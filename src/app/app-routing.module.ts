@@ -1,0 +1,40 @@
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { AppComponent } from './app.component';
+import { LoginGuard } from './service/login-guard/loginGuard';
+import { LoggedGuard } from './service/login-guard/loggedGuard';
+import { DashboardGuard } from './service/login-guard/dashboardGuard';
+
+//components
+import { LoginComponent } from './component/login/login.component';
+import { ChangePasswordComponent } from './component/login/change-password/change-password.component';
+import { DashboardComponent } from './component/dashboard/dashboard.component';
+import { TaskComponent } from './component/dashboard/task/task.component';
+import { UsersComponent } from './component/dashboard/users/users.component';
+import { StoreComponent } from './component/dashboard/store/store.component';
+import { ProfileComponent } from './component/dashboard/profile/profile.component';
+import { CustomersComponent } from './component/dashboard/customers/customers.component';
+
+const routes: Routes = [
+  { path: '', redirectTo: '', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent, canActivate: [LoggedGuard] },
+  { path: 'changePassword/:id', component: ChangePasswordComponent, canActivate: [LoggedGuard] },
+  {
+    path: 'dashboard', component: DashboardComponent, canActivate: [LoginGuard, DashboardGuard],
+    children: [
+      { path: 'task', component: TaskComponent, outlet: 'dashboard' },
+      { path: 'users', component: UsersComponent, outlet: 'dashboard' },
+      { path: 'store', component: StoreComponent, outlet: 'dashboard' },
+      { path: 'profile', component: ProfileComponent, outlet: 'dashboard' },
+      { path: 'customers', component: CustomersComponent, outlet: 'dashboard' }
+    ]
+  }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+
+export class AppRoutingModule { }
+export const routingComponents = [AppComponent, LoginComponent];

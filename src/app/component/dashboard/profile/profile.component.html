@@ -1,0 +1,150 @@
+<div class="vd_content-section clearfix" *ngIf="data !== undefined">
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="panel widget light-widget panel-bd-top">
+        <div class="no-title"> </div>
+        <div class="panel-body">
+          <div class="text-center vd_info-parent"> <img alt="example image" style="width: -webkit-fill-available;"
+              src="../../../../assets/images/users/user-4.jpg"> </div>
+          <h2 class="font-semibold mgbt-xs-5">{{data.firstname}} {{data.lastname}}</h2>
+          <h4 *ngIf="data.type === 0">Superadmin</h4>
+          <h4 *ngIf="data.type === 1">Admin</h4>
+          <h4 *ngIf="data.type === 2">Manager</h4>
+          <h4 *ngIf="data.type === 3">Employee</h4>
+          <div class="mgtp-20">
+            <table class="table table-striped table-hover">
+              <tbody>
+                <tr>
+                  <td style="width:60%;">Status</td>
+                  <td>
+                    <span *ngIf="data.active" class="label label-success">Active</span>
+                    <span *ngIf="!data.active" class="label label-danger">Inactive</span>
+                  </td>
+                </tr>
+                <!--<tr>
+                  <td>User Rating</td>
+                  <td><i class="fa fa-star vd_yellow fa-fw"></i><i class="fa fa-star vd_yellow fa-fw"></i><i
+                      class="fa fa-star vd_yellow fa-fw"></i><i class="fa fa-star vd_yellow fa-fw"></i><i
+                      class="fa fa-star vd_yellow fa-fw"></i></td>
+                </tr>
+                <tr>
+                  <td>Member Since</td>
+                  <td> Jan 07, 2014 </td>
+                </tr>-->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-9">
+      <div class="tabs widget">
+        <ul class="nav nav-tabs widget">
+          <li class="active"> <a data-toggle="tab" href="#profile-tab"> Profile <span class="menu-active"><i
+                  class="fa fa-caret-up"></i></span> </a></li>
+          <li class=""> <a data-toggle="tab" href="#projects-tab"> Company <span class="menu"><i
+                  class="fa fa-caret-up"></i></span> </a></li>
+        </ul>
+        <div class="tab-content">
+          <div id="profile-tab" class="tab-pane active">
+            <div class="pd-20">
+              <div class="vd_info tr" style="float: right;"> <a class="btn vd_btn btn-xs vd_bg-yellow"> <i
+                    class="fa fa-pencil append-icon"></i> Edit </a> </div>
+              <h3 class="mgbt-xs-15 mgtp-10 font-semibold"><i class="fa fa-user"></i> ABOUT</h3>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">First Name:</label>
+                    <div class="col-xs-7 controls">{{data.firstname}}</div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">Last Name:</label>
+                    <div class="col-xs-7 controls">{{data.lastname}}</div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">User Name:</label>
+                    <div class="col-xs-7 controls">{{data.shortname}}</div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">Email:</label>
+                    <div class="col-xs-7 controls">{{data.email}}</div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">Street:</label>
+                    <div class="col-xs-7 controls">{{data.street}}</div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">Zip code:</label>
+                    <div class="col-xs-7 controls">{{data.zipcode}}</div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">Place:</label>
+                    <div class="col-xs-7 controls">{{data.place}}</div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">Phone:</label>
+                    <div class="col-xs-7 controls">{{data.phone}}</div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">Telephone:</label>
+                    <div class="col-xs-7 controls">{{data.telephone}}</div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">Birthday:</label>
+                    <div class="col-xs-7 controls">{{data.birthday}}</div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">In company since:</label>
+                    <div class="col-xs-7 controls">{{data.incompanysince}}</div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+              </div>
+              <hr class="pd-10">
+
+            </div>
+            <!-- pd-20 -->
+          </div>
+          <!-- home-tab -->
+
+
+
+
+
+        </div> <!-- row -->
+
+      </div>
+    </div>
+  </div>
+</div>

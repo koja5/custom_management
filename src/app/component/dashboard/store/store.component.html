@@ -1,0 +1,73 @@
+<div class="user-options">
+  <button kendoButton [icon]="'user'" (click)="newStore()" [primary]="true">New location</button>
+</div>
+
+<kendo-grid [data]="gridData" [height]="500" [resizable]="true" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="true" [filterable]="true" (dataStateChange)="dataStateChange($event)"
+  (pageChange)="pageChange($event)">
+  <ng-template kendoGridToolbarTemplate>
+      <button type="button" kendoGridExcelCommand icon="file-excel">Export to Excel</button>
+      <button kendoGridPDFCommand icon="file-pdf">Export to PDF</button>
+  </ng-template>
+  <kendo-grid-column field="storename" title="Store name" width="120">
+  </kendo-grid-column>
+  <kendo-grid-column field="email" title="Email" width="250">
+  </kendo-grid-column>
+  <kendo-grid-column field="street" title="Street" width="180">
+  </kendo-grid-column>
+  <kendo-grid-column field="place" title="Place" width="180">
+  </kendo-grid-column>
+  <kendo-grid-column field="telephone" title="Telephone" width="180">
+  </kendo-grid-column>
+  <kendo-grid-pdf fileName="Location.pdf" [allPages]="true" paperSize="A4" [repeatHeaders]="true" [landscape]="true">
+      <kendo-grid-pdf-margin top="2cm" left="1cm" right="1cm" bottom="2cm"></kendo-grid-pdf-margin>
+      <ng-template kendoGridPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
+          <div class="page-template">
+              <div class="header">
+                  <div>Page {{ pageNum }} of {{ totalPages }}</div>
+              </div>
+          </div>
+      </ng-template>
+  </kendo-grid-pdf>
+
+  <kendo-grid-excel fileName="Location.xlsx" [fetchData]="allData"></kendo-grid-excel>
+</kendo-grid>
+
+
+
+
+<modal #store modalClass="modal-md top-margin loggerModal adminModal">
+  <modal-header>
+      <h2>Create new location</h2>
+  </modal-header>
+  <modal-content>
+      <form name="loginForm" class="loginForm" (ngSubmit)="createStore(store)">
+          <div class="form-group">
+              <input type="text" class="email col-md-12 col-xs-12" name="storename" placeholder="Store name" [(ngModel)]="data.storename" storename.value=''>
+          </div>
+          <div class="form-group">
+              <input type="text" class="email col-md-12 col-xs-12" name="street" placeholder="Street" [(ngModel)]="data.street" street.value=''>
+          </div>
+          <div class="form-group">
+              <input type="text" class="email col-md-6 col-xs-12" name="zipcode" placeholder="Zipcode" [(ngModel)]="data.zipcode" zipcode.value=''>
+              <input type="text" class="email col-md-6 col-xs-12" name="place" placeholder="Place" [(ngModel)]="data.place" place.value=''>
+          </div>
+          <div class="form-group">
+              <input type="text" class="email col-md-4 col-xs-12" name="telephone" placeholder="Telephone" [(ngModel)]="data.telephone" telephone.value=''>
+              <input type="text" class="email col-md-4 col-xs-12" name="mobile" placeholder="mobile" [(ngModel)]="data.mobile" mobile.value=''>
+              <input type="email" class="email col-md-4 col-xs-12" name="email" placeholder="Email" [(ngModel)]="data.email" email.value=''>
+          </div>
+          <div class="form-group">
+              <input type="text" class="email col-md-12 col-xs-12" name="comment" placeholder="Comment" [(ngModel)]="data.comment" comment.value=''>
+          </div>
+
+          <!-- ./remember-row -->
+          <div class="form-group">
+              <button class="btn btn-lg btn-primary btn-block" type="submit">Create location</button>
+          </div>
+      </form>
+
+  </modal-content>
+  <modal-footer>
+      <button class="btn btn-primary" (click)="user.close()">Close</button>
+  </modal-footer>
+</modal>
