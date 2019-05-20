@@ -19,115 +19,137 @@
     </div>
 </div>-->
 
-<kendo-combobox *ngIf="type !== '3'" [data]="usersInCompany" [textField]="'shortname'" [valueField]="'id'" (valueChange)="changeUser($event)" style="padding: 1%;">
+<kendo-combobox *ngIf="type !== '3'" [data]="usersInCompany" [textField]="'shortname'" [valueField]="'id'"
+  (valueChange)="changeUser($event)" style="padding: 1%;">
 </kendo-combobox>
 
-<kendo-scheduler [kendoSchedulerBinding]="events" [kendoSchedulerReactiveEditing]="createFormGroup" [selectedDate]="selectedDate" style="height: 80vh;" (save)="saveHandler($event)">
+<kendo-scheduler [kendoSchedulerBinding]="events" [kendoSchedulerReactiveEditing]="createFormGroup"
+  [selectedDate]="selectedDate" style="height: 80vh;" (save)="saveHandler($event)">
 
-    <kendo-scheduler-day-view>
-    </kendo-scheduler-day-view>
+  <kendo-scheduler-month-view>
+  </kendo-scheduler-month-view>
 
-    <kendo-scheduler-week-view startTime="07:00">
-    </kendo-scheduler-week-view>
+  <kendo-scheduler-week-view startTime="07:00">
+  </kendo-scheduler-week-view>
 
-    <kendo-scheduler-month-view>
-    </kendo-scheduler-month-view>
+  <kendo-scheduler-work-week-view>
+  </kendo-scheduler-work-week-view>
 
-    <kendo-scheduler-timeline-view>
-    </kendo-scheduler-timeline-view>
+  <kendo-scheduler-multi-day-view [numberOfDays]="3">
+  </kendo-scheduler-multi-day-view>
 
-    <kendo-scheduler-agenda-view>
-    </kendo-scheduler-agenda-view>
-    <ng-template kendoSchedulerEditDialogTemplate let-formGroup="formGroup" let-isNew="isNew" let-editMode="editMode">
-        <div class="k-form-inline">
-            <div class="k-form-field">
-                <span>Title</span>
-                <input class="k-textbox" placeholder="Title" [formControl]="formGroup.get('title')" />
-            </div>
-            <div class="k-form-field">
-                <span>User</span>
-                <kendo-combobox [data]="customerUsers" [textField]="'shortname'" [valueField]="'id'" [formControl]="formGroup.get('user')" (valueChange)="onValueChange($event)">
-                </kendo-combobox>
-                <button kendoButton [icon]="'user'" [routerLink]="[{outlets: {'dashboard': ['users']}}]" [primary]="true">New customer</button>
-            </div>
-            <div class="k-form-field k-datetime-picker-wrapper">
-                <span>Start</span>
-                <kendo-datepicker [formControl]="formGroup.get('start')">
-                </kendo-datepicker>
-                <kendo-timepicker [formControl]="formGroup.get('start')" *ngIf='!formGroup.controls.isAllDay.value'>
-                </kendo-timepicker>
-            </div>
-            <div class="k-form-field k-datetime-picker-wrapper">
-                <span>End</span>
-                <kendo-datepicker [formControl]="formGroup.get('end')">
-                </kendo-datepicker>
-                <kendo-timepicker [formControl]="formGroup.get('end')" *ngIf='!formGroup.controls.isAllDay.value'>
-                </kendo-timepicker>
-            </div>
-           <!-- <div class="k-form-field">
+  <kendo-scheduler-timeline-view>
+  </kendo-scheduler-timeline-view>
+
+  <kendo-scheduler-agenda-view>
+  </kendo-scheduler-agenda-view>
+  <ng-template kendoSchedulerEventTemplate let-event="event">
+    <div>
+      {{event.title}}
+    </div>
+  </ng-template>
+  <ng-template kendoSchedulerEditDialogTemplate let-formGroup="formGroup" let-isNew="isNew" let-editMode="editMode">
+    <div class="k-form-inline">
+      <div class="k-form-field">
+        <span>Title</span>
+        <input class="k-textbox" placeholder="Title" [formControl]="formGroup.get('title')" />
+      </div>
+      <div class="k-form-field">
+        <span>Color</span>
+        <div>
+          <input [style.background]="colorTask" [(ngModel)]="colorTask"
+            [cpPresetColors]="['#fff', '#000', '#2889e9', '#e920e9', '#fff500', 'rgb(236,64,64)']"
+            [(colorPicker)]="colorTask" [formControl]="formGroup.get('colorTask')" />
+        </div>
+      </div>
+      <div class="k-form-field">
+        <span>User</span>
+        <kendo-combobox [data]="customerUsers" [textField]="'shortname'" [valueField]="'id'"
+          [formControl]="formGroup.get('user')" (valueChange)="onValueChange($event)">
+        </kendo-combobox>
+        <button kendoButton [icon]="'user'" [routerLink]="[{outlets: {'dashboard': ['users']}}]" [primary]="true">New
+          customer</button>
+      </div>
+      <div class="k-form-field k-datetime-picker-wrapper">
+        <span>Start</span>
+        <kendo-datepicker [formControl]="formGroup.get('start')">
+        </kendo-datepicker>
+        <kendo-timepicker [formControl]="formGroup.get('start')" *ngIf='!formGroup.controls.isAllDay.value'>
+        </kendo-timepicker>
+      </div>
+      <div class="k-form-field k-datetime-picker-wrapper">
+        <span>End</span>
+        <kendo-datepicker [formControl]="formGroup.get('end')">
+        </kendo-datepicker>
+        <kendo-timepicker [formControl]="formGroup.get('end')" *ngIf='!formGroup.controls.isAllDay.value'>
+        </kendo-timepicker>
+      </div>
+      <!-- <div class="k-form-field">
                 <input type='checkbox' id='k-is-allday-chkbox' class='k-checkbox' [formControl]="formGroup.get('isAllDay')" />
                 <label class='k-checkbox-label' for='k-is-allday-chkbox'>All Day Event</label>
             </div>-->
-            <div class="k-form-field">
-                <span>Telephone</span>
-                <input class="k-textbox" placeholder="Telephone" [formControl]="formGroup.get('telephone')" [value]="telephoneValue"/>
-            </div>
-            <!--<div class="k-form-field" *ngIf="isEditingSeries(editMode)">
+      <div class="k-form-field">
+        <span>Telephone</span>
+        <input class="k-textbox" placeholder="Telephone" [formControl]="formGroup.get('telephone')"
+          [value]="telephoneValue" />
+      </div>
+      <!--<div class="k-form-field" *ngIf="isEditingSeries(editMode)">
                 <kendo-recurrence-editor [formControl]="formGroup.get('recurrenceRule')">
                 </kendo-recurrence-editor>
             </div>-->
-        </div>
-    </ng-template>
+    </div>
+  </ng-template>
 </kendo-scheduler>
 
 <modal #customer modalClass="modal-md top-margin loggerModal adminModal">
-    <modal-header>
-      <h2>Create new customer</h2>
-    </modal-header>
-    <modal-content>
-      <form name="loginForm" class="loginForm" (ngSubmit)="createCustomer(customer)">
-        <div class="form-group">
-          <input type="text" class="email col-md-4 col-xs-12" name="shortname" placeholder="Username"
-            [(ngModel)]="data.shortname" shortname.value=''>
-          <input type="text" class="email col-md-4 col-xs-12" name="firstname" placeholder="Firstname"
-            [(ngModel)]="data.firstname" firstname.value=''>
-          <input type="text" class="email col-md-4 col-xs-12" name="lastname" placeholder="Lastname"
-            [(ngModel)]="data.lastname" lastname.value=''>
+  <modal-header>
+    <h2>Create new customer</h2>
+  </modal-header>
+  <modal-content>
+    <form name="loginForm" class="loginForm" (ngSubmit)="createCustomer(customer)">
+      <div class="form-group">
+        <input type="text" class="email col-md-4 col-xs-12" name="shortname" placeholder="Username"
+          [(ngModel)]="data.shortname" shortname.value=''>
+        <input type="text" class="email col-md-4 col-xs-12" name="firstname" placeholder="Firstname"
+          [(ngModel)]="data.firstname" firstname.value=''>
+        <input type="text" class="email col-md-4 col-xs-12" name="lastname" placeholder="Lastname"
+          [(ngModel)]="data.lastname" lastname.value=''>
+      </div>
+      <div class="form-group">
+        <div class="col-md-6 col-xs-12">
+          <input type="radio" name="gender" id="female" class="k-radio" [(ngModel)]="data.gender" [value]="'female'">
+          <label class="k-radio-label col-md-6 col-xs-12" for="female">Female</label>
+          <input type="radio" name="gender" id="male" class="k-radio" checked="checked" [(ngModel)]="data.gender"
+            [value]="'male'">
+          <label class="k-radio-label col-md-6 col-xs-12" for="male">Male</label>
         </div>
-        <div class="form-group">
-          <div class="col-md-6 col-xs-12">
-            <input type="radio" name="gender" id="female" class="k-radio" [(ngModel)]="data.gender" [value]="'female'">
-            <label class="k-radio-label col-md-6 col-xs-12" for="female">Female</label>
-            <input type="radio" name="gender" id="male" class="k-radio" checked="checked" [(ngModel)]="data.gender" [value]="'male'">
-            <label class="k-radio-label col-md-6 col-xs-12" for="male">Male</label>
-          </div>
-          <kendo-datepicker class="email col-md-6 col-xs-12" name="birthday" placeholder="Birthday"
-            [value]="data.birthday"></kendo-datepicker>
-        </div>
-        <div class="form-group">
-          <input type="text" class="email col-md-4 col-xs-12" name="telephone" placeholder="Telephone"
-            [(ngModel)]="data.telephone" telephone.value=''>
-          <input type="text" class="email col-md-4 col-xs-12" name="mobile" placeholder="Mobile" [(ngModel)]="data.mobile"
-            mobile.value=''>
-          <input type="email" class="email col-md-4 col-xs-12" name="email" placeholder="Email" [(ngModel)]="data.email"
-            email.value=''>
-        </div>
-        <div class="form-group">
-          <input type="text" class="email col-md-4 col-xs-12" name="street" placeholder="Street"
-            [(ngModel)]="data.street" street.value=''>
-          <input type="text" class="email col-md-4 col-xs-12" name="streetnumber" placeholder="Street number" [(ngModel)]="data.streetnumber"
-          streetnumber.value=''>
-          <input type="text" class="email col-md-4 col-xs-12" name="city" placeholder="City" [(ngModel)]="data.city"
+        <kendo-datepicker class="email col-md-6 col-xs-12" name="birthday" placeholder="Birthday"
+          [value]="data.birthday"></kendo-datepicker>
+      </div>
+      <div class="form-group">
+        <input type="text" class="email col-md-4 col-xs-12" name="telephone" placeholder="Telephone"
+          [(ngModel)]="data.telephone" telephone.value=''>
+        <input type="text" class="email col-md-4 col-xs-12" name="mobile" placeholder="Mobile" [(ngModel)]="data.mobile"
+          mobile.value=''>
+        <input type="email" class="email col-md-4 col-xs-12" name="email" placeholder="Email" [(ngModel)]="data.email"
+          email.value=''>
+      </div>
+      <div class="form-group">
+        <input type="text" class="email col-md-4 col-xs-12" name="street" placeholder="Street" [(ngModel)]="data.street"
+          street.value=''>
+        <input type="text" class="email col-md-4 col-xs-12" name="streetnumber" placeholder="Street number"
+          [(ngModel)]="data.streetnumber" streetnumber.value=''>
+        <input type="text" class="email col-md-4 col-xs-12" name="city" placeholder="City" [(ngModel)]="data.city"
           city.value=''>
-        </div>
-        <!-- ./remember-row -->
-        <div class="form-group">
-          <button class="btn btn-lg btn-primary btn-block" type="submit">Create customer</button>
-        </div>
-      </form>
-  
-    </modal-content>
-    <modal-footer>
-      <button class="btn btn-primary" (click)="customer.close()">Close</button>
-    </modal-footer>
-  </modal>
+      </div>
+      <!-- ./remember-row -->
+      <div class="form-group">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Create customer</button>
+      </div>
+    </form>
+
+  </modal-content>
+  <modal-footer>
+    <button class="btn btn-primary" (click)="customer.close()">Close</button>
+  </modal-footer>
+</modal>

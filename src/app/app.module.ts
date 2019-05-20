@@ -13,7 +13,8 @@ import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { ModalModule } from 'ngx-modal';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { InputsModule } from '@progress/kendo-angular-inputs';
- 
+import { ColorPickerModule } from 'ngx-color-picker';
+import { LayoutModule } from '@progress/kendo-angular-layout';
 // guard
 import { LoggedGuard } from './service/login-guard/loggedGuard';
 import { LoginGuard } from './service/login-guard/loginGuard';
@@ -66,7 +67,9 @@ import { CustomersComponent } from './component/dashboard/customers/customers.co
     ButtonsModule,
     ModalModule,
     DropDownsModule,
-    InputsModule
+    InputsModule,
+    ColorPickerModule,
+    LayoutModule
   ],
   providers: [
     LoginComponent,

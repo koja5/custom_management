@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('type', type);
           localStorage.setItem('idUser', id);
           localStorage.setItem('companyId', companyId);
-          thisObject.router.navigate(['dashboard']);
+          thisObject.router.navigate(['dashboard', {outlets: {'dashboard': ['task']}}]);
         }
         this.loading = false;
       } else if (!isLogin) {

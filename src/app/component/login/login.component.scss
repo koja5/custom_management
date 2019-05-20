@@ -400,22 +400,36 @@ body {
 
 /*preloader*/
 
-#preload-block {
+.spinner.loading {
     background-color: #fff;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 99999;
 }
 
-#preload-block .square-block {
-    background: url('../../../assets/images/preloader.gif') no-repeat center center;
-    width: 80px;
-    height: 80px;
-    text-align: center;
-    position: relative;
+.spinner.loading:before {
+    content: "";
+    height: 30px;
+    width: 30px;
+    margin: -15px auto auto -15px;
+    position: absolute;
     top: 50%;
-    margin: 0 auto;
+    left: 50%;
+    border-width: 8px;
+    border-style: solid;
+    border-color: #2180c0 #ccc #ccc;
+    border-radius: 100%;
+    animation: rotation .7s infinite linear;
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(359deg);
+    }
 }

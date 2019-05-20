@@ -9,10 +9,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    <style>
+        .spinner.loading {
+            background-color: #fff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .spinner.loading:before {
+            content: "";
+            height: 30px;
+            width: 30px;
+            margin: -15px auto auto -15px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border-width: 8px;
+            border-style: solid;
+            border-color: #2180c0 #ccc #ccc;
+            border-radius: 100%;
+            animation: rotation .7s infinite linear;
+        }
+
+        @keyframes rotation {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(359deg);
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <app-root></app-root>
+    <app-root>
+        <div class="spinner loading"></div>
+    </app-root>
 </body>
 
 </html>

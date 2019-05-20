@@ -16,7 +16,7 @@ export class LoggedGuard implements CanActivate {
         if (!this.cookie.check('user')) {
             return true;
         } else {
-            if (this.cookie.get('user') === '1') {
+            /*if (this.cookie.get('user') === '1') {
                  this._router.navigate(['/dashboard', {outlets: {'dash': ['admin']}}]);
                  console.log('Ja sam admin');
                  // ako je admin
@@ -24,7 +24,8 @@ export class LoggedGuard implements CanActivate {
                 console.log('ja sam obican user');
                  this._router.navigate(['user-main']);
                  // ako je obican korisnik
-            }
+            }*/
+            this._router.navigate(['/dashboard', {outlets: {'dashboard': ['task']}}]);
             return false;
         }
 

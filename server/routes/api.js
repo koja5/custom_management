@@ -133,6 +133,7 @@ router.post('/createTask', function(req, res, next) {
             'creator_id': req.body.creator_id,
             'customer_id': req.body.user.id,
             'title': req.body.title,
+            'colorTask': req.body.colorTask,
             'start': req.body.start,
             'end': req.body.end
         };

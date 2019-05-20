@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CustomersService } from '../../../service/customers.service';
 import { CustomersComponent } from '../customers/customers.component';
@@ -23,7 +23,8 @@ import { TaskService } from '../../../service/task.service';
 @Component({
     selector: 'app-task',
     templateUrl: './task.component.html',
-    styleUrls: ['./task.component.scss']
+    styleUrls: ['./task.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class TaskComponent implements OnInit {
 
@@ -36,6 +37,7 @@ export class TaskComponent implements OnInit {
     public type: any;
     public customerComponent: CustomersComponent;
     public usersInCompany: any;
+    public colorTask: any;
     public data = {
         'id': '',
         'shortname': '',
@@ -78,6 +80,7 @@ export class TaskComponent implements OnInit {
                         data[i].end = new Date(data[i].end);
                         this.events.push(data[i]);
                     }
+                    console.log(this.events);
                 }
             );
 
@@ -90,12 +93,11 @@ export class TaskComponent implements OnInit {
             console.log(val);
             this.customerUsers = val;
         });
-
+        console.log(this.events);
     }
 
     public createFormGroup(args: CreateFormGroupArgs): FormGroup {
         const dataItem = args.dataItem;
-        console.log(args);
         console.log(this.events);
         this.formGroup = this.formBuilder.group({
             'id': args.isNew ? this.getNextId() : dataItem.id,
@@ -105,6 +107,7 @@ export class TaskComponent implements OnInit {
             'endTimezone': [dataItem.endTimezone],
             'isAllDay': dataItem.isAllDay,
             'title': dataItem.title,
+            'colorTask': dataItem.colorTask,
             'creator_id': localStorage.getItem('idUser'),
             'user': dataItem.user,
             'telephone': dataItem.telephone,

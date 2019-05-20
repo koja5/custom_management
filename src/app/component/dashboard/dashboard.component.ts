@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CookieService } from 'ng2-cookies';
 import { Router } from '@angular/router';
-
+import { Modal } from 'ngx-modal';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
 
+  @ViewChild('settings') settings: Modal;
   private sidebar = '';
   private profile = '';
   private type: number;

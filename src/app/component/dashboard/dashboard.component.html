@@ -48,7 +48,7 @@
                             <a class="dropdown-toggle nav-link arrow-none waves-effect nav-user" data-toggle="dropdown" role="button" aria-haspopup="false" aria-expanded="false"><img src="../../../assets/images/users/user-4.jpg" alt="user" class="rounded-circle"></a>
                             <div class="dropdown-menu dropdown-menu-right profile-dropdown {{profile}}">
                                 <!-- item--><a class="dropdown-item" [routerLink]="[{outlets: {'dashboard': ['profile']}}]"><i class="mdi mdi-account-circle m-r-5"></i> Profile</a> <a class="dropdown-item" href="#"><i class="mdi mdi-wallet m-r-5"></i> My Wallet</a>
-                                <a class="dropdown-item d-block" href="#"><span class="badge badge-success float-right">11</span><i class="mdi mdi-settings m-r-5"></i> Settings</a> <a class="dropdown-item" href="#"><i class="mdi mdi-lock-open-outline m-r-5"></i> Lock screen</a>
+                                <a class="dropdown-item d-block" (click)="settings.open()"><i class="mdi mdi-settings m-r-5"></i> Settings</a> <a class="dropdown-item" href="#"><i class="mdi mdi-lock-open-outline m-r-5"></i> Lock screen</a>
                                 <div class="dropdown-divider"></div><a class="dropdown-item text-danger" (click)="logout()"><i class="mdi mdi-power text-danger"></i> Logout</a></div>
                         </div>
                     </li>
@@ -108,3 +108,15 @@
 </body>
 
 </html>
+
+<modal #settings modalClass="modal-md top-margin loggerModal adminModal">
+        <modal-header>
+          <h2>Settings</h2>
+        </modal-header>
+        <modal-content>
+      
+        </modal-content>
+        <modal-footer>
+          <button class="btn btn-primary" (click)="settings.close()">Close</button>
+        </modal-footer>
+      </modal>
