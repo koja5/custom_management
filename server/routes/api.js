@@ -4,22 +4,23 @@ var sha1 = require('sha1');
 const axios = require('axios');
 const API = 'https://jsonplaceholder.typicode.com';
 const mysql = require('mysql');
+var fs = require("fs");
+const path = require('path');
 
-
-var connection = mysql.createPool({
+/*var connection = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: 'root',
     database: 'management'
-});
-/*
+});*/
+
 var connection = mysql.createPool({
-    host: 'server9.contrateam.com:2083',
-    user: 'zoranjer_koja',
-    password: 'vrbovac12345',
-    database: 'zoranjer_alek_kojic'
+    host: '144.76.112.98',
+    user: 'aparatiz_koja',
+    password: 'Iva03042019',
+    database: 'aparatiz_management'
 })
-*/
+
 /*
 var connection = mysql.createPool({
     host: 'sql9.freemysqlhosting.net',
@@ -28,7 +29,11 @@ var connection = mysql.createPool({
     database: 'sql9231131'
 })*/
 
-console.log(connection);
+connection.getConnection(function(err, conn) {
+    console.log(conn);
+    console.log(err);
+});
+
 
 /* GET api listing. */
 router.get('/', (req, res) => {
@@ -135,7 +140,8 @@ router.post('/createTask', function(req, res, next) {
             'title': req.body.title,
             'colorTask': req.body.colorTask,
             'start': req.body.start,
-            'end': req.body.end
+            'end': req.body.end,
+            'telephone': req.body.telephone
         };
         console.log(podaci);
 
@@ -215,6 +221,7 @@ router.get('/getTasksForUser/:id', function(req, res, next) {
 });
 
 router.post('/login', (req, res, next) => {
+    console.log('usao sam u login!');
     try {
         var reqObj = req.body;
         connection.getConnection(function(err, conn) {
@@ -237,6 +244,8 @@ router.post('/login', (req, res, next) => {
                             //req.session.auth = true;
 
                             res.send({ login: true, notVerified: rows[0].active, user: rows[0].shortname, type: rows[0].type, id: rows[0].id, companyId: rows[0].companyId });
+                        } else {
+                            res.send({ login: false });
                         } /*else {
                             console.log('usao sam u else!');
                             conn.query("SELECT * FROM companies WHERE email=? AND password=?", [reqObj.email, sha1(reqObj.password)],
@@ -356,7 +365,7 @@ router.get('/getUsers/:id', function(req, res, next) {
             return;
         }
         var id = req.params.id;
-        conn.query("SELECT * from users u join store s on u.companyId = s.id where s.superadmin = ?", [id], function(err, rows) {
+        conn.query("SELECT u.id, u.username, u.firstname, u.lastname, u.email, u.street, u.active from users u join store s on u.companyId = s.id where s.superadmin = ?", [id], function(err, rows) {
             conn.release();
             if (!err) {
 
@@ -409,6 +418,32 @@ router.get('/getMe/:id', function(req, res, next) {
         }
         var id = req.params.id;
         conn.query("SELECT * from users where id = ?", [id], function(err, rows) {
+            conn.release();
+            if (!err) {
+
+                res.json(rows);
+            } else {
+                res.json({ "code": 100, "status": "Error in connection database" });
+            }
+        });
+
+
+        conn.on('error', function(err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        });
+    });
+
+});
+
+router.get('/getCompany/:id', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+        var id = req.params.id;
+        conn.query("SELECT * from store where id = ?", [id], function(err, rows) {
             conn.release();
             if (!err) {
 
@@ -605,6 +640,40 @@ router.get('/getCustomers/:id', function(req, res, next) {
 
 });
 
+router.get('/getDocuments/:id', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+        var id = req.params.id;
+        conn.query("SELECT * from documents  where customer_id = ?", [id], function(err, rows) {
+            conn.release();
+            if (!err) {
+
+                res.json(rows);
+            } else {
+                res.json({ "code": 100, "status": "Error in connection database" });
+            }
+        });
+
+
+        conn.on('error', function(err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        });
+    });
+
+});
+
+router.post('/download', function(req,res,next){
+    console.log(req);
+    filepath = path.join(__dirname,'./uploads') +'/'+ req.body.filename;
+    console.log(filepath);
+    res.sendFile(filepath);
+});
+
+
 router.get('/activeUser/:id', function(req, res, next) {
     console.log("pozvano za edit!!!");
     connection.getConnection(function(err, conn) {
@@ -633,6 +702,40 @@ router.get('/activeUser/:id', function(req, res, next) {
             res.json({ "code": 100, "status": "Error in connection database" });
             return;
         });
+    });
+});
+
+router.post('/uploadImage', function(req, res, next) {
+    console.log("pozvano za edit!!!");
+    connection.getConnection(function(err, conn) {
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+        test = {};
+        console.log(req);
+        var id = req.body.id;
+        // console.log(fs);
+        var img = fs.readFileSync("C:\\Users\\Aleksandar\\Pictures\\" + req.body.img);
+
+        conn.query("UPDATE users SET img = ? where id = '" + id + "'", [img], function(err, rows) {
+            conn.release();
+            if (!err) {
+                if (!err) {
+                    test = { 
+                        'img': img
+                    };
+                } else {
+                    test.success = false;
+                }
+                res.json(test);
+                console.log("Usao sam u DB!!!!");
+            } else {
+                res.json({ "code": 100, "status": "Error in connection database" });
+                console.log(err);
+            }
+        });
+
     });
 });
 
@@ -827,6 +930,70 @@ router.get('/deleteUser/:id', (req, res, next) => {
 
 });
 
+router.get('/deleteCustomer/:id', (req, res, next) => {
+    try {
+        var reqObj = req.params.id;
+
+        console.log('usao sam u verifikaciju!');
+        console.log(reqObj);
+        connection.getConnection(function(err, conn) {
+            if (err) {
+                console.error('SQL Connection error: ', err);
+                res.json({ "code": 100, "status": "Error in connection database" });
+                return next(err);
+            } else {
+                conn.query("delete from customers where id = '" + reqObj + "'",
+                    function(err, rows, fields) {
+                        conn.release();
+                        if (err) {
+                            console.error("SQL error:", err);
+                            res.json({ "code": 100, "status": "Error in connection database" });
+                            return next(err);
+                        } else {
+                            res.json(true);
+                            res.end();
+                        }
+                    }
+                );
+            }
+        });
+    } catch (ex) {
+        console.error("Internal error: " + ex);
+        return next(ex);
+    }
+
+});
+
+router.post('/updateCustomer', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+        test = {};
+        var id = req.body.id;
+
+        conn.query("UPDATE customers SET ? where id = '" + id + "'", [req.body], function(err, rows) {
+            conn.release();
+            if (!err) {
+                if (!err) {
+                    test.success = true;
+                } else {
+                    test.success = false;
+                }
+                res.json(test);
+            } else {
+                res.json({ "code": 100, "status": "Error in connection database" });
+                console.log(err);
+            }
+        });
+        conn.on('error', function(err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        });
+    });
+});
+
 router.get('/korisnik/verifikacija/:id', (req, res, next) => {
     try {
         var reqObj = req.params.id;
@@ -986,6 +1153,7 @@ router.get('/getUserWithID/:userid', function(req, res, next) {
                 }
 
                 console.log("Ovdee :D");
+                console.log(test);
                 res.json(test);
             } else {
                 res.json({ "code": 100, "status": "Error in connection database" });

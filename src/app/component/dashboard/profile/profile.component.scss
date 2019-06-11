@@ -5,6 +5,7 @@ body{background-color:#f0f0f0;font-size:13px;font-family:'Open Sans','arial';lin
     padding: 20px;
     padding-top: 25px;
     border-top: 1px solid #F8F8F8;
+    height: 89vh;
 }
 
 .vd_info-parent h4 {
@@ -55,4 +56,26 @@ body{background-color:#f0f0f0;font-size:13px;font-family:'Open Sans','arial';lin
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
+}
+
+.nav>li>a:focus, .nav>li>a:hover {
+    background-color: #2180c0 !important;
+}
+
+li.active {
+    background-color: #2180c0 !important;
+}
+
+input[type="text"]:disabled {
+    opacity: 0.5;
+}
+
+
+input[type="email"]:disabled {
+    opacity: 0.5;
+}
+
+
+.col-xs-12 {
+    margin: 1%;
 }

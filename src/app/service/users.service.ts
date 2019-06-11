@@ -27,4 +27,23 @@ export class UsersService {
       .map(res => res)
       .subscribe(val => callback(val));
   }
+
+  getCompany(id, callback) {
+    return this.http.get('/api/getCompany/' + id)
+      .map(res => res)
+      .subscribe(val => callback(val));
+  }
+
+  uploadImage(data, callback) {
+    console.log(data);
+    this.http.post('/api/uploadImage', data)
+      .map(res => res)
+      .subscribe(val => callback(val));
+  }
+
+  getUserWithId(id, callback) {
+    return this.http.get('/api/getUserWithId/' + id)
+      .map(res => res)
+      .subscribe(val => callback(val));
+  }
 }

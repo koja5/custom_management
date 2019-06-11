@@ -3,3 +3,30 @@
     border: none;
     margin-left: 2%;
 }
+
+.zIndex {
+    z-index: -1;
+}
+
+.noTaskForUser {
+    text-align: center;
+    margin-top: 26vh;
+}
+
+.noTaskForUser .fa {
+    font-size: 9vh;
+}
+
+.noTaskForUser p {
+    font-size: 4vh;
+    font-weight: bold;
+}
+
+.spinner.loading {
+    padding: 15px;
+    position: relative;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}

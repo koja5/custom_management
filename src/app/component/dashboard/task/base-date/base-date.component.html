@@ -1,0 +1,329 @@
+<button kendoButton *ngIf="type === 'details'" [primary]="true" style="margin: 1vh;" (click)="backToGrid()"><i
+    class="fa fa-arrow-left"></i> &nbsp; Back to grid</button>
+
+<div class="vd_content-section clearfix" *ngIf="data !== undefined">
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="widget light-widget panel-bd-top">
+        <div class="no-title"> </div>
+        <div class="panel-body">
+          <div class="text-center vd_info-parent"> <img alt="example image" style="width: 190px;"
+              [src]="data.gender === 'male' ? maleImg : femaleImg" class="rounded-circle"> </div>
+          <h2 class="font-semibold mgbt-xs-5">{{data.firstname}} {{data.lastname}}</h2>
+        </div>
+        <div *ngIf="type === 'details'">
+          <div class="vd_info tr" style="height: 7vh; text-align: center"> <button kendoButton class="k-edit"
+              [icon]="'k-icon k-i-delete'" (click)="customer.open()" style="text-align: center">Edit</button> </div>
+          <div class="vd_info tr" style="height: 7vh; text-align: center"> <button kendoButton class="k-delete"
+              [icon]="'k-icon k-i-delete'" [primary]="true" (click)="open('dialog')"
+              style="text-align: center">Delete</button> </div>
+          <div class="vd_info tr" style="text-align: center;"> <button kendoButton class="k-copy"
+              [icon]="'k-icon k-i-copy'" (click)="newCustomer()">Copy</button> </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-9">
+      <div class="tabs widget">
+        <div class="tab-content">
+          <div id="profile-tab" class="tab-pane active">
+            <div class="pd-20">
+              <div *ngIf="type === 'calendar'" class="vd_info tr" style="height: 12vh;"> <button kendoButton
+                  class="k-save" [icon]="'k-icon k-i-save'" (click)="newCustomer()" style="float: right;">SAVE</button>
+              </div>
+              <div class="row">
+                <div class="col-sm-6" style="margin-bottom: 3vh;">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-12 control-label" style="color: red;">ATTENTION:</label>
+                    <textarea kendoTextArea [autoSize]="true"></textarea>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6" style="margin-bottom: 3vh;">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-12 control-label">Physical complaint:</label>
+                    <textarea kendoTextArea [autoSize]="true"></textarea>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">First Name:</label>
+                    <div class="col-xs-7 controls">{{data.firstname}}</div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">Last Name:</label>
+                    <div class="col-xs-7 controls">{{data.lastname}}</div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">Gender:</label>
+                    <div class="col-xs-7 controls">{{data.gender}} <i *ngIf="data.gender === 'male'" class="fa fa-mars"
+                        style="color: blue;"></i><i *ngIf="data.gender === 'female'" class="fa fa-venus"
+                        style="color: pink;"></i></div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">User Name:</label>
+                    <div class="col-xs-7 controls">{{data.shortname}}</div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">Email:</label>
+                    <div class="col-xs-7 controls">{{data.email}}</div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">Street:</label>
+                    <div class="col-xs-7 controls">{{data.street}}</div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">Street number:</label>
+                    <div class="col-xs-7 controls">{{data.streetnumber}}</div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">Zip code:</label>
+                    <div class="col-xs-7 controls">{{data.zipcode}}</div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">City:</label>
+                    <div class="col-xs-7 controls">{{data.city}}</div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">Phone:</label>
+                    <div class="col-xs-7 controls">{{data.mobile}}</div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">Telephone:</label>
+                    <div class="col-xs-7 controls">{{data.telephone}}</div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="row mgbt-xs-0">
+                    <label class="col-xs-5 control-label">Birthday:</label>
+                    <div class="col-xs-7 controls">{{data.birthday}}</div>
+                    <!-- col-sm-10 -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- pd-20 -->
+          </div>
+          <!-- home-tab -->
+        </div>
+      </div>
+
+      <div class="col-sm-12 document-grid">
+        <label class="col-md-9">Documents</label>
+        <button kendoButton [primary]="true" [icon]="'add'" style="width: 25vh !important; margin-bottom: 2vh;"
+          (click)="upload.open()">Upload document</button>
+        <kendo-grid [data]="documents" [height]="200" [resizable]="true">
+          <kendo-grid-column field="id" title="Document ID" width="30">
+          </kendo-grid-column>
+          <kendo-grid-column width="30">
+            <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+              <span *ngIf="dataItem.type === 'application/pdf'" class="k-icon k-i-pdf"></span>
+              <span *ngIf="dataItem.type === 'application/vnd.openxmlformats'" class="k-icon k-i-file-word"></span>
+              <span *ngIf="dataItem.type === 'image/png'" class="k-icon k-i-image"></span>
+              <span *ngIf="dataItem.type === 'text/plain'" class="k-icon k-i-file-txt"></span>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="name" title="Document name" width="250">
+          </kendo-grid-column>
+          <kendo-grid-column field="size" title="Size" width="120">
+          </kendo-grid-column>
+          <kendo-grid-column field="active" title="Download" width="60">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <button kendoButton [icon]="'k-icon k-i-download'" class='k-preview'
+                (click)="downloadFile(dataItem.filename)"></button>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column field="active" title="Preview" width="60">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <button kendoButton [icon]="'k-icon k-i-preview'" class='k-preview'
+                (click)="previewDocument(dataItem)"></button>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+
+    </div>
+  </div>
+  <kendo-dialog title="Please confirm" *ngIf="dialogOpened" (close)="close('dialog')" [minWidth]="250" [width]="450">
+    <p style="margin: 30px; text-align: center;">Are you sure you want to continue?</p>
+    <kendo-dialog-actions>
+      <button kendoButton (click)="action('no')">No</button>
+      <button kendoButton (click)="action('yes')" primary="true">Yes</button>
+    </kendo-dialog-actions>
+  </kendo-dialog>
+
+
+  <modal #customer modalClass="modal-lg top-margin loggerModal adminModal">
+    <modal-header>
+      <h2>Update customer</h2>
+    </modal-header>
+    <modal-content>
+      <form name="loginForm" class="loginForm" (ngSubmit)="updateCustomer(customer)">
+        <div class="form-group">
+          <div class="panel-body">
+            <div class="text-center vd_info-parent col-md-4 col-xs-12">
+              <img *ngIf="data.gender === ''" alt="example image" style="width: 190px;"
+                src="../../../../assets/images/users/{{imagePath}}.png" class="rounded-circle">
+              <img *ngIf="data.gender !== '' && data.gender === 'male'" alt="example image" style="width: 190px;"
+                src="../../../../assets/images/users/male-patient.png" class="rounded-circle">
+              <img *ngIf="data.gender !== '' && data.gender === 'female'" alt="example image" style="width: 190px;"
+                src="../../../../assets/images/users/female-patient.png" class="rounded-circle">
+              <h2 class="font-semibold col-md-6 col-xs-12">{{data.firstname}} {{data.lastname}}</h2>
+            </div>
+            <div class="col-md-8 col-xs-12">
+              <input type="text" class="email col-md-12 col-xs-12" [(ngModel)]="data.shortname" name="shortname">
+              <input type="text" class="email col-md-12 col-xs-12" [(ngModel)]="data.firstname" name="firstname">
+              <input type="text" class="email col-md-12 col-xs-12" [(ngModel)]="data.lastname" name="lastname">
+              <div class="form-group col-md-12 col-xs-12">
+                <div class="col-md-6 col-xs-12">
+                  <input type="radio" name="gender" id="female" class="k-radio"
+                    checked="date.gender === 'female' ? checked : ''">
+                  <label class="k-radio-label col-md-6 col-xs-12" for="female">Female</label>
+                  <input type="radio" name="gender" id="male" class="k-radio"
+                    checked="date.gender === 'male' ? checked : ''">
+                  <label class="k-radio-label col-md-6 col-xs-12" for="male">Male</label>
+                </div>
+                <!--<kendo-datepicker class="email col-md-6 col-xs-12" [value]="data.birthday"></kendo-datepicker>-->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <input type="text" class="email col-md-4 col-xs-12" [(ngModel)]="data.street" name="street">
+          <input type="text" class="email col-md-4 col-xs-12" [(ngModel)]="data.streetnumber" name="streetnumber">
+          <input type="text" class="email col-md-4 col-xs-12" [(ngModel)]="data.city" name="city">
+        </div>
+        <!-- ./remember-row -->
+        <div class="form-group">
+          <button class="btn btn-lg btn-primary btn-block" type="submit">Update customer</button>
+        </div>
+      </form>
+
+    </modal-content>
+    <modal-footer>
+      <button class="btn btn-primary" (click)="customer.close()">Close</button>
+    </modal-footer>
+  </modal>
+
+
+  <modal #upload modalClass="modal-lg top-margin loggerModal adminModal" *ngIf="uploader !== undefined">
+    <modal-header>
+      <h2>File upload</h2>
+    </modal-header>
+    <modal-content>
+      <div>
+        <div class="row">
+          <div class="col-md-12 col-sm-12">
+            <form>
+              <div class="form-group">
+                <label for="multiple"></label>
+                <input type="file" class="form-control" name="multiple" ng2FileSelect [uploader]="uploader" multiple />
+              </div>
+            </form>
+          </div>
+          <div class="col-md-12 col-sm-12">
+            Queue length: {{ uploader?.queue?.length }}
+
+            <table class="table">
+              <thead>
+                <tr>
+                  <th width="50%">Name</th>
+                  <th class="hidden-xs">Size</th>
+                  <th class="hidden-xs">Progress</th>
+                  <th class="hidden-xs">Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of uploader.queue">
+                  <td><strong>{{ item.file.name }}</strong></td>
+                  <td nowrap>{{ item.file.size/1024/1024 | number:'.2' }} MB</td>
+                  <td class="hidden-xs">
+                    <div class="progress" style="margin-bottom: 0;">
+                      <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                    </div>
+                  </td>
+                  <td class="text-center hidden-xs">
+                    <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                    <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                    <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                  </td>
+                  <td nowrap>
+                    <button type="button" class="btn btn-success btn-xs hidden-xs" (click)="item.upload()"
+                      [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                      <span class="glyphicon glyphicon-upload"></span> Upload
+                    </button>
+                    <button type="button" class="btn btn-warning btn-xs hidden-xs" (click)="item.cancel()"
+                      [disabled]="!item.isUploading">
+                      <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                    </button>
+                    <button type="button" class="btn btn-danger btn-xs" (click)="item.remove()">
+                      <span class="glyphicon glyphicon-trash"></span> Remove
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div>
+              <div>
+                Queue progress:
+                <div class="progress" style="">
+                  <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-success btn-s" (click)="uploader.uploadAll()"
+                [disabled]="!uploader.getNotUploadedItems().length">
+                <span class="glyphicon glyphicon-upload"></span> Upload all
+              </button>
+              <button type="button" class="btn btn-warning btn-s" (click)="uploader.cancelAll()"
+                [disabled]="!uploader.isUploading">
+                <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
+              </button>
+              <button type="button" class="btn btn-danger btn-s" (click)="uploader.clearQueue()"
+                [disabled]="!uploader.queue.length">
+                <span class="glyphicon glyphicon-trash"></span> Remove all
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </modal-content>
+    <modal-footer>
+      <button class="btn btn-primary" (click)="upload.close()">Close</button>
+    </modal-footer>
+  </modal>
+
+</div>

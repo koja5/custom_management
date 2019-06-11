@@ -13,8 +13,14 @@ import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { ModalModule } from 'ngx-modal';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { InputsModule } from '@progress/kendo-angular-inputs';
-import { ColorPickerModule } from 'ngx-color-picker';
 import { LayoutModule } from '@progress/kendo-angular-layout';
+import { IntlModule } from '@progress/kendo-angular-intl';
+import { ColorPickerModule } from '@progress/kendo-angular-inputs';
+import { UploadModule } from '@progress/kendo-angular-upload';
+import { DialogModule } from '@progress/kendo-angular-dialog';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { FileSelectDirective, FileDropDirective } from 'ng2-file-upload';
+
 // guard
 import { LoggedGuard } from './service/login-guard/loggedGuard';
 import { LoginGuard } from './service/login-guard/loginGuard';
@@ -36,6 +42,11 @@ import { UsersComponent } from './component/dashboard/users/users.component';
 import { StoreComponent } from './component/dashboard/store/store.component';
 import { ProfileComponent } from './component/dashboard/profile/profile.component';
 import { CustomersComponent } from './component/dashboard/customers/customers.component';
+import { MessageService } from './service/message.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { BaseDateComponent } from './component/dashboard/task/base-date/base-date.component';
+import { DocumentPreviewComponent } from './component/dashboard/document-preview/document-preview.component';
+import { UserDetailsComponent } from './component/dashboard/users/user-details/user-details.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +59,11 @@ import { CustomersComponent } from './component/dashboard/customers/customers.co
     UsersComponent,
     StoreComponent,
     ProfileComponent,
-    CustomersComponent
+    CustomersComponent,
+    BaseDateComponent,
+    FileSelectDirective,
+    DocumentPreviewComponent,
+    UserDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -69,7 +84,12 @@ import { CustomersComponent } from './component/dashboard/customers/customers.co
     DropDownsModule,
     InputsModule,
     ColorPickerModule,
-    LayoutModule
+    LayoutModule,
+    IntlModule,
+    UploadModule,
+    DialogModule,
+    PdfViewerModule
+    
   ],
   providers: [
     LoginComponent,
@@ -79,6 +99,7 @@ import { CustomersComponent } from './component/dashboard/customers/customers.co
     LoggedGuard,
     DashboardGuard,
     LoginGuard,
+    MessageService
   ],
   bootstrap: [AppComponent]
 })

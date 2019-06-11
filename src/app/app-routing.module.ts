@@ -14,6 +14,9 @@ import { UsersComponent } from './component/dashboard/users/users.component';
 import { StoreComponent } from './component/dashboard/store/store.component';
 import { ProfileComponent } from './component/dashboard/profile/profile.component';
 import { CustomersComponent } from './component/dashboard/customers/customers.component';
+import { BaseDateComponent } from './component/dashboard/task/base-date/base-date.component';
+import { DocumentPreviewComponent } from './component/dashboard/document-preview/document-preview.component';
+import { UserDetailsComponent } from './component/dashboard/users/user-details/user-details.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '', pathMatch: 'full' },
@@ -24,11 +27,13 @@ const routes: Routes = [
     children: [
       { path: 'task', component: TaskComponent, outlet: 'dashboard' },
       { path: 'users', component: UsersComponent, outlet: 'dashboard' },
+      { path: 'user-details/:id', component: UserDetailsComponent, outlet: 'dashboard' },
       { path: 'store', component: StoreComponent, outlet: 'dashboard' },
       { path: 'profile', component: ProfileComponent, outlet: 'dashboard' },
       { path: 'customers', component: CustomersComponent, outlet: 'dashboard' }
     ]
-  }
+  },
+  { path: 'document/server/routes/uploads/:id', component: DocumentPreviewComponent }
 ];
 
 @NgModule({

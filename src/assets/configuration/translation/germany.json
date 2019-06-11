@@ -1,0 +1,65 @@
+{
+    "login": { 
+        "welcomeTitle": "Willkommen bei Tuina Praxis",
+        "welcomeText": "Software für Terminplanung und Kundenverwaltung!",
+        "loginTitle": "ins Konto einloggen",
+        "haventAccount": "Sie haben noch keinen Account?",
+        "signUp": "Melde dich kostenlos an!",
+        "or": "oder",
+        "email": "E-Mail-Addresse",
+        "password": "Passwort",
+        "rememberMe": "Erinnere dich an mich",
+        "forgotPassword": "Passwort vergessen?",
+        "loginWithEmail": "Mit E-Mail einloggen",
+        "signUpTitle": "Melde dich kostenlos an!",
+        "fullName": "Vollständiger Name",
+        "aggree": "Ich stimme dem zu",
+        "privacyPolicy": "Datenschutz-Bestimmungen",
+        "and": "und",
+        "termsOfService": "Nutzungsbedingungen.",
+        "signUpWithEmail": "Registrieren Sie sich mit Ihrer E-Mail Adresse",
+        "alreadyHaveAnAccount": "Hast du schon ein Konto?",
+        "recoveryTitle": "Stellen Sie Ihr Passwort wieder her",
+        "recoveryText": "Geben Sie unten Ihre E-Mail-Adresse ein, und wir senden Ihnen eine E-Mail mit weiteren Anweisungen.",
+        "recoveryYourPassword": "Stellen Sie Ihr Passwort wieder her"
+    },
+    "calendar": {
+        "today": "Heute",
+        "allDay": "Den ganzen tag",
+        "month": "Monat",
+        "day": "Tag",
+        "week": "Woche",
+        "workWeek": "5 Tags",
+        "multiDay": "3 Tags",
+        "timeline": "Zeitleiste",
+        "agenda": "Agenda",
+        "noTaskForUser": "Der ausgewählte Benutzer hat keine Aufgaben."
+    },
+    "navigation-menu": {
+        "calendar": "Kalender",
+        "customer": "Kunde",
+        "users": "Benutzer",
+        "store": "Geschäft"
+    },
+    "grid": {
+        "pagerPage": "Seite",
+        "pagerOf": "von",
+        "pagerItems": "Artikel",
+        "pagerItemsPerPage": "Objekte pro Seite",
+        "exportToExcel": "Nach Excel exportieren",
+        "exportToPDF": "Als PDF exportieren",
+        "username": "Nutzername",
+        "firstname": "Vorname",
+        "lastname": "Nachname",
+        "birthday": "Geburtstag",
+        "telephone": "Telefon",
+        "email": "Email",
+        "street": "Straße",
+        "newUser": "Neuer Benutzer"
+    },
+    "dashboard": {
+        "profile": "Profil",
+        "settings": "die Einstellungen",
+        "logout": "Ausloggen"
+    }
+}

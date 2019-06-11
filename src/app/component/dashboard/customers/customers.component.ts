@@ -3,10 +3,12 @@ import { Modal } from 'ngx-modal';
 import { CustomersService } from '../../../service/customers.service';
 import { StoreService } from '../../../service/store.service';
 import { process, State } from '@progress/kendo-data-query';
+import { UploadEvent, SelectEvent } from '@progress/kendo-angular-upload';
 import {
   DataStateChangeEvent,
   PageChangeEvent
 } from '@progress/kendo-angular-grid';
+import { MessageService } from '../../../service/message.service';
 
 @Component({
   selector: 'app-customers',
@@ -40,10 +42,37 @@ export class CustomersComponent implements OnInit {
     filter: null
   };
   private storeLocation: any;
-
-  constructor(private service: CustomersService, private storeService: StoreService) { }
+  public language: any;
+  public selectedUser: any;
+  public imagePath = 'defaultUser';
+  uploadSaveUrl = 'http://localhost:3000/api/uploadImage'; // should represent an actual API endpoint
+  uploadRemoveUrl = 'removeUrl'; // should represent an actual API endpoint
+  constructor(private service: CustomersService, private storeService: StoreService, private message: MessageService) { }
 
   ngOnInit() {
+
+    this.getCustomers();
+
+    if(localStorage.getItem('translation') !== null) {
+      this.language = JSON.parse(localStorage.getItem('translation'))['grid'];
+      console.log(this.language);
+    }
+
+    this.message.getDeleteCustomer().subscribe(
+      mess => {
+        this.getCustomers();
+        this.selectedUser = undefined;
+      }
+    );
+
+    this.message.getBackToCustomerGrid().subscribe(
+      mess => {
+        this.selectedUser = undefined;
+      }
+    )
+  }
+
+  getCustomers() {
     this.service.getCustomers(localStorage.getItem('companyId'), (val) => {
       console.log(val);
       if (val !== null) {
@@ -53,7 +82,7 @@ export class CustomersComponent implements OnInit {
       } else {
         this.gridData['data'] = [];
       }
-    })
+    });
   }
 
   newUser() {
@@ -84,6 +113,7 @@ export class CustomersComponent implements OnInit {
     this.data.companyId = localStorage.getItem('companyId');
     this.service.createCustomer(this.data, (val) => {
       console.log(val);
+      this.data.id = val.id;
       this.gridData.data.push(this.data);
       this.customer.close();
       // form.reset();
@@ -122,6 +152,15 @@ export class CustomersComponent implements OnInit {
     };
 
     console.log(this.gridData);
+  }
+
+  previewUser(selectedUser) {
+    console.log(selectedUser);
+    this.selectedUser = selectedUser;
+  }
+
+  uploadEventHandler(e: UploadEvent) {
+    console.log(e);
   }
 
 }

@@ -14,6 +14,7 @@ export class LoginGuard implements CanActivate {
 
     canActivate() {
         if (this.cookie.check('user')) {
+            console.log('usao sam ovde!');
             return true;
         } else {
             this._router.navigate(['home']);

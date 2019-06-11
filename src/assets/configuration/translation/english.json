@@ -1,0 +1,65 @@
+{
+    "login": {
+        "welcomeTitle": "Welcome to Tuina Praxis",
+        "welcomeText": "Software for scheduling and customer management!",
+        "loginTitle": "Login to your account",
+        "haventAccount": "Don't have an account?",
+        "signUp": "Sign Up Free!",
+        "or": "or",
+        "email": "Email address",
+        "password": "Password",
+        "rememberMe": "Remember me",
+        "forgotPassword": "Forgot password?",
+        "loginWithEmail": "Login with email",
+        "signUpTitle": "Sign up for free!",
+        "fullName": "Full name",
+        "aggree": "I agree to the",
+        "privacyPolicy": "privacy policy",
+        "and": "and",
+        "termsOfService": "terms of service.",
+        "signUpWithEmail": "Sign up with email",
+        "alreadyHaveAnAccount": "Already have an account?",
+        "recoveryTitle": "Recovery your password",
+        "recoveryText": "Fill in your e-mail address below and we will send you an email with further instructions.",
+        "recoveryYourPassword": "Recovery your password"
+    },
+    "calendar": {
+        "today": "Today",
+        "allDay": "All day",
+        "month": "Month",
+        "day": "Day",
+        "week": "Week",
+        "workWeek": "5 Days",
+        "multiDay": "3 Days",
+        "timeline": "Timeline",
+        "agenda": "Agenda",
+        "noTaskForUser": "The selected user has no tasks."
+    },
+    "navigation-menu": {
+        "calendar": "Calendar",
+        "customer": "Customer",
+        "users": "Users",
+        "store": "Store"
+    },
+    "grid": {
+        "pagerPage": "Page",
+        "pagerOf": "of",
+        "pagerItems": "items",
+        "pagerItemsPerPage": "items per page",
+        "exportToExcel": "Export to Excel",
+        "exportToPDF": "Export to PDF",
+        "username": "Username",
+        "firstname": "Firstname",
+        "lastname": "Lastname",
+        "birthday": "Birthday",
+        "telephone": "Telephone",
+        "email": "Email",
+        "street": "Street",
+        "newUser": "New user"
+    },
+    "dashboard": {
+        "profile": "Profile",
+        "settings": "Settings",
+        "logout": "Logout"
+    }
+}

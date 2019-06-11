@@ -14,6 +14,7 @@ export class DashboardGuard implements CanActivate {
 
     canActivate() {
         if (this.cookie.check('user')) {
+            console.log('usao sam u dashboard guard!');
             return true;
         } else {
             this._router.navigate(['user-main']);

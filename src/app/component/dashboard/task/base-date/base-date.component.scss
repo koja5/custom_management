@@ -1,0 +1,24 @@
+
+@media (min-width: 768px) {
+    .col-md-12 {
+        margin: 1%;
+    }
+}
+
+@media(max-width: 768px) {
+    .vd_content-section {
+        text-align: center;
+    }
+}
+
+.k-radio-label {
+    padding-left: 3vh !important;
+}
+
+.document-grid {
+    padding-top: 3vh;
+    border: 1px solid lightgray;
+    border-radius: 1.5vh;
+    box-shadow: 1px 1px 1px 1px lightgrey;
+    margin-top: 2vh;
+}

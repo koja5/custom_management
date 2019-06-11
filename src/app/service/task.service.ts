@@ -131,4 +131,9 @@ export class TaskService extends BaseEditService<MyEvent> {
             .map(res => res)            
             .subscribe(val => callback(val));
     }
+
+    getTaskColor() {
+        return this.http.get('../assets/configuration/task-color.json')
+            .map(res => res);
+    }
 }

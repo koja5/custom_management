@@ -8,7 +8,7 @@
         <button type="button" kendoGridExcelCommand icon="file-excel">Export to Excel</button>
         <button kendoGridPDFCommand icon="file-pdf">Export to PDF</button>
     </ng-template>
-    <kendo-grid-column field="shortname" title="Username" width="120">
+    <kendo-grid-column field="id" title="Username" width="120">
     </kendo-grid-column>
     <kendo-grid-column field="email" title="Email" width="250">
     </kendo-grid-column>
@@ -23,6 +23,11 @@
             <input type="checkbox" [checked]="dataItem.active" disabled/>
         </ng-template>
     </kendo-grid-column>
+    <kendo-grid-column title="" width="60">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <button kendoButton [icon]="'k-icon k-i-preview'" class='k-preview' [routerLink]="['../', {outlets: {'dashboard': ['user-details', dataItem.id]}}]"></button>
+        </ng-template>
+      </kendo-grid-column>
 
     <kendo-grid-pdf fileName="Users.pdf" [allPages]="true" paperSize="A4" [repeatHeaders]="true" [landscape]="true">
         <kendo-grid-pdf-margin top="2cm" left="1cm" right="1cm" bottom="2cm"></kendo-grid-pdf-margin>
@@ -69,8 +74,8 @@
                 <input type="email" class="email col-md-4 col-xs-12" name="email" placeholder="Email" [(ngModel)]="data.email" email.value=''>
             </div>
             <div class="form-group">
-                <kendo-datepicker class="email col-md-6 col-xs-12" name="birthday" placeholder="Birthday" [value]="data.birthday"></kendo-datepicker>
-                <kendo-datepicker class="email col-md-6 col-xs-12" name="sincecompany" placeholder="Since in company" [(ngModel)]="data.sincecompany" sincecompany.value=''></kendo-datepicker>
+                <kendo-datepicker class="email col-md-6 col-xs-12" name="birthday" placeholder="Birthday" [(ngModel)]="data.birthday" birthday.value=''></kendo-datepicker>
+                <kendo-datepicker class="email col-md-6 col-xs-12" name="sincecompany" placeholder="Since in company" [(ngModel)]="data.incompanysince" incompanysince.value=''></kendo-datepicker>
             </div>
             <div class="form-group">
                 <kendo-combobox [data]="userType" (selectionChange)="selectionChange($event)" class="col-md-6 col-xs-12">

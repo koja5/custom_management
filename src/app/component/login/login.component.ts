@@ -3,6 +3,7 @@ import { LoginService } from '../../service/login.service';
 import { MailService } from '../../service/mail.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ng2-cookies';
+import { DashboardService } from '../../service/dashboard.service';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +21,7 @@ export class LoginComponent implements OnInit {
   private loginInfo: string;
   private errorInfo: string;
   public emailValid = true;
+  private language: any;
 
   public data = {
     'id': '',
@@ -35,9 +37,21 @@ export class LoginComponent implements OnInit {
   };
   // private data: LoginData;
 
-  constructor(private service: LoginService, private mailService: MailService, public cookie: CookieService, private router: Router) { }
+  constructor(private service: LoginService, private mailService: MailService, public cookie: CookieService, private router: Router, private dashboardService: DashboardService) { }
 
   ngOnInit() {
+    if (localStorage.getItem('translation') !== null) {
+      this.language = JSON.parse(localStorage.getItem('translation'))['login'];
+    } else {
+      console.log('english!');
+      this.dashboardService.getTranslation('english').subscribe(
+        data => {
+          console.log(data);
+          localStorage.setItem('translation', JSON.stringify(data));
+          this.language = data['login'];
+        }
+      );
+    }
   }
 
   signUpActive() {
@@ -75,7 +89,7 @@ export class LoginComponent implements OnInit {
           thisObject.router.navigate(['dashboard', {outlets: {'dashboard': ['task']}}]);
         }
         this.loading = false;
-      } else if (!isLogin) {
+      } else {
         this.loginInfo = 'Username or password is not correct!';
         this.loading = false;
       }

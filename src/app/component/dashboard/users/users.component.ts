@@ -7,6 +7,7 @@ import {
   DataStateChangeEvent,
   PageChangeEvent
 } from '@progress/kendo-angular-grid';
+import { SortDescriptor, orderBy } from '@progress/kendo-data-query';
 
 @Component({
   selector: 'app-users',
@@ -43,14 +44,18 @@ export class UsersComponent implements OnInit {
     filter: null
   };
   private storeLocation: any;
+  private sort: SortDescriptor[] = [{
+    field: 'id',
+    dir: 'asc'
+  }];
 
   constructor(private service: UsersService, private storeService: StoreService) { }
 
   ngOnInit() {
     this.service.getUsers(localStorage.getItem('idUser'), (val) => {
       console.log(val);
+      this.currentLoadData = val;
       this.gridData = process(val, this.state);
-      this.currentLoadData = this.gridData.data;
       console.log(this.gridData);
     })
   }
@@ -108,28 +113,35 @@ export class UsersComponent implements OnInit {
     this.data.companyId = event.id;
   }
 
-  public dataStateChange(state: DataStateChangeEvent): void {
+  dataStateChange(state: DataStateChangeEvent): void {
     this.state = state;
-    console.log(this.currentLoadData);
-    this.gridData = process(this.currentLoadData, this.state);
-    this.gridData.total = this.gridData.data.length;
-    console.log(this.state);
-    console.log(this.gridData);
+    this.gridData = process(this.currentLoadData, this.state)
   }
 
-  protected pageChange({ skip, take }: PageChangeEvent): void {
-    this.state.skip = skip;
-    this.state.take = take;
+  pageChange(event: PageChangeEvent): void {
+    this.state.skip = event.skip;
     this.loadProducts();
   }
 
-  private loadProducts(): void {
+  sortChange(sort: SortDescriptor[]): void {
+    this.sort = sort;
+    this.sortChangeData();
+}
+
+  loadProducts(): void {
     this.gridData = {
         data: this.currentLoadData.slice(this.state.skip, this.state.skip + this.state.take),
         total: this.currentLoadData.length
     };
 
     console.log(this.gridData);
-}
+  }
+
+  sortChangeData() {
+    this.currentLoadData = {
+      data:  orderBy(this.currentLoadData, this.sort),
+      total: this.currentLoadData.length
+    };
+  }
 
 }
