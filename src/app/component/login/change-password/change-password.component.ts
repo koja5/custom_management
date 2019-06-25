@@ -9,12 +9,12 @@ import { LoginService } from '../../../service/login.service';
 })
 export class ChangePasswordComponent implements OnInit {
 
-  private hideShow = 'password';
-  private hideShowEye = 'fa-eye-slash';
-  private loginForm = 'active';
-  private loading = false;
-  private errorInfo: string;
-  private changeInfo: string;
+  public hideShow = 'password';
+  public hideShowEye = 'fa-eye-slash';
+  public loginForm = 'active';
+  public loading = false;
+  public errorInfo: string;
+  public changeInfo: string;
   public mail;
   public passMatch;
   public data = {
@@ -23,7 +23,7 @@ export class ChangePasswordComponent implements OnInit {
     'password2': ''
   };
 
-  constructor(public route: ActivatedRoute, private service: LoginService, private router: Router) { }
+  constructor(public route: ActivatedRoute, public service: LoginService, public router: Router) { }
 
   ngOnInit() {
     console.log(this.route);

@@ -20,7 +20,7 @@ export class ProfileComponent implements OnInit {
   public uploadSaveUrl: string; // should represent an actual API endpoint
   public uploadRemoveUrl: string;
   
-  constructor(private service: UsersService, private sanitizer: DomSanitizer, private message: MessageService) { }
+  constructor(public service: UsersService, public sanitizer: DomSanitizer, public message: MessageService) { }
 
   ngOnInit() {
     this.service.getMe(localStorage.getItem('idUser'), (val) => {
@@ -38,7 +38,7 @@ export class ProfileComponent implements OnInit {
       }
     });
 
-    this.service.getCompany(localStorage.getItem('companyId'), val => {
+    this.service.getCompany(localStorage.getItem('storeId'), val => {
       console.log(val);
       this.companyData = val[0];
     })

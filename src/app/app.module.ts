@@ -13,13 +13,13 @@ import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { ModalModule } from 'ngx-modal';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { InputsModule } from '@progress/kendo-angular-inputs';
-import { LayoutModule } from '@progress/kendo-angular-layout';
+import { LayoutModule, SplitterModule } from '@progress/kendo-angular-layout';
 import { IntlModule } from '@progress/kendo-angular-intl';
 import { ColorPickerModule } from '@progress/kendo-angular-inputs';
 import { UploadModule } from '@progress/kendo-angular-upload';
 import { DialogModule } from '@progress/kendo-angular-dialog';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
-import { FileSelectDirective, FileDropDirective } from 'ng2-file-upload';
+import { FileSelectDirective, FileDropDirective, FileUploadModule } from 'ng2-file-upload';
 
 // guard
 import { LoggedGuard } from './service/login-guard/loggedGuard';
@@ -61,7 +61,6 @@ import { UserDetailsComponent } from './component/dashboard/users/user-details/u
     ProfileComponent,
     CustomersComponent,
     BaseDateComponent,
-    FileSelectDirective,
     DocumentPreviewComponent,
     UserDetailsComponent
   ],
@@ -85,9 +84,11 @@ import { UserDetailsComponent } from './component/dashboard/users/user-details/u
     InputsModule,
     ColorPickerModule,
     LayoutModule,
+    SplitterModule,
     IntlModule,
     UploadModule,
     DialogModule,
+    FileUploadModule,
     PdfViewerModule
     
   ],

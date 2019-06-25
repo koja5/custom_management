@@ -5,11 +5,11 @@ import { Subject } from 'rxjs/Subject';
 @Injectable()
 export class MessageService {
 
-  private theme = new Subject<any>();
-  private language = new Subject<null>();
-  private imageProfile = new Subject<null>();
-  private deleteCustomer = new Subject<null>();
-  private backToCustomerGrid = new Subject<null>();
+  public theme = new Subject<any>();
+  public language = new Subject<null>();
+  public imageProfile = new Subject<null>();
+  public deleteCustomer = new Subject<null>();
+  public backToCustomerGrid = new Subject<null>();
 
   sendTheme(message: string) {
     this.theme.next(message);

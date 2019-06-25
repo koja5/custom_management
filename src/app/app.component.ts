@@ -21,7 +21,7 @@ export class AppComponent {
 @Injectable()
 export class UploadInterceptor implements HttpInterceptor {
 
-  constructor(private service: UsersService) {}
+  constructor(public service: UsersService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     console.log(req);

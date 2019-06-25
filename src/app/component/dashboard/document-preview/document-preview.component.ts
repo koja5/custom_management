@@ -9,9 +9,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class DocumentPreviewComponent implements OnInit {
 
-  private url: SafeResourceUrl;
-  private root = 'http://localhost:4200/';
-  private pdfSrc: string | ArrayBuffer;
+  public url: SafeResourceUrl;
+  public root = 'http://localhost:4200/';
+  public pdfSrc: string | ArrayBuffer;
   @Input() link;
 
   constructor(public sanitizer: DomSanitizer, public route: ActivatedRoute) { 

@@ -35,7 +35,7 @@ const fields: SchedulerModelFields = {
 export class TaskService extends BaseEditService<MyEvent> {
     public loading = false;
 
-    constructor(private http: HttpClient) {
+    constructor(public http: HttpClient) {
         super(fields);
     }
 
@@ -70,7 +70,9 @@ export class TaskService extends BaseEditService<MyEvent> {
 
     protected fetch(action: string = '', data?: any): Observable<any[]> {
         this.loading = true;
-
+        console.log('usao sam ovde u fetch!');
+        console.log(action);
+        console.log(data);
         return this.http
             .jsonp(`https://demos.telerik.com/kendo-ui/service/tasks/${action}?${this.serializeModels(data)}`, 'callback')
             .pipe(
@@ -79,7 +81,7 @@ export class TaskService extends BaseEditService<MyEvent> {
             );
     }
 
-    private readEvent(item: any): MyEvent {
+    public readEvent(item: any): MyEvent {
         return {
             ...item,
             Start: parseDate(item.Start),
@@ -88,7 +90,7 @@ export class TaskService extends BaseEditService<MyEvent> {
         };
     }
 
-    private serializeModels(events: MyEvent[]): string {
+    public serializeModels(events: MyEvent[]): string {
         if (!events) {
             return '';
         }
@@ -107,6 +109,18 @@ export class TaskService extends BaseEditService<MyEvent> {
         this.http.post('/api/createTask', data)
             .map(res => res)
             .subscribe(val => callback(val));
+    }
+
+    updateTask(data, callback) {
+        console.log(data);
+        return this.http.post('/api/updateTask', data)
+            .map(res => res)
+            .subscribe(val => callback(val));
+    }
+
+    deleteTask(id) {
+        return this.http.get('/api/deleteTask/' + id)
+            .map(res => res);
     }
 
     getTasks() {

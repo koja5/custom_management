@@ -18,7 +18,7 @@ export class LoginService {
       .subscribe(val => {
         console.log(val);
         this.logged = val['login'];
-        callback(val['login'], val['notVerified'], val['user'], val['type'], val['id'], val['companyId']);
+        callback(val['login'], val['notVerified'], val['user'], val['type'], val['id'], val['storeId']);
       });
   }
 

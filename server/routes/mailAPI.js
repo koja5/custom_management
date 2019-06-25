@@ -21,7 +21,7 @@ router.post('/send', function(req, res) {
     let mail = "Thank you for registering. We require that you validate your registration to ensure that the email address you entered was correct. This protects against unwanted spam and malicious abuse. Your username is: " + req.body.shortname;
     mail += ".\nTo activate your account, simply click on the following link::\n";
     //mail+="http://147.91.204.116:2030/api/korisnik/verifikacija/" + broj + "\n";
-    mail += "http://localhost:4200/api/korisnik/verifikacija/" + broj + "\n";
+    mail += "http://localhost:3000/api/korisnik/verifikacija/" + broj + "\n";
     mail += "Best regards,\nWebAJ Tim!"
 
     var mailOptions = {
@@ -49,7 +49,7 @@ router.post('/forgotmail', function(req, res) {
     let broj = sha1(req.body.email);
     let mail = "Postovani,\nAko ste podneli zahtev za promenu lozinke na stranici iVeterinar.com, ";
     mail += "to mozete uciniti klikom na sledeci link.\n Ukoliko niste podneli takav zahtev, zanemarite ovu poruku.\n";
-    mail += "http://localhost:4200/changePassword/" + broj + "\n";
+    mail += "http://localhost:3000/changePassword/" + broj + "\n";
     mail += "Pozdrav,\niVeterinar Team!"
 
     var mailOptions = {

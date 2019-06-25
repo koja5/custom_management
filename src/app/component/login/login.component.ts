@@ -12,16 +12,16 @@ import { DashboardService } from '../../service/dashboard.service';
 })
 export class LoginComponent implements OnInit {
 
-  private loginForm = 'active';
-  private signupForm: string;
-  private recoverForm: string;
-  private loading = false;
-  private hideShow = 'password';
-  private hideShowEye = 'fa-eye-slash';
-  private loginInfo: string;
-  private errorInfo: string;
+  public loginForm = 'active';
+  public signupForm: string;
+  public recoverForm: string;
+  public loading = false;
+  public hideShow = 'password';
+  public hideShowEye = 'fa-eye-slash';
+  public loginInfo: string;
+  public errorInfo: string;
   public emailValid = true;
-  private language: any;
+  public language: any;
 
   public data = {
     'id': '',
@@ -35,13 +35,13 @@ export class LoginComponent implements OnInit {
     'mobile': '',
     'comment': ''
   };
-  // private data: LoginData;
+  // public data: LoginData;
 
-  constructor(private service: LoginService, private mailService: MailService, public cookie: CookieService, private router: Router, private dashboardService: DashboardService) { }
+  constructor(public service: LoginService, public mailService: MailService, public cookie: CookieService, public router: Router, public dashboardService: DashboardService) { }
 
   ngOnInit() {
-    if (localStorage.getItem('translation') !== null) {
-      this.language = JSON.parse(localStorage.getItem('translation'))['login'];
+    if (localStorage.getItem('language') !== null) {
+      this.language = JSON.parse(localStorage.getItem('language'))['login'];
     } else {
       console.log('english!');
       this.dashboardService.getTranslation('english').subscribe(
@@ -75,7 +75,7 @@ export class LoginComponent implements OnInit {
   login(form) {
     this.loading = true;
     const thisObject = this;
-    this.service.login(this.data, (isLogin, notActive, user, type, id, companyId) => {
+    this.service.login(this.data, (isLogin, notActive, user, type, id, storeId) => {
       console.log('login' + notActive);
       if (isLogin) {
         if (!notActive) {
@@ -85,7 +85,7 @@ export class LoginComponent implements OnInit {
           this.cookie.set('user', type);
           localStorage.setItem('type', type);
           localStorage.setItem('idUser', id);
-          localStorage.setItem('companyId', companyId);
+          localStorage.setItem('storeId', storeId);
           thisObject.router.navigate(['dashboard', {outlets: {'dashboard': ['task']}}]);
         }
         this.loading = false;

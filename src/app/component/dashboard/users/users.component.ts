@@ -32,24 +32,26 @@ export class UsersComponent implements OnInit {
     'birthday': '',
     'incompanysince': '',
     'type': '',
-    'companyId': '',
+    'storeId': '',
     'active': 0
   };
-  private userType = ['Employee', 'Manager', 'Admin'];
-  private gridData: any;
-  private currentLoadData: any;
+  public userType = ['Employee', 'Manager', 'Admin'];
+  public gridData: any;
+  public currentLoadData: any;
   public state: State = {
     skip: 0,
     take: 5,
     filter: null
   };
-  private storeLocation: any;
-  private sort: SortDescriptor[] = [{
+  public hideShow = 'password';
+  public hideShowEye = 'fa-eye-slash';
+  public storeLocation: any;
+  public sort: SortDescriptor[] = [{
     field: 'id',
     dir: 'asc'
   }];
 
-  constructor(private service: UsersService, private storeService: StoreService) { }
+  constructor(public service: UsersService, public storeService: StoreService) { }
 
   ngOnInit() {
     this.service.getUsers(localStorage.getItem('idUser'), (val) => {
@@ -80,7 +82,7 @@ export class UsersComponent implements OnInit {
       'birthday': '',
       'incompanysince': '',
       'type': '',
-      'companyId': '',
+      'storeId': '',
       'active': 0
     };
     this.user.open();
@@ -110,7 +112,7 @@ export class UsersComponent implements OnInit {
 
   selectionChangeStore(event) {
     console.log(event);
-    this.data.companyId = event.id;
+    this.data.storeId = event.id;
   }
 
   dataStateChange(state: DataStateChangeEvent): void {
@@ -144,4 +146,13 @@ export class UsersComponent implements OnInit {
     };
   }
 
+  hideShowPassword() {
+    if (this.hideShow === 'password') {
+      this.hideShow = 'text';
+      this.hideShowEye = 'fa-eye'
+    } else {
+      this.hideShow = 'password';
+      this.hideShowEye = 'fa-eye-slash';
+    }
+  }
 }

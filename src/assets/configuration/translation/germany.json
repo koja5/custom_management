@@ -33,7 +33,8 @@
         "multiDay": "3 Tags",
         "timeline": "Zeitleiste",
         "agenda": "Agenda",
-        "noTaskForUser": "Der ausgewählte Benutzer hat keine Aufgaben."
+        "noTaskForUser": "Der ausgewählte Benutzer hat keine Aufgaben.",
+        "tasksForUser": "Aufgaben für den Benutzer"
     },
     "navigation-menu": {
         "calendar": "Kalender",
@@ -61,5 +62,17 @@
         "profile": "Profil",
         "settings": "die Einstellungen",
         "logout": "Ausloggen"
+    },
+    "user": {
+        "backToGrid": "Zurück zum Gitter",
+        "successUpdateTitle": "Erfolgsupdate!",
+        "successUpdateText": "Benutzer erfolgreich aktualisiert {content}",
+        "profile": "Profil",
+        "workTime": "Arbeitszeit",
+        "monday": "Montag",
+        "tuesday": "Dienstag",
+        "wednesday": "Mittwoch",
+        "thursday": "Donnerstag",
+        "friday": "Freitag"
     }
 }

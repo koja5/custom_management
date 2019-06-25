@@ -56,4 +56,9 @@ export class CustomersService {
       .map(res => res)
       .subscribe(val => callback(val));
   }
+
+  getCustomerWithId(id) {
+    return this.http.get('/api/getCustomerWithId/' + id)
+      .map(res => res);
+  }
 }

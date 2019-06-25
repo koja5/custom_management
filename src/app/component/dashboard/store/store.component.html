@@ -29,7 +29,7 @@
       </ng-template>
   </kendo-grid-pdf>
 
-  <kendo-grid-excel fileName="Location.xlsx" [fetchData]="allData"></kendo-grid-excel>
+  <kendo-grid-excel fileName="Location.xlsx" [fetchData]="gridData"></kendo-grid-excel>
 </kendo-grid>
 
 
@@ -68,6 +68,6 @@
 
   </modal-content>
   <modal-footer>
-      <button class="btn btn-primary" (click)="user.close()">Close</button>
+      <button class="btn btn-primary" (click)="store.close()">Close</button>
   </modal-footer>
 </modal>

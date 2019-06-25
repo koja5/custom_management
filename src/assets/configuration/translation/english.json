@@ -33,7 +33,12 @@
         "multiDay": "3 Days",
         "timeline": "Timeline",
         "agenda": "Agenda",
-        "noTaskForUser": "The selected user has no tasks."
+        "noTaskForUser": "The selected user has no tasks.",
+        "tasksForUser": "Tasks for user",
+        "successUpdateTitle": "Success update",
+        "successUpdateText": "Success update tasks",
+        "unsuccessUpdateTitle": "Unsucess update",
+        "unsuccessUpdateText": "Unsuccess update tasks"
     },
     "navigation-menu": {
         "calendar": "Calendar",
@@ -55,11 +60,26 @@
         "telephone": "Telephone",
         "email": "Email",
         "street": "Street",
-        "newUser": "New user"
+        "newUser": "New user",
+        "female": "Female",
+        "male": "Male"
     },
     "dashboard": {
         "profile": "Profile",
         "settings": "Settings",
         "logout": "Logout"
+    },
+    "user": {
+        "backToGrid": "Back to grid",
+        "successUpdateTitle": "Success update!",
+        "successUpdateText": "Success update user {content}",
+        "profile": "Profile",
+        "workTime": "Work time",
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday"
+
     }
 }

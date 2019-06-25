@@ -27,16 +27,16 @@ export class StoreComponent implements OnInit {
     'comment': '',
     'superadmin': ''
   };
-  private currentLoadData: any;
-  private gridData: any;
+  public currentLoadData: any;
+  public gridData: any;
   public state: State = {
     skip: 0,
     take: 5,
     filter: null
   };
-  private idUser: string;
+  public idUser: string;
 
-  constructor(private service: StoreService) {
+  constructor(public service: StoreService) {
 
   }
 
@@ -76,6 +76,25 @@ export class StoreComponent implements OnInit {
       // form.reset();
     });
 
+  }
+
+  dataStateChange(state: DataStateChangeEvent): void {
+    this.state = state;
+    this.gridData = process(this.currentLoadData, this.state)
+  }
+
+  pageChange(event: PageChangeEvent): void {
+    this.state.skip = event.skip;
+    this.loadProducts();
+  }
+
+  loadProducts(): void {
+    this.gridData = {
+        data: this.currentLoadData.slice(this.state.skip, this.state.skip + this.state.take),
+        total: this.currentLoadData.length
+    };
+
+    console.log(this.gridData);
   }
 
 }

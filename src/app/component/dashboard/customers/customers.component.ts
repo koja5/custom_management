@@ -31,30 +31,30 @@ export class CustomersComponent implements OnInit {
     'mobile': '',
     'email': '',
     'birthday': '',
-    'companyId': ''
+    'storeId': ''
   };
-  private userType = ['Employee', 'Manager', 'Admin'];
-  private gridData: any;
-  private currentLoadData: any;
+  public userType = ['Employee', 'Manager', 'Admin'];
+  public gridData: any;
+  public currentLoadData: any;
   public state: State = {
     skip: 0,
     take: 5,
     filter: null
   };
-  private storeLocation: any;
+  public storeLocation: any;
   public language: any;
   public selectedUser: any;
   public imagePath = 'defaultUser';
   uploadSaveUrl = 'http://localhost:3000/api/uploadImage'; // should represent an actual API endpoint
   uploadRemoveUrl = 'removeUrl'; // should represent an actual API endpoint
-  constructor(private service: CustomersService, private storeService: StoreService, private message: MessageService) { }
+  constructor(public service: CustomersService, public storeService: StoreService, public message: MessageService) { }
 
   ngOnInit() {
 
     this.getCustomers();
 
-    if(localStorage.getItem('translation') !== null) {
-      this.language = JSON.parse(localStorage.getItem('translation'))['grid'];
+    if(localStorage.getItem('language') !== null) {
+      this.language = JSON.parse(localStorage.getItem('language'))['grid'];
       console.log(this.language);
     }
 
@@ -73,7 +73,7 @@ export class CustomersComponent implements OnInit {
   }
 
   getCustomers() {
-    this.service.getCustomers(localStorage.getItem('companyId'), (val) => {
+    this.service.getCustomers(localStorage.getItem('storeId'), (val) => {
       console.log(val);
       if (val !== null) {
         this.gridData = process(val, this.state);
@@ -103,14 +103,14 @@ export class CustomersComponent implements OnInit {
       'mobile': '',
       'email': '',
       'birthday': '',
-      'companyId': ''
+      'storeId': ''
     };
     this.customer.open();
   }
 
   createCustomer(form) {
     console.log(this.data);
-    this.data.companyId = localStorage.getItem('companyId');
+    this.data.storeId = localStorage.getItem('storeId');
     this.service.createCustomer(this.data, (val) => {
       console.log(val);
       this.data.id = val.id;
@@ -145,7 +145,7 @@ export class CustomersComponent implements OnInit {
     this.loadProducts();
   }
 
-  private loadProducts(): void {
+  public loadProducts(): void {
     this.gridData = {
       data: this.currentLoadData.slice(this.state.skip, this.state.skip + this.state.take),
       total: this.currentLoadData.length
