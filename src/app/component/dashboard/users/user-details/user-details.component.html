@@ -247,14 +247,14 @@
         </div> <!-- row -->
         <div *ngIf="currentTab === 'workTime'">
           <div id="profile-tab" class="tab-pane active">
-            <form name="loginForm" class="loginForm" (ngSubmit)="updateUser(user)">
-              <div class="form-group row" *ngFor="let item of workTime">
+            <form name="workTime" class="workTime" (ngSubmit)="updateWorkTime(workTime)">
+              <div class="form-group row" *ngFor="let item of workTime; let i = index;">
                 <label for="example-number-input" class="col-sm-2 col-form-label">{{item.day}}</label>
                 <div class="col-sm-10">
                   <input class="col-sm-2 col-xs-6" type="number" min="8" max="20" id="example-number-input"
-                    value="{{item.start}}"><span class="col-sm-1 h">h</span>
+                    value="{{item.start}}" [(ngModel)]="workTime[i].start" name="{{item.day}}"><span class="col-sm-1 h">h</span>
                   <input class="col-sm-2 col-xs-6" type="number" min="8" max="20" id="example-number-input"
-                    value="{{item.end}}"> <span class="col-sm-1 h">h</span>
+                    value="{{item.end}}" [(ngModel)]="workTime[i].end" name="{{item.day}}"> <span class="col-sm-1 h">h</span>
                 </div>
               </div>
               <div class="form-group">

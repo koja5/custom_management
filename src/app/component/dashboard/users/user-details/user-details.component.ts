@@ -122,4 +122,8 @@ export class UserDetailsComponent implements OnInit {
     }
     return days;
   }
+
+  updateWorkTime(workTime) {
+    console.log(workTime);
+  }
 }
