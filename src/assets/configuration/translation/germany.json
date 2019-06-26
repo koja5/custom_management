@@ -34,7 +34,12 @@
         "timeline": "Zeitleiste",
         "agenda": "Agenda",
         "noTaskForUser": "Der ausgewählte Benutzer hat keine Aufgaben.",
-        "tasksForUser": "Aufgaben für den Benutzer"
+        "tasksForUser": "Aufgaben für den Benutzer",
+        "monday": "Montag",
+        "tuesday": "Dienstag",
+        "wednesday": "Mittwoch",
+        "thursday": "Donnerstag",
+        "friday": "Freitag"
     },
     "navigation-menu": {
         "calendar": "Kalender",

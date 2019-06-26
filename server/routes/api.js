@@ -8,11 +8,11 @@ var fs = require("fs");
 const path = require('path');
 
 var connection = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
+    host: '185.178.193.141',
+    user: 'appproduction.',
+    password: 'jBa9$6v7',
     database: 'management'
-});
+})
 
 /*var connection = mysql.createPool({
     host: '144.76.112.98',
@@ -1269,5 +1269,75 @@ router.get('/getUserWithID/:userid', function(req, res, next) {
         });
     });
 });
+
+router.post('/setWorkTimeForUser', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        console.log(conn);
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+
+        response = {};
+        console.log(req);
+        var date = {
+            'user_id': req.body.user_id,
+            'dateChange': req.body.dateChange,
+            'monday': req.body.monday,
+            'tuesday': req.body.tuesday,
+            'wednesday': req.body.wednesday,
+            'thursday': req.body.thursday,
+            'friday': req.body.friday
+        };
+        console.log(date);
+
+
+        conn.query("insert into work SET ?", date, function(err, rows) {
+            conn.release();
+            if (!err) {
+                if (!err) {
+                    response.id = rows.insertId;
+                    response.success = true;
+                } else {
+                    response.success = false;
+                }
+                res.json(response);
+            } else {
+                res.json({ "code": 100, "status": "Error in connection database" });
+                console.log(err);
+            }
+        });
+        conn.on('error', function(err) {
+            console.log("[mysql error]", err);
+        });
+    });
+});
+
+router.get('/getWorkTimeForUser/:id', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+        var id = req.params.id;
+        conn.query("SELECT * from work where user_id = ?", [id],function(err, rows) {
+            conn.release();
+            if (!err) {
+
+                res.json(rows);
+            } else {
+                res.json({ "code": 100, "status": "Error in connection database" });
+            }
+        });
+
+
+        conn.on('error', function(err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        });
+    });
+
+});
+
 
 module.exports = router;

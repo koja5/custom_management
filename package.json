@@ -63,7 +63,7 @@
         "ngx-modal": "0.0.29",
         "nodemailer": "^6.1.1",
         "rxjs": "^6.3.3",
-        "rxjs-compat": "^6.5.1",
+        "rxjs-compat": "6.3.3",
         "sha1": "^1.1.1",
         "sweetalert2": "^8.12.1",
         "tslib": "^1.9.0",

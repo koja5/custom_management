@@ -17,12 +17,13 @@ export class UserDetailsComponent implements OnInit {
   public currentTab = "profile";
   public language: any;
   public workTime: any;
+  public noSetWorkTime = false;
 
   constructor(
     public route: ActivatedRoute,
     public service: UsersService,
     public sanitizer: DomSanitizer
-  ) {}
+  ) { }
 
   ngOnInit() {
     console.log(this.route.snapshot.params["id"]);
@@ -54,9 +55,21 @@ export class UserDetailsComponent implements OnInit {
 
     this.language = JSON.parse(localStorage.getItem("language"))["user"];
 
+    
+    this.service.getWorkTimeForUser(this.id).subscribe(
+      data => {
+        if(data['length'] === 0) {
+          this.noSetWorkTime = true;
+        } else {
+          console.log(data);
+        }
+      }
+    )
+
     this.service.getWorkTime().subscribe(data => {
       console.log(this.convertNumericToDay(data));
       this.workTime = this.convertNumericToDay(data);
+      console.log(this.workTime);
     });
   }
 
@@ -83,15 +96,15 @@ export class UserDetailsComponent implements OnInit {
   convertNumericToDay(days) {
     for (let i = 0; i < days.length; i++) {
       const data = days[i];
-      if(data.day === 0) {
+      if (data.day === 1) {
         data.day = this.language.monday;
-      } else if(data.day == 1) {
+      } else if (data.day == 2) {
         data.day = this.language.tuesday;
-      } else if(data.day === 2) {
+      } else if (data.day === 3) {
         data.day = this.language.wednesday;
-      } else if(data.day === 3) {
+      } else if (data.day === 4) {
         data.day = this.language.thursday;
-      } else if(data.day === 4) {
+      } else if (data.day === 5) {
         data.day = this.language.friday;
       }
       /*switch (data) {
@@ -123,7 +136,58 @@ export class UserDetailsComponent implements OnInit {
     return days;
   }
 
+  /*convertDayToNumeric(workTime) {
+    for (let i = 0; i < workTime.length; i++) {
+      if (workTime[i].day === this.language.monday.toLowerCase()) {
+        workTime[i].day = 1;
+      } else if (workTime[i].day === this.language.tuesday.toLowerCase()) {
+        workTime[i].day = 2;
+      } else if (workTime[i].day === this.language.wednesday.toLowerCase()) {
+        workTime[i].day = 3;
+      } else if (workTime[i].day === this.language.thursday.toLowerCase()) {
+        workTime[i].day = 4;
+      } else if (workTime[i].day === this.language.friday.toLowerCase()) {
+        workTime[i].day = 5;
+      }
+    }
+    return workTime;
+  }*/
+
+  convertDayToNumeric(day) {
+    if(day === this.language.monday.toLowerCase()) {
+      day = 1;
+    } else if(day === this.language.tuesday.toLowerCase()) {
+      day = 2;
+    } else if(day === this.language.wednesday.toLowerCase()) {
+      day = 3;
+    } else if(day === this.language.thursday.toLowerCase()) {
+      day = 4;
+    } else if(day === this.language.friday.toLowerCase()) {
+      day = 5;
+    }
+    return day;
+  }
+
   updateWorkTime(workTime) {
     console.log(workTime);
+    // workTime = this.convertDayToNumeric(workTime);
+    console.log(this.packWorkTime(workTime));
+    workTime = this.packWorkTime(workTime);
+    this.service.setWorkTimeForUser(workTime).subscribe(
+      date => {
+        console.log(date);
+      }
+    );
+  }
+
+  packWorkTime(workTime) {
+    const time = {};
+    for (let i = 0; i < workTime.length; i++) {
+      const day = workTime[i].day;
+      time[day.toString().toLowerCase()] = this.convertDayToNumeric(day.toString().toLowerCase()) + '-' + workTime[i].start + '-' + workTime[i].end;
+    }
+    time['user_id'] = this.id;
+    time['dateChange'] = new Date();
+    return time;
   }
 }

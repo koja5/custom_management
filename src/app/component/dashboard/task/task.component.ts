@@ -77,6 +77,7 @@ export class TaskComponent implements OnInit {
   public loading = true;
   public height = 92;
   public orientation = "vertical";
+  public workTime: any;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -129,7 +130,7 @@ export class TaskComponent implements OnInit {
           this.height += this.height;
           this.loading = false;
         } else {
-          this.calendars.push({name: null, events: []});
+          this.calendars.push({ name: null, events: [] });
           console.log(this.calendars);
         }
       });
@@ -459,18 +460,25 @@ export class TaskComponent implements OnInit {
             data[i].end = new Date(data[i].end);
             this.events.push(data[i]);
           }
-          const objectCalendar = {
-            name: value[i].shortname,
-            events: this.events
-          };
-          this.calendars.push(objectCalendar);
-          this.height += this.height;
-          console.log(this.calendars);
-          this.loading = false;
+          this.service.getWorkTimeForUser(value[i].id).subscribe(
+            data => {
+              //this.workTime = data[2];
+              this.workTime = this.pickWorkTimeToTask(data);
+              console.log(data[0].monday.split('-'));
+              const objectCalendar = {
+                name: value[i].shortname,
+                events: this.events
+              };
+              console.log(data);
+              this.calendars.push(objectCalendar);
+              this.height += this.height;
+              console.log(this.calendars);
+              this.loading = false;
+            }
+          );
         });
       }
     }
-    console.log(this.calendars);
   }
 
   selectedStore(event) {
@@ -521,4 +529,55 @@ export class TaskComponent implements OnInit {
   cancelHandler(event) {
     console.log(event);
   }
+
+  dateFormat(date) {
+    // console.log(new Date(date).getUTCDay());
+    /*console.log(this.workTime);
+    for (let i = 0; i < this.workTime.length; i++) {
+      if (this.workTime[i].day === new Date(date).getDay()) {
+        // console.log(new Date(date).getHours());
+        if (this.workTime[i].start <= new Date(date).getHours() && this.workTime[i].end >= new Date(date).getHours()) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    }*/
+  }
+
+  convertNumericToDay(numeric) {
+    let day = null;
+    if (numeric === 1) {
+      day = this.language.monday.toString().toLowerCase();
+    } else if (numeric === 2) {
+      day = this.language.tuesday.toLowerCase();
+    } else if (numeric === 3) {
+      day = this.language.wednesday.toLowerCase();
+    } else if (numeric === 4) {
+      day = this.language.thursday.toLowerCase();
+    } else if (numeric === 5) {
+      day = this.language.friday.toLowerCase();
+    }
+    return day;
+  }
+
+  pickWorkTimeToTask(workTime) {
+    let workTimeArray = [];
+    let workTimeObject = null;
+    for (let i = 0; i < workTime.length; i++) {
+      for (let j = 1; j < 6; j++) {
+        workTimeObject = {
+          day: Number(workTime[i][this.convertNumericToDay(j)].split('-')[0]),
+          start: workTime[i][this.convertNumericToDay(j)].split('-')[1],
+          end: workTime[i][this.convertNumericToDay(j)].split('-')[2],
+        }
+        workTimeArray.push(workTimeObject);
+      }
+    }
+    console.log(workTimeArray);
+    return workTimeArray;
+  }
+
 }

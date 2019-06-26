@@ -38,7 +38,12 @@
         "successUpdateTitle": "Success update",
         "successUpdateText": "Success update tasks",
         "unsuccessUpdateTitle": "Unsucess update",
-        "unsuccessUpdateText": "Unsuccess update tasks"
+        "unsuccessUpdateText": "Unsuccess update tasks",
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday"
     },
     "navigation-menu": {
         "calendar": "Calendar",

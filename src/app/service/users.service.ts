@@ -5,7 +5,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
   providedIn: "root"
 })
 export class UsersService {
-  constructor(public http: HttpClient) {}
+  constructor(public http: HttpClient) { }
 
   createUser(data, callback) {
     console.log("Pozivam funkciju signup!");
@@ -57,4 +57,15 @@ export class UsersService {
       .get("../assets/configuration/workTime.json")
       .map(res => res);
   }
+
+  setWorkTimeForUser(data) {
+    return this.http.post('/api/setWorkTimeForUser', data)
+      .map(res => res);
+  }
+  
+  getWorkTimeForUser(id) {
+    return this.http.get('/api/getWorkTimeForUser/' + id)
+      .map(res => res);
+  }
+
 }

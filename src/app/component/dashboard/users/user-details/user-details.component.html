@@ -41,13 +41,12 @@
           </div>
         </div>
         <div>
-          <div class="vd_info tr" style="height: 7vh; text-align: center"> <button kendoButton class="k-edit"
-              [icon]="'k-icon k-i-delete'" (click)="user.open()" style="text-align: center">Edit</button> </div>
-          <div class="vd_info tr" style="height: 7vh; text-align: center"> <button kendoButton class="k-delete"
-              [icon]="'k-icon k-i-delete'" [primary]="true" (click)="open('dialog')"
-              style="text-align: center">Delete</button> </div>
-          <div class="vd_info tr" style="text-align: center;"> <button kendoButton class="k-copy"
-              [icon]="'k-icon k-i-copy'" (click)="newCustomer()">Copy</button> </div>
+          <div class="vd_info tr" style="height: 7vh; text-align: center"> <button kendoButton class="k-edit" [icon]="'k-icon k-i-delete'"
+              (click)="user.open()" style="text-align: center">Edit</button> </div>
+          <div class="vd_info tr" style="height: 7vh; text-align: center"> <button kendoButton class="k-delete" [icon]="'k-icon k-i-delete'"
+              [primary]="true" (click)="open('dialog')" style="text-align: center">Delete</button> </div>
+          <div class="vd_info tr" style="text-align: center;"> <button kendoButton class="k-copy" [icon]="'k-icon k-i-copy'"
+              (click)="newCustomer()">Copy</button> </div>
         </div>
       </div>
 
@@ -57,8 +56,8 @@
         <div class="tab-content">
           <div id="profile-tab" class="tab-pane active">
             <div class="pd-20">
-              <div *ngIf="type === 'calendar'" class="vd_info tr" style="height: 12vh;"> <button kendoButton
-                  class="k-save" [icon]="'k-icon k-i-save'" (click)="newCustomer()" style="float: right;">SAVE</button>
+              <div *ngIf="type === 'calendar'" class="vd_info tr" style="height: 12vh;"> <button kendoButton class="k-save"
+                  [icon]="'k-icon k-i-save'" (click)="newCustomer()" style="float: right;">SAVE</button>
               </div>
               <div class="row">
                 <div class="col-sm-6">
@@ -79,8 +78,7 @@
                   <div class="row mgbt-xs-0">
                     <label class="col-xs-5 control-label">Gender:</label>
                     <div class="col-xs-7 controls">{{data.gender}} <i *ngIf="data.gender === 'male'" class="fa fa-mars"
-                        style="color: blue;"></i><i *ngIf="data.gender === 'female'" class="fa fa-venus"
-                        style="color: pink;"></i></div>
+                        style="color: blue;"></i><i *ngIf="data.gender === 'female'" class="fa fa-venus" style="color: pink;"></i></div>
                     <!-- col-sm-10 -->
                   </div>
                 </div>
@@ -182,8 +180,8 @@
           <div id="profile-tab" class="tab-pane active">
             <form name="loginForm" class="loginForm" (ngSubmit)="updateUser(user)">
               <div class="form-group">
-                <input type="text" class="email col-md-6 col-xs-12" name="shortname" placeholder="Username"
-                  [(ngModel)]="data.shortname" shortname.value=''>
+                <input type="text" class="email col-md-6 col-xs-12" name="shortname" placeholder="Username" [(ngModel)]="data.shortname"
+                  shortname.value=''>
                 <input type="{{hideShow}}" class="col-md-6 col-xs-12 password" name="password" placeholder="Password"
                   [(ngModel)]="data.password" password.value=''>
                 <span class="fa {{hideShowEye}} pwd-toggle" (click)="hideShowPassword()"></span>
@@ -191,30 +189,30 @@
               <div class="form-group">
                 <input type="text" class="email col-md-6 col-xs-12" name="firstname" placeholder="Firstname"
                   [(ngModel)]="data.firstname" firstname.value=''>
-                <input type="text" class="email col-md-6 col-xs-12" name="lastname" placeholder="Lastname"
-                  [(ngModel)]="data.lastname" lastname.value=''>
+                <input type="text" class="email col-md-6 col-xs-12" name="lastname" placeholder="Lastname" [(ngModel)]="data.lastname"
+                  lastname.value=''>
               </div>
               <div class="form-group">
-                <input type="text" class="email col-md-12 col-xs-12" name="street" placeholder="Street"
-                  [(ngModel)]="data.street" street.value=''>
+                <input type="text" class="email col-md-12 col-xs-12" name="street" placeholder="Street" [(ngModel)]="data.street"
+                  street.value=''>
               </div>
               <div class="form-group">
-                <input type="text" class="email col-md-6 col-xs-12" name="zipcode" placeholder="Zipcode"
-                  [(ngModel)]="data.zipcode" zipcode.value=''>
-                <input type="text" class="email col-md-6 col-xs-12" name="place" placeholder="Place"
-                  [(ngModel)]="data.place" place.value=''>
+                <input type="text" class="email col-md-6 col-xs-12" name="zipcode" placeholder="Zipcode" [(ngModel)]="data.zipcode"
+                  zipcode.value=''>
+                <input type="text" class="email col-md-6 col-xs-12" name="place" placeholder="Place" [(ngModel)]="data.place"
+                  place.value=''>
               </div>
               <div class="form-group">
                 <input type="text" class="email col-md-4 col-xs-12" name="telephone" placeholder="Telephone"
                   [(ngModel)]="data.telephone" telephone.value=''>
-                <input type="text" class="email col-md-4 col-xs-12" name="mobile" placeholder="mobile"
-                  [(ngModel)]="data.mobile" mobile.value=''>
-                <input type="email" class="email col-md-4 col-xs-12" name="email" placeholder="Email"
-                  [(ngModel)]="data.email" email.value=''>
+                <input type="text" class="email col-md-4 col-xs-12" name="mobile" placeholder="mobile" [(ngModel)]="data.mobile"
+                  mobile.value=''>
+                <input type="email" class="email col-md-4 col-xs-12" name="email" placeholder="Email" [(ngModel)]="data.email"
+                  email.value=''>
               </div>
               <div class="form-group">
-                <kendo-datepicker class="email col-md-6 col-xs-12" name="birthday" placeholder="Birthday"
-                  [(ngModel)]="data.birthday" birthday.value=''></kendo-datepicker>
+                <kendo-datepicker class="email col-md-6 col-xs-12" name="birthday" placeholder="Birthday" [(ngModel)]="data.birthday"
+                  birthday.value=''></kendo-datepicker>
                 <kendo-datepicker class="email col-md-6 col-xs-12" name="sincecompany" placeholder="Since in company"
                   [(ngModel)]="data.incompanysince" incompanysince.value=''></kendo-datepicker>
               </div>
@@ -227,39 +225,33 @@
                 </label>
               </div>
               <div class="form-group">
-                <kendo-combobox [data]="storeLocation" [textField]="'storename'" [valueField]="'id'"
-                  (selectionChange)="selectionChangeStore($event)" class="col-md-12 col-xs-12">
+                <kendo-combobox [data]="storeLocation" [textField]="'storename'" [valueField]="'id'" (selectionChange)="selectionChangeStore($event)"
+                  class="col-md-12 col-xs-12">
                 </kendo-combobox>
               </div>
 
-              <!-- ./remember-row -->
               <div class="form-group">
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Update user</button>
               </div>
             </form>
           </div>
-          <!-- home-tab -->
-
-
-
-
-
-        </div> <!-- row -->
+        </div> 
         <div *ngIf="currentTab === 'workTime'">
           <div id="profile-tab" class="tab-pane active">
+            <p *ngIf="noSetWorkTime" class="noSetWorkTime">*For this user work time didn't set!</p>
             <form name="workTime" class="workTime" (ngSubmit)="updateWorkTime(workTime)">
               <div class="form-group row" *ngFor="let item of workTime; let i = index;">
                 <label for="example-number-input" class="col-sm-2 col-form-label">{{item.day}}</label>
                 <div class="col-sm-10">
-                  <input class="col-sm-2 col-xs-6" type="number" min="8" max="20" id="example-number-input"
-                    value="{{item.start}}" [(ngModel)]="workTime[i].start" name="{{item.day}}"><span class="col-sm-1 h">h</span>
-                  <input class="col-sm-2 col-xs-6" type="number" min="8" max="20" id="example-number-input"
-                    value="{{item.end}}" [(ngModel)]="workTime[i].end" name="{{item.day}}"> <span class="col-sm-1 h">h</span>
+                  <input class="col-sm-2 col-xs-6" type="number" min="8" max="20" id="example-number-input" value="{{item.start}}"
+                    [(ngModel)]="workTime[i].start" name="{{item.day}}start"><span class="col-sm-1 h">h</span>
+                  <input class="col-sm-2 col-xs-6" type="number" min="8" max="20" id="example-number-input" value="{{item.end}}"
+                    [(ngModel)]="workTime[i].end" name="{{item.day}}end"> <span class="col-sm-1 h">h</span>
                 </div>
               </div>
               <div class="form-group">
-                  <button class="btn btn-lg btn-primary btn-block" type="submit">Update work time</button>
-                </div>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Update work time</button>
+              </div>
             </form>
           </div>
         </div>
@@ -315,12 +307,10 @@
                     <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
                   </td>
                   <td nowrap>
-                    <button type="button" class="btn btn-success btn-xs hidden-xs" (click)="item.upload()"
-                      [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                    <button type="button" class="btn btn-success btn-xs hidden-xs" (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
                       <span class="glyphicon glyphicon-upload"></span> Upload
                     </button>
-                    <button type="button" class="btn btn-warning btn-xs hidden-xs" (click)="item.cancel()"
-                      [disabled]="!item.isUploading">
+                    <button type="button" class="btn btn-warning btn-xs hidden-xs" (click)="item.cancel()" [disabled]="!item.isUploading">
                       <span class="glyphicon glyphicon-ban-circle"></span> Cancel
                     </button>
                     <button type="button" class="btn btn-danger btn-xs" (click)="item.remove()">
@@ -338,16 +328,13 @@
                   <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
                 </div>
               </div>
-              <button type="button" class="btn btn-success btn-s" (click)="uploader.uploadAll()"
-                [disabled]="!uploader.getNotUploadedItems().length">
+              <button type="button" class="btn btn-success btn-s" (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
                 <span class="glyphicon glyphicon-upload"></span> Upload all
               </button>
-              <button type="button" class="btn btn-warning btn-s" (click)="uploader.cancelAll()"
-                [disabled]="!uploader.isUploading">
+              <button type="button" class="btn btn-warning btn-s" (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
                 <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
               </button>
-              <button type="button" class="btn btn-danger btn-s" (click)="uploader.clearQueue()"
-                [disabled]="!uploader.queue.length">
+              <button type="button" class="btn btn-danger btn-s" (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
                 <span class="glyphicon glyphicon-trash"></span> Remove all
               </button>
             </div>

@@ -18,11 +18,11 @@ var multer = require('multer');
 const mysql = require('mysql');
 
 var connection = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
+    host: '185.178.193.141',
+    user: 'appproduction.',
+    password: 'jBa9$6v7',
     database: 'management'
-});
+})
 
 //for upload image
 app.use(function(req, res, next) { //allow cross origin requests
