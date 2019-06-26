@@ -65,7 +65,8 @@
         [selectedDate]="selectedDate" style="height: 88vh;" (save)="saveHandler($event)" [resources]="resources"
         (dragEnd)="dragEndHandler($event)" (resizeEnd)="resizeEndHandler($event)" (remove)="removeHandler($event)">
         <ng-template kendoSchedulerTimeSlotTemplate let-date="date">
-          <strong *ngIf="workTime !== undefined&&dateFormat(date)" style="background: #00d635; opacity: 0.2; color: white; padding: 50%; border-radius: 10%"></strong>
+          <strong *ngIf="workTime !== undefined&&dateFormat(date)" style="background: #00d635; opacity: 0.2; color: white; padding: 10%; border-radius: 10%"></strong>
+          <strong *ngIf="workTime !== undefined&&!dateFormat(date)" style="background: #e24848; opacity: 0.2; color: white; padding: 50%; border-radius: 10%"></strong>
         </ng-template>
         <ng-template kendoSchedulerEventTemplate let-event="event" let-resources="resources">
           <div>

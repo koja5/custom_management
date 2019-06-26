@@ -532,19 +532,13 @@ export class TaskComponent implements OnInit {
 
   dateFormat(date) {
     // console.log(new Date(date).getUTCDay());
-    /*console.log(this.workTime);
-    for (let i = 0; i < this.workTime.length; i++) {
-      if (this.workTime[i].day === new Date(date).getDay()) {
+    console.log(this.workTime);
         // console.log(new Date(date).getHours());
-        if (this.workTime[i].start <= new Date(date).getHours() && this.workTime[i].end >= new Date(date).getHours()) {
+        if (this.workTime[new Date(date).getDay() - 1].start <= new Date(date).getHours() && this.workTime[new Date(date).getDay() - 1].end >= new Date(date).getHours()) {
           return true;
         } else {
           return false;
         }
-      } else {
-        return false;
-      }
-    }*/
   }
 
   convertNumericToDay(numeric) {
