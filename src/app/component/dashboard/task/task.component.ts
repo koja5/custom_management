@@ -463,11 +463,13 @@ export class TaskComponent implements OnInit {
           this.service.getWorkTimeForUser(value[i].id).subscribe(
             data => {
               //this.workTime = data[2];
+              console.log(data);
               this.workTime = this.pickWorkTimeToTask(data);
-              console.log(data[0].monday.split('-'));
+              console.log(this.workTime);
               const objectCalendar = {
                 name: value[i].shortname,
-                events: this.events
+                events: this.events,
+                workTime: this.workTime
               };
               console.log(data);
               this.calendars.push(objectCalendar);
@@ -489,6 +491,8 @@ export class TaskComponent implements OnInit {
         this.usersInCompany = val;
         this.loading = false;
       });
+    } else {
+      this.loading = false;
     }
   }
 
@@ -530,15 +534,20 @@ export class TaskComponent implements OnInit {
     console.log(event);
   }
 
-  dateFormat(date) {
+  dateFormat(date, i) {
     // console.log(new Date(date).getUTCDay());
-    console.log(this.workTime);
-        // console.log(new Date(date).getHours());
-        if (this.workTime[new Date(date).getDay() - 1].start <= new Date(date).getHours() && this.workTime[new Date(date).getDay() - 1].end >= new Date(date).getHours()) {
-          return true;
-        } else {
-          return false;
-        }
+    console.log(new Date(date).getDay() - 1);
+    // console.log(new Date(date).getHours());
+    if (new Date(date).getDay() - 1 < 5 && new Date(date).getDay() !== 0) {
+      console.log(new Date(date).getDay() - 1);
+      if (this.workTime[i].times[new Date(date).getDay() - 1].start <= new Date(date).getHours() && this.workTime[i].times[new Date(date).getDay() - 1].end >= new Date(date).getHours()) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
 
   convertNumericToDay(numeric) {
@@ -559,8 +568,10 @@ export class TaskComponent implements OnInit {
 
   pickWorkTimeToTask(workTime) {
     let workTimeArray = [];
+    let allWorkTime = [];
     let workTimeObject = null;
     for (let i = 0; i < workTime.length; i++) {
+      workTimeArray = [];
       for (let j = 1; j < 6; j++) {
         workTimeObject = {
           day: Number(workTime[i][this.convertNumericToDay(j)].split('-')[0]),
@@ -569,9 +580,10 @@ export class TaskComponent implements OnInit {
         }
         workTimeArray.push(workTimeObject);
       }
+      allWorkTime.push({ 'change': workTime[i].dateChange, 'times': workTimeArray });
     }
-    console.log(workTimeArray);
-    return workTimeArray;
+    console.log(allWorkTime);
+    return allWorkTime;
   }
 
 }

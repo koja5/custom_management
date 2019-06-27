@@ -45,114 +45,221 @@
 
   <!--<div class="spinner loading" *ngIf="loading"></div>-->
 
-  <div *ngFor="let item of calendars">
+  <!--<div *ngFor="let item of calendars">
     <div *ngIf="!loading&&item.events.length === 0 && resources.length !== 0&&type !== '3'&&value.length === 1">
       <div class="noTaskForUser">
         <i class="fa fa-tasks"></i>
         <p>{{language.noTaskForUser}}</p>
       </div>
     </div>
+  </div>-->
+
+
+  <div *ngIf="loading" style="height: 90vh;">
+    <div class="spinner loading"></div>
   </div>
-  <kendo-splitter orientation="{{orientation}}">
+
+  <kendo-splitter orientation="{{orientation}}" *ngIf="!loading">
     <kendo-splitter-pane *ngFor="let item of calendars">
       <p *ngIf="item.name !== null && item.name !== ''&&item.events.length !== 0" style="text-align: center; font-size: 4vh;">{{language.tasksForUser}}
         <b>{{item.name}}</b></p>
-      <p *ngIf="item.events.length === 0 && item.name !== null" style="text-align: center; font-size: 4vh; height: 88vh;">No
+      <!--<p *ngIf="item.events.length === 0 && item.name !== null" style="text-align: center; font-size: 4vh; height: 88vh;">No
         tasks
-        for user <b>{{item.name}}</b></p>
-      <kendo-scheduler *ngIf="!loading && resources.length !== 0 || type === '3'" [editable]="true"
-        [kendoSchedulerBinding]="item.events" [kendoSchedulerReactiveEditing]="createFormGroup" class="{{zIndex}}"
-        [selectedDate]="selectedDate" style="height: 88vh;" (save)="saveHandler($event)" [resources]="resources"
-        (dragEnd)="dragEndHandler($event)" (resizeEnd)="resizeEndHandler($event)" (remove)="removeHandler($event)">
-        <ng-template kendoSchedulerTimeSlotTemplate let-date="date">
-          <strong *ngIf="workTime !== undefined&&dateFormat(date)" style="background: #00d635; opacity: 0.2; color: white; padding: 10%; border-radius: 10%"></strong>
-          <strong *ngIf="workTime !== undefined&&!dateFormat(date)" style="background: #e24848; opacity: 0.2; color: white; padding: 50%; border-radius: 10%"></strong>
-        </ng-template>
-        <ng-template kendoSchedulerEventTemplate let-event="event" let-resources="resources">
-          <div>
-            {{event.title}}
-          </div>
-        </ng-template>
-
-        <kendo-scheduler-work-week-view>
-        </kendo-scheduler-work-week-view>
-
-        <kendo-scheduler-multi-day-view [numberOfDays]="3">
-        </kendo-scheduler-multi-day-view>
-
-        <kendo-scheduler-month-view>
-        </kendo-scheduler-month-view>
-
-        <kendo-scheduler-week-view startTime="08:00" endTime="14:00">
-        </kendo-scheduler-week-view>
-
-        <kendo-scheduler-timeline-view>
-        </kendo-scheduler-timeline-view>
-
-        <kendo-scheduler-agenda-view>
-        </kendo-scheduler-agenda-view>
-
-        <ng-template kendoSchedulerEditDialogTemplate let-formGroup="formGroup" let-isNew="isNew" let-editMode="editMode">
-          <div class="k-form-inline">
-            <div class="k-form-field">
-              <span>Title</span>
-              <input class="k-textbox" placeholder="Title" [formControl]="formGroup.get('title')" />
-            </div>
-            <div class="k-form-field">
-              <span>Color</span>
+        for user <b>{{item.name}}</b></p> -->
+      <div *ngIf="item.workTime !== undefined && item.workTime.length !== 0">
+        <div *ngFor="let it of item.workTime; let i = index">
+          <p class="fromDate">{{it.change | date: 'dd/MM/yyyy'}}</p>
+          <kendo-scheduler *ngIf="!loading && resources.length !== 0 || type === '3'" [editable]="true"
+            [kendoSchedulerBinding]="item.events" [kendoSchedulerReactiveEditing]="createFormGroup" class="{{zIndex}}"
+            [selectedDate]="selectedDate" style="height: 88vh;" (save)="saveHandler($event)" [resources]="resources"
+            (dragEnd)="dragEndHandler($event)" (resizeEnd)="resizeEndHandler($event)" (remove)="removeHandler($event)"
+            startTime="08:00" endTime="17:00">
+            <ng-template kendoSchedulerTimeSlotTemplate let-date="date">
+              <strong *ngIf="workTime !== undefined&&dateFormat(date, i)" style="background: #11db06; opacity: 0.2; color: white; padding: 0.5%; border-radius: 10%"></strong>
+              <strong *ngIf="workTime !== undefined&&!dateFormat(date, i)" style="background: #6b6161; opacity: 0.5; color: white; padding: 50%; border-radius: 10%"></strong>
+            </ng-template>
+            <ng-template kendoSchedulerEventTemplate let-event="event" let-resources="resources">
               <div>
-                <!--<input [style.background]="colorTask" [(ngModel)]="colorTask"
+                {{event.title}}
+              </div>
+            </ng-template>
+
+            <kendo-scheduler-work-week-view>
+            </kendo-scheduler-work-week-view>
+
+            <kendo-scheduler-multi-day-view [numberOfDays]="3">
+            </kendo-scheduler-multi-day-view>
+
+            <kendo-scheduler-month-view>
+            </kendo-scheduler-month-view>
+
+            <kendo-scheduler-week-view startTime="08:00" endTime="14:00">
+            </kendo-scheduler-week-view>
+
+            <kendo-scheduler-timeline-view>
+            </kendo-scheduler-timeline-view>
+
+            <kendo-scheduler-agenda-view>
+            </kendo-scheduler-agenda-view>
+
+            <ng-template kendoSchedulerEditDialogTemplate let-formGroup="formGroup" let-isNew="isNew" let-editMode="editMode">
+              <div class="k-form-inline">
+                <div class="k-form-field">
+                  <span>Title</span>
+                  <input class="k-textbox" placeholder="Title" [formControl]="formGroup.get('title')" />
+                </div>
+                <div class="k-form-field">
+                  <span>Color</span>
+                  <div>
+                    <!--<input [style.background]="colorTask" [(ngModel)]="colorTask"
               [cpPresetColors]="['#fff', '#000', '#2889e9', '#e920e9', '#fff500', 'rgb(236,64,64)']"
               [(colorPicker)]="colorTask" [formControl]="formGroup.get('colorTask')" />-->
-                <kendo-colorpalette [palette]="palette" [value]="selected" [tileSize]="30" [formControl]="formGroup.get('colorTask')">
-                </kendo-colorpalette>
-              </div>
-            </div>
-            <div class="k-form-field">
-              <span>User</span>
-              <kendo-combobox [data]="customerUsers" [textField]="'shortname'" [valueField]="'id'" [formControl]="formGroup.get('user')"
-                (valueChange)="onValueChange($event)" ([ngModel])="customerUser">
-              </kendo-combobox>
-              <button kendoButton [icon]="'user'" [primary]="true" (click)="newCustomer()">New
-                customer</button>
+                    <kendo-colorpalette [palette]="palette" [value]="selected" [tileSize]="30" [formControl]="formGroup.get('colorTask')">
+                    </kendo-colorpalette>
+                  </div>
+                </div>
+                <div class="k-form-field">
+                  <span>User</span>
+                  <kendo-combobox [data]="customerUsers" [textField]="'shortname'" [valueField]="'id'" [formControl]="formGroup.get('user')"
+                    (valueChange)="onValueChange($event)" ([ngModel])="customerUser">
+                  </kendo-combobox>
+                  <button kendoButton [icon]="'user'" [primary]="true" (click)="newCustomer()">New
+                    customer</button>
 
-              <button kendoButton [icon]="'k-icon k-i-information'" [primary]="true" (click)="baseDataForUser()" *ngIf="customerUser !== undefined">Base
-                data</button>
-            </div>
-            <div class="k-form-field k-datetime-picker-wrapper">
-              <span>Start</span>
-              <kendo-datepicker [formControl]="formGroup.get('start')">
-              </kendo-datepicker>
-              <kendo-timepicker [formControl]="formGroup.get('start')" *ngIf='!formGroup.controls.isAllDay.value'>
-              </kendo-timepicker>
-            </div>
-            <div class="k-form-field k-datetime-picker-wrapper">
-              <span>End</span>
-              <kendo-datepicker [formControl]="formGroup.get('end')">
-              </kendo-datepicker>
-              <kendo-timepicker [formControl]="formGroup.get('end')" *ngIf='!formGroup.controls.isAllDay.value'>
-              </kendo-timepicker>
-            </div>
-            <!-- <div class="k-form-field">
+                  <button kendoButton [icon]="'k-icon k-i-information'" [primary]="true" (click)="baseDataForUser()"
+                    *ngIf="customerUser !== undefined">Base
+                    data</button>
+                </div>
+                <div class="k-form-field k-datetime-picker-wrapper">
+                  <span>Start</span>
+                  <kendo-datepicker [formControl]="formGroup.get('start')">
+                  </kendo-datepicker>
+                  <kendo-timepicker [formControl]="formGroup.get('start')" *ngIf='!formGroup.controls.isAllDay.value'>
+                  </kendo-timepicker>
+                </div>
+                <div class="k-form-field k-datetime-picker-wrapper">
+                  <span>End</span>
+                  <kendo-datepicker [formControl]="formGroup.get('end')">
+                  </kendo-datepicker>
+                  <kendo-timepicker [formControl]="formGroup.get('end')" *ngIf='!formGroup.controls.isAllDay.value'>
+                  </kendo-timepicker>
+                </div>
+                <!-- <div class="k-form-field">
                 <input type='checkbox' id='k-is-allday-chkbox' class='k-checkbox' [formControl]="formGroup.get('isAllDay')" />
                 <label class='k-checkbox-label' for='k-is-allday-chkbox'>All Day Event</label>
             </div>-->
-            <div class="k-form-field">
-              <span>Telephone</span>
-              <input class="k-textbox" placeholder="Telephone" [formControl]="formGroup.get('telephone')" [value]="telephoneValue" />
-            </div>
-            <!--<div class="k-form-field" *ngIf="isEditingSeries(editMode)">
+                <div class="k-form-field">
+                  <span>Telephone</span>
+                  <input class="k-textbox" placeholder="Telephone" [formControl]="formGroup.get('telephone')" [value]="telephoneValue" />
+                </div>
+                <!--<div class="k-form-field" *ngIf="isEditingSeries(editMode)">
                 <kendo-recurrence-editor [formControl]="formGroup.get('recurrenceRule')">
                 </kendo-recurrence-editor>
             </div>-->
-          </div>
-        </ng-template>
-        <kendo-scheduler-messages today="{{language.today}}" allDay="{{language.allDay}}" dayViewTitle="{{language.day}}"
-          weekViewTitle="{{language.week}}" monthViewTitle="{{language.month}}" workWeekViewTitle="{{language.workWeek}}"
-          multiDayViewTitle="{{language.multiDay}}" timelineViewTitle="{{language.timeline}}" agendaViewTitle="{{language.agenda}}"
-          showWorkDay="Mostrar horas laborables" showFullDay="Mostrar día completo">
-        </kendo-scheduler-messages>
-      </kendo-scheduler>
+              </div>
+            </ng-template>
+            <kendo-scheduler-messages today="{{language.today}}" allDay="{{language.allDay}}" dayViewTitle="{{language.day}}"
+              weekViewTitle="{{language.week}}" monthViewTitle="{{language.month}}" workWeekViewTitle="{{language.workWeek}}"
+              multiDayViewTitle="{{language.multiDay}}" timelineViewTitle="{{language.timeline}}" agendaViewTitle="{{language.agenda}}"
+              showWorkDay="Mostrar horas laborables" showFullDay="Mostrar día completo">
+            </kendo-scheduler-messages>
+          </kendo-scheduler>
+        </div>
+      </div>
+
+      <div *ngIf="item.workTime === undefined || item.workTime.length === 0">
+        <kendo-scheduler *ngIf="!loading && resources.length !== 0 || type === '3'" [editable]="true"
+          [kendoSchedulerBinding]="item.events" [kendoSchedulerReactiveEditing]="createFormGroup" class="{{zIndex}}"
+          [selectedDate]="selectedDate" style="height: 88vh;" (save)="saveHandler($event)" [resources]="resources"
+          (dragEnd)="dragEndHandler($event)" (resizeEnd)="resizeEndHandler($event)" (remove)="removeHandler($event)"
+          startTime="08:00" endTime="17:00">
+          <ng-template kendoSchedulerEventTemplate let-event="event" let-resources="resources">
+            <div>
+              {{event.title}}
+            </div>
+          </ng-template>
+
+          <kendo-scheduler-work-week-view>
+          </kendo-scheduler-work-week-view>
+
+          <kendo-scheduler-multi-day-view [numberOfDays]="3">
+          </kendo-scheduler-multi-day-view>
+
+          <kendo-scheduler-month-view>
+          </kendo-scheduler-month-view>
+
+          <kendo-scheduler-week-view startTime="08:00" endTime="14:00">
+          </kendo-scheduler-week-view>
+
+          <kendo-scheduler-timeline-view>
+          </kendo-scheduler-timeline-view>
+
+          <kendo-scheduler-agenda-view>
+          </kendo-scheduler-agenda-view>
+
+          <ng-template kendoSchedulerEditDialogTemplate let-formGroup="formGroup" let-isNew="isNew" let-editMode="editMode">
+            <div class="k-form-inline">
+              <div class="k-form-field">
+                <span>Title</span>
+                <input class="k-textbox" placeholder="Title" [formControl]="formGroup.get('title')" />
+              </div>
+              <div class="k-form-field">
+                <span>Color</span>
+                <div>
+                  <!--<input [style.background]="colorTask" [(ngModel)]="colorTask"
+                [cpPresetColors]="['#fff', '#000', '#2889e9', '#e920e9', '#fff500', 'rgb(236,64,64)']"
+                [(colorPicker)]="colorTask" [formControl]="formGroup.get('colorTask')" />-->
+                  <kendo-colorpalette [palette]="palette" [value]="selected" [tileSize]="30" [formControl]="formGroup.get('colorTask')">
+                  </kendo-colorpalette>
+                </div>
+              </div>
+              <div class="k-form-field">
+                <span>User</span>
+                <kendo-combobox [data]="customerUsers" [textField]="'shortname'" [valueField]="'id'" [formControl]="formGroup.get('user')"
+                  (valueChange)="onValueChange($event)" ([ngModel])="customerUser">
+                </kendo-combobox>
+                <button kendoButton [icon]="'user'" [primary]="true" (click)="newCustomer()">New
+                  customer</button>
+
+                <button kendoButton [icon]="'k-icon k-i-information'" [primary]="true" (click)="baseDataForUser()"
+                  *ngIf="customerUser !== undefined">Base
+                  data</button>
+              </div>
+              <div class="k-form-field k-datetime-picker-wrapper">
+                <span>Start</span>
+                <kendo-datepicker [formControl]="formGroup.get('start')">
+                </kendo-datepicker>
+                <kendo-timepicker [formControl]="formGroup.get('start')" *ngIf='!formGroup.controls.isAllDay.value'>
+                </kendo-timepicker>
+              </div>
+              <div class="k-form-field k-datetime-picker-wrapper">
+                <span>End</span>
+                <kendo-datepicker [formControl]="formGroup.get('end')">
+                </kendo-datepicker>
+                <kendo-timepicker [formControl]="formGroup.get('end')" *ngIf='!formGroup.controls.isAllDay.value'>
+                </kendo-timepicker>
+              </div>
+              <!-- <div class="k-form-field">
+                  <input type='checkbox' id='k-is-allday-chkbox' class='k-checkbox' [formControl]="formGroup.get('isAllDay')" />
+                  <label class='k-checkbox-label' for='k-is-allday-chkbox'>All Day Event</label>
+              </div>-->
+              <div class="k-form-field">
+                <span>Telephone</span>
+                <input class="k-textbox" placeholder="Telephone" [formControl]="formGroup.get('telephone')" [value]="telephoneValue" />
+              </div>
+              <!--<div class="k-form-field" *ngIf="isEditingSeries(editMode)">
+                  <kendo-recurrence-editor [formControl]="formGroup.get('recurrenceRule')">
+                  </kendo-recurrence-editor>
+              </div>-->
+            </div>
+          </ng-template>
+          <kendo-scheduler-messages today="{{language.today}}" allDay="{{language.allDay}}" dayViewTitle="{{language.day}}"
+            weekViewTitle="{{language.week}}" monthViewTitle="{{language.month}}" workWeekViewTitle="{{language.workWeek}}"
+            multiDayViewTitle="{{language.multiDay}}" timelineViewTitle="{{language.timeline}}" agendaViewTitle="{{language.agenda}}"
+            showWorkDay="Mostrar horas laborables" showFullDay="Mostrar día completo">
+          </kendo-scheduler-messages>
+        </kendo-scheduler>
+      </div>
     </kendo-splitter-pane>
   </kendo-splitter>
 
