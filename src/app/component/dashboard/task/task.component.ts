@@ -42,7 +42,7 @@ export class TaskComponent implements OnInit {
   public formGroup: FormGroup;
   public events: SchedulerEvent[] = [];
   public customerUsers: any;
-  public telephoneValue = null;
+  public telephoneValue = "";
   public type: any;
   public customerComponent: CustomersComponent;
   public usersInCompany: any = [];
@@ -77,7 +77,7 @@ export class TaskComponent implements OnInit {
   public loading = true;
   public height = 92;
   public orientation = "vertical";
-  public workTime: any;
+  public workTime: any[] = [];
 
   constructor(
     public formBuilder: FormBuilder,
@@ -110,6 +110,7 @@ export class TaskComponent implements OnInit {
             events: this.events
           };
           this.calendars.push(objectCalendar);
+          console.log(this.calendars);
           this.loading = false;
         });
     } else {
@@ -155,9 +156,7 @@ export class TaskComponent implements OnInit {
     }, 50);
 
     if (localStorage.getItem("language") !== undefined) {
-      this.language = JSON.parse(localStorage.getItem("language"))[
-        "calendar"
-      ];
+      this.language = JSON.parse(localStorage.getItem("language"))["calendar"];
       console.log(this.language);
     }
 
@@ -224,15 +223,16 @@ export class TaskComponent implements OnInit {
       recurrenceId: dataItem.recurrenceId
     });
 
-    if (dataItem.telephone !== null) {
-      this.telephoneValue = dataItem.telephone;
-    }
-
     setTimeout(() => {
       if (dataItem.colorTask !== null) {
         this.selected = this.IdMapToColor(dataItem.colorTask);
         console.log(this.selected);
       }
+
+      if (dataItem.telephone !== undefined) {
+        this.telephoneValue = dataItem.telephone;
+      }
+
       this.formGroup = this.formBuilder.group({
         user: this.customerUser
       });
@@ -314,7 +314,13 @@ export class TaskComponent implements OnInit {
 
   onValueChange(event) {
     console.log(event);
-    this.customerUser = event;
+    if (event !== undefined) {
+      this.customerUser = event;
+      this.telephoneValue = event.telephone;
+    } else {
+      this.customerUser = undefined;
+      this.telephoneValue = null;
+    }
   }
 
   newCustomer() {
@@ -451,6 +457,8 @@ export class TaskComponent implements OnInit {
         this.loading = false;
       });
     } else {
+      this.workTime = [];
+      this.calendars = [];
       for (let i = 0; i < value.length; i++) {
         this.service.getTasksForUser(value[i].id).subscribe(data => {
           console.log(data);
@@ -460,24 +468,22 @@ export class TaskComponent implements OnInit {
             data[i].end = new Date(data[i].end);
             this.events.push(data[i]);
           }
-          this.service.getWorkTimeForUser(value[i].id).subscribe(
-            data => {
-              //this.workTime = data[2];
-              console.log(data);
-              this.workTime = this.pickWorkTimeToTask(data);
-              console.log(this.workTime);
-              const objectCalendar = {
-                name: value[i].shortname,
-                events: this.events,
-                workTime: this.workTime
-              };
-              console.log(data);
-              this.calendars.push(objectCalendar);
-              this.height += this.height;
-              console.log(this.calendars);
-              this.loading = false;
-            }
-          );
+          this.service.getWorkTimeForUser(value[i].id).subscribe(data => {
+            //this.workTime = data[2];
+            console.log(data);
+            this.workTime.push(this.pickWorkTimeToTask(data));
+            console.log(this.workTime);
+            const objectCalendar = {
+              name: value[i].shortname,
+              events: this.events,
+              workTime: this.workTime
+            };
+            console.log(data);
+            this.calendars.push(objectCalendar);
+            this.height += this.height;
+            console.log(this.calendars);
+            this.loading = false;
+          });
         });
       }
     }
@@ -534,13 +540,17 @@ export class TaskComponent implements OnInit {
     console.log(event);
   }
 
-  dateFormat(date, i) {
+  dateFormat(date, i, j) {
     // console.log(new Date(date).getUTCDay());
-    console.log(new Date(date).getDay() - 1);
     // console.log(new Date(date).getHours());
     if (new Date(date).getDay() - 1 < 5 && new Date(date).getDay() !== 0) {
       console.log(new Date(date).getDay() - 1);
-      if (this.workTime[i].times[new Date(date).getDay() - 1].start <= new Date(date).getHours() && this.workTime[i].times[new Date(date).getDay() - 1].end >= new Date(date).getHours()) {
+      if (
+        this.workTime[i][j].times[new Date(date).getDay() - 1].start <=
+          new Date(date).getHours() &&
+        this.workTime[i][j].times[new Date(date).getDay() - 1].end >=
+          new Date(date).getHours()
+      ) {
         return true;
       } else {
         return false;
@@ -574,16 +584,18 @@ export class TaskComponent implements OnInit {
       workTimeArray = [];
       for (let j = 1; j < 6; j++) {
         workTimeObject = {
-          day: Number(workTime[i][this.convertNumericToDay(j)].split('-')[0]),
-          start: workTime[i][this.convertNumericToDay(j)].split('-')[1],
-          end: workTime[i][this.convertNumericToDay(j)].split('-')[2],
-        }
+          day: Number(workTime[i][this.convertNumericToDay(j)].split("-")[0]),
+          start: workTime[i][this.convertNumericToDay(j)].split("-")[1],
+          end: workTime[i][this.convertNumericToDay(j)].split("-")[2]
+        };
         workTimeArray.push(workTimeObject);
       }
-      allWorkTime.push({ 'change': workTime[i].dateChange, 'times': workTimeArray });
+      allWorkTime.push({
+        change: workTime[i].dateChange,
+        times: workTimeArray
+      });
     }
     console.log(allWorkTime);
     return allWorkTime;
   }
-
 }

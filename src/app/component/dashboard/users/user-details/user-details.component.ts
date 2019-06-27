@@ -57,20 +57,21 @@ export class UserDetailsComponent implements OnInit {
 
     
     this.service.getWorkTimeForUser(this.id).subscribe(
-      data => {
+      (data: []) => {
         if(data['length'] === 0) {
           this.noSetWorkTime = true;
+          this.service.getWorkTime().subscribe(data => {
+            this.workTime = this.convertNumericToDay(data);
+          });
         } else {
           console.log(data);
+          let dataSort = [];
+          dataSort = data.sort((val1, val2) => {return (new Date(val2['dateChange']) as any) - (new  Date(val1['dateChange']) as any)})
+          console.log(dataSort[0]);
+          this.workTime = this.packWorkTimeFromDatabase(dataSort[0]);
         }
       }
     )
-
-    this.service.getWorkTime().subscribe(data => {
-      console.log(this.convertNumericToDay(data));
-      this.workTime = this.convertNumericToDay(data);
-      console.log(this.workTime);
-    });
   }
 
   updateUser(user) {
@@ -107,51 +108,10 @@ export class UserDetailsComponent implements OnInit {
       } else if (data.day === 5) {
         data.day = this.language.friday;
       }
-      /*switch (data) {
-        case (data.day === 0): {
-          data.day = this.language.monday;
-          break;
-        }
-        case data.day === 1: {
-          data.day = this.language.tuesday;
-          break;
-        }
-        case data.day === 2: {
-          data.day = this.language.wednesday;
-          break;
-        }
-        case data.day === 3: {
-          data.day = this.language.thursday;
-          break;
-        }
-        case data.day === 4: {
-          data.day = this.language.friday;
-          break;
-        }
-        default:
-          break;
-      }*/
       days[i] = data;
     }
     return days;
   }
-
-  /*convertDayToNumeric(workTime) {
-    for (let i = 0; i < workTime.length; i++) {
-      if (workTime[i].day === this.language.monday.toLowerCase()) {
-        workTime[i].day = 1;
-      } else if (workTime[i].day === this.language.tuesday.toLowerCase()) {
-        workTime[i].day = 2;
-      } else if (workTime[i].day === this.language.wednesday.toLowerCase()) {
-        workTime[i].day = 3;
-      } else if (workTime[i].day === this.language.thursday.toLowerCase()) {
-        workTime[i].day = 4;
-      } else if (workTime[i].day === this.language.friday.toLowerCase()) {
-        workTime[i].day = 5;
-      }
-    }
-    return workTime;
-  }*/
 
   convertDayToNumeric(day) {
     if(day === this.language.monday.toLowerCase()) {
@@ -189,5 +149,36 @@ export class UserDetailsComponent implements OnInit {
     time['user_id'] = this.id;
     time['dateChange'] = new Date();
     return time;
+  }
+
+  packWorkTimeFromDatabase(workTime) {
+    const model = [
+      {
+        "day": this.language.monday,
+        "start": workTime.monday.split('-')[1],
+        "end": workTime.monday.split('-')[2]
+      },
+      {
+        "day": this.language.tuesday,
+        "start": workTime.tuesday.split('-')[1],
+        "end": workTime.tuesday.split('-')[2]
+      },
+      {
+        "day": this.language.wednesday,
+        "start": workTime.wednesday.split('-')[1],
+        "end": workTime.wednesday.split('-')[2]
+      },
+      {
+        "day": this.language.thursday,
+        "start": workTime.thursday.split('-')[1],
+        "end": workTime.thursday.split('-')[2]
+      },
+      {
+        "day": this.language.friday,
+        "start": workTime.friday.split('-')[1],
+        "end": workTime.friday.split('-')[2]
+      },
+    ];
+    return model;
   }
 }
