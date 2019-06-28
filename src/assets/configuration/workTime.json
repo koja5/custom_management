@@ -2,26 +2,36 @@
     {
         "day": 1,
         "start": 8,
-        "end": 16
+        "end": 12,
+        "start2": 14,
+        "end2": 16
     },
     {
         "day": 2,
         "start": 8,
-        "end": 16
+        "end": 12,
+        "start2": 14,
+        "end2": 16
     },
     {
         "day": 3,
         "start": 8,
-        "end": 16
+        "end": 12,
+        "start2": 14,
+        "end2": 16
     },
     {
         "day": 4,
         "start": 8,
-        "end": 16
+        "end": 12,
+        "start2": 14,
+        "end2": 16
     },
     {
         "day": 5,
         "start": 8,
-        "end": 16
+        "end": 12,
+        "start2": 14,
+        "end2": 16
     }
 ]

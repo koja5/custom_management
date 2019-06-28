@@ -69,6 +69,7 @@ export class UserDetailsComponent implements OnInit {
           dataSort = data.sort((val1, val2) => {return (new Date(val2['dateChange']) as any) - (new  Date(val1['dateChange']) as any)})
           console.log(dataSort[0]);
           this.workTime = this.packWorkTimeFromDatabase(dataSort[0]);
+          console.log(this.workTime);
         }
       }
     )
@@ -144,7 +145,7 @@ export class UserDetailsComponent implements OnInit {
     const time = {};
     for (let i = 0; i < workTime.length; i++) {
       const day = workTime[i].day;
-      time[day.toString().toLowerCase()] = this.convertDayToNumeric(day.toString().toLowerCase()) + '-' + workTime[i].start + '-' + workTime[i].end;
+      time[day.toString().toLowerCase()] = this.convertDayToNumeric(day.toString().toLowerCase()) + '-' + workTime[i].start + '-' + workTime[i].end + '-' + workTime[i].start2 + '-' + workTime[i].end2;
     }
     time['user_id'] = this.id;
     time['dateChange'] = new Date();
@@ -156,27 +157,37 @@ export class UserDetailsComponent implements OnInit {
       {
         "day": this.language.monday,
         "start": workTime.monday.split('-')[1],
-        "end": workTime.monday.split('-')[2]
+        "end": workTime.monday.split('-')[2],
+        "start2": workTime.monday.split('-')[3],
+        "end2": workTime.monday.split('-')[4]
       },
       {
         "day": this.language.tuesday,
         "start": workTime.tuesday.split('-')[1],
-        "end": workTime.tuesday.split('-')[2]
+        "end": workTime.tuesday.split('-')[2],
+        "start2": workTime.tuesday.split('-')[3],
+        "end2": workTime.tuesday.split('-')[4]
       },
       {
         "day": this.language.wednesday,
         "start": workTime.wednesday.split('-')[1],
-        "end": workTime.wednesday.split('-')[2]
+        "end": workTime.wednesday.split('-')[2],
+        "start2": workTime.wednesday.split('-')[3],
+        "end2": workTime.wednesday.split('-')[4]
       },
       {
         "day": this.language.thursday,
         "start": workTime.thursday.split('-')[1],
-        "end": workTime.thursday.split('-')[2]
+        "end": workTime.thursday.split('-')[2],
+        "start2": workTime.thursday.split('-')[3],
+        "end2": workTime.thursday.split('-')[4]
       },
       {
         "day": this.language.friday,
         "start": workTime.friday.split('-')[1],
-        "end": workTime.friday.split('-')[2]
+        "end": workTime.friday.split('-')[2],
+        "start2": workTime.friday.split('-')[3],
+        "end2": workTime.friday.split('-')[4]
       },
     ];
     return model;

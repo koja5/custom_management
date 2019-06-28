@@ -3,12 +3,12 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule, routingComponents } from './app-routing.module';
 import { HttpModule } from '@angular/http';
-import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http'; 
+import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SchedulerModule } from '@progress/kendo-angular-scheduler';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
-import { GridModule, ExcelModule, PDFModule } from '@progress/kendo-angular-grid'; 
+import { GridModule, ExcelModule, PDFModule } from '@progress/kendo-angular-grid';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { ModalModule } from 'ngx-modal';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
@@ -48,6 +48,9 @@ import { BaseDateComponent } from './component/dashboard/task/base-date/base-dat
 import { DocumentPreviewComponent } from './component/dashboard/document-preview/document-preview.component';
 import { UserDetailsComponent } from './component/dashboard/users/user-details/user-details.component';
 
+import { UrlSerializer } from '@angular/router';
+import { StandardUrlSerializer } from './standardUrlSerializer';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -76,7 +79,7 @@ import { UserDetailsComponent } from './component/dashboard/users/user-details/u
     SchedulerModule,
     DateInputsModule,
     GridModule,
-    ExcelModule, 
+    ExcelModule,
     PDFModule,
     ButtonsModule,
     ModalModule,
@@ -90,7 +93,7 @@ import { UserDetailsComponent } from './component/dashboard/users/user-details/u
     DialogModule,
     FileUploadModule,
     PdfViewerModule
-    
+
   ],
   providers: [
     LoginComponent,
@@ -100,8 +103,13 @@ import { UserDetailsComponent } from './component/dashboard/users/user-details/u
     LoggedGuard,
     DashboardGuard,
     LoginGuard,
-    MessageService
+    MessageService,
+    {
+      provide: UrlSerializer,
+      useClass: StandardUrlSerializer
+    }
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

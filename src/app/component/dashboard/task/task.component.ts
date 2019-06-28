@@ -546,10 +546,13 @@ export class TaskComponent implements OnInit {
     if (new Date(date).getDay() - 1 < 5 && new Date(date).getDay() !== 0) {
       console.log(new Date(date).getDay() - 1);
       if (
-        this.workTime[i][j].times[new Date(date).getDay() - 1].start <=
+        (this.workTime[i][j].times[new Date(date).getDay() - 1].start <=
           new Date(date).getHours() &&
         this.workTime[i][j].times[new Date(date).getDay() - 1].end >=
-          new Date(date).getHours()
+          new Date(date).getHours() || this.workTime[i][j].times[new Date(date).getDay() - 1].start2 <=
+          new Date(date).getHours() &&
+        this.workTime[i][j].times[new Date(date).getDay() - 1].end2 >=
+          new Date(date).getHours())
       ) {
         return true;
       } else {
@@ -586,7 +589,9 @@ export class TaskComponent implements OnInit {
         workTimeObject = {
           day: Number(workTime[i][this.convertNumericToDay(j)].split("-")[0]),
           start: workTime[i][this.convertNumericToDay(j)].split("-")[1],
-          end: workTime[i][this.convertNumericToDay(j)].split("-")[2]
+          end: workTime[i][this.convertNumericToDay(j)].split("-")[2],
+          start2: workTime[i][this.convertNumericToDay(j)].split("-")[3],
+          end2: workTime[i][this.convertNumericToDay(j)].split("-")[4]
         };
         workTimeArray.push(workTimeObject);
       }
