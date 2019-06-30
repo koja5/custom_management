@@ -61,4 +61,24 @@ export class CustomersService {
     return this.http.get('/api/getCustomerWithId/' + id)
       .map(res => res);
   }
+
+  addComplaint(data) {
+    return this.http.post('/api/addComplaint', data)
+      .map(res => res);
+  }
+
+  getComplaintForCustomer(id) {
+    return this.http.get('/api/getComplaintForCustomer/' + id)
+      .map(res => res);
+  }
+
+  addTherapy(data) {
+    return this.http.post('/api/addTherapy', data)
+      .map(res => res);
+  }
+
+  getTherapyForCustomer(id) {
+    return this.http.get('/api/getTherapyForCustomer/' + id)
+      .map(res => res);
+  }
 }

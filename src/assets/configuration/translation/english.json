@@ -84,7 +84,26 @@
         "tuesday": "Tuesday",
         "wednesday": "Wednesday",
         "thursday": "Thursday",
-        "friday": "Friday"
-
-    }
+        "friday": "Friday",
+        "addComplaint": "Add new complaint",
+        "addTherapy": "Add new therapy",
+        "choiceComplaint": "Choice complaint...",
+        "choiceTherapy": "Choice therapy...",
+        "choiceState": "Choice current state"
+    },
+    "complaint": [
+        "Headache",
+        "Neck-pain",
+        "Shoulder-pain"
+    ],
+    "therapy": [
+        "Physio",
+        "Electro",
+        "Tuina"
+    ],
+    "state": [
+        "worse",
+        "same",
+        "better"
+    ]
 }

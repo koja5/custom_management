@@ -14,7 +14,7 @@
 
 </head>
 
-<body class="{{sidebar}}">
+<body class="{{sidebar}}" *ngIf="language !== undefined">
     <!-- Begin page -->
     <div id="wrapper" *ngIf="language !== undefined">
         <!-- Top Bar Start -->
@@ -59,24 +59,26 @@
                     <li class="dropdown notification-list list-inline-item">
                         <div class="dropdown notification-list nav-pro-img {{profile}}" (click)="showHideProfile()">
                             <a class="dropdown-toggle nav-link arrow-none waves-effect nav-user" data-toggle="dropdown"
-                                role="button" aria-haspopup="false" aria-expanded="false"><img
-                                    [src]="imagePath" alt="user"
-                                    class="rounded-circle"></a>
+                                role="button" aria-haspopup="false" aria-expanded="false"><img [src]="imagePath"
+                                    alt="user" class="rounded-circle"></a>
                             <div class="dropdown-menu dropdown-menu-right profile-dropdown {{profile}}">
                                 <!-- item--><a class="dropdown-item"
                                     [routerLink]="[{outlets: {'dashboard': ['profile']}}]"><i
-                                        class="mdi mdi-account-circle m-r-5"></i> {{language['dashboard']['profile']}}</a>
+                                        class="mdi mdi-account-circle m-r-5"></i>
+                                    {{language['dashboard']['profile']}}</a>
                                 <a class="dropdown-item d-block" (click)="settings.open()"><i
                                         class="mdi mdi-settings m-r-5"></i> {{language['dashboard']['settings']}}</a>
                                 <div class="dropdown-divider"></div><a class="dropdown-item text-danger"
-                                    (click)="logout()"><i class="mdi mdi-power text-danger"></i> {{language['dashboard']['logout']}}</a>
+                                    (click)="logout()"><i class="mdi mdi-power text-danger"></i>
+                                    {{language['dashboard']['logout']}}</a>
                             </div>
                         </div>
                     </li>
                 </ul>
                 <ul class="list-inline menu-left mb-0">
                     <li class="float-left" (click)="hideShowSidebar()"><button
-                            class="button-menu-mobile-{{theme}} open-left waves-effect"><i class="fa fa-bars"></i></button></li>
+                            class="button-menu-mobile-{{theme}} open-left waves-effect"><i
+                                class="fa fa-bars"></i></button></li>
                     <li class="d-none d-sm-block">
                         <div class="dropdown pt-3 d-inline-block"><a class="btn btn-light dropdown-toggle" href="#"
                                 role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
@@ -102,13 +104,19 @@
                         <!--<li class="menu-title">Main</li>-->
                         <!--<li *ngIf="type !== 0"><a href="index.html" class="waves-effect"><i class="fa fa fa-home"></i><span class="badge badge-primary badge-pill float-right">2</span> <span>Dashboard</span></a></li>-->
                         <li><a [routerLink]="[{outlets: {'dashboard': ['task']}}]" class="waves-effect"><i
-                                    class="fa fa-calendar"></i><span> {{language['navigation-menu']['calendar']}}</span></a></li>
+                                    class="fa fa-calendar"></i><span>
+                                    {{language['navigation-menu']['calendar']}}</span></a></li>
                         <li><a [routerLink]="[{outlets: {'dashboard': ['customers']}}]" class="waves-effect"><i
-                                    class="fa fa-users"></i><span>{{language['navigation-menu']['customer']}}</span></a></li>
+                                    class="fa fa-users"></i><span>{{language['navigation-menu']['customer']}}</span></a>
+                        </li>
                         <li *ngIf="type === 0"><a [routerLink]="[{outlets: {'dashboard': ['users']}}]"
-                                class="waves-effect"><i class="fa fa-user"></i><span>{{language['navigation-menu']['users']}}</span></a></li>
+                                class="waves-effect"><i
+                                    class="fa fa-user"></i><span>{{language['navigation-menu']['users']}}</span></a>
+                        </li>
                         <li *ngIf="type === 0"><a [routerLink]="[{outlets: {'dashboard': ['store']}}]"
-                                class="waves-effect"><i class="fa fa-building"></i><span>{{language['navigation-menu']['store']}}</span></a></li>
+                                class="waves-effect"><i
+                                    class="fa fa-building"></i><span>{{language['navigation-menu']['store']}}</span></a>
+                        </li>
                     </ul>
                     <div class="copyright">
                         <p>© 2019 <a href="mailto: webaj.info@gmail.com">WebAJ</a></p>
@@ -138,50 +146,56 @@
     </div>
 
 
+    <modal #settings modalClass="modal-md top-margin loggerModal adminModal">
+        <modal-header>
+            <h2>{{language['dashboard']['settings']}}</h2>
+        </modal-header>
+        <modal-content>
+            <kendo-tabstrip>
+                <kendo-tabstrip-tab [title]="'Theme'" [selected]="true" class="row">
+                    <ng-template kendoTabContent class="row">
+                        <div class="row">
+                            <div class="radio radio-primary radio-primary{{theme}} col-md-4"
+                                style="margin-top: -5px; text-align: center;"
+                                *ngFor='let item of allThemes; let i = index' (click)="changeTheme(item['name'])">
+                                <input type="radio" name="radio1" id="radio{{i}}" value="option{{i}}"
+                                    [checked]="theme === item['name'] ? true: false">
+                                <label for="radio{{i}}">
+                                    <div class="color-container width5 ">
+                                        <h3>{{item.name}} </h3>
+                                        <span [style.background]="item.MainColor"
+                                            class="color color-{{item['name']}}-main"></span>
+                                        <span [style.background]="item.SideMenuColor"
+                                            class="color  color-{{item['name']}}-side"></span>
+                                        <span [style.background]="item.MenuColor"
+                                            class="color  color-{{item['name']}}-menu"></span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </ng-template>
+                </kendo-tabstrip-tab>
+                <kendo-tabstrip-tab [title]="'Language'">
+                    <ng-template kendoTabContent>
+                        <div class="row" style="padding: 3%;">
+                            <div class="radio radio-primary radio-primary{{theme}} col-md-6"
+                                style="margin-top: -5px; text-align: center;"
+                                *ngFor='let item of allLanguage; let i = index' (click)="changeLanguage(item['name'])">
+                                <input type="radio" name="radio1" id="radio{{i}}" value="option{{i}}"
+                                    [checked]="languageName === item['name'] ? true: false">
+                                <label for="radio{{i}}">
+                                    <img src="../../../assets/images/flags/{{item.icon}}">
+                                </label>
+                            </div>
+                        </div>
+                    </ng-template>
+                </kendo-tabstrip-tab>
+            </kendo-tabstrip>
+        </modal-content>
+        <modal-footer>
+            <button class="btn btn-primary" (click)="settings.close()">Close</button>
+        </modal-footer>
+    </modal>
 </body>
 
 </html>
-
-<modal #settings modalClass="modal-md top-margin loggerModal adminModal">
-    <modal-header>
-        <h2>{{language['dashboard']['settings']}}</h2>
-    </modal-header>
-    <modal-content>
-        <kendo-tabstrip>
-            <kendo-tabstrip-tab [title]="'Theme'" [selected]="true" class="row">
-                <ng-template kendoTabContent class="row">
-                    <div class="row">
-                        <div class="radio radio-primary radio-primary{{theme}} col-md-4" style="margin-top: -5px; text-align: center;"  *ngFor='let item of allThemes; let i = index'
-                            (click)="changeTheme(item['name'])">
-                            <input type="radio" name="radio1" id="radio{{i}}" value="option{{i}}" [checked]="theme === item['name'] ? true: false">
-                            <label for="radio{{i}}">
-                                <div class="color-container width5 ">
-                                    <h3>{{item.name}} </h3>
-                                    <span [style.background]="item.MainColor" class="color color-{{item['name']}}-main"></span>
-                                    <span [style.background]="item.SideMenuColor" class="color  color-{{item['name']}}-side"></span>
-                                    <span [style.background]="item.MenuColor" class="color  color-{{item['name']}}-menu"></span>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-                </ng-template>
-            </kendo-tabstrip-tab>
-            <kendo-tabstrip-tab [title]="'Language'">
-                <ng-template kendoTabContent>
-                    <div class="row" style="padding: 3%;">
-                        <div class="radio radio-primary radio-primary{{theme}} col-md-6" style="margin-top: -5px; text-align: center;"  *ngFor='let item of allLanguage; let i = index'
-                            (click)="changeLanguage(item['name'])">
-                            <input type="radio" name="radio1" id="radio{{i}}" value="option{{i}}" [checked]="languageName === item['name'] ? true: false">
-                            <label for="radio{{i}}">
-                                <img src="../../../assets/images/flags/{{item.icon}}">
-                            </label>
-                        </div>
-                    </div>
-                </ng-template>
-            </kendo-tabstrip-tab>
-        </kendo-tabstrip>
-    </modal-content>
-    <modal-footer>
-        <button class="btn btn-primary" (click)="settings.close()">Close</button>
-    </modal-footer>
-</modal>

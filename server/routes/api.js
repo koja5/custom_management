@@ -1339,5 +1339,143 @@ router.get('/getWorkTimeForUser/:id', function(req, res, next) {
 
 });
 
+router.post('/addComplaint', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        console.log(conn);
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+
+        response = null;
+        console.log(req);
+        var date = {
+            'customer_id': req.body.customer_id,
+            'employee_name': req.body.employee_name,
+            'date': req.body.date,
+            'complaint': req.body.complaint,
+            'comment': req.body.comment,
+            'therapies': req.body.therapies,
+            'cs': req.body.cs
+        };
+        console.log(date);
+
+
+        conn.query("insert into complaint SET ?", date, function(err, rows) {
+            conn.release();
+            if (!err) {
+                if (!err) {
+                    response = true;
+                } else {
+                    response.success = false;
+                }
+                res.json(response);
+            } else {
+                res.json({ "code": 100, "status": "Error in connection database" });
+                console.log(err);
+            }
+        });
+        conn.on('error', function(err) {
+            console.log("[mysql error]", err);
+        });
+    });
+});
+
+router.get('/getComplaintForCustomer/:id', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+        var id = req.params.id;
+        conn.query("SELECT * from complaint where customer_id = ?", [id],function(err, rows) {
+            conn.release();
+            if (!err) {
+
+                res.json(rows);
+            } else {
+                res.json({ "code": 100, "status": "Error in connection database" });
+            }
+        });
+
+
+        conn.on('error', function(err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        });
+    });
+
+});
+
+
+router.post('/addTherapy', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        console.log(conn);
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+
+        response = null;
+        console.log(req);
+        var date = {
+            'customer_id': req.body.customer_id,
+            'date': req.body.date,
+            'complaint': req.body.complaint,
+            'therapy': req.body.therapies,
+            'comment': req.body.comment,
+            'cs': req.body.cs,
+            'state': req.body.state,
+            'em': req.body.em
+        };
+        console.log(date);
+
+
+        conn.query("insert into therapy SET ?", date, function(err, rows) {
+            conn.release();
+            if (!err) {
+                if (!err) {
+                    response = true;
+                } else {
+                    response.success = false;
+                }
+                res.json(response);
+            } else {
+                res.json({ "code": 100, "status": "Error in connection database" });
+                console.log(err);
+            }
+        });
+        conn.on('error', function(err) {
+            console.log("[mysql error]", err);
+        });
+    });
+});
+
+router.get('/getTherapyForCustomer/:id', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+        var id = req.params.id;
+        conn.query("SELECT * from therapy where customer_id = ?", [id],function(err, rows) {
+            conn.release();
+            if (!err) {
+
+                res.json(rows);
+            } else {
+                res.json({ "code": 100, "status": "Error in connection database" });
+            }
+        });
+
+
+        conn.on('error', function(err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        });
+    });
+
+});
+
 
 module.exports = router;

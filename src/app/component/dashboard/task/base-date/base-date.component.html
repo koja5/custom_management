@@ -141,6 +141,48 @@
       </div>
 
       <div class="col-sm-12 document-grid">
+        <label class="col-md-9">Complaint</label>
+        <button kendoButton [primary]="true" [icon]="'add'" style="width: 25vh !important; margin-bottom: 2vh;"
+          (click)="openComplaintModal()">Add complaint</button>
+        <kendo-grid [data]="gridComplaint" [height]="200" [resizable]="true">
+          <kendo-grid-column field="date" title="Date" width="120">
+          </kendo-grid-column>
+          <kendo-grid-column field="complaint" title="Complaint" width="200">
+          </kendo-grid-column>
+          <kendo-grid-column field="comment" title="Comment" width="150">
+          </kendo-grid-column>
+          <kendo-grid-column field="therapies" title="Therapies" width="120">
+          </kendo-grid-column>
+          <kendo-grid-column field="employee_name" title="Doctor" width="100">
+          </kendo-grid-column>
+          <kendo-grid-column field="cs" title="CS" width="60">
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+
+      <div class="col-sm-12 document-grid">
+        <label class="col-md-9">Therapy</label>
+        <button kendoButton [primary]="true" [icon]="'add'" style="width: 25vh !important; margin-bottom: 2vh;"
+          (click)="openTherapyModal()">Add therapy</button>
+        <kendo-grid [data]="gridTherapy" [height]="200" [resizable]="true">
+          <kendo-grid-column field="date" title="Date" width="120" [format]="{ date: 'short' }">
+          </kendo-grid-column>
+          <kendo-grid-column field="complaint" title="Complaint" width="150">
+          </kendo-grid-column>
+          <kendo-grid-column field="therapy" title="Therapy" width="120">
+          </kendo-grid-column>
+          <kendo-grid-column field="comment" title="Comment" width="150">
+          </kendo-grid-column>
+          <kendo-grid-column field="cs" title="CS" width="60">
+          </kendo-grid-column>
+          <kendo-grid-column field="state" title="State" width="60">
+          </kendo-grid-column>
+          <kendo-grid-column field="em" title="Em" width="100">
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+
+      <div class="col-sm-12 document-grid">
         <label class="col-md-9">Documents</label>
         <button kendoButton [primary]="true" [icon]="'add'" style="width: 25vh !important; margin-bottom: 2vh;"
           (click)="upload.open()">Upload document</button>
@@ -323,6 +365,78 @@
     </modal-content>
     <modal-footer>
       <button class="btn btn-primary" (click)="upload.close()">Close</button>
+    </modal-footer>
+  </modal>
+
+  <modal #complaint modalClass="modal-md top-margin loggerModal adminModal">
+    <modal-header>
+      <h2>{{language.addComplaint}}</h2>
+    </modal-header>
+    <modal-content>
+      <form name="loginForm" class="loginForm" (ngSubmit)="addComplaint(complaint)">
+        <div class="row">
+          <kendo-multiselect class="col-md-12 col-xs-12" [data]="complaintValue" (valueChange)="selectComplaint($event)" [placeholder]="language.choiceComplaint"></kendo-multiselect>
+        </div>
+        <div class="form-group">
+          <input type="text" class="col-md-12 col-xs-12" name="comment" placeholder="Comment"
+            [(ngModel)]="complaintData.comment" comment.value=''>
+        </div>
+        <div class="row">
+          <kendo-multiselect class="col-md-12 col-xs-12" [data]="therapyValue" (valueChange)="selectTherapies($event)" [placeholder]="language.choiceTherapy">
+          </kendo-multiselect>
+        </div>
+        <div class="form-group">
+          <input type="text" class="col-md-12 col-xs-12" name="cs" placeholder="CS" [(ngModel)]="complaintData.cs"
+            cs.value=''>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-lg btn-primary btn-block" type="submit">{{language.addComplaint}}</button>
+        </div>
+      </form>
+
+    </modal-content>
+    <modal-footer>
+      <button class="btn btn-primary" (click)="complaint.close()">Close</button>
+    </modal-footer>
+  </modal>
+
+  <modal #therapy modalClass="modal-md top-margin loggerModal adminModal">
+    <modal-header>
+      <h2>{{language.addTherapy}}</h2>
+    </modal-header>
+    <modal-content>
+      <form name="loginForm" class="loginForm" (ngSubmit)="addTherapy(therapy)">
+        <div class="row">
+          <kendo-multiselect class="col-md-12 col-xs-12" [data]="complaintValue" (valueChange)="selectComplaint($event)" [placeholder]="language.choiceComplaint"></kendo-multiselect>
+        </div>
+        <div class="row">
+          <kendo-multiselect class="col-md-12 col-xs-12" [data]="therapyValue" (valueChange)="selectTherapies($event)" [placeholder]="language.choiceTherapy">
+          </kendo-multiselect>
+        </div>
+        <div class="form-group">
+          <input type="text" class="col-md-12 col-xs-12" name="comment" placeholder="Comment"
+            [(ngModel)]="complaintData.comment" comment.value=''>
+        </div>
+        <div class="form-group">
+          <input type="text" class="col-md-12 col-xs-12" name="cs" placeholder="CS" [(ngModel)]="complaintData.cs"
+            cs.value=''>
+        </div>
+        <div class="row">
+          <kendo-combobox class="col-md-12 col-xs-12" [data]="stateValue" (valueChange)="selectedState($event)" [placeholder]="language.choiceState">
+          </kendo-combobox>
+        </div>
+        <div class="form-group">
+          <input type="text" class="col-md-12 col-xs-12" name="em" placeholder="Em" [(ngModel)]="complaintData.em"
+            cs.value=''>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-lg btn-primary btn-block" type="submit">{{language.addTherapy}}</button>
+        </div>
+      </form>
+
+    </modal-content>
+    <modal-footer>
+      <button class="btn btn-primary" (click)="therapy.close()">Close</button>
     </modal-footer>
   </modal>
 

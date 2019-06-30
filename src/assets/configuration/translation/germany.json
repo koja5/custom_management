@@ -78,6 +78,21 @@
         "tuesday": "Dienstag",
         "wednesday": "Mittwoch",
         "thursday": "Donnerstag",
-        "friday": "Freitag"
-    }
+        "friday": "Freitag",
+        "addComplaint": "Neue Beschwerde hinzufügen",
+        "addTherapy": "Neue Therapie hinzufügen",
+        "choiceComplaint": "Auswahl beschwerde...",
+        "choiceTherapy": "Auswahl therapie...",
+        "choiceState": "Auswahl aktueller Zustand"
+    },
+    "complaint": [
+        "Kopfschmerzen",
+        "Nackenschmerzen",
+        "Schulterschmerzen"
+    ],
+    "therapy": [
+        "Physio",
+        "Electro",
+        "Tuina"
+    ]
 }
