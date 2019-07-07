@@ -21,8 +21,7 @@ import {
   CreateFormGroupArgs,
   SchedulerEvent
 } from "@progress/kendo-angular-scheduler";
-import "@progress/kendo-date-math/tz/regions/Europe";
-import "@progress/kendo-date-math/tz/regions/NorthAmerica";
+import "@progress/kendo-angular-intl/locales/de/all";
 import { filter } from "rxjs/operators/filter";
 import { StoreService } from "../../../service/store.service";
 import { TaskService } from "../../../service/task.service";
@@ -459,10 +458,11 @@ export class TaskComponent implements OnInit {
     } else {
       this.workTime = [];
       this.calendars = [];
+      this.events = [];
       for (let i = 0; i < value.length; i++) {
+        this.events = [];
         this.service.getTasksForUser(value[i].id).subscribe(data => {
           console.log(data);
-          this.events = [];
           for (let i = 0; i < data.length; i++) {
             data[i].start = new Date(data[i].start);
             data[i].end = new Date(data[i].end);
@@ -493,6 +493,23 @@ export class TaskComponent implements OnInit {
     console.log(event);
     this.loading = true;
     if (event !== undefined) {
+      this.service.getTasksForStore(event.id).subscribe(data => {
+        this.events = [];
+        this.calendars = [];
+        for (let i = 0; i < data.length; i++) {
+          data[i].start = new Date(data[i].start);
+          data[i].end = new Date(data[i].end);
+          this.events.push(data[i]);
+        }
+        const objectCalendar = {
+          name: null,
+          events: this.events
+        };
+        console.log(objectCalendar);
+        this.calendars.push(objectCalendar);
+        this.loading = false;
+      });
+
       this.service.getUsersInCompany(event.id, val => {
         this.usersInCompany = val;
         this.loading = false;
@@ -541,18 +558,16 @@ export class TaskComponent implements OnInit {
   }
 
   dateFormat(date, i, j) {
-    // console.log(new Date(date).getUTCDay());
-    // console.log(new Date(date).getHours());
     if (new Date(date).getDay() - 1 < 5 && new Date(date).getDay() !== 0) {
-      console.log(new Date(date).getDay() - 1);
       if (
         (this.workTime[i][j].times[new Date(date).getDay() - 1].start <=
           new Date(date).getHours() &&
-        this.workTime[i][j].times[new Date(date).getDay() - 1].end >=
-          new Date(date).getHours() || this.workTime[i][j].times[new Date(date).getDay() - 1].start2 <=
+          this.workTime[i][j].times[new Date(date).getDay() - 1].end >=
+            new Date(date).getHours()) ||
+        (this.workTime[i][j].times[new Date(date).getDay() - 1].start2 <=
           new Date(date).getHours() &&
-        this.workTime[i][j].times[new Date(date).getDay() - 1].end2 >=
-          new Date(date).getHours())
+          this.workTime[i][j].times[new Date(date).getDay() - 1].end2 >=
+            new Date(date).getHours())
       ) {
         return true;
       } else {

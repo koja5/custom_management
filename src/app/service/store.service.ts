@@ -15,6 +15,17 @@ export class StoreService {
       .subscribe(val => callback(val));
   }
 
+  editStore(data) {
+    console.log(data);
+    return this.http.post('/api/updateStore', data)
+      .map(res => res);
+  }
+
+  deleteStore(id) {
+    return this.http.get('/api/deleteStore/' + id)
+      .map(res => res);
+  }
+
   getStore(id, callback) {
     return this.http.get('/api/getStore/' + id)
       .map(res => res)

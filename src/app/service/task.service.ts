@@ -133,6 +133,11 @@ export class TaskService extends BaseEditService<MyEvent> {
             .map(res => res);
     }
 
+    getTasksForStore(id) {
+        return this.http.get<SchedulerEvent[]>('/api/getTasksForStore/' + id)
+            .map(res => res);
+    }
+
     getUsersInCompany(id, callback) {
         return this.http.get('/api/getUsersInCompany/' + id)
             .map(res => res)

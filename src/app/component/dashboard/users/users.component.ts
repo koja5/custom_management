@@ -8,6 +8,9 @@ import {
   PageChangeEvent
 } from '@progress/kendo-angular-grid';
 import { SortDescriptor, orderBy } from '@progress/kendo-data-query';
+import { StandardUrlSerializer } from '../../../standardUrlSerializer';
+import { UrlTree, Router, UrlSegment, UrlSegmentGroup } from '@angular/router';
+import { throttleTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-users',
@@ -51,7 +54,7 @@ export class UsersComponent implements OnInit {
     dir: 'asc'
   }];
 
-  constructor(public service: UsersService, public storeService: StoreService) { }
+  constructor(public service: UsersService, public storeService: StoreService, public url: StandardUrlSerializer, public router: Router) { }
 
   ngOnInit() {
     this.service.getUsers(localStorage.getItem('idUser'), (val) => {
@@ -154,5 +157,26 @@ export class UsersComponent implements OnInit {
       this.hideShow = 'password';
       this.hideShowEye = 'fa-eye-slash';
     }
+  }
+
+  serializeUrl(root, queryParams) {
+
+    const three = new UrlTree();
+    three.root = root;
+    three.queryParams = queryParams;
+    console.log(three);
+
+    console.log(this.url.serialize(three));
+
+  }
+
+  routing(id) {
+    // this.router.navigate(['user-details'], {queryParams: id});
+    const tree = new UrlTree();
+    const url = new UrlSegment('/dashboard/user-details', id);
+    tree.root = new UrlSegmentGroup([url], null);
+    console.log(tree);
+    return tree;
+    console.log(this.url.serialize(tree));
   }
 }

@@ -70,12 +70,11 @@
         for user <b>{{item.name}}</b></p> -->
       <div *ngIf="item.workTime !== undefined && item.workTime.length !== 0">
         <div *ngFor="let it of item.workTime[i]; let j = index;">
-          <p class="fromDate" *ngIf="item.workTime[i].length > 1">{{it.change | date: 'dd/MM/yyyy'}}</p>
+          <p class="fromDate" *ngIf="item.workTime[i].length > 1">{{it.change}}</p>
           <kendo-scheduler *ngIf="!loading && resources.length !== 0 || type === '3'" [editable]="true"
             [kendoSchedulerBinding]="item.events" [kendoSchedulerReactiveEditing]="createFormGroup" class="{{zIndex}}"
             [selectedDate]="selectedDate" style="height: 88vh;" (save)="saveHandler($event)" [resources]="resources"
-            (dragEnd)="dragEndHandler($event)" (resizeEnd)="resizeEndHandler($event)" (remove)="removeHandler($event)"
-            startTime="08:00" endTime="17:00">
+            (dragEnd)="dragEndHandler($event)" (resizeEnd)="resizeEndHandler($event)" (remove)="removeHandler($event)">
             <ng-template kendoSchedulerTimeSlotTemplate let-date="date">
               <strong *ngIf="workTime !== undefined&&dateFormat(date, i, j)"
                 style="background: #11db06; opacity: 0.2; color: white; padding: 0.5%; border-radius: 10%"></strong>
@@ -180,8 +179,7 @@
         <kendo-scheduler *ngIf="!loading && resources.length !== 0 || type === '3'" [editable]="true"
           [kendoSchedulerBinding]="item.events" [kendoSchedulerReactiveEditing]="createFormGroup" class="{{zIndex}}"
           [selectedDate]="selectedDate" style="height: 88vh;" (save)="saveHandler($event)" [resources]="resources"
-          (dragEnd)="dragEndHandler($event)" (resizeEnd)="resizeEndHandler($event)" (remove)="removeHandler($event)"
-          startTime="08:00" endTime="17:00">
+          (dragEnd)="dragEndHandler($event)" (resizeEnd)="resizeEndHandler($event)" (remove)="removeHandler($event)">
           <ng-template kendoSchedulerEventTemplate let-event="event" let-resources="resources">
             <div>
               {{event.title}}

@@ -297,6 +297,33 @@ router.get('/getTasksForUser/:id', function(req, res, next) {
 
 });
 
+router.get('/getTasksForStore/:id', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+
+        var id = req.params.id;
+        conn.query("SELECT * from users u join tasks t on u.id = t.creator_id where u.storeId = ?", [id], function(err, rows) {
+            conn.release();
+            if (!err) {
+                console.log(rows);
+                res.json(rows);
+            } else {
+                res.json({ "code": 100, "status": "Error in connection database" });
+            }
+        });
+
+
+        conn.on('error', function(err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        });
+    });
+
+});
+
 router.post('/login', (req, res, next) => {
     console.log('usao sam u login!');
     try {
@@ -624,6 +651,79 @@ router.get('/getStore/:id', function(req, res, next) {
             return;
         });
     });
+
+});
+
+router.post('/updateStore', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        console.log(conn);
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+
+        var response = null;
+        var podaci = {
+            'id': req.body.id,
+            'storename': req.body.storename,
+            'street': req.body.street,
+            'zipcode': req.body.zipcode,
+            'place': req.body.place,
+            'email': req.body.email,
+            'telephone': req.body.telephone,
+            'mobile': req.body.mobile,
+            'comment': req.body.comment,
+            'superadmin': req.body.superadmin
+        };
+        
+
+        conn.query("update store set ? where id = '" + req.body.id + "'", podaci,
+            function(err, rows, fields) {
+                conn.release();
+                if (err) {
+                    console.error("SQL error:", err);
+                    res.json({ "code": 100, "status": "Error in connection database" });
+                    return next(err);
+                } else {
+                    response = true;
+                    res.json(response);
+                }
+            }
+        );
+        conn.on('error', function(err) {
+            console.log("[mysql error]", err);
+        });
+    });
+});
+
+router.get('/deleteStore/:id', (req, res, next) => {
+    try {
+        var reqObj = req.params.id;
+        connection.getConnection(function(err, conn) {
+            if (err) {
+                console.error('SQL Connection error: ', err);
+                res.json({ "code": 100, "status": "Error in connection database" });
+                return next(err);
+            } else {
+                conn.query("delete from store where id = '" + reqObj + "'",
+                    function(err, rows, fields) {
+                        conn.release();
+                        if (err) {
+                            console.error("SQL error:", err);
+                            res.json({ "code": 100, "status": "Error in connection database" });
+                            return next(err);
+                        } else {
+                            res.json(true);
+                            res.end();
+                        }
+                    }
+                );
+            }
+        });
+    } catch (ex) {
+        console.error("Internal error: " + ex);
+        return next(ex);
+    }
 
 });
 

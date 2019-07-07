@@ -1,7 +1,9 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { UsersService } from "../../../../service/users.service";
 import { DomSanitizer } from "@angular/platform-browser";
+import { Modal } from 'ngx-modal';
+import { Location } from "@angular/common";
 
 @Component({
   selector: "app-user-details",
@@ -9,6 +11,7 @@ import { DomSanitizer } from "@angular/platform-browser";
   styleUrls: ["./user-details.component.scss"]
 })
 export class UserDetailsComponent implements OnInit {
+  @ViewChild('user') user: Modal;
   public id: string;
   public data: any;
   public imagePath: any;
@@ -22,7 +25,8 @@ export class UserDetailsComponent implements OnInit {
   constructor(
     public route: ActivatedRoute,
     public service: UsersService,
-    public sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer,
+    public location: Location
   ) { }
 
   ngOnInit() {
@@ -135,8 +139,11 @@ export class UserDetailsComponent implements OnInit {
     console.log(this.packWorkTime(workTime));
     workTime = this.packWorkTime(workTime);
     this.service.setWorkTimeForUser(workTime).subscribe(
-      date => {
-        console.log(date);
+      data => {
+        console.log(data);
+        if(data['success']) {
+          this.user.close();
+        }
       }
     );
   }
@@ -191,5 +198,9 @@ export class UserDetailsComponent implements OnInit {
       },
     ];
     return model;
+  }
+
+  backToGrid() {
+    this.location.back();
   }
 }

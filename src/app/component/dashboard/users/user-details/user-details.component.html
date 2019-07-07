@@ -1,6 +1,6 @@
-<button kendoButton [primary]="true" style="margin: 1vh;" [routerLink]="['../../', {outlets: {'dashboard': ['users']}}]"><i
+<button kendoButton [primary]="true" style="margin: 1vh;" (click)="backToGrid()"><i
     class="fa fa-arrow-left"></i> &nbsp; Back to grid</button>
-
+<!--[routerLink]="['../../', {outlets: {'dashboard': ['users']}}]"-->
 <div class="vd_content-section clearfix" *ngIf="data !== undefined">
   <div class="row">
     <div class="col-sm-3">
@@ -329,7 +329,7 @@
             <div>
               <div>
                 Queue progress:
-                <div class="progress" style="">
+                <div class="progress">
                   <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
                 </div>
               </div>

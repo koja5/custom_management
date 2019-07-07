@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 
 import { AppRoutingModule, routingComponents } from './app-routing.module';
 import { HttpModule } from '@angular/http';
@@ -50,7 +50,7 @@ import { UserDetailsComponent } from './component/dashboard/users/user-details/u
 
 import { UrlSerializer } from '@angular/router';
 import { StandardUrlSerializer } from './standardUrlSerializer';
-
+import '@progress/kendo-angular-intl/locales/de/all';
 @NgModule({
   declarations: [
     AppComponent,
@@ -107,6 +107,11 @@ import { StandardUrlSerializer } from './standardUrlSerializer';
     {
       provide: UrlSerializer,
       useClass: StandardUrlSerializer
+    },
+    StandardUrlSerializer,
+    {
+      provide: LOCALE_ID, 
+      useValue: 'de'
     }
   ],
   bootstrap: [AppComponent]
