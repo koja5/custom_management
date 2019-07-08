@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { UsersService } from "../../../../service/users.service";
 import { DomSanitizer } from "@angular/platform-browser";
-import { Modal } from 'ngx-modal';
+import { Modal } from "ngx-modal";
 import { Location } from "@angular/common";
 
 @Component({
@@ -11,7 +11,7 @@ import { Location } from "@angular/common";
   styleUrls: ["./user-details.component.scss"]
 })
 export class UserDetailsComponent implements OnInit {
-  @ViewChild('user') user: Modal;
+  @ViewChild("user") user: Modal;
   public id: string;
   public data: any;
   public imagePath: any;
@@ -27,7 +27,7 @@ export class UserDetailsComponent implements OnInit {
     public service: UsersService,
     public sanitizer: DomSanitizer,
     public location: Location
-  ) { }
+  ) {}
 
   ngOnInit() {
     console.log(this.route.snapshot.params["id"]);
@@ -59,24 +59,31 @@ export class UserDetailsComponent implements OnInit {
 
     this.language = JSON.parse(localStorage.getItem("language"))["user"];
 
-    
-    this.service.getWorkTimeForUser(this.id).subscribe(
-      (data: []) => {
-        if(data['length'] === 0) {
-          this.noSetWorkTime = true;
-          this.service.getWorkTime().subscribe(data => {
-            this.workTime = this.convertNumericToDay(data);
-          });
-        } else {
-          console.log(data);
-          let dataSort = [];
-          dataSort = data.sort((val1, val2) => {return (new Date(val2['dateChange']) as any) - (new  Date(val1['dateChange']) as any)})
-          console.log(dataSort[0]);
-          this.workTime = this.packWorkTimeFromDatabase(dataSort[0]);
-          console.log(this.workTime);
-        }
+    this.workTimeData();
+  }
+
+  workTimeData() {
+    this.workTime = null;
+    this.service.getWorkTimeForUser(this.id).subscribe((data: []) => {
+      if (data["length"] === 0) {
+        this.noSetWorkTime = true;
+        this.service.getWorkTime().subscribe(data => {
+          this.workTime = this.convertNumericToDay(data);
+        });
+      } else {
+        console.log(data);
+        let dataSort = [];
+        dataSort = data.sort((val1, val2) => {
+          return (
+            (new Date(val2["dateChange"]) as any) -
+            (new Date(val1["dateChange"]) as any)
+          );
+        });
+        console.log(dataSort[0]);
+        this.workTime = this.packWorkTimeFromDatabase(dataSort[0]);
+        console.log(this.workTime);
       }
-    )
+    });
   }
 
   updateUser(user) {
@@ -119,15 +126,15 @@ export class UserDetailsComponent implements OnInit {
   }
 
   convertDayToNumeric(day) {
-    if(day === this.language.monday.toLowerCase()) {
+    if (day === this.language.monday.toLowerCase()) {
       day = 1;
-    } else if(day === this.language.tuesday.toLowerCase()) {
+    } else if (day === this.language.tuesday.toLowerCase()) {
       day = 2;
-    } else if(day === this.language.wednesday.toLowerCase()) {
+    } else if (day === this.language.wednesday.toLowerCase()) {
       day = 3;
-    } else if(day === this.language.thursday.toLowerCase()) {
+    } else if (day === this.language.thursday.toLowerCase()) {
       day = 4;
-    } else if(day === this.language.friday.toLowerCase()) {
+    } else if (day === this.language.friday.toLowerCase()) {
       day = 5;
     }
     return day;
@@ -138,69 +145,82 @@ export class UserDetailsComponent implements OnInit {
     // workTime = this.convertDayToNumeric(workTime);
     console.log(this.packWorkTime(workTime));
     workTime = this.packWorkTime(workTime);
-    this.service.setWorkTimeForUser(workTime).subscribe(
-      data => {
-        console.log(data);
-        if(data['success']) {
-          this.user.close();
-        }
+    this.service.setWorkTimeForUser(workTime).subscribe(data => {
+      console.log(data);
+      if (data["success"]) {
+        this.user.close();
+        this.noSetWorkTime = false;
       }
-    );
+    });
   }
 
   packWorkTime(workTime) {
     const time = {};
     for (let i = 0; i < workTime.length; i++) {
       const day = workTime[i].day;
-      time[day.toString().toLowerCase()] = this.convertDayToNumeric(day.toString().toLowerCase()) + '-' + workTime[i].start + '-' + workTime[i].end + '-' + workTime[i].start2 + '-' + workTime[i].end2;
+      time[day.toString().toLowerCase()] =
+        this.convertDayToNumeric(day.toString().toLowerCase()) +
+        "-" +
+        workTime[i].start +
+        "-" +
+        workTime[i].end +
+        "-" +
+        workTime[i].start2 +
+        "-" +
+        workTime[i].end2;
     }
-    time['user_id'] = this.id;
-    time['dateChange'] = new Date();
+    time["user_id"] = this.id;
+    time["dateChange"] = new Date();
     return time;
   }
 
   packWorkTimeFromDatabase(workTime) {
     const model = [
       {
-        "day": this.language.monday,
-        "start": workTime.monday.split('-')[1],
-        "end": workTime.monday.split('-')[2],
-        "start2": workTime.monday.split('-')[3],
-        "end2": workTime.monday.split('-')[4]
+        day: this.language.monday,
+        start: workTime.monday.split("-")[1],
+        end: workTime.monday.split("-")[2],
+        start2: workTime.monday.split("-")[3],
+        end2: workTime.monday.split("-")[4]
       },
       {
-        "day": this.language.tuesday,
-        "start": workTime.tuesday.split('-')[1],
-        "end": workTime.tuesday.split('-')[2],
-        "start2": workTime.tuesday.split('-')[3],
-        "end2": workTime.tuesday.split('-')[4]
+        day: this.language.tuesday,
+        start: workTime.tuesday.split("-")[1],
+        end: workTime.tuesday.split("-")[2],
+        start2: workTime.tuesday.split("-")[3],
+        end2: workTime.tuesday.split("-")[4]
       },
       {
-        "day": this.language.wednesday,
-        "start": workTime.wednesday.split('-')[1],
-        "end": workTime.wednesday.split('-')[2],
-        "start2": workTime.wednesday.split('-')[3],
-        "end2": workTime.wednesday.split('-')[4]
+        day: this.language.wednesday,
+        start: workTime.wednesday.split("-")[1],
+        end: workTime.wednesday.split("-")[2],
+        start2: workTime.wednesday.split("-")[3],
+        end2: workTime.wednesday.split("-")[4]
       },
       {
-        "day": this.language.thursday,
-        "start": workTime.thursday.split('-')[1],
-        "end": workTime.thursday.split('-')[2],
-        "start2": workTime.thursday.split('-')[3],
-        "end2": workTime.thursday.split('-')[4]
+        day: this.language.thursday,
+        start: workTime.thursday.split("-")[1],
+        end: workTime.thursday.split("-")[2],
+        start2: workTime.thursday.split("-")[3],
+        end2: workTime.thursday.split("-")[4]
       },
       {
-        "day": this.language.friday,
-        "start": workTime.friday.split('-')[1],
-        "end": workTime.friday.split('-')[2],
-        "start2": workTime.friday.split('-')[3],
-        "end2": workTime.friday.split('-')[4]
-      },
+        day: this.language.friday,
+        start: workTime.friday.split("-")[1],
+        end: workTime.friday.split("-")[2],
+        start2: workTime.friday.split("-")[3],
+        end2: workTime.friday.split("-")[4]
+      }
     ];
     return model;
   }
 
   backToGrid() {
     this.location.back();
+  }
+
+  editOptions() {
+    this.workTimeData();
+    this.user.open();
   }
 }
