@@ -4,6 +4,7 @@ import { UsersService } from "../../../../service/users.service";
 import { DomSanitizer } from "@angular/platform-browser";
 import { Modal } from "ngx-modal";
 import { Location } from "@angular/common";
+import { StoreService } from "../../../../service/store.service";
 
 @Component({
   selector: "app-user-details",
@@ -21,12 +22,15 @@ export class UserDetailsComponent implements OnInit {
   public language: any;
   public workTime: any;
   public noSetWorkTime = false;
+  public storeLocation: any;
+  public selectedStore: string;
 
   constructor(
     public route: ActivatedRoute,
     public service: UsersService,
     public sanitizer: DomSanitizer,
-    public location: Location
+    public location: Location,
+    public storeService: StoreService
   ) {}
 
   ngOnInit() {
@@ -59,6 +63,11 @@ export class UserDetailsComponent implements OnInit {
 
     this.language = JSON.parse(localStorage.getItem("language"))["user"];
 
+    this.storeService.getStore(localStorage.getItem("idUser"), val => {
+      console.log(val);
+      this.storeLocation = val;
+    });
+
     this.workTimeData();
   }
 
@@ -87,7 +96,10 @@ export class UserDetailsComponent implements OnInit {
   }
 
   updateUser(user) {
-    console.log(user);
+    console.log(this.data);
+    this.service.updateUser(this.data).subscribe(data => {
+      console.log(data);
+    });
   }
 
   modelData() {
@@ -100,6 +112,7 @@ export class UserDetailsComponent implements OnInit {
     } else {
       this.selectedValue = "Employee";
     }
+    this.selectedStore = this.convertIntToTypeString(this.data.storeId);
   }
 
   changeTab(value: string) {
@@ -222,5 +235,37 @@ export class UserDetailsComponent implements OnInit {
   editOptions() {
     this.workTimeData();
     this.user.open();
+  }
+
+  convertTypeStringToInt(type) {
+    if (type === "Admin") {
+      type = 1;
+    } else if (type === "Manager") {
+      type = 2;
+    } else {
+      type = 3;
+    }
+    return type;
+  }
+
+  convertIntToTypeString(type) {
+    if (type === 1) {
+      type = "Admin";
+    } else if (type === 2) {
+      type = "Manager";
+    } else {
+      type = "Employee";
+    }
+    return type;
+  }
+
+  selectionUserType(event) {
+    console.log(event);
+    this.data.type = this.convertTypeStringToInt(event);
+  }
+
+  selectionChangeStore(event) {
+    console.log(event);
+    this.data.stateId = event;
   }
 }

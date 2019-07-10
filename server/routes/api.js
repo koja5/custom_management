@@ -1036,8 +1036,7 @@ router.post('/addUser', function(req, res, next) {
     });
 });
 
-router.post('/editUser', function(req, res, next) {
-    console.log("pozvano!");
+router.post('/updateUser', function(req, res, next) {
     connection.getConnection(function(err, conn) {
         if (err) {
             res.json({ "code": 100, "status": "Error in connection database" });
@@ -1045,47 +1044,35 @@ router.post('/editUser', function(req, res, next) {
         }
 
         var id = req.body.id;
-        var nameOfClinic = req.body.nameOfClinic;
-        var firstname = req.body.firstname;
-        var lastname = req.body.lastname;
-        var phoneNumber = req.body.phoneNumber;
-        var email = req.body.email;
-        var user = req.body.username;
-        var pass = sha1(req.body.password);
-        var confirmPassword = sha1(req.body.confirmPassword);
-        var active;
-        if (req.body.active) {
-            active = 1;
-        } else {
-            active = 0;
-        }
-        test = {};
-        var podaci = {
-            'nameOfClinic': nameOfClinic,
-            "firstname": firstname,
-            "lastname": lastname,
-            "phoneNumber": phoneNumber,
-            "email": email,
-            "username": user,
-            "password": pass,
-            "confirmPassword": confirmPassword,
-            "active": active,
-            "typeOfUser": "2",
+        var response = null;
+        var data = {
+            'shortname': req.body.shortname,
+            "password": sha1(req.body.password),
+            "firstname": req.body.firstname,
+            "lastname": req.body.lastname,
+            "street": req.body.street,
+            "zipcode": req.body.zipcode,
+            "email": req.body.email,
+            "telephone": req.body.telephone,
+            "mobile": req.body.mobile,
+            "birthday": req.body.birthday,
+            "incompanysince": req.body.incompanysince,
+            "type": req.body.type,
+            "storeId": req.body.storeId,
+            "active": req.body.active
         };
 
-        console.log(podaci);
 
 
-        conn.query("update users SET ? where id = '" + id + "'", podaci, function(err, rows) {
+        conn.query("update users SET ? where id = '" + id + "'", data, function(err, rows) {
             conn.release();
             if (!err) {
                 if (!err) {
-                    test.id = rows.insertId;
-                    test.success = true;
+                    response = true;
                 } else {
-                    test.success = false;
+                    response = false;
                 }
-                res.json(test);
+                res.json(response);
                 console.log("Usao sam u DB!!!!");
             } else {
                 res.json({ "code": 100, "status": "Error in connection database" });

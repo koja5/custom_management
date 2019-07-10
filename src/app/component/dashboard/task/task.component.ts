@@ -456,7 +456,6 @@ export class TaskComponent implements OnInit {
         this.loading = false;
       });
     } else {
-      this.workTime = [];
       this.calendars = [];
       this.events = [];
       for (let i = 0; i < value.length; i++) {
@@ -468,6 +467,7 @@ export class TaskComponent implements OnInit {
             data[i].end = new Date(data[i].end);
             this.events.push(data[i]);
           }
+          this.workTime = [];
           this.service.getWorkTimeForUser(value[i].id).subscribe(data => {
             //this.workTime = data[2];
             console.log(data);

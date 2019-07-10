@@ -22,24 +22,50 @@
 <div *ngIf="language !== undefined">
   <div class="col-sm-12" style="padding: 1%;" *ngIf="type !== '3'">
     <div class="col-sm-6 col-xs-12">
-      <kendo-combobox class="col-md-6 col-xs-12" [data]="store" [textField]="'storename'" [valueField]="'id'"
-        (valueChange)="selectedStore($event)">
+      <kendo-combobox
+        class="col-md-6 col-xs-12"
+        [data]="store"
+        [textField]="'storename'"
+        [valueField]="'id'"
+        (valueChange)="selectedStore($event)"
+      >
       </kendo-combobox>
 
-      <kendo-multiselect class="col-md-6 col-xs-12" [data]="usersInCompany" [textField]="'shortname'"
-        [valueField]="'id'" [value]="value" (valueChange)="handleValue($event)"></kendo-multiselect>
+      <kendo-multiselect
+        class="col-md-6 col-xs-12"
+        [data]="usersInCompany"
+        [textField]="'shortname'"
+        [valueField]="'id'"
+        [value]="value"
+        (valueChange)="handleValue($event)"
+      ></kendo-multiselect>
     </div>
     <div class="col-sm-6 col-xs-12" *ngIf="value.length > 1">
       <div style="float: right;">
         <p>Orientation</p>
 
-        <input type="radio" name="orientation" id="horizontal" class="k-radio" [(ngModel)]="orientation"
-          [value]="'horizontal'">
+        <input
+          type="radio"
+          name="orientation"
+          id="horizontal"
+          class="k-radio"
+          [(ngModel)]="orientation"
+          [value]="'horizontal'"
+        />
         <label class="k-radio-label" for="horizontal">Horizontal</label>
 
-        <input type="radio" name="orientation" id="vertical" class="k-radio" checked="checked" [(ngModel)]="orientation"
-          [value]="'vertical'">
-        <label class="k-radio-label" for="vertical" style="margin-left: 2vh;">Vertical</label>
+        <input
+          type="radio"
+          name="orientation"
+          id="vertical"
+          class="k-radio"
+          checked="checked"
+          [(ngModel)]="orientation"
+          [value]="'vertical'"
+        />
+        <label class="k-radio-label" for="vertical" style="margin-left: 2vh;"
+          >Vertical</label
+        >
       </div>
     </div>
   </div>
@@ -55,62 +81,88 @@
     </div>
   </div>-->
 
-
   <div *ngIf="loading" style="height: 90vh;">
     <div class="spinner loading"></div>
   </div>
 
-  <kendo-splitter orientation="{{orientation}}" *ngIf="!loading">
+  <kendo-splitter orientation="{{ orientation }}" *ngIf="!loading">
     <kendo-splitter-pane *ngFor="let item of calendars; let i = index">
-      <p *ngIf="item.name !== null && item.name !== ''"
-        style="text-align: center; font-size: 4vh;">{{language.tasksForUser}}
-        <b>{{item.name}}</b></p>
+      <p
+        *ngIf="item.name !== null && item.name !== ''"
+        style="text-align: center; font-size: 4vh;"
+      >
+        {{ language.tasksForUser }} <b>{{ item.name }}</b>
+      </p>
       <!--<p *ngIf="item.events.length === 0 && item.name !== null" style="text-align: center; font-size: 4vh; height: 88vh;">No
         tasks
         for user <b>{{item.name}}</b></p> -->
       <div *ngIf="item.workTime !== undefined && item.workTime.length !== 0">
-        <div *ngFor="let it of item.workTime[i]; let j = index;">
-          <p class="fromDate" *ngIf="item.workTime[i].length > 1">{{it.change}}</p>
-          <kendo-scheduler *ngIf="!loading && resources.length !== 0 || type === '3'" [editable]="true"
-            [kendoSchedulerBinding]="item.events" [kendoSchedulerReactiveEditing]="createFormGroup" class="{{zIndex}}"
-            [selectedDate]="selectedDate" style="height: 88vh;" (save)="saveHandler($event)" [resources]="resources"
-            (dragEnd)="dragEndHandler($event)" (resizeEnd)="resizeEndHandler($event)" (remove)="removeHandler($event)">
+        <div *ngFor="let it of item.workTime[i]; let j = index">
+          <p class="fromDate" *ngIf="item.workTime[i].length > 1">
+            {{ it.change }}
+          </p>
+          <kendo-scheduler
+            *ngIf="(!loading && resources.length !== 0) || type === '3'"
+            [editable]="true"
+            [kendoSchedulerBinding]="item.events"
+            [kendoSchedulerReactiveEditing]="createFormGroup"
+            class="{{ zIndex }}"
+            [selectedDate]="selectedDate"
+            style="height: 88vh;"
+            (save)="saveHandler($event)"
+            [resources]="resources"
+            (dragEnd)="dragEndHandler($event)"
+            (resizeEnd)="resizeEndHandler($event)"
+            (remove)="removeHandler($event)"
+          >
             <ng-template kendoSchedulerTimeSlotTemplate let-date="date">
-              <strong *ngIf="workTime !== undefined&&dateFormat(date, i, j)"
-                style="background: #11db06; opacity: 0.2; color: white; padding: 0.5%; border-radius: 10%"></strong>
-              <strong *ngIf="workTime !== undefined&&!dateFormat(date, i, j)"
-                style="background: #6b6161; opacity: 0.5; color: white; padding: 50%; border-radius: 10%"></strong>
+              <strong
+                *ngIf="workTime !== undefined && dateFormat(date, i, j)"
+                style="background: #11db06; opacity: 0.2; color: white; padding: 0.5%; border-radius: 10%"
+              ></strong>
+              <strong
+                *ngIf="workTime !== undefined && !dateFormat(date, i, j)"
+                style="background: #6b6161; opacity: 0.5; color: white; padding: 50%; border-radius: 10%"
+              ></strong>
             </ng-template>
-            <ng-template kendoSchedulerEventTemplate let-event="event" let-resources="resources">
+            <ng-template
+              kendoSchedulerEventTemplate
+              let-event="event"
+              let-resources="resources"
+            >
               <div>
-                {{event.title}}
+                {{ event.title }}
               </div>
             </ng-template>
 
-            <kendo-scheduler-work-week-view>
-            </kendo-scheduler-work-week-view>
+            <kendo-scheduler-work-week-view> </kendo-scheduler-work-week-view>
 
             <kendo-scheduler-multi-day-view [numberOfDays]="3">
             </kendo-scheduler-multi-day-view>
 
-            <kendo-scheduler-month-view>
-            </kendo-scheduler-month-view>
+            <kendo-scheduler-month-view> </kendo-scheduler-month-view>
 
             <kendo-scheduler-week-view startTime="08:00" endTime="14:00">
             </kendo-scheduler-week-view>
 
-            <kendo-scheduler-timeline-view>
-            </kendo-scheduler-timeline-view>
+            <kendo-scheduler-timeline-view> </kendo-scheduler-timeline-view>
 
-            <kendo-scheduler-agenda-view>
-            </kendo-scheduler-agenda-view>
+            <kendo-scheduler-agenda-view> </kendo-scheduler-agenda-view>
 
-            <ng-template kendoSchedulerEditDialogTemplate let-formGroup="formGroup" let-isNew="isNew"
-              let-editMode="editMode">
+            <ng-template
+              kendoSchedulerEditDialogTemplate
+              let-formGroup="formGroup"
+              let-isNew="isNew"
+              let-editMode="editMode"
+            >
               <div class="k-form-inline">
                 <div class="k-form-field">
                   <span>Title</span>
-                  <input class="k-textbox" placeholder="Title" [formControl]="formGroup.get('title')" />
+                  <input
+                    class="k-textbox"
+                    placeholder="Title"
+                    [formControl]="formGroup.get('title')"
+                  />
                 </div>
                 <div class="k-form-field">
                   <span>Color</span>
@@ -118,36 +170,63 @@
                     <!--<input [style.background]="colorTask" [(ngModel)]="colorTask"
               [cpPresetColors]="['#fff', '#000', '#2889e9', '#e920e9', '#fff500', 'rgb(236,64,64)']"
               [(colorPicker)]="colorTask" [formControl]="formGroup.get('colorTask')" />-->
-                    <kendo-colorpalette [palette]="palette" [value]="selected" [tileSize]="30"
-                      [formControl]="formGroup.get('colorTask')">
+                    <kendo-colorpalette
+                      [palette]="palette"
+                      [value]="selected"
+                      [tileSize]="30"
+                      [formControl]="formGroup.get('colorTask')"
+                    >
                     </kendo-colorpalette>
                   </div>
                 </div>
                 <div class="k-form-field">
                   <span>User</span>
-                  <kendo-combobox [data]="customerUsers" [textField]="'shortname'" [valueField]="'id'"
-                    [formControl]="formGroup.get('user')" (valueChange)="onValueChange($event)"
-                    ([ngModel])="customerUser">
+                  <kendo-combobox
+                    [data]="customerUsers"
+                    [textField]="'shortname'"
+                    [valueField]="'id'"
+                    [formControl]="formGroup.get('user')"
+                    (valueChange)="onValueChange($event)"
+                    ([ngModel])="(customerUser)"
+                  >
                   </kendo-combobox>
-                  <button kendoButton [icon]="'user'" [primary]="true" (click)="newCustomer()">New
-                    customer</button>
+                  <button
+                    kendoButton
+                    [icon]="'user'"
+                    [primary]="true"
+                    (click)="newCustomer()"
+                  >
+                    New customer
+                  </button>
 
-                  <button kendoButton [icon]="'k-icon k-i-information'" [primary]="true" (click)="baseDataForUser()"
-                    *ngIf="customerUser !== undefined">Base
-                    data</button>
+                  <button
+                    kendoButton
+                    [icon]="'k-icon k-i-information'"
+                    [primary]="true"
+                    (click)="baseDataForUser()"
+                    *ngIf="customerUser !== undefined"
+                  >
+                    Base data
+                  </button>
                 </div>
                 <div class="k-form-field k-datetime-picker-wrapper">
                   <span>Start</span>
                   <kendo-datepicker [formControl]="formGroup.get('start')">
                   </kendo-datepicker>
-                  <kendo-timepicker [formControl]="formGroup.get('start')" *ngIf='!formGroup.controls.isAllDay.value'>
+                  <kendo-timepicker
+                    [formControl]="formGroup.get('start')"
+                    *ngIf="!formGroup.controls.isAllDay.value"
+                  >
                   </kendo-timepicker>
                 </div>
                 <div class="k-form-field k-datetime-picker-wrapper">
                   <span>End</span>
                   <kendo-datepicker [formControl]="formGroup.get('end')">
                   </kendo-datepicker>
-                  <kendo-timepicker [formControl]="formGroup.get('end')" *ngIf='!formGroup.controls.isAllDay.value'>
+                  <kendo-timepicker
+                    [formControl]="formGroup.get('end')"
+                    *ngIf="!formGroup.controls.isAllDay.value"
+                  >
                   </kendo-timepicker>
                 </div>
                 <!-- <div class="k-form-field">
@@ -156,8 +235,12 @@
             </div>-->
                 <div class="k-form-field">
                   <span>Telephone</span>
-                  <input class="k-textbox" placeholder="Telephone" [formControl]="formGroup.get('telephone')"
-                    [value]="telephoneValue" />
+                  <input
+                    class="k-textbox"
+                    placeholder="Telephone"
+                    [formControl]="formGroup.get('telephone')"
+                    [value]="telephoneValue"
+                  />
                 </div>
                 <!--<div class="k-form-field" *ngIf="isEditingSeries(editMode)">
                 <kendo-recurrence-editor [formControl]="formGroup.get('recurrenceRule')">
@@ -165,51 +248,76 @@
             </div>-->
               </div>
             </ng-template>
-            <kendo-scheduler-messages today="{{language.today}}" allDay="{{language.allDay}}"
-              dayViewTitle="{{language.day}}" weekViewTitle="{{language.week}}" monthViewTitle="{{language.month}}"
-              workWeekViewTitle="{{language.workWeek}}" multiDayViewTitle="{{language.multiDay}}"
-              timelineViewTitle="{{language.timeline}}" agendaViewTitle="{{language.agenda}}"
-              showWorkDay="Mostrar horas laborables" showFullDay="Mostrar día completo">
+            <kendo-scheduler-messages
+              today="{{ language.today }}"
+              allDay="{{ language.allDay }}"
+              dayViewTitle="{{ language.day }}"
+              weekViewTitle="{{ language.week }}"
+              monthViewTitle="{{ language.month }}"
+              workWeekViewTitle="{{ language.workWeek }}"
+              multiDayViewTitle="{{ language.multiDay }}"
+              timelineViewTitle="{{ language.timeline }}"
+              agendaViewTitle="{{ language.agenda }}"
+              showWorkDay="Mostrar horas laborables"
+              showFullDay="Mostrar día completo"
+            >
             </kendo-scheduler-messages>
           </kendo-scheduler>
         </div>
       </div>
 
-      <div *ngIf="item.workTime === undefined || item.workTime.length === 0">
-        <kendo-scheduler *ngIf="!loading && resources.length !== 0 || type === '3'" [editable]="true"
-          [kendoSchedulerBinding]="item.events" [kendoSchedulerReactiveEditing]="createFormGroup" class="{{zIndex}}"
-          [selectedDate]="selectedDate" style="height: 88vh;" (save)="saveHandler($event)" [resources]="resources"
-          (dragEnd)="dragEndHandler($event)" (resizeEnd)="resizeEndHandler($event)" (remove)="removeHandler($event)">
-          <ng-template kendoSchedulerEventTemplate let-event="event" let-resources="resources">
+      <div *ngIf="item.workTime === undefined || item.workTime[0].length === 0">
+        <kendo-scheduler
+          [editable]="true"
+          [kendoSchedulerBinding]="item.events"
+          [kendoSchedulerReactiveEditing]="createFormGroup"
+          class="{{ zIndex }}"
+          [selectedDate]="selectedDate"
+          style="height: 88vh;"
+          (save)="saveHandler($event)"
+          [resources]="resources"
+          (dragEnd)="dragEndHandler($event)"
+          (resizeEnd)="resizeEndHandler($event)"
+          (remove)="removeHandler($event)"
+        >
+          <ng-template
+            kendoSchedulerEventTemplate
+            let-event="event"
+            let-resources="resources"
+          >
             <div>
-              {{event.title}}
+              {{ event.title }}
             </div>
           </ng-template>
 
-          <kendo-scheduler-work-week-view>
-          </kendo-scheduler-work-week-view>
+          <kendo-scheduler-work-week-view> </kendo-scheduler-work-week-view>
 
           <kendo-scheduler-multi-day-view [numberOfDays]="3">
           </kendo-scheduler-multi-day-view>
 
-          <kendo-scheduler-month-view>
-          </kendo-scheduler-month-view>
+          <kendo-scheduler-month-view> </kendo-scheduler-month-view>
 
           <kendo-scheduler-week-view startTime="08:00" endTime="14:00">
           </kendo-scheduler-week-view>
 
-          <kendo-scheduler-timeline-view>
-          </kendo-scheduler-timeline-view>
+          <kendo-scheduler-timeline-view> </kendo-scheduler-timeline-view>
 
-          <kendo-scheduler-agenda-view>
-          </kendo-scheduler-agenda-view>
+          <kendo-scheduler-agenda-view> </kendo-scheduler-agenda-view>
 
-          <ng-template kendoSchedulerEditDialogTemplate let-formGroup="formGroup" let-isNew="isNew"
-            let-editMode="editMode">
+          <ng-template
+            kendoSchedulerEditDialogTemplate
+            let-formGroup="formGroup"
+            let-isNew="isNew"
+            let-editMode="editMode"
+          >
             <div class="k-form-inline">
               <div class="k-form-field">
                 <span>Title</span>
-                <input class="k-textbox" placeholder="Title" [formControl]="formGroup.get('title')" />
+                <input
+                  class="k-textbox"
+                  placeholder="Title"
+                  [formControl]="formGroup.get('title')"
+                />
               </div>
               <div class="k-form-field">
                 <span>Color</span>
@@ -217,36 +325,63 @@
                   <!--<input [style.background]="colorTask" [(ngModel)]="colorTask"
                 [cpPresetColors]="['#fff', '#000', '#2889e9', '#e920e9', '#fff500', 'rgb(236,64,64)']"
                 [(colorPicker)]="colorTask" [formControl]="formGroup.get('colorTask')" />-->
-                  <kendo-colorpalette [palette]="palette" [value]="selected" [tileSize]="30"
-                    [formControl]="formGroup.get('colorTask')">
+                  <kendo-colorpalette
+                    [palette]="palette"
+                    [value]="selected"
+                    [tileSize]="30"
+                    [formControl]="formGroup.get('colorTask')"
+                  >
                   </kendo-colorpalette>
                 </div>
               </div>
               <div class="k-form-field">
                 <span>User</span>
-                <kendo-combobox [data]="customerUsers" [textField]="'shortname'" [valueField]="'id'"
-                  [formControl]="formGroup.get('user')" (valueChange)="onValueChange($event)"
-                  ([ngModel])="customerUser">
+                <kendo-combobox
+                  [data]="customerUsers"
+                  [textField]="'shortname'"
+                  [valueField]="'id'"
+                  [formControl]="formGroup.get('user')"
+                  (valueChange)="onValueChange($event)"
+                  ([ngModel])="(customerUser)"
+                >
                 </kendo-combobox>
-                <button kendoButton [icon]="'user'" [primary]="true" (click)="newCustomer()">New
-                  customer</button>
+                <button
+                  kendoButton
+                  [icon]="'user'"
+                  [primary]="true"
+                  (click)="newCustomer()"
+                >
+                  New customer
+                </button>
 
-                <button kendoButton [icon]="'k-icon k-i-information'" [primary]="true" (click)="baseDataForUser()"
-                  *ngIf="customerUser !== undefined">Base
-                  data</button>
+                <button
+                  kendoButton
+                  [icon]="'k-icon k-i-information'"
+                  [primary]="true"
+                  (click)="baseDataForUser()"
+                  *ngIf="customerUser !== undefined"
+                >
+                  Base data
+                </button>
               </div>
               <div class="k-form-field k-datetime-picker-wrapper">
                 <span>Start</span>
                 <kendo-datepicker [formControl]="formGroup.get('start')">
                 </kendo-datepicker>
-                <kendo-timepicker [formControl]="formGroup.get('start')" *ngIf='!formGroup.controls.isAllDay.value'>
+                <kendo-timepicker
+                  [formControl]="formGroup.get('start')"
+                  *ngIf="!formGroup.controls.isAllDay.value"
+                >
                 </kendo-timepicker>
               </div>
               <div class="k-form-field k-datetime-picker-wrapper">
                 <span>End</span>
                 <kendo-datepicker [formControl]="formGroup.get('end')">
                 </kendo-datepicker>
-                <kendo-timepicker [formControl]="formGroup.get('end')" *ngIf='!formGroup.controls.isAllDay.value'>
+                <kendo-timepicker
+                  [formControl]="formGroup.get('end')"
+                  *ngIf="!formGroup.controls.isAllDay.value"
+                >
                 </kendo-timepicker>
               </div>
               <!-- <div class="k-form-field">
@@ -255,8 +390,12 @@
               </div>-->
               <div class="k-form-field">
                 <span>Telephone</span>
-                <input class="k-textbox" placeholder="Telephone" [formControl]="formGroup.get('telephone')"
-                  [value]="telephoneValue" />
+                <input
+                  class="k-textbox"
+                  placeholder="Telephone"
+                  [formControl]="formGroup.get('telephone')"
+                  [value]="telephoneValue"
+                />
               </div>
               <!--<div class="k-form-field" *ngIf="isEditingSeries(editMode)">
                   <kendo-recurrence-editor [formControl]="formGroup.get('recurrenceRule')">
@@ -264,84 +403,184 @@
               </div>-->
             </div>
           </ng-template>
-          <kendo-scheduler-messages today="{{language.today}}" allDay="{{language.allDay}}"
-            dayViewTitle="{{language.day}}" weekViewTitle="{{language.week}}" monthViewTitle="{{language.month}}"
-            workWeekViewTitle="{{language.workWeek}}" multiDayViewTitle="{{language.multiDay}}"
-            timelineViewTitle="{{language.timeline}}" agendaViewTitle="{{language.agenda}}"
-            showWorkDay="Mostrar horas laborables" showFullDay="Mostrar día completo">
+          <kendo-scheduler-messages
+            today="{{ language.today }}"
+            allDay="{{ language.allDay }}"
+            dayViewTitle="{{ language.day }}"
+            weekViewTitle="{{ language.week }}"
+            monthViewTitle="{{ language.month }}"
+            workWeekViewTitle="{{ language.workWeek }}"
+            multiDayViewTitle="{{ language.multiDay }}"
+            timelineViewTitle="{{ language.timeline }}"
+            agendaViewTitle="{{ language.agenda }}"
+            showWorkDay="Mostrar horas laborables"
+            showFullDay="Mostrar día completo"
+          >
           </kendo-scheduler-messages>
         </kendo-scheduler>
       </div>
     </kendo-splitter-pane>
   </kendo-splitter>
 
-  <modal #customer modalClass="modal-md top-margin loggerModal adminModal" [hideCloseButton]="true">
+  <modal
+    #customer
+    modalClass="modal-md top-margin loggerModal adminModal"
+    [hideCloseButton]="true"
+  >
     <modal-header>
       <h2>Create new customer</h2>
     </modal-header>
     <modal-content>
-      <form name="loginForm" class="loginForm" (ngSubmit)="createCustomer(customer)">
+      <form
+        name="loginForm"
+        class="loginForm"
+        (ngSubmit)="createCustomer(customer)"
+      >
         <div class="form-group">
-          <input type="text" class="email col-md-4 col-xs-12" name="shortname" placeholder="Username"
-            [(ngModel)]="data.shortname" shortname.value=''>
-          <input type="text" class="email col-md-4 col-xs-12" name="firstname" placeholder="Firstname"
-            [(ngModel)]="data.firstname" firstname.value=''>
-          <input type="text" class="email col-md-4 col-xs-12" name="lastname" placeholder="Lastname"
-            [(ngModel)]="data.lastname" lastname.value=''>
+          <input
+            type="text"
+            class="email col-md-4 col-xs-12"
+            name="shortname"
+            placeholder="Username"
+            [(ngModel)]="data.shortname"
+            shortname.value=""
+          />
+          <input
+            type="text"
+            class="email col-md-4 col-xs-12"
+            name="firstname"
+            placeholder="Firstname"
+            [(ngModel)]="data.firstname"
+            firstname.value=""
+          />
+          <input
+            type="text"
+            class="email col-md-4 col-xs-12"
+            name="lastname"
+            placeholder="Lastname"
+            [(ngModel)]="data.lastname"
+            lastname.value=""
+          />
         </div>
         <div class="form-group">
           <div class="col-md-6 col-xs-12">
-            <input type="radio" name="gender" id="female" class="k-radio" [(ngModel)]="data.gender" [value]="'female'">
-            <label class="k-radio-label col-md-6 col-xs-12" for="female">Female</label>
-            <input type="radio" name="gender" id="male" class="k-radio" checked="checked" [(ngModel)]="data.gender"
-              [value]="'male'">
-            <label class="k-radio-label col-md-6 col-xs-12" for="male">Male</label>
+            <input
+              type="radio"
+              name="gender"
+              id="female"
+              class="k-radio"
+              [(ngModel)]="data.gender"
+              [value]="'female'"
+            />
+            <label class="k-radio-label col-md-6 col-xs-12" for="female"
+              >Female</label
+            >
+            <input
+              type="radio"
+              name="gender"
+              id="male"
+              class="k-radio"
+              checked="checked"
+              [(ngModel)]="data.gender"
+              [value]="'male'"
+            />
+            <label class="k-radio-label col-md-6 col-xs-12" for="male"
+              >Male</label
+            >
           </div>
-          <kendo-datepicker class="email col-md-6 col-xs-12" name="birthday" placeholder="Birthday"
-            [value]="data.birthday"></kendo-datepicker>
+          <kendo-datepicker
+            class="email col-md-6 col-xs-12"
+            name="birthday"
+            placeholder="Birthday"
+            [value]="data.birthday"
+          ></kendo-datepicker>
         </div>
         <div class="form-group">
-          <input type="text" class="email col-md-4 col-xs-12" name="telephone" placeholder="Telephone"
-            [(ngModel)]="data.telephone" telephone.value=''>
-          <input type="text" class="email col-md-4 col-xs-12" name="mobile" placeholder="Mobile"
-            [(ngModel)]="data.mobile" mobile.value=''>
-          <input type="email" class="email col-md-4 col-xs-12" name="email" placeholder="Email" [(ngModel)]="data.email"
-            email.value=''>
+          <input
+            type="text"
+            class="email col-md-4 col-xs-12"
+            name="telephone"
+            placeholder="Telephone"
+            [(ngModel)]="data.telephone"
+            telephone.value=""
+          />
+          <input
+            type="text"
+            class="email col-md-4 col-xs-12"
+            name="mobile"
+            placeholder="Mobile"
+            [(ngModel)]="data.mobile"
+            mobile.value=""
+          />
+          <input
+            type="email"
+            class="email col-md-4 col-xs-12"
+            name="email"
+            placeholder="Email"
+            [(ngModel)]="data.email"
+            email.value=""
+          />
         </div>
         <div class="form-group">
-          <input type="text" class="email col-md-4 col-xs-12" name="street" placeholder="Street"
-            [(ngModel)]="data.street" street.value=''>
-          <input type="text" class="email col-md-4 col-xs-12" name="streetnumber" placeholder="Street number"
-            [(ngModel)]="data.streetnumber" streetnumber.value=''>
-          <input type="text" class="email col-md-4 col-xs-12" name="city" placeholder="City" [(ngModel)]="data.city"
-            city.value=''>
+          <input
+            type="text"
+            class="email col-md-4 col-xs-12"
+            name="street"
+            placeholder="Street"
+            [(ngModel)]="data.street"
+            street.value=""
+          />
+          <input
+            type="text"
+            class="email col-md-4 col-xs-12"
+            name="streetnumber"
+            placeholder="Street number"
+            [(ngModel)]="data.streetnumber"
+            streetnumber.value=""
+          />
+          <input
+            type="text"
+            class="email col-md-4 col-xs-12"
+            name="city"
+            placeholder="City"
+            [(ngModel)]="data.city"
+            city.value=""
+          />
         </div>
         <!-- ./remember-row -->
         <div class="form-group">
-          <button class="btn btn-lg btn-primary btn-block" type="submit">Create customer</button>
+          <button class="btn btn-lg btn-primary btn-block" type="submit">
+            Create customer
+          </button>
         </div>
       </form>
-
     </modal-content>
     <modal-footer>
-      <button class="btn btn-primary" (click)="closeNewCustomer()">Close</button>
+      <button class="btn btn-primary" (click)="closeNewCustomer()">
+        Close
+      </button>
     </modal-footer>
   </modal>
 
-  <modal #customerUserModal modalClass="modal-lg top-margin loggerModal adminModal" [hideCloseButton]="true"
-    *ngIf="customerUser !== undefined">
+  <modal
+    #customerUserModal
+    modalClass="modal-lg top-margin loggerModal adminModal"
+    [hideCloseButton]="true"
+    *ngIf="customerUser !== undefined"
+  >
     <modal-header>
-      <h2>Base data for {{customerUser.firstname}} {{customerUser.lastname}}</h2>
+      <h2>
+        Base data for {{ customerUser.firstname }} {{ customerUser.lastname }}
+      </h2>
     </modal-header>
     <modal-content>
       <app-base-date [data]="customerUser" *ngIf="customerUser !== undefined">
       </app-base-date>
     </modal-content>
     <modal-footer>
-      <button class="btn btn-primary" (click)="closebaseDataForUser()">Close</button>
+      <button class="btn btn-primary" (click)="closebaseDataForUser()">
+        Close
+      </button>
     </modal-footer>
   </modal>
-
-
-
 </div>
