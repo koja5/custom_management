@@ -27,6 +27,8 @@
         [data]="store"
         [textField]="'storename'"
         [valueField]="'id'"
+        [(ngModel)]="selectedStoreId"
+        [valuePrimitive]="true"
         (valueChange)="selectedStore($event)"
       >
       </kendo-combobox>
@@ -49,6 +51,7 @@
           name="orientation"
           id="horizontal"
           class="k-radio"
+          checked="checked"
           [(ngModel)]="orientation"
           [value]="'horizontal'"
         />
@@ -59,7 +62,6 @@
           name="orientation"
           id="vertical"
           class="k-radio"
-          checked="checked"
           [(ngModel)]="orientation"
           [value]="'vertical'"
         />
@@ -116,14 +118,14 @@
             (remove)="removeHandler($event)"
           >
             <ng-template kendoSchedulerTimeSlotTemplate let-date="date">
-              <strong
-                *ngIf="workTime !== undefined && dateFormat(date, i, j)"
-                style="background: #11db06; opacity: 0.2; color: white; padding: 0.5%; border-radius: 10%"
-              ></strong>
-              <strong
+              <div
+                *ngIf="workTime !== undefined && dateFormat(date, i, j)" [style.background]="workTime[i][j].color"
+                style="opacity: 0.5; color: white; height: 6vh; width: 31.5vh; border-radius: 2px; pointer-events: none;"
+              ></div>
+              <div
                 *ngIf="workTime !== undefined && !dateFormat(date, i, j)"
-                style="background: #6b6161; opacity: 0.5; color: white; padding: 50%; border-radius: 10%"
-              ></strong>
+                style="height: 6vh; width: 31.5vh"
+              ></div>
             </ng-template>
             <ng-template
               kendoSchedulerEventTemplate

@@ -1,17 +1,32 @@
 .user-options {
-    padding: 1%;
+  padding: 1%;
 }
 
 .user-options button {
-    background: cornflowerblue;
-    border: none;
+  background: cornflowerblue;
+  border: none;
 }
 
 .content-page .content {
-    padding-bottom: 0px !important;
+  padding-bottom: 0px !important;
 }
 
 
 .col-xs-12 {
-    margin: 1%;
+  margin: 1%;
+}
+
+.patternContainer {
+  text-align: center;
+  color: red;
+}
+
+.validError {
+  text-align: center;
+  color: red;
+}
+
+.validSuccess {
+  text-align: center;
+  color: green;
 }

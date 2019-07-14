@@ -5,6 +5,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { Modal } from "ngx-modal";
 import { Location } from "@angular/common";
 import { StoreService } from "../../../../service/store.service";
+import { TaskService } from "../../../../service/task.service";
 
 @Component({
   selector: "app-user-details",
@@ -23,14 +24,18 @@ export class UserDetailsComponent implements OnInit {
   public workTime: any;
   public noSetWorkTime = false;
   public storeLocation: any;
-  public selectedStore: string;
+  public selectedStore: any;
+  public validDate: Date;
+  public selectedColor = "#fe413b";
+  public palette: any[] = [];
 
   constructor(
     public route: ActivatedRoute,
     public service: UsersService,
     public sanitizer: DomSanitizer,
     public location: Location,
-    public storeService: StoreService
+    public storeService: StoreService,
+    public taskService: TaskService
   ) {}
 
   ngOnInit() {
@@ -64,8 +69,13 @@ export class UserDetailsComponent implements OnInit {
     this.language = JSON.parse(localStorage.getItem("language"))["user"];
 
     this.storeService.getStore(localStorage.getItem("idUser"), val => {
-      console.log(val);
       this.storeLocation = val;
+    });
+
+    this.taskService.getTaskColor().subscribe(data => {
+      for (let i = 0; i < data["length"]; i++) {
+        this.palette.push(data[i].color);
+      }
     });
 
     this.workTimeData();
@@ -76,6 +86,7 @@ export class UserDetailsComponent implements OnInit {
     this.service.getWorkTimeForUser(this.id).subscribe((data: []) => {
       if (data["length"] === 0) {
         this.noSetWorkTime = true;
+        this.validDate = new Date();
         this.service.getWorkTime().subscribe(data => {
           this.workTime = this.convertNumericToDay(data);
         });
@@ -89,6 +100,7 @@ export class UserDetailsComponent implements OnInit {
           );
         });
         console.log(dataSort[0]);
+        this.validDate = new Date(dataSort[0].dateChange);
         this.workTime = this.packWorkTimeFromDatabase(dataSort[0]);
         console.log(this.workTime);
       }
@@ -112,7 +124,7 @@ export class UserDetailsComponent implements OnInit {
     } else {
       this.selectedValue = "Employee";
     }
-    this.selectedStore = this.convertIntToTypeString(this.data.storeId);
+    // this.selectedStore = this.convertIntToTypeString(this.data.storeId);
   }
 
   changeTab(value: string) {
@@ -183,7 +195,8 @@ export class UserDetailsComponent implements OnInit {
         workTime[i].end2;
     }
     time["user_id"] = this.id;
-    time["dateChange"] = new Date();
+    time["dateChange"] = this.validDate;
+    time["color"] = this.selectedColor;
     return time;
   }
 
@@ -267,5 +280,9 @@ export class UserDetailsComponent implements OnInit {
   selectionChangeStore(event) {
     console.log(event);
     this.data.stateId = event;
+  }
+
+  newValidDate() {
+    this.validDate = new Date();
   }
 }

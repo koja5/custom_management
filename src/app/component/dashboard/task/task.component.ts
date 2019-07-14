@@ -1,14 +1,14 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators
-} from "@angular/forms";
-import { CustomersService } from "../../../service/customers.service";
-import { CustomersComponent } from "../customers/customers.component";
-import { Modal } from "ngx-modal";
-import { MessageService } from "../../../service/message.service";
+} from '@angular/forms';
+import { CustomersService } from '../../../service/customers.service';
+import { CustomersComponent } from '../customers/customers.component';
+import { Modal } from 'ngx-modal';
+import { MessageService } from '../../../service/message.service';
 import {
   CancelEvent,
   CrudOperation,
@@ -20,35 +20,35 @@ import {
   SlotClickEvent,
   CreateFormGroupArgs,
   SchedulerEvent
-} from "@progress/kendo-angular-scheduler";
-import "@progress/kendo-angular-intl/locales/de/all";
-import { filter } from "rxjs/operators/filter";
-import { StoreService } from "../../../service/store.service";
-import { TaskService } from "../../../service/task.service";
-import { isNumber } from "util";
-import Swal from "sweetalert2";
+} from '@progress/kendo-angular-scheduler';
+import '@progress/kendo-angular-intl/locales/de/all';
+import { filter } from 'rxjs/operators/filter';
+import { StoreService } from '../../../service/store.service';
+import { TaskService } from '../../../service/task.service';
+import { isNumber } from 'util';
+import Swal from 'sweetalert2';
 
 @Component({
-  selector: "app-task",
-  templateUrl: "./task.component.html",
-  styleUrls: ["./task.component.scss"],
+  selector: 'app-task',
+  templateUrl: './task.component.html',
+  styleUrls: ['./task.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class TaskComponent implements OnInit {
-  @ViewChild("customer") customerModal: Modal;
-  @ViewChild("customerUserModal") customerUserModal: Modal;
+  @ViewChild('customer') customerModal: Modal;
+  @ViewChild('customerUserModal') customerUserModal: Modal;
   public selectedDate: Date = new Date();
   public formGroup: FormGroup;
   public events: SchedulerEvent[] = [];
   public customerUsers: any;
-  public telephoneValue = "";
+  public telephoneValue = '';
   public type: any;
   public customerComponent: CustomersComponent;
   public usersInCompany: any = [];
   public colorTask: any;
   public zIndex: string;
   public theme: string;
-  public selected = "#fe413b";
+  public selected = '#fe413b';
   public palette: any[] = [];
   public colorPalette: any;
   public selectedColorId: any;
@@ -56,27 +56,29 @@ export class TaskComponent implements OnInit {
   public resources: any[] = [];
   public customerUser: any;
   public data = {
-    id: "",
-    shortname: "",
-    firstname: "",
-    lastname: "",
-    gender: "",
-    street: "",
-    streetnumber: "",
-    city: "",
-    telephone: "",
-    mobile: "",
-    email: "",
-    birthday: "",
-    storeId: ""
+    id: '',
+    shortname: '',
+    firstname: '',
+    lastname: '',
+    gender: '',
+    street: '',
+    streetnumber: '',
+    city: '',
+    telephone: '',
+    mobile: '',
+    email: '',
+    birthday: '',
+    storeId: ''
   };
   public value: any = [];
   public store: any;
   public calendars: any = [];
   public loading = true;
   public height = 92;
-  public orientation = "vertical";
+  public orientation = 'horizontal';
   public workTime: any[] = [];
+  public selectedStoreId: number;
+  public selectedUser: any;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -90,53 +92,12 @@ export class TaskComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this.type = localStorage.getItem("type");
+    this.type = localStorage.getItem('type');
     console.log(this.events);
     this.calendars = [];
     this.height = 92;
-    if (localStorage.getItem("type") === "3") {
-      this.service
-        .getTasksForUser(localStorage.getItem("idUser"))
-        .subscribe(data => {
-          this.events = [];
-          for (let i = 0; i < data.length; i++) {
-            data[i].start = new Date(data[i].start);
-            data[i].end = new Date(data[i].end);
-            this.events.push(data[i]);
-          }
-          const objectCalendar = {
-            name: null,
-            events: this.events
-          };
-          this.calendars.push(objectCalendar);
-          console.log(this.calendars);
-          this.loading = false;
-        });
-    } else {
-      this.service.getTasks().subscribe(data => {
-        console.log(data);
-        if (data.length !== 0) {
-          for (let i = 0; i < data.length; i++) {
-            data[i].start = new Date(data[i].start);
-            data[i].end = new Date(data[i].end);
-            this.events.push(data[i]);
-          }
-          console.log(this.events);
-          const objectCalendar = {
-            name: null,
-            events: this.events
-          };
-          this.calendars.push(objectCalendar);
-          this.height += this.height;
-          this.loading = false;
-        } else {
-          this.calendars.push({ name: null, events: [] });
-          console.log(this.calendars);
-        }
-      });
-    }
 
-    this.customer.getCustomers(localStorage.getItem("storeId"), val => {
+    this.customer.getCustomers(localStorage.getItem('storeId'), val => {
       console.log(val);
       this.customerUsers = val;
       this.loading = false;
@@ -151,19 +112,19 @@ export class TaskComponent implements OnInit {
     });
 
     setTimeout(() => {
-      this.changeTheme(localStorage.getItem("theme"));
+      this.changeTheme(localStorage.getItem('theme'));
     }, 50);
 
-    if (localStorage.getItem("language") !== undefined) {
-      this.language = JSON.parse(localStorage.getItem("language"))["calendar"];
+    if (localStorage.getItem('language') !== undefined) {
+      this.language = JSON.parse(localStorage.getItem('language'))['calendar'];
       console.log(this.language);
     }
 
     this.message.getLanguage().subscribe(mess => {
       this.language = undefined;
       setTimeout(() => {
-        this.language = JSON.parse(localStorage.getItem("language"))[
-          "calendar"
+        this.language = JSON.parse(localStorage.getItem('language'))[
+          'calendar'
         ];
         console.log(this.language);
       }, 10);
@@ -172,30 +133,87 @@ export class TaskComponent implements OnInit {
     this.service.getTaskColor().subscribe(data => {
       console.log(data);
       const resourcesObject = {
-        name: "Rooms",
+        name: 'Rooms',
         data: data,
-        field: "colorTask",
-        valueField: "id",
-        textField: "text",
-        colorField: "color"
+        field: 'colorTask',
+        valueField: 'id',
+        textField: 'text',
+        colorField: 'color'
       };
       this.resources.push(resourcesObject);
       this.colorPalette = data;
-      for (let i = 0; i < data["length"]; i++) {
+      for (let i = 0; i < data['length']; i++) {
         this.palette.push(data[i].color);
       }
     });
 
-    this.storeService.getStore(localStorage.getItem("idUser"), val => {
+    this.storeService.getStore(localStorage.getItem('idUser'), val => {
       this.store = val;
     });
+
+    if (
+      sessionStorage.getItem('selectedStore') !== null &&
+      sessionStorage.getItem('selectedUser') !== null
+    ) {
+      this.calendars = [];
+      this.selectedStoreId = Number(sessionStorage.getItem('selectedStore'));
+      this.value = JSON.parse(sessionStorage.getItem('selectedUser'));
+      // this.selectedStore(this.selectedStoreId);
+      this.getTaskForSelectedUsers(this.value);
+    } else if (sessionStorage.getItem('selectedStore')) {
+      this.calendars = [];
+      this.selectedStoreId = Number(sessionStorage.getItem('selectedStore'));
+      this.selectedStore(this.selectedStoreId);
+    } else {
+      if (localStorage.getItem('type') === '3') {
+        this.service
+          .getTasksForUser(localStorage.getItem('idUser'))
+          .subscribe(data => {
+            this.events = [];
+            for (let i = 0; i < data.length; i++) {
+              data[i].start = new Date(data[i].start);
+              data[i].end = new Date(data[i].end);
+              this.events.push(data[i]);
+            }
+            const objectCalendar = {
+              name: null,
+              events: this.events
+            };
+            this.calendars.push(objectCalendar);
+            console.log(this.calendars);
+            this.loading = false;
+          });
+      } else {
+        this.service.getTasks().subscribe(data => {
+          console.log(data);
+          if (data.length !== 0) {
+            for (let i = 0; i < data.length; i++) {
+              data[i].start = new Date(data[i].start);
+              data[i].end = new Date(data[i].end);
+              this.events.push(data[i]);
+            }
+            console.log(this.events);
+            const objectCalendar = {
+              name: null,
+              events: this.events
+            };
+            this.calendars.push(objectCalendar);
+            this.height += this.height;
+            this.loading = false;
+          } else {
+            this.calendars.push({ name: null, events: [] });
+            console.log(this.calendars);
+          }
+        });
+      }
+    }
   }
 
   public createFormGroup(args: CreateFormGroupArgs): FormGroup {
     const dataItem = args.dataItem;
     console.log(dataItem);
     if (
-      typeof dataItem.customer_id === "number" &&
+      typeof dataItem.customer_id === 'number' &&
       dataItem.customer_id !== null
     ) {
       console.log(dataItem.customer_id);
@@ -214,7 +232,7 @@ export class TaskComponent implements OnInit {
       isAllDay: dataItem.isAllDay,
       title: dataItem.title,
       colorTask: dataItem.colorTitle,
-      creator_id: localStorage.getItem("idUser"),
+      creator_id: localStorage.getItem('idUser'),
       user: this.customerUser,
       telephone: dataItem.telephone,
       description: dataItem.description,
@@ -235,18 +253,18 @@ export class TaskComponent implements OnInit {
       this.formGroup = this.formBuilder.group({
         user: this.customerUser
       });
-      this.changeTheme(localStorage.getItem("theme"));
+      this.changeTheme(localStorage.getItem('theme'));
     }, 50);
     return this.formGroup;
   }
 
   public isEditingSeries(editMode: EditMode): boolean {
-    console.log("update!");
+    console.log('update!');
     return editMode === EditMode.Series;
   }
 
   public getNextId(): number {
-    console.log("test");
+    console.log('test');
     const len = this.events.length;
 
     return len === 0 ? 1 : this.events[this.events.length - 1].id + 1;
@@ -270,14 +288,14 @@ export class TaskComponent implements OnInit {
               title: this.language.successUpdateTitle,
               text: this.language.successUpdateText,
               timer: 3000,
-              type: "success"
+              type: 'success'
             });
           } else {
             Swal.fire({
               title: this.language.unsuccessUpdateTitle,
               text: this.language.unsuccessUpdateText,
               timer: 3000,
-              type: "error"
+              type: 'error'
             });
           }
         });
@@ -291,7 +309,7 @@ export class TaskComponent implements OnInit {
 
   public handleUpdate(item: any, value: any, mode?: EditMode): void {
     const service = this.service;
-    console.log("update!");
+    console.log('update!');
     if (mode === EditMode.Occurrence) {
       if (service.isException(item)) {
         service.update(item, value);
@@ -305,7 +323,7 @@ export class TaskComponent implements OnInit {
   }
 
   public closeEditor(scheduler: SchedulerComponent): void {
-    console.log("close!");
+    console.log('close!');
     scheduler.closeEvent();
 
     this.formGroup = undefined;
@@ -323,18 +341,18 @@ export class TaskComponent implements OnInit {
   }
 
   newCustomer() {
-    this.zIndex = "zIndex";
+    this.zIndex = 'zIndex';
     this.customerModal.open();
   }
 
   closeNewCustomer() {
-    this.zIndex = "";
+    this.zIndex = '';
     this.customerModal.close();
   }
 
   createCustomer(form) {
     console.log(this.data);
-    this.data.storeId = localStorage.getItem("storeId");
+    this.data.storeId = localStorage.getItem('storeId');
     this.customer.createCustomer(this.data, val => {
       console.log(val);
       this.customerModal.close();
@@ -344,48 +362,48 @@ export class TaskComponent implements OnInit {
 
   changeTheme(theme: string) {
     console.log(theme);
-    if (localStorage.getItem("allThemes") !== undefined) {
-      const allThemes = JSON.parse(localStorage.getItem("allThemes"));
+    if (localStorage.getItem('allThemes') !== undefined) {
+      const allThemes = JSON.parse(localStorage.getItem('allThemes'));
       console.log(allThemes);
-      let items = document.querySelectorAll(".k-dialog-titlebar");
+      let items = document.querySelectorAll('.k-dialog-titlebar');
       for (let i = 0; i < items.length; i++) {
         const clas = items[i].classList;
         for (let j = 0; j < allThemes.length; j++) {
-          const themeName = allThemes[j]["name"];
+          const themeName = allThemes[j]['name'];
           console.log(clas);
-          clas.remove("k-dialog-titlebar-" + themeName);
-          clas.add("k-dialog-titlebar-" + theme);
+          clas.remove('k-dialog-titlebar-' + themeName);
+          clas.add('k-dialog-titlebar-' + theme);
         }
       }
 
-      items = document.querySelectorAll(".k-button-icontext");
+      items = document.querySelectorAll('.k-button-icontext');
       for (let i = 0; i < items.length; i++) {
         const clas = items[i].classList;
         for (let j = 0; j < allThemes.length; j++) {
-          const themeName = allThemes[j]["name"];
-          clas.remove("k-button-icontext-" + themeName);
-          clas.add("k-button-icontext-" + theme);
+          const themeName = allThemes[j]['name'];
+          clas.remove('k-button-icontext-' + themeName);
+          clas.add('k-button-icontext-' + theme);
         }
       }
 
-      items = document.querySelectorAll(".k-primary");
+      items = document.querySelectorAll('.k-primary');
       for (let i = 0; i < items.length; i++) {
         const clas = items[i].classList;
         for (let j = 0; j < allThemes.length; j++) {
-          const themeName = allThemes[j]["name"];
-          clas.remove("k-primary-" + themeName);
-          clas.add("k-primary-" + theme);
+          const themeName = allThemes[j]['name'];
+          clas.remove('k-primary-' + themeName);
+          clas.add('k-primary-' + theme);
         }
       }
 
-      items = document.querySelectorAll(".k-state-selected");
+      items = document.querySelectorAll('.k-state-selected');
       for (let i = 0; i < items.length; i++) {
         const clas = items[i].classList;
         for (let j = 0; j < allThemes.length; j++) {
-          const themeName = allThemes[j]["name"];
+          const themeName = allThemes[j]['name'];
           console.log(themeName);
-          clas.remove("k-state-selected-" + themeName);
-          clas.add("k-state-selected-" + theme);
+          clas.remove('k-state-selected-' + themeName);
+          clas.add('k-state-selected-' + theme);
         }
       }
       this.theme = theme;
@@ -415,12 +433,12 @@ export class TaskComponent implements OnInit {
   }
 
   baseDataForUser() {
-    this.zIndex = "zIndex";
+    this.zIndex = 'zIndex';
     this.customerUserModal.open();
   }
 
   closebaseDataForUser() {
-    this.zIndex = "";
+    this.zIndex = '';
     this.customerUserModal.close();
   }
 
@@ -432,12 +450,15 @@ export class TaskComponent implements OnInit {
       this.value = this.value.map(item => item);
     }
 
+    sessionStorage.setItem('selectedUser', JSON.stringify(this.value));
+
     this.getTaskForSelectedUsers(this.value);
   }
 
   getTaskForSelectedUsers(value) {
     this.loading = true;
     console.log(value);
+    console.log('usao sam ovde!');
     this.calendars = [];
     this.height = 92;
     if (value.length === 0) {
@@ -468,8 +489,8 @@ export class TaskComponent implements OnInit {
             this.events.push(data[i]);
           }
           this.workTime = [];
-          this.service.getWorkTimeForUser(value[i].id).subscribe(data => {
-            //this.workTime = data[2];
+          this.service.getWorkTimeForUser(value[i].id).subscribe(
+            data => {
             console.log(data);
             this.workTime.push(this.pickWorkTimeToTask(data));
             console.log(this.workTime);
@@ -493,7 +514,7 @@ export class TaskComponent implements OnInit {
     console.log(event);
     this.loading = true;
     if (event !== undefined) {
-      this.service.getTasksForStore(event.id).subscribe(data => {
+      this.service.getTasksForStore(event).subscribe(data => {
         this.events = [];
         this.calendars = [];
         for (let i = 0; i < data.length; i++) {
@@ -510,13 +531,15 @@ export class TaskComponent implements OnInit {
         this.loading = false;
       });
 
-      this.service.getUsersInCompany(event.id, val => {
+      this.service.getUsersInCompany(event, val => {
         this.usersInCompany = val;
         this.loading = false;
       });
     } else {
       this.loading = false;
     }
+
+    sessionStorage.setItem('selectedStore', event);
   }
 
   dragEndHandler(event) {
@@ -558,16 +581,20 @@ export class TaskComponent implements OnInit {
   }
 
   dateFormat(date, i, j) {
-    if (new Date(date).getDay() - 1 < 5 && new Date(date).getDay() !== 0) {
+    if (
+      new Date(this.workTime[i][j].change) <= new Date(date) &&
+      new Date(date).getDay() - 1 < 5 &&
+      new Date(date).getDay() !== 0
+    ) {
       if (
         (this.workTime[i][j].times[new Date(date).getDay() - 1].start <=
           new Date(date).getHours() &&
           this.workTime[i][j].times[new Date(date).getDay() - 1].end >=
-            new Date(date).getHours()) ||
+          new Date(date).getHours()) ||
         (this.workTime[i][j].times[new Date(date).getDay() - 1].start2 <=
           new Date(date).getHours() &&
           this.workTime[i][j].times[new Date(date).getDay() - 1].end2 >=
-            new Date(date).getHours())
+          new Date(date).getHours())
       ) {
         return true;
       } else {
@@ -596,22 +623,24 @@ export class TaskComponent implements OnInit {
 
   pickWorkTimeToTask(workTime) {
     let workTimeArray = [];
-    let allWorkTime = [];
+    const allWorkTime = [];
     let workTimeObject = null;
+    // tslint:disable-next-line: prefer-for-of
     for (let i = 0; i < workTime.length; i++) {
       workTimeArray = [];
       for (let j = 1; j < 6; j++) {
         workTimeObject = {
-          day: Number(workTime[i][this.convertNumericToDay(j)].split("-")[0]),
-          start: workTime[i][this.convertNumericToDay(j)].split("-")[1],
-          end: workTime[i][this.convertNumericToDay(j)].split("-")[2],
-          start2: workTime[i][this.convertNumericToDay(j)].split("-")[3],
-          end2: workTime[i][this.convertNumericToDay(j)].split("-")[4]
+          day: Number(workTime[i][this.convertNumericToDay(j)].split('-')[0]),
+          start: workTime[i][this.convertNumericToDay(j)].split('-')[1],
+          end: workTime[i][this.convertNumericToDay(j)].split('-')[2],
+          start2: workTime[i][this.convertNumericToDay(j)].split('-')[3],
+          end2: workTime[i][this.convertNumericToDay(j)].split('-')[4]
         };
         workTimeArray.push(workTimeObject);
       }
       allWorkTime.push({
         change: workTime[i].dateChange,
+        color: workTime[i].color,
         times: workTimeArray
       });
     }

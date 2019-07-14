@@ -144,7 +144,7 @@
         <label class="col-md-9">Complaint</label>
         <button kendoButton [primary]="true" [icon]="'add'" style="width: 25vh !important; margin-bottom: 2vh;"
           (click)="openComplaintModal()">Add complaint</button>
-        <kendo-grid [data]="gridComplaint" [height]="200" [resizable]="true">
+        <kendo-grid [data]="gridComplaint" [height]="200" [resizable]="true" [loading]="loadingGridComplaint">
           <kendo-grid-column field="date" title="Date" width="120">
           </kendo-grid-column>
           <kendo-grid-column field="complaint" title="Complaint" width="200">
@@ -164,7 +164,7 @@
         <label class="col-md-9">Therapy</label>
         <button kendoButton [primary]="true" [icon]="'add'" style="width: 25vh !important; margin-bottom: 2vh;"
           (click)="openTherapyModal()">Add therapy</button>
-        <kendo-grid [data]="gridTherapy" [height]="200" [resizable]="true">
+        <kendo-grid [data]="gridTherapy" [height]="200" [resizable]="true" [loading]="loadingGridTherapy">
           <kendo-grid-column field="date" title="Date" width="120" [format]="{ date: 'short' }">
           </kendo-grid-column>
           <kendo-grid-column field="complaint" title="Complaint" width="150">
@@ -186,7 +186,7 @@
         <label class="col-md-9">Documents</label>
         <button kendoButton [primary]="true" [icon]="'add'" style="width: 25vh !important; margin-bottom: 2vh;"
           (click)="upload.open()">Upload document</button>
-        <kendo-grid [data]="documents" [height]="200" [resizable]="true">
+        <kendo-grid [data]="documents" [height]="200" [resizable]="true" [loading]="loadingGridDocument">
           <kendo-grid-column field="id" title="Document ID" width="30">
           </kendo-grid-column>
           <kendo-grid-column width="30">

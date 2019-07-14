@@ -1374,7 +1374,8 @@ router.post('/setWorkTimeForUser', function(req, res, next) {
             'tuesday': req.body.tuesday,
             'wednesday': req.body.wednesday,
             'thursday': req.body.thursday,
-            'friday': req.body.friday
+            'friday': req.body.friday,
+            'color': req.body.color
         };
         console.log(date);
 

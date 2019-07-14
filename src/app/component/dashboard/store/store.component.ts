@@ -1,31 +1,31 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { Modal } from "ngx-modal";
-import { StoreService } from "../../../service/store.service";
-import { process, State } from "@progress/kendo-data-query";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Modal } from 'ngx-modal';
+import { StoreService } from '../../../service/store.service';
+import { process, State } from '@progress/kendo-data-query';
 import {
   DataStateChangeEvent,
   PageChangeEvent
-} from "@progress/kendo-angular-grid";
+} from '@progress/kendo-angular-grid';
 
 @Component({
-  selector: "app-store",
-  templateUrl: "./store.component.html",
-  styleUrls: ["./store.component.scss"]
+  selector: 'app-store',
+  templateUrl: './store.component.html',
+  styleUrls: ['./store.component.scss']
 })
 export class StoreComponent implements OnInit {
-  @ViewChild("store") store: Modal;
-  @ViewChild("storeEdit") storeEdit: Modal;
+  @ViewChild('store') store: Modal;
+  @ViewChild('storeEdit') storeEdit: Modal;
   public data = {
-    id: "",
-    storename: "",
-    street: "",
-    zipcode: "",
-    place: "",
-    email: "",
-    telephone: "",
-    mobile: "",
-    comment: "",
-    superadmin: ""
+    id: '',
+    storename: '',
+    street: '',
+    zipcode: '',
+    place: '',
+    email: '',
+    telephone: '',
+    mobile: '',
+    comment: '',
+    superadmin: ''
   };
   public currentLoadData: any;
   public gridData: any;
@@ -37,11 +37,11 @@ export class StoreComponent implements OnInit {
   };
   public idUser: string;
 
-  constructor(public service: StoreService) {}
+  constructor(public service: StoreService) { }
 
   ngOnInit() {
-    this.idUser = localStorage.getItem("idUser");
-    
+    this.idUser = localStorage.getItem('idUser');
+
     this.getStore();
   }
 
@@ -55,17 +55,17 @@ export class StoreComponent implements OnInit {
   }
 
   newStore() {
-    console.log(localStorage.getItem("idUser"));
+    console.log(localStorage.getItem('idUser'));
     this.data = {
-      id: "",
-      storename: "",
-      street: "",
-      zipcode: "",
-      place: "",
-      email: "",
-      telephone: "",
-      mobile: "",
-      comment: "",
+      id: '',
+      storename: '',
+      street: '',
+      zipcode: '',
+      place: '',
+      email: '',
+      telephone: '',
+      mobile: '',
+      comment: '',
       superadmin: this.idUser
     };
     this.store.open();
@@ -89,7 +89,7 @@ export class StoreComponent implements OnInit {
     });
   }
 
-  deleteStore(store) {}
+  deleteStore(store) { }
 
   dataStateChange(state: DataStateChangeEvent): void {
     this.state = state;
@@ -120,23 +120,23 @@ export class StoreComponent implements OnInit {
   }
 
   public close(component) {
-    this[component + "Opened"] = false;
+    this[component + 'Opened'] = false;
   }
 
   open(component, id) {
-    this[component + "Opened"] = true;
+    this[component + 'Opened'] = true;
     this.data.id = id;
   }
 
   action(event) {
     console.log(event);
-    if (event === "yes") {
+    if (event === 'yes') {
       console.log(this.data);
       this.service.deleteStore(this.data.id).subscribe(data => {
         console.log(data);
         if (data) {
           this.getStore();
-        } 
+        }
         this.dialogOpened = false;
       });
     } else {

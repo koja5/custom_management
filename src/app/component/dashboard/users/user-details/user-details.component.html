@@ -225,8 +225,7 @@
                 </label>
               </div>
               <div class="form-group">
-                <kendo-combobox [data]="storeLocation" [textField]="'storename'" [valueField]="'id'" (selectionChange)="selectionChangeStore($event)"
-                  class="col-md-12 col-xs-12">
+                <kendo-combobox [data]="storeLocation" [textField]="'storename'" [valueField]="'id'" (selectionChange)="selectionChangeStore($event)" [(ngModel)]="data.storeId" [valuePrimitive]="true" name="storename" class="col-md-12 col-xs-12">
                 </kendo-combobox>
               </div>
 
@@ -239,6 +238,23 @@
         <div *ngIf="currentTab === 'workTime'">
           <div id="profile-tab" class="tab-pane active">
             <p *ngIf="noSetWorkTime" class="noSetWorkTime">*For this user work time didn't set!</p>
+            <div class="k-form-field">
+                <span>Color</span>
+                <div>
+                  <kendo-colorpalette
+                    [palette]="palette"
+                    [value]="selectedColor"
+                    [tileSize]="30"
+                  >
+                  </kendo-colorpalette>
+                </div>
+              </div>
+            <div class="form-group row">
+              <label class="col-md-2 col-sm-12 col-form-label">Valid from:</label>
+              <kendo-datepicker class="col-md-6 col-xs-8" name="validDate" placeholder="Valid date" [(ngModel)]="validDate"
+              validDate.value=''></kendo-datepicker> 
+              <button class="col-md-4 col-xs-4 k-edit" kendoButton [icon]="'k-icon k-i-save'" (click)="newValidDate()">Create time</button>
+            </div>
             <form name="workTime" class="workTime" (ngSubmit)="updateWorkTime(workTime)">
               <div class="form-group row" *ngFor="let item of workTime; let i = index;">
                 <label for="example-number-input" class="col-sm-2 col-form-label">{{item.day}}</label>
