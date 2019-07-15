@@ -1,50 +1,55 @@
-<div class="user-options">
-  <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">New user</button>
+<div *ngIf="loading" style="height: 90vh;">
+  <div class="spinner loading"></div>
 </div>
 
-<kendo-grid [data]="gridData" [height]="500" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
-  [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="true" [filterable]="true"
-  (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)">
-  <ng-template kendoGridToolbarTemplate>
-    <button type="button" kendoGridExcelCommand icon="file-excel">Export to Excel</button>
-    <button kendoGridPDFCommand icon="file-pdf">Export to PDF</button>
-  </ng-template>
-  <kendo-grid-column field="id" title="Username" width="120">
-  </kendo-grid-column>
-  <kendo-grid-column field="email" title="Email" width="250">
-  </kendo-grid-column>
-  <kendo-grid-column field="firstname" title="Firstname" width="180">
-  </kendo-grid-column>
-  <kendo-grid-column field="lastname" title="Lastname" width="180">
-  </kendo-grid-column>
-  <kendo-grid-column field="street" title="Street" width="180">
-  </kendo-grid-column>
-  <kendo-grid-column field="active" title="Active" width="120">
-    <ng-template kendoGridCellTemplate let-dataItem>
-      <input type="checkbox" [checked]="dataItem.active" disabled />
-    </ng-template>
-  </kendo-grid-column>
-  <kendo-grid-column title="" width="60">
-    <ng-template kendoGridCellTemplate let-dataItem>
-      <button kendoButton [icon]="'k-icon k-i-preview'" class='k-preview'
-        [routerLink]="['../', {outlets: {'dashboard': ['user-details', dataItem.id]}}]"></button>
-    </ng-template>
-  </kendo-grid-column>
+<div>
+  <div class="user-options">
+    <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">New user</button>
+  </div>
 
-  <kendo-grid-pdf fileName="Users.pdf" [allPages]="true" paperSize="A4" [repeatHeaders]="true" [landscape]="true">
-    <kendo-grid-pdf-margin top="2cm" left="1cm" right="1cm" bottom="2cm"></kendo-grid-pdf-margin>
-    <ng-template kendoGridPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
-      <div class="page-template">
-        <div class="header">
-          <div>Page {{ pageNum }} of {{ totalPages }}</div>
+  <kendo-grid [data]="gridData" [height]="500" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
+    [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="true" [filterable]="true"
+    (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)">
+    <ng-template kendoGridToolbarTemplate>
+      <button type="button" kendoGridExcelCommand icon="file-excel">Export to Excel</button>
+      <button kendoGridPDFCommand icon="file-pdf">Export to PDF</button>
+    </ng-template>
+    <kendo-grid-column field="id" title="Username" width="120">
+    </kendo-grid-column>
+    <kendo-grid-column field="email" title="Email" width="250">
+    </kendo-grid-column>
+    <kendo-grid-column field="firstname" title="Firstname" width="180">
+    </kendo-grid-column>
+    <kendo-grid-column field="lastname" title="Lastname" width="180">
+    </kendo-grid-column>
+    <kendo-grid-column field="street" title="Street" width="180">
+    </kendo-grid-column>
+    <kendo-grid-column field="active" title="Active" width="120">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <input type="checkbox" [checked]="dataItem.active" disabled />
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column title="" width="60">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <button kendoButton [icon]="'k-icon k-i-preview'" class='k-preview'
+          [routerLink]="['../', {outlets: {'dashboard': ['user-details', dataItem.id]}}]"></button>
+      </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-pdf fileName="Users.pdf" [allPages]="true" paperSize="A4" [repeatHeaders]="true" [landscape]="true">
+      <kendo-grid-pdf-margin top="2cm" left="1cm" right="1cm" bottom="2cm"></kendo-grid-pdf-margin>
+      <ng-template kendoGridPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
+        <div class="page-template">
+          <div class="header">
+            <div>Page {{ pageNum }} of {{ totalPages }}</div>
+          </div>
         </div>
-      </div>
-    </ng-template>
-  </kendo-grid-pdf>
+      </ng-template>
+    </kendo-grid-pdf>
 
-  <kendo-grid-excel fileName="Users.xlsx" [fetchData]="gridData"></kendo-grid-excel>
-</kendo-grid>
-
+    <kendo-grid-excel fileName="Users.xlsx" [fetchData]="gridData"></kendo-grid-excel>
+  </kendo-grid>
+</div>
 
 
 
@@ -53,71 +58,96 @@
     <h2>Create new user</h2>
   </modal-header>
   <modal-content>
-    <form name="loginForm" class="loginForm" (ngSubmit)="createUser(user)">
-      {{uname.errors?.pattern.value}}
+    <form name="loginForm" class="loginForm" (ngSubmit)="createUser(user)" ngNativeValidate>
       <div class="patternContainer">
-        <p *ngIf="uname.errors?.pattern || data.shortname === undefined || data.shortname === ''" class="validError">
-          <span class="k-icon k-i-close"></span> Username not valid.
-        </p>
+        <div class="col-xs-6">
 
-        <p *ngIf="!uname.errors?.pattern && data.shortname !== undefined && data.shortname !== ''" class="validSuccess">
-          <span class="k-icon k-i-check"></span> Username is valid.
-        </p>
-        <div *ngIf="password.errors?.pattern || data.password === undefined || data.password === ''" class="validError">
-          <span class="k-icon k-i-close"></span> Passwords must have:
-          <ul>
-            <li>
-              At least 8 characters in length
-            </li>
-            <li>
-              Lowercase letters
-            </li>
-            <li>
-              Uppercase letters
-            </li>
-            <li>
-              Numbers
-            </li>
-            <li>
-              Special characters
-            </li>
-          </ul>
+          <p *ngIf="uname.errors?.pattern || data.shortname === undefined || data.shortname === ''" class="validError">
+            <span class="k-icon k-i-close"></span> Username not valid.
+          </p>
+
+          <p *ngIf="!uname.errors?.pattern && data.shortname !== undefined && data.shortname !== ''"
+            class="validSuccess">
+            <span class="k-icon k-i-check"></span> Username is valid.
+          </p>
+
+          <p *ngIf="email.errors?.pattern || data.email === undefined || data.email === ''" class="validError">
+            <span class="k-icon k-i-close"></span> Email not valid.
+          </p>
+
+          <p *ngIf="!email.errors?.pattern && data.email !== undefined && data.email !== ''" class="validSuccess">
+            <span class="k-icon k-i-check"></span> Email is valid.
+          </p>
+
+          <p *ngIf="data.type === undefined || data.type === ''" class="validError">
+            <span class="k-icon k-i-close"></span> User type not selected.
+          </p>
+
+          <p *ngIf="data.type !== undefined && data.type !== ''" class="validSuccess">
+            <span class="k-icon k-i-check"></span> User type is selected.
+          </p>
+
+          <p *ngIf="data.storeId === undefined || data.storeId === ''" class="validError">
+            <span class="k-icon k-i-close"></span> Store not selected.
+          </p>
+
+          <p *ngIf="data.storeId !== undefined && data.storeId !== ''" class="validSuccess">
+            <span class="k-icon k-i-check"></span> Store is selected.
+          </p>
+        </div>
+        <div class="col-xs-6">
+
+          <div *ngIf="password.errors?.pattern || data.password === undefined || data.password === ''"
+            class="validError">
+            <span class="k-icon k-i-close"></span> Passwords must have:
+            <ul>
+              <li>
+                At least 8 characters in length
+              </li>
+              <li>
+                Lowercase letters
+              </li>
+              <li>
+                Uppercase letters
+              </li>
+              <li>
+                Numbers
+              </li>
+              <li>
+                Special characters
+              </li>
+            </ul>
+          </div>
+
+          <div *ngIf="!password.errors?.pattern && data.password !== undefined && data.password !== ''"
+            class="validSuccess">
+            <span class="k-icon k-i-check"></span> Password correct
+            <ul>
+              <li>
+                At least 8 characters in length
+              </li>
+              <li>
+                Lowercase letters
+              </li>
+              <li>
+                Uppercase letters
+              </li>
+              <li>
+                Numbers
+              </li>
+              <li>
+                Special characters
+              </li>
+            </ul>
+          </div>
         </div>
 
-        <div *ngIf="!password.errors?.pattern && data.password !== undefined && data.password !== ''"
-          class="validSuccess">
-          <span class="k-icon k-i-check"></span> Password correct
-        </div>
-
-        <p *ngIf="email.errors?.pattern || data.email === undefined || data.email === ''" class="validError">
-          <span class="k-icon k-i-close"></span> Email not valid.
-        </p>
-
-        <p *ngIf="!email.errors?.pattern && data.email !== undefined && data.email !== ''" class="validSuccess">
-          <span class="k-icon k-i-check"></span> Email is valid.
-        </p>
-
-        <p *ngIf="data.type === undefined || data.type === ''" class="validError">
-          <span class="k-icon k-i-close"></span> User type not selected.
-        </p>
-
-        <p *ngIf="data.type !== undefined && data.type !== ''" class="validSuccess">
-          <span class="k-icon k-i-check"></span> User type is selected.
-        </p>
-
-        <p *ngIf="data.storeId === undefined || data.storeId === ''" class="validError">
-          <span class="k-icon k-i-close"></span> Store not selected.
-        </p>
-
-        <p *ngIf="data.storeId !== undefined && data.storeId !== ''" class="validSuccess">
-          <span class="k-icon k-i-check"></span> Store is selected.
-        </p>
       </div>
       <div class="form-group">
         <input type="text" class="email col-md-6 col-xs-12" name="shortname" placeholder="Username"
-          [(ngModel)]="data.shortname" [pattern]="unamePattern" #uname="ngModel">
+          [(ngModel)]="data.shortname" [pattern]="unamePattern" #uname="ngModel" required>
         <input type="{{hideShow}}" class="col-md-6 col-xs-12 password" name="password" placeholder="Password"
-          [(ngModel)]="data.password" [pattern]="passwordPattern" #password="ngModel">
+          [(ngModel)]="data.password" [pattern]="passwordPattern" #password="ngModel" required>
         <!--<span class="fa {{hideShowEye}} pwd-toggle" (click)="hideShowPassword()" style="padding-top: 2vh;"></span>-->
       </div>
       <div class="form-group">
@@ -142,7 +172,7 @@
         <input type="text" class="email col-md-4 col-xs-12" name="mobile" placeholder="mobile" [(ngModel)]="data.mobile"
           mobile.value=''>
         <input type="email" class="email col-md-4 col-xs-12" name="email" placeholder="Email" [(ngModel)]="data.email"
-          [pattern]="emailPattern" #email="ngModel">
+          [pattern]="emailPattern" #email="ngModel" required>
       </div>
       <div class="form-group">
         <kendo-datepicker class="email col-md-6 col-xs-12" name="birthday" placeholder="Birthday"
@@ -151,7 +181,8 @@
           [(ngModel)]="data.incompanysince" incompanysince.value=''></kendo-datepicker>
       </div>
       <div class="form-group">
-        <kendo-combobox [data]="userType" (selectionChange)="selectionChange($event)" class="col-md-6 col-xs-12">
+        <kendo-combobox [data]="userType" (selectionChange)="selectionChange($event)" class="col-md-6 col-xs-12"
+          required>
         </kendo-combobox>
         <label class="k-form-field col-md-6" style="text-align: center;">
           Actives &nbsp; <kendo-switch [(ngModel)]="data.active" name='active'></kendo-switch>
@@ -159,14 +190,14 @@
       </div>
       <div class="form-group">
         <kendo-combobox [data]="storeLocation" [textField]="'storename'" [valueField]="'id'"
-          (selectionChange)="selectionChangeStore($event)" class="col-md-12 col-xs-12">
+          (selectionChange)="selectionChangeStore($event)" class="col-md-12 col-xs-12" required>
         </kendo-combobox>
       </div>
 
       <!-- ./remember-row -->
       <div class="form-group">
         <button class="btn btn-lg btn-primary btn-block" type="submit"
-          [disabled]="uname.errors?.pattern || data.shortname === undefined || data.shortname === '' || password.errors?.pattern || data.password === undefined || data.password === '' || email.errors?.pattern || data.email === undefined || data.email === '' || data.storeId === undefined || data.storeId === '' || data.type === undefined || data.type === ''">Create
+          [disabled]="data.type === undefined || data.type === '' || data.storeId !== undefined && data.storeId !== ''">Create
           user</button>
       </div>
     </form>

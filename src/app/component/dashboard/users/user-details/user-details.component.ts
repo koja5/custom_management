@@ -1,33 +1,34 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { UsersService } from "../../../../service/users.service";
-import { DomSanitizer } from "@angular/platform-browser";
-import { Modal } from "ngx-modal";
-import { Location } from "@angular/common";
-import { StoreService } from "../../../../service/store.service";
-import { TaskService } from "../../../../service/task.service";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { UsersService } from '../../../../service/users.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Modal } from 'ngx-modal';
+import { Location } from '@angular/common';
+import { StoreService } from '../../../../service/store.service';
+import { TaskService } from '../../../../service/task.service';
 
 @Component({
-  selector: "app-user-details",
-  templateUrl: "./user-details.component.html",
-  styleUrls: ["./user-details.component.scss"]
+  selector: 'app-user-details',
+  templateUrl: './user-details.component.html',
+  styleUrls: ['./user-details.component.scss']
 })
 export class UserDetailsComponent implements OnInit {
-  @ViewChild("user") user: Modal;
+  @ViewChild('user') user: Modal;
   public id: string;
   public data: any;
   public imagePath: any;
-  public userType = ["Employee", "Manager", "Admin"];
+  public userType = ['Employee', 'Manager', 'Admin'];
   public selectedValue: string;
-  public currentTab = "profile";
+  public currentTab = 'profile';
   public language: any;
   public workTime: any;
   public noSetWorkTime = false;
   public storeLocation: any;
   public selectedStore: any;
   public validDate: Date;
-  public selectedColor = "#fe413b";
+  public selectedColor = '#fe413b';
   public palette: any[] = [];
+  public loading = true;
 
   constructor(
     public route: ActivatedRoute,
@@ -36,11 +37,11 @@ export class UserDetailsComponent implements OnInit {
     public location: Location,
     public storeService: StoreService,
     public taskService: TaskService
-  ) {}
+  ) { }
 
   ngOnInit() {
-    console.log(this.route.snapshot.params["id"]);
-    this.id = this.route.snapshot.params["id"];
+    console.log(this.route.snapshot.params['id']);
+    this.id = this.route.snapshot.params['id'];
     this.service.getUserWithId(this.id, val => {
       console.log(val);
       this.data = val[0];
@@ -50,30 +51,30 @@ export class UserDetailsComponent implements OnInit {
         const STRING_CHAR = String.fromCharCode.apply(null, TYPED_ARRAY);
         let base64String = btoa(STRING_CHAR);
         let path = this.sanitizer.bypassSecurityTrustUrl(
-          "data:image/png;base64," + base64String
+          'data:image/png;base64,' + base64String
         );
         console.log(path);
         this.imagePath = path;
       } else {
         if (this.data.type === 1) {
-          this.imagePath = "../../../../assets/images/users/admin-user.png";
+          this.imagePath = '../../../../assets/images/users/admin-user.png';
         } else if (this.data.type === 2) {
-          this.imagePath = "../../../../assets/images/users/manager-user.png";
+          this.imagePath = '../../../../assets/images/users/manager-user.png';
         } else {
-          this.imagePath = "../../../../../assets/images/users/defaultUser.png";
+          this.imagePath = '../../../../../assets/images/users/defaultUser.png';
         }
         console.log(this.imagePath);
       }
     });
 
-    this.language = JSON.parse(localStorage.getItem("language"))["user"];
+    this.language = JSON.parse(localStorage.getItem('language'))['user'];
 
-    this.storeService.getStore(localStorage.getItem("idUser"), val => {
+    this.storeService.getStore(localStorage.getItem('idUser'), val => {
       this.storeLocation = val;
     });
 
     this.taskService.getTaskColor().subscribe(data => {
-      for (let i = 0; i < data["length"]; i++) {
+      for (let i = 0; i < data['length']; i++) {
         this.palette.push(data[i].color);
       }
     });
@@ -84,7 +85,7 @@ export class UserDetailsComponent implements OnInit {
   workTimeData() {
     this.workTime = null;
     this.service.getWorkTimeForUser(this.id).subscribe((data: []) => {
-      if (data["length"] === 0) {
+      if (data['length'] === 0) {
         this.noSetWorkTime = true;
         this.validDate = new Date();
         this.service.getWorkTime().subscribe(data => {
@@ -95,8 +96,8 @@ export class UserDetailsComponent implements OnInit {
         let dataSort = [];
         dataSort = data.sort((val1, val2) => {
           return (
-            (new Date(val2["dateChange"]) as any) -
-            (new Date(val1["dateChange"]) as any)
+            (new Date(val2['dateChange']) as any) -
+            (new Date(val1['dateChange']) as any)
           );
         });
         console.log(dataSort[0]);
@@ -118,13 +119,13 @@ export class UserDetailsComponent implements OnInit {
     this.data.birthday = new Date(this.data.birthday);
     this.data.incompanysince = new Date(this.data.incompanysince);
     if (this.data.type === 1) {
-      this.selectedValue = "Admin";
+      this.selectedValue = 'Admin';
     } else if (this.data.type === 2) {
-      this.selectedValue = "Manager";
+      this.selectedValue = 'Manager';
     } else {
-      this.selectedValue = "Employee";
+      this.selectedValue = 'Employee';
     }
-    // this.selectedStore = this.convertIntToTypeString(this.data.storeId);
+    this.loading = false;
   }
 
   changeTab(value: string) {
@@ -172,7 +173,7 @@ export class UserDetailsComponent implements OnInit {
     workTime = this.packWorkTime(workTime);
     this.service.setWorkTimeForUser(workTime).subscribe(data => {
       console.log(data);
-      if (data["success"]) {
+      if (data['success']) {
         this.user.close();
         this.noSetWorkTime = false;
       }
@@ -185,18 +186,18 @@ export class UserDetailsComponent implements OnInit {
       const day = workTime[i].day;
       time[day.toString().toLowerCase()] =
         this.convertDayToNumeric(day.toString().toLowerCase()) +
-        "-" +
+        '-' +
         workTime[i].start +
-        "-" +
+        '-' +
         workTime[i].end +
-        "-" +
+        '-' +
         workTime[i].start2 +
-        "-" +
+        '-' +
         workTime[i].end2;
     }
-    time["user_id"] = this.id;
-    time["dateChange"] = this.validDate;
-    time["color"] = this.selectedColor;
+    time['user_id'] = this.id;
+    time['dateChange'] = this.validDate;
+    time['color'] = this.selectedColor;
     return time;
   }
 
@@ -204,38 +205,38 @@ export class UserDetailsComponent implements OnInit {
     const model = [
       {
         day: this.language.monday,
-        start: workTime.monday.split("-")[1],
-        end: workTime.monday.split("-")[2],
-        start2: workTime.monday.split("-")[3],
-        end2: workTime.monday.split("-")[4]
+        start: workTime.monday.split('-')[1],
+        end: workTime.monday.split('-')[2],
+        start2: workTime.monday.split('-')[3],
+        end2: workTime.monday.split('-')[4]
       },
       {
         day: this.language.tuesday,
-        start: workTime.tuesday.split("-")[1],
-        end: workTime.tuesday.split("-")[2],
-        start2: workTime.tuesday.split("-")[3],
-        end2: workTime.tuesday.split("-")[4]
+        start: workTime.tuesday.split('-')[1],
+        end: workTime.tuesday.split('-')[2],
+        start2: workTime.tuesday.split('-')[3],
+        end2: workTime.tuesday.split('-')[4]
       },
       {
         day: this.language.wednesday,
-        start: workTime.wednesday.split("-")[1],
-        end: workTime.wednesday.split("-")[2],
-        start2: workTime.wednesday.split("-")[3],
-        end2: workTime.wednesday.split("-")[4]
+        start: workTime.wednesday.split('-')[1],
+        end: workTime.wednesday.split('-')[2],
+        start2: workTime.wednesday.split('-')[3],
+        end2: workTime.wednesday.split('-')[4]
       },
       {
         day: this.language.thursday,
-        start: workTime.thursday.split("-")[1],
-        end: workTime.thursday.split("-")[2],
-        start2: workTime.thursday.split("-")[3],
-        end2: workTime.thursday.split("-")[4]
+        start: workTime.thursday.split('-')[1],
+        end: workTime.thursday.split('-')[2],
+        start2: workTime.thursday.split('-')[3],
+        end2: workTime.thursday.split('-')[4]
       },
       {
         day: this.language.friday,
-        start: workTime.friday.split("-")[1],
-        end: workTime.friday.split("-")[2],
-        start2: workTime.friday.split("-")[3],
-        end2: workTime.friday.split("-")[4]
+        start: workTime.friday.split('-')[1],
+        end: workTime.friday.split('-')[2],
+        start2: workTime.friday.split('-')[3],
+        end2: workTime.friday.split('-')[4]
       }
     ];
     return model;
@@ -251,9 +252,9 @@ export class UserDetailsComponent implements OnInit {
   }
 
   convertTypeStringToInt(type) {
-    if (type === "Admin") {
+    if (type === 'Admin') {
       type = 1;
-    } else if (type === "Manager") {
+    } else if (type === 'Manager') {
       type = 2;
     } else {
       type = 3;
@@ -263,11 +264,11 @@ export class UserDetailsComponent implements OnInit {
 
   convertIntToTypeString(type) {
     if (type === 1) {
-      type = "Admin";
+      type = 'Admin';
     } else if (type === 2) {
-      type = "Manager";
+      type = 'Manager';
     } else {
-      type = "Employee";
+      type = 'Employee';
     }
     return type;
   }

@@ -7,6 +7,10 @@ import {
   DataStateChangeEvent,
   PageChangeEvent
 } from '@progress/kendo-angular-grid';
+import {
+  FormGroup,
+  FormControl
+} from '@angular/forms';
 import { SortDescriptor, orderBy } from '@progress/kendo-data-query';
 import { StandardUrlSerializer } from '../../../standardUrlSerializer';
 import { UrlTree, Router, UrlSegment, UrlSegmentGroup } from '@angular/router';
@@ -38,9 +42,11 @@ export class UsersComponent implements OnInit {
       dir: 'asc'
     }
   ];
-  public unamePattern = '^[a-z0-9_-]{8,15}$';
+  public unamePattern = '^[a-z0-9_-.]{8,15}$';
   public passwordPattern = '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&#])[A-Za-z\d$@$!%*?&].{8,}';
   public emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$';
+  public loading = true;
+
   constructor(
     public service: UsersService,
     public storeService: StoreService,
@@ -49,11 +55,15 @@ export class UsersComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.getUser();
+  }
+
+  getUser() {
     this.service.getUsers(localStorage.getItem('idUser'), val => {
       console.log(val);
       this.currentLoadData = val;
       this.gridData = process(val, this.state);
-      console.log(this.gridData);
+      this.loading = false;
     });
   }
 
@@ -95,8 +105,10 @@ export class UsersComponent implements OnInit {
       this.data.type = '3';
     } else if (event === 'Manager') {
       this.data.type = '2';
-    } else {
+    } else if (event === 'Admin') {
       this.data.type = '1';
+    } else {
+      this.data.type = event;
     }
   }
 

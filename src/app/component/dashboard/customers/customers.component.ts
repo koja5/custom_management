@@ -9,7 +9,9 @@ import {
   PageChangeEvent
 } from '@progress/kendo-angular-grid';
 import { MessageService } from '../../../service/message.service';
+import { CustomerModel } from '../../../models/customer-model';
 
+const newLocal = 'data';
 @Component({
   selector: 'app-customers',
   templateUrl: './customers.component.html',
@@ -18,21 +20,8 @@ import { MessageService } from '../../../service/message.service';
 export class CustomersComponent implements OnInit {
 
   @ViewChild('customer') customer: Modal;
-  public data = {
-    'id': '',
-    'shortname': '',
-    'firstname': '',
-    'lastname': '',
-    'gender': '',
-    'street': '',
-    'streetnumber': '',
-    'city': '',
-    'telephone': '',
-    'mobile': '',
-    'email': '',
-    'birthday': '',
-    'storeId': ''
-  };
+  public data = new CustomerModel();
+  public unamePattern = '^[a-z0-9_-]{8,15}$';
   public userType = ['Employee', 'Manager', 'Admin'];
   public gridData: any;
   public currentLoadData: any;
@@ -45,6 +34,7 @@ export class CustomersComponent implements OnInit {
   public language: any;
   public selectedUser: any;
   public imagePath = 'defaultUser';
+  public loading = true;
   uploadSaveUrl = 'http://localhost:3000/api/uploadImage'; // should represent an actual API endpoint
   uploadRemoveUrl = 'removeUrl'; // should represent an actual API endpoint
   constructor(public service: CustomersService, public storeService: StoreService, public message: MessageService) { }
@@ -53,8 +43,8 @@ export class CustomersComponent implements OnInit {
 
     this.getCustomers();
 
-    if(localStorage.getItem('language') !== null) {
-      this.language = JSON.parse(localStorage.getItem('language'))['grid'];
+    if (localStorage.getItem('language') !== null) {
+      this.language = JSON.parse(localStorage.getItem('language')).grid;
       console.log(this.language);
     }
 
@@ -69,7 +59,7 @@ export class CustomersComponent implements OnInit {
       mess => {
         this.selectedUser = undefined;
       }
-    )
+    );
   }
 
   getCustomers() {
@@ -78,9 +68,10 @@ export class CustomersComponent implements OnInit {
       if (val !== null) {
         this.gridData = process(val, this.state);
         this.currentLoadData = this.gridData.data;
-        console.log(this.gridData);
+        this.loading = false;
       } else {
-        this.gridData['data'] = [];
+        this.gridData[newLocal] = [];
+        this.loading = false;
       }
     });
   }
@@ -90,22 +81,23 @@ export class CustomersComponent implements OnInit {
       console.log(val);
       this.storeLocation = val;
     });
-    this.data = {
-      'id': '',
-      'shortname': '',
-      'firstname': '',
-      'lastname': '',
-      'gender': '',
-      'street': '',
-      'streetnumber': '',
-      'city': '',
-      'telephone': '',
-      'mobile': '',
-      'email': '',
-      'birthday': '',
-      'storeId': ''
-    };
+    this.initializeParams();
     this.customer.open();
+  }
+
+  initializeParams() {
+    this.data = {
+      firstname: '',
+      lastname: '',
+      gender: '',
+      street: '',
+      streetnumber: '',
+      city: '',
+      telephone: '',
+      mobile: '',
+      birthday: '',
+      storeId: ''
+    };
   }
 
   createCustomer(form) {

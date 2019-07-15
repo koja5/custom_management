@@ -40,13 +40,14 @@ export class BaseDateComponent implements OnInit {
   public gridTherapy: any;
   public stateValue: any;
   public loadingGrid: any;
+  public loading = true;
 
   constructor(
     public router: ActivatedRoute,
     public service: CustomersService,
     public message: MessageService,
     public usersService: UsersService
-  ) {}
+  ) { }
 
   ngOnInit() {
     console.log(this.data);
@@ -67,6 +68,7 @@ export class BaseDateComponent implements OnInit {
     this.service.getComplaintForCustomer(this.data.id).subscribe(data => {
       this.gridComplaint = this.formatingData(data);
       this['loadingGridComplaint'] = false;
+      this.loading = false;
     });
   }
 
@@ -75,16 +77,16 @@ export class BaseDateComponent implements OnInit {
     this.service.getTherapyForCustomer(this.data.id).subscribe(data => {
       this.gridTherapy = this.formatingData(data);
       this['loadingGridTherapy'] = false;
-      console.log(this.gridTherapy);
+      this.loading = false;
     });
   }
 
   getDocument() {
     this['loadingGridDocument'] = true;
     this.service.getDocuments(this.data.id, val => {
-      console.log(val);
       this.documents = val;
       this['loadingGridDocument'] = false;
+      this.loading = false;
     });
   }
 

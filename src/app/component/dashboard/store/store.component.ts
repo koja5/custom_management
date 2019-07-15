@@ -6,6 +6,7 @@ import {
   DataStateChangeEvent,
   PageChangeEvent
 } from '@progress/kendo-angular-grid';
+import { StoreModel } from 'src/app/models/store-model';
 
 @Component({
   selector: 'app-store',
@@ -15,18 +16,7 @@ import {
 export class StoreComponent implements OnInit {
   @ViewChild('store') store: Modal;
   @ViewChild('storeEdit') storeEdit: Modal;
-  public data = {
-    id: '',
-    storename: '',
-    street: '',
-    zipcode: '',
-    place: '',
-    email: '',
-    telephone: '',
-    mobile: '',
-    comment: '',
-    superadmin: ''
-  };
+  public data = new StoreModel();
   public currentLoadData: any;
   public gridData: any;
   public dialogOpened = false;
@@ -36,12 +26,12 @@ export class StoreComponent implements OnInit {
     filter: null
   };
   public idUser: string;
+  public loading = true;
 
   constructor(public service: StoreService) { }
 
   ngOnInit() {
     this.idUser = localStorage.getItem('idUser');
-
     this.getStore();
   }
 
@@ -50,25 +40,26 @@ export class StoreComponent implements OnInit {
       console.log(val);
       this.gridData = process(val, this.state);
       this.currentLoadData = this.gridData.data;
-      console.log(this.gridData);
+      this.loading = false;
     });
   }
 
   newStore() {
-    console.log(localStorage.getItem('idUser'));
+    this.initialParams();
+    this.store.open();
+  }
+
+  initialParams() {
     this.data = {
-      id: '',
       storename: '',
       street: '',
       zipcode: '',
       place: '',
-      email: '',
       telephone: '',
       mobile: '',
       comment: '',
       superadmin: this.idUser
     };
-    this.store.open();
   }
 
   createStore(form) {

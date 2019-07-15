@@ -1,115 +1,127 @@
-<div *ngIf="selectedUser === undefined">
-  <div class="user-options">
-    <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">{{language.newUser}}</button>
-  </div>
-
-  <kendo-grid *ngIf="language !== undefined" [data]="gridData" [height]="500" [resizable]="true" [pageSize]="state.take"
-    [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="true"
-    [filterable]="true" (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)">
-    <kendo-grid-messages pagerPage="{{language.pagerPage}}" pagerOf="{{language.pagerOf}}"
-      pagerItems="{{language.pagerItems}}" pagerItemsPerPage="{{language.pagerItemsPerPage}}">
-    </kendo-grid-messages>
-    <ng-template kendoGridToolbarTemplate>
-      <button type="button" kendoGridExcelCommand icon="file-excel">{{language.exportToExcel}}</button>
-      <button kendoGridPDFCommand icon="file-pdf">{{language.exportToPDF}}</button>
-    </ng-template>
-    <kendo-grid-column field="shortname" title="{{language.username}}" width="120">
-    </kendo-grid-column>
-    <kendo-grid-column field="firstname" title="{{language.firstname}}" width="180">
-    </kendo-grid-column>
-    <kendo-grid-column field="lastname" title="{{language.lastname}}" width="180">
-    </kendo-grid-column>
-    <kendo-grid-column field="telephone" title="{{language.telephone}}" width="250">
-    </kendo-grid-column>
-    <kendo-grid-column field="email" title="{{language.email}}" width="250">
-    </kendo-grid-column>
-    <kendo-grid-column title="{{language.preview}}" width="60">
-      <ng-template kendoGridCellTemplate let-dataItem>
-        <button kendoButton [icon]="'k-icon k-i-preview'" class='k-preview' (click)="previewUser(dataItem)"></button>
-      </ng-template>
-    </kendo-grid-column>
-
-    <kendo-grid-pdf fileName="Users.pdf" [allPages]="true" paperSize="A4" [repeatHeaders]="true" [landscape]="true">
-      <kendo-grid-pdf-margin top="2cm" left="1cm" right="1cm" bottom="2cm"></kendo-grid-pdf-margin>
-      <ng-template kendoGridPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
-        <div class="page-template">
-          <div class="header">
-            <div>{{language.pagerPage}} {{ pageNum }} {{language.pagerOf}} {{ totalPages }}</div>
-          </div>
-        </div>
-      </ng-template>
-    </kendo-grid-pdf>
-
-    <kendo-grid-excel fileName="Users.xlsx" [fetchData]="allData"></kendo-grid-excel>
-  </kendo-grid>
-
-  <modal #customer modalClass="modal-lg top-margin loggerModal adminModal">
-    <modal-header>
-      <h2>Create new customer</h2>
-    </modal-header>
-    <modal-content>
-      <form name="loginForm" class="loginForm" (ngSubmit)="createCustomer(customer)">
-        <div class="form-group">
-          <div class="panel-body">
-            <div class="text-center vd_info-parent col-md-4 col-xs-12">
-              <img *ngIf="data.gender === ''" alt="example image" style="width: 190px;"
-                src="../../../../assets/images/users/{{imagePath}}.png" class="rounded-circle">
-              <img *ngIf="data.gender !== '' && data.gender === 'male'" alt="example image" style="width: 190px;"
-                src="../../../../assets/images/users/male-patient.png" class="rounded-circle">
-              <img *ngIf="data.gender !== '' && data.gender === 'female'" alt="example image" style="width: 190px;"
-                src="../../../../assets/images/users/female-patient.png" class="rounded-circle">
-              <h2 class="font-semibold col-md-6 col-xs-12">{{data.firstname}} {{data.lastname}}</h2>
-            </div>
-            <div class="col-md-8 col-xs-12">
-              <input type="text" class="email col-md-12 col-xs-12" name="shortname" placeholder="Username"
-                [(ngModel)]="data.shortname" shortname.value=''>
-              <input type="text" class="email col-md-12 col-xs-12" name="firstname" placeholder="Firstname"
-                [(ngModel)]="data.firstname" firstname.value=''>
-              <input type="text" class="email col-md-12 col-xs-12" name="lastname" placeholder="Lastname"
-                [(ngModel)]="data.lastname" lastname.value=''>
-              <div class="form-group col-md-12 col-xs-12">
-                <div class="col-md-6 col-xs-12">
-                  <input type="radio" name="gender" id="female" class="k-radio" [(ngModel)]="data.gender"
-                    [value]="'female'">
-                  <label class="k-radio-label col-md-6 col-xs-12" for="female">Female</label>
-                  <input type="radio" name="gender" id="male" class="k-radio" checked="checked"
-                    [(ngModel)]="data.gender" [value]="'male'">
-                  <label class="k-radio-label col-md-6 col-xs-12" for="male">Male</label>
-                </div>
-                <kendo-datepicker class="email col-md-6 col-xs-12" name="birthday" placeholder="Birthday"
-                  [value]="data.birthday"></kendo-datepicker>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <input type="text" class="email col-md-4 col-xs-12" name="telephone" placeholder="Telephone"
-            [(ngModel)]="data.telephone" telephone.value=''>
-          <input type="text" class="email col-md-4 col-xs-12" name="mobile" placeholder="Mobile"
-            [(ngModel)]="data.mobile" mobile.value=''>
-          <input type="email" class="email col-md-4 col-xs-12" name="email" placeholder="Email" [(ngModel)]="data.email"
-            email.value=''>
-        </div>
-        <div class="form-group">
-          <input type="text" class="email col-md-4 col-xs-12" name="street" placeholder="Street"
-            [(ngModel)]="data.street" street.value=''>
-          <input type="text" class="email col-md-4 col-xs-12" name="streetnumber" placeholder="Street number"
-            [(ngModel)]="data.streetnumber" streetnumber.value=''>
-          <input type="text" class="email col-md-4 col-xs-12" name="city" placeholder="City" [(ngModel)]="data.city"
-            city.value=''>
-        </div>
-        <!-- ./remember-row -->
-        <div class="form-group">
-          <button class="btn btn-lg btn-primary btn-block" type="submit">Create customer</button>
-        </div>
-      </form>
-
-    </modal-content>
-    <modal-footer>
-      <button class="btn btn-primary" (click)="customer.close()">Close</button>
-    </modal-footer>
-  </modal>
+<div *ngIf="loading" style="height: 90vh;">
+  <div class="spinner loading"></div>
 </div>
+
+<div *ngIf="!loading">
+  <div *ngIf="selectedUser === undefined">
+    <div class="user-options">
+      <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">{{language.newUser}}</button>
+    </div>
+
+    <kendo-grid *ngIf="language !== undefined" [data]="gridData" [height]="500" [resizable]="true"
+      [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
+      [pageable]="true" [filterable]="true" (dataStateChange)="dataStateChange($event)"
+      (pageChange)="pageChange($event)">
+      <kendo-grid-messages pagerPage="{{language.pagerPage}}" pagerOf="{{language.pagerOf}}"
+        pagerItems="{{language.pagerItems}}" pagerItemsPerPage="{{language.pagerItemsPerPage}}">
+      </kendo-grid-messages>
+      <ng-template kendoGridToolbarTemplate>
+        <button type="button" kendoGridExcelCommand icon="file-excel">{{language.exportToExcel}}</button>
+        <button kendoGridPDFCommand icon="file-pdf">{{language.exportToPDF}}</button>
+      </ng-template>
+      <kendo-grid-column field="shortname" title="{{language.username}}" width="120">
+      </kendo-grid-column>
+      <kendo-grid-column field="firstname" title="{{language.firstname}}" width="180">
+      </kendo-grid-column>
+      <kendo-grid-column field="lastname" title="{{language.lastname}}" width="180">
+      </kendo-grid-column>
+      <kendo-grid-column field="telephone" title="{{language.telephone}}" width="250">
+      </kendo-grid-column>
+      <kendo-grid-column field="email" title="{{language.email}}" width="250">
+      </kendo-grid-column>
+      <kendo-grid-column title="{{language.preview}}" width="60">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <button kendoButton [icon]="'k-icon k-i-preview'" class='k-preview' (click)="previewUser(dataItem)"></button>
+        </ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-pdf fileName="Users.pdf" [allPages]="true" paperSize="A4" [repeatHeaders]="true" [landscape]="true">
+        <kendo-grid-pdf-margin top="2cm" left="1cm" right="1cm" bottom="2cm"></kendo-grid-pdf-margin>
+        <ng-template kendoGridPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
+          <div class="page-template">
+            <div class="header">
+              <div>{{language.pagerPage}} {{ pageNum }} {{language.pagerOf}} {{ totalPages }}</div>
+            </div>
+          </div>
+        </ng-template>
+      </kendo-grid-pdf>
+
+      <kendo-grid-excel fileName="Users.xlsx" [fetchData]="allData"></kendo-grid-excel>
+    </kendo-grid>
+  </div>
+</div>
+<modal #customer modalClass="modal-lg top-margin loggerModal adminModal">
+  <modal-header>
+    <h2>Create new customer</h2>
+  </modal-header>
+  <modal-content>
+    <form name="loginForm" class="loginForm" (ngSubmit)="createCustomer(customer)" ngNativeValidate>
+      <div class="form-group">
+        <div class="panel-body">
+          <div class="text-center vd_info-parent col-md-4 col-xs-12">
+            <img *ngIf="data.gender === ''" alt="example image" style="width: 190px;"
+              src="../../../../assets/images/users/{{imagePath}}.png" class="rounded-circle">
+            <img *ngIf="data.gender !== '' && data.gender === 'male'" alt="example image" style="width: 190px;"
+              src="../../../../assets/images/users/male-patient.png" class="rounded-circle">
+            <img *ngIf="data.gender !== '' && data.gender === 'female'" alt="example image" style="width: 190px;"
+              src="../../../../assets/images/users/female-patient.png" class="rounded-circle">
+            <h2 class="font-semibold col-md-6 col-xs-12">{{data.firstname}} {{data.lastname}}</h2>
+          </div>
+          <div class="col-md-8 col-xs-12">
+            <input type="text" class="email col-md-12 col-xs-12" name="shortname" placeholder="Username"
+              [(ngModel)]="data.shortname" [pattern]="unamePattern" #uname="ngModel" required>
+            <p *ngIf="uname.errors?.pattern" class="validError">
+              <span class="k-icon k-i-close"></span> Username not valid.
+            </p>
+            <input type="text" class="email col-md-12 col-xs-12" name="firstname" placeholder="Firstname"
+              [(ngModel)]="data.firstname" firstname.value=''>
+            <input type="text" class="email col-md-12 col-xs-12" name="lastname" placeholder="Lastname"
+              [(ngModel)]="data.lastname" lastname.value=''>
+            <div class="form-group col-md-12 col-xs-12">
+              <div class="col-md-6 col-xs-12">
+                <input type="radio" name="gender" id="female" class="k-radio" [(ngModel)]="data.gender"
+                  [value]="'female'">
+                <label class="k-radio-label col-md-6 col-xs-12" for="female">Female</label>
+                <input type="radio" name="gender" id="male" class="k-radio" checked="checked" [(ngModel)]="data.gender"
+                  [value]="'male'">
+                <label class="k-radio-label col-md-6 col-xs-12" for="male">Male</label>
+                <p *ngIf="data.gender === ''" class="validError">
+                  <span class="k-icon k-i-close"></span> Gender is not selected
+                </p>
+              </div>
+              <kendo-datepicker class="email col-md-6 col-xs-12" name="birthday" placeholder="Birthday"
+                [value]="data.birthday"></kendo-datepicker>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <input type="text" class="email col-md-4 col-xs-12" name="telephone" placeholder="Telephone"
+          [(ngModel)]="data.telephone" telephone.value=''>
+        <input type="text" class="email col-md-4 col-xs-12" name="mobile" placeholder="Mobile" [(ngModel)]="data.mobile"
+          mobile.value=''>
+        <input type="email" class="email col-md-4 col-xs-12" name="email" placeholder="Email" [(ngModel)]="data.email"
+          [pattern]="emailPattern" #email="ngModel" required>
+      </div>
+      <div class="form-group">
+        <input type="text" class="email col-md-4 col-xs-12" name="street" placeholder="Street" [(ngModel)]="data.street"
+          street.value=''>
+        <input type="text" class="email col-md-4 col-xs-12" name="streetnumber" placeholder="Street number"
+          [(ngModel)]="data.streetnumber" streetnumber.value=''>
+        <input type="text" class="email col-md-4 col-xs-12" name="city" placeholder="City" [(ngModel)]="data.city"
+          city.value=''>
+      </div>
+      <!-- ./remember-row -->
+      <div class="form-group">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Create customer</button>
+      </div>
+    </form>
+
+  </modal-content>
+  <modal-footer>
+    <button class="btn btn-primary" (click)="customer.close()">Close</button>
+  </modal-footer>
+</modal>
 <!--<kendo-upload [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [autoUpload]="false">
 
 </kendo-upload>-->

@@ -1,22 +1,33 @@
 .user-options {
-    padding: 1%;
+  padding: 1%;
 }
 
 .user-options button {
-    background: cornflowerblue;
-    border: none;
+  background: cornflowerblue;
+  border: none;
 }
 
 .content-page .content {
-    padding-bottom: 0px !important;
+  padding-bottom: 0px !important;
 }
 
 @media (min-width: 768px) {
-    .col-md-12 {
-        margin: 1%;
-    }
+  .col-md-12 {
+    margin: 1%;
+  }
 }
 
 .k-radio-label {
-    padding-left: 3vh !important;
+  padding-left: 3vh !important;
+}
+
+.validError {
+  color: red;
+}
+
+.spinner.loading {
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 55%;
 }
