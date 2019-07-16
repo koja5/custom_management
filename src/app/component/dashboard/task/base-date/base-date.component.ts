@@ -164,7 +164,8 @@ export class BaseDateComponent implements OnInit {
 
   openComplaintModal() {
     this.complaintData = new ComplaintTherapyModel();
-    this.complaintData.complaint = null;
+    this.complaintData.complaint = '';
+    this.complaintData.therapies = '';
     this.complaintValue = JSON.parse(localStorage.getItem('language'))[
       'complaint'
     ];
@@ -174,6 +175,8 @@ export class BaseDateComponent implements OnInit {
 
   openTherapyModal() {
     this.complaintData = new ComplaintTherapyModel();
+    this.complaintData.complaint = '';
+    this.complaintData.therapies = '';
     this.complaintValue = JSON.parse(localStorage.getItem('language'))[
       'complaint'
     ];

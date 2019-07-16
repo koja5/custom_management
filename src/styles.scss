@@ -511,12 +511,12 @@ dt {
 
 .waves-button {
     padding: .85em 1.1em;
-    border-radius: .2em
+    border-radius: .2em;
 }
 
 .waves-button-input {
     margin: 0;
-    padding: .85em 1.1em
+    padding: .85em 1.1em;
 }
 
 .waves-input-wrapper {
@@ -2986,7 +2986,7 @@ table.focus-on tbody tr.focused td {
     width: 40px;
     display: inline-block;
     text-align: center;
-    float: left
+    float: left;
 }
 
 .conversation-list .chat-avatar img {
@@ -3699,3 +3699,4 @@ input {
     color: #fff !important;
 }
 
+.required:after { content:" *"; }
