@@ -66,6 +66,7 @@
         "email": "Email",
         "street": "Street",
         "newUser": "New user",
+        "newCustomer": "New customer",
         "female": "Female",
         "male": "Male"
     },

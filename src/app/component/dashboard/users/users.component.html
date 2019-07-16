@@ -2,7 +2,7 @@
   <div class="spinner loading"></div>
 </div>
 
-<div>
+<div *ngIf="!loading">
   <div class="user-options">
     <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">New user</button>
   </div>

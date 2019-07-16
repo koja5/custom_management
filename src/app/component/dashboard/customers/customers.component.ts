@@ -66,8 +66,8 @@ export class CustomersComponent implements OnInit {
     this.service.getCustomers(localStorage.getItem('storeId'), (val) => {
       console.log(val);
       if (val !== null) {
+        this.currentLoadData = val;
         this.gridData = process(val, this.state);
-        this.currentLoadData = this.gridData.data;
         this.loading = false;
       } else {
         this.gridData[newLocal] = [];
@@ -131,19 +131,19 @@ export class CustomersComponent implements OnInit {
     console.log(this.gridData);
   }
 
-  protected pageChange({ skip, take }: PageChangeEvent): void {
-    this.state.skip = skip;
-    this.state.take = take;
+  pageChange(event: PageChangeEvent): void {
+    this.state.skip = event.skip;
     this.loadProducts();
   }
 
-  public loadProducts(): void {
+  loadProducts(): void {
     this.gridData = {
-      data: this.currentLoadData.slice(this.state.skip, this.state.skip + this.state.take),
+      data: this.currentLoadData.slice(
+        this.state.skip,
+        this.state.skip + this.state.take
+      ),
       total: this.currentLoadData.length
     };
-
-    console.log(this.gridData);
   }
 
   previewUser(selectedUser) {

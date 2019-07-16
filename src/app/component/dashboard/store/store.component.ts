@@ -38,8 +38,8 @@ export class StoreComponent implements OnInit {
   getStore() {
     this.service.getStore(this.idUser, val => {
       console.log(val);
+      this.currentLoadData = val;
       this.gridData = process(val, this.state);
-      this.currentLoadData = this.gridData.data;
       this.loading = false;
     });
   }
@@ -69,7 +69,6 @@ export class StoreComponent implements OnInit {
       this.data.id = val.id;
       this.gridData.data.push(this.data);
       this.store.close();
-      // form.reset();
     });
   }
 
@@ -77,6 +76,9 @@ export class StoreComponent implements OnInit {
     console.log(this.data);
     this.service.editStore(this.data).subscribe(data => {
       console.log(data);
+      if(data) {
+        this.storeEdit.close();
+      }
     });
   }
 
@@ -126,6 +128,10 @@ export class StoreComponent implements OnInit {
       this.service.deleteStore(this.data.id).subscribe(data => {
         console.log(data);
         if (data) {
+          this.state = {
+            skip: 0,
+            take: 5
+          };
           this.getStore();
         }
         this.dialogOpened = false;

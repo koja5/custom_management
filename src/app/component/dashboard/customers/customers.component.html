@@ -5,7 +5,7 @@
 <div *ngIf="!loading">
   <div *ngIf="selectedUser === undefined">
     <div class="user-options">
-      <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">{{language.newUser}}</button>
+      <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">{{language.newCustomer}}</button>
     </div>
 
     <kendo-grid *ngIf="language !== undefined" [data]="gridData" [height]="500" [resizable]="true"

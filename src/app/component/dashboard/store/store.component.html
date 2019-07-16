@@ -4,7 +4,7 @@
 
 <div *ngIf="!loading">
   <div class="user-options">
-    <button kendoButton [icon]="'user'" (click)="newStore()" [primary]="true">New location</button>
+    <button kendoButton [icon]="'k-icib k-i-marker-pin-target'" (click)="newStore()" [primary]="true">New location</button>
   </div>
 
   <kendo-grid [data]="gridData" [height]="500" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"

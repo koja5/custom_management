@@ -42,7 +42,7 @@ export class UsersComponent implements OnInit {
       dir: 'asc'
     }
   ];
-  public unamePattern = '^[a-z0-9_-.]{8,15}$';
+  public unamePattern = '^[a-z0-9_-]{8,15}$';
   public passwordPattern = '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&#])[A-Za-z\d$@$!%*?&].{8,}';
   public emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$';
   public loading = true;
@@ -144,8 +144,6 @@ export class UsersComponent implements OnInit {
       ),
       total: this.currentLoadData.length
     };
-
-    console.log(this.gridData);
   }
 
   sortChangeData() {
