@@ -7,7 +7,7 @@
     <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">New user</button>
   </div>
 
-  <kendo-grid [data]="gridData" [height]="500" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
+  <kendo-grid [data]="gridData" [height]="800" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
     [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="true" [filterable]="true"
     (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)">
     <ng-template kendoGridToolbarTemplate>
@@ -197,7 +197,7 @@
       <!-- ./remember-row -->
       <div class="form-group">
         <button class="btn btn-lg btn-primary btn-block" type="submit"
-          [disabled]="data.type === undefined || data.type === '' || data.storeId !== undefined && data.storeId !== ''">Create
+          [disabled]="data.type === undefined || data.type === '' || data.storeId === undefined || data.storeId === ''">Create
           user</button>
       </div>
     </form>

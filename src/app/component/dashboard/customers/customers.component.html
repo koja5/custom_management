@@ -8,7 +8,7 @@
       <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">{{language.newCustomer}}</button>
     </div>
 
-    <kendo-grid *ngIf="language !== undefined" [data]="gridData" [height]="500" [resizable]="true"
+    <kendo-grid *ngIf="language !== undefined" [data]="gridData" [height]="800" [resizable]="true"
       [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
       [pageable]="true" [filterable]="true" (dataStateChange)="dataStateChange($event)"
       (pageChange)="pageChange($event)">

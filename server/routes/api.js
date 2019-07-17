@@ -231,8 +231,7 @@ router.get('/deleteTask/:id', (req, res, next) => {
                             res.json({ "code": 100, "status": "Error in connection database" });
                             return next(err);
                         } else {
-                            res.writeHead(302, { 'Location': '/login' });
-                            res.end();
+                            res.json(true);
                         }
                     }
                 );

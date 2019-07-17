@@ -48,7 +48,7 @@ export class TaskComponent implements OnInit {
   public colorTask: any;
   public zIndex: string;
   public theme: string;
-  public selected = '#fe413b';
+  public selected = '#5843f2';
   public palette: any[] = [];
   public colorPalette: any;
   public selectedColorId: any;
@@ -175,13 +175,23 @@ export class TaskComponent implements OnInit {
               data[i].end = new Date(data[i].end);
               this.events.push(data[i]);
             }
-            const objectCalendar = {
-              name: null,
-              events: this.events
-            };
-            this.calendars.push(objectCalendar);
-            console.log(this.calendars);
-            this.loading = false;
+            this.workTime = [];
+            this.service.getWorkTimeForUser(localStorage.getItem('idUser')).subscribe(
+              data => {
+                console.log(data);
+                this.workTime.push(this.pickWorkTimeToTask(data));
+                console.log(this.workTime);
+                const objectCalendar = {
+                  name: null,
+                  events: this.events,
+                  workTime: this.workTime
+                };
+                console.log(objectCalendar);
+                this.calendars.push(objectCalendar);
+                this.height += this.height;
+                console.log(this.calendars);
+                this.loading = false;
+              });
           });
       } else {
         this.service.getTasks().subscribe(data => {
@@ -241,7 +251,8 @@ export class TaskComponent implements OnInit {
     });
 
     setTimeout(() => {
-      if (dataItem.colorTask !== null) {
+      console.log(dataItem.colorTask);
+      if (dataItem.colorTask !== undefined) {
         this.selected = this.IdMapToColor(dataItem.colorTask);
         console.log(this.selected);
       }
@@ -277,7 +288,9 @@ export class TaskComponent implements OnInit {
     console.log(mode);
     if (formGroup.valid) {
       let formValue = formGroup.value;
-
+      formValue.colorTask = this.selected;
+      formValue.telephone = this.telephoneValue;
+      console.log(formValue);
       if (isNew) {
         formValue = this.colorMapToId(formValue);
         this.service.createTask(formValue, val => {
@@ -491,20 +504,20 @@ export class TaskComponent implements OnInit {
           this.workTime = [];
           this.service.getWorkTimeForUser(value[i].id).subscribe(
             data => {
-            console.log(data);
-            this.workTime.push(this.pickWorkTimeToTask(data));
-            console.log(this.workTime);
-            const objectCalendar = {
-              name: value[i].shortname,
-              events: this.events,
-              workTime: this.workTime
-            };
-            console.log(objectCalendar);
-            this.calendars.push(objectCalendar);
-            this.height += this.height;
-            console.log(this.calendars);
-            this.loading = false;
-          });
+              console.log(data);
+              this.workTime.push(this.pickWorkTimeToTask(data));
+              console.log(this.workTime);
+              const objectCalendar = {
+                name: value[i].shortname,
+                events: this.events,
+                workTime: this.workTime
+              };
+              console.log(objectCalendar);
+              this.calendars.push(objectCalendar);
+              this.height += this.height;
+              console.log(this.calendars);
+              this.loading = false;
+            });
         });
       }
     }
@@ -562,18 +575,9 @@ export class TaskComponent implements OnInit {
   }
 
   removeHandler({ sender, dataItem }: RemoveEvent): void {
-    console.log(sender);
-    console.log(dataItem);
     this.service.deleteTask(dataItem.id).subscribe(data => {
       console.log(data);
     });
-    /*sender.openRemoveConfirmationDialog().subscribe((shouldRemove) => {
-        if (shouldRemove) {
-          console.log('brisem!');
-          console.log(dataItem);
-          this.service.remove(dataItem);
-        }
-    });*/
   }
 
   cancelHandler(event) {
@@ -581,6 +585,7 @@ export class TaskComponent implements OnInit {
   }
 
   dateFormat(date, i, j) {
+    console.log(this.events);
     if (
       new Date(this.workTime[i][j].change) <= new Date(date) &&
       new Date(date).getDay() - 1 < 5 &&

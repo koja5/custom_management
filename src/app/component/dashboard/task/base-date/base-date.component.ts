@@ -208,10 +208,9 @@ export class BaseDateComponent implements OnInit {
   }
 
   addComplaint(complaint) {
-    console.log(this.data.id);
-    console.log(this.complaintData);
     this.complaintData.customer_id = this.data.id;
     this.complaintData.date = new Date();
+    this.initializeParams();
     if (localStorage.getItem('username') === null) {
       this.usersService.getMe(localStorage.getItem('idUser'), val => {
         console.log(val);
@@ -234,11 +233,10 @@ export class BaseDateComponent implements OnInit {
       });
     }
   }
-
   addTherapy(therapy) {
     this.complaintData.customer_id = this.data.id;
     this.complaintData.date = new Date();
-    console.log(this.complaintData);
+    this.initializeParams();
     this.service.addTherapy(this.complaintData).subscribe(data => {
       if (data) {
         this.getTherapy();
@@ -246,4 +244,11 @@ export class BaseDateComponent implements OnInit {
       }
     });
   }
+
+  initializeParams() {
+    this.complaintData.comment = '';
+    this.complaintData.cs = '';
+    this.complaintData.em = '';
+  }
+
 }

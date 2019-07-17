@@ -7,7 +7,7 @@
     <button kendoButton [icon]="'k-icib k-i-marker-pin-target'" (click)="newStore()" [primary]="true">New location</button>
   </div>
 
-  <kendo-grid [data]="gridData" [height]="500" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
+  <kendo-grid [data]="gridData" [height]="800" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
     [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="true" [filterable]="true"
     (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)">
     <ng-template kendoGridToolbarTemplate>

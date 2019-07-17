@@ -175,6 +175,7 @@
                     <kendo-colorpalette
                       [palette]="palette"
                       [value]="selected"
+                      [(ngModel)]="selected"
                       [tileSize]="30"
                       [formControl]="formGroup.get('colorTask')"
                     >
@@ -242,6 +243,7 @@
                     placeholder="Telephone"
                     [formControl]="formGroup.get('telephone')"
                     [value]="telephoneValue"
+                    [(ngModel)]="telephoneValue"
                   />
                 </div>
                 <!--<div class="k-form-field" *ngIf="isEditingSeries(editMode)">
@@ -287,7 +289,7 @@
             let-event="event"
             let-resources="resources"
           >
-            <div>
+            <div style="width: 100vh !important;">
               {{ event.title }}
             </div>
           </ng-template>
@@ -330,6 +332,7 @@
                   <kendo-colorpalette
                     [palette]="palette"
                     [value]="selected"
+                    [(ngModel)]="selected"
                     [tileSize]="30"
                     [formControl]="formGroup.get('colorTask')"
                   >
