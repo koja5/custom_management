@@ -76,7 +76,7 @@ export class StoreComponent implements OnInit {
     console.log(this.data);
     this.service.editStore(this.data).subscribe(data => {
       console.log(data);
-      if(data) {
+      if (data) {
         this.storeEdit.close();
       }
     });

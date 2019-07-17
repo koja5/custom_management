@@ -1,0 +1,31 @@
+<div class="tabs widget">
+  <ul class="nav nav-tabs widget">
+    <li [ngClass]="currentTab === 'profile' ? 'active' : ''" class="col-sm-2"> <a
+        (click)="changeTab('complaint')">Complaint</a>
+    </li>
+    <li [ngClass]="currentTab === 'therapy' ? 'active' : ''" class="col-sm-2"> <a
+        (click)="changeTab('therapy')">Therapy</a>
+    <li [ngClass]="currentTab === 'recommendation' ? 'active' : ''" class="col-sm-2"> <a
+        (click)="changeTab('recommendation')">Recommendation</a>
+    <li [ngClass]="currentTab === 'relationship' ? 'active' : ''" class="col-sm-3"> <a
+        (click)="changeTab('relationship')">Relationship
+        status</a>
+    <li [ngClass]="currentTab === 'social' ? 'active' : ''" class="col-sm-2"> <a (click)="changeTab('social')">Social
+        insurance</a>
+    <li [ngClass]="currentTab === 'doctor' ? 'active' : ''" class="col-sm-2"> <a
+        (click)="changeTab('doctor')">Doctor</a>
+    <li [ngClass]="currentTab === 'doctors' ? 'active' : ''" class="col-sm-2"> <a
+        (click)="changeTab('doctors')">Doctors</a>
+    </li>
+  </ul>
+  <div class="tab-content" *ngIf="currentTab === 'profile'">
+    <div id="profile-tab" class="tab-pane active">
+      Test1
+    </div>
+  </div>
+  <div *ngIf="currentTab === 'workTime'">
+    <div id="profile-tab" class="tab-pane active">
+      Test2
+    </div>
+  </div>
+</div>

@@ -111,7 +111,9 @@ export class UserDetailsComponent implements OnInit {
   updateUser(user) {
     console.log(this.data);
     this.service.updateUser(this.data).subscribe(data => {
-      console.log(data);
+      if(data) {
+        this.user.close();
+      }
     });
   }
 
