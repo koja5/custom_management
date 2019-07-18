@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ParametersComponent implements OnInit {
 
+  public currentTab = 'complaint';
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  changeTab(tab) {
+    this.currentTab = tab;
   }
 
 }
