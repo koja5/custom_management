@@ -23,6 +23,10 @@ export class ParameterItemComponent implements OnInit {
   };
   public formGroup: FormGroup;
   public loading = false;
+  public genderList = ['male', 'female'];
+  public doctorTypeList: any;
+  public selectedGender: string;
+  public selectedDoctorType: string;
 
   private editedRowIndex: number;
 
@@ -30,6 +34,16 @@ export class ParameterItemComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+
+    if (this.type === 'Doctors') {
+      this.service.getDoctorType().subscribe(
+        data => {
+          this.doctorTypeList = data;
+          console.log(this.doctorTypeList);
+        }
+      )
+    }
+
     this.view = this.service.pipe(map(data => process(data, this.gridState)));
 
     this.service.getData(this.type);
@@ -46,10 +60,23 @@ export class ParameterItemComponent implements OnInit {
   public addHandler({ sender }) {
     this.closeEditor(sender);
 
-    this.formGroup = new FormGroup({
-      title: new FormControl(),
-      sequence: new FormControl()
-    });
+    if (this.type !== 'Doctors') {
+      this.formGroup = new FormGroup({
+        title: new FormControl(),
+        sequence: new FormControl()
+      });
+    } else {
+      this.formGroup = new FormGroup({
+        firstname: new FormControl(),
+        lastname: new FormControl(),
+        street: new FormControl(),
+        street_number: new FormControl(),
+        zip_code: new FormControl(),
+        city: new FormControl(),
+        telephone: new FormControl(),
+        email: new FormControl()
+      });
+    }
 
     sender.addRow(this.formGroup);
   }
@@ -57,11 +84,27 @@ export class ParameterItemComponent implements OnInit {
   public editHandler({ sender, rowIndex, dataItem }) {
     this.closeEditor(sender);
     console.log(dataItem);
-    this.formGroup = new FormGroup({
-      id: new FormControl(dataItem.id),
-      title: new FormControl(dataItem.title),
-      sequence: new FormControl(dataItem.sequence)
-    });
+    if (this.type !== 'Doctors') {
+      this.formGroup = new FormGroup({
+        id: new FormControl(dataItem.id),
+        title: new FormControl(dataItem.title),
+        sequence: new FormControl(dataItem.sequence)
+      });
+    } else {
+      this.formGroup = new FormGroup({
+        id: new FormControl(dataItem.id),
+        firstname: new FormControl(dataItem.firstname),
+        lastname: new FormControl(dataItem.lastname),
+        street: new FormControl(dataItem.street),
+        street_number: new FormControl(dataItem.street_number),
+        zip_code: new FormControl(dataItem.zip_code),
+        city: new FormControl(dataItem.city),
+        telephone: new FormControl(dataItem.telephone),
+        email: new FormControl(dataItem.email)
+      });
+      this.selectedDoctorType = dataItem.doctor_type;
+      this.selectedGender = dataItem.gender;
+    }
 
     this.editedRowIndex = rowIndex;
 
@@ -75,7 +118,9 @@ export class ParameterItemComponent implements OnInit {
   public saveHandler({ sender, rowIndex, formGroup, isNew }) {
     console.log(formGroup);
     const product = formGroup.value;
-
+    console.log(this.selectedDoctorType);
+    product.gender = this.selectedGender;
+    product.doctor_type = this.selectedDoctorType;
     this.service.addData(product, isNew, this.type);
 
     sender.closeRow(rowIndex);
@@ -90,5 +135,14 @@ export class ParameterItemComponent implements OnInit {
     grid.closeRow(rowIndex);
     this.editedRowIndex = undefined;
     this.formGroup = undefined;
+  }
+
+  selectionGender(event) {
+    console.log(event);
+    this.selectedGender = event;
+  }
+
+  selectionDoctorType(event) {
+    this.selectedDoctorType = event.id;
   }
 }

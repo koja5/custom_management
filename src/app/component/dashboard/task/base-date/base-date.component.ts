@@ -10,6 +10,9 @@ import { ComplaintTherapyModel } from '../../../../models/complaint-therapy-mode
 import { UsersService } from '../../../../service/users.service';
 import { formatDate } from '@telerik/kendo-intl';
 import { DatePipe } from '@angular/common';
+import { BaseOneModel } from '../../../../models/base-one-model';
+import { BaseTwoModel } from 'src/app/models/base-two-model';
+import { PhysicalModel } from 'src/app/models/physical-model';
 
 @Component({
   selector: 'app-base-date',
@@ -41,6 +44,14 @@ export class BaseDateComponent implements OnInit {
   public stateValue: any;
   public loadingGrid: any;
   public loading = true;
+  public currentTab = 'profile';
+  public recommendationList: any;
+  public baseData: any;
+  public relationshipList: any;
+  public socialList: any;
+  public doctorList: any;
+  public selectedRecommendation: any;
+  public operationMode = 'add';
 
   constructor(
     public router: ActivatedRoute,
@@ -249,6 +260,161 @@ export class BaseDateComponent implements OnInit {
     this.complaintData.comment = '';
     this.complaintData.cs = '';
     this.complaintData.em = '';
+  }
+
+  changeTab(tab) {
+    this.currentTab = tab;
+    if (tab === 'base_one') {
+      this.service.getCustomerList('Recommendation').subscribe(
+        data => {
+          console.log(data);
+          this.recommendationList = data;
+        });
+
+      this.service.getCustomerList('Relationship').subscribe(
+        data => {
+          this.relationshipList = data;
+        }
+      );
+
+      this.service.getCustomerList('Social').subscribe(
+        data => {
+          this.socialList = data;
+        }
+      );
+
+      this.service.getCustomerList('Doctor').subscribe(
+        data => {
+          console.log(data);
+          this.doctorList = data;
+        }
+      );
+      console.log(this.data);
+      this.service.getBaseDataOne(this.data.id).subscribe(
+        data => {
+          console.log(data);
+          if (data['length'] !== 0) {
+            this.baseData = data[0];
+            if (this.baseData.recommendation.split(';') !== undefined) {
+              this.selectedRecommendation = this.baseData.recommendation.split(';').map(Number);
+            } else {
+              this.selectedRecommendation = Number(this.baseData.recommendation);
+            }
+            this.baseData.first_date = new Date(this.baseData.first_date);
+            this.operationMode = 'edit';
+          } else {
+            this.baseData = new BaseOneModel();
+            this.operationMode = 'add';
+          }
+        }
+      );
+    } else if (tab === 'base_two') {
+      this.service.getBaseDataTwo(this.data.id).subscribe(
+        data => {
+          if (data['length'] !== 0) {
+            this.baseData = data[0];
+            this.baseData.birthday = new Date(this.baseData.birthday);
+            this.operationMode = 'edit';
+          } else {
+            this.baseData = new BaseTwoModel();
+            this.operationMode = 'add';
+          }
+        }
+      );
+    } else {
+      this.service.getPhysicallIllness(this.data.id).subscribe(
+        data => {
+          if (data['length'] !== 0) {
+            this.baseData = data[0];
+            this.operationMode = 'edit';
+          } else {
+            this.baseData = new PhysicalModel();
+            this.operationMode = 'add';
+          }
+        });
+    }
+  }
+
+  addBaseDataOne(base) {
+    console.log(this.baseData);
+    let recommendation = '';
+    // tslint:disable-next-line: prefer-for-of
+    for (let i = 0; i < this.selectedRecommendation.length; i++) {
+      recommendation += this.selectedRecommendation[i] + ';';
+    }
+    recommendation = recommendation.substring(0, recommendation.length - 1);
+    this.baseData.customer_id = this.data.id;
+    this.baseData.recommendation = recommendation;
+    this.service.addBaseDataOne(this.baseData).subscribe(
+      data => {
+        console.log(data);
+      }
+    );
+    console.log(this.baseData);
+  }
+
+  updateBaseDataOne(base) {
+    console.log(this.baseData);
+    let recommendation = '';
+    // tslint:disable-next-line: prefer-for-of
+    for (let i = 0; i < this.selectedRecommendation.length; i++) {
+      recommendation += this.selectedRecommendation[i] + ';';
+    }
+    recommendation = recommendation.substring(0, recommendation.length - 1);
+    this.baseData.customer_id = this.data.id;
+    this.baseData.recommendation = recommendation;
+    this.service.updateBaseDataOne(this.baseData).subscribe(
+      data => {
+        console.log(data);
+      }
+    );
+  }
+
+  addBaseDataTwo(base) {
+    console.log(this.baseData);
+    this.baseData.customer_id = this.data.id;
+    this.service.addBaseDataTwo(this.baseData).subscribe(
+      data => {
+        console.log(data);
+      }
+    );
+  }
+
+  updateBaseDataTwo(base) {
+    console.log(this.baseData);
+    this.baseData.customer_id = this.data.id;
+    this.service.updateBaseDataTwo(this.baseData).subscribe(
+      data => {
+        console.log(data);
+      }
+    );
+  }
+
+  addPhysicalIllness(physical) {
+    this.baseData.customer_id = this.data.id;
+    this.service.addPhysicalIllness(this.baseData).subscribe(
+      data => {
+        console.log(data);
+      }
+    );
+  }
+
+  updatePhysicalIllness(physical) {
+    this.baseData.customer_id = this.data.id;
+    this.service.updatePhysicalIllness(this.baseData).subscribe(
+      data => {
+        console.log(data);
+      }
+    );
+  }
+
+  editMode() {
+    this.operationMode = 'edit';
+  }
+
+  mapToInt(data: string) {
+    console.log(data);
+    return data.split(';').map(Number);
   }
 
 }

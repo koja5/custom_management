@@ -34,6 +34,11 @@ export class ParameterItemService extends BehaviorSubject<any[]> {
       });
   }
 
+  getDoctorType() {
+    return this.http.get('/api/getDoctorList')
+      .map(res => res);
+  }
+
   public addData(data: any, isNew?: boolean, type?: string) {
     const action = isNew ? CREATE_ACTION : UPDATE_ACTION;
 

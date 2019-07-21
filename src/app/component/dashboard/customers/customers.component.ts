@@ -22,6 +22,7 @@ export class CustomersComponent implements OnInit {
   @ViewChild('customer') customer: Modal;
   public data = new CustomerModel();
   public unamePattern = '^[a-z0-9_-]{8,15}$';
+  public emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$';
   public userType = ['Employee', 'Manager', 'Admin'];
   public gridData: any;
   public currentLoadData: any;

@@ -2195,5 +2195,599 @@ router.post('/updateSocialList', function(req, res, next) {
 
 // end social_list
 
+// start doctor_list
+
+router.get('/getDoctorList', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+        conn.query("select * from doctor_list", function(err, rows) {
+            conn.release();
+            if (!err) {
+                res.json(rows);
+            } else {
+                res.json({ "code": 100, "status": "Error in connection database" });
+            }
+        });
+
+
+        conn.on('error', function(err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        });
+    });
+
+});
+
+router.post('/addDoctorList', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        console.log(conn);
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+
+        response = null;
+        console.log(req);
+        var date = {
+            'title': req.body.title,
+            'sequence': req.body.sequence
+        };
+
+        conn.query("insert into doctor_list SET ?", date, function(err, rows) {
+            conn.release();
+            if (!err) {
+                if (!err) {
+                    response = true;
+                } else {
+                    response.success = false;
+                }
+                res.json(response);
+            } else {
+                res.json({ "code": 100, "status": "Error in connection database" });
+                console.log(err);
+            }
+        });
+        conn.on('error', function(err) {
+            console.log("[mysql error]", err);
+        });
+    });
+});
+
+router.get('/deleteDoctorList/:id', (req, res, next) => {
+    try {
+        var reqObj = req.params.id;
+        connection.getConnection(function(err, conn) {
+            if (err) {
+                console.error('SQL Connection error: ', err);
+                res.json({ "code": 100, "status": "Error in connection database" });
+                return next(err);
+            } else {
+                conn.query("delete from doctor_list where id = '" + reqObj + "'",
+                    function(err, rows, fields) {
+                        conn.release();
+                        if (err) {
+                            console.error("SQL error:", err);
+                            res.json({ "code": 100, "status": "Error in connection database" });
+                            return next(err);
+                        } else {
+                            res.json(true);
+                            res.end();
+                        }
+                    }
+                );
+            }
+        });
+    } catch (ex) {
+        console.error("Internal error: " + ex);
+        return next(ex);
+    }
+});
+
+router.post('/updateDoctorList', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        console.log(conn);
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+
+        var response = null;
+        var data = {
+            'id': req.body.id,
+            'title': req.body.title,
+            'sequence': req.body.sequence
+        };        
+
+        conn.query("update doctor_list set ? where id = '" + req.body.id + "'", data,
+            function(err, rows, fields) {
+                conn.release();
+                if (err) {
+                    console.error("SQL error:", err);
+                    res.json({ "code": 100, "status": "Error in connection database" });
+                    return next(err);
+                } else {
+                    response = true;
+                    res.json(response);
+                }
+            }
+        );
+        conn.on('error', function(err) {
+            console.log("[mysql error]", err);
+        });
+    });
+});
+
+// end doctor_list
+
+// start doctors_list
+
+router.get('/getDoctorsList', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+        conn.query("select * from doctors_list", function(err, rows) {
+            conn.release();
+            if (!err) {
+                res.json(rows);
+            } else {
+                res.json({ "code": 100, "status": "Error in connection database" });
+            }
+        });
+
+
+        conn.on('error', function(err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        });
+    });
+
+});
+
+router.post('/addDoctorsList', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        console.log(conn);
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+
+        response = null;
+        console.log(req);
+        var date = {
+            'firstname': req.body.firstname,
+            'lastname': req.body.lastname,
+            'gender': req.body.gender,
+            'street': req.body.street,
+            'street_number': req.body.street_number,
+            'zip_code': req.body.zip_code,
+            'city': req.body.city,
+            'telephone': req.body.telephone,
+            'email': req.body.email,
+            'doctor_type': req.body.doctor_type
+        };
+
+        conn.query("insert into doctors_list SET ?", date, function(err, rows) {
+            conn.release();
+            if (!err) {
+                if (!err) {
+                    response = true;
+                } else {
+                    response.success = false;
+                }
+                res.json(response);
+            } else {
+                res.json({ "code": 100, "status": "Error in connection database" });
+                console.log(err);
+            }
+        });
+        conn.on('error', function(err) {
+            console.log("[mysql error]", err);
+        });
+    });
+});
+
+router.get('/deleteDoctorsList/:id', (req, res, next) => {
+    try {
+        var reqObj = req.params.id;
+        connection.getConnection(function(err, conn) {
+            if (err) {
+                console.error('SQL Connection error: ', err);
+                res.json({ "code": 100, "status": "Error in connection database" });
+                return next(err);
+            } else {
+                conn.query("delete from doctors_list where id = '" + reqObj + "'",
+                    function(err, rows, fields) {
+                        conn.release();
+                        if (err) {
+                            console.error("SQL error:", err);
+                            res.json({ "code": 100, "status": "Error in connection database" });
+                            return next(err);
+                        } else {
+                            res.json(true);
+                            res.end();
+                        }
+                    }
+                );
+            }
+        });
+    } catch (ex) {
+        console.error("Internal error: " + ex);
+        return next(ex);
+    }
+});
+
+router.post('/updateDoctorsList', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+
+        var response = null;
+        var data = {
+            'id': req.body.id,
+            'firstname': req.body.firstname,
+            'lastname': req.body.lastname,
+            'gender': req.body.gender,
+            'street': req.body.street,
+            'street_number': req.body.street_number,
+            'zip_code': req.body.zip_code,
+            'city': req.body.city,
+            'telephone': req.body.telephone,
+            'email': req.body.email,
+            'doctor_type': req.body.doctor_type
+        };        
+
+        conn.query("update doctors_list set ? where id = '" + req.body.id + "'", data,
+            function(err, rows, fields) {
+                conn.release();
+                if (err) {
+                    console.error("SQL error:", err);
+                    res.json({ "code": 100, "status": "Error in connection database" });
+                    return next(err);
+                } else {
+                    response = true;
+                    res.json(response);
+                }
+            }
+        );
+        conn.on('error', function(err) {
+            console.log("[mysql error]", err);
+        });
+    });
+});
+
+// end doctors_list
+
+// BASE DATA I
+
+router.get('/getBaseDataOne/:id', function(req, res, next) {
+    var id = req.params.id;
+    connection.getConnection(function(err, conn) {
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+        conn.query("select * from base_one where customer_id = '" + id + "'", function(err, rows) {
+            conn.release();
+            if (!err) {
+                res.json(rows);
+            } else {
+                res.json({ "code": 100, "status": "Error in connection database" });
+            }
+        });
+
+
+        conn.on('error', function(err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        });
+    });
+
+});
+
+router.post('/addBaseDataOne', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        console.log(conn);
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+
+        response = null;
+        console.log(req);
+        var date = {
+            'customer_id': req.body.customer_id,
+            'recommendation': req.body.recommendation,
+            'relationship': req.body.relationship,
+            'social': req.body.social,
+            'doctor': req.body.doctor,
+            'first_date': req.body.first_date
+        };
+
+        conn.query("insert into base_one SET ?", date, function(err, rows) {
+            conn.release();
+            if (!err) {
+                if (!err) {
+                    response = true;
+                } else {
+                    response.success = false;
+                }
+                res.json(response);
+            } else {
+                res.json({ "code": 100, "status": "Error in connection database" });
+                console.log(err);
+            }
+        });
+        conn.on('error', function(err) {
+            console.log("[mysql error]", err);
+        });
+    });
+});
+
+router.post('/updateBaseDataOne', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+
+        var response = null;
+        var data = {
+            'customer_id': req.body.customer_id,
+            'recommendation': req.body.recommendation,
+            'relationship': req.body.relationship,
+            'social': req.body.social,
+            'doctor': req.body.doctor,
+            'first_date': req.body.first_date
+        };      
+
+        conn.query("update base_one set ? where id = '" + req.body.id + "'", data,
+            function(err, rows, fields) {
+                conn.release();
+                if (err) {
+                    console.error("SQL error:", err);
+                    res.json({ "code": 100, "status": "Error in connection database" });
+                    return next(err);
+                } else {
+                    response = true;
+                    res.json(response);
+                }
+            }
+        );
+        conn.on('error', function(err) {
+            console.log("[mysql error]", err);
+        });
+    });
+});
+
+// END BASE DATA I
+
+// BASE DATA II
+
+router.get('/getBaseDataTwo/:id', function(req, res, next) {
+    var id = req.params.id;
+    connection.getConnection(function(err, conn) {
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+        conn.query("select * from base_two where customer_id = '" + id + "'", function(err, rows) {
+            conn.release();
+            if (!err) {
+                res.json(rows);
+            } else {
+                res.json({ "code": 100, "status": "Error in connection database" });
+            }
+        });
+
+
+        conn.on('error', function(err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        });
+    });
+
+});
+
+router.post('/addBaseDataTwo', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        console.log(conn);
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+
+        response = null;
+        console.log(req);
+        var date = {
+            'customer_id': req.body.customer_id,
+            'size': req.body.size,
+            'weight': req.body.weight,
+            'phone': req.body.phone,
+            'mobile_phone': req.body.mobile_phone,
+            'birthday': req.body.birthday,
+            'childs': req.body.childs,
+            'notes': req.body.notes,
+            'profession': req.body.profession,
+            'useful': req.body.useful,
+        };
+
+        conn.query("insert into base_two SET ?", date, function(err, rows) {
+            conn.release();
+            if (!err) {
+                if (!err) {
+                    response = true;
+                } else {
+                    response.success = false;
+                }
+                res.json(response);
+            } else {
+                res.json({ "code": 100, "status": "Error in connection database" });
+                console.log(err);
+            }
+        });
+        conn.on('error', function(err) {
+            console.log("[mysql error]", err);
+        });
+    });
+});
+
+router.post('/updateBaseDataTwo', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+
+        var response = null;
+        var data = {
+            'customer_id': req.body.customer_id,
+            'size': req.body.size,
+            'weight': req.body.weight,
+            'phone': req.body.phone,
+            'mobile_phone': req.body.mobile_phone,
+            'birthday': req.body.birthday,
+            'childs': req.body.childs,
+            'notes': req.body.notes,
+            'profession': req.body.profession,
+            'useful': req.body.useful,
+        };     
+
+        conn.query("update base_two set ? where id = '" + req.body.id + "'", data,
+            function(err, rows, fields) {
+                conn.release();
+                if (err) {
+                    console.error("SQL error:", err);
+                    res.json({ "code": 100, "status": "Error in connection database" });
+                    return next(err);
+                } else {
+                    response = true;
+                    res.json(response);
+                }
+            }
+        );
+        conn.on('error', function(err) {
+            console.log("[mysql error]", err);
+        });
+    });
+});
+
+// END BASE DATA II
+
+// PHYSICAL_ILLNESS
+
+router.get('/getPhysicalIllness/:id', function(req, res, next) {
+    var id = req.params.id;
+    connection.getConnection(function(err, conn) {
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+        conn.query("select * from physical_illness where customer_id = '" + id + "'", function(err, rows) {
+            conn.release();
+            if (!err) {
+                res.json(rows);
+            } else {
+                res.json({ "code": 100, "status": "Error in connection database" });
+            }
+        });
+
+
+        conn.on('error', function(err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        });
+    });
+
+});
+
+router.post('/addPhysicalIllness', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        console.log(conn);
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+
+        response = null;
+        console.log(req);
+        var date = {
+            'customer_id': req.body.customer_id,
+            'internal_organs': req.body.internal_organs,
+            'operations': req.body.operations,
+            'previous_findings': req.body.previous_findings,
+            'medicament': req.body.medicament,
+            'allergies': req.body.allergies,
+            'skin_sensitivity': req.body.skin_sensitivity,
+            'pregnancy': req.body.pregnancy
+        };
+
+        conn.query("insert into physical_illness SET ?", date, function(err, rows) {
+            conn.release();
+            if (!err) {
+                if (!err) {
+                    response = true;
+                } else {
+                    response.success = false;
+                }
+                res.json(response);
+            } else {
+                res.json({ "code": 100, "status": "Error in connection database" });
+                console.log(err);
+            }
+        });
+        conn.on('error', function(err) {
+            console.log("[mysql error]", err);
+        });
+    });
+});
+
+
+router.post('/updatePhysicalIllness', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+
+        var response = null;
+        var data = {
+            'customer_id': req.body.customer_id,
+            'internal_organs': req.body.internal_organs,
+            'operations': req.body.operations,
+            'previous_findings': req.body.previous_findings,
+            'medicament': req.body.medicament,
+            'allergies': req.body.allergies,
+            'skin_sensitivity': req.body.skin_sensitivity,
+            'pregnancy': req.body.pregnancy
+        };     
+
+        conn.query("update physical_illness set ? where id = '" + req.body.id + "'", data,
+            function(err, rows, fields) {
+                conn.release();
+                if (err) {
+                    console.error("SQL error:", err);
+                    res.json({ "code": 100, "status": "Error in connection database" });
+                    return next(err);
+                } else {
+                    response = true;
+                    res.json(response);
+                }
+            }
+        );
+        conn.on('error', function(err) {
+            console.log("[mysql error]", err);
+        });
+    });
+});
+
+// END PHYSICAL_ILLNESS
+
 
 module.exports = router;
