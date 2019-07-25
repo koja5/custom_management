@@ -585,9 +585,9 @@ export class TaskComponent implements OnInit {
   }
 
   dateFormat(date, i, j) {
-    console.log(this.events);
     if (
-      new Date(this.workTime[i][j].change) <= new Date(date) &&
+      // tslint:disable-next-line: max-line-length
+      new Date(this.workTime[i][j].change) <= new Date(date) && (j + 1 <= (this.workTime[i].length - 1) ? new Date(date) < new Date(this.workTime[i][j + 1].change) : true) &&
       new Date(date).getDay() - 1 < 5 &&
       new Date(date).getDay() !== 0
     ) {
@@ -601,12 +601,12 @@ export class TaskComponent implements OnInit {
           this.workTime[i][j].times[new Date(date).getDay() - 1].end2 >=
           new Date(date).getHours())
       ) {
-        return true;
+        return 'workTime';
       } else {
-        return false;
+        return 'none';
       }
     } else {
-      return false;
+      return 'none';
     }
   }
 
