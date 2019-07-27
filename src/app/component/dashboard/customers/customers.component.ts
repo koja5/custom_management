@@ -10,6 +10,7 @@ import {
 } from '@progress/kendo-angular-grid';
 import { MessageService } from '../../../service/message.service';
 import { CustomerModel } from '../../../models/customer-model';
+import Swal from 'sweetalert2';
 
 const newLocal = 'data';
 @Component({
@@ -105,11 +106,25 @@ export class CustomersComponent implements OnInit {
     console.log(this.data);
     this.data.storeId = localStorage.getItem('storeId');
     this.service.createCustomer(this.data, (val) => {
-      console.log(val);
-      this.data.id = val.id;
-      this.gridData.data.push(this.data);
-      this.customer.close();
-      // form.reset();
+      if (val.success) {
+        this.data.id = val.id;
+        this.gridData.data.push(this.data);
+        this.customer.close();
+        // form.reset();
+        Swal.fire({
+          title: 'Successfull!',
+          text: 'New customer is successfull added!',
+          timer: 3000,
+          type: 'success'
+        });
+      } else {
+        Swal.fire({
+          title: 'Error',
+          text: 'New customer is not added!',
+          timer: 3000,
+          type: 'error'
+        });
+      }
     });
 
   }

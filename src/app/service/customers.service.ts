@@ -131,4 +131,9 @@ export class CustomersService {
     return this.http.post('/api/updatePhysicalIllness', data)
       .map(res => res);
   }
+
+  getParameters(type) {
+    return this.http.get('/api/get' + type + 'List')
+      .map(res => res);
+  }
 }

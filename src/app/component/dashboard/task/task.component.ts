@@ -79,7 +79,8 @@ export class TaskComponent implements OnInit {
   public workTime: any[] = [];
   public selectedStoreId: number;
   public selectedUser: any;
-
+  public splitterSizeFull = 100;
+  public splitterSize: number;
   constructor(
     public formBuilder: FormBuilder,
     public service: TaskService,
@@ -160,6 +161,7 @@ export class TaskComponent implements OnInit {
       this.value = JSON.parse(sessionStorage.getItem('selectedUser'));
       // this.selectedStore(this.selectedStoreId);
       this.getTaskForSelectedUsers(this.value);
+      this.getUserInCompany(this.selectedStoreId);
     } else if (sessionStorage.getItem('selectedStore')) {
       this.calendars = [];
       this.selectedStoreId = Number(sessionStorage.getItem('selectedStore'));
@@ -491,17 +493,14 @@ export class TaskComponent implements OnInit {
       });
     } else {
       this.calendars = [];
-      this.events = [];
       for (let i = 0; i < value.length; i++) {
-        this.events = [];
-        this.service.getTasksForUser(value[i].id).subscribe(data => {
+        /*this.service.getTasksForUser(value[i].id).subscribe(data => {
           console.log(data);
           for (let i = 0; i < data.length; i++) {
             data[i].start = new Date(data[i].start);
             data[i].end = new Date(data[i].end);
             this.events.push(data[i]);
           }
-          this.workTime = [];
           this.service.getWorkTimeForUser(value[i].id).subscribe(
             data => {
               console.log(data);
@@ -518,8 +517,34 @@ export class TaskComponent implements OnInit {
               console.log(this.calendars);
               this.loading = false;
             });
-        });
+        });*/
+        this.service.getWorkandTasksForUser(value[i].id).subscribe(
+          data => {
+            console.log(data);
+            this.events = [];
+            this.workTime = this.pickWorkTimeToTask(data['workTime']);
+            this.pickModelForEvent(data['events']);
+            const objectCalendar = {
+              name: value[i].shortname,
+              events: this.events,
+              workTime: this.workTime
+            };
+            this.calendars.push(objectCalendar);
+            this.height += this.height;
+            this.splitterSize = this.splitterSizeFull / value.length;
+            console.log(this.splitterSize);
+            this.loading = false;
+            console.log(this.calendars);
+          });
       }
+    }
+  }
+
+  pickModelForEvent(data) {
+    for (let i = 0; i < data.length; i++) {
+      data[i].start = new Date(data[i].start);
+      data[i].end = new Date(data[i].end);
+      this.events.push(data[i]);
     }
   }
 
@@ -537,22 +562,27 @@ export class TaskComponent implements OnInit {
         }
         const objectCalendar = {
           name: null,
-          events: this.events
+          events: this.events,
+          workTime: undefined
         };
         console.log(objectCalendar);
         this.calendars.push(objectCalendar);
         this.loading = false;
       });
 
-      this.service.getUsersInCompany(event, val => {
-        this.usersInCompany = val;
-        this.loading = false;
-      });
+      this.getUserInCompany(storeId);
     } else {
       this.loading = false;
     }
 
     sessionStorage.setItem('selectedStore', event);
+  }
+
+  getUserInCompany(storeId) {
+    this.service.getUsersInCompany(storeId, val => {
+      this.usersInCompany = val;
+      this.loading = false;
+    });
   }
 
   dragEndHandler(event) {
@@ -587,18 +617,18 @@ export class TaskComponent implements OnInit {
   dateFormat(date, i, j) {
     if (
       // tslint:disable-next-line: max-line-length
-      new Date(this.workTime[i][j].change) <= new Date(date) && (j + 1 <= (this.workTime[i].length - 1) ? new Date(date) < new Date(this.workTime[i][j + 1].change) : true) &&
+      new Date(this.calendars[i].workTime[j].change) <= new Date(date) && (j + 1 <= (this.calendars[i].workTime.length - 1) ? new Date(date) < new Date(this.calendars[i].workTime[j + 1].change) : true) &&
       new Date(date).getDay() - 1 < 5 &&
       new Date(date).getDay() !== 0
     ) {
       if (
-        (this.workTime[i][j].times[new Date(date).getDay() - 1].start <=
+        (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].start <=
           new Date(date).getHours() &&
-          this.workTime[i][j].times[new Date(date).getDay() - 1].end >=
+          this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].end >=
           new Date(date).getHours()) ||
-        (this.workTime[i][j].times[new Date(date).getDay() - 1].start2 <=
+        (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].start2 <=
           new Date(date).getHours() &&
-          this.workTime[i][j].times[new Date(date).getDay() - 1].end2 >=
+          this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].end2 >=
           new Date(date).getHours())
       ) {
         return 'workTime';

@@ -50,6 +50,7 @@ export class BaseDateComponent implements OnInit {
   public relationshipList: any;
   public socialList: any;
   public doctorList: any;
+  public doctorsList: any;
   public selectedRecommendation: any;
   public operationMode = 'add';
 
@@ -177,10 +178,19 @@ export class BaseDateComponent implements OnInit {
     this.complaintData = new ComplaintTherapyModel();
     this.complaintData.complaint = '';
     this.complaintData.therapies = '';
-    this.complaintValue = JSON.parse(localStorage.getItem('language'))[
-      'complaint'
-    ];
-    this.therapyValue = JSON.parse(localStorage.getItem('language'))['therapy'];
+    // this.complaintValue = JSON.parse(localStorage.getItem('language'))['complaint'];
+    // this.therapyValue = JSON.parse(localStorage.getItem('language'))['therapy'];
+    this.service.getParameters('Therapy').subscribe(
+      data => {
+        console.log(data);
+        this.therapyValue = data;
+      }
+    );
+    this.service.getParameters('Complaint').subscribe(
+      data => {
+        this.complaintValue = data;
+      }
+    );
     this.complaint.open();
   }
 
@@ -188,10 +198,21 @@ export class BaseDateComponent implements OnInit {
     this.complaintData = new ComplaintTherapyModel();
     this.complaintData.complaint = '';
     this.complaintData.therapies = '';
-    this.complaintValue = JSON.parse(localStorage.getItem('language'))[
+    /*this.complaintValue = JSON.parse(localStorage.getItem('language'))[
       'complaint'
     ];
-    this.therapyValue = JSON.parse(localStorage.getItem('language'))['therapy'];
+    this.therapyValue = JSON.parse(localStorage.getItem('language'))['therapy'];*/
+    this.service.getParameters('Therapy').subscribe(
+      data => {
+        console.log(data);
+        this.therapyValue = data;
+      }
+    );
+    this.service.getParameters('Complaint').subscribe(
+      data => {
+        this.complaintValue = data;
+      }
+    );
     this.stateValue = JSON.parse(localStorage.getItem('language'))['state'];
     this.therapy.open();
   }
@@ -201,7 +222,7 @@ export class BaseDateComponent implements OnInit {
     this.complaintData.complaint = '';
     event.forEach(element => {
       console.log(element);
-      this.complaintData.complaint += element + ';';
+      this.complaintData.complaint += element.title + ';';
     });
   }
 
@@ -210,7 +231,7 @@ export class BaseDateComponent implements OnInit {
     this.complaintData.therapies = '';
     event.forEach(element => {
       console.log(element);
-      this.complaintData.therapies += element + ';';
+      this.complaintData.therapies += element.title + ';';
     });
   }
 
@@ -227,10 +248,24 @@ export class BaseDateComponent implements OnInit {
         console.log(val);
         localStorage.setItem('username', val[0]['shortname']);
         this.complaintData.employee_name = 'Dr. ' + val[0]['shortname'];
+        console.log(this.complaintData);
         this.service.addComplaint(this.complaintData).subscribe(data => {
           if (data) {
             this.getComplaint();
             this.complaint.close();
+            Swal.fire({
+              title: 'Successfull!',
+              text: 'New complaint is successfull added!',
+              timer: 3000,
+              type: 'success'
+            });
+          } else {
+            Swal.fire({
+              title: 'Error',
+              text: 'New complaint is not added!',
+              timer: 3000,
+              type: 'error'
+            });
           }
         });
       });
@@ -240,6 +275,19 @@ export class BaseDateComponent implements OnInit {
         if (data) {
           this.getComplaint();
           this.complaint.close();
+          Swal.fire({
+            title: 'Successfull!',
+            text: 'New complaint is successfull added!',
+            timer: 3000,
+            type: 'success'
+          });
+        } else {
+          Swal.fire({
+            title: 'Error',
+            text: 'New complaint is not added!',
+            timer: 3000,
+            type: 'error'
+          });
         }
       });
     }
@@ -252,6 +300,19 @@ export class BaseDateComponent implements OnInit {
       if (data) {
         this.getTherapy();
         this.therapy.close();
+        Swal.fire({
+          title: 'Successfull!',
+          text: 'New therapy is successfull added!',
+          timer: 3000,
+          type: 'success'
+        });
+      } else {
+          Swal.fire({
+            title: 'Error',
+            text: 'New therapy is not added!',
+            timer: 3000,
+            type: 'error'
+          });
       }
     });
   }
@@ -265,49 +326,7 @@ export class BaseDateComponent implements OnInit {
   changeTab(tab) {
     this.currentTab = tab;
     if (tab === 'base_one') {
-      this.service.getCustomerList('Recommendation').subscribe(
-        data => {
-          console.log(data);
-          this.recommendationList = data;
-        });
-
-      this.service.getCustomerList('Relationship').subscribe(
-        data => {
-          this.relationshipList = data;
-        }
-      );
-
-      this.service.getCustomerList('Social').subscribe(
-        data => {
-          this.socialList = data;
-        }
-      );
-
-      this.service.getCustomerList('Doctor').subscribe(
-        data => {
-          console.log(data);
-          this.doctorList = data;
-        }
-      );
-      console.log(this.data);
-      this.service.getBaseDataOne(this.data.id).subscribe(
-        data => {
-          console.log(data);
-          if (data['length'] !== 0) {
-            this.baseData = data[0];
-            if (this.baseData.recommendation.split(';') !== undefined) {
-              this.selectedRecommendation = this.baseData.recommendation.split(';').map(Number);
-            } else {
-              this.selectedRecommendation = Number(this.baseData.recommendation);
-            }
-            this.baseData.first_date = new Date(this.baseData.first_date);
-            this.operationMode = 'edit';
-          } else {
-            this.baseData = new BaseOneModel();
-            this.operationMode = 'add';
-          }
-        }
-      );
+      this.initializeBaseOneData();
     } else if (tab === 'base_two') {
       this.service.getBaseDataTwo(this.data.id).subscribe(
         data => {
@@ -335,8 +354,60 @@ export class BaseDateComponent implements OnInit {
     }
   }
 
+  initializeBaseOneData() {
+
+    this.service.getCustomerList('Recommendation').subscribe(
+      data => {
+        console.log(data);
+        this.recommendationList = data;
+      });
+
+    this.service.getCustomerList('Relationship').subscribe(
+      data => {
+        this.relationshipList = data;
+      }
+    );
+
+    this.service.getCustomerList('Social').subscribe(
+      data => {
+        this.socialList = data;
+      }
+    );
+
+    this.service.getCustomerList('Doctor').subscribe(
+      data => {
+        console.log(data);
+        this.doctorList = data;
+      }
+    );
+    this.service.getCustomerList('Doctors').subscribe(
+      data => {
+        console.log(data);
+        this.doctorsList = data;
+      }
+    );
+    console.log(this.data);
+    this.service.getBaseDataOne(this.data.id).subscribe(
+      data => {
+        console.log(data);
+        if (data['length'] !== 0) {
+          this.baseData = data[0];
+          if (this.baseData.recommendation.split(';') !== undefined) {
+            this.selectedRecommendation = this.baseData.recommendation.split(';').map(Number);
+          } else {
+            this.selectedRecommendation = Number(this.baseData.recommendation);
+          }
+          this.baseData.first_date = new Date(this.baseData.first_date);
+          this.operationMode = 'edit';
+        } else {
+          this.baseData = new BaseOneModel();
+          this.operationMode = 'add';
+        }
+      }
+    );
+  }
+
   addBaseDataOne(base) {
-    console.log(this.baseData);
     let recommendation = '';
     // tslint:disable-next-line: prefer-for-of
     for (let i = 0; i < this.selectedRecommendation.length; i++) {
@@ -415,6 +486,12 @@ export class BaseDateComponent implements OnInit {
   mapToInt(data: string) {
     console.log(data);
     return data.split(';').map(Number);
+  }
+
+  onPanelChange(event) {
+    if (this.baseData === undefined) {
+      this.initializeBaseOneData();
+    }
   }
 
 }

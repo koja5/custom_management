@@ -252,7 +252,8 @@
               <div class="k-form-field">
                 <span>Color</span>
                 <div>
-                  <kendo-colorpalette [palette]="palette" [value]="selectedColor" [(ngModel)]="selectedColor" [tileSize]="30">
+                  <kendo-colorpalette [palette]="palette" [value]="selectedColor" [(ngModel)]="selectedColor"
+                    [tileSize]="30">
                   </kendo-colorpalette>
                 </div>
               </div>
@@ -263,7 +264,7 @@
                 <button class="col-md-4 col-xs-4 k-edit" kendoButton [icon]="'k-icon k-i-save'"
                   (click)="newValidDate()">Create time</button>
               </div>
-              <form name="workTime" class="workTime" (ngSubmit)="updateWorkTime(workTime)">
+              <form name="loginForm" class="loginForm" (ngSubmit)="updateWorkTime(workTime)">
                 <div class="form-group row" *ngFor="let item of workTime; let i = index;">
                   <label for="example-number-input" class="col-sm-2 col-form-label">{{item.day}}</label>
                   <div class="col-sm-10">

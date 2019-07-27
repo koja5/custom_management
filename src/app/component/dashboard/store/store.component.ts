@@ -7,6 +7,7 @@ import {
   PageChangeEvent
 } from '@progress/kendo-angular-grid';
 import { StoreModel } from 'src/app/models/store-model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-store',
@@ -65,10 +66,25 @@ export class StoreComponent implements OnInit {
   createStore(form) {
     console.log(this.data);
     this.service.createStore(this.data, val => {
-      console.log(val);
-      this.data.id = val.id;
-      this.gridData.data.push(this.data);
-      this.store.close();
+      if (val.success) {
+        console.log(val);
+        this.data.id = val.id;
+        this.gridData.data.push(this.data);
+        this.store.close();
+        Swal.fire({
+          title: 'Successful!',
+          text: 'New store is successfull added!',
+          timer: 3000,
+          type: 'success'
+        });
+      } else {
+        Swal.fire({
+          title: 'Error!',
+          text: 'New store is not added!',
+          timer: 3000,
+          type: 'error'
+        });
+      }
     });
   }
 

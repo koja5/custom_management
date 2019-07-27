@@ -3700,3 +3700,7 @@ input {
 }
 
 .required:after { content:" *"; }
+
+.swal2-modal {
+    zoom: 1.5 !important;
+}

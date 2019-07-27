@@ -1426,6 +1426,36 @@ router.get('/getWorkTimeForUser/:id', function(req, res, next) {
 
 });
 
+router.get('/getWorkandTaskForUser/:id', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+        var id = req.params.id;
+        conn.query("SELECT * from work where user_id = ?", [id],function(err, work) {
+            console.log(work);
+            if(!err) {
+            conn.query("select * from tasks where creator_id = ?", [id], function(err, events) {
+                conn.release();
+                if (!err) {
+    
+                    res.json({events: events, workTime: work});
+                } else {
+                    res.json({ "code": 100, "status": "Error in connection database" });
+                }});
+            }
+        });
+
+
+        conn.on('error', function(err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        });
+    });
+
+});
+
 router.post('/addComplaint', function(req, res, next) {
     connection.getConnection(function(err, conn) {
         console.log(conn);
@@ -2507,6 +2537,7 @@ router.post('/addBaseDataOne', function(req, res, next) {
             'relationship': req.body.relationship,
             'social': req.body.social,
             'doctor': req.body.doctor,
+            'doctors': req.nody.doctors,
             'first_date': req.body.first_date
         };
 
@@ -2544,6 +2575,7 @@ router.post('/updateBaseDataOne', function(req, res, next) {
             'relationship': req.body.relationship,
             'social': req.body.social,
             'doctor': req.body.doctor,
+            'doctors': req.body.doctors,
             'first_date': req.body.first_date
         };      
 

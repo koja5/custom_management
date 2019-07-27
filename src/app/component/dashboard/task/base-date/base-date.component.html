@@ -144,6 +144,54 @@
               <!-- pd-20 -->
             </div>
             <!-- home-tab -->
+            <kendo-panelbar (stateChange)="onPanelChange($event)">
+              <kendo-panelbar-item [title]="language.additionalField">
+                <ng-template kendoPanelBarContent>
+                  <div class="form-group" *ngIf="baseData !== undefined">
+                    <div class="col-md-4 col-xs-12" *ngIf="recommendationList !== undefined">
+                      <p>{{language.recommendation}}</p>
+                      <kendo-multiselect [data]="recommendationList" [textField]="'title'" [valueField]="'id'"
+                        [(ngModel)]="selectedRecommendation" [valuePrimitive]="true" name="recommendation"
+                        disabled="true">
+                      </kendo-multiselect>
+                    </div>
+                    <div class="col-md-4 col-xs-12" *ngIf="relationshipList !== undefined">
+                      <p>{{language.relationship}}</p>
+                      <kendo-combobox class="col-md-12 col-xs-12" [data]="relationshipList" [textField]="'title'"
+                        [valueField]="'id'" [(ngModel)]="baseData.relationship" [valuePrimitive]="true"
+                        name="relationship" disabled="true">
+                      </kendo-combobox>
+                    </div>
+                    <div class="col-md-4 col-xs-12" *ngIf="socialList !== undefiend">
+                      <p>{{language.social}}</p>
+                      <kendo-combobox class="col-md-12 col-xs-12" [data]="socialList" [textField]="'title'"
+                        [valueField]="'id'" [(ngModel)]="baseData.social" [valuePrimitive]="true" name="title"
+                        disabled="true">
+                      </kendo-combobox>
+                    </div>
+                    <div class="col-md-4 col-xs-12" *ngIf="doctorList !== undefined">
+                      <p>{{language.doctorType}}</p>
+                      <kendo-combobox class="col-md-12 col-xs-12" [data]="doctorList" [textField]="'title'"
+                        [valueField]="'id'" [(ngModel)]="baseData.doctor" [valuePrimitive]="true" name="doctor"
+                        disabled="true">
+                      </kendo-combobox>
+                    </div>
+                    <div class="col-md-4 col-xs-12" *ngIf="doctorList !== undefined">
+                      <p>{{language.doctor}}</p>
+                      <kendo-combobox class="col-md-12 col-xs-12" [data]="doctorsList" [textField]="'firstname'"
+                        [valueField]="'id'" [(ngModel)]="baseData.doctors" [valuePrimitive]="true" name="doctors"
+                        disabled="true">
+                      </kendo-combobox>
+                    </div>
+                    <div class="col-md-4 col-xs-12">
+                      <p>{{language.firstDate}}</p>
+                      <kendo-datepicker [(ngModel)]="baseData.first_date" name="first_date" disabled="true">
+                      </kendo-datepicker>
+                    </div>
+                  </div>
+                </ng-template>
+              </kendo-panelbar-item>
+            </kendo-panelbar>
           </div>
         </div>
 
@@ -333,9 +381,15 @@
                     </kendo-combobox>
                   </div>
                   <div class="col-md-4 col-xs-12" *ngIf="doctorList !== undefined">
-                    <p>{{language.doctor}}</p>
+                    <p>{{language.doctorType}}</p>
                     <kendo-combobox class="col-md-12 col-xs-12" [data]="doctorList" [textField]="'title'"
                       [valueField]="'id'" [(ngModel)]="baseData.doctor" [valuePrimitive]="true" name="doctor">
+                    </kendo-combobox>
+                  </div>
+                  <div class="col-md-4 col-xs-12" *ngIf="doctorList !== undefined">
+                    <p>{{language.doctor}}</p>
+                    <kendo-combobox class="col-md-12 col-xs-12" [data]="doctorsList" [textField]="'firstname'"
+                      [valueField]="'id'" [(ngModel)]="baseData.doctors" [valuePrimitive]="true" name="doctors">
                     </kendo-combobox>
                   </div>
                   <div class="col-md-4 col-xs-12">
@@ -563,16 +617,17 @@
       <modal-content>
         <form name="loginForm" class="loginForm" (ngSubmit)="addComplaint(complaint)" ngNativeValidate>
           <div class="row">
-            <kendo-multiselect class="col-md-12 col-xs-12" [data]="complaintValue"
-              (valueChange)="selectComplaint($event)" [placeholder]="language.choiceComplaint"></kendo-multiselect>
+            <kendo-multiselect class="col-md-12 col-xs-12" [data]="complaintValue" [textField]="'title'"
+              [valueField]="'id'" (valueChange)="selectComplaint($event)" [placeholder]="language.choiceComplaint">
+            </kendo-multiselect>
           </div>
           <div class="form-group">
             <input type="text" class="col-md-12 col-xs-12" name="comment" placeholder="Comment"
               [(ngModel)]="complaintData.comment" comment.value=''>
           </div>
           <div class="row">
-            <kendo-multiselect class="col-md-12 col-xs-12" [data]="therapyValue" (valueChange)="selectTherapies($event)"
-              [placeholder]="language.choiceTherapy">
+            <kendo-multiselect class="col-md-12 col-xs-12" [data]="therapyValue" [textField]="'title'"
+              [valueField]="'id'" (valueChange)="selectTherapies($event)" [placeholder]="language.choiceTherapy">
             </kendo-multiselect>
           </div>
           <div class="form-group">
@@ -598,12 +653,13 @@
       <modal-content>
         <form name="loginForm" class="loginForm" (ngSubmit)="addTherapy(therapy)">
           <div class="row">
-            <kendo-multiselect class="col-md-12 col-xs-12" [data]="complaintValue"
-              (valueChange)="selectComplaint($event)" [placeholder]="language.choiceComplaint"></kendo-multiselect>
+            <kendo-multiselect class="col-md-12 col-xs-12" [data]="complaintValue" [textField]="'title'"
+              [valueField]="'id'" (valueChange)="selectComplaint($event)" [placeholder]="language.choiceComplaint">
+            </kendo-multiselect>
           </div>
           <div class="row">
-            <kendo-multiselect class="col-md-12 col-xs-12" [data]="therapyValue" (valueChange)="selectTherapies($event)"
-              [placeholder]="language.choiceTherapy">
+            <kendo-multiselect class="col-md-12 col-xs-12" [data]="therapyValue" [textField]="'title'"
+              [valueField]="'id'" (valueChange)="selectTherapies($event)" [placeholder]="language.choiceTherapy">
             </kendo-multiselect>
           </div>
           <div class="form-group">

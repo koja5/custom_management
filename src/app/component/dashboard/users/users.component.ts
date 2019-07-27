@@ -16,6 +16,7 @@ import { StandardUrlSerializer } from '../../../standardUrlSerializer';
 import { UrlTree, Router, UrlSegment, UrlSegmentGroup } from '@angular/router';
 import { throttleTime } from 'rxjs/operators';
 import { UserModel } from '../../../models/user-model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-users',
@@ -92,9 +93,24 @@ export class UsersComponent implements OnInit {
   createUser(form) {
     console.log(this.data);
     this.service.createUser(this.data, val => {
-      console.log(val);
-      this.gridData.data.push(this.data);
-      this.user.close();
+      if (val.success) {
+        console.log(val);
+        this.gridData.data.push(this.data);
+        this.user.close();
+        Swal.fire({
+          title: 'Successfull!',
+          text: 'New user is successfull added!',
+          timer: 3000,
+          type: 'success'
+        });
+      } else {
+        Swal.fire({
+          title: 'Error',
+          text: 'New user is not added!',
+          timer: 3000,
+          type: 'error'
+        });
+      }
       // form.reset();
     });
   }

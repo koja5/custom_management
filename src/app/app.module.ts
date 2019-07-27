@@ -114,7 +114,7 @@ import { ParameterItemComponent } from './component/dashboard/parameters/paramet
     },
     StandardUrlSerializer,
     {
-      provide: LOCALE_ID, 
+      provide: LOCALE_ID,
       useValue: 'de'
     }
   ],
