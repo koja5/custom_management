@@ -570,7 +570,7 @@ export class TaskComponent implements OnInit {
         this.loading = false;
       });
 
-      this.getUserInCompany(storeId);
+      this.getUserInCompany(event);
     } else {
       this.loading = false;
     }
