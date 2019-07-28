@@ -168,7 +168,24 @@ export class TaskComponent implements OnInit {
       this.selectedStore(this.selectedStoreId);
     } else {
       if (localStorage.getItem('type') === '3') {
-        this.service
+        this.service.getWorkandTasksForUser(localStorage.getItem('idUser')).subscribe(
+          data => {
+            console.log(data);
+            this.events = [];
+            this.workTime = this.pickWorkTimeToTask(data['workTime']);
+            this.pickModelForEvent(data['events']);
+            const objectCalendar = {
+              name: null,
+              events: this.events,
+              workTime: this.workTime
+            };
+            this.calendars.push(objectCalendar);
+            this.height += this.height;
+            console.log(this.splitterSize);
+            this.loading = false;
+            console.log(this.calendars);
+          });
+        /*this.service
           .getTasksForUser(localStorage.getItem('idUser'))
           .subscribe(data => {
             this.events = [];
@@ -194,7 +211,7 @@ export class TaskComponent implements OnInit {
                 console.log(this.calendars);
                 this.loading = false;
               });
-          });
+          });*/
       } else {
         this.service.getTasks().subscribe(data => {
           console.log(data);
@@ -624,11 +641,11 @@ export class TaskComponent implements OnInit {
       if (
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].start <=
           new Date(date).getHours() &&
-          this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].end >=
+          this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].end >
           new Date(date).getHours()) ||
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].start2 <=
           new Date(date).getHours() &&
-          this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].end2 >=
+          this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].end2 >
           new Date(date).getHours())
       ) {
         return 'workTime';
@@ -636,7 +653,7 @@ export class TaskComponent implements OnInit {
         return 'none';
       }
     } else {
-      return 'none';
+      return 'noTime';
     }
   }
 

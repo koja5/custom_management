@@ -37,13 +37,32 @@
 
 .workTime {
   pointer-events: none !important;
+  opacity: 0.5;
+  color: white;
+  height: 2.7vh;
+  width: 31.5vh;
+  border-radius: 2px;
 }
 
 .none {
   background: white !important;
-  display: none;
+}
+
+.noTime {
+  background: white !important;
 }
 
 .k-nonwork-hour {
   pointer-events: none !important;
+}
+
+.noWorkTime {
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  left: 30%;
+  width: 50%;
+  text-align: center;
+  color: red;
+  font-weight: bold;
 }

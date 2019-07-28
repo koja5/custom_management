@@ -86,6 +86,12 @@
     "choiceTherapy": "Auswahl therapie...",
     "choiceState": "Auswahl aktueller Zustand"
   },
+  "store": {
+    "exist": "E-Mail ist vorhanden!",
+    "notAdded": "Neuer Shop wird nicht hinzugefügt!",
+    "error": "Error!",
+    "successful": "Erfolgreich!"
+  },
   "complaint": [
     "Kopfschmerzen",
     "Nackenschmerzen",

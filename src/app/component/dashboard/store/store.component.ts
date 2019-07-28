@@ -28,11 +28,13 @@ export class StoreComponent implements OnInit {
   };
   public idUser: string;
   public loading = true;
+  public language: any;
 
   constructor(public service: StoreService) { }
 
   ngOnInit() {
     this.idUser = localStorage.getItem('idUser');
+    this.language = JSON.parse(localStorage.getItem('language'))['store'];
     this.getStore();
   }
 
@@ -72,15 +74,15 @@ export class StoreComponent implements OnInit {
         this.gridData.data.push(this.data);
         this.store.close();
         Swal.fire({
-          title: 'Successful!',
-          text: 'New store is successfull added!',
+          title: this.language.successful,
+          text: this.language[val.info],
           timer: 3000,
           type: 'success'
         });
       } else {
         Swal.fire({
-          title: 'Error!',
-          text: 'New store is not added!',
+          title: this.language.error,
+          text: this.language[val.info],
           timer: 3000,
           type: 'error'
         });

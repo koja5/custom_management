@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { GridDataResult } from '@progress/kendo-angular-grid';
 import { map } from 'rxjs/operators';
 import { ParameterItemService } from '../../../../service/parameter-item.service';
+import { DataStateChangeEvent, PageChangeEvent } from '@progress/kendo-angular-grid';
+import { SortDescriptor, orderBy } from '@progress/kendo-data-query';
 
 @Component({
   selector: 'app-parameter-item',
@@ -17,7 +19,10 @@ export class ParameterItemComponent implements OnInit {
 
   public view: Observable<GridDataResult>;
   public gridState: State = {
-    sort: [],
+    sort: [{
+      field: 'id',
+      dir: 'asc'
+    }],
     skip: 0,
     take: 10
   };
@@ -27,8 +32,8 @@ export class ParameterItemComponent implements OnInit {
   public doctorTypeList: any;
   public selectedGender: string;
   public selectedDoctorType: string;
-
   private editedRowIndex: number;
+  public currentLoadData: any;
 
   constructor(private service: ParameterItemService) {
   }
@@ -39,12 +44,14 @@ export class ParameterItemComponent implements OnInit {
       this.service.getDoctorType().subscribe(
         data => {
           this.doctorTypeList = data;
-          console.log(this.doctorTypeList);
         }
-      )
+      );
     }
 
-    this.view = this.service.pipe(map(data => process(data, this.gridState)));
+    this.view = this.service.pipe(map(data => {
+      this.currentLoadData = data;
+      return process(data, this.gridState);
+    }));
 
     this.service.getData(this.type);
     console.log(this.view);
@@ -144,5 +151,33 @@ export class ParameterItemComponent implements OnInit {
 
   selectionDoctorType(event) {
     this.selectedDoctorType = event.id;
+  }
+
+  pageChange(event: PageChangeEvent): void {
+    this.gridState.skip = event.skip;
+    this.loadProducts();
+  }
+
+  sortChange(sort: SortDescriptor[]): void {
+    this.gridState.sort = sort;
+    this.sortChangeData();
+  }
+
+  loadProducts(): void {
+    this.view = this.service.pipe(map(data => {
+      return process(this.currentLoadData, this.gridState);
+    }));
+  }
+
+  dataStateChange(state: DataStateChangeEvent): void {
+    this.gridState = state;
+    this.view = this.service.pipe(map(data => process(this.currentLoadData, this.gridState)));
+  }
+
+  sortChangeData() {
+    this.currentLoadData = {
+      data: orderBy(this.currentLoadData, this.gridState.sort),
+      total: this.currentLoadData.length
+    };
   }
 }

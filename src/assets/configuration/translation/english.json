@@ -124,6 +124,12 @@
     "female": "Female",
     "male": "Male"
   },
+  "store": {
+    "exist": "Email is exist!",
+    "notAdded": "New store is not added!",
+    "error": "Error!",
+    "successful": "Successful!"
+  },
   "complaint": [
     "Headache",
     "Neck-pain",

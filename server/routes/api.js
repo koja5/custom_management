@@ -599,7 +599,7 @@ router.post('/createStore', function(req, res, next) {
                 console.log(rows);
                 if (rows.length >= 1) {
                     test.success = false;
-                    test.info = 'Email already exists!';
+                    test.info = 'exist';
                     res.json(test);
                 } else {
                     conn.query("insert into store SET ?", podaci, function(err, rows) {
@@ -610,7 +610,7 @@ router.post('/createStore', function(req, res, next) {
                                 test.success = true;
                             } else {
                                 test.success = false;
-                                test.info = 'Error';
+                                test.info = 'notAdded';
                             }
                             res.json(test);
                         } else {

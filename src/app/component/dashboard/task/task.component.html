@@ -98,10 +98,10 @@
         <!--<p *ngIf="item.events.length === 0 && item.name !== null" style="text-align: center; font-size: 4vh; height: 88vh;">No
           tasks
           for user <b>{{item.name}}</b></p> -->
-      <div  style="text-align: center; font-size: 4vh; width: 500px; height: 88vh;" *ngIf="item.workTime !== undefined && item.workTime.length === 0">
-        <p>User doesn't have set work time! Please set worktime for user!</p>
+      <div *ngIf="item.workTime !== undefined && item.workTime.length === 0">
+        <p class="noWorkTime">User doesn't have set work time! Please set worktime for user!</p>
       </div>
-        <div *ngIf="item.workTime !== undefined && item.workTime.length !== 0">
+        <div>
           <div>
             <kendo-scheduler
               *ngIf="(!loading && resources.length !== 0) || type === '3'"
@@ -117,10 +117,8 @@
               (resizeEnd)="resizeEndHandler($event)"
               (remove)="removeHandler($event)"
             >
-              <ng-template kendoSchedulerTimeSlotTemplate let-date="date">
-                <div *ngFor="let it of item.workTime; let j = index" class="{{dateFormat(date, i, j)}}" [style.background]="calendars[i].workTime[j].color"
-                  style="opacity: 0.5; color: white; height: 6vh; width: 31.5vh; border-radius: 2px;"
-                ></div>
+              <ng-template kendoSchedulerTimeSlotTemplate let-date="date"  *ngIf="item.workTime !== undefined && item.workTime.length !== 0">
+                <div *ngFor="let it of item.workTime; let j = index" class="{{dateFormat(date, i, j)}}" [style.background]="calendars[i].workTime[j].color"></div>
               </ng-template>
               <ng-template
                 kendoSchedulerEventTemplate
