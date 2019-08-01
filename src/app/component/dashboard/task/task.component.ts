@@ -81,6 +81,8 @@ export class TaskComponent implements OnInit {
   public selectedUser: any;
   public splitterSizeFull = 100;
   public splitterSize: number;
+  public dateEvent: string;
+
   constructor(
     public formBuilder: FormBuilder,
     public service: TaskService,
@@ -550,7 +552,9 @@ export class TaskComponent implements OnInit {
             this.height += this.height;
             this.splitterSize = this.splitterSizeFull / value.length;
             console.log(this.splitterSize);
-            this.loading = false;
+            if (i === value.length) {
+              this.loading = false;
+            }
             console.log(this.calendars);
           });
       }
@@ -698,5 +702,17 @@ export class TaskComponent implements OnInit {
     }
     console.log(allWorkTime);
     return allWorkTime;
+  }
+
+  dateEventChange(event: string) {
+    /*this.loading = true;
+    setTimeout(() => {
+      for (let i = 0; i < this.calendars.length; i++) {
+        this.calendars[i]['dateChange'] = event;
+      }
+      this.loading = false;
+    }, 50);
+    console.log(this.calendars);*/
+    this.message.sendWeekChange(event);
   }
 }

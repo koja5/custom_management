@@ -10,6 +10,7 @@ export class MessageService {
   public imageProfile = new Subject<null>();
   public deleteCustomer = new Subject<null>();
   public backToCustomerGrid = new Subject<null>();
+  public weekChange = new Subject<any>();
 
   sendTheme(message: string) {
     this.theme.next(message);
@@ -30,11 +31,11 @@ export class MessageService {
   sendImageProfile() {
     this.imageProfile.next();
   }
-  
+
   getImageProfile(): Observable<null> {
     return this.imageProfile.asObservable();
   }
- 
+
   sendDeleteCustomer() {
     this.deleteCustomer.next();
   }
@@ -49,5 +50,13 @@ export class MessageService {
 
   getBackToCustomerGrid() {
     return this.backToCustomerGrid.asObservable();
+  }
+
+  sendWeekChange(direction: string) {
+    this.weekChange.next(direction);
+  }
+
+  getWeekChange() {
+    return this.weekChange.asObservable();
   }
 }

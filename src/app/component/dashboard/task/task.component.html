@@ -68,8 +68,13 @@
           <label class="k-radio-label" for="vertical" style="margin-left: 2vh;"
             >Vertical</label
           >
+          
         </div>
       </div>
+    </div>
+    <div *ngIf="calendars.length > 1 && !loading">
+        <button kendoButton (click)="dateEventChange('previous')" [primary]="true" style="margin: 5px 5px 20px 5px;"><span class="k-icon k-i-arrow-60-left"></span>Previous</button>
+        <button kendoButton (click)="dateEventChange('next')" [primary]="true" style="margin: 5px 5px 20px 5px;"><span class="k-icon k-i-arrow-60-right"></span>Next</button>
     </div>
   
     <!--<div class="spinner loading" *ngIf="loading"></div>-->
@@ -117,6 +122,12 @@
               (resizeEnd)="resizeEndHandler($event)"
               (remove)="removeHandler($event)"
             >
+
+            <ng-template kendoSchedulerToolbarTemplate let-selectedDate="selectedDate">
+              <my-navigation [selectedDate]="selectedDate">
+              </my-navigation>
+          </ng-template>
+
               <ng-template kendoSchedulerTimeSlotTemplate let-date="date"  *ngIf="item.workTime !== undefined && item.workTime.length !== 0">
                 <div *ngFor="let it of item.workTime; let j = index" class="{{dateFormat(date, i, j)}}" [style.background]="calendars[i].workTime[j].color"></div>
               </ng-template>
