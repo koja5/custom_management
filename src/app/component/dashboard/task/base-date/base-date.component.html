@@ -170,13 +170,6 @@
                       </kendo-combobox>
                     </div>
                     <div class="col-md-4 col-xs-12" *ngIf="doctorList !== undefined">
-                      <p>{{language.doctorType}}</p>
-                      <kendo-combobox class="col-md-12 col-xs-12" [data]="doctorList" [textField]="'title'"
-                        [valueField]="'id'" [(ngModel)]="baseData.doctor" [valuePrimitive]="true" name="doctor"
-                        disabled="true">
-                      </kendo-combobox>
-                    </div>
-                    <div class="col-md-4 col-xs-12" *ngIf="doctorList !== undefined">
                       <p>{{language.doctor}}</p>
                       <kendo-combobox class="col-md-12 col-xs-12" [data]="doctorsList" [textField]="'firstname'"
                         [valueField]="'id'" [(ngModel)]="baseData.doctors" [valuePrimitive]="true" name="doctors"
@@ -378,12 +371,6 @@
                     <p>{{language.social}}</p>
                     <kendo-combobox class="col-md-12 col-xs-12" [data]="socialList" [textField]="'title'"
                       [valueField]="'id'" [(ngModel)]="baseData.social" [valuePrimitive]="true" name="title">
-                    </kendo-combobox>
-                  </div>
-                  <div class="col-md-4 col-xs-12" *ngIf="doctorList !== undefined">
-                    <p>{{language.doctorType}}</p>
-                    <kendo-combobox class="col-md-12 col-xs-12" [data]="doctorList" [textField]="'title'"
-                      [valueField]="'id'" [(ngModel)]="baseData.doctor" [valuePrimitive]="true" name="doctor">
                     </kendo-combobox>
                   </div>
                   <div class="col-md-4 col-xs-12" *ngIf="doctorList !== undefined">

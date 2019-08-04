@@ -26,7 +26,7 @@ export class MyNavigationViewComponent implements OnInit {
 
         this.localeId = 'de-DE';
 
-        this.message.getWeekChange().subscribe(
+        this.message.getViewChange().subscribe(
             mess => {
                 if (mess === 'next') {
                     this.next();

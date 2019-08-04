@@ -82,6 +82,8 @@ export class TaskComponent implements OnInit {
   public splitterSizeFull = 100;
   public splitterSize: number;
   public dateEvent: string;
+  public selectedViewIndex = 0;
+  public currentDate = new Date();
 
   constructor(
     public formBuilder: FormBuilder,
@@ -711,10 +713,23 @@ export class TaskComponent implements OnInit {
       this.loading = false;
     }, 50);
     console.log(this.calendars);*/
-    this.message.sendWeekChange(event);
+    this.message.sendViewChange(event);
   }
 
   changeHandler(event) {
     console.log(event);
   }
- }
+
+  selectedViewCalendar(index) {
+    console.log(index);
+    this.selectedViewIndex = null;
+    setTimeout(() => {
+      this.selectedViewIndex = index;
+    }, 50);
+  }
+
+  chageDate(event) {
+    console.log(event);
+    this.message.sendDateChange(event);
+  }
+}

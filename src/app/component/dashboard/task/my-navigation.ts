@@ -1,84 +1,91 @@
 import {
-  Component,
-  Input,
-  OnInit,
-  ViewEncapsulation,
-  LOCALE_ID,
-  Inject
-} from "@angular/core";
+    Component,
+    Input,
+    OnInit,
+    ViewEncapsulation,
+    LOCALE_ID,
+    Inject
+} from '@angular/core';
 import {
-  ToolbarService,
-  SchedulerView
-} from "@progress/kendo-angular-scheduler";
-import { MessageService } from "../../../service/message.service";
-import "@progress/kendo-angular-intl/locales/de/all";
-import { IntlService, CldrIntlService } from "@progress/kendo-angular-intl";
+    ToolbarService,
+    SchedulerView
+} from '@progress/kendo-angular-scheduler';
+import { MessageService } from '../../../service/message.service';
+import '@progress/kendo-angular-intl/locales/de/all';
+import { IntlService, CldrIntlService } from '@progress/kendo-angular-intl';
 
 @Component({
-  // tslint:disable-next-line: component-selector
-  selector: "my-navigation",
-  template: `
-    {{ selectedDate | kendoDate: "d":localeId }}
+    // tslint:disable-next-line: component-selector
+    selector: 'my-navigation',
+    template: `
+    {{ selectedDate | kendoDate: 'd':localeId }}
   `,
-  encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None
 })
-export class MyNavigationComponent extends SchedulerView implements OnInit {
-  template: import("@angular/core").TemplateRef<any>;
-  title: string;
-  name: string;
-  @Input() public selectedDate: Date;
+export class MyNavigationComponent implements OnInit {
+    template: import('@angular/core').TemplateRef<any>;
+    title: string;
+    name: string;
+    @Input() public selectedDate: Date;
 
-  // tslint:disable-next-line: max-line-length
-  constructor(
-    public toolbarService: ToolbarService,
-    public message: MessageService,
-    @Inject(LOCALE_ID) public localeId: string,
-    public intlService: IntlService
-  ) {
-    super();
-  }
+    // tslint:disable-next-line: max-line-length
+    constructor(
+        public toolbarService: ToolbarService,
+        public message: MessageService,
+        @Inject(LOCALE_ID) public localeId: string,
+        public intlService: IntlService
+    ) {
+    }
 
-  ngOnInit() {
-    /*console.log('usao sam ovdee!');
-        if (this.dateEvent === 'next') {
-            this.next();
-        }*/
+    ngOnInit() {
+        /*console.log('usao sam ovdee!');
+            if (this.dateEvent === 'next') {
+                this.next();
+            }*/
 
-    this.localeId = "de-DE";
+        this.localeId = 'de-DE';
 
-    this.message.getWeekChange().subscribe(mess => {
-      if (mess === "next") {
-        this.next();
-      } else {
-        this.prev();
-      }
-    });
-  }
+        this.message.getViewChange().subscribe(mess => {
+            if (mess === 'next') {
+                this.next();
+            } else if (mess === 'prev') {
+                this.prev();
+            } else if (mess === 'today') {
+                this.today();
+            }
+        });
 
-  public next(): void {
-    console.log("usao sam ovdee!");
-    /*this.toolbarService.navigate({
+        this.message.getDateChange().subscribe(
+            mess => {
+                this.dateChange(mess);
+            }
+        )
+    }
+
+    public next(): void {
+        console.log('usao sam ovdee!');
+        this.toolbarService.navigate({
             type: 'next'
-        });*/
-    const viewMode = {
-      name: "month",
-      title: "Day View",
-      template: null
-    };
+        });
 
-    this.toolbarService.navigate({
-      type: "view-change",
-      view: {
-        name: "month",
-        title: "Day View",
-        template: null
-      }
-    });
-  }
+    }
 
-  public prev(): void {
-    this.toolbarService.navigate({
-      type: "prev"
-    });
-  }
+    public prev(): void {
+        this.toolbarService.navigate({
+            type: 'prev'
+        });
+    }
+
+    public today(): void {
+        this.toolbarService.navigate({
+            type: 'today'
+        });
+    }
+
+    public dateChange(date): void {
+        this.toolbarService.navigate({
+            type: 'select-date',
+            date: new Date(date)
+        });
+    }
 }
