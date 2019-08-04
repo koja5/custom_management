@@ -143,7 +143,7 @@ export class TaskComponent implements OnInit {
         textField: 'text',
         colorField: 'color'
       };
-      this.resources.push(resourcesObject);
+      // this.resources.push(resourcesObject);
       this.colorPalette = data;
       for (let i = 0; i < data['length']; i++) {
         this.palette.push(data[i].color);
@@ -233,8 +233,8 @@ export class TaskComponent implements OnInit {
             this.loading = false;
           } else {
             this.calendars.push({ name: null, events: [] });
-            console.log(this.calendars);
           }
+          console.log(this.calendars);
         });
       }
     }
@@ -552,9 +552,7 @@ export class TaskComponent implements OnInit {
             this.height += this.height;
             this.splitterSize = this.splitterSizeFull / value.length;
             console.log(this.splitterSize);
-            if (i === value.length) {
-              this.loading = false;
-            }
+            this.loading = false;
             console.log(this.calendars);
           });
       }
@@ -715,4 +713,8 @@ export class TaskComponent implements OnInit {
     console.log(this.calendars);*/
     this.message.sendWeekChange(event);
   }
-}
+
+  changeHandler(event) {
+    console.log(event);
+  }
+ }

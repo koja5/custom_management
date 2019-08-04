@@ -72,8 +72,9 @@
         </div>
       </div>
     </div>
-    <div *ngIf="calendars.length > 1 && !loading">
+    <div>
         <button kendoButton (click)="dateEventChange('previous')" [primary]="true" style="margin: 5px 5px 20px 5px;"><span class="k-icon k-i-arrow-60-left"></span>Previous</button>
+        <button kendoButton (click)="dateEventChange('next')" [primary]="true" style="margin: 5px 5px 20px 5px;"><span class="k-icon k-i-arrow-60-right"></span>Next</button>
         <button kendoButton (click)="dateEventChange('next')" [primary]="true" style="margin: 5px 5px 20px 5px;"><span class="k-icon k-i-arrow-60-right"></span>Next</button>
     </div>
   
@@ -109,24 +110,36 @@
         <div>
           <div>
             <kendo-scheduler
-              *ngIf="(!loading && resources.length !== 0) || type === '3'"
+              *ngIf="(!loading && item.workTime !== undefined) || type === '3'"
               [editable]="true"
               [kendoSchedulerBinding]="item.events"
               [kendoSchedulerReactiveEditing]="createFormGroup"
               class="{{ zIndex }}"
               [selectedDate]="selectedDate"
-              style="height: 88vh;"
+              style="height: 100%;"
               (save)="saveHandler($event)"
               [resources]="resources"
               (dragEnd)="dragEndHandler($event)"
               (resizeEnd)="resizeEndHandler($event)"
               (remove)="removeHandler($event)"
+              (change)="changeHandler($event)"
             >
 
             <ng-template kendoSchedulerToolbarTemplate let-selectedDate="selectedDate">
               <my-navigation [selectedDate]="selectedDate">
               </my-navigation>
+              
+              <ul kendoSchedulerToolbarViewSelector></ul>
           </ng-template>
+
+          <!--<ng-template kendoSchedulerToolbarTemplate let-selectedView="selectedDate">
+            
+              <ul kendoSchedulerToolbarViewSelector>
+              <my-navigation-view [selectedDate]="selectedDate">
+              </my-navigation-view>
+            </ul>
+        </ng-template>
+        -->
 
               <ng-template kendoSchedulerTimeSlotTemplate let-date="date"  *ngIf="item.workTime !== undefined && item.workTime.length !== 0">
                 <div *ngFor="let it of item.workTime; let j = index" class="{{dateFormat(date, i, j)}}" [style.background]="calendars[i].workTime[j].color"></div>
@@ -281,7 +294,7 @@
             [kendoSchedulerReactiveEditing]="createFormGroup"
             class="{{ zIndex }}"
             [selectedDate]="selectedDate"
-            style="height: 88vh;"
+            style="height: 100%;"
             (save)="saveHandler($event)"
             [resources]="resources"
             (dragEnd)="dragEndHandler($event)"

@@ -1,26 +1,21 @@
 import { Component, Input, OnInit, ViewEncapsulation, LOCALE_ID, Inject } from '@angular/core';
-import { ToolbarService, SchedulerView } from '@progress/kendo-angular-scheduler';
+import { ToolbarService } from '@progress/kendo-angular-scheduler';
 import { MessageService } from '../../../service/message.service';
 import '@progress/kendo-angular-intl/locales/de/all';
 import { IntlService, CldrIntlService } from '@progress/kendo-angular-intl';
 
 @Component({
-    // tslint:disable-next-line: component-selector
-    selector: 'my-navigation',
+    selector: 'my-navigation-view',
     template: `
         {{ selectedDate | kendoDate:'d':localeId }}
     `,
     encapsulation: ViewEncapsulation.None
 })
-export class MyNavigationComponent extends SchedulerView implements OnInit {
-    template: import('@angular/core').TemplateRef<any>;
-    title: string;
-    name: string;
+export class MyNavigationViewComponent implements OnInit {
     @Input() public selectedDate: Date;
 
     // tslint:disable-next-line: max-line-length
     constructor(public toolbarService: ToolbarService, public message: MessageService, @Inject(LOCALE_ID) public localeId: string, public intlService: IntlService) {
-        super();
     }
 
     ngOnInit() {
@@ -41,21 +36,10 @@ export class MyNavigationComponent extends SchedulerView implements OnInit {
             }
         );
     }
-
     public next(): void {
         console.log('usao sam ovdee!');
         this.toolbarService.navigate({
             type: 'next'
-        });
-        const viewMode = {
-            template: this.template,
-            title: 'Day View',
-            name: 'day'
-        };
-
-        this.toolbarService.navigate({
-            type: 'view-change',
-            view: viewMode
         });
     }
 
