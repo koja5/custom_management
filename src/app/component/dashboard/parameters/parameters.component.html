@@ -1,0 +1,57 @@
+<div class="tabs widget">
+  <ul class="nav nav-tabs widget">
+    <li [ngClass]="currentTab === 'complaint' ? 'active' : ''" class="col-md-2 col-sm-4 col-xs-6"> <a
+        (click)="changeTab('complaint')"><span class="fa fa-list-alt"></span> Complaint</a>
+    </li>
+    <li [ngClass]="currentTab === 'therapy' ? 'active' : ''" class="col-md-2 col-sm-4 col-xs-6"> <a
+        (click)="changeTab('therapy')"><span class="fa fa-medkit"></span> Therapy</a>
+    <li [ngClass]="currentTab === 'recommendation' ? 'active' : ''" class="col-md-2 col-sm-4 col-xs-6"> <a
+        (click)="changeTab('recommendation')"><span class="fa fa-check"></span> Recommendation</a>
+    <li [ngClass]="currentTab === 'relationship' ? 'active' : ''" class="col-md-2 col-sm-4 col-xs-6"> <a
+        (click)="changeTab('relationship')"><span class="fa fa-exchange"></span> Relationship
+        status</a>
+    <li [ngClass]="currentTab === 'social' ? 'active' : ''" class="col-md-2 col-sm-4 col-xs-6"> <a
+        (click)="changeTab('social')"><span class="fa fa-life-ring"></span> Social
+        insurance</a>
+    <li [ngClass]="currentTab === 'doctor' ? 'active' : ''" class="col-md-1 col-sm-4 col-xs-6"> <a
+        (click)="changeTab('doctor')"><span class="fa fa-user"></span> Doctor</a>
+    <li [ngClass]="currentTab === 'doctors' ? 'active' : ''" class="col-md-1 col-sm-4 col-xs-6"> <a
+        (click)="changeTab('doctors')"><span class="fa fa-users"></span> Doctors</a>
+    </li>
+  </ul>
+  <div class="tab-content" *ngIf="currentTab === 'complaint'">
+    <div id="profile-tab" class="tab-pane active">
+      <app-parameter-item [type]="'Complaint'"></app-parameter-item>
+    </div>
+  </div>
+  <div *ngIf="currentTab === 'therapy'">
+    <div id="profile-tab" class="tab-pane active">
+      <app-parameter-item [type]="'Therapy'"></app-parameter-item>
+    </div>
+  </div>
+  <div *ngIf="currentTab === 'recommendation'">
+    <div id="profile-tab" class="tab-pane active">
+      <app-parameter-item [type]="'Recommendation'"></app-parameter-item>
+    </div>
+  </div>
+  <div *ngIf="currentTab === 'relationship'">
+    <div id="profile-tab" class="tab-pane active">
+      <app-parameter-item [type]="'Relationship'"></app-parameter-item>
+    </div>
+  </div>
+  <div *ngIf="currentTab === 'social'">
+    <div id="profile-tab" class="tab-pane active">
+      <app-parameter-item [type]="'Social'"></app-parameter-item>
+    </div>
+  </div>
+  <div *ngIf="currentTab === 'doctor'">
+    <div id="profile-tab" class="tab-pane active">
+      <app-parameter-item [type]="'Doctor'"></app-parameter-item>
+    </div>
+  </div>
+  <div *ngIf="currentTab === 'doctors'">
+    <div id="profile-tab" class="tab-pane active">
+      <app-parameter-item [type]="'Doctors'"></app-parameter-item>
+    </div>
+  </div>
+</div>

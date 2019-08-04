@@ -41,15 +41,15 @@ export class CustomersService {
       .subscribe(val => callback(val));
   }
 
-  downloadFile(file:String){
+  downloadFile(file: string) {
     console.log(file);
-    var body = {filename:file};
+    const body = { filename: file };
 
-    return this.http.post('/api/download', body,{
-        responseType : 'blob',
-        headers:new HttpHeaders().append('Content-Type','application/json')
+    return this.http.post('/api/download', body, {
+      responseType: 'blob',
+      headers: new HttpHeaders().append('Content-Type', 'application/json')
     });
-}
+  }
 
   getDocuments(id, callback) {
     return this.http.get('/api/getDocuments/' + id)
@@ -79,6 +79,61 @@ export class CustomersService {
 
   getTherapyForCustomer(id) {
     return this.http.get('/api/getTherapyForCustomer/' + id)
+      .map(res => res);
+  }
+
+  getCustomerList(type) {
+    return this.http.get('/api/get' + type + 'List')
+      .map(res => res);
+  }
+
+  addBaseDataOne(data) {
+    return this.http.post('/api/addBaseDataOne', data)
+      .map(res => res);
+  }
+
+  getBaseDataOne(id: number) {
+    return this.http.get('/api/getBaseDataOne/' + id)
+      .map(res => res);
+  }
+
+  updateBaseDataOne(data) {
+    return this.http.post('/api/updateBaseDataOne', data)
+      .map(res => res);
+  }
+
+  addBaseDataTwo(data) {
+    return this.http.post('/api/addBaseDataTwo', data)
+      .map(res => res);
+  }
+
+  getBaseDataTwo(id: number) {
+    return this.http.get('/api/getBaseDataTwo/' + id)
+      .map(res => res);
+  }
+
+  updateBaseDataTwo(data) {
+    return this.http.post('/api/updateBaseDataTwo', data)
+      .map(res => res);
+  }
+
+  addPhysicalIllness(data) {
+    return this.http.post('/api/addPhysicalIllness', data)
+      .map(res => res);
+  }
+
+  getPhysicallIllness(id: number) {
+    return this.http.get('/api/getPhysicalIllness/' + id)
+      .map(res => res);
+  }
+
+  updatePhysicalIllness(data) {
+    return this.http.post('/api/updatePhysicalIllness', data)
+      .map(res => res);
+  }
+
+  getParameters(type) {
+    return this.http.get('/api/get' + type + 'List')
       .map(res => res);
   }
 }

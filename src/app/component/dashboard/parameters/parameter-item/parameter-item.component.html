@@ -1,0 +1,71 @@
+<div *ngIf="loading" style="height: 90vh;">
+  <div class="spinner loading"></div>
+</div>
+
+<div *ngIf="!loading">
+
+  <h2 style="text-align: center; padding: 1vh;">
+    {{type}}
+  </h2>
+
+  <kendo-grid *ngIf="type !== 'Doctors'" [data]="view | async" [height]="533" [pageSize]="gridState.take"
+    [skip]="gridState.skip" [sort]="gridState.sort" [pageable]="true" [sortable]="true"
+    (dataStateChange)="onStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)"
+    (save)="saveHandler($event)" (remove)="removeHandler($event)" (add)="addHandler($event)" [navigable]="true"
+    [loading]="loading" (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)">
+    <ng-template kendoGridToolbarTemplate>
+      <button kendoGridAddCommand>Add new</button>
+    </ng-template>
+    <kendo-grid-column field="id" title="ID" [hidden]="true"></kendo-grid-column>
+    <kendo-grid-column field="title" title="Title"></kendo-grid-column>
+    <kendo-grid-column field="sequence" title="Order"></kendo-grid-column>
+    <kendo-grid-command-column title="command" width="220">
+      <ng-template kendoGridCellTemplate let-isNew="isNew">
+        <button kendoGridEditCommand [primary]="true">Edit</button>
+        <button kendoGridRemoveCommand>Remove</button>
+        <button kendoGridSaveCommand [disabled]="formGroup?.invalid">{{ isNew ? 'Add' : 'Update' }}</button>
+        <button kendoGridCancelCommand>{{ isNew ? 'Discard changes' : 'Cancel' }}</button>
+      </ng-template>
+    </kendo-grid-command-column>
+  </kendo-grid>
+
+  <kendo-grid *ngIf="type === 'Doctors'" [data]="view | async" [height]="533" [pageSize]="gridState.take"
+    [skip]="gridState.skip" [sort]="gridState.sort" [pageable]="true" [sortable]="true"
+    (dataStateChange)="onStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)"
+    (save)="saveHandler($event)" (remove)="removeHandler($event)" (add)="addHandler($event)" [navigable]="true"
+    [loading]="loading">
+    <ng-template kendoGridToolbarTemplate>
+      <button kendoGridAddCommand>Add new</button>
+    </ng-template>
+    <kendo-grid-column field="id" title="ID" [hidden]="true"></kendo-grid-column>
+    <kendo-grid-column field="firstname" title="First name"></kendo-grid-column>
+    <kendo-grid-column field="lastname" title="Last name"></kendo-grid-column>
+    <kendo-grid-column field="gender" title="Gender">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <kendo-combobox [data]="genderList" [(ngModel)]="dataItem.gender" (selectionChange)="selectionGender($event)">
+        </kendo-combobox>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="street" title="Street"></kendo-grid-column>
+    <kendo-grid-column field="street_number" title="Street number"></kendo-grid-column>
+    <kendo-grid-column field="zip_code" title="Zip code"></kendo-grid-column>
+    <kendo-grid-column field="city" title="City"></kendo-grid-column>
+    <kendo-grid-column field="telephone" title="Telephone"></kendo-grid-column>
+    <kendo-grid-column field="email" title="Email"></kendo-grid-column>
+    <kendo-grid-column field="doctor_type" title="Doctor type">
+      <ng-template kendoGridCellTemplate let-dataItem *ngIf="doctorTypeList !== undefined">
+        <kendo-combobox [data]="doctorTypeList" [textField]="'title'" [valueField]="'id'"
+          (selectionChange)="selectionDoctorType($event)" [(ngModel)]="dataItem.doctor_type" [valuePrimitive]="true"
+          name="storename"></kendo-combobox>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-command-column title="command" width="180">
+      <ng-template kendoGridCellTemplate let-isNew="isNew">
+        <button kendoGridEditCommand [primary]="true">Edit</button>
+        <button kendoGridRemoveCommand>Remove</button>
+        <button kendoGridSaveCommand [disabled]="formGroup?.invalid">{{ isNew ? 'Add' : 'Update' }}</button>
+        <button kendoGridCancelCommand>{{ isNew ? 'Discard changes' : 'Cancel' }}</button>
+      </ng-template>
+    </kendo-grid-command-column>
+  </kendo-grid>
+</div>

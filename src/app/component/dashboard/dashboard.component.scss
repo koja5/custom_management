@@ -1,142 +1,194 @@
-
 .color-palette {
-	background: #1c252e;
-	border-radius: 5px;
-	margin: 50px auto;
-	padding: 32px;
-	position: relative;
-	width: 180px;
+  background: #1c252e;
+  border-radius: 5px;
+  margin: 50px auto;
+  padding: 32px;
+  position: relative;
+  width: 180px;
 }
 
 .color-palette:before {
-	background: #1c252e;
-	content: "";
-	height: 8px;
-	left: 50%;
-	margin: -4px 0 0 -4px;
-	position: absolute;
-	top: 0;
-	-webkit-transform: rotate(45deg);
-	-moz-transform: rotate(45deg);
-	-ms-transform: rotate(45deg);
-	-o-transform: rotate(45deg);
-	transform: rotate(45deg);
-	width: 8px;
+  background: #1c252e;
+  content: "";
+  height: 8px;
+  left: 50%;
+  margin: -4px 0 0 -4px;
+  position: absolute;
+  top: 0;
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+  width: 8px;
 }
 
 .color-palette h2 {
-	color: #9aa1a7;
-	font-size: 16px;
+  color: #9aa1a7;
+  font-size: 16px;
 }
 
 .color-container {
-	margin: 21px 0;
+  margin: 21px 0;
   width: 180px;
   padding: 5px;
   height: 80px;
 }
 
-.color-container:first-child { margin-top: 0; }
-.color-container:last-child { margin-bottom: 0; }
+.color-container:first-child {
+  margin-top: 0;
+}
+
+.color-container:last-child {
+  margin-bottom: 0;
+}
 
 .color-container h3 {
-	color: #9aa1a7;
-	font-size: 14px;
-	margin-bottom: 8px;
+  color: #9aa1a7;
+  font-size: 14px;
+  margin-bottom: 8px;
 }
 
 .color-container .color:first-of-type {
-	border-radius: 3px 0 0 3px;
+  border-radius: 3px 0 0 3px;
 }
 
 .color-container .color:last-of-type {
   border-radius: 0 3px 3px 0;
-  
-} 
-.color-container:hover{
-  background-color: #e6e7ef;
- 
-}     
 
-.width10 .color { width: 10%; }
-.width6 .color { width: 16.67%; }
-.width5 .color { width: 20%; }
-.width4 .color { width: 25%; }
-.width3 .color { width: 33.3%; }
-.width2 .color { width: 50%; }
-.width1 .color { width: 100%; }
+}
+
+.color-container:hover {
+  background-color: #e6e7ef;
+
+}
+
+.width10 .color {
+  width: 10%;
+}
+
+.width6 .color {
+  width: 16.67%;
+}
+
+.width5 .color {
+  width: 20%;
+}
+
+.width4 .color {
+  width: 25%;
+}
+
+.width3 .color {
+  width: 33.3%;
+}
+
+.width2 .color {
+  width: 50%;
+}
+
+.width1 .color {
+  width: 100%;
+}
 
 .color {
-	display: block;
-	float: left;
+  display: block;
+  float: left;
   height: 24px;
   border: 1px solid #2f4050;
 }
 
 
-  /*radio test css*/
- 
+/*radio test css*/
+
 .radio {
-    padding-left: 20px; }
+  padding-left: 20px;
+}
+
 .radio label {
-    display: inline-block;
-    position: relative;
-    padding-left: 5px; }
+  display: inline-block;
+  position: relative;
+  padding-left: 5px;
+}
+
 .radio label::before {
-    content: "";
-    display: inline-block;
-    position: absolute;
-    width: 17px;
-    height: 17px;
-    left: 0;
-    margin-left: -20px;
-    border: 1px solid #cccccc;
-    border-radius: 50%;
-    background-color: #fff;
-    -webkit-transition: border 0.15s ease-in-out;
-    -o-transition: border 0.15s ease-in-out;
-    transition: border 0.15s ease-in-out; }
+  content: "";
+  display: inline-block;
+  position: absolute;
+  width: 17px;
+  height: 17px;
+  left: 0;
+  margin-left: -20px;
+  border: 1px solid #cccccc;
+  border-radius: 50%;
+  background-color: #fff;
+  -webkit-transition: border 0.15s ease-in-out;
+  -o-transition: border 0.15s ease-in-out;
+  transition: border 0.15s ease-in-out;
+}
+
 .radio label::after {
-    display: inline-block;
-    position: absolute;
-    content: " ";
-    width: 11px;
-    height: 11px;  
-    left: 3px;
-    top: 3px;
-    margin-left: -20px;
-    border-radius: 50%;
-    background-color: #555555;
-    -webkit-transform: scale(0, 0);
-    -ms-transform: scale(0, 0);
-    -o-transform: scale(0, 0);
-    transform: scale(0, 0);
-    -webkit-transition: -webkit-transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);
-    -moz-transition: -moz-transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);
-    -o-transition: -o-transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);
-    transition: transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33); }
+  display: inline-block;
+  position: absolute;
+  content: " ";
+  width: 11px;
+  height: 11px;
+  left: 3px;
+  top: 3px;
+  margin-left: -20px;
+  border-radius: 50%;
+  background-color: #555555;
+  -webkit-transform: scale(0, 0);
+  -ms-transform: scale(0, 0);
+  -o-transform: scale(0, 0);
+  transform: scale(0, 0);
+  -webkit-transition: -webkit-transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);
+  -moz-transition: -moz-transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);
+  -o-transition: -o-transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);
+  transition: transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);
+}
+
 .radio input[type="radio"] {
-    opacity: 0; }
-.radio input[type="radio"]:focus + label::before {
-    outline: thin dotted;
-    outline: 5px auto -webkit-focus-ring-color;
-    outline-offset: -2px; }
-.radio input[type="radio"]:checked + label::after {
-    -webkit-transform: scale(1, 1);
-    -ms-transform: scale(1, 1);
-    -o-transform: scale(1, 1);
-    transform: scale(1, 1); }
-.radio input[type="radio"]:disabled + label {
-    opacity: 0.65; }
-.radio input[type="radio"]:disabled + label::before {
-    cursor: not-allowed; }
+  opacity: 0;
+}
+
+.radio input[type="radio"]:focus+label::before {
+  outline: thin dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+.radio input[type="radio"]:checked+label::after {
+  -webkit-transform: scale(1, 1);
+  -ms-transform: scale(1, 1);
+  -o-transform: scale(1, 1);
+  transform: scale(1, 1);
+}
+
+.radio input[type="radio"]:disabled+label {
+  opacity: 0.65;
+}
+
+.radio input[type="radio"]:disabled+label::before {
+  cursor: not-allowed;
+}
+
 .radio.radio-inline {
-    margin-top: 0; }
+  margin-top: 0;
+}
 
-.radio-primary input[type="radio"] + label::after {
-    background-color: #73BE28; }
-.radio-primary input[type="radio"]:checked + label::before {
-    border-color: #73BE28; }
-.radio-primary input[type="radio"]:checked + label::after {
-    background-color: #73BE28; }
+.radio-primary input[type="radio"]+label::after {
+  background-color: #73BE28;
+}
 
+.radio-primary input[type="radio"]:checked+label::before {
+  border-color: #73BE28;
+}
+
+.radio-primary input[type="radio"]:checked+label::after {
+  background-color: #73BE28;
+}
+
+.metismenu li:active {
+  color: rgb(255, 118, 0);
+}

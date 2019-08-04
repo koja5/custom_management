@@ -9,7 +9,10 @@ import {
   PageChangeEvent
 } from '@progress/kendo-angular-grid';
 import { MessageService } from '../../../service/message.service';
+import { CustomerModel } from '../../../models/customer-model';
+import Swal from 'sweetalert2';
 
+const newLocal = 'data';
 @Component({
   selector: 'app-customers',
   templateUrl: './customers.component.html',
@@ -18,21 +21,9 @@ import { MessageService } from '../../../service/message.service';
 export class CustomersComponent implements OnInit {
 
   @ViewChild('customer') customer: Modal;
-  public data = {
-    'id': '',
-    'shortname': '',
-    'firstname': '',
-    'lastname': '',
-    'gender': '',
-    'street': '',
-    'streetnumber': '',
-    'city': '',
-    'telephone': '',
-    'mobile': '',
-    'email': '',
-    'birthday': '',
-    'storeId': ''
-  };
+  public data = new CustomerModel();
+  public unamePattern = '^[a-z0-9_-]{8,15}$';
+  public emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$';
   public userType = ['Employee', 'Manager', 'Admin'];
   public gridData: any;
   public currentLoadData: any;
@@ -45,6 +36,7 @@ export class CustomersComponent implements OnInit {
   public language: any;
   public selectedUser: any;
   public imagePath = 'defaultUser';
+  public loading = true;
   uploadSaveUrl = 'http://localhost:3000/api/uploadImage'; // should represent an actual API endpoint
   uploadRemoveUrl = 'removeUrl'; // should represent an actual API endpoint
   constructor(public service: CustomersService, public storeService: StoreService, public message: MessageService) { }
@@ -53,8 +45,8 @@ export class CustomersComponent implements OnInit {
 
     this.getCustomers();
 
-    if(localStorage.getItem('language') !== null) {
-      this.language = JSON.parse(localStorage.getItem('language'))['grid'];
+    if (localStorage.getItem('language') !== null) {
+      this.language = JSON.parse(localStorage.getItem('language')).grid;
       console.log(this.language);
     }
 
@@ -69,18 +61,19 @@ export class CustomersComponent implements OnInit {
       mess => {
         this.selectedUser = undefined;
       }
-    )
+    );
   }
 
   getCustomers() {
     this.service.getCustomers(localStorage.getItem('storeId'), (val) => {
       console.log(val);
       if (val !== null) {
+        this.currentLoadData = val;
         this.gridData = process(val, this.state);
-        this.currentLoadData = this.gridData.data;
-        console.log(this.gridData);
+        this.loading = false;
       } else {
-        this.gridData['data'] = [];
+        this.gridData[newLocal] = [];
+        this.loading = false;
       }
     });
   }
@@ -90,33 +83,48 @@ export class CustomersComponent implements OnInit {
       console.log(val);
       this.storeLocation = val;
     });
-    this.data = {
-      'id': '',
-      'shortname': '',
-      'firstname': '',
-      'lastname': '',
-      'gender': '',
-      'street': '',
-      'streetnumber': '',
-      'city': '',
-      'telephone': '',
-      'mobile': '',
-      'email': '',
-      'birthday': '',
-      'storeId': ''
-    };
+    this.initializeParams();
     this.customer.open();
+  }
+
+  initializeParams() {
+    this.data = {
+      firstname: '',
+      lastname: '',
+      gender: '',
+      street: '',
+      streetnumber: '',
+      city: '',
+      telephone: '',
+      mobile: '',
+      birthday: '',
+      storeId: ''
+    };
   }
 
   createCustomer(form) {
     console.log(this.data);
     this.data.storeId = localStorage.getItem('storeId');
     this.service.createCustomer(this.data, (val) => {
-      console.log(val);
-      this.data.id = val.id;
-      this.gridData.data.push(this.data);
-      this.customer.close();
-      // form.reset();
+      if (val.success) {
+        this.data.id = val.id;
+        this.gridData.data.push(this.data);
+        this.customer.close();
+        // form.reset();
+        Swal.fire({
+          title: 'Successfull!',
+          text: 'New customer is successfull added!',
+          timer: 3000,
+          type: 'success'
+        });
+      } else {
+        Swal.fire({
+          title: 'Error',
+          text: 'New customer is not added!',
+          timer: 3000,
+          type: 'error'
+        });
+      }
     });
 
   }
@@ -139,19 +147,19 @@ export class CustomersComponent implements OnInit {
     console.log(this.gridData);
   }
 
-  protected pageChange({ skip, take }: PageChangeEvent): void {
-    this.state.skip = skip;
-    this.state.take = take;
+  pageChange(event: PageChangeEvent): void {
+    this.state.skip = event.skip;
     this.loadProducts();
   }
 
-  public loadProducts(): void {
+  loadProducts(): void {
     this.gridData = {
-      data: this.currentLoadData.slice(this.state.skip, this.state.skip + this.state.take),
+      data: this.currentLoadData.slice(
+        this.state.skip,
+        this.state.skip + this.state.take
+      ),
       total: this.currentLoadData.length
     };
-
-    console.log(this.gridData);
   }
 
   previewUser(selectedUser) {

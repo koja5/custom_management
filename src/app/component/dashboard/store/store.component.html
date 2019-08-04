@@ -1,13 +1,18 @@
-<div class="user-options">
-    <button kendoButton [icon]="'user'" (click)="newStore()" [primary]="true">New location</button>
+<div *ngIf="loading" style="height: 90vh;">
+  <div class="spinner loading"></div>
 </div>
 
-<kendo-grid [data]="gridData" [height]="500" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
+<div *ngIf="!loading">
+  <div class="user-options">
+    <button kendoButton [icon]="'k-icib k-i-marker-pin-target'" (click)="newStore()" [primary]="true">New location</button>
+  </div>
+
+  <kendo-grid [data]="gridData" [height]="800" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
     [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="true" [filterable]="true"
     (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)">
     <ng-template kendoGridToolbarTemplate>
-        <button type="button" kendoGridExcelCommand icon="file-excel">Export to Excel</button>
-        <button kendoGridPDFCommand icon="file-pdf">Export to PDF</button>
+      <button type="button" kendoGridExcelCommand icon="file-excel">Export to Excel</button>
+      <button kendoGridPDFCommand icon="file-pdf">Export to PDF</button>
     </ng-template>
     <kendo-grid-column field="storename" title="Store name" width="120">
     </kendo-grid-column>
@@ -20,122 +25,122 @@
     <kendo-grid-column field="telephone" title="Telephone" width="150">
     </kendo-grid-column>
     <kendo-grid-column width="30">
-        <ng-template kendoGridCellTemplate let-dataItem>
-            <button kendoButton [icon]="'k-icon k-i-edit'" (click)="editStore(dataItem)"></button>
-        </ng-template>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <button kendoButton [icon]="'k-icon k-i-edit'" (click)="editStore(dataItem)"></button>
+      </ng-template>
     </kendo-grid-column>
     <kendo-grid-column width="30">
-            <ng-template kendoGridCellTemplate let-dataItem>
-                <button kendoButton [icon]="'k-icon k-i-delete'" (click)="open('dialog', dataItem.id)"></button>
-            </ng-template>
-        </kendo-grid-column>
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <button kendoButton [icon]="'k-icon k-i-delete'" (click)="open('dialog', dataItem.id)"></button>
+      </ng-template>
+    </kendo-grid-column>
     <kendo-grid-pdf fileName="Location.pdf" [allPages]="true" paperSize="A4" [repeatHeaders]="true" [landscape]="true">
-        <kendo-grid-pdf-margin top="2cm" left="1cm" right="1cm" bottom="2cm"></kendo-grid-pdf-margin>
-        <ng-template kendoGridPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
-            <div class="page-template">
-                <div class="header">
-                    <div>Page {{ pageNum }} of {{ totalPages }}</div>
-                </div>
-            </div>
-        </ng-template>
+      <kendo-grid-pdf-margin top="2cm" left="1cm" right="1cm" bottom="2cm"></kendo-grid-pdf-margin>
+      <ng-template kendoGridPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
+        <div class="page-template">
+          <div class="header">
+            <div>Page {{ pageNum }} of {{ totalPages }}</div>
+          </div>
+        </div>
+      </ng-template>
     </kendo-grid-pdf>
 
     <kendo-grid-excel fileName="Location.xlsx" [fetchData]="gridData"></kendo-grid-excel>
-</kendo-grid>
-
+  </kendo-grid>
+</div>
 <modal #store modalClass="modal-md top-margin loggerModal adminModal">
-    <modal-header>
-        <h2>Create new store</h2>
-    </modal-header>
-    <modal-content>
-        <form name="loginForm" class="loginForm" (ngSubmit)="createStore(store)">
-            <div class="form-group">
-                <input type="text" class="email col-md-12 col-xs-12" name="storename" placeholder="Store name"
-                    [(ngModel)]="data.storename" storename.value=''>
-            </div>
-            <div class="form-group">
-                <input type="text" class="email col-md-12 col-xs-12" name="street" placeholder="Street"
-                    [(ngModel)]="data.street" street.value=''>
-            </div>
-            <div class="form-group">
-                <input type="text" class="email col-md-6 col-xs-12" name="zipcode" placeholder="Zipcode"
-                    [(ngModel)]="data.zipcode" zipcode.value=''>
-                <input type="text" class="email col-md-6 col-xs-12" name="place" placeholder="Place"
-                    [(ngModel)]="data.place" place.value=''>
-            </div>
-            <div class="form-group">
-                <input type="text" class="email col-md-4 col-xs-12" name="telephone" placeholder="Telephone"
-                    [(ngModel)]="data.telephone" telephone.value=''>
-                <input type="text" class="email col-md-4 col-xs-12" name="mobile" placeholder="mobile"
-                    [(ngModel)]="data.mobile" mobile.value=''>
-                <input type="email" class="email col-md-4 col-xs-12" name="email" placeholder="Email"
-                    [(ngModel)]="data.email" email.value=''>
-            </div>
-            <div class="form-group">
-                <input type="text" class="email col-md-12 col-xs-12" name="comment" placeholder="Comment"
-                    [(ngModel)]="data.comment" comment.value=''>
-            </div>
+  <modal-header>
+    <h2>Create new store</h2>
+  </modal-header>
+  <modal-content>
+    <form name="loginForm" class="loginForm" (ngSubmit)="createStore(store)" ngNativeValidate>
+      <div class="form-group">
+        <input type="text" class="email col-md-12 col-xs-12" name="storename" placeholder="Store name"
+          [(ngModel)]="data.storename" required>
+      </div>
+      <div class="form-group">
+        <input type="text" class="email col-md-12 col-xs-12" name="street" placeholder="Street"
+          [(ngModel)]="data.street" street.value=''>
+      </div>
+      <div class="form-group">
+        <input type="text" class="email col-md-6 col-xs-12" name="zipcode" placeholder="Zipcode"
+          [(ngModel)]="data.zipcode" zipcode.value=''>
+        <input type="text" class="email col-md-6 col-xs-12" name="place" placeholder="Place" [(ngModel)]="data.place"
+          place.value=''>
+      </div>
+      <div class="form-group">
+        <input type="text" class="email col-md-4 col-xs-12" name="telephone" placeholder="Telephone"
+          [(ngModel)]="data.telephone" telephone.value=''>
+        <input type="text" class="email col-md-4 col-xs-12" name="mobile" placeholder="mobile" [(ngModel)]="data.mobile"
+          mobile.value=''>
+        <input type="email" class="email col-md-4 col-xs-12" name="email" placeholder="Email" [(ngModel)]="data.email"
+          required>
+      </div>
+      <div class="form-group">
+        <input type="text" class="email col-md-12 col-xs-12" name="comment" placeholder="Comment"
+          [(ngModel)]="data.comment" comment.value=''>
+      </div>
 
-            <!-- ./remember-row -->
-            <div class="form-group">
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Create store</button>
-            </div>
-        </form>
+      <!-- ./remember-row -->
+      <div class="form-group">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Create store</button>
+      </div>
+    </form>
 
-    </modal-content>
-    <modal-footer>
-        <button class="btn btn-primary" (click)="store.close()">Close</button>
-    </modal-footer>
+  </modal-content>
+  <modal-footer>
+    <button class="btn btn-primary" (click)="store.close()">Close</button>
+  </modal-footer>
 </modal>
 
 <modal #storeEdit modalClass="modal-md top-margin loggerModal adminModal">
-    <modal-header>
-        <h2>Update store</h2>
-    </modal-header>
-    <modal-content>
-        <form name="loginForm" class="loginForm" (ngSubmit)="updateStore(store)">
-            <div class="form-group">
-                <input type="text" class="email col-md-12 col-xs-12" name="storename" placeholder="Store name"
-                    [(ngModel)]="data.storename" storename.value=''>
-            </div>
-            <div class="form-group">
-                <input type="text" class="email col-md-12 col-xs-12" name="street" placeholder="Street"
-                    [(ngModel)]="data.street" street.value=''>
-            </div>
-            <div class="form-group">
-                <input type="text" class="email col-md-6 col-xs-12" name="zipcode" placeholder="Zipcode"
-                    [(ngModel)]="data.zipcode" zipcode.value=''>
-                <input type="text" class="email col-md-6 col-xs-12" name="place" placeholder="Place"
-                    [(ngModel)]="data.place" place.value=''>
-            </div>
-            <div class="form-group">
-                <input type="text" class="email col-md-4 col-xs-12" name="telephone" placeholder="Telephone"
-                    [(ngModel)]="data.telephone" telephone.value=''>
-                <input type="text" class="email col-md-4 col-xs-12" name="mobile" placeholder="mobile"
-                    [(ngModel)]="data.mobile" mobile.value=''>
-                <input type="email" class="email col-md-4 col-xs-12" name="email" placeholder="Email"
-                    [(ngModel)]="data.email" email.value=''>
-            </div>
-            <div class="form-group">
-                <input type="text" class="email col-md-12 col-xs-12" name="comment" placeholder="Comment"
-                    [(ngModel)]="data.comment" comment.value=''>
-            </div>
+  <modal-header>
+    <h2>Update store</h2>
+  </modal-header>
+  <modal-content>
+    <form name="loginForm" class="loginForm" (ngSubmit)="updateStore(store)">
+      <div class="form-group">
+        <input type="text" class="email col-md-12 col-xs-12" name="storename" placeholder="Store name"
+          [(ngModel)]="data.storename" storename.value=''>
+      </div>
+      <div class="form-group">
+        <input type="text" class="email col-md-12 col-xs-12" name="street" placeholder="Street"
+          [(ngModel)]="data.street" street.value=''>
+      </div>
+      <div class="form-group">
+        <input type="text" class="email col-md-6 col-xs-12" name="zipcode" placeholder="Zipcode"
+          [(ngModel)]="data.zipcode" zipcode.value=''>
+        <input type="text" class="email col-md-6 col-xs-12" name="place" placeholder="Place" [(ngModel)]="data.place"
+          place.value=''>
+      </div>
+      <div class="form-group">
+        <input type="text" class="email col-md-4 col-xs-12" name="telephone" placeholder="Telephone"
+          [(ngModel)]="data.telephone" telephone.value=''>
+        <input type="text" class="email col-md-4 col-xs-12" name="mobile" placeholder="mobile" [(ngModel)]="data.mobile"
+          mobile.value=''>
+        <input type="email" class="email col-md-4 col-xs-12" name="email" placeholder="Email" [(ngModel)]="data.email"
+          email.value=''>
+      </div>
+      <div class="form-group">
+        <input type="text" class="email col-md-12 col-xs-12" name="comment" placeholder="Comment"
+          [(ngModel)]="data.comment" comment.value=''>
+      </div>
 
-            <div class="form-group">
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Update store</button>
-            </div>
-        </form>
+      <div class="form-group">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Update store</button>
+      </div>
+    </form>
 
-    </modal-content>
-    <modal-footer>
-        <button class="btn btn-primary" (click)="storeEdit.close()">Close</button>
-    </modal-footer>
+  </modal-content>
+  <modal-footer>
+    <button class="btn btn-primary" (click)="storeEdit.close()">Close</button>
+  </modal-footer>
 </modal>
 
 <kendo-dialog title="Please confirm" *ngIf="dialogOpened" (close)="close('dialog')" [minWidth]="250" [width]="450">
-    <p style="margin: 30px; text-align: center;">Are you sure you want to continue?</p>
-    <kendo-dialog-actions>
-        <button kendoButton (click)="action('no')">No</button>
-        <button kendoButton (click)="action('yes')" primary="true">Yes</button>
-    </kendo-dialog-actions>
+  <p style="margin: 30px; text-align: center;">Are you sure you want to continue?</p>
+  <kendo-dialog-actions>
+    <button kendoButton (click)="action('no')">No</button>
+    <button kendoButton (click)="action('yes')" primary="true">Yes</button>
+  </kendo-dialog-actions>
 </kendo-dialog>

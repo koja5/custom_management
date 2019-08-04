@@ -31,6 +31,8 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './component/login/login.component';
 import { DashboardComponent } from './component/dashboard/dashboard.component';
 import { TaskComponent } from './component/dashboard/task/task.component';
+import { MyNavigationComponent } from './component/dashboard/task/my-navigation';
+import { MyNavigationViewComponent } from './component/dashboard/task/my-navigation-view';
 
 //service
 import { LoginService } from './service/login.service';
@@ -51,6 +53,8 @@ import { UserDetailsComponent } from './component/dashboard/users/user-details/u
 import { UrlSerializer } from '@angular/router';
 import { StandardUrlSerializer } from './standardUrlSerializer';
 import '@progress/kendo-angular-intl/locales/de/all';
+import { ParametersComponent } from './component/dashboard/parameters/parameters.component';
+import { ParameterItemComponent } from './component/dashboard/parameters/parameter-item/parameter-item.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -65,7 +69,11 @@ import '@progress/kendo-angular-intl/locales/de/all';
     CustomersComponent,
     BaseDateComponent,
     DocumentPreviewComponent,
-    UserDetailsComponent
+    UserDetailsComponent,
+    ParametersComponent,
+    ParameterItemComponent,
+    MyNavigationComponent,
+    MyNavigationViewComponent
   ],
   imports: [
     BrowserModule,
@@ -110,7 +118,7 @@ import '@progress/kendo-angular-intl/locales/de/all';
     },
     StandardUrlSerializer,
     {
-      provide: LOCALE_ID, 
+      provide: LOCALE_ID,
       useValue: 'de'
     }
   ],

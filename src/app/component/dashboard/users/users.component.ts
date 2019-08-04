@@ -7,10 +7,16 @@ import {
   DataStateChangeEvent,
   PageChangeEvent
 } from '@progress/kendo-angular-grid';
+import {
+  FormGroup,
+  FormControl
+} from '@angular/forms';
 import { SortDescriptor, orderBy } from '@progress/kendo-data-query';
 import { StandardUrlSerializer } from '../../../standardUrlSerializer';
 import { UrlTree, Router, UrlSegment, UrlSegmentGroup } from '@angular/router';
 import { throttleTime } from 'rxjs/operators';
+import { UserModel } from '../../../models/user-model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-users',
@@ -18,26 +24,8 @@ import { throttleTime } from 'rxjs/operators';
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
-
   @ViewChild('user') user: Modal;
-  public data = {
-    'id': '',
-    'shortname': '',
-    'password': '',
-    'firstname': '',
-    'lastname': '',
-    'street': '',
-    'zipcode': '',
-    'place': '',
-    'email': '',
-    'telephone': '',
-    'mobile': '',
-    'birthday': '',
-    'incompanysince': '',
-    'type': '',
-    'storeId': '',
-    'active': 0
-  };
+  public data = new UserModel();
   public userType = ['Employee', 'Manager', 'Admin'];
   public gridData: any;
   public currentLoadData: any;
@@ -49,57 +37,82 @@ export class UsersComponent implements OnInit {
   public hideShow = 'password';
   public hideShowEye = 'fa-eye-slash';
   public storeLocation: any;
-  public sort: SortDescriptor[] = [{
-    field: 'id',
-    dir: 'asc'
-  }];
+  public sort: SortDescriptor[] = [
+    {
+      field: 'id',
+      dir: 'asc'
+    }
+  ];
+  public unamePattern = '^[a-z0-9_-]{8,15}$';
+  public passwordPattern = '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&#])[A-Za-z\d$@$!%*?&].{8,}';
+  public emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$';
+  public loading = true;
 
-  constructor(public service: UsersService, public storeService: StoreService, public url: StandardUrlSerializer, public router: Router) { }
+  constructor(
+    public service: UsersService,
+    public storeService: StoreService,
+    public url: StandardUrlSerializer,
+    public router: Router
+  ) { }
 
   ngOnInit() {
-    this.service.getUsers(localStorage.getItem('idUser'), (val) => {
+    this.getUser();
+  }
+
+  getUser() {
+    this.service.getUsers(localStorage.getItem('idUser'), val => {
       console.log(val);
       this.currentLoadData = val;
       this.gridData = process(val, this.state);
-      console.log(this.gridData);
-    })
+      this.loading = false;
+    });
   }
 
   newUser() {
+    this.initializeParams();
     this.storeService.getStore(localStorage.getItem('idUser'), val => {
       console.log(val);
       this.storeLocation = val;
     });
-    this.data = {
-      'id': '',
-      'shortname': '',
-      'password': '',
-      'firstname': '',
-      'lastname': '',
-      'street': '',
-      'zipcode': '',
-      'place': '',
-      'email': '',
-      'telephone': '',
-      'mobile': '',
-      'birthday': '',
-      'incompanysince': '',
-      'type': '',
-      'storeId': '',
-      'active': 0
-    };
     this.user.open();
+  }
+
+  initializeParams() {
+    this.data.firstname = '';
+    this.data.lastname = '';
+    this.data.street = '';
+    this.data.zipcode = '';
+    this.data.place = '';
+    this.data.telephone = '';
+    this.data.mobile = '';
+    this.data.birthday = '';
+    this.data.incompanysince = '';
+    this.data.active = 0;
   }
 
   createUser(form) {
     console.log(this.data);
-    this.service.createUser(this.data, (val) => {
-      console.log(val);
-      this.gridData.data.push(this.data);
-      this.user.close();
+    this.service.createUser(this.data, val => {
+      if (val.success) {
+        console.log(val);
+        this.gridData.data.push(this.data);
+        this.user.close();
+        Swal.fire({
+          title: 'Successfull!',
+          text: 'New user is successfull added!',
+          timer: 3000,
+          type: 'success'
+        });
+      } else {
+        Swal.fire({
+          title: 'Error',
+          text: 'New user is not added!',
+          timer: 3000,
+          type: 'error'
+        });
+      }
       // form.reset();
     });
-
   }
 
   selectionChange(event) {
@@ -108,19 +121,25 @@ export class UsersComponent implements OnInit {
       this.data.type = '3';
     } else if (event === 'Manager') {
       this.data.type = '2';
-    } else {
+    } else if (event === 'Admin') {
       this.data.type = '1';
+    } else {
+      this.data.type = event;
     }
   }
 
   selectionChangeStore(event) {
     console.log(event);
-    this.data.storeId = event.id;
+    if (event !== undefined) {
+      this.data.storeId = event.id;
+    } else {
+      this.data.storeId = event;
+    }
   }
 
   dataStateChange(state: DataStateChangeEvent): void {
     this.state = state;
-    this.gridData = process(this.currentLoadData, this.state)
+    this.gridData = process(this.currentLoadData, this.state);
   }
 
   pageChange(event: PageChangeEvent): void {
@@ -131,20 +150,21 @@ export class UsersComponent implements OnInit {
   sortChange(sort: SortDescriptor[]): void {
     this.sort = sort;
     this.sortChangeData();
-}
+  }
 
   loadProducts(): void {
     this.gridData = {
-        data: this.currentLoadData.slice(this.state.skip, this.state.skip + this.state.take),
-        total: this.currentLoadData.length
+      data: this.currentLoadData.slice(
+        this.state.skip,
+        this.state.skip + this.state.take
+      ),
+      total: this.currentLoadData.length
     };
-
-    console.log(this.gridData);
   }
 
   sortChangeData() {
     this.currentLoadData = {
-      data:  orderBy(this.currentLoadData, this.sort),
+      data: orderBy(this.currentLoadData, this.sort),
       total: this.currentLoadData.length
     };
   }
@@ -152,7 +172,7 @@ export class UsersComponent implements OnInit {
   hideShowPassword() {
     if (this.hideShow === 'password') {
       this.hideShow = 'text';
-      this.hideShowEye = 'fa-eye'
+      this.hideShowEye = 'fa-eye';
     } else {
       this.hideShow = 'password';
       this.hideShowEye = 'fa-eye-slash';
@@ -160,14 +180,12 @@ export class UsersComponent implements OnInit {
   }
 
   serializeUrl(root, queryParams) {
-
     const three = new UrlTree();
     three.root = root;
     three.queryParams = queryParams;
     console.log(three);
 
     console.log(this.url.serialize(three));
-
   }
 
   routing(id) {

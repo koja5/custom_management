@@ -6,5 +6,6 @@ export class ComplaintTherapyModel {
     comment?: string;
     therapies?: string;
     cs: string;
-    state?: string
+    state?: string;
+    em?: string;
 }

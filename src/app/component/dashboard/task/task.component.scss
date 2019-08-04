@@ -1,37 +1,72 @@
 .k-form-field button {
-    background: cornflowerblue;
-    border: none;
-    margin-left: 2%;
+  background: cornflowerblue;
+  border: none;
+  margin-left: 2%;
 }
 
 .zIndex {
-    z-index: -1;
+  z-index: -1;
 }
 
 .noTaskForUser {
-    text-align: center;
-    margin-top: 26vh;
+  text-align: center;
+  margin-top: 26vh;
 }
 
 .noTaskForUser .fa {
-    font-size: 9vh;
+  font-size: 9vh;
 }
 
 .noTaskForUser p {
-    font-size: 4vh;
-    font-weight: bold;
+  font-size: 4vh;
+  font-weight: bold;
 }
 
 .spinner.loading {
-    text-align: center;
-    position: absolute;
-    top: 50%;
-    left: 55%;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 55%;
 }
 
 .fromDate {
-    margin: 1%;
-    font-weight: bold;
-    font-size: 2vh;
+  margin: 1%;
+  font-weight: bold;
+  font-size: 2vh;
 }
 
+.workTime {
+  pointer-events: none !important;
+  opacity: 0.5;
+  color: white;
+  height: 2.7vh;
+  width: 31.5vh;
+  border-radius: 2px;
+}
+
+.none {
+  background: white !important;
+}
+
+.noTime {
+  background: white !important;
+}
+
+.k-nonwork-hour {
+  pointer-events: none !important;
+}
+
+.noWorkTime {
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  left: 30%;
+  width: 50%;
+  text-align: center;
+  color: red;
+  font-weight: bold;
+}
+
+.k-scheduler-toolbar {
+  display: initial !important;
+}
