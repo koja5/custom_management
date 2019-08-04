@@ -478,7 +478,6 @@ export class TaskComponent implements OnInit {
               events: this.events,
               workTime: this.workTime
             };
-            console.log(data);
             this.calendars.push(objectCalendar);
             this.height += this.height;
             console.log(this.calendars);
