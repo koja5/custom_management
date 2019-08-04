@@ -44,18 +44,22 @@ export class MyNavigationComponent extends SchedulerView implements OnInit {
 
     public next(): void {
         console.log('usao sam ovdee!');
-        this.toolbarService.navigate({
+        /*this.toolbarService.navigate({
             type: 'next'
-        });
+        });*/
         const viewMode = {
-            template: this.template,
+            name: 'month',
             title: 'Day View',
-            name: 'day'
+            template: null
         };
 
         this.toolbarService.navigate({
             type: 'view-change',
-            view: viewMode
+            view: {
+            name: 'month',
+            title: 'Day View',
+            template: null
+            }
         });
     }
 
