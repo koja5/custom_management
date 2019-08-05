@@ -111,7 +111,7 @@
               class="{{ zIndex }}"
               [selectedDate]="selectedDate"
               style="height: 88vh;"
-              (save)="saveHandler($event)"
+              (save)="saveHandler($event, item.userId)"
               [resources]="resources"
               (dragEnd)="dragEndHandler($event)"
               (resizeEnd)="resizeEndHandler($event)"

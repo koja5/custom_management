@@ -249,20 +249,33 @@
           <div *ngIf="currentTab === 'workTime'">
             <div id="profile-tab" class="tab-pane active">
               <p *ngIf="noSetWorkTime" class="noSetWorkTime">*For this user work time didn't set!</p>
-              <div class="k-form-field">
-                <span>Color</span>
-                <div>
-                  <kendo-colorpalette [palette]="palette" [value]="selectedColor" [(ngModel)]="selectedColor"
-                    [tileSize]="30">
-                  </kendo-colorpalette>
+              <div class="k-form-field row" style="padding: 2vh 0 2vh 0;">
+                <div class="col-sm-6">
+                  <span>Color</span>
+                  <div>
+                    <kendo-colorpalette [palette]="palette" [value]="selectedColor" [(ngModel)]="selectedColor"
+                      [tileSize]="30">
+                    </kendo-colorpalette>
+                  </div>
+                </div>
+                <div class="col-sm-6" style="padding-top: 2vh;">
+                  <button kendoButton [icon]="'k-icon k-i-undo'" class="col-sm-5"
+                    (click)="previousWorkTime()">Previous</button>
+                  <button kendoButton [icon]="'k-icon k-i-redo'" class="col-sm-5" (click)="nextWorkTime()">Next</button>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-2 col-sm-12 col-form-label">Valid from:</label>
-                <kendo-datepicker class="col-md-6 col-xs-8" name="validDate" placeholder="Valid date"
+                <kendo-datepicker class="col-md-5 col-xs-8" name="validDate" placeholder="Valid date"
                   [(ngModel)]="validDate" validDate.value=''></kendo-datepicker>
-                <button class="col-md-4 col-xs-4 k-edit" kendoButton [icon]="'k-icon k-i-save'"
-                  (click)="newValidDate()">Create time</button>
+                <div>
+                  <button class="col-md-2 col-xs-4 btn-save" kendoButton [icon]="'k-icon k-i-save'"
+                    (click)="newValidDate()">Create time</button>
+                  <button class="col-md-1 col-xs-4 btn-edit" kendoButton [icon]="'k-icon k-i-edit'"
+                    (click)="newValidDate()"></button>
+                  <button class="col-md-1 col-xs-4 btn-delete" kendoButton [icon]="'k-icon k-i-delete'"
+                    (click)="newValidDate()"></button>
+                </div>
               </div>
               <form name="loginForm" class="loginForm" (ngSubmit)="updateWorkTime(workTime)">
                 <div class="form-group row" *ngFor="let item of workTime; let i = index;">

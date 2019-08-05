@@ -288,4 +288,12 @@ export class UserDetailsComponent implements OnInit {
   newValidDate() {
     this.validDate = new Date();
   }
+
+  previousWorkTime() {
+
+  }
+
+  nextWorkTime() {
+    
+  }
 }

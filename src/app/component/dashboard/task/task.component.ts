@@ -300,15 +300,18 @@ export class TaskComponent implements OnInit {
     return len === 0 ? 1 : this.events[this.events.length - 1].id + 1;
   }
 
-  public saveHandler({ sender, formGroup, isNew, dataItem, mode }): void {
+  public saveHandler({ sender, formGroup, isNew, dataItem, mode }, customerId): void {
     console.log(formGroup);
     console.log(sender);
     console.log(dataItem);
-    console.log(mode);
+    console.log(customerId);
     if (formGroup.valid) {
       let formValue = formGroup.value;
       formValue.colorTask = this.selected;
       formValue.telephone = this.telephoneValue;
+      if(this.type !== 3) {
+        formValue.creator_id = customerId;
+      }
       console.log(formValue);
       if (isNew) {
         formValue = this.colorMapToId(formValue);
@@ -542,6 +545,7 @@ export class TaskComponent implements OnInit {
             this.workTime = this.pickWorkTimeToTask(data['workTime']);
             this.pickModelForEvent(data['events']);
             const objectCalendar = {
+              userId: value[i].id,
               name: value[i].shortname,
               events: this.events,
               workTime: this.workTime
