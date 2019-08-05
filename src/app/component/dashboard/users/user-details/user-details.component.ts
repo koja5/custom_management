@@ -29,6 +29,10 @@ export class UserDetailsComponent implements OnInit {
   public selectedColor = '#fe413b';
   public palette: any[] = [];
   public loading = true;
+  public allWorkTime: any;
+  public index = 0;
+  public previousInd = '';
+  public nextInd = 'disabled-button';
 
   constructor(
     public route: ActivatedRoute,
@@ -101,6 +105,7 @@ export class UserDetailsComponent implements OnInit {
           );
         });
         console.log(dataSort[0]);
+        this.allWorkTime = dataSort;
         this.validDate = new Date(dataSort[0].dateChange);
         this.workTime = this.packWorkTimeFromDatabase(dataSort[0]);
         console.log(this.workTime);
@@ -111,7 +116,7 @@ export class UserDetailsComponent implements OnInit {
   updateUser(user) {
     console.log(this.data);
     this.service.updateUser(this.data).subscribe(data => {
-      if(data) {
+      if (data) {
         this.user.close();
       }
     });
@@ -168,10 +173,7 @@ export class UserDetailsComponent implements OnInit {
     return day;
   }
 
-  updateWorkTime(workTime) {
-    console.log(workTime);
-    // workTime = this.convertDayToNumeric(workTime);
-    console.log(this.packWorkTime(workTime));
+  setWorkTimeForUser(workTime) {
     workTime = this.packWorkTime(workTime);
     this.service.setWorkTimeForUser(workTime).subscribe(data => {
       console.log(data);
@@ -290,10 +292,43 @@ export class UserDetailsComponent implements OnInit {
   }
 
   previousWorkTime() {
+    if (this.index < this.allWorkTime.length - 1) {
+      this.index += 1;
+    }
 
+    if (this.index === this.allWorkTime.length - 1) {
+      this.previousInd = 'disabled-button';
+    }
+
+    this.nextInd = '';
+    this.workTime = this.packWorkTimeFromDatabase(this.allWorkTime[this.index]);
+    this.validDate = new Date(this.allWorkTime[this.index].dateChange);
   }
 
   nextWorkTime() {
-    
+    if (this.index > 0) {
+      this.index -= 1;
+    }
+
+    if (this.index === 0) {
+      this.nextInd = 'disabled-button';
+    }
+    this.previousInd = '';
+    this.workTime = this.packWorkTimeFromDatabase(this.allWorkTime[this.index]);
+    this.validDate = new Date(this.allWorkTime[this.index].dateChange);
+  }
+
+  editWorkTime(workTime) {
+
+    const work = this.packWorkTime(workTime);
+    work['id'] = this.allWorkTime[this.index].id;
+    this.service.updateWorkTime(work).subscribe(
+      data => {
+        console.log(data);
+        if (data['success']) {
+          this.user.close();
+        }
+      }
+    )
   }
 }

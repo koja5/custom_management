@@ -18,3 +18,14 @@ span.h {
   top: 50%;
   left: 55%;
 }
+
+.disabled-button {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.disabled-button:hover {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+}

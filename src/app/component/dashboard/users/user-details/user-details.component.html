@@ -259,9 +259,10 @@
                   </div>
                 </div>
                 <div class="col-sm-6" style="padding-top: 2vh;">
-                  <button kendoButton [icon]="'k-icon k-i-undo'" class="col-sm-5"
+                  <button kendoButton [icon]="'k-icon k-i-undo'" class="col-sm-5 {{previousInd}}"
                     (click)="previousWorkTime()">Previous</button>
-                  <button kendoButton [icon]="'k-icon k-i-redo'" class="col-sm-5" (click)="nextWorkTime()">Next</button>
+                  <button kendoButton [icon]="'k-icon k-i-redo'" class="col-sm-5 {{nextInd}}"
+                    (click)="nextWorkTime()">Next</button>
                 </div>
               </div>
               <div class="form-group row">
@@ -272,12 +273,12 @@
                   <button class="col-md-2 col-xs-4 btn-save" kendoButton [icon]="'k-icon k-i-save'"
                     (click)="newValidDate()">Create time</button>
                   <button class="col-md-1 col-xs-4 btn-edit" kendoButton [icon]="'k-icon k-i-edit'"
-                    (click)="newValidDate()"></button>
+                    (click)="editWorkTime(workTime)"></button>
                   <button class="col-md-1 col-xs-4 btn-delete" kendoButton [icon]="'k-icon k-i-delete'"
                     (click)="newValidDate()"></button>
                 </div>
               </div>
-              <form name="loginForm" class="loginForm" (ngSubmit)="updateWorkTime(workTime)">
+              <form name="loginForm" class="loginForm" (ngSubmit)="setWorkTimeForUser(workTime)">
                 <div class="form-group row" *ngFor="let item of workTime; let i = index;">
                   <label for="example-number-input" class="col-sm-2 col-form-label">{{item.day}}</label>
                   <div class="col-sm-10">

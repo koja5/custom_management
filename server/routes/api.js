@@ -1426,6 +1426,50 @@ router.get('/getWorkTimeForUser/:id', function(req, res, next) {
 
 });
 
+router.post('/updateWorkTimeForUser', function(req, res, next) {
+    connection.getConnection(function(err, conn) {
+        console.log(conn);
+        if (err) {
+            res.json({ "code": 100, "status": "Error in connection database" });
+            return;
+        }
+
+        response = {};
+        console.log(req);
+        var date = {
+            'user_id': req.body.user_id,
+            'dateChange': req.body.dateChange,
+            'monday': req.body.monday,
+            'tuesday': req.body.tuesday,
+            'wednesday': req.body.wednesday,
+            'thursday': req.body.thursday,
+            'friday': req.body.friday,
+            'color': req.body.color
+        };
+        console.log(date);
+
+
+        conn.query("update work SET ? where id = '" + req.body.id + "'", date, function(err, rows) {
+            conn.release();
+            if (!err) {
+                if (!err) {
+                    response.id = rows.insertId;
+                    response.success = true;
+                } else {
+                    response.success = false;
+                }
+                res.json(response);
+            } else {
+                res.json({ "code": 100, "status": "Error in connection database" });
+                console.log(err);
+            }
+        });
+        conn.on('error', function(err) {
+            console.log("[mysql error]", err);
+        });
+    });
+});
+
 router.get('/getWorkandTaskForUser/:id', function(req, res, next) {
     connection.getConnection(function(err, conn) {
         if (err) {
