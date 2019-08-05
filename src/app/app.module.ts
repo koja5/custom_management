@@ -31,6 +31,8 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './component/login/login.component';
 import { DashboardComponent } from './component/dashboard/dashboard.component';
 import { TaskComponent } from './component/dashboard/task/task.component';
+import { MyNavigationComponent } from './component/dashboard/task/my-navigation';
+import { MyNavigationViewComponent } from './component/dashboard/task/my-navigation-view';
 
 //service
 import { LoginService } from './service/login.service';
@@ -69,7 +71,9 @@ import { ParameterItemComponent } from './component/dashboard/parameters/paramet
     DocumentPreviewComponent,
     UserDetailsComponent,
     ParametersComponent,
-    ParameterItemComponent
+    ParameterItemComponent,
+    MyNavigationComponent,
+    MyNavigationViewComponent
   ],
   imports: [
     BrowserModule,

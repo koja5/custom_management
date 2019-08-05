@@ -10,6 +10,8 @@ export class MessageService {
   public imageProfile = new Subject<null>();
   public deleteCustomer = new Subject<null>();
   public backToCustomerGrid = new Subject<null>();
+  public viewChange = new Subject<any>();
+  public dateChange = new Subject<any>();
 
   sendTheme(message: string) {
     this.theme.next(message);
@@ -30,11 +32,11 @@ export class MessageService {
   sendImageProfile() {
     this.imageProfile.next();
   }
-  
+
   getImageProfile(): Observable<null> {
     return this.imageProfile.asObservable();
   }
- 
+
   sendDeleteCustomer() {
     this.deleteCustomer.next();
   }
@@ -49,5 +51,21 @@ export class MessageService {
 
   getBackToCustomerGrid() {
     return this.backToCustomerGrid.asObservable();
+  }
+
+  sendViewChange(direction: string) {
+    this.viewChange.next(direction);
+  }
+
+  getViewChange() {
+    return this.viewChange.asObservable();
+  }
+
+  sendDateChange(date: string) {
+    this.dateChange.next(date);
+  }
+
+  getDateChange() {
+    return this.dateChange.asObservable();
   }
 }
