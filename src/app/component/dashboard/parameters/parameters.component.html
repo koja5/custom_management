@@ -5,6 +5,8 @@
     </li>
     <li [ngClass]="currentTab === 'therapy' ? 'active' : ''" class="col-md-2 col-sm-4 col-xs-6"> <a
         (click)="changeTab('therapy')"><span class="fa fa-medkit"></span> Therapy</a>
+    <li [ngClass]="currentTab === 'therapies' ? 'active' : ''" class="col-md-2 col-sm-4 col-xs-6"> <a
+        (click)="changeTab('therapies')"><span class="fa fa-medkit"></span> Therapies</a>
     <li [ngClass]="currentTab === 'recommendation' ? 'active' : ''" class="col-md-2 col-sm-4 col-xs-6"> <a
         (click)="changeTab('recommendation')"><span class="fa fa-check"></span> Recommendation</a>
     <li [ngClass]="currentTab === 'relationship' ? 'active' : ''" class="col-md-2 col-sm-4 col-xs-6"> <a
@@ -27,6 +29,11 @@
   <div *ngIf="currentTab === 'therapy'">
     <div id="profile-tab" class="tab-pane active">
       <app-parameter-item [type]="'Therapy'"></app-parameter-item>
+    </div>
+  </div>
+  <div *ngIf="currentTab === 'therapies'">
+    <div id="profile-tab" class="tab-pane active">
+      <app-parameter-item [type]="'Therapies'"></app-parameter-item>
     </div>
   </div>
   <div *ngIf="currentTab === 'recommendation'">

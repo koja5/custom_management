@@ -86,7 +86,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('type', type);
           localStorage.setItem('idUser', id);
           localStorage.setItem('storeId', storeId);
-          thisObject.router.navigate(['dashboard', {outlets: {'dashboard': ['task']}}]);
+          thisObject.router.navigate(['dashboard', { outlets: { 'dashboard': ['task'] } }]);
         }
         this.loading = false;
       } else {
@@ -110,6 +110,7 @@ export class LoginComponent implements OnInit {
           this.errorInfo = val.info;
         } else {
           this.loginInfo = 'Check your mail and active your account!';
+          this.loginActive();
         }
         // form.reset();
       });

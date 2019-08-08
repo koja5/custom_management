@@ -14,6 +14,7 @@ import { BaseOneModel } from '../../../../models/base-one-model';
 import { BaseTwoModel } from 'src/app/models/base-two-model';
 import { PhysicalModel } from 'src/app/models/physical-model';
 
+
 @Component({
   selector: 'app-base-date',
   templateUrl: './base-date.component.html',
@@ -34,8 +35,8 @@ export class BaseDateComponent implements OnInit {
   public uploader: FileUploader;
   public documents: any;
   public language: any;
-  // public url = 'http://localhost:3000/upload';
-  public url = 'http://www.app-production.eu:3000/upload';
+  public url = 'http://localhost:3000/upload';
+  // public url = 'http://www.app-production.eu:3000/upload';
   public complaintValue: any;
   public complaintData = new ComplaintTherapyModel();
   public gridComplaint: any;
@@ -307,12 +308,12 @@ export class BaseDateComponent implements OnInit {
           type: 'success'
         });
       } else {
-          Swal.fire({
-            title: 'Error',
-            text: 'New therapy is not added!',
-            timer: 3000,
-            type: 'error'
-          });
+        Swal.fire({
+          title: 'Error',
+          text: 'New therapy is not added!',
+          timer: 3000,
+          type: 'error'
+        });
       }
     });
   }

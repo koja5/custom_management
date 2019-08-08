@@ -4,7 +4,8 @@
 
 <div *ngIf="!loading">
   <div class="user-options">
-    <button kendoButton [icon]="'k-icib k-i-marker-pin-target'" (click)="newStore()" [primary]="true">New location</button>
+    <button kendoButton [icon]="'k-icib k-i-marker-pin-target'" (click)="newStore()" [primary]="true">New
+      location</button>
   </div>
 
   <kendo-grid [data]="gridData" [height]="800" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
@@ -80,6 +81,12 @@
         <input type="text" class="email col-md-12 col-xs-12" name="comment" placeholder="Comment"
           [(ngModel)]="data.comment" comment.value=''>
       </div>
+      <div class="form-group">
+        <kendo-timepicker [(value)]="data.start_work"></kendo-timepicker>
+        <kendo-timepicker [(value)]="data.end_work"></kendo-timepicker>
+        <kendo-timepicker [(value)]="data.time_duration"></kendo-timepicker>
+      </div>
+
 
       <!-- ./remember-row -->
       <div class="form-group">

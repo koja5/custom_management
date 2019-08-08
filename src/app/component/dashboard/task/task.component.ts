@@ -84,6 +84,8 @@ export class TaskComponent implements OnInit {
   public dateEvent: string;
   public selectedViewIndex = 0;
   public currentDate = new Date();
+  public startWork = '08:00';
+  public endWork = '22:00';
 
   constructor(
     public formBuilder: FormBuilder,
@@ -313,7 +315,7 @@ export class TaskComponent implements OnInit {
       let formValue = formGroup.value;
       formValue.colorTask = this.selected;
       formValue.telephone = this.telephoneValue;
-      if(this.type !== 3) {
+      if (this.type !== 3) {
         formValue.creator_id = customerId;
       }
       console.log(formValue);
@@ -577,7 +579,7 @@ export class TaskComponent implements OnInit {
     console.log(event);
     this.loading = true;
     if (event !== undefined) {
-      this.service.getTasksForStore(event).subscribe(data => {
+      this.service.getTasksForStore(this.selectedStoreId).subscribe(data => {
         this.events = [];
         this.calendars = [];
         for (let i = 0; i < data.length; i++) {
@@ -590,7 +592,10 @@ export class TaskComponent implements OnInit {
           events: this.events,
           workTime: undefined
         };
-        console.log(objectCalendar);
+
+        this.startWork = this.getStartEndTimeForStore(this.store, this.selectedStoreId).start_work;
+        this.endWork = this.getStartEndTimeForStore(this.store, this.selectedStoreId).end_work;
+
         this.calendars.push(objectCalendar);
         this.loading = false;
       });
@@ -601,6 +606,14 @@ export class TaskComponent implements OnInit {
     }
 
     sessionStorage.setItem('selectedStore', event);
+  }
+
+  getStartEndTimeForStore(data, id) {
+    for(let i = 0; i < data.length; i++) {
+      if(data[i].id === id) {
+        return { start_work: data[i].start_work, end_work: data[i].end_work };
+      }
+    }
   }
 
   getUserInCompany(storeId) {

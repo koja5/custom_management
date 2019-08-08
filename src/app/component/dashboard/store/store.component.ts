@@ -61,12 +61,17 @@ export class StoreComponent implements OnInit {
       telephone: '',
       mobile: '',
       comment: '',
+      start_work: '',
+      end_work: '',
+      time_duration: '',
       superadmin: this.idUser
     };
   }
 
   createStore(form) {
-    console.log(this.data);
+    this.data.start_work = new Date(this.data.start_work).getHours() + ':' + new Date(this.data.start_work).getMinutes();
+    this.data.end_work = new Date(this.data.end_work).getHours() + ':' + new Date(this.data.end_work).getMinutes();
+    this.data.time_duration = new Date(this.data.time_duration).getHours() + ':' + new Date(this.data.time_duration).getMinutes();
     this.service.createStore(this.data, val => {
       if (val.success) {
         console.log(val);

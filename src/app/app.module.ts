@@ -1,6 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID } from '@angular/core';
 
+import { registerLocaleData } from '@angular/common';
+import localeDE from '@angular/common/locales/de';
+registerLocaleData(localeDE);
+
 import { AppRoutingModule, routingComponents } from './app-routing.module';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
@@ -116,11 +120,7 @@ import { ParameterItemComponent } from './component/dashboard/parameters/paramet
       provide: UrlSerializer,
       useClass: StandardUrlSerializer
     },
-    StandardUrlSerializer,
-    {
-      provide: LOCALE_ID,
-      useValue: 'de'
-    }
+    StandardUrlSerializer
   ],
   bootstrap: [AppComponent]
 })
