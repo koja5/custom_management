@@ -1046,7 +1046,52 @@ router.get('/getDocuments/:id', function (req, res, next) {
       return;
     });
   });
+});
 
+router.get('/deleteDocumentFromDatabase/:id', (req, res, next) => {
+  try {
+    var reqObj = req.params.id;
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error('SQL Connection error: ', err);
+        res.json({
+          "code": 100,
+          "status": "Error in connection database"
+        });
+        return next(err);
+      } else {
+        conn.query("delete from documents where id = '" + reqObj + "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              console.error("SQL error:", err);
+              res.json({
+                "code": 100,
+                "status": "Error in connection database"
+              });
+              return next(err);
+            } else {
+              res.json(true);
+              res.end();
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    console.error("Internal error: " + ex);
+    return next(ex);
+  }
+});
+
+router.post('/deleteDocument', function (req, res, next) {
+  fs.unlinkSync(req.body.path, function (err) {
+    if (err) {
+      res(false);
+    } else {
+      res(true);
+    }
+  });
 });
 
 router.post('/download', function (req, res, next) {
@@ -1847,8 +1892,10 @@ router.post('/addComplaint', function (req, res, next) {
       'employee_name': req.body.employee_name,
       'date': req.body.date,
       'complaint': req.body.complaint,
+      'complaint_title': req.body.complaint_title,
       'comment': req.body.comment,
       'therapies': req.body.therapies,
+      'therapies_title': req.body.therapies_title,
       'cs': req.body.cs
     };
     console.log(date);
@@ -1875,6 +1922,89 @@ router.post('/addComplaint', function (req, res, next) {
       console.log("[mysql error]", err);
     });
   });
+});
+
+router.post('/updateComplaint', function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    console.log(conn);
+    if (err) {
+      res.json({
+        "code": 100,
+        "status": "Error in connection database"
+      });
+      return;
+    }
+
+    var response = null;
+    var data = {
+      'id': req.body.id,
+      'customer_id': req.body.customer_id,
+      'employee_name': req.body.employee_name,
+      'date': req.body.date,
+      'complaint': req.body.complaint,
+      'complaint_title': req.body.complaint_title,
+      'comment': req.body.comment,
+      'therapies': req.body.therapies,
+      'therapies_title': req.body.therapies_title,
+      'cs': req.body.cs
+    };
+    console.log(data);
+    conn.query("update complaint set ? where id = '" + req.body.id + "'", data,
+      function (err, rows, fields) {
+        conn.release();
+        if (err) {
+          console.error("SQL error:", err);
+          res.json({
+            "code": 100,
+            "status": "Error in connection database"
+          });
+          return next(err);
+        } else {
+          response = true;
+          res.json(response);
+        }
+      }
+    );
+    conn.on('error', function (err) {
+      console.log("[mysql error]", err);
+    });
+  });
+});
+
+router.get('/deleteComplaint/:id', (req, res, next) => {
+  try {
+    var reqObj = req.params.id;
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error('SQL Connection error: ', err);
+        res.json({
+          "code": 100,
+          "status": "Error in connection database"
+        });
+        return next(err);
+      } else {
+        conn.query("delete from complaint where id = '" + reqObj + "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              console.error("SQL error:", err);
+              res.json({
+                "code": 100,
+                "status": "Error in connection database"
+              });
+              return next(err);
+            } else {
+              res.json(true);
+              res.end();
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    console.error("Internal error: " + ex);
+    return next(ex);
+  }
 });
 
 router.get('/getComplaintForCustomer/:id', function (req, res, next) {
@@ -1930,7 +2060,9 @@ router.post('/addTherapy', function (req, res, next) {
       'customer_id': req.body.customer_id,
       'date': req.body.date,
       'complaint': req.body.complaint,
-      'therapy': req.body.therapies,
+      'complaint_title': req.body.complaint_title,
+      'therapies': req.body.therapies,
+      'therapies_title': req.body.therapies_title,
       'comment': req.body.comment,
       'cs': req.body.cs,
       'state': req.body.state,
@@ -1960,6 +2092,90 @@ router.post('/addTherapy', function (req, res, next) {
       console.log("[mysql error]", err);
     });
   });
+});
+
+router.post('/updateTherapy', function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    console.log(conn);
+    if (err) {
+      res.json({
+        "code": 100,
+        "status": "Error in connection database"
+      });
+      return;
+    }
+
+    var response = null;
+    var data = {
+      'id': req.body.id,
+      'customer_id': req.body.customer_id,
+      'date': req.body.date,
+      'complaint': req.body.complaint,
+      'complaint_title': req.body.complaint_title,
+      'therapies': req.body.therapies,
+      'therapies_title': req.body.therapies_title,
+      'comment': req.body.comment,
+      'cs': req.body.cs,
+      'state': req.body.state,
+      'em': req.body.em
+    };
+    console.log(data);
+    conn.query("update therapy set ? where id = '" + req.body.id + "'", data,
+      function (err, rows, fields) {
+        conn.release();
+        if (err) {
+          console.error("SQL error:", err);
+          res.json({
+            "code": 100,
+            "status": "Error in connection database"
+          });
+          return next(err);
+        } else {
+          response = true;
+          res.json(response);
+        }
+      }
+    );
+    conn.on('error', function (err) {
+      console.log("[mysql error]", err);
+    });
+  });
+});
+
+router.get('/deleteTherapy/:id', (req, res, next) => {
+  try {
+    var reqObj = req.params.id;
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error('SQL Connection error: ', err);
+        res.json({
+          "code": 100,
+          "status": "Error in connection database"
+        });
+        return next(err);
+      } else {
+        conn.query("delete from therapy where id = '" + reqObj + "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              console.error("SQL error:", err);
+              res.json({
+                "code": 100,
+                "status": "Error in connection database"
+              });
+              return next(err);
+            } else {
+              res.json(true);
+              res.end();
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    console.error("Internal error: " + ex);
+    return next(ex);
+  }
 });
 
 router.get('/getTherapyForCustomer/:id', function (req, res, next) {

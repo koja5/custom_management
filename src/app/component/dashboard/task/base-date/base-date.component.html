@@ -195,15 +195,26 @@
           <kendo-grid [data]="gridComplaint" [height]="200" [resizable]="true" [loading]="loadingGridComplaint">
             <kendo-grid-column field="date" title="Date" width="120">
             </kendo-grid-column>
-            <kendo-grid-column field="complaint" title="Complaint" width="200">
+            <kendo-grid-column field="complaint_title" title="Complaint" width="200">
             </kendo-grid-column>
             <kendo-grid-column field="comment" title="Comment" width="150">
             </kendo-grid-column>
-            <kendo-grid-column field="therapies" title="Therapies" width="120">
+            <kendo-grid-column field="therapies_title" title="Therapies" width="120">
             </kendo-grid-column>
             <kendo-grid-column field="employee_name" title="Doctor" width="100">
             </kendo-grid-column>
             <kendo-grid-column field="cs" title="CS" width="60">
+            </kendo-grid-column>
+            <kendo-grid-column width="60">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <button kendoButton [icon]="'k-icon k-i-edit'" (click)="editComplaint(dataItem)"></button>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column width="60">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <button kendoButton [icon]="'k-icon k-i-delete'"
+                  (click)="open('dialogComplaint', dataItem.id)"></button>
+              </ng-template>
             </kendo-grid-column>
           </kendo-grid>
         </div>
@@ -215,9 +226,9 @@
           <kendo-grid [data]="gridTherapy" [height]="200" [resizable]="true" [loading]="loadingGridTherapy">
             <kendo-grid-column field="date" title="Date" width="120" [format]="{ date: 'short' }">
             </kendo-grid-column>
-            <kendo-grid-column field="complaint" title="Complaint" width="150">
+            <kendo-grid-column field="complaint_title" title="Complaint" width="150">
             </kendo-grid-column>
-            <kendo-grid-column field="therapy" title="Therapy" width="120">
+            <kendo-grid-column field="therapies_title" title="Therapy" width="120">
             </kendo-grid-column>
             <kendo-grid-column field="comment" title="Comment" width="150">
             </kendo-grid-column>
@@ -226,6 +237,16 @@
             <kendo-grid-column field="state" title="State" width="60">
             </kendo-grid-column>
             <kendo-grid-column field="em" title="Em" width="100">
+            </kendo-grid-column>
+            <kendo-grid-column width="60">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <button kendoButton [icon]="'k-icon k-i-edit'" (click)="editTherapy(dataItem)"></button>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column width="60">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <button kendoButton [icon]="'k-icon k-i-delete'" (click)="open('dialogTherapy', dataItem.id)"></button>
+              </ng-template>
             </kendo-grid-column>
           </kendo-grid>
         </div>
@@ -255,12 +276,18 @@
                   (click)="downloadFile(dataItem.filename)"></button>
               </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column field="active" title="Preview" width="60">
+            <kendo-grid-column width="60">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <button kendoButton [icon]="'k-icon k-i-delete'" (click)="open('dialogDocument', dataItem)"></button>
+              </ng-template>
+            </kendo-grid-column>
+            <!--<kendo-grid-column field="active" title="Preview" width="60">
               <ng-template kendoGridCellTemplate let-dataItem>
                 <button kendoButton [icon]="'k-icon k-i-preview'" class='k-preview'
                   (click)="previewDocument(dataItem)"></button>
               </ng-template>
-            </kendo-grid-column>
+            </kendo-grid-column>-->
+
           </kendo-grid>
         </div>
 
@@ -271,6 +298,33 @@
       <kendo-dialog-actions>
         <button kendoButton (click)="action('no')">No</button>
         <button kendoButton (click)="action('yes')" primary="true">Yes</button>
+      </kendo-dialog-actions>
+    </kendo-dialog>
+
+    <kendo-dialog title="Please confirm" *ngIf="dialogComplaintOpened" (close)="close('dialogComplaint')"
+      [minWidth]="250" [width]="450">
+      <p style="margin: 30px; text-align: center;">Are you sure you want to continue?</p>
+      <kendo-dialog-actions>
+        <button kendoButton (click)="deleteComplaint('no')">No</button>
+        <button kendoButton (click)="deleteComplaint('yes')" primary="true">Yes</button>
+      </kendo-dialog-actions>
+    </kendo-dialog>
+
+    <kendo-dialog title="Please confirm" *ngIf="dialogTherapyOpened" (close)="close('dialogTherapy')" [minWidth]="250"
+      [width]="450">
+      <p style="margin: 30px; text-align: center;">Are you sure you want to continue?</p>
+      <kendo-dialog-actions>
+        <button kendoButton (click)="deleteTherapy('no')">No</button>
+        <button kendoButton (click)="deleteTherapy('yes')" primary="true">Yes</button>
+      </kendo-dialog-actions>
+    </kendo-dialog>
+
+    <kendo-dialog title="Please confirm" *ngIf="dialogDocumentOpened" (close)="close('dialogDocument')" [minWidth]="250"
+      [width]="450">
+      <p style="margin: 30px; text-align: center;">Are you sure you want to continue?</p>
+      <kendo-dialog-actions>
+        <button kendoButton (click)="deleteDocument('no')">No</button>
+        <button kendoButton (click)="deleteDocument('yes')" primary="true">Yes</button>
       </kendo-dialog-actions>
     </kendo-dialog>
 
@@ -303,8 +357,6 @@
                 <div class="form-group">
                   <div class="panel-body">
                     <div class="text-center vd_info-parent col-md-4 col-xs-12">
-                      <img *ngIf="data.gender === ''" alt="example image" style="width: 190px;"
-                        src="../../../../assets/images/users/{{imagePath}}.png" class="rounded-circle">
                       <img *ngIf="data.gender !== '' && data.gender === 'male'" alt="example image"
                         style="width: 190px;" src="../../../../assets/images/users/male-patient.png"
                         class="rounded-circle">
@@ -599,13 +651,16 @@
 
     <modal #complaint modalClass="modal-md top-margin loggerModal adminModal">
       <modal-header>
-        <h2>{{language.addComplaint}}</h2>
+        <h2 *ngIf="operationMode === 'add'">{{language.addComplaint}}</h2>
+        <h2 *ngIf="operationMode === 'edit'">{{language.updateComplaint}}</h2>
       </modal-header>
       <modal-content>
-        <form name="loginForm" class="loginForm" (ngSubmit)="addComplaint(complaint)" ngNativeValidate>
+        <form name="loginForm" class="loginForm"
+          (ngSubmit)="operationMode === 'add' ? addComplaint(complaint) : updateComplaint(complaint)" ngNativeValidate>
           <div class="row">
             <kendo-multiselect class="col-md-12 col-xs-12" [data]="complaintValue" [textField]="'title'"
-              [valueField]="'id'" (valueChange)="selectComplaint($event)" [placeholder]="language.choiceComplaint">
+              [valueField]="'id'" [(ngModel)]="selectedComplaint" name="complaint"
+              [placeholder]="language.choiceComplaint" [valuePrimitive]="true">
             </kendo-multiselect>
           </div>
           <div class="form-group">
@@ -614,7 +669,8 @@
           </div>
           <div class="row">
             <kendo-multiselect class="col-md-12 col-xs-12" [data]="therapyValue" [textField]="'title'"
-              [valueField]="'id'" (valueChange)="selectTherapies($event)" [placeholder]="language.choiceTherapy">
+              [valueField]="'id'" [(ngModel)]="selectedTherapies" name="therapies"
+              [placeholder]="language.choiceTherapy" [valuePrimitive]="true">
             </kendo-multiselect>
           </div>
           <div class="form-group">
@@ -622,8 +678,10 @@
               cs.value=''>
           </div>
           <div class="form-group">
-            <button class="btn btn-lg btn-primary btn-block" type="submit"
-              [disabled]="complaintData.complaint === '' || complaintData.therapies === ''">{{language.addComplaint}}</button>
+            <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-primary btn-block" type="submit"
+              [disabled]="selectedComplaint === '' || selectedTherapies === ''">{{language.addComplaint}}</button>
+            <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-primary btn-block" type="submit"
+              [disabled]="complaintData.complaint === '' || complaintData.therapies === ''">{{language.updateComplaint}}</button>
           </div>
         </form>
 
@@ -635,18 +693,22 @@
 
     <modal #therapy modalClass="modal-md top-margin loggerModal adminModal">
       <modal-header>
-        <h2>{{language.addTherapy}}</h2>
+        <h2 *ngIf="operationMode === 'add'">{{language.addTherapy}}</h2>
+        <h2 *ngIf="operationMode === 'edit'">{{language.updateTherapy}}</h2>
       </modal-header>
       <modal-content>
-        <form name="loginForm" class="loginForm" (ngSubmit)="addTherapy(therapy)">
+        <form name="loginForm" class="loginForm"
+          (ngSubmit)="operationMode === 'add' ? addTherapy(therapy) : updateTherapy(therapy)">
           <div class="row">
             <kendo-multiselect class="col-md-12 col-xs-12" [data]="complaintValue" [textField]="'title'"
-              [valueField]="'id'" (valueChange)="selectComplaint($event)" [placeholder]="language.choiceComplaint">
+              [valueField]="'id'" [(ngModel)]="selectedComplaint" name="complaint"
+              [placeholder]="language.choiceComplaint" [valuePrimitive]="true">
             </kendo-multiselect>
           </div>
           <div class="row">
             <kendo-multiselect class="col-md-12 col-xs-12" [data]="therapyValue" [textField]="'title'"
-              [valueField]="'id'" (valueChange)="selectTherapies($event)" [placeholder]="language.choiceTherapy">
+              [valueField]="'id'" [(ngModel)]="selectedTherapies" name="therapies"
+              [placeholder]="language.choiceTherapy" [valuePrimitive]="true">
             </kendo-multiselect>
           </div>
           <div class="form-group">
@@ -658,8 +720,8 @@
               cs.value=''>
           </div>
           <div class="row">
-            <kendo-combobox class="col-md-12 col-xs-12" [data]="stateValue" (valueChange)="selectedState($event)"
-              [placeholder]="language.choiceState">
+            <kendo-combobox class="col-md-12 col-xs-12" [data]="stateValue" [(ngModel)]="complaintData.state"
+              name="state" [placeholder]="language.choiceState">
             </kendo-combobox>
           </div>
           <div class="form-group">
@@ -667,8 +729,10 @@
               cs.value=''>
           </div>
           <div class="form-group">
-            <button class="btn btn-lg btn-primary btn-block" type="submit"
-              [disabled]="complaintData.complaint === '' || complaintData.therapies === '' || complaintData.state === undefined">{{language.addTherapy}}</button>
+            <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-primary btn-block" type="submit"
+              [disabled]="selectedComplaint === '' || selectedTherapies === '' || complaintData.state === undefined">{{language.addTherapy}}</button>
+            <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-primary btn-block" type="submit"
+              [disabled]="selectedComplaint === '' || selectedTherapies === '' || complaintData.state === undefined">{{language.updateTherapy}}</button>
           </div>
         </form>
 

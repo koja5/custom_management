@@ -57,6 +57,16 @@ export class CustomersService {
       .subscribe(val => callback(val));
   }
 
+  deleteDocument(path) {
+    return this.http.post('api/deleteDocument', path)
+      .map(res => res);
+  }
+
+  deleteDocumentFromDatabase(id) {
+    return this.http.get('/api/deleteDocumentFromDatabase/' + id)
+      .map(res => res);
+  }
+
   getCustomerWithId(id) {
     return this.http.get('/api/getCustomerWithId/' + id)
       .map(res => res);
@@ -67,6 +77,16 @@ export class CustomersService {
       .map(res => res);
   }
 
+  updateComplaint(data) {
+    return this.http.post('/api/updateComplaint', data)
+      .map(res => res);
+  }
+
+  deleteComplaint(id) {
+    return this.http.get('/api/deleteComplaint/' + id)
+      .map(res => res);
+  }
+
   getComplaintForCustomer(id) {
     return this.http.get('/api/getComplaintForCustomer/' + id)
       .map(res => res);
@@ -74,6 +94,16 @@ export class CustomersService {
 
   addTherapy(data) {
     return this.http.post('/api/addTherapy', data)
+      .map(res => res);
+  }
+
+  updateTherapy(data) {
+    return this.http.post('/api/updateTherapy', data)
+      .map(res => res);
+  }
+
+  deleteTherapy(id) {
+    return this.http.get('/api/deleteTherapy/' + id)
       .map(res => res);
   }
 

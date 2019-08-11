@@ -499,7 +499,6 @@ export class TaskComponent implements OnInit {
   getTaskForSelectedUsers(value) {
     this.loading = true;
     console.log(value);
-    console.log('usao sam ovde!');
     this.calendars = [];
     this.height = 92;
     if (value.length === 0) {
@@ -520,30 +519,6 @@ export class TaskComponent implements OnInit {
     } else {
       this.calendars = [];
       for (let i = 0; i < value.length; i++) {
-        /*this.service.getTasksForUser(value[i].id).subscribe(data => {
-          console.log(data);
-          for (let i = 0; i < data.length; i++) {
-            data[i].start = new Date(data[i].start);
-            data[i].end = new Date(data[i].end);
-            this.events.push(data[i]);
-          }
-          this.service.getWorkTimeForUser(value[i].id).subscribe(
-            data => {
-              console.log(data);
-              this.workTime.push(this.pickWorkTimeToTask(data));
-              console.log(this.workTime);
-              const objectCalendar = {
-                name: value[i].shortname,
-                events: this.events,
-                workTime: this.workTime
-              };
-              console.log(objectCalendar);
-              this.calendars.push(objectCalendar);
-              this.height += this.height;
-              console.log(this.calendars);
-              this.loading = false;
-            });
-        });*/
         this.service.getWorkandTasksForUser(value[i].id).subscribe(
           data => {
             console.log(data);
@@ -609,8 +584,8 @@ export class TaskComponent implements OnInit {
   }
 
   getStartEndTimeForStore(data, id) {
-    for(let i = 0; i < data.length; i++) {
-      if(data[i].id === id) {
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].id === id) {
         return { start_work: data[i].start_work, end_work: data[i].end_work };
       }
     }

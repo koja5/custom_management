@@ -3,8 +3,10 @@ export class ComplaintTherapyModel {
     employee_name: string;
     date?: Date;
     complaint?: string;
+    complaint_title?: string;
     comment?: string;
     therapies?: string;
+    therapies_title?: string;
     cs: string;
     state?: string;
     em?: string;

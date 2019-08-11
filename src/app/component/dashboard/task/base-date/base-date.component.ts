@@ -32,6 +32,9 @@ export class BaseDateComponent implements OnInit {
   public maleImg = '../../../../../assets/images/users/male-patient.png';
   public femaleImg = '../../../../../assets/images/users/female-patient.png';
   public dialogOpened = false;
+  public dialogComplaintOpened = false;
+  public dialogTherapyOpened = false;
+  public dialogDocumentOpened = false;
   public uploader: FileUploader;
   public documents: any;
   public language: any;
@@ -54,6 +57,10 @@ export class BaseDateComponent implements OnInit {
   public doctorsList: any;
   public selectedRecommendation: any;
   public operationMode = 'add';
+  public selectedComplaint: any;
+  public selectedTherapies: any;
+  public currentComplaint: any;
+  public selectedForDelete: string;
 
   constructor(
     public router: ActivatedRoute,
@@ -71,24 +78,54 @@ export class BaseDateComponent implements OnInit {
 
     this.language = JSON.parse(localStorage.getItem('language'))['user'];
 
+    this.getParameters();
     this.getDocument();
     this.getComplaint();
     this.getTherapy();
   }
 
+  getParameters() {
+    this.service.getParameters('Complaint').subscribe(
+      data => {
+        this.complaintValue = data;
+      }
+    );
+
+    this.service.getParameters('Therapy').subscribe(
+      data => {
+        console.log(data);
+        this.therapyValue = data;
+      }
+    );
+
+    this.stateValue = JSON.parse(localStorage.getItem('language'))['state'];
+  }
+
   getComplaint() {
     this['loadingGridComplaint'] = true;
     this.service.getComplaintForCustomer(this.data.id).subscribe(data => {
-      this.gridComplaint = this.formatingData(data);
+      this.gridComplaint = data;
       this['loadingGridComplaint'] = false;
       this.loading = false;
     });
   }
 
+  convertStringToArray(data) {
+    let arrayData = [];
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].complaint.split(';') !== undefined) {
+        arrayData.push(data[i].complaint.split(';').map(Number));
+      } else {
+        arrayData.push(Number(data[i].complaint));
+      }
+    }
+    return arrayData;
+  }
+
   getTherapy() {
     this['loadingGridTherapy'] = true;
     this.service.getTherapyForCustomer(this.data.id).subscribe(data => {
-      this.gridTherapy = this.formatingData(data);
+      this.gridTherapy = data;
       this['loadingGridTherapy'] = false;
       this.loading = false;
     });
@@ -108,16 +145,40 @@ export class BaseDateComponent implements OnInit {
     const datePipe = new DatePipe('en-US');
     for (let i = 0; i < data['length']; i++) {
       data[i].date = datePipe.transform(data[i].date, 'dd/MM/yyyy');
+      const stringToArray = [];
+      if (data[i].complaint.split(';') !== undefined) {
+        stringToArray.push(data[i].complaint.split(';').map(Number));
+      } else {
+        stringToArray.push(Number(data[i].complaint));
+      }
+      let complaintString = '';
+      for (let j = 0; j < stringToArray.length; j++) {
+        complaintString += this.getTitle(this.complaintValue, stringToArray[j]);
+      }
+      data[i].complaint = complaintString;
     }
     return data;
+  }
+
+  getTitle(data, idArray) {
+    let value = '';
+    for (let i = 0; i < idArray.length; i++) {
+      for (let j = 0; j < data.length; j++) {
+        if (data[j].id === idArray[i]) {
+          value += data[j].title + ';';
+        }
+      }
+    }
+    return value;
   }
 
   public close(component) {
     this[component + 'Opened'] = false;
   }
 
-  open(component) {
+  open(component, id) {
     this[component + 'Opened'] = true;
+    this.selectedForDelete = id;
   }
 
   action(event) {
@@ -132,6 +193,22 @@ export class BaseDateComponent implements OnInit {
     } else {
       this.dialogOpened = false;
     }
+  }
+
+  deleteComplaint(event) {
+    console.log(event);
+    if (event === 'yes') {
+      console.log(this.data);
+      this.service.deleteComplaint(this.selectedForDelete).subscribe(
+        data => {
+          console.log(data);
+          if (data) {
+            this.getComplaint();
+          }
+        }
+      );
+    }
+    this.dialogComplaintOpened = false;
   }
 
   editCustomer() {
@@ -167,6 +244,29 @@ export class BaseDateComponent implements OnInit {
       .subscribe(data => saveAs(data, filename), error => console.error(error));
   }
 
+  deleteDocument(event) {
+    if (event === 'yes') {
+      console.log(this.data);
+      const pathSplit = this.selectedForDelete['path'].replace(new RegExp('\\\\', 'gi'), '/');
+      const object = {
+        path: this.selectedForDelete['path'].replace(new RegExp('\\\\', 'gi'), '/')
+      };
+      this.service.deleteDocument(object).subscribe(
+        data => {
+          console.log(data);
+        }
+      );
+      this.service.deleteDocumentFromDatabase(this.selectedForDelete['id']).subscribe(
+        data => {
+          if (data) {
+            this.getDocument();
+          }
+        }
+      );
+    }
+    this.dialogDocumentOpened = false;
+  }
+
   previewDocument(document) {
     console.log(document);
   }
@@ -179,6 +279,7 @@ export class BaseDateComponent implements OnInit {
     this.complaintData = new ComplaintTherapyModel();
     this.complaintData.complaint = '';
     this.complaintData.therapies = '';
+    this.operationMode = 'add';
     // this.complaintValue = JSON.parse(localStorage.getItem('language'))['complaint'];
     // this.therapyValue = JSON.parse(localStorage.getItem('language'))['therapy'];
     this.service.getParameters('Therapy').subscribe(
@@ -199,6 +300,7 @@ export class BaseDateComponent implements OnInit {
     this.complaintData = new ComplaintTherapyModel();
     this.complaintData.complaint = '';
     this.complaintData.therapies = '';
+    this.operationMode = 'add';
     /*this.complaintValue = JSON.parse(localStorage.getItem('language'))[
       'complaint'
     ];
@@ -214,11 +316,10 @@ export class BaseDateComponent implements OnInit {
         this.complaintValue = data;
       }
     );
-    this.stateValue = JSON.parse(localStorage.getItem('language'))['state'];
     this.therapy.open();
   }
 
-  selectComplaint(event) {
+  /*selectComplaint(event) {
     console.log(event);
     this.complaintData.complaint = '';
     event.forEach(element => {
@@ -234,16 +335,22 @@ export class BaseDateComponent implements OnInit {
       console.log(element);
       this.complaintData.therapies += element.title + ';';
     });
-  }
+  }*/
 
   selectedState(event) {
     this.complaintData.state = event;
   }
 
-  addComplaint(complaint) {
+  addComplaint(event) {
     this.complaintData.customer_id = this.data.id;
     this.complaintData.date = new Date();
-    this.initializeParams();
+
+    this.complaintData.complaint = this.pickToModel(this.selectedComplaint, this.complaintValue).value;
+    this.complaintData.complaint_title = this.pickToModel(this.selectedComplaint, this.complaintValue).title;
+
+    this.complaintData.therapies = this.pickToModel(this.selectedTherapies, this.therapyValue).value;
+    this.complaintData.therapies_title = this.pickToModel(this.selectedTherapies, this.therapyValue).title;
+
     if (localStorage.getItem('username') === null) {
       this.usersService.getMe(localStorage.getItem('idUser'), val => {
         console.log(val);
@@ -291,12 +398,69 @@ export class BaseDateComponent implements OnInit {
           });
         }
       });
+      this.selectedComplaint = [];
+      this.selectedComplaint = [];
     }
   }
+
+  pickToModel(data: any, titleValue) {
+    let value = '';
+    for (let i = 0; i < data.length; i++) {
+      value += data[i] + ';';
+    }
+    value = value.substring(0, value.length - 1);
+
+    let stringToArray = [];
+    if (value.split(';') !== undefined) {
+      stringToArray = value.split(';').map(Number);
+    } else {
+      stringToArray.push(Number(value));
+    }
+    const title = this.getTitle(titleValue, stringToArray);
+    return { value, title };
+  }
+
+  updateComplaint(complaint) {
+    this.complaintData.complaint = this.pickToModel(this.selectedComplaint, this.complaintValue).value;
+    this.complaintData.complaint_title = this.pickToModel(this.selectedComplaint, this.complaintValue).title;
+
+    this.complaintData.therapies = this.pickToModel(this.selectedTherapies, this.therapyValue).value;
+    this.complaintData.therapies_title = this.pickToModel(this.selectedTherapies, this.therapyValue).title;
+
+    this.service.updateComplaint(this.complaintData).subscribe(data => {
+      if (data) {
+        this.getComplaint();
+        this.complaint.close();
+        Swal.fire({
+          title: 'Successfull!',
+          text: 'Complaint is successfull updated!',
+          timer: 3000,
+          type: 'success'
+        });
+      } else {
+        Swal.fire({
+          title: 'Error',
+          text: 'Complaint is not updated!',
+          timer: 3000,
+          type: 'error'
+        });
+      }
+      this.selectedComplaint = [];
+      this.selectedTherapies = [];
+    });
+  }
+
   addTherapy(therapy) {
     this.complaintData.customer_id = this.data.id;
     this.complaintData.date = new Date();
-    this.initializeParams();
+    // this.initializeParams();
+
+    this.complaintData.complaint = this.pickToModel(this.selectedComplaint, this.complaintValue).value;
+    this.complaintData.complaint_title = this.pickToModel(this.selectedComplaint, this.complaintValue).title;
+
+    this.complaintData.therapies = this.pickToModel(this.selectedTherapies, this.therapyValue).value;
+    this.complaintData.therapies_title = this.pickToModel(this.selectedTherapies, this.therapyValue).title;
+
     this.service.addTherapy(this.complaintData).subscribe(data => {
       if (data) {
         this.getTherapy();
@@ -315,7 +479,70 @@ export class BaseDateComponent implements OnInit {
           type: 'error'
         });
       }
+      this.selectedComplaint = [];
+      this.selectedTherapies = [];
     });
+  }
+
+  updateTherapy(event) {
+    this.complaintData.complaint = this.pickToModel(this.selectedComplaint, this.complaintValue).value;
+    this.complaintData.complaint_title = this.pickToModel(this.selectedComplaint, this.complaintValue).title;
+
+    this.complaintData.therapies = this.pickToModel(this.selectedTherapies, this.therapyValue).value;
+    this.complaintData.therapies_title = this.pickToModel(this.selectedTherapies, this.therapyValue).title;
+
+    this.service.updateTherapy(this.complaintData).subscribe(data => {
+      if (data) {
+        this.getTherapy();
+        this.therapy.close();
+        Swal.fire({
+          title: 'Successfull!',
+          text: 'Therapy is successfull updated!',
+          timer: 3000,
+          type: 'success'
+        });
+      } else {
+        Swal.fire({
+          title: 'Error',
+          text: 'Therapy is not updated!',
+          timer: 3000,
+          type: 'error'
+        });
+      }
+      this.selectedComplaint = [];
+      this.selectedTherapies = [];
+    });
+  }
+
+  editTherapy(event) {
+    this.complaintData = event;
+    if (event.complaint.split(';') !== undefined) {
+      this.selectedComplaint = event.complaint.split(';').map(Number);
+    } else {
+      this.selectedComplaint = Number(event.complaint);
+    }
+    if (event.therapies.split(';') !== undefined) {
+      this.selectedTherapies = event.therapies.split(';').map(Number);
+    } else {
+      this.selectedTherapies = Number(event.therapies);
+    }
+    this.operationMode = 'edit';
+    this.therapy.open();
+  }
+
+  deleteTherapy(event) {
+    if (event === 'yes') {
+      console.log(this.data);
+      this.service.deleteTherapy(this.selectedForDelete).subscribe(
+        data => {
+          console.log(data);
+          if (data) {
+            this.getTherapy();
+          }
+        }
+      );
+    }
+    this.dialogTherapyOpened = false;
   }
 
   initializeParams() {
@@ -493,6 +720,22 @@ export class BaseDateComponent implements OnInit {
     if (this.baseData === undefined) {
       this.initializeBaseOneData();
     }
+  }
+
+  editComplaint(event) {
+    this.complaintData = event;
+    if (event.complaint.split(';') !== undefined) {
+      this.selectedComplaint = event.complaint.split(';').map(Number);
+    } else {
+      this.selectedComplaint = Number(event.complaint);
+    }
+    if (event.therapies.split(';') !== undefined) {
+      this.selectedTherapies = event.therapies.split(';').map(Number);
+    } else {
+      this.selectedTherapies = Number(event.therapies);
+    }
+    this.operationMode = 'edit';
+    this.complaint.open();
   }
 
 }
