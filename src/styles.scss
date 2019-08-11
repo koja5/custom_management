@@ -3719,3 +3719,12 @@ input {
     background: #098df4;
     margin: 0px 2px;
 }
+
+.k-scheduler-times .k-scheduler-times-all-day {
+    height: auto !important;
+}
+
+.k-scheduler-header-wrap>div {
+    height: 35px !important;
+    border-bottom: 1px solid #e8e8e8 !important;
+}

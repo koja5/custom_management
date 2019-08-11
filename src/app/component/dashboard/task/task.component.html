@@ -191,7 +191,15 @@
                   {{ event.title }}
                 </div>
               </ng-template>
-  
+
+              <ng-template kendoSchedulerAllDayEventTemplate let-event="event"
+              let-resources="resources">
+              <div style="width: 100vh !important;">
+                {{ event.title }} test
+              </div>
+              </ng-template>
+
+
               <kendo-scheduler-work-week-view></kendo-scheduler-work-week-view>
   
               <kendo-scheduler-multi-day-view [numberOfDays]="3">
@@ -358,6 +366,13 @@
               <div style="width: 100vh !important;">
                 {{ event.title }}
               </div>
+            </ng-template>
+
+            <ng-template kendoSchedulerAllDayEventTemplate let-event="event"
+            let-resources="resources">
+            <div style="width: 100vh !important;">
+              {{ event.title }} - test
+            </div>
             </ng-template>
   
             <kendo-scheduler-work-week-view> </kendo-scheduler-work-week-view>
