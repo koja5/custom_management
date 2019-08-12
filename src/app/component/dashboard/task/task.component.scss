@@ -39,8 +39,10 @@
   pointer-events: none !important;
   opacity: 0.5;
   color: white;
-  height: 2.7vh;
-  width: 31.5vh;
+  /*height: 2.7vh;
+  width: 31.5vh;*/
+  height: 19px;
+  width: 136px;
   border-radius: 2px;
 }
 
@@ -69,4 +71,14 @@
 
 .k-scheduler-toolbar {
   display: initial !important;
+}
+
+.calendar {
+  height: 76vh;
+  overflow: auto;
+}
+
+.tasks {
+  overflow: hidden;
+  height: 91.5vh;
 }
