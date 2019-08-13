@@ -86,6 +86,7 @@ export class TaskComponent implements OnInit {
   public currentDate = new Date();
   public startWork = '08:00';
   public endWork = '22:00';
+  public timeDuration = '60';
 
   constructor(
     public formBuilder: FormBuilder,
@@ -518,7 +519,9 @@ export class TaskComponent implements OnInit {
       });
     } else {
       this.calendars = [];
+      let count = 1;
       for (let i = 0; i < value.length; i++) {
+        // if (count) {
         this.service.getWorkandTasksForUser(value[i].id).subscribe(
           data => {
             console.log(data);
@@ -533,11 +536,22 @@ export class TaskComponent implements OnInit {
             };
             this.calendars.push(objectCalendar);
             this.height += this.height;
+            this.loading = false;
             this.splitterSize = this.splitterSizeFull / value.length;
             console.log(this.splitterSize);
-            this.loading = false;
             console.log(this.calendars);
           });
+        /*} else {
+          i--;
+        }
+        count = 0;
+        if (i + 1 === value.length) {
+          this.loading = false;
+        }
+
+        setTimeout(() => {
+          count = 1;
+        }, 100);*/
       }
     }
   }
@@ -551,7 +565,7 @@ export class TaskComponent implements OnInit {
   }
 
   selectedStore(event) {
-    console.log(event);
+    console.log(isNumber(event));
     this.loading = true;
     if (event !== undefined) {
       this.service.getTasksForStore(this.selectedStoreId).subscribe(data => {
@@ -567,16 +581,24 @@ export class TaskComponent implements OnInit {
           events: this.events,
           workTime: undefined
         };
-
-        this.startWork = this.getStartEndTimeForStore(this.store, this.selectedStoreId).start_work;
-        this.endWork = this.getStartEndTimeForStore(this.store, this.selectedStoreId).end_work;
-
+        if (!isNaN(event)) {
+          this.startWork = this.getStartEndTimeForStore(this.store, this.selectedStoreId).start_work;
+          this.endWork = this.getStartEndTimeForStore(this.store, this.selectedStoreId).end_work;
+          this.timeDuration = this.getStartEndTimeForStore(this.store, this.selectedStoreId).time_duration;
+        } else {
+          this.startWork = '08:00';
+          this.endWork = '22:00';
+          this.timeDuration = '60';
+        }
         this.calendars.push(objectCalendar);
         this.loading = false;
       });
 
       this.getUserInCompany(event);
     } else {
+      this.startWork = '08:00';
+      this.endWork = '22:00';
+      this.timeDuration = '60';
       this.loading = false;
     }
 
@@ -586,7 +608,8 @@ export class TaskComponent implements OnInit {
   getStartEndTimeForStore(data, id) {
     for (let i = 0; i < data.length; i++) {
       if (data[i].id === id) {
-        return { start_work: data[i].start_work, end_work: data[i].end_work };
+        // tslint:disable-next-line: max-line-length
+        return { start_work: new Date(data[i].start_work).getHours() + ':' + new Date(data[i].start_work).getMinutes(), end_work: new Date(data[i].end_work).getHours() + ':' + new Date(data[i].end_work).getMinutes(), time_duration: data[i].time_duration };
       }
     }
   }

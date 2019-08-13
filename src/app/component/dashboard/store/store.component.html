@@ -82,9 +82,10 @@
           [(ngModel)]="data.comment" comment.value=''>
       </div>
       <div class="form-group">
-        <kendo-timepicker [(value)]="data.start_work"></kendo-timepicker>
-        <kendo-timepicker [(value)]="data.end_work"></kendo-timepicker>
-        <kendo-timepicker [(value)]="data.time_duration"></kendo-timepicker>
+        <kendo-timepicker [(value)]="start_work"></kendo-timepicker>
+        <kendo-timepicker [(value)]="end_work"></kendo-timepicker>
+        <input type="text" class="email col-md-4 col-xs-12" name="time_duraiton" placeholder="Time duration"
+          [(ngModel)]="data.time_duration">
       </div>
 
 
@@ -131,6 +132,12 @@
       <div class="form-group">
         <input type="text" class="email col-md-12 col-xs-12" name="comment" placeholder="Comment"
           [(ngModel)]="data.comment" comment.value=''>
+      </div>
+      <div class="form-group">
+        <kendo-timepicker [(value)]="start_work"></kendo-timepicker>
+        <kendo-timepicker [(value)]="end_work"></kendo-timepicker>
+        <input type="text" class="email col-md-4 col-xs-12" name="time_duraiton" placeholder="Time duration"
+          [(ngModel)]="data.time_duration">
       </div>
 
       <div class="form-group">

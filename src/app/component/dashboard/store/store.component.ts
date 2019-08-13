@@ -29,6 +29,9 @@ export class StoreComponent implements OnInit {
   public idUser: string;
   public loading = true;
   public language: any;
+  public start_work: Date;
+  public end_work: Date;
+  public time_duration: string;
 
   constructor(public service: StoreService) { }
 
@@ -69,9 +72,8 @@ export class StoreComponent implements OnInit {
   }
 
   createStore(form) {
-    this.data.start_work = new Date(this.data.start_work).getHours() + ':' + new Date(this.data.start_work).getMinutes();
-    this.data.end_work = new Date(this.data.end_work).getHours() + ':' + new Date(this.data.end_work).getMinutes();
-    this.data.time_duration = new Date(this.data.time_duration).getHours() + ':' + new Date(this.data.time_duration).getMinutes();
+    this.data.start_work = this.start_work.toString();
+    this.data.end_work = this.end_work.toString()
     this.service.createStore(this.data, val => {
       if (val.success) {
         console.log(val);
@@ -132,6 +134,8 @@ export class StoreComponent implements OnInit {
   editStore(store) {
     console.log(store);
     this.data = store;
+    this.start_work = new Date(this.data.start_work);
+    this.end_work = new Date(this.data.end_work);
     this.storeEdit.open();
   }
 

@@ -74,11 +74,15 @@
 }
 
 .calendar {
-  height: 76vh;
+  height: 72vh;
   overflow: auto;
 }
 
 .tasks {
   overflow: hidden;
-  height: 91.5vh;
+  height: 89vh;
+}
+
+.k-scheduler-content {
+  overflow: hidden;
 }
