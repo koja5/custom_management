@@ -519,7 +519,7 @@ export class TaskComponent implements OnInit {
       });
     } else {
       this.calendars = [];
-      let count = 1;
+      let index = 0;
       for (let i = 0; i < value.length; i++) {
         // if (count) {
         this.service.getWorkandTasksForUser(value[i].id).subscribe(
@@ -529,17 +529,20 @@ export class TaskComponent implements OnInit {
             this.workTime = this.pickWorkTimeToTask(data['workTime']);
             this.pickModelForEvent(data['events']);
             const objectCalendar = {
-              userId: value[i].id,
-              name: value[i].shortname,
+              userId: value[index].id,
+              name: value[index].shortname,
               events: this.events,
               workTime: this.workTime
             };
             this.calendars.push(objectCalendar);
             this.height += this.height;
-            this.loading = false;
+            index++;
             this.splitterSize = this.splitterSizeFull / value.length;
             console.log(this.splitterSize);
             console.log(this.calendars);
+            if (value.length === index) {
+              this.loading = false;
+            }
           });
         /*} else {
           i--;

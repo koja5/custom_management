@@ -33,6 +33,7 @@ export class UserDetailsComponent implements OnInit {
   public index = 0;
   public previousInd = '';
   public nextInd = 'disabled-button';
+  public updateSetIndicator = 0;
 
   constructor(
     public route: ActivatedRoute,
@@ -292,6 +293,7 @@ export class UserDetailsComponent implements OnInit {
   }
 
   previousWorkTime() {
+    this.updateSetIndicator = 0;
     if (this.index < this.allWorkTime.length - 1) {
       this.index += 1;
     }
@@ -306,6 +308,7 @@ export class UserDetailsComponent implements OnInit {
   }
 
   nextWorkTime() {
+    this.updateSetIndicator = 0;
     if (this.index > 0) {
       this.index -= 1;
     }
@@ -318,7 +321,7 @@ export class UserDetailsComponent implements OnInit {
     this.validDate = new Date(this.allWorkTime[this.index].dateChange);
   }
 
-  editWorkTime(workTime) {
+  updateWorkTimeForUser(workTime) {
 
     const work = this.packWorkTime(workTime);
     work['id'] = this.allWorkTime[this.index].id;
@@ -330,5 +333,16 @@ export class UserDetailsComponent implements OnInit {
         }
       }
     )
+  }
+
+  deleteWorkTime(workTime) {
+    const id = this.allWorkTime[this.index].id;
+
+
+
+  }
+
+  createNewWorkTime() {
+    this.updateSetIndicator = 1;
   }
 }

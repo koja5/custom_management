@@ -114,9 +114,9 @@
               [(selectedViewIndex)]="selectedViewIndex" [kendoSchedulerBinding]="item.events"
               [kendoSchedulerReactiveEditing]="createFormGroup" class="{{ zIndex }}" [selectedDate]="selectedDate"
               scrollTime="08:00" startTime="{{startWork}}" endTime="{{endWork}}" workDayStart="{{startWork}}"
-              workDayEnd="{{endWork}}" style="height: 100%;" (save)="saveHandler($event, item.userId)"
-              [resources]="resources" (dragEnd)="dragEndHandler($event)" (resizeEnd)="resizeEndHandler($event)"
-              (remove)="removeHandler($event)" (change)="changeHandler($event)">
+              workDayEnd="{{endWork}}" (save)="saveHandler($event, item.userId)" [resources]="resources"
+              (dragEnd)="dragEndHandler($event)" (resizeEnd)="resizeEndHandler($event)" (remove)="removeHandler($event)"
+              (change)="changeHandler($event)">
 
               <ng-template kendoSchedulerToolbarTemplate let-selectedDate="selectedDate">
                 <my-navigation [selectedDate]="selectedDate">
@@ -246,7 +246,7 @@
             [kendoSchedulerReactiveEditing]="createFormGroup" [(selectedViewIndex)]="selectedViewIndex"
             class="{{ zIndex }}" [selectedDate]="selectedDate" scrollTime="08:00" startTime="{{startWork}}"
             endTime="{{endWork}}" workDayStart="{{startWork}}" workDayEnd="{{endWork}}" style="height: 100%;"
-            (save)="saveHandler($event)" [resources]="resources" (dragEnd)="dragEndHandler($event)"
+            (save)="saveHandler($event)" style="height: 100%" [resources]="resources" (dragEnd)="dragEndHandler($event)"
             (resizeEnd)="resizeEndHandler($event)" (remove)="removeHandler($event)">
             <ng-template kendoSchedulerToolbarTemplate let-selectedDate="selectedDate">
               <my-navigation [selectedDate]="selectedDate">

@@ -272,13 +272,12 @@
                 <div>
                   <button class="col-md-2 col-xs-4 btn-save" kendoButton [icon]="'k-icon k-i-save'"
                     (click)="newValidDate()">Create time</button>
-                  <button class="col-md-1 col-xs-4 btn-edit" kendoButton [icon]="'k-icon k-i-edit'"
-                    (click)="editWorkTime(workTime)"></button>
                   <button class="col-md-1 col-xs-4 btn-delete" kendoButton [icon]="'k-icon k-i-delete'"
-                    (click)="newValidDate()"></button>
+                    (click)="deleteWorkTime(workTime)"></button>
                 </div>
               </div>
-              <form name="loginForm" class="loginForm" (ngSubmit)="setWorkTimeForUser(workTime)">
+              <form name="loginForm" class="loginForm"
+                (ngSubmit)="updateSetIndicator === 1 ? setWorkTimeForUser(workTime) : updateWorkTimeForUser(workTime)">
                 <div class="form-group row" *ngFor="let item of workTime; let i = index;">
                   <label for="example-number-input" class="col-sm-2 col-form-label">{{item.day}}</label>
                   <div class="col-sm-10">
@@ -298,7 +297,10 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <button class="btn btn-lg btn-primary btn-block" type="submit">Update work time</button>
+                  <button *ngIf="updateSetIndicator === 1" class="btn btn-lg btn-primary btn-block" type="submit">Set
+                    work time</button>
+                  <button *ngIf="updateSetIndicator === 0" class="btn btn-lg btn-primary btn-block" type="submit">Update
+                    work time</button>
                 </div>
               </form>
             </div>

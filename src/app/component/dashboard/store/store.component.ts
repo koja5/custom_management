@@ -99,6 +99,8 @@ export class StoreComponent implements OnInit {
 
   updateStore(store) {
     console.log(this.data);
+    this.data.start_work = this.start_work.toString();
+    this.data.end_work = this.end_work.toString();
     this.service.editStore(this.data).subscribe(data => {
       console.log(data);
       if (data) {

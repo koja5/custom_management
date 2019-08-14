@@ -53,6 +53,7 @@ export class ParameterItemComponent implements OnInit {
     if (this.type === 'Therapies') {
       this.service.getTherapy().subscribe(
         data => {
+          console.log(data);
           this.therapyList = data;
         }
       )
@@ -123,7 +124,6 @@ export class ParameterItemComponent implements OnInit {
     } else if (this.type === 'Therapies') {
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
-        therapy_id: new FormControl(dataItem.therapy_id),
         sequence: new FormControl(dataItem.sequence)
       });
       this.selectedTherapy = dataItem.therapy_id;
@@ -177,6 +177,7 @@ export class ParameterItemComponent implements OnInit {
   }
 
   selectionTherapy(event) {
+    console.log(event);
     this.selectedTherapy = event.id;
   }
 
