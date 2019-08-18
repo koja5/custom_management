@@ -6,7 +6,7 @@
   <div *ngIf="selectedUser === undefined">
     <div class="user-options">
       <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">{{language.newCustomer}}</button>
-      <input type="file" name="files[]" multiple id="jsonFile" accept=".xlsx" (change)="onFileChange($event)" />
+      <!--<input type="file" name="files[]" multiple id="jsonFile" accept=".xlsx" (change)="onFileChange($event)" />-->
     </div>
 
     <kendo-grid *ngIf="language !== undefined" [data]="gridData" [height]="800" [resizable]="true"
