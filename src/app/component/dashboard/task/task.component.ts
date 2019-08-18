@@ -568,7 +568,8 @@ export class TaskComponent implements OnInit {
   }
 
   selectedStore(event) {
-    console.log(isNumber(event));
+    this.value = [];
+    sessionStorage.removeItem('selectedUser');
     this.loading = true;
     if (event !== undefined) {
       this.service.getTasksForStore(this.selectedStoreId).subscribe(data => {
@@ -654,6 +655,7 @@ export class TaskComponent implements OnInit {
   }
 
   dateFormat(date, i, j) {
+    console.log(i, j);
     if (
       // tslint:disable-next-line: max-line-length
       new Date(this.calendars[i].workTime[j].change) <= new Date(date) && (j + 1 <= (this.calendars[i].workTime.length - 1) ? new Date(date) < new Date(this.calendars[i].workTime[j + 1].change) : true) &&

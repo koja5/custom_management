@@ -33,7 +33,8 @@ export class LoginComponent implements OnInit {
     'email': '',
     'telephone': '',
     'mobile': '',
-    'comment': ''
+    'comment': '',
+    'storeId': 0
   };
   // public data: LoginData;
 

@@ -63,18 +63,16 @@ router.post('/signUp', function (req, res, next) {
       return;
     }
 
-    var firstname = req.body.firstname;
-    var lastname = req.body.lastname;
     var email = req.body.email;
-    var user = req.body.username;
     var shortname = req.body.shortname;
     var pass = sha1(req.body.password);
 
     test = {};
     var podaci = {
-      'id': '',
-      'shortname': shortname,
       'password': pass,
+      'shortname': shortname,
+      'firstname': '',
+      'lastname': '',
       'street': '',
       'zipcode': '',
       'place': '',
@@ -84,8 +82,9 @@ router.post('/signUp', function (req, res, next) {
       'birthday': '',
       'incompanysince': '',
       'type': 0,
-      'storeId': '',
-      'active': 0
+      'storeId': 0,
+      'active': 0,
+      'img': ''
     };
     console.log(podaci);
 
@@ -3845,5 +3844,43 @@ router.post('/updatePhysicalIllness', function (req, res, next) {
 
 // END PHYSICAL_ILLNESS
 
+router.post('/insertFromExcel', function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        "code": 100,
+        "status": "Error in connection database"
+      });
+      return;
+    }
+
+    var response = null;
+    console.log(req.body);
+    res.send(req.body);
+    var values = '';
+    for (let i = 0; i < req.body.length; i++) {
+      values += "(" + req.body[i].username.toString() + "," + req.body[i].firstname + "," + req.body[i].lastname + "," + req.body[i].telephone + "," + req.body[i].email + "),";
+    }
+    values = values.substr(0, values.length - 1) + ';';
+    console.log(values);
+    conn.query("insert into test(username, firstname, lastname, telephone, email) values " + values, function (err, rows, fields) {
+      conn.release();
+      if (err) {
+        console.error("SQL error:", err);
+        res.json({
+          "code": 100,
+          "status": "Error in connection database"
+        });
+        return next(err);
+      } else {
+        response = true;
+        res.json(response);
+      }
+    });
+    conn.on('error', function (err) {
+      console.log("[mysql error]", err);
+    });
+  });
+});
 
 module.exports = router;

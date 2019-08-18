@@ -83,6 +83,8 @@
   height: 89vh;
 }
 
-.k-scheduler-content {
-  overflow: hidden;
+@media (max-height: 768px) {
+  .k-dialog-wrapper .k-dialog {
+    margin-top: -30vh !important;
+  }
 }

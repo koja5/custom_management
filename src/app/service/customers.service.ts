@@ -36,9 +36,16 @@ export class CustomersService {
   }
 
   uploadImage(data, callback) {
-    return this.http.post('http:/localhost:3000/api/uploadImage', data)
+    // const uploadSaveUrl = 'http://localhost:3000/api/uploadImage';
+    const uploadSaveUrl = 'http://www.app-production.eu:3000/uploadImage';
+    return this.http.post(uploadSaveUrl, data)
       .map(res => res)
       .subscribe(val => callback(val));
+  }
+
+  insertMultiData(data) {
+    return this.http.post('/api/insertFromExcel', data)
+      .map(res => res);
   }
 
   downloadFile(file: string) {

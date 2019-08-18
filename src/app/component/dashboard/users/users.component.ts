@@ -163,10 +163,7 @@ export class UsersComponent implements OnInit {
   }
 
   sortChangeData() {
-    this.currentLoadData = {
-      data: orderBy(this.currentLoadData, this.sort),
-      total: this.currentLoadData.length
-    };
+    this.currentLoadData = orderBy(this.currentLoadData, this.sort);
   }
 
   hideShowPassword() {

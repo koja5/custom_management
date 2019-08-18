@@ -53,10 +53,9 @@ export class ParameterItemComponent implements OnInit {
     if (this.type === 'Therapies') {
       this.service.getTherapy().subscribe(
         data => {
-          console.log(data);
           this.therapyList = data;
         }
-      )
+      );
     }
 
     this.view = this.service.pipe(map(data => {
@@ -203,9 +202,6 @@ export class ParameterItemComponent implements OnInit {
   }
 
   sortChangeData() {
-    this.currentLoadData = {
-      data: orderBy(this.currentLoadData, this.gridState.sort),
-      total: this.currentLoadData.length
-    };
+    this.currentLoadData = orderBy(this.currentLoadData, this.gridState.sort);
   }
 }

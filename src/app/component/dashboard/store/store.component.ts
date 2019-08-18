@@ -104,7 +104,21 @@ export class StoreComponent implements OnInit {
     this.service.editStore(this.data).subscribe(data => {
       console.log(data);
       if (data) {
+        this.getStore();
+        Swal.fire({
+          title: 'Successfull update',
+          text: 'Store data is successfull update!',
+          timer: 3000,
+          type: 'success'
+        });
         this.storeEdit.close();
+      } else {
+        Swal.fire({
+          title: 'Error update',
+          text: 'Store data is not successfull update!',
+          timer: 3000,
+          type: 'error'
+        });
       }
     });
   }

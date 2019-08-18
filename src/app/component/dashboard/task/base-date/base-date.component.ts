@@ -74,6 +74,7 @@ export class BaseDateComponent implements OnInit {
     this.uploader = new FileUploader({
       url: this.url,
       additionalParameter: { comments: this.data.id }
+
     });
 
     this.language = JSON.parse(localStorage.getItem('language'))['user'];
@@ -276,6 +277,8 @@ export class BaseDateComponent implements OnInit {
   }
 
   openComplaintModal() {
+    this.selectedComplaint = [];
+    this.selectedTherapies = [];
     this.complaintData = new ComplaintTherapyModel();
     this.complaintData.complaint = '';
     this.complaintData.therapies = '';
@@ -297,6 +300,9 @@ export class BaseDateComponent implements OnInit {
   }
 
   openTherapyModal() {
+    this.selectedComplaint = [];
+    this.selectedTherapies = [];
+    this.complaintData.state = null;
     this.complaintData = new ComplaintTherapyModel();
     this.complaintData.complaint = '';
     this.complaintData.therapies = '';
@@ -343,7 +349,7 @@ export class BaseDateComponent implements OnInit {
 
   addComplaint(event) {
     this.complaintData.customer_id = this.data.id;
-    this.complaintData.date = new Date();
+    this.complaintData.date = new Date().getDay() + '.' + new Date().getMonth() + '.' + new Date().getFullYear() + '.';
 
     this.complaintData.complaint = this.pickToModel(this.selectedComplaint, this.complaintValue).value;
     this.complaintData.complaint_title = this.pickToModel(this.selectedComplaint, this.complaintValue).title;
@@ -452,7 +458,7 @@ export class BaseDateComponent implements OnInit {
 
   addTherapy(therapy) {
     this.complaintData.customer_id = this.data.id;
-    this.complaintData.date = new Date();
+    this.complaintData.date = new Date().getDay() + '.' + new Date().getMonth() + '.' + new Date().getFullYear() + '.';
     // this.initializeParams();
 
     this.complaintData.complaint = this.pickToModel(this.selectedComplaint, this.complaintValue).value;
@@ -736,6 +742,11 @@ export class BaseDateComponent implements OnInit {
     }
     this.operationMode = 'edit';
     this.complaint.open();
+  }
+
+  closeUploadModal() {
+    this.getDocument();
+    this.upload.close();
   }
 
 }

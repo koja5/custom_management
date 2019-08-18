@@ -11,6 +11,8 @@ import {
 import { MessageService } from '../../../service/message.service';
 import { CustomerModel } from '../../../models/customer-model';
 import Swal from 'sweetalert2';
+import * as GC from '@grapecity/spread-sheets';
+import * as Excel from '@grapecity/spread-excelio';
 
 const newLocal = 'data';
 @Component({
@@ -37,9 +39,14 @@ export class CustomersComponent implements OnInit {
   public selectedUser: any;
   public imagePath = 'defaultUser';
   public loading = true;
-  uploadSaveUrl = 'http://localhost:3000/api/uploadImage'; // should represent an actual API endpoint
-  uploadRemoveUrl = 'removeUrl'; // should represent an actual API endpoint
-  constructor(public service: CustomersService, public storeService: StoreService, public message: MessageService) { }
+  // public uploadSaveUrl = 'http://localhost:3000/api/uploadImage'; // should represent an actual API endpoint
+  public uploadSaveUrl = 'http://www.app-production.eu:3000/uploadImage';
+  public uploadRemoveUrl = 'removeUrl'; // should represent an actual API endpoint
+  private spread: GC.Spread.Sheets.Workbook;
+  private excelIO;
+  constructor(public service: CustomersService, public storeService: StoreService, public message: MessageService) {
+    this.excelIO = new Excel.IO();
+  }
 
   ngOnInit() {
 
@@ -169,6 +176,46 @@ export class CustomersComponent implements OnInit {
 
   uploadEventHandler(e: UploadEvent) {
     console.log(e);
+  }
+
+  onFileChange(args) {
+    const self = this;
+    const file = args.srcElement && args.srcElement.files && args.srcElement.files[0];
+    if (file) {
+      self.excelIO.open(file, (json) => {
+        console.log(json);
+        this.gridData = null;
+        setTimeout(() => {
+          this.gridData = this.xlsxToJson(json);
+          this.service.insertMultiData(this.gridData).subscribe(
+            data => {
+              console.log(data);
+            }
+          )
+        }, 50);
+      }, (error) => {
+        alert('load fail');
+      });
+    }
+  }
+
+  xlsxToJson(data) {
+    const sheets = data.sheets.Sheet1.data.dataTable;
+    const rowCount = data.sheets.Sheet1.rowCount;
+    const columnCount = data.sheets.Sheet1.columnCount;
+    console.log(sheets, rowCount, columnCount);
+    let object = {};
+    for (let i = 0; i < columnCount; i++) {
+      object[sheets[0][i].value] = '';
+    }
+    const dataArray = [];
+    for (let i = 1; i < rowCount; i++) {
+      for (let j = 0; j < columnCount; j++) {
+        object[sheets[0][j].value] = sheets[i][j].value;
+      }
+      dataArray.push(object);
+    }
+    return dataArray;
   }
 
 }
