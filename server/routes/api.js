@@ -549,8 +549,10 @@ router.get('/getUsers/:id', function (req, res, next) {
       return;
     }
     var id = req.params.id;
-    conn.query("SELECT u.id, u.username, u.firstname, u.lastname, u.email, u.street, u.active from users u join store s on u.storeId = s.id where s.superadmin = ?", [id], function (err, rows) {
+    console.log(id);
+    conn.query("SELECT u.id, u.shortname, u.firstname, u.lastname, u.email, u.street, u.active from users u join store s on u.storeId = s.id where s.superadmin = ?", [id], function (err, rows) {
       conn.release();
+      console.log(rows);
       if (!err) {
 
         res.json(rows);

@@ -97,8 +97,8 @@
     <div class="spinner loading"></div>
   </div>
   <div class="calendar">
-    <kendo-splitter orientation="{{ orientation }}" *ngIf="!loading">
-      <kendo-splitter-pane *ngFor="let item of calendars; let i = index">
+    <kendo-splitter orientation="{{ orientation }}"  *ngIf="!loading">
+      <kendo-splitter-pane *ngFor="let item of calendars; let i = index" [size]="size[i]">
         <p *ngIf="item.name !== null && item.name !== ''" style="text-align: center; font-size: 4vh;">
           {{ language.tasksForUser }} <b>{{ item.name }}</b>
         </p>

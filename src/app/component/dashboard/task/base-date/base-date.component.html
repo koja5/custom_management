@@ -15,7 +15,7 @@
           <div class="panel-body">
             <div class="text-center vd_info-parent"> <img alt="example image" style="width: 190px;"
                 [src]="data.gender === 'male' ? maleImg : femaleImg" class="rounded-circle"> </div>
-            <h2 class="font-semibold mgbt-xs-5">{{data.firstname}} {{data.lastname}}</h2>
+            <h2 class="font-semibold mgbt-xs-5" style="text-align: center;">{{data.firstname}} {{data.lastname}}</h2>
           </div>
           <div *ngIf="type === 'details'">
             <div class="vd_info tr" style="height: 7vh; text-align: center"> <button kendoButton class="k-edit"

@@ -16,7 +16,7 @@
             <div class="text-center vd_info-parent"> <img alt="example image" style="width: 190px;" [src]="imagePath"
                 class="rounded-circle"> </div>
             <div style="text-align: center;">
-              <h2 class="font-semibold mgbt-xs-5">{{data.firstname}} {{data.lastname}}</h2>
+              <h2 class="font-semibold mgbt-xs-5" style="text-align: center;">{{data.firstname}} {{data.lastname}}</h2>
               <h4 *ngIf="data.type === 0">Superadmin</h4>
               <h4 *ngIf="data.type === 1">Admin</h4>
               <h4 *ngIf="data.type === 2">Manager</h4>

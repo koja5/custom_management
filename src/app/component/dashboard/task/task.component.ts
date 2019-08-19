@@ -87,6 +87,9 @@ export class TaskComponent implements OnInit {
   public startWork = '08:00';
   public endWork = '22:00';
   public timeDuration = '60';
+  public loopIndex = 0;
+  public valueLoop: any;
+  public size = [];
 
   constructor(
     public formBuilder: FormBuilder,
@@ -219,6 +222,8 @@ export class TaskComponent implements OnInit {
                 this.loading = false;
               });
           });*/
+          this.size = [];
+          this.size.push('100%');
       } else {
         this.service.getTasks().subscribe(data => {
           console.log(data);
@@ -240,6 +245,8 @@ export class TaskComponent implements OnInit {
             this.calendars.push({ name: null, events: [] });
           }
           console.log(this.calendars);
+          this.size = [];
+          this.size.push('100%');
         });
       }
     }
@@ -515,23 +522,27 @@ export class TaskComponent implements OnInit {
           events: this.events
         };
         this.calendars.push(objectCalendar);
+        this.size = [];
+        this.size.push('100%');
         this.loading = false;
       });
     } else {
       this.calendars = [];
       let index = 0;
-      for (let i = 0; i < value.length; i++) {
-        // if (count) {
+
+      this.loopIndex = 0;
+      this.valueLoop = value;
+      this.myLoop();
+      /*for (let i = 0; i < value.length; i++) {
         this.service.getWorkandTasksForUser(value[i].id).subscribe(
           data => {
-            console.log(data);
+            console.log(data, value[i]);
             this.events = [];
             this.workTime = this.pickWorkTimeToTask(data['workTime']);
-            this.pickModelForEvent(data['events']);
             const objectCalendar = {
               userId: value[index].id,
               name: value[index].shortname,
-              events: this.events,
+              events: this.pickModelForEvent(data['events']),
               workTime: this.workTime
             };
             this.calendars.push(objectCalendar);
@@ -544,27 +555,54 @@ export class TaskComponent implements OnInit {
               this.loading = false;
             }
           });
-        /*} else {
-          i--;
-        }
-        count = 0;
-        if (i + 1 === value.length) {
-          this.loading = false;
-        }
-
-        setTimeout(() => {
-          count = 1;
-        }, 100);*/
-      }
+      }*/
     }
   }
 
+  myLoop() {
+    setTimeout(() => {
+      this.service.getWorkandTasksForUser(this.valueLoop[this.loopIndex].id).subscribe(
+        data => {
+          console.log(data, this.valueLoop[this.loopIndex]);
+          this.events = [];
+          this.workTime = this.pickWorkTimeToTask(data['workTime']);
+          const objectCalendar = {
+            userId: this.valueLoop[this.loopIndex].id,
+            name: this.valueLoop[this.loopIndex].shortname,
+            events: this.pickModelForEvent(data['events']),
+            workTime: this.workTime
+          };
+          this.calendars.push(objectCalendar);
+          this.height += this.height;
+          this.loopIndex++;
+          this.splitterSize = this.splitterSizeFull / this.valueLoop.length;
+          console.log(this.splitterSize);
+          console.log(this.calendars);
+          this.size = [];
+          if (this.valueLoop.length === this.loopIndex) {
+            const sizePannel = 100 / this.loopIndex + '%';
+            for(let i = 0; i < this.valueLoop.length - 1; i++) {
+              console.log('usao sam ovde!');
+              this.size.push(sizePannel);
+            }
+            this.size.push('');
+            this.loading = false;
+          }
+          if (this.loopIndex < this.valueLoop.length) {
+            this.myLoop()
+          }
+        });
+    }, 100)
+  }
+
   pickModelForEvent(data) {
+    this.events = [];
     for (let i = 0; i < data.length; i++) {
       data[i].start = new Date(data[i].start);
       data[i].end = new Date(data[i].end);
       this.events.push(data[i]);
     }
+    return this.events;
   }
 
   selectedStore(event) {
@@ -607,6 +645,8 @@ export class TaskComponent implements OnInit {
     }
 
     sessionStorage.setItem('selectedStore', event);
+    this.size = [];
+    this.size.push('100%');
   }
 
   getStartEndTimeForStore(data, id) {
@@ -655,7 +695,6 @@ export class TaskComponent implements OnInit {
   }
 
   dateFormat(date, i, j) {
-    console.log(i, j);
     if (
       // tslint:disable-next-line: max-line-length
       new Date(this.calendars[i].workTime[j].change) <= new Date(date) && (j + 1 <= (this.calendars[i].workTime.length - 1) ? new Date(date) < new Date(this.calendars[i].workTime[j + 1].change) : true) &&
