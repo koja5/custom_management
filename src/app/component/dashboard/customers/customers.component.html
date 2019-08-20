@@ -6,7 +6,8 @@
   <div *ngIf="selectedUser === undefined">
     <div class="user-options">
       <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">{{language.newCustomer}}</button>
-      <label class="uploadFromExcel"><span class='k-icon k-i-file-excel'></span> Upload from Excel<input type="file" name="files[]" multiple id="jsonFile" accept=".xlsx" (change)="onFileChange($event)" /></label>
+      <label class="uploadFromExcel"><span class='k-icon k-i-file-excel'></span> Upload from Excel<input type="file"
+          name="files[]" multiple id="jsonFile" accept=".xlsx" (change)="onFileChange($event)" /></label>
     </div>
 
     <kendo-grid *ngIf="language !== undefined" [data]="gridData" [height]="800" [resizable]="true"
@@ -50,6 +51,15 @@
       <kendo-grid-excel fileName="Users.xlsx" [fetchData]="allData"></kendo-grid-excel>
     </kendo-grid>
   </div>
+
+  <kendo-dialog title="Please confirm" *ngIf="customerDialogOpened" (close)="close('dialog')" [minWidth]="250"
+    [width]="450">
+    <p style="margin: 30px; text-align: center;">Are you sure you want to import data from excel?</p>
+    <kendo-dialog-actions>
+      <button kendoButton (click)="action('no')">No</button>
+      <button kendoButton (click)="action('yes')" primary="true">Yes</button>
+    </kendo-dialog-actions>
+  </kendo-dialog>
 </div>
 <modal #customer modalClass="modal-lg top-margin loggerModal adminModal">
   <modal-header>
@@ -124,13 +134,7 @@
   </modal-footer>
 </modal>
 
-<kendo-dialog title="Please confirm" *ngIf="dialogOpened" (close)="close('dialog')" [minWidth]="250" [width]="450">
-  <p style="margin: 30px; text-align: center;">Are you sure you want to import data from excel?</p>
-  <kendo-dialog-actions>
-    <button kendoButton (click)="action('no')">No</button>
-    <button kendoButton (click)="action('yes')" primary="true">Yes</button>
-  </kendo-dialog-actions>
-</kendo-dialog>
+
 
 <!--<kendo-upload [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [autoUpload]="false">
 

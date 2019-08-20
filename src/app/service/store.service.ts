@@ -31,4 +31,9 @@ export class StoreService {
       .map(res => res)
       .subscribe(val => callback(val));
   }
+
+  insertMultiData(data) {
+    return this.http.post('/api/insertFromExcel', data)
+      .map(res => res);
+  }
 }

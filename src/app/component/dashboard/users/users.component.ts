@@ -17,6 +17,9 @@ import { UrlTree, Router, UrlSegment, UrlSegmentGroup } from '@angular/router';
 import { throttleTime } from 'rxjs/operators';
 import { UserModel } from '../../../models/user-model';
 import Swal from 'sweetalert2';
+import * as GC from '@grapecity/spread-sheets';
+import * as Excel from '@grapecity/spread-excelio';
+
 
 @Component({
   selector: 'app-users',
@@ -47,13 +50,18 @@ export class UsersComponent implements OnInit {
   public passwordPattern = '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&#])[A-Za-z\d$@$!%*?&].{8,}';
   public emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$';
   public loading = true;
+  private spread: GC.Spread.Sheets.Workbook;
+  private excelIO;
+  public excelOpened = false;
 
   constructor(
     public service: UsersService,
     public storeService: StoreService,
     public url: StandardUrlSerializer,
     public router: Router
-  ) { }
+  ) {
+    this.excelIO = new Excel.IO();
+  }
 
   ngOnInit() {
     this.getUser();
@@ -162,6 +170,10 @@ export class UsersComponent implements OnInit {
     };
   }
 
+  public close(component) {
+    this[component + 'Opened'] = false;
+  }
+
   sortChangeData() {
     this.currentLoadData = orderBy(this.currentLoadData, this.sort);
   }
@@ -193,5 +205,76 @@ export class UsersComponent implements OnInit {
     console.log(tree);
     return tree;
     console.log(this.url.serialize(tree));
+  }
+
+  excelAction(event) {
+    console.log(event);
+    if (event === 'yes') {
+      this.excelOpened = false;
+      setTimeout(() => {
+        this.service.insertMultiData(this.gridData).subscribe(
+          data => {
+            if (data) {
+              Swal.fire({
+                title: 'Successfull!',
+                text: 'New users is successfull added',
+                timer: 3000,
+                type: 'success'
+              });
+              this.getUser();
+            }
+          }
+        );
+      }, 50);
+    } else {
+      this.excelOpened = false;
+    }
+  }
+
+  onFileChange(args) {
+    const self = this;
+    const file = args.srcElement && args.srcElement.files && args.srcElement.files[0];
+    this.excelOpened = true;
+    if (file) {
+      self.excelIO.open(file, (json) => {
+        console.log(json);
+        this.gridData = null;
+        setTimeout(() => {
+          this.gridData = this.xlsxToJson(json);
+        }, 50);
+      }, (error) => {
+        alert('load fail');
+      });
+    }
+  }
+
+  xlsxToJson(data) {
+    const sheets = data.sheets.Sheet1.data.dataTable;
+    const rowCount = data.sheets.Sheet1.rowCount;
+    const columnCount = data.sheets.Sheet1.columnCount;
+
+    const objectArray = [];
+    const columns = [];
+    const dataArray = [];
+
+
+    for (let i = 0; i < columnCount; i++) {
+      columns.push(sheets[0][i].value);
+    }
+
+    for (let i = 1; i < rowCount; i++) {
+      const object = {};
+      for (let j = 0; j < columnCount; j++) {
+        object[sheets[0][j].value] = sheets[i][j].value;
+      }
+      objectArray.push(object);
+      dataArray.push(objectArray[i - 1]);
+    }
+    const allData = {
+      table: 'users',
+      columns: columns,
+      data: dataArray
+    };
+    return allData;
   }
 }

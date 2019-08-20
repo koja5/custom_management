@@ -8,6 +8,8 @@ import {
 } from '@progress/kendo-angular-grid';
 import { StoreModel } from 'src/app/models/store-model';
 import Swal from 'sweetalert2';
+import * as GC from '@grapecity/spread-sheets';
+import * as Excel from '@grapecity/spread-excelio';
 
 @Component({
   selector: 'app-store',
@@ -32,8 +34,13 @@ export class StoreComponent implements OnInit {
   public start_work: Date;
   public end_work: Date;
   public time_duration: string;
+  private spread: GC.Spread.Sheets.Workbook;
+  private excelIO;
+  public excelOpened = false;
 
-  constructor(public service: StoreService) { }
+  constructor(public service: StoreService) {
+    this.excelIO = new Excel.IO();
+  }
 
   ngOnInit() {
     this.idUser = localStorage.getItem('idUser');
@@ -164,7 +171,7 @@ export class StoreComponent implements OnInit {
     this.data.id = id;
   }
 
-  action(event) {
+  dialogFromExcel(event) {
     console.log(event);
     if (event === 'yes') {
       console.log(this.data);
@@ -182,5 +189,76 @@ export class StoreComponent implements OnInit {
     } else {
       this.dialogOpened = false;
     }
+  }
+
+  excelAction(event) {
+    console.log(event);
+    if (event === 'yes') {
+      this.excelOpened = false;
+      setTimeout(() => {
+        this.service.insertMultiData(this.gridData).subscribe(
+          data => {
+            if (data) {
+              Swal.fire({
+                title: 'Successfull!',
+                text: 'New stores is successfull added',
+                timer: 3000,
+                type: 'success'
+              });
+              this.getStore();
+            }
+          }
+        );
+      }, 50);
+    } else {
+      this.excelOpened = false;
+    }
+  }
+
+  onFileChange(args) {
+    const self = this;
+    const file = args.srcElement && args.srcElement.files && args.srcElement.files[0];
+    this.excelOpened = true;
+    if (file) {
+      self.excelIO.open(file, (json) => {
+        console.log(json);
+        this.gridData = null;
+        setTimeout(() => {
+          this.gridData = this.xlsxToJson(json);
+        }, 50);
+      }, (error) => {
+        alert('load fail');
+      });
+    }
+  }
+
+  xlsxToJson(data) {
+    const sheets = data.sheets.Sheet1.data.dataTable;
+    const rowCount = data.sheets.Sheet1.rowCount;
+    const columnCount = data.sheets.Sheet1.columnCount;
+    console.log(sheets, rowCount, columnCount);
+    const objectArray = [];
+    const columns = [];
+    const dataArray = [];
+
+
+    for (let i = 0; i < columnCount; i++) {
+      columns.push(sheets[0][i].value);
+    }
+
+    for (let i = 1; i < rowCount; i++) {
+      const object = {};
+      for (let j = 0; j < columnCount; j++) {
+        object[sheets[0][j].value] = sheets[i][j].value;
+      }
+      objectArray.push(object);
+      dataArray.push(objectArray[i - 1]);
+    }
+    const allData = {
+      table: 'store',
+      columns: columns,
+      data: dataArray
+    };
+    return allData;
   }
 }

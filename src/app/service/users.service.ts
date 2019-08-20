@@ -74,4 +74,9 @@ export class UsersService {
     return this.http.post('/api/updateWorkTImeForUser', data)
       .map(res => res);
   }
+
+  insertMultiData(data) {
+    return this.http.post('/api/insertFromExcel', data)
+      .map(res => res);
+  }
 }

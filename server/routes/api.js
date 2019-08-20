@@ -3858,17 +3858,24 @@ router.post('/insertFromExcel', function (req, res, next) {
 
     var response = {};
     var values = '';
-    var columns = ''
+    var columns = '';
+    var table = req.body.table;
+    console.log(req.body);
     for (let i = 0; i < req.body.columns.length; i++) {
       columns += req.body.columns[i] + ',';
     }
     columns = columns.substr(0, columns.length - 1);
     for (let i = 0; i < req.body.data.length; i++) {
-      values += "('" + req.body.data[i].username + "','" + req.body.data[i].firstname + "','" + req.body.data[i].lastname + "','" + req.body.data[i].telephone + "','" + req.body.data[i].email + "'),";
+      values += "('"
+      for (let j = 0; j < req.body.columns.length; j++) {
+        values += req.body.data[i][req.body.columns[j]] + "','";
+      }
+      values = values.substr(0, values.length - 2);
+      values += "),"
     }
-    console.log(values);
+
     values = values.substr(0, values.length - 1);
-    conn.query("insert into test(" + columns + ") values " + values + ';', function (err, rows, fields) {
+    conn.query("insert into " + table + "(" + columns + ") values " + values + ';', function (err, rows, fields) {
       conn.release();
       if (err) {
         console.error("SQL error:", err);
@@ -3877,11 +3884,11 @@ router.post('/insertFromExcel', function (req, res, next) {
           "status": "Error in connection database"
         });
         return next(err);
-      } else { 
+      } else {
         response = true;
         res.send(response);
-      } 
-    }); 
+      }
+    });
     conn.on('error', function (err) {
       console.log("[mysql error]", err);
     });

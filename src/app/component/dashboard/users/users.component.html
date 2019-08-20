@@ -5,6 +5,8 @@
 <div *ngIf="!loading">
   <div class="user-options">
     <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">New user</button>
+    <label class="uploadFromExcel"><span class='k-icon k-i-file-excel'></span> Upload from Excel<input type="file"
+        name="files[]" multiple id="jsonFile" accept=".xlsx" (change)="onFileChange($event)" /></label>
   </div>
 
   <kendo-grid [data]="gridData" [height]="800" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
@@ -207,3 +209,12 @@
     <button class="btn btn-primary" (click)="user.close()">Close</button>
   </modal-footer>
 </modal>
+
+
+<kendo-dialog title="Please confirm" *ngIf="excelOpened" (close)="close('excel')" [minWidth]="250" [width]="450">
+  <p style="margin: 30px; text-align: center;">Are you sure you want to import data from excel?</p>
+  <kendo-dialog-actions>
+    <button kendoButton (click)="excelAction('no')">No</button>
+    <button kendoButton (click)="excelAction('yes')" primary="true">Yes</button>
+  </kendo-dialog-actions>
+</kendo-dialog>
