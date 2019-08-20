@@ -44,6 +44,7 @@ export class CustomersComponent implements OnInit {
   public uploadRemoveUrl = 'removeUrl'; // should represent an actual API endpoint
   private spread: GC.Spread.Sheets.Workbook;
   private excelIO;
+  public dialogOpened = false;
   constructor(public service: CustomersService, public storeService: StoreService, public message: MessageService) {
     this.excelIO = new Excel.IO();
   }
@@ -178,6 +179,15 @@ export class CustomersComponent implements OnInit {
     console.log(e);
   }
 
+  /*action(event) {
+    console.log(event);
+    if (event === 'yes') {
+      this.dialogOpened = false;
+    } else {
+      this.dialogOpened = false;
+    }
+  }*/
+
   onFileChange(args) {
     const self = this;
     const file = args.srcElement && args.srcElement.files && args.srcElement.files[0];
@@ -187,11 +197,13 @@ export class CustomersComponent implements OnInit {
         this.gridData = null;
         setTimeout(() => {
           this.gridData = this.xlsxToJson(json);
-          this.service.insertMultiData(this.gridData).subscribe(
-            data => {
-              console.log(data);
-            }
-          )
+          setTimeout(() => {
+            this.service.insertMultiData(this.gridData).subscribe(
+              data => {
+                console.log(data);
+              }
+            )
+          }, 50);
         }, 50);
       }, (error) => {
         alert('load fail');
@@ -204,18 +216,28 @@ export class CustomersComponent implements OnInit {
     const rowCount = data.sheets.Sheet1.rowCount;
     const columnCount = data.sheets.Sheet1.columnCount;
     console.log(sheets, rowCount, columnCount);
-    let object = {};
-    for (let i = 0; i < columnCount; i++) {
-      object[sheets[0][i].value] = '';
-    }
+    let objectArray = [];
+    let columns = [];
     const dataArray = [];
+
+    
+    for (let i = 0; i < columnCount; i++) {
+      columns.push(sheets[0][i].value);
+    }
+
     for (let i = 1; i < rowCount; i++) {
+      let object = {};
       for (let j = 0; j < columnCount; j++) {
         object[sheets[0][j].value] = sheets[i][j].value;
       }
-      dataArray.push(object);
+      objectArray.push(object)
+      dataArray.push(objectArray[i - 1]);
     }
-    return dataArray;
+    const allData = {
+      columns: columns,
+      data: dataArray
+    }
+    return allData;
   }
 
 }

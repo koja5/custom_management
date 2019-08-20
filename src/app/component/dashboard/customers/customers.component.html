@@ -6,7 +6,7 @@
   <div *ngIf="selectedUser === undefined">
     <div class="user-options">
       <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">{{language.newCustomer}}</button>
-      <!--<input type="file" name="files[]" multiple id="jsonFile" accept=".xlsx" (change)="onFileChange($event)" />-->
+      <label class="uploadFromExcel"><span class='k-icon k-i-file-excel'></span> Upload from Excel<input type="file" name="files[]" multiple id="jsonFile" accept=".xlsx" (change)="onFileChange($event)" /></label>
     </div>
 
     <kendo-grid *ngIf="language !== undefined" [data]="gridData" [height]="800" [resizable]="true"
@@ -123,6 +123,15 @@
     <button class="btn btn-primary" (click)="customer.close()">Close</button>
   </modal-footer>
 </modal>
+
+<kendo-dialog title="Please confirm" *ngIf="dialogOpened" (close)="close('dialog')" [minWidth]="250" [width]="450">
+  <p style="margin: 30px; text-align: center;">Are you sure you want to import data from excel?</p>
+  <kendo-dialog-actions>
+    <button kendoButton (click)="action('no')">No</button>
+    <button kendoButton (click)="action('yes')" primary="true">Yes</button>
+  </kendo-dialog-actions>
+</kendo-dialog>
+
 <!--<kendo-upload [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [autoUpload]="false">
 
 </kendo-upload>-->
