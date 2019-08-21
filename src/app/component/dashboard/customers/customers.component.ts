@@ -222,7 +222,7 @@ export class CustomersComponent implements OnInit {
 
   xlsxToJson(data) {
     const sheets = data.sheets.Sheet1.data.dataTable;
-    const rowCount = data.sheets.Sheet1.rowCount;
+    const rowCount = data.sheets.Sheet1.rows.length;
     const columnCount = data.sheets.Sheet1.columnCount;
     console.log(sheets, rowCount, columnCount);
     const objectArray = [];
