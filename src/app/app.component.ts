@@ -1,4 +1,4 @@
-import { Component, Injectable } from '@angular/core';
+import { Component, Injectable, OnInit } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpProgressEvent, HttpEventType, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
@@ -6,6 +6,7 @@ import { of } from 'rxjs/observable/of';
 import { concat } from 'rxjs/observable/concat';
 import { delay } from 'rxjs/operators/delay';
 import { UsersService } from './service/users.service';
+import * as io from 'socket.io-client';
 
 @Component({
   selector: 'app-root',
@@ -19,9 +20,13 @@ export class AppComponent {
 
 
 @Injectable()
-export class UploadInterceptor implements HttpInterceptor {
+export class UploadInterceptor implements HttpInterceptor, OnInit {
+  socket;
+  numberOfOnlineUsers: number;
 
-  constructor(public service: UsersService) {}
+  constructor(public service: UsersService) {
+    this.socket = io();
+  }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     console.log(req);
@@ -31,7 +36,7 @@ export class UploadInterceptor implements HttpInterceptor {
         loaded: x,
         total: 100
       }).pipe(delay(1000)));
-      
+
       const success = of(new HttpResponse({ status: 200 })).pipe(delay(1000));
       events.push(success);
 
@@ -39,9 +44,19 @@ export class UploadInterceptor implements HttpInterceptor {
     }
 
     if (req.url === 'removeUrl') {
-        return of(new HttpResponse({ status: 200 }));
+      return of(new HttpResponse({ status: 200 }));
     }
 
     return next.handle(req);
+  }
+
+
+  ngOnInit(): void {
+
+    this.socket.on('numberOfOnlineUsers', (numberOfOnlineUsers) => {
+      this.numberOfOnlineUsers = numberOfOnlineUsers;
+      console.log(this.numberOfOnlineUsers);
+    });
+
   }
 }

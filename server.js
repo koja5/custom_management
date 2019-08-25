@@ -14,9 +14,11 @@ const accessControl = require('./server/routes/accessControl')
 const mail = require('./server/routes/mailAPI');
 const cors = require('cors')
 const app = express();
+const socketIO = require('socket.io');
 var multer = require('multer');
 const mysql = require('mysql');
 var fs = require("fs");
+
 
 var connection = mysql.createPool({
   host: '185.178.193.141',
@@ -51,9 +53,7 @@ var upload = multer({ //multer settings
 
 app.post('/upload', function (req, res) {
   upload(req, res, function (err) {
-    console.log(req);
     connection.getConnection(function (err, conn) {
-      console.log(conn);
       if (err) {
         res.json({
           "code": 100,
@@ -82,7 +82,6 @@ app.post('/upload', function (req, res) {
             test.success = false;
           }
           res.json(test);
-          console.log("Usao sam u DB!!!!");
         } else {
           res.json({
             "code": 100,
@@ -139,6 +138,24 @@ app.set('port', port);
  * Create HTTP server.
  */
 const server = http.createServer(app);
+
+
+const io = socketIO(server);
+
+let numberOfOnlineUsers = 0;
+
+io.on('connection', (socket) => {
+  numberOfOnlineUsers++;
+  io.emit('numberOfOnlineUsers', numberOfOnlineUsers);
+
+  console.log('New user connected');
+
+  socket.on('disconnect', () => {
+    numberOfOnlineUsers--;
+    io.emit('numberOfOnlineUsers', numberOfOnlineUsers);
+    console.log('User disconnected');
+  });
+});
 
 /**
  * Listen on provided port, on all network interfaces.

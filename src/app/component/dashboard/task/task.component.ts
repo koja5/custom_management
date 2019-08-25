@@ -160,21 +160,25 @@ export class TaskComponent implements OnInit {
 
     this.storeService.getStore(localStorage.getItem('idUser'), val => {
       this.store = val;
+
+      this.startWork = this.getStartEndTimeForStore(this.store, this.selectedStoreId).start_work;
+      this.endWork = this.getStartEndTimeForStore(this.store, this.selectedStoreId).end_work;
+      this.timeDuration = this.getStartEndTimeForStore(this.store, this.selectedStoreId).time_duration;
     });
 
     if (
-      sessionStorage.getItem('selectedStore') !== null &&
-      sessionStorage.getItem('selectedUser') !== null
+      localStorage.getItem('selectedStore') !== null &&
+      localStorage.getItem('selectedUser') !== null
     ) {
       this.calendars = [];
-      this.selectedStoreId = Number(sessionStorage.getItem('selectedStore'));
-      this.value = JSON.parse(sessionStorage.getItem('selectedUser'));
+      this.selectedStoreId = Number(localStorage.getItem('selectedStore'));
+      this.value = JSON.parse(localStorage.getItem('selectedUser'));
       // this.selectedStore(this.selectedStoreId);
       this.getTaskForSelectedUsers(this.value);
       this.getUserInCompany(this.selectedStoreId);
-    } else if (sessionStorage.getItem('selectedStore')) {
+    } else if (localStorage.getItem('selectedStore')) {
       this.calendars = [];
-      this.selectedStoreId = Number(sessionStorage.getItem('selectedStore'));
+      this.selectedStoreId = Number(localStorage.getItem('selectedStore'));
       this.selectedStore(this.selectedStoreId);
     } else {
       if (localStorage.getItem('type') === '3') {
@@ -222,8 +226,8 @@ export class TaskComponent implements OnInit {
                 this.loading = false;
               });
           });*/
-          this.size = [];
-          this.size.push('100%');
+        this.size = [];
+        this.size.push('100%');
       } else {
         this.service.getTasks().subscribe(data => {
           console.log(data);
@@ -499,7 +503,7 @@ export class TaskComponent implements OnInit {
       this.value = this.value.map(item => item);
     }
 
-    sessionStorage.setItem('selectedUser', JSON.stringify(this.value));
+    localStorage.setItem('selectedUser', JSON.stringify(this.value));
 
     this.getTaskForSelectedUsers(this.value);
   }
@@ -581,7 +585,7 @@ export class TaskComponent implements OnInit {
           this.size = [];
           if (this.valueLoop.length === this.loopIndex) {
             const sizePannel = 100 / this.loopIndex + '%';
-            for(let i = 0; i < this.valueLoop.length - 1; i++) {
+            for (let i = 0; i < this.valueLoop.length - 1; i++) {
               console.log('usao sam ovde!');
               this.size.push(sizePannel);
             }
@@ -607,7 +611,7 @@ export class TaskComponent implements OnInit {
 
   selectedStore(event) {
     this.value = [];
-    sessionStorage.removeItem('selectedUser');
+    localStorage.removeItem('selectedUser');
     this.loading = true;
     if (event !== undefined) {
       this.service.getTasksForStore(this.selectedStoreId).subscribe(data => {
@@ -644,7 +648,7 @@ export class TaskComponent implements OnInit {
       this.loading = false;
     }
 
-    sessionStorage.setItem('selectedStore', event);
+    localStorage.setItem('selectedStore', event);
     this.size = [];
     this.size.push('100%');
   }

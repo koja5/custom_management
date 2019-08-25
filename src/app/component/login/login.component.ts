@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit {
   public emailValid = true;
   public language: any;
 
+
   public data = {
     'id': '',
     'shortname': '',

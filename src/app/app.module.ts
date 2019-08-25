@@ -59,6 +59,7 @@ import { StandardUrlSerializer } from './standardUrlSerializer';
 import '@progress/kendo-angular-intl/locales/de/all';
 import { ParametersComponent } from './component/dashboard/parameters/parameters.component';
 import { ParameterItemComponent } from './component/dashboard/parameters/parameter-item/parameter-item.component';
+import { StatisticComponent } from './component/dashboard/statistic/statistic.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -77,7 +78,8 @@ import { ParameterItemComponent } from './component/dashboard/parameters/paramet
     ParametersComponent,
     ParameterItemComponent,
     MyNavigationComponent,
-    MyNavigationViewComponent
+    MyNavigationViewComponent,
+    StatisticComponent
   ],
   imports: [
     BrowserModule,

@@ -18,6 +18,7 @@ import { BaseDateComponent } from './component/dashboard/task/base-date/base-dat
 import { DocumentPreviewComponent } from './component/dashboard/document-preview/document-preview.component';
 import { UserDetailsComponent } from './component/dashboard/users/user-details/user-details.component';
 import { ParametersComponent } from './component/dashboard/parameters/parameters.component';
+import { StatisticComponent } from './component/dashboard/statistic/statistic.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '', pathMatch: 'full' },
@@ -32,7 +33,8 @@ const routes: Routes = [
       { path: 'store', component: StoreComponent, outlet: 'dashboard' },
       { path: 'profile', component: ProfileComponent, outlet: 'dashboard' },
       { path: 'customers', component: CustomersComponent, outlet: 'dashboard' },
-      { path: 'parameters', component: ParametersComponent, outlet: 'dashboard' }
+      { path: 'parameters', component: ParametersComponent, outlet: 'dashboard' },
+      { path: 'statistic', component: StatisticComponent, outlet: 'dashboard' }
     ]
   },
   { path: 'document/server/routes/uploads/:id', component: DocumentPreviewComponent }

@@ -6,6 +6,7 @@ import { Modal } from 'ngx-modal';
 import { Location } from '@angular/common';
 import { StoreService } from '../../../../service/store.service';
 import { TaskService } from '../../../../service/task.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-details',
@@ -34,6 +35,7 @@ export class UserDetailsComponent implements OnInit {
   public previousInd = '';
   public nextInd = 'disabled-button';
   public updateSetIndicator = 0;
+  public dialogOpened = false;
 
   constructor(
     public route: ActivatedRoute,
@@ -145,7 +147,7 @@ export class UserDetailsComponent implements OnInit {
       const data = days[i];
       if (data.day === 1) {
         data.day = this.language.monday;
-      } else if (data.day == 2) {
+      } else if (data.day === 2) {
         data.day = this.language.tuesday;
       } else if (data.day === 3) {
         data.day = this.language.wednesday;
@@ -201,7 +203,7 @@ export class UserDetailsComponent implements OnInit {
         workTime[i].end2;
     }
     time['user_id'] = this.id;
-    time['dateChange'] = this.validDate;
+    time['dateChange'] = this.validDate.toString();
     time['color'] = this.selectedColor;
     return time;
   }
@@ -289,6 +291,7 @@ export class UserDetailsComponent implements OnInit {
   }
 
   newValidDate() {
+    this.updateSetIndicator = 1;
     this.validDate = new Date();
   }
 
@@ -337,12 +340,39 @@ export class UserDetailsComponent implements OnInit {
 
   deleteWorkTime(workTime) {
     const id = this.allWorkTime[this.index].id;
-
-
-
   }
 
   createNewWorkTime() {
     this.updateSetIndicator = 1;
+  }
+
+  public close(component) {
+    this[component + 'Opened'] = false;
+  }
+
+  open(component, id) {
+    this[component + 'Opened'] = true;
+  }
+
+  action(event) {
+    console.log(event);
+    if (event === 'yes') {
+      console.log(this.data);
+      this.service.deleteUser(this.id).subscribe(
+        data => {
+          if (data) {
+            Swal.fire({
+              title: 'Successfull!',
+              text: 'Successful delete user!',
+              timer: 3000,
+              type: 'success'
+            });
+            this.location.back();
+          }
+        }
+      );
+    } else {
+      this.dialogOpened = false;
+    }
   }
 }

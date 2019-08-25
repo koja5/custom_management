@@ -20,6 +20,11 @@ export class UsersService {
     return this.http.post('/api/updateUser', data).map(res => res);
   }
 
+  deleteUser(id) {
+    return this.http.get('/api/deleteUser/' + id)
+      .map(res => res);
+  }
+
   getUsers(id, callback) {
     return this.http
       .get('/api/getUsers/' + id)

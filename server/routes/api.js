@@ -1357,9 +1357,6 @@ router.post('/updateUser', function (req, res, next) {
 router.get('/deleteUser/:id', (req, res, next) => {
   try {
     var reqObj = req.params.id;
-
-    console.log('usao sam u verifikaciju!');
-    console.log(reqObj);
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error('SQL Connection error: ', err);
@@ -1380,10 +1377,7 @@ router.get('/deleteUser/:id', (req, res, next) => {
               });
               return next(err);
             } else {
-              res.writeHead(302, {
-                'Location': '/login'
-              });
-              res.end();
+              res.send(true);
             }
           }
         );
