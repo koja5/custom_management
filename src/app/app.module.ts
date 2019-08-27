@@ -24,6 +24,7 @@ import { UploadModule } from '@progress/kendo-angular-upload';
 import { DialogModule } from '@progress/kendo-angular-dialog';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { FileSelectDirective, FileDropDirective, FileUploadModule } from 'ng2-file-upload';
+import { DialogsModule } from '@progress/kendo-angular-dialog';
 
 // guard
 import { LoggedGuard } from './service/login-guard/loggedGuard';
@@ -106,7 +107,8 @@ import { StatisticComponent } from './component/dashboard/statistic/statistic.co
     UploadModule,
     DialogModule,
     FileUploadModule,
-    PdfViewerModule
+    PdfViewerModule,
+    DialogsModule
 
   ],
   providers: [

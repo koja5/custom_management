@@ -34,7 +34,7 @@ export class UsersComponent implements OnInit {
   public currentLoadData: any;
   public state: State = {
     skip: 0,
-    take: 5,
+    take: 10,
     filter: null
   };
   public hideShow = 'password';

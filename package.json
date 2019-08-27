@@ -26,6 +26,7 @@
     "@grapecity/spread-excelio": "^11.1.0",
     "@grapecity/spread-sheets": "^11.1.0",
     "@progress/kendo-angular-buttons": "^4.4.2",
+    "@progress/kendo-angular-common": "^1.1.0",
     "@progress/kendo-angular-dateinputs": "^3.7.3",
     "@progress/kendo-angular-dialog": "^3.12.1",
     "@progress/kendo-angular-dropdowns": "^3.5.3",

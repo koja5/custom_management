@@ -90,6 +90,8 @@ export class TaskComponent implements OnInit {
   public loopIndex = 0;
   public valueLoop: any;
   public size = [];
+  public customerUserModal2 = false;
+  public selectedButtonIndex = [false, false, false, false, false, false];
 
   constructor(
     public formBuilder: FormBuilder,
@@ -253,6 +255,13 @@ export class TaskComponent implements OnInit {
           this.size.push('100%');
         });
       }
+    }
+
+    if(localStorage.getItem('calendarView') !== null) {
+      this.selectedViewIndex = Number(localStorage.getItem('calendarView'));
+      this.selectedButtonIndex[this.selectedViewIndex] = true;
+    } else {
+      this.selectedButtonIndex[0] = true;
     }
   }
 
@@ -486,13 +495,15 @@ export class TaskComponent implements OnInit {
   }
 
   baseDataForUser() {
-    this.zIndex = 'zIndex';
-    this.customerUserModal.open();
+    // this.zIndex = 'zIndex';
+    // this.customerUserModal.open();
+    this.customerUserModal2 = true;
   }
 
   closebaseDataForUser() {
-    this.zIndex = '';
-    this.customerUserModal.close();
+    // this.zIndex = '';
+    // this.customerUserModal.close();
+    this.customerUserModal2 = false;
   }
 
   public handleValue(selected) {
@@ -787,7 +798,10 @@ export class TaskComponent implements OnInit {
     console.log(index);
     this.selectedViewIndex = null;
     setTimeout(() => {
+      this.selectedButtonIndex[this.selectedViewIndex] = false;
       this.selectedViewIndex = index;
+      this.selectedButtonIndex[this.selectedViewIndex] = true;
+      localStorage.setItem('calendarView', index);
     }, 50);
   }
 

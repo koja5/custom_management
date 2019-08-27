@@ -25,7 +25,7 @@ export class StoreComponent implements OnInit {
   public dialogOpened = false;
   public state: State = {
     skip: 0,
-    take: 5,
+    take: 10,
     filter: null
   };
   public idUser: string;
@@ -180,7 +180,7 @@ export class StoreComponent implements OnInit {
         if (data) {
           this.state = {
             skip: 0,
-            take: 5
+            take: 10
           };
           this.getStore();
         }

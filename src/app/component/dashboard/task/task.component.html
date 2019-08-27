@@ -59,22 +59,22 @@
       </div>
       <div class="col-md-6 col-sm-12 col-xs-12">
         <kendo-buttongroup [selection]="'single'" style="float: right;">
-          <button kendoButton [toggleable]="true" [selected]="true" (click)="selectedViewCalendar(0)">
+          <button kendoButton [toggleable]="true" [selected]="selectedButtonIndex[0]" (click)="selectedViewCalendar(0)">
             5 Days
           </button>
-          <button kendoButton [toggleable]="true" (click)="selectedViewCalendar(1)">
+          <button kendoButton [toggleable]="true" [selected]="selectedButtonIndex[1]" (click)="selectedViewCalendar(1)">
             3 Days
           </button>
-          <button kendoButton [toggleable]="true" (click)="selectedViewCalendar(2)">
+          <button kendoButton [toggleable]="true" [selected]="selectedButtonIndex[2]" (click)="selectedViewCalendar(2)">
             Month
           </button>
-          <button kendoButton [toggleable]="true" (click)="selectedViewCalendar(3)">
+          <button kendoButton [toggleable]="true" [selected]="selectedButtonIndex[3]" (click)="selectedViewCalendar(3)">
             Week
           </button>
-          <button kendoButton [toggleable]="true" (click)="selectedViewCalendar(4)">
+          <button kendoButton [toggleable]="true" [selected]="selectedButtonIndex[4]" (click)="selectedViewCalendar(4)">
             Timeline
           </button>
-          <button kendoButton [toggleable]="true" (click)="selectedViewCalendar(5)">
+          <button kendoButton [toggleable]="true" [selected]="selectedButtonIndex[5]" (click)="selectedViewCalendar(5)">
             Agenda
           </button>
         </kendo-buttongroup>
@@ -400,21 +400,8 @@
     </modal-footer>
   </modal>
 
-  <modal #customerUserModal modalClass="modal-lg top-margin loggerModal adminModal" [hideCloseButton]="true"
-    *ngIf="customerUser !== undefined">
-    <modal-header>
-      <h2>
-        Base data for {{ customerUser.firstname }} {{ customerUser.lastname }}
-      </h2>
-    </modal-header>
-    <modal-content>
+  <kendo-window title="Please provide additional data" *ngIf="customerUserModal2&&customerUser !== undefined" [minWidth]="700" [width]="850" [height]="700" (close)="closebaseDataForUser()">
       <app-base-date [data]="customerUser" *ngIf="customerUser !== undefined">
       </app-base-date>
-    </modal-content>
-    <modal-footer>
-      <button class="btn btn-primary" (click)="closebaseDataForUser()">
-        Close
-      </button>
-    </modal-footer>
-  </modal>
+  </kendo-window>
 </div>
