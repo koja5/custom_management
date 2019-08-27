@@ -139,7 +139,6 @@ export class CustomersComponent implements OnInit {
 
   selectionChange(event) {
     console.log(event);
-
   }
 
   selectionChangeStore(event) {

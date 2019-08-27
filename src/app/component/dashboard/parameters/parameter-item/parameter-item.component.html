@@ -8,7 +8,7 @@
     {{type}}
   </h2>
 
-  <kendo-grid *ngIf="type !== 'Doctors' && type !== 'Therapies'" [data]="view | async" [height]="533"
+  <kendo-grid *ngIf="type !== 'Doctors' && type !== 'Therapies'" [data]="view | async" [style.height]="'76vh'"
     [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort" [pageable]="true" [sortable]="true"
     (dataStateChange)="onStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)"
     (save)="saveHandler($event)" (remove)="removeHandler($event)" (add)="addHandler($event)" [navigable]="true"
@@ -30,7 +30,7 @@
     </kendo-grid-command-column>
   </kendo-grid>
 
-  <kendo-grid *ngIf="type === 'Therapies'" [data]="view | async" [height]="533" [pageSize]="gridState.take"
+  <kendo-grid *ngIf="type === 'Therapies'" [data]="view | async" [style.height]="'76vh'" [pageSize]="gridState.take"
     [skip]="gridState.skip" [sort]="gridState.sort" [pageable]="true" [sortable]="true"
     (dataStateChange)="onStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)"
     (save)="saveHandler($event)" (remove)="removeHandler($event)" (add)="addHandler($event)" [navigable]="true"
@@ -59,7 +59,7 @@
     </kendo-grid-command-column>
   </kendo-grid>
 
-  <kendo-grid *ngIf="type === 'Doctors'" [data]="view | async" [height]="533" [pageSize]="gridState.take"
+  <kendo-grid *ngIf="type === 'Doctors'" [data]="view | async" [style.height]="'76vh'" [pageSize]="gridState.take"
     [skip]="gridState.skip" [sort]="gridState.sort" [pageable]="true" [sortable]="true"
     (dataStateChange)="onStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)"
     (save)="saveHandler($event)" (remove)="removeHandler($event)" (add)="addHandler($event)" [navigable]="true"
