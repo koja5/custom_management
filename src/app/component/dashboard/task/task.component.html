@@ -118,7 +118,7 @@
               <ng-template kendoSchedulerToolbarTemplate let-selectedDate="selectedDate">
                 <my-navigation [selectedDate]="selectedDate" style="float: left;">
                 </my-navigation>
-                <span *ngIf="item.name !== null && item.name !== ''" style="text-align: center; font-size: 2.8vh;">
+                <span *ngIf="item.name !== null && item.name !== ''" style="text-align: center; font-size: 2vh;">
                   {{ language.tasksForUser }} <b>{{ item.name }}</b>
                 </span>
               </ng-template>
@@ -145,7 +145,7 @@
 
               <ng-template kendoSchedulerAllDayEventTemplate let-event="event" let-resources="resources">
                 <div style="width: 100vh !important;">
-                  {{ event.title }} test
+                  {{ event.title }}
                 </div>
               </ng-template>
 
@@ -260,7 +260,7 @@
 
             <ng-template kendoSchedulerAllDayEventTemplate let-event="event" let-resources="resources">
               <div style="width: 100vh !important;">
-                {{ event.title }} - test
+                {{ event.title }}
               </div>
             </ng-template>
 

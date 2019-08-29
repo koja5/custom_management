@@ -145,14 +145,18 @@ const io = socketIO(server);
 let numberOfOnlineUsers = 0;
 
 io.on('connection', (socket) => {
+
   numberOfOnlineUsers++;
-  io.emit('numberOfOnlineUsers', numberOfOnlineUsers);
+  socket.on('/', numberOfOnlineUsers => {
+    console.log('test');
+    socket.emit('numberOfOnlineUsers', numberOfOnlineUsers);
+  });
 
   console.log('New user connected');
 
   socket.on('disconnect', () => {
     numberOfOnlineUsers--;
-    io.emit('numberOfOnlineUsers', numberOfOnlineUsers);
+    socket.emit('numberOfOnlineUsers', numberOfOnlineUsers);
     console.log('User disconnected');
   });
 });

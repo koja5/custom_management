@@ -18,7 +18,7 @@ import { IntlService, CldrIntlService } from '@progress/kendo-angular-intl';
     // tslint:disable-next-line: component-selector
     selector: 'my-navigation',
     template: `
-    {{ selectedDate | kendoDate: 'd':localeId }}
+    KW{{ selectedDate | date:'w' }}
   `,
     encapsulation: ViewEncapsulation.None
 })
