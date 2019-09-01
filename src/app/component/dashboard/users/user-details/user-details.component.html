@@ -171,9 +171,180 @@
       </kendo-dialog-actions>
     </kendo-dialog>
 
+    <kendo-window [title]="getTranslate(currentTab)" *ngIf="user" [minWidth]="700" [width]="850" [height]="600"
+      (close)="user = false">
+      <div class="tabs widget">
+        <ul class="nav nav-tabs widget">
+          <li [ngClass]="currentTab === 'profile' ? 'active' : ''"> <a (click)="changeTab('profile')">Profile</a></li>
+          <li [ngClass]="currentTab === 'workTime' ? 'active' : ''"> <a (click)="changeTab('workTime')">Work time</a>
+          </li>
+        </ul>
+        <div class="tab-content" *ngIf="currentTab === 'profile'">
+          <div id="profile-tab" class="tab-pane active">
+            <form name="loginForm" class="loginForm" (ngSubmit)="updateUser(user)">
+              <div class="form-group">
+                <div class="email col-md-6 col-xs-12">
+                  <p>{{language.username}}</p>
+                  <input type="text" class="col-xs-12" name="shortname" placeholder="Username"
+                    [(ngModel)]="data.shortname" shortname.value=''>
+                </div>
+                <div class="email col-md-6 col-xs-12">
+                  <p>{{language.password}}</p>
+                  <input type="{{hideShow}}" class="col-xs-12 password" name="password" placeholder="Password"
+                    [(ngModel)]="data.password" password.value=''>
+                  <span class="fa {{hideShowEye}} pwd-toggle" (click)="hideShowPassword()"></span>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="email col-md-6 col-xs-12">
+                  <p>{{language.firstname}}</p>
+                  <input type="text" class="col-xs-12" name="firstname" placeholder="Firstname"
+                    [(ngModel)]="data.firstname" firstname.value=''>
+                </div>
+                <div class="email col-md-6 col-xs-12">
+                  <p>{{language.lastname}}</p>
+                  <input type="text" class="col-xs-12" name="lastname" placeholder="Lastname"
+                    [(ngModel)]="data.lastname" lastname.value=''>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="email col-md-6 col-xs-12">
+                  <p>{{language.street}}</p>
+                  <input type="text" class="col-xs-12" name="street" placeholder="Street" [(ngModel)]="data.street"
+                    street.value=''>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="email col-md-6 col-xs-12">
+                  <p>{{language.zipCode}}</p>
+                  <input type="text" class="col-xs-12" name="zipcode" placeholder="Zipcode" [(ngModel)]="data.zipcode"
+                    zipcode.value=''>
+                </div>
+                <div class="email col-md-6 col-xs-12">
+                  <p>{{language.place}}</p>
+                  <input type="text" class="col-xs-12" name="place" placeholder="Place" [(ngModel)]="data.place"
+                    place.value=''>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="email col-md-6 col-xs-12">
+                  <p>{{language.telephone}}</p>
+                  <input type="text" class="col-xs-12" name="telephone" placeholder="Telephone"
+                    [(ngModel)]="data.telephone" telephone.value=''>
+                </div>
+                <div class="email col-md-6 col-xs-12">
+                  <p>{{language.mobile}}</p>
+                  <input type="text" class="col-xs-12" name="mobile" placeholder="mobile" [(ngModel)]="data.mobile"
+                    mobile.value=''>
+                </div>
+                <div class="email col-md-6 col-xs-12">
+                  <p>{{language.email}}</p>
+                  <input type="email" class="col-xs-12" name="email" placeholder="Email" [(ngModel)]="data.email"
+                    email.value=''>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="email col-md-6 col-xs-12">
+                  <p>{{language.birthday}}</p>
+                  <kendo-datepicker class="col-xs-12" name="birthday" placeholder="Birthday" [(ngModel)]="data.birthday"
+                    birthday.value=''></kendo-datepicker>
+                </div>
+                <div class="email col-md-6 col-xs-12">
+                  <p>{{language.sincecompany}}</p>
+                  <kendo-datepicker class="col-xs-12" name="sincecompany" placeholder="Since in company"
+                    [(ngModel)]="data.incompanysince" incompanysince.value=''></kendo-datepicker>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="email col-md-6 col-xs-12">
+                  <p>{{language.userType}}</p>
+                  <kendo-combobox [data]="userType" (selectionChange)="selectionUserType($event)" class="col-xs-12"
+                    [(ngModel)]="selectedValue" name="type">
+                  </kendo-combobox>
+                </div>
+                <label class="k-form-field col-md-6" style="text-align: center;">
+                  Actives &nbsp; <kendo-switch [(ngModel)]="data.active" name='active'></kendo-switch>
+                </label>
+              </div>
+              <div class="form-group">
+                  <div class="email col-md-12 col-xs-12">
+                    <p>{{language.storeLocation}}</p>
+                <kendo-combobox [data]="storeLocation" [textField]="'storename'" [valueField]="'id'"
+                  (selectionChange)="selectionChangeStore($event)" [(ngModel)]="data.storeId" [valuePrimitive]="true"
+                  name="storename" class="col-xs-12">
+                </kendo-combobox>
+                </div>
+              </div>
 
+              <div class="form-group">
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Update user</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div *ngIf="currentTab === 'workTime'">
+          <div id="profile-tab" class="tab-pane active">
+            <p *ngIf="noSetWorkTime" class="noSetWorkTime">*For this user work time didn't set!</p>
+            <div class="k-form-field row" style="padding: 2vh 0 2vh 0;">
+              <div class="col-sm-6">
+                <span>Color</span>
+                <div>
+                  <kendo-colorpalette [palette]="palette" [value]="selectedColor" [(ngModel)]="selectedColor"
+                    [tileSize]="30">
+                  </kendo-colorpalette>
+                </div>
+              </div>
+              <div class="col-sm-6" style="padding-top: 2vh;">
+                <button kendoButton [icon]="'k-icon k-i-undo'" class="col-sm-5 {{previousInd}}"
+                  (click)="previousWorkTime()">Previous</button>
+                <button kendoButton [icon]="'k-icon k-i-redo'" class="col-sm-5 {{nextInd}}"
+                  (click)="nextWorkTime()">Next</button>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-2 col-sm-12 col-form-label">Valid from:</label>
+              <kendo-datepicker class="col-md-5 col-xs-8" name="validDate" placeholder="Valid date"
+                [(ngModel)]="validDate" validDate.value=''></kendo-datepicker>
+              <div>
+                <button class="col-md-2 col-xs-4 btn-save" kendoButton [icon]="'k-icon k-i-save'"
+                  (click)="newValidDate()">Create time</button>
+                <button class="col-md-1 col-xs-4 btn-delete" kendoButton [icon]="'k-icon k-i-delete'"
+                  (click)="deleteWorkTime(workTime)"></button>
+              </div>
+            </div>
+            <form name="loginForm" class="loginForm"
+              (ngSubmit)="updateSetIndicator === 1 ? setWorkTimeForUser(workTime) : updateWorkTimeForUser(workTime)">
+              <div class="form-group row" *ngFor="let item of workTime; let i = index;">
+                <label for="example-number-input" class="col-sm-2 col-form-label">{{item.day}}</label>
+                <div class="col-sm-10">
+                  <input class="col-sm-2 col-xs-6" type="number" min="8" max="20" id="example-number-input"
+                    value="{{item.start}}" [(ngModel)]="workTime[i].start" name="{{item.day}}start"><span
+                    class="col-sm-1 h">h</span>
+                  <input class="col-sm-2 col-xs-6" type="number" min="8" max="20" id="example-number-input"
+                    value="{{item.end}}" [(ngModel)]="workTime[i].end" name="{{item.day}}end"> <span
+                    class="col-sm-1 h">h</span>
 
-    <modal #user modalClass="modal-md top-margin loggerModal adminModal">
+                  <input class="col-sm-2 col-xs-6" type="number" min="8" max="20" id="example-number-input"
+                    value="{{item.start2}}" [(ngModel)]="workTime[i].start2" name="{{item.day}}start2"><span
+                    class="col-sm-1 h">h</span>
+                  <input class="col-sm-2 col-xs-6" type="number" min="8" max="20" id="example-number-input"
+                    value="{{item.end2}}" [(ngModel)]="workTime[i].end2" name="{{item.day}}end2"> <span
+                    class="col-sm-1 h">h</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <button *ngIf="updateSetIndicator === 1" class="btn btn-lg btn-primary btn-block" type="submit">Set
+                  work time</button>
+                <button *ngIf="updateSetIndicator === 0" class="btn btn-lg btn-primary btn-block" type="submit">Update
+                  work time</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </kendo-window>
+
+    <!-- <modal #user modalClass="modal-md top-margin loggerModal adminModal">
       <modal-header>
         <h2 *ngIf="currentTab === 'profile'">{{language.profile}}</h2>
         <h2 *ngIf="currentTab === 'workTime'">{{language.workTime}}</h2>
@@ -312,7 +483,7 @@
       <modal-footer>
         <button class="btn btn-primary" (click)="user.close()">Close</button>
       </modal-footer>
-    </modal>
+    </modal> -->
 
     <modal #upload modalClass="modal-lg top-margin loggerModal adminModal" *ngIf="uploader !== undefined">
       <modal-header>

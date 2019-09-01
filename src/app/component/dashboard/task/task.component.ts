@@ -87,6 +87,7 @@ export class TaskComponent implements OnInit {
   public startWork = '08:00';
   public endWork = '22:00';
   public timeDuration = '60';
+  public therapyDuration = 1;
   public loopIndex = 0;
   public valueLoop: any;
   public size = [];
@@ -166,6 +167,7 @@ export class TaskComponent implements OnInit {
       this.startWork = this.getStartEndTimeForStore(this.store, this.selectedStoreId).start_work;
       this.endWork = this.getStartEndTimeForStore(this.store, this.selectedStoreId).end_work;
       this.timeDuration = this.getStartEndTimeForStore(this.store, this.selectedStoreId).time_duration;
+      this.therapyDuration = Number(this.timeDuration) / Number(this.getStartEndTimeForStore(this.store, this.selectedStoreId).time_therapy);
     });
 
     if (
@@ -642,10 +644,12 @@ export class TaskComponent implements OnInit {
           this.startWork = this.getStartEndTimeForStore(this.store, this.selectedStoreId).start_work;
           this.endWork = this.getStartEndTimeForStore(this.store, this.selectedStoreId).end_work;
           this.timeDuration = this.getStartEndTimeForStore(this.store, this.selectedStoreId).time_duration;
+          this.therapyDuration = Number(this.timeDuration) / Number(this.getStartEndTimeForStore(this.store, this.selectedStoreId).time_therapy);
         } else {
           this.startWork = '08:00';
           this.endWork = '22:00';
           this.timeDuration = '60';
+          this.therapyDuration = 1;
         }
         this.calendars.push(objectCalendar);
         this.loading = false;
@@ -656,6 +660,7 @@ export class TaskComponent implements OnInit {
       this.startWork = '08:00';
       this.endWork = '22:00';
       this.timeDuration = '60';
+      this.therapyDuration = 1;
       this.loading = false;
     }
 
@@ -668,7 +673,7 @@ export class TaskComponent implements OnInit {
     for (let i = 0; i < data.length; i++) {
       if (data[i].id === id) {
         // tslint:disable-next-line: max-line-length
-        return { start_work: new Date(data[i].start_work).getHours() + ':' + new Date(data[i].start_work).getMinutes(), end_work: new Date(data[i].end_work).getHours() + ':' + new Date(data[i].end_work).getMinutes(), time_duration: data[i].time_duration };
+        return { start_work: new Date(data[i].start_work).getHours() + ':' + new Date(data[i].start_work).getMinutes(), end_work: new Date(data[i].end_work).getHours() + ':' + new Date(data[i].end_work).getMinutes(), time_duration: data[i].time_duration, time_therapy: data[i].time_therapy };
       }
     }
   }

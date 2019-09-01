@@ -27,7 +27,7 @@ import * as Excel from '@grapecity/spread-excelio';
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
-  @ViewChild('user') user: Modal;
+  public user = false;
   public data = new UserModel();
   public userType = ['Employee', 'Manager', 'Admin'];
   public gridData: any;
@@ -53,7 +53,8 @@ export class UsersComponent implements OnInit {
   private spread: GC.Spread.Sheets.Workbook;
   private excelIO;
   public excelOpened = false;
-
+  public language: any;
+  
   constructor(
     public service: UsersService,
     public storeService: StoreService,
@@ -65,6 +66,7 @@ export class UsersComponent implements OnInit {
 
   ngOnInit() {
     this.getUser();
+    this.language = JSON.parse(localStorage.getItem('language'))['user'];
   }
 
   getUser() {
@@ -82,7 +84,7 @@ export class UsersComponent implements OnInit {
       console.log(val);
       this.storeLocation = val;
     });
-    this.user.open();
+    this.user = true;
   }
 
   initializeParams() {
@@ -100,11 +102,13 @@ export class UsersComponent implements OnInit {
 
   createUser(form) {
     console.log(this.data);
+    this.data.birthday = this.data.birthday.toString();
+    this.data.incompanysince = this.data.incompanysince.toString();
     this.service.createUser(this.data, val => {
       if (val.success) {
         console.log(val);
         this.gridData.data.push(this.data);
-        this.user.close();
+        this.user = false;
         Swal.fire({
           title: 'Successfull!',
           text: 'New user is successfull added!',

@@ -21,14 +21,14 @@ import { PhysicalModel } from 'src/app/models/physical-model';
   styleUrls: ['./base-date.component.scss']
 })
 export class BaseDateComponent implements OnInit {
-  @ViewChild('customer') customer: Modal;
+  public customer = false;
   @ViewChild('upload') upload: Modal;
-  @ViewChild('complaint') complaint: Modal;
   @ViewChild('therapy') therapy: Modal;
   @Input() type;
   @Input() data;
   @Input() date;
   @Input() doctor;
+  public complaint = false;
   public maleImg = '../../../../../assets/images/users/male-patient.png';
   public femaleImg = '../../../../../assets/images/users/female-patient.png';
   public dialogOpened = false;
@@ -214,7 +214,7 @@ export class BaseDateComponent implements OnInit {
 
   editCustomer() {
     this.date.birthday = new Date(this.date.birthday);
-    this.customer.open();
+    this.customer = true;
   }
 
   updateCustomer(customer) {
@@ -223,6 +223,8 @@ export class BaseDateComponent implements OnInit {
     this.service.updateCustomer(this.data, val => {
       console.log(val);
       if (val.success) {
+        
+        this.customer = false;
         Swal.fire({
           title: this.language.successUpdateTitle,
           text: this.language.successUpdateText
@@ -231,7 +233,7 @@ export class BaseDateComponent implements OnInit {
           timer: 3000,
           type: 'success',
           onClose: () => {
-            this.customer.close();
+            console.log('done!');
           }
         });
       }
@@ -296,7 +298,7 @@ export class BaseDateComponent implements OnInit {
         this.complaintValue = data;
       }
     );
-    this.complaint.open();
+    this.complaint = true;
   }
 
   openTherapyModal() {
@@ -366,7 +368,7 @@ export class BaseDateComponent implements OnInit {
         this.service.addComplaint(this.complaintData).subscribe(data => {
           if (data) {
             this.getComplaint();
-            this.complaint.close();
+            this.complaint = false;
             Swal.fire({
               title: 'Successfull!',
               text: 'New complaint is successfull added!',
@@ -388,7 +390,7 @@ export class BaseDateComponent implements OnInit {
       this.service.addComplaint(this.complaintData).subscribe(data => {
         if (data) {
           this.getComplaint();
-          this.complaint.close();
+          this.complaint = false;
           Swal.fire({
             title: 'Successfull!',
             text: 'New complaint is successfull added!',
@@ -436,7 +438,7 @@ export class BaseDateComponent implements OnInit {
     this.service.updateComplaint(this.complaintData).subscribe(data => {
       if (data) {
         this.getComplaint();
-        this.complaint.close();
+        this.complaint = false;
         Swal.fire({
           title: 'Successfull!',
           text: 'Complaint is successfull updated!',
@@ -586,6 +588,23 @@ export class BaseDateComponent implements OnInit {
           }
         });
     }
+  }
+
+  getTranslate(title) {
+    if(title === 'profile') {
+      return this.language.profile;
+    } else if(title === 'base_one') {
+      return this.language.baseDataOne;
+    } else if(title === 'base_two') {
+      return this.language.baseDataTwo;
+    } else if(title === 'physical_illness') {
+      return this.language.physicalIllness;
+    } else if(title === 'add') {
+      return this.language.addComplaint;
+    } else if(title === 'edit') {
+      return this.language.updateComplaint;
+    }
+    return null;
   }
 
   initializeBaseOneData() {
@@ -741,7 +760,7 @@ export class BaseDateComponent implements OnInit {
       this.selectedTherapies = Number(event.therapies);
     }
     this.operationMode = 'edit';
-    this.complaint.open();
+    this.complaint = true;
   }
 
   closeUploadModal() {

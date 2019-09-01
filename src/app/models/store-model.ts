@@ -11,5 +11,6 @@ export class StoreModel {
     start_work?: string;
     end_work?: string;
     time_duration?: string;
+    time_therapy?: string;
     superadmin?: string;
 }

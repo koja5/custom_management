@@ -17,8 +17,8 @@ import * as Excel from '@grapecity/spread-excelio';
   styleUrls: ['./store.component.scss']
 })
 export class StoreComponent implements OnInit {
-  @ViewChild('store') store: Modal;
-  @ViewChild('storeEdit') storeEdit: Modal;
+  public store = false;
+  public storeEdit = false;
   public data = new StoreModel();
   public currentLoadData: any;
   public gridData: any;
@@ -59,7 +59,7 @@ export class StoreComponent implements OnInit {
 
   newStore() {
     this.initialParams();
-    this.store.open();
+    this.store = true;
   }
 
   initialParams() {
@@ -86,7 +86,7 @@ export class StoreComponent implements OnInit {
         console.log(val);
         this.data.id = val.id;
         this.gridData.data.push(this.data);
-        this.store.close();
+        this.store = false;
         Swal.fire({
           title: this.language.successful,
           text: this.language[val.info],
@@ -105,7 +105,6 @@ export class StoreComponent implements OnInit {
   }
 
   updateStore(store) {
-    console.log(this.data);
     this.data.start_work = this.start_work.toString();
     this.data.end_work = this.end_work.toString();
     this.service.editStore(this.data).subscribe(data => {
@@ -118,7 +117,7 @@ export class StoreComponent implements OnInit {
           timer: 3000,
           type: 'success'
         });
-        this.storeEdit.close();
+        this.storeEdit = false;
       } else {
         Swal.fire({
           title: 'Error update',
@@ -159,7 +158,11 @@ export class StoreComponent implements OnInit {
     this.data = store;
     this.start_work = new Date(this.data.start_work);
     this.end_work = new Date(this.data.end_work);
-    this.storeEdit.open();
+    this.storeEdit = true;
+  }
+
+  storeEditClose() {
+    this.storeEdit = false;
   }
 
   public close(component) {
@@ -171,7 +174,7 @@ export class StoreComponent implements OnInit {
     this.data.id = id;
   }
 
-  dialogFromExcel(event) {
+  action(event) {
     console.log(event);
     if (event === 'yes') {
       console.log(this.data);
@@ -182,6 +185,12 @@ export class StoreComponent implements OnInit {
             skip: 0,
             take: 10
           };
+          Swal.fire({
+            title: 'Successfull!',
+            text: 'Successfull delete store',
+            timer: 3000,
+            type: 'success'
+          });
           this.getStore();
         }
         this.dialogOpened = false;

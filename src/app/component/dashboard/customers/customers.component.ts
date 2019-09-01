@@ -13,6 +13,7 @@ import { CustomerModel } from '../../../models/customer-model';
 import Swal from 'sweetalert2';
 import * as GC from '@grapecity/spread-sheets';
 import * as Excel from '@grapecity/spread-excelio';
+import { WindowModule } from '@progress/kendo-angular-dialog';
 
 const newLocal = 'data';
 @Component({
@@ -22,7 +23,7 @@ const newLocal = 'data';
 })
 export class CustomersComponent implements OnInit {
 
-  @ViewChild('customer') customer: Modal;
+  public customer = false;
   public data = new CustomerModel();
   public unamePattern = '^[a-z0-9_-]{8,15}$';
   public emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$';
@@ -55,7 +56,6 @@ export class CustomersComponent implements OnInit {
 
     if (localStorage.getItem('language') !== null) {
       this.language = JSON.parse(localStorage.getItem('language')).grid;
-      console.log(this.language);
     }
 
     this.message.getDeleteCustomer().subscribe(
@@ -92,7 +92,7 @@ export class CustomersComponent implements OnInit {
       this.storeLocation = val;
     });
     this.initializeParams();
-    this.customer.open();
+    this.customer = true;
   }
 
   initializeParams() {
@@ -117,7 +117,7 @@ export class CustomersComponent implements OnInit {
       if (val.success) {
         this.data.id = val.id;
         this.gridData.data.push(this.data);
-        this.customer.close();
+        this.customer = false;
         // form.reset();
         Swal.fire({
           title: 'Successfull!',
@@ -247,6 +247,10 @@ export class CustomersComponent implements OnInit {
       data: dataArray
     };
     return allData;
+  }
+
+  closeCustomer() {
+    this.customer = false;
   }
 
 }

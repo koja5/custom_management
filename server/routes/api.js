@@ -473,8 +473,8 @@ router.post('/createUser', function (req, res, next) {
     var pass = sha1(req.body.password);
 
     test = {};
+    console.log(req.body.birthday);
     var podaci = {
-      'id': '',
       'shortname': req.body.shortname,
       'password': sha1(req.body.password),
       'firstname': req.body.firstname,
@@ -490,9 +490,9 @@ router.post('/createUser', function (req, res, next) {
       'incompanysince': req.body.incompanysince,
       'type': req.body.type,
       'storeId': req.body.storeId,
+      'img': '',
       'active': 1
     };
-    console.log(podaci);
 
     conn.query("SELECT * FROM users WHERE email=?", [req.body.email],
       function (err, rows, fields) {
@@ -504,12 +504,13 @@ router.post('/createUser', function (req, res, next) {
           });
           return next(err);
         }
-        console.log(rows);
         if (rows.length >= 1) {
           test.success = false;
           test.info = 'Email already exists!';
           res.json(test);
         } else {
+          console.log(podaci);
+          console.log('usao sam ovde!');
           conn.query("insert into users SET ?", podaci, function (err, rows) {
             conn.release();
             if (!err) {
@@ -695,7 +696,6 @@ router.post('/createStore', function (req, res, next) {
 
     test = {};
     var podaci = {
-      'id': '',
       'storename': req.body.storename,
       'street': req.body.street,
       'zipcode': req.body.zipcode,
@@ -707,6 +707,7 @@ router.post('/createStore', function (req, res, next) {
       'start_work': req.body.start_work,
       'end_work': req.body.end_work,
       'time_duration': req.body.time_duration,
+      'time_therapy': req.body.time_therapy,
       'superadmin': req.body.superadmin
     };
 
@@ -815,6 +816,7 @@ router.post('/updateStore', function (req, res, next) {
       'start_work': req.body.start_work,
       'end_work': req.body.end_work,
       'time_duration': req.body.time_duration,
+      'time_therapy': req.body.time_therapy,
       'superadmin': req.body.superadmin
     };
 
@@ -891,7 +893,6 @@ router.post('/createCustomer', function (req, res, next) {
 
     test = {};
     var podaci = {
-      'id': '',
       'shortname': req.body.shortname,
       'firstname': req.body.firstname,
       'lastname': req.body.lastname,

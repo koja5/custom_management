@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./user-details.component.scss']
 })
 export class UserDetailsComponent implements OnInit {
-  @ViewChild('user') user: Modal;
+  public user = false;
   public id: string;
   public data: any;
   public imagePath: any;
@@ -120,7 +120,13 @@ export class UserDetailsComponent implements OnInit {
     console.log(this.data);
     this.service.updateUser(this.data).subscribe(data => {
       if (data) {
-        this.user.close();
+        Swal.fire({
+          title: 'Successfull!',
+          text: 'Successful update user!',
+          timer: 3000,
+          type: 'success'
+        });
+        this.user = false;
       }
     });
   }
@@ -181,7 +187,7 @@ export class UserDetailsComponent implements OnInit {
     this.service.setWorkTimeForUser(workTime).subscribe(data => {
       console.log(data);
       if (data['success']) {
-        this.user.close();
+        this.user = false;
         this.noSetWorkTime = false;
       }
     });
@@ -255,7 +261,7 @@ export class UserDetailsComponent implements OnInit {
 
   editOptions() {
     this.workTimeData();
-    this.user.open();
+    this.user = true;
   }
 
   convertTypeStringToInt(type) {
@@ -332,7 +338,7 @@ export class UserDetailsComponent implements OnInit {
       data => {
         console.log(data);
         if (data['success']) {
-          this.user.close();
+          this.user = false;
         }
       }
     )
@@ -374,5 +380,14 @@ export class UserDetailsComponent implements OnInit {
     } else {
       this.dialogOpened = false;
     }
+  }
+
+  getTranslate(title) {
+    if(title === 'profile') {
+      return this.language.profile;
+    } else if(title === 'workTime') {
+      return this.language.workTime;
+    }
+    return null;
   }
 }

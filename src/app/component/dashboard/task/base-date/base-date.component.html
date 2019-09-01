@@ -19,7 +19,8 @@
           </div>
           <div *ngIf="type === 'details'">
             <div class="vd_info tr" style="height: 7vh; text-align: center"> <button kendoButton class="k-edit"
-                [icon]="'k-icon k-i-delete'" (click)="customer.open()" style="text-align: center">Edit</button> </div>
+                [icon]="'k-icon k-i-delete'" (click)="customer = !customer" style="text-align: center">Edit</button>
+            </div>
             <div class="vd_info tr" style="height: 7vh; text-align: center"> <button kendoButton class="k-delete"
                 [icon]="'k-icon k-i-delete'" [primary]="true" (click)="open('dialog')"
                 style="text-align: center">Delete</button> </div>
@@ -328,237 +329,241 @@
       </kendo-dialog-actions>
     </kendo-dialog>
 
+    <kendo-window [title]="getTranslate(currentTab)" *ngIf="customer" [minWidth]="700" [width]="850" [height]="600"
+      (close)="customer = false">
+      <div class="tabs widget">
+        <ul class="nav nav-tabs widget">
+          <li [ngClass]="currentTab === 'profile' ? 'active' : ''"> <a
+              (click)="changeTab('profile')">{{language.profile}}</a></li>
+          <li [ngClass]="currentTab === 'base_one' ? 'active' : ''"> <a
+              (click)="changeTab('base_one')">{{language.baseOne}}</a>
+          <li [ngClass]="currentTab === 'base_two' ? 'active' : ''"> <a
+              (click)="changeTab('base_two')">{{language.baseTwo}}</a>
+          <li [ngClass]="currentTab === 'physical_illness' ? 'active' : ''"> <a
+              (click)="changeTab('physical_illness')">{{language.physicalIllness}}</a>
+          </li>
+        </ul>
 
-    <modal #customer modalClass="modal-lg top-margin loggerModal adminModal">
-      <modal-header>
-        <h2 *ngIf="currentTab === 'profile'">Update customer</h2>
-        <h2 *ngIf="currentTab === 'base_one'">Base data I</h2>
-        <h2 *ngIf="currentTab === 'base_two'">Base data II</h2>
-        <h2 *ngIf="currentTab === 'physical_illness'">Physical illness</h2>
-      </modal-header>
-      <modal-content>
-        <div class="tabs widget">
-          <ul class="nav nav-tabs widget">
-            <li [ngClass]="currentTab === 'profile' ? 'active' : ''"> <a
-                (click)="changeTab('profile')">{{language.profile}}</a></li>
-            <li [ngClass]="currentTab === 'base_one' ? 'active' : ''"> <a
-                (click)="changeTab('base_one')">{{language.baseOne}}</a>
-            <li [ngClass]="currentTab === 'base_two' ? 'active' : ''"> <a
-                (click)="changeTab('base_two')">{{language.baseTwo}}</a>
-            <li [ngClass]="currentTab === 'physical_illness' ? 'active' : ''"> <a
-                (click)="changeTab('physical_illness')">{{language.physicalIllness}}</a>
-            </li>
-          </ul>
-
-          <!--PROFILE-->
-          <div class="tab-content" *ngIf="currentTab === 'profile'">
-            <div id="profile-tab" class="tab-pane active">
-              <form name="loginForm" class="loginForm" (ngSubmit)="updateCustomer(customer)">
-                <div class="form-group">
-                  <div class="panel-body">
-                    <div class="text-center vd_info-parent col-md-4 col-xs-12">
-                      <img *ngIf="data.gender !== '' && data.gender === 'male'" alt="example image"
-                        style="width: 190px;" src="../../../../assets/images/users/male-patient.png"
-                        class="rounded-circle">
-                      <img *ngIf="data.gender !== '' && data.gender === 'female'" alt="example image"
-                        style="width: 190px;" src="../../../../assets/images/users/female-patient.png"
-                        class="rounded-circle">
-                      <h2 class="font-semibold col-md-6 col-xs-12">{{data.firstname}} {{data.lastname}}</h2>
-                    </div>
-                    <div class="col-md-8 col-xs-12">
+        <!--PROFILE-->
+        <div class="tab-content" *ngIf="currentTab === 'profile'">
+          <div id="profile-tab" class="tab-pane active">
+            <form name="loginForm" class="loginForm" (ngSubmit)="updateCustomer(customer)">
+              <div class="form-group">
+                <div class="panel-body">
+                  <div class="text-center vd_info-parent col-md-4 col-xs-12">
+                    <img *ngIf="data.gender !== '' && data.gender === 'male'" alt="example image" style="width: 190px;"
+                      src="../../../../assets/images/users/male-patient.png" class="rounded-circle">
+                    <img *ngIf="data.gender !== '' && data.gender === 'female'" alt="example image"
+                      style="width: 190px;" src="../../../../assets/images/users/female-patient.png"
+                      class="rounded-circle">
+                    <h2 class="font-semibold col-md-6 col-xs-12">{{data.firstname}} {{data.lastname}}</h2>
+                  </div>
+                  <div class="col-md-8 col-xs-12">
+                    <div>
+                      <p>{{language.username}}</p>
                       <input type="text" class="email col-md-12 col-xs-12" [(ngModel)]="data.shortname"
                         name="shortname">
+                    </div>
+                    <div>
+                      <p>{{language.firstname}}</p>
                       <input type="text" class="email col-md-12 col-xs-12" [(ngModel)]="data.firstname"
                         name="firstname">
+                    </div>
+                    <div>
+                      <p>{{language.lastname}}</p>
                       <input type="text" class="email col-md-12 col-xs-12" [(ngModel)]="data.lastname" name="lastname">
-                      <div class="form-group col-md-12 col-xs-12">
-                        <div class="col-md-6 col-xs-12">
-                          <input type="radio" name="gender" id="female" class="k-radio"
-                            checked="date.gender === 'female' ? checked : ''" [(ngModel)]="data.gender"
-                            [value]="'female'">
-                          <label class="k-radio-label col-md-6 col-xs-12" for="female">{{language.female}}</label>
-                          <input type="radio" name="gender" id="male" class="k-radio"
-                            checked="date.gender === 'male' ? checked : ''" [(ngModel)]="data.gender" [value]="'male'">
-                          <label class="k-radio-label col-md-6 col-xs-12" for="male">{{language.male}}</label>
-                        </div>
-                        <!--<kendo-datepicker class="email col-md-6 col-xs-12" [value]="data.birthday"></kendo-datepicker>-->
+                    </div>
+                    <div class="form-group col-md-12 col-xs-12">
+                      <p>{{language.gender}}</p>
+                      <div class="col-md-6 col-xs-12">
+                        <input type="radio" name="gender" id="female" class="k-radio"
+                          checked="date.gender === 'female' ? checked : ''" [(ngModel)]="data.gender"
+                          [value]="'female'">
+                        <label class="k-radio-label col-md-6 col-xs-12" for="female">{{language.female}}</label>
+                        <input type="radio" name="gender" id="male" class="k-radio"
+                          checked="date.gender === 'male' ? checked : ''" [(ngModel)]="data.gender" [value]="'male'">
+                        <label class="k-radio-label col-md-6 col-xs-12" for="male">{{language.male}}</label>
                       </div>
+                      <!--<kendo-datepicker class="email col-md-6 col-xs-12" [value]="data.birthday"></kendo-datepicker>-->
                     </div>
                   </div>
                 </div>
-                <div class="form-group">
-                  <input type="text" class="email col-md-4 col-xs-12" [(ngModel)]="data.street" name="street">
-                  <input type="text" class="email col-md-4 col-xs-12" [(ngModel)]="data.streetnumber"
-                    name="streetnumber">
-                  <input type="text" class="email col-md-4 col-xs-12" [(ngModel)]="data.city" name="city">
+              </div>
+              <div class="form-group">
+                <div class="email col-md-4 col-xs-12">
+                  <p>{{language.street}}</p>
+                  <input type="text" class="col-xs-12" [(ngModel)]="data.street" name="street">
                 </div>
-                <!-- ./remember-row -->
-                <div class="form-group">
-                  <button class="btn btn-lg btn-primary btn-block" type="submit">Update customer</button>
+                <div class="email col-md-4 col-xs-12">
+                  <p>{{language.streetnumber}}</p>
+                  <input type="text" class="col-xs-12" [(ngModel)]="data.streetnumber" name="streetnumber">
                 </div>
-              </form>
-            </div>
-          </div>
-
-          <!--BASE ONE-->
-          <div class="tab-content" *ngIf="currentTab === 'base_one'">
-            <div id="profile-tab" class="tab-pane active">
-              <form name="loginForm" class="loginForm"
-                (ngSubmit)="operationMode === 'add' ? addBaseDataOne(base) : updateBaseDataOne(base)" ngNativeValidate>
-                <div class="form-group" *ngIf="baseData !== undefined">
-                  <div class="col-md-4 col-xs-12" *ngIf="recommendationList !== undefined">
-                    <p>{{language.recommendation}}</p>
-                    <kendo-multiselect [data]="recommendationList" [textField]="'title'" [valueField]="'id'"
-                      [(ngModel)]="selectedRecommendation" [valuePrimitive]="true" name="recommendation">
-                    </kendo-multiselect>
-                  </div>
-                  <div class="col-md-4 col-xs-12" *ngIf="relationshipList !== undefined">
-                    <p>{{language.relationship}}</p>
-                    <kendo-combobox class="col-md-12 col-xs-12" [data]="relationshipList" [textField]="'title'"
-                      [valueField]="'id'" [(ngModel)]="baseData.relationship" [valuePrimitive]="true"
-                      name="relationship">
-                    </kendo-combobox>
-                  </div>
-                  <div class="col-md-4 col-xs-12" *ngIf="socialList !== undefiend">
-                    <p>{{language.social}}</p>
-                    <kendo-combobox class="col-md-12 col-xs-12" [data]="socialList" [textField]="'title'"
-                      [valueField]="'id'" [(ngModel)]="baseData.social" [valuePrimitive]="true" name="title">
-                    </kendo-combobox>
-                  </div>
-                  <div class="col-md-4 col-xs-12" *ngIf="doctorList !== undefined">
-                    <p>{{language.doctor}}</p>
-                    <kendo-combobox class="col-md-12 col-xs-12" [data]="doctorsList" [textField]="'firstname'"
-                      [valueField]="'id'" [(ngModel)]="baseData.doctors" [valuePrimitive]="true" name="doctors">
-                    </kendo-combobox>
-                  </div>
-                  <div class="col-md-4 col-xs-12">
-                    <p>{{language.firstDate}}</p>
-                    <kendo-datepicker [(ngModel)]="baseData.first_date" name="first_date"></kendo-datepicker>
-                  </div>
+                <div class="email col-md-4 col-xs-12">
+                  <p>{{language.city}}</p>
+                  <input type="text" class="col-xs-12" [(ngModel)]="data.city" name="city">
                 </div>
-                <div class="form-group">
-                  <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-primary btn-block" type="submit"
-                    [disabled]="selectedRecommendation === undefined || baseData.relationship === undefined || baseData.social === undefined || baseData.doctor === undefined || baseData.first_date === undefined">{{language.addData}}</button>
-                  <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-primary btn-block"
-                    type="submit">{{language.editData}}</button>
-                </div>
-              </form>
-            </div>
-          </div>
-
-
-          <!--BASE TWO-->
-          <div class="tab-content" *ngIf="currentTab === 'base_two'">
-            <div id="profile-tab" class="tab-pane active">
-              <form name="base_two"
-                (ngSubmit)="operationMode === 'add' ? addBaseDataTwo(base_two) : updateBaseDataTwo(base_two)">
-                <div class="form-group">
-                  <div class="panel-body" *ngIf="baseData !== undefined">
-                    <div class="col-md-4 col-xs-12">
-                      <p>{{language.size}}</p>
-                      <input type="number" [(ngModel)]="baseData.size" name="size">
-                    </div>
-                    <div class="col-md-4 col-xs-12">
-                      <p>{{language.weight}}</p>
-                      <input type="number" [(ngModel)]="baseData.weight" name="weight">
-                    </div>
-                    <div class="col-md-4 col-xs-12">
-                      <p>{{language.phone}}</p>
-                      <input type="text" [(ngModel)]="baseData.phone" name="phone">
-                    </div>
-                    <div class="col-md-4 col-xs-12">
-                      <p>{{language.mobilePhone}}</p>
-                      <input type="text" [(ngModel)]="baseData.mobile_phone" name="mobile_phone">
-                    </div>
-                    <div class="col-md-4 col-xs-12">
-                      <p>{{language.birthday}}</p>
-                      <kendo-datepicker [(ngModel)]="baseData.birthday" name="birthday">
-                      </kendo-datepicker>
-                    </div>
-                    <div class="col-md-4 col-xs-12">
-                      <p>{{language.childs}}</p>
-                      <input type="number" [(ngModel)]="baseData.childs" name="childs">
-                    </div>
-                    <div class="col-md-4 col-xs-12">
-                      <p>{{language.notes}}</p>
-                      <input type="text" [(ngModel)]="baseData.notes" name="notes">
-                    </div>
-                    <div class="col-md-4 col-xs-12">
-                      <p>{{language.profession}}</p>
-                      <input type="text" [(ngModel)]="baseData.profession" name="profession">
-                    </div>
-                    <div class="col-md-4 col-xs-12">
-                      <p>{{language.useful}}</p>
-                      <input type="text" [(ngModel)]="baseData.useful" name="useful">
-                    </div>
-                  </div>
-                </div>
-                <!-- ./remember-row -->
-                <div class="form-group">
-                  <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-primary btn-block" type="submit"
-                    [disabled]="baseData.size === undefined || baseData.weight === undefined || baseData.phone === undefined || baseData.mobile_phone === undefined || 
-                  baseData.birthday === undefined || baseData.childs === undefined || baseData.notes === undefined || baseData.profession === undefined || baseData.useful === undefiend">{{language.addData}}</button>
-                  <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-primary btn-block"
-                    type="submit">{{language.editData}}</button>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          <!--PHYSICAL ILLNESS-->
-          <div class="tab-content" *ngIf="currentTab === 'physical_illness'">
-            <div id="profile-tab" class="tab-pane active">
-              <form name="loginForm" class="loginForm"
-                (ngSubmit)="operationMode === 'add' ? addPhysicalIllness(data) : updatePhysicalIllness(data)">
-                <div class="form-group">
-                  <div class="panel-body" *ngIf="baseData !== undefined">
-                    <div class="col-md-4 col-xs-12">
-                      <p>{{language.internalOrgans}}</p>
-                      <input type="text" [(ngModel)]="baseData.internal_organs" name="internal_organs">
-                    </div>
-                    <div class="col-md-4 col-xs-12">
-                      <p>{{language.operations}}</p>
-                      <input type="text" [(ngModel)]="baseData.operations" name="operations">
-                    </div>
-                    <div class="col-md-4 col-xs-12">
-                      <p>{{language.previousFindidngs}}</p>
-                      <input type="text" [(ngModel)]="baseData.previous_findings" name="previous_findings">
-                    </div>
-                    <div class="col-md-4 col-xs-12">
-                      <p>{{language.medicament}}</p>
-                      <input type="text" [(ngModel)]="baseData.medicament" name="medicament">
-                    </div>
-                    <div class="col-md-4 col-xs-12">
-                      <p>{{language.allergies}}</p>
-                      <input type="text" [(ngModel)]="baseData.allergies" name="allergies">
-                    </div>
-                    <div class="col-md-4 col-xs-12">
-                      <p>{{language.skinSensitivity}}</p>
-                      <input type="text" [(ngModel)]="baseData.skin_sensitivity" name="skin_sensitivity">
-                    </div>
-                    <div class="col-md-4 col-xs-12">
-                      <p>{{language.pregnancy}}</p>
-                      <input type="text" [(ngModel)]="baseData.pregnancy" name="pregnancy">
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-primary btn-block" type="submit"
-                    [disabled]="baseData.internal_organs === undefined || baseData.operations === undefined || 
-                  baseData.previous_findings === undefined || baseData.medicament === undefined || baseData.allergies === undefined || baseData.skin_sensitivity === undefined || baseData.pregnancy === undefined">{{language.addData}}</button>
-                  <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-primary btn-block"
-                    type="submit">{{language.editData}}</button>
-                </div>
-              </form>
-            </div>
+              </div>
+              <!-- ./remember-row -->
+              <div class="form-group">
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Update customer</button>
+              </div>
+            </form>
           </div>
         </div>
-      </modal-content>
-      <modal-footer>
-        <button class="btn btn-primary" (click)="customer.close()">Close</button>
-      </modal-footer>
-    </modal>
 
+        <!--BASE ONE-->
+        <div class="tab-content" *ngIf="currentTab === 'base_one'">
+          <div id="profile-tab" class="tab-pane active">
+            <form name="loginForm" class="loginForm"
+              (ngSubmit)="operationMode === 'add' ? addBaseDataOne(base) : updateBaseDataOne(base)" ngNativeValidate>
+              <div class="form-group" *ngIf="baseData !== undefined">
+                <div class="col-md-4 col-xs-12" *ngIf="recommendationList !== undefined">
+                  <p>{{language.recommendation}}</p>
+                  <kendo-multiselect [data]="recommendationList" [textField]="'title'" [valueField]="'id'"
+                    [(ngModel)]="selectedRecommendation" [valuePrimitive]="true" name="recommendation">
+                  </kendo-multiselect>
+                </div>
+                <div class="col-md-4 col-xs-12" *ngIf="relationshipList !== undefined">
+                  <p>{{language.relationship}}</p>
+                  <kendo-combobox class="col-md-12 col-xs-12" [data]="relationshipList" [textField]="'title'"
+                    [valueField]="'id'" [(ngModel)]="baseData.relationship" [valuePrimitive]="true" name="relationship">
+                  </kendo-combobox>
+                </div>
+                <div class="col-md-4 col-xs-12" *ngIf="socialList !== undefiend">
+                  <p>{{language.social}}</p>
+                  <kendo-combobox class="col-md-12 col-xs-12" [data]="socialList" [textField]="'title'"
+                    [valueField]="'id'" [(ngModel)]="baseData.social" [valuePrimitive]="true" name="title">
+                  </kendo-combobox>
+                </div>
+                <div class="col-md-4 col-xs-12" *ngIf="doctorList !== undefined">
+                  <p>{{language.doctor}}</p>
+                  <kendo-combobox class="col-md-12 col-xs-12" [data]="doctorsList" [textField]="'firstname'"
+                    [valueField]="'id'" [(ngModel)]="baseData.doctors" [valuePrimitive]="true" name="doctors">
+                  </kendo-combobox>
+                </div>
+                <div class="col-md-4 col-xs-12">
+                  <p>{{language.firstDate}}</p>
+                  <kendo-datepicker [(ngModel)]="baseData.first_date" name="first_date"></kendo-datepicker>
+                </div>
+              </div>
+              <div class="form-group">
+                <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-primary btn-block" type="submit"
+                  [disabled]="selectedRecommendation === undefined || baseData.relationship === undefined || baseData.social === undefined || baseData.doctor === undefined || baseData.first_date === undefined">{{language.addData}}</button>
+                <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-primary btn-block"
+                  type="submit">{{language.editData}}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+
+        <!--BASE TWO-->
+        <div class="tab-content" *ngIf="currentTab === 'base_two'">
+          <div id="profile-tab" class="tab-pane active">
+            <form name="base_two"
+              (ngSubmit)="operationMode === 'add' ? addBaseDataTwo(base_two) : updateBaseDataTwo(base_two)">
+              <div class="form-group">
+                <div class="panel-body" *ngIf="baseData !== undefined">
+                  <div class="col-md-4 col-xs-12">
+                    <p>{{language.size}}</p>
+                    <input type="number" [(ngModel)]="baseData.size" name="size">
+                  </div>
+                  <div class="col-md-4 col-xs-12">
+                    <p>{{language.weight}}</p>
+                    <input type="number" [(ngModel)]="baseData.weight" name="weight">
+                  </div>
+                  <div class="col-md-4 col-xs-12">
+                    <p>{{language.phone}}</p>
+                    <input type="text" [(ngModel)]="baseData.phone" name="phone">
+                  </div>
+                  <div class="col-md-4 col-xs-12">
+                    <p>{{language.mobilePhone}}</p>
+                    <input type="text" [(ngModel)]="baseData.mobile_phone" name="mobile_phone">
+                  </div>
+                  <div class="col-md-4 col-xs-12">
+                    <p>{{language.birthday}}</p>
+                    <kendo-datepicker [(ngModel)]="baseData.birthday" name="birthday">
+                    </kendo-datepicker>
+                  </div>
+                  <div class="col-md-4 col-xs-12">
+                    <p>{{language.childs}}</p>
+                    <input type="number" [(ngModel)]="baseData.childs" name="childs">
+                  </div>
+                  <div class="col-md-4 col-xs-12">
+                    <p>{{language.notes}}</p>
+                    <input type="text" [(ngModel)]="baseData.notes" name="notes">
+                  </div>
+                  <div class="col-md-4 col-xs-12">
+                    <p>{{language.profession}}</p>
+                    <input type="text" [(ngModel)]="baseData.profession" name="profession">
+                  </div>
+                  <div class="col-md-4 col-xs-12">
+                    <p>{{language.useful}}</p>
+                    <input type="text" [(ngModel)]="baseData.useful" name="useful">
+                  </div>
+                </div>
+              </div>
+              <!-- ./remember-row -->
+              <div class="form-group">
+                <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-primary btn-block" type="submit"
+                  [disabled]="baseData.size === undefined || baseData.weight === undefined || baseData.phone === undefined || baseData.mobile_phone === undefined || 
+                  baseData.birthday === undefined || baseData.childs === undefined || baseData.notes === undefined || baseData.profession === undefined || baseData.useful === undefiend">{{language.addData}}</button>
+                <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-primary btn-block"
+                  type="submit">{{language.editData}}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!--PHYSICAL ILLNESS-->
+        <div class="tab-content" *ngIf="currentTab === 'physical_illness'">
+          <div id="profile-tab" class="tab-pane active">
+            <form name="loginForm" class="loginForm"
+              (ngSubmit)="operationMode === 'add' ? addPhysicalIllness(data) : updatePhysicalIllness(data)">
+              <div class="form-group">
+                <div class="panel-body" *ngIf="baseData !== undefined">
+                  <div class="col-md-4 col-xs-12">
+                    <p>{{language.internalOrgans}}</p>
+                    <input type="text" [(ngModel)]="baseData.internal_organs" name="internal_organs">
+                  </div>
+                  <div class="col-md-4 col-xs-12">
+                    <p>{{language.operations}}</p>
+                    <input type="text" [(ngModel)]="baseData.operations" name="operations">
+                  </div>
+                  <div class="col-md-4 col-xs-12">
+                    <p>{{language.previousFindidngs}}</p>
+                    <input type="text" [(ngModel)]="baseData.previous_findings" name="previous_findings">
+                  </div>
+                  <div class="col-md-4 col-xs-12">
+                    <p>{{language.medicament}}</p>
+                    <input type="text" [(ngModel)]="baseData.medicament" name="medicament">
+                  </div>
+                  <div class="col-md-4 col-xs-12">
+                    <p>{{language.allergies}}</p>
+                    <input type="text" [(ngModel)]="baseData.allergies" name="allergies">
+                  </div>
+                  <div class="col-md-4 col-xs-12">
+                    <p>{{language.skinSensitivity}}</p>
+                    <input type="text" [(ngModel)]="baseData.skin_sensitivity" name="skin_sensitivity">
+                  </div>
+                  <div class="col-md-4 col-xs-12">
+                    <p>{{language.pregnancy}}</p>
+                    <input type="text" [(ngModel)]="baseData.pregnancy" name="pregnancy">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-primary btn-block" type="submit"
+                  [disabled]="baseData.internal_organs === undefined || baseData.operations === undefined || 
+                  baseData.previous_findings === undefined || baseData.medicament === undefined || baseData.allergies === undefined || baseData.skin_sensitivity === undefined || baseData.pregnancy === undefined">{{language.addData}}</button>
+                <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-primary btn-block"
+                  type="submit">{{language.editData}}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </kendo-window>
 
     <modal #upload modalClass="modal-lg top-margin loggerModal adminModal" *ngIf="uploader !== undefined">
       <modal-header>
@@ -649,7 +654,43 @@
       </modal-footer>
     </modal>
 
-    <modal #complaint modalClass="modal-md top-margin loggerModal adminModal">
+    <kendo-window [title]="getTranslate(operationMode)" *ngIf="complaint" [minWidth]="400" [width]="470" [height]="450"
+      (close)="complaint = false">
+      <form name="loginForm" class="loginForm"
+        (ngSubmit)="operationMode === 'add' ? addComplaint(complaint) : updateComplaint(complaint)" ngNativeValidate>
+        <div class="col-md-12 col-xs-12">
+          <p>{{language.complaintValue}}</p>
+          <kendo-multiselect [data]="complaintValue" [textField]="'title'" [valueField]="'id'"
+            [(ngModel)]="selectedComplaint" name="complaint" [placeholder]="language.choiceComplaint"
+            [valuePrimitive]="true">
+          </kendo-multiselect>
+        </div>
+        <div class="col-md-12 col-xs-12">
+          <p>{{language.comment}}</p>
+          <input type="text" class="col-xs-12" name="comment" placeholder="Comment" [(ngModel)]="complaintData.comment"
+            comment.value=''>
+        </div>
+        <div class="col-md-12 col-xs-12">
+          <p>{{language.therapyValue}}</p>
+          <kendo-multiselect class="col-xs-12" [data]="therapyValue" [textField]="'title'" [valueField]="'id'"
+            [(ngModel)]="selectedTherapies" name="therapies" [placeholder]="language.choiceTherapy"
+            [valuePrimitive]="true" style="padding: 0px !important;">
+          </kendo-multiselect>
+        </div>
+        <div class="col-md-12 col-xs-12">
+          <p>{{language.cs}}</p>
+          <input type="text" class="col-xs-12" name="cs" placeholder="CS" [(ngModel)]="complaintData.cs" cs.value=''>
+        </div>
+        <div class="form-group">
+          <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-primary btn-block" type="submit"
+            [disabled]="selectedComplaint === '' || selectedTherapies === ''">{{language.addComplaint}}</button>
+          <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-primary btn-block" type="submit"
+            [disabled]="complaintData.complaint === '' || complaintData.therapies === ''">{{language.updateComplaint}}</button>
+        </div>
+      </form>
+    </kendo-window>
+
+    <!-- <modal #complaint modalClass="modal-md top-margin loggerModal adminModal">
       <modal-header>
         <h2 *ngIf="operationMode === 'add'">{{language.addComplaint}}</h2>
         <h2 *ngIf="operationMode === 'edit'">{{language.updateComplaint}}</h2>
@@ -689,7 +730,7 @@
       <modal-footer>
         <button class="btn btn-primary" (click)="complaint.close()">Close</button>
       </modal-footer>
-    </modal>
+    </modal> -->
 
     <modal #therapy modalClass="modal-md top-margin loggerModal adminModal">
       <modal-header>
