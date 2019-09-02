@@ -35,8 +35,8 @@ import Swal from 'sweetalert2';
   encapsulation: ViewEncapsulation.None
 })
 export class TaskComponent implements OnInit {
-  @ViewChild('customer') customerModal: Modal;
   @ViewChild('customerUserModal') customerUserModal: Modal;
+  public customerModal = false;
   public selectedDate: Date = new Date();
   public formGroup: FormGroup;
   public events: SchedulerEvent[] = [];
@@ -93,6 +93,7 @@ export class TaskComponent implements OnInit {
   public size = [];
   public customerUserModal2 = false;
   public selectedButtonIndex = [false, false, false, false, false, false];
+  public imagePath = 'defaultUser';
 
   constructor(
     public formBuilder: FormBuilder,
@@ -405,13 +406,13 @@ export class TaskComponent implements OnInit {
   }
 
   newCustomer() {
-    this.zIndex = 'zIndex';
-    this.customerModal.open();
+    // this.zIndex = 'zIndex';
+    this.customerModal = true;
   }
 
   closeNewCustomer() {
     this.zIndex = '';
-    this.customerModal.close();
+    this.customerModal = false;
   }
 
   createCustomer(form) {
@@ -419,7 +420,7 @@ export class TaskComponent implements OnInit {
     this.data.storeId = localStorage.getItem('storeId');
     this.customer.createCustomer(this.data, val => {
       console.log(val);
-      this.customerModal.close();
+      this.customerModal = false;
       // form.reset();
     });
   }
