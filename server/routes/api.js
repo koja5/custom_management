@@ -152,7 +152,8 @@ router.post('/createTask', function (req, res, next) {
       'colorTask': req.body.colorTask,
       'start': req.body.start,
       'end': req.body.end,
-      'telephone': req.body.telephone
+      'telephone': req.body.telephone,
+      'therapy_id': req.body.therapy_id
     };
     console.log(podaci);
 
@@ -2050,7 +2051,7 @@ router.post('/addTherapy', function (req, res, next) {
       return;
     }
 
-    response = null;
+    response = {};
     console.log(req);
     var date = {
       'customer_id': req.body.customer_id,
@@ -2071,8 +2072,10 @@ router.post('/addTherapy', function (req, res, next) {
       conn.release();
       if (!err) {
         if (!err) {
-          response = true;
+          response.id = rows.insertId;
+          response.success = true;
         } else {
+          response.id = -1;
           response.success = false;
         }
         res.json(response);
@@ -2418,7 +2421,7 @@ router.post('/addTherapyList', function (req, res, next) {
         if (!err) {
           response = true;
         } else {
-          response.success = false;
+          response = false;
         }
         res.json(response);
       } else {
