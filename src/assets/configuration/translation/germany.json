@@ -34,12 +34,16 @@
     "timeline": "Zeitleiste",
     "agenda": "Agenda",
     "noTaskForUser": "Der ausgewählte Benutzer hat keine Aufgaben.",
-    "tasksForUser": "Aufgaben für den Benutzer",
-    "monday": "Montag",
-    "tuesday": "Dienstag",
-    "wednesday": "Mittwoch",
-    "thursday": "Donnerstag",
-    "friday": "Freitag"
+    "tasksForUser": "Kalender von", 
+    "successUpdateTitle": "Erfolgs update",
+    "successUpdateText": "Update-Aufgaben erfolgreich",
+    "unsuccessUpdateTitle": "Update fehlgeschlagen",
+    "unsuccessUpdateText": "Aktualisierungsaufgaben fehlgeschlagen",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday"
   },
   "navigation-menu": {
     "calendar": "Kalender",
@@ -62,7 +66,10 @@
     "telephone": "Telefon",
     "email": "Email",
     "street": "Straße",
-    "newUser": "Neuer Benutzer"
+    "newUser": "Neuer Benutzer",
+    "newCustomer": "New customer",
+    "female": "Female",
+    "male": "Male"
   },
   "dashboard": {
     "profile": "Profil",
@@ -81,10 +88,43 @@
     "thursday": "Donnerstag",
     "friday": "Freitag",
     "addComplaint": "Neue Beschwerde hinzufügen",
+    "updateComplaint": "Update complaint",
     "addTherapy": "Neue Therapie hinzufügen",
+    "updateTherapy": "Update therapy",
     "choiceComplaint": "Auswahl beschwerde...",
     "choiceTherapy": "Auswahl therapie...",
-    "choiceState": "Auswahl aktueller Zustand"
+    "choiceState": "Auswahl aktueller Zustand",
+    "updateCustomer": "Update customer",
+    "baseOne": "Base data I",
+    "baseTwo": "Base data II",
+    "physicalIllness": "Physical illness",
+    "recommendation": "Recommendation",
+    "relationship": "Relationship status",
+    "social": "Social insurance",
+    "doctor": "Doctor",
+    "doctorType": "Doctor type",
+    "firstDate": "First date",
+    "additionalField": "Additional field",
+    "addData": "Add data",
+    "editData": "Edit data",
+    "size": "Size",
+    "weight": "Weight",
+    "phone": "Phone",
+    "mobilePhone": "Mobile phone",
+    "birthday": "Birthday",
+    "childs": "Childs",
+    "notes": "Notes",
+    "profession": "Profession",
+    "useful": "Useful for",
+    "internalOrgans": "Internal organs",
+    "operations": "Operations",
+    "previousFindidngs": "Previous findings",
+    "medicament": "Medicament",
+    "allergies": "Allerhies",
+    "skinSensitivity": "Skin sensitivity",
+    "pregnancy": "Pregnancy",
+    "female": "Female",
+    "male": "Male"
   },
   "store": {
     "exist": "E-Mail ist vorhanden!",
@@ -101,5 +141,10 @@
     "Physio",
     "Electro",
     "Tuina"
+  ],
+  "state": [
+    "worse",
+    "same",
+    "better"
   ]
 }

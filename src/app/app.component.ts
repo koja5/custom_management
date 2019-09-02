@@ -53,7 +53,7 @@ export class UploadInterceptor implements HttpInterceptor, OnInit {
 
   ngOnInit(): void {
 
-    this.socket.on('numberOfOnlineUsers', (numberOfOnlineUsers) => {
+    this.socket.on('/', (numberOfOnlineUsers) => {
       this.numberOfOnlineUsers = numberOfOnlineUsers;
       console.log(this.numberOfOnlineUsers);
     });
