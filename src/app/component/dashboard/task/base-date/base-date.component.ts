@@ -23,12 +23,12 @@ import { PhysicalModel } from 'src/app/models/physical-model';
 export class BaseDateComponent implements OnInit {
   public customer = false;
   @ViewChild('upload') upload: Modal;
-  @ViewChild('therapy') therapy: Modal;
   @Input() type;
   @Input() data;
   @Input() date;
   @Input() doctor;
   public complaint = false;
+  public therapy = false;
   public maleImg = '../../../../../assets/images/users/male-patient.png';
   public femaleImg = '../../../../../assets/images/users/female-patient.png';
   public dialogOpened = false;
@@ -324,7 +324,7 @@ export class BaseDateComponent implements OnInit {
         this.complaintValue = data;
       }
     );
-    this.therapy.open();
+    this.therapy = true;
   }
 
   /*selectComplaint(event) {
@@ -472,7 +472,7 @@ export class BaseDateComponent implements OnInit {
     this.service.addTherapy(this.complaintData).subscribe(data => {
       if (data) {
         this.getTherapy();
-        this.therapy.close();
+        this.therapy = false;
         Swal.fire({
           title: 'Successfull!',
           text: 'New therapy is successfull added!',
@@ -502,7 +502,7 @@ export class BaseDateComponent implements OnInit {
     this.service.updateTherapy(this.complaintData).subscribe(data => {
       if (data) {
         this.getTherapy();
-        this.therapy.close();
+        this.therapy = false;
         Swal.fire({
           title: 'Successfull!',
           text: 'Therapy is successfull updated!',
@@ -535,7 +535,7 @@ export class BaseDateComponent implements OnInit {
       this.selectedTherapies = Number(event.therapies);
     }
     this.operationMode = 'edit';
-    this.therapy.open();
+    this.therapy = true;
   }
 
   deleteTherapy(event) {
@@ -603,6 +603,10 @@ export class BaseDateComponent implements OnInit {
       return this.language.addComplaint;
     } else if(title === 'edit') {
       return this.language.updateComplaint;
+    } else if(title === 'addTherapy') {
+      return this.language.addTherapy;
+    } else if(title === 'editTherapy') {
+      return this.language.updateTherapy;
     }
     return null;
   }

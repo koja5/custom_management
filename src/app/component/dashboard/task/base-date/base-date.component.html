@@ -654,8 +654,8 @@
       </modal-footer>
     </modal>
 
-    <kendo-window [title]="getTranslate(operationMode)" *ngIf="complaint" [minWidth]="400" [width]="470" [height]="450"
-      (close)="complaint = false">
+    <kendo-window [title]="getTranslate(operationMode)" *ngIf="complaint" [minWidth]="400" [width]="550"
+      [minHeight]="300" (close)="complaint = false">
       <form name="loginForm" class="loginForm"
         (ngSubmit)="operationMode === 'add' ? addComplaint(complaint) : updateComplaint(complaint)" ngNativeValidate>
         <div class="col-md-12 col-xs-12">
@@ -732,7 +732,55 @@
       </modal-footer>
     </modal> -->
 
-    <modal #therapy modalClass="modal-md top-margin loggerModal adminModal">
+    <kendo-window [title]="getTranslate(operationMode + 'Therapy')" *ngIf="therapy" [minWidth]="400" [width]="550"
+      [minHeight]="500" (close)="therapy = false">
+      <form name="loginForm" class="loginForm"
+        (ngSubmit)="operationMode === 'add' ? addTherapy(therapy) : updateTherapy(therapy)">
+        <div class="col-md-12 col-xs-12">
+          <p>{{language.complaintValue}}</p>
+          <kendo-multiselect class="col-md-12 col-xs-12" [data]="complaintValue" [textField]="'title'"
+            [valueField]="'id'" [(ngModel)]="selectedComplaint" name="complaint"
+            [placeholder]="language.choiceComplaint" [valuePrimitive]="true">
+          </kendo-multiselect>
+        </div>
+        <div class="col-md-12 col-xs-12">
+          <p>{{language.therapyValue}}</p>
+          <kendo-multiselect class="col-md-12 col-xs-12" [data]="therapyValue" [textField]="'title'" [valueField]="'id'"
+            [(ngModel)]="selectedTherapies" name="therapies" [placeholder]="language.choiceTherapy"
+            [valuePrimitive]="true">
+          </kendo-multiselect>
+        </div>
+        <div class="col-md-12 col-xs-12">
+          <p>{{language.comment}}</p>
+          <input type="text" class="col-md-12 col-xs-12" name="comment" placeholder="Comment"
+            [(ngModel)]="complaintData.comment" comment.value=''>
+        </div>
+        <div class="col-md-12 col-xs-12">
+          <p>{{language.cs}}</p>
+          <input type="text" class="col-md-12 col-xs-12" name="cs" placeholder="CS" [(ngModel)]="complaintData.cs"
+            cs.value=''>
+        </div>
+        <div class="col-md-12 col-xs-12">
+          <p>{{language.stateValue}}</p>
+          <kendo-combobox class="col-md-12 col-xs-12" [data]="stateValue" [(ngModel)]="complaintData.state" name="state"
+            [placeholder]="language.choiceState">
+          </kendo-combobox>
+        </div>
+        <div class="col-md-12 col-xs-12">
+          <p>{{language.em}}</p>
+          <input type="text" class="col-md-12 col-xs-12" name="em" placeholder="Em" [(ngModel)]="complaintData.em"
+            cs.value=''>
+        </div>
+        <div class="form-group">
+          <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-primary btn-block" type="submit"
+            [disabled]="selectedComplaint === '' || selectedTherapies === '' || complaintData.state === undefined">{{language.addTherapy}}</button>
+          <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-primary btn-block" type="submit"
+            [disabled]="selectedComplaint === '' || selectedTherapies === '' || complaintData.state === undefined">{{language.updateTherapy}}</button>
+        </div>
+      </form>
+    </kendo-window>
+
+    <!-- <modal #therapy modalClass="modal-md top-margin loggerModal adminModal">
       <modal-header>
         <h2 *ngIf="operationMode === 'add'">{{language.addTherapy}}</h2>
         <h2 *ngIf="operationMode === 'edit'">{{language.updateTherapy}}</h2>
@@ -781,7 +829,7 @@
       <modal-footer>
         <button class="btn btn-primary" (click)="therapy.close()">Close</button>
       </modal-footer>
-    </modal>
+    </modal> -->
 
   </div>
 </div>

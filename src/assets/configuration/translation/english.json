@@ -150,9 +150,11 @@
     "userType": "User type",
     "storeLocation": "Store location",
     "cs": "CS",
+    "em": "Em",
     "complaintValue": "Complaint value",
     "therapyValue": "Therapy value",
-    "comment": "Comment"
+    "comment": "Comment",
+    "stateValue": "State"
 
   },
   "store": {
