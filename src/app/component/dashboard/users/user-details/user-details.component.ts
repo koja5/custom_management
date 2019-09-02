@@ -181,6 +181,12 @@ export class UserDetailsComponent implements OnInit {
     this.service.setWorkTimeForUser(workTime).subscribe(data => {
       console.log(data);
       if (data['success']) {
+        Swal.fire({
+          title: 'Successfull!',
+          text: 'Successful create new worktime!',
+          timer: 3000,
+          type: 'success'
+        });
         this.user.close();
         this.noSetWorkTime = false;
       }
