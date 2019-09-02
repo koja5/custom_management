@@ -193,7 +193,7 @@ export class UserDetailsComponent implements OnInit {
           timer: 3000,
           type: 'success'
         });
-        this.user.close();
+        this.user = false;
         this.noSetWorkTime = false;
       }
     });
