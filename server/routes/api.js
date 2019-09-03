@@ -2200,6 +2200,39 @@ router.get('/getTherapyForCustomer/:id', function (req, res, next) {
       }
     });
 
+    conn.on('error', function (err) {
+      res.json({
+        "code": 100,
+        "status": "Error in connection database"
+      });
+      return;
+    });
+  });
+
+});
+
+router.get('/getTherapy/:id', function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        "code": 100,
+        "status": "Error in connection database"
+      });
+      return;
+    }
+    var id = req.params.id;
+    conn.query("SELECT * from therapy where id = ?", [id], function (err, rows) {
+      conn.release();
+      if (!err) {
+
+        res.json(rows);
+      } else {
+        res.json({
+          "code": 100,
+          "status": "Error in connection database"
+        });
+      }
+    });
 
     conn.on('error', function (err) {
       res.json({
@@ -3866,7 +3899,11 @@ router.post('/insertFromExcel', function (req, res, next) {
     for (let i = 0; i < req.body.data.length; i++) {
       values += "('"
       for (let j = 0; j < req.body.columns.length; j++) {
-        values += req.body.data[i][req.body.columns[j]] + "','";
+        if(req.body.columns[j] === 'password') {
+          values += sha1(req.body.data[i][req.body.columns[j]]) + "','";
+        } else {
+          values += req.body.data[i][req.body.columns[j]] + "','";
+        }
       }
       values = values.substr(0, values.length - 2);
       values += "),"

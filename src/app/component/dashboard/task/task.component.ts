@@ -326,6 +326,15 @@ export class TaskComponent implements OnInit {
     });
 
     setTimeout(() => {
+
+      this.customer.getTherapy(dataItem.therapy_id).subscribe(
+        data => {
+          console.log(data);
+          this.splitToValue(data[0].complaint, data[0].therapies);
+          this.complaintData = data[0];
+        }
+      );
+
       console.log(dataItem.colorTask);
       if (dataItem.colorTask !== undefined) {
         this.selected = this.IdMapToColor(dataItem.colorTask);
@@ -958,5 +967,18 @@ export class TaskComponent implements OnInit {
       }
     }
     return value;
+  }
+
+  splitToValue(complaint, therapies) {
+    if (complaint.split(';') !== undefined) {
+      this.selectedComplaint = complaint.split(';').map(Number);
+    } else {
+      this.selectedComplaint = Number(complaint);
+    }
+    if (therapies.split(';') !== undefined) {
+      this.selectedTherapies = therapies.split(';').map(Number);
+    } else {
+      this.selectedTherapies = Number(therapies);
+    }
   }
 }
