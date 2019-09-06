@@ -98,6 +98,7 @@
     "updateTherapy": "Update therapy",
     "choiceComplaint": "Choice complaint...",
     "choiceTherapy": "Choice therapy...",
+    "choicePreviousTherapy": "Choice previous therapy...",
     "choiceState": "Choice current state",
     "updateCustomer": "Update customer",
     "baseOne": "Base data I",
@@ -153,6 +154,7 @@
     "em": "Em",
     "complaintValue": "Complaint value",
     "therapyValue": "Therapy value",
+    "therapyPreviousValue": "Previous therapy",
     "comment": "Comment",
     "stateValue": "State"
 

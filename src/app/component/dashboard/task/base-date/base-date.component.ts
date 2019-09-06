@@ -463,7 +463,7 @@ export class BaseDateComponent implements OnInit {
 
   addTherapy(therapy) {
     this.complaintData.customer_id = this.data.id;
-    this.complaintData.date = new Date().getDay() + '.' + new Date().getMonth() + '.' + new Date().getFullYear() + '.';
+    this.complaintData.date = (new Date().getDay() + 1) + '.' + (new Date().getMonth() + 1)  + '.' + new Date().getFullYear() + '.';
     // this.initializeParams();
 
     this.complaintData.complaint = this.pickToModel(this.selectedComplaint, this.complaintValue).value;
@@ -505,6 +505,9 @@ export class BaseDateComponent implements OnInit {
     this.complaintData.therapies = this.pickToModel(this.selectedTherapies, this.therapyValue).value;
     this.complaintData.therapies_title = this.pickToModel(this.selectedTherapies, this.therapyValue).title;
 
+    this.complaintData.therapies_previous = this.pickToModel(this.selectedTherapiesPrevious, this.therapyValue).value;
+    this.complaintData.therapies_previous_title = this.pickToModel(this.selectedTherapiesPrevious, this.therapyValue).title;
+
     this.service.updateTherapy(this.complaintData).subscribe(data => {
       if (data) {
         this.getTherapy();
@@ -525,6 +528,7 @@ export class BaseDateComponent implements OnInit {
       }
       this.selectedComplaint = [];
       this.selectedTherapies = [];
+      this.selectedTherapiesPrevious = [];
     });
   }
 

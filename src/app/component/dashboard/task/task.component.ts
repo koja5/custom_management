@@ -102,6 +102,7 @@ export class TaskComponent implements OnInit {
   public stateValue: any;
   public selectedComplaint: any;
   public selectedTherapies: any;
+  public selectedTherapiesPrevious: any;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -330,7 +331,7 @@ export class TaskComponent implements OnInit {
       this.customer.getTherapy(dataItem.therapy_id).subscribe(
         data => {
           console.log(data);
-          this.splitToValue(data[0].complaint, data[0].therapies);
+          this.splitToValue(data[0].complaint, data[0].therapies, data[0].therapies_previous);
           this.complaintData = data[0];
         }
       );
@@ -417,6 +418,7 @@ export class TaskComponent implements OnInit {
           }
           this.selectedComplaint = [];
           this.selectedTherapies = [];
+          this.selectedTherapiesPrevious = [];
         });
       } else {
         this.handleUpdate(dataItem, formValue, mode);
@@ -452,6 +454,15 @@ export class TaskComponent implements OnInit {
     ).value;
     this.complaintData.therapies_title = this.pickToModel(
       this.selectedTherapies,
+      this.therapyValue
+    ).title;
+    
+    this.complaintData.therapies_previous = this.pickToModel(
+      this.selectedTherapiesPrevious,
+      this.therapyValue
+    ).value;
+    this.complaintData.therapies_previous_title = this.pickToModel(
+      this.selectedTherapiesPrevious,
       this.therapyValue
     ).title;
   }
@@ -969,16 +980,23 @@ export class TaskComponent implements OnInit {
     return value;
   }
 
-  splitToValue(complaint, therapies) {
+  splitToValue(complaint, therapies, therapies_previous) {
     if (complaint.split(';') !== undefined) {
       this.selectedComplaint = complaint.split(';').map(Number);
     } else {
       this.selectedComplaint = Number(complaint);
     }
+    
     if (therapies.split(';') !== undefined) {
       this.selectedTherapies = therapies.split(';').map(Number);
     } else {
       this.selectedTherapies = Number(therapies);
+    }
+
+    if (therapies_previous.split(';') !== undefined) {
+      this.selectedTherapiesPrevious = therapies_previous.split(';').map(Number);
+    } else {
+      this.selectedTherapiesPrevious = Number(therapies_previous);
     }
   }
 }
