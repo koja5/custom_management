@@ -476,7 +476,7 @@ export class BaseDateComponent implements OnInit {
     this.complaintData.therapies_previous_title = this.pickToModel(this.selectedTherapiesPrevious, this.therapyValue).title;
 
     this.service.addTherapy(this.complaintData).subscribe(data => {
-      if (data) {
+      if (data['success']) {
         this.getTherapy();
         this.therapy = false;
         Swal.fire({

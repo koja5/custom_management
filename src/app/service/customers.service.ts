@@ -109,6 +109,11 @@ export class CustomersService {
       .map(res => res);
   }
 
+  getTherapy(id) {
+    return this.http.get('/api/getTherapy/' + id)
+      .map(res => res);
+  }
+
   deleteTherapy(id) {
     return this.http.get('/api/deleteTherapy/' + id)
       .map(res => res);

@@ -153,7 +153,8 @@
               <kendo-scheduler-work-week-view [slotDuration]="timeDuration" [slotDivisions]="therapyDuration">
               </kendo-scheduler-work-week-view>
 
-              <kendo-scheduler-multi-day-view [numberOfDays]="3" [slotDuration]="timeDuration" [slotDivisions]="therapyDuration">
+              <kendo-scheduler-multi-day-view [numberOfDays]="3" [slotDuration]="timeDuration"
+                [slotDivisions]="therapyDuration">
               </kendo-scheduler-multi-day-view>
 
               <kendo-scheduler-month-view></kendo-scheduler-month-view>
@@ -171,22 +172,7 @@
                 let-editMode="editMode">
                 <div class="k-form-inline">
                   <div class="k-form-field">
-                    <span>Title</span>
-                    <input class="k-textbox" placeholder="Title" [formControl]="formGroup.get('title')" />
-                  </div>
-                  <div class="k-form-field">
-                    <span>Color</span>
-                    <div>
-                      <!--<input [style.background]="colorTask" [(ngModel)]="colorTask"
-                [cpPresetColors]="['#fff', '#000', '#2889e9', '#e920e9', '#fff500', 'rgb(236,64,64)']"
-                [(colorPicker)]="colorTask" [formControl]="formGroup.get('colorTask')" />-->
-                      <kendo-colorpalette [palette]="palette" [value]="selected" [(ngModel)]="selected" [tileSize]="30"
-                        [formControl]="formGroup.get('colorTask')">
-                      </kendo-colorpalette>
-                    </div>
-                  </div>
-                  <div class="k-form-field">
-                    <span>User</span>
+                    <span>Patient</span>
                     <kendo-combobox [data]="customerUsers" [textField]="'shortname'" [valueField]="'id'"
                       [formControl]="formGroup.get('user')" (valueChange)="onValueChange($event)"
                       ([ngModel])="(customerUser)">
@@ -199,6 +185,53 @@
                       *ngIf="customerUser !== undefined">
                       Base data
                     </button>
+                  </div>
+                  <!--<div class="k-form-field">
+                  <span>Title</span>
+                  <input class="k-textbox" placeholder="Title" [formControl]="formGroup.get('title')" />
+                </div>-->
+                  <div class="k-form-field">
+                    <span>{{languageUser.complaintValue}}</span>
+                    <kendo-multiselect [data]="complaintValue" [textField]="'title'" [valueField]="'id'"
+                      [(ngModel)]="selectedComplaint" name="complaint" [placeholder]="language.choiceComplaint"
+                      [valuePrimitive]="true">
+                    </kendo-multiselect>
+                  </div>
+                  <div class="k-form-field">
+                    <span>{{languageUser.therapyValue}}</span>
+                    <kendo-multiselect [data]="therapyValue" [textField]="'title'" [valueField]="'id'"
+                      [(ngModel)]="selectedTherapies" name="therapies" [placeholder]="language.choiceTherapy"
+                      [valuePrimitive]="true">
+                    </kendo-multiselect>
+                  </div>
+                  <div class="k-form-field">
+                    <span>{{languageUser.comment}}</span>
+                    <input type="text" class="col-md-12 col-xs-12" name="comment" placeholder="Comment"
+                      [(ngModel)]="complaintData.comment" comment.value=''>
+                  </div>
+                  <div class="k-form-field">
+                    <p>{{language.cs}}</p>
+                    <input type="text" class="col-md-12 col-xs-12" name="cs" placeholder="CS"
+                      [(ngModel)]="complaintData.cs" cs.value=''>
+                  </div>
+                  <div class="k-form-field">
+                    <p>{{language.stateValue}}</p>
+                    <kendo-combobox class="col-md-12 col-xs-12" [data]="stateValue" [(ngModel)]="complaintData.state"
+                      name="state" [placeholder]="language.choiceState">
+                    </kendo-combobox>
+                  </div>
+                  <div class="k-form-field">
+                    <p>{{language.em}}</p>
+                    <input type="text" class="col-md-12 col-xs-12" name="em" placeholder="Em"
+                      [(ngModel)]="complaintData.em" cs.value=''>
+                  </div>
+                  <div class="k-form-field">
+                    <span>Color</span>
+                    <div>
+                      <kendo-colorpalette [palette]="palette" [value]="selected" [(ngModel)]="selected" [tileSize]="30"
+                        [formControl]="formGroup.get('colorTask')">
+                      </kendo-colorpalette>
+                    </div>
                   </div>
                   <div class="k-form-field k-datetime-picker-wrapper">
                     <span>Start</span>
@@ -214,19 +247,11 @@
                     <kendo-timepicker [formControl]="formGroup.get('end')" *ngIf="!formGroup.controls.isAllDay.value">
                     </kendo-timepicker>
                   </div>
-                  <!-- <div class="k-form-field">
-                  <input type='checkbox' id='k-is-allday-chkbox' class='k-checkbox' [formControl]="formGroup.get('isAllDay')" />
-                  <label class='k-checkbox-label' for='k-is-allday-chkbox'>All Day Event</label>
-              </div>-->
                   <div class="k-form-field">
                     <span>Telephone</span>
                     <input class="k-textbox" placeholder="Telephone" [formControl]="formGroup.get('telephone')"
-                      [value]="telephoneValue" [(ngModel)]="telephoneValue" />
+                      [value]="telephoneValue" />
                   </div>
-                  <!--<div class="k-form-field" *ngIf="isEditingSeries(editMode)">
-                  <kendo-recurrence-editor [formControl]="formGroup.get('recurrenceRule')">
-                  </kendo-recurrence-editor>
-              </div>-->
                 </div>
               </ng-template>
               <kendo-scheduler-messages today="{{ language.today }}" allDay="{{ language.allDay }}"
@@ -267,7 +292,8 @@
             <kendo-scheduler-work-week-view [slotDuration]="timeDuration" [slotDivisions]="therapyDuration">
             </kendo-scheduler-work-week-view>
 
-            <kendo-scheduler-multi-day-view [slotDuration]="timeDuration" [slotDivisions]="therapyDuration" [numberOfDays]="3">
+            <kendo-scheduler-multi-day-view [slotDuration]="timeDuration" [slotDivisions]="therapyDuration"
+              [numberOfDays]="3">
             </kendo-scheduler-multi-day-view>
 
             <kendo-scheduler-month-view> </kendo-scheduler-month-view>
@@ -284,19 +310,7 @@
               let-editMode="editMode">
               <div class="k-form-inline">
                 <div class="k-form-field">
-                  <span>Title</span>
-                  <input class="k-textbox" placeholder="Title" [formControl]="formGroup.get('title')" />
-                </div>
-                <div class="k-form-field">
-                  <span>Color</span>
-                  <div>
-                    <kendo-colorpalette [palette]="palette" [value]="selected" [(ngModel)]="selected" [tileSize]="30"
-                      [formControl]="formGroup.get('colorTask')">
-                    </kendo-colorpalette>
-                  </div>
-                </div>
-                <div class="k-form-field">
-                  <span>User</span>
+                  <span>Patient</span>
                   <kendo-combobox [data]="customerUsers" [textField]="'shortname'" [valueField]="'id'"
                     [formControl]="formGroup.get('user')" (valueChange)="onValueChange($event)"
                     ([ngModel])="(customerUser)">
@@ -309,6 +323,53 @@
                     *ngIf="customerUser !== undefined">
                     Base data
                   </button>
+                </div>
+                <!--<div class="k-form-field">
+                  <span>Title</span>
+                  <input class="k-textbox" placeholder="Title" [formControl]="formGroup.get('title')" />
+                </div>-->
+                <div class="k-form-field">
+                  <span>{{languageUser.complaintValue}}</span>
+                  <kendo-multiselect [data]="complaintValue" [textField]="'title'" [valueField]="'id'"
+                    [(ngModel)]="selectedComplaint" name="complaint" [placeholder]="language.choiceComplaint"
+                    [valuePrimitive]="true">
+                  </kendo-multiselect>
+                </div>
+                <div class="k-form-field">
+                  <span>{{languageUser.therapyValue}}</span>
+                  <kendo-multiselect [data]="therapyValue" [textField]="'title'" [valueField]="'id'"
+                    [(ngModel)]="selectedTherapies" name="therapies" [placeholder]="language.choiceTherapy"
+                    [valuePrimitive]="true">
+                  </kendo-multiselect>
+                </div>
+                <div class="k-form-field">
+                  <span>{{languageUser.comment}}</span>
+                  <input type="text" class="col-md-12 col-xs-12" name="comment" placeholder="Comment"
+                    [(ngModel)]="complaintData.comment" comment.value=''>
+                </div>
+                <div class="k-form-field">
+                  <p>{{language.cs}}</p>
+                  <input type="text" class="col-md-12 col-xs-12" name="cs" placeholder="CS"
+                    [(ngModel)]="complaintData.cs" cs.value=''>
+                </div>
+                <div class="k-form-field">
+                  <p>{{language.stateValue}}</p>
+                  <kendo-combobox class="col-md-12 col-xs-12" [data]="stateValue" [(ngModel)]="complaintData.state"
+                    name="state" [placeholder]="language.choiceState">
+                  </kendo-combobox>
+                </div>
+                <div class="k-form-field">
+                  <p>{{language.em}}</p>
+                  <input type="text" class="col-md-12 col-xs-12" name="em" placeholder="Em"
+                    [(ngModel)]="complaintData.em" cs.value=''>
+                </div>
+                <div class="k-form-field">
+                  <span>Color</span>
+                  <div>
+                    <kendo-colorpalette [palette]="palette" [value]="selected" [(ngModel)]="selected" [tileSize]="30"
+                      [formControl]="formGroup.get('colorTask')">
+                    </kendo-colorpalette>
+                  </div>
                 </div>
                 <div class="k-form-field k-datetime-picker-wrapper">
                   <span>Start</span>
@@ -344,7 +405,8 @@
     </kendo-splitter>
   </div>
 
-  <kendo-window title="Create new patient" *ngIf="customerModal" [minWidth]="700" [width]="850" [minHeight]="300" (close)="customerModal = false">
+  <kendo-window title="Create new patient" *ngIf="customerModal" [minWidth]="700" [width]="850" [minHeight]="300"
+    (close)="customerModal = false">
     <form name="loginForm" class="loginForm" (ngSubmit)="createCustomer(customer)" ngNativeValidate>
       <div class="form-group">
         <div class="panel-body">
@@ -428,8 +490,9 @@
     </form>
   </kendo-window>
 
-  <kendo-window title="Please provide additional data" *ngIf="customerUserModal2&&customerUser !== undefined" [minWidth]="700" [width]="850" [height]="700" (close)="closebaseDataForUser()">
-      <app-base-date [data]="customerUser" *ngIf="customerUser !== undefined">
-      </app-base-date>
+  <kendo-window title="Please provide additional data" *ngIf="customerUserModal2&&customerUser !== undefined"
+    [minWidth]="700" [width]="850" [height]="700" (close)="closebaseDataForUser()">
+    <app-base-date [data]="customerUser" *ngIf="customerUser !== undefined">
+    </app-base-date>
   </kendo-window>
 </div>
