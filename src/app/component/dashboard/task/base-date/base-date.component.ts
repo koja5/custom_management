@@ -59,6 +59,7 @@ export class BaseDateComponent implements OnInit {
   public operationMode = 'add';
   public selectedComplaint: any;
   public selectedTherapies: any;
+  public selectedTherapiesPrevious: any;
   public currentComplaint: any;
   public selectedForDelete: string;
 
@@ -281,6 +282,7 @@ export class BaseDateComponent implements OnInit {
   openComplaintModal() {
     this.selectedComplaint = [];
     this.selectedTherapies = [];
+    this.selectedTherapiesPrevious = [];
     this.complaintData = new ComplaintTherapyModel();
     this.complaintData.complaint = '';
     this.complaintData.therapies = '';
@@ -304,6 +306,7 @@ export class BaseDateComponent implements OnInit {
   openTherapyModal() {
     this.selectedComplaint = [];
     this.selectedTherapies = [];
+    this.selectedTherapiesPrevious = [];
     this.complaintData.state = null;
     this.complaintData = new ComplaintTherapyModel();
     this.complaintData.complaint = '';
@@ -469,6 +472,9 @@ export class BaseDateComponent implements OnInit {
     this.complaintData.therapies = this.pickToModel(this.selectedTherapies, this.therapyValue).value;
     this.complaintData.therapies_title = this.pickToModel(this.selectedTherapies, this.therapyValue).title;
 
+    this.complaintData.therapies_previous = this.pickToModel(this.selectedTherapiesPrevious, this.therapyValue).value;
+    this.complaintData.therapies_previous_title = this.pickToModel(this.selectedTherapiesPrevious, this.therapyValue).title;
+
     this.service.addTherapy(this.complaintData).subscribe(data => {
       if (data) {
         this.getTherapy();
@@ -533,6 +539,11 @@ export class BaseDateComponent implements OnInit {
       this.selectedTherapies = event.therapies.split(';').map(Number);
     } else {
       this.selectedTherapies = Number(event.therapies);
+    }
+    if(event.therapies_previous.split(';') !== undefined) {
+      this.selectedTherapiesPrevious = event.therapies_previous.split(';').map(Number);
+    } else {
+      this.selectedTherapiesPrevious = Number(event.therapies_previous);
     }
     this.operationMode = 'edit';
     this.therapy = true;

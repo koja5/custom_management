@@ -7,6 +7,8 @@ export class ComplaintTherapyModel {
     comment?: string;
     therapies?: string;
     therapies_title?: string;
+    therapies_previous?: string;
+    therapies_previous_title?: string;
     cs: string;
     state?: string;
     em?: string;

@@ -231,6 +231,8 @@
             </kendo-grid-column>
             <kendo-grid-column field="therapies_title" title="Therapy" width="120">
             </kendo-grid-column>
+            <kendo-grid-column field="therapies_previous_title" title="Bisherige Bhandlungen" width="150">
+            </kendo-grid-column>
             <kendo-grid-column field="comment" title="Comment" width="150">
             </kendo-grid-column>
             <kendo-grid-column field="cs" title="CS" width="60">
@@ -747,6 +749,13 @@
           <p>{{language.therapyValue}}</p>
           <kendo-multiselect class="col-md-12 col-xs-12" [data]="therapyValue" [textField]="'title'" [valueField]="'id'"
             [(ngModel)]="selectedTherapies" name="therapies" [placeholder]="language.choiceTherapy"
+            [valuePrimitive]="true">
+          </kendo-multiselect>
+        </div>
+        <div class="col-md-12 col-xs-12">
+          <p>{{language.therapyValue}}</p>
+          <kendo-multiselect class="col-md-12 col-xs-12" [data]="therapyValue" [textField]="'title'" [valueField]="'id'"
+            [(ngModel)]="selectedTherapiesPrevious" name="therapies_previous" [placeholder]="language.choiceTherapy"
             [valuePrimitive]="true">
           </kendo-multiselect>
         </div>
