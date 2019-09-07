@@ -3745,7 +3745,7 @@ input[type='file'] {
 
 /*scrollbar*/
 
-::-webkit-scrollbar-track
+/*::-webkit-scrollbar-track
 {
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
 	background-color: #F5F5F5;
@@ -3761,6 +3761,15 @@ input[type='file'] {
 {
 	background-color: #235484;
 	
-}
+}*/
 
 /*scrollbar*/
+
+.k-scheduler-table td, .k-scheduler-table th {
+    padding: 0px !important;
+    height: 35px !important;
+}
+
+.k-scheduler-monthview .k-scheduler-table td {
+    height: 80px !important;
+}

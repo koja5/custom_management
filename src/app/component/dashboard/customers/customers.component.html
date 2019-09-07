@@ -7,7 +7,7 @@
     <div class="user-options">
       <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">{{language.newCustomer}}</button>
       <label class="uploadFromExcel"><span class='k-icon k-i-file-excel'></span> Upload from Excel<input type="file"
-          name="files[]" multiple id="jsonFile" accept=".xlsx" (change)="onFileChange($event)" /></label>
+          name="files[]" multiple id="jsonFile" accept=".xlsx" (change)="onFileChange($event)" [(ngModel)]="fileValue"/></label>
     </div>
 
     <kendo-grid *ngIf="language !== undefined" [data]="gridData" [height]="800" [resizable]="true"

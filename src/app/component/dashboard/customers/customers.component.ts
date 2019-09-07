@@ -46,6 +46,8 @@ export class CustomersComponent implements OnInit {
   private spread: GC.Spread.Sheets.Workbook;
   private excelIO;
   public customerDialogOpened = false;
+  public fileValue: any;
+
   constructor(public service: CustomersService, public storeService: StoreService, public message: MessageService) {
     this.excelIO = new Excel.IO();
   }
@@ -212,6 +214,7 @@ export class CustomersComponent implements OnInit {
         this.gridData = null;
         setTimeout(() => {
           this.gridData = this.xlsxToJson(json);
+          this.fileValue = null;
         }, 50);
       }, (error) => {
         alert('load fail');

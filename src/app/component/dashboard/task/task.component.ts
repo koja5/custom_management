@@ -380,12 +380,13 @@ export class TaskComponent implements OnInit {
       formValue.telephone = this.telephoneValue;
       if (this.type !== 3) {
         formValue.creator_id = customerId;
-        formValue.title = this.customerUser.shortname;
+        formValue.title = this.customerUser.firstname + ' ' + this.customerUser.lastname + '+' + this.complaintData.complaint_title;
       }
       console.log(formValue);
       if (isNew) {
         formValue = this.colorMapToId(formValue);
         this.addTherapy(this.customerUser.id);
+        formValue.title = this.customerUser.firstname + ' ' + this.customerUser.lastname + '+' + this.complaintData.complaint_title;
         this.customer.addTherapy(this.complaintData).subscribe(data => {
           if (data["success"]) {
             formValue.therapy_id = data["id"];
@@ -416,9 +417,9 @@ export class TaskComponent implements OnInit {
               type: "error"
             });
           }
-          this.selectedComplaint = [];
+          /*this.selectedComplaint = [];
           this.selectedTherapies = [];
-          this.selectedTherapiesPrevious = [];
+          this.selectedTherapiesPrevious = [];*/
         });
       } else {
         this.handleUpdate(dataItem, formValue, mode);

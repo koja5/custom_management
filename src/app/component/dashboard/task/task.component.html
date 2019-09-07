@@ -139,13 +139,15 @@
               </ng-template>
               <ng-template kendoSchedulerEventTemplate let-event="event" let-resources="resources">
                 <div>
-                  {{ event.title }}
+                  <p style="font-weight: bold; padding: 0px;">{{ event.title.split('+')[0] }}</p>
+                  <p style="margin-top: -17px; margin-left: 7px;">{{event.title.split('+')[1]}}</p>
                 </div>
               </ng-template>
 
               <ng-template kendoSchedulerAllDayEventTemplate let-event="event" let-resources="resources">
                 <div style="width: 100vh !important;">
-                  {{ event.title }}
+                  <p style="font-weight: bold; padding: 0px;">{{ event.title.split('+')[0] }}</p>
+                  <p style="margin-top: -17px; margin-left: 7px;">{{event.title.split('+')[1]}}</p>
                 </div>
               </ng-template>
 
@@ -286,13 +288,15 @@
             </ng-template>
             <ng-template kendoSchedulerEventTemplate let-event="event" let-resources="resources">
               <div style="width: 100vh !important;">
-                {{ event.title }}
+                <p style="font-weight: bold; padding: 0px;">{{ event.title.split('+')[0] }}</p>
+                <p style="margin-top: -17px; margin-left: 7px;">{{event.title.split('+')[1]}}</p>
               </div>
             </ng-template>
 
             <ng-template kendoSchedulerAllDayEventTemplate let-event="event" let-resources="resources">
               <div style="width: 100vh !important;">
-                {{ event.title }}
+                <p style="font-weight: bold; padding: 0px;">{{ event.title.split('+')[0] }}</p>
+                <p style="margin-top: -17px; margin-left: 7px;">{{event.title.split('+')[1]}}</p>
               </div>
             </ng-template>
 

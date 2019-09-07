@@ -37,6 +37,7 @@ export class StoreComponent implements OnInit {
   private spread: GC.Spread.Sheets.Workbook;
   private excelIO;
   public excelOpened = false;
+  public fileValue: any;
 
   constructor(public service: StoreService) {
     this.excelIO = new Excel.IO();
@@ -234,6 +235,8 @@ export class StoreComponent implements OnInit {
         this.gridData = null;
         setTimeout(() => {
           this.gridData = this.xlsxToJson(json);
+          args = null;
+          this.excelOpened = false;
         }, 50);
       }, (error) => {
         alert('load fail');

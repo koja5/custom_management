@@ -54,6 +54,7 @@ export class UsersComponent implements OnInit {
   private excelIO;
   public excelOpened = false;
   public language: any;
+  public fileValue: any;
   
   constructor(
     public service: UsersService,
@@ -245,6 +246,7 @@ export class UsersComponent implements OnInit {
         this.gridData = null;
         setTimeout(() => {
           this.gridData = this.xlsxToJson(json);
+          this.fileValue = null;
         }, 50);
       }, (error) => {
         alert('load fail');
