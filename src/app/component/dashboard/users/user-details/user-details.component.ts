@@ -344,6 +344,12 @@ export class UserDetailsComponent implements OnInit {
       data => {
         console.log(data);
         if (data['success']) {
+          Swal.fire({
+            title: 'Successfull!',
+            text: 'Successful update worktime for user!',
+            timer: 3000,
+            type: 'success'
+          });
           this.user = false;
         }
       }

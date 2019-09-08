@@ -327,14 +327,17 @@ export class TaskComponent implements OnInit {
     });
 
     setTimeout(() => {
-
-      this.customer.getTherapy(dataItem.therapy_id).subscribe(
-        data => {
+      if (dataItem.therapy_id !== undefined) {
+        this.customer.getTherapy(dataItem.therapy_id).subscribe(data => {
           console.log(data);
-          this.splitToValue(data[0].complaint, data[0].therapies, data[0].therapies_previous);
+          this.splitToValue(
+            data[0].complaint,
+            data[0].therapies,
+            data[0].therapies_previous
+          );
           this.complaintData = data[0];
-        }
-      );
+        });
+      }
 
       console.log(dataItem.colorTask);
       if (dataItem.colorTask !== undefined) {
@@ -380,13 +383,23 @@ export class TaskComponent implements OnInit {
       formValue.telephone = this.telephoneValue;
       if (this.type !== 3) {
         formValue.creator_id = customerId;
-        formValue.title = this.customerUser.firstname + ' ' + this.customerUser.lastname + '+' + this.complaintData.complaint_title;
+        formValue.title =
+          this.customerUser.firstname +
+          " " +
+          this.customerUser.lastname +
+          "+" +
+          this.complaintData.complaint_title;
       }
       console.log(formValue);
       if (isNew) {
         formValue = this.colorMapToId(formValue);
         this.addTherapy(this.customerUser.id);
-        formValue.title = this.customerUser.firstname + ' ' + this.customerUser.lastname + '+' + this.complaintData.complaint_title;
+        formValue.title =
+          this.customerUser.firstname +
+          " " +
+          this.customerUser.lastname +
+          "+" +
+          this.complaintData.complaint_title;
         this.customer.addTherapy(this.complaintData).subscribe(data => {
           if (data["success"]) {
             formValue.therapy_id = data["id"];
@@ -457,7 +470,7 @@ export class TaskComponent implements OnInit {
       this.selectedTherapies,
       this.therapyValue
     ).title;
-    
+
     this.complaintData.therapies_previous = this.pickToModel(
       this.selectedTherapiesPrevious,
       this.therapyValue
@@ -982,20 +995,22 @@ export class TaskComponent implements OnInit {
   }
 
   splitToValue(complaint, therapies, therapies_previous) {
-    if (complaint.split(';') !== undefined) {
-      this.selectedComplaint = complaint.split(';').map(Number);
+    if (complaint.split(";") !== undefined) {
+      this.selectedComplaint = complaint.split(";").map(Number);
     } else {
       this.selectedComplaint = Number(complaint);
     }
-    
-    if (therapies.split(';') !== undefined) {
-      this.selectedTherapies = therapies.split(';').map(Number);
+
+    if (therapies.split(";") !== undefined) {
+      this.selectedTherapies = therapies.split(";").map(Number);
     } else {
       this.selectedTherapies = Number(therapies);
     }
 
-    if (therapies_previous.split(';') !== undefined) {
-      this.selectedTherapiesPrevious = therapies_previous.split(';').map(Number);
+    if (therapies_previous.split(";") !== undefined) {
+      this.selectedTherapiesPrevious = therapies_previous
+        .split(";")
+        .map(Number);
     } else {
       this.selectedTherapiesPrevious = Number(therapies_previous);
     }
