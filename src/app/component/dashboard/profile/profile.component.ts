@@ -12,17 +12,20 @@ import { UploadEvent, RemoveEvent } from '@progress/kendo-angular-upload';
 })
 export class ProfileComponent implements OnInit {
   
-  @ViewChild('user') user: Modal;
+  public user = false;;
   public data: any;
   public companyData: any;
   public currentTab = 'profile';
   public imagePath: any;
   public uploadSaveUrl: string; // should represent an actual API endpoint
   public uploadRemoveUrl: string;
+  public language: any;
   
   constructor(public service: UsersService, public sanitizer: DomSanitizer, public message: MessageService) { }
 
   ngOnInit() {
+    
+    this.language = JSON.parse(localStorage.getItem("language"))["user"];
     this.service.getMe(localStorage.getItem('idUser'), (val) => {
       console.log(val);
       this.data = val[0];

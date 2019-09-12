@@ -38,8 +38,8 @@ export class BaseDateComponent implements OnInit {
   public uploader: FileUploader;
   public documents: any;
   public language: any;
-  public url = 'http://localhost:3000/upload';
-  // public url = 'http://www.app-production.eu:3000/upload';
+  //public url = 'http://localhost:3000/upload';
+  public url = 'http://www.app-production.eu:3000/upload';
   public complaintValue: any;
   public complaintData = new ComplaintTherapyModel();
   public gridComplaint: any;

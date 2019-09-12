@@ -4,18 +4,13 @@
       <div class="panel widget light-widget panel-bd-top">
         <div class="no-title"> </div>
         <div class="panel-body">
-          <div class="text-center vd_info-parent"> <img alt="example image" style="width: 190px;"
-              [src]="imagePath" class="rounded-circle"> </div>
-              <kendo-upload
-              [saveUrl]="uploadSaveUrl"
-              [removeUrl]="uploadRemoveUrl"
-              (upload)="uploadEventHandler($event)"
-              (remove)="removeEventHandler($event)">
-              <kendo-upload-messages
-              select="Upload image"
-              >
+          <div class="text-center vd_info-parent"> <img alt="example image" style="width: 190px;" [src]="imagePath"
+              class="rounded-circle"> </div>
+          <kendo-upload [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" (upload)="uploadEventHandler($event)"
+            (remove)="removeEventHandler($event)">
+            <kendo-upload-messages select="Upload image">
             </kendo-upload-messages>
-            </kendo-upload>
+          </kendo-upload>
           <h2 class="font-semibold mgbt-xs-5">{{data.firstname}} {{data.lastname}}</h2>
           <h4 *ngIf="data.type === 0">Superadmin</h4>
           <h4 *ngIf="data.type === 1">Admin</h4>
@@ -57,8 +52,8 @@
         <div class="tab-content" *ngIf="currentTab === 'profile'">
           <div id="profile-tab" class="tab-pane active">
             <div class="pd-20">
-              <div class="vd_info tr" style="float: right;"> <a class="btn vd_btn btn-xs vd_bg-yellow" (click)="user.open()"> <i
-                    class="fa fa-pencil append-icon"></i> Edit </a> </div>
+              <div class="vd_info tr" style="float: right;"> <a class="btn vd_btn btn-xs vd_bg-yellow"
+                  (click)="user = true"> <i class="fa fa-pencil append-icon"></i> Edit </a> </div>
               <h3 class="mgbt-xs-15 mgtp-10 font-semibold"><i class="fa fa-user"></i> ABOUT</h3>
               <div class="row">
                 <div class="col-sm-6">
@@ -152,80 +147,167 @@
 
         </div> <!-- row -->
         <div *ngIf="currentTab === 'company'">
-            <div id="profile-tab" class="tab-pane active">
-                <div class="pd-20">
-                  <div class="vd_info tr" style="float: right;"> 
-                  <h3 class="mgbt-xs-15 mgtp-10 font-semibold"><i class="fa fa-map-marker"></i> ABOUT LOCATION</h3>
-                  <div class="row">
-                    <div class="col-sm-6">
-                      <div class="row mgbt-xs-0">
-                        <label class="col-xs-5 control-label">Store Name:</label>
-                        <div class="col-xs-7 controls">{{companyData.storename}}</div>
-                        <!-- col-sm-10 -->
-                      </div>
-                    </div>
-                    <div class="col-sm-6">
-                      <div class="row mgbt-xs-0">
-                        <label class="col-xs-5 control-label">Street:</label>
-                        <div class="col-xs-7 controls">{{companyData.street}}</div>
-                        <!-- col-sm-10 -->
-                      </div>
-                    </div>
-                    <div class="col-sm-6">
-                      <div class="row mgbt-xs-0">
-                        <label class="col-xs-5 control-label">Zip code:</label>
-                        <div class="col-xs-7 controls">{{companyData.zipcode}}</div>
-                        <!-- col-sm-10 -->
-                      </div>
-                    </div>
-                    <div class="col-sm-6">
-                      <div class="row mgbt-xs-0">
-                        <label class="col-xs-5 control-label">Place:</label>
-                        <div class="col-xs-7 controls">{{companyData.place}}</div>
-                        <!-- col-sm-10 -->
-                      </div>
-                    </div>
-                    <div class="col-sm-6">
-                      <div class="row mgbt-xs-0">
-                        <label class="col-xs-5 control-label">Email:</label>
-                        <div class="col-xs-7 controls">{{companyData.email}}</div>
-                        <!-- col-sm-10 -->
-                      </div>
-                    </div>
-                    <div class="col-sm-6">
-                      <div class="row mgbt-xs-0">
-                        <label class="col-xs-5 control-label">Telephone:</label>
-                        <div class="col-xs-7 controls">{{companyData.telephone}}</div>
-                        <!-- col-sm-10 -->
-                      </div>
-                    </div>
-                    <div class="col-sm-6">
-                      <div class="row mgbt-xs-0">
-                        <label class="col-xs-5 control-label">Mobile:</label>
-                        <div class="col-xs-7 controls">{{companyData.mobile}}</div>
-                        <!-- col-sm-10 -->
-                      </div>
-                    </div>
-                    <div class="col-sm-6">
-                      <div class="row mgbt-xs-0">
-                        <label class="col-xs-5 control-label">Comment:</label>
-                        <div class="col-xs-7 controls">{{companyData.comment}}</div>
-                        <!-- col-sm-10 -->
-                      </div>
+          <div id="profile-tab" class="tab-pane active">
+            <div class="pd-20">
+              <div class="vd_info tr" style="float: right;">
+                <h3 class="mgbt-xs-15 mgtp-10 font-semibold"><i class="fa fa-map-marker"></i> ABOUT LOCATION</h3>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="row mgbt-xs-0">
+                      <label class="col-xs-5 control-label">Store Name:</label>
+                      <div class="col-xs-7 controls">{{companyData.storename}}</div>
+                      <!-- col-sm-10 -->
                     </div>
                   </div>
-                  <hr class="pd-10">
-    
+                  <div class="col-sm-6">
+                    <div class="row mgbt-xs-0">
+                      <label class="col-xs-5 control-label">Street:</label>
+                      <div class="col-xs-7 controls">{{companyData.street}}</div>
+                      <!-- col-sm-10 -->
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="row mgbt-xs-0">
+                      <label class="col-xs-5 control-label">Zip code:</label>
+                      <div class="col-xs-7 controls">{{companyData.zipcode}}</div>
+                      <!-- col-sm-10 -->
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="row mgbt-xs-0">
+                      <label class="col-xs-5 control-label">Place:</label>
+                      <div class="col-xs-7 controls">{{companyData.place}}</div>
+                      <!-- col-sm-10 -->
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="row mgbt-xs-0">
+                      <label class="col-xs-5 control-label">Email:</label>
+                      <div class="col-xs-7 controls">{{companyData.email}}</div>
+                      <!-- col-sm-10 -->
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="row mgbt-xs-0">
+                      <label class="col-xs-5 control-label">Telephone:</label>
+                      <div class="col-xs-7 controls">{{companyData.telephone}}</div>
+                      <!-- col-sm-10 -->
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="row mgbt-xs-0">
+                      <label class="col-xs-5 control-label">Mobile:</label>
+                      <div class="col-xs-7 controls">{{companyData.mobile}}</div>
+                      <!-- col-sm-10 -->
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="row mgbt-xs-0">
+                      <label class="col-xs-5 control-label">Comment:</label>
+                      <div class="col-xs-7 controls">{{companyData.comment}}</div>
+                      <!-- col-sm-10 -->
+                    </div>
+                  </div>
                 </div>
-                <!-- pd-20 -->
+                <hr class="pd-10">
+
               </div>
+              <!-- pd-20 -->
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<modal #user modalClass="modal-md top-margin loggerModal adminModal">
+  <kendo-window title="{{language.createNewCustomer}}" *ngIf="user" [minWidth]="700" [width]="850" [height]="700"
+    (close)="user = false">
+    <form name="loginForm" class="loginForm" (ngSubmit)="createUser(user)">
+      <div class="form-group">
+        <div class="email col-md-6 col-xs-12">
+          <p>{{language.username}}</p>
+          <input class="email col-md-12 col-xs-12" type="text" name="shortname" placeholder="Username"
+            [(ngModel)]="data.shortname" shortname.value=''>
+        </div>
+        <div class="col-md-6 col-xs-12 password">
+          <p>{{language.password}}</p>
+          <input class="email col-md-12 col-xs-12" type="{{hideShow}}" name="password" placeholder="Password"
+            [(ngModel)]="data.password" password.value=''>
+          <span class="fa {{hideShowEye}} pwd-toggle" (click)="hideShowPassword()"></span>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="email col-md-6 col-xs-12">
+          <p>{{language.firstname}}</p>
+          <input type="text" class="email col-md-12 col-xs-12" name="firstname" placeholder="Firstname"
+            [(ngModel)]="data.firstname" firstname.value=''>
+        </div>
+
+        <div class="email col-md-6 col-xs-12">
+          <p>{{language.lastname}}</p>
+          <input type="text" class="email col-md-12 col-xs-12" name="lastname" placeholder="Lastname"
+            [(ngModel)]="data.lastname" lastname.value=''>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="email col-md-12 col-xs-12">
+          <p>{{language.street}}</p>
+          <input type="text" class="email col-md-12 col-xs-12" name="street" placeholder="Street"
+            [(ngModel)]="data.street" street.value=''>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="email col-md-6 col-xs-12">
+          <p>{{language.zipCode}}</p>
+          <input type="text" class="email col-md-12 col-xs-12" name="zipcode" placeholder="Zipcode"
+            [(ngModel)]="data.zipcode" zipcode.value=''>
+        </div>
+        <div class="email col-md-6 col-xs-12">
+          <p>{{language.place}}</p>
+          <input type="text" class="email col-md-12 col-xs-12" name="place" placeholder="Place" [(ngModel)]="data.place"
+            place.value=''>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="email col-md-6 col-xs-12">
+          <p>{{language.telephone}}</p>
+          <input type="text" class="email col-md-12 col-xs-12" name="telephone" placeholder="Telephone"
+            [(ngModel)]="data.telephone" telephone.value=''>
+        </div>
+
+        <div class="email col-md-6 col-xs-12">
+          <p>{{language.mobile}}</p>
+          <input type="text" class="email col-md-12 col-xs-12" name="mobile" placeholder="mobile"
+            [(ngModel)]="data.mobile" mobile.value=''>
+        </div>
+        <div class="email col-md-6 col-xs-12">
+          <p>{{language.email}}</p>
+          <input type="email" class="email col-md-12 col-xs-12" name="email" placeholder="Email" [(ngModel)]="data.email"
+            disabled>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="email col-md-6 col-xs-12">
+          <p>{{language.birthday}}</p>
+          <input type="text" class="email col-md-12 col-xs-12" name="birthday" placeholder="Birthday"
+            [(ngModel)]="data.birthday" disabled>
+        </div>
+        <div class="email col-md-6 col-xs-12">
+          <p>{{language.inCompanySince}}</p>
+          <input type="text" class="email col-md-12 col-xs-12" name="incompanysince" placeholder="Since in company"
+            [(ngModel)]="data.incompanysince" disabled>
+        </div>
+      </div>
+
+      <!-- ./remember-row -->
+      <div class="form-group">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Update</button>
+      </div>
+    </form>
+  </kendo-window>
+
+
+  <!--<modal #user modalClass="modal-md top-margin loggerModal adminModal">
     <modal-header>
         <h2>Update info</h2>
     </modal-header>
@@ -257,7 +339,6 @@
                 <input type="text" class="email col-md-6 col-xs-12" name="incompanysince" placeholder="Since in company" [(ngModel)]="data.incompanysince" disabled>
             </div>
 
-            <!-- ./remember-row -->
             <div class="form-group">
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Update</button>
             </div>
@@ -267,4 +348,4 @@
     <modal-footer>
         <button class="btn btn-primary" (click)="user.close()">Close</button>
     </modal-footer>
-</modal>
+</modal>-->

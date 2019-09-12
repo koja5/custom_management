@@ -143,17 +143,17 @@ export class TaskComponent implements OnInit {
       this.language = JSON.parse(localStorage.getItem("language"))["calendar"];
       this.languageUser = JSON.parse(localStorage.getItem("language"))["user"];
       this.stateValue = JSON.parse(localStorage.getItem("language"))["state"];
+    } else {
+      this.message.getLanguage().subscribe(mess => {
+        this.language = undefined;
+        setTimeout(() => {
+          this.language = JSON.parse(localStorage.getItem("language"))[
+            "calendar"
+          ];
+          console.log(this.language);
+        }, 10);
+      });
     }
-
-    this.message.getLanguage().subscribe(mess => {
-      this.language = undefined;
-      setTimeout(() => {
-        this.language = JSON.parse(localStorage.getItem("language"))[
-          "calendar"
-        ];
-        console.log(this.language);
-      }, 10);
-    });
 
     this.service.getTaskColor().subscribe(data => {
       console.log(data);
@@ -864,7 +864,7 @@ export class TaskComponent implements OnInit {
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].end >
-            new Date(date).getHours()) ||
+          new Date(date).getHours()) ||
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start2 <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
