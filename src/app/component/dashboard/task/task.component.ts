@@ -187,12 +187,19 @@ export class TaskComponent implements OnInit {
         this.store,
         this.selectedStoreId
       ).time_duration;
-      this.therapyDuration =
-        Number(this.timeDuration) /
-        Number(
+      if (Number(this.timeDuration) > Number(this.getStartEndTimeForStore(this.store, this.selectedStoreId).time_therapy)) {
+        this.therapyDuration =
+          Number(this.timeDuration) /
+          Number(
+            this.getStartEndTimeForStore(this.store, this.selectedStoreId)
+              .time_therapy
+          );
+      } else {
+        this.therapyDuration = Number(
           this.getStartEndTimeForStore(this.store, this.selectedStoreId)
             .time_therapy
-        );
+        ) / Number(this.timeDuration);
+      }
     });
 
     if (
@@ -309,10 +316,13 @@ export class TaskComponent implements OnInit {
       });
     }
 
+    const timeDurationInd = Number(this.getStartEndTimeForStore(this.store, this.selectedStoreId).time_therapy) > Number(this.timeDuration) ? 1 : 0;
+    const timeDuration = Number(this.getStartEndTimeForStore(this.store, this.selectedStoreId).time_therapy);
+
     this.formGroup = this.formBuilder.group({
       id: args.isNew ? this.getNextId() : dataItem.id,
       start: [dataItem.start, Validators.required],
-      end: [dataItem.end, Validators.required],
+      end: [timeDurationInd ? new Date(dataItem.start.getTime() + timeDuration * 60000) : dataItem.end, Validators.required],
       startTimezone: [dataItem.startTimezone],
       endTimezone: [dataItem.endTimezone],
       isAllDay: dataItem.isAllDay,
@@ -764,12 +774,19 @@ export class TaskComponent implements OnInit {
             this.store,
             this.selectedStoreId
           ).time_duration;
-          this.therapyDuration =
-            Number(this.timeDuration) /
-            Number(
+          if (Number(this.timeDuration) > Number(this.getStartEndTimeForStore(this.store, this.selectedStoreId).time_therapy)) {
+            this.therapyDuration =
+              Number(this.timeDuration) /
+              Number(
+                this.getStartEndTimeForStore(this.store, this.selectedStoreId)
+                  .time_therapy
+              );
+          } else {
+            this.therapyDuration = Number(
               this.getStartEndTimeForStore(this.store, this.selectedStoreId)
                 .time_therapy
-            );
+            ) / Number(this.timeDuration);
+          }
         } else {
           this.startWork = "08:00";
           this.endWork = "22:00";
@@ -864,7 +881,7 @@ export class TaskComponent implements OnInit {
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].end >
-          new Date(date).getHours()) ||
+            new Date(date).getHours()) ||
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start2 <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
@@ -939,7 +956,6 @@ export class TaskComponent implements OnInit {
   }
 
   selectedViewCalendar(index) {
-    console.log(index);
     this.selectedViewIndex = null;
     setTimeout(() => {
       this.selectedButtonIndex[this.selectedViewIndex] = false;
