@@ -1,33 +1,32 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Modal } from 'ngx-modal';
-import { CustomersService } from '../../../service/customers.service';
-import { StoreService } from '../../../service/store.service';
-import { process, State } from '@progress/kendo-data-query';
-import { UploadEvent, SelectEvent } from '@progress/kendo-angular-upload';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { Modal } from "ngx-modal";
+import { CustomersService } from "../../../service/customers.service";
+import { StoreService } from "../../../service/store.service";
+import { process, State } from "@progress/kendo-data-query";
+import { UploadEvent, SelectEvent } from "@progress/kendo-angular-upload";
 import {
   DataStateChangeEvent,
   PageChangeEvent
-} from '@progress/kendo-angular-grid';
-import { MessageService } from '../../../service/message.service';
-import { CustomerModel } from '../../../models/customer-model';
-import Swal from 'sweetalert2';
-import * as GC from '@grapecity/spread-sheets';
-import * as Excel from '@grapecity/spread-excelio';
-import { WindowModule } from '@progress/kendo-angular-dialog';
+} from "@progress/kendo-angular-grid";
+import { MessageService } from "../../../service/message.service";
+import { CustomerModel } from "../../../models/customer-model";
+import Swal from "sweetalert2";
+import * as GC from "@grapecity/spread-sheets";
+import * as Excel from "@grapecity/spread-excelio";
+import { WindowModule } from "@progress/kendo-angular-dialog";
 
-const newLocal = 'data';
+const newLocal = "data";
 @Component({
-  selector: 'app-customers',
-  templateUrl: './customers.component.html',
-  styleUrls: ['./customers.component.scss']
+  selector: "app-customers",
+  templateUrl: "./customers.component.html",
+  styleUrls: ["./customers.component.scss"]
 })
 export class CustomersComponent implements OnInit {
-
   public customer = false;
   public data = new CustomerModel();
-  public unamePattern = '^[a-z0-9_-]{8,15}$';
-  public emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$';
-  public userType = ['Employee', 'Manager', 'Admin'];
+  public unamePattern = "^[a-z0-9_-]{8,15}$";
+  public emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$";
+  public userType = ["Employee", "Manager", "Admin"];
   public gridData: any;
   public currentLoadData: any;
   public state: State = {
@@ -38,44 +37,50 @@ export class CustomersComponent implements OnInit {
   public storeLocation: any;
   public language: any;
   public selectedUser: any;
-  public imagePath = 'defaultUser';
+  public imagePath = "defaultUser";
   public loading = true;
   // public uploadSaveUrl = 'http://localhost:3000/api/uploadImage'; // should represent an actual API endpoint
-  public uploadSaveUrl = 'http://www.app-production.eu:3000/uploadImage';
-  public uploadRemoveUrl = 'removeUrl'; // should represent an actual API endpoint
+  public uploadSaveUrl = "http://www.app-production.eu:3000/uploadImage";
+  public uploadRemoveUrl = "removeUrl"; // should represent an actual API endpoint
   private spread: GC.Spread.Sheets.Workbook;
   private excelIO;
   public customerDialogOpened = false;
   public fileValue: any;
+  public theme: string;
 
-  constructor(public service: CustomersService, public storeService: StoreService, public message: MessageService) {
+  constructor(
+    public service: CustomersService,
+    public storeService: StoreService,
+    public message: MessageService
+  ) {
     this.excelIO = new Excel.IO();
   }
 
   ngOnInit() {
-
     this.getCustomers();
 
-    if (localStorage.getItem('language') !== null) {
-      this.language = JSON.parse(localStorage.getItem('language')).grid;
+    if (localStorage.getItem("language") !== null) {
+      this.language = JSON.parse(localStorage.getItem("language")).grid;
     }
 
-    this.message.getDeleteCustomer().subscribe(
-      mess => {
-        this.getCustomers();
-        this.selectedUser = undefined;
-      }
-    );
+    if (localStorage.getItem("theme") !== null) {
+      this.theme = localStorage.getItem("theme");
+    }
 
-    this.message.getBackToCustomerGrid().subscribe(
-      mess => {
-        this.selectedUser = undefined;
-      }
-    );
+    this.message.getDeleteCustomer().subscribe(mess => {
+      this.getCustomers();
+      this.selectedUser = undefined;
+    });
+
+    this.message.getBackToCustomerGrid().subscribe(mess => {
+      this.selectedUser = undefined;
+    });
+
+    this.changeTheme(this.theme);
   }
 
   getCustomers() {
-    this.service.getCustomers(localStorage.getItem('storeId'), (val) => {
+    this.service.getCustomers(localStorage.getItem("storeId"), val => {
       console.log(val);
       if (val !== null) {
         this.currentLoadData = val;
@@ -89,54 +94,54 @@ export class CustomersComponent implements OnInit {
   }
 
   newUser() {
-    this.storeService.getStore(localStorage.getItem('idUser'), val => {
+    this.storeService.getStore(localStorage.getItem("idUser"), val => {
       console.log(val);
       this.storeLocation = val;
     });
     this.initializeParams();
+    this.changeTheme(this.theme);
     this.customer = true;
   }
 
   initializeParams() {
     this.data = {
-      firstname: '',
-      lastname: '',
-      gender: '',
-      street: '',
-      streetnumber: '',
-      city: '',
-      telephone: '',
-      mobile: '',
-      birthday: '',
-      storeId: ''
+      firstname: "",
+      lastname: "",
+      gender: "",
+      street: "",
+      streetnumber: "",
+      city: "",
+      telephone: "",
+      mobile: "",
+      birthday: "",
+      storeId: ""
     };
   }
 
   createCustomer(form) {
     console.log(this.data);
-    this.data.storeId = localStorage.getItem('storeId');
-    this.service.createCustomer(this.data, (val) => {
+    this.data.storeId = localStorage.getItem("storeId");
+    this.service.createCustomer(this.data, val => {
       if (val.success) {
         this.data.id = val.id;
         this.gridData.data.push(this.data);
         this.customer = false;
         // form.reset();
         Swal.fire({
-          title: 'Successfull!',
-          text: 'New customer is successfull added!',
+          title: "Successfull!",
+          text: "New customer is successfull added!",
           timer: 3000,
-          type: 'success'
+          type: "success"
         });
       } else {
         Swal.fire({
-          title: 'Error',
-          text: 'New customer is not added!',
+          title: "Error",
+          text: "New customer is not added!",
           timer: 3000,
-          type: 'error'
+          type: "error"
         });
       }
     });
-
   }
 
   selectionChange(event) {
@@ -182,22 +187,20 @@ export class CustomersComponent implements OnInit {
 
   action(event) {
     console.log(event);
-    if (event === 'yes') {
+    if (event === "yes") {
       this.customerDialogOpened = false;
       setTimeout(() => {
-        this.service.insertMultiData(this.gridData).subscribe(
-          data => {
-            if (data) {
-              Swal.fire({
-                title: 'Successfull!',
-                text: 'New customer is successfull added',
-                timer: 3000,
-                type: 'success'
-              });
-              this.getCustomers();
-            }
+        this.service.insertMultiData(this.gridData).subscribe(data => {
+          if (data) {
+            Swal.fire({
+              title: "Successfull!",
+              text: "New customer is successfull added",
+              timer: 3000,
+              type: "success"
+            });
+            this.getCustomers();
           }
-        );
+        });
       }, 50);
     } else {
       this.customerDialogOpened = false;
@@ -206,19 +209,24 @@ export class CustomersComponent implements OnInit {
 
   onFileChange(args) {
     const self = this;
-    const file = args.srcElement && args.srcElement.files && args.srcElement.files[0];
+    const file =
+      args.srcElement && args.srcElement.files && args.srcElement.files[0];
     this.customerDialogOpened = true;
     if (file) {
-      self.excelIO.open(file, (json) => {
-        console.log(json);
-        this.gridData = null;
-        setTimeout(() => {
-          this.gridData = this.xlsxToJson(json);
-          this.fileValue = null;
-        }, 50);
-      }, (error) => {
-        alert('load fail');
-      });
+      self.excelIO.open(
+        file,
+        json => {
+          console.log(json);
+          this.gridData = null;
+          setTimeout(() => {
+            this.gridData = this.xlsxToJson(json);
+            this.fileValue = null;
+          }, 50);
+        },
+        error => {
+          alert("load fail");
+        }
+      );
     }
   }
 
@@ -230,7 +238,6 @@ export class CustomersComponent implements OnInit {
     const objectArray = [];
     const columns = [];
     const dataArray = [];
-
 
     for (let i = 0; i < columnCount; i++) {
       columns.push(sheets[0][i].value);
@@ -245,7 +252,7 @@ export class CustomersComponent implements OnInit {
       dataArray.push(objectArray[i - 1]);
     }
     const allData = {
-      table: 'customers',
+      table: "customers",
       columns: columns,
       data: dataArray
     };
@@ -256,4 +263,22 @@ export class CustomersComponent implements OnInit {
     this.customer = false;
   }
 
+  changeTheme(theme: string) {
+    setTimeout(() => {
+      if (localStorage.getItem("allThemes") !== undefined) {
+        const allThemes = JSON.parse(localStorage.getItem("allThemes"));
+        console.log(allThemes);
+        let items = document.querySelectorAll(".k-dialog-titlebar");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const themeName = allThemes[j]["name"];
+            console.log(clas);
+            clas.remove("k-dialog-titlebar-" + themeName);
+            clas.add("k-dialog-titlebar-" + theme);
+          }
+        }
+      }
+    }, 50);
+  }
 }

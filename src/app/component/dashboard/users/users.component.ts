@@ -55,6 +55,7 @@ export class UsersComponent implements OnInit {
   public excelOpened = false;
   public language: any;
   public fileValue: any;
+  public theme: string;
   
   constructor(
     public service: UsersService,
@@ -67,6 +68,10 @@ export class UsersComponent implements OnInit {
 
   ngOnInit() {
     this.getUser();
+    if (localStorage.getItem("theme") !== null) {
+      this.theme = localStorage.getItem("theme");
+    }
+    this.changeTheme(this.theme);
     this.language = JSON.parse(localStorage.getItem('language'))['user'];
   }
 
@@ -85,6 +90,7 @@ export class UsersComponent implements OnInit {
       console.log(val);
       this.storeLocation = val;
     });
+    this.changeTheme(this.theme);
     this.user = true;
   }
 
@@ -282,5 +288,24 @@ export class UsersComponent implements OnInit {
       data: dataArray
     };
     return allData;
+  }
+
+  changeTheme(theme: string) {
+    setTimeout(() => {
+      if (localStorage.getItem("allThemes") !== undefined) {
+        const allThemes = JSON.parse(localStorage.getItem("allThemes"));
+        console.log(allThemes);
+        let items = document.querySelectorAll(".k-dialog-titlebar");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const themeName = allThemes[j]["name"];
+            console.log(clas);
+            clas.remove("k-dialog-titlebar-" + themeName);
+            clas.add("k-dialog-titlebar-" + theme);
+          }
+        }
+      }
+    }, 50);
   }
 }

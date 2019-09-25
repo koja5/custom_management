@@ -38,6 +38,7 @@ export class StoreComponent implements OnInit {
   private excelIO;
   public excelOpened = false;
   public fileValue: any;
+  public theme: string;
 
   constructor(public service: StoreService) {
     this.excelIO = new Excel.IO();
@@ -45,6 +46,10 @@ export class StoreComponent implements OnInit {
 
   ngOnInit() {
     this.idUser = localStorage.getItem('idUser');
+    if (localStorage.getItem("theme") !== null) {
+      this.theme = localStorage.getItem("theme");
+    }
+    this.changeTheme(this.theme);
     this.language = JSON.parse(localStorage.getItem('language'))['store'];
     this.getStore();
   }
@@ -60,6 +65,7 @@ export class StoreComponent implements OnInit {
 
   newStore() {
     this.initialParams();
+    this.changeTheme(this.theme);
     this.store = true;
   }
 
@@ -272,5 +278,24 @@ export class StoreComponent implements OnInit {
       data: dataArray
     };
     return allData;
+  }
+
+  changeTheme(theme: string) {
+    setTimeout(() => {
+      if (localStorage.getItem("allThemes") !== undefined) {
+        const allThemes = JSON.parse(localStorage.getItem("allThemes"));
+        console.log(allThemes);
+        let items = document.querySelectorAll(".k-dialog-titlebar");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const themeName = allThemes[j]["name"];
+            console.log(clas);
+            clas.remove("k-dialog-titlebar-" + themeName);
+            clas.add("k-dialog-titlebar-" + theme);
+          }
+        }
+      }
+    }, 50);
   }
 }

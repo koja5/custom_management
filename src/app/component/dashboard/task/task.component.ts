@@ -95,6 +95,7 @@ export class TaskComponent implements OnInit {
   public size = [];
   public customerUserModal2 = false;
   public selectedButtonIndex = [false, false, false, false, false, false];
+  public selectedButtonIndexStyle = ["", "", "", "", "", ""];
   public imagePath = "defaultUser";
   public therapyValue: any;
   public complaintValue: any;
@@ -174,31 +175,39 @@ export class TaskComponent implements OnInit {
 
     this.storeService.getStore(localStorage.getItem("idUser"), val => {
       this.store = val;
-
-      this.startWork = this.getStartEndTimeForStore(
-        this.store,
-        this.selectedStoreId
-      ).start_work;
-      this.endWork = this.getStartEndTimeForStore(
-        this.store,
-        this.selectedStoreId
-      ).end_work;
-      this.timeDuration = this.getStartEndTimeForStore(
-        this.store,
-        this.selectedStoreId
-      ).time_duration;
-      if (Number(this.timeDuration) > Number(this.getStartEndTimeForStore(this.store, this.selectedStoreId).time_therapy)) {
-        this.therapyDuration =
-          Number(this.timeDuration) /
+      if (!isNaN(this.selectedStoreId)) {
+        this.startWork = this.getStartEndTimeForStore(
+          this.store,
+          this.selectedStoreId
+        ).start_work;
+        this.endWork = this.getStartEndTimeForStore(
+          this.store,
+          this.selectedStoreId
+        ).end_work;
+        this.timeDuration = this.getStartEndTimeForStore(
+          this.store,
+          this.selectedStoreId
+        ).time_duration;
+        if (
+          Number(this.timeDuration) >
           Number(
             this.getStartEndTimeForStore(this.store, this.selectedStoreId)
               .time_therapy
-          );
-      } else {
-        this.therapyDuration = Number(
-          this.getStartEndTimeForStore(this.store, this.selectedStoreId)
-            .time_therapy
-        ) / Number(this.timeDuration);
+          )
+        ) {
+          this.therapyDuration =
+            Number(this.timeDuration) /
+            Number(
+              this.getStartEndTimeForStore(this.store, this.selectedStoreId)
+                .time_therapy
+            );
+        } else {
+          this.therapyDuration =
+            Number(
+              this.getStartEndTimeForStore(this.store, this.selectedStoreId)
+                .time_therapy
+            ) / Number(this.timeDuration);
+        }
       }
     });
 
@@ -295,8 +304,15 @@ export class TaskComponent implements OnInit {
     if (localStorage.getItem("calendarView") !== null) {
       this.selectedViewIndex = Number(localStorage.getItem("calendarView"));
       this.selectedButtonIndex[this.selectedViewIndex] = true;
+      setTimeout(() => {
+        this.selectedButtonIndexStyle[this.selectedViewIndex] =
+          "activeButton" + this.theme;
+      }, 50);
     } else {
       this.selectedButtonIndex[0] = true;
+      setTimeout(() => {
+        this.selectedButtonIndexStyle[0] = "activeButton" + this.theme;
+      }, 50);
     }
 
     this.getParameters();
@@ -316,13 +332,31 @@ export class TaskComponent implements OnInit {
       });
     }
 
-    const timeDurationInd = Number(this.getStartEndTimeForStore(this.store, this.selectedStoreId).time_therapy) > Number(this.timeDuration) ? 1 : 0;
-    const timeDuration = Number(this.getStartEndTimeForStore(this.store, this.selectedStoreId).time_therapy);
+    let timeDurationInd = 0;
+    let timeDuration = 0;
+    if (!isNaN(this.selectedStoreId)) {
+      const timeDurationInd =
+        Number(
+          this.getStartEndTimeForStore(this.store, this.selectedStoreId)
+            .time_therapy
+        ) > Number(this.timeDuration)
+          ? 1
+          : 0;
+      const timeDuration = Number(
+        this.getStartEndTimeForStore(this.store, this.selectedStoreId)
+          .time_therapy
+      );
+    }
 
     this.formGroup = this.formBuilder.group({
       id: args.isNew ? this.getNextId() : dataItem.id,
       start: [dataItem.start, Validators.required],
-      end: [timeDurationInd ? new Date(dataItem.start.getTime() + timeDuration * 60000) : dataItem.end, Validators.required],
+      end: [
+        timeDurationInd
+          ? new Date(dataItem.start.getTime() + timeDuration * 60000)
+          : dataItem.end,
+        Validators.required
+      ],
       startTimezone: [dataItem.startTimezone],
       endTimezone: [dataItem.endTimezone],
       isAllDay: dataItem.isAllDay,
@@ -340,12 +374,14 @@ export class TaskComponent implements OnInit {
       if (dataItem.therapy_id !== undefined) {
         this.customer.getTherapy(dataItem.therapy_id).subscribe(data => {
           console.log(data);
-          this.splitToValue(
-            data[0].complaint,
-            data[0].therapies,
-            data[0].therapies_previous
-          );
-          this.complaintData = data[0];
+          if (data['length'] !== 0) {
+            this.splitToValue(
+              data[0].complaint,
+              data[0].therapies,
+              data[0].therapies_previous
+            );
+            this.complaintData = data[0];
+          }
         });
       }
 
@@ -774,7 +810,13 @@ export class TaskComponent implements OnInit {
             this.store,
             this.selectedStoreId
           ).time_duration;
-          if (Number(this.timeDuration) > Number(this.getStartEndTimeForStore(this.store, this.selectedStoreId).time_therapy)) {
+          if (
+            Number(this.timeDuration) >
+            Number(
+              this.getStartEndTimeForStore(this.store, this.selectedStoreId)
+                .time_therapy
+            )
+          ) {
             this.therapyDuration =
               Number(this.timeDuration) /
               Number(
@@ -782,10 +824,11 @@ export class TaskComponent implements OnInit {
                   .time_therapy
               );
           } else {
-            this.therapyDuration = Number(
-              this.getStartEndTimeForStore(this.store, this.selectedStoreId)
-                .time_therapy
-            ) / Number(this.timeDuration);
+            this.therapyDuration =
+              Number(
+                this.getStartEndTimeForStore(this.store, this.selectedStoreId)
+                  .time_therapy
+              ) / Number(this.timeDuration);
           }
         } else {
           this.startWork = "08:00";
@@ -829,6 +872,7 @@ export class TaskComponent implements OnInit {
         };
       }
     }
+    return null;
   }
 
   getUserInCompany(storeId) {
@@ -956,13 +1000,16 @@ export class TaskComponent implements OnInit {
   }
 
   selectedViewCalendar(index) {
-    this.selectedViewIndex = null;
-    setTimeout(() => {
-      this.selectedButtonIndex[this.selectedViewIndex] = false;
-      this.selectedViewIndex = index;
-      this.selectedButtonIndex[this.selectedViewIndex] = true;
-      localStorage.setItem("calendarView", index);
-    }, 50);
+    // this.selectedViewIndex = null;
+    // setTimeout(() => {
+    this.selectedButtonIndex[this.selectedViewIndex] = false;
+    this.selectedButtonIndexStyle[this.selectedViewIndex] = "";
+    this.selectedViewIndex = index;
+    this.selectedButtonIndex[this.selectedViewIndex] = true;
+    this.selectedButtonIndexStyle[this.selectedViewIndex] =
+      "activeButton" + this.theme;
+    localStorage.setItem("calendarView", index);
+    //}, 50);
   }
 
   chageDate(event) {
