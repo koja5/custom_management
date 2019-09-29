@@ -13,13 +13,13 @@
     <kendo-grid *ngIf="language !== undefined" [data]="gridData" [height]="800" [resizable]="true"
       [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
       [pageable]="true" [filterable]="true" (dataStateChange)="dataStateChange($event)"
-      (pageChange)="pageChange($event)">
+      (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey">
       <kendo-grid-messages pagerPage="{{language.pagerPage}}" pagerOf="{{language.pagerOf}}"
         pagerItems="{{language.pagerItems}}" pagerItemsPerPage="{{language.pagerItemsPerPage}}">
       </kendo-grid-messages>
       <ng-template kendoGridToolbarTemplate>
-        <button type="button" kendoGridExcelCommand icon="file-excel">{{language.exportToExcel}}</button>
-        <button kendoGridPDFCommand icon="file-pdf">{{language.exportToPDF}}</button>
+        <button type="button" kendoGridExcelCommand icon="file-excel" style="background: #098E60 !important;">{{language.exportToExcel}}</button>
+        <button kendoGridPDFCommand icon="file-pdf" style="background: #FF0000 !important;">{{language.exportToPDF}}</button>
       </ng-template>
       <kendo-grid-column field="shortname" title="{{language.username}}" width="120">
       </kendo-grid-column>
@@ -142,7 +142,7 @@
     </div>
     <!-- ./remember-row -->
     <div class="form-group">
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Create customer</button>
+      <button class="btn btn-lg btn-{{theme}}" type="submit">Create customer</button>
     </div>
   </form>
 </kendo-window>

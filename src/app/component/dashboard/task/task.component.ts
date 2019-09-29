@@ -76,6 +76,7 @@ export class TaskComponent implements OnInit {
   public store: any;
   public calendars: any = [];
   public loading = true;
+  public createFormLoading: boolean;
   public height = 92;
   public orientation = "horizontal";
   public workTime: any[] = [];
@@ -318,9 +319,20 @@ export class TaskComponent implements OnInit {
     this.getParameters();
   }
 
+  clearAllSelectedData() {
+    this.customerUser = null;
+    this.selectedComplaint = null;
+    this.selectedTherapies = null;
+    this.selectedTherapies = null;
+    this.complaintData = new ComplaintTherapyModel()
+  }
+
   public createFormGroup(args: CreateFormGroupArgs): FormGroup {
+    this.createFormLoading = false;
     const dataItem = args.dataItem;
+    this.clearAllSelectedData();
     console.log(dataItem);
+    
     if (
       typeof dataItem.customer_id === "number" &&
       dataItem.customer_id !== null
@@ -395,10 +407,8 @@ export class TaskComponent implements OnInit {
         this.telephoneValue = dataItem.telephone;
       }
 
-      this.formGroup = this.formBuilder.group({
-        user: this.customerUser
-      });
       this.changeTheme(localStorage.getItem("theme"));
+      this.createFormLoading = true;
     }, 50);
     return this.formGroup;
   }
@@ -427,6 +437,7 @@ export class TaskComponent implements OnInit {
       let formValue = formGroup.value;
       formValue.colorTask = this.selected;
       formValue.telephone = this.telephoneValue;
+      formValue.user = this.customerUser;
       if (this.type !== 3) {
         formValue.creator_id = customerId;
         formValue.title =

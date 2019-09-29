@@ -12,10 +12,10 @@
 
   <kendo-grid [data]="gridData" [height]="800" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
     [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="true" [filterable]="true"
-    (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)">
+    (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey">
     <ng-template kendoGridToolbarTemplate>
-      <button type="button" kendoGridExcelCommand icon="file-excel">Export to Excel</button>
-      <button kendoGridPDFCommand icon="file-pdf">Export to PDF</button>
+      <button type="button" kendoGridExcelCommand icon="file-excel" style="background: #098E60 !important;">Export to Excel</button>
+      <button kendoGridPDFCommand icon="file-pdf" style="background: #FF0000 !important;">Export to PDF</button>
     </ng-template>
     <kendo-grid-column field="storename" title="Store name" width="120">
     </kendo-grid-column>
@@ -120,7 +120,7 @@
     </div>
 
     <div class="form-group">
-      <button class="btn btn-lg btn-primary btn-block" type="submit">{{language.createStore}}</button>
+      <button class="btn btn-lg btn-{{theme}}" type="submit">{{language.createStore}}</button>
     </div>
   </form>
 </kendo-window>
@@ -165,7 +165,7 @@
       </div>
 
       <div class="form-group">
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Create store</button>
+        <button class="btn btn-lg btn-{{theme}}" type="submit">Create store</button>
       </div>
     </form>
 
@@ -243,7 +243,7 @@
     </div>
 
     <div class="form-group">
-      <button class="btn btn-lg btn-primary btn-block" type="submit"
+      <button class="btn btn-lg btn-{{theme}}" type="submit"
         [disabled]="data.storename === '' || data.email === '' || data.time_duration === ''">Update store</button>
     </div>
   </form>
@@ -294,7 +294,7 @@
       </div>
 
       <div class="form-group">
-        <button class="btn btn-lg btn-primary btn-block" type="submit"
+        <button class="btn btn-lg btn-{{theme}}" type="submit"
           [disabled]="data.storename === '' || data.email === '' || data.time_duration === ''">Update store</button>
       </div>
     </form>

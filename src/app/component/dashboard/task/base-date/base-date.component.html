@@ -407,7 +407,7 @@
               </div>
               <!-- ./remember-row -->
               <div class="form-group">
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Update customer</button>
+                <button class="btn btn-lg btn-{{theme}}" type="submit">Update customer</button>
               </div>
             </form>
           </div>
@@ -449,9 +449,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-primary btn-block" type="submit"
+                <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-{{theme}}" type="submit"
                   [disabled]="selectedRecommendation === undefined || baseData.relationship === undefined || baseData.social === undefined || baseData.doctor === undefined || baseData.first_date === undefined">{{language.addData}}</button>
-                <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-primary btn-block"
+                <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-{{theme}}"
                   type="submit">{{language.editData}}</button>
               </div>
             </form>
@@ -507,10 +507,10 @@
               </div>
               <!-- ./remember-row -->
               <div class="form-group">
-                <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-primary btn-block" type="submit"
+                <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-{{theme}}" type="submit"
                   [disabled]="baseData.size === undefined || baseData.weight === undefined || baseData.phone === undefined || baseData.mobile_phone === undefined || 
                   baseData.birthday === undefined || baseData.childs === undefined || baseData.notes === undefined || baseData.profession === undefined || baseData.useful === undefiend">{{language.addData}}</button>
-                <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-primary btn-block"
+                <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-{{theme}}"
                   type="submit">{{language.editData}}</button>
               </div>
             </form>
@@ -555,10 +555,10 @@
                 </div>
               </div>
               <div class="form-group">
-                <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-primary btn-block" type="submit"
+                <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-{{theme}}" type="submit"
                   [disabled]="baseData.internal_organs === undefined || baseData.operations === undefined || 
                   baseData.previous_findings === undefined || baseData.medicament === undefined || baseData.allergies === undefined || baseData.skin_sensitivity === undefined || baseData.pregnancy === undefined">{{language.addData}}</button>
-                <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-primary btn-block"
+                <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-{{theme}}"
                   type="submit">{{language.editData}}</button>
               </div>
             </form>
@@ -687,9 +687,9 @@
           <input type="text" class="col-xs-12" name="cs" placeholder="CS" [(ngModel)]="complaintData.cs" cs.value=''>
         </div>
         <div class="form-group">
-          <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-primary btn-block" type="submit"
+          <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-{{theme}}" type="submit"
             [disabled]="selectedComplaint === '' || selectedTherapies === ''">{{language.addComplaint}}</button>
-          <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-primary btn-block" type="submit"
+          <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-{{theme}}" type="submit"
             [disabled]="complaintData.complaint === '' || complaintData.therapies === ''">{{language.updateComplaint}}</button>
         </div>
       </form>
@@ -724,9 +724,9 @@
               cs.value=''>
           </div>
           <div class="form-group">
-            <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-primary btn-block" type="submit"
+            <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-{{theme}}" type="submit"
               [disabled]="selectedComplaint === '' || selectedTherapies === ''">{{language.addComplaint}}</button>
-            <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-primary btn-block" type="submit"
+            <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-{{theme}}" type="submit"
               [disabled]="complaintData.complaint === '' || complaintData.therapies === ''">{{language.updateComplaint}}</button>
           </div>
         </form>
@@ -784,9 +784,9 @@
             cs.value=''>
         </div>
         <div class="form-group">
-          <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-primary btn-block" type="submit"
+          <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-{{theme}}" type="submit"
             [disabled]="selectedComplaint === '' || selectedTherapies === '' || complaintData.state === undefined">{{language.addTherapy}}</button>
-          <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-primary btn-block" type="submit"
+          <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-{{theme}}" type="submit"
             [disabled]="selectedComplaint === '' || selectedTherapies === '' || complaintData.state === undefined">{{language.updateTherapy}}</button>
         </div>
       </form>
@@ -830,9 +830,9 @@
               cs.value=''>
           </div>
           <div class="form-group">
-            <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-primary btn-block" type="submit"
+            <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-{{theme}}" type="submit"
               [disabled]="selectedComplaint === '' || selectedTherapies === '' || complaintData.state === undefined">{{language.addTherapy}}</button>
-            <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-primary btn-block" type="submit"
+            <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-{{theme}}" type="submit"
               [disabled]="selectedComplaint === '' || selectedTherapies === '' || complaintData.state === undefined">{{language.updateTherapy}}</button>
           </div>
         </form>

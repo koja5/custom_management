@@ -3609,7 +3609,7 @@ input {
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 928px) {
     .col-md-6 {
         width: 48%;
         margin: 1%;
@@ -3620,6 +3620,12 @@ input {
     }
 }
 
+@media (max-width: 768px) {
+    .k-window {
+        width: 100% !important;
+        min-width: 100% !important;
+    }
+}
 
 /*.k-content {
     height: 50vh !important;

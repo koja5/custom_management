@@ -59,22 +59,28 @@
       </div>
       <div class="col-md-6 col-sm-12 col-xs-12">
         <kendo-buttongroup [selection]="'single'" style="float: right;">
-          <button kendoButton [toggleable]="true" [selected]="selectedButtonIndex[0]" (click)="selectedViewCalendar(0)" class="k-button {{selectedButtonIndexStyle[0]}}">
+          <button kendoButton [toggleable]="true" [selected]="selectedButtonIndex[0]" (click)="selectedViewCalendar(0)"
+            class="k-button {{selectedButtonIndexStyle[0]}}">
             5 Days
           </button>
-          <button kendoButton [toggleable]="true" [selected]="selectedButtonIndex[1]" (click)="selectedViewCalendar(1)" class="k-button {{selectedButtonIndexStyle[1]}}">
+          <button kendoButton [toggleable]="true" [selected]="selectedButtonIndex[1]" (click)="selectedViewCalendar(1)"
+            class="k-button {{selectedButtonIndexStyle[1]}}">
             3 Days
           </button>
-          <button kendoButton [toggleable]="true" [selected]="selectedButtonIndex[2]" (click)="selectedViewCalendar(2)" class="k-button {{selectedButtonIndexStyle[2]}}">
+          <button kendoButton [toggleable]="true" [selected]="selectedButtonIndex[2]" (click)="selectedViewCalendar(2)"
+            class="k-button {{selectedButtonIndexStyle[2]}}">
             Month
           </button>
-          <button kendoButton [toggleable]="true" [selected]="selectedButtonIndex[3]" (click)="selectedViewCalendar(3)" class="k-button {{selectedButtonIndexStyle[3]}}">
+          <button kendoButton [toggleable]="true" [selected]="selectedButtonIndex[3]" (click)="selectedViewCalendar(3)"
+            class="k-button {{selectedButtonIndexStyle[3]}}">
             Week
           </button>
-          <button kendoButton [toggleable]="true" [selected]="selectedButtonIndex[4]" (click)="selectedViewCalendar(4)" class="k-button {{selectedButtonIndexStyle[4]}}">
+          <button kendoButton [toggleable]="true" [selected]="selectedButtonIndex[4]" (click)="selectedViewCalendar(4)"
+            class="k-button {{selectedButtonIndexStyle[4]}}">
             Timeline
           </button>
-          <button kendoButton [toggleable]="true" [selected]="selectedButtonIndex[5]" (click)="selectedViewCalendar(5)" class="k-button {{selectedButtonIndexStyle[5]}}">
+          <button kendoButton [toggleable]="true" [selected]="selectedButtonIndex[5]" (click)="selectedViewCalendar(5)"
+            class="k-button {{selectedButtonIndexStyle[5]}}">
             Agenda
           </button>
         </kendo-buttongroup>
@@ -172,12 +178,16 @@
 
               <ng-template kendoSchedulerEditDialogTemplate let-formGroup="formGroup" let-isNew="isNew"
                 let-editMode="editMode">
-                <div class="k-form-inline">
+
+                <div *ngIf="!createFormLoading" style="height: 700px; width: 400px;">
+                  <div class="spinner loading"></div>
+                </div>
+
+                <div class="k-form-inline" *ngIf="createFormLoading">
                   <div class="k-form-field">
                     <span>Patient</span>
                     <kendo-combobox [data]="customerUsers" [textField]="'shortname'" [valueField]="'id'"
-                      [formControl]="formGroup.get('user')" (valueChange)="onValueChange($event)"
-                      ([ngModel])="(customerUser)">
+                      (valueChange)="onValueChange($event)" [(ngModel)]="customerUser">
                     </kendo-combobox>
                     <button kendoButton [icon]="'user'" [primary]="true" (click)="newCustomer()">
                       New customer
@@ -209,8 +219,8 @@
                   <div class="k-form-field">
                     <span>{{languageUser.therapyPreviousValue}}</span>
                     <kendo-multiselect [data]="therapyValue" [textField]="'title'" [valueField]="'id'"
-                      [(ngModel)]="selectedTherapiesPrevious" name="therapies_previous" [placeholder]="language.choiceTherapyPrevious"
-                      [valuePrimitive]="true">
+                      [(ngModel)]="selectedTherapiesPrevious" name="therapies_previous"
+                      [placeholder]="language.choiceTherapyPrevious" [valuePrimitive]="true">
                     </kendo-multiselect>
                   </div>
                   <div class="k-form-field">
@@ -319,12 +329,14 @@
 
             <ng-template kendoSchedulerEditDialogTemplate let-formGroup="formGroup" let-isNew="isNew"
               let-editMode="editMode">
-              <div class="k-form-inline">
+              <div *ngIf="!createFormLoading" style="height: 700px">
+                <div class=" spinner loading"></div>
+              </div>
+              <div class="k-form-inline" *ngIf="createFormLoading">
                 <div class="k-form-field">
                   <span>Patient</span>
                   <kendo-combobox [data]="customerUsers" [textField]="'shortname'" [valueField]="'id'"
-                    [formControl]="formGroup.get('user')" (valueChange)="onValueChange($event)"
-                    ([ngModel])="(customerUser)">
+                    (valueChange)="onValueChange($event)" [(ngModel)]="customerUser">
                   </kendo-combobox>
                   <button kendoButton [icon]="'user'" [primary]="true" (click)="newCustomer()">
                     New customer
@@ -496,7 +508,7 @@
       </div>
       <!-- ./remember-row -->
       <div class="form-group">
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Create customer</button>
+        <button class="btn btn-lg btn-{{theme}}" type="submit">Create customer</button>
       </div>
     </form>
   </kendo-window>

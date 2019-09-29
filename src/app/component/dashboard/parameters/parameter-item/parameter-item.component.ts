@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Inject } from '@angular/core';
 import { State, process } from '@progress/kendo-data-query';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { GridDataResult } from '@progress/kendo-angular-grid';
+import { GridDataResult, RowArgs } from '@progress/kendo-angular-grid';
 import { map } from 'rxjs/operators';
 import { ParameterItemService } from '../../../../service/parameter-item.service';
 import { DataStateChangeEvent, PageChangeEvent } from '@progress/kendo-angular-grid';
@@ -36,6 +36,10 @@ export class ParameterItemComponent implements OnInit {
   public currentLoadData: any;
   public therapyList: any;
   public selectedTherapy: any;
+  public theme: string;
+  private mySelectionKey(context: RowArgs): string {
+    return JSON.stringify(context.index);
+  }
 
   constructor(private service: ParameterItemService) {
   }
@@ -65,6 +69,12 @@ export class ParameterItemComponent implements OnInit {
 
     this.service.getData(this.type);
     console.log(this.view);
+
+    if (localStorage.getItem("theme") !== null) {
+      this.theme = localStorage.getItem("theme");
+      this.changeTheme(this.theme);
+    }
+
     // this.view = this.service.getData(this.type);
   }
 
@@ -203,5 +213,92 @@ export class ParameterItemComponent implements OnInit {
 
   sortChangeData() {
     this.currentLoadData = orderBy(this.currentLoadData, this.gridState.sort);
+  }
+
+  changeTheme(theme: string) {
+    setTimeout(() => {
+      if (localStorage.getItem("allThemes") !== undefined) {
+        const allThemes = JSON.parse(localStorage.getItem("allThemes"));
+        console.log(allThemes);
+        let items = document.querySelectorAll(".k-dialog-titlebar");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const themeName = allThemes[j]["name"];
+            console.log(clas);
+            clas.remove("k-dialog-titlebar-" + themeName);
+            clas.add("k-dialog-titlebar-" + theme);
+          }
+        }
+
+        items = document.querySelectorAll(".k-header");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("gridHeader-" + element);
+
+            clas.add("gridHeader-" + this.theme);
+          }
+        }
+        items = document.querySelectorAll(".k-pager-numbers");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-pager-numbers-" + element);
+            clas.add("k-pager-numbers-" + this.theme);
+          }
+        }
+
+        items = document.querySelectorAll(".k-select");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-select-" + element);
+            clas.add("k-select-" + this.theme);
+          }
+        }
+
+        items = document.querySelectorAll(".k-grid-table");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-grid-table-" + element);
+            clas.add("k-grid-table-" + this.theme);
+          }
+        }
+        items = document.querySelectorAll(".k-grid-header");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-grid-header-" + element);
+            clas.add("k-grid-header-" + this.theme);
+          }
+        }
+        items = document.querySelectorAll(".k-pager-wrap");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-pager-wrap-" + element);
+            clas.add("k-pager-wrap-" + this.theme);
+          }
+        }
+
+        items = document.querySelectorAll(".k-button");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("inputTheme-" + element);
+            clas.add("inputTheme-" + this.theme);
+          }
+        }
+      }
+    }, 100);
   }
 }

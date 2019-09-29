@@ -13,7 +13,7 @@
     (dataStateChange)="onStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)"
     (save)="saveHandler($event)" (remove)="removeHandler($event)" (add)="addHandler($event)" [navigable]="true"
     [loading]="loading" (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)"
-    (sortChange)="sortChange($event)">
+    (sortChange)="sortChange($event)" [kendoGridSelectBy]="mySelectionKey">
     <ng-template kendoGridToolbarTemplate>
       <button kendoGridAddCommand>Add new</button>
     </ng-template>
@@ -35,7 +35,7 @@
     (dataStateChange)="onStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)"
     (save)="saveHandler($event)" (remove)="removeHandler($event)" (add)="addHandler($event)" [navigable]="true"
     [loading]="loading" (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)"
-    (sortChange)="sortChange($event)" [loading]="loading">
+    (sortChange)="sortChange($event)" [loading]="loading" [kendoGridSelectBy]="mySelectionKey">
     <ng-template kendoGridToolbarTemplate>
       <button kendoGridAddCommand>Add new</button>
     </ng-template>
@@ -64,7 +64,7 @@
     (dataStateChange)="onStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)"
     (save)="saveHandler($event)" (remove)="removeHandler($event)" (add)="addHandler($event)" [navigable]="true"
     [loading]="loading" (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)"
-    (sortChange)="sortChange($event)" [loading]="loading">
+    (sortChange)="sortChange($event)" [loading]="loading" [kendoGridSelectBy]="mySelectionKey">
     <ng-template kendoGridToolbarTemplate>
       <button kendoGridAddCommand>Add new</button>
     </ng-template>

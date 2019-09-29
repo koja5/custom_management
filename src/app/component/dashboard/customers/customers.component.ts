@@ -6,7 +6,8 @@ import { process, State } from "@progress/kendo-data-query";
 import { UploadEvent, SelectEvent } from "@progress/kendo-angular-upload";
 import {
   DataStateChangeEvent,
-  PageChangeEvent
+  PageChangeEvent,
+  RowArgs
 } from "@progress/kendo-angular-grid";
 import { MessageService } from "../../../service/message.service";
 import { CustomerModel } from "../../../models/customer-model";
@@ -47,6 +48,9 @@ export class CustomersComponent implements OnInit {
   public customerDialogOpened = false;
   public fileValue: any;
   public theme: string;
+  private mySelectionKey(context: RowArgs): string {
+    return JSON.stringify(context.index);
+  }
 
   constructor(
     public service: CustomersService,
@@ -74,9 +78,12 @@ export class CustomersComponent implements OnInit {
 
     this.message.getBackToCustomerGrid().subscribe(mess => {
       this.selectedUser = undefined;
+      this.changeTheme(this.theme);
     });
 
-    this.changeTheme(this.theme);
+    this.message.getTheme().subscribe(mess => {
+      this.changeTheme(mess);
+    });
   }
 
   getCustomers() {
@@ -90,6 +97,7 @@ export class CustomersComponent implements OnInit {
         this.gridData[newLocal] = [];
         this.loading = false;
       }
+      this.changeTheme(this.theme);
     });
   }
 
@@ -276,6 +284,74 @@ export class CustomersComponent implements OnInit {
             console.log(clas);
             clas.remove("k-dialog-titlebar-" + themeName);
             clas.add("k-dialog-titlebar-" + theme);
+          }
+        }
+
+        items = document.querySelectorAll(".k-header");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("gridHeader-" + element);
+
+            clas.add("gridHeader-" + this.theme);
+          }
+        }
+        items = document.querySelectorAll(".k-pager-numbers");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-pager-numbers-" + element);
+            clas.add("k-pager-numbers-" + this.theme);
+          }
+        }
+
+        items = document.querySelectorAll(".k-select");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-select-" + element);
+            clas.add("k-select-" + this.theme);
+          }
+        }
+
+        items = document.querySelectorAll(".k-grid-table");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-grid-table-" + element);
+            clas.add("k-grid-table-" + this.theme);
+          }
+        }
+        items = document.querySelectorAll(".k-grid-header");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-grid-header-" + element);
+            clas.add("k-grid-header-" + this.theme);
+          }
+        }
+        items = document.querySelectorAll(".k-pager-wrap");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-pager-wrap-" + element);
+            clas.add("k-pager-wrap-" + this.theme);
+          }
+        }
+
+        items = document.querySelectorAll(".k-button");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("inputTheme-" + element);
+            clas.add("inputTheme-" + this.theme);
           }
         }
       }

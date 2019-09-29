@@ -4,7 +4,8 @@ import { StoreService } from '../../../service/store.service';
 import { process, State } from '@progress/kendo-data-query';
 import {
   DataStateChangeEvent,
-  PageChangeEvent
+  PageChangeEvent,
+  RowArgs
 } from '@progress/kendo-angular-grid';
 import { StoreModel } from 'src/app/models/store-model';
 import Swal from 'sweetalert2';
@@ -39,6 +40,9 @@ export class StoreComponent implements OnInit {
   public excelOpened = false;
   public fileValue: any;
   public theme: string;
+  private mySelectionKey(context: RowArgs): string {
+    return JSON.stringify(context.index);
+  }
 
   constructor(public service: StoreService) {
     this.excelIO = new Excel.IO();
@@ -49,7 +53,6 @@ export class StoreComponent implements OnInit {
     if (localStorage.getItem("theme") !== null) {
       this.theme = localStorage.getItem("theme");
     }
-    this.changeTheme(this.theme);
     this.language = JSON.parse(localStorage.getItem('language'))['store'];
     this.getStore();
   }
@@ -59,6 +62,7 @@ export class StoreComponent implements OnInit {
       console.log(val);
       this.currentLoadData = val;
       this.gridData = process(val, this.state);
+      this.changeTheme(this.theme);
       this.loading = false;
     });
   }
@@ -166,6 +170,7 @@ export class StoreComponent implements OnInit {
     this.start_work = new Date(this.data.start_work);
     this.end_work = new Date(this.data.end_work);
     this.storeEdit = true;
+    this.changeTheme(this.theme);
   }
 
   storeEditClose() {
@@ -179,6 +184,7 @@ export class StoreComponent implements OnInit {
   open(component, id) {
     this[component + 'Opened'] = true;
     this.data.id = id;
+    this.changeTheme(this.theme);
   }
 
   action(event) {
@@ -293,6 +299,74 @@ export class StoreComponent implements OnInit {
             console.log(clas);
             clas.remove("k-dialog-titlebar-" + themeName);
             clas.add("k-dialog-titlebar-" + theme);
+          }
+        }
+
+        items = document.querySelectorAll(".k-header");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("gridHeader-" + element);
+
+            clas.add("gridHeader-" + this.theme);
+          }
+        }
+        items = document.querySelectorAll(".k-pager-numbers");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-pager-numbers-" + element);
+            clas.add("k-pager-numbers-" + this.theme);
+          }
+        }
+
+        items = document.querySelectorAll(".k-select");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-select-" + element);
+            clas.add("k-select-" + this.theme);
+          }
+        }
+
+        items = document.querySelectorAll(".k-grid-table");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-grid-table-" + element);
+            clas.add("k-grid-table-" + this.theme);
+          }
+        }
+        items = document.querySelectorAll(".k-grid-header");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-grid-header-" + element);
+            clas.add("k-grid-header-" + this.theme);
+          }
+        }
+        items = document.querySelectorAll(".k-pager-wrap");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-pager-wrap-" + element);
+            clas.add("k-pager-wrap-" + this.theme);
+          }
+        }
+
+        items = document.querySelectorAll(".k-button");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("inputTheme-" + element);
+            clas.add("inputTheme-" + this.theme);
           }
         }
       }
