@@ -18,8 +18,9 @@ import { UrlTree, Router, UrlSegment, UrlSegmentGroup } from '@angular/router';
 import { throttleTime } from 'rxjs/operators';
 import { UserModel } from '../../../models/user-model';
 import Swal from 'sweetalert2';
-import * as GC from '@grapecity/spread-sheets';
-import * as Excel from '@grapecity/spread-excelio';
+// import * as GC from '@grapecity/spread-sheets';
+// import * as Excel from '@grapecity/spread-excelio';
+import * as XLSX from 'ts-xlsx';
 
 
 @Component({
@@ -51,8 +52,8 @@ export class UsersComponent implements OnInit {
   public passwordPattern = '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&#])[A-Za-z\d$@$!%*?&].{8,}';
   public emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$';
   public loading = true;
-  private spread: GC.Spread.Sheets.Workbook;
-  private excelIO;
+  // private spread: GC.Spread.Sheets.Workbook;
+  // private excelIO;
   public excelOpened = false;
   public language: any;
   public fileValue: any;
@@ -60,14 +61,15 @@ export class UsersComponent implements OnInit {
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
   }
-  
+  private arrayBuffer: any;
+
   constructor(
     public service: UsersService,
     public storeService: StoreService,
     public url: StandardUrlSerializer,
     public router: Router
   ) {
-    this.excelIO = new Excel.IO();
+    // this.excelIO = new Excel.IO();
   }
 
   ngOnInit() {
@@ -244,51 +246,66 @@ export class UsersComponent implements OnInit {
       }, 50);
     } else {
       this.excelOpened = false;
+      this.getUser();
     }
   }
 
   onFileChange(args) {
-    const self = this;
-    const file = args.srcElement && args.srcElement.files && args.srcElement.files[0];
+    /* const self = this;
+     const file = args.srcElement && args.srcElement.files && args.srcElement.files[0];
+     this.excelOpened = true;
+     if (file) {
+       self.excelIO.open(file, (json) => {
+         console.log(json);
+         this.gridData = null;
+         setTimeout(() => {
+           this.gridData = this.xlsxToJson(json);
+           this.fileValue = null;
+         }, 50);
+       }, (error) => {
+         alert('load fail');
+       });*/
+
     this.excelOpened = true;
-    if (file) {
-      self.excelIO.open(file, (json) => {
-        console.log(json);
-        this.gridData = null;
-        setTimeout(() => {
-          this.gridData = this.xlsxToJson(json);
+    let fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      this.arrayBuffer = fileReader.result;
+      var data = new Uint8Array(this.arrayBuffer);
+      var arr = new Array();
+      for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+      var bstr = arr.join("");
+      var workbook = XLSX.read(bstr, { type: "binary" });
+      var first_sheet_name = workbook.SheetNames[0];
+      var worksheet = workbook.Sheets[first_sheet_name];
+      console.log(XLSX.utils.sheet_to_json(worksheet, { raw: false }));
+      setTimeout(() => {
+        if (XLSX.utils.sheet_to_json(worksheet, { raw: true }).length > 0) {
+          this.gridData = this.xlsxToJson(XLSX.utils.sheet_to_json(worksheet, { raw: true }));
           this.fileValue = null;
-        }, 50);
-      }, (error) => {
-        alert('load fail');
-      });
+        }
+      }, 50);
     }
+    fileReader.readAsArrayBuffer(args.target.files[0]);
   }
 
   xlsxToJson(data) {
-    const sheets = data.sheets.Sheet1.data.dataTable;
-    const rowCount = data.sheets.Sheet1.rowCount;
-    const columnCount = data.sheets.Sheet1.columnCount;
-
+    const rowCount = data.length;
     const objectArray = [];
-    const columns = [];
+    const columns = Object.keys(data[0]);
+    const columnCount = columns.length;
     const dataArray = [];
 
-
-    for (let i = 0; i < columnCount; i++) {
-      columns.push(sheets[0][i].value);
-    }
-
-    for (let i = 1; i < rowCount; i++) {
+    for (let i = 0; i < rowCount; i++) {
       const object = {};
       for (let j = 0; j < columnCount; j++) {
-        object[sheets[0][j].value] = sheets[i][j].value;
+        console.log(data[i][columns[j]]);
+        object[columns[j]] = data[i][columns[j]];
       }
       objectArray.push(object);
-      dataArray.push(objectArray[i - 1]);
+      dataArray.push(objectArray[i]);
     }
     const allData = {
-      table: 'users',
+      table: "users",
       columns: columns,
       data: dataArray
     };
