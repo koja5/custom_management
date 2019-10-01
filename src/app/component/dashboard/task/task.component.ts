@@ -851,6 +851,7 @@ export class TaskComponent implements OnInit {
 
       this.getUserInCompany(event);
     } else {
+      localStorage.removeItem('selectedStore');
       this.startWork = '08:00';
       this.endWork = '22:00';
       this.timeDuration = '60';
