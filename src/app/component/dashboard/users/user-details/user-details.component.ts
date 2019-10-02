@@ -53,7 +53,7 @@ export class UserDetailsComponent implements OnInit {
       console.log(val);
       this.data = val[0];
       this.modelData();
-      if (val[0].img !== null) {
+      if (val[0].img !== null && val[0].img.data !== undefined && val[0].img.data.length !== 0) {
         const TYPED_ARRAY = new Uint8Array(val[0].img.data);
         const STRING_CHAR = String.fromCharCode.apply(null, TYPED_ARRAY);
         let base64String = btoa(STRING_CHAR);

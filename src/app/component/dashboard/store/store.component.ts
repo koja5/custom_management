@@ -286,13 +286,14 @@ export class StoreComponent implements OnInit {
     const columns = Object.keys(data[0]);
     const columnCount = columns.length;
     const dataArray = [];
-
+    columns.push('superadmin');
     for (let i = 0; i < rowCount; i++) {
       const object = {};
       for (let j = 0; j < columnCount; j++) {
         console.log(data[i][columns[j]]);
         object[columns[j]] = data[i][columns[j]];
       }
+      object['superadmin'] = localStorage.getItem('idUser')
       objectArray.push(object);
       dataArray.push(objectArray[i]);
     }
