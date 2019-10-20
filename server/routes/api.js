@@ -1535,7 +1535,6 @@ router.get('/sendChangePassword/:id', (req, res, next) => {
                 "code": 100,
                 "status": "Error in connection database"
               });
-              return next(err);
             } else {
               res.writeHead(302, {
                 'Location': '/changePassword'
@@ -1556,8 +1555,6 @@ router.get('/sendChangePassword/:id', (req, res, next) => {
 router.post('/postojikorisnik', (req, res, next) => {
   try {
     var reqObj = req.body;
-    console.log(reqObj);
-    console.log('postoji korisnik...');
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error('SQL Connection error: ', err);

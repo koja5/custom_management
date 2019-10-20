@@ -8,7 +8,7 @@ export class MailService {
 
     constructor(public http: HttpClient) { }
 
-    sendMail(data, callback) {
+    public sendMail(data, callback) {
         console.log(data);
         const headers = new HttpHeaders();
         console.log('service mail servicee');
@@ -18,15 +18,14 @@ export class MailService {
             .subscribe(val => callback(val));
     }
     
-    sendForgetMail(data, callback) {
+    public sendForgetMail(data) {
       const headers = new HttpHeaders();
         headers.append('Content-Type', 'application/json');
         return this.http.post('/api/forgotmail', data, { headers: headers })
-            .map(res => res)
-            .subscribe(val => callback(val));
+            .map(res => res);
     }
 
-    posaljiMiPoruku(data, callback) {
+    public posaljiMiPoruku(data, callback) {
         this.http.post('/api/askQuestion', data)
             .map(res => res)
             .subscribe(val => callback(val));

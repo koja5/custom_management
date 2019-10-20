@@ -77,8 +77,8 @@
                             </div>
                         </div>
                         <div class="row">
-                            <p style="color: red;">{{loginInfo}}</p>
                             <div class="col-xs-12 col-sm-12">
+                                <p style="color: red">{{loginInfo}}</p>
                                 <form name="loginForm" class="loginForm" (ngSubmit)="login(login)">
                                     <div class="form-group">
                                         <input type="email" class="form-control email" name="username"
@@ -88,8 +88,8 @@
                                     <div class="form-group">
                                         <div class="pwdMask">
                                             <input type="{{hideShow}}" class="form-control password" name="password"
-                                                placeholder="{{language.password}}" [(ngModel)]="data.password" password.value=''
-                                                #password="ngModel">
+                                                placeholder="{{language.password}}" [(ngModel)]="data.password"
+                                                password.value='' #password="ngModel">
                                             <span class="fa {{hideShowEye}} pwd-toggle"
                                                 (click)="hideShowPassword()"></span>
                                         </div>
@@ -110,7 +110,8 @@
                                     </div>
                                     <!-- ./remember-row -->
                                     <div class="form-group">
-                                        <button class="btn btn-lg btn-block btn-primary" type="submit">{{language.loginWithEmail}}</button>
+                                        <button class="btn btn-lg btn-block btn-primary"
+                                            type="submit">{{language.loginWithEmail}}</button>
                                     </div>
                                 </form>
                             </div>
@@ -123,38 +124,42 @@
                             <div class="col-xs-12 col-sm-12">
                                 <div class="authfy-heading">
                                     <h3 class="auth-title">{{language.signUpTitle}}</h3>
-                                    <p>{{loginInfo}}</p>
+                                    <p>{{signUpInfo}}</p>
                                     <p style="color: red;">{{errorInfo}}</p>
                                 </div>
                                 <form name="signupForm" class="signupForm" (ngSubmit)="signUp(signup)">
                                     <div class="form-group">
                                         <input type="email" class="form-control" name="email"
-                                            placeholder="{{language.email}}" required="required" [(ngModel)]="data.email"
-                                            email.value='' #email="ngModel">
+                                            placeholder="{{language.email}}" required="required"
+                                            [(ngModel)]="data.email" email.value='' #email="ngModel">
                                     </div>
 
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="fullname" placeholder="{{language.fullName}}"
-                                            required="required" [(ngModel)]="data.shortname" shortname.value=''
-                                            #shortname="ngModel">
+                                        <input type="text" class="form-control" name="fullname"
+                                            placeholder="{{language.fullName}}" required="required"
+                                            [(ngModel)]="data.shortname" shortname.value='' #shortname="ngModel">
                                     </div>
                                     <div class="form-group">
                                         <div class="pwdMask">
                                             <input type="{{hideShow}}" class="form-control password" name="password"
-                                                placeholder="{{language.password}}" [(ngModel)]="data.password" password.value=''
-                                                #password="ngModel">
+                                                placeholder="{{language.password}}" [(ngModel)]="data.password"
+                                                password.value='' #password="ngModel">
                                             <span class="fa {{hideShowEye}} pwd-toggle"
                                                 (click)="hideShowPassword()"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <p class="term-policy text-muted small">{{language.agree}} <a href="#">{{language.privacyPolicy}}</a> {{language.and}} <a href="#">{{language.termsOfService}}</a>.</p>
+                                        <p class="term-policy text-muted small">{{language.agree}} <a
+                                                href="#">{{language.privacyPolicy}}</a> {{language.and}} <a
+                                                href="#">{{language.termsOfService}}</a>.</p>
                                     </div>
                                     <div class="form-group">
-                                        <button class="btn btn-lg btn-block btn-primary" type="submit">{{language.signUpWithEmail}}</button>
+                                        <button class="btn btn-lg btn-block btn-primary"
+                                            type="submit">{{language.signUpWithEmail}}</button>
                                     </div>
                                 </form>
-                                <a class="lnk-toggler" data-panel=".panel-login" (click)="loginActive()">{{language.alreadyHaveAnAccount}}</a>
+                                <a class="lnk-toggler" data-panel=".panel-login"
+                                    (click)="loginActive()">{{language.alreadyHaveAnAccount}}</a>
                             </div>
                         </div>
                     </div>
@@ -166,20 +171,22 @@
                                 <div class="authfy-heading">
                                     <h3 class="auth-title">{{language.recoveryTitle}}</h3>
                                     <p>{{language.recoveryText}}</p>
-                                    <p>{{loginInfo}}</p>
+                                    <p id="textClass" style="color: red;"></p>
                                     <p style="color: red;">{{errorInfo}}</p>
                                 </div>
                                 <form name="forgetForm" class="forgetForm" (ngSubmit)="forgotPassword(forgot)">
                                     <div class="form-group">
                                         <input type="email" class="form-control" name="username"
-                                            placeholder="{{language.email}}" required="required" [(ngModel)]="data.email"
-                                            email.value='' #email="ngModel">
+                                            placeholder="{{language.email}}" required="required"
+                                            [(ngModel)]="data.email" email.value='' #email="ngModel">
                                     </div>
                                     <div class="form-group">
-                                        <button class="btn btn-lg btn-block btn-primary" type="submit">{{language.recoveryYourPassword}}</button>
+                                        <button class="btn btn-lg btn-block btn-primary"
+                                            type="submit">{{language.recoveryYourPassword}}</button>
                                     </div>
                                     <div class="form-group">
-                                        <a class="lnk-toggler" data-panel=".panel-login" (click)="loginActive()">{{language.alreadyHaveAnAccount}}</a>
+                                        <a class="lnk-toggler" data-panel=".panel-login"
+                                            (click)="loginActive()">{{language.alreadyHaveAnAccount}}</a>
                                     </div>
                                     <div class="form-group">
                                         <a class="lnk-toggler" data-panel=".panel-signup" (click)="signUpActive()">Don’t

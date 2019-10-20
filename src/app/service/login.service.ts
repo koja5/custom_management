@@ -31,7 +31,6 @@ export class LoginService {
   }
 
   forgotPassword(data, callback) {
-    console.log('checkaccount...');
     this.http.post('/api/postojikorisnik', data)
       .map(res => res)
       .subscribe(val => {

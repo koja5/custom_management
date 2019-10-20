@@ -21,7 +21,12 @@
     "alreadyHaveAnAccount": "Already have an account?",
     "recoveryTitle": "Recovery your password",
     "recoveryText": "Fill in your e-mail address below and we will send you an email with further instructions.",
-    "recoveryYourPassword": "Recovery your password"
+    "recoveryYourPassword": "Recovery your password",
+    "recoveryButton": "Set new password",
+    "sendForgotMail": "Please check you mail and click on link for reset password!",
+    "notCorrectPass": "Username or password is not correct!",
+    "checkMailForActive": "Check your mail and active your account!",
+    "fillFields": "Fill in all fields"
   },
   "calendar": {
     "today": "Today",

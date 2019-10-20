@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoginService } from '../../../service/login.service';
+import { DashboardService } from '../../../service/dashboard.service';
 
 @Component({
   selector: 'app-change-password',
@@ -22,14 +23,28 @@ export class ChangePasswordComponent implements OnInit {
     'password': '',
     'password2': ''
   };
+  public language: any;
 
-  constructor(public route: ActivatedRoute, public service: LoginService, public router: Router) { }
+  constructor(public route: ActivatedRoute, public service: LoginService, public router: Router, public dashboardService: DashboardService) { }
 
   ngOnInit() {
     console.log(this.route);
     this.mail = this.route.snapshot.params.id;
     this.passMatch = true;
     this.data.email = this.mail;
+
+    if (localStorage.getItem('language') !== null) {
+      this.language = JSON.parse(localStorage.getItem('language'))['login'];
+    } else {
+      this.dashboardService.getTranslation('english').subscribe(
+        data => {
+          console.log(data);
+          localStorage.setItem('translation', JSON.stringify(data));
+          this.language = data['login'];
+        }
+      );
+    }
+
   }
 
   changePass() {
@@ -41,10 +56,10 @@ export class ChangePasswordComponent implements OnInit {
       this.service.changePass(this.data, function (res) {
         console.log(res);
         if (res.code === 'true') {
-          this.changeInfo = res.message;
+          document.getElementById('changeInfoSuccess').innerHTML = res.message;
           setTimeout(() => {
             thisObj.router.navigate(['login']);
-          }, 10);
+          }, 2000);
         }
       });
     }

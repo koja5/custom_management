@@ -21,7 +21,12 @@
     "alreadyHaveAnAccount": "Hast du schon ein Konto?",
     "recoveryTitle": "Stellen Sie Ihr Passwort wieder her",
     "recoveryText": "Geben Sie unten Ihre E-Mail-Adresse ein, und wir senden Ihnen eine E-Mail mit weiteren Anweisungen.",
-    "recoveryYourPassword": "Stellen Sie Ihr Passwort wieder her"
+    "recoveryYourPassword": "Stellen Sie Ihr Passwort wieder her",
+    "recoveryButton": "Legen Sie ein neues Passwort fest",
+    "sendForgotMail": "Bitte überprüfen Sie Ihre E-Mails und klicken Sie auf den Link, um das Passwort zurückzusetzen!",
+    "notCorrectPass": "Benutzername oder Passwort ist nicht korrekt!",
+    "checkMailForActive": "Überprüfen Sie Ihre E-Mails und aktivieren Sie Ihr Konto!",
+    "fillFields": "Füllen Sie alle Felder aus!"
   },
   "calendar": {
     "today": "Heute",
