@@ -48,7 +48,9 @@
     "tuesday": "Tuesday",
     "wednesday": "Wednesday",
     "thursday": "Thursday",
-    "friday": "Friday"
+    "friday": "Friday",
+    "selectStoreIndicator": "Bitte Standort auswählen!",
+    "selectStoreIndicatorText": "Sie müssen den Ort auswählen, bevor Sie eine Aufgabe erstellen!"
   },
   "navigation-menu": {
     "calendar": "Kalender",

@@ -134,6 +134,13 @@ export class CustomersComponent implements OnInit {
     this.service.createCustomer(this.data, val => {
       if (val.success) {
         this.data.id = val.id;
+        /*this.gridData = {
+          data: this.currentLoadData.slice(
+            this.currentLoadData.length - this.state.take,
+            this.state.skip + this.state.take
+          ),
+          total: this.currentLoadData.length
+        };*/
         this.gridData.data.push(this.data);
         this.customer = false;
         // form.reset();

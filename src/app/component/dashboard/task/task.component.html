@@ -194,7 +194,7 @@
                     </button>
 
                     <button kendoButton [icon]="'k-icon k-i-information'" [primary]="true" (click)="baseDataForUser()"
-                      *ngIf="customerUser !== undefined">
+                      *ngIf="customerUser !== undefined && customerUser !== null">
                       Base data
                     </button>
                   </div>
@@ -343,7 +343,7 @@
                   </button>
 
                   <button kendoButton [icon]="'k-icon k-i-information'" [primary]="true" (click)="baseDataForUser()"
-                    *ngIf="customerUser !== undefined">
+                    *ngIf="customerUser !== undefined && customerUser !== null">
                     Base data
                   </button>
                 </div>
@@ -363,6 +363,13 @@
                   <kendo-multiselect [data]="therapyValue" [textField]="'title'" [valueField]="'id'"
                     [(ngModel)]="selectedTherapies" name="therapies" [placeholder]="language.choiceTherapy"
                     [valuePrimitive]="true">
+                  </kendo-multiselect>
+                </div>
+                <div class="k-form-field">
+                  <span>{{languageUser.therapyPreviousValue}}</span>
+                  <kendo-multiselect [data]="therapyValue" [textField]="'title'" [valueField]="'id'"
+                    [(ngModel)]="selectedTherapiesPrevious" name="therapies_previous"
+                    [placeholder]="language.choiceTherapyPrevious" [valuePrimitive]="true">
                   </kendo-multiselect>
                 </div>
                 <div class="k-form-field">

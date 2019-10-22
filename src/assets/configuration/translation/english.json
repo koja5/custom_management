@@ -48,7 +48,9 @@
     "tuesday": "Tuesday",
     "wednesday": "Wednesday",
     "thursday": "Thursday",
-    "friday": "Friday"
+    "friday": "Friday",
+    "selectStoreIndicatorTitle": "Please select location!",
+    "selectStoreIndicatorText": "You need to select location, before you create task!"
   },
   "navigation-menu": {
     "calendar": "Calendar",
