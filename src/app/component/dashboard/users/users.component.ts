@@ -166,6 +166,10 @@ export class UsersComponent implements OnInit {
   dataStateChange(state: DataStateChangeEvent): void {
     this.state = state;
     this.gridData = process(this.currentLoadData, this.state);
+    if (this.state.filter.filters.length === 0) {
+      this.gridData.total = this.currentLoadData.length;
+    }
+    this.changeTheme(this.theme);
   }
 
   pageChange(event: PageChangeEvent): void {

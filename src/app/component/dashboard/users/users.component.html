@@ -6,12 +6,14 @@
   <div class="user-options">
     <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">New user</button>
     <label class="uploadFromExcel"><span class='k-icon k-i-file-excel'></span> Upload from Excel<input type="file"
-        name="files[]" multiple id="jsonFile" accept=".xlsx" (change)="onFileChange($event)" [(ngModel)]="fileValue"/></label>
+        name="files[]" multiple id="jsonFile" accept=".xlsx" (change)="onFileChange($event)"
+        [(ngModel)]="fileValue" /></label>
   </div>
 
   <kendo-grid [data]="gridData" [height]="800" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
     [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="true" [filterable]="true"
-    (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)" (sortChange)="sortChange($event)"  [kendoGridSelectBy]="mySelectionKey">
+    (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)" (sortChange)="sortChange($event)"
+    [kendoGridSelectBy]="mySelectionKey">
     <ng-template kendoGridToolbarTemplate>
       <button kendoGridExcelCommand icon="file-excel" style="background: #098E60 !important;">Export to Excel</button>
       <button kendoGridPDFCommand icon="file-pdf" style="background: #FF0000 !important;">Export to PDF</button>
@@ -47,6 +49,18 @@
           </div>
         </div>
       </ng-template>
+      <kendo-grid-column field="shortname" title="Username">
+      </kendo-grid-column>
+      <kendo-grid-column field="email" title="Email">
+      </kendo-grid-column>
+      <kendo-grid-column field="firstname" title="Firstname">
+      </kendo-grid-column>
+      <kendo-grid-column field="lastname" title="Lastname">
+      </kendo-grid-column>
+      <kendo-grid-column field="street" title="Street">
+      </kendo-grid-column>
+      <kendo-grid-column field="active" title="Active">
+      </kendo-grid-column>
     </kendo-grid-pdf>
 
     <kendo-grid-excel fileName="Users.xlsx"></kendo-grid-excel>

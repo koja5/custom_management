@@ -406,8 +406,8 @@
                 </div>
               </div>
               <!-- ./remember-row -->
-              <div class="form-group">
-                <button class="btn btn-lg btn-{{theme}}" type="submit">Update customer</button>
+              <div class="form-group" style="text-align: center">
+                <button kendoButton [primary]="true" type="submit">Update customer</button>
               </div>
             </form>
           </div>
@@ -415,6 +415,9 @@
 
         <!--BASE ONE-->
         <div class="tab-content" *ngIf="currentTab === 'base_one'">
+          <div *ngIf="baseData === null" style="height: 90vh; overflow: hidden;">
+            <div class="spinner loading"></div>
+          </div>
           <div id="profile-tab" class="tab-pane active">
             <form name="loginForm" class="loginForm"
               (ngSubmit)="operationMode === 'add' ? addBaseDataOne(base) : updateBaseDataOne(base)" ngNativeValidate>
@@ -448,10 +451,10 @@
                   <kendo-datepicker [(ngModel)]="baseData.first_date" name="first_date"></kendo-datepicker>
                 </div>
               </div>
-              <div class="form-group">
-                <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-{{theme}}" type="submit"
+              <div class="form-group" style="text-align: center">
+                <button kendoButton [primary]="true" *ngIf="operationMode === 'add'" type="submit"
                   [disabled]="selectedRecommendation === undefined || baseData.relationship === undefined || baseData.social === undefined || baseData.doctor === undefined || baseData.first_date === undefined">{{language.addData}}</button>
-                <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-{{theme}}"
+                <button kendoButton [primary]="true" *ngIf="operationMode === 'edit'"
                   type="submit">{{language.editData}}</button>
               </div>
             </form>
@@ -461,6 +464,9 @@
 
         <!--BASE TWO-->
         <div class="tab-content" *ngIf="currentTab === 'base_two'">
+          <div *ngIf="baseData === null" style="height: 90vh; overflow: hidden;">
+            <div class="spinner loading"></div>
+          </div>
           <div id="profile-tab" class="tab-pane active">
             <form name="base_two"
               (ngSubmit)="operationMode === 'add' ? addBaseDataTwo(base_two) : updateBaseDataTwo(base_two)">
@@ -506,11 +512,11 @@
                 </div>
               </div>
               <!-- ./remember-row -->
-              <div class="form-group">
-                <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-{{theme}}" type="submit"
+              <div class="form-group" style="text-align: center">
+                <button kendoButton [primary]="true" *ngIf="operationMode === 'add'" type="submit"
                   [disabled]="baseData.size === undefined || baseData.weight === undefined || baseData.phone === undefined || baseData.mobile_phone === undefined || 
                   baseData.birthday === undefined || baseData.childs === undefined || baseData.notes === undefined || baseData.profession === undefined || baseData.useful === undefiend">{{language.addData}}</button>
-                <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-{{theme}}"
+                <button kendoButton [primary]="true" *ngIf="operationMode === 'edit'"
                   type="submit">{{language.editData}}</button>
               </div>
             </form>
@@ -519,6 +525,9 @@
 
         <!--PHYSICAL ILLNESS-->
         <div class="tab-content" *ngIf="currentTab === 'physical_illness'">
+          <div *ngIf="baseData === null" style="height: 90vh; overflow: hidden;">
+            <div class="spinner loading"></div>
+          </div>
           <div id="profile-tab" class="tab-pane active">
             <form name="loginForm" class="loginForm"
               (ngSubmit)="operationMode === 'add' ? addPhysicalIllness(data) : updatePhysicalIllness(data)">
@@ -554,11 +563,11 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group">
-                <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-{{theme}}" type="submit"
+              <div class="form-group" style="text-align: center">
+                <button kendoButton [primary]="true" *ngIf="operationMode === 'add'" type="submit"
                   [disabled]="baseData.internal_organs === undefined || baseData.operations === undefined || 
                   baseData.previous_findings === undefined || baseData.medicament === undefined || baseData.allergies === undefined || baseData.skin_sensitivity === undefined || baseData.pregnancy === undefined">{{language.addData}}</button>
-                <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-{{theme}}"
+                <button kendoButton [primary]="true" *ngIf="operationMode === 'edit'"
                   type="submit">{{language.editData}}</button>
               </div>
             </form>
@@ -580,9 +589,8 @@
                   <!--<label for="multiple"></label>
                   <input type="file" class="form-control" name="multiple" ng2FileSelect [uploader]="uploader"
                     multiple />-->
-                  <label class="uploadFromExcel"><span class='k-icon k-i-upload'></span> Upload files<input
-                      type="file" class="form-control" name="multiple" ng2FileSelect [uploader]="uploader"
-                      multiple /></label>
+                  <label class="uploadFromExcel"><span class='k-icon k-i-upload'></span> Upload files<input type="file"
+                      class="form-control" name="multiple" ng2FileSelect [uploader]="uploader" multiple /></label>
                 </div>
               </form>
             </div>

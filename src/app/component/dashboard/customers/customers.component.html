@@ -7,7 +7,8 @@
     <div class="user-options">
       <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">{{language.newCustomer}}</button>
       <label class="uploadFromExcel"><span class='k-icon k-i-file-excel'></span> Upload from Excel<input type="file"
-          name="files[]" multiple id="jsonFile" accept=".xlsx" (change)="onFileChange($event)" [(ngModel)]="fileValue"/></label>
+          name="files[]" multiple id="jsonFile" accept=".xlsx" (change)="onFileChange($event)"
+          [(ngModel)]="fileValue" /></label>
     </div>
 
     <kendo-grid *ngIf="language !== undefined" [data]="gridData" [height]="800" [resizable]="true"
@@ -18,8 +19,10 @@
         pagerItems="{{language.pagerItems}}" pagerItemsPerPage="{{language.pagerItemsPerPage}}">
       </kendo-grid-messages>
       <ng-template kendoGridToolbarTemplate>
-        <button type="button" kendoGridExcelCommand icon="file-excel" style="background: #098E60 !important;">{{language.exportToExcel}}</button>
-        <button kendoGridPDFCommand icon="file-pdf" style="background: #FF0000 !important;">{{language.exportToPDF}}</button>
+        <button type="button" kendoGridExcelCommand icon="file-excel"
+          style="background: #098E60 !important;">{{language.exportToExcel}}</button>
+        <button kendoGridPDFCommand icon="file-pdf"
+          style="background: #FF0000 !important;">{{language.exportToPDF}}</button>
       </ng-template>
       <kendo-grid-column field="shortname" title="{{language.username}}" width="120">
       </kendo-grid-column>
@@ -37,7 +40,7 @@
         </ng-template>
       </kendo-grid-column>
 
-      <kendo-grid-pdf fileName="Users.pdf" [allPages]="true" paperSize="A4" [repeatHeaders]="true" [landscape]="true">
+      <kendo-grid-pdf fileName="Customers.pdf" [allPages]="true" paperSize="A4" [repeatHeaders]="true">
         <kendo-grid-pdf-margin top="2cm" left="1cm" right="1cm" bottom="2cm"></kendo-grid-pdf-margin>
         <ng-template kendoGridPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
           <div class="page-template">
@@ -46,6 +49,14 @@
             </div>
           </div>
         </ng-template>
+        <kendo-grid-column field="shortname" title="{{language.username}}">
+        </kendo-grid-column>
+        <kendo-grid-column field="firstname" title="{{language.firstname}}">
+        </kendo-grid-column>
+        <kendo-grid-column field="lastname" title="{{language.lastname}}">
+        </kendo-grid-column>
+        <kendo-grid-column field="telephone" title="{{language.telephone}}">
+        </kendo-grid-column>
       </kendo-grid-pdf>
 
       <kendo-grid-excel fileName="Customers.xlsx"></kendo-grid-excel>
@@ -62,8 +73,8 @@
   </kendo-dialog>
 </div>
 
-<kendo-window title="{{language.createNewCustomer}}" *ngIf="customer"
-  [minWidth]="700" [width]="850" [height]="700" (close)="closeCustomer()">
+<kendo-window title="{{language.createNewCustomer}}" *ngIf="customer" [minWidth]="700" [width]="850" [height]="700"
+  (close)="closeCustomer()">
   <form name="loginForm" class="loginForm" (ngSubmit)="createCustomer(customer)" ngNativeValidate>
     <div class="form-group">
       <div class="panel-body">

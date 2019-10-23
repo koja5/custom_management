@@ -92,6 +92,7 @@
     "backToGrid": "Back to grid",
     "successUpdateTitle": "Success update!",
     "successUpdateText": "Success update user {content}",
+    "successUpdateTextData": "Success update your data",
     "profile": "Profile",
     "workTime": "Work time",
     "monday": "Monday",

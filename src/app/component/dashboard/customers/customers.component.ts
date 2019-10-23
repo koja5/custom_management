@@ -141,7 +141,7 @@ export class CustomersComponent implements OnInit {
           ),
           total: this.currentLoadData.length
         };*/
-        this.gridData.data.push(this.data);
+        this.currentLoadData.push(this.data);
         this.customer = false;
         // form.reset();
         Swal.fire({
@@ -171,11 +171,11 @@ export class CustomersComponent implements OnInit {
 
   public dataStateChange(state: DataStateChangeEvent): void {
     this.state = state;
-    console.log(this.currentLoadData);
     this.gridData = process(this.currentLoadData, this.state);
-    this.gridData.total = this.gridData.data.length;
-    console.log(this.state);
-    console.log(this.gridData);
+    if (this.state.filter.filters.length === 0) {
+      this.gridData.total = this.currentLoadData.length;
+    }
+    this.changeTheme(this.theme);
   }
 
   pageChange(event: PageChangeEvent): void {
@@ -185,11 +185,10 @@ export class CustomersComponent implements OnInit {
 
   loadProducts(): void {
     this.gridData = {
-      data: this.currentLoadData.slice(
+      data: this.gridData.slice(
         this.state.skip,
         this.state.skip + this.state.take
-      ),
-      total: this.currentLoadData.length
+      )
     };
   }
 

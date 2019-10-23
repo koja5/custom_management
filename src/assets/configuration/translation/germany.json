@@ -87,6 +87,7 @@
     "backToGrid": "Zurück zum Gitter",
     "successUpdateTitle": "Erfolgsupdate!",
     "successUpdateText": "Benutzer erfolgreich aktualisiert {content}",
+    "successUpdateTextData": "Erfolgreich aktualisieren Sie Ihre Daten",
     "profile": "Profil",
     "workTime": "Arbeitszeit",
     "monday": "Montag",

@@ -224,7 +224,7 @@ export class BaseDateComponent implements OnInit {
     this.service.updateCustomer(this.data, val => {
       console.log(val);
       if (val.success) {
-        
+
         this.customer = false;
         Swal.fire({
           title: this.language.successUpdateTitle,
@@ -463,7 +463,7 @@ export class BaseDateComponent implements OnInit {
 
   addTherapy(therapy) {
     this.complaintData.customer_id = this.data.id;
-    this.complaintData.date = (new Date().getDay() + 1) + '.' + (new Date().getMonth() + 1)  + '.' + new Date().getFullYear() + '.';
+    this.complaintData.date = (new Date().getDay() + 1) + '.' + (new Date().getMonth() + 1) + '.' + new Date().getFullYear() + '.';
     // this.initializeParams();
 
     this.complaintData.complaint = this.pickToModel(this.selectedComplaint, this.complaintValue).value;
@@ -544,7 +544,7 @@ export class BaseDateComponent implements OnInit {
     } else {
       this.selectedTherapies = Number(event.therapies);
     }
-    if(event.therapies_previous.split(';') !== undefined) {
+    if (event.therapies_previous.split(';') !== undefined) {
       this.selectedTherapiesPrevious = event.therapies_previous.split(';').map(Number);
     } else {
       this.selectedTherapiesPrevious = Number(event.therapies_previous);
@@ -576,6 +576,7 @@ export class BaseDateComponent implements OnInit {
 
   changeTab(tab) {
     this.currentTab = tab;
+    this.baseData = null;
     if (tab === 'base_one') {
       this.initializeBaseOneData();
     } else if (tab === 'base_two') {
@@ -606,21 +607,21 @@ export class BaseDateComponent implements OnInit {
   }
 
   getTranslate(title) {
-    if(title === 'profile') {
+    if (title === 'profile') {
       return this.language.profile;
-    } else if(title === 'base_one') {
+    } else if (title === 'base_one') {
       return this.language.baseDataOne;
-    } else if(title === 'base_two') {
+    } else if (title === 'base_two') {
       return this.language.baseDataTwo;
-    } else if(title === 'physical_illness') {
+    } else if (title === 'physical_illness') {
       return this.language.physicalIllness;
-    } else if(title === 'add') {
+    } else if (title === 'add') {
       return this.language.addComplaint;
-    } else if(title === 'edit') {
+    } else if (title === 'edit') {
       return this.language.updateComplaint;
-    } else if(title === 'addTherapy') {
+    } else if (title === 'addTherapy') {
       return this.language.addTherapy;
-    } else if(title === 'editTherapy') {
+    } else if (title === 'editTherapy') {
       return this.language.updateTherapy;
     }
     return null;
@@ -690,7 +691,9 @@ export class BaseDateComponent implements OnInit {
     this.baseData.recommendation = recommendation;
     this.service.addBaseDataOne(this.baseData).subscribe(
       data => {
-        console.log(data);
+        if (data) {
+
+        }
       }
     );
     console.log(this.baseData);
@@ -708,7 +711,15 @@ export class BaseDateComponent implements OnInit {
     this.baseData.recommendation = recommendation;
     this.service.updateBaseDataOne(this.baseData).subscribe(
       data => {
-        console.log(data);
+        if (data) {
+          Swal.fire({
+            title: this.language.successUpdateTitle,
+            text: this.language.successUpdateData,
+            timer: 3000,
+            type: 'success'
+          });
+          this.customer = false;
+        }
       }
     );
   }
@@ -729,6 +740,15 @@ export class BaseDateComponent implements OnInit {
     this.service.updateBaseDataTwo(this.baseData).subscribe(
       data => {
         console.log(data);
+        if (data) {
+          Swal.fire({
+            title: this.language.successUpdateTitle,
+            text: this.language.successUpdateData,
+            timer: 3000,
+            type: 'success'
+          });
+          this.customer = false;
+        }
       }
     );
   }
@@ -746,7 +766,15 @@ export class BaseDateComponent implements OnInit {
     this.baseData.customer_id = this.data.id;
     this.service.updatePhysicalIllness(this.baseData).subscribe(
       data => {
-        console.log(data);
+        if (data) {
+          Swal.fire({
+            title: this.language.successUpdateTitle,
+            text: this.language.successUpdateData,
+            timer: 3000,
+            type: 'success'
+          });
+          this.customer = false;
+        }
       }
     );
   }
