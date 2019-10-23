@@ -299,6 +299,6 @@ export class ParameterItemComponent implements OnInit {
           }
         }
       }
-    }, 100);
+    }, 50);
   }
 }

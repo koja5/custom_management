@@ -407,7 +407,7 @@
               </div>
               <!-- ./remember-row -->
               <div class="form-group" style="text-align: center">
-                <button kendoButton [primary]="true" type="submit">Update customer</button>
+                <button kendoButton [primary]="true" class="form-button" type="submit">Update customer</button>
               </div>
             </form>
           </div>
@@ -418,10 +418,10 @@
           <div *ngIf="baseData === null" style="height: 90vh; overflow: hidden;">
             <div class="spinner loading"></div>
           </div>
-          <div id="profile-tab" class="tab-pane active">
+          <div id="profile-tab" class="tab-pane active"  *ngIf="baseData !== undefined && baseData !== null && selectedRecommendation !== undefined">
             <form name="loginForm" class="loginForm"
               (ngSubmit)="operationMode === 'add' ? addBaseDataOne(base) : updateBaseDataOne(base)" ngNativeValidate>
-              <div class="form-group" *ngIf="baseData !== undefined">
+              <div class="form-group">
                 <div class="col-md-4 col-xs-12" *ngIf="recommendationList !== undefined">
                   <p>{{language.recommendation}}</p>
                   <kendo-multiselect [data]="recommendationList" [textField]="'title'" [valueField]="'id'"
@@ -443,7 +443,7 @@
                 <div class="col-md-4 col-xs-12" *ngIf="doctorList !== undefined">
                   <p>{{language.doctor}}</p>
                   <kendo-combobox class="col-md-12 col-xs-12" [data]="doctorsList" [textField]="'firstname'"
-                    [valueField]="'id'" [(ngModel)]="baseData.doctors" [valuePrimitive]="true" name="doctors">
+                    [valueField]="'id'" [(ngModel)]="baseData.doctor" [valuePrimitive]="true" name="doctors">
                   </kendo-combobox>
                 </div>
                 <div class="col-md-4 col-xs-12">
@@ -452,9 +452,9 @@
                 </div>
               </div>
               <div class="form-group" style="text-align: center">
-                <button kendoButton [primary]="true" *ngIf="operationMode === 'add'" type="submit"
+                <button kendoButton [primary]="true" class="form-button" *ngIf="operationMode === 'add'" type="submit"
                   [disabled]="selectedRecommendation === undefined || baseData.relationship === undefined || baseData.social === undefined || baseData.doctor === undefined || baseData.first_date === undefined">{{language.addData}}</button>
-                <button kendoButton [primary]="true" *ngIf="operationMode === 'edit'"
+                <button kendoButton [primary]="true" class="form-button" *ngIf="operationMode === 'edit'"
                   type="submit">{{language.editData}}</button>
               </div>
             </form>
@@ -467,11 +467,11 @@
           <div *ngIf="baseData === null" style="height: 90vh; overflow: hidden;">
             <div class="spinner loading"></div>
           </div>
-          <div id="profile-tab" class="tab-pane active">
+          <div id="profile-tab" class="tab-pane active" *ngIf="baseData !== undefined && baseData !== null">
             <form name="base_two"
               (ngSubmit)="operationMode === 'add' ? addBaseDataTwo(base_two) : updateBaseDataTwo(base_two)">
               <div class="form-group">
-                <div class="panel-body" *ngIf="baseData !== undefined">
+                <div class="panel-body">
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.size}}</p>
                     <input type="number" [(ngModel)]="baseData.size" name="size">
@@ -513,10 +513,10 @@
               </div>
               <!-- ./remember-row -->
               <div class="form-group" style="text-align: center">
-                <button kendoButton [primary]="true" *ngIf="operationMode === 'add'" type="submit"
+                <button kendoButton [primary]="true" class="form-button" *ngIf="operationMode === 'add'" type="submit"
                   [disabled]="baseData.size === undefined || baseData.weight === undefined || baseData.phone === undefined || baseData.mobile_phone === undefined || 
                   baseData.birthday === undefined || baseData.childs === undefined || baseData.notes === undefined || baseData.profession === undefined || baseData.useful === undefiend">{{language.addData}}</button>
-                <button kendoButton [primary]="true" *ngIf="operationMode === 'edit'"
+                <button kendoButton [primary]="true" class="form-button" *ngIf="operationMode === 'edit'"
                   type="submit">{{language.editData}}</button>
               </div>
             </form>
@@ -528,11 +528,11 @@
           <div *ngIf="baseData === null" style="height: 90vh; overflow: hidden;">
             <div class="spinner loading"></div>
           </div>
-          <div id="profile-tab" class="tab-pane active">
+          <div id="profile-tab" class="tab-pane active" *ngIf="baseData !== undefined && baseData !== null">
             <form name="loginForm" class="loginForm"
               (ngSubmit)="operationMode === 'add' ? addPhysicalIllness(data) : updatePhysicalIllness(data)">
               <div class="form-group">
-                <div class="panel-body" *ngIf="baseData !== undefined">
+                <div class="panel-body">
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.internalOrgans}}</p>
                     <input type="text" [(ngModel)]="baseData.internal_organs" name="internal_organs">
@@ -564,10 +564,10 @@
                 </div>
               </div>
               <div class="form-group" style="text-align: center">
-                <button kendoButton [primary]="true" *ngIf="operationMode === 'add'" type="submit"
+                <button kendoButton [primary]="true" class="form-button" *ngIf="operationMode === 'add'" type="submit"
                   [disabled]="baseData.internal_organs === undefined || baseData.operations === undefined || 
                   baseData.previous_findings === undefined || baseData.medicament === undefined || baseData.allergies === undefined || baseData.skin_sensitivity === undefined || baseData.pregnancy === undefined">{{language.addData}}</button>
-                <button kendoButton [primary]="true" *ngIf="operationMode === 'edit'"
+                <button kendoButton [primary]="true" class="form-button" *ngIf="operationMode === 'edit'"
                   type="submit">{{language.editData}}</button>
               </div>
             </form>
@@ -694,10 +694,10 @@
           <p>{{language.cs}}</p>
           <input type="text" class="col-xs-12" name="cs" placeholder="CS" [(ngModel)]="complaintData.cs" cs.value=''>
         </div>
-        <div class="form-group">
-          <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-{{theme}}" type="submit"
+        <div class="form-group" style="text-align: center;">
+          <button *ngIf="operationMode === 'add'" kendoButton [primary]="true" class="form-button" type="submit"
             [disabled]="selectedComplaint === '' || selectedTherapies === ''">{{language.addComplaint}}</button>
-          <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-{{theme}}" type="submit"
+          <button *ngIf="operationMode === 'edit'" kendoButton [primary]="true" class="form-button" type="submit"
             [disabled]="complaintData.complaint === '' || complaintData.therapies === ''">{{language.updateComplaint}}</button>
         </div>
       </form>
@@ -764,7 +764,7 @@
           </kendo-multiselect>
         </div>
         <div class="col-md-12 col-xs-12">
-          <p>{{language.therapyValue}}</p>
+          <p>{{language.therapyPreviousValue}}</p>
           <kendo-multiselect class="col-md-12 col-xs-12" [data]="therapyValue" [textField]="'title'" [valueField]="'id'"
             [(ngModel)]="selectedTherapiesPrevious" name="therapies_previous" [placeholder]="language.choiceTherapy"
             [valuePrimitive]="true">
@@ -791,10 +791,10 @@
           <input type="text" class="col-md-12 col-xs-12" name="em" placeholder="Em" [(ngModel)]="complaintData.em"
             cs.value=''>
         </div>
-        <div class="form-group">
-          <button *ngIf="operationMode === 'add'" class="btn btn-lg btn-{{theme}}" type="submit"
+        <div class="form-group" style="text-align: center;">
+          <button *ngIf="operationMode === 'add'" kendoButton [primary]="true" class="form-button" type="submit"
             [disabled]="selectedComplaint === '' || selectedTherapies === '' || complaintData.state === undefined">{{language.addTherapy}}</button>
-          <button *ngIf="operationMode === 'edit'" class="btn btn-lg btn-{{theme}}" type="submit"
+          <button *ngIf="operationMode === 'edit'" kendoButton [primary]="true" class="form-button" type="submit"
             [disabled]="selectedComplaint === '' || selectedTherapies === '' || complaintData.state === undefined">{{language.updateTherapy}}</button>
         </div>
       </form>

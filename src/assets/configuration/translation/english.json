@@ -93,6 +93,8 @@
     "successUpdateTitle": "Success update!",
     "successUpdateText": "Success update user {content}",
     "successUpdateTextData": "Success update your data",
+    "successAddDataTitle": "Success added",
+    "successAddDataText": "Success added new data",
     "profile": "Profile",
     "workTime": "Work time",
     "monday": "Monday",

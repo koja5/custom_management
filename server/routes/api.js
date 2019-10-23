@@ -3543,7 +3543,7 @@ router.post('/addBaseDataOne', function (req, res, next) {
       'relationship': req.body.relationship,
       'social': req.body.social,
       'doctor': req.body.doctor,
-      'doctors': req.nody.doctors,
+      //'doctors': req.nody.doctors,
       'first_date': req.body.first_date
     };
 
@@ -3587,7 +3587,7 @@ router.post('/updateBaseDataOne', function (req, res, next) {
       'relationship': req.body.relationship,
       'social': req.body.social,
       'doctor': req.body.doctor,
-      'doctors': req.body.doctors,
+      //'doctors': req.body.doctors,
       'first_date': req.body.first_date
     };
 

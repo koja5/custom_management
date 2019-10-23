@@ -340,7 +340,7 @@ export class TaskComponent implements OnInit {
     } else {
       this.createFormLoading = false;
       const dataItem = args.dataItem;
-      this.clearAllSelectedData();
+      // this.clearAllSelectedData();
       console.log(dataItem);
 
       if (

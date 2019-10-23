@@ -354,7 +354,7 @@ export class BaseDateComponent implements OnInit {
 
   addComplaint(event) {
     this.complaintData.customer_id = this.data.id;
-    this.complaintData.date = new Date().getDay() + '.' + new Date().getMonth() + '.' + new Date().getFullYear() + '.';
+    this.complaintData.date = this.getTodayDate();
 
     this.complaintData.complaint = this.pickToModel(this.selectedComplaint, this.complaintValue).value;
     this.complaintData.complaint_title = this.pickToModel(this.selectedComplaint, this.complaintValue).title;
@@ -414,6 +414,14 @@ export class BaseDateComponent implements OnInit {
     }
   }
 
+  getTodayDate() {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    return dd + '.' + mm + '.' + yyyy + '.';
+  }
+
   pickToModel(data: any, titleValue) {
     let value = '';
     for (let i = 0; i < data.length; i++) {
@@ -463,7 +471,7 @@ export class BaseDateComponent implements OnInit {
 
   addTherapy(therapy) {
     this.complaintData.customer_id = this.data.id;
-    this.complaintData.date = (new Date().getDay() + 1) + '.' + (new Date().getMonth() + 1) + '.' + new Date().getFullYear() + '.';
+    this.complaintData.date = this.getTodayDate();
     // this.initializeParams();
 
     this.complaintData.complaint = this.pickToModel(this.selectedComplaint, this.complaintValue).value;
@@ -692,7 +700,13 @@ export class BaseDateComponent implements OnInit {
     this.service.addBaseDataOne(this.baseData).subscribe(
       data => {
         if (data) {
-
+          Swal.fire({
+            title: this.language.successAddDataTitle,
+            text: this.language.successAddDataText,
+            timer: 3000,
+            type: 'success'
+          });
+          this.customer = false;
         }
       }
     );
@@ -729,7 +743,15 @@ export class BaseDateComponent implements OnInit {
     this.baseData.customer_id = this.data.id;
     this.service.addBaseDataTwo(this.baseData).subscribe(
       data => {
-        console.log(data);
+        if(data) {
+          Swal.fire({
+            title: this.language.successAddDataTitle,
+            text: this.language.successAddDataText,
+            timer: 3000,
+            type: 'success'
+          });
+          this.customer = false;
+        }
       }
     );
   }
@@ -757,7 +779,15 @@ export class BaseDateComponent implements OnInit {
     this.baseData.customer_id = this.data.id;
     this.service.addPhysicalIllness(this.baseData).subscribe(
       data => {
-        console.log(data);
+        if(data) {
+          Swal.fire({
+            title: this.language.successAddDataTitle,
+            text: this.language.successAddDataText,
+            timer: 3000,
+            type: 'success'
+          });
+          this.customer = false;
+        }
       }
     );
   }

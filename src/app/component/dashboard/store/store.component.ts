@@ -98,7 +98,8 @@ export class StoreComponent implements OnInit {
       if (val.success) {
         console.log(val);
         this.data.id = val.id;
-        this.gridData.data.push(this.data);
+        this.currentLoadData.push(this.data);
+        this.gridData.total = this.currentLoadData.length;
         this.store = false;
         Swal.fire({
           title: this.language.successful,

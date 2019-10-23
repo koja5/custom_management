@@ -24,7 +24,7 @@
       <ng-template kendoGridCellTemplate let-isNew="isNew">
         <button kendoGridEditCommand [primary]="true">Edit</button>
         <button kendoGridRemoveCommand>Remove</button>
-        <button kendoGridSaveCommand [disabled]="formGroup?.invalid">{{ isNew ? 'Add' : 'Update' }}</button>
+        <button kendoGridSaveCommand [disabled]="formGroup?.invalid" (click)="changeTheme(theme)">{{ isNew ? 'Add' : 'Update' }}</button>
         <button kendoGridCancelCommand>{{ isNew ? 'Discard changes' : 'Cancel' }}</button>
       </ng-template>
     </kendo-grid-command-column>
@@ -53,7 +53,7 @@
       <ng-template kendoGridCellTemplate let-isNew="isNew">
         <button kendoGridEditCommand [primary]="true">Edit</button>
         <button kendoGridRemoveCommand>Remove</button>
-        <button kendoGridSaveCommand [disabled]="formGroup?.invalid">{{ isNew ? 'Add' : 'Update' }}</button>
+        <button kendoGridSaveCommand [disabled]="formGroup?.invalid" (click)="changeTheme(theme)">{{ isNew ? 'Add' : 'Update' }}</button>
         <button kendoGridCancelCommand>{{ isNew ? 'Discard changes' : 'Cancel' }}</button>
       </ng-template>
     </kendo-grid-command-column>
@@ -94,7 +94,7 @@
       <ng-template kendoGridCellTemplate let-isNew="isNew">
         <button kendoGridEditCommand [primary]="true">Edit</button>
         <button kendoGridRemoveCommand>Remove</button>
-        <button kendoGridSaveCommand [disabled]="formGroup?.invalid">{{ isNew ? 'Add' : 'Update' }}</button>
+        <button kendoGridSaveCommand [disabled]="formGroup?.invalid" (click)="changeTheme(theme)">{{ isNew ? 'Add' : 'Update' }}</button>
         <button kendoGridCancelCommand>{{ isNew ? 'Discard changes' : 'Cancel' }}</button>
       </ng-template>
     </kendo-grid-command-column>

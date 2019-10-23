@@ -88,6 +88,8 @@
     "successUpdateTitle": "Erfolgsupdate!",
     "successUpdateText": "Benutzer erfolgreich aktualisiert {content}",
     "successUpdateTextData": "Erfolgreich aktualisieren Sie Ihre Daten",
+    "successAddDataTitle": "Erfolg hinzugefügt",
+    "successAddDataText": "Erfolg hat neue Daten hinzugefügt",
     "profile": "Profil",
     "workTime": "Arbeitszeit",
     "monday": "Montag",
