@@ -175,7 +175,7 @@ export class TaskComponent implements OnInit {
 
     this.storeService.getStore(localStorage.getItem("idUser"), val => {
       this.store = val;
-      if (!isNaN(this.selectedStoreId)) {
+      if (!isNaN(this.selectedStoreId) && this.selectedStoreId !== undefined) {
         this.startWork = this.getStartEndTimeForStore(
           this.store,
           this.selectedStoreId
@@ -221,7 +221,9 @@ export class TaskComponent implements OnInit {
         localStorage.getItem("usersFor" + this.selectedStoreId)
       );
       // this.selectedStore(this.selectedStoreId);
-      this.getTaskForSelectedUsers(this.value);
+      if (this.value !== null) {
+        this.getTaskForSelectedUsers(this.value);
+      }
       this.getUserInCompany(this.selectedStoreId);
     } else if (localStorage.getItem("selectedStore")) {
       this.calendars = [];
@@ -331,13 +333,13 @@ export class TaskComponent implements OnInit {
 
   public createFormGroup(args: CreateFormGroupArgs): FormGroup {
     if ((this.selectedStoreId === null || this.selectedStoreId === undefined) && this.type !== 3) {
-        Swal.fire({
-          title: this.language.selectStoreIndicatorTitle,
-          text: this.language.selectStoreIndicatorText,
-          timer: 3000,
-          type: "error"
-        });
-        return this.createFormGroup.bind(this);
+      Swal.fire({
+        title: this.language.selectStoreIndicatorTitle,
+        text: this.language.selectStoreIndicatorText,
+        timer: 3000,
+        type: "error"
+      });
+      return this.createFormGroup.bind(this);
     } else {
       this.createFormLoading = false;
       const dataItem = args.dataItem;
@@ -809,6 +811,7 @@ export class TaskComponent implements OnInit {
     this.value = [];
     // localStorage.removeItem('selectedUser');
     this.loading = true;
+    this.calendars = [];
     if (
       localStorage.getItem("usersFor" + this.selectedStoreId) !== null &&
       event !== undefined
@@ -849,12 +852,34 @@ export class TaskComponent implements OnInit {
         });
         this.getUserInCompany(event);
       } else {
-        localStorage.removeItem("selectedStore");
-        this.startWork = "08:00";
-        this.endWork = "22:00";
-        this.timeDuration = "60";
-        this.therapyDuration = 1;
-        this.loading = false;
+        this.service.getTasks().subscribe(data => {
+          console.log(data);
+          if (data.length !== 0) {
+            for (let i = 0; i < data.length; i++) {
+              data[i].start = new Date(data[i].start);
+              data[i].end = new Date(data[i].end);
+              this.events.push(data[i]);
+            }
+            console.log(this.events);
+            const objectCalendar = {
+              name: null,
+              events: this.events,
+              workTime: undefined
+            };
+            this.calendars.push(objectCalendar);
+            this.height += this.height;
+          } else {
+            this.calendars.push({ name: null, events: [] });
+          }
+          localStorage.removeItem("selectedStore");
+          this.startWork = "08:00";
+          this.endWork = "22:00";
+          this.timeDuration = "60";
+          this.therapyDuration = 1;
+          this.loading = false;
+          this.size = [];
+          this.size.push("100%");
+        });
       }
     }
 
@@ -970,7 +995,7 @@ export class TaskComponent implements OnInit {
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].end >
-            new Date(date).getHours()) ||
+          new Date(date).getHours()) ||
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start2 <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]

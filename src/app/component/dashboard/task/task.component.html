@@ -30,7 +30,7 @@
         <kendo-multiselect class="col-md-6 col-xs-12" [data]="usersInCompany" [textField]="'shortname'"
           [valueField]="'id'" [value]="value" (valueChange)="handleValue($event)"></kendo-multiselect>
       </div>
-      <div class="col-sm-6 col-xs-12" *ngIf="value.length > 1">
+      <div class="col-sm-6 col-xs-12" *ngIf="value !== null && value.length > 1">
         <div style="float: right;">
           <p>Orientation</p>
 
