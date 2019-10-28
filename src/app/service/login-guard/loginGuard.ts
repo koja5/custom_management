@@ -13,10 +13,11 @@ export class LoginGuard implements CanActivate {
     a cookie.get("user") da koji je tip usera. Ukoliko ne postoji cookie.get("user") vraca prazan string*/
 
     canActivate() {
-        if (this.cookie.check('user')) {
+        if (this.cookie.check('user') !== null && this.cookie.check('user') !== undefined) {
             console.log('usao sam ovde!');
             return true;
         } else {
+            console.log('prosao sam!');
             this._router.navigate(['home']);
             return false;
         }

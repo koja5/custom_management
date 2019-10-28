@@ -13,7 +13,7 @@ export class LoggedGuard implements CanActivate {
     a cookie.get('user') da koji je tip usera. Ukoliko ne postoji cookie.get('user') vraca prazan string*/
 
     canActivate() {
-        if (!this.cookie.check('user')) {
+        if (this.cookie.check('user') === null || this.cookie.check('user') === undefined || !this.cookie.check('user') || localStorage.getItem('idUser') === null) {
             return true;
         } else {
             /*if (this.cookie.get('user') === '1') {

@@ -4,8 +4,8 @@
 
 <div *ngIf="!loading">
   <div class="user-options">
-    <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">New user</button>
-    <label class="uploadFromExcel"><span class='k-icon k-i-file-excel'></span> Upload from Excel<input type="file"
+    <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">{{language.newUser}}</button>
+    <label class="uploadFromExcel"><span class='k-icon k-i-file-excel'></span> {{ language.uploadFromExcel }}<input type="file"
         name="files[]" multiple id="jsonFile" accept=".xlsx" (change)="onFileChange($event)"
         [(ngModel)]="fileValue" /></label>
   </div>
@@ -15,8 +15,8 @@
     (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)" (sortChange)="sortChange($event)"
     [kendoGridSelectBy]="mySelectionKey">
     <ng-template kendoGridToolbarTemplate>
-      <button kendoGridExcelCommand icon="file-excel" style="background: #098E60 !important;">Export to Excel</button>
-      <button kendoGridPDFCommand icon="file-pdf" style="background: #FF0000 !important;">Export to PDF</button>
+      <button kendoGridExcelCommand icon="file-excel" style="background: #098E60 !important;">{{language.exportToExcel}}</button>
+      <button kendoGridPDFCommand icon="file-pdf" style="background: #FF0000 !important;">{{language.exportToPDF}}</button>
     </ng-template>
     <kendo-grid-column field="shortname" title="Username" width="120">
     </kendo-grid-column>

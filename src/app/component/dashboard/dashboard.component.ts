@@ -143,9 +143,12 @@ export class DashboardComponent implements OnInit {
 
   logout() {
     this.cookie.deleteAll('/');
+    localStorage.removeItem('idUser');
     sessionStorage.clear();
     this.cookie.deleteAll('/dashboard');
-    this.router.navigate(['login']);
+    setTimeout(() => {
+      this.router.navigate(['login']);
+    }, 50);
     console.log(this.cookie.get('user'));
   }
 

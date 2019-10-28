@@ -148,7 +148,7 @@ export class StoreComponent implements OnInit {
   dataStateChange(state: DataStateChangeEvent): void {
     this.state = state;
     this.gridData = process(this.currentLoadData, this.state);
-    if (this.state.filter.filters.length === 0) {
+    if (this.state.filter !== undefined && this.state.filter.filters.length === 0) {
       this.gridData.total = this.currentLoadData.length;
     }
     this.changeTheme(this.theme);
@@ -291,7 +291,7 @@ export class StoreComponent implements OnInit {
     const columns = Object.keys(data[0]);
     const columnCount = columns.length;
     const dataArray = [];
-    columns.push('superadmin');
+    // columns.push('superadmin');
     for (let i = 0; i < rowCount; i++) {
       const object = {};
       for (let j = 0; j < columnCount; j++) {

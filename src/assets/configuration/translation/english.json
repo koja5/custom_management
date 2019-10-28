@@ -81,7 +81,8 @@
     "newCustomer": "New customer",
     "female": "Female",
     "male": "Male",
-    "createNewCustomer": "Create new customer"
+    "createNewCustomer": "Create new customer",
+    "uploadFromExcel": "Upload from Excel"
   },
   "dashboard": {
     "profile": "Profile",
@@ -167,7 +168,11 @@
     "therapyValue": "Therapy value",
     "therapyPreviousValue": "Previous therapy",
     "comment": "Comment",
-    "stateValue": "State"
+    "stateValue": "State",
+    "newUser": "New user",
+    "exportToExcel": "Export to Excel",
+    "exportToPDF": "Export to PDF",
+    "uploadFromExcel": "Upload from Excel"
 
   },
   "store": {
@@ -191,7 +196,11 @@
     "timeDuration": "Time duration",
     "timeTherapy": "Time therapy",
     "startWork": "Start work",
-    "endWork": "End work"
+    "endWork": "End work",
+    "newStore": "New location",
+    "exportToExcel": "Export to Excel",
+    "exportToPDF": "Export to PDF",
+    "uploadFromExcel": "Upload from Excel"
   },
   "complaint": [
     "Headache",

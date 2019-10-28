@@ -31,7 +31,7 @@ router.post('/send', function(req, res) {
     mail += ".\nTo activate your account, simply click on the following link:\n";
     //mail+="http://147.91.204.116:2030/api/korisnik/verifikacija/" + broj + "\n";
     // mail += "http://app-production.eu:3000/api/korisnik/verifikacija/" + broj + "\n";
-    mail += "http:/localhost:3000/api/korisnik/verifikacija/" + broj + "\n";
+    mail += "http://localhost:3000/api/korisnik/verifikacija/" + broj + "\n";
     mail += "Best regards,\nTuina Praxis!"
 
     var mailOptions = {

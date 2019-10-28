@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
     public cookie: CookieService,
     public router: Router,
     public dashboardService: DashboardService
-  ) {}
+  ) { }
 
   ngOnInit() {
     if (localStorage.getItem("language") !== null) {
@@ -127,11 +127,13 @@ export class LoginComponent implements OnInit {
         if (!val.success) {
           this.errorInfo = val.info;
         } else {
-          this.mailService.sendMail(this.data, function() {
+          this.mailService.sendMail(this.data, function () {
             console.log("Mail uspesno poslat");
           });
           this.signUpInfo = JSON.parse(localStorage.getItem("language"))["login"]['checkMailForActive'];
-          this.loginActive();
+          setTimeout(() => {
+            this.loginActive();
+          }, 3000);
         }
         // form.reset();
       });
@@ -143,7 +145,7 @@ export class LoginComponent implements OnInit {
   forgotPassword() {
     const thisObject = this;
     if (this.data.email !== "") {
-      this.service.forgotPassword(this.data, function(exist, notVerified) {
+      this.service.forgotPassword(this.data, function (exist, notVerified) {
         setTimeout(() => {
           if (exist) {
             thisObject.mailService

@@ -817,6 +817,7 @@ export class TaskComponent implements OnInit {
       );
       this.getTaskForSelectedUsers(this.value);
       this.getUserInCompany(event);
+      this.setStoreWork(event);
       localStorage.setItem("selectedStore", event);
     } else {
       this.value = [];
@@ -835,40 +836,7 @@ export class TaskComponent implements OnInit {
             workTime: undefined
           };
           if (!isNaN(event)) {
-            this.startWork = this.getStartEndTimeForStore(
-              this.store,
-              this.selectedStoreId
-            ).start_work;
-            this.endWork = this.getStartEndTimeForStore(
-              this.store,
-              this.selectedStoreId
-            ).end_work;
-            this.timeDuration = this.getStartEndTimeForStore(
-              this.store,
-              this.selectedStoreId
-            ).time_duration;
-            if (
-              Number(this.timeDuration) >
-              Number(
-                this.getStartEndTimeForStore(this.store, this.selectedStoreId)
-                  .time_therapy
-              )
-            ) {
-              this.therapyDuration =
-                Number(this.timeDuration) /
-                Number(
-                  this.getStartEndTimeForStore(this.store, this.selectedStoreId)
-                    .time_therapy
-                );
-            } else {
-              this.therapyDuration =
-                Number(
-                  this.getStartEndTimeForStore(this.store, this.selectedStoreId)
-                    .time_therapy
-                ) / Number(this.timeDuration);
-            }
-
-            localStorage.setItem("selectedStore", event);
+            this.setStoreWork(event);
           } else {
             this.startWork = "08:00";
             this.endWork = "22:00";
@@ -891,6 +859,43 @@ export class TaskComponent implements OnInit {
 
     this.size = [];
     this.size.push("100%");
+  }
+
+  setStoreWork(event) {
+    this.startWork = this.getStartEndTimeForStore(
+      this.store,
+      this.selectedStoreId
+    ).start_work;
+    this.endWork = this.getStartEndTimeForStore(
+      this.store,
+      this.selectedStoreId
+    ).end_work;
+    this.timeDuration = this.getStartEndTimeForStore(
+      this.store,
+      this.selectedStoreId
+    ).time_duration;
+    if (
+      Number(this.timeDuration) >
+      Number(
+        this.getStartEndTimeForStore(this.store, this.selectedStoreId)
+          .time_therapy
+      )
+    ) {
+      this.therapyDuration =
+        Number(this.timeDuration) /
+        Number(
+          this.getStartEndTimeForStore(this.store, this.selectedStoreId)
+            .time_therapy
+        );
+    } else {
+      this.therapyDuration =
+        Number(
+          this.getStartEndTimeForStore(this.store, this.selectedStoreId)
+            .time_therapy
+        ) / Number(this.timeDuration);
+    }
+
+    localStorage.setItem("selectedStore", event);
   }
 
   getStartEndTimeForStore(data, id) {
