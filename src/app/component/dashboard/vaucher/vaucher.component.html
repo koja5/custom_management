@@ -1,0 +1,136 @@
+<div *ngIf="loading" style="height: 90vh;">
+  <div class="spinner loading"></div>
+</div>
+
+<div *ngIf="!loading">
+  <div *ngIf="selectedUser === undefined">
+    <div class="user-options">
+      <button kendoButton [icon]="'greyscale'" (click)="newVaucher()" [primary]="true">{{language.newVaucher}}</button>
+      <label class="uploadFromExcel"><span class='k-icon k-i-file-excel'></span> {{ language.uploadFromExcel }}<input
+          type="file" name="files[]" multiple id="jsonFile" accept=".xlsx" (change)="onFileChange($event)"
+          [(ngModel)]="fileValue" /></label>
+    </div>
+
+    <kendo-grid *ngIf="language !== undefined" [data]="gridData" [height]="800" [resizable]="true"
+      [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
+      [pageable]="true" [filterable]="true" (dataStateChange)="dataStateChange($event)"
+      (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey" [loading]="loadingGridVaucher">
+      <kendo-grid-messages pagerPage="{{language.pagerPage}}" pagerOf="{{language.pagerOf}}"
+        pagerItems="{{language.pagerItems}}" pagerItemsPerPage="{{language.pagerItemsPerPage}}">
+      </kendo-grid-messages>
+      <ng-template kendoGridToolbarTemplate>
+        <button type="button" kendoGridExcelCommand icon="file-excel"
+          style="background: #098E60 !important;">{{language.exportToExcel}}</button>
+        <button kendoGridPDFCommand icon="file-pdf"
+          style="background: #FF0000 !important;">{{language.exportToPDF}}</button>
+      </ng-template>
+      <kendo-grid-column field="id" title="{{language.id}}" width="50">
+      </kendo-grid-column>
+      <kendo-grid-column field="date" title="{{language.date}}" width="150">
+      </kendo-grid-column>
+      <kendo-grid-column field="amount" title="{{language.amount}}" width="50">
+      </kendo-grid-column>
+      <kendo-grid-column field="date_redeemed" title="{{language.date_redeemed}}" width="100">
+      </kendo-grid-column>
+      <kendo-grid-column field="customer" title="{{language.customer}}" width="120">
+      </kendo-grid-column>
+      <kendo-grid-column field="comment" title="{{language.comment}}" width="120">
+      </kendo-grid-column>
+      <kendo-grid-column width="50">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <button kendoButton [icon]="'k-icon k-i-edit'" (click)="editStore(dataItem)"></button>
+        </ng-template>
+      </kendo-grid-column>
+      <kendo-grid-column width="50">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <button kendoButton [icon]="'k-icon k-i-delete'" (click)="open('dialog', dataItem.id)"></button>
+        </ng-template>
+      </kendo-grid-column>
+
+      <kendo-grid-pdf fileName="Vauchers.pdf" [allPages]="true" paperSize="A4" [repeatHeaders]="true">
+        <kendo-grid-pdf-margin top="2cm" left="1cm" right="1cm" bottom="2cm"></kendo-grid-pdf-margin>
+        <ng-template kendoGridPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
+          <div class="page-template">
+            <div class="header">
+              <div>{{language.pagerPage}} {{ pageNum }} {{language.pagerOf}} {{ totalPages }}</div>
+            </div>
+          </div>
+        </ng-template>
+        <kendo-grid-column field="shortname" title="{{language.username}}">
+        </kendo-grid-column>
+        <kendo-grid-column field="firstname" title="{{language.firstname}}">
+        </kendo-grid-column>
+        <kendo-grid-column field="lastname" title="{{language.lastname}}">
+        </kendo-grid-column>
+        <kendo-grid-column field="telephone" title="{{language.telephone}}">
+        </kendo-grid-column>
+      </kendo-grid-pdf>
+      <kendo-grid-excel fileName="Vauchers.xlsx"></kendo-grid-excel>
+    </kendo-grid>
+  </div>
+
+  <kendo-dialog title="Please confirm" *ngIf="vaucherDialogOpened" (close)="vaucherDialogOpened = false" [minWidth]="250"
+    [width]="450">
+    <p style="margin: 30px; text-align: center;">Are you sure you want to import data from excel?</p>
+    <kendo-dialog-actions>
+      <button kendoButton (click)="action('no')">No</button>
+      <button kendoButton (click)="action('yes')" primary="true">Yes</button>
+    </kendo-dialog-actions>
+  </kendo-dialog>
+
+  <kendo-dialog title="Please confirm" *ngIf="dialog" (close)="dialog = false" [minWidth]="250"
+      [width]="450">
+      <p style="margin: 30px; text-align: center;">Are you sure you want to continue?</p>
+      <kendo-dialog-actions>
+        <button kendoButton (click)="deleteVaucher('no')">No</button>
+        <button kendoButton (click)="deleteVaucher('yes')" primary="true">Yes</button>
+      </kendo-dialog-actions>
+    </kendo-dialog>
+</div>
+
+<kendo-window [title]="getTranslate(operationMode)" *ngIf="vaucher" [minWidth]="400" [width]="550" [minHeight]="300"
+  (close)="vaucher = false">
+  <form name="loginForm" class="loginForm"
+    (ngSubmit)="operationMode === 'add' ? createVaucher(vaucher) : editVaucher(vaucher)" ngNativeValidate>
+    <div class="col-md-12 col-xs-12">
+      <p>{{language.date}}</p>
+      <kendo-datepicker class="email col-md-12 col-xs-12" name="Date" placeholder="Date" [(ngModel)]="data.date" date.value=''>
+      </kendo-datepicker>
+    </div>
+    <div class="col-md-12 col-xs-12">
+      <p>{{language.amount}}</p>
+      <kendo-numerictextbox class="email col-md-12 col-xs-12" name="Amount" placeholder="Amount" [(ngModel)]="data.amount" amount.value=''>
+      </kendo-numerictextbox>
+    </div>
+    <div class="col-md-12 col-xs-12">
+      <p>{{language.date_redeemed}}</p>
+      <kendo-datepicker class="email col-md-12 col-xs-12" name="Date redeemed" placeholder="Date redeemed" [(ngModel)]="data.date_redeemed" date_redeemed.value=''>
+      </kendo-datepicker>
+    </div>
+    <div class="col-md-12 col-xs-12">
+      <p>{{language.customer}}</p>
+      <kendo-combobox class="email col-md-12 col-xs-12" [data]="customerUsers" [textField]="'shortname'" [valueField]="'id'"
+         [(ngModel)]="customerUser" name="customer">
+      </kendo-combobox>
+    </div>
+    <div class="col-md-12 col-xs-12">
+      <p>{{language.comment}}</p>
+      <input type="text" class="col-xs-12" name="comment" placeholder="Comment" [(ngModel)]="data.comment"
+        comment.value=''>
+    </div>
+    <div class="col-md-12 col-xs-12">
+      <p>{{language.cs}}</p>
+    </div>
+    <div class="form-group" style="text-align: center;">
+      <button *ngIf="operationMode === 'add'" kendoButton [primary]="true" class="form-button" type="submit"
+        [disabled]="selectedComplaint === '' || selectedTherapies === ''">{{language.addVaucher}}</button>
+      <button *ngIf="operationMode === 'edit'" kendoButton [primary]="true" class="form-button" type="submit"
+        [disabled]="complaintData.complaint === '' || complaintData.therapies === ''">{{language.updateVaucher}}</button>
+    </div>
+  </form>
+</kendo-window>
+
+<!--<kendo-upload [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [autoUpload]="false">
+
+</kendo-upload>-->
+<app-base-date *ngIf="selectedUser !== undefined" [data]="selectedUser" [type]="'details'"></app-base-date>

@@ -3931,4 +3931,121 @@ router.post('/insertFromExcel', function (req, res, next) {
   });
 });
 
+router.post('/createVaucher', function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    console.log(conn);
+    if (err) {
+      res.json({
+        "code": 100,
+        "status": "Error in connection database"
+      });
+      return;
+    }
+
+    response = {};
+    console.log(req);
+    var data = {
+      'date': req.body.date,
+      'amount': req.body.amount,
+      'date_redeemed': req.body.date_redeemed,
+      'customer': req.body.customer,
+      'comment': req.body.comment,
+      'superadmin': req.body.superadmin
+    };
+
+
+    conn.query("insert into vaucher SET ?", data, function (err, rows) {
+      conn.release();
+      if (!err) {
+        if (!err) {
+          response.id = rows.insertId;
+          response.success = true;
+        } else {
+          response.success = false;
+        }
+        res.json(response);
+      } else {
+        res.json({
+          "code": 100,
+          "status": "Error in connection database"
+        });
+        console.log(err);
+      }
+    });
+    conn.on('error', function (err) {
+      console.log("[mysql error]", err);
+    });
+  });
+});
+
+router.get('/deleteVaucher/:id', (req, res, next) => {
+  try {
+    var reqObj = req.params.id;
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error('SQL Connection error: ', err);
+        res.json({
+          "code": 100,
+          "status": "Error in connection database"
+        });
+        return next(err);
+      } else {
+        conn.query("delete from vaucher where id = '" + reqObj + "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              console.error("SQL error:", err);
+              res.json({
+                "code": 100,
+                "status": "Error in connection database"
+              });
+              return next(err);
+            } else {
+              res.json(true);
+              res.end();
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    console.error("Internal error: " + ex);
+    return next(ex);
+  }
+});
+
+router.get('/getVauchers/:id', function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        "code": 100,
+        "status": "Error in connection database"
+      });
+      return;
+    }
+    var id = req.params.id;
+    conn.query("SELECT * from vaucher where superadmin = ?", [id], function (err, rows) {
+      conn.release();
+      if (!err) {
+        res.json(rows);
+      } else {
+        res.json({
+          "code": 100,
+          "status": "Error in connection database"
+        });
+      }
+    });
+
+
+    conn.on('error', function (err) {
+      res.json({
+        "code": 100,
+        "status": "Error in connection database"
+      });
+      return;
+    });
+  });
+
+});
+
 module.exports = router;

@@ -28,6 +28,17 @@
     "checkMailForActive": "Überprüfen Sie Ihre E-Mails und aktivieren Sie Ihr Konto!",
     "fillFields": "Füllen Sie alle Felder aus!"
   },
+  "vaucher": {
+    "id": "ID",
+    "date": "Date",
+    "amount": "Amount",
+    "date_redeemed": "Date redeemed",
+    "customer": "Customer",
+    "comment": "Comment",
+    "newVaucher": "New vaucher",
+    "addVaucher": "Add vaucher",
+    "updateVaucher": "Update vaucher"
+  },
   "calendar": {
     "today": "Heute",
     "allDay": "Den ganzen tag",
@@ -57,7 +68,8 @@
     "customer": "Kunde",
     "users": "Benutzer",
     "store": "Geschäft",
-    "parameters": "Parameter"
+    "parameters": "Parameter",
+    "vaucher": "Vaucher"
   },
   "grid": {
     "pagerPage": "Seite",

@@ -61,6 +61,7 @@ import '@progress/kendo-angular-intl/locales/de/all';
 import { ParametersComponent } from './component/dashboard/parameters/parameters.component';
 import { ParameterItemComponent } from './component/dashboard/parameters/parameter-item/parameter-item.component';
 import { StatisticComponent } from './component/dashboard/statistic/statistic.component';
+import { VaucherComponent } from './component/dashboard/vaucher/vaucher.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -80,7 +81,8 @@ import { StatisticComponent } from './component/dashboard/statistic/statistic.co
     ParameterItemComponent,
     MyNavigationComponent,
     MyNavigationViewComponent,
-    StatisticComponent
+    StatisticComponent,
+    VaucherComponent
   ],
   imports: [
     BrowserModule,

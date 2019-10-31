@@ -28,6 +28,23 @@
     "checkMailForActive": "Check your mail and active your account!",
     "fillFields": "Fill in all fields"
   },
+  "vaucher": {
+    "id": "ID",
+    "date": "Date",
+    "amount": "Amount",
+    "date_redeemed": "Date redeemed",
+    "customer": "Customer",
+    "comment": "Comment",
+    "newVaucher": "New vaucher",
+    "addVaucher": "Add vaucher",
+    "updateVaucher": "Update vaucher",
+    "uploadFromExcel": "Upload from Excel",
+    "exportToExcel": "Export to Excel",
+    "exportToPDF": "Export to PDF",
+    "pagerPage": "Page",
+    "pagerOf": "of",
+    "pagerItems": "items"
+  },
   "calendar": {
     "today": "Today",
     "allDay": "All day",
@@ -57,7 +74,8 @@
     "customer": "Customer",
     "users": "Users",
     "store": "Store",
-    "parameters": "Parameters"
+    "parameters": "Parameters",
+    "vaucher": "Vaucher"
   },
   "grid": {
     "pagerPage": "Page",
