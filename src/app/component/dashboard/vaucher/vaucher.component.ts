@@ -52,6 +52,8 @@ export class VaucherComponent implements OnInit {
   public customerUsers: any;
   public customerUser: any;
   public dialog = false;
+  public dateConst: any;
+  public dateredeemedConst: any;
 
   constructor(
     private service: VaucherService,
@@ -91,7 +93,7 @@ export class VaucherComponent implements OnInit {
       if (date !== null) {
         console.log(date);
         this.currentLoadData = date;
-        this.gridData = process(date, this.state);
+        this.gridData = process(this.currentLoadData, this.state);
         this['loadingGridVaucher'] = false;
       } else {
         this.gridData = [];
@@ -104,11 +106,7 @@ export class VaucherComponent implements OnInit {
   }
 
   newVaucher() {
-    this.customer.getCustomers(localStorage.getItem("storeId"), val => {
-      console.log(val);
-      this.customerUsers = val;
-      this.loading = false;
-    });
+    this.getCustomer();
     this.operationMode = "add";
     this.initializeParams();
     this.changeTheme(this.theme);
@@ -118,17 +116,23 @@ export class VaucherComponent implements OnInit {
   initializeParams() {
     this.data = {
       date: "",
-      amount: "",
+      amount: null,
       date_redeemed: "",
-      customer: "",
+      customer: null,
       comment: ""
     };
+    this.dateConst = "";
+    this.dateredeemedConst = "";
+    this.customerUser = null;
   }
 
   createVaucher(form) {
     console.log(this.data);
     this.data.superadmin = localStorage.getItem("idUser");
     this.data.customer = this.customerUser.id;
+    this.data.customer_name = this.customerUser.firstname + " " + this.customerUser.lastname;
+    this.data.date = this.dateConst.toString();
+    this.data.date_redeemed = this.dateredeemedConst.toString();
     this.service.createVaucher(this.data).subscribe(data => {
       if (data["success"]) {
         this.data.id = data["id"];
@@ -141,6 +145,7 @@ export class VaucherComponent implements OnInit {
         };*/
         this.currentLoadData.push(this.data);
         this.vaucher = false;
+        this.getVauchers();
         // form.reset();
         Swal.fire({
           title: "Successfull!",
@@ -174,8 +179,49 @@ export class VaucherComponent implements OnInit {
     this.dialog = false;
   }
 
-  editVaucher(data) {
+  editForm(data) {
+    this.changeTheme(this.theme);
+    this.getCustomer();
+    this.data = data;
+    this.convertValue(data);
+    this.operationMode = 'edit';
+    this.vaucher = true;
+  }
 
+  editVaucher(store) {
+    this.data.customer = this.customerUser.id;
+    this.data.customer_name = this.customerUser.firstname + " " + this.customerUser.lastname;
+    this.data.date = this.dateConst.toString();
+    this.data.date_redeemed = this.dateredeemedConst.toString();
+    this.service.editVaucher(this.data).subscribe(data => {
+      console.log(data);
+      if (data) {
+        this.getVauchers();
+        Swal.fire({
+          title: 'Successfull update',
+          text: 'Store data is successfull update!',
+          timer: 3000,
+          type: 'success'
+        });
+        this.vaucher = false;
+      } else {
+        Swal.fire({
+          title: 'Error update',
+          text: 'Store data is not successfull update!',
+          timer: 3000,
+          type: 'error'
+        });
+      }
+    });
+  }
+
+  convertValue(data) {
+    this.dateConst = new Date(data.date);
+    this.dateredeemedConst = new Date(data.date_redeemed);
+    this.data.amount = Number(data.amount);
+    this.customerUser = {
+      id: Number(data.customer)
+    };
   }
 
   selectionChange(event) {
@@ -306,7 +352,7 @@ export class VaucherComponent implements OnInit {
       dataArray.push(objectArray[i]);
     }
     const allData = {
-      table: "vauchers",
+      table: "vaucher",
       columns: columns,
       data: dataArray
     };
@@ -323,6 +369,14 @@ export class VaucherComponent implements OnInit {
     } else if (title === "edit") {
       return this.language.updateVaucher;
     }
+  }
+
+  getCustomer() {
+    this.customer.getCustomers(localStorage.getItem("storeId"), val => {
+      console.log(val);
+      this.customerUsers = val;
+      this.loading = false;
+    });
   }
 
   open(component, id) {

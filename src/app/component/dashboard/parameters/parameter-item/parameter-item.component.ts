@@ -98,11 +98,11 @@ export class ParameterItemComponent implements OnInit {
         telephone: new FormControl(),
         email: new FormControl()
       });
-    } else if (this.type === 'Therapies') {
+    } /*else if (this.type === 'Therapies') {
       this.formGroup = new FormGroup({
         sequence: new FormControl()
       });
-    } else {
+    }*/ else {
       this.formGroup = new FormGroup({
         title: new FormControl(),
         sequence: new FormControl()
@@ -130,13 +130,13 @@ export class ParameterItemComponent implements OnInit {
       this.selectedDoctorType = dataItem.doctor_type;
       this.selectedGender = dataItem.gender;
 
-    } else if (this.type === 'Therapies') {
+    } /*else if (this.type === 'Therapies') {
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
         sequence: new FormControl(dataItem.sequence)
       });
       this.selectedTherapy = dataItem.therapy_id;
-    } else {
+    }*/ else {
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
         title: new FormControl(dataItem.title),

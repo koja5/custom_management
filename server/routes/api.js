@@ -3337,7 +3337,7 @@ router.post('/updateDoctorsList', function (req, res, next) {
 
 // start therapies_list
 
-router.get('/getTherapiesList', function (req, res, next) {
+router.get('/getTreatmentList', function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       res.json({
@@ -3346,7 +3346,7 @@ router.get('/getTherapiesList', function (req, res, next) {
       });
       return;
     }
-    conn.query("select * from therapies_list", function (err, rows) {
+    conn.query("select * from treatment_list", function (err, rows) {
       conn.release();
       if (!err) {
         res.json(rows);
@@ -3370,7 +3370,7 @@ router.get('/getTherapiesList', function (req, res, next) {
 
 });
 
-router.post('/addTherapiesList', function (req, res, next) {
+router.post('/addTreatmentList', function (req, res, next) {
   connection.getConnection(function (err, conn) {
     console.log(conn);
     if (err) {
@@ -3384,11 +3384,11 @@ router.post('/addTherapiesList', function (req, res, next) {
     response = null;
     console.log(req);
     var date = {
-      'therapy_id': req.body.therapy_id,
+      'title': req.body.title,
       'sequence': req.body.sequence
     };
 
-    conn.query("insert into therapies_list SET ?", date, function (err, rows) {
+    conn.query("insert into treatment_list SET ?", date, function (err, rows) {
       conn.release();
       if (!err) {
         if (!err) {
@@ -3411,7 +3411,7 @@ router.post('/addTherapiesList', function (req, res, next) {
   });
 });
 
-router.get('/deleteTherapiesList/:id', (req, res, next) => {
+router.get('/deleteTreatmentList/:id', (req, res, next) => {
   try {
     var reqObj = req.params.id;
     connection.getConnection(function (err, conn) {
@@ -3423,7 +3423,7 @@ router.get('/deleteTherapiesList/:id', (req, res, next) => {
         });
         return next(err);
       } else {
-        conn.query("delete from therapies_list where id = '" + reqObj + "'",
+        conn.query("delete from treatment_list where id = '" + reqObj + "'",
           function (err, rows, fields) {
             conn.release();
             if (err) {
@@ -3447,7 +3447,7 @@ router.get('/deleteTherapiesList/:id', (req, res, next) => {
   }
 });
 
-router.post('/updateTherapiesList', function (req, res, next) {
+router.post('/updateTreatmentList', function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       res.json({
@@ -3460,11 +3460,11 @@ router.post('/updateTherapiesList', function (req, res, next) {
     var response = null;
     var data = {
       'id': req.body.id,
-      'therapy_id': req.body.therapy_id,
+      'title': req.body.title,
       'sequence': req.body.sequence
     };
 
-    conn.query("update therapies_list set ? where id = '" + req.body.id + "'", data,
+    conn.query("update treatment_list set ? where id = '" + req.body.id + "'", data,
       function (err, rows, fields) {
         conn.release();
         if (err) {
@@ -3950,6 +3950,7 @@ router.post('/createVaucher', function (req, res, next) {
       'date_redeemed': req.body.date_redeemed,
       'customer': req.body.customer,
       'comment': req.body.comment,
+      'customer_name': req.body.customer_name,
       'superadmin': req.body.superadmin
     };
 
@@ -4046,6 +4047,51 @@ router.get('/getVauchers/:id', function (req, res, next) {
     });
   });
 
+});
+
+router.post('/updateVaucher', function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    console.log(conn);
+    if (err) {
+      res.json({
+        "code": 100,
+        "status": "Error in connection database"
+      });
+      return;
+    }
+
+    var response = null;
+    var data = {
+      'id': req.body.id,
+      'date': req.body.date,
+      'amount': req.body.amount,
+      'date_redeemed': req.body.date_redeemed,
+      'customer': req.body.customer,
+      'customer_name': req.body.customer_name,
+      'comment': req.body.comment
+    };
+
+
+    conn.query("update vaucher set ? where id = '" + req.body.id + "'", data,
+      function (err, rows, fields) {
+        conn.release();
+        if (err) {
+          console.error("SQL error:", err);
+          res.json({
+            "code": 100,
+            "status": "Error in connection database"
+          });
+          return next(err);
+        } else {
+          response = true;
+          res.json(response);
+        }
+      }
+    );
+    conn.on('error', function (err) {
+      console.log("[mysql error]", err);
+    });
+  });
 });
 
 module.exports = router;

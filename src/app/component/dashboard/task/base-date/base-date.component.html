@@ -418,7 +418,7 @@
           <div *ngIf="baseData === null" style="height: 90vh; overflow: hidden;">
             <div class="spinner loading"></div>
           </div>
-          <div id="profile-tab" class="tab-pane active"  *ngIf="baseData !== undefined && baseData !== null && selectedRecommendation !== undefined">
+          <div id="profile-tab" class="tab-pane active" *ngIf="baseData !== undefined && baseData !== null">
             <form name="loginForm" class="loginForm"
               (ngSubmit)="operationMode === 'add' ? addBaseDataOne(base) : updateBaseDataOne(base)" ngNativeValidate>
               <div class="form-group">
