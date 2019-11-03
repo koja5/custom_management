@@ -195,11 +195,10 @@ router.post('/updateTask', function (req, res, next) {
     }
 
     test = {};
-    console.log(req);
     var data = {
       'id': req.body.id,
       'creator_id': req.body.creator_id,
-      'customer_id': req.body.customer_id,
+      'customer_id': req.body.user.id,
       'title': req.body.title,
       'colorTask': req.body.colorTask,
       'start': req.body.start,

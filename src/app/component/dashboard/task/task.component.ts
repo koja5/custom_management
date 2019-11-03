@@ -332,7 +332,10 @@ export class TaskComponent implements OnInit {
   }
 
   public createFormGroup(args: CreateFormGroupArgs): FormGroup {
-    if ((this.selectedStoreId === null || this.selectedStoreId === undefined) && this.type !== 3) {
+    if (
+      (this.selectedStoreId === null || this.selectedStoreId === undefined) &&
+      this.type !== 3
+    ) {
       Swal.fire({
         title: this.language.selectStoreIndicatorTitle,
         text: this.language.selectStoreIndicatorText,
@@ -506,7 +509,48 @@ export class TaskComponent implements OnInit {
           this.selectedTherapiesPrevious = [];*/
         });
       } else {
-        this.handleUpdate(dataItem, formValue, mode);
+        formValue = this.colorMapToId(formValue);
+        this.addTherapy(this.customerUser.id);
+        formValue.title =
+          this.customerUser.firstname +
+          " " +
+          this.customerUser.lastname +
+          "+" +
+          this.complaintData.complaint_title;
+        this.customer.addTherapy(this.complaintData).subscribe(data => {
+          if (data["success"]) {
+            formValue.therapy_id = data["id"];
+            this.service.updateTask(formValue, val => {
+              console.log(val);
+              if (val.success) {
+                this.handleUpdate(dataItem, formValue, mode);
+                Swal.fire({
+                  title: this.language.successUpdateTitle,
+                  text: this.language.successUpdateText,
+                  timer: 3000,
+                  type: "success"
+                });
+              } else {
+                Swal.fire({
+                  title: this.language.unsuccessUpdateTitle,
+                  text: this.language.unsuccessUpdateText,
+                  timer: 3000,
+                  type: "error"
+                });
+              }
+            });
+          } else {
+            Swal.fire({
+              title: this.language.unsuccessUpdateTitle,
+              text: this.language.unsuccessUpdateText,
+              timer: 3000,
+              type: "error"
+            });
+          }
+          /*this.selectedComplaint = [];
+          this.selectedTherapies = [];
+          this.selectedTherapiesPrevious = [];*/
+        });
       }
 
       this.closeEditor(sender);
@@ -995,7 +1039,7 @@ export class TaskComponent implements OnInit {
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].end >
-          new Date(date).getHours()) ||
+            new Date(date).getHours()) ||
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start2 <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]

@@ -112,7 +112,6 @@ export class TaskService extends BaseEditService<MyEvent> {
     }
 
     updateTask(data, callback) {
-        console.log(data);
         return this.http.post('/api/updateTask', data)
             .map(res => res)
             .subscribe(val => callback(val));
