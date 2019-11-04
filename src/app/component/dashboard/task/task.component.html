@@ -177,7 +177,7 @@
               </kendo-scheduler-agenda-view>
 
               <ng-template kendoSchedulerEditDialogTemplate let-formGroup="formGroup" let-isNew="isNew"
-                let-editMode="editMode">
+                let-editMode="editMode" *ngIf="selectedStoreId !== null && selectedStoreId !== undefined && type !== 3">
 
                 <div *ngIf="!createFormLoading" style="height: 700px; width: 400px;">
                   <div class="spinner loading"></div>
@@ -328,7 +328,7 @@
             <kendo-scheduler-agenda-view> </kendo-scheduler-agenda-view>
 
             <ng-template kendoSchedulerEditDialogTemplate let-formGroup="formGroup" let-isNew="isNew"
-              let-editMode="editMode">
+              let-editMode="editMode" *ngIf="selectedStoreId !== null && selectedStoreId !== undefined && type !== 3">
               <div *ngIf="!createFormLoading" style="height: 700px">
                 <div class=" spinner loading"></div>
               </div>

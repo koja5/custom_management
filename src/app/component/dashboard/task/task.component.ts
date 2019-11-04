@@ -339,6 +339,8 @@ export class TaskComponent implements OnInit {
         timer: 3000,
         type: "error"
       });
+      
+      this.createFormLoading = false;
       return this.createFormGroup.bind(this);
     } else {
       this.createFormLoading = false;
