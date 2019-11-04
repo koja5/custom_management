@@ -73,8 +73,8 @@
     </kendo-grid>
   </div>
 
-  <kendo-dialog title="Please confirm" *ngIf="vaucherDialogOpened" (close)="vaucherDialogOpened = false" [minWidth]="250"
-    [width]="450">
+  <kendo-dialog title="Please confirm" *ngIf="vaucherDialogOpened" (close)="vaucherDialogOpened = false"
+    [minWidth]="250" [width]="450">
     <p style="margin: 30px; text-align: center;">Are you sure you want to import data from excel?</p>
     <kendo-dialog-actions>
       <button kendoButton (click)="action('no')">No</button>
@@ -82,14 +82,13 @@
     </kendo-dialog-actions>
   </kendo-dialog>
 
-  <kendo-dialog title="Please confirm" *ngIf="dialog" (close)="dialog = false" [minWidth]="250"
-      [width]="450">
-      <p style="margin: 30px; text-align: center;">Are you sure you want to continue?</p>
-      <kendo-dialog-actions>
-        <button kendoButton (click)="deleteVaucher('no')">No</button>
-        <button kendoButton (click)="deleteVaucher('yes')" primary="true">Yes</button>
-      </kendo-dialog-actions>
-    </kendo-dialog>
+  <kendo-dialog title="Please confirm" *ngIf="dialog" (close)="dialog = false" [minWidth]="250" [width]="450">
+    <p style="margin: 30px; text-align: center;">Are you sure you want to continue?</p>
+    <kendo-dialog-actions>
+      <button kendoButton (click)="deleteVaucher('no')">No</button>
+      <button kendoButton (click)="deleteVaucher('yes')" primary="true">Yes</button>
+    </kendo-dialog-actions>
+  </kendo-dialog>
 </div>
 
 <kendo-window [title]="getTranslate(operationMode)" *ngIf="vaucher" [minWidth]="400" [width]="550" [minHeight]="300"
@@ -98,23 +97,26 @@
     (ngSubmit)="operationMode === 'add' ? createVaucher(vaucher) : editVaucher(vaucher)" ngNativeValidate>
     <div class="col-md-12 col-xs-12">
       <p>{{language.date}}</p>
-      <kendo-datepicker class="email col-md-12 col-xs-12" name="Date" placeholder="Date" [(ngModel)]="dateConst" dateConst.value=''>
+      <kendo-datepicker class="email col-md-12 col-xs-12" name="Date" placeholder="Date" [(ngModel)]="dateConst"
+        dateConst.value=''>
       </kendo-datepicker>
     </div>
     <div class="col-md-12 col-xs-12">
       <p>{{language.amount}}</p>
-      <kendo-numerictextbox class="email col-md-12 col-xs-12" name="Amount" placeholder="Amount" [(ngModel)]="data.amount" amount.value=''>
+      <kendo-numerictextbox class="email col-md-12 col-xs-12" name="Amount" placeholder="Amount"
+        [(ngModel)]="data.amount" amount.value=''>
       </kendo-numerictextbox>
     </div>
     <div class="col-md-12 col-xs-12">
       <p>{{language.date_redeemed}}</p>
-      <kendo-datepicker class="email col-md-12 col-xs-12" name="Date redeemed" placeholder="Date redeemed" [(ngModel)]="dateredeemedConst" dateredeemedConst.value=''>
+      <kendo-datepicker class="email col-md-12 col-xs-12" name="Date redeemed" placeholder="Date redeemed"
+        [(ngModel)]="dateredeemedConst" dateredeemedConst.value=''>
       </kendo-datepicker>
     </div>
     <div class="col-md-12 col-xs-12">
       <p>{{language.customer}}</p>
-      <kendo-combobox class="email col-md-12 col-xs-12" [data]="customerUsers" [textField]="'shortname'" [valueField]="'id'"
-         [(ngModel)]="customerUser" name="customer">
+      <kendo-combobox class="email col-md-12 col-xs-12" [data]="customerUsers" [textField]="'shortname'"
+        [valueField]="'id'" [(ngModel)]="customerUser" name="customer">
       </kendo-combobox>
     </div>
     <div class="col-md-12 col-xs-12">
@@ -127,9 +129,9 @@
     </div>
     <div class="form-group" style="text-align: center;">
       <button *ngIf="operationMode === 'add'" kendoButton [primary]="true" class="form-button" type="submit"
-        [disabled]="">{{language.addVaucher}}</button>
+        [disabled]="dateConst === '' || data.amount === '' || dateredeemedConst === '' || customerUsers === null">{{language.addVaucher}}</button>
       <button *ngIf="operationMode === 'edit'" kendoButton [primary]="true" class="form-button" type="submit"
-        [disabled]="">{{language.updateVaucher}}</button>
+        [disabled]="dateConst === '' || data.amount === '' || dateredeemedConst === '' || customerUsers === null">{{language.updateVaucher}}</button>
     </div>
   </form>
 </kendo-window>

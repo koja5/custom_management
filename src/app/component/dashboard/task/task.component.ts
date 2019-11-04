@@ -332,10 +332,7 @@ export class TaskComponent implements OnInit {
   }
 
   public createFormGroup(args: CreateFormGroupArgs): FormGroup {
-    if (
-      (this.selectedStoreId === null || this.selectedStoreId === undefined) &&
-      this.type !== 3
-    ) {
+    if ((this.selectedStoreId === null || this.selectedStoreId === undefined) && this.type !== 3) {
       Swal.fire({
         title: this.language.selectStoreIndicatorTitle,
         text: this.language.selectStoreIndicatorText,
@@ -517,8 +514,8 @@ export class TaskComponent implements OnInit {
           this.customerUser.lastname +
           "+" +
           this.complaintData.complaint_title;
-        this.customer.addTherapy(this.complaintData).subscribe(data => {
-          if (data["success"]) {
+        this.customer.updateTherapy(this.complaintData).subscribe(data => {
+          if (data) {
             formValue.therapy_id = data["id"];
             this.service.updateTask(formValue, val => {
               console.log(val);
@@ -1039,7 +1036,7 @@ export class TaskComponent implements OnInit {
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].end >
-            new Date(date).getHours()) ||
+          new Date(date).getHours()) ||
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start2 <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
