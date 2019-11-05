@@ -1,29 +1,29 @@
-import { Component, OnInit } from "@angular/core";
-import { VaucherModel } from "src/app/models/vaucher-model";
-import { process, State } from "@progress/kendo-data-query";
+import { Component, OnInit } from '@angular/core';
+import { VaucherModel } from 'src/app/models/vaucher-model';
+import { process, State } from '@progress/kendo-data-query';
 import {
   RowArgs,
   DataStateChangeEvent,
   PageChangeEvent
-} from "@progress/kendo-angular-grid";
-import { VaucherService } from "src/app/service/vaucher.service";
-import Swal from "sweetalert2";
-import { UploadEvent } from "@progress/kendo-angular-upload";
-import { MessageService } from "../../../service/message.service";
-import * as XLSX from "ts-xlsx";
+} from '@progress/kendo-angular-grid';
+import { VaucherService } from 'src/app/service/vaucher.service';
+import Swal from 'sweetalert2';
+import { UploadEvent } from '@progress/kendo-angular-upload';
+import { MessageService } from '../../../service/message.service';
+import * as XLSX from 'ts-xlsx';
 import { CustomersService } from 'src/app/service/customers.service';
 
 @Component({
-  selector: "app-vaucher",
-  templateUrl: "./vaucher.component.html",
-  styleUrls: ["./vaucher.component.scss"]
+  selector: 'app-vaucher',
+  templateUrl: './vaucher.component.html',
+  styleUrls: ['./vaucher.component.scss']
 })
 export class VaucherComponent implements OnInit {
   public vaucher = false;
   public data = new VaucherModel();
-  public unamePattern = "^[a-z0-9_-]{8,15}$";
-  public emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$";
-  public userType = ["Employee", "Manager", "Admin"];
+  public unamePattern = '^[a-z0-9_-]{8,15}$';
+  public emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$';
+  public userType = ['Employee', 'Manager', 'Admin'];
   public gridData: any;
   public currentLoadData: any;
   public state: State = {
@@ -34,11 +34,11 @@ export class VaucherComponent implements OnInit {
   public storeLocation: any;
   public language: any;
   public selectedUser: any;
-  public imagePath = "defaultUser";
+  public imagePath = 'defaultUser';
   public loading = true;
   // public uploadSaveUrl = 'http://localhost:3000/api/uploadImage'; // should represent an actual API endpoint
-  public uploadSaveUrl = "http://www.app-production.eu:3000/uploadImage";
-  public uploadRemoveUrl = "removeUrl"; // should represent an actual API endpoint
+  public uploadSaveUrl = 'http://www.app-production.eu:3000/uploadImage';
+  public uploadRemoveUrl = 'removeUrl'; // should represent an actual API endpoint
   // private spread: GC.Spread.Sheets.Workbook;
   // private excelIO;
   public vaucherDialogOpened = false;
@@ -64,12 +64,12 @@ export class VaucherComponent implements OnInit {
   ngOnInit() {
     this.getVauchers();
 
-    if (localStorage.getItem("language") !== null) {
-      this.language = JSON.parse(localStorage.getItem("language")).vaucher;
+    if (localStorage.getItem('language') !== null) {
+      this.language = JSON.parse(localStorage.getItem('language')).vaucher;
     }
 
-    if (localStorage.getItem("theme") !== null) {
-      this.theme = localStorage.getItem("theme");
+    if (localStorage.getItem('theme') !== null) {
+      this.theme = localStorage.getItem('theme');
     }
 
     /*this.message.getDeleteVaucher().subscribe(mess => {
@@ -89,7 +89,7 @@ export class VaucherComponent implements OnInit {
 
   getVauchers() {
     this['loadingGridVaucher'] = true;
-    this.service.getVauchers(localStorage.getItem("idUser")).subscribe(date => {
+    this.service.getVauchers(localStorage.getItem('idUser')).subscribe(date => {
       if (date !== null) {
         console.log(date);
         this.currentLoadData = date;
@@ -107,7 +107,7 @@ export class VaucherComponent implements OnInit {
 
   newVaucher() {
     this.getCustomer();
-    this.operationMode = "add";
+    this.operationMode = 'add';
     this.initializeParams();
     this.changeTheme(this.theme);
     this.vaucher = true;
@@ -115,27 +115,28 @@ export class VaucherComponent implements OnInit {
 
   initializeParams() {
     this.data = {
-      date: "",
+      date: '',
       amount: null,
-      date_redeemed: "",
+      date_redeemed: '',
       customer: null,
-      comment: ""
+      comment: ''
     };
-    this.dateConst = "";
-    this.dateredeemedConst = "";
+    this.dateConst = '';
+    this.dateredeemedConst = '';
     this.customerUser = null;
   }
 
   createVaucher(form) {
     console.log(this.data);
-    this.data.superadmin = localStorage.getItem("idUser");
+    this.data.superadmin = localStorage.getItem('idUser');
     this.data.customer = this.customerUser.id;
-    this.data.customer_name = this.customerUser.firstname + " " + this.customerUser.lastname;
+    this.data.customer_name =
+      this.customerUser.firstname + ' ' + this.customerUser.lastname;
     this.data.date = this.dateConst.toString();
     this.data.date_redeemed = this.dateredeemedConst.toString();
     this.service.createVaucher(this.data).subscribe(data => {
-      if (data["success"]) {
-        this.data.id = data["id"];
+      if (data['success']) {
+        this.data.id = data['id'];
         /*this.gridData = {
           data: this.currentLoadData.slice(
             this.currentLoadData.length - this.state.take,
@@ -148,17 +149,17 @@ export class VaucherComponent implements OnInit {
         this.getVauchers();
         // form.reset();
         Swal.fire({
-          title: "Successfull!",
-          text: "New vaucher is successfull added!",
+          title: 'Successfull!',
+          text: 'New vaucher is successfull added!',
           timer: 3000,
-          type: "success"
+          type: 'success'
         });
       } else {
         Swal.fire({
-          title: "Error",
-          text: "New vaucher is not added!",
+          title: 'Error',
+          text: 'New vaucher is not added!',
           timer: 3000,
-          type: "error"
+          type: 'error'
         });
       }
     });
@@ -167,14 +168,12 @@ export class VaucherComponent implements OnInit {
   deleteVaucher(event) {
     if (event === 'yes') {
       console.log(this.data);
-      this.service.deleteVaucher(this.data.id).subscribe(
-        data => {
-          console.log(data);
-          if (data) {
-            this.getVauchers();
-          }
+      this.service.deleteVaucher(this.data.id).subscribe(data => {
+        console.log(data);
+        if (data) {
+          this.getVauchers();
         }
-      );
+      });
     }
     this.dialog = false;
   }
@@ -190,7 +189,9 @@ export class VaucherComponent implements OnInit {
 
   editVaucher(store) {
     this.data.customer = this.customerUser.id;
-    this.data.customer_name = this.customerUser.firstname + " " + this.customerUser.lastname;
+    if (this.customerUser.firstname !== undefined && this.customerUser.lastname !== undefined) {
+      this.data.customer_name = this.customerUser.firstname + ' ' + this.customerUser.lastname;
+    }
     this.data.date = this.dateConst.toString();
     this.data.date_redeemed = this.dateredeemedConst.toString();
     this.service.editVaucher(this.data).subscribe(data => {
@@ -266,16 +267,16 @@ export class VaucherComponent implements OnInit {
 
   action(event) {
     console.log(event);
-    if (event === "yes") {
+    if (event === 'yes') {
       this.vaucherDialogOpened = false;
       setTimeout(() => {
         this.service.insertMultiData(this.gridData).subscribe(data => {
           if (data) {
             Swal.fire({
-              title: "Successfull!",
-              text: "New vaucher is successfull added",
+              title: 'Successfull!',
+              text: 'New vaucher is successfull added',
               timer: 3000,
-              type: "success"
+              type: 'success'
             });
             this.getVauchers();
           }
@@ -305,7 +306,7 @@ export class VaucherComponent implements OnInit {
           }, 50);
         },
         error => {
-          alert("load fail");
+          alert('load fail');
         }
       );
     }*/
@@ -318,8 +319,8 @@ export class VaucherComponent implements OnInit {
       var arr = new Array();
       for (var i = 0; i != data.length; ++i)
         arr[i] = String.fromCharCode(data[i]);
-      var bstr = arr.join("");
-      var workbook = XLSX.read(bstr, { type: "binary" });
+      var bstr = arr.join('');
+      var workbook = XLSX.read(bstr, { type: 'binary' });
       var first_sheet_name = workbook.SheetNames[0];
       var worksheet = workbook.Sheets[first_sheet_name];
       console.log(XLSX.utils.sheet_to_json(worksheet, { raw: false }));
@@ -352,7 +353,7 @@ export class VaucherComponent implements OnInit {
       dataArray.push(objectArray[i]);
     }
     const allData = {
-      table: "vaucher",
+      table: 'vaucher',
       columns: columns,
       data: dataArray
     };
@@ -364,15 +365,15 @@ export class VaucherComponent implements OnInit {
   }
 
   getTranslate(title: string) {
-    if (title === "add") {
+    if (title === 'add') {
       return this.language.addVaucher;
-    } else if (title === "edit") {
+    } else if (title === 'edit') {
       return this.language.updateVaucher;
     }
   }
 
   getCustomer() {
-    this.customer.getCustomers(localStorage.getItem("storeId"), val => {
+    this.customer.getCustomers(localStorage.getItem('storeId'), val => {
       console.log(val);
       this.customerUsers = val;
       this.loading = false;
@@ -387,85 +388,85 @@ export class VaucherComponent implements OnInit {
 
   changeTheme(theme: string) {
     setTimeout(() => {
-      if (localStorage.getItem("allThemes") !== undefined) {
-        const allThemes = JSON.parse(localStorage.getItem("allThemes"));
+      if (localStorage.getItem('allThemes') !== undefined) {
+        const allThemes = JSON.parse(localStorage.getItem('allThemes'));
         console.log(allThemes);
-        let items = document.querySelectorAll(".k-dialog-titlebar");
+        let items = document.querySelectorAll('.k-dialog-titlebar');
         for (let i = 0; i < items.length; i++) {
           const clas = items[i].classList;
           for (let j = 0; j < allThemes.length; j++) {
-            const themeName = allThemes[j]["name"];
+            const themeName = allThemes[j]['name'];
             console.log(clas);
-            clas.remove("k-dialog-titlebar-" + themeName);
-            clas.add("k-dialog-titlebar-" + theme);
+            clas.remove('k-dialog-titlebar-' + themeName);
+            clas.add('k-dialog-titlebar-' + theme);
           }
         }
 
-        items = document.querySelectorAll(".k-header");
+        items = document.querySelectorAll('.k-header');
         for (let i = 0; i < items.length; i++) {
           const clas = items[i].classList;
           for (let j = 0; j < allThemes.length; j++) {
-            const element = allThemes[j]["name"];
-            clas.remove("gridHeader-" + element);
+            const element = allThemes[j]['name'];
+            clas.remove('gridHeader-' + element);
 
-            clas.add("gridHeader-" + this.theme);
+            clas.add('gridHeader-' + this.theme);
           }
         }
-        items = document.querySelectorAll(".k-pager-numbers");
+        items = document.querySelectorAll('.k-pager-numbers');
         for (let i = 0; i < items.length; i++) {
           const clas = items[i].classList;
           for (let j = 0; j < allThemes.length; j++) {
-            const element = allThemes[j]["name"];
-            clas.remove("k-pager-numbers-" + element);
-            clas.add("k-pager-numbers-" + this.theme);
-          }
-        }
-
-        items = document.querySelectorAll(".k-select");
-        for (let i = 0; i < items.length; i++) {
-          const clas = items[i].classList;
-          for (let j = 0; j < allThemes.length; j++) {
-            const element = allThemes[j]["name"];
-            clas.remove("k-select-" + element);
-            clas.add("k-select-" + this.theme);
+            const element = allThemes[j]['name'];
+            clas.remove('k-pager-numbers-' + element);
+            clas.add('k-pager-numbers-' + this.theme);
           }
         }
 
-        items = document.querySelectorAll(".k-grid-table");
+        items = document.querySelectorAll('.k-select');
         for (let i = 0; i < items.length; i++) {
           const clas = items[i].classList;
           for (let j = 0; j < allThemes.length; j++) {
-            const element = allThemes[j]["name"];
-            clas.remove("k-grid-table-" + element);
-            clas.add("k-grid-table-" + this.theme);
-          }
-        }
-        items = document.querySelectorAll(".k-grid-header");
-        for (let i = 0; i < items.length; i++) {
-          const clas = items[i].classList;
-          for (let j = 0; j < allThemes.length; j++) {
-            const element = allThemes[j]["name"];
-            clas.remove("k-grid-header-" + element);
-            clas.add("k-grid-header-" + this.theme);
-          }
-        }
-        items = document.querySelectorAll(".k-pager-wrap");
-        for (let i = 0; i < items.length; i++) {
-          const clas = items[i].classList;
-          for (let j = 0; j < allThemes.length; j++) {
-            const element = allThemes[j]["name"];
-            clas.remove("k-pager-wrap-" + element);
-            clas.add("k-pager-wrap-" + this.theme);
+            const element = allThemes[j]['name'];
+            clas.remove('k-select-' + element);
+            clas.add('k-select-' + this.theme);
           }
         }
 
-        items = document.querySelectorAll(".k-button");
+        items = document.querySelectorAll('.k-grid-table');
         for (let i = 0; i < items.length; i++) {
           const clas = items[i].classList;
           for (let j = 0; j < allThemes.length; j++) {
-            const element = allThemes[j]["name"];
-            clas.remove("inputTheme-" + element);
-            clas.add("inputTheme-" + this.theme);
+            const element = allThemes[j]['name'];
+            clas.remove('k-grid-table-' + element);
+            clas.add('k-grid-table-' + this.theme);
+          }
+        }
+        items = document.querySelectorAll('.k-grid-header');
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]['name'];
+            clas.remove('k-grid-header-' + element);
+            clas.add('k-grid-header-' + this.theme);
+          }
+        }
+        items = document.querySelectorAll('.k-pager-wrap');
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]['name'];
+            clas.remove('k-pager-wrap-' + element);
+            clas.add('k-pager-wrap-' + this.theme);
+          }
+        }
+
+        items = document.querySelectorAll('.k-button');
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]['name'];
+            clas.remove('inputTheme-' + element);
+            clas.add('inputTheme-' + this.theme);
           }
         }
       }
