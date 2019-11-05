@@ -339,7 +339,7 @@ export class TaskComponent implements OnInit {
         timer: 3000,
         type: "error"
       });
-      
+
       this.createFormLoading = false;
       return this.createFormGroup.bind(this);
     } else {
@@ -364,17 +364,24 @@ export class TaskComponent implements OnInit {
       let timeDurationInd = 0;
       let timeDuration = 0;
       if (!isNaN(this.selectedStoreId)) {
-        timeDurationInd =
-          Number(
-            this.getStartEndTimeForStore(this.store, this.selectedStoreId)
-              .time_therapy
-          ) > Number(this.timeDuration)
-            ? 1
-            : 0;
-        timeDuration = Number(
+        if (dataItem.end.getTime() - dataItem.start.getTime() > Number(
           this.getStartEndTimeForStore(this.store, this.selectedStoreId)
             .time_therapy
-        );
+        ) * 60000) {
+          timeDuration = (dataItem.end.getTime() - dataItem.start.getTime()) / 60000;
+        } else {
+          timeDurationInd =
+            Number(
+              this.getStartEndTimeForStore(this.store, this.selectedStoreId)
+                .time_therapy
+            ) !== Number(this.timeDuration)
+              ? 1
+              : 0;
+          timeDuration = Number(
+            this.getStartEndTimeForStore(this.store, this.selectedStoreId)
+              .time_therapy
+          );
+        }
       }
 
       this.formGroup = this.formBuilder.group({
@@ -553,6 +560,13 @@ export class TaskComponent implements OnInit {
       }
 
       this.closeEditor(sender);
+    } else {
+      Swal.fire({
+        title: this.language.unsuccessUpdateTitle,
+        text: this.language.unsuccessUpdateText,
+        timer: 3000,
+        type: "error"
+      });
     }
   }
 

@@ -415,10 +415,10 @@
 
         <!--BASE ONE-->
         <div class="tab-content" *ngIf="currentTab === 'base_one'">
-          <div *ngIf="baseData === null" style="height: 90vh; overflow: hidden;">
+          <div *ngIf="baseDataOne === null" style="height: 90vh; overflow: hidden;">
             <div class="spinner loading"></div>
           </div>
-          <div id="profile-tab" class="tab-pane active" *ngIf="baseData !== undefined && baseData !== null">
+          <div id="profile-tab" class="tab-pane active" *ngIf="baseDataOne !== undefined && baseDataOne !== null">
             <form name="loginForm" class="loginForm"
               (ngSubmit)="operationMode === 'add' ? addBaseDataOne(base) : updateBaseDataOne(base)" ngNativeValidate>
               <div class="form-group">
@@ -431,29 +431,29 @@
                 <div class="col-md-4 col-xs-12" *ngIf="relationshipList !== undefined">
                   <p>{{language.relationship}}</p>
                   <kendo-combobox class="col-md-12 col-xs-12" [data]="relationshipList" [textField]="'title'"
-                    [valueField]="'id'" [(ngModel)]="baseData.relationship" [valuePrimitive]="true" name="relationship">
+                    [valueField]="'id'" [(ngModel)]="baseDataOne.relationship" [valuePrimitive]="true" name="relationship">
                   </kendo-combobox>
                 </div>
                 <div class="col-md-4 col-xs-12" *ngIf="socialList !== undefiend">
                   <p>{{language.social}}</p>
                   <kendo-combobox class="col-md-12 col-xs-12" [data]="socialList" [textField]="'title'"
-                    [valueField]="'id'" [(ngModel)]="baseData.social" [valuePrimitive]="true" name="title">
+                    [valueField]="'id'" [(ngModel)]="baseDataOne.social" [valuePrimitive]="true" name="title">
                   </kendo-combobox>
                 </div>
                 <div class="col-md-4 col-xs-12" *ngIf="doctorList !== undefined">
                   <p>{{language.doctor}}</p>
                   <kendo-combobox class="col-md-12 col-xs-12" [data]="doctorsList" [textField]="'firstname'"
-                    [valueField]="'id'" [(ngModel)]="baseData.doctor" [valuePrimitive]="true" name="doctors">
+                    [valueField]="'id'" [(ngModel)]="baseDataOne.doctor" [valuePrimitive]="true" name="doctors">
                   </kendo-combobox>
                 </div>
                 <div class="col-md-4 col-xs-12">
                   <p>{{language.firstDate}}</p>
-                  <kendo-datepicker [(ngModel)]="baseData.first_date" name="first_date"></kendo-datepicker>
+                  <kendo-datepicker [(ngModel)]="baseDataOne.first_date" name="first_date"></kendo-datepicker>
                 </div>
               </div>
               <div class="form-group" style="text-align: center">
                 <button kendoButton [primary]="true" class="form-button" *ngIf="operationMode === 'add'" type="submit"
-                  [disabled]="selectedRecommendation === undefined || baseData.relationship === undefined || baseData.social === undefined || baseData.doctor === undefined || baseData.first_date === undefined">{{language.addData}}</button>
+                  [disabled]="selectedRecommendation === undefined || baseDataOne.relationship === undefined || baseDataOne.social === undefined || baseDataOne.doctor === undefined || baseDataOne.first_date === undefined">{{language.addData}}</button>
                 <button kendoButton [primary]="true" class="form-button" *ngIf="operationMode === 'edit'"
                   type="submit">{{language.editData}}</button>
               </div>
@@ -464,58 +464,58 @@
 
         <!--BASE TWO-->
         <div class="tab-content" *ngIf="currentTab === 'base_two'">
-          <div *ngIf="baseData === null" style="height: 90vh; overflow: hidden;">
+          <div *ngIf="baseDataTwo === null" style="height: 90vh; overflow: hidden;">
             <div class="spinner loading"></div>
           </div>
-          <div id="profile-tab" class="tab-pane active" *ngIf="baseData !== undefined && baseData !== null">
+          <div id="profile-tab" class="tab-pane active" *ngIf="baseDataTwo !== undefined && baseDataTwo !== null">
             <form name="base_two"
               (ngSubmit)="operationMode === 'add' ? addBaseDataTwo(base_two) : updateBaseDataTwo(base_two)">
               <div class="form-group">
                 <div class="panel-body">
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.size}}</p>
-                    <input type="number" [(ngModel)]="baseData.size" name="size">
+                    <input type="number" [(ngModel)]="baseDataTwo.size" name="size">
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.weight}}</p>
-                    <input type="number" [(ngModel)]="baseData.weight" name="weight">
+                    <input type="number" [(ngModel)]="baseDataTwo.weight" name="weight">
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.phone}}</p>
-                    <input type="text" [(ngModel)]="baseData.phone" name="phone">
+                    <input type="text" [(ngModel)]="baseDataTwo.phone" name="phone">
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.mobilePhone}}</p>
-                    <input type="text" [(ngModel)]="baseData.mobile_phone" name="mobile_phone">
+                    <input type="text" [(ngModel)]="baseDataTwo.mobile_phone" name="mobile_phone">
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.birthday}}</p>
-                    <kendo-datepicker [(ngModel)]="baseData.birthday" name="birthday">
+                    <kendo-datepicker [(ngModel)]="baseDataTwo.birthday" name="birthday">
                     </kendo-datepicker>
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.childs}}</p>
-                    <input type="number" [(ngModel)]="baseData.childs" name="childs">
+                    <input type="number" [(ngModel)]="baseDataTwo.childs" name="childs">
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.notes}}</p>
-                    <input type="text" [(ngModel)]="baseData.notes" name="notes">
+                    <input type="text" [(ngModel)]="baseDataTwo.notes" name="notes">
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.profession}}</p>
-                    <input type="text" [(ngModel)]="baseData.profession" name="profession">
+                    <input type="text" [(ngModel)]="baseDataTwo.profession" name="profession">
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.useful}}</p>
-                    <input type="text" [(ngModel)]="baseData.useful" name="useful">
+                    <input type="text" [(ngModel)]="baseDataTwo.useful" name="useful">
                   </div>
                 </div>
               </div>
               <!-- ./remember-row -->
               <div class="form-group" style="text-align: center">
                 <button kendoButton [primary]="true" class="form-button" *ngIf="operationMode === 'add'" type="submit"
-                  [disabled]="baseData.size === undefined || baseData.weight === undefined || baseData.phone === undefined || baseData.mobile_phone === undefined || 
-                  baseData.birthday === undefined || baseData.childs === undefined || baseData.notes === undefined || baseData.profession === undefined || baseData.useful === undefiend">{{language.addData}}</button>
+                  [disabled]="baseDataTwo.size === undefined || baseDataTwo.weight === undefined || baseDataTwo.phone === undefined || baseDataTwo.mobile_phone === undefined || 
+                  baseDataTwo.birthday === undefined || baseDataTwo.childs === undefined || baseDataTwo.notes === undefined || baseDataTwo.profession === undefined || baseDataTwo.useful === undefiend">{{language.addData}}</button>
                 <button kendoButton [primary]="true" class="form-button" *ngIf="operationMode === 'edit'"
                   type="submit">{{language.editData}}</button>
               </div>
@@ -525,48 +525,48 @@
 
         <!--PHYSICAL ILLNESS-->
         <div class="tab-content" *ngIf="currentTab === 'physical_illness'">
-          <div *ngIf="baseData === null" style="height: 90vh; overflow: hidden;">
+          <div *ngIf="physicalIllness === null" style="height: 90vh; overflow: hidden;">
             <div class="spinner loading"></div>
           </div>
-          <div id="profile-tab" class="tab-pane active" *ngIf="baseData !== undefined && baseData !== null">
+          <div id="profile-tab" class="tab-pane active" *ngIf="physicalIllness !== undefined && physicalIllness !== null">
             <form name="loginForm" class="loginForm"
               (ngSubmit)="operationMode === 'add' ? addPhysicalIllness(data) : updatePhysicalIllness(data)">
               <div class="form-group">
                 <div class="panel-body">
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.internalOrgans}}</p>
-                    <input type="text" [(ngModel)]="baseData.internal_organs" name="internal_organs">
+                    <input type="text" [(ngModel)]="physicalIllness.internal_organs" name="internal_organs">
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.operations}}</p>
-                    <input type="text" [(ngModel)]="baseData.operations" name="operations">
+                    <input type="text" [(ngModel)]="physicalIllness.operations" name="operations">
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.previousFindidngs}}</p>
-                    <input type="text" [(ngModel)]="baseData.previous_findings" name="previous_findings">
+                    <input type="text" [(ngModel)]="physicalIllness.previous_findings" name="previous_findings">
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.medicament}}</p>
-                    <input type="text" [(ngModel)]="baseData.medicament" name="medicament">
+                    <input type="text" [(ngModel)]="physicalIllness.medicament" name="medicament">
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.allergies}}</p>
-                    <input type="text" [(ngModel)]="baseData.allergies" name="allergies">
+                    <input type="text" [(ngModel)]="physicalIllness.allergies" name="allergies">
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.skinSensitivity}}</p>
-                    <input type="text" [(ngModel)]="baseData.skin_sensitivity" name="skin_sensitivity">
+                    <input type="text" [(ngModel)]="physicalIllness.skin_sensitivity" name="skin_sensitivity">
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.pregnancy}}</p>
-                    <input type="text" [(ngModel)]="baseData.pregnancy" name="pregnancy">
+                    <input type="text" [(ngModel)]="physicalIllness.pregnancy" name="pregnancy">
                   </div>
                 </div>
               </div>
               <div class="form-group" style="text-align: center">
                 <button kendoButton [primary]="true" class="form-button" *ngIf="operationMode === 'add'" type="submit"
-                  [disabled]="baseData.internal_organs === undefined || baseData.operations === undefined || 
-                  baseData.previous_findings === undefined || baseData.medicament === undefined || baseData.allergies === undefined || baseData.skin_sensitivity === undefined || baseData.pregnancy === undefined">{{language.addData}}</button>
+                  [disabled]="physicalIllness.internal_organs === undefined || physicalIllness.operations === undefined || 
+                  physicalIllness.previous_findings === undefined || physicalIllness.medicament === undefined || physicalIllness.allergies === undefined || physicalIllness.skin_sensitivity === undefined || physicalIllness.pregnancy === undefined">{{language.addData}}</button>
                 <button kendoButton [primary]="true" class="form-button" *ngIf="operationMode === 'edit'"
                   type="submit">{{language.editData}}</button>
               </div>

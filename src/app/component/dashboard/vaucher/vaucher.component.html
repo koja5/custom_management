@@ -129,9 +129,9 @@
     </div>
     <div class="form-group" style="text-align: center;">
       <button *ngIf="operationMode === 'add'" kendoButton [primary]="true" class="form-button" type="submit"
-        [disabled]="dateConst === '' || data.amount === '' || dateredeemedConst === '' || customerUsers === null">{{language.addVaucher}}</button>
+        [disabled]="dateConst === '' || data.amount === '' || dateredeemedConst === '' || customerUser === null">{{language.addVaucher}}</button>
       <button *ngIf="operationMode === 'edit'" kendoButton [primary]="true" class="form-button" type="submit"
-        [disabled]="dateConst === '' || data.amount === '' || dateredeemedConst === '' || customerUsers === null">{{language.updateVaucher}}</button>
+        [disabled]="dateConst === '' || data.amount === '' || dateredeemedConst === '' || customerUser === null">{{language.updateVaucher}}</button>
     </div>
   </form>
 </kendo-window>

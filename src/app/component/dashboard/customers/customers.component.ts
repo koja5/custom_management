@@ -180,7 +180,7 @@ export class CustomersComponent implements OnInit {
 
   pageChange(event: PageChangeEvent): void {
     this.state.skip = event.skip;
-    this.loadProducts();
+    // this.loadProducts();
   }
 
   loadProducts(): void {

@@ -50,7 +50,9 @@ export class BaseDateComponent implements OnInit {
   public loading = true;
   public currentTab = 'profile';
   public recommendationList: any;
-  public baseData: any;
+  public baseDataOne: any;
+  public baseDataTwo: any;
+  public physicalIllness: any;
   public relationshipList: any;
   public socialList: any;
   public doctorList: any;
@@ -584,18 +586,20 @@ export class BaseDateComponent implements OnInit {
 
   changeTab(tab) {
     this.currentTab = tab;
-    this.baseData = null;
+    // this.baseData = null;
     if (tab === 'base_one') {
       this.initializeBaseOneData();
     } else if (tab === 'base_two') {
       this.service.getBaseDataTwo(this.data.id).subscribe(
         data => {
           if (data['length'] !== 0) {
-            this.baseData = data[0];
-            this.baseData.birthday = new Date(this.baseData.birthday);
+            this.baseDataTwo = data[0];
+            this.baseDataTwo.birthday = new Date(this.baseDataTwo.birthday);
             this.operationMode = 'edit';
           } else {
-            this.baseData = new BaseTwoModel();
+            if (this.isEmptyObject(this.baseDataTwo) || this.baseDataTwo === undefined) {
+              this.baseDataTwo = new BaseTwoModel();
+            }
             this.operationMode = 'add';
           }
         }
@@ -604,10 +608,12 @@ export class BaseDateComponent implements OnInit {
       this.service.getPhysicallIllness(this.data.id).subscribe(
         data => {
           if (data['length'] !== 0) {
-            this.baseData = data[0];
+            this.physicalIllness = data[0];
             this.operationMode = 'edit';
           } else {
-            this.baseData = new PhysicalModel();
+            if (this.isEmptyObject(this.physicalIllness) || this.physicalIllness === undefined) {
+              this.physicalIllness = new PhysicalModel();
+            }
             this.operationMode = 'add';
           }
         });
@@ -667,25 +673,31 @@ export class BaseDateComponent implements OnInit {
         this.doctorsList = data;
       }
     );
-    console.log(this.data);
+
     this.service.getBaseDataOne(this.data.id).subscribe(
       data => {
         console.log(data);
         if (data['length'] !== 0) {
-          this.baseData = data[0];
-          if (this.baseData.recommendation.split(';') !== undefined) {
-            this.selectedRecommendation = this.baseData.recommendation.split(';').map(Number);
+          this.baseDataOne = data[0];
+          if (this.baseDataOne.recommendation.split(';') !== undefined) {
+            this.selectedRecommendation = this.baseDataOne.recommendation.split(';').map(Number);
           } else {
-            this.selectedRecommendation = Number(this.baseData.recommendation);
+            this.selectedRecommendation = Number(this.baseDataOne.recommendation);
           }
-          this.baseData.first_date = new Date(this.baseData.first_date);
+          this.baseDataOne.first_date = new Date(this.baseDataOne.first_date);
           this.operationMode = 'edit';
         } else {
-          this.baseData = new BaseOneModel();
+          if (this.isEmptyObject(this.baseDataOne) || this.baseDataOne === undefined) {
+            this.baseDataOne = new BaseOneModel();
+          }
           this.operationMode = 'add';
         }
       }
     );
+  }
+
+  isEmptyObject(obj) {
+    return (obj && (Object.keys(obj).length === 0));
   }
 
   addBaseDataOne(base) {
@@ -695,9 +707,9 @@ export class BaseDateComponent implements OnInit {
       recommendation += this.selectedRecommendation[i] + ';';
     }
     recommendation = recommendation.substring(0, recommendation.length - 1);
-    this.baseData.customer_id = this.data.id;
-    this.baseData.recommendation = recommendation;
-    this.service.addBaseDataOne(this.baseData).subscribe(
+    this.baseDataOne.customer_id = this.data.id;
+    this.baseDataOne.recommendation = recommendation;
+    this.service.addBaseDataOne(this.baseDataOne).subscribe(
       data => {
         if (data) {
           Swal.fire({
@@ -710,20 +722,20 @@ export class BaseDateComponent implements OnInit {
         }
       }
     );
-    console.log(this.baseData);
+    console.log(this.baseDataOne);
   }
 
   updateBaseDataOne(base) {
-    console.log(this.baseData);
+    console.log(this.baseDataOne);
     let recommendation = '';
     // tslint:disable-next-line: prefer-for-of
     for (let i = 0; i < this.selectedRecommendation.length; i++) {
       recommendation += this.selectedRecommendation[i] + ';';
     }
     recommendation = recommendation.substring(0, recommendation.length - 1);
-    this.baseData.customer_id = this.data.id;
-    this.baseData.recommendation = recommendation;
-    this.service.updateBaseDataOne(this.baseData).subscribe(
+    this.baseDataOne.customer_id = this.data.id;
+    this.baseDataOne.recommendation = recommendation;
+    this.service.updateBaseDataOne(this.baseDataOne).subscribe(
       data => {
         if (data) {
           Swal.fire({
@@ -739,11 +751,11 @@ export class BaseDateComponent implements OnInit {
   }
 
   addBaseDataTwo(base) {
-    console.log(this.baseData);
-    this.baseData.customer_id = this.data.id;
-    this.service.addBaseDataTwo(this.baseData).subscribe(
+    console.log(this.baseDataTwo);
+    this.baseDataTwo.customer_id = this.data.id;
+    this.service.addBaseDataTwo(this.baseDataTwo).subscribe(
       data => {
-        if(data) {
+        if (data) {
           Swal.fire({
             title: this.language.successAddDataTitle,
             text: this.language.successAddDataText,
@@ -757,9 +769,9 @@ export class BaseDateComponent implements OnInit {
   }
 
   updateBaseDataTwo(base) {
-    console.log(this.baseData);
-    this.baseData.customer_id = this.data.id;
-    this.service.updateBaseDataTwo(this.baseData).subscribe(
+    console.log(this.baseDataTwo);
+    this.baseDataTwo.customer_id = this.data.id;
+    this.service.updateBaseDataTwo(this.baseDataTwo).subscribe(
       data => {
         console.log(data);
         if (data) {
@@ -776,10 +788,10 @@ export class BaseDateComponent implements OnInit {
   }
 
   addPhysicalIllness(physical) {
-    this.baseData.customer_id = this.data.id;
-    this.service.addPhysicalIllness(this.baseData).subscribe(
+    this.physicalIllness.customer_id = this.data.id;
+    this.service.addPhysicalIllness(this.physicalIllness).subscribe(
       data => {
-        if(data) {
+        if (data) {
           Swal.fire({
             title: this.language.successAddDataTitle,
             text: this.language.successAddDataText,
@@ -793,8 +805,8 @@ export class BaseDateComponent implements OnInit {
   }
 
   updatePhysicalIllness(physical) {
-    this.baseData.customer_id = this.data.id;
-    this.service.updatePhysicalIllness(this.baseData).subscribe(
+    this.physicalIllness.customer_id = this.data.id;
+    this.service.updatePhysicalIllness(this.physicalIllness).subscribe(
       data => {
         if (data) {
           Swal.fire({
@@ -819,9 +831,9 @@ export class BaseDateComponent implements OnInit {
   }
 
   onPanelChange(event) {
-    if (this.baseData === undefined) {
+    /*if (this.baseData === undefined) {
       this.initializeBaseOneData();
-    }
+    }*/
   }
 
   editComplaint(event) {

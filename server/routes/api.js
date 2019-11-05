@@ -461,8 +461,6 @@ router.post('/login', (req, res, next) => {
   }
 });
 
-
-
 router.post('/createUser', function (req, res, next) {
   connection.getConnection(function (err, conn) {
     console.log(conn);
