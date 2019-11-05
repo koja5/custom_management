@@ -110,6 +110,7 @@ export class ParameterItemComponent implements OnInit {
     }
 
     sender.addRow(this.formGroup);
+    this.refreshData();
   }
 
   public editHandler({ sender, rowIndex, dataItem }) {
@@ -147,6 +148,7 @@ export class ParameterItemComponent implements OnInit {
     this.editedRowIndex = rowIndex;
 
     sender.editRow(rowIndex, this.formGroup);
+    this.refreshData();
   }
 
   public cancelHandler({ sender, rowIndex }) {
@@ -163,11 +165,22 @@ export class ParameterItemComponent implements OnInit {
     this.service.addData(product, isNew, this.type);
 
     sender.closeRow(rowIndex);
+    this.refreshData();
   }
 
   public removeHandler({ dataItem }) {
     console.log(dataItem);
     this.service.deleteData(dataItem.id, this.type);
+    this.refreshData();
+  }
+
+  refreshData() {
+    this.view = this.service.pipe(map(data => {
+      this.currentLoadData = data;
+      return process(data, this.gridState);
+    }));
+
+    this.service.getData(this.type);
   }
 
   private closeEditor(grid, rowIndex = this.editedRowIndex) {

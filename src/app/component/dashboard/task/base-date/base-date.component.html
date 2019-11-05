@@ -148,7 +148,7 @@
             <kendo-panelbar (stateChange)="onPanelChange($event)">
               <kendo-panelbar-item [title]="language.additionalField">
                 <ng-template kendoPanelBarContent>
-                  <div class="form-group" *ngIf="baseData !== undefined">
+                  <div class="form-group" *ngIf="baseDataOne !== undefined && baseDataOne !== null">
                     <div class="col-md-4 col-xs-12" *ngIf="recommendationList !== undefined">
                       <p>{{language.recommendation}}</p>
                       <kendo-multiselect [data]="recommendationList" [textField]="'title'" [valueField]="'id'"
@@ -159,27 +159,26 @@
                     <div class="col-md-4 col-xs-12" *ngIf="relationshipList !== undefined">
                       <p>{{language.relationship}}</p>
                       <kendo-combobox class="col-md-12 col-xs-12" [data]="relationshipList" [textField]="'title'"
-                        [valueField]="'id'" [(ngModel)]="baseData.relationship" [valuePrimitive]="true"
+                        [valueField]="'id'" [(ngModel)]="baseDataOne.relationship" [valuePrimitive]="true"
                         name="relationship" disabled="true">
                       </kendo-combobox>
                     </div>
                     <div class="col-md-4 col-xs-12" *ngIf="socialList !== undefiend">
                       <p>{{language.social}}</p>
                       <kendo-combobox class="col-md-12 col-xs-12" [data]="socialList" [textField]="'title'"
-                        [valueField]="'id'" [(ngModel)]="baseData.social" [valuePrimitive]="true" name="title"
+                        [valueField]="'id'" [(ngModel)]="baseDataOne.social" [valuePrimitive]="true" name="title"
                         disabled="true">
                       </kendo-combobox>
                     </div>
                     <div class="col-md-4 col-xs-12" *ngIf="doctorList !== undefined">
                       <p>{{language.doctor}}</p>
                       <kendo-combobox class="col-md-12 col-xs-12" [data]="doctorsList" [textField]="'firstname'"
-                        [valueField]="'id'" [(ngModel)]="baseData.doctors" [valuePrimitive]="true" name="doctors"
-                        disabled="true">
+                        [valueField]="'id'" [(ngModel)]="baseDataOne.doctor" [valuePrimitive]="true" name="doctors" disabled="true">
                       </kendo-combobox>
                     </div>
                     <div class="col-md-4 col-xs-12">
                       <p>{{language.firstDate}}</p>
-                      <kendo-datepicker [(ngModel)]="baseData.first_date" name="first_date" disabled="true">
+                      <kendo-datepicker [(ngModel)]="baseDataOne.first_date" name="first_date" disabled="true">
                       </kendo-datepicker>
                     </div>
                   </div>
@@ -431,7 +430,8 @@
                 <div class="col-md-4 col-xs-12" *ngIf="relationshipList !== undefined">
                   <p>{{language.relationship}}</p>
                   <kendo-combobox class="col-md-12 col-xs-12" [data]="relationshipList" [textField]="'title'"
-                    [valueField]="'id'" [(ngModel)]="baseDataOne.relationship" [valuePrimitive]="true" name="relationship">
+                    [valueField]="'id'" [(ngModel)]="baseDataOne.relationship" [valuePrimitive]="true"
+                    name="relationship">
                   </kendo-combobox>
                 </div>
                 <div class="col-md-4 col-xs-12" *ngIf="socialList !== undefiend">
@@ -528,7 +528,8 @@
           <div *ngIf="physicalIllness === null" style="height: 90vh; overflow: hidden;">
             <div class="spinner loading"></div>
           </div>
-          <div id="profile-tab" class="tab-pane active" *ngIf="physicalIllness !== undefined && physicalIllness !== null">
+          <div id="profile-tab" class="tab-pane active"
+            *ngIf="physicalIllness !== undefined && physicalIllness !== null">
             <form name="loginForm" class="loginForm"
               (ngSubmit)="operationMode === 'add' ? addPhysicalIllness(data) : updatePhysicalIllness(data)">
               <div class="form-group">

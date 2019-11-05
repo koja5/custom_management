@@ -831,9 +831,9 @@ export class BaseDateComponent implements OnInit {
   }
 
   onPanelChange(event) {
-    /*if (this.baseData === undefined) {
+    if (this.baseDataOne === undefined) {
       this.initializeBaseOneData();
-    }*/
+    }
   }
 
   editComplaint(event) {

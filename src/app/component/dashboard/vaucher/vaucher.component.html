@@ -5,7 +5,8 @@
 <div *ngIf="!loading">
   <div *ngIf="selectedUser === undefined">
     <div class="vaucher-options">
-      <button kendoButton [icon]="'greyscale'" (click)="newVaucher()" [primary]="true">{{language.newVaucher}}</button>
+      <button kendoButton [icon]="'greyscale'" (click)="newVaucher()" [primary]="true"
+        style="border: none;">{{language.newVaucher}}</button>
       <label class="uploadFromExcel"><span class='k-icon k-i-file-excel'></span> {{ language.uploadFromExcel }}<input
           type="file" name="files[]" multiple id="jsonFile" accept=".xlsx" (change)="onFileChange($event)"
           [(ngModel)]="fileValue" /></label>
@@ -27,10 +28,16 @@
       <kendo-grid-column field="id" title="{{language.id}}" width="50">
       </kendo-grid-column>
       <kendo-grid-column field="date" title="{{language.date}}" width="150">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          {{dataItem.date | date: 'dd.MM.yyyy'}}
+        </ng-template>
       </kendo-grid-column>
       <kendo-grid-column field="amount" title="{{language.amount}}" width="50">
       </kendo-grid-column>
       <kendo-grid-column field="date_redeemed" title="{{language.date_redeemed}}" width="100">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          {{dataItem.date_redeemed | date: 'dd.MM.yyyy'}}
+        </ng-template>
       </kendo-grid-column>
       <kendo-grid-column field="customer_name" title="{{language.customer}}" width="120">
       </kendo-grid-column>
