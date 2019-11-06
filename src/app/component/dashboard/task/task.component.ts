@@ -99,12 +99,13 @@ export class TaskComponent implements OnInit {
   public selectedButtonIndexStyle = ["", "", "", "", "", ""];
   public imagePath = "defaultUser";
   public therapyValue: any;
+  public treatmentValue: any;
   public complaintValue: any;
   public complaintData = new ComplaintTherapyModel();
   public stateValue: any;
   public selectedComplaint: any;
   public selectedTherapies: any;
-  public selectedTherapiesPrevious: any;
+  public selectedTreatments: any;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -326,7 +327,7 @@ export class TaskComponent implements OnInit {
     this.customerUser = null;
     this.selectedComplaint = null;
     this.selectedTherapies = null;
-    this.selectedTherapiesPrevious = null;
+    this.selectedTreatments = null;
     this.telephoneValue = "";
     this.complaintData = new ComplaintTherapyModel();
   }
@@ -467,7 +468,7 @@ export class TaskComponent implements OnInit {
           this.customerUser.firstname +
           " " +
           this.customerUser.lastname +
-          "+" +
+          " " +
           this.complaintData.complaint_title;
       }
       console.log(formValue);
@@ -478,7 +479,7 @@ export class TaskComponent implements OnInit {
           this.customerUser.firstname +
           " " +
           this.customerUser.lastname +
-          "+" +
+          " " +
           this.complaintData.complaint_title;
         this.customer.addTherapy(this.complaintData).subscribe(data => {
           if (data["success"]) {
@@ -512,7 +513,7 @@ export class TaskComponent implements OnInit {
           }
           /*this.selectedComplaint = [];
           this.selectedTherapies = [];
-          this.selectedTherapiesPrevious = [];*/
+          this.selectedTreatments = [];*/
         });
       } else {
         formValue = this.colorMapToId(formValue);
@@ -521,7 +522,7 @@ export class TaskComponent implements OnInit {
           this.customerUser.firstname +
           " " +
           this.customerUser.lastname +
-          "+" +
+          " " +
           this.complaintData.complaint_title;
         this.customer.updateTherapy(this.complaintData).subscribe(data => {
           if (data) {
@@ -555,7 +556,7 @@ export class TaskComponent implements OnInit {
           }
           /*this.selectedComplaint = [];
           this.selectedTherapies = [];
-          this.selectedTherapiesPrevious = [];*/
+          this.selectedTreatments = [];*/
         });
       }
 
@@ -600,11 +601,11 @@ export class TaskComponent implements OnInit {
     ).title;
 
     this.complaintData.therapies_previous = this.pickToModel(
-      this.selectedTherapiesPrevious,
+      this.selectedTreatments,
       this.therapyValue
     ).value;
     this.complaintData.therapies_previous_title = this.pickToModel(
-      this.selectedTherapiesPrevious,
+      this.selectedTreatments,
       this.therapyValue
     ).title;
   }
@@ -1153,6 +1154,11 @@ export class TaskComponent implements OnInit {
       console.log(data);
       this.therapyValue = data;
     });
+
+    this.customer.getParameters("Treatment").subscribe(data => {
+      console.log(data);
+      this.treatmentValue = data;
+    });
   }
 
   pickToModel(data: any, titleValue) {
@@ -1198,11 +1204,11 @@ export class TaskComponent implements OnInit {
     }
 
     if (therapies_previous.split(";") !== undefined) {
-      this.selectedTherapiesPrevious = therapies_previous
+      this.selectedTreatments = therapies_previous
         .split(";")
         .map(Number);
     } else {
-      this.selectedTherapiesPrevious = Number(therapies_previous);
+      this.selectedTreatments = Number(therapies_previous);
     }
   }
 }

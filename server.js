@@ -99,7 +99,7 @@ app.post('/upload', function (req, res) {
 
 
 // Parsers for POST data
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb', extended: true}));
 app.use(bodyParser.urlencoded({
   extended: false
 }));

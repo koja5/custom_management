@@ -4,6 +4,7 @@ import { Modal } from 'ngx-modal';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MessageService } from '../../../service/message.service';
 import { UploadEvent, RemoveEvent } from '@progress/kendo-angular-upload';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-profile',
@@ -68,6 +69,22 @@ export class ProfileComponent implements OnInit {
       this.imagePath = path;
       this.message.sendImageProfile();
     });
+  }
+
+  updateUser(event) {
+    this.service.updateUser(this.data).subscribe(
+      data => {
+        if(data) {
+          Swal.fire({
+            title: this.language.successUpdateTitle,
+            text: this.language.successUpdateTextProfile,
+            timer: 3000,
+            type: 'success'
+          });
+          this.user = false;
+        }
+      }
+    )  
   }
 
   removeEventHandler(event) {

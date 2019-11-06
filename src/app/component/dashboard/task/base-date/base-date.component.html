@@ -414,7 +414,7 @@
 
         <!--BASE ONE-->
         <div class="tab-content" *ngIf="currentTab === 'base_one'">
-          <div *ngIf="baseDataOne === null" style="height: 90vh; overflow: hidden;">
+          <div *ngIf="baseDataOne === null || baseDataOne === undefined" style="height: 90vh; overflow: hidden;">
             <div class="spinner loading"></div>
           </div>
           <div id="profile-tab" class="tab-pane active" *ngIf="baseDataOne !== undefined && baseDataOne !== null">
@@ -464,7 +464,7 @@
 
         <!--BASE TWO-->
         <div class="tab-content" *ngIf="currentTab === 'base_two'">
-          <div *ngIf="baseDataTwo === null" style="height: 90vh; overflow: hidden;">
+          <div *ngIf="baseDataTwo === null || baseDataTwo === undefined" style="height: 90vh; overflow: hidden;">
             <div class="spinner loading"></div>
           </div>
           <div id="profile-tab" class="tab-pane active" *ngIf="baseDataTwo !== undefined && baseDataTwo !== null">
@@ -525,7 +525,7 @@
 
         <!--PHYSICAL ILLNESS-->
         <div class="tab-content" *ngIf="currentTab === 'physical_illness'">
-          <div *ngIf="physicalIllness === null" style="height: 90vh; overflow: hidden;">
+          <div *ngIf="physicalIllness === null || physicalIllness === undefined" style="height: 90vh; overflow: hidden;">
             <div class="spinner loading"></div>
           </div>
           <div id="profile-tab" class="tab-pane active"

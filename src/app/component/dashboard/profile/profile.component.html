@@ -222,7 +222,7 @@
 
   <kendo-window title="{{language.createNewCustomer}}" *ngIf="user" [minWidth]="700" [width]="850" [height]="700"
     (close)="user = false">
-    <form name="loginForm" class="loginForm" (ngSubmit)="createUser(user)">
+    <form name="loginForm" class="loginForm" (ngSubmit)="updateUser(user)">
       <div class="form-group">
         <div class="email col-md-6 col-xs-12">
           <p>{{language.username}}</p>
@@ -231,9 +231,9 @@
         </div>
         <div class="col-md-6 col-xs-12 password">
           <p>{{language.password}}</p>
-          <input class="email col-md-12 col-xs-12" type="{{hideShow}}" name="password" placeholder="Password"
-            [(ngModel)]="data.password" password.value=''>
-          <span class="fa {{hideShowEye}} pwd-toggle" (click)="hideShowPassword()"></span>
+          <input class="email col-md-12 col-xs-12" type="password" name="password" placeholder="Password"
+            [(ngModel)]="data.password" password.value='' disabled>
+          <span class="fa {{hideShowEye}} pwd-toggle" (click)="hideShowPassword()" disabled></span>
         </div>
       </div>
       <div class="form-group">

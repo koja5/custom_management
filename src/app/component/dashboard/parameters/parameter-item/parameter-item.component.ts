@@ -72,8 +72,9 @@ export class ParameterItemComponent implements OnInit {
 
     if (localStorage.getItem("theme") !== null) {
       this.theme = localStorage.getItem("theme");
-      this.changeTheme(this.theme);
-    }
+    } 
+    
+    this.changeTheme(this.theme);
 
     // this.view = this.service.getData(this.type);
   }
@@ -302,7 +303,7 @@ export class ParameterItemComponent implements OnInit {
           }
         }
 
-        items = document.querySelectorAll(".k-button");
+        /*items = document.querySelectorAll(".k-button");
         for (let i = 0; i < items.length; i++) {
           const clas = items[i].classList;
           for (let j = 0; j < allThemes.length; j++) {
@@ -310,8 +311,8 @@ export class ParameterItemComponent implements OnInit {
             clas.remove("inputTheme-" + element);
             clas.add("inputTheme-" + this.theme);
           }
-        }
+        }*/
       }
-    }, 50);
+    }, 150);
   }
 }

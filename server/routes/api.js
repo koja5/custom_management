@@ -1313,15 +1313,23 @@ router.post('/updateUser', function (req, res, next) {
       return;
     }
 
+    var bodyPassword = null;
+    if(req.body.password.length >= 40) {
+      bodyPassword = req.body.password;
+    } else {
+      bodyPassword = sha1(req.body.password);
+    }
+
     var id = req.body.id;
     var response = null;
     var data = {
       'shortname': req.body.shortname,
-      "password": sha1(req.body.password),
+      "password": bodyPassword,
       "firstname": req.body.firstname,
       "lastname": req.body.lastname,
       "street": req.body.street,
       "zipcode": req.body.zipcode,
+      "place": req.body.place,
       "email": req.body.email,
       "telephone": req.body.telephone,
       "mobile": req.body.mobile,
