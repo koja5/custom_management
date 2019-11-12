@@ -421,7 +421,9 @@ export class BaseDateComponent implements OnInit {
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
-    return dd + '.' + mm + '.' + yyyy + '.';
+    var hh = today.getHours();
+    var min = today.getMinutes();
+    return dd + '.' + mm + '.' + yyyy + ' / ' + (hh === 0 ? '00' : min) + ':' + (min < 10 ? ('0' + min) : min);
   }
 
   pickToModel(data: any, titleValue) {

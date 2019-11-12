@@ -119,6 +119,7 @@ export class VaucherComponent implements OnInit {
       amount: null,
       date_redeemed: '',
       customer: null,
+      customer_name: '',
       comment: ''
     };
     this.dateConst = '';
@@ -129,9 +130,11 @@ export class VaucherComponent implements OnInit {
   createVaucher(form) {
     console.log(this.data);
     this.data.superadmin = localStorage.getItem('idUser');
+    if(this.customerUser !== null) {
     this.data.customer = this.customerUser.id;
     this.data.customer_name =
       this.customerUser.firstname + ' ' + this.customerUser.lastname;
+    }
     this.data.date = this.dateConst.toString();
     this.data.date_redeemed = this.dateredeemedConst.toString();
     this.service.createVaucher(this.data).subscribe(data => {

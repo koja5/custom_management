@@ -20,7 +20,7 @@ export class ParameterItemComponent implements OnInit {
   public view: Observable<GridDataResult>;
   public gridState: State = {
     sort: [{
-      field: 'id',
+      field: 'sequence',
       dir: 'asc'
     }],
     skip: 0,
@@ -40,6 +40,10 @@ export class ParameterItemComponent implements OnInit {
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
   }
+  /*public sort: SortDescriptor[] = [{
+    field: 'sequence',
+    dir: 'asc'
+  }];*/
 
   constructor(private service: ParameterItemService) {
   }
