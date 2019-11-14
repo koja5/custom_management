@@ -191,7 +191,12 @@
     "newUser": "New user",
     "exportToExcel": "Export to Excel",
     "exportToPDF": "Export to PDF",
-    "uploadFromExcel": "Upload from Excel"
+    "uploadFromExcel": "Upload from Excel",
+    "patient": "Patient",
+    "newCustomer": "New customer",
+    "baseDate": "Base date",
+    "attention": "Attention",
+    "physicalComplaint": "Physical complaint"
 
   },
   "store": {

@@ -109,6 +109,11 @@ export class CustomersService {
       .map(res => res);
   }
 
+  updateAttentionAndPhysical(data) {
+    return this.http.post('/api/updateAttentionAndPhysical', data)
+      .map(res => res);
+  }
+
   getTherapy(id) {
     return this.http.get('/api/getTherapy/' + id)
       .map(res => res);

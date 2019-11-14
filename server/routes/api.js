@@ -911,6 +911,8 @@ router.post('/createCustomer', function (req, res, next) {
       'mobile': req.body.mobile,
       'email': req.body.email,
       'birthday': req.body.birthday,
+      'attention': req.body.attention,
+      'physicalComplaint': req.body.physicalComplaint,
       'storeId': req.body.storeId
     };
     console.log(podaci);
@@ -1459,6 +1461,45 @@ router.post('/updateCustomer', function (req, res, next) {
     var id = req.body.id;
 
     conn.query("UPDATE customers SET ? where id = '" + id + "'", [req.body], function (err, rows) {
+      conn.release();
+      if (!err) {
+        if (!err) {
+          test.success = true;
+        } else {
+          test.success = false;
+        }
+        res.json(test);
+      } else {
+        res.json({
+          "code": 100,
+          "status": "Error in connection database"
+        });
+        console.log(err);
+      }
+    });
+    conn.on('error', function (err) {
+      res.json({
+        "code": 100,
+        "status": "Error in connection database"
+      });
+      return;
+    });
+  });
+});
+
+router.post('/updateAttentionAndPhysical', function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        "code": 100,
+        "status": "Error in connection database"
+      });
+      return;
+    }
+    test = {};
+    var id = req.body.id;
+    console.log(req.body);
+    conn.query("UPDATE customers SET attention = '" + req.body.attention + "', physicalComplaint = '" + req.body.physicalComplaint + "' where id = '" + id + "'", [req.body], function (err, rows) {
       conn.release();
       if (!err) {
         if (!err) {

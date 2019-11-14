@@ -11,5 +11,7 @@ export class CustomerModel {
     mobile?: string;
     email?: string;
     birthday?: string;
+    attention?: string;
+    physicalComplaint?: string;
     storeId?: string;
 }

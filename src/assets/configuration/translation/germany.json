@@ -185,7 +185,12 @@
     "newUser": "Neuer Benutzer",
     "uploadFromExcel": "Aus Excel hochladen",
     "exportToExcel": "Nach Excel exportieren",
-    "exportToPDF": "Als PDF exportieren"
+    "exportToPDF": "Als PDF exportieren",
+    "patient": "Geduldig",
+    "newCustomer": "Neukunde",
+    "baseDate": "Basisdatum",
+    "attention": "Beachtung",
+    "physicalComplaint": "Körperliche Beschwerde"
   },
   "store": {
     "exist": "E-Mail ist vorhanden!",

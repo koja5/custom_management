@@ -1,3 +1,4 @@
+import { CustomerModel } from './../../../models/customer-model';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from "@angular/core";
 import {
   FormBuilder,
@@ -56,7 +57,7 @@ export class TaskComponent implements OnInit {
   public language: any;
   public languageUser: any;
   public resources: any[] = [];
-  public customerUser: any;
+  public customerUser = new CustomerModel();
   public data = {
     id: "",
     shortname: "",
@@ -70,6 +71,8 @@ export class TaskComponent implements OnInit {
     mobile: "",
     email: "",
     birthday: "",
+    attention: "",
+    physicalComplaint: "",
     storeId: ""
   };
   public value: any = [];
@@ -324,7 +327,7 @@ export class TaskComponent implements OnInit {
   }
 
   clearAllSelectedData() {
-    this.customerUser = null;
+    this.customerUser = new CustomerModel();
     this.selectedComplaint = null;
     this.selectedTherapies = null;
     this.selectedTreatments = null;
@@ -347,8 +350,11 @@ export class TaskComponent implements OnInit {
       this.createFormLoading = false;
       const dataItem = args.dataItem;
       // this.clearAllSelectedData();
-      console.log(dataItem);
-
+      /*this.customerUser = new CustomerModel();
+      this.customerUser.attention = '';
+      this.customerUser.physicalComplaint = '';*/
+      /*this.customerUser.attention = '';
+      this.customerUser.physicalComplaint = '';*/
       if (
         typeof dataItem.customer_id === "number" &&
         dataItem.customer_id !== null
@@ -465,20 +471,20 @@ export class TaskComponent implements OnInit {
       if (this.type !== 3 && customerId !== undefined) {
         formValue.creator_id = customerId;
         formValue.title =
-          this.customerUser.firstname +
+          this.customerUser['firstname'] +
           " " +
-          this.customerUser.lastname +
+          this.customerUser['lastname'] +
           " " +
           this.complaintData.complaint_title;
       }
       console.log(formValue);
       if (isNew) {
         formValue = this.colorMapToId(formValue);
-        this.addTherapy(this.customerUser.id);
+        this.addTherapy(this.customerUser['id']);
         formValue.title =
-          this.customerUser.firstname +
+          this.customerUser['firstname'] +
           " " +
-          this.customerUser.lastname +
+          this.customerUser['lastname'] +
           " " +
           this.complaintData.complaint_title;
         this.customer.addTherapy(this.complaintData).subscribe(data => {
@@ -503,6 +509,18 @@ export class TaskComponent implements OnInit {
                 });
               }
             });
+
+            console.log(this.data);
+            const customerAttentionAndPhysical = {
+              id: this.customerUser['id'],
+              attention: this.customerUser['attention'],
+              physicalComplaint: this.customerUser['physicalComplaint']
+            };
+            console.log(customerAttentionAndPhysical);
+            this.customer.updateAttentionAndPhysical(customerAttentionAndPhysical).subscribe(
+              data => {
+                console.log(data);
+              });
           } else {
             Swal.fire({
               title: this.language.unsuccessUpdateTitle,
@@ -517,11 +535,11 @@ export class TaskComponent implements OnInit {
         });
       } else {
         formValue = this.colorMapToId(formValue);
-        this.addTherapy(this.customerUser.id);
+        this.addTherapy(this.customerUser['id']);
         formValue.title =
-          this.customerUser.firstname +
+          this.customerUser['firstname'] +
           " " +
-          this.customerUser.lastname +
+          this.customerUser['lastname'] +
           " " +
           this.complaintData.complaint_title;
         this.customer.updateTherapy(this.complaintData).subscribe(data => {
@@ -546,6 +564,16 @@ export class TaskComponent implements OnInit {
                 });
               }
             });
+            const customerAttentionAndPhysical = {
+              id: this.customerUser['id'],
+              attention: this.customerUser['attention'],
+              physicalComplaint: this.customerUser['physicalComplaint']
+            };
+            console.log(customerAttentionAndPhysical);
+            this.customer.updateAttentionAndPhysical(customerAttentionAndPhysical).subscribe(
+              data => {
+                console.log(data);
+              });
           } else {
             Swal.fire({
               title: this.language.unsuccessUpdateTitle,
@@ -638,7 +666,10 @@ export class TaskComponent implements OnInit {
       this.customerUser = event;
       this.telephoneValue = event.telephone;
     } else {
-      this.customerUser = undefined;
+      this.customerUser = {
+        attention: '',
+        physicalComplaint: ''
+      };
       this.telephoneValue = null;
     }
   }

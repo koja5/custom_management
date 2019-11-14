@@ -125,7 +125,7 @@
                 <my-navigation [selectedDate]="selectedDate" style="float: left;">
                 </my-navigation>
                 <span *ngIf="item.name !== null && item.name !== ''" style="text-align: center; font-size: 2vh;">
-                 <b>{{ item.name }}</b>
+                  <b>{{ item.name }}</b>
                 </span>
               </ng-template>
 
@@ -143,14 +143,16 @@
                 <div *ngFor="let it of item.workTime; let j = index" class="{{dateFormat(date, i, j)}}"
                   [style.background]="calendars[i].workTime[j].color"></div>
               </ng-template>
-              <ng-template kendoSchedulerEventTemplate let-event="event" let-resources="resources" *ngIf="event !== undefined">
+              <ng-template kendoSchedulerEventTemplate let-event="event" let-resources="resources"
+                *ngIf="event !== undefined">
                 <div>
                   <p style="font-weight: bold; padding: 0px;">{{ event.title.split('+')[0] }}</p>
                   <p style="margin-top: -17px; margin-left: 7px;">{{event.title.split('+')[1]}}</p>
                 </div>
               </ng-template>
 
-              <ng-template kendoSchedulerAllDayEventTemplate let-event="event" let-resources="resources" *ngIf="event !== undefined">
+              <ng-template kendoSchedulerAllDayEventTemplate let-event="event" let-resources="resources"
+                *ngIf="event !== undefined">
                 <div style="width: 100vh !important;">
                   <p style="font-weight: bold; padding: 0px;">{{ event.title.split('+')[0] }}</p>
                   <p style="margin-top: -17px; margin-left: 7px;">{{event.title.split('+')[1]}}</p>
@@ -161,8 +163,7 @@
               <kendo-scheduler-work-week-view [slotDuration]="timeDuration" [slotDivisions]="1">
               </kendo-scheduler-work-week-view>
 
-              <kendo-scheduler-multi-day-view [numberOfDays]="3" [slotDuration]="timeDuration"
-                [slotDivisions]="1">
+              <kendo-scheduler-multi-day-view [numberOfDays]="3" [slotDuration]="timeDuration" [slotDivisions]="1">
               </kendo-scheduler-multi-day-view>
 
               <kendo-scheduler-month-view></kendo-scheduler-month-view>
@@ -184,18 +185,34 @@
                 </div>
 
                 <div class="k-form-inline" *ngIf="createFormLoading">
+                  <div class="k-form-field" style="text-align: center; margin: 0px !important;">
+                    <div class="col-sm-6" style="margin-bottom: 2vh;">
+                      <div class="row mgbt-xs-0">
+                        <label class="col-xs-12 control-label" style="color: red;">{{languageUser.attention}}:</label>
+                        <textarea kendoTextArea [autoSize]="true" [(ngModel)]="customerUser.attention" style="width: 70% !important;">{{customerUser.attention}}</textarea>
+                        <!-- col-sm-10 -->
+                      </div>
+                    </div>
+                    <div class="col-sm-6" style="margin-bottom: 2vh;">
+                      <div class="row mgbt-xs-0">
+                        <label class="col-xs-12 control-label">{{languageUser.physicalComplaint}}:</label>
+                        <textarea kendoTextArea [autoSize]="true" [(ngModel)]="customerUser.physicalComplaint" style="width: 70% !important;">{{customerUser.physicalComplaint}}</textarea>
+                        <!-- col-sm-10 -->
+                      </div>
+                    </div>
+                  </div>
                   <div class="k-form-field">
-                    <span>Patient</span>
+                    <span>{{languageUser.patient}}</span>
                     <kendo-combobox [data]="customerUsers" [textField]="'shortname'" [valueField]="'id'"
                       (valueChange)="onValueChange($event)" [(ngModel)]="customerUser">
                     </kendo-combobox>
                     <button kendoButton [icon]="'user'" [primary]="true" (click)="newCustomer()">
-                      New customer
+                      {{languageUser.newCustomer}}
                     </button>
 
                     <button kendoButton [icon]="'k-icon k-i-information'" [primary]="true" (click)="baseDataForUser()"
                       *ngIf="customerUser !== undefined && customerUser !== null">
-                      Base data
+                      {{languageUser.baseDate}}
                     </button>
                   </div>
                   <!--<div class="k-form-field">
@@ -219,8 +236,8 @@
                   <div class="k-form-field">
                     <span>{{languageUser.treatmentValue}}</span>
                     <kendo-multiselect [data]="treatmentValue" [textField]="'title'" [valueField]="'id'"
-                      [(ngModel)]="selectedTreatments" name="therapies_previous"
-                      [placeholder]="language.treatmentValue" [valuePrimitive]="true">
+                      [(ngModel)]="selectedTreatments" name="therapies_previous" [placeholder]="language.treatmentValue"
+                      [valuePrimitive]="true">
                     </kendo-multiselect>
                   </div>
                   <div class="k-form-field">
@@ -269,7 +286,7 @@
                   <div class="k-form-field">
                     <span>Telephone</span>
                     <input class="k-textbox" placeholder="Telephone" [formControl]="formGroup.get('telephone')"
-                      [value]="telephoneValue" readonly/>
+                      [value]="telephoneValue" readonly />
                   </div>
                 </div>
               </ng-template>
@@ -296,14 +313,16 @@
               </my-navigation>
 
             </ng-template>
-            <ng-template kendoSchedulerEventTemplate let-event="event" let-resources="resources" *ngIf="event !== undefined">
+            <ng-template kendoSchedulerEventTemplate let-event="event" let-resources="resources"
+              *ngIf="event !== undefined">
               <div style="width: 100vh !important;">
                 <p style="font-weight: bold; padding: 0px;">{{ event.title.split('+')[0] }}</p>
                 <p style="margin-top: -17px; margin-left: 7px;">{{event.title.split('+')[1]}}</p>
               </div>
             </ng-template>
 
-            <ng-template kendoSchedulerAllDayEventTemplate let-event="event" let-resources="resources" *ngIf="event !== undefined">
+            <ng-template kendoSchedulerAllDayEventTemplate let-event="event" let-resources="resources"
+              *ngIf="event !== undefined">
               <div style="width: 100vh !important;">
                 <p style="font-weight: bold; padding: 0px;">{{ event.title.split('+')[0] }}</p>
                 <p style="margin-top: -17px; margin-left: 7px;">{{event.title.split('+')[1]}}</p>
@@ -313,8 +332,7 @@
             <kendo-scheduler-work-week-view [slotDuration]="timeDuration" [slotDivisions]="1">
             </kendo-scheduler-work-week-view>
 
-            <kendo-scheduler-multi-day-view [slotDuration]="timeDuration" [slotDivisions]="1"
-              [numberOfDays]="3">
+            <kendo-scheduler-multi-day-view [slotDuration]="timeDuration" [slotDivisions]="1" [numberOfDays]="3">
             </kendo-scheduler-multi-day-view>
 
             <kendo-scheduler-month-view> </kendo-scheduler-month-view>
@@ -368,8 +386,8 @@
                 <div class="k-form-field">
                   <span>{{languageUser.treatmentValue}}</span>
                   <kendo-multiselect [data]="treatmentValue" [textField]="'title'" [valueField]="'id'"
-                    [(ngModel)]="selectedTreatments" name="therapies_previous"
-                    [placeholder]="language.treatmentValue" [valuePrimitive]="true">
+                    [(ngModel)]="selectedTreatments" name="therapies_previous" [placeholder]="language.treatmentValue"
+                    [valuePrimitive]="true">
                   </kendo-multiselect>
                 </div>
                 <div class="k-form-field">
@@ -418,7 +436,7 @@
                 <div class="k-form-field">
                   <span>Telephone</span>
                   <input class="k-textbox" placeholder="Telephone" [formControl]="formGroup.get('telephone')"
-                    [value]="telephoneValue" readonly/>
+                    [value]="telephoneValue" readonly />
                 </div>
               </div>
             </ng-template>
