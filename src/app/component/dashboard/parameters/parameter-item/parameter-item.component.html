@@ -15,7 +15,7 @@
     [loading]="loading" (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)"
     (sortChange)="sortChange($event)" [kendoGridSelectBy]="mySelectionKey">
     <ng-template kendoGridToolbarTemplate>
-      <button kendoGridAddCommand>Add new</button>
+      <button class="uploadFromExcel-{{theme}}" kendoGridAddCommand>Add new</button>
     </ng-template>
     <kendo-grid-column field="id" title="ID" [hidden]="true"></kendo-grid-column>
     <kendo-grid-column field="title" title="Title"></kendo-grid-column>
@@ -66,7 +66,7 @@
     [loading]="loading" (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)"
     (sortChange)="sortChange($event)" [loading]="loading" [kendoGridSelectBy]="mySelectionKey">
     <ng-template kendoGridToolbarTemplate>
-      <button kendoGridAddCommand>Add new</button>
+      <button class="uploadFromExcel-{{theme}}" kendoGridAddCommand>Add new</button>
     </ng-template>
     <kendo-grid-column field="id" title="ID" [hidden]="true"></kendo-grid-column>
     <kendo-grid-column field="firstname" title="First name"></kendo-grid-column>

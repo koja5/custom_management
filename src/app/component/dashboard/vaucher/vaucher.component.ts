@@ -83,6 +83,7 @@ export class VaucherComponent implements OnInit {
     });*/
 
     this.message.getTheme().subscribe(mess => {
+      this.theme = mess;
       this.changeTheme(mess);
     });
   }

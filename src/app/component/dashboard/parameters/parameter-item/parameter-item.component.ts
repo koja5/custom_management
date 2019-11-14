@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { ParameterItemService } from '../../../../service/parameter-item.service';
 import { DataStateChangeEvent, PageChangeEvent } from '@progress/kendo-angular-grid';
 import { SortDescriptor, orderBy } from '@progress/kendo-data-query';
+import { MessageService } from 'src/app/service/message.service';
 
 @Component({
   selector: 'app-parameter-item',
@@ -45,8 +46,7 @@ export class ParameterItemComponent implements OnInit {
     dir: 'asc'
   }];*/
 
-  constructor(private service: ParameterItemService) {
-  }
+  constructor(private service: ParameterItemService, public message: MessageService) { }
 
   public ngOnInit(): void {
 
@@ -77,6 +77,11 @@ export class ParameterItemComponent implements OnInit {
     if (localStorage.getItem("theme") !== null) {
       this.theme = localStorage.getItem("theme");
     } 
+
+    this.message.getTheme().subscribe(mess => {
+      this.changeTheme(mess);
+      this.theme = mess;
+    });
     
     this.changeTheme(this.theme);
 

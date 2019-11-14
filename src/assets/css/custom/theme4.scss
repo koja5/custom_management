@@ -570,7 +570,7 @@
     color: #951313 !important;
   }
   .k-select-Theme4:hover {
-    background-color: #951313 !important;
+    background: #951313 !important;
     color: #E6E6E6 !important;
   }
   
@@ -983,3 +983,15 @@
   .navMinTheme4 .tabButton {
   background-color: #951313 !important;
   }
+
+  .uploadFromExcel-Theme4 {
+    margin-left: 1vh;
+    background: #951313;
+    padding: 3px 5px 5px 5px;
+    border-radius: 3px;
+    color: white;
+    cursor: pointer;
+    border: none;
+  }
+
+  

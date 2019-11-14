@@ -85,6 +85,7 @@ export class CustomersComponent implements OnInit {
 
     this.message.getTheme().subscribe(mess => {
       this.changeTheme(mess);
+      this.theme = mess;
     });
   }
 

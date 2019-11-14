@@ -568,7 +568,7 @@
     color: #073343 !important;
   }
   .k-select-Theme3:hover {
-    background-color: #073343 !important;
+    background: #073343 !important;
     color: #E6E6E6 !important;
   }
   
@@ -981,3 +981,15 @@
   .navMinTheme3 .tabButton {
   background-color: #073343 !important;
   }
+
+  .uploadFromExcel-Theme3 {
+    margin-left: 1vh;
+    background: #073343;
+    padding: 3px 5px 5px 5px;
+    border-radius: 3px;
+    color: white;
+    cursor: pointer;
+    border: none;
+  }
+
+  
