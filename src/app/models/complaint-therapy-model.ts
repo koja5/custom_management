@@ -11,5 +11,6 @@ export class ComplaintTherapyModel {
     therapies_previous_title?: string;
     cs: string;
     state?: string;
-    em?: string;
+    em?: any;
+    em_title?: string;
 }

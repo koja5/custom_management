@@ -173,7 +173,8 @@
                     <div class="col-md-4 col-xs-12" *ngIf="doctorList !== undefined">
                       <p>{{language.doctor}}</p>
                       <kendo-combobox class="col-md-12 col-xs-12" [data]="doctorsList" [textField]="'firstname'"
-                        [valueField]="'id'" [(ngModel)]="baseDataOne.doctor" [valuePrimitive]="true" name="doctors" disabled="true">
+                        [valueField]="'id'" [(ngModel)]="baseDataOne.doctor" [valuePrimitive]="true" name="doctors"
+                        disabled="true">
                       </kendo-combobox>
                     </div>
                     <div class="col-md-4 col-xs-12">
@@ -238,7 +239,7 @@
             </kendo-grid-column>
             <kendo-grid-column field="state" title="State" width="60">
             </kendo-grid-column>
-            <kendo-grid-column field="em" title="Em" width="100">
+            <kendo-grid-column field="em_title" title="Em" width="100">
             </kendo-grid-column>
             <kendo-grid-column width="60">
               <ng-template kendoGridCellTemplate let-dataItem>
@@ -525,7 +526,8 @@
 
         <!--PHYSICAL ILLNESS-->
         <div class="tab-content" *ngIf="currentTab === 'physical_illness'">
-          <div *ngIf="physicalIllness === null || physicalIllness === undefined" style="height: 90vh; overflow: hidden;">
+          <div *ngIf="physicalIllness === null || physicalIllness === undefined"
+            style="height: 90vh; overflow: hidden;">
             <div class="spinner loading"></div>
           </div>
           <div id="profile-tab" class="tab-pane active"
@@ -748,7 +750,10 @@
 
     <kendo-window [title]="getTranslate(operationMode + 'Therapy')" *ngIf="therapy" [minWidth]="400" [width]="550"
       [minHeight]="500" (close)="therapy = false">
-      <form name="loginForm" class="loginForm"
+      <div *ngIf="loadingTherapy" style="height: 90vh;">
+        <div class="spinner loading"></div>
+      </div>
+      <form *ngIf="!loadingTherapy" name="loginForm" class="loginForm"
         (ngSubmit)="operationMode === 'add' ? addTherapy(therapy) : updateTherapy(therapy)">
         <div class="col-md-12 col-xs-12">
           <p>{{language.complaintValue}}</p>
@@ -789,8 +794,9 @@
         </div>
         <div class="col-md-12 col-xs-12">
           <p>{{language.em}}</p>
-          <input type="text" class="col-md-12 col-xs-12" name="em" placeholder="Em" [(ngModel)]="complaintData.em"
-            cs.value=''>
+          <kendo-combobox class="col-md-12 col-xs-12" [data]="allUsers" [textField]="'shortname'" [valueField]="'id'"
+            (valueChange)="onValueUserEmChange($event)" [(ngModel)]="selectedUser" name="em" style="padding: 0px !important;">
+          </kendo-combobox>
         </div>
         <div class="form-group" style="text-align: center;">
           <button *ngIf="operationMode === 'add'" kendoButton [primary]="true" class="form-button" type="submit"

@@ -900,7 +900,7 @@ router.post('/createCustomer', function (req, res, next) {
 
     test = {};
     var podaci = {
-      'shortname': req.body.shortname,
+      'shortname': req.body.lastname + ' ' + req.body.firstname,
       'firstname': req.body.firstname,
       'lastname': req.body.lastname,
       'gender': req.body.gender,
@@ -2105,6 +2105,13 @@ router.post('/addTherapy', function (req, res, next) {
 
     response = {};
     console.log(req);
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    var hh = today.getHours();
+    var min = today.getMinutes();
+    // var fullData = dd + '.' + mm + '.' + yyyy + ' / ' + (hh === 0 ? '00' : hh) + ':' + (min < 10 ? ('0' + min) : min);
     var date = {
       'customer_id': req.body.customer_id,
       'date': req.body.date,
@@ -2117,7 +2124,8 @@ router.post('/addTherapy', function (req, res, next) {
       'comment': req.body.comment,
       'cs': req.body.cs,
       'state': req.body.state,
-      'em': req.body.em
+      'em': req.body.em,
+      'em_title': req.body.em_title
     };
     console.log(date);
 
@@ -2159,6 +2167,14 @@ router.post('/updateTherapy', function (req, res, next) {
     }
 
     var response = null;
+
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    var hh = today.getHours();
+    var min = today.getMinutes();
+    // var fullData = dd + '.' + mm + '.' + yyyy + ' / ' + (hh === 0 ? '00' : hh) + ':' + (min < 10 ? ('0' + min) : min);
     var data = {
       'id': req.body.id,
       'customer_id': req.body.customer_id,
@@ -2172,7 +2188,8 @@ router.post('/updateTherapy', function (req, res, next) {
       'comment': req.body.comment,
       'cs': req.body.cs,
       'state': req.body.state,
-      'em': req.body.em
+      'em': req.body.em,
+      'em_title': req.body.em_title
     };
     console.log(data);
     conn.query("update therapy set ? where id = '" + req.body.id + "'", data,

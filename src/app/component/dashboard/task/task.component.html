@@ -189,14 +189,16 @@
                     <div class="col-sm-6" style="margin-bottom: 2vh;">
                       <div class="row mgbt-xs-0">
                         <label class="col-xs-12 control-label" style="color: red;">{{languageUser.attention}}:</label>
-                        <textarea kendoTextArea [autoSize]="true" [(ngModel)]="customerUser.attention" style="width: 70% !important;">{{customerUser.attention}}</textarea>
+                        <textarea kendoTextArea [autoSize]="true" [(ngModel)]="customerUser.attention"
+                          style="width: 70% !important;">{{customerUser.attention}}</textarea>
                         <!-- col-sm-10 -->
                       </div>
                     </div>
                     <div class="col-sm-6" style="margin-bottom: 2vh;">
                       <div class="row mgbt-xs-0">
                         <label class="col-xs-12 control-label">{{languageUser.physicalComplaint}}:</label>
-                        <textarea kendoTextArea [autoSize]="true" [(ngModel)]="customerUser.physicalComplaint" style="width: 70% !important;">{{customerUser.physicalComplaint}}</textarea>
+                        <textarea kendoTextArea [autoSize]="true" [(ngModel)]="customerUser.physicalComplaint"
+                          style="width: 70% !important;">{{customerUser.physicalComplaint}}</textarea>
                         <!-- col-sm-10 -->
                       </div>
                     </div>
@@ -211,7 +213,7 @@
                     </button>
 
                     <button kendoButton [icon]="'k-icon k-i-information'" [primary]="true" (click)="baseDataForUser()"
-                      *ngIf="customerUser !== undefined && customerUser !== null">
+                      *ngIf="baseDataIndicator">
                       {{languageUser.baseDate}}
                     </button>
                   </div>
@@ -253,13 +255,16 @@
                   <div class="k-form-field">
                     <span>{{languageUser.stateValue}}</span>
                     <kendo-combobox class="col-md-12 col-xs-12" [data]="stateValue" [(ngModel)]="complaintData.state"
-                      name="state" [placeholder]="language.choiceState">
+                      name="state" [placeholder]="language.choiceState" style="padding: 0px !important;">
                     </kendo-combobox>
                   </div>
                   <div class="k-form-field">
                     <span>{{languageUser.em}}</span>
-                    <input type="text" class="col-md-12 col-xs-12" name="em" placeholder="Em"
-                      [(ngModel)]="complaintData.em" cs.value=''>
+                    <!--<input type="text" class="col-md-12 col-xs-12" name="em" placeholder="Em"
+                      [(ngModel)]="complaintData.em" cs.value=''>-->
+                    <kendo-combobox class="col-md-12 col-xs-12" [data]="allUsers" [textField]="'shortname'" [valueField]="'id'"
+                      (valueChange)="onValueUserEmChange($event)" [(ngModel)]="selectedUser" style="padding: 0px !important;">
+                    </kendo-combobox>
                   </div>
                   <div class="k-form-field">
                     <span>Color</span>
@@ -351,18 +356,36 @@
                 <div class=" spinner loading"></div>
               </div>
               <div class="k-form-inline" *ngIf="createFormLoading">
+                <div class="k-form-field" style="text-align: center; margin: 0px !important;">
+                  <div class="col-sm-6" style="margin-bottom: 2vh;">
+                    <div class="row mgbt-xs-0">
+                      <label class="col-xs-12 control-label" style="color: red;">{{languageUser.attention}}:</label>
+                      <textarea kendoTextArea [autoSize]="true" [(ngModel)]="customerUser.attention"
+                        style="width: 70% !important;">{{customerUser.attention}}</textarea>
+                      <!-- col-sm-10 -->
+                    </div>
+                  </div>
+                  <div class="col-sm-6" style="margin-bottom: 2vh;">
+                    <div class="row mgbt-xs-0">
+                      <label class="col-xs-12 control-label">{{languageUser.physicalComplaint}}:</label>
+                      <textarea kendoTextArea [autoSize]="true" [(ngModel)]="customerUser.physicalComplaint"
+                        style="width: 70% !important;">{{customerUser.physicalComplaint}}</textarea>
+                      <!-- col-sm-10 -->
+                    </div>
+                  </div>
+                </div>
                 <div class="k-form-field">
-                  <span>Patient</span>
+                  <span>{{languageUser.patient}}</span>
                   <kendo-combobox [data]="customerUsers" [textField]="'shortname'" [valueField]="'id'"
                     (valueChange)="onValueChange($event)" [(ngModel)]="customerUser">
                   </kendo-combobox>
                   <button kendoButton [icon]="'user'" [primary]="true" (click)="newCustomer()">
-                    New customer
+                    {{languageUser.newCustomer}}
                   </button>
 
                   <button kendoButton [icon]="'k-icon k-i-information'" [primary]="true" (click)="baseDataForUser()"
-                    *ngIf="customerUser !== undefined && customerUser !== null">
-                    Base data
+                    *ngIf="baseDataIndicator">
+                    {{languageUser.baseDate}}
                   </button>
                 </div>
                 <!--<div class="k-form-field">
@@ -403,13 +426,13 @@
                 <div class="k-form-field">
                   <span>{{languageUser.stateValue}}</span>
                   <kendo-combobox class="col-md-12 col-xs-12" [data]="stateValue" [(ngModel)]="complaintData.state"
-                    name="state" [placeholder]="language.choiceState">
+                    name="state" [placeholder]="language.choiceState" style="padding: 0px !important;">
                   </kendo-combobox>
                 </div>
                 <div class="k-form-field">
                   <span>{{languageUser.em}}</span>
                   <input type="text" class="col-md-12 col-xs-12" name="em" placeholder="Em"
-                    [(ngModel)]="complaintData.em" cs.value=''>
+                  (valueChange)="onValueUserEmChange($event)" [(ngModel)]="complaintData.em" cs.value='' style="padding: 0px !important;">
                 </div>
                 <div class="k-form-field">
                   <span>Color</span>
@@ -454,7 +477,7 @@
   </div>
 
   <kendo-window title="Create new patient" *ngIf="customerModal" [minWidth]="700" [width]="850" [minHeight]="300"
-    (close)="customerModal = false">
+    (close)="customerModal = false; reloadNewCustomer()">
     <form name="loginForm" class="loginForm" (ngSubmit)="createCustomer(customer)" ngNativeValidate>
       <div class="form-group">
         <div class="panel-body">

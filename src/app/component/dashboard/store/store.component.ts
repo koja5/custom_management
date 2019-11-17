@@ -1,22 +1,23 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Modal } from 'ngx-modal';
-import { StoreService } from '../../../service/store.service';
-import { process, State } from '@progress/kendo-data-query';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { Modal } from "ngx-modal";
+import { StoreService } from "../../../service/store.service";
+import { process, State } from "@progress/kendo-data-query";
 import {
   DataStateChangeEvent,
   PageChangeEvent,
   RowArgs
-} from '@progress/kendo-angular-grid';
-import { StoreModel } from 'src/app/models/store-model';
-import Swal from 'sweetalert2';
+} from "@progress/kendo-angular-grid";
+import { StoreModel } from "src/app/models/store-model";
+import Swal from "sweetalert2";
 // import * as GC from '@grapecity/spread-sheets';
 // import * as Excel from '@grapecity/spread-excelio';
-import * as XLSX from 'ts-xlsx';
+import * as XLSX from "ts-xlsx";
+import { MessageService } from 'src/app/service/message.service';
 
 @Component({
-  selector: 'app-store',
-  templateUrl: './store.component.html',
-  styleUrls: ['./store.component.scss']
+  selector: "app-store",
+  templateUrl: "./store.component.html",
+  styleUrls: ["./store.component.scss"]
 })
 export class StoreComponent implements OnInit {
   public store = false;
@@ -46,17 +47,22 @@ export class StoreComponent implements OnInit {
   }
   private arrayBuffer: any;
 
-  constructor(public service: StoreService) {
+  constructor(public service: StoreService, public message: MessageService) {
     // this.excelIO = new Excel.IO();
   }
 
   ngOnInit() {
-    this.idUser = localStorage.getItem('idUser');
-    if (localStorage.getItem('theme') !== null) {
-      this.theme = localStorage.getItem('theme');
+    this.idUser = localStorage.getItem("idUser");
+    if (localStorage.getItem("theme") !== null) {
+      this.theme = localStorage.getItem("theme");
     }
-    this.language = JSON.parse(localStorage.getItem('language'))['store'];
+    this.language = JSON.parse(localStorage.getItem("language"))["store"];
     this.getStore();
+
+    this.message.getTheme().subscribe(mess => {
+      this.changeTheme(mess);
+      this.theme = mess;
+    });
   }
 
   getStore() {
@@ -77,23 +83,23 @@ export class StoreComponent implements OnInit {
 
   initialParams() {
     this.data = {
-      storename: '',
-      street: '',
-      zipcode: '',
-      place: '',
-      telephone: '',
-      mobile: '',
-      comment: '',
-      start_work: '',
-      end_work: '',
-      time_duration: '',
+      storename: "",
+      street: "",
+      zipcode: "",
+      place: "",
+      telephone: "",
+      mobile: "",
+      comment: "",
+      start_work: "",
+      end_work: "",
+      time_duration: "",
       superadmin: this.idUser
     };
   }
 
   createStore(form) {
     this.data.start_work = this.start_work.toString();
-    this.data.end_work = this.end_work.toString()
+    this.data.end_work = this.end_work.toString();
     this.service.createStore(this.data, val => {
       if (val.success) {
         console.log(val);
@@ -105,14 +111,14 @@ export class StoreComponent implements OnInit {
           title: this.language.successful,
           text: this.language[val.info],
           timer: 3000,
-          type: 'success'
+          type: "success"
         });
       } else {
         Swal.fire({
           title: this.language.error,
           text: this.language[val.info],
           timer: 3000,
-          type: 'error'
+          type: "error"
         });
       }
     });
@@ -126,29 +132,32 @@ export class StoreComponent implements OnInit {
       if (data) {
         this.getStore();
         Swal.fire({
-          title: 'Successfull update',
-          text: 'Store data is successfull update!',
+          title: "Successfull update",
+          text: "Store data is successfull update!",
           timer: 3000,
-          type: 'success'
+          type: "success"
         });
         this.storeEdit = false;
       } else {
         Swal.fire({
-          title: 'Error update',
-          text: 'Store data is not successfull update!',
+          title: "Error update",
+          text: "Store data is not successfull update!",
           timer: 3000,
-          type: 'error'
+          type: "error"
         });
       }
     });
   }
 
-  deleteStore(store) { }
+  deleteStore(store) {}
 
   dataStateChange(state: DataStateChangeEvent): void {
     this.state = state;
     this.gridData = process(this.currentLoadData, this.state);
-    if (this.state.filter !== undefined && this.state.filter.filters.length === 0) {
+    if (
+      this.state.filter !== undefined &&
+      this.state.filter.filters.length === 0
+    ) {
       this.gridData.total = this.currentLoadData.length;
     }
     this.changeTheme(this.theme);
@@ -185,18 +194,18 @@ export class StoreComponent implements OnInit {
   }
 
   public close(component) {
-    this[component + 'Opened'] = false;
+    this[component + "Opened"] = false;
   }
 
   open(component, id) {
-    this[component + 'Opened'] = true;
+    this[component + "Opened"] = true;
     this.data.id = id;
     this.changeTheme(this.theme);
   }
 
   action(event) {
     console.log(event);
-    if (event === 'yes') {
+    if (event === "yes") {
       console.log(this.data);
       this.service.deleteStore(this.data.id).subscribe(data => {
         console.log(data);
@@ -206,10 +215,10 @@ export class StoreComponent implements OnInit {
             take: 10
           };
           Swal.fire({
-            title: 'Successfull!',
-            text: 'Successfull delete store',
+            title: "Successfull!",
+            text: "Successfull delete store",
             timer: 3000,
-            type: 'success'
+            type: "success"
           });
           this.getStore();
         }
@@ -222,22 +231,20 @@ export class StoreComponent implements OnInit {
 
   excelAction(event) {
     console.log(event);
-    if (event === 'yes') {
+    if (event === "yes") {
       this.excelOpened = false;
       setTimeout(() => {
-        this.service.insertMultiData(this.gridData).subscribe(
-          data => {
-            if (data) {
-              Swal.fire({
-                title: 'Successfull!',
-                text: 'New stores is successfull added',
-                timer: 3000,
-                type: 'success'
-              });
-              this.getStore();
-            }
+        this.service.insertMultiData(this.gridData).subscribe(data => {
+          if (data) {
+            Swal.fire({
+              title: "Successfull!",
+              text: "New stores is successfull added",
+              timer: 3000,
+              type: "success"
+            });
+            this.getStore();
           }
-        );
+        });
       }, 50);
     } else {
       this.excelOpened = false;
@@ -265,23 +272,26 @@ export class StoreComponent implements OnInit {
 
     this.excelOpened = true;
     let fileReader = new FileReader();
-    fileReader.onload = (e) => {
+    fileReader.onload = e => {
       this.arrayBuffer = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer);
       var arr = new Array();
-      for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
-      var bstr = arr.join('');
-      var workbook = XLSX.read(bstr, { type: 'binary' });
+      for (var i = 0; i != data.length; ++i)
+        arr[i] = String.fromCharCode(data[i]);
+      var bstr = arr.join("");
+      var workbook = XLSX.read(bstr, { type: "binary" });
       var first_sheet_name = workbook.SheetNames[0];
       var worksheet = workbook.Sheets[first_sheet_name];
       console.log(XLSX.utils.sheet_to_json(worksheet, { raw: false }));
       setTimeout(() => {
         if (XLSX.utils.sheet_to_json(worksheet, { raw: true }).length > 0) {
-          this.gridData = this.xlsxToJson(XLSX.utils.sheet_to_json(worksheet, { raw: true }));
+          this.gridData = this.xlsxToJson(
+            XLSX.utils.sheet_to_json(worksheet, { raw: true })
+          );
           this.fileValue = null;
         }
       }, 50);
-    }
+    };
     fileReader.readAsArrayBuffer(args.target.files[0]);
   }
 
@@ -298,12 +308,12 @@ export class StoreComponent implements OnInit {
         console.log(data[i][columns[j]]);
         object[columns[j]] = data[i][columns[j]];
       }
-      object['superadmin'] = localStorage.getItem('idUser')
+      object["superadmin"] = localStorage.getItem("idUser");
       objectArray.push(object);
       dataArray.push(objectArray[i]);
     }
     const allData = {
-      table: 'store',
+      table: "store",
       columns: columns,
       data: dataArray
     };
@@ -312,85 +322,85 @@ export class StoreComponent implements OnInit {
 
   changeTheme(theme: string) {
     setTimeout(() => {
-      if (localStorage.getItem('allThemes') !== undefined) {
-        const allThemes = JSON.parse(localStorage.getItem('allThemes'));
+      if (localStorage.getItem("allThemes") !== undefined) {
+        const allThemes = JSON.parse(localStorage.getItem("allThemes"));
         console.log(allThemes);
-        let items = document.querySelectorAll('.k-dialog-titlebar');
+        let items = document.querySelectorAll(".k-dialog-titlebar");
         for (let i = 0; i < items.length; i++) {
           const clas = items[i].classList;
           for (let j = 0; j < allThemes.length; j++) {
-            const themeName = allThemes[j]['name'];
+            const themeName = allThemes[j]["name"];
             console.log(clas);
-            clas.remove('k-dialog-titlebar-' + themeName);
-            clas.add('k-dialog-titlebar-' + theme);
+            clas.remove("k-dialog-titlebar-" + themeName);
+            clas.add("k-dialog-titlebar-" + theme);
           }
         }
 
-        items = document.querySelectorAll('.k-header');
+        items = document.querySelectorAll(".k-header");
         for (let i = 0; i < items.length; i++) {
           const clas = items[i].classList;
           for (let j = 0; j < allThemes.length; j++) {
-            const element = allThemes[j]['name'];
-            clas.remove('gridHeader-' + element);
+            const element = allThemes[j]["name"];
+            clas.remove("gridHeader-" + element);
 
-            clas.add('gridHeader-' + this.theme);
+            clas.add("gridHeader-" + this.theme);
           }
         }
-        items = document.querySelectorAll('.k-pager-numbers');
+        items = document.querySelectorAll(".k-pager-numbers");
         for (let i = 0; i < items.length; i++) {
           const clas = items[i].classList;
           for (let j = 0; j < allThemes.length; j++) {
-            const element = allThemes[j]['name'];
-            clas.remove('k-pager-numbers-' + element);
-            clas.add('k-pager-numbers-' + this.theme);
-          }
-        }
-
-        items = document.querySelectorAll('.k-select');
-        for (let i = 0; i < items.length; i++) {
-          const clas = items[i].classList;
-          for (let j = 0; j < allThemes.length; j++) {
-            const element = allThemes[j]['name'];
-            clas.remove('k-select-' + element);
-            clas.add('k-select-' + this.theme);
+            const element = allThemes[j]["name"];
+            clas.remove("k-pager-numbers-" + element);
+            clas.add("k-pager-numbers-" + this.theme);
           }
         }
 
-        items = document.querySelectorAll('.k-grid-table');
+        items = document.querySelectorAll(".k-select");
         for (let i = 0; i < items.length; i++) {
           const clas = items[i].classList;
           for (let j = 0; j < allThemes.length; j++) {
-            const element = allThemes[j]['name'];
-            clas.remove('k-grid-table-' + element);
-            clas.add('k-grid-table-' + this.theme);
-          }
-        }
-        items = document.querySelectorAll('.k-grid-header');
-        for (let i = 0; i < items.length; i++) {
-          const clas = items[i].classList;
-          for (let j = 0; j < allThemes.length; j++) {
-            const element = allThemes[j]['name'];
-            clas.remove('k-grid-header-' + element);
-            clas.add('k-grid-header-' + this.theme);
-          }
-        }
-        items = document.querySelectorAll('.k-pager-wrap');
-        for (let i = 0; i < items.length; i++) {
-          const clas = items[i].classList;
-          for (let j = 0; j < allThemes.length; j++) {
-            const element = allThemes[j]['name'];
-            clas.remove('k-pager-wrap-' + element);
-            clas.add('k-pager-wrap-' + this.theme);
+            const element = allThemes[j]["name"];
+            clas.remove("k-select-" + element);
+            clas.add("k-select-" + this.theme);
           }
         }
 
-        items = document.querySelectorAll('.k-button');
+        items = document.querySelectorAll(".k-grid-table");
         for (let i = 0; i < items.length; i++) {
           const clas = items[i].classList;
           for (let j = 0; j < allThemes.length; j++) {
-            const element = allThemes[j]['name'];
-            clas.remove('inputTheme-' + element);
-            clas.add('inputTheme-' + this.theme);
+            const element = allThemes[j]["name"];
+            clas.remove("k-grid-table-" + element);
+            clas.add("k-grid-table-" + this.theme);
+          }
+        }
+        items = document.querySelectorAll(".k-grid-header");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-grid-header-" + element);
+            clas.add("k-grid-header-" + this.theme);
+          }
+        }
+        items = document.querySelectorAll(".k-pager-wrap");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-pager-wrap-" + element);
+            clas.add("k-pager-wrap-" + this.theme);
+          }
+        }
+
+        items = document.querySelectorAll(".k-button");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("inputTheme-" + element);
+            clas.add("inputTheme-" + this.theme);
           }
         }
       }

@@ -1,4 +1,4 @@
-import { CustomerModel } from './../../../models/customer-model';
+import { CustomerModel } from "./../../../models/customer-model";
 import { Component, OnInit, ViewChild, ViewEncapsulation } from "@angular/core";
 import {
   FormBuilder,
@@ -29,6 +29,7 @@ import { TaskService } from "../../../service/task.service";
 import { isNumber } from "util";
 import Swal from "sweetalert2";
 import { ComplaintTherapyModel } from "src/app/models/complaint-therapy-model";
+import { UsersService } from "src/app/service/users.service";
 
 @Component({
   selector: "app-task",
@@ -84,7 +85,6 @@ export class TaskComponent implements OnInit {
   public orientation = "horizontal";
   public workTime: any[] = [];
   public selectedStoreId: number;
-  public selectedUser: any;
   public splitterSizeFull = 100;
   public splitterSize: number;
   public dateEvent: string;
@@ -109,13 +109,17 @@ export class TaskComponent implements OnInit {
   public selectedComplaint: any;
   public selectedTherapies: any;
   public selectedTreatments: any;
+  public baseDataIndicator = false;
+  public allUsers: any;
+  public selectedUser: any;
 
   constructor(
     public formBuilder: FormBuilder,
     public service: TaskService,
     public customer: CustomersService,
     public message: MessageService,
-    public storeService: StoreService
+    public storeService: StoreService,
+    public usersService: UsersService
   ) {
     this.createFormGroup = this.createFormGroup.bind(this);
   }
@@ -336,7 +340,11 @@ export class TaskComponent implements OnInit {
   }
 
   public createFormGroup(args: CreateFormGroupArgs): FormGroup {
-    if ((this.selectedStoreId === null || this.selectedStoreId === undefined) && this.type !== 3) {
+    this.baseDataIndicator = false;
+    if (
+      (this.selectedStoreId === null || this.selectedStoreId === undefined) &&
+      this.type !== 3
+    ) {
       Swal.fire({
         title: this.language.selectStoreIndicatorTitle,
         text: this.language.selectStoreIndicatorText,
@@ -365,18 +373,14 @@ export class TaskComponent implements OnInit {
           .subscribe(data => {
             console.log(data);
             this.customerUser = data[0];
+            this.baseDataIndicator = true;
           });
       }
 
       let timeDurationInd = 0;
       let timeDuration = 0;
       if (!isNaN(this.selectedStoreId)) {
-        if (dataItem.end.getTime() - dataItem.start.getTime() > Number(
-          this.getStartEndTimeForStore(this.store, this.selectedStoreId)
-            .time_therapy
-        ) * 60000) {
-          timeDuration = (dataItem.end.getTime() - dataItem.start.getTime()) / 60000;
-        } else {
+        if (dataItem.id === undefined || dataItem.id === null) {
           timeDurationInd =
             Number(
               this.getStartEndTimeForStore(this.store, this.selectedStoreId)
@@ -388,7 +392,39 @@ export class TaskComponent implements OnInit {
             this.getStartEndTimeForStore(this.store, this.selectedStoreId)
               .time_therapy
           );
+        } else {
+          if (
+            dataItem.end.getTime() - dataItem.start.getTime() !==
+            Number(
+              this.getStartEndTimeForStore(this.store, this.selectedStoreId)
+                .time_therapy
+            ) *
+              60000
+          ) {
+            timeDuration =
+              (dataItem.end.getTime() - dataItem.start.getTime()) / 60000;
+          } else {
+            timeDurationInd =
+              Number(
+                this.getStartEndTimeForStore(this.store, this.selectedStoreId)
+                  .time_therapy
+              ) !== Number(this.timeDuration)
+                ? 1
+                : 0;
+            timeDuration = Number(
+              this.getStartEndTimeForStore(this.store, this.selectedStoreId)
+                .time_therapy
+            );
+          }
         }
+      }
+
+      if (
+        this.customerUser !== undefined &&
+        this.customerUser !== null &&
+        this.customerUser.id !== undefined
+      ) {
+        this.baseDataIndicator = true;
       }
 
       this.formGroup = this.formBuilder.group({
@@ -423,9 +459,15 @@ export class TaskComponent implements OnInit {
                 data[0].therapies,
                 data[0].therapies_previous
               );
+              this.usersService.getUserWithId(data[0].em, val => {
+                this.selectedUser = val[0];
+              });
               this.complaintData = data[0];
             }
+            this.createFormLoading = true;
           });
+        } else {
+          this.createFormLoading = true;
         }
 
         console.log(dataItem.colorTask);
@@ -439,7 +481,6 @@ export class TaskComponent implements OnInit {
         }
 
         this.changeTheme(localStorage.getItem("theme"));
-        this.createFormLoading = true;
       }, 50);
       return this.formGroup;
     }
@@ -471,22 +512,26 @@ export class TaskComponent implements OnInit {
       if (this.type !== 3 && customerId !== undefined) {
         formValue.creator_id = customerId;
         formValue.title =
-          this.customerUser['firstname'] +
+          this.customerUser["firstname"] +
           " " +
-          this.customerUser['lastname'] +
+          this.customerUser["lastname"] +
           " " +
           this.complaintData.complaint_title;
       }
       console.log(formValue);
       if (isNew) {
         formValue = this.colorMapToId(formValue);
-        this.addTherapy(this.customerUser['id']);
+        this.addTherapy(this.customerUser["id"]);
         formValue.title =
-          this.customerUser['firstname'] +
+          this.customerUser["firstname"] +
           " " +
-          this.customerUser['lastname'] +
+          this.customerUser["lastname"] +
           " " +
           this.complaintData.complaint_title;
+        this.complaintData.date = this.formatDate(
+          formValue.start,
+          formValue.end
+        );
         this.customer.addTherapy(this.complaintData).subscribe(data => {
           if (data["success"]) {
             formValue.therapy_id = data["id"];
@@ -512,13 +557,14 @@ export class TaskComponent implements OnInit {
 
             console.log(this.data);
             const customerAttentionAndPhysical = {
-              id: this.customerUser['id'],
-              attention: this.customerUser['attention'],
-              physicalComplaint: this.customerUser['physicalComplaint']
+              id: this.customerUser["id"],
+              attention: this.customerUser["attention"],
+              physicalComplaint: this.customerUser["physicalComplaint"]
             };
             console.log(customerAttentionAndPhysical);
-            this.customer.updateAttentionAndPhysical(customerAttentionAndPhysical).subscribe(
-              data => {
+            this.customer
+              .updateAttentionAndPhysical(customerAttentionAndPhysical)
+              .subscribe(data => {
                 console.log(data);
               });
           } else {
@@ -535,13 +581,17 @@ export class TaskComponent implements OnInit {
         });
       } else {
         formValue = this.colorMapToId(formValue);
-        this.addTherapy(this.customerUser['id']);
+        this.addTherapy(this.customerUser["id"]);
         formValue.title =
-          this.customerUser['firstname'] +
+          this.customerUser["firstname"] +
           " " +
-          this.customerUser['lastname'] +
+          this.customerUser["lastname"] +
           " " +
           this.complaintData.complaint_title;
+        this.complaintData.date = this.formatDate(
+          formValue.start,
+          formValue.end
+        );
         this.customer.updateTherapy(this.complaintData).subscribe(data => {
           if (data) {
             formValue.therapy_id = data["id"];
@@ -565,13 +615,14 @@ export class TaskComponent implements OnInit {
               }
             });
             const customerAttentionAndPhysical = {
-              id: this.customerUser['id'],
-              attention: this.customerUser['attention'],
-              physicalComplaint: this.customerUser['physicalComplaint']
+              id: this.customerUser["id"],
+              attention: this.customerUser["attention"],
+              physicalComplaint: this.customerUser["physicalComplaint"]
             };
             console.log(customerAttentionAndPhysical);
-            this.customer.updateAttentionAndPhysical(customerAttentionAndPhysical).subscribe(
-              data => {
+            this.customer
+              .updateAttentionAndPhysical(customerAttentionAndPhysical)
+              .subscribe(data => {
                 console.log(data);
               });
           } else {
@@ -597,6 +648,31 @@ export class TaskComponent implements OnInit {
         type: "error"
       });
     }
+  }
+
+  formatDate(start, end) {
+    const dd = String(start.getDate()).padStart(2, "0");
+    const mm = String(start.getMonth() + 1).padStart(2, "0"); //January is 0!
+    const yyyy = start.getFullYear();
+    const hhStart = start.getHours();
+    const minStart = start.getMinutes();
+    const hhEnd = end.getHours();
+    const minEnd = end.getMinutes();
+    return (
+      dd +
+      "." +
+      mm +
+      "." +
+      yyyy +
+      " / " +
+      (hhStart === 0 ? "00" : hhStart) +
+      ":" +
+      (minStart < 10 ? "0" + minStart : minStart) +
+      "-" +
+      (hhEnd === 0 ? "00" : hhEnd) +
+      ":" +
+      (minEnd < 10 ? "0" + minEnd : minEnd)
+    );
   }
 
   addTherapy(customerId) {
@@ -665,12 +741,14 @@ export class TaskComponent implements OnInit {
     if (event !== undefined) {
       this.customerUser = event;
       this.telephoneValue = event.telephone;
+      this.baseDataIndicator = true;
     } else {
       this.customerUser = {
-        attention: '',
-        physicalComplaint: ''
+        attention: "",
+        physicalComplaint: ""
       };
       this.telephoneValue = null;
+      this.baseDataIndicator = false;
     }
   }
 
@@ -689,8 +767,11 @@ export class TaskComponent implements OnInit {
     this.data.storeId = localStorage.getItem("storeId");
     this.customer.createCustomer(this.data, val => {
       console.log(val);
-      this.customerModal = false;
-      // form.reset();
+      if (val) {
+        this.reloadNewCustomer();
+        this.customerModal = false;
+        // form.reset();
+      }
     });
   }
 
@@ -1062,7 +1143,13 @@ export class TaskComponent implements OnInit {
 
   removeHandler({ sender, dataItem }: RemoveEvent): void {
     this.service.deleteTask(dataItem.id).subscribe(data => {
-      console.log(data);
+      if (data) {
+        this.customer
+          .deleteTherapy(dataItem.therapy_id)
+          .subscribe(data_therapy => {
+            console.log(data_therapy);
+          });
+      }
     });
   }
 
@@ -1084,7 +1171,7 @@ export class TaskComponent implements OnInit {
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].end >
-          new Date(date).getHours()) ||
+            new Date(date).getHours()) ||
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start2 <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
@@ -1190,6 +1277,10 @@ export class TaskComponent implements OnInit {
       console.log(data);
       this.treatmentValue = data;
     });
+
+    this.service.getCompanyUsers(localStorage.getItem("idUser"), val => {
+      this.allUsers = val;
+    });
   }
 
   pickToModel(data: any, titleValue) {
@@ -1235,11 +1326,25 @@ export class TaskComponent implements OnInit {
     }
 
     if (therapies_previous.split(";") !== undefined) {
-      this.selectedTreatments = therapies_previous
-        .split(";")
-        .map(Number);
+      this.selectedTreatments = therapies_previous.split(";").map(Number);
     } else {
       this.selectedTreatments = Number(therapies_previous);
     }
+  }
+
+  reloadNewCustomer() {
+    this.customerUsers = null;
+    setTimeout(() => {
+      this.customer.getCustomers(localStorage.getItem("storeId"), val => {
+        console.log(val);
+        this.customerUsers = val;
+        this.loading = false;
+      });
+    }, 100);
+  }
+
+  onValueUserEmChange(event) {
+    this.complaintData.em = event.id;
+    this.complaintData.em_title = event.lastname + " " + event.firstname;
   }
 }

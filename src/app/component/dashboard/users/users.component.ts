@@ -1,37 +1,34 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Modal } from 'ngx-modal';
-import { UsersService } from '../../../service/users.service';
-import { StoreService } from '../../../service/store.service';
-import { process, State } from '@progress/kendo-data-query';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { Modal } from "ngx-modal";
+import { UsersService } from "../../../service/users.service";
+import { StoreService } from "../../../service/store.service";
+import { process, State } from "@progress/kendo-data-query";
 import {
   DataStateChangeEvent,
   PageChangeEvent,
   RowArgs
-} from '@progress/kendo-angular-grid';
-import {
-  FormGroup,
-  FormControl
-} from '@angular/forms';
-import { SortDescriptor, orderBy } from '@progress/kendo-data-query';
-import { StandardUrlSerializer } from '../../../standardUrlSerializer';
-import { UrlTree, Router, UrlSegment, UrlSegmentGroup } from '@angular/router';
-import { throttleTime } from 'rxjs/operators';
-import { UserModel } from '../../../models/user-model';
-import Swal from 'sweetalert2';
+} from "@progress/kendo-angular-grid";
+import { FormGroup, FormControl } from "@angular/forms";
+import { SortDescriptor, orderBy } from "@progress/kendo-data-query";
+import { StandardUrlSerializer } from "../../../standardUrlSerializer";
+import { UrlTree, Router, UrlSegment, UrlSegmentGroup } from "@angular/router";
+import { throttleTime } from "rxjs/operators";
+import { UserModel } from "../../../models/user-model";
+import Swal from "sweetalert2";
 // import * as GC from '@grapecity/spread-sheets';
 // import * as Excel from '@grapecity/spread-excelio';
-import * as XLSX from 'ts-xlsx';
-
+import * as XLSX from "ts-xlsx";
+import { MessageService } from "src/app/service/message.service";
 
 @Component({
-  selector: 'app-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss']
+  selector: "app-users",
+  templateUrl: "./users.component.html",
+  styleUrls: ["./users.component.scss"]
 })
 export class UsersComponent implements OnInit {
   public user = false;
   public data = new UserModel();
-  public userType = ['Employee', 'Manager', 'Admin'];
+  public userType = ["Employee", "Manager", "Admin"];
   public gridData: any;
   public currentLoadData: any;
   public state: State = {
@@ -39,18 +36,19 @@ export class UsersComponent implements OnInit {
     take: 10,
     filter: null
   };
-  public hideShow = 'password';
-  public hideShowEye = 'fa-eye-slash';
+  public hideShow = "password";
+  public hideShowEye = "fa-eye-slash";
   public storeLocation: any;
   public sort: SortDescriptor[] = [
     {
-      field: 'id',
-      dir: 'asc'
+      field: "id",
+      dir: "asc"
     }
   ];
-  public unamePattern = '^[a-z0-9_-]{8,15}$';
-  public passwordPattern = '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&#])[A-Za-z\d$@$!%*?&].{8,}';
-  public emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$';
+  public unamePattern = "^[a-z0-9_-]{8,15}$";
+  public passwordPattern =
+    "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&#])[A-Za-zd$@$!%*?&].{8,}";
+  public emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$";
   public loading = true;
   // private spread: GC.Spread.Sheets.Workbook;
   // private excelIO;
@@ -67,7 +65,8 @@ export class UsersComponent implements OnInit {
     public service: UsersService,
     public storeService: StoreService,
     public url: StandardUrlSerializer,
-    public router: Router
+    public router: Router,
+    public message: MessageService
   ) {
     // this.excelIO = new Excel.IO();
   }
@@ -78,11 +77,16 @@ export class UsersComponent implements OnInit {
       this.theme = localStorage.getItem("theme");
     }
     this.changeTheme(this.theme);
-    this.language = JSON.parse(localStorage.getItem('language'))['user'];
+    this.language = JSON.parse(localStorage.getItem("language"))["user"];
+
+    this.message.getTheme().subscribe(mess => {
+      this.changeTheme(mess);
+      this.theme = mess;
+    });
   }
 
   getUser() {
-    this.service.getUsers(localStorage.getItem('idUser'), val => {
+    this.service.getUsers(localStorage.getItem("idUser"), val => {
       console.log(val);
       this.currentLoadData = val;
       this.gridData = process(val, this.state);
@@ -93,7 +97,7 @@ export class UsersComponent implements OnInit {
 
   newUser() {
     this.initializeParams();
-    this.storeService.getStore(localStorage.getItem('idUser'), val => {
+    this.storeService.getStore(localStorage.getItem("idUser"), val => {
       console.log(val);
       this.storeLocation = val;
     });
@@ -102,15 +106,15 @@ export class UsersComponent implements OnInit {
   }
 
   initializeParams() {
-    this.data.firstname = '';
-    this.data.lastname = '';
-    this.data.street = '';
-    this.data.zipcode = '';
-    this.data.place = '';
-    this.data.telephone = '';
-    this.data.mobile = '';
-    this.data.birthday = '';
-    this.data.incompanysince = '';
+    this.data.firstname = "";
+    this.data.lastname = "";
+    this.data.street = "";
+    this.data.zipcode = "";
+    this.data.place = "";
+    this.data.telephone = "";
+    this.data.mobile = "";
+    this.data.birthday = "";
+    this.data.incompanysince = "";
     this.data.active = 0;
   }
 
@@ -124,17 +128,17 @@ export class UsersComponent implements OnInit {
         this.gridData.data.push(this.data);
         this.user = false;
         Swal.fire({
-          title: 'Successfull!',
-          text: 'New user is successfull added!',
+          title: "Successfull!",
+          text: "New user is successfull added!",
           timer: 3000,
-          type: 'success'
+          type: "success"
         });
       } else {
         Swal.fire({
-          title: 'Error',
-          text: 'New user is not added!',
+          title: "Error",
+          text: "New user is not added!",
           timer: 3000,
-          type: 'error'
+          type: "error"
         });
       }
       // form.reset();
@@ -143,12 +147,12 @@ export class UsersComponent implements OnInit {
 
   selectionChange(event) {
     console.log(event);
-    if (event === 'Employee') {
-      this.data.type = '3';
-    } else if (event === 'Manager') {
-      this.data.type = '2';
-    } else if (event === 'Admin') {
-      this.data.type = '1';
+    if (event === "Employee") {
+      this.data.type = "3";
+    } else if (event === "Manager") {
+      this.data.type = "2";
+    } else if (event === "Admin") {
+      this.data.type = "1";
     } else {
       this.data.type = event;
     }
@@ -193,7 +197,7 @@ export class UsersComponent implements OnInit {
   }
 
   public close(component) {
-    this[component + 'Opened'] = false;
+    this[component + "Opened"] = false;
   }
 
   sortChangeData() {
@@ -201,12 +205,12 @@ export class UsersComponent implements OnInit {
   }
 
   hideShowPassword() {
-    if (this.hideShow === 'password') {
-      this.hideShow = 'text';
-      this.hideShowEye = 'fa-eye';
+    if (this.hideShow === "password") {
+      this.hideShow = "text";
+      this.hideShowEye = "fa-eye";
     } else {
-      this.hideShow = 'password';
-      this.hideShowEye = 'fa-eye-slash';
+      this.hideShow = "password";
+      this.hideShowEye = "fa-eye-slash";
     }
   }
 
@@ -222,7 +226,7 @@ export class UsersComponent implements OnInit {
   routing(id) {
     // this.router.navigate(['user-details'], {queryParams: id});
     const tree = new UrlTree();
-    const url = new UrlSegment('/dashboard/user-details', id);
+    const url = new UrlSegment("/dashboard/user-details", id);
     tree.root = new UrlSegmentGroup([url], null);
     console.log(tree);
     return tree;
@@ -231,22 +235,20 @@ export class UsersComponent implements OnInit {
 
   excelAction(event) {
     console.log(event);
-    if (event === 'yes') {
+    if (event === "yes") {
       this.excelOpened = false;
       setTimeout(() => {
-        this.service.insertMultiData(this.gridData).subscribe(
-          data => {
-            if (data) {
-              Swal.fire({
-                title: 'Successfull!',
-                text: 'New users is successfull added',
-                timer: 3000,
-                type: 'success'
-              });
-              this.getUser();
-            }
+        this.service.insertMultiData(this.gridData).subscribe(data => {
+          if (data) {
+            Swal.fire({
+              title: "Successfull!",
+              text: "New users is successfull added",
+              timer: 3000,
+              type: "success"
+            });
+            this.getUser();
           }
-        );
+        });
       }, 50);
     } else {
       this.excelOpened = false;
@@ -272,11 +274,12 @@ export class UsersComponent implements OnInit {
 
     this.excelOpened = true;
     let fileReader = new FileReader();
-    fileReader.onload = (e) => {
+    fileReader.onload = e => {
       this.arrayBuffer = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer);
       var arr = new Array();
-      for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+      for (var i = 0; i != data.length; ++i)
+        arr[i] = String.fromCharCode(data[i]);
       var bstr = arr.join("");
       var workbook = XLSX.read(bstr, { type: "binary" });
       var first_sheet_name = workbook.SheetNames[0];
@@ -284,11 +287,13 @@ export class UsersComponent implements OnInit {
       console.log(XLSX.utils.sheet_to_json(worksheet, { raw: false }));
       setTimeout(() => {
         if (XLSX.utils.sheet_to_json(worksheet, { raw: true }).length > 0) {
-          this.gridData = this.xlsxToJson(XLSX.utils.sheet_to_json(worksheet, { raw: true }));
+          this.gridData = this.xlsxToJson(
+            XLSX.utils.sheet_to_json(worksheet, { raw: true })
+          );
           this.fileValue = null;
         }
       }, 50);
-    }
+    };
     fileReader.readAsArrayBuffer(args.target.files[0]);
   }
 
