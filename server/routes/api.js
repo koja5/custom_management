@@ -1935,11 +1935,18 @@ router.post('/addComplaint', function (req, res, next) {
     }
 
     response = null;
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    var hh = today.getHours();
+    var min = today.getMinutes();
+    var fullData = dd + '.' + mm + '.' + yyyy + ' / ' + (hh === 0 ? '00' : hh) + ':' + (min < 10 ? ('0' + min) : min);
     console.log(req);
     var date = {
       'customer_id': req.body.customer_id,
       'employee_name': req.body.employee_name,
-      'date': req.body.date,
+      'date': fullData,
       'complaint': req.body.complaint,
       'complaint_title': req.body.complaint_title,
       'comment': req.body.comment,
@@ -1985,11 +1992,18 @@ router.post('/updateComplaint', function (req, res, next) {
     }
 
     var response = null;
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    var hh = today.getHours();
+    var min = today.getMinutes();
+    var fullData = dd + '.' + mm + '.' + yyyy + ' / ' + (hh === 0 ? '00' : hh) + ':' + (min < 10 ? ('0' + min) : min);
     var data = {
       'id': req.body.id,
       'customer_id': req.body.customer_id,
       'employee_name': req.body.employee_name,
-      'date': req.body.date,
+      'date': fullData,
       'complaint': req.body.complaint,
       'complaint_title': req.body.complaint_title,
       'comment': req.body.comment,

@@ -44,6 +44,7 @@ export class BaseDateComponent implements OnInit {
   public complaintData = new ComplaintTherapyModel();
   public gridComplaint: any;
   public therapyValue: any;
+  public treatmentValue: any;
   public gridTherapy: any;
   public stateValue: any;
   public loadingGrid: any;
@@ -104,6 +105,11 @@ export class BaseDateComponent implements OnInit {
 
     this.taskService.getCompanyUsers(localStorage.getItem("idUser"), val => {
       this.allUsers = val;
+    });
+
+    this.service.getParameters("Treatment").subscribe(data => {
+      console.log(data);
+      this.treatmentValue = data;
     });
 
     this.stateValue = JSON.parse(localStorage.getItem("language"))["state"];
@@ -367,11 +373,11 @@ export class BaseDateComponent implements OnInit {
 
     this.complaintData.therapies = this.pickToModel(
       this.selectedTherapies,
-      this.therapyValue
+      this.treatmentValue
     ).value;
     this.complaintData.therapies_title = this.pickToModel(
       this.selectedTherapies,
-      this.therapyValue
+      this.treatmentValue
     ).title;
 
     if (localStorage.getItem("username") === null) {
@@ -475,11 +481,11 @@ export class BaseDateComponent implements OnInit {
 
     this.complaintData.therapies = this.pickToModel(
       this.selectedTherapies,
-      this.therapyValue
+      this.treatmentValue
     ).value;
     this.complaintData.therapies_title = this.pickToModel(
       this.selectedTherapies,
-      this.therapyValue
+      this.treatmentValue
     ).title;
 
     this.service.updateComplaint(this.complaintData).subscribe(data => {
