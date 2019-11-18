@@ -459,9 +459,9 @@ export class TaskComponent implements OnInit {
                 data[0].therapies,
                 data[0].therapies_previous
               );
-              this.usersService.getUserWithId(data[0].em, val => {
+              /*this.usersService.getUserWithId(data[0].em, val => {
                 this.selectedUser = val[0];
-              });
+              });*/
               this.complaintData = data[0];
             }
             this.createFormLoading = true;
@@ -481,7 +481,7 @@ export class TaskComponent implements OnInit {
         }
 
         this.changeTheme(localStorage.getItem("theme"));
-      }, 50);
+      }, 100);
       return this.formGroup;
     }
   }
