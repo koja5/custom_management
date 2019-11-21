@@ -515,7 +515,7 @@ export class TaskComponent implements OnInit {
           this.customerUser["firstname"] +
           " " +
           this.customerUser["lastname"] +
-          " " +
+          "+" +
           this.complaintData.complaint_title;
       }
       console.log(formValue);
@@ -526,7 +526,7 @@ export class TaskComponent implements OnInit {
           this.customerUser["firstname"] +
           " " +
           this.customerUser["lastname"] +
-          " " +
+          "+" +
           this.complaintData.complaint_title;
         this.complaintData.date = this.formatDate(
           formValue.start,
@@ -586,7 +586,7 @@ export class TaskComponent implements OnInit {
           this.customerUser["firstname"] +
           " " +
           this.customerUser["lastname"] +
-          " " +
+          "+" +
           this.complaintData.complaint_title;
         this.complaintData.date = this.formatDate(
           formValue.start,
@@ -768,6 +768,9 @@ export class TaskComponent implements OnInit {
     this.customer.createCustomer(this.data, val => {
       console.log(val);
       if (val) {
+        this.data.id = val.id
+        this.customerUser = this.data;
+        this.baseDataIndicator = true;
         this.reloadNewCustomer();
         this.customerModal = false;
         // form.reset();
