@@ -215,19 +215,19 @@
     <div class="form-group">
       <div class="email col-md-6 col-xs-12">
         <p>{{language.birthday}}</p>
-        <kendo-datepicker class="col-xs-12" name="birthday" placeholder="Birthday" [(ngModel)]="data.birthday"
+        <kendo-datepicker class="col-xs-12 noPadding" name="birthday" placeholder="Birthday" [(ngModel)]="data.birthday"
           birthday.value=''></kendo-datepicker>
       </div>
       <div class="email col-md-6 col-xs-12">
         <p>{{language.sincecompany}}</p>
-        <kendo-datepicker class="col-xs-12" name="sincecompany" placeholder="Since in company"
+        <kendo-datepicker class="col-xs-12 noPadding" name="sincecompany" placeholder="Since in company"
           [(ngModel)]="data.incompanysince" incompanysince.value=''></kendo-datepicker>
       </div>
     </div>
     <div class="form-group">
       <div class="col-md-6 col-xs-12">
         <p>{{language.userType}}</p>
-        <kendo-combobox [data]="userType" (selectionChange)="selectionChange($event)" class="col-xs-12" required>
+        <kendo-combobox [data]="userType" (selectionChange)="selectionChange($event)" class="col-xs-12 noPadding" required>
         </kendo-combobox>
       </div>
       <label class="k-form-field col-md-6" style="text-align: center;">
@@ -238,7 +238,7 @@
       <div class="col-md-12 col-xs-12">
         <p>{{language.storeLocation}}</p>
         <kendo-combobox [data]="storeLocation" [textField]="'storename'" [valueField]="'id'"
-          (selectionChange)="selectionChangeStore($event)" class="col-xs-12" required>
+          (selectionChange)="selectionChangeStore($event)" class="col-xs-12 noPadding" required>
         </kendo-combobox>
       </div>
     </div>

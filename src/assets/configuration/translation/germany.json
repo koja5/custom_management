@@ -67,7 +67,11 @@
     "thursday": "Thursday",
     "friday": "Friday",
     "selectStoreIndicator": "Bitte Standort auswählen!",
-    "selectStoreIndicatorText": "Sie müssen den Ort auswählen, bevor Sie eine Aufgabe erstellen!"
+    "selectStoreIndicatorText": "Sie müssen den Ort auswählen, bevor Sie eine Aufgabe erstellen!",
+    "color": "Farbe",
+    "start": "Start",
+    "end": "Ende",
+    "telephone": "Telefon"
   },
   "navigation-menu": {
     "calendar": "Kalender",

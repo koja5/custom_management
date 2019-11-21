@@ -158,28 +158,29 @@
                     </div>
                     <div class="col-md-4 col-xs-12" *ngIf="relationshipList !== undefined">
                       <p>{{language.relationship}}</p>
-                      <kendo-combobox class="col-md-12 col-xs-12" [data]="relationshipList" [textField]="'title'"
-                        [valueField]="'id'" [(ngModel)]="baseDataOne.relationship" [valuePrimitive]="true"
-                        name="relationship" disabled="true">
+                      <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="relationshipList"
+                        [textField]="'title'" [valueField]="'id'" [(ngModel)]="baseDataOne.relationship"
+                        [valuePrimitive]="true" name="relationship" disabled="true">
                       </kendo-combobox>
                     </div>
                     <div class="col-md-4 col-xs-12" *ngIf="socialList !== undefiend">
                       <p>{{language.social}}</p>
-                      <kendo-combobox class="col-md-12 col-xs-12" [data]="socialList" [textField]="'title'"
+                      <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="socialList" [textField]="'title'"
                         [valueField]="'id'" [(ngModel)]="baseDataOne.social" [valuePrimitive]="true" name="title"
                         disabled="true">
                       </kendo-combobox>
                     </div>
                     <div class="col-md-4 col-xs-12" *ngIf="doctorList !== undefined">
                       <p>{{language.doctor}}</p>
-                      <kendo-combobox class="col-md-12 col-xs-12" [data]="doctorsList" [textField]="'firstname'"
-                        [valueField]="'id'" [(ngModel)]="baseDataOne.doctor" [valuePrimitive]="true" name="doctors"
-                        disabled="true">
+                      <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="doctorsList"
+                        [textField]="'firstname'" [valueField]="'id'" [(ngModel)]="baseDataOne.doctor"
+                        [valuePrimitive]="true" name="doctors" disabled="true">
                       </kendo-combobox>
                     </div>
                     <div class="col-md-4 col-xs-12">
                       <p>{{language.firstDate}}</p>
-                      <kendo-datepicker [(ngModel)]="baseDataOne.first_date" name="first_date" disabled="true">
+                      <kendo-datepicker [(ngModel)]="baseDataOne.first_date" name="first_date" disabled="true"
+                        class="noPadding">
                       </kendo-datepicker>
                     </div>
                   </div>
@@ -430,26 +431,27 @@
                 </div>
                 <div class="col-md-4 col-xs-12" *ngIf="relationshipList !== undefined">
                   <p>{{language.relationship}}</p>
-                  <kendo-combobox class="col-md-12 col-xs-12" [data]="relationshipList" [textField]="'title'"
+                  <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="relationshipList" [textField]="'title'"
                     [valueField]="'id'" [(ngModel)]="baseDataOne.relationship" [valuePrimitive]="true"
                     name="relationship">
                   </kendo-combobox>
                 </div>
                 <div class="col-md-4 col-xs-12" *ngIf="socialList !== undefiend">
                   <p>{{language.social}}</p>
-                  <kendo-combobox class="col-md-12 col-xs-12" [data]="socialList" [textField]="'title'"
+                  <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="socialList" [textField]="'title'"
                     [valueField]="'id'" [(ngModel)]="baseDataOne.social" [valuePrimitive]="true" name="title">
                   </kendo-combobox>
                 </div>
                 <div class="col-md-4 col-xs-12" *ngIf="doctorList !== undefined">
                   <p>{{language.doctor}}</p>
-                  <kendo-combobox class="col-md-12 col-xs-12" [data]="doctorsList" [textField]="'firstname'"
+                  <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="doctorsList" [textField]="'firstname'"
                     [valueField]="'id'" [(ngModel)]="baseDataOne.doctor" [valuePrimitive]="true" name="doctors">
                   </kendo-combobox>
                 </div>
                 <div class="col-md-4 col-xs-12">
                   <p>{{language.firstDate}}</p>
-                  <kendo-datepicker [(ngModel)]="baseDataOne.first_date" name="first_date"></kendo-datepicker>
+                  <kendo-datepicker [(ngModel)]="baseDataOne.first_date" name="first_date" class="noPadding">
+                  </kendo-datepicker>
                 </div>
               </div>
               <div class="form-group" style="text-align: center">
@@ -491,7 +493,7 @@
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.birthday}}</p>
-                    <kendo-datepicker [(ngModel)]="baseDataTwo.birthday" name="birthday">
+                    <kendo-datepicker [(ngModel)]="baseDataTwo.birthday" name="birthday" class="noPadding">
                     </kendo-datepicker>
                   </div>
                   <div class="col-md-4 col-xs-12">
@@ -500,15 +502,15 @@
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.notes}}</p>
-                    <input type="text" [(ngModel)]="baseDataTwo.notes" name="notes">
+                    <textarea kendoTextArea type="text" [(ngModel)]="baseDataTwo.notes" name="notes" style="width: 95%;"></textarea>
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.profession}}</p>
-                    <input type="text" [(ngModel)]="baseDataTwo.profession" name="profession">
+                    <textarea kendoTextArea type="text" [(ngModel)]="baseDataTwo.profession" name="profession" style="width: 95%;"></textarea>
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.useful}}</p>
-                    <input type="text" [(ngModel)]="baseDataTwo.useful" name="useful">
+                    <textarea kendoTextArea type="text" [(ngModel)]="baseDataTwo.useful" name="useful" style="width: 95%;"></textarea>
                   </div>
                 </div>
               </div>
@@ -757,23 +759,23 @@
         (ngSubmit)="operationMode === 'add' ? addTherapy(therapy) : updateTherapy(therapy)">
         <div class="col-md-12 col-xs-12">
           <p>{{language.complaintValue}}</p>
-          <kendo-multiselect class="col-md-12 col-xs-12" [data]="complaintValue" [textField]="'title'"
+          <kendo-multiselect class="col-md-12 col-xs-12 noPadding" [data]="complaintValue" [textField]="'title'"
             [valueField]="'id'" [(ngModel)]="selectedComplaint" name="complaint"
             [placeholder]="language.choiceComplaint" [valuePrimitive]="true">
           </kendo-multiselect>
         </div>
         <div class="col-md-12 col-xs-12">
           <p>{{language.therapyValue}}</p>
-          <kendo-multiselect class="col-md-12 col-xs-12" [data]="therapyValue" [textField]="'title'" [valueField]="'id'"
-            [(ngModel)]="selectedTherapies" name="therapies" [placeholder]="language.choiceTherapy"
+          <kendo-multiselect class="col-md-12 col-xs-12 noPadding" [data]="therapyValue" [textField]="'title'"
+            [valueField]="'id'" [(ngModel)]="selectedTherapies" name="therapies" [placeholder]="language.choiceTherapy"
             [valuePrimitive]="true">
           </kendo-multiselect>
         </div>
         <div class="col-md-12 col-xs-12">
-          <p>{{language.therapyPreviousValue}}</p>
-          <kendo-multiselect class="col-md-12 col-xs-12" [data]="therapyValue" [textField]="'title'" [valueField]="'id'"
-            [(ngModel)]="selectedTherapiesPrevious" name="therapies_previous" [placeholder]="language.choiceTherapy"
-            [valuePrimitive]="true">
+          <p>{{language.treatmentValue}}</p>
+          <kendo-multiselect class="col-md-12 col-xs-12 noPadding" [data]="treatmentValue" [textField]="'title'"
+            [valueField]="'id'" [(ngModel)]="selectedTreatment" name="therapies_previous"
+            [placeholder]="language.treatmentValue" [valuePrimitive]="true">
           </kendo-multiselect>
         </div>
         <div class="col-md-12 col-xs-12">
@@ -788,14 +790,14 @@
         </div>
         <div class="col-md-12 col-xs-12">
           <p>{{language.stateValue}}</p>
-          <kendo-combobox class="col-md-12 col-xs-12" [data]="stateValue" [(ngModel)]="complaintData.state" name="state"
-            [placeholder]="language.choiceState">
+          <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="stateValue" [(ngModel)]="complaintData.state"
+            name="state" [placeholder]="language.choiceState">
           </kendo-combobox>
         </div>
         <div class="col-md-12 col-xs-12">
           <p>{{language.em}}</p>
-          <kendo-combobox class="col-md-12 col-xs-12" [data]="allUsers" [textField]="'shortname'" [valueField]="'id'"
-            (valueChange)="onValueUserEmChange($event)" [(ngModel)]="selectedUser" name="em" style="padding: 0px !important;">
+          <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="allUsers" [textField]="'shortname'"
+            [valueField]="'id'" (valueChange)="onValueUserEmChange($event)" [(ngModel)]="selectedUser" name="em">
           </kendo-combobox>
         </div>
         <div class="form-group" style="text-align: center;">

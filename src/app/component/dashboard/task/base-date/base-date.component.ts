@@ -20,6 +20,7 @@ import { TaskService } from "src/app/service/task.service";
   templateUrl: "./base-date.component.html",
   styleUrls: ["./base-date.component.scss"]
 })
+
 export class BaseDateComponent implements OnInit {
   public customer = false;
   @ViewChild("upload") upload: Modal;
@@ -62,7 +63,7 @@ export class BaseDateComponent implements OnInit {
   public operationMode = "add";
   public selectedComplaint: any;
   public selectedTherapies: any;
-  public selectedTherapiesPrevious: any;
+  public selectedTreatment: any;
   public currentComplaint: any;
   public selectedForDelete: string;
   public allUsers: any;
@@ -94,22 +95,26 @@ export class BaseDateComponent implements OnInit {
   }
 
   getParameters() {
-    this.service.getParameters("Complaint").subscribe(data => {
-      this.complaintValue = data;
+    this.service.getParameters("Complaint").subscribe((data:[]) => {
+      this.complaintValue = data.sort(function(a, b) {
+        return a['sequence'] - b['sequence']
+      });
     });
 
-    this.service.getParameters("Therapy").subscribe(data => {
-      console.log(data);
-      this.therapyValue = data;
+    this.service.getParameters("Therapy").subscribe((data:[]) => {
+      this.therapyValue = data.sort(function(a, b) {
+        return a['sequence'] - b['sequence']
+      });
     });
 
     this.taskService.getCompanyUsers(localStorage.getItem("idUser"), val => {
       this.allUsers = val;
     });
 
-    this.service.getParameters("Treatment").subscribe(data => {
-      console.log(data);
-      this.treatmentValue = data;
+    this.service.getParameters("Treatment").subscribe((data:[]) => {
+      this.treatmentValue = data.sort(function(a, b) {
+        return a['sequence'] - b['sequence']
+      });
     });
 
     this.stateValue = JSON.parse(localStorage.getItem("language"))["state"];
@@ -295,7 +300,7 @@ export class BaseDateComponent implements OnInit {
   openComplaintModal() {
     this.selectedComplaint = [];
     this.selectedTherapies = [];
-    this.selectedTherapiesPrevious = [];
+    this.selectedTreatment = [];
     this.complaintData = new ComplaintTherapyModel();
     this.complaintData.complaint = "";
     this.complaintData.therapies = "";
@@ -315,7 +320,7 @@ export class BaseDateComponent implements OnInit {
   openTherapyModal() {
     this.selectedComplaint = [];
     this.selectedTherapies = [];
-    this.selectedTherapiesPrevious = [];
+    this.selectedTreatment = [];
     this.complaintData.state = null;
     this.complaintData = new ComplaintTherapyModel();
     this.complaintData.complaint = "";
@@ -535,11 +540,11 @@ export class BaseDateComponent implements OnInit {
     ).title;
 
     this.complaintData.therapies_previous = this.pickToModel(
-      this.selectedTherapiesPrevious,
+      this.selectedTreatment,
       this.therapyValue
     ).value;
     this.complaintData.therapies_previous_title = this.pickToModel(
-      this.selectedTherapiesPrevious,
+      this.selectedTreatment,
       this.therapyValue
     ).title;
 
@@ -586,11 +591,11 @@ export class BaseDateComponent implements OnInit {
     ).title;
 
     this.complaintData.therapies_previous = this.pickToModel(
-      this.selectedTherapiesPrevious,
+      this.selectedTreatment,
       this.therapyValue
     ).value;
     this.complaintData.therapies_previous_title = this.pickToModel(
-      this.selectedTherapiesPrevious,
+      this.selectedTreatment,
       this.therapyValue
     ).title;
 
@@ -614,7 +619,7 @@ export class BaseDateComponent implements OnInit {
       }
       this.selectedComplaint = [];
       this.selectedTherapies = [];
-      this.selectedTherapiesPrevious = [];
+      this.selectedTreatment = [];
     });
   }
 
@@ -633,11 +638,11 @@ export class BaseDateComponent implements OnInit {
       this.selectedTherapies = Number(event.therapies);
     }
     if (event.therapies_previous.split(";") !== undefined) {
-      this.selectedTherapiesPrevious = event.therapies_previous
+      this.selectedTreatment = event.therapies_previous
         .split(";")
         .map(Number);
     } else {
-      this.selectedTherapiesPrevious = Number(event.therapies_previous);
+      this.selectedTreatment = Number(event.therapies_previous);
     }
     if (event.em !== undefined && event.em !== null) {
       this.userUservice.getUserWithId(event.em, val => {

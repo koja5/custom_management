@@ -112,6 +112,7 @@ export class TaskComponent implements OnInit {
   public baseDataIndicator = false;
   public allUsers: any;
   public selectedUser: any;
+  public userWidth = '72%';
 
   constructor(
     public formBuilder: FormBuilder,
@@ -374,6 +375,7 @@ export class TaskComponent implements OnInit {
             console.log(data);
             this.customerUser = data[0];
             this.baseDataIndicator = true;
+            this.userWidth = '49%';
           });
       }
 
@@ -399,7 +401,7 @@ export class TaskComponent implements OnInit {
               this.getStartEndTimeForStore(this.store, this.selectedStoreId)
                 .time_therapy
             ) *
-              60000
+            60000
           ) {
             timeDuration =
               (dataItem.end.getTime() - dataItem.start.getTime()) / 60000;
@@ -425,6 +427,7 @@ export class TaskComponent implements OnInit {
         this.customerUser.id !== undefined
       ) {
         this.baseDataIndicator = true;
+        this.userWidth = '49%';
       }
 
       this.formGroup = this.formBuilder.group({
@@ -742,6 +745,7 @@ export class TaskComponent implements OnInit {
       this.customerUser = event;
       this.telephoneValue = event.telephone;
       this.baseDataIndicator = true;
+      this.userWidth = '49%';
     } else {
       this.customerUser = {
         attention: "",
@@ -749,6 +753,7 @@ export class TaskComponent implements OnInit {
       };
       this.telephoneValue = null;
       this.baseDataIndicator = false;
+      this.userWidth = '72%';
     }
   }
 
@@ -771,6 +776,7 @@ export class TaskComponent implements OnInit {
         this.data.id = val.id
         this.customerUser = this.data;
         this.baseDataIndicator = true;
+        this.userWidth = '49%';
         this.reloadNewCustomer();
         this.customerModal = false;
         // form.reset();
@@ -869,7 +875,6 @@ export class TaskComponent implements OnInit {
     } else {
       this.value = this.value.map(item => item);
     }
-
     localStorage.setItem("selectedUser", JSON.stringify(this.value));
     localStorage.setItem(
       "usersFor" + this.selectedStoreId,
@@ -1174,7 +1179,7 @@ export class TaskComponent implements OnInit {
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].end >
-            new Date(date).getHours()) ||
+          new Date(date).getHours()) ||
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start2 <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
@@ -1267,18 +1272,25 @@ export class TaskComponent implements OnInit {
   }
 
   getParameters() {
-    this.customer.getParameters("Complaint").subscribe(data => {
-      this.complaintValue = data;
+    this.customer.getParameters("Complaint").subscribe((data: []) => {
+      console.log(data);
+      this.complaintValue = data.sort(function (a, b) {
+        return a['sequence'] - b['sequence']
+      });
     });
 
-    this.customer.getParameters("Therapy").subscribe(data => {
+    this.customer.getParameters("Therapy").subscribe((data: []) => {
       console.log(data);
-      this.therapyValue = data;
+      this.therapyValue = data.sort(function (a, b) {
+        return a['sequence'] - b['sequence']
+      });
     });
 
-    this.customer.getParameters("Treatment").subscribe(data => {
+    this.customer.getParameters("Treatment").subscribe((data: []) => {
       console.log(data);
-      this.treatmentValue = data;
+      this.treatmentValue = data.sort(function (a, b) {
+        return a['sequence'] - b['sequence']
+      });
     });
 
     this.service.getCompanyUsers(localStorage.getItem("idUser"), val => {

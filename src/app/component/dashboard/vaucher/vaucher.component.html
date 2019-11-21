@@ -103,25 +103,25 @@
     (ngSubmit)="operationMode === 'add' ? createVaucher(vaucher) : editVaucher(vaucher)" ngNativeValidate>
     <div class="col-md-12 col-xs-12">
       <p>{{language.date}}</p>
-      <kendo-datepicker class="email col-md-12 col-xs-12" name="Date" placeholder="Date" [(ngModel)]="dateConst"
+      <kendo-datepicker class="email col-md-12 col-xs-12 noPadding" name="Date" placeholder="Date" [(ngModel)]="dateConst"
         dateConst.value=''>
       </kendo-datepicker>
     </div>
     <div class="col-md-12 col-xs-12">
       <p>{{language.amount}}</p>
-      <kendo-numerictextbox class="email col-md-12 col-xs-12" name="Amount" placeholder="Amount"
+      <kendo-numerictextbox class="email col-md-12 col-xs-12 noPadding" name="Amount" placeholder="Amount"
         [(ngModel)]="data.amount" amount.value=''>
       </kendo-numerictextbox>
     </div>
     <div class="col-md-12 col-xs-12">
       <p>{{language.date_redeemed}}</p>
-      <kendo-datepicker class="email col-md-12 col-xs-12" name="Date redeemed" placeholder="Date redeemed"
+      <kendo-datepicker class="email col-md-12 col-xs-12 noPadding" name="Date redeemed" placeholder="Date redeemed"
         [(ngModel)]="dateredeemedConst" dateredeemedConst.value=''>
       </kendo-datepicker>
     </div>
     <div class="col-md-12 col-xs-12">
       <p>{{language.customer}}</p>
-      <kendo-combobox class="email col-md-12 col-xs-12" [data]="customerUsers" [textField]="'shortname'"
+      <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="customerUsers" [textField]="'shortname'"
         [valueField]="'id'" [(ngModel)]="customerUser" name="customer">
       </kendo-combobox>
     </div>

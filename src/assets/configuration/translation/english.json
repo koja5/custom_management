@@ -73,7 +73,11 @@
     "thursday": "Thursday",
     "friday": "Friday",
     "selectStoreIndicatorTitle": "Please select location!",
-    "selectStoreIndicatorText": "You need to select location, before you create task!"
+    "selectStoreIndicatorText": "You need to select location, before you create task!",
+    "color": "Color",
+    "start": "Start",
+    "end": "End",
+    "telephone": "Telephone"
   },
   "navigation-menu": {
     "calendar": "Calendar",

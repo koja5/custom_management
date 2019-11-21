@@ -143,19 +143,17 @@
                 <div *ngFor="let it of item.workTime; let j = index" class="{{dateFormat(date, i, j)}}"
                   [style.background]="calendars[i].workTime[j].color"></div>
               </ng-template>
-              <ng-template kendoSchedulerEventTemplate let-event="event" let-resources="resources"
-                *ngIf="event !== undefined">
-                <div>
-                  <p style="font-weight: bold; padding: 0px;">{{ event.title.split('+')[0] }}</p>
-                  <p style="margin-top: -17px; margin-left: 7px;">{{event.title.split('+')[1]}}</p>
+              <ng-template kendoSchedulerEventTemplate let-event="event" let-resources="resources">
+                <div *ngIf="event !== undefined">
+                  <p style="font-weight: bold; padding: 0px; color: black;">{{ event.title.split('+')[0] }}</p>
+                  <p style="margin-top: -17px; margin-left: 7px; color: black;">{{event.title.split('+')[1]}}</p>
                 </div>
               </ng-template>
 
-              <ng-template kendoSchedulerAllDayEventTemplate let-event="event" let-resources="resources"
-                *ngIf="event !== undefined">
-                <div style="width: 100vh !important;">
-                  <p style="font-weight: bold; padding: 0px;">{{ event.title.split('+')[0] }}</p>
-                  <p style="margin-top: -17px; margin-left: 7px;">{{event.title.split('+')[1]}}</p>
+              <ng-template kendoSchedulerAllDayEventTemplate let-event="event" let-resources="resources">
+                <div style="width: 100vh !important;" *ngIf="event !== undefined">
+                  <p style="font-weight: bold; padding: 0px; color: black;">{{ event.title.split('+')[0] }}</p>
+                  <p style="margin-top: -17px; margin-left: 7px; color: black;">{{event.title.split('+')[1]}}</p>
                 </div>
               </ng-template>
 
@@ -181,7 +179,7 @@
                 let-editMode="editMode" *ngIf="selectedStoreId !== null && selectedStoreId !== undefined && type !== 3">
 
                 <div *ngIf="!createFormLoading" style="height: 700px; width: 400px;">
-                  <div class="spinner loading"></div>
+                  <div class="spinner loading" style="left: 47% !important;"></div>
                 </div>
 
                 <div class="k-form-inline" *ngIf="createFormLoading">
@@ -206,7 +204,12 @@
                   <div class="k-form-field">
                     <span>{{languageUser.patient}}</span>
                     <kendo-combobox [data]="customerUsers" [textField]="'shortname'" [valueField]="'id'"
-                      (valueChange)="onValueChange($event)" [(ngModel)]="customerUser">
+                      (valueChange)="onValueChange($event)" [(ngModel)]="customerUser" style.width="{{userWidth}}">
+                      <ng-template kendoComboBoxItemTemplate let-dataItem>
+                        <span class="template">{{ dataItem.shortname }}</span>
+                        <span class="template" *ngIf="dataItem.city !== ''">, {{ dataItem.city}}</span>
+                        <span class="template" *ngIf="dataItem.street !== ''">/{{dataItem.street}}</span>
+                      </ng-template>
                     </kendo-combobox>
                     <button kendoButton [icon]="'user'" [primary]="true" (click)="newCustomer()">
                       {{languageUser.newCustomer}}
@@ -254,44 +257,44 @@
                   </div>
                   <div class="k-form-field">
                     <span>{{languageUser.stateValue}}</span>
-                    <kendo-combobox class="col-md-12 col-xs-12" [data]="stateValue" [(ngModel)]="complaintData.state"
-                      name="state" [placeholder]="language.choiceState" style="padding: 0px !important;">
+                    <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="stateValue"
+                      [(ngModel)]="complaintData.state" name="state" [placeholder]="language.choiceState">
                     </kendo-combobox>
                   </div>
                   <div class="k-form-field">
                     <span>{{languageUser.em}}</span>
                     <!--<input type="text" class="col-md-12 col-xs-12" name="em" placeholder="Em"
                       [(ngModel)]="complaintData.em" cs.value=''>-->
-                    <kendo-combobox class="col-md-12 col-xs-12" [data]="allUsers" [textField]="'shortname'" [valueField]="'id'"
-                      (valueChange)="onValueUserEmChange($event)" [(ngModel)]="selectedUser" style="padding: 0px !important;">
+                    <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="allUsers" [textField]="'shortname'"
+                      [valueField]="'id'" (valueChange)="onValueUserEmChange($event)" [(ngModel)]="selectedUser">
                     </kendo-combobox>
                   </div>
                   <div class="k-form-field">
-                    <span>Color</span>
-                    <div>
+                    <span>{{language.color}}</span>
+                    <div style="width: 100%">
                       <kendo-colorpalette [palette]="palette" [value]="selected" [(ngModel)]="selected" [tileSize]="30"
                         [formControl]="formGroup.get('colorTask')">
                       </kendo-colorpalette>
                     </div>
                   </div>
                   <div class="k-form-field k-datetime-picker-wrapper">
-                    <span>Start</span>
-                    <kendo-datepicker [formControl]="formGroup.get('start')">
+                    <span>{{language.start}}</span>
+                    <kendo-datepicker [formControl]="formGroup.get('start')" class="dateWidth">
                     </kendo-datepicker>
                     <kendo-timepicker [formControl]="formGroup.get('start')" *ngIf="!formGroup.controls.isAllDay.value">
                     </kendo-timepicker>
                   </div>
                   <div class="k-form-field k-datetime-picker-wrapper">
-                    <span>End</span>
-                    <kendo-datepicker [formControl]="formGroup.get('end')">
+                    <span>{{language.end}}</span>
+                    <kendo-datepicker [formControl]="formGroup.get('end')" class="dateWidth">
                     </kendo-datepicker>
                     <kendo-timepicker [formControl]="formGroup.get('end')" *ngIf="!formGroup.controls.isAllDay.value">
                     </kendo-timepicker>
                   </div>
                   <div class="k-form-field">
-                    <span>Telephone</span>
+                    <span>{{language.telephone}}</span>
                     <input class="k-textbox" placeholder="Telephone" [formControl]="formGroup.get('telephone')"
-                      [value]="telephoneValue" readonly />
+                      [value]="telephoneValue" readonly style="width: 100%" />
                   </div>
                 </div>
               </ng-template>
@@ -318,19 +321,17 @@
               </my-navigation>
 
             </ng-template>
-            <ng-template kendoSchedulerEventTemplate let-event="event" let-resources="resources"
-              *ngIf="event !== undefined">
-              <div style="width: 100vh !important;">
-                <p style="font-weight: bold; padding: 0px;">{{ event.title.split('+')[0] }}</p>
-                <p style="margin-top: -17px; margin-left: 7px;">{{event.title.split('+')[1]}}</p>
+            <ng-template kendoSchedulerEventTemplate let-event="event" let-resources="resources">
+              <div style="width: 100vh !important;" *ngIf="event !== undefined">
+                <p style="font-weight: bold; padding: 0px; color: black;">{{ event.title.split('+')[0] }} </p>
+                <p style="margin-top: -17px; margin-left: 7px; color: black;">{{event.title.split('+')[1]}}</p>
               </div>
             </ng-template>
 
-            <ng-template kendoSchedulerAllDayEventTemplate let-event="event" let-resources="resources"
-              *ngIf="event !== undefined">
-              <div style="width: 100vh !important;">
-                <p style="font-weight: bold; padding: 0px;">{{ event.title.split('+')[0] }}</p>
-                <p style="margin-top: -17px; margin-left: 7px;">{{event.title.split('+')[1]}}</p>
+            <ng-template kendoSchedulerAllDayEventTemplate let-event="event" let-resources="resources">
+              <div style="width: 100vh !important;" *ngIf="event !== undefined">
+                <p style="font-weight: bold; padding: 0px; color: black;">{{ event.title.split('+')[0] }} </p>
+                <p style="margin-top: -17px; margin-left: 7px; color: black;">{{event.title.split('+')[1]}}</p>
               </div>
             </ng-template>
 
@@ -353,7 +354,7 @@
             <ng-template kendoSchedulerEditDialogTemplate let-formGroup="formGroup" let-isNew="isNew"
               let-editMode="editMode" *ngIf="selectedStoreId !== null && selectedStoreId !== undefined && type !== 3">
               <div *ngIf="!createFormLoading" style="height: 700px">
-                <div class=" spinner loading"></div>
+                <div class="spinner loading" style="left: 47% !important;"></div>
               </div>
               <div class="k-form-inline" *ngIf="createFormLoading">
                 <div class="k-form-field" style="text-align: center; margin: 0px !important;">
@@ -377,7 +378,12 @@
                 <div class="k-form-field">
                   <span>{{languageUser.patient}}</span>
                   <kendo-combobox [data]="customerUsers" [textField]="'shortname'" [valueField]="'id'"
-                    (valueChange)="onValueChange($event)" [(ngModel)]="customerUser">
+                    (valueChange)="onValueChange($event)" [(ngModel)]="customerUser" style.width="{{userWidth}}">
+                    <ng-template kendoComboBoxItemTemplate let-dataItem>
+                      <span class="template">{{ dataItem.shortname }}</span>
+                      <span class="template" *ngIf="dataItem.city !== ''">, {{ dataItem.city}}</span>
+                      <span class="template" *ngIf="dataItem.street !== ''">/{{dataItem.street}}</span>
+                    </ng-template>
                   </kendo-combobox>
                   <button kendoButton [icon]="'user'" [primary]="true" (click)="newCustomer()">
                     {{languageUser.newCustomer}}
@@ -425,41 +431,41 @@
                 </div>
                 <div class="k-form-field">
                   <span>{{languageUser.stateValue}}</span>
-                  <kendo-combobox class="col-md-12 col-xs-12" [data]="stateValue" [(ngModel)]="complaintData.state"
-                    name="state" [placeholder]="language.choiceState" style="padding: 0px !important;">
+                  <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="stateValue"
+                    [(ngModel)]="complaintData.state" name="state" [placeholder]="language.choiceState">
                   </kendo-combobox>
                 </div>
                 <div class="k-form-field">
                   <span>{{languageUser.em}}</span>
-                  <input type="text" class="col-md-12 col-xs-12" name="em" placeholder="Em"
-                  (valueChange)="onValueUserEmChange($event)" [(ngModel)]="complaintData.em" cs.value='' style="padding: 0px !important;">
+                  <input type="text" class="col-md-12 col-xs-12 noPadding" name="em" placeholder="Em"
+                    (valueChange)="onValueUserEmChange($event)" [(ngModel)]="complaintData.em" cs.value=''>
                 </div>
                 <div class="k-form-field">
-                  <span>Color</span>
-                  <div>
+                  <span>{{language.color}}</span>
+                  <div style="width: 100%">
                     <kendo-colorpalette [palette]="palette" [value]="selected" [(ngModel)]="selected" [tileSize]="30"
                       [formControl]="formGroup.get('colorTask')">
                     </kendo-colorpalette>
                   </div>
                 </div>
                 <div class="k-form-field k-datetime-picker-wrapper">
-                  <span>Start</span>
-                  <kendo-datepicker [formControl]="formGroup.get('start')">
+                  <span>{{language.start}}</span>
+                  <kendo-datepicker [formControl]="formGroup.get('start')" class="dateWidth">
                   </kendo-datepicker>
                   <kendo-timepicker [formControl]="formGroup.get('start')" *ngIf="!formGroup.controls.isAllDay.value">
                   </kendo-timepicker>
                 </div>
                 <div class="k-form-field k-datetime-picker-wrapper">
-                  <span>End</span>
-                  <kendo-datepicker [formControl]="formGroup.get('end')">
+                  <span>{{language.end}}</span>
+                  <kendo-datepicker [formControl]="formGroup.get('end')" class="dateWidth">
                   </kendo-datepicker>
                   <kendo-timepicker [formControl]="formGroup.get('end')" *ngIf="!formGroup.controls.isAllDay.value">
                   </kendo-timepicker>
                 </div>
                 <div class="k-form-field">
-                  <span>Telephone</span>
+                  <span>{{language.telephone}}</span>
                   <input class="k-textbox" placeholder="Telephone" [formControl]="formGroup.get('telephone')"
-                    [value]="telephoneValue" readonly />
+                    [value]="telephoneValue" readonly style="width: 100%" />
                 </div>
               </div>
             </ng-template>
