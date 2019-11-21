@@ -90,7 +90,7 @@ export class CustomersComponent implements OnInit {
   }
 
   getCustomers() {
-    this.service.getCustomers(localStorage.getItem("storeId"), val => {
+    this.service.getCustomers(localStorage.getItem("superadmin"), val => {
       console.log(val);
       if (val !== null) {
         this.currentLoadData = val;
@@ -131,7 +131,7 @@ export class CustomersComponent implements OnInit {
 
   createCustomer(form) {
     console.log(this.data);
-    this.data.storeId = localStorage.getItem("storeId");
+    this.data.storeId = localStorage.getItem("superadmin");
     this.service.createCustomer(this.data, val => {
       if (val.success) {
         this.data.id = val.id;
@@ -142,6 +142,7 @@ export class CustomersComponent implements OnInit {
           ),
           total: this.currentLoadData.length
         };*/
+        this.getCustomers();
         this.currentLoadData.push(this.data);
         this.customer = false;
         // form.reset();

@@ -86,7 +86,7 @@ export class UsersComponent implements OnInit {
   }
 
   getUser() {
-    this.service.getUsers(localStorage.getItem("idUser"), val => {
+    this.service.getUsers(localStorage.getItem("superadmin"), val => {
       console.log(val);
       this.currentLoadData = val;
       this.gridData = process(val, this.state);
@@ -97,7 +97,7 @@ export class UsersComponent implements OnInit {
 
   newUser() {
     this.initializeParams();
-    this.storeService.getStore(localStorage.getItem("idUser"), val => {
+    this.storeService.getStore(localStorage.getItem("superadmin"), val => {
       console.log(val);
       this.storeLocation = val;
     });

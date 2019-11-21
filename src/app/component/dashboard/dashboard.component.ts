@@ -110,7 +110,7 @@ export class DashboardComponent implements OnInit {
   getMe() {
     this.users.getMe(localStorage.getItem('idUser'), val => {
       console.log(val);
-      if (val[0].img.data.length !== 0) {
+      if (val[0].img !== null && val[0].img.data !== undefined && val[0].img.data.length !== 0) {
         const TYPED_ARRAY = new Uint8Array(val[0].img.data);
         const STRING_CHAR = String.fromCharCode.apply(null, TYPED_ARRAY);
         const base64String = btoa(STRING_CHAR);

@@ -89,7 +89,7 @@ export class LoginComponent implements OnInit {
     const thisObject = this;
     this.service.login(
       this.data,
-      (isLogin, notActive, user, type, id, storeId) => {
+      (isLogin, notActive, user, type, id, storeId, superadmin) => {
         console.log("login" + notActive);
         if (isLogin) {
           if (!notActive) {
@@ -100,6 +100,7 @@ export class LoginComponent implements OnInit {
             localStorage.setItem("type", type);
             localStorage.setItem("idUser", id);
             localStorage.setItem("storeId", storeId);
+            localStorage.setItem("superadmin", superadmin);
             thisObject.router.navigate([
               "dashboard",
               { outlets: { dashboard: ["task"] } }

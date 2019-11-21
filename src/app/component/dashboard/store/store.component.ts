@@ -46,13 +46,14 @@ export class StoreComponent implements OnInit {
     return JSON.stringify(context.index);
   }
   private arrayBuffer: any;
+  public loadingGrid = false;
 
   constructor(public service: StoreService, public message: MessageService) {
     // this.excelIO = new Excel.IO();
   }
 
   ngOnInit() {
-    this.idUser = localStorage.getItem("idUser");
+    this.idUser = localStorage.getItem("superadmin");
     if (localStorage.getItem("theme") !== null) {
       this.theme = localStorage.getItem("theme");
     }
@@ -66,12 +67,14 @@ export class StoreComponent implements OnInit {
   }
 
   getStore() {
+    this.loadingGrid = true;
     this.service.getStore(this.idUser, val => {
       console.log(val);
       this.currentLoadData = val;
       this.gridData = process(val, this.state);
       this.changeTheme(this.theme);
       this.loading = false;
+      this.loadingGrid = false;
     });
   }
 
@@ -106,6 +109,7 @@ export class StoreComponent implements OnInit {
         this.data.id = val.id;
         this.currentLoadData.push(this.data);
         this.gridData.total = this.currentLoadData.length;
+        this.getStore();
         this.store = false;
         Swal.fire({
           title: this.language.successful,
@@ -114,6 +118,7 @@ export class StoreComponent implements OnInit {
           type: "success"
         });
       } else {
+        this.store = false;
         Swal.fire({
           title: this.language.error,
           text: this.language[val.info],
@@ -308,7 +313,7 @@ export class StoreComponent implements OnInit {
         console.log(data[i][columns[j]]);
         object[columns[j]] = data[i][columns[j]];
       }
-      object["superadmin"] = localStorage.getItem("idUser");
+      object["superadmin"] = localStorage.getItem("superadmin");
       objectArray.push(object);
       dataArray.push(objectArray[i]);
     }

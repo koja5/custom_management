@@ -11,7 +11,7 @@
 
   <kendo-grid [data]="gridData" [height]="800" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
     [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="true" [filterable]="true"
-    (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey">
+    (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey" [loading]="loadingGrid">
     <ng-template kendoGridToolbarTemplate>
       <button type="button" kendoGridExcelCommand icon="file-excel" class="uploadFromExcel-{{theme}}">{{language.exportToExcel}}</button>
       <button kendoGridPDFCommand icon="file-pdf" class="uploadFromExcel-{{theme}}">{{language.exportToPDF}}</button>
