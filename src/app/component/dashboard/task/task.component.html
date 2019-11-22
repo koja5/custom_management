@@ -21,14 +21,14 @@
 
 <div *ngIf="language !== undefined" class="tasks">
   <div class="options">
-    <div class="col-sm-12" style="padding: 1%;" *ngIf="type !== '3'">
+    <div class="col-sm-12" style="padding: 1%;" *ngIf="type !== 3">
       <div class="col-sm-6 col-xs-12">
         <kendo-combobox class="col-md-6 col-xs-12" [data]="store" [textField]="'storename'" [valueField]="'id'"
-          [(ngModel)]="selectedStoreId" [valuePrimitive]="true" (valueChange)="selectedStore($event)">
+          [(ngModel)]="selectedStoreId" [valuePrimitive]="true" (valueChange)="selectedStore($event)" [suggest]="true" [placeholder]="language.selectStore">
         </kendo-combobox>
 
         <kendo-multiselect class="col-md-6 col-xs-12" [data]="usersInCompany" [textField]="'shortname'"
-          [valueField]="'id'" [value]="value" (valueChange)="handleValue($event)"></kendo-multiselect>
+          [valueField]="'id'" [value]="value" (valueChange)="handleValue($event)" [placeholder]="language.selectUsers"></kendo-multiselect>
       </div>
       <div class="col-sm-6 col-xs-12" *ngIf="value !== null && value.length > 1">
         <div style="float: right;">
@@ -113,7 +113,7 @@
         </div>
         <div>
           <div>
-            <kendo-scheduler *ngIf="(!loading && item.workTime !== undefined) || type === '3'" [editable]="true"
+            <kendo-scheduler *ngIf="(!loading && item.workTime !== undefined) || type === 3" [editable]="true"
               [(selectedViewIndex)]="selectedViewIndex" [kendoSchedulerBinding]="item.events"
               [kendoSchedulerReactiveEditing]="createFormGroup" class="{{ zIndex }}" [selectedDate]="selectedDate"
               scrollTime="08:00" startTime="{{startWork}}" endTime="{{endWork}}" workDayStart="{{startWork}}"
@@ -176,7 +176,7 @@
               </kendo-scheduler-agenda-view>
 
               <ng-template kendoSchedulerEditDialogTemplate let-formGroup="formGroup" let-isNew="isNew"
-                let-editMode="editMode" *ngIf="selectedStoreId !== null && selectedStoreId !== undefined && type !== 3">
+                let-editMode="editMode">
 
                 <div *ngIf="!createFormLoading" style="height: 700px; width: 400px;">
                   <div class="spinner loading" style="left: 47% !important;"></div>

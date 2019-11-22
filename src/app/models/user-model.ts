@@ -14,5 +14,6 @@ export class UserModel {
   incompanysince?: string;
   type?: string;
   storeId?: string;
+  superadmin?: string;
   active?: number;
 }

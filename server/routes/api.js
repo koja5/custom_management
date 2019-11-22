@@ -157,7 +157,8 @@ router.post("/createTask", function(req, res, next) {
       start: req.body.start,
       end: req.body.end,
       telephone: req.body.telephone,
-      therapy_id: req.body.therapy_id
+      therapy_id: req.body.therapy_id,
+      superadmin: req.body.superadmin
     };
     console.log(podaci);
 
@@ -215,7 +216,9 @@ router.post("/updateTask", function(req, res, next) {
       colorTask: req.body.colorTask,
       start: req.body.start,
       end: req.body.end,
-      telephone: req.body.telephone
+      telephone: req.body.telephone,
+      therapy_id: req.body.therapy_id,
+      superadmin: req.body.superadmin
     };
     console.log(data);
     conn.query(
@@ -287,7 +290,8 @@ router.get("/deleteTask/:id", (req, res, next) => {
   }
 });
 
-router.get("/getTasks", function(req, res, next) {
+router.get("/getTasks/:id", function(req, res, next) {
+  var reqObj = req.params.id;
   connection.getConnection(function(err, conn) {
     if (err) {
       res.json({
@@ -296,7 +300,7 @@ router.get("/getTasks", function(req, res, next) {
       });
       return;
     }
-    conn.query("SELECT * from tasks", function(err, rows) {
+    conn.query("SELECT * from tasks where superadmin '" + reqObj + "'", function(err, rows) {
       conn.release();
       if (!err) {
         res.json(rows);
@@ -429,8 +433,8 @@ router.post("/login", (req, res, next) => {
                 user: rows[0].shortname,
                 type: rows[0].type,
                 id: rows[0].id,
-                superadmin: rows[0].superadmin,
-                storeId: rows[0].storeId
+                storeId: rows[0].storeId,
+                superadmin: rows[0].superadmin
               });
             } else {
               conn.query(
@@ -454,6 +458,7 @@ router.post("/login", (req, res, next) => {
                       user: rows[0].shortname,
                       type: rows[0].type,
                       id: rows[0].id,
+                      storeId: 0,
                       superadmin: rows[0].id
                     });
                   } else {
@@ -534,6 +539,7 @@ router.post("/createUser", function(req, res, next) {
       incompanysince: req.body.incompanysince,
       type: req.body.type,
       storeId: req.body.storeId,
+      superadmin: req.body.superadmin,
       img: "",
       active: 1
     };
@@ -1400,6 +1406,7 @@ router.post("/updateUser", function(req, res, next) {
       incompanysince: req.body.incompanysince,
       type: req.body.type,
       storeId: req.body.storeId,
+      superadmin: req.body.superadmin,
       active: req.body.active
     };
 
@@ -2242,7 +2249,10 @@ router.post("/addTherapy", function(req, res, next) {
     var yyyy = today.getFullYear();
     var hh = today.getHours();
     var min = today.getMinutes();
-    // var fullData = dd + '.' + mm + '.' + yyyy + ' / ' + (hh === 0 ? '00' : hh) + ':' + (min < 10 ? ('0' + min) : min);
+    var fullDate = dd + '.' + mm + '.' + yyyy + ' / ' + (hh === 0 ? '00' : hh) + ':' + (min < 10 ? ('0' + min) : min);
+    if(req.body.date === null || req.body.date === undefined) {
+      req.body.date = fullDate;
+    }
     var date = {
       customer_id: req.body.customer_id,
       date: req.body.date,
@@ -2304,7 +2314,10 @@ router.post("/updateTherapy", function(req, res, next) {
     var yyyy = today.getFullYear();
     var hh = today.getHours();
     var min = today.getMinutes();
-    // var fullData = dd + '.' + mm + '.' + yyyy + ' / ' + (hh === 0 ? '00' : hh) + ':' + (min < 10 ? ('0' + min) : min);
+    var fullDate = dd + '.' + mm + '.' + yyyy + ' / ' + (hh === 0 ? '00' : hh) + ':' + (min < 10 ? ('0' + min) : min);
+    if(req.body.date === null || req.body.date === undefined) {
+      req.body.date = fullDate;
+    }
     var data = {
       id: req.body.id,
       customer_id: req.body.customer_id,

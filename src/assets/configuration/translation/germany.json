@@ -71,7 +71,9 @@
     "color": "Farbe",
     "start": "Start",
     "end": "Ende",
-    "telephone": "Telefon"
+    "telephone": "Telefon",
+    "selectStore": "Wählen Sie einen Standort(e.g. ",
+    "selectUsers": "Benutzer auswählen(e.g. Mark Piters)"
   },
   "navigation-menu": {
     "calendar": "Kalender",

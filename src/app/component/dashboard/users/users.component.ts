@@ -115,6 +115,7 @@ export class UsersComponent implements OnInit {
     this.data.mobile = "";
     this.data.birthday = "";
     this.data.incompanysince = "";
+    this.data.superadmin = localStorage.getItem('superadmin');
     this.data.active = 0;
   }
 

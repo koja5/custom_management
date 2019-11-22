@@ -21,11 +21,12 @@ export class ProfileComponent implements OnInit {
   public uploadSaveUrl: string; // should represent an actual API endpoint
   public uploadRemoveUrl: string;
   public language: any;
+  public id: number;
   
   constructor(public service: UsersService, public sanitizer: DomSanitizer, public message: MessageService) { }
 
   ngOnInit() {
-    
+    this.id = Number(localStorage.getItem('idUser'));
     this.language = JSON.parse(localStorage.getItem("language"))["user"];
     this.service.getMe(localStorage.getItem('idUser'), (val) => {
       console.log(val);
@@ -42,7 +43,7 @@ export class ProfileComponent implements OnInit {
       }
     });
 
-    this.service.getCompany(localStorage.getItem('storeId'), val => {
+    this.service.getCompany(localStorage.getItem('storeId-' + this.id), val => {
       console.log(val);
       this.companyData = val[0];
     })

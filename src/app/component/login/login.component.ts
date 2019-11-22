@@ -99,7 +99,8 @@ export class LoginComponent implements OnInit {
             this.cookie.set("user", type);
             localStorage.setItem("type", type);
             localStorage.setItem("idUser", id);
-            localStorage.setItem("storeId", storeId);
+            localStorage.setItem("indicatorUser", id);
+            localStorage.setItem("storeId-" + id, storeId);
             localStorage.setItem("superadmin", superadmin);
             thisObject.router.navigate([
               "dashboard",

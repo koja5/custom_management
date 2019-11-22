@@ -51,7 +51,7 @@ export class TaskComponent implements OnInit {
   public colorTask: any;
   public zIndex: string;
   public theme: string;
-  public selected = "#5843f2";
+  public selected = "#cac6c3";
   public palette: any[] = [];
   public colorPalette: any;
   public selectedColorId: any;
@@ -74,7 +74,8 @@ export class TaskComponent implements OnInit {
     birthday: "",
     attention: "",
     physicalComplaint: "",
-    storeId: ""
+    storeId: "",
+    superadmin: localStorage.getItem('superadmin')
   };
   public value: any = [];
   public store: any;
@@ -113,6 +114,7 @@ export class TaskComponent implements OnInit {
   public allUsers: any;
   public selectedUser: any;
   public userWidth = '72%';
+  public id: number;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -127,12 +129,13 @@ export class TaskComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this.type = localStorage.getItem("type");
+    this.type = Number(localStorage.getItem("type"));
+    this.id = Number(localStorage.getItem('idUser'));
     console.log(this.events);
     this.calendars = [];
     this.height = 92;
 
-    this.customer.getCustomers(localStorage.getItem("storeId"), val => {
+    this.customer.getCustomers(localStorage.getItem("superadmin"), val => {
       console.log(val);
       this.customerUsers = val;
       this.loading = false;
@@ -182,8 +185,13 @@ export class TaskComponent implements OnInit {
       }
     });
 
-    this.storeService.getStore(localStorage.getItem("idUser"), val => {
+
+    this.storeService.getStore(localStorage.getItem("superadmin"), val => {
       this.store = val;
+      this.language.selectStore += this.store[0].storename + ')';
+      if(this.type === 3) {
+        this.selectedStoreId = Number(localStorage.getItem('storeId' + this.id));
+      }
       if (!isNaN(this.selectedStoreId) && this.selectedStoreId !== undefined) {
         this.startWork = this.getStartEndTimeForStore(
           this.store,
@@ -221,22 +229,22 @@ export class TaskComponent implements OnInit {
     });
 
     if (
-      localStorage.getItem("selectedStore") !== null &&
-      localStorage.getItem("selectedUser") !== null
+      localStorage.getItem("selectedStore-" + this.id) !== null &&
+      localStorage.getItem("selectedUser-" + this.id) !== null && this.type !== 3
     ) {
       this.calendars = [];
-      this.selectedStoreId = Number(localStorage.getItem("selectedStore"));
+      this.selectedStoreId = Number(localStorage.getItem("selectedStore-" + this.id));
       this.value = JSON.parse(
-        localStorage.getItem("usersFor" + this.selectedStoreId)
+        localStorage.getItem("usersFor-" + this.selectedStoreId + "-" + this.id)
       );
       // this.selectedStore(this.selectedStoreId);
       if (this.value !== null) {
         this.getTaskForSelectedUsers(this.value);
       }
       this.getUserInCompany(this.selectedStoreId);
-    } else if (localStorage.getItem("selectedStore")) {
+    } else if (localStorage.getItem("selectedStore-" + this.id) &&  this.type !== 3) {
       this.calendars = [];
-      this.selectedStoreId = Number(localStorage.getItem("selectedStore"));
+      this.selectedStoreId = Number(localStorage.getItem("selectedStore-" + this.id));
       this.selectedStore(this.selectedStoreId);
     } else {
       if (localStorage.getItem("type") === "3") {
@@ -288,7 +296,7 @@ export class TaskComponent implements OnInit {
         this.size = [];
         this.size.push("100%");
       } else {
-        this.service.getTasks().subscribe(data => {
+        this.service.getTasks(localStorage.getItem('superadmin')).subscribe(data => {
           console.log(data);
           if (data.length !== 0) {
             for (let i = 0; i < data.length; i++) {
@@ -447,6 +455,7 @@ export class TaskComponent implements OnInit {
         user: this.customerUser,
         therapy_id: dataItem.therapy_id,
         telephone: dataItem.telephone,
+        superadmin: dataItem.superadmin,
         description: dataItem.description,
         recurrenceRule: dataItem.recurrenceRule,
         recurrenceId: dataItem.recurrenceId
@@ -501,25 +510,28 @@ export class TaskComponent implements OnInit {
 
   public saveHandler(
     { sender, formGroup, isNew, dataItem, mode },
-    customerId
+    selectedUser
   ): void {
     console.log(formGroup);
     console.log(sender);
     console.log(dataItem);
-    console.log(customerId);
+    console.log(selectedUser);
     if (formGroup.valid) {
       let formValue = formGroup.value;
       formValue.colorTask = this.selected;
       formValue.telephone = this.telephoneValue;
       formValue.user = this.customerUser;
-      if (this.type !== 3 && customerId !== undefined) {
-        formValue.creator_id = customerId;
-        formValue.title =
-          this.customerUser["firstname"] +
-          " " +
-          this.customerUser["lastname"] +
-          "+" +
-          this.complaintData.complaint_title;
+      formValue.title =
+        this.customerUser["firstname"] +
+        " " +
+        this.customerUser["lastname"] +
+        "+" +
+        this.complaintData.complaint_title;
+      formValue.superadmin = localStorage.getItem('superadmin');
+      if (this.type !== 3 && selectedUser !== undefined) {
+        formValue.creator_id = selectedUser;
+      } else {
+        formValue.creator_id = localStorage.getItem('idUser');
       }
       console.log(formValue);
       if (isNew) {
@@ -597,7 +609,6 @@ export class TaskComponent implements OnInit {
         );
         this.customer.updateTherapy(this.complaintData).subscribe(data => {
           if (data) {
-            formValue.therapy_id = data["id"];
             this.service.updateTask(formValue, val => {
               console.log(val);
               if (val.success) {
@@ -769,7 +780,7 @@ export class TaskComponent implements OnInit {
 
   createCustomer(form) {
     console.log(this.data);
-    this.data.storeId = localStorage.getItem("storeId");
+    this.data.storeId = localStorage.getItem("storeId-" + this.id);
     this.customer.createCustomer(this.data, val => {
       console.log(val);
       if (val) {
@@ -875,9 +886,9 @@ export class TaskComponent implements OnInit {
     } else {
       this.value = this.value.map(item => item);
     }
-    localStorage.setItem("selectedUser", JSON.stringify(this.value));
+    localStorage.setItem("selectedUser-" + this.id, JSON.stringify(this.value));
     localStorage.setItem(
-      "usersFor" + this.selectedStoreId,
+      "usersFor-" + this.selectedStoreId + "-" + this.id,
       JSON.stringify(this.value)
     );
     this.getTaskForSelectedUsers(this.value);
@@ -889,7 +900,7 @@ export class TaskComponent implements OnInit {
     this.calendars = [];
     this.height = 92;
     if (value.length === 0) {
-      this.service.getTasks().subscribe(data => {
+      this.service.getTasks(localStorage.getItem('superadmin')).subscribe(data => {
         this.events = [];
         for (let i = 0; i < data.length; i++) {
           data[i].start = new Date(data[i].start);
@@ -991,16 +1002,16 @@ export class TaskComponent implements OnInit {
     this.loading = true;
     this.calendars = [];
     if (
-      localStorage.getItem("usersFor" + this.selectedStoreId) !== null &&
+      localStorage.getItem("usersFor-" + this.selectedStoreId + "-" + this.id) !== null &&
       event !== undefined
     ) {
       this.value = JSON.parse(
-        localStorage.getItem("usersFor" + this.selectedStoreId)
+        localStorage.getItem("usersFor-" + this.selectedStoreId + "-" + this.id)
       );
       this.getTaskForSelectedUsers(this.value);
       this.getUserInCompany(event);
       this.setStoreWork(event);
-      localStorage.setItem("selectedStore", event);
+      localStorage.setItem("selectedStore-" + this.id, event);
     } else {
       this.value = [];
       if (event !== undefined) {
@@ -1030,7 +1041,7 @@ export class TaskComponent implements OnInit {
         });
         this.getUserInCompany(event);
       } else {
-        this.service.getTasks().subscribe(data => {
+        this.service.getTasks(localStorage.getItem('superadmin')).subscribe(data => {
           console.log(data);
           if (data.length !== 0) {
             for (let i = 0; i < data.length; i++) {
@@ -1049,7 +1060,8 @@ export class TaskComponent implements OnInit {
           } else {
             this.calendars.push({ name: null, events: [] });
           }
-          localStorage.removeItem("selectedStore");
+          localStorage.removeItem("selectedStore-" + this.id);
+          this.usersInCompany = [];
           this.startWork = "08:00";
           this.endWork = "22:00";
           this.timeDuration = "60";
@@ -1099,7 +1111,7 @@ export class TaskComponent implements OnInit {
         ) / Number(this.timeDuration);
     }
 
-    localStorage.setItem("selectedStore", event);
+    localStorage.setItem("selectedStore-" + this.id, event);
   }
 
   getStartEndTimeForStore(data, id) {
@@ -1126,6 +1138,7 @@ export class TaskComponent implements OnInit {
   getUserInCompany(storeId) {
     this.service.getUsersInCompany(storeId, val => {
       this.usersInCompany = val;
+      this.language.selectedUsers += this.usersInCompany[0].shortname;
       this.loading = false;
     });
   }
@@ -1350,7 +1363,7 @@ export class TaskComponent implements OnInit {
   reloadNewCustomer() {
     this.customerUsers = null;
     setTimeout(() => {
-      this.customer.getCustomers(localStorage.getItem("storeId"), val => {
+      this.customer.getCustomers(localStorage.getItem("storeId-" + this.id), val => {
         console.log(val);
         this.customerUsers = val;
         this.loading = false;

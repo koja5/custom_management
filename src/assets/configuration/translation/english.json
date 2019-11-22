@@ -77,7 +77,9 @@
     "color": "Color",
     "start": "Start",
     "end": "End",
-    "telephone": "Telephone"
+    "telephone": "Telephone",
+    "selectStore": "Select a location(e.g. ",
+    "selectUsers": "Select users(e.g. Mark Piters)"
   },
   "navigation-menu": {
     "calendar": "Calendar",

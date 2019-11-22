@@ -54,6 +54,7 @@ export class VaucherComponent implements OnInit {
   public dialog = false;
   public dateConst: any;
   public dateredeemedConst: any;
+  public id: number;
 
   constructor(
     private service: VaucherService,
@@ -62,6 +63,8 @@ export class VaucherComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    
+    this.id = Number(localStorage.getItem('idUser'));
     this.getVauchers();
 
     if (localStorage.getItem('language') !== null) {
@@ -377,7 +380,7 @@ export class VaucherComponent implements OnInit {
   }
 
   getCustomer() {
-    this.customer.getCustomers(localStorage.getItem('storeId'), val => {
+    this.customer.getCustomers(localStorage.getItem('storeId-' + this.id), val => {
       console.log(val);
       this.customerUsers = val;
       this.loading = false;
