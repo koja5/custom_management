@@ -611,12 +611,12 @@ dt {
     color: #626ed4
 }
 
-.content-page {
+.content-page-vertical {
     margin-left: 240px;
     overflow: hidden
 }
 
-.content-page .content {
+.content-page-vertical .content, .content-page-horizontal .content {
     padding: 0 15px 0px 15px;
     margin-top: 70px;
 }
@@ -665,7 +665,7 @@ dt {
     background-color: #333547
 }
 
-.enlarged #wrapper .content-page {
+.enlarged #wrapper .content-page-vertical, .enlarged #wrapper .content-page-horizontal {
     margin-left: 70px
 }
 
@@ -3365,7 +3365,7 @@ a.faq[data-toggle=collapse]:before {
         margin-top: 0;
         padding-top: 0
     }
-    .content-page {
+    .content-page-vertical, .content-page-horizontal {
         margin-left: 0;
         margin-top: 0
     }

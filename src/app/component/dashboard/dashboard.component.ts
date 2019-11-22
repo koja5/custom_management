@@ -26,6 +26,7 @@ export class DashboardComponent implements OnInit {
   public imagePath: any;
   public selectedNode = 'calendar';
   public selectedNodeModel = new NavigationMenuModel();
+  public typeOfDesign = 'vertical';
 
   constructor(
     public router: Router,
