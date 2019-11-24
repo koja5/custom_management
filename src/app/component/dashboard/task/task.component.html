@@ -21,14 +21,16 @@
 
 <div *ngIf="language !== undefined" class="tasks">
   <div class="options">
-    <div class="col-sm-12" style="padding: 1%;" *ngIf="type !== 3">
+    <div class="col-sm-12" style="padding: 1% 1% 1% 0px;" *ngIf="type !== 3">
       <div class="col-sm-6 col-xs-12">
-        <kendo-combobox class="col-md-6 col-xs-12" [data]="store" [textField]="'storename'" [valueField]="'id'"
-          [(ngModel)]="selectedStoreId" [valuePrimitive]="true" (valueChange)="selectedStore($event)" [suggest]="true" [placeholder]="language.selectStore">
+        <kendo-combobox class="col-md-6 col-xs-12 noPaddingNoMargin" [data]="store" [textField]="'storename'"
+          [valueField]="'id'" [(ngModel)]="selectedStoreId" [valuePrimitive]="true"
+          (valueChange)="selectedStore($event)" [suggest]="true" [placeholder]="language.selectStore">
         </kendo-combobox>
 
-        <kendo-multiselect class="col-md-6 col-xs-12" [data]="usersInCompany" [textField]="'shortname'"
-          [valueField]="'id'" [value]="value" (valueChange)="handleValue($event)" [placeholder]="language.selectUsers"></kendo-multiselect>
+        <kendo-multiselect class="col-md-6 col-xs-12 noPaddingNoMargin" [data]="usersInCompany"
+          [textField]="'shortname'" [valueField]="'id'" [value]="value" (valueChange)="handleValue($event)"
+          [placeholder]="language.selectUsers"></kendo-multiselect>
       </div>
       <div class="col-sm-6 col-xs-12" *ngIf="value !== null && value.length > 1">
         <div style="float: right;">
@@ -437,8 +439,9 @@
                 </div>
                 <div class="k-form-field">
                   <span>{{languageUser.em}}</span>
-                  <input type="text" class="col-md-12 col-xs-12 noPadding" name="em" placeholder="Em"
-                    (valueChange)="onValueUserEmChange($event)" [(ngModel)]="complaintData.em" cs.value=''>
+                  <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="allUsers" [textField]="'shortname'"
+                    [valueField]="'id'" (valueChange)="onValueUserEmChange($event)" [(ngModel)]="selectedUser">
+                  </kendo-combobox>
                 </div>
                 <div class="k-form-field">
                   <span>{{language.color}}</span>

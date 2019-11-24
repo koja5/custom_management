@@ -58,6 +58,17 @@
         </kendo-grid-column>
       </kendo-grid-pdf>
       <kendo-grid-excel fileName="Customers.xlsx"></kendo-grid-excel>
+      <ng-template kendoGridNoRecordsTemplate>
+        <div class="row no-results-element">
+          <div class="text-center">
+            <i class="fa fa-heartbeat no-results-icon"></i><br>
+          </div>
+          <div class="text-center m-t-md">
+            <p class="m-b-none">
+              You have no records yet! Let's start with adding records. </p>
+          </div>
+        </div>
+      </ng-template>
     </kendo-grid>
   </div>
 

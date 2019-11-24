@@ -8,12 +8,12 @@
     {{type}}
   </h2>
 
-  <kendo-grid *ngIf="type !== 'Doctors'" [data]="view | async" [style.height]="'76vh'"
-    [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort" [pageable]="true" [sortable]="true"
-    (dataStateChange)="onStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)"
-    (save)="saveHandler($event)" (remove)="removeHandler($event)" (add)="addHandler($event)" [navigable]="true"
-    [loading]="loading" (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)"
-    (sortChange)="sortChange($event)" [kendoGridSelectBy]="mySelectionKey">
+  <kendo-grid *ngIf="type !== 'Doctors' && type !== 'Therapy' && type !== 'VATTax'" [data]="view | async"
+    [style.height]="'76vh'" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
+    [pageable]="true" [sortable]="true" (dataStateChange)="onStateChange($event)" (edit)="editHandler($event)"
+    (cancel)="cancelHandler($event)" (save)="saveHandler($event)" (remove)="removeHandler($event)"
+    (add)="addHandler($event)" [navigable]="true" [loading]="loading" (dataStateChange)="dataStateChange($event)"
+    (pageChange)="pageChange($event)" (sortChange)="sortChange($event)" [kendoGridSelectBy]="mySelectionKey">
     <ng-template kendoGridToolbarTemplate>
       <button class="uploadFromExcel-{{theme}}" kendoGridAddCommand>Add new</button>
     </ng-template>
@@ -24,10 +24,103 @@
       <ng-template kendoGridCellTemplate let-isNew="isNew">
         <button kendoGridEditCommand [primary]="true" (click)="changeTheme(theme)">Edit</button>
         <button kendoGridRemoveCommand (click)="changeTheme(theme)">Remove</button>
-        <button kendoGridSaveCommand [disabled]="formGroup?.invalid" (click)="changeTheme(theme)">{{ isNew ? 'Add' : 'Update' }}</button>
+        <button kendoGridSaveCommand [disabled]="formGroup?.invalid"
+          (click)="changeTheme(theme)">{{ isNew ? 'Add' : 'Update' }}</button>
         <button kendoGridCancelCommand>{{ isNew ? 'Discard changes' : 'Cancel' }}</button>
       </ng-template>
     </kendo-grid-command-column>
+    <ng-template kendoGridNoRecordsTemplate>
+      <div class="row no-results-element">
+        <div class="text-center">
+          <i class="fa fa-heartbeat no-results-icon"></i><br>
+        </div>
+        <div class="text-center m-t-md">
+          <p class="m-b-none">
+            You have no records yet! Let's start with adding records. </p>
+        </div>
+      </div>
+    </ng-template>
+  </kendo-grid>
+
+  <kendo-grid *ngIf="type === 'VATTax'" [data]="view | async" [style.height]="'76vh'" [pageSize]="gridState.take"
+    [skip]="gridState.skip" [sort]="gridState.sort" [pageable]="true" [sortable]="true"
+    (dataStateChange)="onStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)"
+    (save)="saveHandler($event)" (remove)="removeHandler($event)" (add)="addHandler($event)" [navigable]="true"
+    [loading]="loading" (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)"
+    (sortChange)="sortChange($event)" [kendoGridSelectBy]="mySelectionKey">
+    <ng-template kendoGridToolbarTemplate>
+      <button class="uploadFromExcel-{{theme}}" kendoGridAddCommand>Add new</button>
+    </ng-template>
+    <kendo-grid-column field="id" title="ID" [hidden]="true"></kendo-grid-column>
+    <kendo-grid-column field="title" title="%"></kendo-grid-column>
+    <kendo-grid-column field="sequence" title="Order"></kendo-grid-column>
+    <kendo-grid-command-column title="command" width="220">
+      <ng-template kendoGridCellTemplate let-isNew="isNew">
+        <button kendoGridEditCommand [primary]="true" (click)="changeTheme(theme)">Edit</button>
+        <button kendoGridRemoveCommand (click)="changeTheme(theme)">Remove</button>
+        <button kendoGridSaveCommand [disabled]="formGroup?.invalid"
+          (click)="changeTheme(theme)">{{ isNew ? 'Add' : 'Update' }}</button>
+        <button kendoGridCancelCommand>{{ isNew ? 'Discard changes' : 'Cancel' }}</button>
+      </ng-template>
+    </kendo-grid-command-column>
+    <ng-template kendoGridNoRecordsTemplate>
+      <div class="row no-results-element">
+        <div class="text-center">
+          <i class="fa fa-heartbeat no-results-icon"></i><br>
+        </div>
+        <div class="text-center m-t-md">
+          <p class="m-b-none">
+            You have no records yet! Let's start with adding records. </p>
+        </div>
+      </div>
+    </ng-template>
+  </kendo-grid>
+
+  <kendo-grid *ngIf="type === 'Therapy'" [data]="view | async" [style.height]="'76vh'" [pageSize]="gridState.take"
+    [skip]="gridState.skip" [sort]="gridState.sort" [pageable]="true" [sortable]="true"
+    (dataStateChange)="onStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)"
+    (save)="saveHandler($event)" (remove)="removeHandler($event)" (add)="addHandler($event)" [navigable]="true"
+    [loading]="loading" (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)"
+    (sortChange)="sortChange($event)" [kendoGridSelectBy]="mySelectionKey">
+    <ng-template kendoGridToolbarTemplate>
+      <button class="uploadFromExcel-{{theme}}" kendoGridAddCommand>Add new</button>
+    </ng-template>
+    <kendo-grid-column field="id" title="ID" [hidden]="true"></kendo-grid-column>
+    <kendo-grid-column field="title" title="Title"></kendo-grid-column>
+    <kendo-grid-column field="sequence" title="Order"></kendo-grid-column>
+    <kendo-grid-column field="unit" title="Unit"></kendo-grid-column>
+    <kendo-grid-column field="description" title="Description"></kendo-grid-column>
+    <kendo-grid-column field="art_nr" title="ArtNr"></kendo-grid-column>
+    <kendo-grid-column field="net_price" title="Net price"></kendo-grid-column>
+    <kendo-grid-column field="vat" title="VAT">
+      <ng-template kendoGridCellTemplate let-dataItem *ngIf="vatTexList !== undefined">
+        <kendo-combobox [data]="vatTexList" [textField]="'title'" [valueField]="'id'"
+          (selectionChange)="selectionVAT($event)" [(ngModel)]="dataItem.vat" [valuePrimitive]="true"
+          name="vat"></kendo-combobox>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="gross_price" title="Gross price"></kendo-grid-column>
+    <kendo-grid-column field="category" title="Category"></kendo-grid-column>
+    <kendo-grid-command-column title="command" width="220">
+      <ng-template kendoGridCellTemplate let-isNew="isNew">
+        <button kendoGridEditCommand [primary]="true" (click)="changeTheme(theme)">Edit</button>
+        <button kendoGridRemoveCommand (click)="changeTheme(theme)">Remove</button>
+        <button kendoGridSaveCommand [disabled]="formGroup?.invalid"
+          (click)="changeTheme(theme)">{{ isNew ? 'Add' : 'Update' }}</button>
+        <button kendoGridCancelCommand>{{ isNew ? 'Discard changes' : 'Cancel' }}</button>
+      </ng-template>
+    </kendo-grid-command-column>
+    <ng-template kendoGridNoRecordsTemplate>
+      <div class="row no-results-element">
+        <div class="text-center">
+          <i class="fa fa-heartbeat no-results-icon"></i><br>
+        </div>
+        <div class="text-center m-t-md">
+          <p class="m-b-none">
+            You have no records yet! Let's start with adding records. </p>
+        </div>
+      </div>
+    </ng-template>
   </kendo-grid>
 
   <!--<kendo-grid *ngIf="type === 'Therapies'" [data]="view | async" [style.height]="'76vh'" [pageSize]="gridState.take"
@@ -87,16 +180,28 @@
       <ng-template kendoGridCellTemplate let-dataItem *ngIf="doctorTypeList !== undefined">
         <kendo-combobox [data]="doctorTypeList" [textField]="'title'" [valueField]="'id'"
           (selectionChange)="selectionDoctorType($event)" [(ngModel)]="dataItem.doctor_type" [valuePrimitive]="true"
-          name="storename"></kendo-combobox>
+          name="doctorType"></kendo-combobox>
       </ng-template>
     </kendo-grid-column>
     <kendo-grid-command-column title="command" width="180">
       <ng-template kendoGridCellTemplate let-isNew="isNew">
         <button kendoGridEditCommand [primary]="true">Edit</button>
         <button kendoGridRemoveCommand>Remove</button>
-        <button kendoGridSaveCommand [disabled]="formGroup?.invalid" (click)="changeTheme(theme)">{{ isNew ? 'Add' : 'Update' }}</button>
+        <button kendoGridSaveCommand [disabled]="formGroup?.invalid"
+          (click)="changeTheme(theme)">{{ isNew ? 'Add' : 'Update' }}</button>
         <button kendoGridCancelCommand>{{ isNew ? 'Discard changes' : 'Cancel' }}</button>
       </ng-template>
     </kendo-grid-command-column>
+    <ng-template kendoGridNoRecordsTemplate>
+      <div class="row no-results-element">
+        <div class="text-center">
+          <i class="fa fa-heartbeat no-results-icon"></i><br>
+        </div>
+        <div class="text-center m-t-md">
+          <p class="m-b-none">
+            You have no records yet! Let's start with adding records. </p>
+        </div>
+      </div>
+    </ng-template>
   </kendo-grid>
 </div>

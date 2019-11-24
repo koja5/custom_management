@@ -19,6 +19,9 @@
         (click)="changeTab('doctor')"><span class="fa fa-user"></span> Doctor</a>
     <li [ngClass]="currentTab === 'doctors' ? 'active' : ''" class="col-md-2 col-sm-4 col-xs-6"> <a
         (click)="changeTab('doctors')"><span class="fa fa-users"></span> Doctors</a>
+    <li [ngClass]="currentTab === 'vat_tax' ? 'active' : ''" class="col-md-2 col-sm-4 col-xs-6"> <a
+        (click)="changeTab('vat_tax')"><span class="fa fa-percent"></span> VAT Tax</a>
+
     </li>
   </ul>
   <div class="tab-content" *ngIf="currentTab === 'complaint'">
@@ -59,6 +62,11 @@
   <div *ngIf="currentTab === 'doctors'">
     <div id="profile-tab" class="tab-pane active">
       <app-parameter-item [type]="'Doctors'"></app-parameter-item>
+    </div>
+  </div>
+  <div *ngIf="currentTab === 'vat_tax'">
+    <div id="profile-tab" class="tab-pane active">
+      <app-parameter-item [type]="'VATTax'"></app-parameter-item>
     </div>
   </div>
 </div>

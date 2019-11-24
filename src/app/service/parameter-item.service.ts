@@ -44,6 +44,11 @@ export class ParameterItemService extends BehaviorSubject<any[]> {
       .map(res => res);
   }
 
+  getVATTex() {
+    return this.http.get('/api/getVATTaxList')
+      .map(res => res);
+  }
+
   public addData(data: any, isNew?: boolean, type?: string) {
     const action = isNew ? CREATE_ACTION : UPDATE_ACTION;
 

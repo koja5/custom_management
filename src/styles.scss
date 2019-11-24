@@ -616,9 +616,14 @@ dt {
     overflow: hidden
 }
 
-.content-page-vertical .content, .content-page-horizontal .content {
+.content-page-vertical .content {
     padding: 0 15px 0px 15px;
     margin-top: 70px;
+}
+
+.content-page-horizontal .content {
+    padding: 0 15px 0px 15px;
+    margin-top: 0px;
 }
 
 
@@ -3788,4 +3793,20 @@ input[type='file'] {
 
 .noPadding {
     padding: 0px !important;
+}
+
+.no-results-element {
+    margin: 30px auto;
+    max-width: 450px;
+    width: 100%;
+    color: #000;
+}
+
+.no-results-icon {
+    opacity: 0.3;
+    font-size: 100px;
+}
+
+tr.k-grid-norecords:hover {
+    background-color: #fff !important;
 }

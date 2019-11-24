@@ -33,11 +33,13 @@ export class ParameterItemComponent implements OnInit {
   public doctorTypeList: any;
   public selectedGender: string;
   public selectedDoctorType: string;
+  public selectedVAT: string;
   private editedRowIndex: number;
   public currentLoadData: any;
   public therapyList: any;
   public selectedTherapy: any;
   public theme: string;
+  public vatTexList: any;
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
   }
@@ -49,7 +51,7 @@ export class ParameterItemComponent implements OnInit {
   constructor(private service: ParameterItemService, public message: MessageService) { }
 
   public ngOnInit(): void {
-
+    console.log(this.type);
     if (this.type === 'Doctors') {
       this.service.getDoctorType().subscribe(
         data => {
@@ -64,6 +66,14 @@ export class ParameterItemComponent implements OnInit {
           this.therapyList = data;
         }
       );
+    }
+
+    if(this.type === 'Therapy') {
+      this.service.getVATTex().subscribe(
+        data => {
+          this.vatTexList = data;
+        }
+      )
     }
 
     this.view = this.service.pipe(map(data => {
@@ -108,11 +118,19 @@ export class ParameterItemComponent implements OnInit {
         telephone: new FormControl(),
         email: new FormControl()
       });
-    } /*else if (this.type === 'Therapies') {
+    } else if(this.type === 'Therapy') {
       this.formGroup = new FormGroup({
-        sequence: new FormControl()
+        id: new FormControl(),
+        title: new FormControl(),
+        sequence: new FormControl(),
+        unit: new FormControl(),
+        description: new FormControl(), 
+        art_nr: new FormControl(),
+        net_price: new FormControl(),
+        gross_price: new FormControl(),
+        category: new FormControl()
       });
-    }*/ else {
+    } else {
       this.formGroup = new FormGroup({
         title: new FormControl(),
         sequence: new FormControl()
@@ -141,13 +159,20 @@ export class ParameterItemComponent implements OnInit {
       this.selectedDoctorType = dataItem.doctor_type;
       this.selectedGender = dataItem.gender;
 
-    } /*else if (this.type === 'Therapies') {
+    } else if(this.type === 'Therapy') {
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
-        sequence: new FormControl(dataItem.sequence)
+        title: new FormControl(dataItem.title),
+        sequence: new FormControl(dataItem.sequence),
+        unit: new FormControl(dataItem.unit),
+        description: new FormControl(dataItem.description), 
+        art_nr: new FormControl(dataItem.art_ne),
+        net_price: new FormControl(dataItem.net_price),
+        gross_price: new FormControl(dataItem.gross_price),
+        category: new FormControl(dataItem.category)
       });
-      this.selectedTherapy = dataItem.therapy_id;
-    }*/ else {
+      this.selectedVAT = dataItem.vat;
+    } else {
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
         title: new FormControl(dataItem.title),
@@ -172,6 +197,7 @@ export class ParameterItemComponent implements OnInit {
     product.gender = this.selectedGender;
     product.doctor_type = this.selectedDoctorType;
     product.therapy_id = this.selectedTherapy;
+    product.vat = this.selectedVAT;
     this.service.addData(product, isNew, this.type);
 
     sender.closeRow(rowIndex);
@@ -211,6 +237,10 @@ export class ParameterItemComponent implements OnInit {
   selectionTherapy(event) {
     console.log(event);
     this.selectedTherapy = event.id;
+  }
+
+  selectionVAT(event) {
+    this.selectedVAT = event.id;
   }
 
   pageChange(event: PageChangeEvent): void {

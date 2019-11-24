@@ -60,6 +60,24 @@ export class UsersComponent implements OnInit {
     return JSON.stringify(context.index);
   }
   private arrayBuffer: any;
+  private icon: string = 'cog';
+  private settings: Array<any> = [
+    {
+      text: "My Profile"
+    },
+    {
+      text: "Friend Requests"
+    },
+    {
+      text: "Account Settings"
+    },
+    {
+      text: "Support"
+    },
+    {
+      text: "Log Out"
+    }
+  ];
 
   constructor(
     public service: UsersService,
@@ -115,7 +133,7 @@ export class UsersComponent implements OnInit {
     this.data.mobile = "";
     this.data.birthday = "";
     this.data.incompanysince = "";
-    this.data.superadmin = localStorage.getItem('superadmin');
+    this.data.superadmin = localStorage.getItem("superadmin");
     this.data.active = 0;
   }
 

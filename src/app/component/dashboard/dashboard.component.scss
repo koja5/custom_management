@@ -197,7 +197,13 @@
 
 /********************************/
 
-/*.dropdown-content.as-select.form-field-tax-select-dropdown-menu {
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700);
+
+li a span {
+  font-family: "Open Sans", sans-serif;
+}
+
+.dropdown-content.as-select.form-field-tax-select-dropdown-menu {
   background-color: white;
   width: auto; }
   .dropdown-content.as-select.form-field-tax-select-dropdown-menu .form-field-checkbox,
@@ -639,8 +645,9 @@ button,
       height: 56px; }
     .dashboard-header .dashboard-header-brand .cs-logo-large {
       display: none;
-      width: 65px;
-    height: 55px; }
+      width: 122px;
+    height: 40px;
+    margin-top: 10px; }
     @media only screen and (min-width: 1200px) {
       .dashboard-header .dashboard-header-brand {
         padding: 0 40px; }
@@ -934,4 +941,3 @@ button,
   z-index: 20;
   background-color: #eeeff1;
   width: 56px; }
-*/

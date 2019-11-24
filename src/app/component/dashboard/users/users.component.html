@@ -4,10 +4,13 @@
 
 <div *ngIf="!loading">
   <div class="user-options">
-    <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">{{language.newUser}}</button>
-    <label class="uploadFromExcel-{{theme}}"><span class='k-icon k-i-file-excel'></span> {{ language.uploadFromExcel }}<input type="file"
-        name="files[]" multiple id="jsonFile" accept=".xlsx" (change)="onFileChange($event)"
-        [(ngModel)]="fileValue" /></label>
+    <kendo-buttongroup>
+      <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">{{language.newUser}}</button>
+    </kendo-buttongroup>
+    <!--<kendo-dropdownbutton [data]="settings" [icon]="icon"></kendo-dropdownbutton>-->
+    <label class="uploadFromExcel-{{theme}}"><span class='k-icon k-i-file-excel'></span>
+      {{ language.uploadFromExcel }}<input type="file" name="files[]" multiple id="jsonFile" accept=".xlsx"
+        (change)="onFileChange($event)" [(ngModel)]="fileValue" /></label>
   </div>
 
   <kendo-grid [data]="gridData" [height]="800" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
@@ -15,7 +18,8 @@
     (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)" (sortChange)="sortChange($event)"
     [kendoGridSelectBy]="mySelectionKey">
     <ng-template kendoGridToolbarTemplate>
-      <button kendoGridExcelCommand icon="file-excel" class="uploadFromExcel-{{theme}}">{{language.exportToExcel}}</button>
+      <button kendoGridExcelCommand icon="file-excel"
+        class="uploadFromExcel-{{theme}}">{{language.exportToExcel}}</button>
       <button kendoGridPDFCommand icon="file-pdf" class="uploadFromExcel-{{theme}}">{{language.exportToPDF}}</button>
     </ng-template>
     <kendo-grid-column field="shortname" title="Username" width="120">
@@ -64,6 +68,17 @@
     </kendo-grid-pdf>
 
     <kendo-grid-excel fileName="Users.xlsx"></kendo-grid-excel>
+    <ng-template kendoGridNoRecordsTemplate>
+      <div class="row no-results-element">
+        <div class="text-center">
+          <i class="fa fa-heartbeat no-results-icon"></i><br>
+        </div>
+        <div class="text-center m-t-md">
+          <p class="m-b-none">
+            You have no records yet! Let's start with adding records. </p>
+        </div>
+      </div>
+    </ng-template>
   </kendo-grid>
 </div>
 
@@ -227,7 +242,8 @@
     <div class="form-group">
       <div class="col-md-6 col-xs-12">
         <p>{{language.userType}}</p>
-        <kendo-combobox [data]="userType" (selectionChange)="selectionChange($event)" class="col-xs-12 noPadding" required>
+        <kendo-combobox [data]="userType" (selectionChange)="selectionChange($event)" class="col-xs-12 noPadding"
+          required>
         </kendo-combobox>
       </div>
       <label class="k-form-field col-md-6" style="text-align: center;">

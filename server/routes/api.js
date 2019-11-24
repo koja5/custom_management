@@ -300,7 +300,7 @@ router.get("/getTasks/:id", function(req, res, next) {
       });
       return;
     }
-    conn.query("SELECT * from tasks where superadmin '" + reqObj + "'", function(err, rows) {
+    conn.query("SELECT * from tasks where superadmin = '" + reqObj + "'", function(err, rows) {
       conn.release();
       if (!err) {
         res.json(rows);
@@ -544,7 +544,7 @@ router.post("/createUser", function(req, res, next) {
       active: 1
     };
 
-    conn.query("SELECT * FROM users WHERE email=?", [req.body.email], function(
+    conn.query("SELECT * FROM users WHERE email=? and superadmin=?", [req.body.email, req.body.superadmin], function(
       err,
       rows,
       fields
@@ -766,7 +766,7 @@ router.post("/createStore", function(req, res, next) {
       superadmin: req.body.superadmin
     };
 
-    conn.query("SELECT * FROM store WHERE email=?", [req.body.email], function(
+    conn.query("SELECT * FROM store WHERE email=? and superadmin=?", [req.body.email, req.body.superadmin], function(
       err,
       rows,
       fields
@@ -2663,7 +2663,14 @@ router.post("/addTherapyList", function(req, res, next) {
     console.log(req);
     var date = {
       title: req.body.title,
-      sequence: req.body.sequence
+      sequence: req.body.sequence,
+      unit: req.body.unit,
+      description: req.body.description,
+      art_nr: req.body.art_nr,
+      net_price: req.body.net_price,
+      vat: req.body.vat,
+      gross_price: req.body.gross_price,
+      category: req.body.category
     };
 
     conn.query("insert into therapy_list SET ?", date, function(err, rows) {
@@ -2738,10 +2745,18 @@ router.post("/updateTherapyList", function(req, res, next) {
     }
 
     var response = null;
+    console.log(req.body); 
     var data = {
       id: req.body.id,
       title: req.body.title,
-      sequence: req.body.sequence
+      sequence: req.body.sequence,
+      unit: req.body.unit,
+      description: req.body.description,
+      art_nr: req.body.art_ne,
+      net_price: req.body.net_price,
+      vat: req.body.vat,
+      gross_price: req.body.gross_price,
+      category: req.body.category
     };
 
     conn.query(
@@ -3718,7 +3733,162 @@ router.post("/updateTreatmentList", function(req, res, next) {
   });
 });
 
-// end doctors_list
+// end treatment_list
+
+// start vattax_list
+
+router.get("/getVATTaxList", function(req, res, next) {
+  connection.getConnection(function(err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+    conn.query("select * from vattax_list", function(err, rows) {
+      conn.release();
+      if (!err) {
+        res.json(rows);
+      } else {
+        res.json({
+          code: 100,
+          status: "Error in connection database"
+        });
+      }
+    });
+
+    conn.on("error", function(err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    });
+  });
+});
+
+router.post("/addVATTaxList", function(req, res, next) {
+  connection.getConnection(function(err, conn) {
+    console.log(conn);
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+
+    response = null;
+    console.log(req);
+    var date = {
+      title: req.body.title,
+      sequence: req.body.sequence
+    };
+
+    conn.query("insert into vattax_list SET ?", date, function(err, rows) {
+      conn.release();
+      if (!err) {
+        if (!err) {
+          response = true;
+        } else {
+          response.success = false;
+        }
+        res.json(response);
+      } else {
+        res.json({
+          code: 100,
+          status: "Error in connection database"
+        });
+        console.log(err);
+      }
+    });
+    conn.on("error", function(err) {
+      console.log("[mysql error]", err);
+    });
+  });
+});
+
+router.get("/deleteVATTaxList/:id", (req, res, next) => {
+  try {
+    var reqObj = req.params.id;
+    connection.getConnection(function(err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: "Error in connection database"
+        });
+        return next(err);
+      } else {
+        conn.query(
+          "delete from vattax_list where id = '" + reqObj + "'",
+          function(err, rows, fields) {
+            conn.release();
+            if (err) {
+              console.error("SQL error:", err);
+              res.json({
+                code: 100,
+                status: "Error in connection database"
+              });
+              return next(err);
+            } else {
+              res.json(true);
+              res.end();
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    console.error("Internal error: " + ex);
+    return next(ex);
+  }
+});
+
+router.post("/updateVATTaxList", function(req, res, next) {
+  connection.getConnection(function(err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+
+    var response = null;
+    var data = {
+      id: req.body.id,
+      title: req.body.title,
+      sequence: req.body.sequence
+    };
+
+    conn.query(
+      "update vattax_list set ? where id = '" + req.body.id + "'",
+      data,
+      function(err, rows, fields) {
+        conn.release();
+        if (err) {
+          console.error("SQL error:", err);
+          res.json({
+            code: 100,
+            status: "Error in connection database"
+          });
+          return next(err);
+        } else {
+          response = true;
+          res.json(response);
+        }
+      }
+    );
+    conn.on("error", function(err) {
+      console.log("[mysql error]", err);
+    });
+  });
+});
+
+// end vattax_list
+
 
 // BASE DATA I
 
