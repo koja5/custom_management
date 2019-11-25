@@ -27,7 +27,7 @@ export class UserDetailsComponent implements OnInit {
   public storeLocation: any;
   public selectedStore: any;
   public validDate: Date;
-  public selectedColor = '#fe413b';
+  public selectedColor = '#f7f1db';
   public palette: any[] = [];
   public loading = true;
   public allWorkTime: any;

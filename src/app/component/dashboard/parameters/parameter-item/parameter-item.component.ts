@@ -68,7 +68,7 @@ export class ParameterItemComponent implements OnInit {
       );
     }
 
-    if(this.type === 'Therapy') {
+    if (this.type === 'Therapy') {
       this.service.getVATTex().subscribe(
         data => {
           this.vatTexList = data;
@@ -86,13 +86,13 @@ export class ParameterItemComponent implements OnInit {
 
     if (localStorage.getItem("theme") !== null) {
       this.theme = localStorage.getItem("theme");
-    } 
+    }
 
     this.message.getTheme().subscribe(mess => {
       this.changeTheme(mess);
       this.theme = mess;
     });
-    
+
     this.changeTheme(this.theme);
 
     // this.view = this.service.getData(this.type);
@@ -118,13 +118,13 @@ export class ParameterItemComponent implements OnInit {
         telephone: new FormControl(),
         email: new FormControl()
       });
-    } else if(this.type === 'Therapy') {
+    } else if (this.type === 'Therapy') {
       this.formGroup = new FormGroup({
         id: new FormControl(),
         title: new FormControl(),
         sequence: new FormControl(),
         unit: new FormControl(),
-        description: new FormControl(), 
+        description: new FormControl(),
         art_nr: new FormControl(),
         net_price: new FormControl(),
         gross_price: new FormControl(),
@@ -159,13 +159,13 @@ export class ParameterItemComponent implements OnInit {
       this.selectedDoctorType = dataItem.doctor_type;
       this.selectedGender = dataItem.gender;
 
-    } else if(this.type === 'Therapy') {
+    } else if (this.type === 'Therapy') {
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
         title: new FormControl(dataItem.title),
         sequence: new FormControl(dataItem.sequence),
         unit: new FormControl(dataItem.unit),
-        description: new FormControl(dataItem.description), 
+        description: new FormControl(dataItem.description),
         art_nr: new FormControl(dataItem.art_ne),
         net_price: new FormControl(dataItem.net_price),
         gross_price: new FormControl(dataItem.gross_price),
@@ -240,7 +240,11 @@ export class ParameterItemComponent implements OnInit {
   }
 
   selectionVAT(event) {
-    this.selectedVAT = event.id;
+    if (event !== undefined) {
+      this.selectedVAT = event;
+    } else {
+      this.selectedVAT = '-1';
+    }
   }
 
   pageChange(event: PageChangeEvent): void {

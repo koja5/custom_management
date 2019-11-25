@@ -95,7 +95,7 @@
     <kendo-grid-column field="vat" title="VAT">
       <ng-template kendoGridCellTemplate let-dataItem *ngIf="vatTexList !== undefined">
         <kendo-combobox [data]="vatTexList" [textField]="'title'" [valueField]="'id'"
-          (selectionChange)="selectionVAT($event)" [(ngModel)]="dataItem.vat" [valuePrimitive]="true"
+          (valueChange)="selectionVAT($event)" [(ngModel)]="dataItem.vat" [valuePrimitive]="true"
           name="vat"></kendo-combobox>
       </ng-template>
     </kendo-grid-column>

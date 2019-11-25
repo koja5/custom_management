@@ -185,53 +185,43 @@ export class TaskComponent implements OnInit {
       }
     });
 
+    if (this.type === 3) {
+      this.selectedStoreId = Number(
+        localStorage.getItem("storeId-" + this.id)
+      );
+    }
     this.storeService.getStore(localStorage.getItem("superadmin"), val => {
       this.store = val;
       this.language.selectStore += this.store[0].storename + ")";
-      if (this.type === 3) {
-        this.selectedStoreId = Number(
-          localStorage.getItem("storeId" + this.id)
-        );
-      }
+      
       if (!isNaN(this.selectedStoreId) && this.selectedStoreId !== undefined) {
-        this.startWork = this.getStartEndTimeForStore(
-          this.store,
-          this.selectedStoreId
-        ).start_work;
-        this.endWork = this.getStartEndTimeForStore(
-          this.store,
-          this.selectedStoreId
-        ).end_work;
-        this.timeDuration = this.getStartEndTimeForStore(
-          this.store,
-          this.selectedStoreId
-        ).time_duration;
+        const informationAboutStore = this.getStartEndTimeForStore(this.store, this.selectedStoreId);
+        this.startWork = informationAboutStore.start_work;
+        this.endWork = informationAboutStore.end_work;
+        this.timeDuration = informationAboutStore.time_duration;
         if (
           Number(this.timeDuration) >
           Number(
-            this.getStartEndTimeForStore(this.store, this.selectedStoreId)
-              .time_therapy
+            informationAboutStore.time_therapy
           )
         ) {
           this.therapyDuration =
             Number(this.timeDuration) /
             Number(
-              this.getStartEndTimeForStore(this.store, this.selectedStoreId)
-                .time_therapy
+              informationAboutStore.time_therapy
             );
         } else {
           this.therapyDuration =
             Number(
-              this.getStartEndTimeForStore(this.store, this.selectedStoreId)
-                .time_therapy
+              informationAboutStore.time_therapy
             ) / Number(this.timeDuration);
         }
       }
     });
 
     if (
-      localStorage.getItem("selectedStore-" + this.id) !== null &&
-      localStorage.getItem("selectedUser-" + this.id) !== null &&
+      localStorage.getItem("selectedStore-" + this.id) !== null && JSON.parse(localStorage.getItem("selectedStore-" + this.id)).length !== 0 &&
+      localStorage.getItem("selectedUser-" + this.id) !== null && JSON.parse(localStorage.getItem("selectedUser-" + this.id)).length !== 0 &&
       this.type !== 3
     ) {
       this.calendars = [];
@@ -255,9 +245,7 @@ export class TaskComponent implements OnInit {
         localStorage.getItem("selectedStore-" + this.id)
       );
       this.selectedStore(this.selectedStoreId);
-    }
-
-    if (localStorage.getItem("type") === "3") {
+    } else if (localStorage.getItem("type") === "3") {
       this.service
         .getWorkandTasksForUser(localStorage.getItem("idUser"))
         .subscribe(data => {
@@ -402,39 +390,37 @@ export class TaskComponent implements OnInit {
       let timeDuration = 0;
       if (!isNaN(this.selectedStoreId)) {
         if (dataItem.id === undefined || dataItem.id === null) {
+
+          const informationAboutStore = this.getStartEndTimeForStore(this.store, this.selectedStoreId);
           timeDurationInd =
             Number(
-              this.getStartEndTimeForStore(this.store, this.selectedStoreId)
-                .time_therapy
+              informationAboutStore.time_therapy
             ) !== Number(this.timeDuration)
               ? 1
               : 0;
           timeDuration = Number(
-            this.getStartEndTimeForStore(this.store, this.selectedStoreId)
-              .time_therapy
+            informationAboutStore.time_therapy
           );
         } else {
+          const informationAboutStore = this.getStartEndTimeForStore(this.store, this.selectedStoreId);
           if (
             dataItem.end.getTime() - dataItem.start.getTime() !==
             Number(
-              this.getStartEndTimeForStore(this.store, this.selectedStoreId)
-                .time_therapy
+              informationAboutStore.time_therapy
             ) *
-              60000
+            60000
           ) {
             timeDuration =
               (dataItem.end.getTime() - dataItem.start.getTime()) / 60000;
           } else {
             timeDurationInd =
               Number(
-                this.getStartEndTimeForStore(this.store, this.selectedStoreId)
-                  .time_therapy
+                informationAboutStore.time_therapy
               ) !== Number(this.timeDuration)
                 ? 1
                 : 0;
             timeDuration = Number(
-              this.getStartEndTimeForStore(this.store, this.selectedStoreId)
-                .time_therapy
+              informationAboutStore.time_therapy
             );
           }
         }
@@ -561,6 +547,9 @@ export class TaskComponent implements OnInit {
         this.customer.addTherapy(this.complaintData).subscribe(data => {
           if (data["success"]) {
             formValue.therapy_id = data["id"];
+            if (this.type === 0) {
+              formValue['storeId'] = this.selectedStoreId;
+            }
             this.service.createTask(formValue, val => {
               console.log(val);
               if (val.success) {
@@ -791,7 +780,7 @@ export class TaskComponent implements OnInit {
 
   createCustomer(form) {
     console.log(this.data);
-    this.data.storeId = localStorage.getItem("storeId-" + this.id);
+    this.data.storeId = localStorage.getItem("superadmin");
     this.customer.createCustomer(this.data, val => {
       console.log(val);
       if (val) {
@@ -911,24 +900,24 @@ export class TaskComponent implements OnInit {
     this.calendars = [];
     this.height = 92;
     if (value.length === 0) {
-      this.service
-        .getTasks(localStorage.getItem("superadmin"))
-        .subscribe(data => {
-          this.events = [];
-          for (let i = 0; i < data.length; i++) {
-            data[i].start = new Date(data[i].start);
-            data[i].end = new Date(data[i].end);
-            this.events.push(data[i]);
-          }
-          const objectCalendar = {
-            name: null,
-            events: this.events
-          };
-          this.calendars.push(objectCalendar);
-          this.size = [];
-          this.size.push("100%");
-          this.loading = false;
-        });
+      this.service.getTasksForStore(this.selectedStoreId, this.id, this.type).subscribe(data => {
+        this.events = [];
+        this.calendars = [];
+        this.events = [];
+        for (let i = 0; i < data.length; i++) {
+          data[i].start = new Date(data[i].start);
+          data[i].end = new Date(data[i].end);
+          this.events.push(data[i]);
+        }
+        const objectCalendar = {
+          name: null,
+          events: this.events
+        };
+        this.calendars.push(objectCalendar);
+        this.size = [];
+        this.size.push("100%");
+        this.loading = false;
+      });
     } else {
       this.calendars = [];
       let index = 0;
@@ -1014,10 +1003,13 @@ export class TaskComponent implements OnInit {
     // localStorage.removeItem('selectedUser');
     this.loading = true;
     this.calendars = [];
+    this.selectedStoreId = event;
     if (
       localStorage.getItem(
         "usersFor-" + this.selectedStoreId + "-" + this.id
-      ) !== null &&
+      ) !== null && JSON.parse(localStorage.getItem(
+        "usersFor-" + this.selectedStoreId + "-" + this.id
+      )).length !== 0 &&
       event !== undefined
     ) {
       this.value = JSON.parse(
@@ -1030,7 +1022,7 @@ export class TaskComponent implements OnInit {
     } else {
       this.value = [];
       if (event !== undefined) {
-        this.service.getTasksForStore(this.selectedStoreId).subscribe(data => {
+        this.service.getTasksForStore(event, this.id, this.type).subscribe(data => {
           this.events = [];
           this.calendars = [];
           for (let i = 0; i < data.length; i++) {
@@ -1060,6 +1052,7 @@ export class TaskComponent implements OnInit {
           .getTasks(localStorage.getItem("superadmin"))
           .subscribe(data => {
             console.log(data);
+            this.events = [];
             if (data.length !== 0) {
               for (let i = 0; i < data.length; i++) {
                 data[i].start = new Date(data[i].start);
@@ -1089,46 +1082,34 @@ export class TaskComponent implements OnInit {
           });
       }
     }
-
-    this.size = [];
-    this.size.push("100%");
   }
 
   setStoreWork(event) {
-    this.startWork = this.getStartEndTimeForStore(
-      this.store,
-      this.selectedStoreId
-    ).start_work;
-    this.endWork = this.getStartEndTimeForStore(
-      this.store,
-      this.selectedStoreId
-    ).end_work;
-    this.timeDuration = this.getStartEndTimeForStore(
-      this.store,
-      this.selectedStoreId
-    ).time_duration;
-    if (
-      Number(this.timeDuration) >
-      Number(
-        this.getStartEndTimeForStore(this.store, this.selectedStoreId)
-          .time_therapy
-      )
-    ) {
-      this.therapyDuration =
-        Number(this.timeDuration) /
+    if (this.store !== undefined) {
+      const informationAboutStore = this.getStartEndTimeForStore(this.store, this.selectedStoreId);
+      this.startWork = informationAboutStore.start_work;
+      this.endWork = informationAboutStore.end_work;
+      this.timeDuration = informationAboutStore.time_duration;
+      if (
+        Number(this.timeDuration) >
         Number(
-          this.getStartEndTimeForStore(this.store, this.selectedStoreId)
-            .time_therapy
-        );
-    } else {
-      this.therapyDuration =
-        Number(
-          this.getStartEndTimeForStore(this.store, this.selectedStoreId)
-            .time_therapy
-        ) / Number(this.timeDuration);
-    }
+          informationAboutStore.time_therapy
+        )
+      ) {
+        this.therapyDuration =
+          Number(this.timeDuration) /
+          Number(
+            informationAboutStore.time_therapy
+          );
+      } else {
+        this.therapyDuration =
+          Number(
+            informationAboutStore.time_therapy
+          ) / Number(this.timeDuration);
+      }
 
-    localStorage.setItem("selectedStore-" + this.id, event);
+      localStorage.setItem("selectedStore-" + this.id, event);
+    }
   }
 
   getStartEndTimeForStore(data, id) {
@@ -1157,7 +1138,7 @@ export class TaskComponent implements OnInit {
   getUserInCompany(storeId) {
     this.service.getUsersInCompany(storeId, val => {
       this.usersInCompany = val;
-      this.language.selectedUsers += this.usersInCompany[0].shortname;
+      // this.language.selectedUsers += this.usersInCompany[0].shortname;
       this.loading = false;
     });
   }
@@ -1211,7 +1192,7 @@ export class TaskComponent implements OnInit {
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].end >
-            new Date(date).getHours()) ||
+          new Date(date).getHours()) ||
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start2 <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
@@ -1306,21 +1287,21 @@ export class TaskComponent implements OnInit {
   getParameters() {
     this.customer.getParameters("Complaint").subscribe((data: []) => {
       console.log(data);
-      this.complaintValue = data.sort(function(a, b) {
+      this.complaintValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("Therapy").subscribe((data: []) => {
       console.log(data);
-      this.therapyValue = data.sort(function(a, b) {
+      this.therapyValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("Treatment").subscribe((data: []) => {
       console.log(data);
-      this.treatmentValue = data.sort(function(a, b) {
+      this.treatmentValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
@@ -1383,7 +1364,7 @@ export class TaskComponent implements OnInit {
     this.customerUsers = null;
     setTimeout(() => {
       this.customer.getCustomers(
-        localStorage.getItem("storeId-" + this.id),
+        localStorage.getItem("superadmin"),
         val => {
           console.log(val);
           this.customerUsers = val;
