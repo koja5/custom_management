@@ -18,13 +18,13 @@
             <h2 class="font-semibold mgbt-xs-5" style="text-align: center;">{{data.firstname}} {{data.lastname}}</h2>
           </div>
           <div *ngIf="type === 'details'">
-            <div class="vd_info tr" style="height: 7vh; text-align: center"> <button kendoButton class="k-edit"
-                [icon]="'k-icon k-i-delete'" (click)="customer = !customer" style="text-align: center">Edit</button>
+            <div class="vd_info tr" style="height: 7vh; text-align: center"> <button kendoButton class="k-delete"
+                [icon]="'k-icon k-i-delete'" (click)="customer = !customer; changeTheme(theme);" style="text-align: center">Edit</button>
             </div>
             <div class="vd_info tr" style="height: 7vh; text-align: center"> <button kendoButton class="k-delete"
                 [icon]="'k-icon k-i-delete'" [primary]="true" (click)="open('dialog')"
                 style="text-align: center">Delete</button> </div>
-            <div class="vd_info tr" style="text-align: center;"> <button kendoButton class="k-copy"
+            <div class="vd_info tr" style="text-align: center;"> <button kendoButton class="k-delete"
                 [icon]="'k-icon k-i-copy'" (click)="newCustomer()">Copy</button> </div>
           </div>
         </div>
@@ -193,7 +193,7 @@
         <div class="col-sm-12 document-grid">
           <label class="col-md-9">Complaint</label>
           <button kendoButton [primary]="true" [icon]="'add'" style="width: 25vh !important; margin-bottom: 2vh;"
-            (click)="openComplaintModal()">Add complaint</button>
+            (click)="openComplaintModal(); changeTheme(theme);">Add complaint</button>
           <kendo-grid [data]="gridComplaint" [height]="200" [resizable]="true" [loading]="loadingGridComplaint">
             <kendo-grid-column field="date" title="Date" width="120">
             </kendo-grid-column>
@@ -224,7 +224,7 @@
         <div class="col-sm-12 document-grid">
           <label class="col-md-9">Therapy</label>
           <button kendoButton [primary]="true" [icon]="'add'" style="width: 25vh !important; margin-bottom: 2vh;"
-            (click)="openTherapyModal()">Add therapy</button>
+            (click)="openTherapyModal(); changeTheme(theme);">Add therapy</button>
           <kendo-grid [data]="gridTherapy" [height]="200" [resizable]="true" [loading]="loadingGridTherapy">
             <kendo-grid-column field="date" title="Date" width="140" [format]="{ date: 'short' }">
             </kendo-grid-column>
@@ -408,7 +408,7 @@
               </div>
               <!-- ./remember-row -->
               <div class="form-group" style="text-align: center">
-                <button kendoButton [primary]="true" class="form-button" type="submit">Update customer</button>
+                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}" type="submit">Update customer</button>
               </div>
             </form>
           </div>
@@ -455,9 +455,9 @@
                 </div>
               </div>
               <div class="form-group" style="text-align: center">
-                <button kendoButton [primary]="true" class="form-button" *ngIf="operationMode === 'add'" type="submit"
+                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}" *ngIf="operationMode === 'add'" type="submit"
                   [disabled]="selectedRecommendation === undefined || baseDataOne.relationship === undefined || baseDataOne.social === undefined || baseDataOne.doctor === undefined || baseDataOne.first_date === undefined">{{language.addData}}</button>
-                <button kendoButton [primary]="true" class="form-button" *ngIf="operationMode === 'edit'"
+                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}" *ngIf="operationMode === 'edit'"
                   type="submit">{{language.editData}}</button>
               </div>
             </form>
@@ -516,10 +516,10 @@
               </div>
               <!-- ./remember-row -->
               <div class="form-group" style="text-align: center">
-                <button kendoButton [primary]="true" class="form-button" *ngIf="operationMode === 'add'" type="submit"
+                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}" *ngIf="operationMode === 'add'" type="submit"
                   [disabled]="baseDataTwo.size === undefined || baseDataTwo.weight === undefined || baseDataTwo.phone === undefined || baseDataTwo.mobile_phone === undefined || 
                   baseDataTwo.birthday === undefined || baseDataTwo.childs === undefined || baseDataTwo.notes === undefined || baseDataTwo.profession === undefined || baseDataTwo.useful === undefiend">{{language.addData}}</button>
-                <button kendoButton [primary]="true" class="form-button" *ngIf="operationMode === 'edit'"
+                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}" *ngIf="operationMode === 'edit'"
                   type="submit">{{language.editData}}</button>
               </div>
             </form>
@@ -569,10 +569,10 @@
                 </div>
               </div>
               <div class="form-group" style="text-align: center">
-                <button kendoButton [primary]="true" class="form-button" *ngIf="operationMode === 'add'" type="submit"
+                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}" *ngIf="operationMode === 'add'" type="submit"
                   [disabled]="physicalIllness.internal_organs === undefined || physicalIllness.operations === undefined || 
                   physicalIllness.previous_findings === undefined || physicalIllness.medicament === undefined || physicalIllness.allergies === undefined || physicalIllness.skin_sensitivity === undefined || physicalIllness.pregnancy === undefined">{{language.addData}}</button>
-                <button kendoButton [primary]="true" class="form-button" *ngIf="operationMode === 'edit'"
+                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}" *ngIf="operationMode === 'edit'"
                   type="submit">{{language.editData}}</button>
               </div>
             </form>

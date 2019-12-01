@@ -2,8 +2,7 @@
   <div class="spinner loading"></div>
 </div>
 
-<div *ngIf="!loading">
-  <div *ngIf="selectedUser === undefined">
+<div *ngIf="!loading && selectedUser === undefined" style="height: 100%">
     <div class="user-options">
       <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">{{language.newCustomer}}</button>
       <label class="uploadFromExcel-{{theme}}"><span class='k-icon k-i-file-excel'></span>
@@ -11,7 +10,7 @@
           (change)="onFileChange($event)" [(ngModel)]="fileValue" /></label>
     </div>
 
-    <kendo-grid *ngIf="language !== undefined" [data]="gridData" [height]="800" [resizable]="true"
+    <kendo-grid *ngIf="language !== undefined" [data]="gridData" [style.height.%]="93" [resizable]="true"
       [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
       [pageable]="true" [filterable]="true" (dataStateChange)="dataStateChange($event)"
       (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey">
@@ -70,7 +69,6 @@
         </div>
       </ng-template>
     </kendo-grid>
-  </div>
 
   <kendo-dialog title="Please confirm" *ngIf="customerDialogOpened" (close)="close('dialog')" [minWidth]="250"
     [width]="450">

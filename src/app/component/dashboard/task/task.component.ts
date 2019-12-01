@@ -771,6 +771,9 @@ export class TaskComponent implements OnInit {
   newCustomer() {
     // this.zIndex = 'zIndex';
     this.customerModal = true;
+    setTimeout(() => {
+      this.changeTheme(this.theme);
+    }, 50);
   }
 
   closeNewCustomer() {

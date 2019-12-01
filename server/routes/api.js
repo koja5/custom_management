@@ -1442,7 +1442,7 @@ router.post("/updateUser", function (req, res, next) {
       err,
       rows
     ) {
-      conn.release();
+      conn.release(); 
       if (!err) {
         if (!err) {
           response = true;
@@ -2780,7 +2780,7 @@ router.post("/updateTherapyList", function (req, res, next) {
       sequence: req.body.sequence,
       unit: req.body.unit,
       description: req.body.description,
-      art_nr: req.body.art_ne,
+      art_nr: req.body.art_nr,
       net_price: req.body.net_price,
       vat: req.body.vat,
       gross_price: req.body.gross_price,

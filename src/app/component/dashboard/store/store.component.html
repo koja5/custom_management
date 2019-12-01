@@ -2,7 +2,7 @@
   <div class="spinner loading"></div>
 </div>
 
-<div *ngIf="!loading">
+<div *ngIf="!loading" style="height: 100%">
   <div class="user-options">
     <button kendoButton [icon]="'k-icib k-i-marker-pin-target'" (click)="newStore()"
       [primary]="true">{{language.newStore}}</button>
@@ -11,7 +11,7 @@
         (change)="onFileChange($event)" [(ngModel)]="fileValue" /></label>
   </div>
 
-  <kendo-grid [data]="gridData" [height]="800" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
+  <kendo-grid [data]="gridData" [style.height.%]="93" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
     [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="true" [filterable]="true"
     (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey"
     [loading]="loadingGrid">

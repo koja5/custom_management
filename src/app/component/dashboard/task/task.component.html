@@ -213,11 +213,11 @@
                         <span class="template" *ngIf="dataItem.street !== ''">/{{dataItem.street}}</span>
                       </ng-template>
                     </kendo-combobox>
-                    <button kendoButton [icon]="'user'" [primary]="true" (click)="newCustomer()">
+                    <button kendoButton [icon]="'user'" [primary]="true" class="inputTheme-{{theme}}" (click)="newCustomer()">
                       {{languageUser.newCustomer}}
                     </button>
 
-                    <button kendoButton [icon]="'k-icon k-i-information'" [primary]="true" (click)="baseDataForUser()"
+                    <button kendoButton [icon]="'k-icon k-i-information'" class="inputTheme-{{theme}}" [primary]="true" (click)="baseDataForUser()"
                       *ngIf="baseDataIndicator">
                       {{languageUser.baseDate}}
                     </button>
@@ -387,11 +387,11 @@
                       <span class="template" *ngIf="dataItem.street !== ''">/{{dataItem.street}}</span>
                     </ng-template>
                   </kendo-combobox>
-                  <button kendoButton [icon]="'user'" [primary]="true" (click)="newCustomer()">
+                  <button kendoButton [icon]="'user'" [primary]="true" class="inputTheme-{{theme}}" (click)="newCustomer()">
                     {{languageUser.newCustomer}}
                   </button>
 
-                  <button kendoButton [icon]="'k-icon k-i-information'" [primary]="true" (click)="baseDataForUser()"
+                  <button kendoButton [icon]="'k-icon k-i-information'" class="inputTheme-{{theme}}" [primary]="true" (click)="baseDataForUser()"
                     *ngIf="baseDataIndicator">
                     {{languageUser.baseDate}}
                   </button>

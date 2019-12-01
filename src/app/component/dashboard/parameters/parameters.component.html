@@ -1,4 +1,4 @@
-<div class="tabs widget">
+<div class="tabs widget" style="height: 100%;">
   <ul class="nav nav-tabs widget">
     <li [ngClass]="currentTab === 'complaint' ? 'active' : ''" class="col-md-2 col-sm-4 col-xs-6"> <a
         (click)="changeTab('complaint')"><span class="fa fa-list-alt"></span> Complaint</a>
@@ -29,42 +29,42 @@
       <app-parameter-item [type]="'Complaint'"></app-parameter-item>
     </div>
   </div>
-  <div *ngIf="currentTab === 'therapy'">
+  <div class="tab-content" *ngIf="currentTab === 'therapy'">
     <div id="profile-tab" class="tab-pane active">
       <app-parameter-item [type]="'Therapy'"></app-parameter-item>
     </div>
   </div>
-  <div *ngIf="currentTab === 'treatment'">
+  <div class="tab-content" *ngIf="currentTab === 'treatment'">
     <div id="profile-tab" class="tab-pane active">
       <app-parameter-item [type]="'Treatment'"></app-parameter-item>
     </div>
   </div>
-  <div *ngIf="currentTab === 'recommendation'">
+  <div class="tab-content" *ngIf="currentTab === 'recommendation'">
     <div id="profile-tab" class="tab-pane active">
       <app-parameter-item [type]="'Recommendation'"></app-parameter-item>
     </div>
   </div>
-  <div *ngIf="currentTab === 'relationship'">
+  <div class="tab-content" *ngIf="currentTab === 'relationship'">
     <div id="profile-tab" class="tab-pane active">
       <app-parameter-item [type]="'Relationship'"></app-parameter-item>
     </div>
   </div>
-  <div *ngIf="currentTab === 'social'">
+  <div class="tab-content" *ngIf="currentTab === 'social'">
     <div id="profile-tab" class="tab-pane active">
       <app-parameter-item [type]="'Social'"></app-parameter-item>
     </div>
   </div>
-  <div *ngIf="currentTab === 'doctor'">
+  <div class="tab-content" *ngIf="currentTab === 'doctor'">
     <div id="profile-tab" class="tab-pane active">
       <app-parameter-item [type]="'Doctor'"></app-parameter-item>
     </div>
   </div>
-  <div *ngIf="currentTab === 'doctors'">
+  <div class="tab-content" *ngIf="currentTab === 'doctors'">
     <div id="profile-tab" class="tab-pane active">
       <app-parameter-item [type]="'Doctors'"></app-parameter-item>
     </div>
   </div>
-  <div *ngIf="currentTab === 'vat_tax'">
+  <div class="tab-content" *ngIf="currentTab === 'vat_tax'">
     <div id="profile-tab" class="tab-pane active">
       <app-parameter-item [type]="'VATTax'"></app-parameter-item>
     </div>

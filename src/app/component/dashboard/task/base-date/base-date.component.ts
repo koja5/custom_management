@@ -20,7 +20,6 @@ import { TaskService } from "src/app/service/task.service";
   templateUrl: "./base-date.component.html",
   styleUrls: ["./base-date.component.scss"]
 })
-
 export class BaseDateComponent implements OnInit {
   public customer = false;
   @ViewChild("upload") upload: Modal;
@@ -69,6 +68,7 @@ export class BaseDateComponent implements OnInit {
   public allUsers: any;
   public selectedUser: any;
   public loadingTherapy = false;
+  public theme: string;
 
   constructor(
     public router: ActivatedRoute,
@@ -80,7 +80,6 @@ export class BaseDateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log(this.data);
     this.uploader = new FileUploader({
       url: this.url,
       additionalParameter: { comments: this.data.id }
@@ -92,18 +91,30 @@ export class BaseDateComponent implements OnInit {
     this.getDocument();
     this.getComplaint();
     this.getTherapy();
+
+    if (localStorage.getItem("theme") !== null) {
+      this.theme = localStorage.getItem("theme");
+    }
+    setTimeout(() => {
+      this.changeTheme(this.theme);
+    }, 500);
+
+    this.message.getTheme().subscribe(mess => {
+      this.changeTheme(mess);
+      this.theme = mess;
+    });
   }
 
   getParameters() {
-    this.service.getParameters("Complaint").subscribe((data:[]) => {
+    this.service.getParameters("Complaint").subscribe((data: []) => {
       this.complaintValue = data.sort(function(a, b) {
-        return a['sequence'] - b['sequence']
+        return a["sequence"] - b["sequence"];
       });
     });
 
-    this.service.getParameters("Therapy").subscribe((data:[]) => {
+    this.service.getParameters("Therapy").subscribe((data: []) => {
       this.therapyValue = data.sort(function(a, b) {
-        return a['sequence'] - b['sequence']
+        return a["sequence"] - b["sequence"];
       });
     });
 
@@ -111,9 +122,9 @@ export class BaseDateComponent implements OnInit {
       this.allUsers = val;
     });
 
-    this.service.getParameters("Treatment").subscribe((data:[]) => {
+    this.service.getParameters("Treatment").subscribe((data: []) => {
       this.treatmentValue = data.sort(function(a, b) {
-        return a['sequence'] - b['sequence']
+        return a["sequence"] - b["sequence"];
       });
     });
 
@@ -198,6 +209,7 @@ export class BaseDateComponent implements OnInit {
   open(component, id) {
     this[component + "Opened"] = true;
     this.selectedForDelete = id;
+    this.changeTheme(this.theme);
   }
 
   action(event) {
@@ -638,9 +650,7 @@ export class BaseDateComponent implements OnInit {
       this.selectedTherapies = Number(event.therapies);
     }
     if (event.therapies_previous.split(";") !== undefined) {
-      this.selectedTreatment = event.therapies_previous
-        .split(";")
-        .map(Number);
+      this.selectedTreatment = event.therapies_previous.split(";").map(Number);
     } else {
       this.selectedTreatment = Number(event.therapies_previous);
     }
@@ -712,6 +722,7 @@ export class BaseDateComponent implements OnInit {
         }
       });
     }
+    
   }
 
   getTranslate(title) {
@@ -935,5 +946,92 @@ export class BaseDateComponent implements OnInit {
   onValueUserEmChange(event) {
     this.complaintData.em = event.id;
     this.complaintData.em_title = event.lastname + " " + event.firstname;
+  }
+
+  changeTheme(theme: string) {
+    setTimeout(() => {
+      if (localStorage.getItem("allThemes") !== undefined) {
+        const allThemes = JSON.parse(localStorage.getItem("allThemes"));
+        console.log(allThemes);
+        let items = document.querySelectorAll(".k-dialog-titlebar");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const themeName = allThemes[j]["name"];
+            console.log(clas);
+            clas.remove("k-dialog-titlebar-" + themeName);
+            clas.add("k-dialog-titlebar-" + theme);
+          }
+        }
+
+        items = document.querySelectorAll(".k-header");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("gridHeader-" + element);
+
+            clas.add("gridHeader-" + this.theme);
+          }
+        }
+        items = document.querySelectorAll(".k-pager-numbers");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-pager-numbers-" + element);
+            clas.add("k-pager-numbers-" + this.theme);
+          }
+        }
+
+        items = document.querySelectorAll(".k-select");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-select-" + element);
+            clas.add("k-select-" + this.theme);
+          }
+        }
+
+        items = document.querySelectorAll(".k-grid-table");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-grid-table-" + element);
+            clas.add("k-grid-table-" + this.theme);
+          }
+        }
+        items = document.querySelectorAll(".k-grid-header");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-grid-header-" + element);
+            clas.add("k-grid-header-" + this.theme);
+          }
+        }
+        items = document.querySelectorAll(".k-pager-wrap");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-pager-wrap-" + element);
+            clas.add("k-pager-wrap-" + this.theme);
+          }
+        }
+
+        items = document.querySelectorAll(".k-button");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("inputTheme-" + element);
+            clas.add("inputTheme-" + this.theme);
+          }
+        }
+      }
+    }, 50);
   }
 }

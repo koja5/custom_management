@@ -1,35 +1,45 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
-import { State, process } from '@progress/kendo-data-query';
-import { FormGroup, FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { GridDataResult, RowArgs } from '@progress/kendo-angular-grid';
-import { map } from 'rxjs/operators';
-import { ParameterItemService } from '../../../../service/parameter-item.service';
-import { DataStateChangeEvent, PageChangeEvent } from '@progress/kendo-angular-grid';
-import { SortDescriptor, orderBy } from '@progress/kendo-data-query';
-import { MessageService } from 'src/app/service/message.service';
+import { Component, OnInit, Input, Inject } from "@angular/core";
+import { State, process } from "@progress/kendo-data-query";
+import { FormGroup, FormControl } from "@angular/forms";
+import { Observable } from "rxjs";
+import { GridDataResult, RowArgs } from "@progress/kendo-angular-grid";
+import { map } from "rxjs/operators";
+import { ParameterItemService } from "../../../../service/parameter-item.service";
+import {
+  DataStateChangeEvent,
+  PageChangeEvent
+} from "@progress/kendo-angular-grid";
+import { SortDescriptor, orderBy } from "@progress/kendo-data-query";
+import { MessageService } from "src/app/service/message.service";
 
 @Component({
-  selector: 'app-parameter-item',
-  templateUrl: './parameter-item.component.html',
-  styleUrls: ['./parameter-item.component.scss']
+  selector: "app-parameter-item",
+  templateUrl: "./parameter-item.component.html",
+  styleUrls: ["./parameter-item.component.scss"]
 })
 export class ParameterItemComponent implements OnInit {
-
   @Input() type: string;
 
   public view: Observable<GridDataResult>;
   public gridState: State = {
-    sort: [{
-      field: 'sequence',
-      dir: 'asc'
-    }],
+    sort: [
+      {
+        field: "sequence",
+        dir: "asc"
+      }
+    ],
     skip: 0,
     take: 10
   };
+  public sort: SortDescriptor[] = [
+    {
+      field: "sequence",
+      dir: "asc"
+    }
+  ];
   public formGroup: FormGroup;
   public loading = false;
-  public genderList = ['male', 'female'];
+  public genderList = ["male", "female"];
   public doctorTypeList: any;
   public selectedGender: string;
   public selectedDoctorType: string;
@@ -40,6 +50,7 @@ export class ParameterItemComponent implements OnInit {
   public selectedTherapy: any;
   public theme: string;
   public vatTexList: any;
+  public net_price_value: number;
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
   }
@@ -48,38 +59,39 @@ export class ParameterItemComponent implements OnInit {
     dir: 'asc'
   }];*/
 
-  constructor(private service: ParameterItemService, public message: MessageService) { }
+  constructor(
+    private service: ParameterItemService,
+    public message: MessageService
+  ) {}
 
   public ngOnInit(): void {
     console.log(this.type);
-    if (this.type === 'Doctors') {
-      this.service.getDoctorType().subscribe(
-        data => {
-          this.doctorTypeList = data;
-        }
-      );
+    if (this.type === "Doctors") {
+      this.service.getDoctorType().subscribe(data => {
+        this.doctorTypeList = data;
+      });
     }
 
-    if (this.type === 'Therapies') {
-      this.service.getTherapy().subscribe(
-        data => {
-          this.therapyList = data;
-        }
-      );
+    if (this.type === "Therapies") {
+      this.service.getTherapy().subscribe(data => {
+        this.therapyList = data;
+      });
     }
 
-    if (this.type === 'Therapy') {
-      this.service.getVATTex().subscribe(
-        data => {
-          this.vatTexList = data;
-        }
-      )
+    if (this.type === "Therapy") {
+      this.service.getVATTex().subscribe((data: []) => {
+        this.vatTexList = data.sort(function(a, b) {
+          return a["sequence"] - b["sequence"];
+        });
+      });
     }
 
-    this.view = this.service.pipe(map(data => {
-      this.currentLoadData = data;
-      return process(data, this.gridState);
-    }));
+    this.view = this.service.pipe(
+      map(data => {
+        this.currentLoadData = data;
+        return process(data, this.gridState);
+      })
+    );
 
     this.service.getData(this.type);
     console.log(this.view);
@@ -93,13 +105,15 @@ export class ParameterItemComponent implements OnInit {
       this.theme = mess;
     });
 
-    this.changeTheme(this.theme);
-
+    setTimeout(() => {
+      this.changeTheme(this.theme);
+    }, 350);
     // this.view = this.service.getData(this.type);
   }
 
   public onStateChange(state: State) {
     this.gridState = state;
+    console.log(state);
 
     // this.editService.read();
   }
@@ -107,7 +121,7 @@ export class ParameterItemComponent implements OnInit {
   public addHandler({ sender }) {
     this.closeEditor(sender);
 
-    if (this.type === 'Doctors') {
+    if (this.type === "Doctors") {
       this.formGroup = new FormGroup({
         firstname: new FormControl(),
         lastname: new FormControl(),
@@ -118,7 +132,7 @@ export class ParameterItemComponent implements OnInit {
         telephone: new FormControl(),
         email: new FormControl()
       });
-    } else if (this.type === 'Therapy') {
+    } else if (this.type === "Therapy") {
       this.formGroup = new FormGroup({
         id: new FormControl(),
         title: new FormControl(),
@@ -144,7 +158,7 @@ export class ParameterItemComponent implements OnInit {
   public editHandler({ sender, rowIndex, dataItem }) {
     this.closeEditor(sender);
     console.log(dataItem);
-    if (this.type === 'Doctors') {
+    if (this.type === "Doctors") {
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
         firstname: new FormControl(dataItem.firstname),
@@ -158,15 +172,14 @@ export class ParameterItemComponent implements OnInit {
       });
       this.selectedDoctorType = dataItem.doctor_type;
       this.selectedGender = dataItem.gender;
-
-    } else if (this.type === 'Therapy') {
+    } else if (this.type === "Therapy") {
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
         title: new FormControl(dataItem.title),
         sequence: new FormControl(dataItem.sequence),
         unit: new FormControl(dataItem.unit),
         description: new FormControl(dataItem.description),
-        art_nr: new FormControl(dataItem.art_ne),
+        art_nr: new FormControl(dataItem.art_nr),
         net_price: new FormControl(dataItem.net_price),
         gross_price: new FormControl(dataItem.gross_price),
         category: new FormControl(dataItem.category)
@@ -188,16 +201,37 @@ export class ParameterItemComponent implements OnInit {
 
   public cancelHandler({ sender, rowIndex }) {
     this.closeEditor(sender, rowIndex);
+    this.changeTheme(this.theme);
   }
 
   public saveHandler({ sender, rowIndex, formGroup, isNew }) {
     console.log(formGroup);
     const product = formGroup.value;
-    console.log(this.selectedDoctorType);
+    console.log(product);
+    if (this.type === "Therapy") {
+      const sortedData = {
+        data: orderBy(this.currentLoadData, this.sort),
+        total: this.currentLoadData.length
+      };
+      if (
+        rowIndex !== -1 && sortedData.data[rowIndex]["net_price"] !== formGroup.value.net_price && sortedData.data[rowIndex]['vat'] !== formGroup.value.vat
+      ) {
+        formGroup.value.gross_price = (
+          Number(formGroup.value.net_price) *
+          (1 + this.getTaxValue(sortedData.data[rowIndex]["vat"]) / 100)).toFixed(2);
+      } else if (
+        rowIndex !== -1 && sortedData.data[rowIndex]["gross_price"] !== formGroup.value.gross_price && sortedData.data[rowIndex]['vat'] !== formGroup.value.vat
+      ) {
+        formGroup.value.net_price = (
+          Number(formGroup.value.gross_price) *
+          (1 - this.getTaxValue(sortedData.data[rowIndex]["vat"]) / 100)).toFixed(2);
+      }
+    }
     product.gender = this.selectedGender;
     product.doctor_type = this.selectedDoctorType;
     product.therapy_id = this.selectedTherapy;
     product.vat = this.selectedVAT;
+
     this.service.addData(product, isNew, this.type);
 
     sender.closeRow(rowIndex);
@@ -211,10 +245,12 @@ export class ParameterItemComponent implements OnInit {
   }
 
   refreshData() {
-    this.view = this.service.pipe(map(data => {
-      this.currentLoadData = data;
-      return process(data, this.gridState);
-    }));
+    this.view = this.service.pipe(
+      map(data => {
+        this.currentLoadData = data;
+        return process(data, this.gridState);
+      })
+    );
 
     this.service.getData(this.type);
   }
@@ -239,11 +275,57 @@ export class ParameterItemComponent implements OnInit {
     this.selectedTherapy = event.id;
   }
 
-  selectionVAT(event) {
+  selectionVAT(event, rowIndex) {
+    console.log(this.view);
+    /*const allData = process(this.currentLoadData, this.gridState);
+    this.view.source['data'] = allData.data;
+    this.view.source['data'].length = allData.total;*/
     if (event !== undefined) {
       this.selectedVAT = event;
+      if (
+        this.formGroup !== undefined &&
+        this.formGroup.value.net_price !== "" &&
+        this.formGroup.value.net_price !== undefined &&
+        this.formGroup.value.net_price !== null
+      ) {
+        const procent = 1 + this.getTaxValue(event) / 100;
+        // this.formGroup.value.gross_price = Number(this.formGroup.value.net_price) * procent;
+        // this.setViewValue(this.formGroup.value.id, this.formGroup.value.gross_price, 'gross_price');
+        this.formGroup.controls["gross_price"].setValue(
+          Number(this.formGroup.value.net_price) * procent
+        );
+      } else if (
+        this.formGroup !== undefined &&
+        this.formGroup.value.gross_price !== "" &&
+        this.formGroup.value.gross_price !== undefined &&
+        this.formGroup.value.gross_price !== null
+      ) {
+        const procent = 1 - this.getTaxValue(event) / 100;
+        this.formGroup.controls["net_price"].setValue(
+          Number(this.formGroup.value.gross_price) * procent
+        );
+      }
+      this.formGroup.value.vat = event;
     } else {
-      this.selectedVAT = '-1';
+      this.selectedVAT = "-1";
+    }
+  }
+
+  getTaxValue(id) {
+    for (let i = 0; i < this.vatTexList.length; i++) {
+      if (this.vatTexList[i].id === id) {
+        return Number(this.vatTexList[i].title);
+      }
+    }
+    return 0;
+  }
+
+  setViewValue(id, value, field) {
+    for (let i = 0; i < this.view.source["data"].length; i++) {
+      if (this.view.source["data"][i].id === id) {
+        this.view.source["data"][i][field] = value;
+        break;
+      }
     }
   }
 
@@ -258,14 +340,18 @@ export class ParameterItemComponent implements OnInit {
   }
 
   loadProducts(): void {
-    this.view = this.service.pipe(map(data => {
-      return process(this.currentLoadData, this.gridState);
-    }));
+    this.view = this.service.pipe(
+      map(data => {
+        return process(this.currentLoadData, this.gridState);
+      })
+    );
   }
 
   dataStateChange(state: DataStateChangeEvent): void {
     this.gridState = state;
-    this.view = this.service.pipe(map(data => process(this.currentLoadData, this.gridState)));
+    this.view = this.service.pipe(
+      map(data => process(this.currentLoadData, this.gridState))
+    );
   }
 
   sortChangeData() {
@@ -346,7 +432,7 @@ export class ParameterItemComponent implements OnInit {
           }
         }
 
-        /*items = document.querySelectorAll(".k-button");
+        items = document.querySelectorAll(".k-button");
         for (let i = 0; i < items.length; i++) {
           const clas = items[i].classList;
           for (let j = 0; j < allThemes.length; j++) {
@@ -354,8 +440,16 @@ export class ParameterItemComponent implements OnInit {
             clas.remove("inputTheme-" + element);
             clas.add("inputTheme-" + this.theme);
           }
-        }*/
+        }
       }
     }, 150);
+  }
+
+  NetPriceChange(event) {
+    console.log(event);
+  }
+
+  cellClick(event) {
+    console.log(event);
   }
 }

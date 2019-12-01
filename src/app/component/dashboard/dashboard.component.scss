@@ -1,3 +1,7 @@
+#wrapper {
+  height: 100vh;
+}
+
 .color-palette {
   background: #1c252e;
   border-radius: 5px;
@@ -197,7 +201,7 @@
 
 /********************************/
 
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700);
+/*@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700);
 
 li a span {
   font-family: "Open Sans", sans-serif;
@@ -941,3 +945,4 @@ button,
   z-index: 20;
   background-color: #eeeff1;
   width: 56px; }
+*/

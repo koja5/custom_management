@@ -2,8 +2,8 @@
   <div class="spinner loading"></div>
 </div>
 
-<div *ngIf="!loading">
-  <div *ngIf="selectedUser === undefined">
+<div *ngIf="!loading" style="height: 100%">
+  <div *ngIf="selectedUser === undefined" style="height: 100%">
     <div class="vaucher-options">
       <button kendoButton [icon]="'greyscale'" (click)="newVaucher()" [primary]="true"
         style="border: none;">{{language.newVaucher}}</button>
@@ -12,7 +12,7 @@
           (change)="onFileChange($event)" [(ngModel)]="fileValue" /></label>
     </div>
 
-    <kendo-grid *ngIf="language !== undefined" [data]="gridData" [height]="800" [resizable]="true"
+    <kendo-grid *ngIf="language !== undefined" [data]="gridData" [style.height.%]="93" [resizable]="true"
       [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
       [pageable]="true" [filterable]="true" (dataStateChange)="dataStateChange($event)"
       (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey" [loading]="loadingGridVaucher">

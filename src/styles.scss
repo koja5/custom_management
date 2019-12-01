@@ -619,6 +619,8 @@ dt {
 .content-page-vertical .content {
     padding: 0 15px 0px 15px;
     margin-top: 70px;
+    /*position: absolute;
+    top: 70px;*/
 }
 
 .content-page-horizontal .content {
@@ -3809,4 +3811,8 @@ input[type='file'] {
 
 tr.k-grid-norecords:hover {
     background-color: #fff !important;
+}
+
+.k-button.k-primary, .k-slider .k-draghandle {
+    border: none !important;
 }

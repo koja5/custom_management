@@ -2,7 +2,7 @@
   <div class="spinner loading"></div>
 </div>
 
-<div *ngIf="!loading">
+<div *ngIf="!loading" style="height: 100%">
   <div class="user-options">
     <kendo-buttongroup>
       <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">{{language.newUser}}</button>
@@ -13,7 +13,7 @@
         (change)="onFileChange($event)" [(ngModel)]="fileValue" /></label>
   </div>
 
-  <kendo-grid [data]="gridData" [height]="800" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
+  <kendo-grid [data]="gridData" [style.height.%]="93" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
     [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="true" [filterable]="true"
     (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)" (sortChange)="sortChange($event)"
     [kendoGridSelectBy]="mySelectionKey">
@@ -87,14 +87,6 @@
   <form name="loginForm" class="loginForm" (ngSubmit)="createUser(user)" ngNativeValidate>
     <div class="patternContainer">
       <div class="col-xs-6">
-
-        <p *ngIf="uname.errors?.pattern || data.shortname === undefined || data.shortname === ''" class="validError">
-          <span class="k-icon k-i-close"></span> Username not valid.
-        </p>
-
-        <p *ngIf="!uname.errors?.pattern && data.shortname !== undefined && data.shortname !== ''" class="validSuccess">
-          <span class="k-icon k-i-check"></span> Username is valid.
-        </p>
 
         <p *ngIf="email.errors?.pattern || data.email === undefined || data.email === ''" class="validError">
           <span class="k-icon k-i-close"></span> Email not valid.
@@ -171,7 +163,7 @@
       <div class="email col-md-6 col-xs-12">
         <p>{{language.username}}</p>
         <input type="text" class="col-xs-12" name="shortname" placeholder="Username" [(ngModel)]="data.shortname"
-          [pattern]="unamePattern" #uname="ngModel" required>
+          #uname="ngModel" required>
       </div>
       <div class="email col-md-6 col-xs-12">
         <p>{{language.password}}</p>

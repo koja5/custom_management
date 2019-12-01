@@ -45,7 +45,7 @@ export class UsersComponent implements OnInit {
       dir: "asc"
     }
   ];
-  public unamePattern = "^[a-z0-9_-]{8,15}$";
+  // public unamePattern = "^[a-z0-9_-]{8,15}$";
   public passwordPattern =
     "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&#])[A-Za-zd$@$!%*?&].{8,}";
   public emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$";
