@@ -208,17 +208,20 @@
                     <kendo-combobox [data]="customerUsers" [textField]="'shortname'" [valueField]="'id'"
                       (valueChange)="onValueChange($event)" [(ngModel)]="customerUser" style.width="{{userWidth}}">
                       <ng-template kendoComboBoxItemTemplate let-dataItem>
-                        <span class="template">{{ dataItem.shortname }}</span>
-                        <span class="template" *ngIf="dataItem.city !== ''">, {{ dataItem.city}}</span>
-                        <span class="template" *ngIf="dataItem.street !== ''">/{{dataItem.street}}</span>
+                        <p style="height: 30px !important;">
+                          <span style="font-weight: bold">{{ dataItem.shortname }}</span> <br>
+                          <span class="customerInfo" *ngIf="dataItem.city !== ''"> {{ dataItem.city}}</span>
+                          <span class="customerInfo" *ngIf="dataItem.street !== ''">/{{dataItem.street}}</span>
+                        </p>
                       </ng-template>
                     </kendo-combobox>
-                    <button kendoButton [icon]="'user'" [primary]="true" class="inputTheme-{{theme}}" (click)="newCustomer()">
+                    <button kendoButton [icon]="'user'" [primary]="true" class="inputTheme-{{theme}}"
+                      (click)="newCustomer()">
                       {{languageUser.newCustomer}}
                     </button>
 
-                    <button kendoButton [icon]="'k-icon k-i-information'" class="inputTheme-{{theme}}" [primary]="true" (click)="baseDataForUser()"
-                      *ngIf="baseDataIndicator">
+                    <button kendoButton [icon]="'k-icon k-i-information'" class="inputTheme-{{theme}}" [primary]="true"
+                      (click)="baseDataForUser()" *ngIf="baseDataIndicator">
                       {{languageUser.baseDate}}
                     </button>
                   </div>
@@ -387,12 +390,13 @@
                       <span class="template" *ngIf="dataItem.street !== ''">/{{dataItem.street}}</span>
                     </ng-template>
                   </kendo-combobox>
-                  <button kendoButton [icon]="'user'" [primary]="true" class="inputTheme-{{theme}}" (click)="newCustomer()">
+                  <button kendoButton [icon]="'user'" [primary]="true" class="inputTheme-{{theme}}"
+                    (click)="newCustomer()">
                     {{languageUser.newCustomer}}
                   </button>
 
-                  <button kendoButton [icon]="'k-icon k-i-information'" class="inputTheme-{{theme}}" [primary]="true" (click)="baseDataForUser()"
-                    *ngIf="baseDataIndicator">
+                  <button kendoButton [icon]="'k-icon k-i-information'" class="inputTheme-{{theme}}" [primary]="true"
+                    (click)="baseDataForUser()" *ngIf="baseDataIndicator">
                     {{languageUser.baseDate}}
                   </button>
                 </div>

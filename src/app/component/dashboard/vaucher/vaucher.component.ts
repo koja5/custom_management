@@ -227,9 +227,16 @@ export class VaucherComponent implements OnInit {
     this.dateConst = new Date(data.date);
     this.dateredeemedConst = new Date(data.date_redeemed);
     this.data.amount = Number(data.amount);
-    this.customerUser = {
-      id: Number(data.customer)
-    };
+    this.customerUser = this.getSelectedCustomerUser(data.customer);
+  }
+
+  getSelectedCustomerUser(id) {
+    for(let i = 0; i < this.customerUsers.length; i++) {
+      if(this.customerUsers[i].id == id) {
+        return this.customerUsers[i];
+      }
+    }
+    return null;
   }
 
   selectionChange(event) {
@@ -380,7 +387,7 @@ export class VaucherComponent implements OnInit {
   }
 
   getCustomer() {
-    this.customer.getCustomers(localStorage.getItem('storeId-' + this.id), val => {
+    this.customer.getCustomers(localStorage.getItem('superadmin'), val => {
       console.log(val);
       this.customerUsers = val;
       this.loading = false;
