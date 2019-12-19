@@ -37,7 +37,7 @@ export class CustomersService {
 
   uploadImage(data, callback) {
     // const uploadSaveUrl = 'http://localhost:3000/api/uploadImage';
-    const uploadSaveUrl = 'http://www.app-production.eu:3000/uploadImage';
+    const uploadSaveUrl = 'http://www.app-production.eu:8081/uploadImage';
     return this.http.post(uploadSaveUrl, data)
       .map(res => res)
       .subscribe(val => callback(val));
@@ -53,6 +53,16 @@ export class CustomersService {
     const body = { filename: file };
 
     return this.http.post('/api/download', body, {
+      responseType: 'blob',
+      headers: new HttpHeaders().append('Content-Type', 'application/json')
+    });
+  }
+
+  getPdfFile(file: string) {
+    console.log(file);
+    const body = { filename: file };
+
+    return this.http.post('/api/getPdfFile', body, {
       responseType: 'blob',
       headers: new HttpHeaders().append('Content-Type', 'application/json')
     });

@@ -30,7 +30,7 @@ router.post('/send', function(req, res) {
     let mail = "Thank you for registering. We require that you validate your registration to ensure that the email address you entered was correct. This protects against unwanted spam and malicious abuse. Your username is: " + req.body.shortname;
     mail += ".\nTo activate your account, simply click on the following link:\n";
     //mail+="http://147.91.204.116:2030/api/korisnik/verifikacija/" + broj + "\n";
-    // mail += "http://app-production.eu:3000/api/korisnik/verifikacija/" + broj + "\n";
+    // mail += "http://app-production.eu:8081/api/korisnik/verifikacija/" + broj + "\n";
     mail += "http://localhost:3000/api/korisnik/verifikacija/" + broj + "\n";
     mail += "Best regards,\nTuina Praxis!"
 
@@ -59,7 +59,7 @@ router.post('/forgotmail', function(req, res) {
     let broj = sha1(req.body.email);
     let mail = "Dear \nIf you submitted your password change request at app-production.eu, ";
     mail += "you can do so by clicking the following link. \ n If you did not submit this request, please ignore this message.\n";
-    // mail += "http://app-production.eu:3000/changePassword/" + broj + "\n";
+    // mail += "http://app-production.eu:8081/changePassword/" + broj + "\n";
     mail += "http://localhost:4200/changePassword/" + broj + "\n";
     mail += "Regards \nTuina Praxis!"
 

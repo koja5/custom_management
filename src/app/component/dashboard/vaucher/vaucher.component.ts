@@ -37,7 +37,7 @@ export class VaucherComponent implements OnInit {
   public imagePath = 'defaultUser';
   public loading = true;
   // public uploadSaveUrl = 'http://localhost:3000/api/uploadImage'; // should represent an actual API endpoint
-  public uploadSaveUrl = 'http://www.app-production.eu:3000/uploadImage';
+  public uploadSaveUrl = 'http://www.app-production.eu:8081/uploadImage';
   public uploadRemoveUrl = 'removeUrl'; // should represent an actual API endpoint
   // private spread: GC.Spread.Sheets.Workbook;
   // private excelIO;
@@ -66,6 +66,7 @@ export class VaucherComponent implements OnInit {
     
     this.id = Number(localStorage.getItem('idUser'));
     this.getVauchers();
+    this.getCustomer();
 
     if (localStorage.getItem('language') !== null) {
       this.language = JSON.parse(localStorage.getItem('language')).vaucher;
@@ -110,7 +111,6 @@ export class VaucherComponent implements OnInit {
   }
 
   newVaucher() {
-    this.getCustomer();
     this.operationMode = 'add';
     this.initializeParams();
     this.changeTheme(this.theme);
@@ -187,7 +187,6 @@ export class VaucherComponent implements OnInit {
 
   editForm(data) {
     this.changeTheme(this.theme);
-    this.getCustomer();
     this.data = data;
     this.convertValue(data);
     this.operationMode = 'edit';

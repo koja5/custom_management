@@ -8,3 +8,8 @@ export NVM_DIR="$HOME/.nvm"
 nvm use node
 pkill node
 forever start --minUptime 1000 --spinSleepTime 1000 app.js
+
+
+78.47.206.131
+root
+CJr4eUqWg33tT97mxPFx

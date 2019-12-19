@@ -42,7 +42,7 @@ export class CustomersComponent implements OnInit {
   public imagePath = "defaultUser";
   public loading = true;
   // public uploadSaveUrl = 'http://localhost:3000/api/uploadImage'; // should represent an actual API endpoint
-  public uploadSaveUrl = "http://www.app-production.eu:3000/uploadImage";
+  public uploadSaveUrl = "http://www.app-production.eu:8081/uploadImage";
   public uploadRemoveUrl = "removeUrl"; // should represent an actual API endpoint
   // private spread: GC.Spread.Sheets.Workbook;
   // private excelIO;

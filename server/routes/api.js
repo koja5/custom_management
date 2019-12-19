@@ -12,8 +12,8 @@ const path = require("path");
   user: "appproduction.",
   password: "jBa9$6v7",
   database: "management"
-});
-*/
+});*/
+
 var connection = mysql.createPool({
   host: 'localhost',
   user: 'root',
@@ -1199,6 +1199,13 @@ router.post("/deleteDocument", function (req, res, next) {
 });
 
 router.post("/download", function (req, res, next) {
+  console.log(req);
+  filepath = path.join(__dirname, "./uploads") + "/" + req.body.filename;
+  console.log(filepath);
+  res.sendFile(filepath);
+});
+
+router.post("/getPdfFile", function (req, res, next) {
   console.log(req);
   filepath = path.join(__dirname, "./uploads") + "/" + req.body.filename;
   console.log(filepath);
