@@ -39,7 +39,7 @@ export class BaseDateComponent implements OnInit {
   public documents: any;
   public language: any;
   //public url = 'http://localhost:3000/upload';
-  public url = "http://www.app-production.eu:3000/upload";
+  public url = "http://www.app-production.eu:8081/upload";
   public complaintValue: any;
   public complaintData = new ComplaintTherapyModel();
   public gridComplaint: any;
@@ -103,6 +103,14 @@ export class BaseDateComponent implements OnInit {
       this.changeTheme(mess);
       this.theme = mess;
     });
+
+    this.convertStringToDate();
+  }
+
+  convertStringToDate() {
+    if(this.data.birthday !== undefined && this.data.birthday !== '') {
+      this.data.birthday = new Date(this.data.birthday);
+    }
   }
 
   getParameters() {
@@ -266,12 +274,27 @@ export class BaseDateComponent implements OnInit {
     });
   }
 
+  onChange(event) {
+    this.data.birthday = event; 
+  }
+
+
   downloadFile(filename: string) {
     console.log(filename);
     this.service.downloadFile(filename).subscribe(
       data => saveAs(data, filename),
       error => console.error(error)
     );
+  }
+
+  previewDocument(filename: string) {
+    this.service.getPdfFile(filename).subscribe(data => {
+      console.log(data);
+      let file = new Blob([data], { type: "application/pdf" });
+      console.log(file);
+      var fileURL = URL.createObjectURL(file);
+      window.open(fileURL);
+    });
   }
 
   deleteDocument(event) {
@@ -299,10 +322,6 @@ export class BaseDateComponent implements OnInit {
         });
     }
     this.dialogDocumentOpened = false;
-  }
-
-  previewDocument(document) {
-    console.log(document);
   }
 
   backToGrid() {
@@ -722,7 +741,6 @@ export class BaseDateComponent implements OnInit {
         }
       });
     }
-    
   }
 
   getTranslate(title) {

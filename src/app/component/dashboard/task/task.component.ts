@@ -193,7 +193,7 @@ export class TaskComponent implements OnInit {
     this.storeService.getStore(localStorage.getItem("superadmin"), val => {
       this.store = val;
       this.language.selectStore += this.store[0].storename + ")";
-      
+
       if (!isNaN(this.selectedStoreId) && this.selectedStoreId !== undefined) {
         const informationAboutStore = this.getStartEndTimeForStore(this.store, this.selectedStoreId);
         this.startWork = informationAboutStore.start_work;
@@ -789,6 +789,7 @@ export class TaskComponent implements OnInit {
       if (val) {
         this.data.id = val.id;
         this.customerUser = this.data;
+        this.formGroup.patchValue({ telephone: this.data.telephone });
         this.baseDataIndicator = true;
         this.userWidth = "49%";
         this.reloadNewCustomer();

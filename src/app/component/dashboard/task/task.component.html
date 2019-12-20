@@ -505,16 +505,16 @@
           </div>
           <div class="col-md-8 col-xs-12">
             <p>{{languageUser.username}}</p>
-            <input type="text" class="email col-md-12 col-xs-12" name="shortname" placeholder="Username"
+            <input type="text" class="email col-md-12 col-xs-12" name="shortname" placeholder="{{languageUser.username}}"
               [(ngModel)]="data.shortname" [pattern]="unamePattern" #uname="ngModel" required>
             <p *ngIf="uname.errors?.pattern" class="validError">
               <span class="k-icon k-i-close"></span> Username not valid.
             </p>
             <p>{{languageUser.firstname}}</p>
-            <input type="text" class="email col-md-12 col-xs-12" name="firstname" placeholder="Firstname"
+            <input type="text" class="email col-md-12 col-xs-12" name="firstname" placeholder="{{languageUser.firstname}}"
               [(ngModel)]="data.firstname" firstname.value=''>
             <p>{{languageUser.lastname}}</p>
-            <input type="text" class="email col-md-12 col-xs-12" name="lastname" placeholder="Lastname"
+            <input type="text" class="email col-md-12 col-xs-12" name="lastname" placeholder="{{languageUser.lastname}}"
               [(ngModel)]="data.lastname" lastname.value=''>
             <div class="form-group col-md-12 col-xs-12">
               <div class="col-md-6 col-xs-12">
@@ -539,32 +539,32 @@
       <div class="form-group col-xs-12">
         <div class="email col-md-4 col-xs-12">
           <p>{{languageUser.telephone}}</p>
-          <input type="text" class="col-xs-12" name="telephone" placeholder="Telephone" [(ngModel)]="data.telephone"
+          <input type="text" class="col-xs-12" name="telephone" placeholder="{{languageUser.telephone}}" [(ngModel)]="data.telephone"
             telephone.value=''>
         </div>
         <div class="email col-md-4 col-xs-12">
           <p>{{languageUser.mobile}}</p>
-          <input type="text" class="col-xs-12" name="mobile" placeholder="Mobile" [(ngModel)]="data.mobile"
+          <input type="text" class="col-xs-12" name="mobile" placeholder="{{languageUser.mobile}}" [(ngModel)]="data.mobile"
             mobile.value=''>
         </div>
         <div class="email col-md-4 col-xs-12">
           <p>{{languageUser.email}}</p>
-          <input type="email" class="col-xs-12" name="email" placeholder="Email" [(ngModel)]="data.email"
+          <input type="email" class="col-xs-12" name="email" placeholder="{{languageUser.email}}" [(ngModel)]="data.email"
             [pattern]="emailPattern" #email="ngModel" required>
         </div>
         <div class="email col-md-4 col-xs-12">
           <p>{{languageUser.street}}</p>
-          <input type="text" class="col-xs-12" name="street" placeholder="Street" [(ngModel)]="data.street"
+          <input type="text" class="col-xs-12" name="street" placeholder="{{languageUser.street}}" [(ngModel)]="data.street"
             street.value=''>
         </div>
         <div class="email col-md-4 col-xs-12">
           <p>{{languageUser.streetnumber}}</p>
-          <input type="text" class="col-xs-12" name="streetnumber" placeholder="Street number"
+          <input type="text" class="col-xs-12" name="streetnumber" placeholder="{{languageUser.streetnumber}}"
             [(ngModel)]="data.streetnumber" streetnumber.value=''>
         </div>
         <div class="email col-md-4 col-xs-12">
           <p>{{languageUser.city}}</p>
-          <input type="text" class="col-xs-12" name="city" placeholder="City" [(ngModel)]="data.city" city.value=''>
+          <input type="text" class="col-xs-12" name="city" placeholder="{{languageUser.city}}" [(ngModel)]="data.city" city.value=''>
         </div>
       </div>
       <!-- ./remember-row -->

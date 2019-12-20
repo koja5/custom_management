@@ -7,11 +7,18 @@ const mysql = require("mysql");
 var fs = require("fs");
 const path = require("path");
 
-var connection = mysql.createPool({
+/*var connection = mysql.createPool({
   host: "185.178.193.141",
   user: "appproduction.",
   password: "jBa9$6v7",
   database: "management"
+});*/
+
+var connection = mysql.createPool({
+  host: "185.178.193.141",
+  user: "appproduction.",
+  password: "jBa9$6v7",
+  database: "management_prod"
 });
 
 /*var connection = mysql.createPool({
@@ -1199,6 +1206,13 @@ router.post("/deleteDocument", function (req, res, next) {
 });
 
 router.post("/download", function (req, res, next) {
+  console.log(req);
+  filepath = path.join(__dirname, "./uploads") + "/" + req.body.filename;
+  console.log(filepath);
+  res.sendFile(filepath);
+});
+
+router.post("/getPdfFile", function (req, res, next) {
   console.log(req);
   filepath = path.join(__dirname, "./uploads") + "/" + req.body.filename;
   console.log(filepath);

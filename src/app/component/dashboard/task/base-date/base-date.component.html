@@ -19,7 +19,8 @@
           </div>
           <div *ngIf="type === 'details'">
             <div class="vd_info tr" style="height: 7vh; text-align: center"> <button kendoButton class="k-delete"
-                [icon]="'k-icon k-i-delete'" (click)="customer = !customer; changeTheme(theme);" style="text-align: center">Edit</button>
+                [icon]="'k-icon k-i-delete'" (click)="customer = !customer; changeTheme(theme);"
+                style="text-align: center">Edit</button>
             </div>
             <div class="vd_info tr" style="height: 7vh; text-align: center"> <button kendoButton class="k-delete"
                 [icon]="'k-icon k-i-delete'" [primary]="true" (click)="open('dialog')"
@@ -136,7 +137,7 @@
                   <div class="col-sm-6">
                     <div class="row mgbt-xs-0">
                       <label class="col-xs-5 control-label">Birthday:</label>
-                      <div class="col-xs-7 controls">{{data.birthday}}</div>
+                      <div class="col-xs-7 controls">{{data.birthday | date:'MM/dd/yyyy'}}</div>
                       <!-- col-sm-10 -->
                     </div>
                   </div>
@@ -272,9 +273,15 @@
             </kendo-grid-column>
             <kendo-grid-column field="name" title="Document name" width="250">
             </kendo-grid-column>
-            <kendo-grid-column field="size" title="Size" width="120">
+            <kendo-grid-column field="size" title="Size" width="80">
             </kendo-grid-column>
-            <kendo-grid-column field="active" title="Download" width="60">
+            <kendo-grid-column field="active" title="Preview" width="100">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <button kendoButton [icon]="'k-icon k-i-preview'" class='k-preview'
+                  (click)="previewDocument(dataItem.filename)"></button>
+              </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="active" title="Download" width="100">
               <ng-template kendoGridCellTemplate let-dataItem>
                 <button kendoButton [icon]="'k-icon k-i-download'" class='k-preview'
                   (click)="downloadFile(dataItem.filename)"></button>
@@ -285,12 +292,6 @@
                 <button kendoButton [icon]="'k-icon k-i-delete'" (click)="open('dialogDocument', dataItem)"></button>
               </ng-template>
             </kendo-grid-column>
-            <!--<kendo-grid-column field="active" title="Preview" width="60">
-              <ng-template kendoGridCellTemplate let-dataItem>
-                <button kendoButton [icon]="'k-icon k-i-preview'" class='k-preview'
-                  (click)="previewDocument(dataItem)"></button>
-              </ng-template>
-            </kendo-grid-column>-->
 
           </kendo-grid>
         </div>
@@ -377,8 +378,8 @@
                       <input type="text" class="email col-md-12 col-xs-12" [(ngModel)]="data.lastname" name="lastname">
                     </div>
                     <div class="form-group col-md-12 col-xs-12">
-                      <p>{{language.gender}}</p>
                       <div class="col-md-6 col-xs-12">
+                        <p>{{language.gender}}</p>
                         <input type="radio" name="gender" id="female" class="k-radio"
                           checked="date.gender === 'female' ? checked : ''" [(ngModel)]="data.gender"
                           [value]="'female'">
@@ -387,12 +388,29 @@
                           checked="date.gender === 'male' ? checked : ''" [(ngModel)]="data.gender" [value]="'male'">
                         <label class="k-radio-label col-md-6 col-xs-12" for="male">{{language.male}}</label>
                       </div>
-                      <!--<kendo-datepicker class="email col-md-6 col-xs-12" [value]="data.birthday"></kendo-datepicker>-->
+
+                      <p>{{language.birthday}}</p>
+                      <kendo-datepicker class="email col-md-6 col-xs-12 noPadding" name="birthday" placeholder="{{language.birthday}}"
+                        [value]="data.birthday" (valueChange)="onChange($event)"></kendo-datepicker>
                     </div>
+
                   </div>
                 </div>
               </div>
               <div class="form-group">
+                <div class="email col-md-4 col-xs-12">
+                  <p>{{language.telephone}}</p>
+                  <input type="text" class="col-xs-12" name="telephone" [(ngModel)]="data.telephone" telephone.value=''>
+                </div>
+                <div class="email col-md-4 col-xs-12">
+                  <p>{{language.mobile}}</p>
+                  <input type="text" class="col-xs-12" name="mobile" [(ngModel)]="data.mobile" mobile.value=''>
+                </div>
+                <div class="email col-md-4 col-xs-12">
+                  <p>{{language.email}}</p>
+                  <input type="email" class="col-xs-12" name="email" [(ngModel)]="data.email" [pattern]="emailPattern"
+                    #email="ngModel" required>
+                </div>
                 <div class="email col-md-4 col-xs-12">
                   <p>{{language.street}}</p>
                   <input type="text" class="col-xs-12" [(ngModel)]="data.street" name="street">
@@ -408,7 +426,8 @@
               </div>
               <!-- ./remember-row -->
               <div class="form-group" style="text-align: center">
-                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}" type="submit">Update customer</button>
+                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}" type="submit">Update
+                  customer</button>
               </div>
             </form>
           </div>
@@ -455,10 +474,11 @@
                 </div>
               </div>
               <div class="form-group" style="text-align: center">
-                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}" *ngIf="operationMode === 'add'" type="submit"
+                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}"
+                  *ngIf="operationMode === 'add'" type="submit"
                   [disabled]="selectedRecommendation === undefined || baseDataOne.relationship === undefined || baseDataOne.social === undefined || baseDataOne.doctor === undefined || baseDataOne.first_date === undefined">{{language.addData}}</button>
-                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}" *ngIf="operationMode === 'edit'"
-                  type="submit">{{language.editData}}</button>
+                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}"
+                  *ngIf="operationMode === 'edit'" type="submit">{{language.editData}}</button>
               </div>
             </form>
           </div>
@@ -502,25 +522,29 @@
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.notes}}</p>
-                    <textarea kendoTextArea type="text" [(ngModel)]="baseDataTwo.notes" name="notes" style="width: 95%;"></textarea>
+                    <textarea kendoTextArea type="text" [(ngModel)]="baseDataTwo.notes" name="notes"
+                      style="width: 95%;"></textarea>
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.profession}}</p>
-                    <textarea kendoTextArea type="text" [(ngModel)]="baseDataTwo.profession" name="profession" style="width: 95%;"></textarea>
+                    <textarea kendoTextArea type="text" [(ngModel)]="baseDataTwo.profession" name="profession"
+                      style="width: 95%;"></textarea>
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.useful}}</p>
-                    <textarea kendoTextArea type="text" [(ngModel)]="baseDataTwo.useful" name="useful" style="width: 95%;"></textarea>
+                    <textarea kendoTextArea type="text" [(ngModel)]="baseDataTwo.useful" name="useful"
+                      style="width: 95%;"></textarea>
                   </div>
                 </div>
               </div>
               <!-- ./remember-row -->
               <div class="form-group" style="text-align: center">
-                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}" *ngIf="operationMode === 'add'" type="submit"
+                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}"
+                  *ngIf="operationMode === 'add'" type="submit"
                   [disabled]="baseDataTwo.size === undefined || baseDataTwo.weight === undefined || baseDataTwo.phone === undefined || baseDataTwo.mobile_phone === undefined || 
                   baseDataTwo.birthday === undefined || baseDataTwo.childs === undefined || baseDataTwo.notes === undefined || baseDataTwo.profession === undefined || baseDataTwo.useful === undefiend">{{language.addData}}</button>
-                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}" *ngIf="operationMode === 'edit'"
-                  type="submit">{{language.editData}}</button>
+                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}"
+                  *ngIf="operationMode === 'edit'" type="submit">{{language.editData}}</button>
               </div>
             </form>
           </div>
@@ -569,11 +593,12 @@
                 </div>
               </div>
               <div class="form-group" style="text-align: center">
-                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}" *ngIf="operationMode === 'add'" type="submit"
+                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}"
+                  *ngIf="operationMode === 'add'" type="submit"
                   [disabled]="physicalIllness.internal_organs === undefined || physicalIllness.operations === undefined || 
                   physicalIllness.previous_findings === undefined || physicalIllness.medicament === undefined || physicalIllness.allergies === undefined || physicalIllness.skin_sensitivity === undefined || physicalIllness.pregnancy === undefined">{{language.addData}}</button>
-                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}" *ngIf="operationMode === 'edit'"
-                  type="submit">{{language.editData}}</button>
+                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}"
+                  *ngIf="operationMode === 'edit'" type="submit">{{language.editData}}</button>
               </div>
             </form>
           </div>
