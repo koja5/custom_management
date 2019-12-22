@@ -7,6 +7,7 @@ import { DashboardService } from '../../service/dashboard.service';
 import { UsersService } from '../../service/users.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NavigationMenuModel } from '../../models/navigation-menu';
+import { MongoService } from '../../service/mongo.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -35,7 +36,8 @@ export class DashboardComponent implements OnInit {
     public service: DashboardService,
     public users: UsersService,
     public sanitizer: DomSanitizer,
-    public activatedRouter: ActivatedRoute
+    public activatedRouter: ActivatedRoute,
+    public mongo: MongoService
   ) { }
 
   ngOnInit() {
@@ -50,6 +52,7 @@ export class DashboardComponent implements OnInit {
       this.theme = localStorage.getItem('theme');
     } else {
       this.theme = 'Theme2';
+      this.insertThemeForUser(this.theme);
       localStorage.setItem('theme', this.theme);
     }
     this.type = Number(localStorage.getItem('type'));
@@ -106,6 +109,25 @@ export class DashboardComponent implements OnInit {
     this.message.getImageProfile().subscribe(mess => {
       this.getMe();
     });
+
+    /*this.mongo.getConfigurationForUser(localStorage.getItem('idUser')).subscribe(
+      data => {
+        console.log(data);
+      }
+    );*/
+  }
+
+  insertThemeForUser(theme: string) {
+    const item = {
+      user_id: localStorage.getItem('idUser'),
+      theme: theme
+    };
+
+    this.mongo.includeConfiguration(item).subscribe(
+      data => {
+        console.log(data);
+      }
+    )
   }
 
   getMe() {
@@ -158,6 +180,27 @@ export class DashboardComponent implements OnInit {
     localStorage.setItem('theme', name);
     this.theme = name;
     this.message.sendTheme(name);
+
+    const item = {
+      user_id: 123,
+      theme: 'Theme2',
+      events: 'Event',
+      store_users: [
+        {
+          key: 'store-3',
+          value: {
+            id: 3,
+            user: 'pera'
+          }
+        }
+      ]
+    };
+
+    this.mongo.includeConfiguration(item).subscribe(
+      data => {
+        console.log(data);
+      }
+    )
   }
 
   changeLanguage(name: string) {
