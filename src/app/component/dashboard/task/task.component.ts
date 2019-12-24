@@ -755,6 +755,7 @@ export class TaskComponent implements OnInit {
     if (event !== undefined) {
       this.customerUser = event;
       this.telephoneValue = event.telephone;
+      // this.getComplaintAndTherapyForCustomer(event.id);
       this.baseDataIndicator = true;
       this.userWidth = "49%";
     } else {
@@ -766,6 +767,19 @@ export class TaskComponent implements OnInit {
       this.baseDataIndicator = false;
       this.userWidth = "72%";
     }
+  }
+
+  getComplaintAndTherapyForCustomer(id) {
+    console.log(id);
+    this.customer.getComplaintForCustomer(id).subscribe(
+      data => {
+        console.log(data);
+        if (data['length'] !== 0) {
+          this.selectedComplaint = this.stringToArray(data['complaint']);
+          this.selectedTherapies = this.stringToArray(data['therapies']);
+        }
+      }
+    )
   }
 
   newCustomer() {
@@ -1311,7 +1325,9 @@ export class TaskComponent implements OnInit {
     });
 
     this.service.getCompanyUsers(localStorage.getItem("idUser"), val => {
-      this.allUsers = val;
+      console.log(val);
+      this.allUsers = val.sort((a, b) => a['shortname'].localeCompare(b['shortname']));
+      console.log(this.allUsers);
     });
   }
 
@@ -1330,6 +1346,19 @@ export class TaskComponent implements OnInit {
     }
     const title = this.getTitle(titleValue, stringToArray);
     return { value, title };
+  }
+
+  stringToArray(data) {
+    let array = [];
+    const dataArray = data.split(';');
+    if (dataArray.length > 0) {
+      for (let i = 0; i < dataArray.length; i++) {
+        array.push(Number(dataArray[i]));
+      }
+    } else {
+      array.push(Number(data));
+    }
+    return array;
   }
 
   getTitle(data, idArray) {

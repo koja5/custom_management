@@ -333,7 +333,7 @@
       </kendo-dialog-actions>
     </kendo-dialog>
 
-    <kendo-window [title]="getTranslate(currentTab)" *ngIf="customer" [minWidth]="700" [width]="850" [height]="600"
+    <kendo-window [title]="getTranslate(currentTab)" *ngIf="customer" [minWidth]="700" [width]="850" [height]="670"
       (close)="customer = false">
       <div class="tabs widget">
         <ul class="nav nav-tabs widget">
@@ -360,14 +360,9 @@
                     <img *ngIf="data.gender !== '' && data.gender === 'female'" alt="example image"
                       style="width: 190px;" src="../../../../assets/images/users/female-patient.png"
                       class="rounded-circle">
-                    <h2 class="font-semibold col-md-6 col-xs-12">{{data.firstname}} {{data.lastname}}</h2>
+                    <h2 class="font-semibold">{{data.firstname}} {{data.lastname}}</h2>
                   </div>
                   <div class="col-md-8 col-xs-12">
-                    <div>
-                      <p>{{language.username}}</p>
-                      <input type="text" class="email col-md-12 col-xs-12" [(ngModel)]="data.shortname"
-                        name="shortname">
-                    </div>
                     <div>
                       <p>{{language.firstname}}</p>
                       <input type="text" class="email col-md-12 col-xs-12" [(ngModel)]="data.firstname"
