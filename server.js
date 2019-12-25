@@ -22,11 +22,11 @@ var fs = require("fs");
 
 
 var connection = mysql.createPool({
-  host: '185.178.193.141',
-  user: 'appproduction.',
-  password: 'jBa9$6v7',
-  database: 'management'
-})
+  host: "185.178.193.141",
+  user: "appproduction.",
+  password: "jBa9$6v7",
+  database: "management_prod"
+});
 
 //for upload image
 app.use(function (req, res, next) { //allow cross origin requests

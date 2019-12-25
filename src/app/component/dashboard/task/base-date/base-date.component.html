@@ -459,7 +459,7 @@
                 <div class="col-md-4 col-xs-12" *ngIf="doctorList !== undefined">
                   <p>{{language.doctor}}</p>
                   <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="doctorsList" [textField]="'firstname'"
-                    [valueField]="'id'" [(ngModel)]="baseDataOne.doctor" [valuePrimitive]="true" name="doctors">
+                    [valueField]="'id'" [(ngModel)]="baseDataOne.doctor" [valuePrimitive]="true" (filterChange)="filterDoctor($event)" name="doctors">
                   </kendo-combobox>
                 </div>
                 <div class="col-md-4 col-xs-12">
