@@ -14,19 +14,19 @@ const path = require("path");
   database: "management"
 });*/
 
-var connection = mysql.createPool({
+/*var connection = mysql.createPool({
   host: "185.178.193.141",
   user: "appproduction.",
   password: "jBa9$6v7",
   database: "management_prod"
-});
+});*/
 
-/*var connection = mysql.createPool({
+var connection = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: 'root',
   database: 'management'
-});*/
+});
 
 /*var connection = mysql.createPool({
     host: '144.76.112.98',
@@ -4407,6 +4407,7 @@ router.post("/createVaucher", function (req, res, next) {
     response = {};
     console.log(req);
     var data = {
+      id_voucher: req.body.id_voucher,
       date: req.body.date,
       amount: req.body.amount,
       date_redeemed: req.body.date_redeemed,

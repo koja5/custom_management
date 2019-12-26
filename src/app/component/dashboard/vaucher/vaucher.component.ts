@@ -119,6 +119,7 @@ export class VaucherComponent implements OnInit {
 
   initializeParams() {
     this.data = {
+      id_voucher: null,
       date: '',
       amount: null,
       date_redeemed: '',

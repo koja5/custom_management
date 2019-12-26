@@ -13,3 +13,14 @@ forever start --minUptime 1000 --spinSleepTime 1000 app.js
 78.47.206.131
 root
 CJr4eUqWg33tT97mxPFx
+
+mysqladmin flush-hosts
+mysql -u root -p
+mysql> show variables like "max_connections";
+set global max_connections = 500;
+sudo systemctl restart mysql
+
+FTP:
+host: 78.47.206.131
+user: appproduction
+pass: Iva#0304

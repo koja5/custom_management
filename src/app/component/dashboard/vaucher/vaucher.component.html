@@ -24,7 +24,7 @@
           class="uploadFromExcel-{{theme}}">{{language.exportToExcel}}</button>
         <button kendoGridPDFCommand icon="file-pdf" class="uploadFromExcel-{{theme}}">{{language.exportToPDF}}</button>
       </ng-template>
-      <kendo-grid-column field="id" title="{{language.id}}" width="50">
+      <kendo-grid-column field="id_voucher" title="{{language.id}}" width="50">
       </kendo-grid-column>
       <kendo-grid-column field="date" title="{{language.date}}" width="150">
         <ng-template kendoGridCellTemplate let-dataItem>
@@ -62,7 +62,7 @@
             </div>
           </div>
         </ng-template>
-        <kendo-grid-column field="id" title="{{language.id}}">
+        <kendo-grid-column field="id_voucher" title="{{language.id}}">
         </kendo-grid-column>
         <kendo-grid-column field="date" title="{{language.date}}">
         </kendo-grid-column>
@@ -112,11 +112,12 @@
   (close)="vaucher = false">
   <form name="loginForm" class="loginForm"
     (ngSubmit)="operationMode === 'add' ? createVaucher(vaucher) : editVaucher(vaucher)" ngNativeValidate>
-    <div class="col-md-12 col-xs-12" *ngIf="operationMode === 'edit'">
+    <div class="col-md-12 col-xs-12">
       <p>{{language.id}}</p>
-      <kendo-numerictextbox class="email col-md-12 col-xs-12 noPadding" name="id" placeholder="id"
-        [(ngModel)]="data.id" id.id='' [disabled]="true">
-      </kendo-numerictextbox>
+      <input *ngIf="operationMode === 'add'" class="col-xs-12" name="id_voucher" [(ngModel)]="data.id_voucher" id.id=''>
+
+      <input kendoTextBox *ngIf="operationMode === 'edit'" class="col-xs-12" name="id_voucher" [(ngModel)]="data.id_voucher" id.id=''
+        [disabled]="true">
     </div>
     <div class="col-md-12 col-xs-12">
       <p>{{language.date}}</p>
@@ -152,7 +153,7 @@
     </div>
     <div class="form-group" style="text-align: center;">
       <button *ngIf="operationMode === 'add'" kendoButton [primary]="true" class="form-button" type="submit"
-        [disabled]="dateConst === '' || data.amount === null">{{language.addVaucher}}</button>
+        [disabled]="dateConst === '' || data.amount === null || data.id_voucher === null">{{language.addVaucher}}</button>
       <button *ngIf="operationMode === 'edit'" kendoButton [primary]="true" class="form-button" type="submit"
         [disabled]="dateConst === '' || data.amount === null">{{language.updateVaucher}}</button>
     </div>
