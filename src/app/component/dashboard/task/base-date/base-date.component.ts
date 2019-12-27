@@ -97,11 +97,11 @@ export class BaseDateComponent implements OnInit {
       this.theme = localStorage.getItem("theme");
     }
     setTimeout(() => {
-      this.changeTheme(this.theme);
+      // this.changeTheme(this.theme);
     }, 500);
 
     this.message.getTheme().subscribe(mess => {
-      this.changeTheme(mess);
+      // this.changeTheme(mess);
       this.theme = mess;
     });
 
@@ -218,7 +218,7 @@ export class BaseDateComponent implements OnInit {
   open(component, id) {
     this[component + "Opened"] = true;
     this.selectedForDelete = id;
-    this.changeTheme(this.theme);
+    // this.changeTheme(this.theme);
   }
 
   action(event) {
@@ -968,7 +968,7 @@ export class BaseDateComponent implements OnInit {
   }
 
   changeTheme(theme: string) {
-    setTimeout(() => {
+    /*setTimeout(() => {
       if (localStorage.getItem("allThemes") !== undefined) {
         const allThemes = JSON.parse(localStorage.getItem("allThemes"));
         console.log(allThemes);
@@ -1051,7 +1051,7 @@ export class BaseDateComponent implements OnInit {
           }
         }
       }
-    }, 50);
+    }, 50);*/
   }
 
   filterDoctor(event) {

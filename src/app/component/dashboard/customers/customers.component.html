@@ -1,16 +1,16 @@
-<div *ngIf="loading" style="height: 90vh;">
+<!--<div *ngIf="loading" style="height: 90vh;">
   <div class="spinner loading"></div>
-</div>
+</div>-->
 
-<div *ngIf="!loading && selectedUser === undefined" style="height: 100%">
+<div *ngIf="selectedUser === undefined" style="height: 100%">
     <div class="user-options">
       <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">{{language.newCustomer}}</button>
-      <label class="uploadFromExcel-{{theme}}"><span class='k-icon k-i-file-excel'></span>
+      <label class="k-button k-primary k-button-icontext k-group-start k-group-end margin-left"><span class='k-icon k-i-file-excel'></span>
         {{ language.uploadFromExcel }}<input type="file" name="files[]" multiple id="jsonFile" accept=".xlsx"
           (change)="onFileChange($event)" [(ngModel)]="fileValue" /></label>
     </div>
 
-    <kendo-grid *ngIf="language !== undefined" [data]="gridData" [style.height.%]="93" [resizable]="true"
+    <kendo-grid *ngIf="language !== undefined" [data]="gridData" [style.height]="height" [resizable]="true"
       [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
       [pageable]="true" [filterable]="true" (dataStateChange)="dataStateChange($event)"
       (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey">
@@ -18,9 +18,8 @@
         pagerItems="{{language.pagerItems}}" pagerItemsPerPage="{{language.pagerItemsPerPage}}">
       </kendo-grid-messages>
       <ng-template kendoGridToolbarTemplate>
-        <button type="button" kendoGridExcelCommand icon="file-excel"
-          class="uploadFromExcel-{{theme}}">{{language.exportToExcel}}</button>
-        <button kendoGridPDFCommand icon="file-pdf" class="uploadFromExcel-{{theme}}">{{language.exportToPDF}}</button>
+        <button type="button" kendoGridExcelCommand icon="file-excel">{{language.exportToExcel}}</button>
+        <button kendoGridPDFCommand icon="file-pdf">{{language.exportToPDF}}</button>
       </ng-template>
       <kendo-grid-column field="shortname" title="{{language.username}}" width="120">
       </kendo-grid-column>

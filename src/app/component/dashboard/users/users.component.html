@@ -1,26 +1,25 @@
-<div *ngIf="loading" style="height: 90vh;">
+<!--<div *ngIf="loading" style="height: 90vh;">
   <div class="spinner loading"></div>
-</div>
+</div>-->
 
-<div *ngIf="!loading" style="height: 100%">
+<div style="height: 100%">
   <div class="user-options">
     <kendo-buttongroup>
       <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">{{language.newUser}}</button>
     </kendo-buttongroup>
     <!--<kendo-dropdownbutton [data]="settings" [icon]="icon"></kendo-dropdownbutton>-->
-    <label class="uploadFromExcel-{{theme}}"><span class='k-icon k-i-file-excel'></span>
+    <label class="k-button k-primary k-button-icontext k-group-start k-group-end margin-left"><span class='k-icon k-i-file-excel'></span>
       {{ language.uploadFromExcel }}<input type="file" name="files[]" multiple id="jsonFile" accept=".xlsx"
         (change)="onFileChange($event)" [(ngModel)]="fileValue" /></label>
   </div>
 
-  <kendo-grid [data]="gridData" [style.height.%]="93" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
+  <kendo-grid [data]="gridData" [style.height]="height" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
     [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="true" [filterable]="true"
     (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)" (sortChange)="sortChange($event)"
     [kendoGridSelectBy]="mySelectionKey">
     <ng-template kendoGridToolbarTemplate>
-      <button kendoGridExcelCommand icon="file-excel"
-        class="uploadFromExcel-{{theme}}">{{language.exportToExcel}}</button>
-      <button kendoGridPDFCommand icon="file-pdf" class="uploadFromExcel-{{theme}}">{{language.exportToPDF}}</button>
+      <button kendoGridExcelCommand icon="file-excel">{{language.exportToExcel}}</button>
+      <button kendoGridPDFCommand icon="file-pdf">{{language.exportToPDF}}</button>
     </ng-template>
     <kendo-grid-column field="shortname" title="Username" width="120">
     </kendo-grid-column>

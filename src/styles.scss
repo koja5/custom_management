@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import url("../node_modules/@progress/kendo-theme-default/dist/all.css");
+@import url("../node_modules/@progress/kendo-theme-material/dist/all.css");
 @import url("../node_modules/bootstrap/dist/css/bootstrap.min.css");
 @import url("../node_modules/font-awesome/css/font-awesome.min.css");
 /*@import url(https://fonts.googleapis.com/css?family=Titillium+Web:300,400,600,700,900);*/
@@ -3815,4 +3815,8 @@ tr.k-grid-norecords:hover {
 
 .k-button.k-primary, .k-slider .k-draghandle {
     border: none !important;
+}
+
+.margin-left {
+    margin: 0px 0px 0px 5px;
 }

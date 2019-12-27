@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { VaucherModel } from 'src/app/models/vaucher-model';
 import { process, State } from '@progress/kendo-data-query';
 import {
@@ -55,6 +55,7 @@ export class VaucherComponent implements OnInit {
   public dateConst: any;
   public dateredeemedConst: any;
   public id: number;
+  public height: any;
 
   constructor(
     private service: VaucherService,
@@ -64,6 +65,8 @@ export class VaucherComponent implements OnInit {
 
   ngOnInit() {
     
+    this.height = window.innerHeight - 110;
+    this.height += 'px'; 
     this.id = Number(localStorage.getItem('idUser'));
     this.getVauchers();
     this.getCustomer();
@@ -83,11 +86,11 @@ export class VaucherComponent implements OnInit {
 
     this.message.getBackToVaucherGrid().subscribe(mess => {
       this.selectedUser = undefined;
-      this.changeTheme(this.theme);
+      // this.changeTheme(this.theme);
     });*/
 
     this.message.getTheme().subscribe(mess => {
-      this.changeTheme(mess);
+      // this.changeTheme(mess);
       this.theme = mess;
     });
   }
@@ -106,14 +109,14 @@ export class VaucherComponent implements OnInit {
         this['loadingGridVaucher'] = false;
       }
       this.loading = false;
-      this.changeTheme(this.theme);
+      // this.changeTheme(this.theme);
     });
   }
 
   newVaucher() {
     this.operationMode = 'add';
     this.initializeParams();
-    this.changeTheme(this.theme);
+    // this.changeTheme(this.theme);
     this.vaucher = true;
   }
 
@@ -187,7 +190,7 @@ export class VaucherComponent implements OnInit {
   }
 
   editForm(data) {
-    this.changeTheme(this.theme);
+    // this.changeTheme(this.theme);
     this.data = data;
     this.convertValue(data);
     this.operationMode = 'edit';
@@ -253,7 +256,7 @@ export class VaucherComponent implements OnInit {
     if (this.state.filter.filters.length === 0) {
       this.gridData.total = this.currentLoadData.length;
     }
-    this.changeTheme(this.theme);
+    // this.changeTheme(this.theme);
   }
 
   pageChange(event: PageChangeEvent): void {
@@ -397,7 +400,7 @@ export class VaucherComponent implements OnInit {
   open(component, id) {
     this.dialog = true;
     this.data.id = id;
-    this.changeTheme(this.theme);
+    // this.changeTheme(this.theme);
   }
 
   changeTheme(theme: string) {
@@ -485,5 +488,12 @@ export class VaucherComponent implements OnInit {
         }
       }
     }, 50);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    console.log(window.innerHeight);
+    this.height = window.innerHeight - 110;
+    this.height += 'px';
   }
 }

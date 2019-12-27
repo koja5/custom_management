@@ -99,11 +99,11 @@ export class UserDetailsComponent implements OnInit {
     }
 
     setTimeout(() => {
-      this.changeTheme(this.theme);
+      // this.changeTheme(this.theme);
     }, 500);
 
     this.message.getTheme().subscribe(mess => {
-      this.changeTheme(mess);
+      // this.changeTheme(mess);
       this.theme = mess;
     });
   }
@@ -287,7 +287,7 @@ export class UserDetailsComponent implements OnInit {
   editOptions() {
     this.workTimeData();
     this.user = true;
-    this.changeTheme(this.theme);
+    // this.changeTheme(this.theme);
   }
 
   convertTypeStringToInt(type) {

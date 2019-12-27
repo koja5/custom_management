@@ -144,12 +144,12 @@ export class TaskComponent implements OnInit {
     this.message.getTheme().subscribe(mess => {
       console.log(mess);
       setTimeout(() => {
-        this.changeTheme(mess);
+        // this.changeTheme(mess);
       }, 50);
     });
 
     setTimeout(() => {
-      this.changeTheme(localStorage.getItem("theme"));
+      // this.changeTheme(localStorage.getItem("theme"));
     }, 50);
 
     if (localStorage.getItem("language") !== undefined) {
@@ -489,7 +489,7 @@ export class TaskComponent implements OnInit {
           this.telephoneValue = dataItem.telephone;
         }
 
-        this.changeTheme(localStorage.getItem("theme"));
+        // this.changeTheme(localStorage.getItem("theme"));
       }, 100);
       return this.formGroup;
     }
@@ -786,7 +786,7 @@ export class TaskComponent implements OnInit {
     // this.zIndex = 'zIndex';
     this.customerModal = true;
     setTimeout(() => {
-      this.changeTheme(this.theme);
+      // this.changeTheme(this.theme);
     }, 50);
   }
 

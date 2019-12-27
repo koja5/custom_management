@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject } from "@angular/core";
+import { Component, OnInit, Input, Inject, HostListener } from "@angular/core";
 import { State, process } from "@progress/kendo-data-query";
 import { FormGroup, FormControl } from "@angular/forms";
 import { Observable } from "rxjs";
@@ -54,6 +54,7 @@ export class ParameterItemComponent implements OnInit {
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
   }
+  public height: any;
   /*public sort: SortDescriptor[] = [{
     field: 'sequence',
     dir: 'asc'
@@ -65,6 +66,8 @@ export class ParameterItemComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
+    this.height = window.innerHeight - 225;
+    this.height += 'px'; 
     console.log(this.type);
     if (this.type === "Doctors") {
       this.service.getDoctorType().subscribe(data => {
@@ -101,12 +104,12 @@ export class ParameterItemComponent implements OnInit {
     }
 
     this.message.getTheme().subscribe(mess => {
-      this.changeTheme(mess);
+      // this.changeTheme(mess);
       this.theme = mess;
     });
 
     setTimeout(() => {
-      this.changeTheme(this.theme);
+      // this.changeTheme(this.theme);
     }, 350);
     // this.view = this.service.getData(this.type);
   }
@@ -201,7 +204,7 @@ export class ParameterItemComponent implements OnInit {
 
   public cancelHandler({ sender, rowIndex }) {
     this.closeEditor(sender, rowIndex);
-    this.changeTheme(this.theme);
+    // this.changeTheme(this.theme);
   }
 
   public saveHandler({ sender, rowIndex, formGroup, isNew }) {
@@ -359,7 +362,7 @@ export class ParameterItemComponent implements OnInit {
   }
 
   changeTheme(theme: string) {
-    setTimeout(() => {
+    /*setTimeout(() => {
       if (localStorage.getItem("allThemes") !== undefined) {
         const allThemes = JSON.parse(localStorage.getItem("allThemes"));
         console.log(allThemes);
@@ -442,7 +445,7 @@ export class ParameterItemComponent implements OnInit {
           }
         }
       }
-    }, 150);
+    }, 150);*/
   }
 
   NetPriceChange(event) {
@@ -451,5 +454,12 @@ export class ParameterItemComponent implements OnInit {
 
   cellClick(event) {
     console.log(event);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    console.log(window.innerHeight);
+    this.height = window.innerHeight - 225;
+    this.height += 'px';
   }
 }

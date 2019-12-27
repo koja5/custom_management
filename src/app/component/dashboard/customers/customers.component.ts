@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
 import { Modal } from "ngx-modal";
 import { CustomersService } from "../../../service/customers.service";
 import { StoreService } from "../../../service/store.service";
@@ -16,6 +16,7 @@ import Swal from "sweetalert2";
 // import * as Excel from "@grapecity/spread-excelio";
 import { WindowModule } from "@progress/kendo-angular-dialog";
 import * as XLSX from 'ts-xlsx';
+import ProgressBar from "@badrap/bar-of-progress";
 
 const newLocal = "data";
 @Component({
@@ -53,6 +54,15 @@ export class CustomersComponent implements OnInit {
     return JSON.stringify(context.index);
   }
   private arrayBuffer: any;
+  public progress = new ProgressBar(
+    {
+      size: 4,
+      color: "#29e",
+      className: "bar-of-progress",
+      delay: 80
+    }
+  );
+  public height: any;
 
   constructor(
     public service: CustomersService,
@@ -63,8 +73,9 @@ export class CustomersComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.height = window.innerHeight - 110;
+    this.height += 'px'; 
     this.getCustomers();
-
     if (localStorage.getItem("language") !== null) {
       this.language = JSON.parse(localStorage.getItem("language")).grid;
     }
@@ -80,27 +91,29 @@ export class CustomersComponent implements OnInit {
 
     this.message.getBackToCustomerGrid().subscribe(mess => {
       this.selectedUser = undefined;
-      this.changeTheme(this.theme);
+      // this.changeTheme(this.theme);
     });
 
     this.message.getTheme().subscribe(mess => {
-      this.changeTheme(mess);
+      // this.changeTheme(mess);
       this.theme = mess;
     });
   }
 
   getCustomers() {
+    this.progress.start();
     this.service.getCustomers(localStorage.getItem("superadmin"), val => {
       console.log(val);
       if (val !== null) {
         this.currentLoadData = val;
         this.gridData = process(val, this.state);
         this.loading = false;
+        this.progress.finish();
       } else {
         this.gridData[newLocal] = [];
         this.loading = false;
       }
-      this.changeTheme(this.theme);
+      // this.changeTheme(this.theme);
     });
   }
 
@@ -110,7 +123,7 @@ export class CustomersComponent implements OnInit {
       this.storeLocation = val;
     });
     this.initializeParams();
-    this.changeTheme(this.theme);
+    // this.changeTheme(this.theme);
     this.customer = true;
   }
 
@@ -164,7 +177,7 @@ export class CustomersComponent implements OnInit {
   }
 
   onChange(event) {
-    this.data.birthday = event; 
+    this.data.birthday = event;
   }
 
   selectionChange(event) {
@@ -181,7 +194,7 @@ export class CustomersComponent implements OnInit {
     if (this.state.filter.filters.length === 0) {
       this.gridData.total = this.currentLoadData.length;
     }
-    this.changeTheme(this.theme);
+    // this.changeTheme(this.theme);
   }
 
   pageChange(event: PageChangeEvent): void {
@@ -388,5 +401,12 @@ export class CustomersComponent implements OnInit {
         }
       }
     }, 50);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    console.log(window.innerHeight);
+    this.height = window.innerHeight - 110;
+    this.height += 'px';
   }
 }

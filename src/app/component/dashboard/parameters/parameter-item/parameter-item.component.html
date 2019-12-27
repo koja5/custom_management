@@ -9,13 +9,13 @@
   </h2>
 
   <kendo-grid *ngIf="type !== 'Doctors' && type !== 'Therapy' && type !== 'VATTax'" [data]="view | async"
-    [style.height.%]="88.3" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
+   [style.height]="height" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
     [pageable]="true" [sortable]="true" (dataStateChange)="onStateChange($event)" (edit)="editHandler($event)"
     (cancel)="cancelHandler($event)" (save)="saveHandler($event)" (remove)="removeHandler($event)"
     (add)="addHandler($event)" [navigable]="true" [loading]="loading" (dataStateChange)="dataStateChange($event)"
     (pageChange)="pageChange($event)" (sortChange)="sortChange($event)" [kendoGridSelectBy]="mySelectionKey">
     <ng-template kendoGridToolbarTemplate>
-      <button class="uploadFromExcel-{{theme}}" kendoGridAddCommand>Add new</button>
+      <button kendoGridAddCommand>Add new</button>
     </ng-template>
     <kendo-grid-column field="id" title="ID" [hidden]="true"></kendo-grid-column>
     <kendo-grid-column field="title" title="Title"></kendo-grid-column>
@@ -42,14 +42,14 @@
     </ng-template>
   </kendo-grid>
 
-  <kendo-grid *ngIf="type === 'VATTax'" [data]="view | async" [style.height.%]="88.3" [pageSize]="gridState.take"
+  <kendo-grid *ngIf="type === 'VATTax'" [data]="view | async" [style.height]="height" [pageSize]="gridState.take"
     [skip]="gridState.skip" [sort]="gridState.sort" [pageable]="true" [sortable]="true"
     (dataStateChange)="onStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)"
     (save)="saveHandler($event)" (remove)="removeHandler($event)" (add)="addHandler($event)" [navigable]="true"
     [loading]="loading" (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)"
     (sortChange)="sortChange($event)" [kendoGridSelectBy]="mySelectionKey">
     <ng-template kendoGridToolbarTemplate>
-      <button class="uploadFromExcel-{{theme}}" kendoGridAddCommand>Add new</button>
+      <button kendoGridAddCommand>Add new</button>
     </ng-template>
     <kendo-grid-column field="id" title="ID" [hidden]="true"></kendo-grid-column>
     <kendo-grid-column field="title" title="%"></kendo-grid-column>
@@ -76,14 +76,14 @@
     </ng-template>
   </kendo-grid>
 
-  <kendo-grid *ngIf="type === 'Therapy'" [data]="view | async" [style.height.%]="88.3" [pageSize]="gridState.take"
+  <kendo-grid *ngIf="type === 'Therapy'" [data]="view | async" [style.height]="height" [pageSize]="gridState.take"
   [skip]="gridState.skip" [sort]="gridState.sort" [pageable]="true" [sortable]="true"
   (dataStateChange)="onStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)"
   (save)="saveHandler($event)" (remove)="removeHandler($event)" (add)="addHandler($event)" [navigable]="true"
   [loading]="loading" (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)"
   (sortChange)="sortChange($event)" [kendoGridSelectBy]="mySelectionKey">
     <ng-template kendoGridToolbarTemplate>
-      <button class="uploadFromExcel-{{theme}}" kendoGridAddCommand>Add new</button>
+      <button kendoGridAddCommand>Add new</button>
     </ng-template>
     <kendo-grid-column field="id" title="ID" [hidden]="true"></kendo-grid-column>
     <kendo-grid-column field="title" title="Title" width="220"></kendo-grid-column>
@@ -141,14 +141,14 @@
     </kendo-grid-command-column>
   </kendo-grid>-->
 
-  <kendo-grid *ngIf="type === 'Doctors'" [data]="view | async" [style.height.%]="88.3" [pageSize]="gridState.take"
+  <kendo-grid *ngIf="type === 'Doctors'" [data]="view | async" [style.height]="height" [pageSize]="gridState.take"
     [skip]="gridState.skip" [sort]="gridState.sort" [pageable]="true" [sortable]="true"
     (dataStateChange)="onStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)"
     (save)="saveHandler($event)" (remove)="removeHandler($event)" (add)="addHandler($event)" [navigable]="true"
     [loading]="loading" (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)"
     (sortChange)="sortChange($event)" [loading]="loading" [kendoGridSelectBy]="mySelectionKey">
     <ng-template kendoGridToolbarTemplate>
-      <button class="uploadFromExcel-{{theme}}" kendoGridAddCommand>Add new</button>
+      <button kendoGridAddCommand>Add new</button>
     </ng-template>
     <kendo-grid-column field="id" title="ID" [hidden]="true"></kendo-grid-column>
     <kendo-grid-column field="firstname" title="First name"></kendo-grid-column>

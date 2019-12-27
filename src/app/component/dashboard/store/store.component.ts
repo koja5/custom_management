@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
 import { Modal } from "ngx-modal";
 import { StoreService } from "../../../service/store.service";
 import { process, State } from "@progress/kendo-data-query";
@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 // import * as Excel from '@grapecity/spread-excelio';
 import * as XLSX from "ts-xlsx";
 import { MessageService } from 'src/app/service/message.service';
+import ProgressBar from '@badrap/bar-of-progress';
 
 @Component({
   selector: "app-store",
@@ -47,12 +48,23 @@ export class StoreComponent implements OnInit {
   }
   private arrayBuffer: any;
   public loadingGrid = false;
+  public progress = new ProgressBar(
+    {
+      size: 4,
+      color: "#29e",
+      className: "bar-of-progress",
+      delay: 80
+    }
+  );
+  public height: any;
 
   constructor(public service: StoreService, public message: MessageService) {
     // this.excelIO = new Excel.IO();
   }
 
   ngOnInit() {
+    this.height = window.innerHeight - 110;
+    this.height += 'px'; 
     this.idUser = localStorage.getItem("superadmin");
     if (localStorage.getItem("theme") !== null) {
       this.theme = localStorage.getItem("theme");
@@ -61,26 +73,25 @@ export class StoreComponent implements OnInit {
     this.getStore();
 
     this.message.getTheme().subscribe(mess => {
-      this.changeTheme(mess);
+      // this.changeTheme(mess);
       this.theme = mess;
     });
   }
 
   getStore() {
-    this.loadingGrid = true;
+    this.progress.start();
     this.service.getStore(this.idUser, val => {
       console.log(val);
       this.currentLoadData = val;
       this.gridData = process(val, this.state);
-      this.changeTheme(this.theme);
-      this.loading = false;
-      this.loadingGrid = false;
+      // this.changeTheme(this.theme);
+       this.progress.finish();
     });
   }
 
   newStore() {
     this.initialParams();
-    this.changeTheme(this.theme);
+    // this.changeTheme(this.theme);
     this.store = true;
   }
 
@@ -165,7 +176,7 @@ export class StoreComponent implements OnInit {
     ) {
       this.gridData.total = this.currentLoadData.length;
     }
-    this.changeTheme(this.theme);
+    // this.changeTheme(this.theme);
   }
 
   pageChange(event: PageChangeEvent): void {
@@ -191,7 +202,7 @@ export class StoreComponent implements OnInit {
     this.start_work = new Date(this.data.start_work);
     this.end_work = new Date(this.data.end_work);
     this.storeEdit = true;
-    this.changeTheme(this.theme);
+    // this.changeTheme(this.theme);
   }
 
   storeEditClose() {
@@ -205,7 +216,7 @@ export class StoreComponent implements OnInit {
   open(component, id) {
     this[component + "Opened"] = true;
     this.data.id = id;
-    this.changeTheme(this.theme);
+    // this.changeTheme(this.theme);
   }
 
   action(event) {
@@ -410,5 +421,12 @@ export class StoreComponent implements OnInit {
         }
       }
     }, 50);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    console.log(window.innerHeight);
+    this.height = window.innerHeight - 110;
+    this.height += 'px';
   }
 }

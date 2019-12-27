@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
 import { Modal } from "ngx-modal";
 import { UsersService } from "../../../service/users.service";
 import { StoreService } from "../../../service/store.service";
@@ -19,6 +19,7 @@ import Swal from "sweetalert2";
 // import * as Excel from '@grapecity/spread-excelio';
 import * as XLSX from "ts-xlsx";
 import { MessageService } from "src/app/service/message.service";
+import ProgressBar from '@badrap/bar-of-progress';
 
 @Component({
   selector: "app-users",
@@ -78,6 +79,15 @@ export class UsersComponent implements OnInit {
       text: "Log Out"
     }
   ];
+  public progress = new ProgressBar(
+    {
+      size: 4,
+      color: "#29e",
+      className: "bar-of-progress",
+      delay: 80
+    }
+  );
+  public height: any;
 
   constructor(
     public service: UsersService,
@@ -90,26 +100,30 @@ export class UsersComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.height = window.innerHeight - 110;
+    this.height += 'px'; 
     this.getUser();
     if (localStorage.getItem("theme") !== null) {
       this.theme = localStorage.getItem("theme");
     }
-    this.changeTheme(this.theme);
+    // this.changeTheme(this.theme);
     this.language = JSON.parse(localStorage.getItem("language"))["user"];
 
     this.message.getTheme().subscribe(mess => {
-      this.changeTheme(mess);
+      // this.changeTheme(mess);
       this.theme = mess;
     });
   }
 
   getUser() {
+    this.progress.start();
     this.service.getUsers(localStorage.getItem("superadmin"), val => {
       console.log(val);
       this.currentLoadData = val;
       this.gridData = process(val, this.state);
-      this.changeTheme(this.theme);
+      // this.changeTheme(this.theme);
       this.loading = false;
+      this.progress.finish();
     });
   }
 
@@ -119,7 +133,7 @@ export class UsersComponent implements OnInit {
       console.log(val);
       this.storeLocation = val;
     });
-    this.changeTheme(this.theme);
+    // this.changeTheme(this.theme);
     this.user = true;
   }
 
@@ -192,7 +206,7 @@ export class UsersComponent implements OnInit {
     if (this.state.filter.filters.length === 0) {
       this.gridData.total = this.currentLoadData.length;
     }
-    this.changeTheme(this.theme);
+    // this.changeTheme(this.theme);
   }
 
   pageChange(event: PageChangeEvent): void {
@@ -425,5 +439,12 @@ export class UsersComponent implements OnInit {
         }
       }
     }, 50);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    console.log(window.innerHeight);
+    this.height = window.innerHeight - 110;
+    this.height += 'px';
   }
 }
