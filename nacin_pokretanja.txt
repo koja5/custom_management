@@ -14,6 +14,7 @@ forever start --minUptime 1000 --spinSleepTime 1000 app.js
 root
 CJr4eUqWg33tT97mxPFx
 
+
 mysqladmin flush-hosts
 mysql -u root -p
 mysql> show variables like "max_connections";

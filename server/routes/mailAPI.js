@@ -4,7 +4,7 @@ var router = express.Router();
 var sha1 = require('sha1');
 
 var smtpTransport = nodemailer.createTransport({
-    host: 'karmentis.ssl.hosttech.eu',
+    host: '78.47.206.131',
     port: 25,
     secure: false,
     // requireTLS: true,
