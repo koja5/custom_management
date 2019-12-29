@@ -137,7 +137,7 @@ export class TaskComponent implements OnInit {
 
     this.customer.getCustomers(localStorage.getItem("superadmin"), val => {
       console.log(val);
-      this.customerUsers = val;
+      this.customerUsers = val.sort((a, b) => a['shortname'].localeCompare(b['shortname']));
       this.loading = false;
     });
 
@@ -1400,7 +1400,7 @@ export class TaskComponent implements OnInit {
         localStorage.getItem("superadmin"),
         val => {
           console.log(val);
-          this.customerUsers = val;
+          this.customerUsers = val.sort((a, b) => a['shortname'].localeCompare(b['shortname']));
           this.loading = false;
         }
       );

@@ -385,8 +385,9 @@
                       </div>
 
                       <p>{{language.birthday}}</p>
-                      <kendo-datepicker class="email col-md-6 col-xs-12 noPadding" name="birthday" placeholder="{{language.birthday}}"
-                        [value]="data.birthday" (valueChange)="onChange($event)"></kendo-datepicker>
+                      <kendo-datepicker class="email col-md-6 col-xs-12 noPadding" name="birthday"
+                        placeholder="{{language.birthday}}" [value]="data.birthday" (valueChange)="onChange($event)">
+                      </kendo-datepicker>
                     </div>
 
                   </div>
@@ -459,7 +460,8 @@
                 <div class="col-md-4 col-xs-12" *ngIf="doctorList !== undefined">
                   <p>{{language.doctor}}</p>
                   <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="doctorsList" [textField]="'firstname'"
-                    [valueField]="'id'" [(ngModel)]="baseDataOne.doctor" [valuePrimitive]="true" (filterChange)="filterDoctor($event)" name="doctors">
+                    [valueField]="'id'" [(ngModel)]="baseDataOne.doctor" [valuePrimitive]="true"
+                    (filterChange)="filterDoctor($event)" name="doctors">
                   </kendo-combobox>
                 </div>
                 <div class="col-md-4 col-xs-12">
@@ -490,28 +492,20 @@
               (ngSubmit)="operationMode === 'add' ? addBaseDataTwo(base_two) : updateBaseDataTwo(base_two)">
               <div class="form-group">
                 <div class="panel-body">
-                  <div class="col-md-4 col-xs-12">
+                  <div class="col-md-3 col-xs-12">
                     <p>{{language.size}}</p>
                     <input type="number" [(ngModel)]="baseDataTwo.size" name="size">
                   </div>
-                  <div class="col-md-4 col-xs-12">
+                  <div class="col-md-3 col-xs-12">
                     <p>{{language.weight}}</p>
                     <input type="number" [(ngModel)]="baseDataTwo.weight" name="weight">
                   </div>
-                  <div class="col-md-4 col-xs-12">
-                    <p>{{language.phone}}</p>
-                    <input type="text" [(ngModel)]="baseDataTwo.phone" name="phone">
-                  </div>
-                  <div class="col-md-4 col-xs-12">
-                    <p>{{language.mobilePhone}}</p>
-                    <input type="text" [(ngModel)]="baseDataTwo.mobile_phone" name="mobile_phone">
-                  </div>
-                  <div class="col-md-4 col-xs-12">
+                  <div class="col-md-3 col-xs-12">
                     <p>{{language.birthday}}</p>
                     <kendo-datepicker [(ngModel)]="baseDataTwo.birthday" name="birthday" class="noPadding">
                     </kendo-datepicker>
                   </div>
-                  <div class="col-md-4 col-xs-12">
+                  <div class="col-md-3 col-xs-12">
                     <p>{{language.childs}}</p>
                     <input type="number" [(ngModel)]="baseDataTwo.childs" name="childs">
                   </div>
@@ -536,8 +530,7 @@
               <div class="form-group" style="text-align: center">
                 <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}"
                   *ngIf="operationMode === 'add'" type="submit"
-                  [disabled]="baseDataTwo.size === undefined || baseDataTwo.weight === undefined || baseDataTwo.phone === undefined || baseDataTwo.mobile_phone === undefined || 
-                  baseDataTwo.birthday === undefined || baseDataTwo.childs === undefined || baseDataTwo.notes === undefined || baseDataTwo.profession === undefined || baseDataTwo.useful === undefiend">{{language.addData}}</button>
+                  [disabled]="baseDataTwo.size === undefined || baseDataTwo.weight === undefined || baseDataTwo.birthday === undefined || baseDataTwo.childs === undefined || baseDataTwo.notes === undefined || baseDataTwo.profession === undefined || baseDataTwo.useful === undefiend">{{language.addData}}</button>
                 <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}"
                   *ngIf="operationMode === 'edit'" type="submit">{{language.editData}}</button>
               </div>
@@ -559,31 +552,38 @@
                 <div class="panel-body">
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.internalOrgans}}</p>
-                    <input type="text" [(ngModel)]="physicalIllness.internal_organs" name="internal_organs">
+                    <textarea kendoTextArea [(ngModel)]="physicalIllness.internal_organs" name="internal_organs"
+                      style="width: 95%;"></textarea>
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.operations}}</p>
-                    <input type="text" [(ngModel)]="physicalIllness.operations" name="operations">
+                    <textarea kendoTextArea [(ngModel)]="physicalIllness.operations" name="operations"
+                      style="width: 95%;"></textarea>
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.previousFindidngs}}</p>
-                    <input type="text" [(ngModel)]="physicalIllness.previous_findings" name="previous_findings">
+                    <textarea kendoTextArea [(ngModel)]="physicalIllness.previous_findings" name="previous_findings"
+                      style="width: 95%;"></textarea>
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.medicament}}</p>
-                    <input type="text" [(ngModel)]="physicalIllness.medicament" name="medicament">
+                    <textarea kendoTextArea [(ngModel)]="physicalIllness.medicament" name="medicament"
+                      style="width: 95%;"></textarea>
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.allergies}}</p>
-                    <input type="text" [(ngModel)]="physicalIllness.allergies" name="allergies">
+                    <textarea kendoTextArea [(ngModel)]="physicalIllness.allergies" name="allergies"
+                      style="width: 95%;"></textarea>
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.skinSensitivity}}</p>
-                    <input type="text" [(ngModel)]="physicalIllness.skin_sensitivity" name="skin_sensitivity">
+                    <textarea kendoTextArea [(ngModel)]="physicalIllness.skin_sensitivity" name="skin_sensitivity"
+                      style="width: 95%;"></textarea>
                   </div>
                   <div class="col-md-4 col-xs-12">
                     <p>{{language.pregnancy}}</p>
-                    <input type="text" [(ngModel)]="physicalIllness.pregnancy" name="pregnancy">
+                    <textarea kendoTextArea [(ngModel)]="physicalIllness.pregnancy" name="pregnancy"
+                      style="width: 95%;"></textarea>
                   </div>
                 </div>
               </div>

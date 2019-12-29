@@ -4476,7 +4476,6 @@ router.post("/createVaucher", function (req, res, next) {
     response = {};
     console.log(req);
     var data = {
-      id_voucher: req.body.id_voucher,
       date: req.body.date,
       amount: req.body.amount,
       date_redeemed: req.body.date_redeemed,
