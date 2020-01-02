@@ -23,8 +23,7 @@
                 style="text-align: center">Edit</button>
             </div>
             <div class="vd_info tr" style="height: 7vh; text-align: center"> <button kendoButton class="k-delete"
-                [icon]="'k-icon k-i-delete'" (click)="open('dialog')"
-                style="text-align: center">Delete</button> </div>
+                [icon]="'k-icon k-i-delete'" (click)="open('dialog')" style="text-align: center">Delete</button> </div>
             <div class="vd_info tr" style="text-align: center;"> <button kendoButton class="k-delete"
                 [icon]="'k-icon k-i-copy'" (click)="newCustomer()">Copy</button> </div>
           </div>
@@ -385,8 +384,9 @@
                       </div>
 
                       <p>{{language.birthday}}</p>
-                      <kendo-datepicker class="email col-md-6 col-xs-12 noPadding" name="birthday" placeholder="{{language.birthday}}"
-                        [value]="data.birthday" (valueChange)="onChange($event)"></kendo-datepicker>
+                      <kendo-datepicker class="email col-md-6 col-xs-12 noPadding" name="birthday"
+                        placeholder="{{language.birthday}}" [value]="data.birthday" (valueChange)="onChange($event)">
+                      </kendo-datepicker>
                     </div>
 
                   </div>
@@ -459,7 +459,8 @@
                 <div class="col-md-4 col-xs-12" *ngIf="doctorList !== undefined">
                   <p>{{language.doctor}}</p>
                   <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="doctorsList" [textField]="'firstname'"
-                    [valueField]="'id'" [(ngModel)]="baseDataOne.doctor" [valuePrimitive]="true" (filterChange)="filterDoctor($event)" name="doctors">
+                    [valueField]="'id'" [(ngModel)]="baseDataOne.doctor" [valuePrimitive]="true"
+                    (filterChange)="filterDoctor($event)" name="doctors">
                   </kendo-combobox>
                 </div>
                 <div class="col-md-4 col-xs-12">
@@ -587,13 +588,13 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group" style="text-align: center">
-                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}"
-                  *ngIf="operationMode === 'add'" type="submit"
+              <div class="form-group action-button">
+                <button class="noButtonBackgroundClose" (click)="customer = false">Close</button>
+                <button class="noButtonBackground" *ngIf="operationMode === 'add'" type="submit"
                   [disabled]="physicalIllness.internal_organs === undefined || physicalIllness.operations === undefined || 
                   physicalIllness.previous_findings === undefined || physicalIllness.medicament === undefined || physicalIllness.allergies === undefined || physicalIllness.skin_sensitivity === undefined || physicalIllness.pregnancy === undefined">{{language.addData}}</button>
-                <button kendoButton [primary]="true" class="form-button inputTheme-{{theme}}"
-                  *ngIf="operationMode === 'edit'" type="submit">{{language.editData}}</button>
+                <button class="noButtonBackground" *ngIf="operationMode === 'edit'"
+                  type="submit">{{language.editData}}</button>
               </div>
             </form>
           </div>

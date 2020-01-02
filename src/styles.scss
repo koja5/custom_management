@@ -3820,3 +3820,31 @@ tr.k-grid-norecords:hover {
 .margin-left {
     margin: 0px 0px 0px 5px;
 }
+
+.action-button {
+    text-align: right;
+    position: absolute;
+    bottom: 0px;
+    right: 10px;
+}
+
+.noButtonBackgroundClose {
+    border: none !important;
+    background: none;
+}
+
+.noButtonBackground {
+    border: none !important;
+    background: none;
+    color: #42A5F5;
+    font-weight: bold;
+}
+
+.noButtonBackground:disabled,
+.noButtonBackground[disabled] {
+    border: none !important;
+    background: none;
+    color: #8dbbdd;
+    font-weight: bold;
+    cursor: not-allowed;
+}
