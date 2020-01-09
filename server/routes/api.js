@@ -21,11 +21,25 @@ const path = require("path");
   database: "management_prod"
 });*/
 
-var connection = mysql.createPool({
+/*var connection = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: 'root',
   database: 'management'
+});*/
+
+/*var connection = mysql.createPool({
+  host: '78.47.206.131',
+  user: 'appprodu_appproduction_prod',
+  password: 'CJr4eUqWg33tT97mxPFx',
+  database: 'appprodu_management_prod_1'
+})*/
+
+var connection = mysql.createPool({
+  host: 'localhost',
+  user: 'root',
+  password: 'root',
+  database: 'appprodu_management_prod'
 });
 
 /*var connection = mysql.createPool({

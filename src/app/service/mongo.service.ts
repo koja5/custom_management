@@ -13,9 +13,28 @@ export class MongoService {
       .map(res => res);
   }
 
-  getConfigurationForUser(user_id) {
-    return this.http.get('/api/getConfigurationForUser/' + user_id)
+  updateTheme(data) {
+    return this.http.post('/api/updateTheme', data)
       .map(res => res);
   }
 
+  updateLanguage(data) {
+    return this.http.post('/api/updateLanguage', data)
+      .map(res => res);
+  }
+
+  setSelectedStore(data) {
+    return this.http.post('/api/setSelectedStore', data)
+      .map(res => res);
+  }
+
+  setUsersFor(data) {
+    return this.http.post('/api/setUsersFor', data)
+      .map(res => res);
+  }
+
+  getConfiguration(id) {
+    return this.http.get('/api/getConfiguration/' + id)
+      .map(res => res);
+  }
 }

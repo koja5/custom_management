@@ -4,6 +4,7 @@ import { MailService } from "../../service/mail.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { CookieService } from "ng2-cookies";
 import { DashboardService } from "../../service/dashboard.service";
+import { MongoService } from "../../service/mongo.service";
 
 @Component({
   selector: "app-login",
@@ -44,10 +45,13 @@ export class LoginComponent implements OnInit {
     public mailService: MailService,
     public cookie: CookieService,
     public router: Router,
-    public dashboardService: DashboardService
-  ) { }
+    public dashboardService: DashboardService,
+    public mongo: MongoService
+  ) {}
 
   ngOnInit() {
+    // ovde treba da se napravi da se ocita lokacija korisnika i na osnovu toga povuce odgovarajuci jezik
+    // kada se korisnik loguje, povlaci se ona konfiguracija koju je on sacuvao...
     if (localStorage.getItem("language") !== null) {
       this.language = JSON.parse(localStorage.getItem("language"))["login"];
     } else {
@@ -72,10 +76,10 @@ export class LoginComponent implements OnInit {
   }
 
   /*forgotActive() {
-    this.signupForm = "";
-    this.recoverForm = "";
-    this.loginForm = "active";
-    this.forgotInfo = "Link to recovery password is send on your mail!";
+    this.signupForm = '';
+    this.recoverForm = '';
+    this.loginForm = 'active';
+    this.forgotInfo = 'Link to recovery password is send on your mail!';
   }*/
 
   recoveryActive() {
@@ -86,14 +90,16 @@ export class LoginComponent implements OnInit {
 
   login(form) {
     this.loading = true;
-    const thisObject = this;
     this.service.login(
       this.data,
       (isLogin, notActive, user, type, id, storeId, superadmin) => {
         console.log("login" + notActive);
         if (isLogin) {
           if (!notActive) {
-            this.loginInfo = JSON.parse(localStorage.getItem("language"))["login"]['checkMailForActive'];
+            this.loginInfo = JSON.parse(localStorage.getItem("language"))[
+              "login"
+            ]["checkMailForActive"];
+            this.loading = false;
           } else {
             console.log(user);
             this.cookie.set("user", type);
@@ -102,14 +108,12 @@ export class LoginComponent implements OnInit {
             localStorage.setItem("indicatorUser", id);
             localStorage.setItem("storeId-" + id, storeId);
             localStorage.setItem("superadmin", superadmin);
-            thisObject.router.navigate([
-              "dashboard",
-              { outlets: { dashboard: ["task"] } }
-            ]);
+            this.getConfigurationFromDatabase(id);
           }
-          this.loading = false;
         } else {
-          this.loginInfo = JSON.parse(localStorage.getItem("language"))["login"]['notCorrectPass'];
+          this.loginInfo = JSON.parse(localStorage.getItem("language"))[
+            "login"
+          ]["notCorrectPass"];
           this.loading = false;
         }
       }
@@ -129,10 +133,12 @@ export class LoginComponent implements OnInit {
         if (!val.success) {
           this.errorInfo = val.info;
         } else {
-          this.mailService.sendMail(this.data, function () {
+          this.mailService.sendMail(this.data, function() {
             console.log("Mail uspesno poslat");
           });
-          this.signUpInfo = JSON.parse(localStorage.getItem("language"))["login"]['checkMailForActive'];
+          this.signUpInfo = JSON.parse(localStorage.getItem("language"))[
+            "login"
+          ]["checkMailForActive"];
           setTimeout(() => {
             this.loginActive();
           }, 3000);
@@ -140,14 +146,16 @@ export class LoginComponent implements OnInit {
         // form.reset();
       });
     } else {
-      this.errorInfo = JSON.parse(localStorage.getItem("language"))["login"]['fillFields'];
+      this.errorInfo = JSON.parse(localStorage.getItem("language"))["login"][
+        "fillFields"
+      ];
     }
   }
 
   forgotPassword() {
     const thisObject = this;
     if (this.data.email !== "") {
-      this.service.forgotPassword(this.data, function (exist, notVerified) {
+      this.service.forgotPassword(this.data, function(exist, notVerified) {
         setTimeout(() => {
           if (exist) {
             thisObject.mailService
@@ -159,13 +167,17 @@ export class LoginComponent implements OnInit {
             if (!exist) {
               thisObject.emailValid = false;
             } else {
-              document.getElementById('textClass').innerHTML = JSON.parse(localStorage.getItem("language"))["login"]['sendForgotMail'];
+              document.getElementById("textClass").innerHTML = JSON.parse(
+                localStorage.getItem("language")
+              )["login"]["sendForgotMail"];
             }
           }
         }, 100);
       });
     } else {
-      this.errorInfo = JSON.parse(localStorage.getItem("language"))["login"]['fillFields'];
+      this.errorInfo = JSON.parse(localStorage.getItem("language"))["login"][
+        "fillFields"
+      ];
     }
   }
 
@@ -176,6 +188,35 @@ export class LoginComponent implements OnInit {
     } else {
       this.hideShow = "password";
       this.hideShowEye = "fa-eye-slash";
+    }
+  }
+
+  getConfigurationFromDatabase(id) {
+    this.mongo.getConfiguration(Number(id)).subscribe(data => {
+      this.setConfiguration(data, id);
+      const thisObject = this;
+      thisObject.router.navigate([
+        "dashboard",
+        { outlets: { dashboard: ["task"] } }
+      ]);
+      this.loading = false;
+    });
+  }
+
+  setConfiguration(data, id) {
+    localStorage.setItem("theme", data.theme);
+    localStorage.setItem("defaultLanguage", data.language);
+    if (data.selectedStore !== null && data.selectedStore.length !== 0) {
+      localStorage.setItem("selectedStore-" + id, data.selectedStore[0]);
+    }
+    if (data.usersFor !== null && data.usersFor.length !== 0) {
+      this.setUsersForConfiguration(data.usersFor);
+    }
+  }
+
+  setUsersForConfiguration(data) {
+    for (let i = 0; i < data.length; i++) {
+      localStorage.setItem(data[i].key, JSON.stringify(data[i].value));
     }
   }
 }

@@ -1,15 +1,15 @@
-import { CustomerModel } from "./../../../models/customer-model";
-import { Component, OnInit, ViewChild, ViewEncapsulation } from "@angular/core";
+import { CustomerModel } from './../../../models/customer-model';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators
-} from "@angular/forms";
-import { CustomersService } from "../../../service/customers.service";
-import { CustomersComponent } from "../customers/customers.component";
-import { Modal } from "ngx-modal";
-import { MessageService } from "../../../service/message.service";
+} from '@angular/forms';
+import { CustomersService } from '../../../service/customers.service';
+import { CustomersComponent } from '../customers/customers.component';
+import { Modal } from 'ngx-modal';
+import { MessageService } from '../../../service/message.service';
 import {
   CancelEvent,
   CrudOperation,
@@ -21,37 +21,38 @@ import {
   SlotClickEvent,
   CreateFormGroupArgs,
   SchedulerEvent
-} from "@progress/kendo-angular-scheduler";
-import "@progress/kendo-angular-intl/locales/de/all";
-import { filter } from "rxjs/operators/filter";
-import { StoreService } from "../../../service/store.service";
-import { TaskService } from "../../../service/task.service";
-import { isNumber } from "util";
-import Swal from "sweetalert2";
-import { ComplaintTherapyModel } from "src/app/models/complaint-therapy-model";
-import { UsersService } from "src/app/service/users.service";
+} from '@progress/kendo-angular-scheduler';
+import '@progress/kendo-angular-intl/locales/de/all';
+import { filter } from 'rxjs/operators/filter';
+import { StoreService } from '../../../service/store.service';
+import { TaskService } from '../../../service/task.service';
+import { isNumber } from 'util';
+import Swal from 'sweetalert2';
+import { ComplaintTherapyModel } from 'src/app/models/complaint-therapy-model';
+import { UsersService } from 'src/app/service/users.service';
+import { MongoService } from '../../../service/mongo.service';
 
 @Component({
-  selector: "app-task",
-  templateUrl: "./task.component.html",
-  styleUrls: ["./task.component.scss"],
+  selector: 'app-task',
+  templateUrl: './task.component.html',
+  styleUrls: ['./task.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class TaskComponent implements OnInit {
-  @ViewChild("customerUserModal") customerUserModal: Modal;
+  @ViewChild('customerUserModal') customerUserModal: Modal;
   public customerModal = false;
   public selectedDate: Date = new Date();
   public formGroup: FormGroup;
   public events: SchedulerEvent[] = [];
   public customerUsers: any;
-  public telephoneValue = "";
+  public telephoneValue = '';
   public type: any;
   public customerComponent: CustomersComponent;
   public usersInCompany: any = [];
   public colorTask: any;
   public zIndex: string;
   public theme: string;
-  public selected = "#cac6c3";
+  public selected = '#cac6c3';
   public palette: any[] = [];
   public colorPalette: any;
   public selectedColorId: any;
@@ -60,22 +61,22 @@ export class TaskComponent implements OnInit {
   public resources: any[] = [];
   public customerUser = new CustomerModel();
   public data = {
-    id: "",
-    shortname: "",
-    firstname: "",
-    lastname: "",
-    gender: "",
-    street: "",
-    streetnumber: "",
-    city: "",
-    telephone: "",
-    mobile: "",
-    email: "",
-    birthday: "",
-    attention: "",
-    physicalComplaint: "",
-    storeId: "",
-    superadmin: localStorage.getItem("superadmin")
+    id: '',
+    shortname: '',
+    firstname: '',
+    lastname: '',
+    gender: '',
+    street: '',
+    streetnumber: '',
+    city: '',
+    telephone: '',
+    mobile: '',
+    email: '',
+    birthday: '',
+    attention: '',
+    physicalComplaint: '',
+    storeId: '',
+    superadmin: localStorage.getItem('superadmin')
   };
   public value: any = [];
   public store: any;
@@ -83,7 +84,7 @@ export class TaskComponent implements OnInit {
   public loading = true;
   public createFormLoading: boolean;
   public height = 92;
-  public orientation = "horizontal";
+  public orientation = 'horizontal';
   public workTime: any[] = [];
   public selectedStoreId: number;
   public splitterSizeFull = 100;
@@ -91,17 +92,17 @@ export class TaskComponent implements OnInit {
   public dateEvent: string;
   public selectedViewIndex = 0;
   public currentDate = new Date();
-  public startWork = "08:00";
-  public endWork = "22:00";
-  public timeDuration = "60";
+  public startWork = '08:00';
+  public endWork = '22:00';
+  public timeDuration = '60';
   public therapyDuration = 1;
   public loopIndex = 0;
   public valueLoop: any;
   public size = [];
   public customerUserModal2 = false;
   public selectedButtonIndex = [false, false, false, false, false, false];
-  public selectedButtonIndexStyle = ["", "", "", "", "", ""];
-  public imagePath = "defaultUser";
+  public selectedButtonIndexStyle = ['', '', '', '', '', ''];
+  public imagePath = 'defaultUser';
   public therapyValue: any;
   public treatmentValue: any;
   public complaintValue: any;
@@ -113,7 +114,7 @@ export class TaskComponent implements OnInit {
   public baseDataIndicator = false;
   public allUsers: any;
   public selectedUser: any;
-  public userWidth = "72%";
+  public userWidth = '72%';
   public id: number;
 
   constructor(
@@ -122,20 +123,21 @@ export class TaskComponent implements OnInit {
     public customer: CustomersService,
     public message: MessageService,
     public storeService: StoreService,
-    public usersService: UsersService
+    public usersService: UsersService,
+    public mongo: MongoService
   ) {
     this.createFormGroup = this.createFormGroup.bind(this);
   }
 
   ngOnInit() {
     this.loading = true;
-    this.type = Number(localStorage.getItem("type"));
-    this.id = Number(localStorage.getItem("idUser"));
+    this.type = Number(localStorage.getItem('type'));
+    this.id = Number(localStorage.getItem('idUser'));
     console.log(this.events);
     this.calendars = [];
     this.height = 92;
 
-    this.customer.getCustomers(localStorage.getItem("superadmin"), val => {
+    this.customer.getCustomers(localStorage.getItem('superadmin'), val => {
       console.log(val);
       this.customerUsers = val.sort((a, b) => a['shortname'].localeCompare(b['shortname']));
       this.loading = false;
@@ -149,19 +151,19 @@ export class TaskComponent implements OnInit {
     });
 
     setTimeout(() => {
-      this.changeTheme(localStorage.getItem("theme"));
+      this.changeTheme(localStorage.getItem('theme'));
     }, 50);
 
-    if (localStorage.getItem("language") !== undefined) {
-      this.language = JSON.parse(localStorage.getItem("language"))["calendar"];
-      this.languageUser = JSON.parse(localStorage.getItem("language"))["user"];
-      this.stateValue = JSON.parse(localStorage.getItem("language"))["state"];
+    if (localStorage.getItem('language') !== undefined) {
+      this.language = JSON.parse(localStorage.getItem('language'))['calendar'];
+      this.languageUser = JSON.parse(localStorage.getItem('language'))['user'];
+      this.stateValue = JSON.parse(localStorage.getItem('language'))['state'];
     } else {
       this.message.getLanguage().subscribe(mess => {
         this.language = undefined;
         setTimeout(() => {
-          this.language = JSON.parse(localStorage.getItem("language"))[
-            "calendar"
+          this.language = JSON.parse(localStorage.getItem('language'))[
+            'calendar'
           ];
           console.log(this.language);
         }, 10);
@@ -171,28 +173,28 @@ export class TaskComponent implements OnInit {
     this.service.getTaskColor().subscribe(data => {
       console.log(data);
       const resourcesObject = {
-        name: "Rooms",
+        name: 'Rooms',
         data: data,
-        field: "colorTask",
-        valueField: "id",
-        textField: "text",
-        colorField: "color"
+        field: 'colorTask',
+        valueField: 'id',
+        textField: 'text',
+        colorField: 'color'
       };
       this.resources.push(resourcesObject);
       this.colorPalette = data;
-      for (let i = 0; i < data["length"]; i++) {
+      for (let i = 0; i < data['length']; i++) {
         this.palette.push(data[i].color);
       }
     });
 
     if (this.type === 3) {
       this.selectedStoreId = Number(
-        localStorage.getItem("storeId-" + this.id)
+        localStorage.getItem('storeId-' + this.id)
       );
     }
-    this.storeService.getStore(localStorage.getItem("superadmin"), val => {
+    this.storeService.getStore(localStorage.getItem('superadmin'), val => {
       this.store = val;
-      this.language.selectStore += this.store[0].storename + ")";
+      this.language.selectStore += this.store[0].storename + ')';
 
       if (!isNaN(this.selectedStoreId) && this.selectedStoreId !== undefined) {
         const informationAboutStore = this.getStartEndTimeForStore(this.store, this.selectedStoreId);
@@ -220,16 +222,16 @@ export class TaskComponent implements OnInit {
     });
 
     if (
-      localStorage.getItem("selectedStore-" + this.id) !== null && JSON.parse(localStorage.getItem("selectedStore-" + this.id)).length !== 0 &&
-      localStorage.getItem("selectedUser-" + this.id) !== null && JSON.parse(localStorage.getItem("selectedUser-" + this.id)).length !== 0 &&
+      localStorage.getItem('selectedStore-' + this.id) !== null && JSON.parse(localStorage.getItem('selectedStore-' + this.id)).length !== 0 &&
+      localStorage.getItem('selectedUser-' + this.id) !== null && JSON.parse(localStorage.getItem('selectedUser-' + this.id)).length !== 0 &&
       this.type !== 3
     ) {
       this.calendars = [];
       this.selectedStoreId = Number(
-        localStorage.getItem("selectedStore-" + this.id)
+        localStorage.getItem('selectedStore-' + this.id)
       );
       this.value = JSON.parse(
-        localStorage.getItem("usersFor-" + this.selectedStoreId + "-" + this.id)
+        localStorage.getItem('usersFor-' + this.selectedStoreId + '-' + this.id)
       );
       // this.selectedStore(this.selectedStoreId);
       if (this.value !== null) {
@@ -237,22 +239,22 @@ export class TaskComponent implements OnInit {
       }
       this.getUserInCompany(this.selectedStoreId);
     } else if (
-      localStorage.getItem("selectedStore-" + this.id) &&
+      localStorage.getItem('selectedStore-' + this.id) &&
       this.type !== 3
     ) {
       this.calendars = [];
       this.selectedStoreId = Number(
-        localStorage.getItem("selectedStore-" + this.id)
+        localStorage.getItem('selectedStore-' + this.id)
       );
       this.selectedStore(this.selectedStoreId);
-    } else if (localStorage.getItem("type") === "3") {
+    } else if (localStorage.getItem('type') === '3') {
       this.service
-        .getWorkandTasksForUser(localStorage.getItem("idUser"))
+        .getWorkandTasksForUser(localStorage.getItem('idUser'))
         .subscribe(data => {
           console.log(data);
           this.events = [];
-          this.workTime = this.pickWorkTimeToTask(data["workTime"]);
-          this.pickModelForEvent(data["events"]);
+          this.workTime = this.pickWorkTimeToTask(data['workTime']);
+          this.pickModelForEvent(data['events']);
           const objectCalendar = {
             name: null,
             events: this.events,
@@ -292,10 +294,10 @@ export class TaskComponent implements OnInit {
               });
           });*/
       this.size = [];
-      this.size.push("100%");
+      this.size.push('100%');
     } else {
       this.service
-        .getTasks(localStorage.getItem("superadmin"))
+        .getTasks(localStorage.getItem('superadmin'))
         .subscribe(data => {
           console.log(data);
           if (data.length !== 0) {
@@ -317,21 +319,21 @@ export class TaskComponent implements OnInit {
           }
           console.log(this.calendars);
           this.size = [];
-          this.size.push("100%");
+          this.size.push('100%');
         });
     }
 
-    if (localStorage.getItem("calendarView") !== null) {
-      this.selectedViewIndex = Number(localStorage.getItem("calendarView"));
+    if (localStorage.getItem('calendarView') !== null) {
+      this.selectedViewIndex = Number(localStorage.getItem('calendarView'));
       this.selectedButtonIndex[this.selectedViewIndex] = true;
       setTimeout(() => {
         this.selectedButtonIndexStyle[this.selectedViewIndex] =
-          "activeButton" + this.theme;
+          'activeButton' + this.theme;
       }, 50);
     } else {
       this.selectedButtonIndex[0] = true;
       setTimeout(() => {
-        this.selectedButtonIndexStyle[0] = "activeButton" + this.theme;
+        this.selectedButtonIndexStyle[0] = 'activeButton' + this.theme;
       }, 50);
     }
 
@@ -343,7 +345,7 @@ export class TaskComponent implements OnInit {
     this.selectedComplaint = null;
     this.selectedTherapies = null;
     this.selectedTreatments = null;
-    this.telephoneValue = "";
+    this.telephoneValue = '';
     this.complaintData = new ComplaintTherapyModel();
   }
 
@@ -357,7 +359,7 @@ export class TaskComponent implements OnInit {
         title: this.language.selectStoreIndicatorTitle,
         text: this.language.selectStoreIndicatorText,
         timer: 3000,
-        type: "error"
+        type: 'error'
       });
 
       this.createFormLoading = false;
@@ -372,7 +374,7 @@ export class TaskComponent implements OnInit {
       /*this.customerUser.attention = '';
       this.customerUser.physicalComplaint = '';*/
       if (
-        typeof dataItem.customer_id === "number" &&
+        typeof dataItem.customer_id === 'number' &&
         dataItem.customer_id !== null
       ) {
         console.log(dataItem.customer_id);
@@ -382,7 +384,7 @@ export class TaskComponent implements OnInit {
             console.log(data);
             this.customerUser = data[0];
             this.baseDataIndicator = true;
-            this.userWidth = "49%";
+            this.userWidth = '49%';
           });
       }
 
@@ -432,7 +434,7 @@ export class TaskComponent implements OnInit {
         this.customerUser.id !== undefined
       ) {
         this.baseDataIndicator = true;
-        this.userWidth = "49%";
+        this.userWidth = '49%';
       }
 
       this.formGroup = this.formBuilder.group({
@@ -448,7 +450,7 @@ export class TaskComponent implements OnInit {
         endTimezone: [dataItem.endTimezone],
         isAllDay: dataItem.isAllDay,
         colorTask: dataItem.colorTitle,
-        creator_id: Number(localStorage.getItem("idUser")),
+        creator_id: Number(localStorage.getItem('idUser')),
         user: this.customerUser,
         therapy_id: dataItem.therapy_id,
         telephone: dataItem.telephone,
@@ -462,7 +464,7 @@ export class TaskComponent implements OnInit {
         if (dataItem.therapy_id !== undefined) {
           this.customer.getTherapy(dataItem.therapy_id).subscribe(data => {
             console.log(data);
-            if (data["length"] !== 0) {
+            if (data['length'] !== 0) {
               this.splitToValue(
                 data[0].complaint,
                 data[0].therapies,
@@ -489,7 +491,7 @@ export class TaskComponent implements OnInit {
           this.telephoneValue = dataItem.telephone;
         }
 
-        this.changeTheme(localStorage.getItem("theme"));
+        this.changeTheme(localStorage.getItem('theme'));
       }, 100);
       return this.formGroup;
     }
@@ -519,34 +521,34 @@ export class TaskComponent implements OnInit {
       formValue.telephone = this.telephoneValue;
       formValue.user = this.customerUser;
       formValue.title =
-        this.customerUser["firstname"] +
-        " " +
-        this.customerUser["lastname"] +
-        "+" +
+        this.customerUser['firstname'] +
+        ' ' +
+        this.customerUser['lastname'] +
+        '+' +
         this.complaintData.complaint_title;
-      formValue.superadmin = localStorage.getItem("superadmin");
+      formValue.superadmin = localStorage.getItem('superadmin');
       if (this.type !== 3 && selectedUser !== undefined) {
         formValue.creator_id = selectedUser;
       } else {
-        formValue.creator_id = localStorage.getItem("idUser");
+        formValue.creator_id = localStorage.getItem('idUser');
       }
       console.log(formValue);
       if (isNew) {
         formValue = this.colorMapToId(formValue);
-        this.addTherapy(this.customerUser["id"]);
+        this.addTherapy(this.customerUser['id']);
         formValue.title =
-          this.customerUser["firstname"] +
-          " " +
-          this.customerUser["lastname"] +
-          "+" +
+          this.customerUser['firstname'] +
+          ' ' +
+          this.customerUser['lastname'] +
+          '+' +
           this.complaintData.complaint_title;
         this.complaintData.date = this.formatDate(
           formValue.start,
           formValue.end
         );
         this.customer.addTherapy(this.complaintData).subscribe(data => {
-          if (data["success"]) {
-            formValue.therapy_id = data["id"];
+          if (data['success']) {
+            formValue.therapy_id = data['id'];
             if (this.type === 0) {
               formValue['storeId'] = this.selectedStoreId;
             }
@@ -558,23 +560,23 @@ export class TaskComponent implements OnInit {
                   title: this.language.successUpdateTitle,
                   text: this.language.successUpdateText,
                   timer: 3000,
-                  type: "success"
+                  type: 'success'
                 });
               } else {
                 Swal.fire({
                   title: this.language.unsuccessUpdateTitle,
                   text: this.language.unsuccessUpdateText,
                   timer: 3000,
-                  type: "error"
+                  type: 'error'
                 });
               }
             });
 
             console.log(this.data);
             const customerAttentionAndPhysical = {
-              id: this.customerUser["id"],
-              attention: this.customerUser["attention"],
-              physicalComplaint: this.customerUser["physicalComplaint"]
+              id: this.customerUser['id'],
+              attention: this.customerUser['attention'],
+              physicalComplaint: this.customerUser['physicalComplaint']
             };
             console.log(customerAttentionAndPhysical);
             this.customer
@@ -587,7 +589,7 @@ export class TaskComponent implements OnInit {
               title: this.language.unsuccessUpdateTitle,
               text: this.language.unsuccessUpdateText,
               timer: 3000,
-              type: "error"
+              type: 'error'
             });
           }
           /*this.selectedComplaint = [];
@@ -596,12 +598,12 @@ export class TaskComponent implements OnInit {
         });
       } else {
         formValue = this.colorMapToId(formValue);
-        this.addTherapy(this.customerUser["id"]);
+        this.addTherapy(this.customerUser['id']);
         formValue.title =
-          this.customerUser["firstname"] +
-          " " +
-          this.customerUser["lastname"] +
-          "+" +
+          this.customerUser['firstname'] +
+          ' ' +
+          this.customerUser['lastname'] +
+          '+' +
           this.complaintData.complaint_title;
         this.complaintData.date = this.formatDate(
           formValue.start,
@@ -617,21 +619,21 @@ export class TaskComponent implements OnInit {
                   title: this.language.successUpdateTitle,
                   text: this.language.successUpdateText,
                   timer: 3000,
-                  type: "success"
+                  type: 'success'
                 });
               } else {
                 Swal.fire({
                   title: this.language.unsuccessUpdateTitle,
                   text: this.language.unsuccessUpdateText,
                   timer: 3000,
-                  type: "error"
+                  type: 'error'
                 });
               }
             });
             const customerAttentionAndPhysical = {
-              id: this.customerUser["id"],
-              attention: this.customerUser["attention"],
-              physicalComplaint: this.customerUser["physicalComplaint"]
+              id: this.customerUser['id'],
+              attention: this.customerUser['attention'],
+              physicalComplaint: this.customerUser['physicalComplaint']
             };
             console.log(customerAttentionAndPhysical);
             this.customer
@@ -644,7 +646,7 @@ export class TaskComponent implements OnInit {
               title: this.language.unsuccessUpdateTitle,
               text: this.language.unsuccessUpdateText,
               timer: 3000,
-              type: "error"
+              type: 'error'
             });
           }
           /*this.selectedComplaint = [];
@@ -659,14 +661,14 @@ export class TaskComponent implements OnInit {
         title: this.language.unsuccessUpdateTitle,
         text: this.language.unsuccessUpdateText,
         timer: 3000,
-        type: "error"
+        type: 'error'
       });
     }
   }
 
   formatDate(start, end) {
-    const dd = String(start.getDate()).padStart(2, "0");
-    const mm = String(start.getMonth() + 1).padStart(2, "0"); //January is 0!
+    const dd = String(start.getDate()).padStart(2, '0');
+    const mm = String(start.getMonth() + 1).padStart(2, '0'); //January is 0!
     const yyyy = start.getFullYear();
     const hhStart = start.getHours();
     const minStart = start.getMinutes();
@@ -674,18 +676,18 @@ export class TaskComponent implements OnInit {
     const minEnd = end.getMinutes();
     return (
       dd +
-      "." +
+      '.' +
       mm +
-      "." +
+      '.' +
       yyyy +
-      " / " +
-      (hhStart === 0 ? "00" : hhStart) +
-      ":" +
-      (minStart < 10 ? "0" + minStart : minStart) +
-      "-" +
-      (hhEnd === 0 ? "00" : hhEnd) +
-      ":" +
-      (minEnd < 10 ? "0" + minEnd : minEnd)
+      ' / ' +
+      (hhStart === 0 ? '00' : hhStart) +
+      ':' +
+      (minStart < 10 ? '0' + minStart : minStart) +
+      '-' +
+      (hhEnd === 0 ? '00' : hhEnd) +
+      ':' +
+      (minEnd < 10 ? '0' + minEnd : minEnd)
     );
   }
 
@@ -693,11 +695,11 @@ export class TaskComponent implements OnInit {
     this.complaintData.customer_id = customerId;
     this.complaintData.date =
       new Date().getDay() +
-      "." +
+      '.' +
       new Date().getMonth() +
-      "." +
+      '.' +
       new Date().getFullYear() +
-      ".";
+      '.';
     // this.initializeParams();
 
     this.complaintData.complaint = this.pickToModel(
@@ -730,7 +732,7 @@ export class TaskComponent implements OnInit {
 
   public handleUpdate(item: any, value: any, mode?: EditMode): void {
     const service = this.service;
-    console.log("update!");
+    console.log('update!');
     if (mode === EditMode.Occurrence) {
       if (service.isException(item)) {
         service.update(item, value);
@@ -744,7 +746,7 @@ export class TaskComponent implements OnInit {
   }
 
   public closeEditor(scheduler: SchedulerComponent): void {
-    console.log("close!");
+    console.log('close!');
     scheduler.closeEvent();
 
     this.formGroup = undefined;
@@ -757,15 +759,15 @@ export class TaskComponent implements OnInit {
       this.telephoneValue = event.telephone;
       // this.getComplaintAndTherapyForCustomer(event.id);
       this.baseDataIndicator = true;
-      this.userWidth = "49%";
+      this.userWidth = '49%';
     } else {
       this.customerUser = {
-        attention: "",
-        physicalComplaint: ""
+        attention: '',
+        physicalComplaint: ''
       };
       this.telephoneValue = null;
       this.baseDataIndicator = false;
-      this.userWidth = "72%";
+      this.userWidth = '72%';
     }
   }
 
@@ -791,13 +793,13 @@ export class TaskComponent implements OnInit {
   }
 
   closeNewCustomer() {
-    this.zIndex = "";
+    this.zIndex = '';
     this.customerModal = false;
   }
 
   createCustomer(form) {
     console.log(this.data);
-    this.data.storeId = localStorage.getItem("superadmin");
+    this.data.storeId = localStorage.getItem('superadmin');
     this.customer.createCustomer(this.data, val => {
       console.log(val);
       if (val) {
@@ -805,7 +807,7 @@ export class TaskComponent implements OnInit {
         this.customerUser = this.data;
         this.formGroup.patchValue({ telephone: this.data.telephone });
         this.baseDataIndicator = true;
-        this.userWidth = "49%";
+        this.userWidth = '49%';
         this.reloadNewCustomer();
         this.customerModal = false;
         // form.reset();
@@ -815,48 +817,48 @@ export class TaskComponent implements OnInit {
 
   changeTheme(theme: string) {
     console.log(theme);
-    if (localStorage.getItem("allThemes") !== undefined) {
-      const allThemes = JSON.parse(localStorage.getItem("allThemes"));
+    if (localStorage.getItem('allThemes') !== undefined) {
+      const allThemes = JSON.parse(localStorage.getItem('allThemes'));
       console.log(allThemes);
-      let items = document.querySelectorAll(".k-dialog-titlebar");
+      let items = document.querySelectorAll('.k-dialog-titlebar');
       for (let i = 0; i < items.length; i++) {
         const clas = items[i].classList;
         for (let j = 0; j < allThemes.length; j++) {
-          const themeName = allThemes[j]["name"];
+          const themeName = allThemes[j]['name'];
           console.log(clas);
-          clas.remove("k-dialog-titlebar-" + themeName);
-          clas.add("k-dialog-titlebar-" + theme);
+          clas.remove('k-dialog-titlebar-' + themeName);
+          clas.add('k-dialog-titlebar-' + theme);
         }
       }
 
-      items = document.querySelectorAll(".k-button-icontext");
+      items = document.querySelectorAll('.k-button-icontext');
       for (let i = 0; i < items.length; i++) {
         const clas = items[i].classList;
         for (let j = 0; j < allThemes.length; j++) {
-          const themeName = allThemes[j]["name"];
-          clas.remove("k-button-icontext-" + themeName);
-          clas.add("k-button-icontext-" + theme);
+          const themeName = allThemes[j]['name'];
+          clas.remove('k-button-icontext-' + themeName);
+          clas.add('k-button-icontext-' + theme);
         }
       }
 
-      items = document.querySelectorAll(".k-primary");
+      items = document.querySelectorAll('.k-primary');
       for (let i = 0; i < items.length; i++) {
         const clas = items[i].classList;
         for (let j = 0; j < allThemes.length; j++) {
-          const themeName = allThemes[j]["name"];
-          clas.remove("k-primary-" + themeName);
-          clas.add("k-primary-" + theme);
+          const themeName = allThemes[j]['name'];
+          clas.remove('k-primary-' + themeName);
+          clas.add('k-primary-' + theme);
         }
       }
 
-      items = document.querySelectorAll(".k-state-selected");
+      items = document.querySelectorAll('.k-state-selected');
       for (let i = 0; i < items.length; i++) {
         const clas = items[i].classList;
         for (let j = 0; j < allThemes.length; j++) {
-          const themeName = allThemes[j]["name"];
+          const themeName = allThemes[j]['name'];
           console.log(themeName);
-          clas.remove("k-state-selected-" + themeName);
-          clas.add("k-state-selected-" + theme);
+          clas.remove('k-state-selected-' + themeName);
+          clas.add('k-state-selected-' + theme);
         }
       }
       this.theme = theme;
@@ -904,12 +906,24 @@ export class TaskComponent implements OnInit {
     } else {
       this.value = this.value.map(item => item);
     }
-    localStorage.setItem("selectedUser-" + this.id, JSON.stringify(this.value));
+    localStorage.setItem('selectedUser-' + this.id, JSON.stringify(this.value));
     localStorage.setItem(
-      "usersFor-" + this.selectedStoreId + "-" + this.id,
+      'usersFor-' + this.selectedStoreId + '-' + this.id,
       JSON.stringify(this.value)
     );
     this.getTaskForSelectedUsers(this.value);
+
+    const item = {
+      user_id: Number(localStorage.getItem('idUser')),
+      key: 'usersFor-' + this.selectedStoreId + '-' + this.id,
+      value: this.value
+    }
+
+    this.mongo.setUsersFor(item).subscribe(
+      data => {
+        console.log(data);
+      }
+    );
   }
 
   getTaskForSelectedUsers(value) {
@@ -933,7 +947,7 @@ export class TaskComponent implements OnInit {
         };
         this.calendars.push(objectCalendar);
         this.size = [];
-        this.size.push("100%");
+        this.size.push('100%');
         this.loading = false;
       });
     } else {
@@ -976,11 +990,11 @@ export class TaskComponent implements OnInit {
         .subscribe(data => {
           console.log(data, this.valueLoop[this.loopIndex]);
           this.events = [];
-          this.workTime = this.pickWorkTimeToTask(data["workTime"]);
+          this.workTime = this.pickWorkTimeToTask(data['workTime']);
           const objectCalendar = {
             userId: this.valueLoop[this.loopIndex].id,
             name: this.valueLoop[this.loopIndex].shortname,
-            events: this.pickModelForEvent(data["events"]),
+            events: this.pickModelForEvent(data['events']),
             workTime: this.workTime
           };
           this.calendars.push(objectCalendar);
@@ -991,12 +1005,12 @@ export class TaskComponent implements OnInit {
           console.log(this.calendars);
           this.size = [];
           if (this.valueLoop.length === this.loopIndex) {
-            const sizePannel = 100 / this.loopIndex + "%";
+            const sizePannel = 100 / this.loopIndex + '%';
             for (let i = 0; i < this.valueLoop.length - 1; i++) {
-              console.log("usao sam ovde!");
+              console.log('usao sam ovde!');
               this.size.push(sizePannel);
             }
-            this.size.push("");
+            this.size.push('');
             this.loading = false;
           }
           if (this.loopIndex < this.valueLoop.length) {
@@ -1017,6 +1031,7 @@ export class TaskComponent implements OnInit {
   }
 
   selectedStore(event) {
+    console.log(event);
     this.value = [];
     // localStorage.removeItem('selectedUser');
     this.loading = true;
@@ -1024,19 +1039,19 @@ export class TaskComponent implements OnInit {
     this.selectedStoreId = event;
     if (
       localStorage.getItem(
-        "usersFor-" + this.selectedStoreId + "-" + this.id
+        'usersFor-' + this.selectedStoreId + '-' + this.id
       ) !== null && JSON.parse(localStorage.getItem(
-        "usersFor-" + this.selectedStoreId + "-" + this.id
+        'usersFor-' + this.selectedStoreId + '-' + this.id
       )).length !== 0 &&
       event !== undefined
     ) {
       this.value = JSON.parse(
-        localStorage.getItem("usersFor-" + this.selectedStoreId + "-" + this.id)
+        localStorage.getItem('usersFor-' + this.selectedStoreId + '-' + this.id)
       );
       this.getTaskForSelectedUsers(this.value);
       this.getUserInCompany(event);
       this.setStoreWork(event);
-      localStorage.setItem("selectedStore-" + this.id, event);
+      localStorage.setItem('selectedStore-' + this.id, event);
     } else {
       this.value = [];
       if (event !== undefined) {
@@ -1056,9 +1071,9 @@ export class TaskComponent implements OnInit {
           if (!isNaN(event)) {
             this.setStoreWork(event);
           } else {
-            this.startWork = "08:00";
-            this.endWork = "22:00";
-            this.timeDuration = "60";
+            this.startWork = '08:00';
+            this.endWork = '22:00';
+            this.timeDuration = '60';
             this.therapyDuration = 1;
           }
           this.calendars.push(objectCalendar);
@@ -1067,7 +1082,7 @@ export class TaskComponent implements OnInit {
         this.getUserInCompany(event);
       } else {
         this.service
-          .getTasks(localStorage.getItem("superadmin"))
+          .getTasks(localStorage.getItem('superadmin'))
           .subscribe(data => {
             console.log(data);
             this.events = [];
@@ -1088,18 +1103,29 @@ export class TaskComponent implements OnInit {
             } else {
               this.calendars.push({ name: null, events: [] });
             }
-            localStorage.removeItem("selectedStore-" + this.id);
+            localStorage.removeItem('selectedStore-' + this.id);
             this.usersInCompany = [];
-            this.startWork = "08:00";
-            this.endWork = "22:00";
-            this.timeDuration = "60";
+            this.startWork = '08:00';
+            this.endWork = '22:00';
+            this.timeDuration = '60';
             this.therapyDuration = 1;
             this.loading = false;
             this.size = [];
-            this.size.push("100%");
+            this.size.push('100%');
           });
       }
     }
+
+    const item = {
+      user_id: Number(localStorage.getItem('idUser')),
+      selectedStore: event
+    };
+
+    this.mongo.setSelectedStore(item).subscribe(
+      data => {
+        console.log(data);
+      }
+    );
   }
 
   setStoreWork(event) {
@@ -1126,7 +1152,7 @@ export class TaskComponent implements OnInit {
           ) / Number(this.timeDuration);
       }
 
-      localStorage.setItem("selectedStore-" + this.id, event);
+      localStorage.setItem('selectedStore-' + this.id, event);
     }
   }
 
@@ -1138,11 +1164,11 @@ export class TaskComponent implements OnInit {
           return {
             start_work:
               new Date(data[i].start_work).getHours() +
-              ":" +
+              ':' +
               new Date(data[i].start_work).getMinutes(),
             end_work:
               new Date(data[i].end_work).getHours() +
-              ":" +
+              ':' +
               new Date(data[i].end_work).getMinutes(),
             time_duration: data[i].time_duration,
             time_therapy: data[i].time_therapy
@@ -1216,12 +1242,12 @@ export class TaskComponent implements OnInit {
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
             .end2 > new Date(date).getHours())
       ) {
-        return "workTime";
+        return 'workTime';
       } else {
-        return "none";
+        return 'none';
       }
     } else {
-      return "noTime";
+      return 'noTime';
     }
   }
 
@@ -1250,11 +1276,11 @@ export class TaskComponent implements OnInit {
       workTimeArray = [];
       for (let j = 1; j < 6; j++) {
         workTimeObject = {
-          day: Number(workTime[i][this.convertNumericToDay(j)].split("-")[0]),
-          start: workTime[i][this.convertNumericToDay(j)].split("-")[1],
-          end: workTime[i][this.convertNumericToDay(j)].split("-")[2],
-          start2: workTime[i][this.convertNumericToDay(j)].split("-")[3],
-          end2: workTime[i][this.convertNumericToDay(j)].split("-")[4]
+          day: Number(workTime[i][this.convertNumericToDay(j)].split('-')[0]),
+          start: workTime[i][this.convertNumericToDay(j)].split('-')[1],
+          end: workTime[i][this.convertNumericToDay(j)].split('-')[2],
+          start2: workTime[i][this.convertNumericToDay(j)].split('-')[3],
+          end2: workTime[i][this.convertNumericToDay(j)].split('-')[4]
         };
         workTimeArray.push(workTimeObject);
       }
@@ -1288,12 +1314,12 @@ export class TaskComponent implements OnInit {
     // this.selectedViewIndex = null;
     // setTimeout(() => {
     this.selectedButtonIndex[this.selectedViewIndex] = false;
-    this.selectedButtonIndexStyle[this.selectedViewIndex] = "";
+    this.selectedButtonIndexStyle[this.selectedViewIndex] = '';
     this.selectedViewIndex = index;
     this.selectedButtonIndex[this.selectedViewIndex] = true;
     this.selectedButtonIndexStyle[this.selectedViewIndex] =
-      "activeButton" + this.theme;
-    localStorage.setItem("calendarView", index);
+      'activeButton' + this.theme;
+    localStorage.setItem('calendarView', index);
     //}, 50);
   }
 
@@ -1303,28 +1329,28 @@ export class TaskComponent implements OnInit {
   }
 
   getParameters() {
-    this.customer.getParameters("Complaint").subscribe((data: []) => {
+    this.customer.getParameters('Complaint').subscribe((data: []) => {
       console.log(data);
       this.complaintValue = data.sort(function (a, b) {
-        return a["sequence"] - b["sequence"];
+        return a['sequence'] - b['sequence'];
       });
     });
 
-    this.customer.getParameters("Therapy").subscribe((data: []) => {
+    this.customer.getParameters('Therapy').subscribe((data: []) => {
       console.log(data);
       this.therapyValue = data.sort(function (a, b) {
-        return a["sequence"] - b["sequence"];
+        return a['sequence'] - b['sequence'];
       });
     });
 
-    this.customer.getParameters("Treatment").subscribe((data: []) => {
+    this.customer.getParameters('Treatment').subscribe((data: []) => {
       console.log(data);
       this.treatmentValue = data.sort(function (a, b) {
-        return a["sequence"] - b["sequence"];
+        return a['sequence'] - b['sequence'];
       });
     });
 
-    this.service.getCompanyUsers(localStorage.getItem("idUser"), val => {
+    this.service.getCompanyUsers(localStorage.getItem('idUser'), val => {
       console.log(val);
       this.allUsers = val.sort((a, b) => a['shortname'].localeCompare(b['shortname']));
       console.log(this.allUsers);
@@ -1332,15 +1358,15 @@ export class TaskComponent implements OnInit {
   }
 
   pickToModel(data: any, titleValue) {
-    let value = "";
+    let value = '';
     for (let i = 0; i < data.length; i++) {
-      value += data[i] + ";";
+      value += data[i] + ';';
     }
     value = value.substring(0, value.length - 1);
 
     let stringToArray = [];
-    if (value.split(";") !== undefined) {
-      stringToArray = value.split(";").map(Number);
+    if (value.split(';') !== undefined) {
+      stringToArray = value.split(';').map(Number);
     } else {
       stringToArray.push(Number(value));
     }
@@ -1362,11 +1388,11 @@ export class TaskComponent implements OnInit {
   }
 
   getTitle(data, idArray) {
-    let value = "";
+    let value = '';
     for (let i = 0; i < idArray.length; i++) {
       for (let j = 0; j < data.length; j++) {
         if (data[j].id === idArray[i]) {
-          value += data[j].title + ";";
+          value += data[j].title + ';';
         }
       }
     }
@@ -1374,20 +1400,20 @@ export class TaskComponent implements OnInit {
   }
 
   splitToValue(complaint, therapies, therapies_previous) {
-    if (complaint.split(";") !== undefined) {
-      this.selectedComplaint = complaint.split(";").map(Number);
+    if (complaint.split(';') !== undefined) {
+      this.selectedComplaint = complaint.split(';').map(Number);
     } else {
       this.selectedComplaint = Number(complaint);
     }
 
-    if (therapies.split(";") !== undefined) {
-      this.selectedTherapies = therapies.split(";").map(Number);
+    if (therapies.split(';') !== undefined) {
+      this.selectedTherapies = therapies.split(';').map(Number);
     } else {
       this.selectedTherapies = Number(therapies);
     }
 
-    if (therapies_previous.split(";") !== undefined) {
-      this.selectedTreatments = therapies_previous.split(";").map(Number);
+    if (therapies_previous.split(';') !== undefined) {
+      this.selectedTreatments = therapies_previous.split(';').map(Number);
     } else {
       this.selectedTreatments = Number(therapies_previous);
     }
@@ -1397,7 +1423,7 @@ export class TaskComponent implements OnInit {
     this.customerUsers = null;
     setTimeout(() => {
       this.customer.getCustomers(
-        localStorage.getItem("superadmin"),
+        localStorage.getItem('superadmin'),
         val => {
           console.log(val);
           this.customerUsers = val.sort((a, b) => a['shortname'].localeCompare(b['shortname']));
@@ -1409,6 +1435,6 @@ export class TaskComponent implements OnInit {
 
   onValueUserEmChange(event) {
     this.complaintData.em = event.id;
-    this.complaintData.em_title = event.lastname + " " + event.firstname;
+    this.complaintData.em_title = event.lastname + ' ' + event.firstname;
   }
 }
