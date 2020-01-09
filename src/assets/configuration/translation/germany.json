@@ -37,7 +37,8 @@
     "comment": "Comment",
     "newVaucher": "New vaucher",
     "addVaucher": "Add vaucher",
-    "updateVaucher": "Update vaucher"
+    "updateVaucher": "Update vaucher",
+    "user": "Benutzerin"
   },
   "calendar": {
     "today": "Heute",

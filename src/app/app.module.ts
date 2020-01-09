@@ -62,6 +62,7 @@ import { ParametersComponent } from './component/dashboard/parameters/parameters
 import { ParameterItemComponent } from './component/dashboard/parameters/parameter-item/parameter-item.component';
 import { StatisticComponent } from './component/dashboard/statistic/statistic.component';
 import { VaucherComponent } from './component/dashboard/vaucher/vaucher.component';
+import {ImageCropperModule} from 'ngx-image-cropper';
 @NgModule({
   declarations: [
     AppComponent,
@@ -110,8 +111,8 @@ import { VaucherComponent } from './component/dashboard/vaucher/vaucher.componen
     DialogModule,
     FileUploadModule,
     PdfViewerModule,
-    DialogsModule
-
+    DialogsModule,
+    ImageCropperModule
   ],
   providers: [
     LoginComponent,

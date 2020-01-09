@@ -14,19 +14,19 @@ const path = require("path");
   database: "management"
 });*/
 
-/*var connection = mysql.createPool({
+var connection = mysql.createPool({
   host: "185.178.193.141",
   user: "appproduction.",
   password: "jBa9$6v7",
   database: "management_prod"
-});*/
+});
 
-var connection = mysql.createPool({
+/*var connection = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: 'root',
   database: 'management'
-});
+});*/
 
 /*var connection = mysql.createPool({
     host: '144.76.112.98',
@@ -50,7 +50,7 @@ connection.getConnection(function (err, conn) {
 
 /* GET api listing. */
 router.get("/", (req, res) => {
-  res.send("api works");
+  res.send("api works"); 
 });
 
 router.get("/posts", (req, res) => {
@@ -4482,7 +4482,9 @@ router.post("/createVaucher", function (req, res, next) {
       customer: req.body.customer,
       comment: req.body.comment,
       customer_name: req.body.customer_name,
-      superadmin: req.body.superadmin
+      superadmin: req.body.superadmin,
+      user: req.body.user,
+      user_name: req.body.user_name
     };
 
     conn.query("insert into vaucher SET ?", data, function (err, rows) {

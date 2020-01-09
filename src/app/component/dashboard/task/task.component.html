@@ -301,6 +301,11 @@
                     <input class="k-textbox" placeholder="Telephone" [formControl]="formGroup.get('telephone')"
                       [value]="telephoneValue" readonly style="width: 100%" />
                   </div>
+                  <div class="k-form-field">
+                    <span>{{language.mobile}}</span>
+                    <input class="k-textbox" placeholder="Mobile" [formControl]="formGroup.get('mobile')"
+                      [value]="mobileValue" readonly style="width: 100%" />
+                  </div>
                 </div>
               </ng-template>
               <kendo-scheduler-messages today="{{ language.today }}" allDay="{{ language.allDay }}"

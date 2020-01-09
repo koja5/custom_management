@@ -44,14 +44,14 @@
                   <div class="col-sm-6" style="margin-bottom: 3vh;">
                     <div class="row mgbt-xs-0">
                       <label class="col-xs-12 control-label" style="color: red;">ATTENTION:</label>
-                      <textarea kendoTextArea [autoSize]="true">{{data.attention}}</textarea>
+                      <textarea kendoTextArea [autoSize]="true" [disabled]="true">{{data.attention}}</textarea>
                       <!-- col-sm-10 -->
                     </div>
                   </div>
                   <div class="col-sm-6" style="margin-bottom: 3vh;">
                     <div class="row mgbt-xs-0">
                       <label class="col-xs-12 control-label">Physical complaint:</label>
-                      <textarea kendoTextArea [autoSize]="true">{{data.physicalComplaint}}</textarea>
+                      <textarea kendoTextArea [autoSize]="true" [disabled]="true">{{data.physicalComplaint}}</textarea>
                       <!-- col-sm-10 -->
                     </div>
                   </div>
@@ -363,6 +363,22 @@
                     <h2 class="font-semibold">{{data.firstname}} {{data.lastname}}</h2>
                   </div>
                   <div class="col-md-8 col-xs-12">
+                      <div class="col-sm-6" style="margin-bottom: 3vh;">
+                          <div class="row mgbt-xs-0">
+                            <label class="col-xs-12 control-label" style="color: red;">ATTENTION:</label>
+                            <textarea kendoTextArea [autoSize]="true" [(ngModel)]="data.attention"
+                            name="attention">{{data.attention}}</textarea>
+                            <!-- col-sm-10 -->
+                          </div>
+                        </div>
+                        <div class="col-sm-6" style="margin-bottom: 3vh;">
+                          <div class="row mgbt-xs-0">
+                            <label class="col-xs-12 control-label">Physical complaint:</label>
+                            <textarea kendoTextArea [autoSize]="true" [(ngModel)]="data.physicalComplaint"
+                            name="physicalComplaint">{{data.physicalComplaint}}</textarea>
+                            <!-- col-sm-10 -->
+                          </div>
+                        </div>
                     <div>
                       <p>{{language.firstname}}</p>
                       <input type="text" class="email col-md-12 col-xs-12" [(ngModel)]="data.firstname"

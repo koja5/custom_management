@@ -19,7 +19,6 @@ import { MessageService } from "src/app/service/message.service";
 })
 export class ParameterItemComponent implements OnInit {
   @Input() type: string;
-
   public view: Observable<GridDataResult>;
   public gridState: State = {
     sort: [
@@ -51,6 +50,9 @@ export class ParameterItemComponent implements OnInit {
   public theme: string;
   public vatTexList: any;
   public net_price_value: number;
+  public editButton = [];
+  i=0;
+
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
   }
@@ -65,7 +67,9 @@ export class ParameterItemComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
+    alert("onInit "+this.type);
     console.log(this.type);
+    // this.editButton[41]=true;
     if (this.type === "Doctors") {
       this.service.getDoctorType().subscribe(data => {
         this.doctorTypeList = data;
@@ -73,8 +77,12 @@ export class ParameterItemComponent implements OnInit {
     }
 
     if (this.type === "Therapies") {
+      alert("Therapies")
       this.service.getTherapy().subscribe(data => {
         this.therapyList = data;
+        for(this.i=0;this.i<this.therapyList.length;this.i++)
+          // this.editButton[this.i]=true;
+          alert("ima ih "+this.therapyList.length)
       });
     }
 
@@ -83,6 +91,7 @@ export class ParameterItemComponent implements OnInit {
         this.vatTexList = data.sort(function(a, b) {
           return a["sequence"] - b["sequence"];
         });
+
       });
     }
 
@@ -120,7 +129,6 @@ export class ParameterItemComponent implements OnInit {
 
   public addHandler({ sender }) {
     this.closeEditor(sender);
-
     if (this.type === "Doctors") {
       this.formGroup = new FormGroup({
         firstname: new FormControl(),
@@ -185,6 +193,7 @@ export class ParameterItemComponent implements OnInit {
         category: new FormControl(dataItem.category)
       });
       this.selectedVAT = dataItem.vat;
+      
     } else {
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
@@ -443,7 +452,7 @@ export class ParameterItemComponent implements OnInit {
         }
       }
     }, 150);
-  }
+    }
 
   NetPriceChange(event) {
     console.log(event);
@@ -452,4 +461,17 @@ export class ParameterItemComponent implements OnInit {
   cellClick(event) {
     console.log(event);
   }
+
+  changeDisplayVAT(id, val) {
+    alert("tu sam")
+    if(val=='edit')
+    {
+      this.editButton[id] = false; 
+      alert('false je '+ id)
+    }
+    else 
+      this.editButton[id] = true; 
+  }
+
 }
+
