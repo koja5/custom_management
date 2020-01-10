@@ -60,6 +60,7 @@ export class TaskComponent implements OnInit {
   public languageUser: any;
   public resources: any[] = [];
   public customerUser = new CustomerModel();
+  public mobileValue="";
   public data = {
     id: '',
     shortname: '',
@@ -345,7 +346,8 @@ export class TaskComponent implements OnInit {
     this.selectedComplaint = null;
     this.selectedTherapies = null;
     this.selectedTreatments = null;
-    this.telephoneValue = '';
+    this.telephoneValue = "";
+    this.mobileValue = "";
     this.complaintData = new ComplaintTherapyModel();
   }
 
@@ -454,6 +456,7 @@ export class TaskComponent implements OnInit {
         user: this.customerUser,
         therapy_id: dataItem.therapy_id,
         telephone: dataItem.telephone,
+        mobile: dataItem.mobile,
         superadmin: dataItem.superadmin,
         description: dataItem.description,
         recurrenceRule: dataItem.recurrenceRule,
@@ -490,8 +493,10 @@ export class TaskComponent implements OnInit {
         if (dataItem.telephone !== undefined) {
           this.telephoneValue = dataItem.telephone;
         }
-
-        this.changeTheme(localStorage.getItem('theme'));
+        if (dataItem.mobile !== undefined) {
+          this.mobileValue = dataItem.mobile;
+        }
+        this.changeTheme(localStorage.getItem("theme"));
       }, 100);
       return this.formGroup;
     }
@@ -520,6 +525,7 @@ export class TaskComponent implements OnInit {
       formValue.colorTask = this.selected;
       formValue.telephone = this.telephoneValue;
       formValue.user = this.customerUser;
+      formValue.mobile = this.mobileValue;
       formValue.title =
         this.customerUser['firstname'] +
         ' ' +
@@ -757,6 +763,7 @@ export class TaskComponent implements OnInit {
     if (event !== undefined) {
       this.customerUser = event;
       this.telephoneValue = event.telephone;
+      this.mobileValue = event.mobile;
       // this.getComplaintAndTherapyForCustomer(event.id);
       this.baseDataIndicator = true;
       this.userWidth = '49%';
@@ -766,6 +773,7 @@ export class TaskComponent implements OnInit {
         physicalComplaint: ''
       };
       this.telephoneValue = null;
+      this.mobileValue = null;
       this.baseDataIndicator = false;
       this.userWidth = '72%';
     }
@@ -805,7 +813,8 @@ export class TaskComponent implements OnInit {
       if (val) {
         this.data.id = val.id;
         this.customerUser = this.data;
-        this.formGroup.patchValue({ telephone: this.data.telephone });
+        this.formGroup.patchValue({ telephone: this.data.telephone});
+        this.formGroup.patchValue({ mobile: this.data.mobile });
         this.baseDataIndicator = true;
         this.userWidth = '49%';
         this.reloadNewCustomer();

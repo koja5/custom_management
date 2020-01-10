@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { UsersService } from '../../../service/users.service';
 import { Modal } from 'ngx-modal';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, EventManager } from '@angular/platform-browser';
 import { MessageService } from '../../../service/message.service';
 import { UploadEvent, RemoveEvent } from '@progress/kendo-angular-upload';
 import Swal from 'sweetalert2';
@@ -86,6 +86,10 @@ export class ProfileComponent implements OnInit {
         }
       }
     )  
+  }
+
+  uploadPhoto(event: any) {
+    alert(event);
   }
 
   removeEventHandler(event) {

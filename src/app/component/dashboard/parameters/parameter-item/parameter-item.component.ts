@@ -19,7 +19,6 @@ import { MessageService } from "src/app/service/message.service";
 })
 export class ParameterItemComponent implements OnInit {
   @Input() type: string;
-
   public view: Observable<GridDataResult>;
   public gridState: State = {
     sort: [
@@ -44,13 +43,15 @@ export class ParameterItemComponent implements OnInit {
   public selectedGender: string;
   public selectedDoctorType: string;
   public selectedVAT: string;
-  private editedRowIndex: number;
+  public editedRowIndex: number;
   public currentLoadData: any;
   public therapyList: any;
   public selectedTherapy: any;
   public theme: string;
   public vatTexList: any;
   public net_price_value: number;
+  public editButton = [];
+
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
   }
@@ -65,7 +66,9 @@ export class ParameterItemComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
+    this.editedRowIndex=-1;
     console.log(this.type);
+    // this.editButton[41]=true;
     if (this.type === "Doctors") {
       this.service.getDoctorType().subscribe(data => {
         this.doctorTypeList = data;
@@ -83,6 +86,7 @@ export class ParameterItemComponent implements OnInit {
         this.vatTexList = data.sort(function(a, b) {
           return a["sequence"] - b["sequence"];
         });
+
       });
     }
 
@@ -120,7 +124,6 @@ export class ParameterItemComponent implements OnInit {
 
   public addHandler({ sender }) {
     this.closeEditor(sender);
-
     if (this.type === "Doctors") {
       this.formGroup = new FormGroup({
         firstname: new FormControl(),
@@ -185,6 +188,7 @@ export class ParameterItemComponent implements OnInit {
         category: new FormControl(dataItem.category)
       });
       this.selectedVAT = dataItem.vat;
+      
     } else {
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
@@ -200,12 +204,14 @@ export class ParameterItemComponent implements OnInit {
   }
 
   public cancelHandler({ sender, rowIndex }) {
+    this.editedRowIndex=-1;
     this.closeEditor(sender, rowIndex);
     this.changeTheme(this.theme);
   }
 
   public saveHandler({ sender, rowIndex, formGroup, isNew }) {
     console.log(formGroup);
+    this.editedRowIndex=-1;
     const product = formGroup.value;
     console.log(product);
     if (this.type === "Therapy") {
@@ -443,7 +449,7 @@ export class ParameterItemComponent implements OnInit {
         }
       }
     }, 150);
-  }
+    }
 
   NetPriceChange(event) {
     console.log(event);
@@ -453,3 +459,4 @@ export class ParameterItemComponent implements OnInit {
     console.log(event);
   }
 }
+

@@ -43,7 +43,8 @@
     "exportToPDF": "Export to PDF",
     "pagerPage": "Page",
     "pagerOf": "of",
-    "pagerItems": "items"
+    "pagerItems": "items",
+    "user": "User"
   },
   "calendar": {
     "today": "Today",
@@ -79,7 +80,8 @@
     "end": "End",
     "telephone": "Telephone",
     "selectStore": "Select a location(e.g. ",
-    "selectUsers": "Select users(e.g. Mark Piters)"
+    "selectUsers": "Select users(e.g. Mark Piters)",
+    "mobile": "Mobile"
   },
   "navigation-menu": {
     "calendar": "Calendar",

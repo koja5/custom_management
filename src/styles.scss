@@ -3600,6 +3600,47 @@ a.faq[data-toggle=collapse]:before {
 .rounded-circle {
     border-radius: 100%;
 }
+/*
+.text-center:hover img {
+    filter: brightness(50%);
+    cursor: pointer;
+}
+
+.text-center {
+    position: relative;
+    display: inline-block; /* added */
+ /*   overflow: hidden; /* added */
+/*}
+
+.text-center:hover a {
+  
+        opacity: 1; /* added */
+ //       top: 0; /* added */
+ /*       z-index: 500;
+    
+}
+
+.text-center:hover a span {
+    top: 50%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    color:white;
+}
+
+.text-center a {
+        display: block;
+        position: absolute;
+        top: -100%;
+        opacity: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        text-align: center;
+        color: inherit;
+    
+}*/
 
 input {
     display: block;

@@ -12,6 +12,7 @@ import { UploadEvent } from "@progress/kendo-angular-upload";
 import { MessageService } from "../../../service/message.service";
 import * as XLSX from "ts-xlsx";
 import { CustomersService } from "src/app/service/customers.service";
+import { UsersService } from 'src/app/service/users.service';
 
 @Component({
   selector: "app-vaucher",
@@ -55,18 +56,21 @@ export class VaucherComponent implements OnInit {
   public dateConst: any;
   public dateredeemedConst: any;
   public id: number;
-
+  public users: any;
+  public user:any;
+//  public selectedUser: any;
   constructor(
     private service: VaucherService,
     private customer: CustomersService,
-    private message: MessageService
+    private message: MessageService,
+    private userService: UsersService
   ) {}
 
   ngOnInit() {
     this.id = Number(localStorage.getItem("idUser"));
     this.getVauchers();
     this.getCustomer();
-
+    this.getUsers();
     if (localStorage.getItem("language") !== null) {
       this.language = JSON.parse(localStorage.getItem("language")).vaucher;
     }
@@ -123,21 +127,32 @@ export class VaucherComponent implements OnInit {
       date_redeemed: "",
       customer: null,
       customer_name: "",
+      user: null,
+      user_name: "",
       comment: ""
     };
     this.dateConst = "";
     this.dateredeemedConst = "";
     this.customerUser = null;
+    this.selectedUser=null;
   }
 
   createVaucher(form) {
     console.log(this.data);
+  //  alert("Data.user je "+this.data.user+"cu");
     this.data.superadmin = localStorage.getItem("idUser");
     if (this.customerUser !== null) {
+      alert("Ali je customer !=null")
       this.data.customer = this.customerUser.id;
       this.data.customer_name =
         this.customerUser.firstname + " " + this.customerUser.lastname;
     }
+    if (this.user !== null) {
+      this.data.user = this.user.id;
+      this.data.user_name =
+        this.user.shortname;
+    }
+    alert("Za usera" + this.data.user+" i user_name"+ this.data.user_name);
     this.data.date = this.dateConst.toString();
     this.data.date_redeemed = this.dateredeemedConst.toString();
     this.service.createVaucher(this.data).subscribe(data => {
@@ -233,12 +248,26 @@ export class VaucherComponent implements OnInit {
     }
     this.data.amount = Number(data.amount);
     this.customerUser = this.getSelectedCustomerUser(data.customer);
+    this.user=this.getSelectedUser(data.user);
+    alert("Ovde sam za cu "+ data.customer+" i su "+ data.user+"!!!")
   }
 
+
+
   getSelectedCustomerUser(id) {
+    alert("ovdeeee")
     for (let i = 0; i < this.customerUsers.length; i++) {
       if (this.customerUsers[i].id == id) {
         return this.customerUsers[i];
+      }
+    }
+    return null;
+  }
+
+  getSelectedUser(id) {
+    for (let i = 0; i < this.users.length; i++) {
+      if (this.users[i].id == id) {
+        return this.users[i];
       }
     }
     return null;
@@ -397,6 +426,16 @@ export class VaucherComponent implements OnInit {
       this.customerUsers = val;
       this.loading = false;
     });
+  }
+
+  getUsers()
+  {
+    this.userService.getUsers(localStorage.getItem("superadmin"), val => {
+      console.log(val);
+      this.users = val;
+      this.loading = false;
+    });
+
   }
 
   open(component, id) {

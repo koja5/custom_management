@@ -5,6 +5,8 @@ export class VaucherModel {
     date_redeemed?: string;
     customer?: number;
     customer_name?: string;
+    user?: number;
+    user_name: string;
     comment?: string;
     superadmin?: string;
 }

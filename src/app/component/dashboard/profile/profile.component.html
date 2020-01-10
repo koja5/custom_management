@@ -4,13 +4,12 @@
       <div class="panel widget light-widget panel-bd-top">
         <div class="no-title"> </div>
         <div class="panel-body">
-          <div class="text-center vd_info-parent"> <img alt="example image" style="width: 190px;" [src]="imagePath"
-              class="rounded-circle"> </div>
-          <kendo-upload [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" (upload)="uploadEventHandler($event)"
-            (remove)="removeEventHandler($event)">
-            <kendo-upload-messages select="Upload image">
-            </kendo-upload-messages>
-          </kendo-upload>
+          <div class="text-center vd_info-parent" > <img alt="example image" style="width: 190px;" [src]="imagePath"
+              class="rounded-circle"> 
+              <a href="#"><span class="fa fa-pencil edit-image"></span></a>
+         </div>   
+         <input type="file" value="123" name="" id="" />
+                     
           <h2 class="font-semibold mgbt-xs-5">{{data.firstname}} {{data.lastname}}</h2>
           <h4 *ngIf="data.type === 0">Superadmin</h4>
           <h4 *ngIf="data.type === 1">Admin</h4>

@@ -40,6 +40,8 @@
       </kendo-grid-column>
       <kendo-grid-column field="customer_name" title="{{language.customer}}" width="120">
       </kendo-grid-column>
+      <kendo-grid-column field="user_name" title="{{language.user}}" width="120">
+      </kendo-grid-column>
       <kendo-grid-column field="comment" title="{{language.comment}}" width="120">
       </kendo-grid-column>
       <kendo-grid-column width="50">
@@ -71,6 +73,8 @@
         <kendo-grid-column field="date_redeemed" title="{{language.date_redeemed}}">
         </kendo-grid-column>
         <kendo-grid-column field="customer" title="{{language.customer}}">
+        </kendo-grid-column>
+        <kendo-grid-column field="user" title="{{language.user}}">
         </kendo-grid-column>
         <kendo-grid-column field="comment" title="{{language.comment}}">
         </kendo-grid-column>
@@ -141,6 +145,14 @@
         [valueField]="'id'" [(ngModel)]="customerUser" name="customer">
       </kendo-combobox>
     </div>
+
+    <div class="col-md-12 col-xs-12">
+      <p>{{language.user}}</p>
+      <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="users" [textField]="'shortname'"
+        [valueField]="'id'" [(ngModel)]="user" name="user" [disabled]="operationMode === 'add' ? false : true">
+      </kendo-combobox>
+    </div>
+
     <div class="col-md-12 col-xs-12">
       <p>{{language.comment}}</p>
       <input type="text" class="col-xs-12" name="comment" placeholder="Comment" [(ngModel)]="data.comment"
