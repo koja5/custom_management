@@ -35,12 +35,12 @@ var connection = mysql.createPool({
   database: 'appprodu_management_prod_1'
 })*/
 
-var connection = mysql.createPool({
+/*var connection = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: 'root',
   database: 'appprodu_management_prod'
-});
+});*/
 
 /*var connection = mysql.createPool({
     host: '144.76.112.98',

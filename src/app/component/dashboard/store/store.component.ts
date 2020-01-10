@@ -271,7 +271,6 @@ export class StoreComponent implements OnInit {
           this.excelOpened = false;
         }, 50);
       }, (error) => {
-        alert('load fail');
       });
     }*/
 

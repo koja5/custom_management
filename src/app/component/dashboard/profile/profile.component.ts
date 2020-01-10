@@ -89,7 +89,6 @@ export class ProfileComponent implements OnInit {
   }
 
   uploadPhoto(event: any) {
-    alert(event);
   }
 
   removeEventHandler(event) {

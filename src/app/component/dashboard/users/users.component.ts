@@ -288,7 +288,6 @@ export class UsersComponent implements OnInit {
            this.fileValue = null;
          }, 50);
        }, (error) => {
-         alert('load fail');
        });*/
 
     this.excelOpened = true;

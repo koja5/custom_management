@@ -134,15 +134,13 @@ export class VaucherComponent implements OnInit {
     this.dateConst = "";
     this.dateredeemedConst = "";
     this.customerUser = null;
-    this.selectedUser=null;
+    // this.selectedUser = null;
   }
 
   createVaucher(form) {
     console.log(this.data);
-  //  alert("Data.user je "+this.data.user+"cu");
     this.data.superadmin = localStorage.getItem("idUser");
     if (this.customerUser !== null) {
-      alert("Ali je customer !=null")
       this.data.customer = this.customerUser.id;
       this.data.customer_name =
         this.customerUser.firstname + " " + this.customerUser.lastname;
@@ -152,7 +150,6 @@ export class VaucherComponent implements OnInit {
       this.data.user_name =
         this.user.shortname;
     }
-    alert("Za usera" + this.data.user+" i user_name"+ this.data.user_name);
     this.data.date = this.dateConst.toString();
     this.data.date_redeemed = this.dateredeemedConst.toString();
     this.service.createVaucher(this.data).subscribe(data => {
@@ -249,13 +246,11 @@ export class VaucherComponent implements OnInit {
     this.data.amount = Number(data.amount);
     this.customerUser = this.getSelectedCustomerUser(data.customer);
     this.user=this.getSelectedUser(data.user);
-    alert("Ovde sam za cu "+ data.customer+" i su "+ data.user+"!!!")
   }
 
 
 
   getSelectedCustomerUser(id) {
-    alert("ovdeeee")
     for (let i = 0; i < this.customerUsers.length; i++) {
       if (this.customerUsers[i].id == id) {
         return this.customerUsers[i];
@@ -354,7 +349,6 @@ export class VaucherComponent implements OnInit {
           }, 50);
         },
         error => {
-          alert('load fail');
         }
       );
     }*/

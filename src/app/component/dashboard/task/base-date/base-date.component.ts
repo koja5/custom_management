@@ -80,11 +80,10 @@ export class BaseDateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log(this.data.id);
-    this.uploader = new FileUploader({
+    /*this.uploader = new FileUploader({
       url: this.url,
       additionalParameter: { comments: this.data.id }
-    });
+    });*/
 
     this.language = JSON.parse(localStorage.getItem("language"))["user"];
 

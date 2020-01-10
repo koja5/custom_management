@@ -248,7 +248,6 @@ export class CustomersComponent implements OnInit {
           }, 50);
         },
         error => {
-          alert("load fail");
         }
       );
     }*/
