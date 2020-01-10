@@ -43,7 +43,7 @@ export class ParameterItemComponent implements OnInit {
   public selectedGender: string;
   public selectedDoctorType: string;
   public selectedVAT: string;
-  private editedRowIndex: number;
+  public editedRowIndex: number;
   public currentLoadData: any;
   public therapyList: any;
   public selectedTherapy: any;
@@ -51,7 +51,6 @@ export class ParameterItemComponent implements OnInit {
   public vatTexList: any;
   public net_price_value: number;
   public editButton = [];
-  i=0;
 
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
@@ -67,7 +66,7 @@ export class ParameterItemComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    alert("onInit "+this.type);
+    this.editedRowIndex=-1;
     console.log(this.type);
     // this.editButton[41]=true;
     if (this.type === "Doctors") {
@@ -77,12 +76,8 @@ export class ParameterItemComponent implements OnInit {
     }
 
     if (this.type === "Therapies") {
-      alert("Therapies")
       this.service.getTherapy().subscribe(data => {
         this.therapyList = data;
-        for(this.i=0;this.i<this.therapyList.length;this.i++)
-          // this.editButton[this.i]=true;
-          alert("ima ih "+this.therapyList.length)
       });
     }
 
@@ -209,12 +204,14 @@ export class ParameterItemComponent implements OnInit {
   }
 
   public cancelHandler({ sender, rowIndex }) {
+    this.editedRowIndex=-1;
     this.closeEditor(sender, rowIndex);
     this.changeTheme(this.theme);
   }
 
   public saveHandler({ sender, rowIndex, formGroup, isNew }) {
     console.log(formGroup);
+    this.editedRowIndex=-1;
     const product = formGroup.value;
     console.log(product);
     if (this.type === "Therapy") {
@@ -461,17 +458,5 @@ export class ParameterItemComponent implements OnInit {
   cellClick(event) {
     console.log(event);
   }
-
-  changeDisplayVAT(id, val) {
-    alert("tu sam")
-    if(val=='edit')
-    {
-      this.editButton[id] = false; 
-      alert('false je '+ id)
-    }
-    else 
-      this.editButton[id] = true; 
-  }
-
 }
 

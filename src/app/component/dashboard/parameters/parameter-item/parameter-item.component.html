@@ -95,21 +95,23 @@
     <kendo-grid-column field="vat" title="VAT" width="120" >
       <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex" *ngIf="vatTexList !== undefined">
         <kendo-combobox [data]="vatTexList" [textField]="'title'" [valueField]="'id'"
-          (valueChange)="selectionVAT($event, rowIndex)" [(ngModel)]="dataItem.vat" [valuePrimitive]="true"
-          name="vat" [disabled]="(editButton.length !== 0 && (editButton[dataItem.id] !== null || editButton[dataItem.id] !== undefined)) ? false : true"></kendo-combobox>
+          (valueChange)="selectionVAT($event, rowIndex)" [disabled]="editedRowIndex!=rowIndex" [(ngModel)]="dataItem.vat" [valuePrimitive]="true"
+          name="vat" ></kendo-combobox>
       </ng-template>
     </kendo-grid-column>
     <kendo-grid-column field="gross_price" title="Gross price"></kendo-grid-column>
     <kendo-grid-column field="category" title="Category"></kendo-grid-column>
     <kendo-grid-command-column title="command" width="220">
       <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem>
-        <button kendoGridEditCommand [primary]="true" (click)="changeTheme(theme);changeDisplayVAT(dataItem.id,'edit');">Edit</button>
-        <button kendoGridRemoveCommand (click)="changeTheme(theme);changeDisplayVAT(dataItem.id,'remove');">Remove</button>
+        <button kendoGridEditCommand [primary]="true" (click)="changeTheme(theme)">Edit</button>
+        <button kendoGridRemoveCommand (click)="changeTheme(theme);">Remove</button>
         <button kendoGridSaveCommand [disabled]="formGroup?.invalid"
-          (click)="changeTheme(theme);changeDisplayVAT(dataItem.id,'button');">{{ isNew ? 'Add' : 'Update' }}</button>
-        <button kendoGridCancelCommand (click)="changeDisplayVAT(dataItem.id,'button')">{{ isNew ? 'Discard changes' : 'Cancel' }}</button>
+          (click)="changeTheme(theme);">{{ isNew ? 'Add' : 'Update' }}</button>
+        <button kendoGridCancelCommand>{{ isNew ? 'Discard changes' : 'Cancel' }}</button>
       </ng-template>
     </kendo-grid-command-column>
+
+<!-- the rest of confguration -->
   </kendo-grid>
 
   <!--<kendo-grid *ngIf="type === 'Therapies'" [data]="view | async" [style.height]="'76vh'" [pageSize]="gridState.take"
