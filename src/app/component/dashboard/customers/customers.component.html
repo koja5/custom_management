@@ -22,15 +22,17 @@
           class="uploadFromExcel-{{theme}}">{{language.exportToExcel}}</button>
         <button kendoGridPDFCommand icon="file-pdf" class="uploadFromExcel-{{theme}}">{{language.exportToPDF}}</button>
       </ng-template>
-      <kendo-grid-column field="shortname" title="{{language.username}}" width="120">
+      <kendo-grid-column field="shortname" title="{{language.username}}">
       </kendo-grid-column>
-      <kendo-grid-column field="firstname" title="{{language.firstname}}" width="180">
+      <kendo-grid-column field="firstname" title="{{language.firstname}}">
       </kendo-grid-column>
-      <kendo-grid-column field="lastname" title="{{language.lastname}}" width="180">
+      <kendo-grid-column field="lastname" title="{{language.lastname}}">
       </kendo-grid-column>
-      <kendo-grid-column field="telephone" title="{{language.telephone}}" width="250">
+      <kendo-grid-column field="telephone" title="{{language.telephone}}">
       </kendo-grid-column>
-      <kendo-grid-column field="email" title="{{language.email}}" width="250">
+      <kendo-grid-column field="mobile" title="{{language.mobile}}">
+      </kendo-grid-column>
+      <kendo-grid-column field="email" title="{{language.email}}">
       </kendo-grid-column>
       <kendo-grid-column title="{{language.preview}}" width="60">
         <ng-template kendoGridCellTemplate let-dataItem>
@@ -54,6 +56,8 @@
         <kendo-grid-column field="lastname" title="{{language.lastname}}">
         </kendo-grid-column>
         <kendo-grid-column field="telephone" title="{{language.telephone}}">
+        </kendo-grid-column>
+        <kendo-grid-column field="mobile" title="{{language.mobile}}">
         </kendo-grid-column>
       </kendo-grid-pdf>
       <kendo-grid-excel fileName="Customers.xlsx"></kendo-grid-excel>

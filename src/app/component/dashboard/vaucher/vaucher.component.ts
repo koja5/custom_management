@@ -37,8 +37,8 @@ export class VaucherComponent implements OnInit {
   public selectedUser: any;
   public imagePath = "defaultUser";
   public loading = true;
-  // public uploadSaveUrl = 'http://localhost:3000/api/uploadImage'; // should represent an actual API endpoint
-  public uploadSaveUrl = "http://78.47.206.131:8081/uploadImage";
+  public uploadSaveUrl = 'http://localhost:3000/api/uploadImage'; // should represent an actual API endpoint
+  // public uploadSaveUrl = "http://78.47.206.131:8081/uploadImage";
   public uploadRemoveUrl = "removeUrl"; // should represent an actual API endpoint
   // private spread: GC.Spread.Sheets.Workbook;
   // private excelIO;
