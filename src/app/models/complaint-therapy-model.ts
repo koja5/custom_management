@@ -9,8 +9,8 @@ export class ComplaintTherapyModel {
     therapies_title?: string;
     therapies_previous?: string;
     therapies_previous_title?: string;
-    cs: string;
-    state?: string;
+    cs: number;
+    state?: number;
     em?: any;
     em_title?: string;
 }

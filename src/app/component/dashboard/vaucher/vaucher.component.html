@@ -12,7 +12,7 @@
           (change)="onFileChange($event)" [(ngModel)]="fileValue" /></label>
     </div>
 
-    <kendo-grid *ngIf="language !== undefined" [data]="gridData" [style.height.%]="93" [resizable]="true"
+    <kendo-grid *ngIf="language !== undefined" [data]="gridData" [style.height]="height" [resizable]="true"
       [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
       [pageable]="true" [filterable]="true" (dataStateChange)="dataStateChange($event)"
       (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey" [loading]="loadingGridVaucher">
@@ -38,7 +38,9 @@
           {{dataItem.date_redeemed | date: 'dd.MM.yyyy'}}
         </ng-template>
       </kendo-grid-column>
-      <kendo-grid-column field="customer_name" title="{{language.customer}}" width="120">
+      <kendo-grid-column field="customer_name" title="{{language.customerBuys}}" width="120">
+      </kendo-grid-column>
+      <kendo-grid-column field="customer_consumer_name" title="{{language.customerConsumer}}" width="120">
       </kendo-grid-column>
       <kendo-grid-column field="user_name" title="{{language.user}}" width="120">
       </kendo-grid-column>
@@ -72,7 +74,9 @@
         </kendo-grid-column>
         <kendo-grid-column field="date_redeemed" title="{{language.date_redeemed}}">
         </kendo-grid-column>
-        <kendo-grid-column field="customer" title="{{language.customer}}">
+        <kendo-grid-column field="customer" title="{{language.customerBuys}}">
+        </kendo-grid-column>
+        <kendo-grid-column field="customer_consumer" title="{{language.customerConsumer}}">
         </kendo-grid-column>
         <kendo-grid-column field="user" title="{{language.user}}">
         </kendo-grid-column>
@@ -140,12 +144,17 @@
       </kendo-datepicker>
     </div>
     <div class="col-md-12 col-xs-12">
-      <p>{{language.customer}}</p>
+      <p>{{language.customerBuys}}</p>
       <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="customerUsers" [textField]="'shortname'"
         [valueField]="'id'" [(ngModel)]="customerUser" name="customer">
       </kendo-combobox>
     </div>
-
+    <div class="col-md-12 col-xs-12">
+      <p>{{language.customerConsumer}}</p>
+      <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="customerUsers" [textField]="'shortname'"
+        [valueField]="'id'" [(ngModel)]="customerUserConsumer" name="customer_consumer">
+      </kendo-combobox>
+    </div>
     <div class="col-md-12 col-xs-12">
       <p>{{language.user}}</p>
       <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="users" [textField]="'shortname'"

@@ -4013,6 +4013,315 @@ router.post("/updateVATTaxList", function (req, res, next) {
 
 // end vattax_list
 
+// start cs_list
+
+router.get("/getCSList", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+    conn.query("select * from cs_list", function (err, rows) {
+      conn.release();
+      if (!err) {
+        res.json(rows);
+      } else {
+        res.json({
+          code: 100,
+          status: "Error in connection database"
+        });
+      }
+    });
+
+    conn.on("error", function (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    });
+  });
+});
+
+router.post("/addCSList", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    console.log(conn);
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+
+    response = null;
+    console.log(req);
+    var date = {
+      title: req.body.title,
+      sequence: req.body.sequence
+    };
+
+    conn.query("insert into cs_list SET ?", date, function (err, rows) {
+      conn.release();
+      if (!err) {
+        if (!err) {
+          response = true;
+        } else {
+          response.success = false;
+        }
+        res.json(response);
+      } else {
+        res.json({
+          code: 100,
+          status: "Error in connection database"
+        });
+        console.log(err);
+      }
+    });
+    conn.on("error", function (err) {
+      console.log("[mysql error]", err);
+    });
+  });
+});
+
+router.get("/deleteCSList/:id", (req, res, next) => {
+  try {
+    var reqObj = req.params.id;
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: "Error in connection database"
+        });
+        return next(err);
+      } else {
+        conn.query(
+          "delete from cs_list where id = '" + reqObj + "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              console.error("SQL error:", err);
+              res.json({
+                code: 100,
+                status: "Error in connection database"
+              });
+              return next(err);
+            } else {
+              res.json(true);
+              res.end();
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    console.error("Internal error: " + ex);
+    return next(ex);
+  }
+});
+
+router.post("/updateCSList", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    console.log(conn);
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+
+    var response = null;
+    var data = {
+      id: req.body.id,
+      title: req.body.title,
+      sequence: req.body.sequence
+    };
+
+    conn.query(
+      "update cs_list set ? where id = '" + req.body.id + "'",
+      data,
+      function (err, rows, fields) {
+        conn.release();
+        if (err) {
+          console.error("SQL error:", err);
+          res.json({
+            code: 100,
+            status: "Error in connection database"
+          });
+          return next(err);
+        } else {
+          response = true;
+          res.json(response);
+        }
+      }
+    );
+    conn.on("error", function (err) {
+      console.log("[mysql error]", err);
+    });
+  });
+});
+
+// end cs_list
+
+// start state_list
+
+router.get("/getStateList", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+    conn.query("select * from state_list", function (err, rows) {
+      conn.release();
+      if (!err) {
+        res.json(rows);
+      } else {
+        res.json({
+          code: 100,
+          status: "Error in connection database"
+        });
+      }
+    });
+
+    conn.on("error", function (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    });
+  });
+});
+
+router.post("/addStateList", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    console.log(conn);
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+
+    response = null;
+    console.log(req);
+    var date = {
+      title: req.body.title,
+      sequence: req.body.sequence
+    };
+
+    conn.query("insert into state_list SET ?", date, function (err, rows) {
+      conn.release();
+      if (!err) {
+        if (!err) {
+          response = true;
+        } else {
+          response.success = false;
+        }
+        res.json(response);
+      } else {
+        res.json({
+          code: 100,
+          status: "Error in connection database"
+        });
+        console.log(err);
+      }
+    });
+    conn.on("error", function (err) {
+      console.log("[mysql error]", err);
+    });
+  });
+});
+
+router.get("/deleteStateList/:id", (req, res, next) => {
+  try {
+    var reqObj = req.params.id;
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: "Error in connection database"
+        });
+        return next(err);
+      } else {
+        conn.query(
+          "delete from state_list where id = '" + reqObj + "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              console.error("SQL error:", err);
+              res.json({
+                code: 100,
+                status: "Error in connection database"
+              });
+              return next(err);
+            } else {
+              res.json(true);
+              res.end();
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    console.error("Internal error: " + ex);
+    return next(ex);
+  }
+});
+
+router.post("/updateStateList", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    console.log(conn);
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+
+    var response = null;
+    var data = {
+      id: req.body.id,
+      title: req.body.title,
+      sequence: req.body.sequence
+    };
+
+    conn.query(
+      "update state_list set ? where id = '" + req.body.id + "'",
+      data,
+      function (err, rows, fields) {
+        conn.release();
+        if (err) {
+          console.error("SQL error:", err);
+          res.json({
+            code: 100,
+            status: "Error in connection database"
+          });
+          return next(err);
+        } else {
+          response = true;
+          res.json(response);
+        }
+      }
+    );
+    conn.on("error", function (err) {
+      console.log("[mysql error]", err);
+    });
+  });
+});
+
+// end state_list
 
 // BASE DATA I
 
@@ -4485,9 +4794,11 @@ router.post("/createVaucher", function (req, res, next) {
       date: req.body.date,
       amount: req.body.amount,
       date_redeemed: req.body.date_redeemed,
-      customer: req.body.customer,
       comment: req.body.comment,
+      customer: req.body.customer,
       customer_name: req.body.customer_name,
+      customer_consumer: req.body.customer_consumer,
+      customer_consumer_name: req.body.customer_consumer_name,
       superadmin: req.body.superadmin,
       user: req.body.user,
       user_name: req.body.user_name
@@ -4607,9 +4918,14 @@ router.post("/updateVaucher", function (req, res, next) {
       date: req.body.date,
       amount: req.body.amount,
       date_redeemed: req.body.date_redeemed,
+      comment: req.body.comment,
       customer: req.body.customer,
       customer_name: req.body.customer_name,
-      comment: req.body.comment
+      customer_consumer: req.body.customer_consumer,
+      customer_consumer_name: req.body.customer_consumer_name,
+      superadmin: req.body.superadmin,
+      user: req.body.user,
+      user_name: req.body.user_name
     };
 
     conn.query(

@@ -25,3 +25,7 @@ FTP:
 host: 78.47.206.131
 user: appproduction
 pass: Iva#0304
+
+ContraTeam:
+hosttech@tuina.com
+Hosttech#ct0304

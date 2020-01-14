@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
 import { Modal } from "ngx-modal";
 import { CustomersService } from "../../../service/customers.service";
 import { StoreService } from "../../../service/store.service";
@@ -53,6 +53,7 @@ export class CustomersComponent implements OnInit {
     return JSON.stringify(context.index);
   }
   private arrayBuffer: any;
+  public height: any;
 
   constructor(
     public service: CustomersService,
@@ -63,6 +64,8 @@ export class CustomersComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.height = window.innerHeight - 110;
+    this.height += 'px';
     this.getCustomers();
 
     if (localStorage.getItem("language") !== null) {
@@ -164,7 +167,7 @@ export class CustomersComponent implements OnInit {
   }
 
   onChange(event) {
-    this.data.birthday = event; 
+    this.data.birthday = event;
   }
 
   selectionChange(event) {
@@ -387,5 +390,12 @@ export class CustomersComponent implements OnInit {
         }
       }
     }, 50);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    console.log(window.innerHeight);
+    this.height = window.innerHeight - 110;
+    this.height += 'px';
   }
 }

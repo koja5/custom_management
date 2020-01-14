@@ -11,7 +11,7 @@
         (change)="onFileChange($event)" [(ngModel)]="fileValue" /></label>
   </div>
 
-  <kendo-grid [data]="gridData" [style.height.%]="93" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
+  <kendo-grid [data]="gridData" [style.height]="height" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
     [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="true" [filterable]="true"
     (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey"
     [loading]="loadingGrid">

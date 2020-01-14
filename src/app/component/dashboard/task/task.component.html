@@ -257,13 +257,14 @@
                   </div>
                   <div class="k-form-field">
                     <span>{{languageUser.cs}}</span>
-                    <input type="text" class="col-md-12 col-xs-12" name="cs" placeholder="CS"
-                      [(ngModel)]="complaintData.cs" cs.value=''>
+                    <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="CSValue" [textField]="'title'"
+                      [valueField]="'id'" [(ngModel)]="complaintData.cs" [valuePrimitive]="true" [placeholder]="language.choiceState">
+                    </kendo-combobox>
                   </div>
                   <div class="k-form-field">
                     <span>{{languageUser.stateValue}}</span>
-                    <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="stateValue"
-                      [(ngModel)]="complaintData.state" name="state" [placeholder]="language.choiceState">
+                    <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="stateValue" [textField]="'title'"
+                      [valueField]="'id'" [(ngModel)]="complaintData.state" [valuePrimitive]="true" [placeholder]="language.choiceState">
                     </kendo-combobox>
                   </div>
                   <div class="k-form-field">
@@ -437,13 +438,14 @@
                 </div>
                 <div class="k-form-field">
                   <span>{{languageUser.cs}}</span>
-                  <input type="text" class="col-md-12 col-xs-12" name="cs" placeholder="CS"
-                    [(ngModel)]="complaintData.cs" cs.value=''>
+                  <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="CSValue" [textField]="'title'"
+                    [valueField]="'id'" [(ngModel)]="complaintData.cs" [placeholder]="language.choiceState">
+                  </kendo-combobox>
                 </div>
                 <div class="k-form-field">
                   <span>{{languageUser.stateValue}}</span>
-                  <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="stateValue"
-                    [(ngModel)]="complaintData.state" name="state" [placeholder]="language.choiceState">
+                  <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="stateValue" [textField]="'title'"
+                    [valueField]="'id'" [(ngModel)]="complaintData.state" [placeholder]="language.choiceState">
                   </kendo-combobox>
                 </div>
                 <div class="k-form-field">
@@ -510,14 +512,15 @@
           </div>
           <div class="col-md-8 col-xs-12">
             <p>{{languageUser.username}}</p>
-            <input type="text" class="email col-md-12 col-xs-12" name="shortname" placeholder="{{languageUser.username}}"
-              [(ngModel)]="data.shortname" [pattern]="unamePattern" #uname="ngModel" required>
+            <input type="text" class="email col-md-12 col-xs-12" name="shortname"
+              placeholder="{{languageUser.username}}" [(ngModel)]="data.shortname" [pattern]="unamePattern"
+              #uname="ngModel" required>
             <p *ngIf="uname.errors?.pattern" class="validError">
               <span class="k-icon k-i-close"></span> Username not valid.
             </p>
             <p>{{languageUser.firstname}}</p>
-            <input type="text" class="email col-md-12 col-xs-12" name="firstname" placeholder="{{languageUser.firstname}}"
-              [(ngModel)]="data.firstname" firstname.value=''>
+            <input type="text" class="email col-md-12 col-xs-12" name="firstname"
+              placeholder="{{languageUser.firstname}}" [(ngModel)]="data.firstname" firstname.value=''>
             <p>{{languageUser.lastname}}</p>
             <input type="text" class="email col-md-12 col-xs-12" name="lastname" placeholder="{{languageUser.lastname}}"
               [(ngModel)]="data.lastname" lastname.value=''>
@@ -544,23 +547,23 @@
       <div class="form-group col-xs-12">
         <div class="email col-md-4 col-xs-12">
           <p>{{languageUser.telephone}}</p>
-          <input type="text" class="col-xs-12" name="telephone" placeholder="{{languageUser.telephone}}" [(ngModel)]="data.telephone"
-            telephone.value=''>
+          <input type="text" class="col-xs-12" name="telephone" placeholder="{{languageUser.telephone}}"
+            [(ngModel)]="data.telephone" telephone.value=''>
         </div>
         <div class="email col-md-4 col-xs-12">
           <p>{{languageUser.mobile}}</p>
-          <input type="text" class="col-xs-12" name="mobile" placeholder="{{languageUser.mobile}}" [(ngModel)]="data.mobile"
-            mobile.value=''>
+          <input type="text" class="col-xs-12" name="mobile" placeholder="{{languageUser.mobile}}"
+            [(ngModel)]="data.mobile" mobile.value=''>
         </div>
         <div class="email col-md-4 col-xs-12">
           <p>{{languageUser.email}}</p>
-          <input type="email" class="col-xs-12" name="email" placeholder="{{languageUser.email}}" [(ngModel)]="data.email"
-            [pattern]="emailPattern" #email="ngModel" required>
+          <input type="email" class="col-xs-12" name="email" placeholder="{{languageUser.email}}"
+            [(ngModel)]="data.email" [pattern]="emailPattern" #email="ngModel" required>
         </div>
         <div class="email col-md-4 col-xs-12">
           <p>{{languageUser.street}}</p>
-          <input type="text" class="col-xs-12" name="street" placeholder="{{languageUser.street}}" [(ngModel)]="data.street"
-            street.value=''>
+          <input type="text" class="col-xs-12" name="street" placeholder="{{languageUser.street}}"
+            [(ngModel)]="data.street" street.value=''>
         </div>
         <div class="email col-md-4 col-xs-12">
           <p>{{languageUser.streetnumber}}</p>
@@ -569,7 +572,8 @@
         </div>
         <div class="email col-md-4 col-xs-12">
           <p>{{languageUser.city}}</p>
-          <input type="text" class="col-xs-12" name="city" placeholder="{{languageUser.city}}" [(ngModel)]="data.city" city.value=''>
+          <input type="text" class="col-xs-12" name="city" placeholder="{{languageUser.city}}" [(ngModel)]="data.city"
+            city.value=''>
         </div>
       </div>
       <!-- ./remember-row -->

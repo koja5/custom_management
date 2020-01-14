@@ -107,8 +107,9 @@ export class TaskComponent implements OnInit {
   public therapyValue: any;
   public treatmentValue: any;
   public complaintValue: any;
-  public complaintData = new ComplaintTherapyModel();
+  public CSValue: any;
   public stateValue: any;
+  public complaintData = new ComplaintTherapyModel();
   public selectedComplaint: any;
   public selectedTherapies: any;
   public selectedTreatments: any;
@@ -160,7 +161,7 @@ export class TaskComponent implements OnInit {
     if (localStorage.getItem("language") !== undefined) {
       this.language = JSON.parse(localStorage.getItem("language"))["calendar"];
       this.languageUser = JSON.parse(localStorage.getItem("language"))["user"];
-      this.stateValue = JSON.parse(localStorage.getItem("language"))["state"];
+      // this.stateValue = JSON.parse(localStorage.getItem("language"))["state"];
     } else {
       this.message.getLanguage().subscribe(mess => {
         this.language = undefined;
@@ -474,6 +475,8 @@ export class TaskComponent implements OnInit {
                 this.selectedUser = val[0];
               });*/
               this.complaintData = data[0];
+              this.complaintData.cs = Number(data[0].cs);
+              this.complaintData.state = Number(data[0].state);
             }
             this.createFormLoading = true;
           });
@@ -612,6 +615,7 @@ export class TaskComponent implements OnInit {
           formValue.start,
           formValue.end
         );
+        console.log(this.complaintData);
         this.customer.updateTherapy(this.complaintData).subscribe(data => {
           if (data) {
             this.service.updateTask(formValue, val => {
@@ -1348,6 +1352,27 @@ export class TaskComponent implements OnInit {
     this.customer.getParameters("Treatment").subscribe((data: []) => {
       console.log(data);
       this.treatmentValue = data.sort(function(a, b) {
+        return a["sequence"] - b["sequence"];
+      });
+    });
+
+    this.customer.getParameters("CS").subscribe((data: []) => {
+      console.log(data);
+      this.CSValue = data.sort(function(a, b) {
+        return a["sequence"] - b["sequence"];
+      });
+    });
+
+    this.customer.getParameters("CS").subscribe((data: []) => {
+      console.log(data);
+      this.CSValue = data.sort(function(a, b) {
+        return a["sequence"] - b["sequence"];
+      });
+    });
+
+    this.customer.getParameters("State").subscribe((data: []) => {
+      console.log(data);
+      this.stateValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });

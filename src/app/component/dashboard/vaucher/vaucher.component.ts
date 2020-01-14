@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, HostListener } from "@angular/core";
 import { VaucherModel } from "src/app/models/vaucher-model";
 import { process, State } from "@progress/kendo-data-query";
 import {
@@ -52,12 +52,14 @@ export class VaucherComponent implements OnInit {
   public operationMode: any;
   public customerUsers: any;
   public customerUser: any;
+  public customerUserConsumer: any;
   public dialog = false;
   public dateConst: any;
   public dateredeemedConst: any;
   public id: number;
   public users: any;
   public user:any;
+  public height: any;
 //  public selectedUser: any;
   constructor(
     private service: VaucherService,
@@ -67,6 +69,8 @@ export class VaucherComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.height = window.innerHeight - 110;
+    this.height += 'px';
     this.id = Number(localStorage.getItem("idUser"));
     this.getVauchers();
     this.getCustomer();
@@ -134,6 +138,7 @@ export class VaucherComponent implements OnInit {
     this.dateConst = "";
     this.dateredeemedConst = "";
     this.customerUser = null;
+    this.customerUserConsumer = null;
     // this.selectedUser = null;
   }
 
@@ -144,6 +149,10 @@ export class VaucherComponent implements OnInit {
       this.data.customer = this.customerUser.id;
       this.data.customer_name =
         this.customerUser.firstname + " " + this.customerUser.lastname;
+    }
+    if(this.customerUserConsumer !== null) {
+      this.data.customer_consumer = this.customerUserConsumer.id;
+      this.data.customer_consumer_name = this.customerUserConsumer.firstname + " " + this.customerUserConsumer.lastname;
     }
     if (this.user !== null) {
       this.data.user = this.user.id;
@@ -212,6 +221,10 @@ export class VaucherComponent implements OnInit {
       this.data.customer_name =
         this.customerUser.firstname + " " + this.customerUser.lastname;
     }
+    if(this.customerUserConsumer !== null) {
+      this.data.customer_consumer = this.customerUserConsumer.id;
+      this.data.customer_consumer_name = this.customerUserConsumer.firstname + " " + this.customerUserConsumer.lastname;
+    }
     this.data.date = this.dateConst.toString();
     this.data.date_redeemed = this.dateredeemedConst.toString();
     this.service.editVaucher(this.data).subscribe(data => {
@@ -245,6 +258,7 @@ export class VaucherComponent implements OnInit {
     }
     this.data.amount = Number(data.amount);
     this.customerUser = this.getSelectedCustomerUser(data.customer);
+    this.customerUserConsumer = this.getSelectedCustomerUser(data.customer_consumer);
     this.user=this.getSelectedUser(data.user);
   }
 
@@ -523,5 +537,12 @@ export class VaucherComponent implements OnInit {
         }
       }
     }, 50);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    console.log(window.innerHeight);
+    this.height = window.innerHeight - 110;
+    this.height += 'px';
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
 import { Modal } from "ngx-modal";
 import { UsersService } from "../../../service/users.service";
 import { StoreService } from "../../../service/store.service";
@@ -78,6 +78,7 @@ export class UsersComponent implements OnInit {
       text: "Log Out"
     }
   ];
+  public height: any;
 
   constructor(
     public service: UsersService,
@@ -90,6 +91,8 @@ export class UsersComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.height = window.innerHeight - 110;
+    this.height += 'px';
     this.getUser();
     if (localStorage.getItem("theme") !== null) {
       this.theme = localStorage.getItem("theme");
@@ -424,5 +427,12 @@ export class UsersComponent implements OnInit {
         }
       }
     }, 50);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    console.log(window.innerHeight);
+    this.height = window.innerHeight - 110;
+    this.height += 'px';
   }
 }

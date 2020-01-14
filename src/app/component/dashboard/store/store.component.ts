@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
 import { Modal } from "ngx-modal";
 import { StoreService } from "../../../service/store.service";
 import { process, State } from "@progress/kendo-data-query";
@@ -47,12 +47,15 @@ export class StoreComponent implements OnInit {
   }
   private arrayBuffer: any;
   public loadingGrid = false;
+  public height: any;
 
   constructor(public service: StoreService, public message: MessageService) {
     // this.excelIO = new Excel.IO();
   }
 
   ngOnInit() {
+    this.height = window.innerHeight - 110;
+    this.height += 'px';
     this.idUser = localStorage.getItem("superadmin");
     if (localStorage.getItem("theme") !== null) {
       this.theme = localStorage.getItem("theme");
@@ -409,5 +412,12 @@ export class StoreComponent implements OnInit {
         }
       }
     }, 50);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    console.log(window.innerHeight);
+    this.height = window.innerHeight - 110;
+    this.height += 'px';
   }
 }

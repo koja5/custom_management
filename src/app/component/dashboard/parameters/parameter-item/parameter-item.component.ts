@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject } from "@angular/core";
+import { Component, OnInit, Input, Inject, HostListener } from "@angular/core";
 import { State, process } from "@progress/kendo-data-query";
 import { FormGroup, FormControl } from "@angular/forms";
 import { Observable } from "rxjs";
@@ -51,6 +51,7 @@ export class ParameterItemComponent implements OnInit {
   public vatTexList: any;
   public net_price_value: number;
   public editButton = [];
+  public height: any;
 
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
@@ -66,6 +67,8 @@ export class ParameterItemComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
+    this.height = window.innerHeight - 225;
+    this.height += 'px';
     this.editedRowIndex=-1;
     console.log(this.type);
     // this.editButton[41]=true;
@@ -457,6 +460,13 @@ export class ParameterItemComponent implements OnInit {
 
   cellClick(event) {
     console.log(event);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    console.log(window.innerHeight);
+    this.height = window.innerHeight - 225;
+    this.height += 'px';
   }
 }
 
