@@ -140,7 +140,7 @@
     <div class="col-md-12 col-xs-12">
       <p>{{language.date_redeemed}}</p>
       <kendo-datepicker class="email col-md-12 col-xs-12 noPadding" name="Date redeemed" placeholder="Date redeemed"
-        [(ngModel)]="dateredeemedConst" dateredeemedConst.value=''>
+        [(ngModel)]="dateredeemedConst" dateredeemedConst.value='' [disabled]="operationMode === 'add' ? false : true">
       </kendo-datepicker>
     </div>
     <div class="col-md-12 col-xs-12">
@@ -172,7 +172,7 @@
     </div>
     <div class="form-group" style="text-align: center;">
       <button *ngIf="operationMode === 'add'" kendoButton [primary]="true" class="form-button" type="submit"
-        [disabled]="dateConst === '' || data.amount === null">{{language.addVaucher}}</button>
+        [disabled]="dateConst === '' || data.amount === null || user === null">{{language.addVaucher}}</button>
       <button *ngIf="operationMode === 'edit'" kendoButton [primary]="true" class="form-button" type="submit"
         [disabled]="dateConst === '' || data.amount === null">{{language.updateVaucher}}</button>
     </div>

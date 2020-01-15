@@ -101,10 +101,12 @@ export class VaucherComponent implements OnInit {
 
   getVauchers() {
     this["loadingGridVaucher"] = true;
-    this.service.getVauchers(localStorage.getItem("idUser")).subscribe(date => {
-      if (date !== null) {
-        console.log(date);
-        this.currentLoadData = date;
+    this.service.getVauchers(localStorage.getItem("idUser")).subscribe((data: []) => {
+      if (data !== null) {
+        console.log(data);
+        this.currentLoadData = data.sort(function(a, b) {
+          return b["id"] - a["id"];
+        });;
         this.gridData = process(this.currentLoadData, this.state);
         this["loadingGridVaucher"] = false;
       } else {
@@ -139,6 +141,7 @@ export class VaucherComponent implements OnInit {
     this.dateredeemedConst = "";
     this.customerUser = null;
     this.customerUserConsumer = null;
+    this.user = null;
     // this.selectedUser = null;
   }
 
