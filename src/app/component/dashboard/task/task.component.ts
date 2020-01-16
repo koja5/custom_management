@@ -141,10 +141,12 @@ export class TaskComponent implements OnInit {
 
     this.customer.getCustomers(localStorage.getItem("superadmin"), val => {
       console.log(val);
-      this.customerUsers = val.sort((a, b) =>
-        a["shortname"].localeCompare(b["shortname"])
-      );
-      this.loading = false;
+      setTimeout(() => {
+        this.customerUsers = val.sort((a, b) =>
+          String(a["shortname"]).localeCompare(String(b["shortname"]))
+        );
+        this.loading = false;
+      }, 500);
     });
 
     this.message.getTheme().subscribe(mess => {
@@ -223,10 +225,10 @@ export class TaskComponent implements OnInit {
     if (
       localStorage.getItem("selectedStore-" + this.id) !== null &&
       JSON.parse(localStorage.getItem("selectedStore-" + this.id)).length !==
-        0 &&
+      0 &&
       localStorage.getItem("selectedUser-" + this.id) !== null &&
       JSON.parse(localStorage.getItem("selectedUser-" + this.id)).length !==
-        0 &&
+      0 &&
       this.type !== 3
     ) {
       this.calendars = [];
@@ -402,7 +404,7 @@ export class TaskComponent implements OnInit {
           );
           timeDurationInd =
             Number(informationAboutStore.time_therapy) !==
-            Number(this.timeDuration)
+              Number(this.timeDuration)
               ? 1
               : 0;
           timeDuration = Number(informationAboutStore.time_therapy);
@@ -420,7 +422,7 @@ export class TaskComponent implements OnInit {
           } else {
             timeDurationInd =
               Number(informationAboutStore.time_therapy) !==
-              Number(this.timeDuration)
+                Number(this.timeDuration)
                 ? 1
                 : 0;
             timeDuration = Number(informationAboutStore.time_therapy);
@@ -1242,7 +1244,7 @@ export class TaskComponent implements OnInit {
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].end >
-            new Date(date).getHours()) ||
+          new Date(date).getHours()) ||
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start2 <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
@@ -1337,51 +1339,53 @@ export class TaskComponent implements OnInit {
   getParameters() {
     this.customer.getParameters("Complaint").subscribe((data: []) => {
       console.log(data);
-      this.complaintValue = data.sort(function(a, b) {
+      this.complaintValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("Therapy").subscribe((data: []) => {
       console.log(data);
-      this.therapyValue = data.sort(function(a, b) {
+      this.therapyValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("Treatment").subscribe((data: []) => {
       console.log(data);
-      this.treatmentValue = data.sort(function(a, b) {
+      this.treatmentValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("CS").subscribe((data: []) => {
       console.log(data);
-      this.CSValue = data.sort(function(a, b) {
+      this.CSValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("CS").subscribe((data: []) => {
       console.log(data);
-      this.CSValue = data.sort(function(a, b) {
+      this.CSValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("State").subscribe((data: []) => {
       console.log(data);
-      this.stateValue = data.sort(function(a, b) {
+      this.stateValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.service.getCompanyUsers(localStorage.getItem("idUser"), val => {
       console.log(val);
-      this.allUsers = val.sort((a, b) =>
-        a["shortname"].localeCompare(b["shortname"])
-      );
+      if (val.length !== 0) {
+        this.allUsers = val.sort((a, b) =>
+          a["shortname"].localeCompare(b["shortname"])
+        );
+      }
       console.log(this.allUsers);
     });
   }
