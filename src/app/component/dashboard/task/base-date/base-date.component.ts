@@ -69,7 +69,7 @@ export class BaseDateComponent implements OnInit {
   public selectedUser: any;
   public loadingTherapy = false;
   public theme: string;
-
+  public ourFile: File;
   constructor(
     public router: ActivatedRoute,
     public service: CustomersService,
@@ -78,6 +78,7 @@ export class BaseDateComponent implements OnInit {
     public message: MessageService,
     public usersService: UsersService
   ) {}
+
 
   ngOnInit() {
     this.uploader = new FileUploader({

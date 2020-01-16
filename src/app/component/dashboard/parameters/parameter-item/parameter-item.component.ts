@@ -49,6 +49,7 @@ export class ParameterItemComponent implements OnInit {
   public selectedTherapy: any;
   public theme: string;
   public vatTexList: any;
+  public firstVatTexList: any;
   public net_price_value: number;
   public editButton = [];
   public height: any;
@@ -89,8 +90,9 @@ export class ParameterItemComponent implements OnInit {
         this.vatTexList = data.sort(function(a, b) {
           return a["sequence"] - b["sequence"];
         });
-
+        this.firstVatTexList= this.vatTexList;
       });
+     
     }
 
     this.view = this.service.pipe(
@@ -164,6 +166,7 @@ export class ParameterItemComponent implements OnInit {
   public editHandler({ sender, rowIndex, dataItem }) {
     this.closeEditor(sender);
     console.log(dataItem);
+
     if (this.type === "Doctors") {
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
@@ -201,14 +204,16 @@ export class ParameterItemComponent implements OnInit {
     }
 
     this.editedRowIndex = rowIndex;
-
     sender.editRow(rowIndex, this.formGroup);
     this.refreshData();
   }
 
+
   public cancelHandler({ sender, rowIndex }) {
     this.editedRowIndex=-1;
+    this.vatTexList= this.firstVatTexList;
     this.closeEditor(sender, rowIndex);
+    this.refreshData();
     this.changeTheme(this.theme);
   }
 
