@@ -141,9 +141,11 @@ export class TaskComponent implements OnInit {
 
     this.customer.getCustomers(localStorage.getItem("superadmin"), val => {
       console.log(val);
-      this.customerUsers = val.sort((a, b) =>
-        a["shortname"].localeCompare(b["shortname"])
-      );
+      if (val.length !== 0) {
+        this.customerUsers = val.sort((a, b) =>
+          a["shortname"].localeCompare(b["shortname"])
+        );
+      }
       this.loading = false;
     });
 
@@ -196,8 +198,9 @@ export class TaskComponent implements OnInit {
     }
     this.storeService.getStore(localStorage.getItem("superadmin"), val => {
       this.store = val;
-      this.language.selectStore += this.store[0].storename + ")";
-
+      if (this.store.length !== 0) {
+        this.language.selectStore += this.store[0].storename + ")";
+      }
       if (!isNaN(this.selectedStoreId) && this.selectedStoreId !== undefined) {
         const informationAboutStore = this.getStartEndTimeForStore(
           this.store,
