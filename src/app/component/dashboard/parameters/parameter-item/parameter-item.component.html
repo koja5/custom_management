@@ -156,8 +156,8 @@
     <kendo-grid-column field="firstname" title="First name"></kendo-grid-column>
     <kendo-grid-column field="lastname" title="Last name"></kendo-grid-column>
     <kendo-grid-column field="gender" title="Gender">
-      <ng-template kendoGridCellTemplate let-dataItem>
-        <kendo-combobox [data]="genderList" [(ngModel)]="dataItem.gender" (selectionChange)="selectionGender($event)">
+      <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+        <kendo-combobox [data]="genderList" [(ngModel)]="dataItem.gender" [disabled]="editedRowIndex!=rowIndex" (selectionChange)="selectionGender($event)">
         </kendo-combobox>
       </ng-template>
     </kendo-grid-column>
@@ -168,9 +168,9 @@
     <kendo-grid-column field="telephone" title="Telephone"></kendo-grid-column>
     <kendo-grid-column field="email" title="Email"></kendo-grid-column>
     <kendo-grid-column field="doctor_type" title="Doctor type">
-      <ng-template kendoGridCellTemplate let-dataItem *ngIf="doctorTypeList !== undefined">
+      <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex" *ngIf="doctorTypeList !== undefined">
         <kendo-combobox [data]="doctorTypeList" [textField]="'title'" [valueField]="'id'"
-          (selectionChange)="selectionDoctorType($event)" [(ngModel)]="dataItem.doctor_type" [valuePrimitive]="true"
+          (selectionChange)="selectionDoctorType($event)" [(ngModel)]="dataItem.doctor_type" [disabled]="editedRowIndex!=rowIndex" [valuePrimitive]="true"
           name="doctorType"></kendo-combobox>
       </ng-template>
     </kendo-grid-column>

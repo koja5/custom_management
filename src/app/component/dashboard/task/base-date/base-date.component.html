@@ -347,7 +347,6 @@
               (click)="changeTab('physical_illness')">{{language.physicalIllness}}</a>
           </li>
         </ul>
-
         <!--PROFILE-->
         <div class="tab-content" *ngIf="currentTab === 'profile'">
           <div id="profile-tab" class="tab-pane active">
@@ -359,8 +358,9 @@
                       src="../../../../assets/images/users/male-patient.png" class="rounded-circle">
                     <img *ngIf="data.gender !== '' && data.gender === 'female'" alt="example image"
                       style="width: 190px;" src="../../../../assets/images/users/female-patient.png"
-                      class="rounded-circle">
+                      class="rounded-circle">                   
                     <h2 class="font-semibold">{{data.firstname}} {{data.lastname}}</h2>
+     
                   </div>
                   <div class="col-md-8 col-xs-12">
                       <div class="col-sm-6" style="margin-bottom: 3vh;">
