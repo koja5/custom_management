@@ -539,7 +539,7 @@ export class TaskComponent implements OnInit {
       } else {
         formValue.creator_id = localStorage.getItem("idUser");
       }
-      console.log(formValue);
+      
       if (isNew) {
         formValue = this.colorMapToId(formValue);
         this.addTherapy(this.customerUser["id"]);

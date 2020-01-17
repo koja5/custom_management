@@ -41,8 +41,8 @@ export class CustomersComponent implements OnInit {
   public selectedUser: any;
   public imagePath = "defaultUser";
   public loading = true;
-  public uploadSaveUrl = 'http://localhost:3000/api/uploadImage'; // should represent an actual API endpoint
-  // public uploadSaveUrl = "http://78.47.206.131:8081/uploadImage";
+  // public uploadSaveUrl = 'http://localhost:3000/api/uploadImage'; // should represent an actual API endpoint
+  public uploadSaveUrl = "http://78.47.206.131:8081/uploadImage";
   public uploadRemoveUrl = "removeUrl"; // should represent an actual API endpoint
   // private spread: GC.Spread.Sheets.Workbook;
   // private excelIO;
@@ -181,7 +181,7 @@ export class CustomersComponent implements OnInit {
   public dataStateChange(state: DataStateChangeEvent): void {
     this.state = state;
     this.gridData = process(this.currentLoadData, this.state);
-    if (this.state.filter.filters.length === 0) {
+    if (this.state.filter !== null && this.state.filter.filters.length === 0) {
       this.gridData.total = this.currentLoadData.length;
     }
     this.changeTheme(this.theme);
