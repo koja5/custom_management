@@ -73,7 +73,7 @@ export class CustomersComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.height = window.innerHeight - 110;
+    this.height = window.innerHeight - 191;
     this.height += 'px'; 
     this.getCustomers();
     if (localStorage.getItem("language") !== null) {
@@ -406,7 +406,7 @@ export class CustomersComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     console.log(window.innerHeight);
-    this.height = window.innerHeight - 110;
+    this.height = window.innerHeight - 191;
     this.height += 'px';
   }
 }

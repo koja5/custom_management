@@ -63,7 +63,7 @@ export class StoreComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.height = window.innerHeight - 110;
+    this.height = window.innerHeight - 191;
     this.height += 'px'; 
     this.idUser = localStorage.getItem("superadmin");
     if (localStorage.getItem("theme") !== null) {
@@ -426,7 +426,7 @@ export class StoreComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     console.log(window.innerHeight);
-    this.height = window.innerHeight - 110;
+    this.height = window.innerHeight - 191;
     this.height += 'px';
   }
 }

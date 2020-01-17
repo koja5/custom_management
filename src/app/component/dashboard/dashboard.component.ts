@@ -24,10 +24,11 @@ export class DashboardComponent implements OnInit {
   public language: any;
   public allThemes: any;
   public allLanguage: any;
-  public imagePath: any;
+  public imagePath: any = '../../../assets/images/users/defaultUser.png';
   public selectedNode = 'calendar';
   public selectedNodeModel = new NavigationMenuModel();
   public typeOfDesign = 'vertical';
+  public user: any;
 
   constructor(
     public router: Router,
@@ -133,6 +134,7 @@ export class DashboardComponent implements OnInit {
   getMe() {
     this.users.getMe(localStorage.getItem('idUser'), val => {
       console.log(val);
+      this.user = val[0];
       if (val[0].img !== null && val[0].img.data !== undefined && val[0].img.data.length !== 0) {
         const TYPED_ARRAY = new Uint8Array(val[0].img.data);
         const STRING_CHAR = String.fromCharCode.apply(null, TYPED_ARRAY);
@@ -148,9 +150,17 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  hideShowSidebar() {
+  /*hideShowSidebar() {
     if (this.sidebar === '') {
       this.sidebar = 'enlarged';
+    } else {
+      this.sidebar = '';
+    }
+  }*/
+
+  hideShowSidebar() {
+    if (this.sidebar === '') {
+      this.sidebar = 'sidemenu-closed';
     } else {
       this.sidebar = '';
     }
