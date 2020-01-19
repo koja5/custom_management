@@ -20,6 +20,7 @@ import { UserDetailsComponent } from './component/dashboard/users/user-details/u
 import { ParametersComponent } from './component/dashboard/parameters/parameters.component';
 import { StatisticComponent } from './component/dashboard/statistic/statistic.component';
 import { VaucherComponent } from './component/dashboard/vaucher/vaucher.component';
+import { SettingsComponent } from './component/dashboard/settings/settings.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '', pathMatch: 'full' },
@@ -36,7 +37,8 @@ const routes: Routes = [
       { path: 'customers', component: CustomersComponent, outlet: 'dashboard' },
       { path: 'parameters', component: ParametersComponent, outlet: 'dashboard' },
       { path: 'statistic', component: StatisticComponent, outlet: 'dashboard' },
-      { path: 'vaucher', component: VaucherComponent, outlet: 'dashboard'}
+      { path: 'vaucher', component: VaucherComponent, outlet: 'dashboard'},
+      { path: 'settings', component: SettingsComponent, outlet: 'dashboard' }
     ]
   },
   { path: 'document/server/routes/uploads/:id', component: DocumentPreviewComponent }

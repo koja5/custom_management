@@ -1,350 +1,521 @@
-<div class="vd_content-section clearfix" *ngIf="data !== undefined">
-  <div class="row">
-    <div class="col-sm-3">
-      <div class="panel widget light-widget panel-bd-top">
-        <div class="no-title"> </div>
-        <div class="panel-body">
-          <div class="text-center vd_info-parent" > <img alt="example image" style="width: 190px;" [src]="imagePath"
-              class="rounded-circle"> 
-              <a href="#"><span class="fa fa-pencil edit-image"></span></a>
-         </div>   
-         <input type="file" value="123" name="" id="" />
-                     
-          <h2 class="font-semibold mgbt-xs-5">{{data.firstname}} {{data.lastname}}</h2>
-          <h4 *ngIf="data.type === 0">Superadmin</h4>
-          <h4 *ngIf="data.type === 1">Admin</h4>
-          <h4 *ngIf="data.type === 2">Manager</h4>
-          <h4 *ngIf="data.type === 3">Employee</h4>
-          <div class="mgtp-20">
-            <table class="table table-striped table-hover">
-              <tbody>
-                <tr>
-                  <td style="width:60%;">Status</td>
-                  <td>
-                    <span *ngIf="data.active" class="label label-success">Active</span>
-                    <span *ngIf="!data.active" class="label label-danger">Inactive</span>
-                  </td>
-                </tr>
-                <!--<tr>
-                  <td>User Rating</td>
-                  <td><i class="fa fa-star vd_yellow fa-fw"></i><i class="fa fa-star vd_yellow fa-fw"></i><i
-                      class="fa fa-star vd_yellow fa-fw"></i><i class="fa fa-star vd_yellow fa-fw"></i><i
-                      class="fa fa-star vd_yellow fa-fw"></i></td>
-                </tr>
-                <tr>
-                  <td>Member Since</td>
-                  <td> Jan 07, 2014 </td>
-                </tr>-->
-              </tbody>
-            </table>
+<div class="row" *ngIf="data !== undefined">
+  <div class="col-md-12">
+    <!-- BEGIN PROFILE SIDEBAR -->
+    <div class="profile-sidebar">
+      <div class="card card-topline-aqua">
+        <div class="card-body no-padding height-9">
+          <div class="row">
+            <div class="profile-userpic">
+              <img [src]="imagePath" class="img-responsive" alt=""> </div>
+          </div>
+          <div class="profile-usertitle">
+            <div class="profile-usertitle-name">
+              <span class="username username-hide-on-mobile" *ngIf="data.lastname !== '' && data.firstname !== ''">
+                {{data.lastname}} {{data.firstname}} </span>
+              <span class="username username-hide-on-mobile" *ngIf="data.lastname === '' || data.firstname === ''">
+                {{data.shortname}} </span>
+            </div>
+            <div class="profile-usertitle-job">
+              <span *ngIf="data.type === 0">Superadmin</span>
+              <span *ngIf="data.type === 1">Admin</span>
+              <span *ngIf="data.type === 2">Manager</span>
+              <span *ngIf="data.type === 3">Employee</span>
+            </div>
+          </div>
+          <ul class="list-group list-group-unbordered">
+            <li class="list-group-item">
+              <b>{{language['firstname']}}</b> 
+              <span class="pull-right a-color" *ngIf="data.firstname === ''">{{language['noInformation']}}</span>
+              <span class="pull-right a-color" *ngIf="data.firstname !== ''">{{data.firstname}}</span>
+            </li>
+            <li class="list-group-item">
+              <b>{{language['lastname']}}</b> 
+              <span class="pull-right a-color" *ngIf="data.lastname === ''">{{language['noInformation']}}</span>
+              <span class="pull-right a-color" *ngIf="data.lastname !== ''">{{data.lastname}}</span>
+            </li>
+            <li class="list-group-item">
+              <b>{{language['email']}}</b> 
+              <span class="pull-right a-color" *ngIf="data.email === ''">{{language['noInformation']}}</span>
+              <span class="pull-right a-color" *ngIf="data.email !== ''">{{data.email}}</span>
+            </li>
+          </ul>
+          <!-- END SIDEBAR USER TITLE -->
+          <!-- SIDEBAR BUTTONS -->
+          <div class="profile-userbuttons">
+            <span *ngIf="data.active" class="label status-green">Active</span>
+            <span *ngIf="!data.active" class="label status-red">Inactive</span>
+          </div>
+          <!-- END SIDEBAR BUTTONS -->
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head card-topline-aqua">
+          <header>{{language['aboutMe']}}</header>
+        </div>
+        <div class="card-body no-padding height-9">
+          <div class="profile-desc">
+            <span *ngIf="data.description === undefined || data.description === ''">
+              {{language['noInformation']}}
+            </span>
+            <span *ngIf="data.description !== undefined && data.description !== ''">
+              {{data.description}}
+            </span>
+          </div>
+          <ul class="list-group list-group-unbordered">
+            <li class="list-group-item">
+              <b>{{language['birthday']}} </b>
+              <div class="profile-desc-item pull-right">
+                <span *ngIf="data.birthday === ''"> {{language['noInformation']}} </span>
+                <span *ngIf="data.birthday !== ''"> {{data.birthday}} </span>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <b>{{language['sincecompany']}} </b>
+              <div class="profile-desc-item pull-right">
+                <span *ngIf="data.incompanysince === ''"> {{language['noInformation']}} </span>
+                <span *ngIf="data.incompanysince !== ''"> {{data.incompanysince}} </span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head card-topline-aqua">
+          <header>{{language['place']}}</header>
+        </div>
+        <div class="card-body no-padding height-9">
+          <div class="row text-center m-t-10">
+            <div class="col-md-12">
+              <p *ngIf="data.street === ''">{{language['noInformation']}}</p>
+              <p *ngIf="data.street !== ''">{{data.street}}
+                <br> {{data.place}}, {{data.zipcode}}</p>
+            </div>
           </div>
         </div>
       </div>
-
-    </div>
-    <div class="col-sm-9">
-      <div class="tabs widget">
-        <ul class="nav nav-tabs widget">
-          <li [ngClass]="currentTab === 'profile' ? 'active' : ''"> <a (click)="changeTab('profile')">Profile</a></li>
-          <li [ngClass]="currentTab === 'company' ? 'active' : ''"> <a (click)="changeTab('company')">Company</a></li>
-        </ul>
-        <div class="tab-content" *ngIf="currentTab === 'profile'">
-          <div id="profile-tab" class="tab-pane active">
-            <div class="pd-20">
-              <div class="vd_info tr" style="float: right;"> <a class="btn vd_btn btn-xs vd_bg-yellow"
-                  (click)="user = true"> <i class="fa fa-pencil append-icon"></i> Edit </a> </div>
-              <h3 class="mgbt-xs-15 mgtp-10 font-semibold"><i class="fa fa-user"></i> ABOUT</h3>
-              <div class="row">
-                <div class="col-sm-6">
-                  <div class="row mgbt-xs-0">
-                    <label class="col-xs-5 control-label">First Name:</label>
-                    <div class="col-xs-7 controls">{{data.firstname}}</div>
-                    <!-- col-sm-10 -->
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="row mgbt-xs-0">
-                    <label class="col-xs-5 control-label">Last Name:</label>
-                    <div class="col-xs-7 controls">{{data.lastname}}</div>
-                    <!-- col-sm-10 -->
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="row mgbt-xs-0">
-                    <label class="col-xs-5 control-label">User Name:</label>
-                    <div class="col-xs-7 controls">{{data.shortname}}</div>
-                    <!-- col-sm-10 -->
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="row mgbt-xs-0">
-                    <label class="col-xs-5 control-label">Email:</label>
-                    <div class="col-xs-7 controls">{{data.email}}</div>
-                    <!-- col-sm-10 -->
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="row mgbt-xs-0">
-                    <label class="col-xs-5 control-label">Street:</label>
-                    <div class="col-xs-7 controls">{{data.street}}</div>
-                    <!-- col-sm-10 -->
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="row mgbt-xs-0">
-                    <label class="col-xs-5 control-label">Zip code:</label>
-                    <div class="col-xs-7 controls">{{data.zipcode}}</div>
-                    <!-- col-sm-10 -->
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="row mgbt-xs-0">
-                    <label class="col-xs-5 control-label">Place:</label>
-                    <div class="col-xs-7 controls">{{data.place}}</div>
-                    <!-- col-sm-10 -->
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="row mgbt-xs-0">
-                    <label class="col-xs-5 control-label">Phone:</label>
-                    <div class="col-xs-7 controls">{{data.phone}}</div>
-                    <!-- col-sm-10 -->
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="row mgbt-xs-0">
-                    <label class="col-xs-5 control-label">Telephone:</label>
-                    <div class="col-xs-7 controls">{{data.telephone}}</div>
-                    <!-- col-sm-10 -->
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="row mgbt-xs-0">
-                    <label class="col-xs-5 control-label">Birthday:</label>
-                    <div class="col-xs-7 controls">{{data.birthday}}</div>
-                    <!-- col-sm-10 -->
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="row mgbt-xs-0">
-                    <label class="col-xs-5 control-label">In company since:</label>
-                    <div class="col-xs-7 controls">{{data.incompanysince}}</div>
-                    <!-- col-sm-10 -->
-                  </div>
+      <div class="card">
+        <div class="card-head card-topline-aqua">
+          <header>Work Progress</header>
+        </div>
+        <div class="card-body no-padding height-9">
+          <div class="work-monitor work-progress">
+            <div class="states">
+              <div class="info">
+                <div class="desc pull-left">OPD</div>
+                <div class="percent pull-right">50%</div>
+              </div>
+              <div class="progress progress-xs">
+                <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar"
+                  aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 70%">
+                  <span class="sr-only">50% </span>
                 </div>
               </div>
-              <hr class="pd-10">
-
             </div>
-            <!-- pd-20 -->
-          </div>
-          <!-- home-tab -->
-
-
-
-
-
-        </div> <!-- row -->
-        <div *ngIf="currentTab === 'company'">
-          <div id="profile-tab" class="tab-pane active">
-            <div class="pd-20">
-              <div class="vd_info tr" style="float: right;">
-                <h3 class="mgbt-xs-15 mgtp-10 font-semibold"><i class="fa fa-map-marker"></i> ABOUT LOCATION</h3>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <div class="row mgbt-xs-0">
-                      <label class="col-xs-5 control-label">Store Name:</label>
-                      <div class="col-xs-7 controls">{{companyData.storename}}</div>
-                      <!-- col-sm-10 -->
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="row mgbt-xs-0">
-                      <label class="col-xs-5 control-label">Street:</label>
-                      <div class="col-xs-7 controls">{{companyData.street}}</div>
-                      <!-- col-sm-10 -->
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="row mgbt-xs-0">
-                      <label class="col-xs-5 control-label">Zip code:</label>
-                      <div class="col-xs-7 controls">{{companyData.zipcode}}</div>
-                      <!-- col-sm-10 -->
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="row mgbt-xs-0">
-                      <label class="col-xs-5 control-label">Place:</label>
-                      <div class="col-xs-7 controls">{{companyData.place}}</div>
-                      <!-- col-sm-10 -->
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="row mgbt-xs-0">
-                      <label class="col-xs-5 control-label">Email:</label>
-                      <div class="col-xs-7 controls">{{companyData.email}}</div>
-                      <!-- col-sm-10 -->
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="row mgbt-xs-0">
-                      <label class="col-xs-5 control-label">Telephone:</label>
-                      <div class="col-xs-7 controls">{{companyData.telephone}}</div>
-                      <!-- col-sm-10 -->
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="row mgbt-xs-0">
-                      <label class="col-xs-5 control-label">Mobile:</label>
-                      <div class="col-xs-7 controls">{{companyData.mobile}}</div>
-                      <!-- col-sm-10 -->
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="row mgbt-xs-0">
-                      <label class="col-xs-5 control-label">Comment:</label>
-                      <div class="col-xs-7 controls">{{companyData.comment}}</div>
-                      <!-- col-sm-10 -->
-                    </div>
-                  </div>
-                </div>
-                <hr class="pd-10">
-
+            <div class="states">
+              <div class="info">
+                <div class="desc pull-left">Operations</div>
+                <div class="percent pull-right">85%</div>
               </div>
-              <!-- pd-20 -->
+              <div class="progress progress-xs">
+                <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar"
+                  aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+                  <span class="sr-only">85% </span>
+                </div>
+              </div>
+            </div>
+            <div class="states">
+              <div class="info">
+                <div class="desc pull-left">Patient visit</div>
+                <div class="percent pull-right">20%</div>
+              </div>
+              <div class="progress progress-xs">
+                <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar"
+                  aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 35%">
+                  <span class="sr-only">20% </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <!-- END BEGIN PROFILE SIDEBAR -->
+    <!-- BEGIN PROFILE CONTENT -->
+    <div class="profile-content">
+      <div class="row">
+        <div class="card">
+          <div class="card-topline-aqua">
+            <header></header>
+          </div>
+          <div class="white-box">
+            <!-- Nav tabs -->
+            <div class="p-rl-20">
+              <ul class="nav customtab nav-tabs" role="tablist">
+                <li class="nav-item"><a (click)="changeTab('profile')" class="nav-link" [ngClass]="currentTab === 'profile' ? 'active' : ''">{{language['aboutMe']}}</a></li>
+                <li class="nav-item"><a (click)="changeTab('company')" class="nav-link" [ngClass]="currentTab === 'company' ? 'active' : ''">{{language['company']}}</a></li>
+              </ul>
+            </div>
+            <!-- Tab panes -->
+            <div class="tab-content" *ngIf="currentTab === 'profile'">
+              <div class="tab-pane active fontawesome-demo" id="tab1">
+                <div id="biography">
+                  <div class="row">
+                    <div class="col-md-3 col-xs-6 b-r"> <strong> {{language['fullName']}} </strong>
+                      <br>
+                      <p class="text-muted">
+                        <span *ngIf="data.firstname === '' || data.lastname === ''">
+                          {{language['noInformation']}}
+                        </span>
+                        <span *ngIf="data.firstname !== '' && data.lastname !== ''">
+                          {{data.lastname}} {{data.firstname}}
+                        </span>
+                      </p>
+                    </div>
+                    <div class="col-md-3 col-xs-6 b-r"> <strong>{{language['mobile']}}</strong>
+                      <br>
+                      <p class="text-muted">
+                        <span *ngIf="data.mobile === ''">
+                          {{language['noInformation']}}
+                        </span>
+                        <span *ngIf="data.mobile !== ''">
+                          {{data.mobile}}
+                        </span>
+                      </p>
+                    </div>
+                    <div class="col-md-3 col-xs-6 b-r"> <strong>{{language['email']}}</strong>
+                      <br>
+                      <p class="text-muted">
+                        <span *ngIf="data.email === ''">
+                          {{language['noInformation']}}
+                        </span>
+                        <span *ngIf="data.email !== ''">
+                          {{data.email}}
+                        </span>
+                      </p>
+                    </div>
+                    <div class="col-md-3 col-xs-6"> <strong>{{language['place']}}</strong>
+                      <br>
+                      <p class="text-muted">
+                        <span *ngIf="data.place === ''">
+                          {{language['noInformation']}}
+                        </span>
+                        <span *ngIf="data.place !== ''">
+                          {{data.place}}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                  <hr>
+                  <p class="m-t-30">Maintaining current and complete documentation in the medical record that reflects the care and services provided to the patient
+                    Performing history and physical assessments as indicated by his/her specialty area
+                    Assesses patient health by interviewing patients; performing physical examinations; obtaining, updating, and studying medical histories
+                    Performs therapeutic procedures by administering injections and immunizations; suturing; managing wounds and infections
+                    Manages medical and surgical emergencies</p>
+                  <p>Developing a plan of treatment / care for the patient that also includes education and follow-up visits
+                    Orders, performs, and interprets diagnostic studies such as lab work and x-rays</p>
+                  <p>Great opportunity to walk into an established, well-respected clinic and immediately begin building your practice
+                    Great opportunity to walk into an established well-respected clinic and immediately begin building your practice
+                    Patient encounters average between 18 – 22 patients per day
+                    32 patient contact hours per week</p>
+                  <p>When I offer or recommend products, I do so because I have
+                    actively researched them and find they are
+                    the best in that category for your health. I ignore
+                    substandard products, and products not directly
+                    pertinent to your health, regardless of any potential
+                    financial upsid</p>
+                  <br>
+                  <h4 class="font-bold">Education</h4>
+                  <hr>
+                  <ul>
+                    <li>M.B.B.S.,Gujarat University, Ahmedabad,India.</li>
+                    <li>M.S.,Gujarat University, Ahmedabad, India.</li>
+                    <li>SPINAL FELLOWSHIP Dr. John Adam, Allegimeines
+                      Krakenhaus, Schwerin, Germany.</li>
+                    <li>Fellowship in Endoscopic Spine Surgery Phoenix, USA.
+                    </li>
+                    <li>D.N.B from AIIMS</li>
+                  </ul>
+                  <br>
+                  <h4 class="font-bold">Experience</h4>
+                  <hr>
+                  <ul>
+                    <li>One year rotatory internship from April-2009 to
+                      march-2010 at B. J. Medical College, Ahmedabad.</li>
+                    <li>Three year residency at V.S. General Hospital as a
+                      resident in orthopedics from April - 2008 to
+                      April - 2011.</li>
+                    <li>I have worked as a part time physiotherapist in Apang
+                      manav mandal from 1st june 2004 to 31st jan
+                      2005.</li>
+                    <li>Clinical and Research fellowship in Scoliosis at
+                      Shaurashtra University and Medical Centre (KUMC) ,
+                      Krishna Hospital , Rajkot from April 2013 to June 2013.
+                    </li>
+                    <li>2.5 Years Worked at Mahatma Gandhi General Hospital,
+                      Surendranagar.</li>
+                    <li>Consultant Orthopedics Surgeon Jalna 2 years.</li>
+                  </ul>
+                  <br>
+                  <h4 class="font-bold">Conferences, Cources &amp; Workshop Attended
+                  </h4>
+                  <hr>
+                  <ul>
+                    <li>3 days conference of Indian Orthopedics Association
+                      (IOACON) held in December 2001 in Ahmedabad,
+                      Gujarat.</li>
+                    <li>4th Annual Karnataka state physiotherapy students
+                      conference</li>
+                    <li>3 day conference of Association of Spine Surgeons of
+                      India(ASSICON) held in Jan 2007 in Ahmedabad,
+                      India.</li>
+                    <li>16th Annual Conference GOACON ' 98 Ahmedabad CME 6th
+                      February, 1998</li>
+                    <li>5 day conference of Indian Orthopedic Association
+                      (IOACON) held in Dec.2005 in Mumbai, India.</li>
+                    <li>Indian Medical Association Kapadwanj C.M.E. on 22nd
+                      April, 2004.</li>
+                    <li>Post Graduate lecture course for Gujarat Orthopaedic
+                      Association Ahmedabad 6th to 7th August, 2005.</li>
+                  </ul>
+                  <br>
+                  <h4 class="font-bold">Professional Affiliations </h4>
+                  <hr>
+                  <ul>
+                    <li>Life member: Association of Spine Surgeons’ of India.
+                    </li>
+                    <li>Life member: Gujarat Orthopaedic Association.</li>
+                    <li>Life Member: The Indian Society for Bone and Mineral
+                      Research (ISBMR).</li>
+                    <li>Life member: Ahmedabad Orthopaedic Society</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="tab-pane" id="tab2">
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="full-width p-rl-20">
+                      <div class="panel">
+                        <form>
+                          <textarea class="form-control p-text-area" rows="4"
+                            placeholder="Whats in your mind today?"></textarea>
+                        </form>
+                        <footer class="panel-footer">
+                          <button class="btn btn-post pull-right">Post</button>
+                          <ul class="nav nav-pills p-option">
+                            <li>
+                              <a href="#"><i class="fa fa-user"></i></a>
+                            </li>
+                            <li>
+                              <a href="#"><i class="fa fa-camera"></i></a>
+                            </li>
+                            <li>
+                              <a href="#"><i class="fa  fa-location-arrow"></i></a>
+                            </li>
+                            <li>
+                              <a href="#"><i class="fa fa-meh-o"></i></a>
+                            </li>
+                          </ul>
+                        </footer>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            
+            <div class="tab-content" *ngIf="currentTab === 'company'">
+              <div class="tab-pane active fontawesome-demo" id="tab1">
+                <div id="biography">
+                  <div class="row">
+                    <div class="col-md-3 col-xs-6 b-r"> <strong>{{language['storeName']}}</strong>
+                      <br>
+                      <p class="text-muted">
+                        <span *ngIf="companyData === undefined || companyData.length === 0 || companyData.storename === ''">{{language['noInformation']}}</span>
+                        <span *ngIf="companyData.storename !== ''">{{companyData.storename}}</span>
+                      </p>
+                    </div>
+                    <div class="col-md-3 col-xs-6 b-r"> <strong>{{language['street']}}</strong>
+                      <br>
+                      <p class="text-muted">
+                        <span *ngIf="companyData === undefined || companyData.length === 0 || companyData.street === ''">{{language['noInformation']}}</span>
+                        <span *ngIf="companyData.street !== ''">{{companyData.street}}</span>
+                      </p>
+                    </div>
+                    <div class="col-md-3 col-xs-6 b-r"> <strong>{{language['zipCode']}}</strong>
+                      <br>
+                      <p class="text-muted">
+                        <span *ngIf="companyData === undefined || companyData.length === 0 || companyData.zipcode === ''">{{language['noInformation']}}</span>
+                        <span *ngIf="companyData.zipcode !== ''">{{companyData.zipcode}}</span>
+                      </p>
+                    </div>
+                    <div class="col-md-3 col-xs-6 b-r"> <strong>{{language['place']}}</strong>
+                      <br>
+                      <p class="text-muted">
+                        <span *ngIf="companyData === undefined || companyData.length === 0 || companyData.place === ''">{{language['noInformation']}}</span>
+                        <span *ngIf="companyData.place !== ''">{{companyData.place}}</span>
+                      </p>
+                    </div>
+                    <div class="col-md-3 col-xs-6 b-r"> <strong>{{language['email']}}</strong>
+                      <br>
+                      <p class="text-muted">
+                        <span *ngIf="companyData === undefined || companyData.length === 0 || companyData.email === ''">{{language['noInformation']}}</span>
+                        <span *ngIf="companyData.email !== ''">{{companyData.email}}</span>
+                      </p>
+                    </div>
+                    <div class="col-md-3 col-xs-6 b-r"> <strong>{{language['telephone']}}</strong>
+                      <br>
+                      <p class="text-muted">
+                        <span *ngIf="companyData === undefined || companyData.length === 0 || companyData.telephone === ''">{{language['noInformation']}}</span>
+                        <span *ngIf="companyData.telephone !== ''">{{companyData.telephone}}</span>
+                      </p>
+                    </div>
+                    <div class="col-md-3 col-xs-6 b-r"> <strong>{{language['mobile']}}</strong>
+                      <br>
+                      <p class="text-muted">
+                        <span *ngIf="companyData === undefined || companyData.length === 0 || companyData.mobile === ''">{{language['noInformation']}}</span>
+                        <span *ngIf="companyData.mobile !== ''">{{companyData.mobile}}</span>
+                      </p>
+                    </div>
+                    <div class="col-md-3 col-xs-6 b-r"> <strong>{{language['comment']}}</strong>
+                      <br>
+                      <p class="text-muted">
+                        <span *ngIf="companyData === undefined || companyData.length === 0 || companyData.comment === ''">{{language['noInformation']}}</span>
+                        <span *ngIf="companyData.comment !== ''">{{companyData.comment}}</span>
+                      </p>
+                    </div>
+                  </div>
+                  <hr>
+                  <p class="m-t-30">Completed my graduation in Gynaecologist
+                    Medicine from the well known and renowned
+                    institution of India – SARDAR PATEL MEDICAL COLLEGE, BARODA
+                    in 2000-01, which was affiliated to M.S.
+                    University. I ranker in University exams from the same
+                    university from 1996-01.</p>
+                  <p>Worked as Professor and Head of the department ; Community
+                    medicine Department at Sterline Hospital,
+                    Rajkot, Gujarat from 2003-2015 </p>
+                  <p>And I was lucky to train in a collegial environment where we
+                    called most of our attendings by their
+                    first names. If only doctors did it that way outside the
+                    Midwest. One of my attendings even made the
+                    argument that it is safer for patient care because it’s
+                    easier for subordinates to raise concerns when
+                    they’re not verbally kowtowing to their superior. I never
+                    respected a white-haired surgeon any less when
+                    I addressed him by his first name. In fact, I saw that in
+                    non-clinical science, it is commonplace for
+                    the most junior researchers to call the most celebrated
+                    senior scientists by their first names.</p>
+                  <p>When I offer or recommend products, I do so because I have
+                    actively researched them and find they are
+                    the best in that category for your health. I ignore
+                    substandard products, and products not directly
+                    pertinent to your health, regardless of any potential
+                    financial upsid</p>
+                  <br>
+                  <h4 class="font-bold">Education</h4>
+                  <hr>
+                  <ul>
+                    <li>M.B.B.S.,Gujarat University, Ahmedabad,India.</li>
+                    <li>M.S.,Gujarat University, Ahmedabad, India.</li>
+                    <li>SPINAL FELLOWSHIP Dr. John Adam, Allegimeines
+                      Krakenhaus, Schwerin, Germany.</li>
+                    <li>Fellowship in Endoscopic Spine Surgery Phoenix, USA.
+                    </li>
+                    <li>D.N.B from AIIMS</li>
+                  </ul>
+                  <br>
+                  <h4 class="font-bold">Experience</h4>
+                  <hr>
+                  <ul>
+                    <li>One year rotatory internship from April-2009 to
+                      march-2010 at B. J. Medical College, Ahmedabad.</li>
+                    <li>Three year residency at V.S. General Hospital as a
+                      resident in orthopedics from April - 2008 to
+                      April - 2011.</li>
+                    <li>I have worked as a part time physiotherapist in Apang
+                      manav mandal from 1st june 2004 to 31st jan
+                      2005.</li>
+                    <li>Clinical and Research fellowship in Scoliosis at
+                      Shaurashtra University and Medical Centre (KUMC) ,
+                      Krishna Hospital , Rajkot from April 2013 to June 2013.
+                    </li>
+                    <li>2.5 Years Worked at Mahatma Gandhi General Hospital,
+                      Surendranagar.</li>
+                    <li>Consultant Orthopedics Surgeon Jalna 2 years.</li>
+                  </ul>
+                  <br>
+                  <h4 class="font-bold">Conferences, Cources &amp; Workshop Attended
+                  </h4>
+                  <hr>
+                  <ul>
+                    <li>3 days conference of Indian Orthopedics Association
+                      (IOACON) held in December 2001 in Ahmedabad,
+                      Gujarat.</li>
+                    <li>4th Annual Karnataka state physiotherapy students
+                      conference</li>
+                    <li>3 day conference of Association of Spine Surgeons of
+                      India(ASSICON) held in Jan 2007 in Ahmedabad,
+                      India.</li>
+                    <li>16th Annual Conference GOACON ' 98 Ahmedabad CME 6th
+                      February, 1998</li>
+                    <li>5 day conference of Indian Orthopedic Association
+                      (IOACON) held in Dec.2005 in Mumbai, India.</li>
+                    <li>Indian Medical Association Kapadwanj C.M.E. on 22nd
+                      April, 2004.</li>
+                    <li>Post Graduate lecture course for Gujarat Orthopaedic
+                      Association Ahmedabad 6th to 7th August, 2005.</li>
+                  </ul>
+                  <br>
+                  <h4 class="font-bold">Professional Affiliations </h4>
+                  <hr>
+                  <ul>
+                    <li>Life member: Association of Spine Surgeons’ of India.
+                    </li>
+                    <li>Life member: Gujarat Orthopaedic Association.</li>
+                    <li>Life Member: The Indian Society for Bone and Mineral
+                      Research (ISBMR).</li>
+                    <li>Life member: Ahmedabad Orthopaedic Society</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="tab-pane" id="tab2">
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="full-width p-rl-20">
+                      <div class="panel">
+                        <form>
+                          <textarea class="form-control p-text-area" rows="4"
+                            placeholder="Whats in your mind today?"></textarea>
+                        </form>
+                        <footer class="panel-footer">
+                          <button class="btn btn-post pull-right">Post</button>
+                          <ul class="nav nav-pills p-option">
+                            <li>
+                              <a href="#"><i class="fa fa-user"></i></a>
+                            </li>
+                            <li>
+                              <a href="#"><i class="fa fa-camera"></i></a>
+                            </li>
+                            <li>
+                              <a href="#"><i class="fa  fa-location-arrow"></i></a>
+                            </li>
+                            <li>
+                              <a href="#"><i class="fa fa-meh-o"></i></a>
+                            </li>
+                          </ul>
+                        </footer>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END PROFILE CONTENT -->
   </div>
-
-  <kendo-window title="{{language.createNewCustomer}}" *ngIf="user" [minWidth]="700" [width]="850" [height]="700"
-    (close)="user = false">
-    <form name="loginForm" class="loginForm" (ngSubmit)="updateUser(user)">
-      <div class="form-group">
-        <div class="email col-md-6 col-xs-12">
-          <p>{{language.username}}</p>
-          <input class="email col-md-12 col-xs-12" type="text" name="shortname" placeholder="Username"
-            [(ngModel)]="data.shortname" shortname.value=''>
-        </div>
-        <div class="col-md-6 col-xs-12 password">
-          <p>{{language.password}}</p>
-          <input class="email col-md-12 col-xs-12" type="password" name="password" placeholder="Password"
-            [(ngModel)]="data.password" password.value='' disabled>
-          <span class="fa {{hideShowEye}} pwd-toggle" (click)="hideShowPassword()" disabled></span>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="email col-md-6 col-xs-12">
-          <p>{{language.firstname}}</p>
-          <input type="text" class="email col-md-12 col-xs-12" name="firstname" placeholder="Firstname"
-            [(ngModel)]="data.firstname" firstname.value=''>
-        </div>
-
-        <div class="email col-md-6 col-xs-12">
-          <p>{{language.lastname}}</p>
-          <input type="text" class="email col-md-12 col-xs-12" name="lastname" placeholder="Lastname"
-            [(ngModel)]="data.lastname" lastname.value=''>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="email col-md-12 col-xs-12">
-          <p>{{language.street}}</p>
-          <input type="text" class="email col-md-12 col-xs-12" name="street" placeholder="Street"
-            [(ngModel)]="data.street" street.value=''>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="email col-md-6 col-xs-12">
-          <p>{{language.zipCode}}</p>
-          <input type="text" class="email col-md-12 col-xs-12" name="zipcode" placeholder="Zipcode"
-            [(ngModel)]="data.zipcode" zipcode.value=''>
-        </div>
-        <div class="email col-md-6 col-xs-12">
-          <p>{{language.place}}</p>
-          <input type="text" class="email col-md-12 col-xs-12" name="place" placeholder="Place" [(ngModel)]="data.place"
-            place.value=''>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="email col-md-6 col-xs-12">
-          <p>{{language.telephone}}</p>
-          <input type="text" class="email col-md-12 col-xs-12" name="telephone" placeholder="Telephone"
-            [(ngModel)]="data.telephone" telephone.value=''>
-        </div>
-
-        <div class="email col-md-6 col-xs-12">
-          <p>{{language.mobile}}</p>
-          <input type="text" class="email col-md-12 col-xs-12" name="mobile" placeholder="mobile"
-            [(ngModel)]="data.mobile" mobile.value=''>
-        </div>
-        <div class="email col-md-6 col-xs-12">
-          <p>{{language.email}}</p>
-          <input type="email" class="email col-md-12 col-xs-12" name="email" placeholder="Email" [(ngModel)]="data.email"
-            disabled>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="email col-md-6 col-xs-12">
-          <p>{{language.birthday}}</p>
-          <input type="text" class="email col-md-12 col-xs-12" name="birthday" placeholder="Birthday"
-            [(ngModel)]="data.birthday" disabled>
-        </div>
-        <div class="email col-md-6 col-xs-12">
-          <p>{{language.inCompanySince}}</p>
-          <input type="text" class="email col-md-12 col-xs-12" name="incompanysince" placeholder="Since in company"
-            [(ngModel)]="data.incompanysince" disabled>
-        </div>
-      </div>
-
-      <!-- ./remember-row -->
-      <div class="form-group">
-        <button kendoButton [primary]="true" type="submit">Update</button>
-      </div>
-    </form>
-  </kendo-window>
-
-
-  <!--<modal #user modalClass="modal-md top-margin loggerModal adminModal">
-    <modal-header>
-        <h2>Update info</h2>
-    </modal-header>
-    <modal-content>
-        <form name="loginForm" class="loginForm" (ngSubmit)="createUser(user)">
-            <div class="form-group">
-                <input type="text" class="email col-md-6 col-xs-12" name="shortname" placeholder="Username" [(ngModel)]="data.shortname" shortname.value=''>
-                <input type="{{hideShow}}" class="col-md-6 col-xs-12 password" name="password" placeholder="Password" [(ngModel)]="data.password" password.value=''>
-                <span class="fa {{hideShowEye}} pwd-toggle" (click)="hideShowPassword()"></span>
-            </div>
-            <div class="form-group">
-                <input type="text" class="email col-md-6 col-xs-12" name="firstname" placeholder="Firstname" [(ngModel)]="data.firstname" firstname.value=''>
-                <input type="text" class="email col-md-6 col-xs-12" name="lastname" placeholder="Lastname" [(ngModel)]="data.lastname" lastname.value=''>
-            </div>
-            <div class="form-group">
-                <input type="text" class="email col-md-12 col-xs-12" name="street" placeholder="Street" [(ngModel)]="data.street" street.value=''>
-            </div>
-            <div class="form-group">
-                <input type="text" class="email col-md-6 col-xs-12" name="zipcode" placeholder="Zipcode" [(ngModel)]="data.zipcode" zipcode.value=''>
-                <input type="text" class="email col-md-6 col-xs-12" name="place" placeholder="Place" [(ngModel)]="data.place" place.value=''>
-            </div>
-            <div class="form-group">
-                <input type="text" class="email col-md-4 col-xs-12" name="telephone" placeholder="Telephone" [(ngModel)]="data.telephone" telephone.value=''>
-                <input type="text" class="email col-md-4 col-xs-12" name="mobile" placeholder="mobile" [(ngModel)]="data.mobile" mobile.value=''>
-                <input type="email" class="email col-md-4 col-xs-12" name="email" placeholder="Email" [(ngModel)]="data.email" disabled>
-            </div>
-            <div class="form-group">
-                <input type="text" class="email col-md-6 col-xs-12" name="birthday" placeholder="Birthday" [(ngModel)]="data.birthday" disabled>
-                <input type="text" class="email col-md-6 col-xs-12" name="incompanysince" placeholder="Since in company" [(ngModel)]="data.incompanysince" disabled>
-            </div>
-
-            <div class="form-group">
-                <button class="btn btn-lg btn-{{theme}}" type="submit">Update</button>
-            </div>
-        </form>
-
-    </modal-content>
-    <modal-footer>
-        <button class="btn btn-primary" (click)="user.close()">Close</button>
-    </modal-footer>
-</modal>-->
+</div>

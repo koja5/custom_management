@@ -108,7 +108,7 @@
     "female": "Weiblich",
     "male": "Männlich",
     "createNewCustomer": "Neuen Kunden anlegen",
-    "uploadFromExcel": "Aus Excel hochladen"
+    "uploadFromExcel": "AUS EXCEL HOCHLADEN"
   },
   "dashboard": {
     "profile": "Profil",
@@ -197,14 +197,19 @@
     "comment": "Kommentar",		
     "stateValue": "Zustand",
     "newUser": "Neuer Benutzer",
-    "uploadFromExcel": "Aus Excel hochladen",
+    "uploadFromExcel": "AUS EXCEL HOCHLADEN",
     "exportToExcel": "Nach Excel exportieren",
     "exportToPDF": "Als PDF exportieren",
     "patient": "Geduldig",
     "newCustomer": "Neukunde",
     "baseDate": "Basisdatum",
     "attention": "Beachtung",
-    "physicalComplaint": "Körperliche Beschwerde"
+    "physicalComplaint": "Körperliche Beschwerde",
+    "aboutMe": "Über mich",
+    "company": "Unternehmen",
+    "noInformation": "Keine Information",
+    "fullName": "Vollständiger Name",
+    "storeName": "Store name"
   },
   "store": {
     "exist": "E-Mail ist vorhanden!",
@@ -229,7 +234,7 @@
     "startWork": "Fang an zu arbeiten",
     "endWork": "Arbeit beenden",
     "newStore": "Neuen Ort",
-    "uploadFromExcel": "Aus Excel hochladen",
+    "uploadFromExcel": "AUS EXCEL HOCHLADEN",
     "exportToExcel": "Nach Excel exportieren",
     "exportToPDF": "Als PDF exportieren"
   },

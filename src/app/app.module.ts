@@ -62,6 +62,7 @@ import { ParametersComponent } from './component/dashboard/parameters/parameters
 import { ParameterItemComponent } from './component/dashboard/parameters/parameter-item/parameter-item.component';
 import { StatisticComponent } from './component/dashboard/statistic/statistic.component';
 import { VaucherComponent } from './component/dashboard/vaucher/vaucher.component';
+import { SettingsComponent } from './component/dashboard/settings/settings.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +84,8 @@ import { VaucherComponent } from './component/dashboard/vaucher/vaucher.componen
     MyNavigationComponent,
     MyNavigationViewComponent,
     StatisticComponent,
-    VaucherComponent
+    VaucherComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,

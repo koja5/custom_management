@@ -39,7 +39,7 @@
     "newVaucher": "New vaucher",
     "addVaucher": "Add vaucher",
     "updateVaucher": "Update vaucher",
-    "uploadFromExcel": "Upload from Excel",
+    "uploadFromExcel": "IMPORT FROM EXCEL",
     "exportToExcel": "Export to Excel",
     "exportToPDF": "Export to PDF",
     "pagerPage": "Page",
@@ -115,7 +115,7 @@
     "female": "Female",
     "male": "Male",
     "createNewCustomer": "Create new customer",
-    "uploadFromExcel": "Upload from Excel"
+    "uploadFromExcel": "IMPORT FROM EXCEL"
   },
   "dashboard": {
     "profile": "Profile",
@@ -206,12 +206,17 @@
     "newUser": "New user",
     "exportToExcel": "Export to Excel",
     "exportToPDF": "Export to PDF",
-    "uploadFromExcel": "Upload from Excel",
+    "uploadFromExcel": "IMPORT FROM EXCEL",
     "patient": "Patient",
     "newCustomer": "New customer",
     "baseDate": "Base date",
     "attention": "Attention",
-    "physicalComplaint": "Physical complaint"
+    "physicalComplaint": "Physical complaint",
+    "aboutMe": "About me",
+    "company": "Company",
+    "noInformation": "No information",
+    "fullName": "Full name",
+    "storeName": "Store name"
 
   },
   "store": {
@@ -239,7 +244,7 @@
     "newStore": "New location",
     "exportToExcel": "Export to Excel",
     "exportToPDF": "Export to PDF",
-    "uploadFromExcel": "Upload from Excel"
+    "uploadFromExcel": "IMPORT FROM EXCEL"
   },
   "complaint": [
     "Headache",
