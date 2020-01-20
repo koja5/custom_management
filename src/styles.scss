@@ -2423,7 +2423,7 @@ form.search-form-opened .btn.submit {
     z-index: 999;
 }
 .sidemenu-closed .sidemenu-container.fixed-menu {
-	position: relative;
+	position: fixed;
 }
 .sidemenu-container-reversed .sidemenu-container.fixed-menu {
     right: 0;
