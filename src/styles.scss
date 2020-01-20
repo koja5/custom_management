@@ -11027,9 +11027,13 @@ tr.group:hover {
 }
 
 .k-filter-row td, .k-filter-row th {
-    padding: 4px 0px 4px 16px !important;
+    padding: 4px 0px 4px 4px !important;
 }
 
 kendo-grid-filter-cell-operators {
     width: 35px !important;
+}
+
+.k-grid-aria-root {
+    padding: 0px 15px !important;
 }

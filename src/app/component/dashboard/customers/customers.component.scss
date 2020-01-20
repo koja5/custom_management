@@ -62,17 +62,23 @@ html, body {
   display: none;
   position: absolute;
   background-color: #f1f1f1;
-  min-width: 160px;
+  min-width: 180px;
   z-index: 1;
   box-shadow: 1px 2px 6px 1px grey;
 }
 
 .dropdown-content-grid a {
   color: black;
-  padding: 12px 16px;
+  padding: 12px 12px;
   text-decoration: none;
   display: block;
   text-align: left;
+  font-size: 12px !important;
+}
+
+.dropdown-content-grid a label {
+  margin-bottom: 0px !important;
+  cursor: pointer;
 }
 
 .dropdown-content-grid a:hover {background-color: #ddd}
