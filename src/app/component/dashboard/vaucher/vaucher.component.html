@@ -108,7 +108,10 @@
   </kendo-dialog>
 
   <kendo-dialog title="Please confirm" *ngIf="dialog" (close)="dialog = false" [minWidth]="250" [width]="450">
-    <p style="margin: 30px; text-align: center;">Are you sure you want to continue?</p>
+    <div class="modal-body text-center">
+      <img src="../../../../assets/images/sent.png" alt="" width="50" height="46">
+      <h3>Are you sure want to delete this Voucher?</h3>
+    </div>
     <kendo-dialog-actions>
       <button kendoButton (click)="deleteVaucher('no')">No</button>
       <button kendoButton (click)="deleteVaucher('yes')" primary="true">Yes</button>

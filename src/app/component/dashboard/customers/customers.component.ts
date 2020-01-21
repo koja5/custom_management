@@ -7,7 +7,8 @@ import { UploadEvent, SelectEvent } from "@progress/kendo-angular-upload";
 import {
   DataStateChangeEvent,
   PageChangeEvent,
-  RowArgs
+  RowArgs,
+  DataBindingDirective
 } from "@progress/kendo-angular-grid";
 import { MessageService } from "../../../service/message.service";
 import { CustomerModel } from "../../../models/customer-model";
@@ -24,12 +25,15 @@ const newLocal = "data";
   styleUrls: ["./customers.component.scss"]
 })
 export class CustomersComponent implements OnInit {
+  
+  @ViewChild(DataBindingDirective) dataBinding: DataBindingDirective;
   public customer = false;
   public data = new CustomerModel();
   public unamePattern = "^[a-z0-9_-]{8,15}$";
   public emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$";
   public userType = ["Employee", "Manager", "Admin"];
   public gridData: any;
+  public gridView: any;
   public currentLoadData: any;
   public state: State = {
     skip: 0,
@@ -98,9 +102,11 @@ export class CustomersComponent implements OnInit {
       if (val !== null) {
         this.currentLoadData = val;
         this.gridData = process(val, this.state);
+        this.gridView = this.gridData;
         this.loading = false;
       } else {
         this.gridData[newLocal] = [];
+        this.gridView = this.gridData;
         this.loading = false;
       }
       this.changeTheme(this.theme);
@@ -184,6 +190,7 @@ export class CustomersComponent implements OnInit {
     if (this.state.filter !== null && this.state.filter.filters.length === 0) {
       this.gridData.total = this.currentLoadData.length;
     }
+    this.gridView = this.gridData;
     this.changeTheme(this.theme);
   }
 
@@ -199,6 +206,7 @@ export class CustomersComponent implements OnInit {
         this.state.skip + this.state.take
       )
     };
+    this.gridView = this.gridData;
   }
 
   previewUser(selectedUser) {
@@ -271,6 +279,7 @@ export class CustomersComponent implements OnInit {
         if (XLSX.utils.sheet_to_json(worksheet, { raw: true }).length > 0) {
           this.gridData = this.xlsxToJson(XLSX.utils.sheet_to_json(worksheet, { raw: true }));
           this.fileValue = null;
+          this.gridView = this.gridData;
         }
       }, 50);
     }
@@ -398,4 +407,45 @@ export class CustomersComponent implements OnInit {
     this.height = window.innerHeight - 155;
     this.height += 'px';
   }
+
+  public onFilter(inputValue: string): void {
+    this.gridView = process(this.gridData.data, {
+        filter: {
+            logic: "or",
+            filters: [
+                {
+                    field: 'shortname',
+                    operator: 'contains',
+                    value: inputValue
+                },
+                {
+                    field: 'firstname',
+                    operator: 'contains',
+                    value: inputValue
+                },
+                {
+                    field: 'lastname',
+                    operator: 'contains',
+                    value: inputValue
+                },
+                {
+                    field: 'telephone',
+                    operator: 'contains',
+                    value: inputValue
+                },
+                {
+                    field: 'mobile',
+                    operator: 'contains',
+                    value: inputValue
+                },
+                {
+                    field: 'email',
+                    operator: 'contains',
+                    value: inputValue
+                }
+            ],
+        }
+    }).data;
+
+}
 }

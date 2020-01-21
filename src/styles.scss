@@ -11034,6 +11034,10 @@ kendo-grid-filter-cell-operators {
     width: 35px !important;
 }
 
-.k-grid-aria-root {
+/*.k-grid-aria-root {
     padding: 0px 15px !important;
+}*/
+
+.k-grid-header .k-header>.k-link {
+    border-right: 1px solid;
 }

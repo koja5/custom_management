@@ -108,7 +108,8 @@
     "female": "Weiblich",
     "male": "Männlich",
     "createNewCustomer": "Neuen Kunden anlegen",
-    "uploadFromExcel": "AUS EXCEL HOCHLADEN"
+    "uploadFromExcel": "AUS EXCEL HOCHLADEN",
+    "searchAllColumn": "In allen Spalten suchen..."
   },
   "dashboard": {
     "profile": "Profil",

@@ -115,7 +115,8 @@
     "female": "Female",
     "male": "Male",
     "createNewCustomer": "Create new customer",
-    "uploadFromExcel": "IMPORT FROM EXCEL"
+    "uploadFromExcel": "IMPORT FROM EXCEL",
+    "searchAllColumn": "Search in all columns..."
   },
   "dashboard": {
     "profile": "Profile",

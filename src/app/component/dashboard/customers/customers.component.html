@@ -8,20 +8,20 @@
 
   </div>
 
-  <kendo-grid *ngIf="language !== undefined" [data]="gridData" [style.height]="height" [resizable]="true"
+  <kendo-grid *ngIf="language !== undefined" [data]="gridView" [style.height]="height" [resizable]="true"
     [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
-    [pageable]="true" [filterable]="true" (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)"
+    [pageable]="true" (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)"
     [kendoGridSelectBy]="mySelectionKey">
     <kendo-grid-messages pagerPage="{{language.pagerPage}}" pagerOf="{{language.pagerOf}}"
       pagerItems="{{language.pagerItems}}" pagerItemsPerPage="{{language.pagerItemsPerPage}}">
     </kendo-grid-messages>
     <ng-template kendoGridToolbarTemplate>
 
-      <kendo-textbox-container floatingLabel="First name">
-        <input kendoTextBox />
+      <kendo-textbox-container floatingLabel="{{language.searchAllColumn}}">
+        <input kendoTextBox (input)="onFilter($event.target.value)"/>
       </kendo-textbox-container>
       <div style="float: right; padding-right: 30px; padding-top: 14px;">
-        <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true"
+        <button kendoButton [icon]="'add'" (click)="newUser()" [primary]="true"
           style="background: #6673FC !important; margin-left: 12px;">{{language.newCustomer}}</button>
         <div class="dropdown-grid">
           <button class="btn-grid" style="border-left:1px solid #0d8bf2">
