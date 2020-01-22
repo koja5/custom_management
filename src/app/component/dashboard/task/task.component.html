@@ -206,7 +206,8 @@
                   <div class="k-form-field">
                     <span>{{languageUser.patient}}</span>
                     <kendo-combobox [data]="customerUsers" [textField]="'shortname'" [valueField]="'id'"
-                      (valueChange)="onValueChange($event)" [(ngModel)]="customerUser" style.width="{{userWidth}}">
+                      (valueChange)="onValueChange($event)" [(ngModel)]="customerUser" style.width="{{userWidth}}"
+                      [filterable]="true" (filterChange)="searchCustomer($event)" [loading]="customerLoading">
                       <ng-template kendoComboBoxItemTemplate let-dataItem>
                         <p style="height: 30px !important;">
                           <span style="font-weight: bold">{{ dataItem.shortname }}</span> <br>
@@ -391,7 +392,8 @@
                 <div class="k-form-field">
                   <span>{{languageUser.patient}}</span>
                   <kendo-combobox [data]="customerUsers" [textField]="'shortname'" [valueField]="'id'"
-                    (valueChange)="onValueChange($event)" [(ngModel)]="customerUser" style.width="{{userWidth}}">
+                    (valueChange)="onValueChange($event)" [(ngModel)]="customerUser" style.width="{{userWidth}}"
+                    [filterable]="true" (filterChange)="searchCustomer($event)">
                     <ng-template kendoComboBoxItemTemplate let-dataItem>
                       <p style="height: 30px !important;">
                         <span style="font-weight: bold">{{ dataItem.shortname }}</span> <br>
