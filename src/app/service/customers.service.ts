@@ -29,6 +29,11 @@ export class CustomersService {
       .subscribe(val => callback(val));
   }
 
+  searchCustomer(search) {
+    return this.http.post('/api/searchCustomer', search)
+      .map(res => res);
+  }
+
   updateCustomer(data, callback) {
     this.http.post('/api/updateCustomer', data)
       .map(res => res)

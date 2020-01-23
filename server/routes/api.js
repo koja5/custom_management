@@ -1097,6 +1097,40 @@ router.get("/getCustomers/:id", function (req, res, next) {
   });
 });
 
+router.post("/searchCustomer", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+    var superadmin = req.body.superadmin;
+    var filter = req.body.filter;
+    console.log(superadmin);
+    conn.query("SELECT * from customers where storeId = ? and shortname like '%" + filter + "%'", [superadmin],function (
+      err,
+      rows
+    ) {
+      conn.release();
+      if (!err) {
+        res.json(rows);
+      } else {
+        res.json(null);
+      }
+    });
+
+    conn.on("error", function (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    });
+  });
+});
+
 router.get("/getCustomerWithId/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {

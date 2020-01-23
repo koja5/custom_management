@@ -144,12 +144,14 @@
           <ul _ngcontent-vwt-c6="" class="breadcrumb breadcrumb-style ">
             <li _ngcontent-vwt-c6="" class="breadcrumb-item">
               <h4 _ngcontent-vwt-c6="" class="page-title selectedNode">{{selectedNode}}</h4>
-            </li>
-            <li class="breadcrumb-item bcrumb-1"><a _ngcontent-vwt-c6="" routerlink="/dashboard/main"
-                href="#/dashboard/main"><i _ngcontent-vwt-c6="" class="fa fa-home"></i>
-                Home</a></li>
-            <li _ngcontent-vwt-c6="" class="breadcrumb-item active">
-              <span class="selectedNode">{{selectedNode}}</span>
+            </li> 
+            <li><a routerlink="/dashboard/main"
+                href="#/dashboard/main"><i _ngcontent-vwt-c6="" class="fa fa-home"></i> / 
+                Home</a></li> / 
+            <li *ngFor="let item of pathFromUrl">
+               <a routerLink="{{item}}">
+                &nbsp;{{item}}&nbsp;/
+              </a>
             </li>
           </ul>
 

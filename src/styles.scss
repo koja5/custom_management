@@ -11041,3 +11041,25 @@ kendo-grid-filter-cell-operators {
 .k-grid-header .k-header>.k-link {
     border-right: 1px solid;
 }
+
+.breadcrumb>li+li:before {
+    display: none;
+}
+
+.breadcrumb li a .fa-home {
+    font-size: 22px;
+    position: relative;
+    top: 0;
+    float: left;
+    padding-right: 3px;
+    color: #444;
+    padding: 4px;
+}
+
+.breadcrumb .page-title {
+    border-right: 1px solid #c5c5c5;
+    padding-right: 10px;
+    font-size: 23px;
+    font-weight: 600;
+    color: #444;
+}
