@@ -124,51 +124,57 @@
   <form name="loginForm" class="loginForm"
     (ngSubmit)="operationMode === 'add' ? createVaucher(vaucher) : editVaucher(vaucher)" ngNativeValidate>
     <div class="col-md-12 col-xs-12" *ngIf="operationMode === 'edit'">
-      <p>{{language.id}}</p>
-      <input kendoTextBox class="col-xs-12" name="id" [(ngModel)]="data.id" id.id=''
-        [disabled]="true">
+      <kendo-textbox-container floatingLabel="{{language.id}}">
+        <input kendoTextBox class="col-xs-12" name="id" [(ngModel)]="data.id" id.id='' [disabled]="true">
+      </kendo-textbox-container>
     </div>
     <div class="col-md-12 col-xs-12">
-      <p>{{language.date}}</p>
-      <kendo-datepicker class="email col-md-12 col-xs-12 noPadding" name="Date" placeholder="Date"
-        [(ngModel)]="dateConst" dateConst.value=''>
-      </kendo-datepicker>
+      <kendo-textbox-container floatingLabel="{{language.date}}">
+        <kendo-datepicker class="email col-md-12 col-xs-12 noPadding" name="Date" [(ngModel)]="dateConst"
+          dateConst.value=''>
+        </kendo-datepicker>
+      </kendo-textbox-container>
     </div>
     <div class="col-md-12 col-xs-12">
-      <p>{{language.amount}}</p>
-      <kendo-numerictextbox class="email col-md-12 col-xs-12 noPadding" name="Amount" placeholder="Amount"
-        [(ngModel)]="data.amount" amount.value=''>
-      </kendo-numerictextbox>
+      <kendo-textbox-container floatingLabel="{{language.amount}}">
+        <kendo-numerictextbox class="email col-md-12 col-xs-12 noPadding" name="Amount" [(ngModel)]="data.amount"
+          amount.value=''>
+        </kendo-numerictextbox>
+      </kendo-textbox-container>
     </div>
     <div class="col-md-12 col-xs-12">
-      <p>{{language.date_redeemed}}</p>
-      <kendo-datepicker class="email col-md-12 col-xs-12 noPadding" name="Date redeemed" placeholder="Date redeemed"
-        [(ngModel)]="dateredeemedConst" dateredeemedConst.value='' [disabled]="operationMode === 'add' ? false : true">
-      </kendo-datepicker>
+      <kendo-textbox-container floatingLabel="{{language.date_redeemed}}">
+        <kendo-datepicker class="email col-md-12 col-xs-12 noPadding" name="Date redeemed"
+          [(ngModel)]="dateredeemedConst" dateredeemedConst.value=''
+          [disabled]="operationMode === 'add' ? false : true">
+        </kendo-datepicker>
+      </kendo-textbox-container>
     </div>
     <div class="col-md-12 col-xs-12">
-      <p>{{language.customerBuys}}</p>
-      <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="customerUsers" [textField]="'shortname'"
-        [valueField]="'id'" [(ngModel)]="customerUser" name="customer">
-      </kendo-combobox>
+      <kendo-textbox-container floatingLabel="{{language.customerBuys}}">
+        <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="customerUsers" [textField]="'shortname'"
+          [valueField]="'id'" [(ngModel)]="customerUser" name="customer">
+        </kendo-combobox>
+      </kendo-textbox-container>
     </div>
     <div class="col-md-12 col-xs-12">
-      <p>{{language.customerConsumer}}</p>
-      <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="customerUsers" [textField]="'shortname'"
-        [valueField]="'id'" [(ngModel)]="customerUserConsumer" name="customer_consumer">
-      </kendo-combobox>
+      <kendo-textbox-container floatingLabel="{{language.customerConsumer}}">
+        <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="customerUsers" [textField]="'shortname'"
+          [valueField]="'id'" [(ngModel)]="customerUserConsumer" name="customer_consumer">
+        </kendo-combobox>
+      </kendo-textbox-container>
     </div>
     <div class="col-md-12 col-xs-12">
-      <p>{{language.user}}</p>
-      <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="users" [textField]="'shortname'"
-        [valueField]="'id'" [(ngModel)]="user" name="user" [disabled]="operationMode === 'add' ? false : true">
-      </kendo-combobox>
+      <kendo-textbox-container floatingLabel="{{language.user}}">
+        <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="users" [textField]="'shortname'"
+          [valueField]="'id'" [(ngModel)]="user" name="user" [disabled]="operationMode === 'add' ? false : true">
+        </kendo-combobox>
+      </kendo-textbox-container>
     </div>
-
-    <div class="col-md-12 col-xs-12">
-      <p>{{language.comment}}</p>
-      <input type="text" class="col-xs-12" name="comment" placeholder="Comment" [(ngModel)]="data.comment"
-        comment.value=''>
+    <div class="col-md-12 col-xs-12" style="padding-top: 15px;">
+      <kendo-textbox-container floatingLabel="{{language.comment}}">
+        <textarea kendoTextArea name="comment" [(ngModel)]="data.comment" comment.value='' [autoSize]="true"></textarea>
+      </kendo-textbox-container>
     </div>
     <div class="col-md-12 col-xs-12">
       <p>{{language.cs}}</p>
