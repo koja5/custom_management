@@ -244,7 +244,7 @@ export class DashboardComponent implements OnInit {
     this.selectedNodeModel[this.selectedNode] = "active";
     setTimeout(() => {
       this.pathFromUrl = window.location.pathname.split("/");
-      this.pathFromUrl = this.pathFromUrl.splice(0, 1);
+      // this.pathFromUrl = this.pathFromUrl.splice(0, 1);
       console.log(this.pathFromUrl);
     }, 10);
   }
