@@ -201,7 +201,7 @@
     "stateValue": "Zustand",
     "newUser": "Neuer Benutzer",
     "uploadFromExcel": "AUS EXCEL HOCHLADEN",
-    "exportToExcel": "Nach Excel exportieren",
+    "exportToExcel": "NACH EXCEL EXPORTIEREN",
     "exportToPDF": "Als PDF exportieren",
     "patient": "Geduldig",
     "newCustomer": "Neukunde",
@@ -212,7 +212,10 @@
     "company": "Unternehmen",
     "noInformation": "Keine Information",
     "fullName": "Vollständiger Name",
-    "searchAllColumn": "Search all column..."
+    "searchAllColumn": "Search all column...",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "print": "Drucken"
   },
   "store": {
     "exist": "E-Mail ist vorhanden!",

@@ -1071,4 +1071,8 @@ export class BaseDateComponent implements OnInit {
   filterDoctor(event) {
 
   }
+
+  printCustomer() {
+    window.print();
+  }
 }

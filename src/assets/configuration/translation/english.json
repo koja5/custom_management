@@ -115,7 +115,7 @@
     "female": "Female",
     "male": "Male",
     "createNewCustomer": "Create new customer",
-    "uploadFromExcel": "Upload from Excel",
+    "uploadFromExcel": "UPLOAD FROM EXCEL",
     "searchAllColumn": "Search all column..."
   },
   "dashboard": {
@@ -209,7 +209,7 @@
     "newUser": "New user",
     "exportToExcel": "Export to Excel",
     "exportToPDF": "Export to PDF",
-    "uploadFromExcel": "Upload from Excel",
+    "uploadFromExcel": "UPLOAD FROM EXCEL",
     "patient": "Patient",
     "newCustomer": "New customer",
     "baseDate": "Base date",
@@ -218,7 +218,10 @@
     "aboutMe": "About me",
     "company": "Company",
     "noInformation": "No information",
-    "fullName": "Full name"
+    "fullName": "Full name",
+    "edit": "Edit",
+    "delete": "Delete",
+    "print": "Print"
   },
   "store": {
     "exist": "Email is exist!",
