@@ -39,7 +39,7 @@
     "newVaucher": "New vaucher",
     "addVaucher": "Add vaucher",
     "updateVaucher": "Update vaucher",
-    "uploadFromExcel": "IMPORT FROM EXCEL",
+    "uploadFromExcel": "Upload from Excel",
     "exportToExcel": "Export to Excel",
     "exportToPDF": "Export to PDF",
     "pagerPage": "Page",
@@ -115,8 +115,8 @@
     "female": "Female",
     "male": "Male",
     "createNewCustomer": "Create new customer",
-    "uploadFromExcel": "IMPORT FROM EXCEL",
-    "searchAllColumn": "Search in all columns..."
+    "uploadFromExcel": "Upload from Excel",
+    "searchAllColumn": "Search all column..."
   },
   "dashboard": {
     "profile": "Profile",
@@ -147,6 +147,7 @@
     "choicePreviousTherapy": "Choice previous therapy...",
     "choiceState": "Choice current state",
     "updateCustomer": "Update customer",
+    "updateDocument": "Upload documents",
     "baseOne": "Base data I",
     "baseTwo": "Base data II",
     "physicalIllness": "Physical illness",
@@ -202,12 +203,13 @@
     "complaintValue": "Complaint",
     "therapyValue": "Therapy",
     "treatmentValue": "Treatment",
+    "documentValue": "Documents",
     "comment": "Comment",
     "stateValue": "State",
     "newUser": "New user",
     "exportToExcel": "Export to Excel",
     "exportToPDF": "Export to PDF",
-    "uploadFromExcel": "IMPORT FROM EXCEL",
+    "uploadFromExcel": "Upload from Excel",
     "patient": "Patient",
     "newCustomer": "New customer",
     "baseDate": "Base date",
@@ -216,9 +218,7 @@
     "aboutMe": "About me",
     "company": "Company",
     "noInformation": "No information",
-    "fullName": "Full name",
-    "storeName": "Store name"
-
+    "fullName": "Full name"
   },
   "store": {
     "exist": "Email is exist!",
@@ -245,7 +245,7 @@
     "newStore": "New location",
     "exportToExcel": "Export to Excel",
     "exportToPDF": "Export to PDF",
-    "uploadFromExcel": "IMPORT FROM EXCEL"
+    "uploadFromExcel": "Upload from Excel"
   },
   "complaint": [
     "Headache",

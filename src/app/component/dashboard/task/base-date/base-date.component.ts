@@ -50,6 +50,7 @@ export class BaseDateComponent implements OnInit {
   public loadingGrid: any;
   public loading = true;
   public currentTab = "profile";
+  public currentTabGrid = 'complaint';
   public recommendationList: any;
   public baseDataOne: any;
   public baseDataTwo: any;
@@ -77,7 +78,7 @@ export class BaseDateComponent implements OnInit {
     public userUservice: UsersService,
     public message: MessageService,
     public usersService: UsersService
-  ) {}
+  ) { }
 
 
   ngOnInit() {
@@ -109,20 +110,20 @@ export class BaseDateComponent implements OnInit {
   }
 
   convertStringToDate() {
-    if(this.data.birthday !== undefined && this.data.birthday !== '') {
+    if (this.data.birthday !== undefined && this.data.birthday !== '') {
       this.data.birthday = new Date(this.data.birthday);
     }
   }
 
   getParameters() {
     this.service.getParameters("Complaint").subscribe((data: []) => {
-      this.complaintValue = data.sort(function(a, b) {
+      this.complaintValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.service.getParameters("Therapy").subscribe((data: []) => {
-      this.therapyValue = data.sort(function(a, b) {
+      this.therapyValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
@@ -132,7 +133,7 @@ export class BaseDateComponent implements OnInit {
     });
 
     this.service.getParameters("Treatment").subscribe((data: []) => {
-      this.treatmentValue = data.sort(function(a, b) {
+      this.treatmentValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
@@ -276,7 +277,7 @@ export class BaseDateComponent implements OnInit {
   }
 
   onChange(event) {
-    this.data.birthday = event; 
+    this.data.birthday = event;
   }
 
 
@@ -330,9 +331,9 @@ export class BaseDateComponent implements OnInit {
   }
 
   openComplaintModal() {
-    this.selectedComplaint = [];
+    /*this.selectedComplaint = [];
     this.selectedTherapies = [];
-    this.selectedTreatment = [];
+    this.selectedTreatment = [];*/
     this.complaintData = new ComplaintTherapyModel();
     this.complaintData.complaint = "";
     this.complaintData.therapies = "";
@@ -350,9 +351,9 @@ export class BaseDateComponent implements OnInit {
   }
 
   openTherapyModal() {
-    this.selectedComplaint = [];
+    /*this.selectedComplaint = [];
     this.selectedTherapies = [];
-    this.selectedTreatment = [];
+    this.selectedTreatment = [];*/
     this.complaintData.state = null;
     this.complaintData = new ComplaintTherapyModel();
     this.complaintData.complaint = "";
@@ -728,7 +729,7 @@ export class BaseDateComponent implements OnInit {
           console.log(this.baseDataTwo);
         }
       });
-    } else {
+    } else if (tab === 'physical_illness') {
       this.service.getPhysicallIllness(this.data.id).subscribe(data => {
         if (data["length"] !== 0) {
           this.physicalIllness = data[0];
@@ -743,6 +744,17 @@ export class BaseDateComponent implements OnInit {
           this.operationMode = "add";
         }
       });
+    }
+  }
+
+  changeTabGrid(tab) {
+    this.currentTabGrid = tab;
+    if (tab === 'complaint') {
+      this.getComplaint();
+    } else if (tab === 'therapy') {
+      this.getTherapy();
+    } else if (tab === 'document') {
+      this.getDocument();
     }
   }
 

@@ -140,6 +140,7 @@
     "choicePreviousTherapy": "Wahl der vorherigen Therapie...",
     "choiceState": "Auswahl aktueller Zustand",
     "updateCustomer": "Kunden aktualisieren",
+    "updateDocument": "Dokumente hochladen",
     "baseOne": "Basisdaten I",
     "baseTwo": "Basisdaten II",
     "physicalIllness": "Körperliche Krankheit",
@@ -195,6 +196,7 @@
     "complaintValue": "Reklamationswert",		
     "therapyValue": "Therapiewert",		
     "treatmentValue": "Behandlung",	
+    "documentValue": "Unterlagen",
     "comment": "Kommentar",		
     "stateValue": "Zustand",
     "newUser": "Neuer Benutzer",
@@ -210,7 +212,7 @@
     "company": "Unternehmen",
     "noInformation": "Keine Information",
     "fullName": "Vollständiger Name",
-    "storeName": "Store name"
+    "searchAllColumn": "Search all column..."
   },
   "store": {
     "exist": "E-Mail ist vorhanden!",

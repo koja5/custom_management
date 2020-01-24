@@ -1,9 +1,3 @@
-@media (min-width: 768px) {
-  .col-md-12 {
-    margin: 1%;
-  }
-}
-
 @media(max-width: 768px) {
   .vd_content-section {
     text-align: center;
@@ -50,5 +44,9 @@ p {
 }
 
 #biography .row {
-  height: 206px;
+  height: 215px;
+}
+
+#biography .row-grid {
+  height: 435px;
 }
