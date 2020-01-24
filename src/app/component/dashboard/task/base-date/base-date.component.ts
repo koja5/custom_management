@@ -712,6 +712,7 @@ export class BaseDateComponent implements OnInit {
       this.initializeBaseOneData();
     } else if (tab === "base_two") {
       this.service.getBaseDataTwo(this.data.id).subscribe(data => {
+        console.log(data);
         if (data["length"] !== 0) {
           this.baseDataTwo = data[0];
           this.baseDataTwo.birthday = new Date(this.baseDataTwo.birthday);
@@ -724,6 +725,7 @@ export class BaseDateComponent implements OnInit {
             this.baseDataTwo = new BaseTwoModel();
           }
           this.operationMode = "add";
+          console.log(this.baseDataTwo);
         }
       });
     } else {
@@ -792,6 +794,7 @@ export class BaseDateComponent implements OnInit {
       console.log(data);
       if (data["length"] !== 0) {
         this.baseDataOne = data[0];
+        this.baseDataOne.first_date = new Date(this.baseDataOne.first_date);
         if (this.baseDataOne.recommendation.split(";") !== undefined) {
           this.selectedRecommendation = this.baseDataOne.recommendation
             .split(";")
@@ -799,7 +802,6 @@ export class BaseDateComponent implements OnInit {
         } else {
           this.selectedRecommendation = Number(this.baseDataOne.recommendation);
         }
-        this.baseDataOne.first_date = new Date(this.baseDataOne.first_date);
         this.operationMode = "edit";
       } else {
         if (
