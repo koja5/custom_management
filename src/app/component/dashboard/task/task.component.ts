@@ -389,6 +389,7 @@ export class TaskComponent implements OnInit {
           .subscribe(data => {
             console.log(data);
             this.customerUser = data[0];
+            this.customerUsers = data;
             this.baseDataIndicator = true;
             this.userWidth = "49%";
           });
