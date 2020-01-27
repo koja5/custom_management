@@ -14,6 +14,7 @@ import { BaseOneModel } from "../../../../models/base-one-model";
 import { BaseTwoModel } from "src/app/models/base-two-model";
 import { PhysicalModel } from "src/app/models/physical-model";
 import { TaskService } from "src/app/service/task.service";
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: "app-base-date",
@@ -77,7 +78,8 @@ export class BaseDateComponent implements OnInit {
     public taskService: TaskService,
     public userUservice: UsersService,
     public message: MessageService,
-    public usersService: UsersService
+    public usersService: UsersService,
+    private toastr: ToastrService
   ) { }
 
 
@@ -331,9 +333,9 @@ export class BaseDateComponent implements OnInit {
   }
 
   openComplaintModal() {
-    /*this.selectedComplaint = [];
+    this.selectedComplaint = [];
     this.selectedTherapies = [];
-    this.selectedTreatment = [];*/
+    this.selectedTreatment = [];
     this.complaintData = new ComplaintTherapyModel();
     this.complaintData.complaint = "";
     this.complaintData.therapies = "";
@@ -428,12 +430,13 @@ export class BaseDateComponent implements OnInit {
           if (data) {
             this.getComplaint();
             this.complaint = false;
-            Swal.fire({
+            /*Swal.fire({
               title: "Successfull!",
               text: "New complaint is successfull added!",
               timer: 3000,
               type: "success"
-            });
+            });*/
+            this.toastr.success('Successfull!', 'New complaint is successfull added!', { timeOut: 7000, positionClass: 'toast-bottom-right', });
             this.selectedComplaint = [];
             this.selectedTherapies = [];
           } else {
@@ -452,12 +455,14 @@ export class BaseDateComponent implements OnInit {
         if (data) {
           this.getComplaint();
           this.complaint = false;
-          Swal.fire({
+          /*Swal.fire({
             title: "Successfull!",
             text: "New complaint is successfull added!",
             timer: 3000,
             type: "success"
-          });
+          });*/
+          
+          this.toastr.success('Successfull!', 'New complaint is successfull added!', { timeOut: 7000, positionClass: 'toast-bottom-right', });
           this.selectedComplaint = [];
           this.selectedTherapies = [];
         } else {

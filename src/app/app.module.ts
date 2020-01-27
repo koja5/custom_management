@@ -25,6 +25,7 @@ import { DialogModule } from '@progress/kendo-angular-dialog';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { FileSelectDirective, FileDropDirective, FileUploadModule } from 'ng2-file-upload';
 import { DialogsModule } from '@progress/kendo-angular-dialog';
+import { ToastrModule } from 'ngx-toastr';
 
 // guard
 import { LoggedGuard } from './service/login-guard/loggedGuard';
@@ -113,7 +114,8 @@ import { SettingsComponent } from './component/dashboard/settings/settings.compo
     DialogModule,
     FileUploadModule,
     PdfViewerModule,
-    DialogsModule
+    DialogsModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     LoginComponent,

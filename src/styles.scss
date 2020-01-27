@@ -4,6 +4,7 @@
 @import url("../node_modules/@progress/kendo-theme-material/dist/all.css");
 @import url("../node_modules/bootstrap/dist/css/bootstrap.min.css");
 @import url("../node_modules/font-awesome/css/font-awesome.min.css");
+@import '~ngx-toastr/toastr';
 /*@import url(https://fonts.googleapis.com/css?family=Titillium+Web:300,400,600,700,900);*/
 
 /*custom css*/
@@ -9385,6 +9386,16 @@ tr.group:hover {
         margin-top: 50px !important
     }
 }
+
+@media (min-width: 991) {
+    .navbar-collapse.collapse {
+        display: block !important;
+        height: auto !important;
+        padding-bottom: 0;
+        overflow: visible !important;
+    }
+}
+
 @media (max-width:815px) {
 	.chat-sidebar-container {
         top: 106px;
