@@ -11024,6 +11024,7 @@ tr.group:hover {
 
 .k-grid th {
     padding: 7px 24px !important;
+    border-right: 1px solid !important;
 }
 
 .k-filter-row td, .k-filter-row th {
@@ -11136,6 +11137,9 @@ kendo-grid-filter-cell-operators {
     }
   }
 
+.lds-ellipsis-form div {
+    top: 250px !important;
+}
   
 .btn-grid {
   background-color: #6673FC;

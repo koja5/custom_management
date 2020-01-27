@@ -519,13 +519,6 @@
             <h2 class="font-semibold col-md-6 col-xs-12">{{data.firstname}} {{data.lastname}}</h2>
           </div>
           <div class="col-md-8 col-xs-12">
-            <p>{{languageUser.username}}</p>
-            <input type="text" class="email col-md-12 col-xs-12" name="shortname"
-              placeholder="{{languageUser.username}}" [(ngModel)]="data.shortname" [pattern]="unamePattern"
-              #uname="ngModel" required>
-            <p *ngIf="uname.errors?.pattern" class="validError">
-              <span class="k-icon k-i-close"></span> Username not valid.
-            </p>
             <p>{{languageUser.firstname}}</p>
             <input type="text" class="email col-md-12 col-xs-12" name="firstname"
               placeholder="{{languageUser.firstname}}" [(ngModel)]="data.firstname" firstname.value=''>

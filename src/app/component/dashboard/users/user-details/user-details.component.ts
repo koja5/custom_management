@@ -127,6 +127,7 @@ export class UserDetailsComponent implements OnInit {
           );
         });
         console.log(dataSort[0]);
+        this.selectedColor = dataSort[0].color;
         this.allWorkTime = dataSort;
         this.validDate = new Date(dataSort[0].dateChange);
         this.workTime = this.packWorkTimeFromDatabase(dataSort[0]);

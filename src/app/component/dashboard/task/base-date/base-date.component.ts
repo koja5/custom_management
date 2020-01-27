@@ -434,6 +434,8 @@ export class BaseDateComponent implements OnInit {
               timer: 3000,
               type: "success"
             });
+            this.selectedComplaint = [];
+            this.selectedTherapies = [];
           } else {
             Swal.fire({
               title: "Error",
@@ -456,6 +458,8 @@ export class BaseDateComponent implements OnInit {
             timer: 3000,
             type: "success"
           });
+          this.selectedComplaint = [];
+          this.selectedTherapies = [];
         } else {
           Swal.fire({
             title: "Error",
@@ -465,8 +469,6 @@ export class BaseDateComponent implements OnInit {
           });
         }
       });
-      this.selectedComplaint = [];
-      this.selectedComplaint = [];
     }
   }
 
@@ -701,7 +703,6 @@ export class BaseDateComponent implements OnInit {
   }
 
   initializeParams() {
-    this.complaintData.comment = "";
     this.complaintData.cs = "";
     this.complaintData.em = "";
   }

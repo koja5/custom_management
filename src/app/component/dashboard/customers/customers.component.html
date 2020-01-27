@@ -10,7 +10,7 @@
 
   <kendo-grid *ngIf="language !== undefined" [data]="gridView" [style.height]="height" [resizable]="true"
     [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
-    [pageable]="true" (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)"
+    [pageable]="true" (pageChange)="pageChange($event)"
     [kendoGridSelectBy]="mySelectionKey">
     <kendo-grid-messages pagerPage="{{language.pagerPage}}" pagerOf="{{language.pagerOf}}"
       pagerItems="{{language.pagerItems}}" pagerItemsPerPage="{{language.pagerItemsPerPage}}">
@@ -18,7 +18,7 @@
     <ng-template kendoGridToolbarTemplate>
 
       <kendo-textbox-container floatingLabel="{{language.searchAllColumn}}">
-        <input kendoTextBox (input)="onFilter($event.target.value)"/>
+        <input kendoTextBox (input)="onFilter($event.target.value)" [(ngModel)]="searchFilter"/>
       </kendo-textbox-container>
       <div style="float: right; padding-right: 30px; padding-top: 14px;">
         <button kendoButton [icon]="'add'" (click)="newUser()" [primary]="true"

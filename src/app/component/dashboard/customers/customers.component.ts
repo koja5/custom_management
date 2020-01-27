@@ -16,7 +16,7 @@ import Swal from "sweetalert2";
 // import * as GC from "@grapecity/spread-sheets";
 // import * as Excel from "@grapecity/spread-excelio";
 import { WindowModule } from "@progress/kendo-angular-dialog";
-import * as XLSX from 'ts-xlsx';
+import * as XLSX from "ts-xlsx";
 
 const newLocal = "data";
 @Component({
@@ -25,7 +25,6 @@ const newLocal = "data";
   styleUrls: ["./customers.component.scss"]
 })
 export class CustomersComponent implements OnInit {
-  
   @ViewChild(DataBindingDirective) dataBinding: DataBindingDirective;
   public customer = false;
   public data = new CustomerModel();
@@ -58,6 +57,7 @@ export class CustomersComponent implements OnInit {
   }
   private arrayBuffer: any;
   public height: any;
+  public searchFilter: any;
 
   constructor(
     public service: CustomersService,
@@ -69,7 +69,7 @@ export class CustomersComponent implements OnInit {
 
   ngOnInit() {
     this.height = window.innerHeight - 155;
-    this.height += 'px';
+    this.height += "px";
     this.getCustomers();
 
     if (localStorage.getItem("language") !== null) {
@@ -101,8 +101,10 @@ export class CustomersComponent implements OnInit {
       console.log(val);
       if (val !== null) {
         this.currentLoadData = val;
-        this.gridData = process(val, this.state);
-        this.gridView = this.gridData;
+        this.gridData = {
+          data: val
+        };
+        this.gridView = process(val, this.state);
         this.loading = false;
       } else {
         this.gridData[newLocal] = [];
@@ -186,27 +188,23 @@ export class CustomersComponent implements OnInit {
 
   public dataStateChange(state: DataStateChangeEvent): void {
     this.state = state;
-    this.gridData = process(this.currentLoadData, this.state);
+    this.gridView = process(this.currentLoadData, this.state);
     if (this.state.filter !== null && this.state.filter.filters.length === 0) {
-      this.gridData.total = this.currentLoadData.length;
+      this.gridView.total = this.currentLoadData.length;
     }
-    this.gridView = this.gridData;
     this.changeTheme(this.theme);
   }
 
   pageChange(event: PageChangeEvent): void {
     this.state.skip = event.skip;
-    // this.loadProducts();
+    this.loadProducts();
   }
 
   loadProducts(): void {
-    this.gridData = {
-      data: this.gridData.slice(
-        this.state.skip,
-        this.state.skip + this.state.take
-      )
-    };
-    this.gridView = this.gridData;
+    this.gridView.data = this.gridData.data.slice(
+      this.state.skip,
+      this.state.skip + this.state.take
+    );
   }
 
   previewUser(selectedUser) {
@@ -265,11 +263,12 @@ export class CustomersComponent implements OnInit {
 
     this.customerDialogOpened = true;
     let fileReader = new FileReader();
-    fileReader.onload = (e) => {
+    fileReader.onload = e => {
       this.arrayBuffer = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer);
       var arr = new Array();
-      for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+      for (var i = 0; i != data.length; ++i)
+        arr[i] = String.fromCharCode(data[i]);
       var bstr = arr.join("");
       var workbook = XLSX.read(bstr, { type: "binary" });
       var first_sheet_name = workbook.SheetNames[0];
@@ -277,12 +276,14 @@ export class CustomersComponent implements OnInit {
       console.log(XLSX.utils.sheet_to_json(worksheet, { raw: false }));
       setTimeout(() => {
         if (XLSX.utils.sheet_to_json(worksheet, { raw: true }).length > 0) {
-          this.gridData = this.xlsxToJson(XLSX.utils.sheet_to_json(worksheet, { raw: true }));
+          this.gridData = this.xlsxToJson(
+            XLSX.utils.sheet_to_json(worksheet, { raw: true })
+          );
           this.fileValue = null;
           this.gridView = this.gridData;
         }
       }, 50);
-    }
+    };
     fileReader.readAsArrayBuffer(args.target.files[0]);
   }
 
@@ -401,51 +402,53 @@ export class CustomersComponent implements OnInit {
     }, 50);
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener("window:resize", ["$event"])
   onResize(event) {
     console.log(window.innerHeight);
     this.height = window.innerHeight - 155;
-    this.height += 'px';
+    this.height += "px";
   }
 
   public onFilter(inputValue: string): void {
-    this.gridView = process(this.gridData.data, {
-        filter: {
-            logic: "or",
-            filters: [
-                {
-                    field: 'shortname',
-                    operator: 'contains',
-                    value: inputValue
-                },
-                {
-                    field: 'firstname',
-                    operator: 'contains',
-                    value: inputValue
-                },
-                {
-                    field: 'lastname',
-                    operator: 'contains',
-                    value: inputValue
-                },
-                {
-                    field: 'telephone',
-                    operator: 'contains',
-                    value: inputValue
-                },
-                {
-                    field: 'mobile',
-                    operator: 'contains',
-                    value: inputValue
-                },
-                {
-                    field: 'email',
-                    operator: 'contains',
-                    value: inputValue
-                }
-            ],
-        }
-    }).data;
-
-}
+    this.searchFilter = inputValue;
+    this.state.skip = 0;
+    this.gridData = process(this.currentLoadData, {
+      filter: {
+        logic: "or",
+        filters: [
+          {
+            field: "shortname",
+            operator: "contains",
+            value: inputValue
+          },
+          {
+            field: "firstname",
+            operator: "contains",
+            value: inputValue
+          },
+          {
+            field: "lastname",
+            operator: "contains",
+            value: inputValue
+          },
+          {
+            field: "telephone",
+            operator: "contains",
+            value: inputValue
+          },
+          {
+            field: "mobile",
+            operator: "contains",
+            value: inputValue
+          },
+          {
+            field: "email",
+            operator: "contains",
+            value: inputValue
+          }
+        ]
+      }
+    });
+    this.gridView = process(this.gridData.data, this.state);
+  }
 }

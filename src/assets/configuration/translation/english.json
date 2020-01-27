@@ -221,7 +221,8 @@
     "fullName": "Full name",
     "edit": "Edit",
     "delete": "Delete",
-    "print": "Print"
+    "print": "Print",
+    "required": "required"
   },
   "store": {
     "exist": "Email is exist!",

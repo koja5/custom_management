@@ -215,7 +215,8 @@
     "searchAllColumn": "Search all column...",
     "edit": "Bearbeiten",
     "delete": "Löschen",
-    "print": "Drucken"
+    "print": "Drucken",
+    "required": "erforderlich"
   },
   "store": {
     "exist": "E-Mail ist vorhanden!",
