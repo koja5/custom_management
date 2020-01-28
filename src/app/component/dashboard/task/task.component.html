@@ -23,14 +23,20 @@
   <div class="options">
     <div class="col-sm-12" style="padding: 1% 1% 1% 0px;" *ngIf="type !== 3">
       <div class="col-sm-6 col-xs-12">
-        <kendo-combobox class="col-md-6 col-xs-12 noPaddingNoMargin" [data]="store" [textField]="'storename'"
-          [valueField]="'id'" [(ngModel)]="selectedStoreId" [valuePrimitive]="true"
-          (valueChange)="selectedStore($event)" [suggest]="true" [placeholder]="language.selectStore">
-        </kendo-combobox>
-
-        <kendo-multiselect class="col-md-6 col-xs-12 noPaddingNoMargin" [data]="usersInCompany"
-          [textField]="'shortname'" [valueField]="'id'" [value]="value" (valueChange)="handleValue($event)"
-          [placeholder]="language.selectUsers"></kendo-multiselect>
+        <div class="col-md-6 col-xs-12">
+          <kendo-textbox-container floatingLabel="{{language.selectStore}}">
+            <kendo-combobox [data]="store" [textField]="'storename'" [valueField]="'id'" [(ngModel)]="selectedStoreId"
+              [valuePrimitive]="true" (valueChange)="selectedStore($event)" [suggest]="true">
+            </kendo-combobox>
+          </kendo-textbox-container>
+        </div>
+        <div class="col-md-6 col-xs-12" *ngIf="usersInCompany !== undefined">
+          <kendo-textbox-container floatingLabel="{{language.selectUsers}}">
+            <kendo-multiselect [data]="usersInCompany" [textField]="'shortname'" [valueField]="'id'" [(ngModel)]="value"
+              name="usersInCompany" (valueChange)="handleValue($event)">
+            </kendo-multiselect>
+          </kendo-textbox-container>
+        </div>
       </div>
       <div class="col-sm-6 col-xs-12" *ngIf="value !== null && value.length > 1">
         <div style="float: right;">
@@ -395,7 +401,7 @@
                     (valueChange)="onValueChange($event)" [(ngModel)]="customerUser" style.width="{{userWidth}}"
                     [filterable]="true" (filterChange)="searchCustomer($event)">
                     <ng-template kendoComboBoxItemTemplate let-dataItem>
-                      <p style="height: 30px !important;">
+                      <p style="height: 45px !important;">
                         <span style="font-weight: bold">{{ dataItem.shortname }}</span> <br>
                         <span class="customerInfo" *ngIf="dataItem.city !== ''"> {{ dataItem.city}}</span>
                         <span class="customerInfo" *ngIf="dataItem.street !== ''">/{{dataItem.street}}</span>
@@ -403,12 +409,12 @@
                     </ng-template>
                   </kendo-combobox>
                   <button kendoButton [icon]="'user'" [primary]="true" class="inputTheme-{{theme}}"
-                    (click)="newCustomer()">
+                    (click)="newCustomer()" style="font-size: 9px !important;">
                     {{languageUser.newCustomer}}
                   </button>
 
                   <button kendoButton [icon]="'k-icon k-i-information'" class="inputTheme-{{theme}}" [primary]="true"
-                    (click)="baseDataForUser()" *ngIf="baseDataIndicator">
+                    (click)="baseDataForUser()" *ngIf="baseDataIndicator" style="font-size: 9px !important;">
                     {{languageUser.baseDate}}
                   </button>
                 </div>
@@ -585,7 +591,7 @@
   </kendo-window>
 
   <kendo-window title="Please provide additional data" *ngIf="customerUserModal2&&customerUser !== undefined"
-    [minWidth]="700" [width]="850" [height]="700" (close)="closebaseDataForUser()">
+    [width]="950" [height]="700" (close)="closebaseDataForUser()">
     <app-base-date [data]="customerUser" *ngIf="customerUser !== undefined">
     </app-base-date>
   </kendo-window>

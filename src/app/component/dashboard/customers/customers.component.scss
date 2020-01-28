@@ -11,12 +11,6 @@
   padding-bottom: 0px !important;
 }
 
-@media (min-width: 768px) {
-  .col-md-12 {
-    margin: 1%;
-  }
-}
-
 .k-radio-label {
   padding-left: 3vh !important;
 }
@@ -89,7 +83,15 @@ html, body {
   background-color: #0b7dda;
 }
 
-.k-textbox-container, .k-floating-label-container {
-
+.search .k-textbox-container, .search .k-floating-label-container {
   width: 200px !important;
+}
+
+.search {
+  width: 200px !important;
+  float: left;
+}
+
+.k-textarea-wrapper .k-textarea {
+  height: auto !important;
 }

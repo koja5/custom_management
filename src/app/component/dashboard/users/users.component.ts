@@ -168,7 +168,6 @@ export class UsersComponent implements OnInit {
   }
 
   selectionChange(event) {
-    console.log(event);
     if (event === "Employee") {
       this.data.type = "3";
     } else if (event === "Manager") {

@@ -115,19 +115,6 @@
                         <div class="col-md-6 col-xs-6 b-r">
                           <br>
                           <p class="text-muted">
-                            <kendo-textbox-container floatingLabel="{{language.physicalComplaint}}">
-                              <textarea kendoTextArea
-                                *ngIf="data.physicalComplaint === '' || data.shophysicalComplaintrtname === null || data.physicalComplaint === undefiend"
-                                [autoSize]="true" [disabled]="true">{{language.noInformation}}</textarea>
-                              <textarea kendoTextArea
-                                *ngIf="data.physicalComplaint !== null && data.physicalComplaint !== undefined && data.physicalComplaint !== ''"
-                                [(ngModel)]="data.physicalComplaint" [autoSize]="true" [disabled]="true"></textarea>
-                            </kendo-textbox-container>
-                          </p>
-                        </div>
-                        <div class="col-md-6 col-xs-6 b-r">
-                          <br>
-                          <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{language.attention}}">
                               <textarea kendoTextArea
                                 *ngIf="data.attention === '' || data.attention === null || data.attention === undefiend"
@@ -135,6 +122,19 @@
                               <textarea kendoTextArea
                                 *ngIf="data.attention !== null && data.attention !== undefined && data.attention !== ''"
                                 [(ngModel)]="data.attention" [autoSize]="true" [disabled]="true"></textarea>
+                            </kendo-textbox-container>
+                          </p>
+                        </div>
+                        <div class="col-md-6 col-xs-6 b-r">
+                          <br>
+                          <p class="text-muted">
+                            <kendo-textbox-container floatingLabel="{{language.physicalComplaint}}">
+                              <textarea kendoTextArea
+                                *ngIf="data.physicalComplaint === '' || data.shophysicalComplaintrtname === null || data.physicalComplaint === undefiend"
+                                [autoSize]="true" [disabled]="true">{{language.noInformation}}</textarea>
+                              <textarea kendoTextArea
+                                *ngIf="data.physicalComplaint !== null && data.physicalComplaint !== undefined && data.physicalComplaint !== ''"
+                                [(ngModel)]="data.physicalComplaint" [autoSize]="true" [disabled]="true"></textarea>
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -1041,6 +1041,19 @@
                   <div class="col-md-8 col-xs-12">
                     <div class="col-sm-6" style="margin-bottom: 3vh;">
                       <div class="row mgbt-xs-0">
+                        <kendo-textbox-container floatingLabel="{{language.attention}}">
+                          <textarea kendoTextArea
+                            *ngIf="data.attention === '' || data.attention === null || data.attention === undefiend"
+                            [autoSize]="true" name="attention" style="width: 95%;">{{language.noInformation}}</textarea>
+                          <textarea kendoTextArea
+                            *ngIf="data.attention !== null && data.attention !== undefined && data.attention !== ''"
+                            [(ngModel)]="data.attention" [autoSize]="true" name="attention"
+                            style="width: 95%;"></textarea>
+                        </kendo-textbox-container>
+                      </div>
+                    </div>
+                    <div class="col-sm-6" style="margin-bottom: 3vh;">
+                      <div class="row mgbt-xs-0">
                         <kendo-textbox-container floatingLabel="{{language.physicalComplaint}}">
                           <textarea kendoTextArea
                             *ngIf="data.physicalComplaint === '' || data.physicalComplaint === null || data.physicalComplaint === undefiend"
@@ -1049,19 +1062,6 @@
                           <textarea kendoTextArea
                             *ngIf="data.physicalComplaint !== null && data.physicalComplaint !== undefined && data.physicalComplaint !== ''"
                             [(ngModel)]="data.physicalComplaint" [autoSize]="true" name="physicalComplaint"
-                            style="width: 95%;"></textarea>
-                        </kendo-textbox-container>
-                      </div>
-                    </div>
-                    <div class="col-sm-6" style="margin-bottom: 3vh;">
-                      <div class="row mgbt-xs-0">
-                        <kendo-textbox-container floatingLabel="{{language.attention}}">
-                          <textarea kendoTextArea
-                            *ngIf="data.attention === '' || data.attention === null || data.attention === undefiend"
-                            [autoSize]="true" name="attention" style="width: 95%;">{{language.noInformation}}</textarea>
-                          <textarea kendoTextArea
-                            *ngIf="data.attention !== null && data.attention !== undefined && data.attention !== ''"
-                            [(ngModel)]="data.attention" [autoSize]="true" name="attention"
                             style="width: 95%;"></textarea>
                         </kendo-textbox-container>
                       </div>
@@ -1091,13 +1091,13 @@
                         <kendo-textbox-container floatingLabel="{{language.gender}}">
                           <div>
                             <input type="radio" name="gender" id="female" class="k-radio"
-                              checked="date.gender === 'female' ? checked : ''" [(ngModel)]="data.gender"
+                              checked="data.gender === 'female' ? checked : ''" [(ngModel)]="data.gender"
                               [value]="'female'">
                             <span class="k-radio-label col-md-6 col-xs-12" for="female">{{language.female}}</span>
                           </div>
                           <div>
                             <input type="radio" name="gender" id="male" class="k-radio"
-                              checked="date.gender === 'male' ? checked : ''" [(ngModel)]="data.gender"
+                              checked="data.gender === 'male' ? checked : ''" [(ngModel)]="data.gender"
                               [value]="'male'">
                             <span class="k-radio-label col-md-6 col-xs-12" for="male">{{language.male}}</span>
                           </div>
@@ -1149,7 +1149,7 @@
               <!-- ./remember-row -->
               <div class="form-group" style="text-align: center">
                 <button kendoButton [disabled]="customerForm.form.invalid" [primary]="true"
-                  class="form-button inputTheme-{{theme}}" type="submit">Update
+                  class="form-button" type="submit">Update
                   customer</button>
               </div>
             </form>

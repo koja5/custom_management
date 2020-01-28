@@ -71,6 +71,7 @@ export class CustomersComponent implements OnInit {
     this.height = window.innerHeight - 155;
     this.height += "px";
     this.getCustomers();
+    this.data.gender = 'male';
 
     if (localStorage.getItem("language") !== null) {
       this.language = JSON.parse(localStorage.getItem("language")).grid;

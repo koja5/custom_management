@@ -82,10 +82,10 @@
   </kendo-grid>
 </div>
 
-<kendo-window title="{{language.createNewUser}}" *ngIf="user" [minWidth]="700" [width]="850" [height]="600"
+<kendo-window title="{{language.createNewUser}}" *ngIf="user" [minWidth]="700" [width]="850"
   (close)="user = false">
-  <form name="loginForm" class="loginForm" (ngSubmit)="createUser(user)" ngNativeValidate>
-    <div class="patternContainer">
+  <form name="loginForm" class="loginForm" (ngSubmit)="createUser(user)" #userForm="ngForm">
+    <!--<div class="patternContainer">
       <div class="col-xs-6">
 
         <p *ngIf="email.errors?.pattern || data.email === undefined || data.email === ''" class="validError">
@@ -157,105 +157,98 @@
           </ul>
         </div>
       </div>
-
     </div>
-    <div class="form-group">
-      <div class="email col-md-6 col-xs-12">
-        <p>{{language.username}}</p>
-        <input type="text" class="col-xs-12" name="shortname" placeholder="Username" [(ngModel)]="data.shortname"
-          #uname="ngModel" required>
-      </div>
-      <div class="email col-md-6 col-xs-12">
-        <p>{{language.password}}</p>
-        <input type="{{hideShow}}" class="col-xs-12 password" name="password" placeholder="Password"
-          [(ngModel)]="data.password" [pattern]="passwordPattern" #password="ngModel" required>
-      </div>
-      <!--<span class="fa {{hideShowEye}} pwd-toggle" (click)="hideShowPassword()" style="padding-top: 2vh;"></span>-->
-    </div>
-    <div class="form-group">
-      <div class="email col-md-6 col-xs-12">
-        <p>{{language.firstname}}</p>
-        <input type="text" class="col-xs-12" name="firstname" placeholder="Firstname" [(ngModel)]="data.firstname"
-          firstname.value=''>
-      </div>
-      <div class="email col-md-6 col-xs-12">
-        <p>{{language.lastname}}</p>
-        <input type="text" class="col-xs-12" name="lastname" placeholder="Lastname" [(ngModel)]="data.lastname"
-          lastname.value=''>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="email col-md-12 col-xs-12">
-        <p>{{language.street}}</p>
-        <input type="text" class="col-xs-12" name="street" placeholder="Street" [(ngModel)]="data.street"
-          street.value=''>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="email col-md-6 col-xs-12">
-        <p>{{language.zipCode}}</p>
-        <input type="text" class="col-xs-12" name="zipcode" placeholder="Zipcode" [(ngModel)]="data.zipcode"
-          zipcode.value=''>
-      </div>
-      <div class="email col-md-6 col-xs-12">
-        <p>{{language.place}}</p>
-        <input type="text" class="col-xs-12" name="place" placeholder="Place" [(ngModel)]="data.place" place.value=''>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="email col-md-4 col-xs-12">
-        <p>{{language.telephone}}</p>
-        <input type="text" class="col-xs-12" name="telephone" placeholder="Telephone" [(ngModel)]="data.telephone"
-          telephone.value=''>
-      </div>
-      <div class="email col-md-4 col-xs-12">
-        <p>{{language.mobile}}</p>
-        <input type="text" class="col-xs-12" name="mobile" placeholder="mobile" [(ngModel)]="data.mobile"
-          mobile.value=''>
-      </div>
-      <div class="email col-md-4 col-xs-12">
-        <p>{{language.email}}</p>
-        <input type="email" class="col-xs-12" name="email" placeholder="Email" [(ngModel)]="data.email"
-          [pattern]="emailPattern" #email="ngModel" required>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="email col-md-6 col-xs-12">
-        <p>{{language.birthday}}</p>
-        <kendo-datepicker class="col-xs-12 noPadding" name="birthday" placeholder="Birthday" [(ngModel)]="data.birthday"
-          birthday.value=''></kendo-datepicker>
-      </div>
-      <div class="email col-md-6 col-xs-12">
-        <p>{{language.sincecompany}}</p>
-        <kendo-datepicker class="col-xs-12 noPadding" name="sincecompany" placeholder="Since in company"
-          [(ngModel)]="data.incompanysince" incompanysince.value=''></kendo-datepicker>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-md-6 col-xs-12">
-        <p>{{language.userType}}</p>
-        <kendo-combobox [data]="userType" (selectionChange)="selectionChange($event)" class="col-xs-12 noPadding"
+    -->
+    <div class="col-md-6 col-xs-12 b-r">
+      <kendo-textbox-container floatingLabel="{{language.username}}({{language.required}})">
+        <input kendoTextBox type="text" class="col-xs-12" name="shortname" [(ngModel)]="data.shortname" #uname="ngModel"
           required>
-        </kendo-combobox>
-      </div>
-      <label class="k-form-field col-md-6" style="text-align: center;">
-        Actives &nbsp; <kendo-switch [(ngModel)]="data.active" name='active'></kendo-switch>
-      </label>
+      </kendo-textbox-container>
     </div>
-    <div class="form-group">
-      <div class="col-md-12 col-xs-12">
-        <p>{{language.storeLocation}}</p>
-        <kendo-combobox [data]="storeLocation" [textField]="'storename'" [valueField]="'id'"
-          (selectionChange)="selectionChangeStore($event)" class="col-xs-12 noPadding" required>
+    <div class="col-md-6 col-xs-12 b-r">
+      <kendo-textbox-container floatingLabel="{{language.password}}({{language.required}})">
+        <input kendoTextBox type="{{hideShow}}" class="col-xs-12 password" name="password" [(ngModel)]="data.password"
+          #password="ngModel" required>
+      </kendo-textbox-container>
+    </div>
+    <div class="col-md-6 col-xs-12 b-r">
+      <kendo-textbox-container floatingLabel="{{language.firstname}}">
+        <input kendoTextBox type="text" class="col-xs-12" name="firstname" [(ngModel)]="data.firstname"
+          firstname.value=''>
+      </kendo-textbox-container>
+    </div>
+    <div class="col-md-6 col-xs-12 b-r">
+      <kendo-textbox-container floatingLabel="{{language.lastname}}">
+        <input kendoTextBox type="text" class="col-xs-12" name="lastname" [(ngModel)]="data.lastname" lastname.value=''>
+      </kendo-textbox-container>
+    </div>
+    <div class="col-md-12 col-xs-12 b-r">
+      <kendo-textbox-container floatingLabel="{{language.street}}">
+        <input kendoTextBox type="text" class="col-xs-12" name="street" [(ngModel)]="data.street" street.value=''>
+      </kendo-textbox-container>
+    </div>
+    <div class="col-md-6 col-xs-12 b-r">
+      <kendo-textbox-container floatingLabel="{{language.zipCode}}">
+        <input kendoTextBox type="text" class="col-xs-12" name="zipcode" [(ngModel)]="data.zipcode" zipcode.value=''>
+      </kendo-textbox-container>
+    </div>
+    <div class="col-md-6 col-xs-12 b-r">
+      <kendo-textbox-container floatingLabel="{{language.place}}">
+        <input kendoTextBox type="text" class="col-xs-12" name="place" [(ngModel)]="data.place" place.value=''>
+      </kendo-textbox-container>
+    </div>
+    <div class="col-md-4 col-xs-12 b-r">
+      <kendo-textbox-container floatingLabel="{{language.telephone}}">
+        <input kendoTextBox type="text" class="col-xs-12" name="telephone" [(ngModel)]="data.telephone"
+          telephone.value=''>
+      </kendo-textbox-container>
+    </div>
+    <div class="col-md-4 col-xs-12 b-r">
+      <kendo-textbox-container floatingLabel="{{language.mobile}}">
+        <input kendoTextBox type="text" class="col-xs-12" name="mobile" [(ngModel)]="data.mobile" mobile.value=''>
+      </kendo-textbox-container>
+    </div>
+    <div class="col-md-4 col-xs-12 b-r">
+      <kendo-textbox-container floatingLabel="{{language.email}}({{language.required}})">
+        <input kendoTextBox type="email" class="col-xs-12" name="email" [(ngModel)]="data.email" #email="ngModel"
+          required>
+      </kendo-textbox-container>
+    </div>
+    <div class="col-md-6 col-xs-12 b-r">
+      <kendo-textbox-container floatingLabel="{{language.birthday}}">
+        <kendo-datepicker class="col-xs-12 noPadding" name="birthday" [(ngModel)]="data.birthday" birthday.value=''>
+        </kendo-datepicker>
+      </kendo-textbox-container>
+    </div>
+    <div class="col-md-6 col-xs-12 b-r">
+      <kendo-textbox-container floatingLabel="{{language.sincecompany}}">
+        <kendo-datepicker class="col-xs-12 noPadding" name="sincecompany" [(ngModel)]="data.incompanysince"
+          incompanysince.value=''></kendo-datepicker>
+      </kendo-textbox-container>
+    </div>
+    <div class="col-md-6 col-xs-12 b-r" *ngIf="userType !== undefined">
+      <kendo-textbox-container floatingLabel="{{language.userType}}({{language.required}})">
+        <kendo-combobox [data]="userType" (selectionChange)="selectionChange($event)" [(ngModel)]="data.type"
+          name="user-type" class="col-xs-12 noPadding" required>
         </kendo-combobox>
-      </div>
+      </kendo-textbox-container>
+    </div>
+    <label class="k-form-field col-md-6" style="text-align: center;">
+      Actives &nbsp; <kendo-switch [(ngModel)]="data.active" name='active'></kendo-switch>
+    </label>
+    <div class="col-md-12 col-xs-12 b-r" *ngIf="storeLocation !== undefined">
+      <kendo-textbox-container floatingLabel="{{language.storeLocation}}({{language.required}})">
+        <kendo-combobox [data]="storeLocation" [textField]="'storename'" [valueField]="'id'"
+          (selectionChange)="selectionChangeStore($event)" class="col-xs-12 noPadding" [(ngModel)]="data.storeId"
+          name="storeId" required>
+        </kendo-combobox>
+      </kendo-textbox-container>
     </div>
 
     <!-- ./remember-row -->
-    <div class="form-group">
-      <button class="btn btn-lg btn-{{theme}}" type="submit"
-        [disabled]="data.type === undefined || data.type === '' || data.storeId === undefined || data.storeId === ''">Create
-        user</button>
+    <div class="form-group" style="text-align: center;">
+      <button kendoButton [primary]="true" class="form-button" type="submit"
+        [disabled]="userForm.form.invalid">{{language.createNewUser}}</button>
     </div>
   </form>
 </kendo-window>
