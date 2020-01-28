@@ -45,7 +45,8 @@
     "pagerPage": "Page",
     "pagerOf": "of",
     "pagerItems": "items",
-    "user": "User"
+    "user": "User",
+    "required": "required"
   },
   "calendar": {
     "today": "Today",
@@ -231,6 +232,7 @@
     "successful": "Successful!",
     "createNewStore": "Create new store",
     "createStore": "Create store",
+    "updateStore": "Update store",
     "telephone": "Telephone",
     "email": "Email",
     "gender": "Gender",
@@ -249,7 +251,8 @@
     "newStore": "New location",
     "exportToExcel": "Export to Excel",
     "exportToPDF": "Export to PDF",
-    "uploadFromExcel": "Upload from Excel"
+    "uploadFromExcel": "Upload from Excel",
+    "required": "required"
   },
   "complaint": [
     "Headache",

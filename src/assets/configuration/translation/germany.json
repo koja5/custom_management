@@ -39,7 +39,8 @@
     "newVaucher": "New vaucher",
     "addVaucher": "Add vaucher",
     "updateVaucher": "Update vaucher",
-    "user": "Benutzerin"
+    "user": "Benutzerin",
+    "required": "erforderlich"
   },
   "calendar": {
     "today": "Heute",
@@ -225,6 +226,7 @@
     "successful": "Erfolgreich!",
     "createNewStore": "Neuen Shop erstellen",
     "createStore": "Laden erstellen",
+    "updateStore": "Laden aktualisieren",
     "telephone": "Telefon",
     "email": "Email",
     "gender": "Geschlecht",
@@ -243,7 +245,8 @@
     "newStore": "Neuen Ort",
     "uploadFromExcel": "AUS EXCEL HOCHLADEN",
     "exportToExcel": "Nach Excel exportieren",
-    "exportToPDF": "Als PDF exportieren"
+    "exportToPDF": "Als PDF exportieren",
+    "required": "erforderlich"
   },
   "complaint": [
     "Kopfschmerzen",

@@ -122,23 +122,23 @@
 <kendo-window [title]="getTranslate(operationMode)" *ngIf="vaucher" [minWidth]="400" [width]="550" [minHeight]="300"
   (close)="vaucher = false">
   <form name="loginForm" class="loginForm"
-    (ngSubmit)="operationMode === 'add' ? createVaucher(vaucher) : editVaucher(vaucher)" ngNativeValidate>
+    (ngSubmit)="operationMode === 'add' ? createVaucher(vaucher) : editVaucher(vaucher)" #voucher="ngForm">
     <div class="col-md-12 col-xs-12" *ngIf="operationMode === 'edit'">
       <kendo-textbox-container floatingLabel="{{language.id}}">
         <input kendoTextBox class="col-xs-12" name="id" [(ngModel)]="data.id" id.id='' [disabled]="true">
       </kendo-textbox-container>
     </div>
     <div class="col-md-12 col-xs-12">
-      <kendo-textbox-container floatingLabel="{{language.date}}">
+      <kendo-textbox-container floatingLabel="{{language.date}}({{language.required}})">
         <kendo-datepicker class="email col-md-12 col-xs-12 noPadding" name="Date" [(ngModel)]="dateConst"
-          dateConst.value=''>
+          dateConst.value='' required>
         </kendo-datepicker>
       </kendo-textbox-container>
     </div>
     <div class="col-md-12 col-xs-12">
-      <kendo-textbox-container floatingLabel="{{language.amount}}">
+      <kendo-textbox-container floatingLabel="{{language.amount}}({{language.required}})">
         <kendo-numerictextbox class="email col-md-12 col-xs-12 noPadding" name="Amount" [(ngModel)]="data.amount"
-          amount.value=''>
+          amount.value='' required>
         </kendo-numerictextbox>
       </kendo-textbox-container>
     </div>
@@ -165,9 +165,9 @@
       </kendo-textbox-container>
     </div>
     <div class="col-md-12 col-xs-12">
-      <kendo-textbox-container floatingLabel="{{language.user}}">
+      <kendo-textbox-container floatingLabel="{{language.user}}({{language.required}})">
         <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="users" [textField]="'shortname'"
-          [valueField]="'id'" [(ngModel)]="user" name="user" [disabled]="operationMode === 'add' ? false : true">
+          [valueField]="'id'" [(ngModel)]="user" name="user" [disabled]="operationMode === 'add' ? false : true" required>
         </kendo-combobox>
       </kendo-textbox-container>
     </div>
@@ -181,9 +181,9 @@
     </div>
     <div class="form-group" style="text-align: center;">
       <button *ngIf="operationMode === 'add'" kendoButton [primary]="true" class="form-button" type="submit"
-        [disabled]="dateConst === '' || data.amount === null || user === null">{{language.addVaucher}}</button>
+        [disabled]="voucher.form.invalid">{{language.addVaucher}}</button>
       <button *ngIf="operationMode === 'edit'" kendoButton [primary]="true" class="form-button" type="submit"
-        [disabled]="dateConst === '' || data.amount === null">{{language.updateVaucher}}</button>
+        [disabled]="voucher.form.invalid">{{language.updateVaucher}}</button>
     </div>
   </form>
 </kendo-window>
