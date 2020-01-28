@@ -81,66 +81,84 @@
   (close)="store = false">
   <form name="loginForm" class="loginForm" (ngSubmit)="createStore(store)" ngNativeValidate>
     <div class="email col-md-12 col-xs-12">
-      <p>{{language.storename}}</p>
-      <input type="text" class="col-xs-12" name="storename" placeholder="Store name" [(ngModel)]="data.storename"
-        required>
+      <kendo-textbox-container floatingLabel="{{language.storename}}">
+        <input kendoTextBox type="text" class="col-xs-12" name="storename" placeholder="Store name"
+          [(ngModel)]="data.storename" required>
+      </kendo-textbox-container>
     </div>
     <div class="email col-md-12 col-xs-12">
-      <p>{{language.street}}</p>
-      <input type="text" class="col-xs-12" name="street" placeholder="Street" [(ngModel)]="data.street" street.value=''>
+      <kendo-textbox-container floatingLabel="{{language.street}}">
+        <input kendoTextBox type="text" class="col-xs-12" name="street" placeholder="Street" [(ngModel)]="data.street"
+          street.value=''>
+
+      </kendo-textbox-container>
     </div>
     <div class="form-group">
       <div class="email col-md-6 col-xs-12">
-        <p>{{language.zipCode}}</p>
-        <input type="text" class="col-xs-12" name="zipcode" placeholder="Zipcode" [(ngModel)]="data.zipcode"
-          zipcode.value=''>
+        <kendo-textbox-container floatingLabel="{{language.zipCode}}">
+          <input kendoTextBox type="text" class="col-xs-12" name="zipcode" placeholder="Zipcode"
+            [(ngModel)]="data.zipcode" zipcode.value=''>
+        </kendo-textbox-container>
       </div>
       <div class="email col-md-6 col-xs-12">
-        <p>{{language.place}}</p>
-        <input type="text" class="col-xs-12" name="place" placeholder="Place" [(ngModel)]="data.place" place.value=''>
+        <kendo-textbox-container floatingLabel="{{language.place}}">
+          <input kendoTextBox type="text" class="col-xs-12" name="place" placeholder="Place" [(ngModel)]="data.place"
+            place.value=''>
+
+        </kendo-textbox-container>
       </div>
     </div>
     <div class="form-group">
       <div class="email col-md-6 col-xs-12">
-        <p>{{language.telephone}}</p>
-        <input type="text" class=" col-xs-12" name="telephone" placeholder="Telephone" [(ngModel)]="data.telephone"
-          telephone.value=''>
+        <kendo-textbox-container floatingLabel="{{language.telephone}}">
+          <input kendoTextBox type="text" class=" col-xs-12" name="telephone" placeholder="Telephone"
+            [(ngModel)]="data.telephone" telephone.value=''>
+        </kendo-textbox-container>
       </div>
       <div class="email col-md-6 col-xs-12">
-        <p>{{language.mobile}}</p>
-        <input type="text" class="col-xs-12" name="mobile" placeholder="mobile" [(ngModel)]="data.mobile"
-          mobile.value=''>
+        <kendo-textbox-container floatingLabel="{{language.mobile}}">
+          <input kendoTextBox type="text" class="col-xs-12" name="mobile" placeholder="mobile" [(ngModel)]="data.mobile"
+            mobile.value=''>
+        </kendo-textbox-container>
       </div>
       <div class="email col-md-12 col-xs-12">
-        <p>{{language.email}}</p>
-        <input type="email" class="col-xs-12" name="email" placeholder="Email" [(ngModel)]="data.email" required>
+        <kendo-textbox-container floatingLabel="{{language.email}}">
+          <input kendoTextBox type="email" class="col-xs-12" name="email" placeholder="Email" [(ngModel)]="data.email"
+            required>
+
+        </kendo-textbox-container>
       </div>
     </div>
     <div class="email col-md-12 col-xs-12">
-      <p>{{language.comment}}</p>
-      <input type="text" class="col-xs-12" name="comment" placeholder="Comment" [(ngModel)]="data.comment"
-        comment.value=''>
+      <kendo-textbox-container floatingLabel="{{language.comment}}">
+        <input kendoTextBox type="text" class="col-xs-12" name="comment" placeholder="Comment"
+          [(ngModel)]="data.comment" comment.value=''>
+      </kendo-textbox-container>
     </div>
     <div class="form-group">
       <div class="email col-md-6 col-xs-12">
-        <p>{{language.timeDuration}}</p>
-        <input type="text" class="col-xs-12" name="time_duraiton" placeholder="Time duration"
-          [(ngModel)]="data.time_duration" time_duration.value=''>
+        <kendo-textbox-container floatingLabel="{{language.timeDuration}}">
+          <input kendoTextBox type="text" class="col-xs-12" name="time_duraiton" placeholder="Time duration"
+            [(ngModel)]="data.time_duration" time_duration.value=''>
+        </kendo-textbox-container>
       </div>
       <div class="email col-md-6 col-xs-12">
-        <p>{{language.timeTherapy}}</p>
-        <input type="text" class="col-xs-12" name="time_therapy" placeholder="Therapy duration"
-          [(ngModel)]="data.time_therapy" time_therapy.value=''>
+        <kendo-textbox-container floatingLabel="{{language.timeTherapy}}">
+          <input kendoTextBox type="text" class="col-xs-12" name="time_therapy" placeholder="Therapy duration"
+            [(ngModel)]="data.time_therapy" time_therapy.value=''>
+        </kendo-textbox-container>
       </div>
     </div>
     <div class="form-group">
       <div class="email col-md-6 col-xs-12">
-        <p>{{language.startWork}}</p>
-        <kendo-timepicker class="col-xs-12" [(value)]="start_work"></kendo-timepicker>
+        <kendo-textbox-container floatingLabel="{{language.startWork}}">
+          <kendo-timepicker class="col-xs-12" [(value)]="start_work"></kendo-timepicker>
+        </kendo-textbox-container>
       </div>
       <div class="email col-md-6 col-xs-12">
-        <p>{{language.endWork}}</p>
-        <kendo-timepicker class="col-xs-12" [(value)]="end_work"></kendo-timepicker>
+        <kendo-textbox-container floatingLabel="{{language.endWork}}">
+          <kendo-timepicker class="col-xs-12" [(value)]="end_work"></kendo-timepicker>
+        </kendo-textbox-container>
       </div>
     </div>
 
