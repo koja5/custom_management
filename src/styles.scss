@@ -9144,7 +9144,7 @@ tr.group:hover {
         margin-left: 235px;
         margin-top: 0;
         min-height: 600px;
-        padding: 25px 20px 10px
+        padding: 25px 20px 0px;
     }
     .page-content-wrapper .page-content.no-min-height {
         min-height: auto
@@ -11216,4 +11216,6 @@ kendo-grid-filter-cell-operators {
   height: auto !important;
 }
 
-  /*end loader for component*/
+.k-scheduler-table .k-middle-row td { 
+    border-bottom-style: inset !important;
+}

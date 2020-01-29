@@ -118,7 +118,8 @@
                             <kendo-textbox-container floatingLabel="{{language.attention}}">
                               <textarea kendoTextArea
                                 *ngIf="data.attention === '' || data.attention === null || data.attention === undefiend"
-                                [autoSize]="true" [disabled]="true">{{language.noInformation}}</textarea>
+                                [autoSize]="true" [disabled]="true" [(ngModel)]="language.noInformation"
+                                name="attention"></textarea>
                               <textarea kendoTextArea
                                 *ngIf="data.attention !== null && data.attention !== undefined && data.attention !== ''"
                                 [(ngModel)]="data.attention" [autoSize]="true" [disabled]="true"></textarea>
@@ -130,8 +131,9 @@
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{language.physicalComplaint}}">
                               <textarea kendoTextArea
-                                *ngIf="data.physicalComplaint === '' || data.shophysicalComplaintrtname === null || data.physicalComplaint === undefiend"
-                                [autoSize]="true" [disabled]="true">{{language.noInformation}}</textarea>
+                                *ngIf="data.physicalComplaint === '' || data.physicalComplaint === null || data.physicalComplaint === undefiend"
+                                [autoSize]="true" [disabled]="true" [(ngModel)]="language.noInformation"
+                                name="physicalComplaint"></textarea>
                               <textarea kendoTextArea
                                 *ngIf="data.physicalComplaint !== null && data.physicalComplaint !== undefined && data.physicalComplaint !== ''"
                                 [(ngModel)]="data.physicalComplaint" [autoSize]="true" [disabled]="true"></textarea>
@@ -1042,12 +1044,7 @@
                     <div class="col-sm-6" style="margin-bottom: 3vh;">
                       <div class="row mgbt-xs-0">
                         <kendo-textbox-container floatingLabel="{{language.attention}}">
-                          <textarea kendoTextArea
-                            *ngIf="data.attention === '' || data.attention === null || data.attention === undefiend"
-                            [autoSize]="true" name="attention" style="width: 95%;">{{language.noInformation}}</textarea>
-                          <textarea kendoTextArea
-                            *ngIf="data.attention !== null && data.attention !== undefined && data.attention !== ''"
-                            [(ngModel)]="data.attention" [autoSize]="true" name="attention"
+                          <textarea kendoTextArea [(ngModel)]="data.attention" [autoSize]="true" name="attention"
                             style="width: 95%;"></textarea>
                         </kendo-textbox-container>
                       </div>
@@ -1055,14 +1052,8 @@
                     <div class="col-sm-6" style="margin-bottom: 3vh;">
                       <div class="row mgbt-xs-0">
                         <kendo-textbox-container floatingLabel="{{language.physicalComplaint}}">
-                          <textarea kendoTextArea
-                            *ngIf="data.physicalComplaint === '' || data.physicalComplaint === null || data.physicalComplaint === undefiend"
-                            [autoSize]="true" name="physicalComplaint"
-                            style="width: 95%;">{{language.noInformation}}</textarea>
-                          <textarea kendoTextArea
-                            *ngIf="data.physicalComplaint !== null && data.physicalComplaint !== undefined && data.physicalComplaint !== ''"
-                            [(ngModel)]="data.physicalComplaint" [autoSize]="true" name="physicalComplaint"
-                            style="width: 95%;"></textarea>
+                          <textarea kendoTextArea [(ngModel)]="data.physicalComplaint" [autoSize]="true"
+                            name="physicalComplaint" style="width: 95%;"></textarea>
                         </kendo-textbox-container>
                       </div>
                     </div>
@@ -1148,8 +1139,8 @@
               </div>
               <!-- ./remember-row -->
               <div class="form-group" style="text-align: center">
-                <button kendoButton [disabled]="customerForm.form.invalid" [primary]="true"
-                  class="form-button" type="submit">Update
+                <button kendoButton [disabled]="customerForm.form.invalid" [primary]="true" class="form-button"
+                  type="submit">Update
                   customer</button>
               </div>
             </form>

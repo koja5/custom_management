@@ -68,7 +68,7 @@ export class CustomersComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.height = window.innerHeight - 155;
+    this.height = window.innerHeight - 138;
     this.height += "px";
     this.data.gender = 'male';
     this.getCustomers();
@@ -406,7 +406,7 @@ export class CustomersComponent implements OnInit {
   @HostListener("window:resize", ["$event"])
   onResize(event) {
     console.log(window.innerHeight);
-    this.height = window.innerHeight - 155;
+    this.height = window.innerHeight - 138;
     this.height += "px";
   }
 

@@ -51,8 +51,9 @@ export class VaucherComponent implements OnInit {
   }
   private arrayBuffer: any;
   public operationMode: any;
-  public customerUsers: any;
-  public customerUser: any;
+  public customerBuysUsers = [];
+  public customerConsumersUsers = [];
+  public customerUserBuys: any;
   public customerUserConsumer: any;
   public dialog = false;
   public dateConst: any;
@@ -62,20 +63,21 @@ export class VaucherComponent implements OnInit {
   public user: any;
   public height: any;
   public searchFilter: any;
+  public customerBuysLoading = false;
+  public customerConsumersLoading = false;
   //  public selectedUser: any;
   constructor(
     private service: VaucherService,
     private customer: CustomersService,
     private message: MessageService,
     private userService: UsersService
-  ) {}
+  ) { }
 
   ngOnInit() {
-    this.height = window.innerHeight - 155;
+    this.height = window.innerHeight - 138;
     this.height += "px";
     this.id = Number(localStorage.getItem("idUser"));
     this.getVauchers();
-    this.getCustomer();
     this.getUsers();
     if (localStorage.getItem("language") !== null) {
       this.language = JSON.parse(localStorage.getItem("language")).vaucher;
@@ -108,7 +110,7 @@ export class VaucherComponent implements OnInit {
       .subscribe((data: []) => {
         if (data !== null) {
           console.log(data);
-          this.currentLoadData = data.sort(function(a, b) {
+          this.currentLoadData = data.sort(function (a, b) {
             return b["id"] - a["id"];
           });
           this.gridData = {
@@ -147,7 +149,7 @@ export class VaucherComponent implements OnInit {
     };
     this.dateConst = "";
     this.dateredeemedConst = "";
-    this.customerUser = null;
+    this.customerUserBuys = null;
     this.customerUserConsumer = null;
     this.user = null;
     // this.selectedUser = null;
@@ -156,10 +158,10 @@ export class VaucherComponent implements OnInit {
   createVaucher(form) {
     console.log(this.data);
     this.data.superadmin = localStorage.getItem("idUser");
-    if (this.customerUser !== null) {
-      this.data.customer = this.customerUser.id;
+    if (this.customerUserBuys !== null) {
+      this.data.customer = this.customerUserBuys.id;
       this.data.customer_name =
-        this.customerUser.firstname + " " + this.customerUser.lastname;
+        this.customerUserBuys.firstname + " " + this.customerUserBuys.lastname;
     }
     if (this.customerUserConsumer !== null) {
       this.data.customer_consumer = this.customerUserConsumer.id;
@@ -228,13 +230,13 @@ export class VaucherComponent implements OnInit {
   }
 
   editVaucher(store) {
-    console.log(this.customerUser);
-    if (this.customerUser !== null) {
-      this.data.customer = this.customerUser.id;
+    console.log(this.customerUserBuys);
+    if (this.customerUserBuys !== null && this.customerUserBuys !== undefined) {
+      this.data.customer = this.customerUserBuys.id;
       this.data.customer_name =
-        this.customerUser.firstname + " " + this.customerUser.lastname;
+        this.customerUserBuys.firstname + " " + this.customerUserBuys.lastname;
     }
-    if (this.customerUserConsumer !== null) {
+    if (this.customerUserConsumer !== null && this.customerUserConsumer !== undefined) {
       this.data.customer_consumer = this.customerUserConsumer.id;
       this.data.customer_consumer_name =
         this.customerUserConsumer.firstname +
@@ -273,20 +275,23 @@ export class VaucherComponent implements OnInit {
       this.dateredeemedConst = "";
     }
     this.data.amount = Number(data.amount);
-    this.customerUser = this.getSelectedCustomerUser(data.customer);
-    this.customerUserConsumer = this.getSelectedCustomerUser(
-      data.customer_consumer
+    this.customer.getInfoCustomer(data.customer).subscribe(
+      data => {
+        if (data !== null) {
+          this.customerBuysUsers.push(data[0]);
+          this.customerUserBuys = data[0];
+        }
+      }
+    );
+    this.customer.getInfoCustomer(data.customer_consumer).subscribe(
+      data => {
+        if (data !== null) {
+          this.customerConsumersUsers.push(data[0]);
+          this.customerUserConsumer = data[0];;
+        }
+      }
     );
     this.user = this.getSelectedUser(data.user);
-  }
-
-  getSelectedCustomerUser(id) {
-    for (let i = 0; i < this.customerUsers.length; i++) {
-      if (this.customerUsers[i].id == id) {
-        return this.customerUsers[i];
-      }
-    }
-    return null;
   }
 
   getSelectedUser(id) {
@@ -443,14 +448,6 @@ export class VaucherComponent implements OnInit {
     }
   }
 
-  getCustomer() {
-    this.customer.getCustomers(localStorage.getItem("superadmin"), val => {
-      console.log(val);
-      this.customerUsers = val;
-      this.loading = false;
-    });
-  }
-
   getUsers() {
     this.userService.getUsers(localStorage.getItem("superadmin"), val => {
       console.log(val);
@@ -555,7 +552,7 @@ export class VaucherComponent implements OnInit {
   @HostListener("window:resize", ["$event"])
   onResize(event) {
     console.log(window.innerHeight);
-    this.height = window.innerHeight - 155;
+    this.height = window.innerHeight - 138;
     this.height += "px";
   }
 
@@ -595,5 +592,45 @@ export class VaucherComponent implements OnInit {
       }
     });
     this.gridView = process(this.gridData.data, this.state);
+  }
+
+  searchCustomerBuys(event) {
+    console.log(event);
+    if (event !== "" && event.length > 2) {
+      this.customerBuysLoading = true;
+      const searchFilter = {
+        superadmin: localStorage.getItem("superadmin"),
+        filter: event
+      };
+      this.customer.searchCustomer(searchFilter).subscribe((val: []) => {
+        console.log(val);
+        this.customerBuysUsers = val.sort((a, b) =>
+          String(a["shortname"]).localeCompare(String(b["shortname"]))
+        );
+        this.customerBuysLoading = false;
+      });
+    } else {
+      this.customerBuysUsers = [];
+    }
+  }
+
+  searchCustomerConsumers(event) {
+    console.log(event);
+    if (event !== "" && event.length > 2) {
+      this.customerConsumersLoading = true;
+      const searchFilter = {
+        superadmin: localStorage.getItem("superadmin"),
+        filter: event
+      };
+      this.customer.searchCustomer(searchFilter).subscribe((val: []) => {
+        console.log(val);
+        this.customerConsumersUsers = val.sort((a, b) =>
+          String(a["shortname"]).localeCompare(String(b["shortname"]))
+        );
+        this.customerConsumersLoading = false;
+      });
+    } else {
+      this.customerConsumersUsers = [];
+    }
   }
 }

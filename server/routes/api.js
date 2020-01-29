@@ -1017,7 +1017,7 @@ router.post("/createCustomer", function (req, res, next) {
     console.log(podaci);
 
     conn.query(
-      "SELECT * FROM customers WHERE shortname=?",
+      "SELECT * FROM customers WHERE email=?",
       [req.body.shortname],
       function (err, rows, fields) {
         if (err) {
@@ -1076,6 +1076,38 @@ router.get("/getCustomers/:id", function (req, res, next) {
     }
     var id = req.params.id;
     conn.query("SELECT * from customers where storeId = ?", [id], function (
+      err,
+      rows
+    ) {
+      conn.release();
+      if (!err) {
+        res.json(rows);
+      } else {
+        res.json(null);
+      }
+    });
+
+    conn.on("error", function (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    });
+  });
+});
+
+router.get("/getInfoForCustomer/:id", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+    var id = req.params.id;
+    conn.query("SELECT * from customers where id = ?", [id], function (
       err,
       rows
     ) {

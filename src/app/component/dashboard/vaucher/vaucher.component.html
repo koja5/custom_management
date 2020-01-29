@@ -163,15 +163,15 @@
     </div>
     <div class="col-md-12 col-xs-12">
       <kendo-textbox-container floatingLabel="{{language.customerBuys}}">
-        <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="customerUsers" [textField]="'shortname'"
-          [valueField]="'id'" [(ngModel)]="customerUser" name="customer">
+        <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="customerBuysUsers" [textField]="'shortname'"
+          [valueField]="'id'" [(ngModel)]="customerUserBuys" name="customer" [filterable]="true" (filterChange)="searchCustomerBuys($event)" [loading]="customerBuysLoading">
         </kendo-combobox>
       </kendo-textbox-container>
     </div>
     <div class="col-md-12 col-xs-12">
       <kendo-textbox-container floatingLabel="{{language.customerConsumer}}">
-        <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="customerUsers" [textField]="'shortname'"
-          [valueField]="'id'" [(ngModel)]="customerUserConsumer" name="customer_consumer">
+        <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="customerConsumersUsers" [textField]="'shortname'"
+          [valueField]="'id'" [(ngModel)]="customerUserConsumer" name="customer_consumer"  [filterable]="true" (filterChange)="searchCustomerConsumers($event)" [loading]="customerConsumersLoading">
         </kendo-combobox>
       </kendo-textbox-container>
     </div>

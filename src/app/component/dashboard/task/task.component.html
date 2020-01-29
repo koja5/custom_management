@@ -215,19 +215,19 @@
                       (valueChange)="onValueChange($event)" [(ngModel)]="customerUser" style.width="{{userWidth}}"
                       [filterable]="true" (filterChange)="searchCustomer($event)" [loading]="customerLoading">
                       <ng-template kendoComboBoxItemTemplate let-dataItem>
-                        <p style="height: 30px !important;">
+                        <p style="height: 50px !important;">
                           <span style="font-weight: bold">{{ dataItem.shortname }}</span> <br>
                           <span class="customerInfo" *ngIf="dataItem.city !== ''"> {{ dataItem.city}}</span>
                           <span class="customerInfo" *ngIf="dataItem.street !== ''">/{{dataItem.street}}</span>
                         </p>
                       </ng-template>
                     </kendo-combobox>
-                    <button kendoButton [icon]="'user'" [primary]="true" class="inputTheme-{{theme}}"
+                    <button kendoButton [icon]="'user'" [primary]="true" class="patient-options"
                       (click)="newCustomer()">
                       {{languageUser.newCustomer}}
                     </button>
 
-                    <button kendoButton [icon]="'k-icon k-i-information'" class="inputTheme-{{theme}}" [primary]="true"
+                    <button kendoButton [icon]="'k-icon k-i-information'" class="patient-options" [primary]="true"
                       (click)="baseDataForUser()" *ngIf="baseDataIndicator">
                       {{languageUser.baseDate}}
                     </button>
@@ -401,20 +401,19 @@
                     (valueChange)="onValueChange($event)" [(ngModel)]="customerUser" style.width="{{userWidth}}"
                     [filterable]="true" (filterChange)="searchCustomer($event)">
                     <ng-template kendoComboBoxItemTemplate let-dataItem>
-                      <p style="height: 45px !important;">
+                      <p style="height: 50px !important;">
                         <span style="font-weight: bold">{{ dataItem.shortname }}</span> <br>
                         <span class="customerInfo" *ngIf="dataItem.city !== ''"> {{ dataItem.city}}</span>
                         <span class="customerInfo" *ngIf="dataItem.street !== ''">/{{dataItem.street}}</span>
                       </p>
                     </ng-template>
                   </kendo-combobox>
-                  <button kendoButton [icon]="'user'" [primary]="true" class="inputTheme-{{theme}}"
-                    (click)="newCustomer()" style="font-size: 9px !important;">
+                  <button kendoButton [icon]="'user'" [primary]="true" class="patient-options" (click)="newCustomer()">
                     {{languageUser.newCustomer}}
                   </button>
 
-                  <button kendoButton [icon]="'k-icon k-i-information'" class="inputTheme-{{theme}}" [primary]="true"
-                    (click)="baseDataForUser()" *ngIf="baseDataIndicator" style="font-size: 9px !important;">
+                  <button kendoButton [icon]="'k-icon k-i-information'" class="patient-options" [primary]="true"
+                    (click)="baseDataForUser()" *ngIf="baseDataIndicator">
                     {{languageUser.baseDate}}
                   </button>
                 </div>

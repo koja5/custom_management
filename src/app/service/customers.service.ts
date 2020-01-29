@@ -23,6 +23,11 @@ export class CustomersService {
       .subscribe(val => callback(val));
   }
 
+  getInfoCustomer(id) {
+    return this.http.get('/api/getInfoForCustomer/' + id)
+      .map(res => res);
+  }
+
   deleteCustomer(id, callback) {
     return this.http.get('/api/deleteCustomer/' + id)
       .map(res => res)

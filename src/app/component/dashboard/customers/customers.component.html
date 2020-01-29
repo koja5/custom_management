@@ -3,11 +3,6 @@
 </div>
 
 <div *ngIf="!loading && selectedUser === undefined" style="height: 100%">
-  <div class="user-options">
-
-
-  </div>
-
   <kendo-grid *ngIf="language !== undefined" [data]="gridView" [style.height]="height" [resizable]="true"
     [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
     [pageable]="true" (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey">
