@@ -11203,5 +11203,17 @@ kendo-grid-filter-cell-operators {
   width: 100% !important;
 }
 
-  
+.search .k-textbox-container, .search .k-floating-label-container {
+  width: 200px !important;
+}
+
+.search {
+  width: 200px !important;
+  float: left;
+}
+
+.k-textarea-wrapper .k-textarea {
+  height: auto !important;
+}
+
   /*end loader for component*/

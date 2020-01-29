@@ -4,25 +4,36 @@
 
 <div *ngIf="!loading" style="height: 100%">
   <div *ngIf="selectedUser === undefined" style="height: 100%">
-    <div class="vaucher-options">
-      <button kendoButton [icon]="'greyscale'" (click)="newVaucher()" [primary]="true"
-        style="border: none;">{{language.newVaucher}}</button>
-      <label class="uploadFromExcel-{{theme}}"><span class='k-icon k-i-file-excel'></span>
-        {{ language.uploadFromExcel }}<input type="file" name="files[]" multiple id="jsonFile" accept=".xlsx"
-          (change)="onFileChange($event)" [(ngModel)]="fileValue" /></label>
-    </div>
-
-    <kendo-grid *ngIf="language !== undefined" [data]="gridData" [style.height]="height" [resizable]="true"
+    <kendo-grid *ngIf="language !== undefined" [data]="gridView" [style.height]="height" [resizable]="true"
       [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
-      [pageable]="true" [filterable]="true" (dataStateChange)="dataStateChange($event)"
-      (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey" [loading]="loadingGridVaucher">
+      [pageable]="true" (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey"
+      [loading]="loadingGridVaucher">
       <kendo-grid-messages pagerPage="{{language.pagerPage}}" pagerOf="{{language.pagerOf}}"
         pagerItems="{{language.pagerItems}}" pagerItemsPerPage="{{language.pagerItemsPerPage}}">
       </kendo-grid-messages>
       <ng-template kendoGridToolbarTemplate>
-        <button type="button" kendoGridExcelCommand icon="file-excel"
-          class="uploadFromExcel-{{theme}}">{{language.exportToExcel}}</button>
-        <button kendoGridPDFCommand icon="file-pdf" class="uploadFromExcel-{{theme}}">{{language.exportToPDF}}</button>
+        <div class="search">
+          <kendo-textbox-container floatingLabel="{{language.searchAllColumn}}">
+            <input kendoTextBox (input)="onFilter($event.target.value)" [(ngModel)]="searchFilter" />
+          </kendo-textbox-container>
+        </div>
+        <div style="float: right; padding-right: 30px; padding-top: 14px;">
+          <button kendoButton [icon]="'add'" (click)="newVaucher()" [primary]="true"
+            style="background: #6673FC !important; margin-left: 12px;">{{language.newVaucher}}</button>
+          <div class="dropdown-grid">
+            <button class="btn-grid" style="border-left:1px solid #0d8bf2">
+              <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content-grid">
+              <a style="padding: 0px;"><label class="uploadFromExcel-{{theme}}"
+                  style="padding: 12px; cursor: pointer;"><span class='k-icon k-i-file-excel'></span>
+                  {{ language.uploadFromExcel }}<input type="file" name="files[]" multiple id="jsonFile" accept=".xlsx"
+                    (change)="onFileChange($event)" [(ngModel)]="fileValue" /></label></a>
+              <a kendoGridPDFCommand><span class="k-icon k-i-file-pdf"></span> {{language.exportToPDF}}</a>
+              <a kendoGridExcelCommand><span class="k-icon k-i-file-excel"></span> {{language.exportToExcel}}</a>
+            </div>
+          </div>
+        </div>
       </ng-template>
       <kendo-grid-column field="id" title="{{language.id}}" width="50">
       </kendo-grid-column>
@@ -46,12 +57,12 @@
       </kendo-grid-column>
       <kendo-grid-column field="comment" title="{{language.comment}}" width="120">
       </kendo-grid-column>
-      <kendo-grid-column width="50">
+      <kendo-grid-column width="80">
         <ng-template kendoGridCellTemplate let-dataItem>
           <button kendoButton [icon]="'k-icon k-i-edit'" (click)="editForm(dataItem)"></button>
         </ng-template>
       </kendo-grid-column>
-      <kendo-grid-column width="50">
+      <kendo-grid-column width="80">
         <ng-template kendoGridCellTemplate let-dataItem>
           <button kendoButton [icon]="'k-icon k-i-delete'" (click)="open('dialog', dataItem.id)"></button>
         </ng-template>
@@ -167,7 +178,8 @@
     <div class="col-md-12 col-xs-12">
       <kendo-textbox-container floatingLabel="{{language.user}}({{language.required}})">
         <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="users" [textField]="'shortname'"
-          [valueField]="'id'" [(ngModel)]="user" name="user" [disabled]="operationMode === 'add' ? false : true" required>
+          [valueField]="'id'" [(ngModel)]="user" name="user" [disabled]="operationMode === 'add' ? false : true"
+          required>
         </kendo-combobox>
       </kendo-textbox-container>
     </div>

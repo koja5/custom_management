@@ -30,6 +30,7 @@ export class UsersComponent implements OnInit {
   public data = new UserModel();
   public userType = ["Employee", "Manager", "Admin"];
   public gridData: any;
+  public gridView: any;
   public currentLoadData: any;
   public state: State = {
     skip: 0,
@@ -60,7 +61,7 @@ export class UsersComponent implements OnInit {
     return JSON.stringify(context.index);
   }
   private arrayBuffer: any;
-  private icon: string = 'cog';
+  private icon: string = "cog";
   private settings: Array<any> = [
     {
       text: "My Profile"
@@ -79,6 +80,9 @@ export class UsersComponent implements OnInit {
     }
   ];
   public height: any;
+  public searchFilter: any;
+  public selectedUserType: any;
+  public selectedStoreId: any;
 
   constructor(
     public service: UsersService,
@@ -91,8 +95,8 @@ export class UsersComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.height = window.innerHeight - 191;
-    this.height += 'px';
+    this.height = window.innerHeight - 155;
+    this.height += "px";
     this.getUser();
     if (localStorage.getItem("theme") !== null) {
       this.theme = localStorage.getItem("theme");
@@ -110,7 +114,10 @@ export class UsersComponent implements OnInit {
     this.service.getUsers(localStorage.getItem("superadmin"), val => {
       console.log(val);
       this.currentLoadData = val;
-      this.gridData = process(val, this.state);
+      this.gridData = {
+        data: val
+      };
+      this.gridView = process(val, this.state);
       this.changeTheme(this.theme);
       this.loading = false;
     });
@@ -148,6 +155,7 @@ export class UsersComponent implements OnInit {
       if (val.success) {
         console.log(val);
         this.gridData.data.push(this.data);
+        this.gridView.data.push(this.data);
         this.user = false;
         Swal.fire({
           title: "Successfull!",
@@ -168,6 +176,7 @@ export class UsersComponent implements OnInit {
   }
 
   selectionChange(event) {
+    this.selectedUserType = event;
     if (event === "Employee") {
       this.data.type = "3";
     } else if (event === "Manager") {
@@ -180,7 +189,7 @@ export class UsersComponent implements OnInit {
   }
 
   selectionChangeStore(event) {
-    console.log(event);
+    this.selectedStoreId = event
     if (event !== undefined) {
       this.data.storeId = event.id;
     } else {
@@ -208,13 +217,10 @@ export class UsersComponent implements OnInit {
   }
 
   loadProducts(): void {
-    this.gridData = {
-      data: this.currentLoadData.slice(
-        this.state.skip,
-        this.state.skip + this.state.take
-      ),
-      total: this.currentLoadData.length
-    };
+    this.gridData.data = this.gridData.data.slice(
+      this.state.skip,
+      this.state.skip + this.state.take
+    );
   }
 
   public close(component) {
@@ -222,7 +228,10 @@ export class UsersComponent implements OnInit {
   }
 
   sortChangeData() {
-    this.currentLoadData = orderBy(this.currentLoadData, this.sort);
+    this.gridView = {
+      data: orderBy(this.currentLoadData, this.sort),
+      total: this.currentLoadData.length
+    };
   }
 
   hideShowPassword() {
@@ -311,6 +320,7 @@ export class UsersComponent implements OnInit {
             XLSX.utils.sheet_to_json(worksheet, { raw: true })
           );
           this.fileValue = null;
+          this.gridView = this.gridData;
         }
       }, 50);
     };
@@ -428,10 +438,48 @@ export class UsersComponent implements OnInit {
     }, 50);
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener("window:resize", ["$event"])
   onResize(event) {
     console.log(window.innerHeight);
-    this.height = window.innerHeight - 191;
-    this.height += 'px';
+    this.height = window.innerHeight - 155;
+    this.height += "px";
+  }
+
+  public onFilter(inputValue: string): void {
+    this.searchFilter = inputValue;
+    this.state.skip = 0;
+    this.gridData = process(this.currentLoadData, {
+      filter: {
+        logic: "or",
+        filters: [
+          {
+            field: "shortname",
+            operator: "contains",
+            value: inputValue
+          },
+          {
+            field: "email",
+            operator: "contains",
+            value: inputValue
+          },
+          {
+            field: "firstname",
+            operator: "contains",
+            value: inputValue
+          },
+          {
+            field: "lastname",
+            operator: "contains",
+            value: inputValue
+          },
+          {
+            field: "street",
+            operator: "contains",
+            value: inputValue
+          }
+        ]
+      }
+    });
+    this.gridView = process(this.gridData.data, this.state);
   }
 }

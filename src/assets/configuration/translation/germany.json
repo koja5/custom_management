@@ -40,7 +40,8 @@
     "addVaucher": "Add vaucher",
     "updateVaucher": "Update vaucher",
     "user": "Benutzerin",
-    "required": "erforderlich"
+    "required": "erforderlich",
+    "searchAllColumn": "In allen Spalten suchen..."
   },
   "calendar": {
     "today": "Heute",
@@ -216,11 +217,12 @@
     "company": "Unternehmen",
     "noInformation": "Keine Information",
     "fullName": "Vollständiger Name",
-    "searchAllColumn": "Search all column...",
     "edit": "Bearbeiten",
     "delete": "Löschen",
     "print": "Drucken",
-    "required": "erforderlich"
+    "required": "erforderlich",
+    "searchAllColumn": "In allen Spalten suchen...",
+    "storename": "Name des Geschäfts"
   },
   "store": {
     "exist": "E-Mail ist vorhanden!",
@@ -249,7 +251,8 @@
     "uploadFromExcel": "AUS EXCEL HOCHLADEN",
     "exportToExcel": "Nach Excel exportieren",
     "exportToPDF": "Als PDF exportieren",
-    "required": "erforderlich"
+    "required": "erforderlich",
+    "searchAllColumn": "In allen Spalten suchen..."
   },
   "complaint": [
     "Kopfschmerzen",

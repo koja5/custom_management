@@ -12,7 +12,7 @@ import Swal from "sweetalert2";
 // import * as GC from '@grapecity/spread-sheets';
 // import * as Excel from '@grapecity/spread-excelio';
 import * as XLSX from "ts-xlsx";
-import { MessageService } from 'src/app/service/message.service';
+import { MessageService } from "src/app/service/message.service";
 
 @Component({
   selector: "app-store",
@@ -25,6 +25,7 @@ export class StoreComponent implements OnInit {
   public data = new StoreModel();
   public currentLoadData: any;
   public gridData: any;
+  public gridView: any;
   public dialogOpened = false;
   public state: State = {
     skip: 0,
@@ -48,14 +49,15 @@ export class StoreComponent implements OnInit {
   private arrayBuffer: any;
   public loadingGrid = false;
   public height: any;
+  public searchFilter: any;
 
   constructor(public service: StoreService, public message: MessageService) {
     // this.excelIO = new Excel.IO();
   }
 
   ngOnInit() {
-    this.height = window.innerHeight - 191;
-    this.height += 'px';
+    this.height = window.innerHeight - 155;
+    this.height += "px";
     this.idUser = localStorage.getItem("superadmin");
     if (localStorage.getItem("theme") !== null) {
       this.theme = localStorage.getItem("theme");
@@ -74,7 +76,10 @@ export class StoreComponent implements OnInit {
     this.service.getStore(this.idUser, val => {
       console.log(val);
       this.currentLoadData = val;
-      this.gridData = process(val, this.state);
+      this.gridData = {
+        data: val
+      };
+      this.gridView = process(val, this.state);
       this.changeTheme(this.theme);
       this.loading = false;
       this.loadingGrid = false;
@@ -110,8 +115,6 @@ export class StoreComponent implements OnInit {
       if (val.success) {
         console.log(val);
         this.data.id = val.id;
-        this.currentLoadData.push(this.data);
-        this.gridData.total = this.currentLoadData.length;
         this.getStore();
         this.store = false;
         Swal.fire({
@@ -177,15 +180,10 @@ export class StoreComponent implements OnInit {
   }
 
   loadProducts(): void {
-    this.gridData = {
-      data: this.currentLoadData.slice(
-        this.state.skip,
-        this.state.skip + this.state.take
-      ),
-      total: this.currentLoadData.length
-    };
-
-    console.log(this.gridData);
+    this.gridView.data = this.gridData.data.slice(
+      this.state.skip,
+      this.state.skip + this.state.take
+    );
   }
 
   editStore(store) {
@@ -296,6 +294,7 @@ export class StoreComponent implements OnInit {
             XLSX.utils.sheet_to_json(worksheet, { raw: true })
           );
           this.fileValue = null;
+          this.gridView = this.gridData;
         }
       }, 50);
     };
@@ -414,10 +413,48 @@ export class StoreComponent implements OnInit {
     }, 50);
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener("window:resize", ["$event"])
   onResize(event) {
     console.log(window.innerHeight);
-    this.height = window.innerHeight - 191;
-    this.height += 'px';
+    this.height = window.innerHeight - 155;
+    this.height += "px";
+  }
+
+  public onFilter(inputValue: string): void {
+    this.searchFilter = inputValue;
+    this.state.skip = 0;
+    this.gridData = process(this.currentLoadData, {
+      filter: {
+        logic: "or",
+        filters: [
+          {
+            field: "storename",
+            operator: "contains",
+            value: inputValue
+          },
+          {
+            field: "email",
+            operator: "contains",
+            value: inputValue
+          },
+          {
+            field: "street",
+            operator: "contains",
+            value: inputValue
+          },
+          {
+            field: "place",
+            operator: "contains",
+            value: inputValue
+          },
+          {
+            field: "telephone",
+            operator: "contains",
+            value: inputValue
+          }
+        ]
+      }
+    });
+    this.gridView = process(this.gridData.data, this.state);
   }
 }

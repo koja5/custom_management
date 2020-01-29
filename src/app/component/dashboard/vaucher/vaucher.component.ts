@@ -12,7 +12,7 @@ import { UploadEvent } from "@progress/kendo-angular-upload";
 import { MessageService } from "../../../service/message.service";
 import * as XLSX from "ts-xlsx";
 import { CustomersService } from "src/app/service/customers.service";
-import { UsersService } from 'src/app/service/users.service';
+import { UsersService } from "src/app/service/users.service";
 
 @Component({
   selector: "app-vaucher",
@@ -26,6 +26,7 @@ export class VaucherComponent implements OnInit {
   public emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$";
   public userType = ["Employee", "Manager", "Admin"];
   public gridData: any;
+  public gridView: any;
   public currentLoadData: any;
   public state: State = {
     skip: 0,
@@ -58,9 +59,10 @@ export class VaucherComponent implements OnInit {
   public dateredeemedConst: any;
   public id: number;
   public users: any;
-  public user:any;
+  public user: any;
   public height: any;
-//  public selectedUser: any;
+  public searchFilter: any;
+  //  public selectedUser: any;
   constructor(
     private service: VaucherService,
     private customer: CustomersService,
@@ -69,8 +71,8 @@ export class VaucherComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.height = window.innerHeight - 191;
-    this.height += 'px';
+    this.height = window.innerHeight - 155;
+    this.height += "px";
     this.id = Number(localStorage.getItem("idUser"));
     this.getVauchers();
     this.getCustomer();
@@ -101,22 +103,28 @@ export class VaucherComponent implements OnInit {
 
   getVauchers() {
     this["loadingGridVaucher"] = true;
-    this.service.getVauchers(localStorage.getItem("idUser")).subscribe((data: []) => {
-      if (data !== null) {
-        console.log(data);
-        this.currentLoadData = data.sort(function(a, b) {
-          return b["id"] - a["id"];
-        });;
-        this.gridData = process(this.currentLoadData, this.state);
-        this["loadingGridVaucher"] = false;
-      } else {
-        this.gridData = [];
+    this.service
+      .getVauchers(localStorage.getItem("idUser"))
+      .subscribe((data: []) => {
+        if (data !== null) {
+          console.log(data);
+          this.currentLoadData = data.sort(function(a, b) {
+            return b["id"] - a["id"];
+          });
+          this.gridData = {
+            data: data
+          };
+          this.gridView = process(data, this.state);
+          this["loadingGridVaucher"] = false;
+        } else {
+          this.gridData = [];
+          this.gridView = this.gridData;
+          this.loading = false;
+          this["loadingGridVaucher"] = false;
+        }
         this.loading = false;
-        this["loadingGridVaucher"] = false;
-      }
-      this.loading = false;
-      this.changeTheme(this.theme);
-    });
+        this.changeTheme(this.theme);
+      });
   }
 
   newVaucher() {
@@ -153,14 +161,16 @@ export class VaucherComponent implements OnInit {
       this.data.customer_name =
         this.customerUser.firstname + " " + this.customerUser.lastname;
     }
-    if(this.customerUserConsumer !== null) {
+    if (this.customerUserConsumer !== null) {
       this.data.customer_consumer = this.customerUserConsumer.id;
-      this.data.customer_consumer_name = this.customerUserConsumer.firstname + " " + this.customerUserConsumer.lastname;
+      this.data.customer_consumer_name =
+        this.customerUserConsumer.firstname +
+        " " +
+        this.customerUserConsumer.lastname;
     }
     if (this.user !== null) {
       this.data.user = this.user.id;
-      this.data.user_name =
-        this.user.shortname;
+      this.data.user_name = this.user.shortname;
     }
     this.data.date = this.dateConst.toString();
     this.data.date_redeemed = this.dateredeemedConst.toString();
@@ -224,9 +234,12 @@ export class VaucherComponent implements OnInit {
       this.data.customer_name =
         this.customerUser.firstname + " " + this.customerUser.lastname;
     }
-    if(this.customerUserConsumer !== null) {
+    if (this.customerUserConsumer !== null) {
       this.data.customer_consumer = this.customerUserConsumer.id;
-      this.data.customer_consumer_name = this.customerUserConsumer.firstname + " " + this.customerUserConsumer.lastname;
+      this.data.customer_consumer_name =
+        this.customerUserConsumer.firstname +
+        " " +
+        this.customerUserConsumer.lastname;
     }
     this.data.date = this.dateConst.toString();
     this.data.date_redeemed = this.dateredeemedConst.toString();
@@ -261,11 +274,11 @@ export class VaucherComponent implements OnInit {
     }
     this.data.amount = Number(data.amount);
     this.customerUser = this.getSelectedCustomerUser(data.customer);
-    this.customerUserConsumer = this.getSelectedCustomerUser(data.customer_consumer);
-    this.user=this.getSelectedUser(data.user);
+    this.customerUserConsumer = this.getSelectedCustomerUser(
+      data.customer_consumer
+    );
+    this.user = this.getSelectedUser(data.user);
   }
-
-
 
   getSelectedCustomerUser(id) {
     for (let i = 0; i < this.customerUsers.length; i++) {
@@ -308,12 +321,10 @@ export class VaucherComponent implements OnInit {
   }
 
   loadProducts(): void {
-    this.gridData = {
-      data: this.gridData.slice(
-        this.state.skip,
-        this.state.skip + this.state.take
-      )
-    };
+    this.gridView.data = this.gridData.data.slice(
+      this.state.skip,
+      this.state.skip + this.state.take
+    );
   }
 
   previewUser(selectedUser) {
@@ -389,6 +400,7 @@ export class VaucherComponent implements OnInit {
             XLSX.utils.sheet_to_json(worksheet, { raw: true })
           );
           this.fileValue = null;
+          this.gridView = this.gridData;
         }
       }, 50);
     };
@@ -439,14 +451,12 @@ export class VaucherComponent implements OnInit {
     });
   }
 
-  getUsers()
-  {
+  getUsers() {
     this.userService.getUsers(localStorage.getItem("superadmin"), val => {
       console.log(val);
       this.users = val;
       this.loading = false;
     });
-
   }
 
   open(component, id) {
@@ -542,10 +552,48 @@ export class VaucherComponent implements OnInit {
     }, 50);
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener("window:resize", ["$event"])
   onResize(event) {
     console.log(window.innerHeight);
-    this.height = window.innerHeight - 191;
-    this.height += 'px';
+    this.height = window.innerHeight - 155;
+    this.height += "px";
+  }
+
+  public onFilter(inputValue: string): void {
+    this.searchFilter = inputValue;
+    this.state.skip = 0;
+    this.gridData = process(this.currentLoadData, {
+      filter: {
+        logic: "or",
+        filters: [
+          {
+            field: "amount",
+            operator: "contains",
+            value: inputValue
+          },
+          {
+            field: "customer_name",
+            operator: "contains",
+            value: inputValue
+          },
+          {
+            field: "customer_consumer_name",
+            operator: "contains",
+            value: inputValue
+          },
+          {
+            field: "user_name",
+            operator: "contains",
+            value: inputValue
+          },
+          {
+            field: "comment",
+            operator: "contains",
+            value: inputValue
+          }
+        ]
+      }
+    });
+    this.gridView = process(this.gridData.data, this.state);
   }
 }

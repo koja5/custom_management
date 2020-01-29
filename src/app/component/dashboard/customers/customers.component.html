@@ -146,22 +146,24 @@
           <div class="form-group col-md-12 col-xs-12">
             <div class="col-md-6 col-xs-12">
               <kendo-textbox-container floatingLabel="{{language.gender}}">
-                <div>
+                <div style="padding-left: 45px;">
                   <input type="radio" name="gender" id="female" class="k-radio"
                     checked="data.gender === 'female' ? checked : ''" [(ngModel)]="data.gender" [value]="'female'">
                   <span class="k-radio-label col-md-6 col-xs-12" for="female">{{language.female}}</span>
                 </div>
-                <div>
+                <div style="padding-left: 45px;">
                   <input type="radio" name="gender" id="male" class="k-radio"
                     checked="data.gender === 'male' ? checked : ''" [(ngModel)]="data.gender" [value]="'male'">
                   <span class="k-radio-label col-md-6 col-xs-12" for="male">{{language.male}}</span>
                 </div>
               </kendo-textbox-container>
             </div>
-            <div class="birthday-container">
-              <kendo-datepicker class="email col-md-6 col-xs-12 noPadding" name="birthday" [value]="data.birthday"
-                (valueChange)="onChange($event)">
-              </kendo-datepicker>
+            <div class="birthday-container col-md-6 col-xs-12">
+              <kendo-textbox-container floatingLabel="{{language.birthday}}">
+                <kendo-datepicker class="email noPadding" name="birthday" [(ngModel)]="data.birthday"
+                  (valueChange)="onChange($event)">
+                </kendo-datepicker>
+              </kendo-textbox-container>
             </div>
           </div>
 

@@ -3,22 +3,35 @@
 </div>
 
 <div *ngIf="!loading" style="height: 100%">
-  <div class="user-options">
-    <button kendoButton [icon]="'k-icib k-i-marker-pin-target'" (click)="newStore()"
-      [primary]="true">{{language.newStore}}</button>
-    <label class="uploadFromExcel-{{theme}}"><span class='k-icon k-i-file-excel'></span>
-      {{ language.uploadFromExcel }}<input type="file" name="files[]" multiple id="jsonFile" accept=".xlsx"
-        (change)="onFileChange($event)" [(ngModel)]="fileValue" /></label>
-  </div>
-
-  <kendo-grid [data]="gridData" [style.height]="height" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
-    [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="true" [filterable]="true"
-    (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey"
-    [loading]="loadingGrid">
+  <kendo-grid [data]="gridView" [style.height]="height" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
+    [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="true" (pageChange)="pageChange($event)"
+    [kendoGridSelectBy]="mySelectionKey" [loading]="loadingGrid">
+    <kendo-grid-messages pagerPage="{{language.pagerPage}}" pagerOf="{{language.pagerOf}}"
+      pagerItems="{{language.pagerItems}}" pagerItemsPerPage="{{language.pagerItemsPerPage}}">
+    </kendo-grid-messages>
     <ng-template kendoGridToolbarTemplate>
-      <button type="button" kendoGridExcelCommand icon="file-excel"
-        class="uploadFromExcel-{{theme}}">{{language.exportToExcel}}</button>
-      <button kendoGridPDFCommand icon="file-pdf" class="uploadFromExcel-{{theme}}">{{language.exportToPDF}}</button>
+      <div class="search">
+        <kendo-textbox-container floatingLabel="{{language.searchAllColumn}}">
+          <input kendoTextBox (input)="onFilter($event.target.value)" [(ngModel)]="searchFilter" />
+        </kendo-textbox-container>
+      </div>
+      <div style="float: right; padding-right: 30px; padding-top: 14px;">
+        <button kendoButton [icon]="'add'" (click)="newStore()" [primary]="true"
+          style="background: #6673FC !important; margin-left: 12px;">{{language.newStore}}</button>
+        <div class="dropdown-grid">
+          <button class="btn-grid" style="border-left:1px solid #0d8bf2">
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content-grid">
+            <a style="padding: 0px;"><label class="uploadFromExcel-{{theme}}"
+                style="padding: 12px; cursor: pointer;"><span class='k-icon k-i-file-excel'></span>
+                {{ language.uploadFromExcel }}<input type="file" name="files[]" multiple id="jsonFile" accept=".xlsx"
+                  (change)="onFileChange($event)" [(ngModel)]="fileValue" /></label></a>
+            <a kendoGridPDFCommand><span class="k-icon k-i-file-pdf"></span> {{language.exportToPDF}}</a>
+            <a kendoGridExcelCommand><span class="k-icon k-i-file-excel"></span> {{language.exportToExcel}}</a>
+          </div>
+        </div>
+      </div>
     </ng-template>
     <kendo-grid-column field="storename" title="Store name" width="120">
     </kendo-grid-column>
@@ -30,12 +43,12 @@
     </kendo-grid-column>
     <kendo-grid-column field="telephone" title="Telephone" width="150">
     </kendo-grid-column>
-    <kendo-grid-column width="50">
+    <kendo-grid-column width="80">
       <ng-template kendoGridCellTemplate let-dataItem>
         <button kendoButton [icon]="'k-icon k-i-edit'" (click)="editStore(dataItem)"></button>
       </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column width="50">
+    <kendo-grid-column width="80">
       <ng-template kendoGridCellTemplate let-dataItem>
         <button kendoButton [icon]="'k-icon k-i-delete'" (click)="open('dialog', dataItem.id)"></button>
       </ng-template>
@@ -77,8 +90,7 @@
   </kendo-grid>
 </div>
 
-<kendo-window title="{{language.createNewStore}}" *ngIf="store" [minWidth]="600" [width]="600"
-  (close)="store = false">
+<kendo-window title="{{language.createNewStore}}" *ngIf="store" [minWidth]="600" [width]="600" (close)="store = false">
   <form name="loginForm" class="loginForm" (ngSubmit)="createStore(store)" #storeForm="ngForm">
     <div class="col-md-12 col-xs-12">
       <kendo-textbox-container floatingLabel="{{language.storename}}({{language.required}})">
@@ -234,15 +246,19 @@
       </div>
     </div>
 
-    <div class="form-group"  style="text-align: center;">
-      <button kendoButton [primary]="true" [disabled]="storeForm.form.invalid" class="form-button" type="submit">{{language.updateStore}}</button>
+    <div class="form-group" style="text-align: center;">
+      <button kendoButton [primary]="true" [disabled]="storeForm.form.invalid" class="form-button"
+        type="submit">{{language.updateStore}}</button>
     </div>
   </form>
 
 </kendo-window>
 
 <kendo-dialog title="Please confirm" *ngIf="dialogOpened" (close)="close('dialog')" [minWidth]="250" [width]="450">
-  <p style="margin: 30px; text-align: center;">Are you sure you want to continue?</p>
+  <div class="modal-body text-center">
+    <img src="../../../../assets/images/sent.png" alt="" width="50" height="46">
+    <h3>Are you sure you want to continue?</h3>
+  </div>
   <kendo-dialog-actions>
     <button kendoButton (click)="action('no')">No</button>
     <button kendoButton (click)="action('yes')" primary="true">Yes</button>

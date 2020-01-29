@@ -39,14 +39,15 @@
     "newVaucher": "New vaucher",
     "addVaucher": "Add vaucher",
     "updateVaucher": "Update vaucher",
-    "uploadFromExcel": "Upload from Excel",
+    "uploadFromExcel": "UPLOAD FROM EXCEL",
     "exportToExcel": "Export to Excel",
     "exportToPDF": "Export to PDF",
     "pagerPage": "Page",
     "pagerOf": "of",
     "pagerItems": "items",
     "user": "User",
-    "required": "required"
+    "required": "required",
+    "searchAllColumn": "Search all column..."
   },
   "calendar": {
     "today": "Today",
@@ -227,7 +228,9 @@
     "edit": "Edit",
     "delete": "Delete",
     "print": "Print",
-    "required": "required"
+    "required": "required",
+    "searchAllColumn": "Search all column...",
+    "storename": "Store name"
   },
   "store": {
     "exist": "Email is exist!",
@@ -255,8 +258,9 @@
     "newStore": "New location",
     "exportToExcel": "Export to Excel",
     "exportToPDF": "Export to PDF",
-    "uploadFromExcel": "Upload from Excel",
-    "required": "required"
+    "uploadFromExcel": "UPLOAD FROM EXCEL",
+    "required": "required",
+    "searchAllColumn": "Search all column..."
   },
   "complaint": [
     "Headache",

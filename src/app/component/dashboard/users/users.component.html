@@ -3,41 +3,53 @@
 </div>
 
 <div *ngIf="!loading" style="height: 100%">
-  <div class="user-options">
-    <kendo-buttongroup>
-      <button kendoButton [icon]="'user'" (click)="newUser()" [primary]="true">{{language.newUser}}</button>
-    </kendo-buttongroup>
-    <!--<kendo-dropdownbutton [data]="settings" [icon]="icon"></kendo-dropdownbutton>-->
-    <label class="uploadFromExcel-{{theme}}"><span class='k-icon k-i-file-excel'></span>
-      {{ language.uploadFromExcel }}<input type="file" name="files[]" multiple id="jsonFile" accept=".xlsx"
-        (change)="onFileChange($event)" [(ngModel)]="fileValue" /></label>
-  </div>
 
-  <kendo-grid [data]="gridData" [style.height]="height" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
-    [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="true" [filterable]="true"
-    (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)" (sortChange)="sortChange($event)"
-    [kendoGridSelectBy]="mySelectionKey">
+  <kendo-grid [data]="gridView" [style.height]="height" [resizable]="true" [sortable]="true" [pageable]="true"
+    [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter"
+    (pageChange)="pageChange($event)" (sortChange)="sortChange($event)" [kendoGridSelectBy]="mySelectionKey">
+    <kendo-grid-messages pagerPage="{{language.pagerPage}}" pagerOf="{{language.pagerOf}}"
+      pagerItems="{{language.pagerItems}}" pagerItemsPerPage="{{language.pagerItemsPerPage}}">
+    </kendo-grid-messages>
     <ng-template kendoGridToolbarTemplate>
-      <button kendoGridExcelCommand icon="file-excel"
-        class="uploadFromExcel-{{theme}}">{{language.exportToExcel}}</button>
-      <button kendoGridPDFCommand icon="file-pdf" class="uploadFromExcel-{{theme}}">{{language.exportToPDF}}</button>
+      <div class="search">
+        <kendo-textbox-container floatingLabel="{{language.searchAllColumn}}">
+          <input kendoTextBox (input)="onFilter($event.target.value)" [(ngModel)]="searchFilter" />
+        </kendo-textbox-container>
+      </div>
+      <div style="float: right; padding-right: 30px; padding-top: 14px;">
+        <button kendoButton [icon]="'add'" (click)="newUser()" [primary]="true"
+          style="background: #6673FC !important; margin-left: 12px;">{{language.newUser}}</button>
+        <div class="dropdown-grid">
+          <button class="btn-grid" style="border-left:1px solid #0d8bf2">
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content-grid">
+            <a style="padding: 0px;"><label class="uploadFromExcel-{{theme}}"
+                style="padding: 12px; cursor: pointer;"><span class='k-icon k-i-file-excel'></span>
+                {{ language.uploadFromExcel }}<input type="file" name="files[]" multiple id="jsonFile" accept=".xlsx"
+                  (change)="onFileChange($event)" [(ngModel)]="fileValue" /></label></a>
+            <a kendoGridPDFCommand><span class="k-icon k-i-file-pdf"></span> {{language.exportToPDF}}</a>
+            <a kendoGridExcelCommand><span class="k-icon k-i-file-excel"></span> {{language.exportToExcel}}</a>
+          </div>
+        </div>
+      </div>
     </ng-template>
-    <kendo-grid-column field="shortname" title="Username" width="120">
+    <kendo-grid-column field="shortname" title="Username">
     </kendo-grid-column>
-    <kendo-grid-column field="email" title="Email" width="250">
+    <kendo-grid-column field="email" title="Email">
     </kendo-grid-column>
-    <kendo-grid-column field="firstname" title="Firstname" width="180">
+    <kendo-grid-column field="firstname" title="Firstname">
     </kendo-grid-column>
-    <kendo-grid-column field="lastname" title="Lastname" width="180">
+    <kendo-grid-column field="lastname" title="Lastname">
     </kendo-grid-column>
-    <kendo-grid-column field="street" title="Street" width="180">
+    <kendo-grid-column field="street" title="Street">
     </kendo-grid-column>
-    <kendo-grid-column field="active" title="Active" width="120">
+    <kendo-grid-column field="active" title="Active">
       <ng-template kendoGridCellTemplate let-dataItem>
         <input type="checkbox" [checked]="dataItem.active" disabled />
       </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column title="" width="60">
+    <kendo-grid-column title="" width="100">
       <ng-template kendoGridCellTemplate let-dataItem>
         <button kendoButton [icon]="'k-icon k-i-preview'" class='k-preview'
           [routerLink]="['../', {outlets: {'dashboard': ['user-details', dataItem.id]}}]"></button>
@@ -82,8 +94,7 @@
   </kendo-grid>
 </div>
 
-<kendo-window title="{{language.createNewUser}}" *ngIf="user" [minWidth]="700" [width]="850"
-  (close)="user = false">
+<kendo-window title="{{language.createNewUser}}" *ngIf="user" [minWidth]="700" [width]="850" (close)="user = false">
   <form name="loginForm" class="loginForm" (ngSubmit)="createUser(user)" #userForm="ngForm">
     <!--<div class="patternContainer">
       <div class="col-xs-6">
@@ -228,7 +239,7 @@
     </div>
     <div class="col-md-6 col-xs-12 b-r" *ngIf="userType !== undefined">
       <kendo-textbox-container floatingLabel="{{language.userType}}({{language.required}})">
-        <kendo-combobox [data]="userType" (selectionChange)="selectionChange($event)" [(ngModel)]="data.type"
+        <kendo-combobox [data]="userType" (selectionChange)="selectionChange($event)" [(ngModel)]="selectedUserType"
           name="user-type" class="col-xs-12 noPadding" required>
         </kendo-combobox>
       </kendo-textbox-container>
@@ -239,7 +250,7 @@
     <div class="col-md-12 col-xs-12 b-r" *ngIf="storeLocation !== undefined">
       <kendo-textbox-container floatingLabel="{{language.storeLocation}}({{language.required}})">
         <kendo-combobox [data]="storeLocation" [textField]="'storename'" [valueField]="'id'"
-          (selectionChange)="selectionChangeStore($event)" class="col-xs-12 noPadding" [(ngModel)]="data.storeId"
+          (selectionChange)="selectionChangeStore($event)" class="col-xs-12 noPadding" [(ngModel)]="selectedStoreId"
           name="storeId" required>
         </kendo-combobox>
       </kendo-textbox-container>
