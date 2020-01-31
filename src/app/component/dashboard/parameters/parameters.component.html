@@ -1,5 +1,5 @@
 <div class="tabs widget" style="height: 100%;">
-  <ul class="nav nav-tabs widget">
+  <!--<ul class="nav nav-tabs widget">
     <li [ngClass]="currentTab === 'complaint' ? 'active' : ''" class="col-md-2 col-sm-4 col-xs-6"> <a
         (click)="changeTab('complaint')"><span class="fa fa-list-alt"></span> Complaint</a>
     </li>
@@ -27,7 +27,7 @@
         (click)="changeTab('state')"><span class="fa fa-thermometer-three-quarters"></span> State</a>
 
     </li>
-  </ul>
+  </ul>-->
   <div class="tab-content" *ngIf="currentTab === 'complaint'">
     <div id="profile-tab" class="tab-pane active">
       <app-parameter-item [type]="'Complaint'"></app-parameter-item>

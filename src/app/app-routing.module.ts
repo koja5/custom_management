@@ -38,7 +38,18 @@ const routes: Routes = [
       { path: 'parameters', component: ParametersComponent, outlet: 'dashboard' },
       { path: 'statistic', component: StatisticComponent, outlet: 'dashboard' },
       { path: 'vaucher', component: VaucherComponent, outlet: 'dashboard'},
-      { path: 'settings', component: SettingsComponent, outlet: 'dashboard' }
+      { path: 'settings', component: SettingsComponent, outlet: 'dashboard' },
+      { path: 'complaint', component: ParametersComponent, outlet: 'dashboard' },
+      { path: 'therapy', component: ParametersComponent, outlet: 'dashboard' },
+      { path: 'treatment', component: ParametersComponent, outlet: 'dashboard' },
+      { path: 'recommendation', component: ParametersComponent, outlet: 'dashboard' },
+      { path: 'relationship', component: ParametersComponent, outlet: 'dashboard' },
+      { path: 'social', component: ParametersComponent, outlet: 'dashboard' },
+      { path: 'doctor', component: ParametersComponent, outlet: 'dashboard' },
+      { path: 'doctors', component: ParametersComponent, outlet: 'dashboard' },
+      { path: 'vat_tax', component: ParametersComponent, outlet: 'dashboard' },
+      { path: 'CS', component: ParametersComponent, outlet: 'dashboard' },
+      { path: 'state', component: ParametersComponent, outlet: 'dashboard' }
     ]
   },
   { path: 'document/server/routes/uploads/:id', component: DocumentPreviewComponent }

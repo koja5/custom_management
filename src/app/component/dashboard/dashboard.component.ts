@@ -31,6 +31,8 @@ export class DashboardComponent implements OnInit {
   public typeOfDesign = "vertical";
   public user: any;
   public pathFromUrl: any;
+  public subMenuInd = '';
+  public sidebarHeight: any;
 
   constructor(
     public router: Router,
@@ -44,10 +46,8 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log(
-      this.activatedRouter.snapshot["_routerState"].url.split("/")[2]
-    );
-
+    
+    this.sidebarHeight = window.innerHeight - 30 + 'px';
     this.selectedNode = this.activatedRouter.snapshot["_routerState"].url.split(
       "/"
     )[2];
@@ -247,5 +247,13 @@ export class DashboardComponent implements OnInit {
       // this.pathFromUrl = this.pathFromUrl.splice(0, 1);
       console.log(this.pathFromUrl);
     }, 10);
+  }
+
+  showHideSubMenu() {
+    if(this.subMenuInd === '') {
+      this.subMenuInd = 'active open'
+    } else {
+      this.subMenuInd = '';
+    }
   }
 }

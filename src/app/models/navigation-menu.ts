@@ -5,4 +5,14 @@ export class NavigationMenuModel {
     users?: string;
     store?: string;
     parameters?: string;
+    complaint?: string;
+    therapy?: string;
+    treatment?: string;
+    recommendation?: string;
+    relationship?: string;
+    social?: string;
+    doctor?: string;
+    vat_tax?: string;
+    CS?: string;
+    state?: string;
 }

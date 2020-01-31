@@ -4,9 +4,9 @@
 
 <div *ngIf="!loading" style="height: 100%;">
 
-  <h2 style="text-align: center; padding: 1vh;">
+  <!--<h2 style="text-align: center; padding: 1vh;">
     {{type}}
-  </h2>
+  </h2>-->
 
   <kendo-grid *ngIf="type !== 'Doctors' && type !== 'Therapy' && type !== 'VATTax'" [data]="view | async"
   [style.height]="height" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
