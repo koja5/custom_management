@@ -250,7 +250,8 @@
       <kendo-tabstrip-tab [title]="'Theme'" [selected]="true" class="row">
         <ng-template kendoTabContent class="row">
           <div class="row">
-            <div class="radio radio-primary radio-primary{{theme}} col-md-4"
+            <h2 style="text-align: center;">Theme is on redesign mode...</h2>
+            <!--<div class="radio radio-primary radio-primary{{theme}} col-md-4"
               style="margin-top: -5px; text-align: center;" *ngFor='let item of allThemes; let i = index'
               (click)="changeTheme(item['name'])">
               <input type="radio" name="radio1" id="radio{{i}}" value="option{{i}}"
@@ -263,7 +264,7 @@
                   <span [style.background]="item.MenuColor" class="color  color-{{item['name']}}-menu"></span>
                 </div>
               </label>
-            </div>
+            </div>-->
           </div>
         </ng-template>
       </kendo-tabstrip-tab>

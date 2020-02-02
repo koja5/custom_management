@@ -390,6 +390,8 @@ export class TaskComponent implements OnInit {
             console.log(data);
             this.customerUser = data[0];
             this.customerUsers.push(data[0]);
+            this.telephoneValue = data[0].telephone;
+            this.mobileValue = data[0].mobile;
             this.baseDataIndicator = true;
             this.userWidth = "49%";
           });
