@@ -132,6 +132,7 @@ export class VaucherComponent implements OnInit {
   newVaucher() {
     this.operationMode = "add";
     this.initializeParams();
+    this.getNextVaucherId();
     this.changeTheme(this.theme);
     this.vaucher = true;
   }
@@ -153,6 +154,14 @@ export class VaucherComponent implements OnInit {
     this.customerUserConsumer = null;
     this.user = null;
     // this.selectedUser = null;
+  }
+
+  getNextVaucherId() {
+    this.service.getNextVaucherId().subscribe(
+      data => {
+        this.data.id = data.toString();
+      }
+    )
   }
 
   createVaucher(form) {

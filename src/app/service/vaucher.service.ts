@@ -32,4 +32,9 @@ export class VaucherService {
     return this.http.post('/api/insertFromExcel', data)
       .map(res => res);
   }
+
+  getNextVaucherId() {
+    return this.http.get('/api/getNextVaucherId')
+      .map(res => res);
+  }
 }

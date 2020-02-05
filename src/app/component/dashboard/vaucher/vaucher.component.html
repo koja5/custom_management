@@ -134,7 +134,7 @@
   (close)="vaucher = false">
   <form name="loginForm" class="loginForm"
     (ngSubmit)="operationMode === 'add' ? createVaucher(vaucher) : editVaucher(vaucher)" #voucher="ngForm">
-    <div class="col-md-12 col-xs-12" *ngIf="operationMode === 'edit'">
+    <div class="col-md-12 col-xs-12">
       <kendo-textbox-container floatingLabel="{{language.id}}">
         <input kendoTextBox class="col-xs-12" name="id" [(ngModel)]="data.id" id.id='' [disabled]="true">
       </kendo-textbox-container>
@@ -156,22 +156,23 @@
     <div class="col-md-12 col-xs-12">
       <kendo-textbox-container floatingLabel="{{language.date_redeemed}}">
         <kendo-datepicker class="email col-md-12 col-xs-12 noPadding" name="Date redeemed"
-          [(ngModel)]="dateredeemedConst" dateredeemedConst.value=''
-          [disabled]="operationMode === 'add' ? false : true">
+          [(ngModel)]="dateredeemedConst" dateredeemedConst.value=''>
         </kendo-datepicker>
       </kendo-textbox-container>
     </div>
     <div class="col-md-12 col-xs-12">
       <kendo-textbox-container floatingLabel="{{language.customerBuys}}">
         <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="customerBuysUsers" [textField]="'shortname'"
-          [valueField]="'id'" [(ngModel)]="customerUserBuys" name="customer" [filterable]="true" (filterChange)="searchCustomerBuys($event)" [loading]="customerBuysLoading">
+          [valueField]="'id'" [(ngModel)]="customerUserBuys" name="customer" [filterable]="true"
+          (filterChange)="searchCustomerBuys($event)" [loading]="customerBuysLoading">
         </kendo-combobox>
       </kendo-textbox-container>
     </div>
     <div class="col-md-12 col-xs-12">
       <kendo-textbox-container floatingLabel="{{language.customerConsumer}}">
-        <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="customerConsumersUsers" [textField]="'shortname'"
-          [valueField]="'id'" [(ngModel)]="customerUserConsumer" name="customer_consumer"  [filterable]="true" (filterChange)="searchCustomerConsumers($event)" [loading]="customerConsumersLoading">
+        <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="customerConsumersUsers"
+          [textField]="'shortname'" [valueField]="'id'" [(ngModel)]="customerUserConsumer" name="customer_consumer"
+          [filterable]="true" (filterChange)="searchCustomerConsumers($event)" [loading]="customerConsumersLoading">
         </kendo-combobox>
       </kendo-textbox-container>
     </div>
