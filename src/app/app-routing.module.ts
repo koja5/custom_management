@@ -38,7 +38,9 @@ const routes: Routes = [
       { path: 'parameters', component: ParametersComponent, outlet: 'dashboard' },
       { path: 'statistic', component: StatisticComponent, outlet: 'dashboard' },
       { path: 'vaucher', component: VaucherComponent, outlet: 'dashboard'},
-      { path: 'settings', component: SettingsComponent, outlet: 'dashboard' },
+      { path: 'settings', component: SettingsComponent, outlet: 'dashboard', children: [
+        { path: 'change-password', component: ChangePasswordComponent, outlet: 'settings' }
+      ] },
       { path: 'complaint', component: ParametersComponent, outlet: 'dashboard' },
       { path: 'therapy', component: ParametersComponent, outlet: 'dashboard' },
       { path: 'treatment', component: ParametersComponent, outlet: 'dashboard' },

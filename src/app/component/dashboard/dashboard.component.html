@@ -243,7 +243,7 @@
 
 <modal #settings modalClass="modal-md top-margin loggerModal adminModal">
   <modal-header>
-    <h2>{{language['dashboard']['settings']}}</h2>
+    <h2 *ngIf="language !== undefined">{{language['dashboard']['settings']}}</h2>
   </modal-header>
   <modal-content>
     <kendo-tabstrip>

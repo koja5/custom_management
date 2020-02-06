@@ -122,6 +122,10 @@
     "logout": "Ausloggen"
   },
   "user": {
+    "pagerPage": "Seite",
+    "pagerOf": "von",
+    "pagerItems": "Artikel",
+    "pagerItemsPerPage": "Objekte pro Seite",
     "backToGrid": "Zurück zum Gitter",
     "successUpdateTitle": "Erfolgsupdate!",
     "successUpdateText": "Benutzer erfolgreich aktualisiert {content}",
@@ -225,6 +229,10 @@
     "storename": "Name des Geschäfts"
   },
   "store": {
+    "pagerPage": "Seite",
+    "pagerOf": "von",
+    "pagerItems": "Artikel",
+    "pagerItemsPerPage": "Objekte pro Seite",
     "exist": "E-Mail ist vorhanden!",
     "notAdded": "Neuer Shop wird nicht hinzugefügt!",
     "error": "Error!",
