@@ -4967,6 +4967,42 @@ router.get("/getVauchers/:id", function (req, res, next) {
   });
 });
 
+router.get("/getNextVaucherId", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+    var id = req.params.id;
+    conn.query("SELECT * from vaucher order by id desc limit 1", function (
+      err,
+      rows
+    ) {
+      conn.release();
+      if (!err) {
+        console.log(rows);
+        res.json(rows[0].id + 1);
+      } else {
+        res.json({
+          code: 100,
+          status: "Error in connection database"
+        });
+      }
+    });
+
+    conn.on("error", function (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    });
+  });
+});
+
 router.post("/updateVaucher", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     console.log(conn);
