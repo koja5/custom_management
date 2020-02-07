@@ -9143,7 +9143,7 @@ tr.group:hover {
     .page-content-wrapper .page-content {
         margin-left: 235px;
         margin-top: 0;
-        min-height: 600px;
+        // min-height: 600px;
         padding: 25px 20px 0px;
     }
     .page-content-wrapper .page-content.no-min-height {
@@ -11359,8 +11359,8 @@ tr.group:hover {
     .page-content-wrapper .page-content {
         margin-left: 235px;
         margin-top: 0;
-        min-height: 600px;
-        padding: 25px 20px 10px
+        // min-height: 600px;
+        padding: 25px 20px 0px;
     }
     .page-content-wrapper .page-content.no-min-height {
         min-height: auto

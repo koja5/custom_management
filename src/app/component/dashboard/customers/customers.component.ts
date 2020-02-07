@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
 import { Modal } from "ngx-modal";
 import { CustomersService } from "../../../service/customers.service";
 import { StoreService } from "../../../service/store.service";
-import { process, State } from "@progress/kendo-data-query";
+import { process, State, GroupDescriptor } from "@progress/kendo-data-query";
 import { UploadEvent, SelectEvent } from "@progress/kendo-angular-upload";
 import {
   DataStateChangeEvent,
@@ -39,6 +39,7 @@ export class CustomersComponent implements OnInit {
     take: 10,
     filter: null
   };
+  public groups: GroupDescriptor[] = [];
   public storeLocation: any;
   public language: any;
   public selectedUser: any;
@@ -58,6 +59,11 @@ export class CustomersComponent implements OnInit {
   private arrayBuffer: any;
   public height: any;
   public searchFilter: any;
+  public pageSize = 5;
+  public pageable = {
+    pageSizes: true,
+    previousNext: true
+  }
 
   constructor(
     public service: CustomersService,
@@ -198,6 +204,8 @@ export class CustomersComponent implements OnInit {
 
   pageChange(event: PageChangeEvent): void {
     this.state.skip = event.skip;
+    this.state.take = event.take;
+    this.pageSize = event.take;
     this.loadProducts();
   }
 
@@ -450,6 +458,11 @@ export class CustomersComponent implements OnInit {
         ]
       }
     });
+    this.gridView = process(this.gridData.data, this.state);
+  }
+
+  public groupChange(groups: GroupDescriptor[]): void {
+    this.state.group = groups;
     this.gridView = process(this.gridData.data, this.state);
   }
 }
