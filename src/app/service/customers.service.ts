@@ -47,7 +47,7 @@ export class CustomersService {
 
   uploadImage(data, callback) {
     // const uploadSaveUrl = 'http://localhost:3000/api/uploadImage';
-    const uploadSaveUrl = 'http://78.47.206.131:8081/uploadImage';
+    const uploadSaveUrl = 'http://78.47.206.131:8080/uploadImage';
     return this.http.post(uploadSaveUrl, data)
       .map(res => res)
       .subscribe(val => callback(val));
