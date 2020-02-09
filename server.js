@@ -64,6 +64,7 @@ app.post('/upload', function (req, res) {
       }
 
       var test = {};
+      console.log(req);
       var doc = {
         'customer_id': req.body.comments,
         'name': req.file.originalname,

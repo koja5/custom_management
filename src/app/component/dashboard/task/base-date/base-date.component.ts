@@ -39,8 +39,8 @@ export class BaseDateComponent implements OnInit {
   public uploader: FileUploader;
   public documents: any;
   public language: any;
-  // public url = 'http://localhost:3000/upload';
-  public url = "http://78.47.206.131:8080/upload";
+  public url = 'http://localhost:3000/upload';
+  // public url = "http://78.47.206.131:8080/upload";
   public complaintValue: any;
   public complaintData = new ComplaintTherapyModel();
   public gridComplaint: any;
@@ -72,6 +72,7 @@ export class BaseDateComponent implements OnInit {
   public loadingTherapy = false;
   public theme: string;
   public ourFile: File;
+  public fileDescription = [];
   constructor(
     public router: ActivatedRoute,
     public service: CustomersService,
@@ -86,7 +87,7 @@ export class BaseDateComponent implements OnInit {
   ngOnInit() {
     this.uploader = new FileUploader({
       url: this.url,
-      additionalParameter: { comments: this.data.id }
+      additionalParameter: { comments: this.data.id + '-' + this.fileDescription }
     });
 
     this.language = JSON.parse(localStorage.getItem("language"))["user"];

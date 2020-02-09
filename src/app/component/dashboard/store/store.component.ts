@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
 import { Modal } from "ngx-modal";
 import { StoreService } from "../../../service/store.service";
-import { process, State } from "@progress/kendo-data-query";
+import { process, State, GroupDescriptor } from "@progress/kendo-data-query";
 import {
   DataStateChangeEvent,
   PageChangeEvent,
@@ -50,6 +50,11 @@ export class StoreComponent implements OnInit {
   public loadingGrid = false;
   public height: any;
   public searchFilter: any;
+  public pageSize = 5;
+  public pageable = {
+    pageSizes: true,
+    previousNext: true
+  };
 
   constructor(public service: StoreService, public message: MessageService) {
     // this.excelIO = new Excel.IO();
@@ -176,14 +181,13 @@ export class StoreComponent implements OnInit {
 
   pageChange(event: PageChangeEvent): void {
     this.state.skip = event.skip;
+    this.state.take = event.take;
+    this.pageSize = event.take;
     this.loadProducts();
   }
 
   loadProducts(): void {
-    this.gridView.data = this.gridData.data.slice(
-      this.state.skip,
-      this.state.skip + this.state.take
-    );
+    this.gridView = process(this.gridData.data, this.state);
   }
 
   editStore(store) {
@@ -455,6 +459,11 @@ export class StoreComponent implements OnInit {
         ]
       }
     });
+    this.gridView = process(this.gridData.data, this.state);
+  }
+
+  public groupChange(groups: GroupDescriptor[]): void {
+    this.state.group = groups;
     this.gridView = process(this.gridData.data, this.state);
   }
 }

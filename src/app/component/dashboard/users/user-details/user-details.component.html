@@ -50,8 +50,7 @@
             <div class="vd_info tr" style="height: 7vh; text-align: center"> <button kendoButton class="k-delete"
                 [icon]="'k-icon k-i-delete'" (click)="editOptions()" style="text-align: center">Edit</button> </div>
             <div class="vd_info tr" style="height: 7vh; text-align: center"> <button kendoButton class="k-delete"
-                [icon]="'k-icon k-i-delete'" (click)="open('dialog')"
-                style="text-align: center">Delete</button> </div>
+                [icon]="'k-icon k-i-delete'" (click)="open('dialog')" style="text-align: center">Delete</button> </div>
             <div class="vd_info tr" style="text-align: center;"> <button kendoButton class="k-delete"
                 [icon]="'k-icon k-i-copy'" (click)="newCustomer()">Copy</button> </div>
           </div>
@@ -246,8 +245,8 @@
               <div class="form-group">
                 <div class="email col-md-6 col-xs-12">
                   <p>{{language.birthday}}</p>
-                  <kendo-datepicker class="col-xs-12 noPadding" name="birthday" placeholder="Birthday" [(ngModel)]="data.birthday"
-                    birthday.value=''></kendo-datepicker>
+                  <kendo-datepicker class="col-xs-12 noPadding" name="birthday" placeholder="Birthday"
+                    [(ngModel)]="data.birthday" birthday.value=''></kendo-datepicker>
                 </div>
                 <div class="email col-md-6 col-xs-12">
                   <p>{{language.sincecompany}}</p>
@@ -258,8 +257,8 @@
               <div class="form-group">
                 <div class="email col-md-6 col-xs-12">
                   <p>{{language.userType}}</p>
-                  <kendo-combobox [data]="userType" (selectionChange)="selectionUserType($event)" class="col-xs-12 noPadding"
-                    [(ngModel)]="selectedValue" name="type">
+                  <kendo-combobox [data]="userType" (selectionChange)="selectionUserType($event)"
+                    class="col-xs-12 noPadding" [(ngModel)]="selectedValue" name="type">
                   </kendo-combobox>
                 </div>
                 <label class="k-form-field col-md-6" style="text-align: center;">
@@ -267,12 +266,12 @@
                 </label>
               </div>
               <div class="form-group">
-                  <div class="email col-md-12 col-xs-12">
-                    <p>{{language.storeLocation}}</p>
-                <kendo-combobox [data]="storeLocation" [textField]="'storename'" [valueField]="'id'"
-                  (selectionChange)="selectionChangeStore($event)" [(ngModel)]="data.storeId" [valuePrimitive]="true"
-                  name="storename" class="col-xs-12 noPadding">
-                </kendo-combobox>
+                <div class="email col-md-12 col-xs-12">
+                  <p>{{language.storeLocation}}</p>
+                  <kendo-combobox [data]="storeLocation" [textField]="'storename'" [valueField]="'id'"
+                    (selectionChange)="selectionChangeStore($event)" [(ngModel)]="data.storeId" [valuePrimitive]="true"
+                    name="storename" class="col-xs-12 noPadding">
+                  </kendo-combobox>
                 </div>
               </div>
 
@@ -317,25 +316,34 @@
               <div class="form-group row" *ngFor="let item of workTime; let i = index;">
                 <label for="example-number-input" class="col-sm-2 col-form-label">{{item.day}}</label>
                 <div class="col-sm-10">
-                  <input class="col-sm-2 col-xs-6" type="number" min="8" max="20" id="example-number-input"
+                  <input class="col-sm-2 col-xs-6" type="number" min="0" min="24" id="example-number-input"
                     value="{{item.start}}" [(ngModel)]="workTime[i].start" name="{{item.day}}start"><span
                     class="col-sm-1 h">h</span>
-                  <input class="col-sm-2 col-xs-6" type="number" min="8" max="20" id="example-number-input"
+                  <input class="col-sm-2 col-xs-6" type="number" min="0" min="24" id="example-number-input"
                     value="{{item.end}}" [(ngModel)]="workTime[i].end" name="{{item.day}}end"> <span
                     class="col-sm-1 h">h</span>
 
-                  <input class="col-sm-2 col-xs-6" type="number" min="8" max="20" id="example-number-input"
+                  <input class="col-sm-2 col-xs-6" type="number" min="0" min="24" id="example-number-input"
                     value="{{item.start2}}" [(ngModel)]="workTime[i].start2" name="{{item.day}}start2"><span
                     class="col-sm-1 h">h</span>
-                  <input class="col-sm-2 col-xs-6" type="number" min="8" max="20" id="example-number-input"
+                  <input class="col-sm-2 col-xs-6" type="number" min="0" min="24" id="example-number-input"
                     value="{{item.end2}}" [(ngModel)]="workTime[i].end2" name="{{item.day}}end2"> <span
+                    class="col-sm-1 h">h</span>
+
+                  <input class="col-sm-2 col-xs-6" type="number" min="0" min="24" id="example-number-input"
+                    value="{{item.start3}}" [(ngModel)]="workTime[i].start3" name="{{item.day}}start3"><span
+                    class="col-sm-1 h">h</span>
+                  <input class="col-sm-2 col-xs-6" type="number" min="0" min="24" id="example-number-input"
+                    value="{{item.end3}}" [(ngModel)]="workTime[i].end3" name="{{item.day}}end3"> <span
                     class="col-sm-1 h">h</span>
                 </div>
               </div>
               <div class="form-group" style="text-align: center;">
-                <button *ngIf="updateSetIndicator === 1" kendoButton [primary]="true" type="submit" class="updateButton">Set
+                <button *ngIf="updateSetIndicator === 1" kendoButton [primary]="true" type="submit"
+                  class="updateButton">Set
                   work time</button>
-                <button *ngIf="updateSetIndicator === 0" kendoButton [primary]="true" type="submit" class="updateButton">Update
+                <button *ngIf="updateSetIndicator === 0" kendoButton [primary]="true" type="submit"
+                  class="updateButton">Update
                   work time</button>
               </div>
             </form>
@@ -452,17 +460,17 @@
                 <div class="form-group row" *ngFor="let item of workTime; let i = index;">
                   <label for="example-number-input" class="col-sm-2 col-form-label">{{item.day}}</label>
                   <div class="col-sm-10">
-                    <input class="col-sm-2 col-xs-6" type="number" min="8" max="20" id="example-number-input"
+                    <input class="col-sm-2 col-xs-6" type="number" min="0" min="24" id="example-number-input"
                       value="{{item.start}}" [(ngModel)]="workTime[i].start" name="{{item.day}}start"><span
                       class="col-sm-1 h">h</span>
-                    <input class="col-sm-2 col-xs-6" type="number" min="8" max="20" id="example-number-input"
+                    <input class="col-sm-2 col-xs-6" type="number" min="0" min="24" id="example-number-input"
                       value="{{item.end}}" [(ngModel)]="workTime[i].end" name="{{item.day}}end"> <span
                       class="col-sm-1 h">h</span>
 
-                    <input class="col-sm-2 col-xs-6" type="number" min="8" max="20" id="example-number-input"
+                    <input class="col-sm-2 col-xs-6" type="number" min="0" min="24" id="example-number-input"
                       value="{{item.start2}}" [(ngModel)]="workTime[i].start2" name="{{item.day}}start2"><span
                       class="col-sm-1 h">h</span>
-                    <input class="col-sm-2 col-xs-6" type="number" min="8" max="20" id="example-number-input"
+                    <input class="col-sm-2 col-xs-6" type="number" min="0" min="24" id="example-number-input"
                       value="{{item.end2}}" [(ngModel)]="workTime[i].end2" name="{{item.day}}end2"> <span
                       class="col-sm-1 h">h</span>
                   </div>

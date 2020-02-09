@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
 import { Modal } from "ngx-modal";
 import { UsersService } from "../../../service/users.service";
 import { StoreService } from "../../../service/store.service";
-import { process, State } from "@progress/kendo-data-query";
+import { process, State, GroupDescriptor } from "@progress/kendo-data-query";
 import {
   DataStateChangeEvent,
   PageChangeEvent,
@@ -83,6 +83,11 @@ export class UsersComponent implements OnInit {
   public searchFilter: any;
   public selectedUserType: any;
   public selectedStoreId: any;
+  public pageSize = 5;
+  public pageable = {
+    pageSizes: true,
+    previousNext: true
+  };
 
   constructor(
     public service: UsersService,
@@ -189,7 +194,7 @@ export class UsersComponent implements OnInit {
   }
 
   selectionChangeStore(event) {
-    this.selectedStoreId = event
+    this.selectedStoreId = event;
     if (event !== undefined) {
       this.data.storeId = event.id;
     } else {
@@ -208,6 +213,8 @@ export class UsersComponent implements OnInit {
 
   pageChange(event: PageChangeEvent): void {
     this.state.skip = event.skip;
+    this.state.take = event.take;
+    this.pageSize = event.take;
     this.loadProducts();
   }
 
@@ -217,10 +224,7 @@ export class UsersComponent implements OnInit {
   }
 
   loadProducts(): void {
-    this.gridData.data = this.gridData.data.slice(
-      this.state.skip,
-      this.state.skip + this.state.take
-    );
+    this.gridView = process(this.gridData.data, this.state);
   }
 
   public close(component) {
@@ -480,6 +484,11 @@ export class UsersComponent implements OnInit {
         ]
       }
     });
+    this.gridView = process(this.gridData.data, this.state);
+  }
+
+  public groupChange(groups: GroupDescriptor[]): void {
+    this.state.group = groups;
     this.gridView = process(this.gridData.data, this.state);
   }
 }

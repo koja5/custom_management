@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener } from "@angular/core";
 import { VaucherModel } from "src/app/models/vaucher-model";
-import { process, State } from "@progress/kendo-data-query";
+import { process, State, GroupDescriptor } from "@progress/kendo-data-query";
 import {
   RowArgs,
   DataStateChangeEvent,
@@ -65,7 +65,12 @@ export class VaucherComponent implements OnInit {
   public searchFilter: any;
   public customerBuysLoading = false;
   public customerConsumersLoading = false;
-  //  public selectedUser: any;
+  public pageSize = 5;
+  public pageable = {
+    pageSizes: true,
+    previousNext: true
+  };
+
   constructor(
     private service: VaucherService,
     private customer: CustomersService,
@@ -331,14 +336,13 @@ export class VaucherComponent implements OnInit {
 
   pageChange(event: PageChangeEvent): void {
     this.state.skip = event.skip;
+    this.state.take = event.take;
+    this.pageSize = event.take;
     this.loadProducts();
   }
 
   loadProducts(): void {
-    this.gridView.data = this.gridData.data.slice(
-      this.state.skip,
-      this.state.skip + this.state.take
-    );
+    this.gridView = process(this.gridData.data, this.state);
   }
 
   previewUser(selectedUser) {
@@ -641,5 +645,10 @@ export class VaucherComponent implements OnInit {
     } else {
       this.customerConsumersUsers = [];
     }
+  }
+
+  public groupChange(groups: GroupDescriptor[]): void {
+    this.state.group = groups;
+    this.gridView = process(this.gridData.data, this.state);
   }
 }

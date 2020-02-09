@@ -840,8 +840,9 @@
               <table class="table">
                 <thead>
                   <tr>
-                    <th width="50%">Name</th>
+                    <th width="20%">Name</th>
                     <th class="hidden-xs">Size</th>
+                    <th class="30%">description</th>
                     <th class="hidden-xs">Progress</th>
                     <th class="hidden-xs">Status</th>
                     <th>Actions</th>
@@ -851,6 +852,10 @@
                   <tr *ngFor="let item of uploader.queue">
                     <td><strong>{{ item.file.name }}</strong></td>
                     <td nowrap>{{ item.file.size/1024/1024 | number:'.2' }} MB</td>
+                    <td>
+                      <textarea kendoTextArea [(ngModel)]="fileDescription[item.file.name]" [autoSize]="true" name="{{item.file.name}}-Descriprion"
+                        style="width: 95%;"></textarea>
+                    </td>
                     <td class="hidden-xs">
                       <div class="progress" style="margin-bottom: 0;">
                         <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
@@ -1080,16 +1085,15 @@
                     <div class="form-group col-md-12 col-xs-12">
                       <div class="col-md-6 col-xs-12">
                         <p>{{language.gender}}</p>
-                          <label class="k-radio-label col-md-6 col-xs-12" for="female">
-                            <input type="radio" name="gender" id="female" class="k-radio"
-                              checked="data.gender === 'female' ? checked : ''" [(ngModel)]="data.gender"
-                              [value]="'female'">
-                            {{language.female}}</label>
-                          <label class="k-radio-label col-md-6 col-xs-12" for="male">
-                            <input type="radio" name="gender" id="male" class="k-radio"
-                              checked="data.gender === 'male' ? checked : ''" [(ngModel)]="data.gender"
-                              [value]="'male'">
-                            {{language.male}}</label>
+                        <label class="k-radio-label col-md-6 col-xs-12" for="female">
+                          <input type="radio" name="gender" id="female" class="k-radio"
+                            checked="data.gender === 'female' ? checked : ''" [(ngModel)]="data.gender"
+                            [value]="'female'">
+                          {{language.female}}</label>
+                        <label class="k-radio-label col-md-6 col-xs-12" for="male">
+                          <input type="radio" name="gender" id="male" class="k-radio"
+                            checked="data.gender === 'male' ? checked : ''" [(ngModel)]="data.gender" [value]="'male'">
+                          {{language.male}}</label>
 
                       </div>
                       <div class="birthday-container">

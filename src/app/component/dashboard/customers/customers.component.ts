@@ -63,7 +63,7 @@ export class CustomersComponent implements OnInit {
   public pageable = {
     pageSizes: true,
     previousNext: true
-  }
+  };
 
   constructor(
     public service: CustomersService,
@@ -210,10 +210,7 @@ export class CustomersComponent implements OnInit {
   }
 
   loadProducts(): void {
-    this.gridView.data = this.gridData.data.slice(
-      this.state.skip,
-      this.state.skip + this.state.take
-    );
+    this.gridView = process(this.gridData.data, this.state);
   }
 
   previewUser(selectedUser) {

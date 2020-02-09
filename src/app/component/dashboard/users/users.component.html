@@ -4,9 +4,10 @@
 
 <div *ngIf="!loading" style="height: 100%">
 
-  <kendo-grid [data]="gridView" [style.height]="height" [resizable]="true" [sortable]="true" [pageable]="true"
-    [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter"
-    (pageChange)="pageChange($event)" (sortChange)="sortChange($event)" [kendoGridSelectBy]="mySelectionKey">
+  <kendo-grid [data]="gridView" [style.height]="height" [resizable]="true" [sortable]="true" [pageSize]="state.take"
+    [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [pageable]="pageable"
+    (pageChange)="pageChange($event)" (sortChange)="sortChange($event)" [kendoGridSelectBy]="mySelectionKey"
+    [groupable]="true" [group]="state.group" [pageSize]="pageSize" (groupChange)="groupChange($event)">
     <kendo-grid-messages pagerPage="{{language.pagerPage}}" pagerOf="{{language.pagerOf}}"
       pagerItems="{{language.pagerItems}}" pagerItemsPerPage="{{language.pagerItemsPerPage}}">
     </kendo-grid-messages>
