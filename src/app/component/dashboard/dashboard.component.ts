@@ -252,7 +252,7 @@ export class DashboardComponent implements OnInit {
   showHideSubMenu() {
     if(this.subMenuInd === '') {
       this.subMenuInd = 'active open'
-      this.sidebarHeight = window.innerHeight - 30 + 'px';
+      this.sidebarHeight = window.innerHeight - 40 + 'px';
     } else {
       this.subMenuInd = '';
       this.sidebarHeight = 'auto';

@@ -64,6 +64,13 @@ import { ParameterItemComponent } from './component/dashboard/parameters/paramet
 import { StatisticComponent } from './component/dashboard/statistic/statistic.component';
 import { VaucherComponent } from './component/dashboard/vaucher/vaucher.component';
 import { SettingsComponent } from './component/dashboard/settings/settings.component';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+ 
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+  suppressScrollX: true
+};
 
 @NgModule({
   declarations: [
@@ -115,7 +122,8 @@ import { SettingsComponent } from './component/dashboard/settings/settings.compo
     FileUploadModule,
     PdfViewerModule,
     DialogsModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    PerfectScrollbarModule
   ],
   providers: [
     LoginComponent,
@@ -130,7 +138,11 @@ import { SettingsComponent } from './component/dashboard/settings/settings.compo
       provide: UrlSerializer,
       useClass: StandardUrlSerializer
     },
-    StandardUrlSerializer
+    StandardUrlSerializer,
+    {
+      provide: PERFECT_SCROLLBAR_CONFIG,
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+    }
   ],
   bootstrap: [AppComponent]
 })
