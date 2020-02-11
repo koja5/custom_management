@@ -20,7 +20,7 @@
     <kendo-grid-column field="id" title="ID" [hidden]="true"></kendo-grid-column>
     <kendo-grid-column field="title" title="Title"></kendo-grid-column>
     <kendo-grid-column field="sequence" title="Order"></kendo-grid-column>
-    <kendo-grid-command-column title="command" width="220">
+    <kendo-grid-command-column title="command" width="250">
       <ng-template kendoGridCellTemplate let-isNew="isNew">
         <button kendoGridEditCommand [primary]="true" (click)="changeTheme(theme)">Edit</button>
         <button kendoGridRemoveCommand (click)="changeTheme(theme)">Remove</button>
@@ -54,7 +54,7 @@
     <kendo-grid-column field="id" title="ID" [hidden]="true"></kendo-grid-column>
     <kendo-grid-column field="title" title="%"></kendo-grid-column>
     <kendo-grid-column field="sequence" title="Order"></kendo-grid-column>
-    <kendo-grid-command-column title="command" width="220">
+    <kendo-grid-command-column title="command" width="250">
       <ng-template kendoGridCellTemplate let-isNew="isNew">
         <button kendoGridEditCommand [primary]="true" (click)="changeTheme(theme)">Edit</button>
         <button kendoGridRemoveCommand (click)="changeTheme(theme)">Remove</button>
@@ -92,7 +92,7 @@
     <kendo-grid-column field="description" title="Description"></kendo-grid-column>
     <kendo-grid-column field="art_nr" title="ArtNr"></kendo-grid-column>
     <kendo-grid-column field="net_price" title="Net price"></kendo-grid-column>
-    <kendo-grid-column field="vat" title="VAT" width="120" >
+    <kendo-grid-column field="vat" title="VAT" width="180" >
       <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex" *ngIf="vatTexList !== undefined">
         <kendo-combobox [data]="vatTexList" [textField]="'title'" [valueField]="'id'"
           (valueChange)="selectionVAT($event, rowIndex)" [disabled]="editedRowIndex!=rowIndex" [(ngModel)]="dataItem.vat" [valuePrimitive]="true"
@@ -101,7 +101,7 @@
     </kendo-grid-column>
     <kendo-grid-column field="gross_price" title="Gross price"></kendo-grid-column>
     <kendo-grid-column field="category" title="Category"></kendo-grid-column>
-    <kendo-grid-command-column title="command" width="220">
+    <kendo-grid-command-column title="command" width="250">
       <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem>
         <button kendoGridEditCommand [primary]="true" (click)="changeTheme(theme)">Edit</button>
         <button kendoGridRemoveCommand (click)="changeTheme(theme);">Remove</button>
@@ -174,7 +174,7 @@
           name="doctorType"></kendo-combobox>
       </ng-template>
     </kendo-grid-column>
-    <kendo-grid-command-column title="command" width="180">
+    <kendo-grid-command-column title="command" width="250">
       <ng-template kendoGridCellTemplate let-isNew="isNew">
         <button kendoGridEditCommand [primary]="true">Edit</button>
         <button kendoGridRemoveCommand>Remove</button>
