@@ -37,26 +37,20 @@ app.use(function (req, res, next) { //allow cross origin requests
   next();
 });
 
-var storage = multer.diskStorage({ //multers disk storage settings
+var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './server/routes/uploads/'); //./src/assets/uploads
+    cb(null, './server/routes/uploads/');
   },
   filename: function (req, file, cb) {
+    // console.log(req);
     var datetimestamp = Date.now();
-    cb(null, file.filename + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length - 1]);
+    cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length - 1]);
   }
 });
 
 var upload = multer({ //multer settings
   storage: storage
 }).single('file');
-
-
-// Parsers for POST data
-app.use(bodyParser.json({limit: '50mb', extended: true}));
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
 
 
 app.post('/upload', function (req, res) {
@@ -75,14 +69,22 @@ app.post('/upload', function (req, res) {
       // console.log(storage.getFilename());
       var doc = {
         'customer_id': req.body.customer_id,
-        'name': req.body.name,
-        'type': req.body.type,
-        'size': req.body.size,
+        'name': req.file.originalname,
+        'type': req.file.mimetype,
+        'size': req.file.size,
         'date': req.body.date,
-        'comment': req.body.description,
-        'filename': req.body.filename,
-        'path': req.body.filename
+        'description': req.body.description,
+        'filename': req.file.filename,
+        'path': req.file.path
       }
+      /*var doc = {
+        'customer_id': req.body.customer_id,
+        'name': req.file.originalname,
+        'type': req.file.mimetype,
+        'size': req.file.size,
+        'filename': req.file.filename,
+        'path': req.file.path
+    }*/
 
       conn.query("insert into documents SET ?", doc, function (err, rows) {
         conn.release();
@@ -108,6 +110,15 @@ app.post('/upload', function (req, res) {
     });
   });
 });
+
+
+
+// Parsers for POST data
+app.use(bodyParser.json({limit: '50mb', extended: true}));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
+
 
 app.use(cookieParser());
 app.use(session({

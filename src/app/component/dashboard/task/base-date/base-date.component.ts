@@ -3,7 +3,7 @@ import { RouterModule, Routes, Router, ActivatedRoute } from "@angular/router";
 import { CustomersService } from "../../../../service/customers.service";
 import { MessageService } from "../../../../service/message.service";
 import { Modal } from "ngx-modal";
-import { FileUploader } from "ng2-file-upload";
+import { FileUploader, FileItem } from "ng2-file-upload";
 import { saveAs } from "file-saver";
 import Swal from "sweetalert2";
 import { ComplaintTherapyModel } from "../../../../models/complaint-therapy-model";
@@ -87,8 +87,7 @@ export class BaseDateComponent implements OnInit {
     var datetimestamp = Date.now();
     
     this.uploader = new FileUploader({
-      url: this.url,
-      headers: [{ name: "Content-Type", value: "application/json" }],
+      url: this.url/*,
       additionalParameter: { comments: this.data.id },
       disableMultipart: true,
       formatDataFunctionIsAsync: true,
@@ -104,8 +103,14 @@ export class BaseDateComponent implements OnInit {
             date: item.formData
           });
         });
-      }
+      }*/
     });
+
+    this.uploader.onBuildItemForm = (fileItem: FileItem, form: any) => {
+      form.append('description', fileItem.file.description);
+      form.append('date', fileItem.file.lastModifiedDate !== undefined ? fileItem.file.lastModifiedDate : new Date());
+      form.append('customer_id', this.data.id);
+  };
 
     this.language = JSON.parse(localStorage.getItem("language"))["user"];
 

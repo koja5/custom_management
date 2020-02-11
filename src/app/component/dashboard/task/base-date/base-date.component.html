@@ -721,9 +721,9 @@
                           (click)="upload.open()">{{language.updateDocument}}</button>
                         <kendo-grid [data]="documents" [height]="390" [resizable]="true"
                           [loading]="loadingGridDocument">
-                          <kendo-grid-column field="id" title="Document ID" width="120">
+                          <kendo-grid-column field="id" title="Document ID" width="100">
                           </kendo-grid-column>
-                          <kendo-grid-column width="30">
+                          <kendo-grid-column width="70">
                             <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                               <span *ngIf="dataItem.type === 'application/pdf'" class="k-icon k-i-pdf"></span>
                               <span *ngIf="dataItem.type === 'application/vnd.openxmlformats'"
@@ -732,23 +732,30 @@
                               <span *ngIf="dataItem.type === 'text/plain'" class="k-icon k-i-file-txt"></span>
                             </ng-template>
                           </kendo-grid-column>
-                          <kendo-grid-column field="name" title="Document name" width="250">
+                          <kendo-grid-column field="name" title="Document name" width="180">
                           </kendo-grid-column>
-                          <kendo-grid-column field="size" title="Size" width="80">
+                          <kendo-grid-column field="size" title="Size" width="120">
                           </kendo-grid-column>
-                          <kendo-grid-column field="active" title="Preview" width="100">
+                          <kendo-grid-column field="date" title="Date" width="120">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                              {{dataItem.date | date: 'dd/MM/yyyy'}}
+                          </ng-template>
+                          </kendo-grid-column>
+                          <kendo-grid-column field="description" title="Description" width="150">
+                          </kendo-grid-column>
+                          <kendo-grid-column field="active" title="" width="80">
                             <ng-template kendoGridCellTemplate let-dataItem>
                               <button kendoButton [icon]="'k-icon k-i-preview'" class='k-preview'
                                 (click)="previewDocument(dataItem.filename)"></button>
                             </ng-template>
                           </kendo-grid-column>
-                          <kendo-grid-column field="active" title="Download" width="100">
+                          <kendo-grid-column field="active" title="" width="80">
                             <ng-template kendoGridCellTemplate let-dataItem>
                               <button kendoButton [icon]="'k-icon k-i-download'" class='k-preview'
                                 (click)="downloadFile(dataItem.filename)"></button>
                             </ng-template>
                           </kendo-grid-column>
-                          <kendo-grid-column width="60">
+                          <kendo-grid-column width="80">
                             <ng-template kendoGridCellTemplate let-dataItem>
                               <button kendoButton [icon]="'k-icon k-i-delete'"
                                 (click)="open('dialogDocument', dataItem)"></button>
@@ -840,7 +847,7 @@
               <table class="table">
                 <thead>
                   <tr>
-                    <th width="20%">Name</th>
+                    <th width="10%">Name</th>
                     <th class="hidden-xs">Size</th>
                     <th class="30%">Description</th>
                     <th class="15%">Date</th>
@@ -854,12 +861,12 @@
                     <td><strong>{{ item.file.name }}</strong></td>
                     <td nowrap>{{ item.file.size/1024/1024 | number:'.2' }} MB</td>
                     <td>
-                      <textarea kendoTextArea [(ngModel)]="item.alias" [autoSize]="true"
+                      <textarea kendoTextArea [(ngModel)]="item.file.description" [autoSize]="true"
                         name="descriprion" style="width: 95%;"></textarea>
                     </td>
                     <td>
                       <kendo-datepicker name="birthday" class="date-archive"
-                        [(ngModel)]="item.formData">
+                        [(ngModel)]="item.file.lastModifiedDate">
                       </kendo-datepicker>
                     </td>
                     <td class="hidden-xs">

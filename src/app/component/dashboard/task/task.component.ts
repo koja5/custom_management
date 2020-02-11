@@ -919,11 +919,13 @@ export class TaskComponent implements OnInit {
 
   public handleValue(selected) {
     console.log(selected);
-    if (selected.length <= 3) {
+    this.value = selected;
+
+    /*if (selected.length <= 3) {
       this.value = selected;
     } else {
       this.value = this.value.map(item => item);
-    }
+    }*/
     localStorage.setItem("selectedUser-" + this.id, JSON.stringify(this.value));
     localStorage.setItem(
       "usersFor-" + this.selectedStoreId + "-" + this.id,
