@@ -842,7 +842,8 @@
                   <tr>
                     <th width="20%">Name</th>
                     <th class="hidden-xs">Size</th>
-                    <th class="30%">description</th>
+                    <th class="30%">Description</th>
+                    <th class="15%">Date</th>
                     <th class="hidden-xs">Progress</th>
                     <th class="hidden-xs">Status</th>
                     <th>Actions</th>
@@ -853,8 +854,13 @@
                     <td><strong>{{ item.file.name }}</strong></td>
                     <td nowrap>{{ item.file.size/1024/1024 | number:'.2' }} MB</td>
                     <td>
-                      <textarea kendoTextArea [(ngModel)]="fileDescription[item.file.name]" [autoSize]="true" name="{{item.file.name}}-Descriprion"
-                        style="width: 95%;"></textarea>
+                      <textarea kendoTextArea [(ngModel)]="item.alias" [autoSize]="true"
+                        name="descriprion" style="width: 95%;"></textarea>
+                    </td>
+                    <td>
+                      <kendo-datepicker name="birthday" class="date-archive"
+                        [(ngModel)]="item.formData">
+                      </kendo-datepicker>
                     </td>
                     <td class="hidden-xs">
                       <div class="progress" style="margin-bottom: 0;">

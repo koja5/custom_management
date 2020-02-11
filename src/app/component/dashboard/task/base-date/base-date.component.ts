@@ -14,7 +14,7 @@ import { BaseOneModel } from "../../../../models/base-one-model";
 import { BaseTwoModel } from "src/app/models/base-two-model";
 import { PhysicalModel } from "src/app/models/physical-model";
 import { TaskService } from "src/app/service/task.service";
-import { ToastrService } from 'ngx-toastr';
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: "app-base-date",
@@ -39,7 +39,7 @@ export class BaseDateComponent implements OnInit {
   public uploader: FileUploader;
   public documents: any;
   public language: any;
-  public url = 'http://localhost:3000/upload';
+  public url = "http://localhost:3000/upload";
   // public url = "http://78.47.206.131:8080/upload";
   public complaintValue: any;
   public complaintData = new ComplaintTherapyModel();
@@ -51,7 +51,7 @@ export class BaseDateComponent implements OnInit {
   public loadingGrid: any;
   public loading = true;
   public currentTab = "profile";
-  public currentTabGrid = 'complaint';
+  public currentTabGrid = "complaint";
   public recommendationList: any;
   public baseDataOne: any;
   public baseDataTwo: any;
@@ -81,13 +81,30 @@ export class BaseDateComponent implements OnInit {
     public message: MessageService,
     public usersService: UsersService,
     private toastr: ToastrService
-  ) { }
-
+  ) {}
 
   ngOnInit() {
+    var datetimestamp = Date.now();
+    
     this.uploader = new FileUploader({
       url: this.url,
-      additionalParameter: { comments: this.data.id + '-' + this.fileDescription }
+      headers: [{ name: "Content-Type", value: "application/json" }],
+      additionalParameter: { comments: this.data.id },
+      disableMultipart: true,
+      formatDataFunctionIsAsync: true,
+      formatDataFunction: item => {
+        return new Promise((resolve, reject) => {
+          resolve({
+            customer_id: this.data.id,
+            name: item._file.name,
+            type: item._file.type,
+            size: item._file.size,
+            description: item.alias,
+            filename:  'file-' + datetimestamp + '.' + item.file.name.split('.')[item.file.name.split('.').length - 1],
+            date: item.formData
+          });
+        });
+      }
     });
 
     this.language = JSON.parse(localStorage.getItem("language"))["user"];
@@ -113,20 +130,20 @@ export class BaseDateComponent implements OnInit {
   }
 
   convertStringToDate() {
-    if (this.data.birthday !== undefined && this.data.birthday !== '') {
+    if (this.data.birthday !== undefined && this.data.birthday !== "") {
       this.data.birthday = new Date(this.data.birthday);
     }
   }
 
   getParameters() {
     this.service.getParameters("Complaint").subscribe((data: []) => {
-      this.complaintValue = data.sort(function (a, b) {
+      this.complaintValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.service.getParameters("Therapy").subscribe((data: []) => {
-      this.therapyValue = data.sort(function (a, b) {
+      this.therapyValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
@@ -136,7 +153,7 @@ export class BaseDateComponent implements OnInit {
     });
 
     this.service.getParameters("Treatment").subscribe((data: []) => {
-      this.treatmentValue = data.sort(function (a, b) {
+      this.treatmentValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
@@ -282,7 +299,6 @@ export class BaseDateComponent implements OnInit {
   onChange(event) {
     this.data.birthday = event;
   }
-
 
   downloadFile(filename: string) {
     console.log(filename);
@@ -437,7 +453,11 @@ export class BaseDateComponent implements OnInit {
               timer: 3000,
               type: "success"
             });*/
-            this.toastr.success('Successfull!', 'New complaint is successfull added!', { timeOut: 7000, positionClass: 'toast-bottom-right', });
+            this.toastr.success(
+              "Successfull!",
+              "New complaint is successfull added!",
+              { timeOut: 7000, positionClass: "toast-bottom-right" }
+            );
             this.selectedComplaint = [];
             this.selectedTherapies = [];
           } else {
@@ -462,8 +482,12 @@ export class BaseDateComponent implements OnInit {
             timer: 3000,
             type: "success"
           });*/
-          
-          this.toastr.success('Successfull!', 'New complaint is successfull added!', { timeOut: 7000, positionClass: 'toast-bottom-right', });
+
+          this.toastr.success(
+            "Successfull!",
+            "New complaint is successfull added!",
+            { timeOut: 7000, positionClass: "toast-bottom-right" }
+          );
           this.selectedComplaint = [];
           this.selectedTherapies = [];
         } else {
@@ -736,7 +760,7 @@ export class BaseDateComponent implements OnInit {
           console.log(this.baseDataTwo);
         }
       });
-    } else if (tab === 'physical_illness') {
+    } else if (tab === "physical_illness") {
       this.service.getPhysicallIllness(this.data.id).subscribe(data => {
         if (data["length"] !== 0) {
           this.physicalIllness = data[0];
@@ -756,11 +780,11 @@ export class BaseDateComponent implements OnInit {
 
   changeTabGrid(tab) {
     this.currentTabGrid = tab;
-    if (tab === 'complaint') {
+    if (tab === "complaint") {
       this.getComplaint();
-    } else if (tab === 'therapy') {
+    } else if (tab === "therapy") {
       this.getTherapy();
-    } else if (tab === 'document') {
+    } else if (tab === "document") {
       this.getDocument();
     }
   }
@@ -1075,9 +1099,7 @@ export class BaseDateComponent implements OnInit {
     }, 50);
   }
 
-  filterDoctor(event) {
-
-  }
+  filterDoctor(event) {}
 
   printCustomer() {
     window.print();

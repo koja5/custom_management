@@ -43,13 +43,20 @@ var storage = multer.diskStorage({ //multers disk storage settings
   },
   filename: function (req, file, cb) {
     var datetimestamp = Date.now();
-    cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length - 1]);
+    cb(null, file.filename + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length - 1]);
   }
 });
 
 var upload = multer({ //multer settings
   storage: storage
 }).single('file');
+
+
+// Parsers for POST data
+app.use(bodyParser.json({limit: '50mb', extended: true}));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 
 
 app.post('/upload', function (req, res) {
@@ -65,13 +72,16 @@ app.post('/upload', function (req, res) {
 
       var test = {};
       console.log(req);
+      // console.log(storage.getFilename());
       var doc = {
-        'customer_id': req.body.comments,
-        'name': req.file.originalname,
-        'type': req.file.mimetype,
-        'size': req.file.size,
-        'filename': req.file.filename,
-        'path': req.file.path
+        'customer_id': req.body.customer_id,
+        'name': req.body.name,
+        'type': req.body.type,
+        'size': req.body.size,
+        'date': req.body.date,
+        'comment': req.body.description,
+        'filename': req.body.filename,
+        'path': req.body.filename
       }
 
       conn.query("insert into documents SET ?", doc, function (err, rows) {
@@ -98,13 +108,6 @@ app.post('/upload', function (req, res) {
     });
   });
 });
-
-
-// Parsers for POST data
-app.use(bodyParser.json({limit: '50mb', extended: true}));
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
 
 app.use(cookieParser());
 app.use(session({
