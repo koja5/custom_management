@@ -55,6 +55,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BaseDateComponent } from './component/dashboard/task/base-date/base-date.component';
 import { DocumentPreviewComponent } from './component/dashboard/document-preview/document-preview.component';
 import { UserDetailsComponent } from './component/dashboard/users/user-details/user-details.component';
+import { SettingsComponent } from './component/dashboard/settings/settings.component';
 
 import { UrlSerializer } from '@angular/router';
 import { StandardUrlSerializer } from './standardUrlSerializer';
@@ -63,11 +64,9 @@ import { ParametersComponent } from './component/dashboard/parameters/parameters
 import { ParameterItemComponent } from './component/dashboard/parameters/parameter-item/parameter-item.component';
 import { StatisticComponent } from './component/dashboard/statistic/statistic.component';
 import { VaucherComponent } from './component/dashboard/vaucher/vaucher.component';
-import { SettingsComponent } from './component/dashboard/settings/settings.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
- 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
