@@ -718,7 +718,7 @@
                       <div class="row-grid" *ngIf="documents !== undefined">
                         <button kendoButton [primary]="true" [icon]="'add'"
                           style="width: 200px !important; margin-bottom: 2vh;"
-                          (click)="upload.open()">{{language.updateDocument}}</button>
+                          (click)="upload.open()">{{language.uploadDocument}}</button>
                         <kendo-grid [data]="documents" [height]="390" [resizable]="true"
                           [loading]="loadingGridDocument">
                           <kendo-grid-column field="id" title="Document ID" width="100">
@@ -739,9 +739,9 @@
                           <kendo-grid-column field="date" title="Date" width="120">
                             <ng-template kendoGridCellTemplate let-dataItem>
                               {{dataItem.date | date: 'dd/MM/yyyy'}}
-                          </ng-template>
+                            </ng-template>
                           </kendo-grid-column>
-                          <kendo-grid-column field="description" title="Description" width="150">
+                          <kendo-grid-column field="description" title="{{language.description}}" width="150">
                           </kendo-grid-column>
                           <kendo-grid-column field="active" title="" width="80">
                             <ng-template kendoGridCellTemplate let-dataItem>
@@ -749,19 +749,23 @@
                                 (click)="previewDocument(dataItem.filename)"></button>
                             </ng-template>
                           </kendo-grid-column>
-                          <kendo-grid-column field="active" title="" width="80">
-                            <ng-template kendoGridCellTemplate let-dataItem>
-                              <button kendoButton [icon]="'k-icon k-i-download'" class='k-preview'
-                                (click)="downloadFile(dataItem.filename)"></button>
-                            </ng-template>
-                          </kendo-grid-column>
                           <kendo-grid-column width="80">
                             <ng-template kendoGridCellTemplate let-dataItem>
-                              <button kendoButton [icon]="'k-icon k-i-delete'"
-                                (click)="open('dialogDocument', dataItem)"></button>
+                              <div class="dropdown-grid">
+                                <button class="btn-grid" style="border-left:1px solid #0d8bf2">
+                                  <i class="fa fa-ellipsis-v"></i>
+                                </button>
+                                <div class="dropdown-content-grid">
+                                  <a (click)="downloadFile(dataItem.filename)"><span class="k-icon k-i-download"></span>
+                                    {{language.download}}</a>
+                                  <a (click)="editDocuments(dataItem)"><span class="k-icon k-i-file-excel"></span>
+                                    {{language.edit}}</a>
+                                  <a (click)="open('dialogDocument', dataItem)"><span
+                                      class="k-icon k-i-file-excel"></span> {{language.delete}}</a>
+                                </div>
+                              </div>
                             </ng-template>
                           </kendo-grid-column>
-
                         </kendo-grid>
                       </div>
                     </div>
@@ -861,12 +865,11 @@
                     <td><strong>{{ item.file.name }}</strong></td>
                     <td nowrap>{{ item.file.size/1024/1024 | number:'.2' }} MB</td>
                     <td>
-                      <textarea kendoTextArea [(ngModel)]="item.file.description" [autoSize]="true"
-                        name="descriprion" style="width: 95%;"></textarea>
+                      <textarea kendoTextArea [(ngModel)]="item.file.description" [autoSize]="true" name="descriprion"
+                        style="width: 95%;"></textarea>
                     </td>
                     <td>
-                      <kendo-datepicker name="birthday" class="date-archive"
-                        [(ngModel)]="item.file.lastModifiedDate">
+                      <kendo-datepicker name="birthday" class="date-archive" [(ngModel)]="item.file.lastModifiedDate">
                       </kendo-datepicker>
                     </td>
                     <td class="hidden-xs">
@@ -1376,6 +1379,33 @@
           </div>
         </div>
       </div>
+    </kendo-window>
+
+    <kendo-window [title]="getTranslate(operationMode)" *ngIf="document_edit" [minWidth]="400" [width]="550"
+      [minHeight]="300" (close)="document_edit = false">
+      <form name="loginForm" class="loginForm" (ngSubmit)="updateDocument(document)" #documentEditForm="ngForm">
+        <div class="col-md-12 col-xs-12">
+          <kendo-textbox-container floatingLabel="{{language.name}}({{language.required}})">
+            <input kendoTextBox type="text" class="col-xs-12" [(ngModel)]="documentItem.name" name="name" required>
+          </kendo-textbox-container>
+        </div>
+        <div class="col-md-12 col-xs-12">
+          <kendo-textbox-container floatingLabel="{{language.date}}">
+            <kendo-datepicker [(ngModel)]="documentItem.date" name="date" class="noPadding">
+            </kendo-datepicker>
+          </kendo-textbox-container>
+        </div>
+        <div class="col-md-12 col-xs-12" style="padding-top: 10px">
+          <kendo-textbox-container floatingLabel="{{language.description}}">
+            <textarea kendoTextArea [(ngModel)]="documentItem.description" name="description"
+              [autoSize]="true"></textarea>
+          </kendo-textbox-container>
+        </div>
+        <div class="form-group" style="text-align: center;">
+          <button kendoButton [primary]="true" class="form-button" [disabled]="documentEditForm.form.invalid"
+            type="submit">{{language.updateDocument}}</button>
+        </div>
+      </form>
     </kendo-window>
 
   </div>

@@ -226,7 +226,9 @@
     "print": "Drucken",
     "required": "erforderlich",
     "searchAllColumn": "In allen Spalten suchen...",
-    "storename": "Name des Geschäfts"
+    "storename": "Name des Geschäfts",
+    "download": "Herunterladen",
+    "description": "Beschreibung"
   },
   "store": {
     "pagerPage": "Seite",

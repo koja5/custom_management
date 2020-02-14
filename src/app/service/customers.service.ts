@@ -203,4 +203,9 @@ export class CustomersService {
     return this.http.get('/api/get' + type + 'List')
       .map(res => res);
   }
+
+  updateDocument(data) {
+    return this.http.post('/api/updateDocument', data)
+      .map(res => res);
+  }
 }

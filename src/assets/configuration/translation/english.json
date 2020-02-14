@@ -156,7 +156,7 @@
     "choicePreviousTherapy": "Choice previous therapy...",
     "choiceState": "Choice current state",
     "updateCustomer": "Update customer",
-    "updateDocument": "Upload documents",
+    "uploadDocument": "Upload documents",
     "baseOne": "Base data I",
     "baseTwo": "Base data II",
     "physicalIllness": "Physical illness",
@@ -234,7 +234,10 @@
     "print": "Print",
     "required": "required",
     "searchAllColumn": "Search all column...",
-    "storename": "Store name"
+    "storename": "Store name",
+    "download": "Download",
+    "updateDocument": "Update document",
+    "description": "Description"
   },
   "store": {
     "pagerPage": "Page",

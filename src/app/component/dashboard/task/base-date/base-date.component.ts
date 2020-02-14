@@ -30,6 +30,7 @@ export class BaseDateComponent implements OnInit {
   @Input() doctor;
   public complaint = false;
   public therapy = false;
+  public document_edit = false;
   public maleImg = "../../../../../assets/images/users/male-patient.png";
   public femaleImg = "../../../../../assets/images/users/female-patient.png";
   public dialogOpened = false;
@@ -73,6 +74,7 @@ export class BaseDateComponent implements OnInit {
   public theme: string;
   public ourFile: File;
   public fileDescription = [];
+  public documentItem: any;
   constructor(
     public router: ActivatedRoute,
     public service: CustomersService,
@@ -1108,5 +1110,34 @@ export class BaseDateComponent implements OnInit {
 
   printCustomer() {
     window.print();
+  }
+
+  editDocuments(item) {
+    this.document_edit = true;
+    this.documentItem = item;
+    if(this.documentItem.date !== null && this.documentItem.date !== undefined) {
+      this.documentItem.date = new Date(this.documentItem.date);
+    }
+  }
+
+  updateDocument(item) {
+    this.service.updateDocument(this.documentItem).subscribe(
+      data => {
+        if(data) {
+          this.document_edit = false;
+          this.toastr.success(
+            "Successfull!",
+            "Document update successfuly!",
+            { timeOut: 7000, positionClass: "toast-bottom-right" }
+          );
+        } else {
+          this.toastr.error(
+            "Error!",
+            "Document is not updated!",
+            { timeOut: 7000, positionClass: "toast-bottom-right" }
+          );
+        }
+      }
+    )
   }
 }

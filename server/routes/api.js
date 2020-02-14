@@ -1277,6 +1277,49 @@ router.post("/deleteDocument", function (req, res, next) {
   });
 });
 
+router.post("/updateDocument", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+    test = {};
+    var id = req.body.id;
+
+    conn.query(
+      "UPDATE documents SET ? where id = '" + id + "'",
+      [req.body],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            test.success = true;
+          } else {
+            test.success = false;
+          }
+          res.json(test);
+        } else {
+          res.json({
+            code: 100,
+            status: "Error in connection database"
+          });
+          console.log(err);
+        }
+      }
+    );
+    conn.on("error", function (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    });
+  });
+});
+
 router.post("/download", function (req, res, next) {
   console.log(req);
   filepath = path.join(__dirname, "./uploads") + "/" + req.body.filename;
