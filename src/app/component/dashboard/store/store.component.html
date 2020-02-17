@@ -6,7 +6,7 @@
   <kendo-grid [data]="gridView" [style.height]="height" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
     [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="pageable" (pageChange)="pageChange($event)"
     [kendoGridSelectBy]="mySelectionKey" [loading]="loadingGrid" [groupable]="true"
-    [group]="state.group" [pageSize]="pageSize" (groupChange)="groupChange($event)">
+    [group]="state.group" [pageSize]="pageSize" (groupChange)="groupChange($event)" (sortChange)="sortChange($event)">
     <kendo-grid-messages pagerPage="{{language.pagerPage}}" pagerOf="{{language.pagerOf}}"
       pagerItems="{{language.pagerItems}}" pagerItemsPerPage="{{language.pagerItemsPerPage}}">
     </kendo-grid-messages>

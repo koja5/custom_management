@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
 import { Modal } from "ngx-modal";
 import { StoreService } from "../../../service/store.service";
-import { process, State, GroupDescriptor } from "@progress/kendo-data-query";
+import { process, State, GroupDescriptor, SortDescriptor } from "@progress/kendo-data-query";
 import {
   DataStateChangeEvent,
   PageChangeEvent,
@@ -464,6 +464,11 @@ export class StoreComponent implements OnInit {
 
   public groupChange(groups: GroupDescriptor[]): void {
     this.state.group = groups;
+    this.gridView = process(this.gridData.data, this.state);
+  }
+
+  public sortChange(sort: SortDescriptor[]): void {
+    this.state.sort = sort;
     this.gridView = process(this.gridData.data, this.state);
   }
 }

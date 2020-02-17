@@ -218,24 +218,12 @@ export class UsersComponent implements OnInit {
     this.loadProducts();
   }
 
-  sortChange(sort: SortDescriptor[]): void {
-    this.sort = sort;
-    this.sortChangeData();
-  }
-
   loadProducts(): void {
     this.gridView = process(this.gridData.data, this.state);
   }
 
   public close(component) {
     this[component + "Opened"] = false;
-  }
-
-  sortChangeData() {
-    this.gridView = {
-      data: orderBy(this.currentLoadData, this.sort),
-      total: this.currentLoadData.length
-    };
   }
 
   hideShowPassword() {
@@ -489,6 +477,11 @@ export class UsersComponent implements OnInit {
 
   public groupChange(groups: GroupDescriptor[]): void {
     this.state.group = groups;
+    this.gridView = process(this.gridData.data, this.state);
+  }
+
+  public sortChange(sort: SortDescriptor[]): void {
+    this.state.sort = sort;
     this.gridView = process(this.gridData.data, this.state);
   }
 }

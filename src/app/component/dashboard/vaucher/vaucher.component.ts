@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener } from "@angular/core";
 import { VaucherModel } from "src/app/models/vaucher-model";
-import { process, State, GroupDescriptor } from "@progress/kendo-data-query";
+import { process, State, GroupDescriptor, SortDescriptor } from "@progress/kendo-data-query";
 import {
   RowArgs,
   DataStateChangeEvent,
@@ -649,6 +649,11 @@ export class VaucherComponent implements OnInit {
 
   public groupChange(groups: GroupDescriptor[]): void {
     this.state.group = groups;
+    this.gridView = process(this.gridData.data, this.state);
+  }
+
+  public sortChange(sort: SortDescriptor[]): void {
+    this.state.sort = sort;
     this.gridView = process(this.gridData.data, this.state);
   }
 }
