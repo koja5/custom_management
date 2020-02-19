@@ -42,6 +42,7 @@ export class BaseDateComponent implements OnInit {
   public language: any;
   // public url = "http://localhost:3000/upload";
   public url = "http://78.47.206.131:8081/upload";
+  // public url = location.protocol + '/upload';
   public complaintValue: any;
   public complaintData = new ComplaintTherapyModel();
   public gridComplaint: any;
@@ -86,6 +87,7 @@ export class BaseDateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    console.log(location);
     var datetimestamp = Date.now();
     
     this.uploader = new FileUploader({
