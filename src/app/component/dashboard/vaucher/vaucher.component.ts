@@ -144,7 +144,7 @@ export class VaucherComponent implements OnInit {
 
   initializeParams() {
     this.data = {
-      date: "",
+      date: new Date().toString(),
       amount: null,
       date_redeemed: "",
       customer: null,
@@ -153,7 +153,7 @@ export class VaucherComponent implements OnInit {
       user_name: "",
       comment: ""
     };
-    this.dateConst = "";
+    this.dateConst = new Date();
     this.dateredeemedConst = "";
     this.customerUserBuys = null;
     this.customerUserConsumer = null;
