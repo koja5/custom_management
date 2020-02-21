@@ -127,7 +127,7 @@
               scrollTime="08:00" startTime="{{startWork}}" endTime="{{endWork}}" workDayStart="{{startWork}}"
               workDayEnd="{{endWork}}" (save)="saveHandler($event, item.userId)" [resources]="resources"
               (dragEnd)="dragEndHandler($event)" (resizeEnd)="resizeEndHandler($event)" (remove)="removeHandler($event)"
-              (change)="changeHandler($event)">
+              (change)="changeHandler($event)" (eventClick)="eventClickHendler($event)">
 
               <ng-template kendoSchedulerToolbarTemplate let-selectedDate="selectedDate">
                 <my-navigation [selectedDate]="selectedDate" style="float: left;">
@@ -152,9 +152,9 @@
                   [style.background]="calendars[i].workTime[j].color"></div>
               </ng-template>
               <ng-template kendoSchedulerEventTemplate let-event="event" let-resources="resources">
-                <div *ngIf="event !== undefined">
-                  <p style="font-weight: bold; padding: 0px; color: black;">{{ event.title.split('+')[0] }}</p>
-                  <p style="margin-top: -17px; margin-left: 7px; color: black;">{{event.title.split('+')[1]}}</p>
+                <div *ngIf="event !== undefined" class="eventDiv">
+                  <p class="eventName">{{ event.title.split('+')[0] }}</p>
+                  <p class="eventTitle">{{event.title.split('+')[1]}}</p>
                 </div>
               </ng-template>
 
@@ -335,7 +335,8 @@
             class="{{ zIndex }}" [selectedDate]="selectedDate" scrollTime="08:00" startTime="{{startWork}}"
             endTime="{{endWork}}" workDayStart="{{startWork}}" workDayEnd="{{endWork}}" style="height: 100%;"
             (save)="saveHandler($event)" style="height: 100%" [resources]="resources" (dragEnd)="dragEndHandler($event)"
-            (resizeEnd)="resizeEndHandler($event)" (remove)="removeHandler($event)">
+            (resizeEnd)="resizeEndHandler($event)" (remove)="removeHandler($event)"
+            (eventClick)="eventClickHendler($event)">
             <ng-template kendoSchedulerToolbarTemplate let-selectedDate="selectedDate">
               <my-navigation [selectedDate]="selectedDate" style="float: left;">
               </my-navigation>
@@ -343,15 +344,15 @@
             </ng-template>
             <ng-template kendoSchedulerEventTemplate let-event="event" let-resources="resources">
               <div style="width: 100vh !important;" *ngIf="event !== undefined">
-                <p style="font-weight: bold; padding: 0px; color: black;">{{ event.title.split('+')[0] }} </p>
-                <p style="margin-top: -17px; margin-left: 7px; color: black;">{{event.title.split('+')[1]}}</p>
+                <p class="eventName">{{ event.title.split('+')[0] }} </p>
+                <p class="eventTitle">{{event.title.split('+')[1]}}</p>
               </div>
             </ng-template>
 
             <ng-template kendoSchedulerAllDayEventTemplate let-event="event" let-resources="resources">
-              <div style="width: 100vh !important;" *ngIf="event !== undefined">
-                <p style="font-weight: bold; padding: 0px; color: black;">{{ event.title.split('+')[0] }} </p>
-                <p style="margin-top: -17px; margin-left: 7px; color: black;">{{event.title.split('+')[1]}}</p>
+              <div style="width: 100vh !important;" *ngIf="event !== undefined" class="eventDiv">
+                <p class="eventName">{{ event.title.split('+')[0] }} </p>
+                <p class="eventTitle">{{event.title.split('+')[1]}}</p>
               </div>
             </ng-template>
 
@@ -593,5 +594,15 @@
     [width]="950" [height]="700" (close)="closebaseDataForUser()">
     <app-base-date [data]="customerUser" *ngIf="customerUser !== undefined">
     </app-base-date>
+  </kendo-window>
+
+  <kendo-window *ngIf="quickPreview" (close)="quickPreview = false" class="quickPreviewWindow">
+    <div class="customerNameEvent">
+      <h3>{{quickPreviewEvent.title.split('+')[0]}}</h3>
+    </div>
+    <div class="customerTitleEvent">
+      <h5><i class="fa fa-calendar" aria-hidden="true"></i> {{quickPreviewEvent.start | date: 'dd.MM.yyyy'}}({{quickPreviewEvent.start | date: 'HH:mm'}} - {{quickPreviewEvent.end | date: 'HH:mm'}})</h5>
+      <h5><i class="fa fa-sticky-note-o" aria-hidden="true"></i> {{quickPreviewEvent.title.split('+')[1]}}</h5>
+    </div>
   </kendo-window>
 </div>

@@ -119,6 +119,8 @@ export class TaskComponent implements OnInit {
   public userWidth = "72%";
   public id: number;
   public customerLoading = false;
+  public quickPreview = false;
+  public quickPreviewEvent: any;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -1507,5 +1509,11 @@ export class TaskComponent implements OnInit {
     } else {
       this.customerUsers = [];
     }
+  }
+
+  eventClickHendler({ sender, event }: EventClickEvent): void {
+    console.log(event);
+    this.quickPreviewEvent = event;
+    this.quickPreview = true;
   }
 }

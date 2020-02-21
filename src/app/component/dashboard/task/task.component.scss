@@ -41,7 +41,8 @@
   color: white;
   /*height: 2.7vh;
   width: 31.5vh;*/
-  height: 35px !important;
+  // height: 35px !important;
+  height: 70px !important;
   width: 100%;
   border-radius: 2px;
 }
@@ -121,3 +122,47 @@ kendo-multiselect {
 .patient-options {
   font-size: 9px;
 }
+
+kendo-scheduler .k-event:hover {
+  cursor: pointer;
+  filter: brightness(0.9);
+}
+
+.eventName {
+  font-weight: bold; 
+  padding: 0px; 
+  color: black;
+  font-size: 14px !important;
+}
+
+.eventTitle {
+  margin-top: -17px; 
+  margin-left: 7px; 
+  color: black;
+  font-size: 12px !important;
+}
+
+.quickPreviewWindow {
+  background: #6673FC !important;
+}
+
+.quickPreviewWindow kendo-window-titlebar {
+  padding: 5px 24px !important;
+}
+
+.quickPreviewWindow .k-window-content {
+  padding: 0px !important;
+}
+
+.customerNameEvent {
+  padding: 0px 24px;
+  color: #fff;
+  font-weight: 300;
+}
+
+.customerTitleEvent {
+  padding: 24px;
+  background: #fff !important;
+}
+
+
