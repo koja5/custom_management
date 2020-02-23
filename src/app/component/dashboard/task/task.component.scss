@@ -75,13 +75,14 @@
 }
 
 .calendar {
-  height: 76vh;
+  /*height: 76vh;*/
   overflow: auto;
+  margin-top: 20px;
 }
 
 .tasks {
   overflow: hidden;
-  height: 92vh;
+  /*height: 92vh;*/
 }
 
 /*@media (max-height: 768px) {
@@ -92,6 +93,7 @@
 
 .k-scheduler-toolbar {
   text-align: center !important;
+  padding: 6px !important;
 }
 
 .k-dialog {
@@ -140,6 +142,10 @@ kendo-scheduler .k-event:hover {
   margin-left: 7px; 
   color: black;
   font-size: 12px !important;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .quickPreviewWindow {
@@ -165,4 +171,17 @@ kendo-scheduler .k-event:hover {
   background: #fff !important;
 }
 
+kendo-colorpalette {
+  width: 100% !important;
+}
 
+k-window-content {
+  max-width: 700px !important;
+}
+
+.eventDiv {
+  top: 38%;
+  vertical-align: middle;
+  text-align: center;
+  width: 100%;
+}

@@ -74,7 +74,9 @@
     "selectStoreIndicatorText": "Sie müssen den Ort auswählen, bevor Sie eine Aufgabe erstellen!",
     "color": "Farbe",
     "start": "Start",
+    "startTime": "Startzeit",
     "end": "Ende",
+    "endTime": "Endzeit",
     "telephone": "Telefon",
     "selectStore": "Wählen Sie einen Standort(e.g. ",
     "selectUsers": "Benutzer auswählen(e.g. Mark Piters)"

@@ -10,7 +10,7 @@ import { HttpModule } from '@angular/http';
 import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SchedulerModule } from '@progress/kendo-angular-scheduler';
+import { SchedulerModule, PDFModule as SchedulerPDFModule } from '@progress/kendo-angular-scheduler';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
 import { GridModule, ExcelModule, PDFModule } from '@progress/kendo-angular-grid';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
@@ -104,6 +104,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     BrowserAnimationsModule,
     ReactiveFormsModule,
     SchedulerModule,
+    SchedulerPDFModule,
     DateInputsModule,
     GridModule,
     ExcelModule,

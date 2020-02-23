@@ -1,5 +1,5 @@
 import { CustomerModel } from "./../../../models/customer-model";
-import { Component, OnInit, ViewChild, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit, ViewChild, ViewEncapsulation, HostListener } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -40,6 +40,7 @@ import { MongoService } from "../../../service/mongo.service";
 })
 export class TaskComponent implements OnInit {
   @ViewChild("customerUserModal") customerUserModal: Modal;
+  @ViewChild('scheduler') public scheduler: SchedulerComponent;
   public customerModal = false;
   public selectedDate: Date = new Date();
   public formGroup: FormGroup;
@@ -84,7 +85,6 @@ export class TaskComponent implements OnInit {
   public calendars: any = [];
   public loading = true;
   public createFormLoading: boolean;
-  public height = 92;
   public orientation = "horizontal";
   public workTime: any[] = [];
   public selectedStoreId: number;
@@ -116,11 +116,13 @@ export class TaskComponent implements OnInit {
   public baseDataIndicator = false;
   public allUsers: any;
   public selectedUser: any;
-  public userWidth = "72%";
+  public userWidth = "22%";
   public id: number;
   public customerLoading = false;
   public quickPreview = false;
   public quickPreviewEvent: any;
+  public height: any;
+  public calendarHeight: any;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -135,12 +137,16 @@ export class TaskComponent implements OnInit {
   }
 
   ngOnInit() {
+    
+    this.height = window.innerHeight - 138;
+    this.height += "px";
+    this.calendarHeight = window.innerHeight - 252;
+    this.calendarHeight += "px";
     this.loading = true;
     this.type = Number(localStorage.getItem("type"));
     this.id = Number(localStorage.getItem("idUser"));
     console.log(this.events);
     this.calendars = [];
-    this.height = 92;
 
     /*this.customer.getCustomers(localStorage.getItem("superadmin"), val => {
       console.log(val);
@@ -268,7 +274,6 @@ export class TaskComponent implements OnInit {
             workTime: this.workTime
           };
           this.calendars.push(objectCalendar);
-          this.height += this.height;
           console.log(this.splitterSize);
           this.loading = false;
           console.log(this.calendars);
@@ -319,7 +324,6 @@ export class TaskComponent implements OnInit {
               events: this.events
             };
             this.calendars.push(objectCalendar);
-            this.height += this.height;
             this.loading = false;
           } else {
             this.calendars.push({ name: null, events: [] });
@@ -395,7 +399,7 @@ export class TaskComponent implements OnInit {
             this.telephoneValue = data[0].telephone;
             this.mobileValue = data[0].mobile;
             this.baseDataIndicator = true;
-            this.userWidth = "49%";
+            this.userWidth = "65%";
           });
       }
 
@@ -441,7 +445,7 @@ export class TaskComponent implements OnInit {
         this.customerUser.id !== undefined
       ) {
         this.baseDataIndicator = true;
-        this.userWidth = "49%";
+        this.userWidth = "65%";
       }
 
       this.formGroup = this.formBuilder.group({
@@ -774,7 +778,7 @@ export class TaskComponent implements OnInit {
       this.mobileValue = event.mobile;
       this.getComplaintAndTherapyForCustomer(event.id);
       this.baseDataIndicator = true;
-      this.userWidth = "49%";
+      this.userWidth = "65%";
     } else {
       this.customerUser = {
         attention: "",
@@ -787,7 +791,7 @@ export class TaskComponent implements OnInit {
       this.selectedTherapies = null;
       this.selectedTreatments = null;
       this.complaintData = new ComplaintTherapyModel();
-      this.userWidth = "72%";
+      this.userWidth = "22%";
     }
   }
 
@@ -827,7 +831,7 @@ export class TaskComponent implements OnInit {
         this.formGroup.patchValue({ telephone: this.data.telephone });
         this.formGroup.patchValue({ mobile: this.data.mobile });
         this.baseDataIndicator = true;
-        this.userWidth = "49%";
+        this.userWidth = "65%";
         this.reloadNewCustomer();
         this.customerModal = false;
         // form.reset();
@@ -950,7 +954,6 @@ export class TaskComponent implements OnInit {
     this.loading = true;
     console.log(value);
     this.calendars = [];
-    this.height = 92;
     if (value.length === 0) {
       this.service
         .getTasksForStore(this.selectedStoreId, this.id, this.type)
@@ -1020,7 +1023,6 @@ export class TaskComponent implements OnInit {
             workTime: this.workTime
           };
           this.calendars.push(objectCalendar);
-          this.height += this.height;
           this.loopIndex++;
           this.splitterSize = this.splitterSizeFull / this.valueLoop.length;
           console.log(this.splitterSize);
@@ -1124,7 +1126,6 @@ export class TaskComponent implements OnInit {
                 workTime: undefined
               };
               this.calendars.push(objectCalendar);
-              this.height += this.height;
             } else {
               this.calendars.push({ name: null, events: [] });
             }
@@ -1515,5 +1516,17 @@ export class TaskComponent implements OnInit {
     console.log(event);
     this.quickPreviewEvent = event;
     this.quickPreview = true;
+  }
+
+  @HostListener("window:resize", ["$event"])
+  onResize(event) {
+    this.height = window.innerHeight - 138;
+    this.height += "px";
+    this.calendarHeight = window.innerHeight - 252;
+    this.calendarHeight += "px";
+  }
+
+  exportToPdf() {
+    this.scheduler.saveAsPDF();
   }
 }
