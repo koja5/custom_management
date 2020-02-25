@@ -621,7 +621,7 @@
                       </div>
                       <div class="row-grid" *ngIf="gridComplaint !== undefined">
                         <button kendoButton [primary]="true" [icon]="'add'"
-                          style="width: 200px !important; margin-bottom: 2vh;"
+                          style="width: auto; margin-bottom: 2vh;"
                           (click)="openComplaintModal(); changeTheme(theme);">{{language.addComplaint}}</button>
                         <kendo-grid [data]="gridComplaint" [height]="390" [resizable]="true"
                           [loading]="loadingGridComplaint">
@@ -667,7 +667,7 @@
                       </div>
                       <div class="row-grid" *ngIf="gridTherapy !== undefined">
                         <button kendoButton [primary]="true" [icon]="'add'"
-                          style="width: 200px !important; margin-bottom: 2vh;"
+                          style="width: auto; margin-bottom: 2vh;"
                           (click)="openTherapyModal(); changeTheme(theme);">{{language.addTherapy}}</button>
                         <kendo-grid [data]="gridTherapy" [height]="390" [resizable]="true"
                           [loading]="loadingGridTherapy">
@@ -717,7 +717,7 @@
                       </div>
                       <div class="row-grid" *ngIf="documents !== undefined">
                         <button kendoButton [primary]="true" [icon]="'add'"
-                          style="width: 200px !important; margin-bottom: 2vh;"
+                          style="width: auto; margin-bottom: 2vh;"
                           (click)="upload.open()">{{language.uploadDocument}}</button>
                         <kendo-grid [data]="documents" [height]="390" [resizable]="true"
                           [loading]="loadingGridDocument">
