@@ -4,4 +4,5 @@ export class EventCategoryModel {
     sequence?: string;
     color?: string;
     comment?: string;
+    superadmin?: string;
 }

@@ -23,8 +23,8 @@ export class EventCategoryService {
       .map(res => res);
   }
 
-  getEventCategory() {
-    return this.http.get('/api/getEventCategory/')
+  getEventCategory(superadmin) {
+    return this.http.get('/api/getEventCategory/' + superadmin)
       .map(res => res);
   }
 

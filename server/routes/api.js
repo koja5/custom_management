@@ -5099,7 +5099,7 @@ router.post("/updateVaucher", function (req, res, next) {
 
 // start event_category
 
-router.get("/getEventCategory", function (req, res, next) {
+router.get("/getEventCategory/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       res.json({
@@ -5108,7 +5108,8 @@ router.get("/getEventCategory", function (req, res, next) {
       });
       return;
     }
-    conn.query("select * from event_category", function (err, rows) {
+    var id = req.params.id
+    conn.query("select * from event_category where superadmin = ?", [id],function (err, rows) {
       conn.release();
       if (!err) {
         res.json(rows);
@@ -5146,7 +5147,8 @@ router.post("/createEventCategory", function (req, res, next) {
       category: req.body.category,
       sequence: req.body.sequence,
       color: req.body.color,
-      comment: req.body.comment
+      comment: req.body.comment,
+      superadmin: req.body.superadmin
     };
 
     conn.query("insert into event_category SET ?", data, function (err, rows) {
@@ -5225,7 +5227,8 @@ router.post("/updateEventCategory", function (req, res, next) {
       category: req.body.category,
       sequence: req.body.sequence,
       color: req.body.color,
-      comment: req.body.comment
+      comment: req.body.comment,
+      superadmin: req.body.superadmin
     };
 
     conn.query(

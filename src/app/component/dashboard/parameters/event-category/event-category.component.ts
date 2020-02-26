@@ -55,7 +55,7 @@ export class EventCategoryComponent implements OnInit {
   }
 
   getEventCategory() {
-    this.service.getEventCategory().subscribe(
+    this.service.getEventCategory(localStorage.getItem("superadmin")).subscribe(
       (data: []) => {
         this.currentLoadData = data;
         this.gridView = process(data, this.state);
@@ -94,12 +94,12 @@ export class EventCategoryComponent implements OnInit {
 
   public groupChange(groups: GroupDescriptor[]): void {
     this.state.group = groups;
-    this.gridView = process(this.gridData.data, this.state);
+    this.gridView = process(this.currentLoadData, this.state);
   }
 
   public sortChange(sort: SortDescriptor[]): void {
     this.state.sort = sort;
-    this.gridView = process(this.gridData.data, this.state);
+    this.gridView = process(this.currentLoadData, this.state);
   }
 
   addNewModal() {
@@ -114,6 +114,7 @@ export class EventCategoryComponent implements OnInit {
   }
 
   createEventCategory(event) {
+    this.data.superadmin = localStorage.getItem("superadmin");
     this.service.createEventCategory(this.data).subscribe(
       data => {
         if (data) {
