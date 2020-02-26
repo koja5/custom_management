@@ -79,7 +79,22 @@
     "endTime": "Endzeit",
     "telephone": "Telefon",
     "selectStore": "Wählen Sie einen Standort(e.g. ",
-    "selectUsers": "Benutzer auswählen(e.g. Mark Piters)"
+    "selectUsers": "Benutzer auswählen(e.g. Mark Piters)",
+    "required": "erforderlich",
+    "attention": "Beachtung",
+    "physicalComplaint": "Körperliche Beschwerde",
+    "email": "Email",
+    "gender": "Geschlecht",
+    "street": "Straße",
+    "streetnumber": "Hausnummer",
+    "city": "Stadt",
+    "username": "Nutzername",
+    "firstname": "Vorname",
+    "lastname": "Nachname",
+    "birthday": "Geburtstag",
+    "female": "Weiblich",
+    "male": "Männlich",
+    "createNewCustomer": "Neuen Kunden anlegen"
   },
   "navigation-menu": {
     "calendar": "Kalender",

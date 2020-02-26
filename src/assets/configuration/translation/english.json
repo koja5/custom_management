@@ -86,7 +86,22 @@
     "telephone": "Telephone",
     "selectStore": "Select a location(e.g. ",
     "selectUsers": "Select users(e.g. Mark Piters)",
-    "mobile": "Mobile"
+    "mobile": "Mobile",
+    "required": "required",
+    "attention": "Attention",
+    "physicalComplaint": "Physical complaint",
+    "email": "Email",
+    "gender": "Gender",
+    "street": "Street",
+    "streetnumber": "Zip Code",
+    "city": "City",
+    "username": "Username",
+    "firstname": "Firstname",
+    "lastname": "Lastname",
+    "birthday": "Birthday",
+    "female": "Female",
+    "male": "Male",
+    "createNewCustomer": "Create new customer"
   },
   "navigation-menu": {
     "calendar": "Calendar",
