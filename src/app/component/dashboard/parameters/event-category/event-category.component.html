@@ -63,15 +63,16 @@
           </div>
         </div>
       </ng-template>
-      <kendo-grid-column field="shortname" title="{{language.username}}">
+      <kendo-grid-column field="category" title="{{language.username}}">
       </kendo-grid-column>
-      <kendo-grid-column field="firstname" title="{{language.firstname}}">
+      <kendo-grid-column field="sequence" title="{{language.firstname}}">
       </kendo-grid-column>
-      <kendo-grid-column field="lastname" title="{{language.lastname}}">
+      <kendo-grid-column width="100">
+        <ng-template kendoGridCellTemplate let-dataItem>
+          <button kendoButton [icon]="'k-icon k-i-edit'" (click)="editEventCategory(dataItem)"></button>
+        </ng-template>
       </kendo-grid-column>
-      <kendo-grid-column field="telephone" title="{{language.telephone}}">
-      </kendo-grid-column>
-      <kendo-grid-column field="mobile" title="{{language.mobile}}">
+      <kendo-grid-column field="comment" title="{{language.telephone}}">
       </kendo-grid-column>
     </kendo-grid-pdf>
     <kendo-grid-excel fileName="Customers.xlsx"></kendo-grid-excel>
@@ -124,8 +125,8 @@
       </div>
       <div class="col-md-12 col-xs-12">
         <kendo-textbox-container floatingLabel="{{language.color}}({{language.required}})">
-          <kendo-colorpicker #picker  [view]="'combo'" [format]="'hex'" [(ngModel)]="data.color" [(value)]="data.color" name="color"
-            required></kendo-colorpicker>
+          <kendo-colorpicker #picker [view]="'combo'" [format]="'hex'" [(ngModel)]="data.color" [(value)]="data.color"
+            name="color" required></kendo-colorpicker>
         </kendo-textbox-container>
       </div>
       <div class="col-md-12 col-xs-12" style="padding-top: 10px;">
