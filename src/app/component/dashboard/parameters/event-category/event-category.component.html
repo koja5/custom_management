@@ -124,7 +124,7 @@
       </div>
       <div class="col-md-12 col-xs-12">
         <kendo-textbox-container floatingLabel="{{language.color}}({{language.required}})">
-          <kendo-colorpicker #picker [format]="'hex'" [view]="'gradient'" [(ngModel)]="data.color" name="color"
+          <kendo-colorpicker #picker  [view]="'combo'" [format]="'hex'" [(ngModel)]="data.color" [(value)]="data.color" name="color"
             required></kendo-colorpicker>
         </kendo-textbox-container>
       </div>

@@ -4,6 +4,7 @@ import { EventCategoryService } from '../../../../service/event-category.service
 import { EventCategoryModel } from 'src/app/models/event-category-model';
 import { ServiceHelperService } from 'src/app/service/service-helper.service';
 import { ToastrService } from "ngx-toastr";
+import { GradientSettings } from '@progress/kendo-angular-inputs';
 
 @Component({
   selector: "app-event-category",
@@ -38,13 +39,16 @@ export class EventCategoryComponent implements OnInit {
   public deleteModal = false;
   public operationMode = 'add';
   public loading = true;
+  public settings: GradientSettings = {
+    opacity: false
+  }
 
-  constructor(private service: EventCategoryService, private serviceHelper: ServiceHelperService, private toastr: ToastrService) {}
+  constructor(private service: EventCategoryService, private serviceHelper: ServiceHelperService, private toastr: ToastrService) { }
 
   ngOnInit() {
     this.height = window.innerHeight - 138;
     this.height += "px";
-    
+
     this.language = JSON.parse(localStorage.getItem("language")).grid;
 
     this.getEventCategory();
