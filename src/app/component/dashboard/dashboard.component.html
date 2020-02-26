@@ -200,6 +200,12 @@
                         <span class="fa fa-thermometer-three-quarters"></span> State
                       </a>
                     </li>
+                    <li class="nav-item {{selectedNodeModel.state}}">
+                      <a [routerLink]="[{outlets: {'dashboard': ['event-category']}}]" (click)="returnActiveNode('event-category')"
+                        class="nav-link">
+                        <span class="fa fa-paint-brush"></span> Event Category
+                      </a>
+                    </li>
                   </ul>
                 </li>
               </ul>

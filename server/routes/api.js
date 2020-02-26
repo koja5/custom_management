@@ -5097,4 +5097,162 @@ router.post("/updateVaucher", function (req, res, next) {
   });
 });
 
+// start event_category
+
+router.get("/getEventCategory", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+    conn.query("select * from event_category", function (err, rows) {
+      conn.release();
+      if (!err) {
+        res.json(rows);
+      } else {
+        res.json({
+          code: 100,
+          status: "Error in connection database"
+        });
+      }
+    });
+
+    conn.on("error", function (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    });
+  });
+});
+
+router.post("/createEventCategory", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    console.log(conn);
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+
+    response = null;
+    var data = {
+      category: req.body.category,
+      sequence: req.body.sequence,
+      color: req.body.color,
+      comment: req.body.comment
+    };
+
+    conn.query("insert into event_category SET ?", data, function (err, rows) {
+      conn.release();
+      if (!err) {
+        if (!err) {
+          response = true;
+        } else {
+          response.success = false;
+        }
+        res.json(response);
+      } else {
+        res.json({
+          code: 100,
+          status: "Error in connection database"
+        });
+        console.log(err);
+      }
+    });
+    conn.on("error", function (err) {
+      console.log("[mysql error]", err);
+    });
+  });
+});
+
+router.get("/deleteEventCategory/:id", (req, res, next) => {
+  try {
+    var reqObj = req.params.id;
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: "Error in connection database"
+        });
+        return next(err);
+      } else {
+        conn.query(
+          "delete from event_category where id = '" + reqObj + "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              console.error("SQL error:", err);
+              res.json({
+                code: 100,
+                status: "Error in connection database"
+              });
+              return next(err);
+            } else {
+              res.json(true);
+              res.end();
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    console.error("Internal error: " + ex);
+    return next(ex);
+  }
+});
+
+router.post("/updateEventCategory", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+
+    var response = null;
+    var data = {
+      id: req.body.id,
+      category: req.body.category,
+      sequence: req.body.sequence,
+      color: req.body.color,
+      comment: req.body.comment
+    };
+
+    conn.query(
+      "update event_category set ? where id = '" + req.body.id + "'",
+      data,
+      function (err, rows, fields) {
+        conn.release();
+        if (err) {
+          console.error("SQL error:", err);
+          res.json({
+            code: 100,
+            status: "Error in connection database"
+          });
+          return next(err);
+        } else {
+          response = true;
+          res.json(response);
+        }
+      }
+    );
+    conn.on("error", function (err) {
+      console.log("[mysql error]", err);
+    });
+  });
+});
+
+// end vattax_list
+
+
 module.exports = router;

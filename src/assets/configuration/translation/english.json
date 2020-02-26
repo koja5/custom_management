@@ -123,7 +123,14 @@
     "searchAllColumn": "Search all column...",
     "required": "required",
     "attention": "Attention",
-    "physicalComplaint": "Physical complaint"
+    "physicalComplaint": "Physical complaint",
+    "addNew": "Add new",
+    "add": "Add",
+    "edit": "Edit",
+    "category": "Category",
+    "sequence": "Sequence",
+    "color": "Color",
+    "comment": "Comment"
   },
   "dashboard": {
     "profile": "Profile",

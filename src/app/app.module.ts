@@ -67,6 +67,7 @@ import { VaucherComponent } from './component/dashboard/vaucher/vaucher.componen
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import { EventCategoryComponent } from './component/dashboard/parameters/event-category/event-category.component';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -92,7 +93,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MyNavigationViewComponent,
     StatisticComponent,
     VaucherComponent,
-    SettingsComponent
+    SettingsComponent,
+    EventCategoryComponent
   ],
   imports: [
     BrowserModule,
