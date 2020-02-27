@@ -150,7 +150,7 @@ kendo-scheduler .k-event:hover {
   margin: 0px;
   padding: 0px !important;
   line-height: initial;
-  word-spacing: 9999px;
+  // word-spacing: 9999px;
 }
 
 .quickPreviewWindow {
@@ -194,7 +194,7 @@ k-window-content {
 .eventDiv {
   overflow: auto;
   width: 100%;
-  padding: 2px;
+  padding: 4px;
 }
 
 kendo-scheduler .k-event {

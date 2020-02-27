@@ -155,14 +155,14 @@
               <ng-template kendoSchedulerEventTemplate let-event="event" let-resources="resources">
                 <div *ngIf="event !== undefined" class="eventDiv">
                   <p class="eventName">{{ event.title.split('+')[0] }}</p>
-                  <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(' ') }}</p>
+                  <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(', ') }}</p>
                 </div>
               </ng-template>
 
               <ng-template kendoSchedulerAllDayEventTemplate let-event="event" let-resources="resources">
                 <div *ngIf="event !== undefined">
                   <p class="eventName">{{ event.title.split('+')[0] }}</p>
-                  <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(' ') }}</p>
+                  <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(', ') }}</p>
                 </div>
               </ng-template>
 
@@ -400,14 +400,14 @@
             <ng-template kendoSchedulerEventTemplate let-event="event" let-resources="resources">
               <div *ngIf="event !== undefined">
                 <p class="eventName">{{ event.title.split('+')[0] }} </p>
-                <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(' ') }}</p>
+                <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(', ') }}</p>
               </div>
             </ng-template>
 
             <ng-template kendoSchedulerAllDayEventTemplate let-event="event" let-resources="resources">
               <div *ngIf="event !== undefined" class="eventDiv">
                 <p class="eventName">{{ event.title.split('+')[0] }} </p>
-                <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(' ') }}</p>
+                <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(', ') }}</p>
               </div>
             </ng-template>
 
