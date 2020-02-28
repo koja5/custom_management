@@ -101,7 +101,8 @@
     "birthday": "Birthday",
     "female": "Female",
     "male": "Male",
-    "createNewCustomer": "Create new customer"
+    "createNewCustomer": "Create new customer",
+    "eventCategory": "Category"
   },
   "navigation-menu": {
     "calendar": "Calendar",

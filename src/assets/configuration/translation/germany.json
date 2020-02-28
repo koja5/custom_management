@@ -94,7 +94,8 @@
     "birthday": "Geburtstag",
     "female": "Weiblich",
     "male": "Männlich",
-    "createNewCustomer": "Neuen Kunden anlegen"
+    "createNewCustomer": "Neuen Kunden anlegen",
+    "eventCategory": "Kategorie"
   },
   "navigation-menu": {
     "calendar": "Kalender",

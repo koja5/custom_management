@@ -1,5 +1,11 @@
 import { CustomerModel } from "./../../../models/customer-model";
-import { Component, OnInit, ViewChild, ViewEncapsulation, HostListener } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+  HostListener
+} from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -31,6 +37,7 @@ import Swal from "sweetalert2";
 import { ComplaintTherapyModel } from "src/app/models/complaint-therapy-model";
 import { UsersService } from "src/app/service/users.service";
 import { MongoService } from "../../../service/mongo.service";
+import { EventCategoryService } from "src/app/service/event-category.service";
 
 @Component({
   selector: "app-task",
@@ -40,7 +47,7 @@ import { MongoService } from "../../../service/mongo.service";
 })
 export class TaskComponent implements OnInit {
   @ViewChild("customerUserModal") customerUserModal: Modal;
-  @ViewChild('scheduler') public scheduler: SchedulerComponent;
+  @ViewChild("scheduler") public scheduler: SchedulerComponent;
   public customerModal = false;
   public selectedDate: Date = new Date();
   public formGroup: FormGroup;
@@ -123,6 +130,7 @@ export class TaskComponent implements OnInit {
   public quickPreviewEvent: any;
   public height: any;
   public calendarHeight: any;
+  public eventCategory: any;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -131,13 +139,13 @@ export class TaskComponent implements OnInit {
     public message: MessageService,
     public storeService: StoreService,
     public usersService: UsersService,
-    public mongo: MongoService
+    public mongo: MongoService,
+    public eventCategoryService: EventCategoryService
   ) {
     this.createFormGroup = this.createFormGroup.bind(this);
   }
 
   ngOnInit() {
-    
     this.height = window.innerHeight - 138;
     this.height += "px";
     this.calendarHeight = window.innerHeight - 252;
@@ -183,7 +191,7 @@ export class TaskComponent implements OnInit {
       });
     }
 
-    this.service.getTaskColor().subscribe(data => {
+    /*this.service.getTaskColor().subscribe(data => {
       console.log(data);
       const resourcesObject = {
         name: "Rooms",
@@ -198,7 +206,31 @@ export class TaskComponent implements OnInit {
       for (let i = 0; i < data["length"]; i++) {
         this.palette.push(data[i].color);
       }
-    });
+    });*/
+
+    this.eventCategoryService
+      .getEventCategory(localStorage.getItem("superadmin"))
+      .subscribe((data: []) => {
+        this.eventCategory = data.sort(function(a, b) {
+          return a["sequence"] - b["sequence"];
+        });
+        const resourcesObject = {
+          name: "tasks",
+          data: data,
+          field: "colorTask",
+          valueField: "id",
+          textField: "text",
+          colorField: "color"
+        };
+        if (this.eventCategory.length > 0) {
+          this.selected = this.eventCategory[0].id;
+        }
+        this.resources.push(resourcesObject);
+        this.colorPalette = data;
+        for (let i = 0; i < data["length"]; i++) {
+          this.palette.push(data[i]["color"]);
+        }
+      });
 
     if (this.type === 3) {
       this.selectedStoreId = Number(localStorage.getItem("storeId-" + this.id));
@@ -232,8 +264,6 @@ export class TaskComponent implements OnInit {
 
     if (
       localStorage.getItem("selectedStore-" + this.id) !== null &&
-      JSON.parse(localStorage.getItem("selectedStore-" + this.id)).length !==
-        0 &&
       localStorage.getItem("selectedUser-" + this.id) !== null &&
       JSON.parse(localStorage.getItem("selectedUser-" + this.id)).length !==
         0 &&
@@ -363,6 +393,9 @@ export class TaskComponent implements OnInit {
 
   public createFormGroup(args: CreateFormGroupArgs): FormGroup {
     this.baseDataIndicator = false;
+    if (this.eventCategory.length > 0) {
+      this.selected = this.eventCategory[0].id;
+    }
     if (
       (this.selectedStoreId === null || this.selectedStoreId === undefined) &&
       this.type !== 3
@@ -497,7 +530,7 @@ export class TaskComponent implements OnInit {
 
         console.log(dataItem.colorTask);
         if (dataItem.colorTask !== undefined) {
-          this.selected = this.IdMapToColor(dataItem.colorTask);
+          this.selected = dataItem.colorTask;
           console.log(this.selected);
         }
 
@@ -1528,5 +1561,9 @@ export class TaskComponent implements OnInit {
 
   exportToPdf() {
     this.scheduler.saveAsPDF();
+  }
+
+  selectedEventCategory(event) {
+    this.selected = event;
   }
 }
