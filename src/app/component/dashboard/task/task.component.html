@@ -198,17 +198,17 @@
                   <div class="k-form-field" style="text-align: center; margin: 0px !important;">
                     <div class="col-sm-6" style="margin-bottom: 2vh;">
                       <div class="row mgbt-xs-0">
-                        <label class="col-xs-12 control-label" style="color: red;">{{languageUser.attention}}:</label>
-                        <textarea kendoTextArea [autoSize]="true" [(ngModel)]="customerUser.attention"
-                          style="width: 70% !important;">{{customerUser.attention}}</textarea>
+                        <label class="col-xs-12 control-label" style="color: red; text-align: left;">{{languageUser.attention}}:</label>
+                        <textarea kendoTextArea class="textAreaInput"
+                          [(ngModel)]="customerUser.attention">{{customerUser.attention}}</textarea>
                         <!-- col-sm-10 -->
                       </div>
                     </div>
                     <div class="col-sm-6" style="margin-bottom: 2vh;">
                       <div class="row mgbt-xs-0">
-                        <label class="col-xs-12 control-label">{{languageUser.physicalComplaint}}:</label>
-                        <textarea kendoTextArea [autoSize]="true" [(ngModel)]="customerUser.physicalComplaint"
-                          style="width: 70% !important;">{{customerUser.physicalComplaint}}</textarea>
+                        <label class="col-xs-12 control-label" style="text-align: left;">{{languageUser.physicalComplaint}}:</label>
+                        <textarea kendoTextArea class="textAreaInput"
+                          [(ngModel)]="customerUser.physicalComplaint">{{customerUser.physicalComplaint}}</textarea>
                         <!-- col-sm-10 -->
                       </div>
                     </div>

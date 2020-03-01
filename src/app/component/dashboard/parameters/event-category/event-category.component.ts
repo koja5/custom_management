@@ -42,11 +42,12 @@ export class EventCategoryComponent implements OnInit {
   public settings: GradientSettings = {
     opacity: false
   }
+  public importExcel = false;
 
   constructor(private service: EventCategoryService, private serviceHelper: ServiceHelperService, private toastr: ToastrService) { }
 
   ngOnInit() {
-    this.height = window.innerHeight - 138;
+    this.height = window.innerHeight - 81;
     this.height += "px";
 
     this.language = JSON.parse(localStorage.getItem("language")).grid;
@@ -201,5 +202,57 @@ export class EventCategoryComponent implements OnInit {
     } else {
       this.deleteModal = false;
     }
+  }
+
+  onFileChange(args) {
+
+    /*this.customerDialogOpened = true;
+    let fileReader = new FileReader();
+    fileReader.onload = e => {
+      this.arrayBuffer = fileReader.result;
+      var data = new Uint8Array(this.arrayBuffer);
+      var arr = new Array();
+      for (var i = 0; i != data.length; ++i)
+        arr[i] = String.fromCharCode(data[i]);
+      var bstr = arr.join("");
+      var workbook = XLSX.read(bstr, { type: "binary" });
+      var first_sheet_name = workbook.SheetNames[0];
+      var worksheet = workbook.Sheets[first_sheet_name];
+      console.log(XLSX.utils.sheet_to_json(worksheet, { raw: false }));
+      setTimeout(() => {
+        if (XLSX.utils.sheet_to_json(worksheet, { raw: true }).length > 0) {
+          this.gridData = this.xlsxToJson(
+            XLSX.utils.sheet_to_json(worksheet, { raw: true })
+          );
+          this.fileValue = null;
+          this.gridView = this.gridData;
+        }
+      }, 50);
+    };
+    fileReader.readAsArrayBuffer(args.target.files[0]);*/
+  }
+
+  xlsxToJson(data) {
+    const rowCount = data.length;
+    const objectArray = [];
+    const columns = Object.keys(data[0]);
+    const columnCount = columns.length;
+    const dataArray = [];
+
+    for (let i = 0; i < rowCount; i++) {
+      const object = {};
+      for (let j = 0; j < columnCount; j++) {
+        console.log(data[i][columns[j]]);
+        object[columns[j]] = data[i][columns[j]];
+      }
+      objectArray.push(object);
+      dataArray.push(objectArray[i]);
+    }
+    const allData = {
+      table: "customers",
+      columns: columns,
+      data: dataArray
+    };
+    return allData;
   }
 }

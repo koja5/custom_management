@@ -68,7 +68,7 @@ export class ParameterItemComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.height = window.innerHeight - 138;
+    this.height = window.innerHeight - 81;
     this.height += 'px';
     this.editedRowIndex=-1;
     console.log(this.type);
@@ -470,7 +470,7 @@ export class ParameterItemComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     console.log(window.innerHeight);
-    this.height = window.innerHeight - 138;
+    this.height = window.innerHeight - 81;
     this.height += 'px';
   }
 }

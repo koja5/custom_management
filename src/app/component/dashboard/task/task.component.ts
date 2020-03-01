@@ -146,9 +146,9 @@ export class TaskComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.height = window.innerHeight - 138;
+    this.height = window.innerHeight - 81;
     this.height += "px";
-    this.calendarHeight = window.innerHeight - 252;
+    this.calendarHeight = window.innerHeight - 209;
     this.calendarHeight += "px";
     this.loading = true;
     this.type = Number(localStorage.getItem("type"));
@@ -1553,9 +1553,9 @@ export class TaskComponent implements OnInit {
 
   @HostListener("window:resize", ["$event"])
   onResize(event) {
-    this.height = window.innerHeight - 138;
+    this.height = window.innerHeight - 81;
     this.height += "px";
-    this.calendarHeight = window.innerHeight - 252;
+    this.calendarHeight = window.innerHeight - 209;
     this.calendarHeight += "px";
   }
 

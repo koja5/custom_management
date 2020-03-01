@@ -79,7 +79,7 @@ export class VaucherComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.height = window.innerHeight - 138;
+    this.height = window.innerHeight - 81;
     this.height += "px";
     this.id = Number(localStorage.getItem("idUser"));
     this.getVauchers();
@@ -565,7 +565,7 @@ export class VaucherComponent implements OnInit {
   @HostListener("window:resize", ["$event"])
   onResize(event) {
     console.log(window.innerHeight);
-    this.height = window.innerHeight - 138;
+    this.height = window.innerHeight - 81;
     this.height += "px";
   }
 

@@ -42,7 +42,7 @@
   /*height: 2.7vh;
   width: 31.5vh;*/
   // height: 35px !important;
-  height: 70px !important;
+  height: 50px !important;
   width: 100%;
   border-radius: 2px;
 }
@@ -192,12 +192,21 @@ k-window-content {
 }*/
 
 .eventDiv {
-  overflow: auto;
-  width: 100%;
-  padding: 4px;
+  width: 90%;
+  padding-top: 8px;
+  height: 85%;
+  overflow: hidden;
 }
 
 kendo-scheduler .k-event {
   width: 20% !important;
   padding: 0px !important;
+}
+
+.textAreaInput {
+  width: 90% !important;
+  resize: none;
+  overflow: auto;
+  height: 80px;
+  padding: 7px;
 }
