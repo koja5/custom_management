@@ -150,6 +150,7 @@ export class TaskComponent implements OnInit {
     this.height += "px";
     this.calendarHeight = window.innerHeight - 209;
     this.calendarHeight += "px";
+    
     this.loading = true;
     this.type = Number(localStorage.getItem("type"));
     this.id = Number(localStorage.getItem("idUser"));
@@ -306,6 +307,7 @@ export class TaskComponent implements OnInit {
           this.calendars.push(objectCalendar);
           console.log(this.splitterSize);
           this.loading = false;
+          this.setHeightForCalendar();
           console.log(this.calendars);
         });
       /*this.service
@@ -355,6 +357,8 @@ export class TaskComponent implements OnInit {
             };
             this.calendars.push(objectCalendar);
             this.loading = false;
+            this.setHeightForCalendar();
+
           } else {
             this.calendars.push({ name: null, events: [] });
           }
@@ -379,6 +383,16 @@ export class TaskComponent implements OnInit {
     }
 
     this.getParameters();
+  }
+
+  setHeightForCalendar() {
+    /*setTimeout(() => {
+      const node = document.querySelectorAll('.k-scheduler-content');
+      for(let i = 0; i < node.length; i++) {
+        const clas = node[i] as HTMLElement;
+        clas.style.height = '330px'
+      }
+    }, 50);*/
   }
 
   clearAllSelectedData() {
@@ -1007,6 +1021,7 @@ export class TaskComponent implements OnInit {
           this.size = [];
           this.size.push("100%");
           this.loading = false;
+          this.setHeightForCalendar();
         });
     } else {
       this.calendars = [];
@@ -1069,6 +1084,7 @@ export class TaskComponent implements OnInit {
             }
             this.size.push("");
             this.loading = false;
+            this.setHeightForCalendar();
           }
           if (this.loopIndex < this.valueLoop.length) {
             this.myLoop();
