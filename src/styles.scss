@@ -158,6 +158,8 @@ input[type='file'] {
 .k-scheduler-table td, .k-scheduler-table th {
     padding: 0px !important;
     height: 35px !important;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
 }
 
 .k-scheduler-monthview .k-scheduler-table td {
@@ -11636,6 +11638,12 @@ kendo-grid-filter-cell-operators {
 }
 
 .k-scheduler-table .k-middle-row td { 
+    /*border-bottom-style: inset !important;
+    height: 50px !important;*/
+
     border-bottom-style: inset !important;
     height: 50px !important;
+    border-collapse: collapse;
+    border-right: 0.2px solid #ccc;
+    border-bottom: 1px solid #ccc;
 }
