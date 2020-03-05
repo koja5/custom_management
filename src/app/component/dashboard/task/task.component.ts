@@ -150,12 +150,22 @@ export class TaskComponent implements OnInit {
     this.height += "px";
     this.calendarHeight = window.innerHeight - 209;
     this.calendarHeight += "px";
-    
+
     this.loading = true;
     this.type = Number(localStorage.getItem("type"));
     this.id = Number(localStorage.getItem("idUser"));
     console.log(this.events);
     this.calendars = [];
+
+    setTimeout(() => {
+      let items = document.getElementsByClassName("k-scheduler-content");
+      for (let i = 0; i < items.length; i++) {
+        const clas = items[i];
+        clas.addEventListener("scroll", function(e) {
+          console.log(e);
+        });
+      }
+    }, 2500);
 
     /*this.customer.getCustomers(localStorage.getItem("superadmin"), val => {
       console.log(val);
@@ -358,7 +368,6 @@ export class TaskComponent implements OnInit {
             this.calendars.push(objectCalendar);
             this.loading = false;
             this.setHeightForCalendar();
-
           } else {
             this.calendars.push({ name: null, events: [] });
           }
@@ -383,6 +392,10 @@ export class TaskComponent implements OnInit {
     }
 
     this.getParameters();
+  }
+
+  scrollCalendar(e) {
+    console.log(e);
   }
 
   setHeightForCalendar() {
