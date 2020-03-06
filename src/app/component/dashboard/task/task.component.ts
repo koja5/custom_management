@@ -161,11 +161,12 @@ export class TaskComponent implements OnInit {
       let items = document.getElementsByClassName("k-scheduler-content");
       for (let i = 0; i < items.length; i++) {
         const clas = items[i];
-        clas.addEventListener("scroll", function(e) {
-          console.log(e);
-        });
+        clas.classList.add("k-scheduler-content-" + i);
+        clas.addEventListener("scroll", this.wheel, false);
+        // clas.addEventListener(waitForPause(30, self.worker));
       }
     }, 2500);
+
 
     /*this.customer.getCustomers(localStorage.getItem("superadmin"), val => {
       console.log(val);
@@ -222,7 +223,7 @@ export class TaskComponent implements OnInit {
     this.eventCategoryService
       .getEventCategory(localStorage.getItem("superadmin"))
       .subscribe((data: []) => {
-        this.eventCategory = data.sort(function(a, b) {
+        this.eventCategory = data.sort(function (a, b) {
           return a["sequence"] - b["sequence"];
         });
         const resourcesObject = {
@@ -277,7 +278,7 @@ export class TaskComponent implements OnInit {
       localStorage.getItem("selectedStore-" + this.id) !== null &&
       localStorage.getItem("selectedUser-" + this.id) !== null &&
       JSON.parse(localStorage.getItem("selectedUser-" + this.id)).length !==
-        0 &&
+      0 &&
       this.type !== 3
     ) {
       this.calendars = [];
@@ -394,9 +395,60 @@ export class TaskComponent implements OnInit {
     this.getParameters();
   }
 
-  scrollCalendar(e) {
-    console.log(e);
+  wheel(event) {
+    console.log(event);
+    var delta = 0;
+    if (event.wheelDelta) { (delta = event.wheelDelta / 120); }
+    else if (event.detail) { (delta = -event.detail / 3); }
+
+    var distance = 300;
+    let items = document.getElementsByClassName("k-scheduler-content");
+    for (let i = 0; i < items.length; i++) {
+      console.log(items[0].scrollTop, items[1].scrollTop);
+
+      if (i === 0) {
+        console.log(items[0].scrollTop);
+        if (items[0].scrollHeight - items[0].clientHeight > items[0].scrollTop && items[0].scrollTop !== items[1].scrollTop) {
+          items[0].scrollTop -= (distance * delta);
+          items[1].scrollTop = items[0].scrollTop;
+        }
+      } else if (i === 1) {
+        console.log(items[1].scrollTop);
+        if (items[1].scrollHeight - items[1].clientHeight > items[1].scrollTop && items[1].scrollTop !== items[0].scrollTop) {
+          items[1].scrollTop -= (distance * delta);
+          items[0].scrollTop = items[1].scrollTop;
+        }
+      };
+      // clas.addEventListener(waitForPause(30, self.worker));
+    }
+
+    if (event.preventDefault) { (event.preventDefault()); }
+    event.returnValue = false;
   }
+
+  testFunkciona(delta) {
+    var time = 1000;
+    var distance = 300;
+
+    /*document.getElementsByTagName('html, body')[0].stop().animate({
+        scrollTop: $(window).scrollTop() - (distance * delta)
+    }, time );*/
+    let items = document.getElementsByClassName("k-scheduler-content");
+    for (let i = 0; i < items.length; i++) {
+      const clas = items[i];
+
+      if (i === 0) {
+        console.log(items[0].scrollTop);
+        items[0].scrollTop -= (distance * delta);
+        items[1].scrollTop = items[0].scrollTop;
+      } else if (i === 1) {
+        items[0].scrollTop = items[1].scrollTop;
+        items[0].scrollLeft = items[1].scrollLeft;
+      };
+      // clas.addEventListener(waitForPause(30, self.worker));
+    }
+  }
+
 
   setHeightForCalendar() {
     /*setTimeout(() => {
@@ -473,7 +525,7 @@ export class TaskComponent implements OnInit {
           );
           timeDurationInd =
             Number(informationAboutStore.time_therapy) !==
-            Number(this.timeDuration)
+              Number(this.timeDuration)
               ? 1
               : 0;
           timeDuration = Number(informationAboutStore.time_therapy);
@@ -491,7 +543,7 @@ export class TaskComponent implements OnInit {
           } else {
             timeDurationInd =
               Number(informationAboutStore.time_therapy) !==
-              Number(this.timeDuration)
+                Number(this.timeDuration)
                 ? 1
                 : 0;
             timeDuration = Number(informationAboutStore.time_therapy);
@@ -1319,7 +1371,7 @@ export class TaskComponent implements OnInit {
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].end >
-            new Date(date).getHours()) ||
+          new Date(date).getHours()) ||
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start2 <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
@@ -1420,42 +1472,42 @@ export class TaskComponent implements OnInit {
   getParameters() {
     this.customer.getParameters("Complaint").subscribe((data: []) => {
       console.log(data);
-      this.complaintValue = data.sort(function(a, b) {
+      this.complaintValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("Therapy").subscribe((data: []) => {
       console.log(data);
-      this.therapyValue = data.sort(function(a, b) {
+      this.therapyValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("Treatment").subscribe((data: []) => {
       console.log(data);
-      this.treatmentValue = data.sort(function(a, b) {
+      this.treatmentValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("CS").subscribe((data: []) => {
       console.log(data);
-      this.CSValue = data.sort(function(a, b) {
+      this.CSValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("CS").subscribe((data: []) => {
       console.log(data);
-      this.CSValue = data.sort(function(a, b) {
+      this.CSValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("State").subscribe((data: []) => {
       console.log(data);
-      this.stateValue = data.sort(function(a, b) {
+      this.stateValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
