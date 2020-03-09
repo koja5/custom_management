@@ -39,7 +39,6 @@ import { ComplaintTherapyModel } from "src/app/models/complaint-therapy-model";
 import { UsersService } from "src/app/service/users.service";
 import { MongoService } from "../../../service/mongo.service";
 import { EventCategoryService } from "src/app/service/event-category.service";
-import * as $ from 'jquery';
 
 @Component({
   selector: "app-task",
@@ -138,6 +137,7 @@ export class TaskComponent implements OnInit {
   public step = 0;
   public pixel = 100;
   public delay = 1000;
+  public calendarWidth = 80;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -367,9 +367,6 @@ export class TaskComponent implements OnInit {
             this.calendars.push(objectCalendar);
             this.loading = false;
             this.setHeightForCalendar();
-            this.ngZone.runOutsideAngular(() => {
-              this.addScrollEvent();
-            });
           } else {
             this.calendars.push({ name: null, events: [] });
           }
@@ -434,18 +431,6 @@ export class TaskComponent implements OnInit {
         clas.addEventListener("scroll", this.wheel.bind(this), <any>this.eventOptions);
       }
     }, 500);
-  }
-
-  ngOnDestroy(): void {
-    let items = document.getElementsByClassName("k-scheduler-content");
-    for (let i = 0; i < items.length; i++) {
-      const clas = items[i];
-      clas.classList.add("layout-" + i);
-      if (i !== items.length - 1) {
-        clas.classList.add('overflowHide');
-      }
-      clas.removeEventListener("wheel", this.wheel, <any>this.eventOptions);
-    }
   }
 
   wheel(event) {
@@ -1183,9 +1168,6 @@ export class TaskComponent implements OnInit {
           this.size = [];
           this.size.push("100%");
           this.loading = false;
-          this.ngZone.runOutsideAngular(() => {
-            this.addScrollEvent();
-          });
           this.setHeightForCalendar();
         });
     } else {
@@ -1249,9 +1231,6 @@ export class TaskComponent implements OnInit {
             }
             this.size.push("");
             this.loading = false;
-            this.ngZone.runOutsideAngular(() => {
-              this.addScrollEvent();
-            });
             this.setHeightForCalendar();
           }
           if (this.loopIndex < this.valueLoop.length) {
@@ -1322,9 +1301,6 @@ export class TaskComponent implements OnInit {
             }
             this.calendars.push(objectCalendar);
             this.loading = false;
-            this.ngZone.runOutsideAngular(() => {
-              this.addScrollEvent();
-            });
           });
         this.getUserInCompany(event);
       } else {
@@ -1356,9 +1332,6 @@ export class TaskComponent implements OnInit {
             this.timeDuration = "60";
             this.therapyDuration = 1;
             this.loading = false;
-            this.ngZone.runOutsideAngular(() => {
-              this.addScrollEvent();
-            });
             this.size = [];
             this.size.push("100%");
           });

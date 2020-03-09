@@ -77,7 +77,7 @@
 .calendar {
   /*height: 76vh;*/
   overflow: auto;
-  margin-top: 20px;
+  margin-top: 50px;
 }
 
 .tasks {
@@ -94,6 +94,9 @@
 .k-scheduler-toolbar {
   text-align: center !important;
   padding: 6px !important;
+  position: fixed;
+  z-index: 1;
+  margin-top: -35px;
 }
 
 .k-dialog {
