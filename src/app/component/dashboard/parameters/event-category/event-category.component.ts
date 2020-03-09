@@ -5,7 +5,6 @@ import { EventCategoryModel } from 'src/app/models/event-category-model';
 import { ServiceHelperService } from 'src/app/service/service-helper.service';
 import { ToastrService } from "ngx-toastr";
 import { GradientSettings } from '@progress/kendo-angular-inputs';
-import { PageChangeEvent } from '@progress/kendo-angular-grid';
 
 @Component({
   selector: "app-event-category",
@@ -60,9 +59,6 @@ export class EventCategoryComponent implements OnInit {
     this.service.getEventCategory(localStorage.getItem("superadmin")).subscribe(
       (data: []) => {
         this.currentLoadData = data;
-        this.gridData = {
-          data: data
-        };
         this.gridView = process(data, this.state);
         this.loading = false;
       }
@@ -94,13 +90,6 @@ export class EventCategoryComponent implements OnInit {
         ]
       }
     });
-    this.gridView = process(this.gridData.data, this.state);
-  }
-
-  pageChange(event: PageChangeEvent): void {
-    this.state.skip = event.skip;
-    this.state.take = event.take;
-    this.pageSize = event.take;
     this.gridView = process(this.gridData.data, this.state);
   }
 
