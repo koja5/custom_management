@@ -206,6 +206,12 @@
                         <span class="fa fa-paint-brush"></span> Event Category
                       </a>
                     </li>
+                    <li class="nav-item {{selectedNodeModel.state}}">
+                      <a [routerLink]="[{outlets: {'dashboard': ['work-time-colors']}}]" (click)="returnActiveNode('work-time-colors')"
+                        class="nav-link">
+                        <span class="fa fa-tint"></span> Work Time Colors
+                      </a>
+                    </li>
                   </ul>
                 </li>
               </ul>

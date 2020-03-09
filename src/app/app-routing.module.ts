@@ -22,6 +22,7 @@ import { StatisticComponent } from './component/dashboard/statistic/statistic.co
 import { VaucherComponent } from './component/dashboard/vaucher/vaucher.component';
 import { SettingsComponent } from './component/dashboard/settings/settings.component';
 import { EventCategoryComponent } from './component/dashboard/parameters/event-category/event-category.component';
+import { WorkTimeColorsComponent } from './component/dashboard/parameters/work-time-colors/work-time-colors.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '', pathMatch: 'full' },
@@ -53,7 +54,8 @@ const routes: Routes = [
       { path: 'vat_tax', component: ParametersComponent, outlet: 'dashboard' },
       { path: 'CS', component: ParametersComponent, outlet: 'dashboard' },
       { path: 'state', component: ParametersComponent, outlet: 'dashboard' },
-      { path: 'event-category', component: EventCategoryComponent, outlet: 'dashboard' }
+      { path: 'event-category', component: EventCategoryComponent, outlet: 'dashboard' },
+      { path: 'work-time-colors', component: WorkTimeColorsComponent, outlet: 'dashboard' }
     ]
   },
   { path: 'document/server/routes/uploads/:id', component: DocumentPreviewComponent }

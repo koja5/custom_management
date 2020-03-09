@@ -5255,7 +5255,162 @@ router.post("/updateEventCategory", function (req, res, next) {
   });
 });
 
-// end vattax_list
+// end event_category
+
+// start work_time_colors
+
+router.get("/getWorkTimeColors/:id", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+    var id = req.params.id
+    conn.query("select * from work_time_colors where superadmin = ?", [id],function (err, rows) {
+      conn.release();
+      if (!err) {
+        res.json(rows);
+      } else {
+        res.json({
+          code: 100,
+          status: "Error in connection database"
+        });
+      }
+    });
+
+    conn.on("error", function (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    });
+  });
+});
+
+router.post("/createWorkTimeColors", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    console.log(conn);
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+
+    response = null;
+    var data = {
+      color: req.body.color,
+      sequence: req.body.sequence,
+      superadmin: req.body.superadmin
+    };
+
+    conn.query("insert into work_time_colors SET ?", data, function (err, rows) {
+      conn.release();
+      if (!err) {
+        if (!err) {
+          response = true;
+        } else {
+          response.success = false;
+        }
+        res.json(response);
+      } else {
+        res.json({
+          code: 100,
+          status: "Error in connection database"
+        });
+        console.log(err);
+      }
+    });
+    conn.on("error", function (err) {
+      console.log("[mysql error]", err);
+    });
+  });
+});
+
+router.get("/deleteWorkTimeColors/:id", (req, res, next) => {
+  try {
+    var reqObj = req.params.id;
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: "Error in connection database"
+        });
+        return next(err);
+      } else {
+        conn.query(
+          "delete from work_time_colors where id = '" + reqObj + "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              console.error("SQL error:", err);
+              res.json({
+                code: 100,
+                status: "Error in connection database"
+              });
+              return next(err);
+            } else {
+              res.json(true);
+              res.end();
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    console.error("Internal error: " + ex);
+    return next(ex);
+  }
+});
+
+router.post("/updateWorkTimeColors", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+
+    var response = null;
+    var data = {
+      color: req.body.color,
+      sequence: req.body.sequence,
+      superadmin: req.body.superadmin
+    };
+
+    conn.query(
+      "update work_time_colors set ? where id = '" + req.body.id + "'",
+      data,
+      function (err, rows, fields) {
+        conn.release();
+        if (err) {
+          console.error("SQL error:", err);
+          res.json({
+            code: 100,
+            status: "Error in connection database"
+          });
+          return next(err);
+        } else {
+          response = true;
+          res.json(response);
+        }
+      }
+    );
+    conn.on("error", function (err) {
+      console.log("[mysql error]", err);
+    });
+  });
+});
+
+// end work_time_colors
 
 
 module.exports = router;

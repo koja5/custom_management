@@ -30,30 +30,28 @@
         </div>
       </div>
     </ng-template>
-    <kendo-grid-column field="category" title="{{language.category}}">
-    </kendo-grid-column>
-    <kendo-grid-column field="sequence" title="{{language.sequence}}">
-    </kendo-grid-column>
     <kendo-grid-column field="color" title="{{language.color}}">
       <ng-template kendoGridCellTemplate let-dataItem>
         <div [style.background]="dataItem.color" class="colorEvent">
         </div>
       </ng-template>
     </kendo-grid-column>
+    <kendo-grid-column field="sequence" title="{{language.sequence}}">
+    </kendo-grid-column>
     <kendo-grid-column field="comment" title="{{language.comment}}">
     </kendo-grid-column>
     <kendo-grid-column width="100">
       <ng-template kendoGridCellTemplate let-dataItem>
-        <button kendoButton [icon]="'k-icon k-i-edit'" (click)="editEventCategory(dataItem)"></button>
+        <button kendoButton [icon]="'k-icon k-i-edit'" (click)="editWorkTimeColors(dataItem)"></button>
       </ng-template>
     </kendo-grid-column>
     <kendo-grid-column width="100">
       <ng-template kendoGridCellTemplate let-dataItem>
-        <button kendoButton [icon]="'k-icon k-i-delete'" (click)="deleteEventCategory(dataItem.id)"></button>
+        <button kendoButton [icon]="'k-icon k-i-delete'" (click)="deleteWorkTimeColors(dataItem.id)"></button>
       </ng-template>
     </kendo-grid-column>
 
-    <kendo-grid-pdf fileName="EventCategory.pdf" [allPages]="true" paperSize="A4" [repeatHeaders]="true">
+    <kendo-grid-pdf fileName="WorkTimeColors.pdf" [allPages]="true" paperSize="A4" [repeatHeaders]="true">
       <kendo-grid-pdf-margin top="2cm" left="1cm" right="1cm" bottom="2cm"></kendo-grid-pdf-margin>
       <ng-template kendoGridPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
         <div class="page-template">
@@ -62,16 +60,12 @@
           </div>
         </div>
       </ng-template>
-      <kendo-grid-column field="category" title="{{language.username}}">
-      </kendo-grid-column>
-      <kendo-grid-column field="sequence" title="{{language.firstname}}">
-      </kendo-grid-column>
       <kendo-grid-column width="100">
         <ng-template kendoGridCellTemplate let-dataItem>
-          <button kendoButton [icon]="'k-icon k-i-edit'" (click)="editEventCategory(dataItem)"></button>
+          <button kendoButton [icon]="'k-icon k-i-edit'" (click)="editWorkTimeColors(dataItem)"></button>
         </ng-template>
       </kendo-grid-column>
-      <kendo-grid-column field="comment" title="{{language.telephone}}">
+      <kendo-grid-column field="sequence" title="{{language.firstname}}">
       </kendo-grid-column>
     </kendo-grid-pdf>
     <kendo-grid-excel fileName="Customers.xlsx"></kendo-grid-excel>
@@ -107,14 +101,15 @@
     </kendo-dialog-actions>
   </kendo-dialog>
 
-  <kendo-window [title]="getTranslate(operationMode)" *ngIf="eventCategoryModal" [minWidth]="400" [width]="550"
-    [minHeight]="300" (close)="eventCategoryModal = false">
+  <kendo-window [title]="getTranslate(operationMode)" *ngIf="WorkTimeColorsModal" [minWidth]="400" [width]="550"
+    [minHeight]="300" (close)="WorkTimeColorsModal = false">
     <form
-      (ngSubmit)="eventCategoryForm.form.valid === true ? (operationMode === 'add' ? createEventCategory(event) : updateEventCategory(event)) : none"
-      #eventCategoryForm="ngForm">
+      (ngSubmit)="WorkTimeColorsForm.form.valid === true ? (operationMode === 'add' ? createWorkTimeColors(event) : updateWorkTimeColors(event)) : none"
+      #WorkTimeColorsForm="ngForm">
       <div class="col-md-12 col-xs-12">
-        <kendo-textbox-container floatingLabel="{{language.category}}({{language.required}})">
-          <input kendoTextBox type="text" class="col-xs-12" [(ngModel)]="data.category" name="category" required>
+        <kendo-textbox-container floatingLabel="{{language.color}}({{language.required}})">
+          <kendo-colorpicker #picker [view]="'combo'" [format]="'hex'" [(ngModel)]="data.color" [(value)]="data.color"
+            name="color" required></kendo-colorpicker>
         </kendo-textbox-container>
       </div>
       <div class="col-md-12 col-xs-12">
@@ -122,22 +117,11 @@
           <input kendoTextBox type="number" class="col-xs-12" [(ngModel)]="data.sequence" name="sequence" required>
         </kendo-textbox-container>
       </div>
-      <div class="col-md-12 col-xs-12">
-        <kendo-textbox-container floatingLabel="{{language.color}}({{language.required}})">
-          <kendo-colorpicker #picker [view]="'combo'" [format]="'hex'" [(ngModel)]="data.color" [(value)]="data.color"
-            name="color" required></kendo-colorpicker>
-        </kendo-textbox-container>
-      </div>
-      <div class="col-md-12 col-xs-12" style="padding-top: 10px;">
-        <kendo-textbox-container floatingLabel="{{language.comment}}">
-          <textarea kendoTextArea type="text" class="col-xs-12" [(ngModel)]="data.comment" name="comment"></textarea>
-        </kendo-textbox-container>
-      </div>
       <div class="form-group" style="text-align: center;">
         <button *ngIf="operationMode === 'add'" kendoButton [primary]="true" class="form-button"
-          [disabled]="eventCategoryForm.form.invalid" type="submit">{{language.add}}</button>
+          [disabled]="WorkTimeColorsForm.form.invalid" type="submit">{{language.add}}</button>
         <button *ngIf="operationMode === 'edit'" kendoButton [primary]="true" class="form-button"
-          [disabled]="eventCategoryForm.form.invalid" type="submit">{{language.edit}}</button>
+          [disabled]="WorkTimeColorsForm.form.invalid" type="submit">{{language.edit}}</button>
       </div>
     </form>
   </kendo-window>

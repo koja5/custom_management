@@ -146,7 +146,14 @@
     "category": "Category",
     "sequence": "Sequence",
     "color": "Color",
-    "comment": "Comment"
+    "comment": "Comment",
+    "successTitle": "Successful",
+    "successTextAdd": "New item is added in grid!",
+    "successTextEdit": "Selected item is successful edited!",
+    "errorTitle": "Error",
+    "errorTextAdd": "New item is not added in grid!",
+    "errorTextEdit": "Selected item is not successful edited!",
+    "successTextDelete": "Selected item is successful deleted!"
   },
   "dashboard": {
     "profile": "Profile",

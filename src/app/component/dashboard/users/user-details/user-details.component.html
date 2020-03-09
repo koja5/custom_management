@@ -184,12 +184,12 @@
               <div class="form-group">
                 <div class="email col-md-6 col-xs-12">
                   <p>{{language.username}}</p>
-                  <input type="text" class="col-xs-12" name="shortname" placeholder="Username"
+                  <input kendoTextBox type="text" class="col-xs-12" name="shortname" placeholder="Username"
                     [(ngModel)]="data.shortname" shortname.value=''>
                 </div>
                 <div class="email col-md-6 col-xs-12">
                   <p>{{language.password}}</p>
-                  <input type="{{hideShow}}" class="col-xs-12 password" name="password" placeholder="Password"
+                  <input kendoTextBox type="{{hideShow}}" class="col-xs-12 password" name="password" placeholder="Password"
                     [(ngModel)]="data.password" password.value=''>
                   <span class="fa {{hideShowEye}} pwd-toggle" (click)="hideShowPassword()"></span>
                 </div>
@@ -197,48 +197,48 @@
               <div class="form-group">
                 <div class="email col-md-6 col-xs-12">
                   <p>{{language.firstname}}</p>
-                  <input type="text" class="col-xs-12" name="firstname" placeholder="Firstname"
+                  <input kendoTextBox type="text" class="col-xs-12" name="firstname" placeholder="Firstname"
                     [(ngModel)]="data.firstname" firstname.value=''>
                 </div>
                 <div class="email col-md-6 col-xs-12">
                   <p>{{language.lastname}}</p>
-                  <input type="text" class="col-xs-12" name="lastname" placeholder="Lastname"
+                  <input kendoTextBox type="text" class="col-xs-12" name="lastname" placeholder="Lastname"
                     [(ngModel)]="data.lastname" lastname.value=''>
                 </div>
               </div>
               <div class="form-group">
                 <div class="email col-md-6 col-xs-12">
                   <p>{{language.street}}</p>
-                  <input type="text" class="col-xs-12" name="street" placeholder="Street" [(ngModel)]="data.street"
+                  <input kendoTextBox type="text" class="col-xs-12" name="street" placeholder="Street" [(ngModel)]="data.street"
                     street.value=''>
                 </div>
               </div>
               <div class="form-group">
                 <div class="email col-md-6 col-xs-12">
                   <p>{{language.zipCode}}</p>
-                  <input type="text" class="col-xs-12" name="zipcode" placeholder="Zipcode" [(ngModel)]="data.zipcode"
+                  <input kendoTextBox type="text" class="col-xs-12" name="zipcode" placeholder="Zipcode" [(ngModel)]="data.zipcode"
                     zipcode.value=''>
                 </div>
                 <div class="email col-md-6 col-xs-12">
                   <p>{{language.place}}</p>
-                  <input type="text" class="col-xs-12" name="place" placeholder="Place" [(ngModel)]="data.place"
+                  <input kendoTextBox type="text" class="col-xs-12" name="place" placeholder="Place" [(ngModel)]="data.place"
                     place.value=''>
                 </div>
               </div>
               <div class="form-group">
                 <div class="email col-md-6 col-xs-12">
                   <p>{{language.telephone}}</p>
-                  <input type="text" class="col-xs-12" name="telephone" placeholder="Telephone"
+                  <input kendoTextBox type="text" class="col-xs-12" name="telephone" placeholder="Telephone"
                     [(ngModel)]="data.telephone" telephone.value=''>
                 </div>
                 <div class="email col-md-6 col-xs-12">
                   <p>{{language.mobile}}</p>
-                  <input type="text" class="col-xs-12" name="mobile" placeholder="mobile" [(ngModel)]="data.mobile"
+                  <input kendoTextBox type="text" class="col-xs-12" name="mobile" placeholder="mobile" [(ngModel)]="data.mobile"
                     mobile.value=''>
                 </div>
                 <div class="email col-md-6 col-xs-12">
                   <p>{{language.email}}</p>
-                  <input type="email" class="col-xs-12" name="email" placeholder="Email" [(ngModel)]="data.email"
+                  <input kendoTextBox type="email" class="col-xs-12" name="email" placeholder="Email" [(ngModel)]="data.email"
                     email.value=''>
                 </div>
               </div>
@@ -316,39 +316,39 @@
               <div class="form-group row" *ngFor="let item of workTime; let i = index;">
                 <label for="example-number-input" class="col-sm-2 col-form-label">{{item.day}}</label>
                 <div class="col-sm-10">
-                  <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                  <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.start}}" [(ngModel)]="workTime[i].start" name="{{item.day}}start"><span
                     class="col-sm-1 h">h</span>
                   <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.startMin}}" [(ngModel)]="workTime[i].startMin" name="{{item.day}}startMin"><span
                     class="col-sm-1 h">min</span> -->
-                  <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                  <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.end}}" [(ngModel)]="workTime[i].end" name="{{item.day}}end"> <span
                     class="col-sm-1 h">h</span>
                   <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.endMin}}" [(ngModel)]="workTime[i].endMin" name="{{item.day}}endMin"> <span
                     class="col-sm-1 h">min</span> -->
 
-                  <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                  <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.start2}}" [(ngModel)]="workTime[i].start2" name="{{item.day}}start2"><span
                     class="col-sm-1 h">h</span>
                   <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.start2Min}}" [(ngModel)]="workTime[i].start2Min" name="{{item.day}}start2Min"><span
                     class="col-sm-1 h">min</span> -->
-                  <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                  <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.end2}}" [(ngModel)]="workTime[i].end2" name="{{item.day}}end2"> <span
                     class="col-sm-1 h">h</span>
                   <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.end2Min}}" [(ngModel)]="workTime[i].end2Min" name="{{item.day}}end2Min"> <span
                     class="col-sm-1 h">min</span> -->
 
-                  <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                  <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.start3}}" [(ngModel)]="workTime[i].start3" name="{{item.day}}start3"><span
                     class="col-sm-1 h">h</span>
                   <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.start3Min}}" [(ngModel)]="workTime[i].start3Min" name="{{item.day}}start3Min"><span
                     class="col-sm-1 h">min</span> -->
-                  <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                  <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.end3}}" [(ngModel)]="workTime[i].end3" name="{{item.day}}end3"> <span
                     class="col-sm-1 h">h</span>
                   <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"

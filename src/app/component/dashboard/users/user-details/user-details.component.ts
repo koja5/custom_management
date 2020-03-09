@@ -8,6 +8,7 @@ import { StoreService } from "../../../../service/store.service";
 import { TaskService } from "../../../../service/task.service";
 import Swal from "sweetalert2";
 import { MessageService } from "src/app/service/message.service";
+import { WorkTimeColorsService } from "src/app/service/work-time-colors.service";
 
 @Component({
   selector: "app-user-details",
@@ -46,7 +47,8 @@ export class UserDetailsComponent implements OnInit {
     public location: Location,
     public storeService: StoreService,
     public taskService: TaskService,
-    public message: MessageService
+    public message: MessageService,
+    public workTimeColorService: WorkTimeColorsService
   ) {}
 
   ngOnInit() {
@@ -86,11 +88,23 @@ export class UserDetailsComponent implements OnInit {
       this.storeLocation = val;
     });
 
-    this.taskService.getTaskColor().subscribe(data => {
-      for (let i = 0; i < data["length"]; i++) {
+    /*this.taskService.getTaskColor().subscribe(data => {
+      for (let i = 0; i < data['length']; i++) {
         this.palette.push(data[i].color);
       }
-    });
+    });*/
+
+    this.workTimeColorService
+      .getWorkTimeColors(localStorage.getItem("superadmin"))
+      .subscribe((data: []) => {
+        const colors = data.sort(function(a, b) {
+          return a["sequence"] - b["sequence"];
+        });
+        console.log(data);
+        for (let i = 0; i < colors["length"]; i++) {
+          this.palette.push(colors[i]["color"]);
+        }
+      });
 
     this.workTimeData();
 

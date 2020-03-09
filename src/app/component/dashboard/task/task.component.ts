@@ -133,7 +133,7 @@ export class TaskComponent implements OnInit {
   public calendarHeight: any;
   public eventCategory: any;
   public currentTopPosition: any = [];
-  private eventOptions: boolean | { capture?: boolean, passive?: boolean };
+  private eventOptions: boolean | { capture?: boolean; passive?: boolean };
   public step = 0;
   public pixel = 100;
   public delay = 1000;
@@ -157,7 +157,7 @@ export class TaskComponent implements OnInit {
     var self = this;
     this.height = window.innerHeight - 81;
     this.height += "px";
-    this.calendarHeight = window.innerHeight - 209;
+    this.calendarHeight = window.innerHeight - 274;
     this.calendarHeight += "px";
 
     this.loading = true;
@@ -316,8 +316,7 @@ export class TaskComponent implements OnInit {
           this.calendars.push(objectCalendar);
           console.log(this.splitterSize);
           this.loading = false;
-          this.setHeightForCalendar();
-          console.log(this.calendars);
+          this.setWidthForCalendarHeader(this.calendarWidth/this.calendars.length);
         });
       /*this.service
           .getTasksForUser(localStorage.getItem('idUser'))
@@ -366,7 +365,6 @@ export class TaskComponent implements OnInit {
             };
             this.calendars.push(objectCalendar);
             this.loading = false;
-            this.setHeightForCalendar();
           } else {
             this.calendars.push({ name: null, events: [] });
           }
@@ -391,99 +389,6 @@ export class TaskComponent implements OnInit {
     }
 
     this.getParameters();
-    this.ngZone.runOutsideAngular(() => {
-      window.addEventListener('scroll', this.scroll, <any>this.eventOptions);
-    })
-  }
-
-  scroll = (): void => {
-    this.ngZone.run(() => {
-      console.log(window);
-    });
-  };
-
-  /*addScrollEvent() {
-    setTimeout(() => {
-      let items = document.getElementsByClassName("k-scheduler-content");
-      for (let i = 0; i < items.length; i++) {
-        const clas = items[i];
-        clas.classList.add("layout-" + i);
-        if(i !== items.length - 1) {
-          clas.classList.add('overflowHide');
-        }
-        clas.addEventListener("scroll", this.wheel, false);
-        clas.addEventListener("wheel", this.wheel, false);
-        clas.addEventListener ("mousewheel", this.wheel, false);
-        clas.addEventListener("DOMMouseScroll", this.wheel, false);
-      }
-    }, 500);
-  }*/
-
-  /*wheel(event) {
-    let index = null;
-    if (event.type === 'scroll' && event.target !== undefined) {
-      index = Number(event.target.classList[1].split("-")[1]);
-    } else if (event.type === 'wheel' && event.path !== undefined) {
-      index = Number(event.path[4].classList[1].split("-")[1]);
-    }
-    var delta = 0;
-    if (event.wheelDelta) {
-      delta = event.wheelDelta / 120;
-    } else if (event.detail) {
-      delta = -event.detail / 3;
-    }
-
-    var distance = 200;
-    let items = document.getElementsByClassName("k-scheduler-content");
-    for (let i = 0; i < items.length; i++) {
-      if (index === i) {
-        items[i].scrollTop -= distance * delta;
-        for (let j = 0; j < items.length; j++) {
-          if (j !== i) {
-            items[j].scrollTop = items[i].scrollTop;
-          }
-        }
-        break;
-      }
-    }
-
-    if (event.preventDefault) {
-      event.preventDefault();
-    }
-    event.returnValue = false;
-  }*/
-
-  testFunkciona(delta) {
-    var time = 1000;
-    var distance = 300;
-
-    /*document.getElementsByTagName('html, body')[0].stop().animate({
-        scrollTop: $(window).scrollTop() - (distance * delta)
-    }, time );*/
-    let items = document.getElementsByClassName("k-scheduler-content");
-    for (let i = 0; i < items.length; i++) {
-      const clas = items[i];
-
-      if (i === 0) {
-        console.log(items[0].scrollTop);
-        items[0].scrollTop -= distance * delta;
-        items[1].scrollTop = items[0].scrollTop;
-      } else if (i === 1) {
-        items[0].scrollTop = items[1].scrollTop;
-        items[0].scrollLeft = items[1].scrollLeft;
-      }
-      // clas.addEventListener(waitForPause(30, self.worker));
-    }
-  }
-
-  setHeightForCalendar() {
-    /*setTimeout(() => {
-      const node = document.querySelectorAll('.k-scheduler-content');
-      for(let i = 0; i < node.length; i++) {
-        const clas = node[i] as HTMLElement;
-        clas.style.height = '330px'
-      }
-    }, 50);*/
   }
 
   clearAllSelectedData() {
@@ -1027,6 +932,15 @@ export class TaskComponent implements OnInit {
     }
   }
 
+  setWidthForCalendarHeader(height) {
+    setTimeout(() => {
+      let items = document.querySelectorAll(".k-scheduler-toolbar");
+      for (let i = 0; i < items.length; i++) {
+        (items[i] as HTMLElement).style.width = height + '%';
+      }
+    }, 50);
+  }
+
   valueChange(event) {
     console.log(event);
   }
@@ -1112,7 +1026,7 @@ export class TaskComponent implements OnInit {
           this.size = [];
           this.size.push("100%");
           this.loading = false;
-          this.setHeightForCalendar();
+          this.setWidthForCalendarHeader(this.calendarWidth/this.calendars.length);
         });
     } else {
       this.calendars = [];
@@ -1175,7 +1089,7 @@ export class TaskComponent implements OnInit {
             }
             this.size.push("");
             this.loading = false;
-            this.setHeightForCalendar();
+            this.setWidthForCalendarHeader(this.calendarWidth/this.calendars.length);
           }
           if (this.loopIndex < this.valueLoop.length) {
             this.myLoop();
@@ -1245,6 +1159,7 @@ export class TaskComponent implements OnInit {
             }
             this.calendars.push(objectCalendar);
             this.loading = false;
+            this.setWidthForCalendarHeader(this.calendarWidth/this.calendars.length);
           });
         this.getUserInCompany(event);
       } else {
@@ -1276,6 +1191,7 @@ export class TaskComponent implements OnInit {
             this.timeDuration = "60";
             this.therapyDuration = 1;
             this.loading = false;
+            this.setWidthForCalendarHeader(this.calendarWidth/this.calendars.length);
             this.size = [];
             this.size.push("100%");
           });
@@ -1662,7 +1578,7 @@ export class TaskComponent implements OnInit {
   onResize(event) {
     this.height = window.innerHeight - 81;
     this.height += "px";
-    this.calendarHeight = window.innerHeight - 209;
+    this.calendarHeight = window.innerHeight - 274;
     this.calendarHeight += "px";
   }
 

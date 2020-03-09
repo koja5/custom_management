@@ -72,6 +72,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
 import * as $ from "jquery";
+import { WorkTimeColorsComponent } from './component/dashboard/parameters/work-time-colors/work-time-colors.component';
 
 @NgModule({
   declarations: [
@@ -95,7 +96,8 @@ import * as $ from "jquery";
     StatisticComponent,
     VaucherComponent,
     SettingsComponent,
-    EventCategoryComponent
+    EventCategoryComponent,
+    WorkTimeColorsComponent
   ],
   imports: [
     BrowserModule,

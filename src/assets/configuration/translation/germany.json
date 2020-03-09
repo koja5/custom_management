@@ -139,7 +139,14 @@
     "category": "Kategorie",
     "sequence": "Reihenfolge",
     "color": "Farbe",
-    "comment": "Kommentar"
+    "comment": "Kommentar",
+    "successTitle": "Erfolgreich",
+    "successTextAdd": "Neues Element wird im Raster hinzugefügt!",
+    "successTextEdit": "Ausgewählter Artikel wurde erfolgreich bearbeitet!",
+    "errorTitle": "Error",
+    "errorTextAdd": "Neues Element wird nicht im Raster hinzugefügt!",
+    "errorTextEdit": "Ausgewählter Artikel wurde nicht erfolgreich bearbeitet!",
+    "successTextDelete": "Das ausgewählte Element wurde erfolgreich gelöscht!"
   },
   "dashboard": {
     "profile": "Profil",
