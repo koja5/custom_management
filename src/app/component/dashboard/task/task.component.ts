@@ -221,7 +221,7 @@ export class TaskComponent implements OnInit {
     this.eventCategoryService
       .getEventCategory(localStorage.getItem("superadmin"))
       .subscribe((data: []) => {
-        this.eventCategory = data.sort(function (a, b) {
+        this.eventCategory = data.sort(function(a, b) {
           return a["sequence"] - b["sequence"];
         });
         const resourcesObject = {
@@ -276,7 +276,7 @@ export class TaskComponent implements OnInit {
       localStorage.getItem("selectedStore-" + this.id) !== null &&
       localStorage.getItem("selectedUser-" + this.id) !== null &&
       JSON.parse(localStorage.getItem("selectedUser-" + this.id)).length !==
-      0 &&
+        0 &&
       this.type !== 3
     ) {
       this.calendars = [];
@@ -419,62 +419,6 @@ export class TaskComponent implements OnInit {
     }, 500);
   }*/
 
-  addScrollEvent() {
-    setTimeout(() => {
-      let items = document.getElementsByClassName("k-scheduler-content");
-      for (let i = 0; i < items.length; i++) {
-        const clas = items[i];
-        clas.classList.add("layout-" + i);
-        if (i !== items.length - 1) {
-          clas.classList.add('overflowHide');
-        }
-        clas.addEventListener("scroll", this.wheel.bind(this), <any>this.eventOptions);
-      }
-    }, 500);
-  }
-
-  wheel(event) {
-    console.log(this.step);
-    let index = null;
-    const intervalToRepeat = 25;
-    this.step += (intervalToRepeat * this.pixel) / this.pixel;
-    if (event.type === 'scroll' && event.target !== undefined) {
-      index = Number(event.target.classList[1].split("-")[1]);
-    } else if (event.type === 'wheel' && event.path !== undefined) {
-      index = Number(event.path[4].classList[1].split("-")[1]);
-    }
-    var delta = 0;
-    if (event.wheelDelta) {
-      delta = event.wheelDelta / 120;
-    } else if (event.detail) {
-      delta = -event.detail / 3;
-    }
-
-    var distance = 200;
-    if (this.step < this.pixel) {
-      let items = document.getElementsByClassName("k-scheduler-content");
-      for (let i = 0; i < items.length; i++) {
-        if (index === i) {
-          items[i].scrollTop += this.step;
-          for (let j = 0; j < items.length; j++) {
-            if (j !== i) {
-              items[j].scrollTop = items[i].scrollTop;
-            }
-          }
-          setTimeout(function () {
-            this.pixel = this.pixel - this.step;
-            this.wheel(event);
-          }, intervalToRepeat);
-        }
-      }
-
-      if (event.preventDefault) {
-        event.preventDefault();
-      }
-      event.returnValue = false;
-    }
-  }
-
   /*wheel(event) {
     let index = null;
     if (event.type === 'scroll' && event.target !== undefined) {
@@ -607,7 +551,7 @@ export class TaskComponent implements OnInit {
           );
           timeDurationInd =
             Number(informationAboutStore.time_therapy) !==
-              Number(this.timeDuration)
+            Number(this.timeDuration)
               ? 1
               : 0;
           timeDuration = Number(informationAboutStore.time_therapy);
@@ -625,7 +569,7 @@ export class TaskComponent implements OnInit {
           } else {
             timeDurationInd =
               Number(informationAboutStore.time_therapy) !==
-                Number(this.timeDuration)
+              Number(this.timeDuration)
                 ? 1
                 : 0;
             timeDuration = Number(informationAboutStore.time_therapy);
@@ -1453,7 +1397,7 @@ export class TaskComponent implements OnInit {
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].end >
-          new Date(date).getHours()) ||
+            new Date(date).getHours()) ||
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start2 <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
@@ -1554,42 +1498,42 @@ export class TaskComponent implements OnInit {
   getParameters() {
     this.customer.getParameters("Complaint").subscribe((data: []) => {
       console.log(data);
-      this.complaintValue = data.sort(function (a, b) {
+      this.complaintValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("Therapy").subscribe((data: []) => {
       console.log(data);
-      this.therapyValue = data.sort(function (a, b) {
+      this.therapyValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("Treatment").subscribe((data: []) => {
       console.log(data);
-      this.treatmentValue = data.sort(function (a, b) {
+      this.treatmentValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("CS").subscribe((data: []) => {
       console.log(data);
-      this.CSValue = data.sort(function (a, b) {
+      this.CSValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("CS").subscribe((data: []) => {
       console.log(data);
-      this.CSValue = data.sort(function (a, b) {
+      this.CSValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("State").subscribe((data: []) => {
       console.log(data);
-      this.stateValue = data.sort(function (a, b) {
+      this.stateValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
