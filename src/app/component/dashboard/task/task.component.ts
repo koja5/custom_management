@@ -131,6 +131,7 @@ export class TaskComponent implements OnInit {
   public height: any;
   public calendarHeight: any;
   public eventCategory: any;
+  public currentTopPosition: any = [];
 
   constructor(
     public formBuilder: FormBuilder,
@@ -156,17 +157,6 @@ export class TaskComponent implements OnInit {
     this.id = Number(localStorage.getItem("idUser"));
     console.log(this.events);
     this.calendars = [];
-
-    setTimeout(() => {
-      let items = document.getElementsByClassName("k-scheduler-content");
-      for (let i = 0; i < items.length; i++) {
-        const clas = items[i];
-        clas.classList.add("k-scheduler-content-" + i);
-        clas.addEventListener("scroll", this.wheel, false);
-        // clas.addEventListener(waitForPause(30, self.worker));
-      }
-    }, 2500);
-
 
     /*this.customer.getCustomers(localStorage.getItem("superadmin"), val => {
       console.log(val);
@@ -223,7 +213,7 @@ export class TaskComponent implements OnInit {
     this.eventCategoryService
       .getEventCategory(localStorage.getItem("superadmin"))
       .subscribe((data: []) => {
-        this.eventCategory = data.sort(function (a, b) {
+        this.eventCategory = data.sort(function(a, b) {
           return a["sequence"] - b["sequence"];
         });
         const resourcesObject = {
@@ -278,7 +268,7 @@ export class TaskComponent implements OnInit {
       localStorage.getItem("selectedStore-" + this.id) !== null &&
       localStorage.getItem("selectedUser-" + this.id) !== null &&
       JSON.parse(localStorage.getItem("selectedUser-" + this.id)).length !==
-      0 &&
+        0 &&
       this.type !== 3
     ) {
       this.calendars = [];
@@ -369,6 +359,7 @@ export class TaskComponent implements OnInit {
             this.calendars.push(objectCalendar);
             this.loading = false;
             this.setHeightForCalendar();
+            this.addScrollEvent();
           } else {
             this.calendars.push({ name: null, events: [] });
           }
@@ -395,34 +386,57 @@ export class TaskComponent implements OnInit {
     this.getParameters();
   }
 
+  addScrollEvent() {
+    setTimeout(() => {
+      let items = document.getElementsByClassName("k-scheduler-content");
+      for (let i = 0; i < items.length; i++) {
+        const clas = items[i];
+        clas.classList.add("layout-" + i);
+        if(i !== items.length - 1) {
+          clas.classList.add('overflowHide');
+        }
+        /*clas.addEventListener("scroll", this.wheel, false);
+        clas.addEventListener("wheel", this.wheel, false);
+        clas.addEventListener("mousewheel", this.wheel, false);*/
+        clas.addEventListener("scroll", this.wheel, false);
+        clas.addEventListener("wheel", this.wheel, false);
+        clas.addEventListener ("mousewheel", this.wheel, false);
+        clas.addEventListener("DOMMouseScroll", this.wheel, false);
+      }
+    }, 500);
+  }
+
   wheel(event) {
-    console.log(event);
+    let index = null;
+    if(event.type === 'scroll' && event.target !== undefined) {
+      index = Number(event.target.classList[1].split("-")[1]);
+    } else if(event.type === 'wheel' && event.path !== undefined) {
+      index = Number(event.path[4].classList[1].split("-")[1]);
+    } 
     var delta = 0;
-    if (event.wheelDelta) { (delta = event.wheelDelta / 120); }
-    else if (event.detail) { (delta = -event.detail / 3); }
-
-    var distance = 300;
-    let items = document.getElementsByClassName("k-scheduler-content");
-    for (let i = 0; i < items.length; i++) {
-      console.log(items[0].scrollTop, items[1].scrollTop);
-
-      if (i === 0) {
-        console.log(items[0].scrollTop);
-        if (items[0].scrollHeight - items[0].clientHeight > items[0].scrollTop && items[0].scrollTop !== items[1].scrollTop) {
-          items[0].scrollTop -= (distance * delta);
-          items[1].scrollTop = items[0].scrollTop;
-        }
-      } else if (i === 1) {
-        console.log(items[1].scrollTop);
-        if (items[1].scrollHeight - items[1].clientHeight > items[1].scrollTop && items[1].scrollTop !== items[0].scrollTop) {
-          items[1].scrollTop -= (distance * delta);
-          items[0].scrollTop = items[1].scrollTop;
-        }
-      };
-      // clas.addEventListener(waitForPause(30, self.worker));
+    if (event.wheelDelta) {
+      delta = event.wheelDelta / 120;
+    } else if (event.detail) {
+      delta = -event.detail / 3;
     }
 
-    if (event.preventDefault) { (event.preventDefault()); }
+    var distance = 200;
+    let items = document.getElementsByClassName("k-scheduler-content");
+    for (let i = 0; i < items.length; i++) {
+        if (index === i) {
+          items[i].scrollTop -= distance * delta;
+          for (let j = 0; j < items.length; j++) {
+            if (j !== i) {
+              items[j].scrollTop = items[i].scrollTop;
+            }
+          }
+          break;
+        }
+    }
+
+    if (event.preventDefault) {
+      event.preventDefault();
+    }
     event.returnValue = false;
   }
 
@@ -439,16 +453,15 @@ export class TaskComponent implements OnInit {
 
       if (i === 0) {
         console.log(items[0].scrollTop);
-        items[0].scrollTop -= (distance * delta);
+        items[0].scrollTop -= distance * delta;
         items[1].scrollTop = items[0].scrollTop;
       } else if (i === 1) {
         items[0].scrollTop = items[1].scrollTop;
         items[0].scrollLeft = items[1].scrollLeft;
-      };
+      }
       // clas.addEventListener(waitForPause(30, self.worker));
     }
   }
-
 
   setHeightForCalendar() {
     /*setTimeout(() => {
@@ -525,7 +538,7 @@ export class TaskComponent implements OnInit {
           );
           timeDurationInd =
             Number(informationAboutStore.time_therapy) !==
-              Number(this.timeDuration)
+            Number(this.timeDuration)
               ? 1
               : 0;
           timeDuration = Number(informationAboutStore.time_therapy);
@@ -543,7 +556,7 @@ export class TaskComponent implements OnInit {
           } else {
             timeDurationInd =
               Number(informationAboutStore.time_therapy) !==
-                Number(this.timeDuration)
+              Number(this.timeDuration)
                 ? 1
                 : 0;
             timeDuration = Number(informationAboutStore.time_therapy);
@@ -1086,6 +1099,7 @@ export class TaskComponent implements OnInit {
           this.size = [];
           this.size.push("100%");
           this.loading = false;
+          this.addScrollEvent();
           this.setHeightForCalendar();
         });
     } else {
@@ -1149,6 +1163,7 @@ export class TaskComponent implements OnInit {
             }
             this.size.push("");
             this.loading = false;
+            this.addScrollEvent();
             this.setHeightForCalendar();
           }
           if (this.loopIndex < this.valueLoop.length) {
@@ -1219,6 +1234,7 @@ export class TaskComponent implements OnInit {
             }
             this.calendars.push(objectCalendar);
             this.loading = false;
+            this.addScrollEvent();
           });
         this.getUserInCompany(event);
       } else {
@@ -1250,6 +1266,7 @@ export class TaskComponent implements OnInit {
             this.timeDuration = "60";
             this.therapyDuration = 1;
             this.loading = false;
+            this.addScrollEvent();
             this.size = [];
             this.size.push("100%");
           });
@@ -1371,7 +1388,7 @@ export class TaskComponent implements OnInit {
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].end >
-          new Date(date).getHours()) ||
+            new Date(date).getHours()) ||
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start2 <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
@@ -1472,42 +1489,42 @@ export class TaskComponent implements OnInit {
   getParameters() {
     this.customer.getParameters("Complaint").subscribe((data: []) => {
       console.log(data);
-      this.complaintValue = data.sort(function (a, b) {
+      this.complaintValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("Therapy").subscribe((data: []) => {
       console.log(data);
-      this.therapyValue = data.sort(function (a, b) {
+      this.therapyValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("Treatment").subscribe((data: []) => {
       console.log(data);
-      this.treatmentValue = data.sort(function (a, b) {
+      this.treatmentValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("CS").subscribe((data: []) => {
       console.log(data);
-      this.CSValue = data.sort(function (a, b) {
+      this.CSValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("CS").subscribe((data: []) => {
       console.log(data);
-      this.CSValue = data.sort(function (a, b) {
+      this.CSValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("State").subscribe((data: []) => {
       console.log(data);
-      this.stateValue = data.sort(function (a, b) {
+      this.stateValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
