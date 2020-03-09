@@ -4,7 +4,8 @@ import {
   OnInit,
   ViewChild,
   ViewEncapsulation,
-  HostListener
+  HostListener,
+  NgZone
 } from "@angular/core";
 import {
   FormBuilder,
@@ -38,6 +39,7 @@ import { ComplaintTherapyModel } from "src/app/models/complaint-therapy-model";
 import { UsersService } from "src/app/service/users.service";
 import { MongoService } from "../../../service/mongo.service";
 import { EventCategoryService } from "src/app/service/event-category.service";
+import * as $ from 'jquery';
 
 @Component({
   selector: "app-task",
@@ -132,6 +134,10 @@ export class TaskComponent implements OnInit {
   public calendarHeight: any;
   public eventCategory: any;
   public currentTopPosition: any = [];
+  private eventOptions: boolean | { capture?: boolean, passive?: boolean };
+  public step = 0;
+  public pixel = 100;
+  public delay = 1000;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -141,12 +147,14 @@ export class TaskComponent implements OnInit {
     public storeService: StoreService,
     public usersService: UsersService,
     public mongo: MongoService,
-    public eventCategoryService: EventCategoryService
+    public eventCategoryService: EventCategoryService,
+    public ngZone: NgZone
   ) {
     this.createFormGroup = this.createFormGroup.bind(this);
   }
 
   ngOnInit() {
+    var self = this;
     this.height = window.innerHeight - 81;
     this.height += "px";
     this.calendarHeight = window.innerHeight - 209;
@@ -213,7 +221,7 @@ export class TaskComponent implements OnInit {
     this.eventCategoryService
       .getEventCategory(localStorage.getItem("superadmin"))
       .subscribe((data: []) => {
-        this.eventCategory = data.sort(function(a, b) {
+        this.eventCategory = data.sort(function (a, b) {
           return a["sequence"] - b["sequence"];
         });
         const resourcesObject = {
@@ -268,7 +276,7 @@ export class TaskComponent implements OnInit {
       localStorage.getItem("selectedStore-" + this.id) !== null &&
       localStorage.getItem("selectedUser-" + this.id) !== null &&
       JSON.parse(localStorage.getItem("selectedUser-" + this.id)).length !==
-        0 &&
+      0 &&
       this.type !== 3
     ) {
       this.calendars = [];
@@ -359,7 +367,9 @@ export class TaskComponent implements OnInit {
             this.calendars.push(objectCalendar);
             this.loading = false;
             this.setHeightForCalendar();
-            this.addScrollEvent();
+            this.ngZone.runOutsideAngular(() => {
+              this.addScrollEvent();
+            });
           } else {
             this.calendars.push({ name: null, events: [] });
           }
@@ -384,9 +394,18 @@ export class TaskComponent implements OnInit {
     }
 
     this.getParameters();
+    this.ngZone.runOutsideAngular(() => {
+      window.addEventListener('scroll', this.scroll, <any>this.eventOptions);
+    })
   }
 
-  addScrollEvent() {
+  scroll = (): void => {
+    this.ngZone.run(() => {
+      console.log(window);
+    });
+  };
+
+  /*addScrollEvent() {
     setTimeout(() => {
       let items = document.getElementsByClassName("k-scheduler-content");
       for (let i = 0; i < items.length; i++) {
@@ -395,24 +414,89 @@ export class TaskComponent implements OnInit {
         if(i !== items.length - 1) {
           clas.classList.add('overflowHide');
         }
-        /*clas.addEventListener("scroll", this.wheel, false);
-        clas.addEventListener("wheel", this.wheel, false);
-        clas.addEventListener("mousewheel", this.wheel, false);*/
         clas.addEventListener("scroll", this.wheel, false);
         clas.addEventListener("wheel", this.wheel, false);
         clas.addEventListener ("mousewheel", this.wheel, false);
         clas.addEventListener("DOMMouseScroll", this.wheel, false);
       }
     }, 500);
+  }*/
+
+  addScrollEvent() {
+    setTimeout(() => {
+      let items = document.getElementsByClassName("k-scheduler-content");
+      for (let i = 0; i < items.length; i++) {
+        const clas = items[i];
+        clas.classList.add("layout-" + i);
+        if (i !== items.length - 1) {
+          clas.classList.add('overflowHide');
+        }
+        clas.addEventListener("scroll", this.wheel.bind(this), <any>this.eventOptions);
+      }
+    }, 500);
+  }
+
+  ngOnDestroy(): void {
+    let items = document.getElementsByClassName("k-scheduler-content");
+    for (let i = 0; i < items.length; i++) {
+      const clas = items[i];
+      clas.classList.add("layout-" + i);
+      if (i !== items.length - 1) {
+        clas.classList.add('overflowHide');
+      }
+      clas.removeEventListener("wheel", this.wheel, <any>this.eventOptions);
+    }
   }
 
   wheel(event) {
+    console.log(this.step);
     let index = null;
-    if(event.type === 'scroll' && event.target !== undefined) {
+    const intervalToRepeat = 25;
+    this.step += (intervalToRepeat * this.pixel) / this.pixel;
+    if (event.type === 'scroll' && event.target !== undefined) {
       index = Number(event.target.classList[1].split("-")[1]);
-    } else if(event.type === 'wheel' && event.path !== undefined) {
+    } else if (event.type === 'wheel' && event.path !== undefined) {
       index = Number(event.path[4].classList[1].split("-")[1]);
-    } 
+    }
+    var delta = 0;
+    if (event.wheelDelta) {
+      delta = event.wheelDelta / 120;
+    } else if (event.detail) {
+      delta = -event.detail / 3;
+    }
+
+    var distance = 200;
+    if (this.step < this.pixel) {
+      let items = document.getElementsByClassName("k-scheduler-content");
+      for (let i = 0; i < items.length; i++) {
+        if (index === i) {
+          items[i].scrollTop += this.step;
+          for (let j = 0; j < items.length; j++) {
+            if (j !== i) {
+              items[j].scrollTop = items[i].scrollTop;
+            }
+          }
+          setTimeout(function () {
+            this.pixel = this.pixel - this.step;
+            this.wheel(event);
+          }, intervalToRepeat);
+        }
+      }
+
+      if (event.preventDefault) {
+        event.preventDefault();
+      }
+      event.returnValue = false;
+    }
+  }
+
+  /*wheel(event) {
+    let index = null;
+    if (event.type === 'scroll' && event.target !== undefined) {
+      index = Number(event.target.classList[1].split("-")[1]);
+    } else if (event.type === 'wheel' && event.path !== undefined) {
+      index = Number(event.path[4].classList[1].split("-")[1]);
+    }
     var delta = 0;
     if (event.wheelDelta) {
       delta = event.wheelDelta / 120;
@@ -423,22 +507,22 @@ export class TaskComponent implements OnInit {
     var distance = 200;
     let items = document.getElementsByClassName("k-scheduler-content");
     for (let i = 0; i < items.length; i++) {
-        if (index === i) {
-          items[i].scrollTop -= distance * delta;
-          for (let j = 0; j < items.length; j++) {
-            if (j !== i) {
-              items[j].scrollTop = items[i].scrollTop;
-            }
+      if (index === i) {
+        items[i].scrollTop -= distance * delta;
+        for (let j = 0; j < items.length; j++) {
+          if (j !== i) {
+            items[j].scrollTop = items[i].scrollTop;
           }
-          break;
         }
+        break;
+      }
     }
 
     if (event.preventDefault) {
       event.preventDefault();
     }
     event.returnValue = false;
-  }
+  }*/
 
   testFunkciona(delta) {
     var time = 1000;
@@ -538,7 +622,7 @@ export class TaskComponent implements OnInit {
           );
           timeDurationInd =
             Number(informationAboutStore.time_therapy) !==
-            Number(this.timeDuration)
+              Number(this.timeDuration)
               ? 1
               : 0;
           timeDuration = Number(informationAboutStore.time_therapy);
@@ -556,7 +640,7 @@ export class TaskComponent implements OnInit {
           } else {
             timeDurationInd =
               Number(informationAboutStore.time_therapy) !==
-              Number(this.timeDuration)
+                Number(this.timeDuration)
                 ? 1
                 : 0;
             timeDuration = Number(informationAboutStore.time_therapy);
@@ -1099,7 +1183,9 @@ export class TaskComponent implements OnInit {
           this.size = [];
           this.size.push("100%");
           this.loading = false;
-          this.addScrollEvent();
+          this.ngZone.runOutsideAngular(() => {
+            this.addScrollEvent();
+          });
           this.setHeightForCalendar();
         });
     } else {
@@ -1163,7 +1249,9 @@ export class TaskComponent implements OnInit {
             }
             this.size.push("");
             this.loading = false;
-            this.addScrollEvent();
+            this.ngZone.runOutsideAngular(() => {
+              this.addScrollEvent();
+            });
             this.setHeightForCalendar();
           }
           if (this.loopIndex < this.valueLoop.length) {
@@ -1234,7 +1322,9 @@ export class TaskComponent implements OnInit {
             }
             this.calendars.push(objectCalendar);
             this.loading = false;
-            this.addScrollEvent();
+            this.ngZone.runOutsideAngular(() => {
+              this.addScrollEvent();
+            });
           });
         this.getUserInCompany(event);
       } else {
@@ -1266,7 +1356,9 @@ export class TaskComponent implements OnInit {
             this.timeDuration = "60";
             this.therapyDuration = 1;
             this.loading = false;
-            this.addScrollEvent();
+            this.ngZone.runOutsideAngular(() => {
+              this.addScrollEvent();
+            });
             this.size = [];
             this.size.push("100%");
           });
@@ -1388,7 +1480,7 @@ export class TaskComponent implements OnInit {
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].end >
-            new Date(date).getHours()) ||
+          new Date(date).getHours()) ||
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start2 <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
@@ -1489,42 +1581,42 @@ export class TaskComponent implements OnInit {
   getParameters() {
     this.customer.getParameters("Complaint").subscribe((data: []) => {
       console.log(data);
-      this.complaintValue = data.sort(function(a, b) {
+      this.complaintValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("Therapy").subscribe((data: []) => {
       console.log(data);
-      this.therapyValue = data.sort(function(a, b) {
+      this.therapyValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("Treatment").subscribe((data: []) => {
       console.log(data);
-      this.treatmentValue = data.sort(function(a, b) {
+      this.treatmentValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("CS").subscribe((data: []) => {
       console.log(data);
-      this.CSValue = data.sort(function(a, b) {
+      this.CSValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("CS").subscribe((data: []) => {
       console.log(data);
-      this.CSValue = data.sort(function(a, b) {
+      this.CSValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("State").subscribe((data: []) => {
       console.log(data);
-      this.stateValue = data.sort(function(a, b) {
+      this.stateValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });

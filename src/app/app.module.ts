@@ -71,6 +71,7 @@ import { EventCategoryComponent } from './component/dashboard/parameters/event-c
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
+import * as $ from "jquery";
 
 @NgModule({
   declarations: [
