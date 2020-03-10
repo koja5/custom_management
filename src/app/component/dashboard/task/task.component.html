@@ -113,7 +113,7 @@
   </div>
   <div class="calendar" [style.height]="calendarHeight">
     <kendo-splitter orientation="{{ orientation }}" *ngIf="!loading">
-      <kendo-splitter-pane *ngFor="let item of calendars; let i = index" [size]="size[i]">
+      <kendo-splitter-pane *ngFor="let item of calendars; let i = index" [(size)]="sidebarSize[i]">
         <!--<p *ngIf="item.events.length === 0 && item.name !== null" style="text-align: center; font-size: 4vh; height: 88vh;">No
           tasks
           for user <b>{{item.name}}</b></p> -->
