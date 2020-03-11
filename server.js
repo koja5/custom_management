@@ -19,7 +19,8 @@ const socketIO = require('socket.io');
 var multer = require('multer');
 const mysql = require('mysql');
 var fs = require("fs");
-
+var schedule = require('node-schedule');
+var eventConfirm = require('./server/routes/eventConfirm');
 
 var connection = mysql.createPool({
   host: "185.178.193.141",
@@ -177,6 +178,16 @@ io.on('connection', (socket) => {
     console.log('User disconnected');
   });
 });
+
+var rule = new schedule.RecurrenceRule();
+rule.second = 5;
+var j = schedule.scheduleJob(rule, function(){
+  console.log('Proslo je 5 sekundi!');
+  // eventConfirm();
+});
+
+
+eventConfirm();
 
 /**
  * Listen on provided port, on all network interfaces.
