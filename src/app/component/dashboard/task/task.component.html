@@ -157,6 +157,7 @@
                   <p class="eventName">{{ event.title.split('+')[0] }}</p>
                   <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(', ') }}</p>
                 </div>
+                <span class="fa fa-check-circle-o checkButton" title="Not confirmed" (click)="sendAgainConfirmMail()"></span>
               </ng-template>
 
               <ng-template kendoSchedulerAllDayEventTemplate let-event="event" let-resources="resources">
@@ -164,6 +165,7 @@
                   <p class="eventName">{{ event.title.split('+')[0] }}</p>
                   <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(', ') }}</p>
                 </div>
+                <span class="fa fa-check-circle-o checkButton" title="Not confirmed" (click)="sendAgainConfirmMail()"></span>
               </ng-template>
 
 
@@ -198,7 +200,8 @@
                   <div class="k-form-field" style="text-align: center; margin: 0px !important;">
                     <div class="col-sm-6" style="margin-bottom: 2vh;">
                       <div class="row mgbt-xs-0">
-                        <label class="col-xs-12 control-label" style="color: red; text-align: left;">{{languageUser.attention}}:</label>
+                        <label class="col-xs-12 control-label"
+                          style="color: red; text-align: left;">{{languageUser.attention}}:</label>
                         <textarea kendoTextArea class="textAreaInput"
                           [(ngModel)]="customerUser.attention">{{customerUser.attention}}</textarea>
                         <!-- col-sm-10 -->
@@ -206,7 +209,8 @@
                     </div>
                     <div class="col-sm-6" style="margin-bottom: 2vh;">
                       <div class="row mgbt-xs-0">
-                        <label class="col-xs-12 control-label" style="text-align: left;">{{languageUser.physicalComplaint}}:</label>
+                        <label class="col-xs-12 control-label"
+                          style="text-align: left;">{{languageUser.physicalComplaint}}:</label>
                         <textarea kendoTextArea class="textAreaInput"
                           [(ngModel)]="customerUser.physicalComplaint">{{customerUser.physicalComplaint}}</textarea>
                         <!-- col-sm-10 -->
@@ -406,6 +410,7 @@
                 <p class="eventName">{{ event.title.split('+')[0] }} </p>
                 <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(', ') }}</p>
               </div>
+              <span class="fa fa-check-circle-o checkButton" title="Not confirmed" (click)="sendAgainConfirmMail()"></span>
             </ng-template>
 
             <ng-template kendoSchedulerAllDayEventTemplate let-event="event" let-resources="resources">
@@ -413,6 +418,7 @@
                 <p class="eventName">{{ event.title.split('+')[0] }} </p>
                 <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(', ') }}</p>
               </div>
+              <span class="fa fa-check-circle-o checkButton" title="Not confirmed" (click)="sendAgainConfirmMail()"></span>
             </ng-template>
 
             <kendo-scheduler-work-week-view [slotDuration]="timeDuration" [slotDivisions]="1">
@@ -769,4 +775,12 @@
       <h5><i class="fa fa-sticky-note-o" aria-hidden="true"></i> {{quickPreviewEvent.title.split('+')[1]}}</h5>
     </div>
   </kendo-window>
+
+  <kendo-dialog title="Confirmation of arrival" *ngIf="requestForConfirmArrival" (close)="requestForConfirmArrival = false" [minWidth]="250" [width]="450">
+    <p style="margin: 30px; text-align: center;">Do you want to request a confirmation from your client?</p>
+    <kendo-dialog-actions>
+      <button kendoButton (click)="requestForConfirmArrivalAnswer('yes')" primary="true">Yes</button>
+        <button kendoButton (click)="requestForConfirmArrival = false">No</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
 </div>

@@ -138,6 +138,7 @@ export class TaskComponent implements OnInit {
   public pixel = 100;
   public delay = 1000;
   public calendarWidth = 80;
+  public requestForConfirmArrival = false;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -1621,5 +1622,15 @@ export class TaskComponent implements OnInit {
     console.log(newSize);
     this.size = newSize;
     console.log('test');
+  }
+
+  sendAgainConfirmMail() {
+    console.log('test!');
+    this.requestForConfirmArrival = true;
+  }
+
+  requestForConfirmArrivalAnswer(answer) {
+    console.log(answer);
+    this.requestForConfirmArrival = false;
   }
 }
