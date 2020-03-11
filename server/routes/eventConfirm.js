@@ -9,6 +9,7 @@ const path = require("path");
 var nodemailer = require("nodemailer");
 var hogan = require("hogan.js");
 
+var link = "http://localhost:3000/api/korisnik/verifikacija/";
 var confirmTemplate = fs.readFileSync('./server/routes/templates/confirmTemplate.hjs', 'utf-8');
 var compiledTemplate = hogan.compile(confirmTemplate);
 
@@ -43,26 +44,24 @@ function confirm() {
       return;
     }
 
-    conn.query("SELECT email FROM users_superadmin where active = 1", function(
+    conn.query("SELECT * FROM users_superadmin where active = 1", function(
       err,
       rows,
       fields
     ) {
       if (err) {
         console.error("SQL error:", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database"
-        });
         return next(err);
       }
       console.log(rows);
       rows.forEach(function(to, i, array) {
+        var verificationLinkButton = link + "/korisnik/verifikacija/" + sha1(to.email);
+        console.log(verificationLinkButton);
         var mailOptions = {
           from: "info@app-production.eu",
           subject: "Confirm registration",
           // text: 'test'
-          html: compiledTemplate.render()
+          html: compiledTemplate.render({firstName: to.shortname, verificationLink: link + sha1(to.email)})
         };
         mailOptions.to = to.email;
         smtpTransport.sendMail(mailOptions, function(error, response) {
