@@ -180,7 +180,7 @@ io.on('connection', (socket) => {
 });
 
 var rule = new schedule.RecurrenceRule();
-rule.second = 5;
+rule.minute = 5;
 var j = schedule.scheduleJob(rule, function(){
   console.log('Proslo je 5 sekundi!');
   // eventConfirm();

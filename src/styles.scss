@@ -2048,7 +2048,15 @@ form.search-form-opened .btn.submit {
 .sidemenu-closed.sidemenu-container-fixed .sidemenu-container:hover .sidemenu>li {
     display: block;
     margin: 0;
-    border: 0
+    border: 0;
+}
+
+.sidemenu-container .sidemenu:nth-child(3) {
+    height: 0px !important;
+}
+
+li.nav-item {
+    height: 60px;
 }
 .sidemenu-container .sidemenu>li.sidebar-search-wrapper,
 .sidemenu-container .sidemenu>li.sidebar-toggler-wrapper,
@@ -8880,7 +8888,8 @@ tr.group:hover {
         -moz-border-radius: 0 4px 0 0;
         -ms-border-radius: 0 4px 0 0;
         -o-border-radius: 0 4px 0 0;
-        border-radius: 0 4px 0 0
+        border-radius: 0 4px 0 0;
+        position: fixed !important;
     }
     .sidemenu-closed .sidemenu-container .sidemenu.sidemenu-closed>li:hover>a>i {
         margin-right: 10px
@@ -11089,7 +11098,8 @@ tr.group:hover {
         width: 256px !important;
         position: relative !important;
         z-index: 10000;
-        display: block !important
+        display: block !important;
+        height: 60px;
     }
     .sidemenu-closed .sidemenu-container .sidemenu.sidemenu-closed>li:hover>a {
         -webkit-border-radius: 0 4px 0 0;
