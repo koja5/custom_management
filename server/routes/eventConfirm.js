@@ -9,7 +9,7 @@ const path = require("path");
 var nodemailer = require("nodemailer");
 var hogan = require("hogan.js");
 
-var link = "http://localhost:3000/api/korisnik/verifikacija/";
+var link = "http://localhost:3000/api/";
 var confirmTemplate = fs.readFileSync('./server/routes/templates/confirmTemplate.hjs', 'utf-8');
 var compiledTemplate = hogan.compile(confirmTemplate);
 
@@ -81,6 +81,52 @@ var smtpTransport = nodemailer.createTransport({
 }*/
 
 function confirm() {
+  connection.getConnection(function(err, conn) {
+    console.log(conn);
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+
+    conn.query("SELECT c.email, t.id FROM tasks t join customers c on t.customer_id = c.id where DATEDIFF(t.start, NOW()) = 3 order by t.start desc", function(
+      err,
+      rows,
+      fields
+    ) {
+      if (err) {
+        console.error("SQL error:", err);
+      }
+      console.log(rows);
+      rows.forEach(function(to, i, array) {
+        var verificationLinkButton = link + "task/confirmationArrival/" + to.id;
+        console.log(verificationLinkButton);
+        var mailOptions = {
+          from: "info@app-production.eu",
+          subject: "Confirm registration",
+          // text: 'test'
+          html: compiledTemplate.render({firstName: to.shortname, verificationLink: verificationLinkButton})
+        };
+        mailOptions.to = to.email;
+        smtpTransport.sendMail(mailOptions, function(error, response) {
+          console.log(response);
+          if (error) {
+            console.log(error);
+          } else {
+            console.log("Message sent: " + response.message);
+          }
+        });
+      });
+    });
+    conn.on("error", function(err) {
+      console.log("[mysql error]", err);
+    });
+  });
+}
+
+function confirm1() {
   connection.getConnection(function(err, conn) {
     console.log(conn);
     if (err) {

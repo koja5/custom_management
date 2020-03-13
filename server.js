@@ -187,7 +187,7 @@ var j = schedule.scheduleJob(rule, function(){
 });
 
 
-eventConfirm();
+// eventConfirm();
 
 /**
  * Listen on provided port, on all network interfaces.

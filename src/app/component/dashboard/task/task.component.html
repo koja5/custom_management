@@ -155,17 +155,24 @@
               <ng-template kendoSchedulerEventTemplate let-event="event" let-resources="resources">
                 <div *ngIf="event !== undefined" class="eventDiv">
                   <p class="eventName">{{ event.title.split('+')[0] }}</p>
-                  <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(', ') }}</p>
+                  <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(', ') }}
+                  </p>
                 </div>
-                <span class="fa fa-check-circle-o checkButton" title="Not confirmed" (click)="sendAgainConfirmMail()"></span>
+                <span *ngIf="event.dataItem.confirm === 0" class="fa fa-check-circle-o checkButton notConfirmed"
+                  title="{{language.notConfirmed}}" (click)="sendAgainConfirmMail()"></span>
+                <span *ngIf="event.dataItem.confirm === 1" class="fa fa-check-circle-o checkButton confirmed"
+                  title="{{language.confirmed}}"></span>
               </ng-template>
 
               <ng-template kendoSchedulerAllDayEventTemplate let-event="event" let-resources="resources">
                 <div *ngIf="event !== undefined" class="eventDiv">
                   <p class="eventName">{{ event.title.split('+')[0] }}</p>
-                  <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(', ') }}</p>
+                  <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(', ') }} </p>
                 </div>
-                <span class="fa fa-check-circle-o checkButton" title="Not confirmed" (click)="sendAgainConfirmMail()"></span>
+                <span *ngIf="event.dataItem.confirm === 0" class="fa fa-check-circle-o checkButton notConfirmed"
+                  title="{{language.notConfirmed}}" (click)="sendAgainConfirmMail()"></span>
+                <span *ngIf="event.dataItem.confirm === 1" class="fa fa-check-circle-o checkButton confirmed"
+                  title="{{language.confirmed}}"></span>
               </ng-template>
 
 
@@ -410,7 +417,10 @@
                 <p class="eventName">{{ event.title.split('+')[0] }} </p>
                 <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(', ') }}</p>
               </div>
-              <span class="fa fa-check-circle-o checkButton" title="Not confirmed" (click)="sendAgainConfirmMail()"></span>
+              <span *ngIf="event.dataItem.confirm === 0" class="fa fa-check-circle-o checkButton notConfirmed"
+                  title="{{language.notConfirmed}}" (click)="sendAgainConfirmMail()"></span>
+                <span *ngIf="event.dataItem.confirm === 1" class="fa fa-check-circle-o checkButton confirmed"
+                  title="{{language.confirmed}}"></span>
             </ng-template>
 
             <ng-template kendoSchedulerAllDayEventTemplate let-event="event" let-resources="resources">
@@ -418,7 +428,10 @@
                 <p class="eventName">{{ event.title.split('+')[0] }} </p>
                 <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(', ') }}</p>
               </div>
-              <span class="fa fa-check-circle-o checkButton" title="Not confirmed" (click)="sendAgainConfirmMail()"></span>
+              <span *ngIf="event.dataItem.confirm === 0" class="fa fa-check-circle-o checkButton notConfirmed"
+                  title="{{language.notConfirmed}}" (click)="sendAgainConfirmMail()"></span>
+                <span *ngIf="event.dataItem.confirm === 1" class="fa fa-check-circle-o checkButton confirmed"
+                  title="{{language.confirmed}}"></span>
             </ng-template>
 
             <kendo-scheduler-work-week-view [slotDuration]="timeDuration" [slotDivisions]="1">
@@ -776,11 +789,12 @@
     </div>
   </kendo-window>
 
-  <kendo-dialog title="Confirmation of arrival" *ngIf="requestForConfirmArrival" (close)="requestForConfirmArrival = false" [minWidth]="250" [width]="450">
+  <kendo-dialog title="Confirmation of arrival" *ngIf="requestForConfirmArrival"
+    (close)="requestForConfirmArrival = false" [minWidth]="250" [width]="450">
     <p style="margin: 30px; text-align: center;">Do you want to request a confirmation from your client?</p>
     <kendo-dialog-actions>
       <button kendoButton (click)="requestForConfirmArrivalAnswer('yes')" primary="true">Yes</button>
-        <button kendoButton (click)="requestForConfirmArrival = false">No</button>
+      <button kendoButton (click)="requestForConfirmArrival = false">No</button>
     </kendo-dialog-actions>
-</kendo-dialog>
+  </kendo-dialog>
 </div>

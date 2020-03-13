@@ -5412,5 +5412,49 @@ router.post("/updateWorkTimeColors", function (req, res, next) {
 
 // end work_time_colors
 
+router.get("/task/confirmationArrival/:id", (req, res, next) => {
+  try {
+    var reqObj = req.params.id;
+
+    console.log("usao sam u verifikaciju!");
+    console.log(reqObj);
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: "Error in connection database"
+        });
+        return next(err);
+      } else {
+        conn.query(
+          "UPDATE tasks SET confirm=1 WHERE id='" +
+          reqObj +
+          "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              console.error("SQL error:", err);
+              res.json({
+                code: 100,
+                status: "Error in connection database"
+              });
+              return next(err);
+            } else {
+              console.log(rows);
+              res.writeHead(302, {
+                Location: "/login"
+              });
+              res.end();
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    console.error("Internal error: " + ex);
+    return next(ex);
+  }
+});
 
 module.exports = router;

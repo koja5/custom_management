@@ -221,6 +221,14 @@ kendo-scheduler .k-event {
   right: 7px;
   bottom: 8px;
   font-size: 21px;
-  color: green;
   z-index: 10000;
+}
+
+.confirmed {
+  color: #24c719;
+}
+
+.notConfirmed {
+  color: gray;
+  opacity: 0.6;
 }

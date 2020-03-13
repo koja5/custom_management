@@ -102,7 +102,9 @@
     "female": "Female",
     "male": "Male",
     "createNewCustomer": "Create new customer",
-    "eventCategory": "Category"
+    "eventCategory": "Category",
+    "notConfirmed": "Not confirmed",
+    "confirmed": "Confirmed"
   },
   "navigation-menu": {
     "calendar": "Calendar",

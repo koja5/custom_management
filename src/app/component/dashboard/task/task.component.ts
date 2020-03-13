@@ -86,7 +86,8 @@ export class TaskComponent implements OnInit {
     attention: "",
     physicalComplaint: "",
     storeId: "",
-    superadmin: localStorage.getItem("superadmin")
+    superadmin: localStorage.getItem("superadmin"),
+    confirm: ""
   };
   public value: any = [];
   public store: any;
@@ -241,6 +242,7 @@ export class TaskComponent implements OnInit {
         for (let i = 0; i < data["length"]; i++) {
           this.palette.push(data[i]["color"]);
         }
+        console.log(this.resources);
       });
 
     if (this.type === 3) {
@@ -512,6 +514,7 @@ export class TaskComponent implements OnInit {
         telephone: dataItem.telephone,
         mobile: dataItem.mobile,
         superadmin: dataItem.superadmin,
+        confirm: dataItem.confirm,
         description: dataItem.description,
         recurrenceRule: dataItem.recurrenceRule,
         recurrenceId: dataItem.recurrenceId
@@ -589,6 +592,7 @@ export class TaskComponent implements OnInit {
         "+" +
         this.complaintData.complaint_title;
       formValue.superadmin = localStorage.getItem("superadmin");
+      formValue.confirm = this.customerUser['confirm'];
       if (this.type !== 3 && selectedUser !== undefined) {
         formValue.creator_id = selectedUser;
       } else {

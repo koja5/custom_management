@@ -95,7 +95,9 @@
     "female": "Weiblich",
     "male": "Männlich",
     "createNewCustomer": "Neuen Kunden anlegen",
-    "eventCategory": "Kategorie"
+    "eventCategory": "Kategorie",
+    "notConfirmed": "Nicht bestätigt",
+    "confirmed": "Bestätigt"
   },
   "navigation-menu": {
     "calendar": "Kalender",
