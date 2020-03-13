@@ -10,7 +10,7 @@ var nodemailer = require("nodemailer");
 var hogan = require("hogan.js");
 
 var link = "http://localhost:3000/api/";
-var confirmTemplate = fs.readFileSync('./server/routes/templates/confirmTemplate.hjs', 'utf-8');
+var confirmTemplate = fs.readFileSync('./server/routes/templates/confirmArrival.hjs', 'utf-8');
 var compiledTemplate = hogan.compile(confirmTemplate);
 
 var connection = mysql.createPool({
@@ -106,7 +106,6 @@ function confirm() {
         var mailOptions = {
           from: "info@app-production.eu",
           subject: "Confirm registration",
-          // text: 'test'
           html: compiledTemplate.render({firstName: to.shortname, verificationLink: verificationLinkButton})
         };
         mailOptions.to = to.email;

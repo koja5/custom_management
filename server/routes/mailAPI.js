@@ -2,6 +2,10 @@ var express = require('express');
 var nodemailer = require("nodemailer");
 var router = express.Router();
 var sha1 = require('sha1');
+var hogan = require("hogan.js");
+var fs = require("fs");
+
+var link = 'http://localhost:3000/api/';
 
 var smtpTransport = nodemailer.createTransport({
     host: '78.47.206.131',
@@ -24,7 +28,32 @@ var smtpTransport = nodemailer.createTransport({
 });
 
 //slanje maila pri registraciji
-router.post('/send', function(req, res) {
+
+router.post('/send', function (req, res) {
+    var confirmTemplate = fs.readFileSync('./server/routes/templates/confirmMail.hjs', 'utf-8');
+    var compiledTemplate = hogan.compile(confirmTemplate);
+    var verificationLinkButton = link + "korisnik/verifikacija/" + sha1(req.body.email);
+
+    var mailOptions = {
+        from: 'info@app-production.eu',
+        to: req.body.email,
+        subject: "Confirm registration",
+        html: compiledTemplate.render({firstName: req.body.shortname, verificationLink: verificationLinkButton})
+    }
+
+    smtpTransport.sendMail(mailOptions, function (error, response) {
+        console.log(response);
+        if (error) {
+            console.log(error);
+            res.end("error");
+        } else {
+            console.log("Message sent: " + response.message);
+            res.end("sent");
+        }
+    });
+});
+
+router.post('/send1', function (req, res) {
     console.log(req.body.email);
     let broj = sha1(req.body.email);
     let mail = "Thank you for registering. We require that you validate your registration to ensure that the email address you entered was correct. This protects against unwanted spam and malicious abuse. Your username is: " + req.body.shortname;
@@ -41,7 +70,7 @@ router.post('/send', function(req, res) {
         text: mail
     }
 
-    smtpTransport.sendMail(mailOptions, function(error, response) {
+    smtpTransport.sendMail(mailOptions, function (error, response) {
         console.log(response);
         if (error) {
             console.log(error);
@@ -55,22 +84,20 @@ router.post('/send', function(req, res) {
 
 //slanje mail-a kada korisnik zaboravi lozinku
 
-router.post('/forgotmail', function(req, res) {
-    let broj = sha1(req.body.email);
-    let mail = "Dear \nIf you submitted your password change request at app-production.eu, ";
-    mail += "you can do so by clicking the following link. \ n If you did not submit this request, please ignore this message.\n";
-    // mail += "http://app-production.eu:8080/changePassword/" + broj + "\n";
-    mail += "http://localhost:4200/changePassword/" + broj + "\n";
-    mail += "Regards \nTuina Praxis!"
+router.post('/forgotmail', function (req, res) {
+
+    var confirmTemplate = fs.readFileSync('./server/routes/templates/forgotMail.hjs', 'utf-8');
+    var compiledTemplate = hogan.compile(confirmTemplate);
+    var verificationLinkButton = 'http://localhost:4200/changePassword/' + sha1(req.body.email);
 
     var mailOptions = {
         from: 'info@app-production.eu',
         to: req.body.email,
         subject: "Reset password",
-        text: mail
+        html: compiledTemplate.render({firstName: req.body.shortname, verificationLink: verificationLinkButton})
     }
 
-    smtpTransport.sendMail(mailOptions, function(error, response) {
+    smtpTransport.sendMail(mailOptions, function (error, response) {
         if (error) {
             console.log(error);
             res.end(error);
@@ -81,7 +108,7 @@ router.post('/forgotmail', function(req, res) {
     });
 });
 
-router.post('/askQuestion', function(req, res) {
+router.post('/askQuestion', function (req, res) {
 
     let ime = req.body.ime;
     let naslov = req.body.naslov;
@@ -96,7 +123,7 @@ router.post('/askQuestion', function(req, res) {
         text: mail
     }
 
-    smtpTransport.sendMail(mailOptions, function(error, response) {
+    smtpTransport.sendMail(mailOptions, function (error, response) {
         if (error) {
             console.log(error);
             res.send({ message: "error" });
