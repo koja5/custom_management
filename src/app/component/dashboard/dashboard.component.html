@@ -32,6 +32,9 @@
         <!-- end mobile menu -->
         <!-- start header menu -->
         <div class="top-menu">
+          <a (click)="toggleFullscreen()">
+            <i class="k-icon k-i-image-resize"></i>
+          </a>
           <ul class="nav navbar-nav pull-right">
             <!-- start manage user dropdown -->
             <li class="dropdown dropdown-user" *ngIf="user !== undefined">
@@ -83,7 +86,7 @@
       <div class="sidebar-container">
         <div class="sidemenu-container navbar-collapse collapse fixed-menu {{sidebarMobile}}">
           <div id="remove-scroll" class="left-sidemenu" style.height="{{sidebarHeight}}" style="overflow: auto">
-            <perfect-scrollbar  style.height="{{sidebarHeight}}" [config]="config">
+            <perfect-scrollbar style.height="{{sidebarHeight}}" [config]="config">
               <ul class="sidemenu  page-header-fixed slimscroll-style {{sidebar}}" data-keep-expanded="false"
                 data-auto-scroll="true" data-slide-speed="200" style="padding-top: 20px">
                 <li class="sidebar-toggler-wrapper hide">
@@ -201,14 +204,14 @@
                       </a>
                     </li>
                     <li class="nav-item {{selectedNodeModel.state}}">
-                      <a [routerLink]="[{outlets: {'dashboard': ['event-category']}}]" (click)="returnActiveNode('event-category')"
-                        class="nav-link">
+                      <a [routerLink]="[{outlets: {'dashboard': ['event-category']}}]"
+                        (click)="returnActiveNode('event-category')" class="nav-link">
                         <span class="fa fa-paint-brush"></span> Event Category
                       </a>
                     </li>
                     <li class="nav-item {{selectedNodeModel.state}}">
-                      <a [routerLink]="[{outlets: {'dashboard': ['work-time-colors']}}]" (click)="returnActiveNode('work-time-colors')"
-                        class="nav-link">
+                      <a [routerLink]="[{outlets: {'dashboard': ['work-time-colors']}}]"
+                        (click)="returnActiveNode('work-time-colors')" class="nav-link">
                         <span class="fa fa-tint"></span> Work Time Colors
                       </a>
                     </li>

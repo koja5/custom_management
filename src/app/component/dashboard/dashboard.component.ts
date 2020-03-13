@@ -8,6 +8,7 @@ import { UsersService } from "../../service/users.service";
 import { DomSanitizer } from "@angular/platform-browser";
 import { NavigationMenuModel } from "../../models/navigation-menu";
 import { MongoService } from "../../service/mongo.service";
+declare var document: any;
 
 @Component({
   selector: "app-dashboard",
@@ -256,6 +257,36 @@ export class DashboardComponent implements OnInit {
     } else {
       this.subMenuInd = '';
       this.sidebarHeight = 'auto';
+    }
+  }
+
+  toggleFullscreen(): void {
+    const isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null) ||
+      (document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
+      (document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
+      (document.msFullscreenElement && document.msFullscreenElement !== null);
+
+    const docElm = document.documentElement;
+    if (!isInFullScreen) {
+      if (docElm.requestFullscreen) {
+        docElm.requestFullscreen();
+      } else if (docElm.mozRequestFullScreen) {
+        docElm.mozRequestFullScreen();
+      } else if (docElm.webkitRequestFullScreen) {
+        docElm.webkitRequestFullScreen();
+      } else if (docElm.msRequestFullscreen) {
+        docElm.msRequestFullscreen();
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
     }
   }
 }
