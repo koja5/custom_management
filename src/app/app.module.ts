@@ -73,6 +73,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 };
 import * as $ from "jquery";
 import { WorkTimeColorsComponent } from './component/dashboard/parameters/work-time-colors/work-time-colors.component';
+import { ConfirmArrivalComponent } from './component/templates/confirm-arrival/confirm-arrival.component';
 
 @NgModule({
   declarations: [
@@ -97,7 +98,8 @@ import { WorkTimeColorsComponent } from './component/dashboard/parameters/work-t
     VaucherComponent,
     SettingsComponent,
     EventCategoryComponent,
-    WorkTimeColorsComponent
+    WorkTimeColorsComponent,
+    ConfirmArrivalComponent
   ],
   imports: [
     BrowserModule,

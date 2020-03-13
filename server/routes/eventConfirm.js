@@ -91,7 +91,7 @@ function confirm() {
       return;
     }
 
-    conn.query("SELECT c.email, t.id FROM tasks t join customers c on t.customer_id = c.id where DATEDIFF(t.start, NOW()) = 3 order by t.start desc", function(
+    conn.query("SELECT c.email, t.id FROM tasks t join customers c on t.customer_id = c.id where DATEDIFF(t.start, NOW()) = 3 and t.confirm = 0 order by t.start desc", function(
       err,
       rows,
       fields

@@ -5443,7 +5443,7 @@ router.get("/task/confirmationArrival/:id", (req, res, next) => {
             } else {
               console.log(rows);
               res.writeHead(302, {
-                Location: "/login"
+                Location: "../../../template/confirm-arrival"
               });
               res.end();
             }

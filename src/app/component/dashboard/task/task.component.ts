@@ -612,6 +612,7 @@ export class TaskComponent implements OnInit {
           formValue.start,
           formValue.end
         );
+        formValue.confirm = 0;
         this.customer.addTherapy(this.complaintData).subscribe(data => {
           if (data["success"]) {
             formValue.therapy_id = data["id"];

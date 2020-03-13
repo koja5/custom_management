@@ -418,9 +418,9 @@
                 <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(', ') }}</p>
               </div>
               <span *ngIf="event.dataItem.confirm === 0" class="fa fa-check-circle-o checkButton notConfirmed"
-                  title="{{language.notConfirmed}}" (click)="sendAgainConfirmMail()"></span>
-                <span *ngIf="event.dataItem.confirm === 1" class="fa fa-check-circle-o checkButton confirmed"
-                  title="{{language.confirmed}}"></span>
+                title="{{language.notConfirmed}}" (click)="sendAgainConfirmMail()"></span>
+              <span *ngIf="event.dataItem.confirm === 1" class="fa fa-check-circle-o checkButton confirmed"
+                title="{{language.confirmed}}"></span>
             </ng-template>
 
             <ng-template kendoSchedulerAllDayEventTemplate let-event="event" let-resources="resources">
@@ -429,9 +429,9 @@
                 <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(', ') }}</p>
               </div>
               <span *ngIf="event.dataItem.confirm === 0" class="fa fa-check-circle-o checkButton notConfirmed"
-                  title="{{language.notConfirmed}}" (click)="sendAgainConfirmMail()"></span>
-                <span *ngIf="event.dataItem.confirm === 1" class="fa fa-check-circle-o checkButton confirmed"
-                  title="{{language.confirmed}}"></span>
+                title="{{language.notConfirmed}}" (click)="sendAgainConfirmMail()"></span>
+              <span *ngIf="event.dataItem.confirm === 1" class="fa fa-check-circle-o checkButton confirmed"
+                title="{{language.confirmed}}"></span>
             </ng-template>
 
             <kendo-scheduler-work-week-view [slotDuration]="timeDuration" [slotDivisions]="1">

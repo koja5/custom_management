@@ -1,3 +1,4 @@
+import { ConfirmArrivalComponent } from './component/templates/confirm-arrival/confirm-arrival.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
@@ -58,7 +59,8 @@ const routes: Routes = [
       { path: 'work-time-colors', component: WorkTimeColorsComponent, outlet: 'dashboard' }
     ]
   },
-  { path: 'document/server/routes/uploads/:id', component: DocumentPreviewComponent }
+  { path: 'document/server/routes/uploads/:id', component: DocumentPreviewComponent },
+  { path: 'template/confirm-arrival', component: ConfirmArrivalComponent }
 ];
 
 @NgModule({
