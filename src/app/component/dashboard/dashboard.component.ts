@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
 import { CookieService } from "ng2-cookies";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Modal } from "ngx-modal";
@@ -289,4 +289,5 @@ export class DashboardComponent implements OnInit {
       }
     }
   }
+  
 }

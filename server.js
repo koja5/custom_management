@@ -181,9 +181,8 @@ io.on('connection', (socket) => {
 
 var rule = new schedule.RecurrenceRule();
 rule.minute = 5;
-var j = schedule.scheduleJob(rule, function(){
-  console.log('Proslo je 5 sekundi!');
-  // eventConfirm();
+var j = schedule.scheduleJob('59 23 * * *', function(){
+  eventConfirm();
 });
 
 

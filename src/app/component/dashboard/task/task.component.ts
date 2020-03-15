@@ -39,6 +39,7 @@ import { ComplaintTherapyModel } from "src/app/models/complaint-therapy-model";
 import { UsersService } from "src/app/service/users.service";
 import { MongoService } from "../../../service/mongo.service";
 import { EventCategoryService } from "src/app/service/event-category.service";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: "app-task",
@@ -140,6 +141,7 @@ export class TaskComponent implements OnInit {
   public delay = 1000;
   public calendarWidth = 80;
   public requestForConfirmArrival = false;
+  public confirmArrivalData: any;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -150,7 +152,8 @@ export class TaskComponent implements OnInit {
     public usersService: UsersService,
     public mongo: MongoService,
     public eventCategoryService: EventCategoryService,
-    public ngZone: NgZone
+    public ngZone: NgZone,
+    private toastr: ToastrService
   ) {
     this.createFormGroup = this.createFormGroup.bind(this);
   }
@@ -159,7 +162,7 @@ export class TaskComponent implements OnInit {
     var self = this;
     this.height = window.innerHeight - 81;
     this.height += "px";
-    this.calendarHeight = window.innerHeight - 274;
+    this.calendarHeight = window.innerHeight - 244;
     this.calendarHeight += "px";
 
     this.loading = true;
@@ -223,7 +226,7 @@ export class TaskComponent implements OnInit {
     this.eventCategoryService
       .getEventCategory(localStorage.getItem("superadmin"))
       .subscribe((data: []) => {
-        this.eventCategory = data.sort(function (a, b) {
+        this.eventCategory = data.sort(function(a, b) {
           return a["sequence"] - b["sequence"];
         });
         const resourcesObject = {
@@ -279,7 +282,7 @@ export class TaskComponent implements OnInit {
       localStorage.getItem("selectedStore-" + this.id) !== null &&
       localStorage.getItem("selectedUser-" + this.id) !== null &&
       JSON.parse(localStorage.getItem("selectedUser-" + this.id)).length !==
-      0 &&
+        0 &&
       this.type !== 3
     ) {
       this.calendars = [];
@@ -460,7 +463,7 @@ export class TaskComponent implements OnInit {
           );
           timeDurationInd =
             Number(informationAboutStore.time_therapy) !==
-              Number(this.timeDuration)
+            Number(this.timeDuration)
               ? 1
               : 0;
           timeDuration = Number(informationAboutStore.time_therapy);
@@ -478,7 +481,7 @@ export class TaskComponent implements OnInit {
           } else {
             timeDurationInd =
               Number(informationAboutStore.time_therapy) !==
-                Number(this.timeDuration)
+              Number(this.timeDuration)
                 ? 1
                 : 0;
             timeDuration = Number(informationAboutStore.time_therapy);
@@ -592,7 +595,7 @@ export class TaskComponent implements OnInit {
         "+" +
         this.complaintData.complaint_title;
       formValue.superadmin = localStorage.getItem("superadmin");
-      formValue.confirm = this.customerUser['confirm'];
+      formValue.confirm = this.customerUser["confirm"];
       if (this.type !== 3 && selectedUser !== undefined) {
         formValue.creator_id = selectedUser;
       } else {
@@ -942,24 +945,26 @@ export class TaskComponent implements OnInit {
   setWidthForCalendarHeader() {
     setTimeout(() => {
       let items = document.querySelectorAll(".k-scheduler-toolbar");
-      let calendars = document.querySelectorAll('.k-scheduler');
+      let calendars = document.querySelectorAll(".k-scheduler");
       for (let i = 0; i < items.length; i++) {
         console.log((calendars[i] as HTMLElement).offsetWidth);
-        (items[i] as HTMLElement).style.width = (calendars[i] as HTMLElement).offsetWidth + 'px';
+        (items[i] as HTMLElement).style.width =
+          (calendars[i] as HTMLElement).offsetWidth + "px";
       }
     }, 50);
   }
 
-
   setSplitterBarEvent() {
     setTimeout(() => {
-      let splitterBar = document.querySelectorAll('.k-splitbar');
+      let splitterBar = document.querySelectorAll(".k-splitbar");
       for (let i = 0; i < splitterBar.length; i++) {
-        splitterBar[i].addEventListener('click', this.splitteBarEvent.bind(this));
+        splitterBar[i].addEventListener(
+          "click",
+          this.splitteBarEvent.bind(this)
+        );
       }
-    }, 50)
+    }, 50);
   }
-
 
   splitteBarEvent(event) {
     this.setWidthForCalendarHeader();
@@ -1341,7 +1346,7 @@ export class TaskComponent implements OnInit {
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].end >
-          new Date(date).getHours()) ||
+            new Date(date).getHours()) ||
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start2 <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
@@ -1442,42 +1447,42 @@ export class TaskComponent implements OnInit {
   getParameters() {
     this.customer.getParameters("Complaint").subscribe((data: []) => {
       console.log(data);
-      this.complaintValue = data.sort(function (a, b) {
+      this.complaintValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("Therapy").subscribe((data: []) => {
       console.log(data);
-      this.therapyValue = data.sort(function (a, b) {
+      this.therapyValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("Treatment").subscribe((data: []) => {
       console.log(data);
-      this.treatmentValue = data.sort(function (a, b) {
+      this.treatmentValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("CS").subscribe((data: []) => {
       console.log(data);
-      this.CSValue = data.sort(function (a, b) {
+      this.CSValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("CS").subscribe((data: []) => {
       console.log(data);
-      this.CSValue = data.sort(function (a, b) {
+      this.CSValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("State").subscribe((data: []) => {
       console.log(data);
-      this.stateValue = data.sort(function (a, b) {
+      this.stateValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
@@ -1604,9 +1609,10 @@ export class TaskComponent implements OnInit {
 
   @HostListener("window:resize", ["$event"])
   onResize(event) {
+    console.log(event);
     this.height = window.innerHeight - 81;
     this.height += "px";
-    this.calendarHeight = window.innerHeight - 274;
+    this.calendarHeight = window.innerHeight - 244;
     this.calendarHeight += "px";
     this.setWidthForCalendarHeader();
   }
@@ -1619,23 +1625,43 @@ export class TaskComponent implements OnInit {
     this.selected = event;
   }
 
-
   public get sidebarSize(): any[] {
     return this.size;
   }
   public set sidebarSize(newSize: any[]) {
     console.log(newSize);
     this.size = newSize;
-    console.log('test');
+    console.log("test");
   }
 
-  sendAgainConfirmMail() {
-    console.log('test!');
+  sendAgainConfirmMail(dataItem) {
+    console.log(dataItem);
+    this.confirmArrivalData = {
+      id: dataItem.id,
+      name: dataItem.title.split('+')[0],
+      customer_id: dataItem.customer_id
+    };
     this.requestForConfirmArrival = true;
   }
 
   requestForConfirmArrivalAnswer(answer) {
     console.log(answer);
+    if (answer === "yes") {
+      this.service
+        .sendConfirmArrivalAgain(this.confirmArrivalData)
+        .subscribe(data => {
+          console.log(data);
+        });
+
+      this.toastr.success(
+        this.language.successTitle,
+        this.language.successTextConfirmArrival.replace(
+          "{{QUOTE}}",
+          this.confirmArrivalData.name
+        ),
+        { timeOut: 7000, positionClass: "toast-bottom-right" }
+      );
+    }
     this.requestForConfirmArrival = false;
   }
 }

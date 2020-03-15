@@ -159,7 +159,7 @@
                   </p>
                 </div>
                 <span *ngIf="event.dataItem.confirm === 0" class="fa fa-check-circle-o checkButton notConfirmed"
-                  title="{{language.notConfirmed}}" (click)="sendAgainConfirmMail()"></span>
+                  title="{{language.notConfirmed}}" (click)="sendAgainConfirmMail(event.dataItem)"></span>
                 <span *ngIf="event.dataItem.confirm === 1" class="fa fa-check-circle-o checkButton confirmed"
                   title="{{language.confirmed}}"></span>
               </ng-template>
@@ -170,7 +170,7 @@
                   <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(', ') }} </p>
                 </div>
                 <span *ngIf="event.dataItem.confirm === 0" class="fa fa-check-circle-o checkButton notConfirmed"
-                  title="{{language.notConfirmed}}" (click)="sendAgainConfirmMail()"></span>
+                  title="{{language.notConfirmed}}" (click)="sendAgainConfirmMail(event.dataItem)"></span>
                 <span *ngIf="event.dataItem.confirm === 1" class="fa fa-check-circle-o checkButton confirmed"
                   title="{{language.confirmed}}"></span>
               </ng-template>
@@ -418,7 +418,7 @@
                 <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(', ') }}</p>
               </div>
               <span *ngIf="event.dataItem.confirm === 0" class="fa fa-check-circle-o checkButton notConfirmed"
-                title="{{language.notConfirmed}}" (click)="sendAgainConfirmMail()"></span>
+                title="{{language.notConfirmed}}" (click)="sendAgainConfirmMail(event.dataItem)"></span>
               <span *ngIf="event.dataItem.confirm === 1" class="fa fa-check-circle-o checkButton confirmed"
                 title="{{language.confirmed}}"></span>
             </ng-template>
@@ -429,7 +429,7 @@
                 <p class="eventTitle">{{ event.title.split('+')[1].split(';').join(', ') }}</p>
               </div>
               <span *ngIf="event.dataItem.confirm === 0" class="fa fa-check-circle-o checkButton notConfirmed"
-                title="{{language.notConfirmed}}" (click)="sendAgainConfirmMail()"></span>
+                title="{{language.notConfirmed}}" (click)="sendAgainConfirmMail(event.dataItem)"></span>
               <span *ngIf="event.dataItem.confirm === 1" class="fa fa-check-circle-o checkButton confirmed"
                 title="{{language.confirmed}}"></span>
             </ng-template>

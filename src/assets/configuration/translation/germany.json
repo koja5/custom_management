@@ -97,7 +97,9 @@
     "createNewCustomer": "Neuen Kunden anlegen",
     "eventCategory": "Kategorie",
     "notConfirmed": "Nicht bestätigt",
-    "confirmed": "Bestätigt"
+    "confirmed": "Bestätigt",
+    "successTitle": "Successful",
+    "successTextConfirmArrival": "Successful send request confirm for {{QUOTE}}"
   },
   "navigation-menu": {
     "calendar": "Kalender",

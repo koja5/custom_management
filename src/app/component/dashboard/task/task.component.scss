@@ -208,6 +208,10 @@ kendo-scheduler .k-event {
   border: 2px solid !important;
 }
 
+div.monthviewitem .k-event {
+  width: auto !important;
+}
+
 .textAreaInput {
   width: 90% !important;
   resize: none;

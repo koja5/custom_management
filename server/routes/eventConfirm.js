@@ -10,7 +10,10 @@ var nodemailer = require("nodemailer");
 var hogan = require("hogan.js");
 
 var link = "http://localhost:3000/api/";
-var confirmTemplate = fs.readFileSync('./server/routes/templates/confirmArrival.hjs', 'utf-8');
+var confirmTemplate = fs.readFileSync(
+  "./server/routes/templates/confirmArrival.hjs",
+  "utf-8"
+);
 var compiledTemplate = hogan.compile(confirmTemplate);
 
 var connection = mysql.createPool({
@@ -19,6 +22,7 @@ var connection = mysql.createPool({
   password: "jBa9$6v7",
   database: "management_prod"
 });
+
 var smtpTransport = nodemailer.createTransport({
   host: "78.47.206.131",
   port: 25,
@@ -91,34 +95,61 @@ function confirm() {
       return;
     }
 
-    conn.query("SELECT c.email, t.id FROM tasks t join customers c on t.customer_id = c.id where DATEDIFF(t.start, NOW()) = 3 and t.confirm = 0 order by t.start desc", function(
-      err,
-      rows,
-      fields
-    ) {
-      if (err) {
-        console.error("SQL error:", err);
-      }
-      console.log(rows);
-      rows.forEach(function(to, i, array) {
-        var verificationLinkButton = link + "task/confirmationArrival/" + to.id;
-        console.log(verificationLinkButton);
-        var mailOptions = {
-          from: "info@app-production.eu",
-          subject: "Confirm registration",
-          html: compiledTemplate.render({firstName: to.shortname, verificationLink: verificationLinkButton})
-        };
-        mailOptions.to = to.email;
-        smtpTransport.sendMail(mailOptions, function(error, response) {
-          console.log(response);
-          if (error) {
-            console.log(error);
-          } else {
-            console.log("Message sent: " + response.message);
-          }
+    conn.query(
+      "SELECT c.email, t.id, t.start, t.end, th.therapies_title, us.lastname, us.firstname FROM tasks t join customers c on t.customer_id = c.id join therapy th on t.therapy_id = th.id join users us on t.creator_id = us.id where DATEDIFF(t.start, NOW()) = 2 and t.confirm = 0 order by t.start desc",
+      function(err, rows, fields) {
+        if (err) {
+          console.error("SQL error:", err);
+        }
+        console.log(rows);
+        rows.forEach(function(to, i, array) {
+          var verificationLinkButton =
+            link + "task/confirmationArrival/" + to.id;
+          var convertToDateStart = new Date(to.start);
+          var convertToDateEnd = new Date(to.end);
+          var startHours = convertToDateStart.getHours();
+          var startMinutes = convertToDateStart.getMinutes();
+          var endHours = convertToDateEnd.getHours();
+          var endMinutes = convertToDateEnd.getMinutes();
+          var date =
+            convertToDateStart.getDay() +
+            "." +
+            convertToDateStart.getMonth() +
+            "." +
+            convertToDateStart.getFullYear();
+          var start =
+            (startHours < 10 ? "0" + startHours : startHours) +
+            ":" +
+            (startMinutes < 10 ? "0" + startMinutes : startMinutes);
+          var end =
+            (endHours < 10 ? "0" + endHours : endHours) +
+            ":" +
+            (endMinutes < 10 ? "0" + endMinutes : endMinutes);
+          var mailOptions = {
+            from: '"ClinicNode" info@app-production.eu',
+            subject: "Confirm arrival",
+            html: compiledTemplate.render({
+              firstName: to.shortname,
+              verificationLink: verificationLinkButton,
+              date: date,
+              start: start,
+              end: end,
+              therapy: to.therapies_title,
+              doctor: to.lastname + " " + to.firstname
+            })
+          };
+          mailOptions.to = to.email;
+          smtpTransport.sendMail(mailOptions, function(error, response) {
+            console.log(response);
+            if (error) {
+              console.log(error);
+            } else {
+              console.log("Message sent: " + response.message);
+            }
+          });
         });
-      });
-    });
+      }
+    );
     conn.on("error", function(err) {
       console.log("[mysql error]", err);
     });
@@ -136,35 +167,38 @@ function confirm1() {
       return;
     }
 
-    conn.query("SELECT c.email FROM tasks t join customers c on t.customer_id = c.id where DATEDIFF(t.start, NOW()) = 2 order by t.start desc", function(
-      err,
-      rows,
-      fields
-    ) {
-      if (err) {
-        console.error("SQL error:", err);
-      }
-      console.log(rows);
-      rows.forEach(function(to, i, array) {
-        var verificationLinkButton = link + "/korisnik/verifikacija/" + sha1(to.email);
-        console.log(verificationLinkButton);
-        var mailOptions = {
-          from: "info@app-production.eu",
-          subject: "Confirm registration",
-          // text: 'test'
-          html: compiledTemplate.render({firstName: to.shortname, verificationLink: link + sha1(to.email)})
-        };
-        mailOptions.to = to.email;
-        smtpTransport.sendMail(mailOptions, function(error, response) {
-          console.log(response);
-          if (error) {
-            console.log(error);
-          } else {
-            console.log("Message sent: " + response.message);
-          }
+    conn.query(
+      "SELECT c.email FROM tasks t join customers c on t.customer_id = c.id where DATEDIFF(t.start, NOW()) = 2 order by t.start desc",
+      function(err, rows, fields) {
+        if (err) {
+          console.error("SQL error:", err);
+        }
+        console.log(rows);
+        rows.forEach(function(to, i, array) {
+          var verificationLinkButton =
+            link + "/korisnik/verifikacija/" + sha1(to.email);
+          console.log(verificationLinkButton);
+          var mailOptions = {
+            from: "info@app-production.eu",
+            subject: "Confirm registration",
+            // text: 'test'
+            html: compiledTemplate.render({
+              firstName: to.shortname,
+              verificationLink: link + sha1(to.email)
+            })
+          };
+          mailOptions.to = to.email;
+          smtpTransport.sendMail(mailOptions, function(error, response) {
+            console.log(response);
+            if (error) {
+              console.log(error);
+            } else {
+              console.log("Message sent: " + response.message);
+            }
+          });
         });
-      });
-    });
+      }
+    );
     conn.on("error", function(err) {
       console.log("[mysql error]", err);
     });
