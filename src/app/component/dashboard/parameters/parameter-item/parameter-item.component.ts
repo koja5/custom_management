@@ -71,22 +71,22 @@ export class ParameterItemComponent implements OnInit {
     this.height = window.innerHeight - 81;
     this.height += 'px';
     this.editedRowIndex=-1;
-    console.log(this.type);
+    const superadmin = localStorage.getItem('superadmin');
     // this.editButton[41]=true;
     if (this.type === "Doctors") {
-      this.service.getDoctorType().subscribe(data => {
+      this.service.getDoctorType(superadmin).subscribe(data => {
         this.doctorTypeList = data;
       });
     }
 
     if (this.type === "Therapies") {
-      this.service.getTherapy().subscribe(data => {
+      this.service.getTherapy(superadmin).subscribe(data => {
         this.therapyList = data;
       });
     }
 
     if (this.type === "Therapy") {
-      this.service.getVATTex().subscribe((data: []) => {
+      this.service.getVATTex(superadmin).subscribe((data: []) => {
         this.vatTexList = data.sort(function(a, b) {
           return a["sequence"] - b["sequence"];
         });
@@ -102,7 +102,7 @@ export class ParameterItemComponent implements OnInit {
       })
     );
 
-    this.service.getData(this.type);
+    this.service.getData(this.type, superadmin);
     console.log(this.view);
 
     if (localStorage.getItem("theme") !== null) {
@@ -155,7 +155,8 @@ export class ParameterItemComponent implements OnInit {
     } else {
       this.formGroup = new FormGroup({
         title: new FormControl(),
-        sequence: new FormControl()
+        sequence: new FormControl(),
+        superadmin: new FormControl()
       });
     }
 
@@ -199,7 +200,7 @@ export class ParameterItemComponent implements OnInit {
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
         title: new FormControl(dataItem.title),
-        sequence: new FormControl(dataItem.sequence)
+        sequence: new FormControl(dataItem.sequence),
       });
     }
 
@@ -245,8 +246,9 @@ export class ParameterItemComponent implements OnInit {
     product.doctor_type = this.selectedDoctorType;
     product.therapy_id = this.selectedTherapy;
     product.vat = this.selectedVAT;
+    product.superadmin = localStorage.getItem('superadmin');
 
-    this.service.addData(product, isNew, this.type);
+    this.service.addData(product, isNew, this.type, localStorage.getItem('superadmin'));
 
     sender.closeRow(rowIndex);
     this.refreshData();
@@ -254,7 +256,7 @@ export class ParameterItemComponent implements OnInit {
 
   public removeHandler({ dataItem }) {
     console.log(dataItem);
-    this.service.deleteData(dataItem.id, this.type);
+    this.service.deleteData(dataItem.id, this.type, localStorage.getItem('superadmin'));
     this.refreshData();
   }
 
@@ -266,7 +268,7 @@ export class ParameterItemComponent implements OnInit {
       })
     );
 
-    this.service.getData(this.type);
+    this.service.getData(this.type, localStorage.getItem('superadmin'));
   }
 
   private closeEditor(grid, rowIndex = this.editedRowIndex) {

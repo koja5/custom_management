@@ -18,11 +18,11 @@ export class ParameterItemService extends BehaviorSubject<any[]> {
     super([]);
   }
 
-  getData(type) {
+  getData(type, superadmin) {
     /*return this.http.get('/api/get' + type)
       .map(res => res);*/
-
-    this.fetch('read', null, type)
+    console.log(type);
+    this.fetch('read', null, type, superadmin)
       .pipe(
         tap(data => {
           this.data = data;
@@ -34,40 +34,41 @@ export class ParameterItemService extends BehaviorSubject<any[]> {
       });
   }
 
-  getDoctorType() {
-    return this.http.get('/api/getDoctorList')
+  getDoctorType(superadmin) {
+    return this.http.get('/api/getDoctorList/' + superadmin)
       .map(res => res);
   }
 
-  getTherapy() {
-    return this.http.get('/api/getTherapyList')
+  getTherapy(superadmin) {
+    return this.http.get('/api/getTherapyList/' + superadmin)
       .map(res => res);
   }
 
-  getVATTex() {
-    return this.http.get('/api/getVATTaxList')
+  getVATTex(superadmin) {
+    return this.http.get('/api/getVATTaxList/' + superadmin)
       .map(res => res);
   }
 
-  public addData(data: any, isNew?: boolean, type?: string) {
+  public addData(data: any, isNew?: boolean, type?: string, superadmin?: any) {
     const action = isNew ? CREATE_ACTION : UPDATE_ACTION;
 
     this.reset();
 
-    this.fetch(action, data, type)
-      .subscribe(() => this.getData(type), () => this.getData(type));
+    this.fetch(action, data, type, superadmin)
+      .subscribe(() => this.getData(type, superadmin), () => this.getData(type, superadmin));
   }
 
-  public deleteData(data: any, type?: string) {
+  public deleteData(data: any, type?: string, superadmin?: any) {
     this.reset();
 
-    this.fetch(REMOVE_ACTION, data, type)
-      .subscribe(() => this.getData(type), () => this.getData(type));
+    this.fetch(REMOVE_ACTION, data, type, superadmin)
+      .subscribe(() => this.getData(type, superadmin), () => this.getData(type, superadmin));
   }
 
-  private fetch(action, data, type): Observable<any[]> {
+  private fetch(action, data, type, superadmin): Observable<any[]> {
     if (action === 'read') {
-      return this.http.get('/api/get' + type + 'List')
+      console.log(superadmin);
+      return this.http.get('/api/get' + type + 'List/' + superadmin)
         .pipe(map(res => res as any[]));
     } else if (action === 'add') {
       return this.http.post('/api/add' + type + 'List', data)

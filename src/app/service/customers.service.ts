@@ -199,8 +199,8 @@ export class CustomersService {
       .map(res => res);
   }
 
-  getParameters(type) {
-    return this.http.get('/api/get' + type + 'List')
+  getParameters(type, superadmin) {
+    return this.http.get('/api/get' + type + 'List/' + superadmin)
       .map(res => res);
   }
 

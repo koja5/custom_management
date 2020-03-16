@@ -485,6 +485,8 @@ router.post("/login", (req, res, next) => {
                 superadmin: rows[0].superadmin
               });
             } else {
+              console.log(sha1(reqObj.password));
+              console.log(reqObj.email);
               conn.query(
                 "SELECT * FROM users_superadmin WHERE email=? AND password=?",
                 [reqObj.email, sha1(reqObj.password)],
@@ -2697,7 +2699,7 @@ router.get("/getTherapy/:id", function (req, res, next) {
   });
 });
 
-router.get("/getComplaintList", function (req, res, next) {
+router.get("/getComplaintList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       res.json({
@@ -2706,7 +2708,9 @@ router.get("/getComplaintList", function (req, res, next) {
       });
       return;
     }
-    conn.query("select * from complaint_list", function (err, rows) {
+    var superadmin = req.params.superadmin;
+    console.log(superadmin);
+    conn.query("select * from complaint_list where superadmin = '" + superadmin + "'", function (err, rows) {
       conn.release();
       if (!err) {
         res.json(rows);
@@ -2743,7 +2747,8 @@ router.post("/addComplaintList", function (req, res, next) {
     console.log(req);
     var date = {
       title: req.body.title,
-      sequence: req.body.sequence
+      sequence: req.body.sequence,
+      superadmin: req.body.superadmin
     };
 
     conn.query("insert into complaint_list SET ?", date, function (err, rows) {
@@ -2821,7 +2826,8 @@ router.post("/updateComplaintList", function (req, res, next) {
     var data = {
       id: req.body.id,
       title: req.body.title,
-      sequence: req.body.sequence
+      sequence: req.body.sequence,
+      superadmin: req.body.superadmin
     };
 
     conn.query(
@@ -2850,7 +2856,7 @@ router.post("/updateComplaintList", function (req, res, next) {
 
 // start therapy_list
 
-router.get("/getTherapyList", function (req, res, next) {
+router.get("/getTherapyList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       res.json({
@@ -2859,7 +2865,9 @@ router.get("/getTherapyList", function (req, res, next) {
       });
       return;
     }
-    conn.query("select * from therapy_list", function (err, rows) {
+    var superadmin = req.params.superadmin;
+    console.log(superadmin);
+    conn.query("select * from therapy_list where superadmin = '" + superadmin + "'", function (err, rows) {
       conn.release();
       if (!err) {
         res.json(rows);
@@ -2903,7 +2911,8 @@ router.post("/addTherapyList", function (req, res, next) {
       net_price: req.body.net_price,
       vat: req.body.vat,
       gross_price: req.body.gross_price,
-      category: req.body.category
+      category: req.body.category,
+      superadmin: req.body.superadmin
     };
 
     conn.query("insert into therapy_list SET ?", date, function (err, rows) {
@@ -2989,7 +2998,8 @@ router.post("/updateTherapyList", function (req, res, next) {
       net_price: req.body.net_price,
       vat: req.body.vat,
       gross_price: req.body.gross_price,
-      category: req.body.category
+      category: req.body.category,
+      superadmin: req.body.superadmin
     };
 
     conn.query(
@@ -3020,7 +3030,7 @@ router.post("/updateTherapyList", function (req, res, next) {
 
 // start recommendation_list
 
-router.get("/getRecommendationList", function (req, res, next) {
+router.get("/getRecommendationList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       res.json({
@@ -3029,7 +3039,8 @@ router.get("/getRecommendationList", function (req, res, next) {
       });
       return;
     }
-    conn.query("select * from recommendation_list", function (err, rows) {
+    var superadmin = req.params.superadmin;
+    conn.query("select * from recommendation_list where superadmin = '" + superadmin + "'", function (err, rows) {
       conn.release();
       if (!err) {
         res.json(rows);
@@ -3066,7 +3077,8 @@ router.post("/addRecommendationList", function (req, res, next) {
     console.log(req);
     var date = {
       title: req.body.title,
-      sequence: req.body.sequence
+      sequence: req.body.sequence,
+      superadmin: req.body.superadmin
     };
 
     conn.query("insert into recommendation_list SET ?", date, function (
@@ -3147,7 +3159,8 @@ router.post("/updateRecommendationList", function (req, res, next) {
     var data = {
       id: req.body.id,
       title: req.body.title,
-      sequence: req.body.sequence
+      sequence: req.body.sequence,
+      superadmin: req.body.superadmin
     };
 
     conn.query(
@@ -3178,7 +3191,7 @@ router.post("/updateRecommendationList", function (req, res, next) {
 
 // start relationship_list
 
-router.get("/getRelationshipList", function (req, res, next) {
+router.get("/getRelationshipList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       res.json({
@@ -3187,7 +3200,8 @@ router.get("/getRelationshipList", function (req, res, next) {
       });
       return;
     }
-    conn.query("select * from relationship_list", function (err, rows) {
+    var superadmin = req.params.superadmin;
+    conn.query("select * from relationship_list where superadmin = '" + superadmin + "'", function (err, rows) {
       conn.release();
       if (!err) {
         res.json(rows);
@@ -3224,7 +3238,8 @@ router.post("/addRelationshipList", function (req, res, next) {
     console.log(req);
     var date = {
       title: req.body.title,
-      sequence: req.body.sequence
+      sequence: req.body.sequence,
+      superadmin: req.body.superadmin
     };
 
     conn.query("insert into relationship_list SET ?", date, function (
@@ -3305,7 +3320,8 @@ router.post("/updateRelationshipList", function (req, res, next) {
     var data = {
       id: req.body.id,
       title: req.body.title,
-      sequence: req.body.sequence
+      sequence: req.body.sequence,
+      superadmin: req.body.superadmin
     };
 
     conn.query(
@@ -3336,7 +3352,7 @@ router.post("/updateRelationshipList", function (req, res, next) {
 
 // start social_list
 
-router.get("/getSocialList", function (req, res, next) {
+router.get("/getSocialList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       res.json({
@@ -3345,7 +3361,8 @@ router.get("/getSocialList", function (req, res, next) {
       });
       return;
     }
-    conn.query("select * from social_list", function (err, rows) {
+    var superadmin = req.params.superadmin;
+    conn.query("select * from social_list where superadmin = '" + superadmin + "'", function (err, rows) {
       conn.release();
       if (!err) {
         res.json(rows);
@@ -3382,7 +3399,8 @@ router.post("/addSocialList", function (req, res, next) {
     console.log(req);
     var date = {
       title: req.body.title,
-      sequence: req.body.sequence
+      sequence: req.body.sequence,
+      superadmin: req.body.superadmin
     };
 
     conn.query("insert into social_list SET ?", date, function (err, rows) {
@@ -3460,7 +3478,8 @@ router.post("/updateSocialList", function (req, res, next) {
     var data = {
       id: req.body.id,
       title: req.body.title,
-      sequence: req.body.sequence
+      sequence: req.body.sequence,
+      superadmin: req.body.superadmin
     };
 
     conn.query(
@@ -3491,7 +3510,7 @@ router.post("/updateSocialList", function (req, res, next) {
 
 // start doctor_list
 
-router.get("/getDoctorList", function (req, res, next) {
+router.get("/getDoctorList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       res.json({
@@ -3500,7 +3519,8 @@ router.get("/getDoctorList", function (req, res, next) {
       });
       return;
     }
-    conn.query("select * from doctor_list", function (err, rows) {
+    var superadmin = req.params.superadmin;
+    conn.query("select * from doctor_list where superadmin = '" + superadmin + "'", function (err, rows) {
       conn.release();
       if (!err) {
         res.json(rows);
@@ -3537,7 +3557,8 @@ router.post("/addDoctorList", function (req, res, next) {
     console.log(req);
     var date = {
       title: req.body.title,
-      sequence: req.body.sequence
+      sequence: req.body.sequence,
+      superadmin: req.body.superadmin
     };
 
     conn.query("insert into doctor_list SET ?", date, function (err, rows) {
@@ -3615,7 +3636,8 @@ router.post("/updateDoctorList", function (req, res, next) {
     var data = {
       id: req.body.id,
       title: req.body.title,
-      sequence: req.body.sequence
+      sequence: req.body.sequence,
+      superadmin: req.body.superadmin
     };
 
     conn.query(
@@ -3646,7 +3668,7 @@ router.post("/updateDoctorList", function (req, res, next) {
 
 // start doctors_list
 
-router.get("/getDoctorsList", function (req, res, next) {
+router.get("/getDoctorsList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       res.json({
@@ -3655,7 +3677,8 @@ router.get("/getDoctorsList", function (req, res, next) {
       });
       return;
     }
-    conn.query("select * from doctors_list", function (err, rows) {
+    var superadmin = req.params.superadmin;
+    conn.query("select * from doctors_list where superadmin = '" + superadmin + "'", function (err, rows) {
       conn.release();
       if (!err) {
         res.json(rows);
@@ -3700,7 +3723,8 @@ router.post("/addDoctorsList", function (req, res, next) {
       city: req.body.city,
       telephone: req.body.telephone,
       email: req.body.email,
-      doctor_type: req.body.doctor_type
+      doctor_type: req.body.doctor_type,
+      superadmin: req.body.superadmin
     };
 
     conn.query("insert into doctors_list SET ?", date, function (err, rows) {
@@ -3785,7 +3809,8 @@ router.post("/updateDoctorsList", function (req, res, next) {
       city: req.body.city,
       telephone: req.body.telephone,
       email: req.body.email,
-      doctor_type: req.body.doctor_type
+      doctor_type: req.body.doctor_type,
+      superadmin: req.body.superadmin
     };
 
     conn.query(
@@ -3816,7 +3841,7 @@ router.post("/updateDoctorsList", function (req, res, next) {
 
 // start therapies_list
 
-router.get("/getTreatmentList", function (req, res, next) {
+router.get("/getTreatmentList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       res.json({
@@ -3825,7 +3850,8 @@ router.get("/getTreatmentList", function (req, res, next) {
       });
       return;
     }
-    conn.query("select * from treatment_list", function (err, rows) {
+    var superadmin = req.params.superadmin;
+    conn.query("select * from treatment_list where superadmin = '" + superadmin + "'", function (err, rows) {
       conn.release();
       if (!err) {
         res.json(rows);
@@ -3862,7 +3888,8 @@ router.post("/addTreatmentList", function (req, res, next) {
     console.log(req);
     var date = {
       title: req.body.title,
-      sequence: req.body.sequence
+      sequence: req.body.sequence,
+      superadmin: req.body.superadmin
     };
 
     conn.query("insert into treatment_list SET ?", date, function (err, rows) {
@@ -3939,7 +3966,8 @@ router.post("/updateTreatmentList", function (req, res, next) {
     var data = {
       id: req.body.id,
       title: req.body.title,
-      sequence: req.body.sequence
+      sequence: req.body.sequence,
+      superadmin: req.body.superadmin
     };
 
     conn.query(
@@ -3970,7 +3998,7 @@ router.post("/updateTreatmentList", function (req, res, next) {
 
 // start vattax_list
 
-router.get("/getVATTaxList", function (req, res, next) {
+router.get("/getVATTaxList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       res.json({
@@ -3979,7 +4007,8 @@ router.get("/getVATTaxList", function (req, res, next) {
       });
       return;
     }
-    conn.query("select * from vattax_list", function (err, rows) {
+    var superadmin = req.params.superadmin;
+    conn.query("select * from vattax_list where superadmin = '" + superadmin +"'", function (err, rows) {
       conn.release();
       if (!err) {
         res.json(rows);
@@ -4016,7 +4045,8 @@ router.post("/addVATTaxList", function (req, res, next) {
     console.log(req);
     var date = {
       title: req.body.title,
-      sequence: req.body.sequence
+      sequence: req.body.sequence,
+      superadmin: req.body.superadmin
     };
 
     conn.query("insert into vattax_list SET ?", date, function (err, rows) {
@@ -4093,7 +4123,8 @@ router.post("/updateVATTaxList", function (req, res, next) {
     var data = {
       id: req.body.id,
       title: req.body.title,
-      sequence: req.body.sequence
+      sequence: req.body.sequence,
+      superadmin: req.body.superadmin
     };
 
     conn.query(
@@ -4124,7 +4155,7 @@ router.post("/updateVATTaxList", function (req, res, next) {
 
 // start cs_list
 
-router.get("/getCSList", function (req, res, next) {
+router.get("/getCSList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       res.json({
@@ -4133,7 +4164,8 @@ router.get("/getCSList", function (req, res, next) {
       });
       return;
     }
-    conn.query("select * from cs_list", function (err, rows) {
+    var superadmin = req.params.superadmin;
+    conn.query("select * from cs_list where superadmin = '" + superadmin + "'", function (err, rows) {
       conn.release();
       if (!err) {
         res.json(rows);
@@ -4170,7 +4202,8 @@ router.post("/addCSList", function (req, res, next) {
     console.log(req);
     var date = {
       title: req.body.title,
-      sequence: req.body.sequence
+      sequence: req.body.sequence,
+      superadmin: req.body.superadmin
     };
 
     conn.query("insert into cs_list SET ?", date, function (err, rows) {
@@ -4248,7 +4281,8 @@ router.post("/updateCSList", function (req, res, next) {
     var data = {
       id: req.body.id,
       title: req.body.title,
-      sequence: req.body.sequence
+      sequence: req.body.sequence,
+      superadmin: req.body.superadmin
     };
 
     conn.query(
@@ -4279,7 +4313,7 @@ router.post("/updateCSList", function (req, res, next) {
 
 // start state_list
 
-router.get("/getStateList", function (req, res, next) {
+router.get("/getStateList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       res.json({
@@ -4288,7 +4322,8 @@ router.get("/getStateList", function (req, res, next) {
       });
       return;
     }
-    conn.query("select * from state_list", function (err, rows) {
+    var superadmin = req.params.superadmin;
+    conn.query("select * from state_list where superadmin = '" + superadmin + "'", function (err, rows) {
       conn.release();
       if (!err) {
         res.json(rows);
@@ -4325,7 +4360,8 @@ router.post("/addStateList", function (req, res, next) {
     console.log(req);
     var date = {
       title: req.body.title,
-      sequence: req.body.sequence
+      sequence: req.body.sequence,
+      superadmin: req.body.superadmin
     };
 
     conn.query("insert into state_list SET ?", date, function (err, rows) {
@@ -4403,7 +4439,8 @@ router.post("/updateStateList", function (req, res, next) {
     var data = {
       id: req.body.id,
       title: req.body.title,
-      sequence: req.body.sequence
+      sequence: req.body.sequence,
+      superadmin: req.body.superadmin
     };
 
     conn.query(

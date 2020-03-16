@@ -170,6 +170,7 @@ export class TaskComponent implements OnInit {
     this.id = Number(localStorage.getItem("idUser"));
     console.log(this.events);
     this.calendars = [];
+    const superadmin = localStorage.getItem('superadmin');
 
     /*this.customer.getCustomers(localStorage.getItem("superadmin"), val => {
       console.log(val);
@@ -395,7 +396,7 @@ export class TaskComponent implements OnInit {
       }, 50);
     }
 
-    this.getParameters();
+    this.getParameters(superadmin);
   }
 
   clearAllSelectedData() {
@@ -1444,43 +1445,36 @@ export class TaskComponent implements OnInit {
     this.message.sendDateChange(event);
   }
 
-  getParameters() {
-    this.customer.getParameters("Complaint").subscribe((data: []) => {
+  getParameters(superadmin) {
+    this.customer.getParameters("Complaint", superadmin).subscribe((data: []) => {
       console.log(data);
       this.complaintValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
-    this.customer.getParameters("Therapy").subscribe((data: []) => {
+    this.customer.getParameters("Therapy", superadmin).subscribe((data: []) => {
       console.log(data);
       this.therapyValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
-    this.customer.getParameters("Treatment").subscribe((data: []) => {
+    this.customer.getParameters("Treatment", superadmin).subscribe((data: []) => {
       console.log(data);
       this.treatmentValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
-    this.customer.getParameters("CS").subscribe((data: []) => {
+    this.customer.getParameters("CS", superadmin).subscribe((data: []) => {
       console.log(data);
       this.CSValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
-    this.customer.getParameters("CS").subscribe((data: []) => {
-      console.log(data);
-      this.CSValue = data.sort(function(a, b) {
-        return a["sequence"] - b["sequence"];
-      });
-    });
-
-    this.customer.getParameters("State").subscribe((data: []) => {
+    this.customer.getParameters("State", superadmin).subscribe((data: []) => {
       console.log(data);
       this.stateValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];

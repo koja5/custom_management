@@ -144,13 +144,13 @@ export class BaseDateComponent implements OnInit {
   }
 
   getParameters() {
-    this.service.getParameters("Complaint").subscribe((data: []) => {
+    this.service.getParameters("Complaint", localStorage.getItem('superadmin')).subscribe((data: []) => {
       this.complaintValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
-    this.service.getParameters("Therapy").subscribe((data: []) => {
+    this.service.getParameters("Therapy", localStorage.getItem('superadmin')).subscribe((data: []) => {
       this.therapyValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
@@ -160,7 +160,7 @@ export class BaseDateComponent implements OnInit {
       this.allUsers = val;
     });
 
-    this.service.getParameters("Treatment").subscribe((data: []) => {
+    this.service.getParameters("Treatment", localStorage.getItem('superadmin')).subscribe((data: []) => {
       this.treatmentValue = data.sort(function(a, b) {
         return a["sequence"] - b["sequence"];
       });
@@ -367,11 +367,11 @@ export class BaseDateComponent implements OnInit {
     this.operationMode = "add";
     // this.complaintValue = JSON.parse(localStorage.getItem('language'))['complaint'];
     // this.therapyValue = JSON.parse(localStorage.getItem('language'))['therapy'];
-    this.service.getParameters("Therapy").subscribe(data => {
+    this.service.getParameters("Therapy", localStorage.getItem('superadmin')).subscribe(data => {
       console.log(data);
       this.therapyValue = data;
     });
-    this.service.getParameters("Complaint").subscribe(data => {
+    this.service.getParameters("Complaint", localStorage.getItem('superadmin')).subscribe(data => {
       this.complaintValue = data;
     });
     this.complaint = true;
@@ -390,11 +390,11 @@ export class BaseDateComponent implements OnInit {
       'complaint'
     ];
     this.therapyValue = JSON.parse(localStorage.getItem('language'))['therapy'];*/
-    this.service.getParameters("Therapy").subscribe(data => {
+    this.service.getParameters("Therapy", localStorage.getItem('superadmin')).subscribe(data => {
       console.log(data);
       this.therapyValue = data;
     });
-    this.service.getParameters("Complaint").subscribe(data => {
+    this.service.getParameters("Complaint", localStorage.getItem('superadmin')).subscribe(data => {
       this.complaintValue = data;
     });
 
