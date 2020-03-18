@@ -95,7 +95,7 @@
   </kendo-dialog>
 </div>
 
-<kendo-window title="{{language.createNewCustomer}}" *ngIf="customer" [minWidth]="700" [width]="850" [height]="670"
+<kendo-window title="{{language.createNewCustomer}}" *ngIf="customer" [minWidth]="700" [width]="850" [height]="auto"
   (close)="closeCustomer()">
   <form name="loginForm" class="loginForm" (ngSubmit)="createCustomer(customer)" #customerForm="ngForm">
     <div class="form-group">
@@ -139,7 +139,7 @@
             </kendo-textbox-container>
           </div>
           <div class="form-group col-md-12 col-xs-12">
-            <div class="col-md-6 col-xs-12">
+            <div class="col-md-6 col-xs-12" style="padding-top: 5px;">
               <!--<kendo-textbox-container floatingLabel="{{language.gender}}">
                 <div style="padding-left: 45px;">
                   <input type="radio" name="gender" id="female" class="k-radio"
@@ -153,7 +153,7 @@
                 </div>
               </kendo-textbox-container>
               -->
-              <p>{{language.gender}}</p>
+              <p style="font-size: 10px; color: #0000006b; padding-bottom: 5px;">{{language.gender}}</p>
               <label class="k-radio-label col-md-6 col-xs-12" for="female">
                 <input type="radio" name="gender" id="female" class="k-radio"
                   checked="data.gender === 'female' ? checked : ''" [(ngModel)]="data.gender" [value]="'female'">

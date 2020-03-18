@@ -73,19 +73,6 @@
               <header></header>
             </div>
             <div class="white-box">
-              <!-- Nav tabs -->
-              <!--<div class="p-rl-20">
-                <ul class="nav customtab nav-tabs" role="tablist" style="padding-bottom: 10px;">
-                  <li class="nav-item"><a (click)="changeTab('profile')" class="nav-link"
-                      [ngClass]="currentTab === 'profile' ? 'active' : ''">{{language['aboutMe']}}</a></li>
-                  <li class="nav-item"><a (click)="changeTab('base_one')" class="nav-link"
-                      [ngClass]="currentTab === 'base_one' ? 'active' : ''">{{language.baseOne}}</a></li>
-                  <li class="nav-item"><a (click)="changeTab('base_two')" class="nav-link"
-                      [ngClass]="currentTab === 'base_two' ? 'active' : ''">{{language.baseTwo}}</a></li>
-                  <li class="nav-item"><a (click)="changeTab('physical_illness')" class="nav-link"
-                      [ngClass]="currentTab === 'physical_illness' ? 'active' : ''">{{language.physicalIllness}}</a>
-                  </li>
-                </ul>>-->
               <div class="tabs widget">
                 <ul class="nav nav-tabs widget">
                   <li [ngClass]="currentTab === 'profile' ? 'active' : ''"> <a
@@ -620,8 +607,7 @@
                         </div>
                       </div>
                       <div class="row-grid" *ngIf="gridComplaint !== undefined">
-                        <button kendoButton [primary]="true" [icon]="'add'"
-                          style="width: auto; margin-bottom: 2vh;"
+                        <button kendoButton [primary]="true" [icon]="'add'" style="width: auto; margin-bottom: 2vh;"
                           (click)="openComplaintModal(); changeTheme(theme);">{{language.addComplaint}}</button>
                         <kendo-grid [data]="gridComplaint" [height]="390" [resizable]="true"
                           [loading]="loadingGridComplaint">
@@ -666,8 +652,7 @@
                         </div>
                       </div>
                       <div class="row-grid" *ngIf="gridTherapy !== undefined">
-                        <button kendoButton [primary]="true" [icon]="'add'"
-                          style="width: auto; margin-bottom: 2vh;"
+                        <button kendoButton [primary]="true" [icon]="'add'" style="width: auto; margin-bottom: 2vh;"
                           (click)="openTherapyModal(); changeTheme(theme);">{{language.addTherapy}}</button>
                         <kendo-grid [data]="gridTherapy" [height]="390" [resizable]="true"
                           [loading]="loadingGridTherapy">
@@ -716,8 +701,7 @@
                         </div>
                       </div>
                       <div class="row-grid" *ngIf="documents !== undefined">
-                        <button kendoButton [primary]="true" [icon]="'add'"
-                          style="width: auto; margin-bottom: 2vh;"
+                        <button kendoButton [primary]="true" [icon]="'add'" style="width: auto; margin-bottom: 2vh;"
                           (click)="upload.open()">{{language.uploadDocument}}</button>
                         <kendo-grid [data]="documents" [height]="390" [resizable]="true"
                           [loading]="loadingGridDocument">

@@ -43,12 +43,12 @@
           <span>Orientation: </span>
 
           <input type="radio" name="orientation" id="horizontal" class="k-radio" checked="checked"
-            [(ngModel)]="orientation" [value]="'horizontal'" />
-          <label class="k-radio-label" for="horizontal">Horizontal</label>
+            [(ngModel)]="orientation" [value]="'horizontal'" style="margin: 0px" />
+          <label class="k-radio-label" for="horizontal" style="padding-right: 10px;">Horizontal</label>
 
           <input type="radio" name="orientation" id="vertical" class="k-radio" [(ngModel)]="orientation"
-            [value]="'vertical'" />
-          <label class="k-radio-label" for="vertical" style="margin-left: 2vh;">Vertical</label>
+            [value]="'vertical'" style="margin: 0px" />
+          <label class="k-radio-label" for="vertical">Vertical</label>
 
         </div>
       </div>
@@ -694,7 +694,7 @@
               </kendo-textbox-container>
             </div>
             <div class="form-group col-md-12 col-xs-12">
-              <div class="col-md-6 col-xs-12">
+              <div class="col-md-6 col-xs-12" style="padding-top: 5px;">
                 <!--<kendo-textbox-container floatingLabel="{{language.gender}}">
                   <div style="padding-left: 45px;">
                     <input type="radio" name="gender" id="female" class="k-radio"
@@ -708,7 +708,7 @@
                   </div>
                 </kendo-textbox-container>
                 -->
-                <p>{{language.gender}}</p>
+                <p style="font-size: 10px; color: #0000006b;">{{language.gender}}</p>
                 <label class="k-radio-label col-md-6 col-xs-12" for="female">
                   <input type="radio" name="gender" id="female" class="k-radio"
                     checked="data.gender === 'female' ? checked : ''" [(ngModel)]="data.gender" [value]="'female'">

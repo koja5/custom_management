@@ -5,165 +5,366 @@
 <div *ngIf="!loading">
 
   <button kendoButton [primary]="true" style="margin: 1vh;" (click)="backToGrid()"><i class="fa fa-arrow-left"></i>
-    &nbsp; Back to grid</button>
+    &nbsp; {{language.backToGrid}}</button>
+
+  <div style="float: right; padding-right: 30px; padding-top: 14px;">
+    <button kendoButton [icon]="'edit'" (click)="editOptions()" [primary]="true"
+      style="background: #6673FC !important; margin-left: 12px;">{{language.edit}}</button>
+    <div class="dropdown-grid">
+      <button class="btn-grid" style="border-left:1px solid #0d8bf2">
+        <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content-grid">
+        <a (click)="open('dialog')"><span class="k-icon k-i-delete"></span> {{language.delete}}</a>
+        <a (click)="printUser()"><span class="k-icon k-i-print"></span> {{language.print}}</a>
+      </div>
+    </div>
+  </div>
+
   <!--[routerLink]="['../../', {outlets: {'dashboard': ['users']}}]"-->
-  <div class="vd_content-section clearfix" *ngIf="data !== undefined">
-    <div class="row">
-      <div class="col-sm-3">
-        <div class="widget light-widget panel-bd-top">
-          <div class="no-title"> </div>
-          <div class="panel-body">
-            <div class="text-center vd_info-parent"> <img alt="example image" style="width: 190px;" [src]="imagePath"
-                class="rounded-circle"> </div>
-            <div style="text-align: center;">
-              <h2 class="font-semibold mgbt-xs-5" style="text-align: center;">{{data.firstname}} {{data.lastname}}</h2>
-              <h4 *ngIf="data.type === 0">Superadmin</h4>
-              <h4 *ngIf="data.type === 1">Admin</h4>
-              <h4 *ngIf="data.type === 2">Manager</h4>
-              <h4 *ngIf="data.type === 3">Employee</h4>
+  <div class="row" *ngIf="data !== undefined">
+    <div class="col-md-12">
+      <!-- BEGIN PROFILE SIDEBAR -->
+      <div class="profile-sidebar">
+        <div class="card card-topline-aqua card-container">
+          <div class="card-body no-padding height-9">
+            <div class="row">
+              <div class="profile-userpic">
+                <img alt="example image" style="width: 190px;" [src]="imagePath" class="rounded-circle">
+              </div>
+              <div style="text-align: center;">
+                <h2 class="font-semibold mgbt-xs-5" style="text-align: center;">{{data.firstname}} {{data.lastname}}
+                </h2>
+                <h4 *ngIf="data.type === 0">Superadmin</h4>
+                <h4 *ngIf="data.type === 1">Admin</h4>
+                <h4 *ngIf="data.type === 2">Manager</h4>
+                <h4 *ngIf="data.type === 3">Employee</h4>
+              </div>
+              <div class="mgtp-20" style="text-align: center;">
+                <span *ngIf="data.active" class="label label-success">Active</span>
+                <span *ngIf="!data.active" class="label label-danger">Inactive</span>
+              </div>
             </div>
-            <div class="mgtp-20">
-              <table class="table table-striped table-hover">
-                <tbody>
-                  <tr>
-                    <td style="width:60%;">Status</td>
-                    <td>
-                      <span *ngIf="data.active" class="label label-success">Active</span>
-                      <span *ngIf="!data.active" class="label label-danger">Inactive</span>
-                    </td>
-                  </tr>
-                  <!--<tr>
-                  <td>User Rating</td>
-                  <td><i class="fa fa-star vd_yellow fa-fw"></i><i class="fa fa-star vd_yellow fa-fw"></i><i
-                      class="fa fa-star vd_yellow fa-fw"></i><i class="fa fa-star vd_yellow fa-fw"></i><i
-                      class="fa fa-star vd_yellow fa-fw"></i></td>
-                </tr>
-                <tr>
-                  <td>Member Since</td>
-                  <td> Jan 07, 2014 </td>
-                </tr>-->
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div>
-            <div class="vd_info tr" style="height: 7vh; text-align: center"> <button kendoButton class="k-delete"
-                [icon]="'k-icon k-i-delete'" (click)="editOptions()" style="text-align: center">Edit</button> </div>
-            <div class="vd_info tr" style="height: 7vh; text-align: center"> <button kendoButton class="k-delete"
-                [icon]="'k-icon k-i-delete'" (click)="open('dialog')" style="text-align: center">Delete</button> </div>
-            <div class="vd_info tr" style="text-align: center;"> <button kendoButton class="k-delete"
-                [icon]="'k-icon k-i-copy'" (click)="newCustomer()">Copy</button> </div>
           </div>
         </div>
-
       </div>
-      <div class="col-sm-9">
-        <div class="tabs widget">
-          <div class="tab-content">
-            <div id="profile-tab" class="tab-pane active">
-              <div class="pd-20">
-                <div *ngIf="type === 'calendar'" class="vd_info tr" style="height: 12vh;"> <button kendoButton
-                    class="k-save" [icon]="'k-icon k-i-save'" (click)="newCustomer()"
-                    style="float: right;">SAVE</button>
+      <!-- BEGIN PROFILE CONTENT -->
+      <div class="profile-content">
+        <div class="row">
+          <div class="card card-container">
+            <div class="card-topline-aqua">
+              <header></header>
+            </div>
+            <div>
+              <div class="tabs widget">
+                <div class="col-md-5 col-sm-12 status-widget">
+                  <div class="card card-stats">
+                    <!-- Card body -->
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col">
+                          <h5 class="card-title text-uppercase text-muted mb-0">Total traffic</h5>
+                          <span class="h2 font-weight-bold mb-0">350,897</span>
+                        </div>
+                        <div class="col-auto">
+                          <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
+                            <i class="fa fa-user"></i>
+                          </div>
+                        </div>
+                      </div>
+                      <p class="mt-3 mb-0 text-sm">
+                        <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                        <span class="text-nowrap">Since last month</span>
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <div class="row mgbt-xs-0">
-                      <label class="col-xs-5 control-label">First Name:</label>
-                      <div class="col-xs-7 controls">{{data.firstname}}</div>
-                      <!-- col-sm-10 -->
+                <div class="col-md-5 col-sm-12 status-widget">
+                  <div class="card card-stats">
+                    <!-- Card body -->
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col">
+                          <h5 class="card-title text-uppercase text-muted mb-0">Total traffic</h5>
+                          <span class="h2 font-weight-bold mb-0">350,897</span>
+                        </div>
+                        <div class="col-auto">
+                          <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
+                            <i class="fa fa-area-chart"></i>
+                          </div>
+                        </div>
+                      </div>
+                      <p class="mt-3 mb-0 text-sm">
+                        <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                        <span class="text-nowrap">Since last month</span>
+                      </p>
                     </div>
                   </div>
-                  <div class="col-sm-6">
-                    <div class="row mgbt-xs-0">
-                      <label class="col-xs-5 control-label">Last Name:</label>
-                      <div class="col-xs-7 controls">{{data.lastname}}</div>
-                      <!-- col-sm-10 -->
+                </div>
+                <div class="col-md-5 col-sm-12 status-widget">
+                  <div class="card card-stats">
+                    <!-- Card body -->
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col">
+                          <h5 class="card-title text-uppercase text-muted mb-0">Total traffic</h5>
+                          <span class="h2 font-weight-bold mb-0">350,897</span>
+                        </div>
+                        <div class="col-auto">
+                          <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                            <i class="fa fa-line-chart"></i>
+                          </div>
+                        </div>
+                      </div>
+                      <p class="mt-3 mb-0 text-sm">
+                        <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                        <span class="text-nowrap">Since last month</span>
+                      </p>
                     </div>
                   </div>
-                  <div class="col-sm-6">
-                    <div class="row mgbt-xs-0">
-                      <label class="col-xs-5 control-label">Gender:</label>
-                      <div class="col-xs-7 controls">{{data.gender}} <i *ngIf="data.gender === 'male'"
-                          class="fa fa-mars" style="color: blue;"></i><i *ngIf="data.gender === 'female'"
-                          class="fa fa-venus" style="color: pink;"></i></div>
-                      <!-- col-sm-10 -->
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="row mgbt-xs-0">
-                      <label class="col-xs-5 control-label">User Name:</label>
-                      <div class="col-xs-7 controls">{{data.shortname}}</div>
-                      <!-- col-sm-10 -->
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="row mgbt-xs-0">
-                      <label class="col-xs-5 control-label">Email:</label>
-                      <div class="col-xs-7 controls">{{data.email}}</div>
-                      <!-- col-sm-10 -->
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="row mgbt-xs-0">
-                      <label class="col-xs-5 control-label">Street:</label>
-                      <div class="col-xs-7 controls">{{data.street}}</div>
-                      <!-- col-sm-10 -->
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="row mgbt-xs-0">
-                      <label class="col-xs-5 control-label">Street number:</label>
-                      <div class="col-xs-7 controls">{{data.streetnumber}}</div>
-                      <!-- col-sm-10 -->
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="row mgbt-xs-0">
-                      <label class="col-xs-5 control-label">Zip code:</label>
-                      <div class="col-xs-7 controls">{{data.zipcode}}</div>
-                      <!-- col-sm-10 -->
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="row mgbt-xs-0">
-                      <label class="col-xs-5 control-label">City:</label>
-                      <div class="col-xs-7 controls">{{data.city}}</div>
-                      <!-- col-sm-10 -->
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="row mgbt-xs-0">
-                      <label class="col-xs-5 control-label">Phone:</label>
-                      <div class="col-xs-7 controls">{{data.mobile}}</div>
-                      <!-- col-sm-10 -->
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="row mgbt-xs-0">
-                      <label class="col-xs-5 control-label">Telephone:</label>
-                      <div class="col-xs-7 controls">{{data.telephone}}</div>
-                      <!-- col-sm-10 -->
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="row mgbt-xs-0">
-                      <label class="col-xs-5 control-label">Birthday:</label>
-                      <div class="col-xs-7 controls">{{data.birthday}}</div>
-                      <!-- col-sm-10 -->
+                </div>
+                <div class="col-md-5 col-sm-12 status-widget">
+                  <div class="card card-stats">
+                    <!-- Card body -->
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col">
+                          <h5 class="card-title text-uppercase text-muted mb-0">Total traffic</h5>
+                          <span class="h2 font-weight-bold mb-0">350,897</span>
+                        </div>
+                        <div class="col-auto">
+                          <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
+                            <i class="fa fa-pie-chart"></i>
+                          </div>
+                        </div>
+                      </div>
+                      <p class="mt-3 mb-0 text-sm">
+                        <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                        <span class="text-nowrap">Since last month</span>
+                      </p>
                     </div>
                   </div>
                 </div>
               </div>
-              <!-- pd-20 -->
             </div>
-            <!-- home-tab -->
           </div>
+          <!-- END PROFILE CONTENT -->
         </div>
       </div>
     </div>
+
+    <div class="col-md-12">
+
+      <div class="profile-content">
+        <div class="row">
+          <div class="card">
+            <div class="card-topline-aqua">
+              <header></header>
+            </div>
+            <div class="white-box">
+              <div class="tabs widget">
+                <ul class="nav nav-tabs widget">
+                  <li [ngClass]="currentTab === 'profile' ? 'active' : ''"> <a
+                      (click)="changeTab('profile')">{{language.profile}}</a></li>
+                </ul>
+                <br>
+                <!-- Tab panes -->
+                <div class="tab-content" *ngIf="currentTab === 'profile'">
+                  <div class="tab-pane active fontawesome-demo" id="tab1">
+                    <div id="biography">
+                      <div class="row" *ngIf="data === undefined">
+                        <div class="lds-ellipsis">
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                        </div>
+                      </div>
+                      <div *ngIf="type === 'calendar'" class="vd_info tr" style="height: 12vh;"> <button kendoButton
+                          class="k-save" [icon]="'k-icon k-i-save'" (click)="newCustomer()"
+                          style="float: right;">SAVE</button>
+                      </div>
+                      <div class="row" *ngIf="data !== undefined">
+                        <div class="col-md-3 col-xs-6 b-r">
+                          <br>
+                          <p class="text-muted">
+                            <kendo-textbox-container floatingLabel="{{language.firstname}}">
+                              <input kendoTextBox
+                                *ngIf="data.firstname === '' || data.firstname === null || data.firstname === undefiend"
+                                [(ngModel)]="language['noInformation']" name="firstname" class="noPadding"
+                                readonly="true">
+                              <input kendoTextBox
+                                *ngIf="data.firstname !== null && data.firstname !== undefined && data.firstname !== ''"
+                                [(ngModel)]="data.firstname" name="firstname" class="noPadding" readonly="true">
+                            </kendo-textbox-container>
+                          </p>
+                        </div>
+                        <div class="col-md-3 col-xs-6 b-r">
+                          <br>
+                          <p class="text-muted">
+                            <kendo-textbox-container floatingLabel="{{language.lastname}}">
+                              <input kendoTextBox
+                                *ngIf="data.lastname === '' || data.lastname === null || data.telephone === undefiend"
+                                [(ngModel)]="language['noInformation']" name="lastname" class="noPadding"
+                                readonly="true">
+                              <input kendoTextBox
+                                *ngIf="data.lastname !== null && data.lastname !== undefined && data.lastname !== ''"
+                                [(ngModel)]="data.lastname" name="lastname" class="noPadding" readonly="true">
+                            </kendo-textbox-container>
+                          </p>
+                        </div>
+                        <div class="col-md-3 col-xs-6 b-r">
+                          <br>
+                          <p class="text-muted">
+                            <kendo-textbox-container floatingLabel="{{language.gender}}">
+                              <input kendoTextBox
+                                *ngIf="data.gender === '' || data.gender === null || data.gender === undefiend"
+                                [(ngModel)]="language['noInformation']" name="gender" class="noPadding" readonly="true">
+                              <input kendoTextBox
+                                *ngIf="data.gender !== null && data.gender !== undefined &&  data.gender !== ''"
+                                [(ngModel)]="data.gender" name="gender" class="noPadding" readonly="true">
+                            </kendo-textbox-container>
+                          </p>
+                        </div>
+                        <div class="col-md-3 col-xs-6 b-r">
+                          <br>
+                          <p class="text-muted">
+                            <kendo-textbox-container floatingLabel="{{language.shortname}}">
+                              <input kendoTextBox
+                                *ngIf="data.shortname === '' || data.shortname === null || data.shortname === undefiend"
+                                [(ngModel)]="language['noInformation']" name="shortname" class="noPadding"
+                                readonly="true">
+                              <input kendoTextBox
+                                *ngIf="data.shortname !== null && data.shortname !== undefined && data.shortname !== ''"
+                                [(ngModel)]="data.shortname" name="shortname" class="noPadding" readonly="true">
+                            </kendo-textbox-container>
+                          </p>
+                        </div>
+                        <div class="col-md-3 col-xs-6 b-r">
+                          <br>
+                          <p class="text-muted">
+                            <kendo-textbox-container floatingLabel="{{language.email}}">
+                              <input kendoTextBox
+                                *ngIf="data.email === '' || data.email === null || data.email === undefiend"
+                                [(ngModel)]="language['noInformation']" name="email" class="noPadding" readonly="true">
+                              <input kendoTextBox
+                                *ngIf="data.email !== null && data.email !== undefined && data.email !== ''"
+                                [(ngModel)]="data.email" name="email" class="noPadding" readonly="true">
+                            </kendo-textbox-container>
+                          </p>
+                        </div>
+                        <div class="col-md-3 col-xs-6 b-r">
+                          <br>
+                          <p class="text-muted">
+                            <kendo-textbox-container floatingLabel="{{language.street}}">
+                              <input kendoTextBox
+                                *ngIf="data.street === '' || data.street === null || data.street === undefiend"
+                                [(ngModel)]="language['noInformation']" name="street" class="noPadding" readonly="true">
+                              <input kendoTextBox
+                                *ngIf="data.street !== null && data.street !== undefined && data.street !== ''"
+                                [(ngModel)]="data.street" name="street" class="noPadding" readonly="true">
+                            </kendo-textbox-container>
+                          </p>
+                        </div>
+                        <div class="col-md-3 col-xs-6 b-r">
+                          <br>
+                          <p class="text-muted">
+                            <kendo-textbox-container floatingLabel="{{language.streetnumber}}">
+                              <input kendoTextBox
+                                *ngIf="data.streetnumber === '' || data.streetnumber === null || data.streetnumber === undefiend"
+                                [(ngModel)]="language['noInformation']" name="streetnumber" class="noPadding"
+                                readonly="true">
+                              <input kendoTextBox
+                                *ngIf="data.city !== null && data.city !== undefined && data.city !== ''"
+                                [(ngModel)]="data.streetnumber" name="streetnumber" class="noPadding" readonly="true">
+                            </kendo-textbox-container>
+                          </p>
+                        </div>
+                        <div class="col-md-3 col-xs-6 b-r">
+                          <br>
+                          <p class="text-muted">
+                            <kendo-textbox-container floatingLabel="{{language.zipcode}}">
+                              <input kendoTextBox
+                                *ngIf="data.zipcode === '' || data.zipcode === null || data.zipcode === undefiend"
+                                [(ngModel)]="language['noInformation']" name="zipcode" class="noPadding"
+                                readonly="true">
+                              <input kendoTextBox
+                                *ngIf="data.zipcode !== null && data.zipcode !== undefined && data.zipcode !== ''"
+                                [(ngModel)]="data.zipcode" name="zipcode" class="noPadding" readonly="true">
+                            </kendo-textbox-container>
+                          </p>
+                        </div>
+                        <div class="col-md-3 col-xs-6 b-r">
+                          <br>
+                          <p class="text-muted">
+                            <kendo-textbox-container floatingLabel="{{language.city}}">
+                              <input kendoTextBox
+                                *ngIf="data.city === '' || data.city === null || data.city === undefiend"
+                                [(ngModel)]="language['noInformation']" name="city" class="noPadding" readonly="true">
+                              <input kendoTextBox
+                                *ngIf="data.city !== null && data.city !== undefined && data.city !== ''"
+                                [(ngModel)]="data.city" name="city" class="noPadding" readonly="true">
+                            </kendo-textbox-container>
+                          </p>
+                        </div>
+                        <div class="col-md-3 col-xs-6 b-r">
+                          <br>
+                          <p class="text-muted">
+                            <kendo-textbox-container floatingLabel="{{language.mobile}}">
+                              <input kendoTextBox
+                                *ngIf="data.mobile === '' || data.mobile === null || data.mobile === undefiend"
+                                [(ngModel)]="language['noInformation']" name="mobile" class="noPadding" readonly="true">
+                              <input kendoTextBox
+                                *ngIf="data.mobile !== null && data.mobile !== undefined && data.mobile !== ''"
+                                [(ngModel)]="data.mobile" name="mobile" class="noPadding" readonly="true">
+                            </kendo-textbox-container>
+                          </p>
+                        </div>
+                        <div class="col-md-3 col-xs-6 b-r">
+                          <br>
+                          <p class="text-muted">
+                            <kendo-textbox-container floatingLabel="{{language.telephone}}">
+                              <input kendoTextBox
+                                *ngIf="data.telephone === '' || data.telephone === null || data.telephone === undefiend"
+                                [(ngModel)]="language['noInformation']" name="telephone" class="noPadding"
+                                readonly="true">
+                              <input kendoTextBox
+                                *ngIf="data.telephone !== null && data.telephone !== undefined && data.telephone !== ''"
+                                [(ngModel)]="data.telephone" name="telephone" class="noPadding" readonly="true">
+                            </kendo-textbox-container>
+                          </p>
+                        </div>
+                        <div class="col-md-3 col-xs-6 b-r">
+                          <br>
+                          <p class="text-muted">
+                            <kendo-textbox-container floatingLabel="{{language.birthday}}">
+                              <input kendoTextBox
+                                *ngIf="data.birthday === '' || data.birthday === null || data.birthday === undefiend"
+                                [(ngModel)]="language['noInformation']" name="birthday" class="noPadding"
+                                readonly="true">
+
+                              <kendo-datepicker *ngIf="data.birthday !== undefined && data.birthday !== ''"
+                                [(ngModel)]="data.birthday" name="birthday" class="noPadding" readonly="true">
+                              </kendo-datepicker>
+                            </kendo-textbox-container>
+                          </p>
+                        </div>
+                      </div>
+                      <hr>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- END PROFILE CONTENT -->
+        </div>
+      </div>
+    </div>
+
     <kendo-dialog title="Please confirm" *ngIf="dialogOpened" (close)="close('dialog')" [minWidth]="250" [width]="450">
-      <p style="margin: 30px; text-align: center;">Are you sure you want to continue?</p>
+      <img src="../../../../../assets/images/sent.png" alt="" width="50" height="46">
+      <h3>Are you sure want to delete?</h3>
       <kendo-dialog-actions>
         <button kendoButton (click)="action('no')">No</button>
         <button kendoButton (click)="action('yes')" primary="true">Yes</button>
@@ -189,8 +390,8 @@
                 </div>
                 <div class="email col-md-6 col-xs-12">
                   <p>{{language.password}}</p>
-                  <input kendoTextBox type="{{hideShow}}" class="col-xs-12 password" name="password" placeholder="Password"
-                    [(ngModel)]="data.password" password.value=''>
+                  <input kendoTextBox type="{{hideShow}}" class="col-xs-12 password" name="password"
+                    placeholder="Password" [(ngModel)]="data.password" password.value=''>
                   <span class="fa {{hideShowEye}} pwd-toggle" (click)="hideShowPassword()"></span>
                 </div>
               </div>
@@ -209,20 +410,20 @@
               <div class="form-group">
                 <div class="email col-md-6 col-xs-12">
                   <p>{{language.street}}</p>
-                  <input kendoTextBox type="text" class="col-xs-12" name="street" placeholder="Street" [(ngModel)]="data.street"
-                    street.value=''>
+                  <input kendoTextBox type="text" class="col-xs-12" name="street" placeholder="Street"
+                    [(ngModel)]="data.street" street.value=''>
                 </div>
               </div>
               <div class="form-group">
                 <div class="email col-md-6 col-xs-12">
                   <p>{{language.zipCode}}</p>
-                  <input kendoTextBox type="text" class="col-xs-12" name="zipcode" placeholder="Zipcode" [(ngModel)]="data.zipcode"
-                    zipcode.value=''>
+                  <input kendoTextBox type="text" class="col-xs-12" name="zipcode" placeholder="Zipcode"
+                    [(ngModel)]="data.zipcode" zipcode.value=''>
                 </div>
                 <div class="email col-md-6 col-xs-12">
                   <p>{{language.place}}</p>
-                  <input kendoTextBox type="text" class="col-xs-12" name="place" placeholder="Place" [(ngModel)]="data.place"
-                    place.value=''>
+                  <input kendoTextBox type="text" class="col-xs-12" name="place" placeholder="Place"
+                    [(ngModel)]="data.place" place.value=''>
                 </div>
               </div>
               <div class="form-group">
@@ -233,13 +434,13 @@
                 </div>
                 <div class="email col-md-6 col-xs-12">
                   <p>{{language.mobile}}</p>
-                  <input kendoTextBox type="text" class="col-xs-12" name="mobile" placeholder="mobile" [(ngModel)]="data.mobile"
-                    mobile.value=''>
+                  <input kendoTextBox type="text" class="col-xs-12" name="mobile" placeholder="mobile"
+                    [(ngModel)]="data.mobile" mobile.value=''>
                 </div>
                 <div class="email col-md-6 col-xs-12">
                   <p>{{language.email}}</p>
-                  <input kendoTextBox type="email" class="col-xs-12" name="email" placeholder="Email" [(ngModel)]="data.email"
-                    email.value=''>
+                  <input kendoTextBox type="email" class="col-xs-12" name="email" placeholder="Email"
+                    [(ngModel)]="data.email" email.value=''>
                 </div>
               </div>
               <div class="form-group">
@@ -546,7 +747,8 @@
                     <td nowrap>{{ item.file.size/1024/1024 | number:'.2' }} MB</td>
                     <td class="hidden-xs">
                       <div class="progress" style="margin-bottom: 0;">
-                        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }">
+                        </div>
                       </div>
                     </td>
                     <td class="text-center hidden-xs">
@@ -575,7 +777,8 @@
                 <div>
                   Queue progress:
                   <div class="progress">
-                    <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+                    <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }">
+                    </div>
                   </div>
                 </div>
                 <button type="button" class="btn btn-success btn-s" (click)="uploader.uploadAll()"

@@ -533,4 +533,8 @@ export class UserDetailsComponent implements OnInit {
       }
     }, 50);
   }
+
+  printUser() {
+    window.print();
+  }
 }

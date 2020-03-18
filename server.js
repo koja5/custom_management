@@ -186,7 +186,7 @@ var j = schedule.scheduleJob('59 23 * * *', function(){
 });
 
 
-eventConfirm();
+// eventConfirm();
 
 /**
  * Listen on provided port, on all network interfaces.
