@@ -264,7 +264,11 @@
     "searchAllColumn": "In allen Spalten suchen...",
     "storename": "Name des Geschäfts",
     "download": "Herunterladen",
-    "description": "Beschreibung"
+    "description": "Beschreibung",
+    "totalTherapy": "Totale Therapie",
+    "averagePerMonth": "Durchschnitt pro Monat",
+    "therapyForLastMonth": "Im vergangenen Monat",
+    "therapyForLastWeek": "Letzte Woche"
   },
   "store": {
     "pagerPage": "Seite",

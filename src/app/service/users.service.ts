@@ -80,6 +80,18 @@ export class UsersService {
       .map(res => res);
   }
 
+  getCountAllTasksForUser(id) {
+    return this.http.get('/api/getCountAllTasksForUser/' + id).map(res => res);
+  }
+
+  getCountAllTasksForUserPerMonth(id) {
+    return this.http.get('/api/getCountAllTasksForUserPerMonth/' + id).map(res => res);
+  }
+
+  getCountAllTasksForUserPerWeek(id) {
+    return this.http.get('/api/getCountAllTasksForUserPerWeek/' + id).map(res => res);
+  }
+
   insertMultiData(data) {
     return this.http.post('/api/insertFromExcel', data)
       .map(res => res);

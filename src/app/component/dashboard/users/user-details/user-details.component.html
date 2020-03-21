@@ -56,92 +56,92 @@
               <header></header>
             </div>
             <div>
-              <div class="tabs widget">
+              <div class="tabs widget" style="margin-bottom: 30px;">
                 <div class="col-md-5 col-sm-12 status-widget">
                   <div class="card card-stats">
                     <!-- Card body -->
                     <div class="card-body">
                       <div class="row">
                         <div class="col">
-                          <h5 class="card-title text-uppercase text-muted mb-0">Total traffic</h5>
-                          <span class="h2 font-weight-bold mb-0">350,897</span>
+                          <h5 class="card-title text-uppercase text-muted mb-0">{{language.totalTherapy}}</h5>
+                          <span class="h2 font-weight-bold mb-0">{{totalSum}}</span>
                         </div>
                         <div class="col-auto">
                           <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
-                            <i class="fa fa-user"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <p class="mt-3 mb-0 text-sm">
-                        <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                        <span class="text-nowrap">Since last month</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-5 col-sm-12 status-widget">
-                  <div class="card card-stats">
-                    <!-- Card body -->
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col">
-                          <h5 class="card-title text-uppercase text-muted mb-0">Total traffic</h5>
-                          <span class="h2 font-weight-bold mb-0">350,897</span>
-                        </div>
-                        <div class="col-auto">
-                          <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
-                            <i class="fa fa-area-chart"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <p class="mt-3 mb-0 text-sm">
-                        <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                        <span class="text-nowrap">Since last month</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-5 col-sm-12 status-widget">
-                  <div class="card card-stats">
-                    <!-- Card body -->
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col">
-                          <h5 class="card-title text-uppercase text-muted mb-0">Total traffic</h5>
-                          <span class="h2 font-weight-bold mb-0">350,897</span>
-                        </div>
-                        <div class="col-auto">
-                          <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
-                            <i class="fa fa-line-chart"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <p class="mt-3 mb-0 text-sm">
-                        <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                        <span class="text-nowrap">Since last month</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-5 col-sm-12 status-widget">
-                  <div class="card card-stats">
-                    <!-- Card body -->
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col">
-                          <h5 class="card-title text-uppercase text-muted mb-0">Total traffic</h5>
-                          <span class="h2 font-weight-bold mb-0">350,897</span>
-                        </div>
-                        <div class="col-auto">
-                          <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
                             <i class="fa fa-pie-chart"></i>
                           </div>
                         </div>
                       </div>
-                      <p class="mt-3 mb-0 text-sm">
+                      <!-- <p class="mt-3 mb-0 text-sm">
                         <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
                         <span class="text-nowrap">Since last month</span>
-                      </p>
+                      </p> -->
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-5 col-sm-12 status-widget">
+                  <div class="card card-stats">
+                    <!-- Card body -->
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col">
+                          <h5 class="card-title text-uppercase text-muted mb-0">{{language.averagePerMonth}}</h5>
+                          <span class="h2 font-weight-bold mb-0">{{statisticMonthAverage}}</span>
+                        </div>
+                        <div class="col-auto">
+                          <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
+                            <i class="fa fa-line-chart"></i>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- <p class="mt-3 mb-0 text-sm">
+                        <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                        <span class="text-nowrap">Since last month</span>
+                      </p> -->
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-5 col-sm-12 status-widget">
+                  <div class="card card-stats">
+                    <!-- Card body -->
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col">
+                          <h5 class="card-title text-uppercase text-muted mb-0">{{language.therapyForLastMonth}}</h5>
+                          <span class="h2 font-weight-bold mb-0">{{statisticMonthLast}}</span>
+                        </div>
+                        <div class="col-auto">
+                          <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                            <i class="fa fa-calendar"></i>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- <p class="mt-3 mb-0 text-sm">
+                        <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                        <span class="text-nowrap">Since last month</span>
+                      </p> -->
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-5 col-sm-12 status-widget">
+                  <div class="card card-stats">
+                    <!-- Card body -->
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col">
+                          <h5 class="card-title text-uppercase text-muted mb-0">{{language.therapyForLastWeek}}</h5>
+                          <span class="h2 font-weight-bold mb-0">{{statisticLastWeek}}</span>
+                        </div>
+                        <div class="col-auto">
+                          <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
+                            <i class="fa fa-area-chart"></i>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- <p class="mt-3 mb-0 text-sm">
+                        <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                        <span class="text-nowrap">Since last month</span>
+                      </p> -->
                     </div>
                   </div>
                 </div>
@@ -166,6 +166,8 @@
                 <ul class="nav nav-tabs widget">
                   <li [ngClass]="currentTab === 'profile' ? 'active' : ''"> <a
                       (click)="changeTab('profile')">{{language.profile}}</a></li>
+                  <li [ngClass]="currentTab === 'workTime' ? 'active' : ''"> <a
+                      (click)="changeTab('workTime')">{{language.workTime}}</a></li>
                 </ul>
                 <br>
                 <!-- Tab panes -->
@@ -354,6 +356,78 @@
                     </div>
                   </div>
                 </div>
+                <div *ngIf="currentTab === 'workTime'">
+                  <div id="profile-tab" class="tab-pane">
+                    <p *ngIf="noSetWorkTime" class="noSetWorkTime">*For this user work time didn't set!</p>
+                    <div class="k-form-field row" style="padding: 2vh 0 2vh 0;">
+                      <div class="col-sm-6">
+                        <span>Color</span>
+                        <div>
+                          <kendo-colorpalette [palette]="palette" [value]="selectedColor" [(ngModel)]="selectedColor"
+                            [tileSize]="30" [readonly]="true">
+                          </kendo-colorpalette>
+                        </div>
+                      </div>
+                      <div class="col-sm-6" style="padding-top: 2vh;">
+                        <button kendoButton [icon]="'k-icon k-i-undo'" class="col-sm-5 {{previousInd}}"
+                          (click)="previousWorkTime()">Previous</button>
+                        <button kendoButton [icon]="'k-icon k-i-redo'" class="col-sm-5 {{nextInd}}"
+                          (click)="nextWorkTime()">Next</button>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-md-2 col-sm-12 col-form-label">Valid from:</label>
+                      <kendo-datepicker class="col-md-5 col-xs-8 noPadding" name="validDate" placeholder="Valid date"
+                        [(ngModel)]="validDate" validDate.value='' readonly="true"></kendo-datepicker>
+                    </div>
+                    <form name="loginForm" class="loginForm"
+                      (ngSubmit)="updateSetIndicator === 1 ? setWorkTimeForUser(workTime) : updateWorkTimeForUser(workTime)">
+                      <div class="form-group row" *ngFor="let item of workTime; let i = index;">
+                        <label for="example-number-input" class="col-sm-2 col-form-label">{{item.day}}</label>
+                        <div class="col-sm-10">
+                          <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                            value="{{item.start}}" [(ngModel)]="workTime[i].start" name="{{item.day}}start" readonly="true"><span
+                            class="col-sm-1 h">h</span>
+                          <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                            value="{{item.startMin}}" [(ngModel)]="workTime[i].startMin" name="{{item.day}}startMin"><span
+                            class="col-sm-1 h">min</span> -->
+                          <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                            value="{{item.end}}" [(ngModel)]="workTime[i].end" name="{{item.day}}end" readonly="true"> <span
+                            class="col-sm-1 h">h</span>
+                          <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                            value="{{item.endMin}}" [(ngModel)]="workTime[i].endMin" name="{{item.day}}endMin"> <span
+                            class="col-sm-1 h">min</span> -->
+        
+                          <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                            value="{{item.start2}}" [(ngModel)]="workTime[i].start2" name="{{item.day}}start2" readonly="true"><span
+                            class="col-sm-1 h">h</span>
+                          <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                            value="{{item.start2Min}}" [(ngModel)]="workTime[i].start2Min" name="{{item.day}}start2Min"><span
+                            class="col-sm-1 h">min</span> -->
+                          <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                            value="{{item.end2}}" [(ngModel)]="workTime[i].end2" name="{{item.day}}end2" readonly="true"> <span
+                            class="col-sm-1 h">h</span>
+                          <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                            value="{{item.end2Min}}" [(ngModel)]="workTime[i].end2Min" name="{{item.day}}end2Min"> <span
+                            class="col-sm-1 h">min</span> -->
+        
+                          <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                            value="{{item.start3}}" [(ngModel)]="workTime[i].start3" name="{{item.day}}start3" readonly="true"><span
+                            class="col-sm-1 h">h</span>
+                          <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                            value="{{item.start3Min}}" [(ngModel)]="workTime[i].start3Min" name="{{item.day}}start3Min"><span
+                            class="col-sm-1 h">min</span> -->
+                          <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                            value="{{item.end3}}" [(ngModel)]="workTime[i].end3" name="{{item.day}}end3" readonly="true"> <span
+                            class="col-sm-1 h">h</span>
+                          <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                            value="{{item.end3Min}}" [(ngModel)]="workTime[i].end3Min" name="{{item.day}}end3Min"> <span
+                            class="col-sm-1 h">min</span> -->
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -375,7 +449,7 @@
       (close)="user = false">
       <div class="tabs widget">
         <ul class="nav nav-tabs widget">
-          <li [ngClass]="currentTab === 'profile' ? 'active' : ''"> <a (click)="changeTab('profile')">Profile</a></li>
+          <li [ngClass]="currentTab === 'profile' ? 'active' : ''"> <a (click)="changeTab('profile')">{{language.profile}}</a></li>
           <li [ngClass]="currentTab === 'workTime' ? 'active' : ''"> <a (click)="changeTab('workTime')">Work time</a>
           </li>
         </ul>

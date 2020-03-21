@@ -273,7 +273,11 @@
     "storename": "Store name",
     "download": "Download",
     "updateDocument": "Update document",
-    "description": "Description"
+    "description": "Description",
+    "totalTherapy": "Total therapy",
+    "averagePerMonth": "Average per month",
+    "therapyForLastMonth": "Last month",
+    "therapyForLastWeek": "Last week"
   },
   "store": {
     "pagerPage": "Page",

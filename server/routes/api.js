@@ -5494,4 +5494,103 @@ router.get("/task/confirmationArrival/:id", (req, res, next) => {
   }
 });
 
+router.get("/getCountAllTasksForUser/:id", function (req, res, next) {
+  var reqObj = req.params.id;
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+    conn.query("SELECT COUNT(*) as total from tasks where creator_id = '" + reqObj + "'", function (err, rows) {
+      conn.release();
+      console.log(err);
+      if (!err) {
+        res.json(rows);
+      } else {
+        res.json({
+          code: 100,
+          status: "Error in connection database"
+        });
+      }
+    });
+
+    conn.on("error", function (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    });
+  });
+});
+
+router.get("/getCountAllTasksForUserPerMonth/:id", function (req, res, next) {
+  var reqObj = req.params.id;
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+    conn.query("SELECT COUNT(*) as month from tasks where creator_id = '" + reqObj + "' GROUP BY MONTH(start)", function (err, rows) {
+      conn.release();
+      console.log(err);
+      if (!err) {
+        res.json(rows);
+      } else {
+        res.json({
+          code: 100,
+          status: "Error in connection database"
+        });
+      }
+    });
+
+    conn.on("error", function (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    });
+  });
+});
+
+router.get("/getCountAllTasksForUserPerWeek/:id", function (req, res, next) {
+  var reqObj = req.params.id;
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    }
+    conn.query("SELECT COUNT(*) as week from tasks where creator_id = '" + reqObj + "' GROUP BY WEEK(start)", function (err, rows) {
+      conn.release();
+      console.log(err);
+      if (!err) {
+        res.json(rows);
+      } else {
+        res.json({
+          code: 100,
+          status: "Error in connection database"
+        });
+      }
+    });
+
+    conn.on("error", function (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database"
+      });
+      return;
+    });
+  });
+});
+
 module.exports = router;

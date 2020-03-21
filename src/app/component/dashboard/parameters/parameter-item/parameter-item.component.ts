@@ -70,7 +70,7 @@ export class ParameterItemComponent implements OnInit {
   public ngOnInit(): void {
     this.height = window.innerHeight - 81;
     this.height += 'px';
-    this.editedRowIndex=-1;
+    this.editedRowIndex = -1;
     const superadmin = localStorage.getItem('superadmin');
     // this.editButton[41]=true;
     if (this.type === "Doctors") {
@@ -129,6 +129,7 @@ export class ParameterItemComponent implements OnInit {
 
   public addHandler({ sender }) {
     this.closeEditor(sender);
+    this.editedRowIndex = -1;
     if (this.type === "Doctors") {
       this.formGroup = new FormGroup({
         firstname: new FormControl(),
@@ -211,8 +212,8 @@ export class ParameterItemComponent implements OnInit {
 
 
   public cancelHandler({ sender, rowIndex }) {
-    this.editedRowIndex=-1;
-    this.vatTexList= this.firstVatTexList;
+    this.editedRowIndex = -1;
+    this.vatTexList = this.firstVatTexList;
     this.closeEditor(sender, rowIndex);
     this.refreshData();
     this.changeTheme(this.theme);
@@ -220,7 +221,7 @@ export class ParameterItemComponent implements OnInit {
 
   public saveHandler({ sender, rowIndex, formGroup, isNew }) {
     console.log(formGroup);
-    this.editedRowIndex=-1;
+    this.editedRowIndex = -1;
     const product = formGroup.value;
     console.log(product);
     if (this.type === "Therapy") {
