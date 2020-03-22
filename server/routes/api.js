@@ -178,7 +178,8 @@ router.post("/createTask", function (req, res, next) {
       end: req.body.end,
       telephone: req.body.telephone,
       therapy_id: req.body.therapy_id,
-      superadmin: req.body.superadmin
+      superadmin: req.body.superadmin,
+      confirm: req.body.confirm
     };
     if (req.body.storeId !== undefined) {
       podaci['storeId'] = req.body.storeId;
@@ -241,7 +242,8 @@ router.post("/updateTask", function (req, res, next) {
       end: req.body.end,
       telephone: req.body.telephone,
       therapy_id: req.body.therapy_id,
-      superadmin: req.body.superadmin
+      superadmin: req.body.superadmin,
+      confirm: req.body.confirm
     };
     if (req.body.storeId !== undefined) {
       data['storeId'] = req.body.storeId;
@@ -1014,7 +1016,8 @@ router.post("/createCustomer", function (req, res, next) {
       birthday: req.body.birthday,
       attention: req.body.attention,
       physicalComplaint: req.body.physicalComplaint,
-      storeId: req.body.storeId
+      storeId: req.body.storeId,
+      isConfirm: req.body.isConfirm
     };
     console.log(podaci);
 

@@ -202,10 +202,14 @@ k-window-content {
 }
 
 kendo-scheduler .k-event {
-  width: 19.5% !important;
   padding: 0px !important;
   margin-top: 1px;
   border: 2px solid !important;
+}
+
+
+kendo-scheduler multi-day-view .k-event {
+  width: 19.5% !important;
 }
 
 div.monthviewitem .k-event {
@@ -235,4 +239,8 @@ div.monthviewitem .k-event {
 .notConfirmed {
   color: gray;
   opacity: 0.6;
+}
+
+kendo-scheduler month-view .k-event {
+  height: 11% !important;
 }

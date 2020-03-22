@@ -75,6 +75,8 @@ export class BaseDateComponent implements OnInit {
   public ourFile: File;
   public fileDescription = [];
   public documentItem: any;
+  public settingsWindow = false;
+
   constructor(
     public router: ActivatedRoute,
     public service: CustomersService,
@@ -819,24 +821,24 @@ export class BaseDateComponent implements OnInit {
   }
 
   initializeBaseOneData() {
-    this.service.getCustomerList("Recommendation").subscribe(data => {
+    this.service.getCustomerList("Recommendation", localStorage.getItem('superadmin')).subscribe(data => {
       console.log(data);
       this.recommendationList = data;
     });
 
-    this.service.getCustomerList("Relationship").subscribe(data => {
+    this.service.getCustomerList("Relationship", localStorage.getItem('superadmin')).subscribe(data => {
       this.relationshipList = data;
     });
 
-    this.service.getCustomerList("Social").subscribe(data => {
+    this.service.getCustomerList("Social", localStorage.getItem('superadmin')).subscribe(data => {
       this.socialList = data;
     });
 
-    this.service.getCustomerList("Doctor").subscribe(data => {
+    this.service.getCustomerList("Doctor", localStorage.getItem('superadmin')).subscribe(data => {
       console.log(data);
       this.doctorList = data;
     });
-    this.service.getCustomerList("Doctors").subscribe(data => {
+    this.service.getCustomerList("Doctors", localStorage.getItem('superadmin')).subscribe(data => {
       console.log(data);
       this.doctorsList = data;
     });

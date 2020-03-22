@@ -142,6 +142,7 @@ export class TaskComponent implements OnInit {
   public calendarWidth = 80;
   public requestForConfirmArrival = false;
   public confirmArrivalData: any;
+  public isConfirm: any;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -170,7 +171,7 @@ export class TaskComponent implements OnInit {
     this.id = Number(localStorage.getItem("idUser"));
     console.log(this.events);
     this.calendars = [];
-    const superadmin = localStorage.getItem('superadmin');
+    const superadmin = localStorage.getItem("superadmin");
 
     /*this.customer.getCustomers(localStorage.getItem("superadmin"), val => {
       console.log(val);
@@ -406,6 +407,7 @@ export class TaskComponent implements OnInit {
     this.selectedTreatments = null;
     this.telephoneValue = "";
     this.mobileValue = "";
+    this.isConfirm = false;
     this.complaintData = new ComplaintTherapyModel();
   }
 
@@ -418,13 +420,17 @@ export class TaskComponent implements OnInit {
       (this.selectedStoreId === null || this.selectedStoreId === undefined) &&
       this.type !== 3
     ) {
-      Swal.fire({
+      /*Swal.fire({
         title: this.language.selectStoreIndicatorTitle,
         text: this.language.selectStoreIndicatorText,
         timer: 3000,
         type: "error"
-      });
-
+      });*/
+      this.toastr.success(
+        this.language.selectStoreIndicatorTitle,
+        this.language.selectStoreIndicatorText,
+        { timeOut: 7000, positionClass: "toast-bottom-right" }
+      );
       this.createFormLoading = false;
       return this.createFormGroup.bind(this);
     } else {
@@ -559,6 +565,15 @@ export class TaskComponent implements OnInit {
         if (dataItem.mobile !== undefined) {
           this.mobileValue = dataItem.mobile;
         }
+
+        if (dataItem.confirm !== undefined) {
+          if (dataItem.confirm === -1) {
+            this.isConfirm = 0;
+          } else {
+            this.isConfirm = 1;
+          }
+        }
+
         this.changeTheme(localStorage.getItem("theme"));
       }, 100);
       return this.formGroup;
@@ -596,7 +611,6 @@ export class TaskComponent implements OnInit {
         "+" +
         this.complaintData.complaint_title;
       formValue.superadmin = localStorage.getItem("superadmin");
-      formValue.confirm = this.customerUser["confirm"];
       if (this.type !== 3 && selectedUser !== undefined) {
         formValue.creator_id = selectedUser;
       } else {
@@ -616,7 +630,11 @@ export class TaskComponent implements OnInit {
           formValue.start,
           formValue.end
         );
-        formValue.confirm = 0;
+        if (this.isConfirm) {
+          formValue.confirm = 0;
+        } else {
+          formValue.confirm = -1;
+        }
         this.customer.addTherapy(this.complaintData).subscribe(data => {
           if (data["success"]) {
             formValue.therapy_id = data["id"];
@@ -627,19 +645,29 @@ export class TaskComponent implements OnInit {
               console.log(val);
               if (val.success) {
                 this.service.create(formValue);
-                Swal.fire({
+                /*Swal.fire({
                   title: this.language.successUpdateTitle,
                   text: this.language.successUpdateText,
                   timer: 3000,
                   type: "success"
-                });
+                });*/
+                this.toastr.success(
+                  this.language.successUpdateTitle,
+                  this.language.successUpdateText,
+                  { timeOut: 7000, positionClass: "toast-bottom-right" }
+                );
               } else {
-                Swal.fire({
+                /*Swal.fire({
                   title: this.language.unsuccessUpdateTitle,
                   text: this.language.unsuccessUpdateText,
                   timer: 3000,
                   type: "error"
-                });
+                });*/
+                this.toastr.error(
+                  this.language.unsuccessUpdateTitle,
+                  this.language.unsuccessUpdateText,
+                  { timeOut: 7000, positionClass: "toast-bottom-right" }
+                );
               }
             });
 
@@ -680,26 +708,40 @@ export class TaskComponent implements OnInit {
           formValue.start,
           formValue.end
         );
-        console.log(this.complaintData);
+        if (this.isConfirm) {
+          formValue.confirm = 0;
+        } else {
+          formValue.confirm = -1;
+        }
         this.customer.updateTherapy(this.complaintData).subscribe(data => {
           if (data) {
             this.service.updateTask(formValue, val => {
               console.log(val);
               if (val.success) {
                 this.handleUpdate(dataItem, formValue, mode);
-                Swal.fire({
+                /*Swal.fire({
                   title: this.language.successUpdateTitle,
                   text: this.language.successUpdateText,
                   timer: 3000,
                   type: "success"
-                });
+                });*/
+                this.toastr.success(
+                  this.language.successUpdateTitle,
+                  this.language.successUpdateText,
+                  { timeOut: 7000, positionClass: "toast-bottom-right" }
+                );
               } else {
-                Swal.fire({
+                /*Swal.fire({
                   title: this.language.unsuccessUpdateTitle,
                   text: this.language.unsuccessUpdateText,
                   timer: 3000,
                   type: "error"
-                });
+                });*/
+                this.toastr.error(
+                  this.language.unsuccessUpdateTitle,
+                  this.language.unsuccessUpdateText,
+                  { timeOut: 7000, positionClass: "toast-bottom-right" }
+                );
               }
             });
             const customerAttentionAndPhysical = {
@@ -714,12 +756,17 @@ export class TaskComponent implements OnInit {
                 console.log(data);
               });
           } else {
-            Swal.fire({
+            /*Swal.fire({
               title: this.language.unsuccessUpdateTitle,
               text: this.language.unsuccessUpdateText,
               timer: 3000,
               type: "error"
-            });
+            });*/
+            this.toastr.success(
+              this.language.unsuccessUpdateTitle,
+              this.language.unsuccessUpdateText,
+              { timeOut: 7000, positionClass: "toast-bottom-right" }
+            );
           }
           /*this.selectedComplaint = [];
           this.selectedTherapies = [];
@@ -735,6 +782,11 @@ export class TaskComponent implements OnInit {
         timer: 3000,
         type: "error"
       });
+      this.toastr.success(
+        this.language.unsuccessUpdateTitle,
+        this.language.unsuccessUpdateText,
+        { timeOut: 7000, positionClass: "toast-bottom-right" }
+      );
     }
   }
 
@@ -830,6 +882,7 @@ export class TaskComponent implements OnInit {
       this.customerUser = event;
       this.telephoneValue = event.telephone;
       this.mobileValue = event.mobile;
+      this.isConfirm = event.isConfirm;
       this.getComplaintAndTherapyForCustomer(event.id);
       this.baseDataIndicator = true;
       this.userWidth = "65%";
@@ -840,6 +893,7 @@ export class TaskComponent implements OnInit {
       };
       this.telephoneValue = null;
       this.mobileValue = null;
+      this.isConfirm = false;
       this.baseDataIndicator = false;
       this.selectedComplaint = null;
       this.selectedTherapies = null;
@@ -1446,12 +1500,14 @@ export class TaskComponent implements OnInit {
   }
 
   getParameters(superadmin) {
-    this.customer.getParameters("Complaint", superadmin).subscribe((data: []) => {
-      console.log(data);
-      this.complaintValue = data.sort(function(a, b) {
-        return a["sequence"] - b["sequence"];
+    this.customer
+      .getParameters("Complaint", superadmin)
+      .subscribe((data: []) => {
+        console.log(data);
+        this.complaintValue = data.sort(function(a, b) {
+          return a["sequence"] - b["sequence"];
+        });
       });
-    });
 
     this.customer.getParameters("Therapy", superadmin).subscribe((data: []) => {
       console.log(data);
@@ -1460,12 +1516,14 @@ export class TaskComponent implements OnInit {
       });
     });
 
-    this.customer.getParameters("Treatment", superadmin).subscribe((data: []) => {
-      console.log(data);
-      this.treatmentValue = data.sort(function(a, b) {
-        return a["sequence"] - b["sequence"];
+    this.customer
+      .getParameters("Treatment", superadmin)
+      .subscribe((data: []) => {
+        console.log(data);
+        this.treatmentValue = data.sort(function(a, b) {
+          return a["sequence"] - b["sequence"];
+        });
       });
-    });
 
     this.customer.getParameters("CS", superadmin).subscribe((data: []) => {
       console.log(data);
@@ -1632,7 +1690,7 @@ export class TaskComponent implements OnInit {
     console.log(dataItem);
     this.confirmArrivalData = {
       id: dataItem.id,
-      name: dataItem.title.split('+')[0],
+      name: dataItem.title.split("+")[0],
       customer_id: dataItem.customer_id
     };
     this.requestForConfirmArrival = true;

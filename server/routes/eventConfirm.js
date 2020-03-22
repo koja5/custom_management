@@ -10,6 +10,9 @@ var nodemailer = require("nodemailer");
 var hogan = require("hogan.js");
 
 var link = "http://localhost:3000/api/";
+const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
 var confirmTemplate = fs.readFileSync(
   "./server/routes/templates/confirmArrival.hjs",
   "utf-8"
@@ -117,6 +120,8 @@ function confirm() {
             convertToDateStart.getMonth() +
             "." +
             convertToDateStart.getFullYear();
+          var day = convertToDateStart.getDay();
+          var month = monthNames[convertToDateStart.getMonth()];
           var start =
             (startHours < 10 ? "0" + startHours : startHours) +
             ":" +
@@ -135,7 +140,9 @@ function confirm() {
               start: start,
               end: end,
               therapy: to.therapies_title,
-              doctor: to.lastname + " " + to.firstname
+              doctor: to.lastname + " " + to.firstname,
+              month: month,
+              day: day
             })
           };
           mailOptions.to = to.email;

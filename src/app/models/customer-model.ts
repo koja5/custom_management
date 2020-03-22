@@ -14,4 +14,5 @@ export class CustomerModel {
     attention?: string;
     physicalComplaint?: string;
     storeId?: string;
+    isConfirm?: boolean;
 }

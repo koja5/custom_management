@@ -99,7 +99,8 @@
     "notConfirmed": "Nicht bestätigt",
     "confirmed": "Bestätigt",
     "successTitle": "Successful",
-    "successTextConfirmArrival": "Successful send request confirm for {{QUOTE}}"
+    "successTextConfirmArrival": "Successful send request confirm for {{QUOTE}}",
+    "confirmMessage": "Bestätigungsnachricht an den Patienten senden"
   },
   "navigation-menu": {
     "calendar": "Kalender",
@@ -150,7 +151,8 @@
     "errorTitle": "Error",
     "errorTextAdd": "Neues Element wird nicht im Raster hinzugefügt!",
     "errorTextEdit": "Ausgewählter Artikel wurde nicht erfolgreich bearbeitet!",
-    "successTextDelete": "Das ausgewählte Element wurde erfolgreich gelöscht!"
+    "successTextDelete": "Das ausgewählte Element wurde erfolgreich gelöscht!",
+    "confirmMessageText": "Bestätigungsnachricht erhalten"
   },
   "dashboard": {
     "profile": "Profil",
@@ -268,7 +270,10 @@
     "totalTherapy": "Totale Therapie",
     "averagePerMonth": "Durchschnitt pro Monat",
     "therapyForLastMonth": "Im vergangenen Monat",
-    "therapyForLastWeek": "Letzte Woche"
+    "therapyForLastWeek": "Letzte Woche",
+    "settings": "die Einstellungen",
+    "confirmMessageText": "Bestätigungsnachricht erhalten",
+    "updateSettings": "Update Einstellungen"
   },
   "store": {
     "pagerPage": "Seite",

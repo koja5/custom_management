@@ -7,6 +7,9 @@ var fs = require("fs");
 const mysql = require("mysql");
 
 var link = "http://localhost:3000/api/";
+const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
 
 var connection = mysql.createPool({
   host: "185.178.193.141",
@@ -197,6 +200,8 @@ router.post("/sendConfirmArrivalAgain", function(req, res) {
             convertToDateStart.getMonth() +
             "." +
             convertToDateStart.getFullYear();
+          var day = convertToDateStart.getDay();
+          var month = monthNames[convertToDateStart.getMonth()];
           var start =
             (startHours < 10 ? "0" + startHours : startHours) +
             ":" +
@@ -215,7 +220,9 @@ router.post("/sendConfirmArrivalAgain", function(req, res) {
               start: start,
               end: end,
               therapy: to.therapies_title,
-              doctor: to.lastname + " " + to.firstname
+              doctor: to.lastname + " " + to.firstname,
+              month: month,
+              day: day
             })
           };
           mailOptions.to = to.email;

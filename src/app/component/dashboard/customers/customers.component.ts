@@ -143,7 +143,8 @@ export class CustomersComponent implements OnInit {
       telephone: "",
       mobile: "",
       birthday: "",
-      storeId: ""
+      storeId: "",
+      isConfirm: false
     };
   }
 

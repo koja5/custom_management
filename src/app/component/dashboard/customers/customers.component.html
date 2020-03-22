@@ -140,19 +140,6 @@
           </div>
           <div class="form-group col-md-12 col-xs-12">
             <div class="col-md-6 col-xs-12" style="padding-top: 5px;">
-              <!--<kendo-textbox-container floatingLabel="{{language.gender}}">
-                <div style="padding-left: 45px;">
-                  <input type="radio" name="gender" id="female" class="k-radio"
-                    checked="data.gender === 'female' ? checked : ''" [(ngModel)]="data.gender" [value]="'female'">
-                  <span class="k-radio-label col-md-6 col-xs-12" for="female">{{language.female}}</span>
-                </div>
-                <div style="padding-left: 45px;">
-                  <input type="radio" name="gender" id="male" class="k-radio"
-                    checked="data.gender === 'male' ? checked : ''" [(ngModel)]="data.gender" [value]="'male'">
-                  <span class="k-radio-label col-md-6 col-xs-12" for="male">{{language.male}}</span>
-                </div>
-              </kendo-textbox-container>
-              -->
               <p style="font-size: 10px; color: #0000006b; padding-bottom: 5px;">{{language.gender}}</p>
               <label class="k-radio-label col-md-6 col-xs-12" for="female">
                 <input type="radio" name="gender" id="female" class="k-radio"
@@ -206,6 +193,9 @@
         <kendo-textbox-container floatingLabel="{{language.city}}">
           <input kendoTextBox type="text" class="col-xs-12" [(ngModel)]="data.city" name="city">
         </kendo-textbox-container>
+      </div>
+      <div class="email col-md-12 col-xs-12" style="padding-top: 20px; font-weight: bold;">
+        <input type="checkbox" kendoCheckBox [(ngModel)]="data.isConfirm" name="isConfirm" style="margin: 0px"/> <span style="font-size: 12px;"> {{language.confirmMessageText}}</span>
       </div>
     </div>
     <!-- ./remember-row -->

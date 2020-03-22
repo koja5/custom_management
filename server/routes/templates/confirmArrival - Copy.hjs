@@ -4,38 +4,12 @@
 
 <head style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
   <meta charset="UTF-8" style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
-  <title style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">Confirm Arrival -
-    ClinicNode</title>
+  <title style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">Confirm Arrival - ClinicNode</title>
   <link rel="stylesheet" href="https://unpkg.com/tailwindcss@0.7.4/dist/tailwind.min.css"
     style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.4/css/all.css"
     style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
-  <style>
-    table,
-    th,
-    td {
-      border: 1px solid black;
-      border-collapse: collapse;
-    }
 
-    th,
-    td {
-      padding: 5px;
-      text-align: left;
-    }
-
-    @media (max-width: 768px) {
-      .date-large {
-        display: none;
-      }
-    }
-
-    @media (min-width: 768px) {
-      .date-small {
-        display: none;
-      }
-    }
-  </style>
 </head>
 
 <body style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;">
@@ -66,49 +40,18 @@
               style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">You are coming to
             us for treatment soon, we are very happy about that. The treatment is scheduled for the following date:</p>
 
-          <div style="text-align: center; padding: 15px;">
-            <table style="width:80%; margin: auto;">
-              <tr class="date-large">
-                <td
-                  style="width: 30%; background: #01A9E9; color: #fff; text-align: center; font-weight: bold; font-size: 18px;">
-                  {{month}}
-                  {{day}}
-                </td>
-                <td>
-                  <p style="text-align: initial; font-size: 13px; margin: 0px">Date: <span
-                      style="font-size: 15px; font-weight: bold;">{{date}}</span>
-                  </p>
-                  <p style="text-align: initial; font-size: 13px; margin: 0px">Time: <span
-                      style="font-size: 15px; font-weight: bold;">{{start}} - {{end}}</span></p>
-                  <p style="text-align: initial; font-size: 13px; margin: 0px">Therapy: <span
-                      style="font-size: 15px; font-weight: bold;">{{therapy}}</span></p>
-                  <p style="text-align: initial; font-size: 13px; margin: 0px">Doctor: <span
-                      style="font-size: 15px; font-weight: bold;">{{doctor}}</span></p>
-
-                </td>
-              </tr>
-              <tr class="date-small">
-                <td
-                  style="width: 30%; background: #01A9E9; color: #fff; text-align: center; font-weight: bold; font-size: 18px;">
-                  {{month}}
-                  {{day}}
-                </td>
-              </tr>
-              <tr class="date-small">
-                <td>
-                  <p style="text-align: initial; font-size: 13px; margin: 0px">Date: <span
-                      style="font-size: 15px; font-weight: bold;">{{date}}</span>
-                  </p>
-                  <p style="text-align: initial; font-size: 13px; margin: 0px">Time: <span
-                      style="font-size: 15px; font-weight: bold;">{{start}} - {{end}}</span></p>
-                  <p style="text-align: initial; font-size: 13px; margin: 0px">Therapy: <span
-                      style="font-size: 15px; font-weight: bold;">{{therapy}}</span></p>
-                  <p style="text-align: initial; font-size: 13px; margin: 0px">Doctor: <span
-                      style="font-size: 15px; font-weight: bold;">{{doctor}}</span></p>
-
-                </td>
-              </tr>
-            </table>
+          <div style="text-align: center; padding: 15px; margin-left: 26%;">
+            <div style="float: left;">
+              <!--<span class="fa fa-calendar" style="font-size: 75px; color: #01A9E9"></span>-->
+              <img src="http://app-production.eu:8081/assets/images/calendar_confirm_arrival.png" style="width: 85px;">
+            </div>
+            <div style="padding-left: 100px; padding-top: 7px;">
+              <p style="text-align: initial; font-size: 13px; margin: 0px">Date: <span style="font-size: 15px; font-weight: bold;">{{date}}</span>
+              </p>
+              <p style="text-align: initial; font-size: 13px; margin: 0px">Time: <span style="font-size: 15px; font-weight: bold;">{{start}} - {{end}}</span></p>
+              <p style="text-align: initial; font-size: 13px; margin: 0px">Therapy: <span style="font-size: 15px; font-weight: bold;">{{therapy}}</span></p>
+              <p style="text-align: initial; font-size: 13px; margin: 0px">Doctor: <span style="font-size: 15px; font-weight: bold;">{{doctor}}</span></p>
+            </div>
           </div>
           <br>
           <p style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;">Please
@@ -116,8 +59,7 @@
           </p>
           <a href={{verificationLink}} style="cursor: pointer; text-decoration: initial;"><button
               class="text-white text-sm tracking-wide rounded w-full my-8 p-4 "
-              style="background: #01A9E9;box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;font-family: inherit;font-size: .875rem;line-height: 1.15;margin: 0;overflow: visible;text-transform: none;-webkit-appearance: button;padding: 1rem;cursor: pointer;border-radius: .25rem;margin-top: 2rem;margin-bottom: 2rem;color: #fff;letter-spacing: .05em;">CONFIRM
-              ARRIVAL</button></a>
+              style="background: #01A9E9;box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;font-family: inherit;font-size: .875rem;line-height: 1.15;margin: 0;overflow: visible;text-transform: none;-webkit-appearance: button;padding: 1rem;cursor: pointer;border-radius: .25rem;margin-top: 2rem;margin-bottom: 2rem;color: #fff;letter-spacing: .05em;">CONFIRM ARRIVAL</button></a>
           <p class="text-sm"
             style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;font-size: .875rem;">
             Thanks,<br style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">

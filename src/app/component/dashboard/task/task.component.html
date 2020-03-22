@@ -252,10 +252,6 @@
                       </button>
                     </div>
                   </div>
-                  <!--<div class="k-form-field">
-                  <span>Title</span>
-                  <input class="k-textbox" placeholder="Title" [formControl]="formGroup.get('title')" />
-                </div>-->
                   <div class="k-form-field">
                     <kendo-textbox-container floatingLabel="{{languageUser.complaintValue}}">
                       <kendo-multiselect [data]="complaintValue" [textField]="'title'" [valueField]="'id'"
@@ -314,29 +310,8 @@
                       </kendo-textbox-container>
                     </div>
                   </div>
-                  <!--
-                  <div class="k-form-field">
-                    <kendo-textbox-container floatingLabel="{{languageUser.stateValue}}">
-                      <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="stateValue" [textField]="'title'"
-                        [valueField]="'id'" [(ngModel)]="complaintData.state" [valuePrimitive]="true"
-                        [placeholder]="language.choiceState">
-                      </kendo-combobox>
-                    </kendo-textbox-container>
-                  </div>
-                  <div class="k-form-field">
-                    <kendo-textbox-container floatingLabel="{{languageUser.em}}">
-                      <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="allUsers" [textField]="'shortname'"
-                        [valueField]="'id'" (valueChange)="onValueUserEmChange($event)" [(ngModel)]="selectedUser">
-                      </kendo-combobox>
-                    </kendo-textbox-container>
-                  </div>-->
                   <div class="k-form-field">
                     <kendo-textbox-container floatingLabel="{{language.eventCategory}}">
-                      <!--<div style="width: 100%; margin-top: 5px;">
-                        <kendo-colorpalette [palette]="palette" [value]="selected" [(ngModel)]="selected"
-                          [tileSize]="30" [formControl]="formGroup.get('colorTask')">
-                        </kendo-colorpalette>
-                      </div>-->
                       <kendo-combobox class="col-md-12 col-xs-12" [data]="eventCategory" [textField]="'category'"
                         [valuePrimitive]="true" [valueField]="'id'" (valueChange)="selectedEventCategory($event)"
                         [(ngModel)]="selected" [formControl]="formGroup.get('colorTask')">
@@ -387,15 +362,19 @@
                       </kendo-textbox-container>
                     </div>
                   </div>
+                  <div class="col-sm-12" style="text-align: center; font-weight: bold;">
+                    <input type="checkbox" kendoCheckBox [formControl]="formGroup.get('confirm')"
+                      [(ngModel)]="isConfirm" name="isConfirm" style="margin: 0px" /> <span style="font-size: 12px;"> {{language.confirmMessage}}</span>
+                  </div>
                 </div>
               </ng-template>
               <kendo-scheduler-messages today="{{ language.today }}" allDay="{{ language.allDay }}"
-                dayViewTitle="{{ language.day }}" weekViewTitle="{{ language.week }}"
-                monthViewTitle="{{ language.month }}" workWeekViewTitle="{{ language.workWeek }}"
-                multiDayViewTitle="{{ language.multiDay }}" timelineViewTitle="{{ language.timeline }}"
-                agendaViewTitle="{{ language.agenda }}" showWorkDay="Mostrar horas laborables"
-                showFullDay="Mostrar día completo">
-              </kendo-scheduler-messages>
+                      dayViewTitle="{{ language.day }}" weekViewTitle="{{ language.week }}"
+                      monthViewTitle="{{ language.month }}" workWeekViewTitle="{{ language.workWeek }}"
+                      multiDayViewTitle="{{ language.multiDay }}" timelineViewTitle="{{ language.timeline }}"
+                      agendaViewTitle="{{ language.agenda }}" showWorkDay="Mostrar horas laborables"
+                      showFullDay="Mostrar día completo">
+                      </kendo-scheduler-messages>
             </kendo-scheduler>
           </div>
         </div>
@@ -563,29 +542,8 @@
                     </kendo-textbox-container>
                   </div>
                 </div>
-                <!--
-                <div class="k-form-field">
-                  <kendo-textbox-container floatingLabel="{{languageUser.stateValue}}">
-                    <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="stateValue" [textField]="'title'"
-                      [valueField]="'id'" [(ngModel)]="complaintData.state" [valuePrimitive]="true"
-                      [placeholder]="language.choiceState">
-                    </kendo-combobox>
-                  </kendo-textbox-container>
-                </div>
-                <div class="k-form-field">
-                  <kendo-textbox-container floatingLabel="{{languageUser.em}}">
-                    <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="allUsers" [textField]="'shortname'"
-                      [valueField]="'id'" (valueChange)="onValueUserEmChange($event)" [(ngModel)]="selectedUser">
-                    </kendo-combobox>
-                  </kendo-textbox-container>
-                </div>-->
                 <div class="k-form-field">
                   <kendo-textbox-container floatingLabel="{{language.eventCategory}}">
-                    <!--<div style="width: 100%; margin-top: 5px;">
-                      <kendo-colorpalette [palette]="palette" [value]="selected" [(ngModel)]="selected"
-                        [tileSize]="30" [formControl]="formGroup.get('colorTask')">
-                      </kendo-colorpalette>
-                    </div>-->
                     <kendo-combobox class="col-md-12 col-xs-12" [data]="eventCategory" [textField]="'category'"
                       [valuePrimitive]="true" [valueField]="'id'" (valueChange)="selectedEventCategory($event)"
                       [(ngModel)]="selected" [formControl]="formGroup.get('colorTask')">
@@ -635,15 +593,19 @@
                     </kendo-textbox-container>
                   </div>
                 </div>
+                <div class="col-sm-12" style="text-align: center; font-weight: bold;">
+                  <input type="checkbox" kendoCheckBox [formControl]="formGroup.get('confirm')" [(ngModel)]="isConfirm"
+                    name="isConfirm" style="margin: 0px" /> <span style="font-size: 12px;"> {{language.confirmMessage}}</span>
+                </div>
               </div>
             </ng-template>
             <kendo-scheduler-messages today="{{ language.today }}" allDay="{{ language.allDay }}"
-              dayViewTitle="{{ language.day }}" weekViewTitle="{{ language.week }}"
-              monthViewTitle="{{ language.month }}" workWeekViewTitle="{{ language.workWeek }}"
-              multiDayViewTitle="{{ language.multiDay }}" timelineViewTitle="{{ language.timeline }}"
-              agendaViewTitle="{{ language.agenda }}" showWorkDay="Mostrar horas laborables"
-              showFullDay="Mostrar día completo">
-            </kendo-scheduler-messages>
+                    dayViewTitle="{{ language.day }}" weekViewTitle="{{ language.week }}"
+                    monthViewTitle="{{ language.month }}" workWeekViewTitle="{{ language.workWeek }}"
+                    multiDayViewTitle="{{ language.multiDay }}" timelineViewTitle="{{ language.timeline }}"
+                    agendaViewTitle="{{ language.agenda }}" showWorkDay="Mostrar horas laborables"
+                    showFullDay="Mostrar día completo">
+                    </kendo-scheduler-messages>
           </kendo-scheduler>
         </div>
       </kendo-splitter-pane>

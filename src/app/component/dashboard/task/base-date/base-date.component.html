@@ -17,6 +17,7 @@
       <div class="dropdown-content-grid">
         <a (click)="open('dialog')"><span class="k-icon k-i-delete"></span> {{language.delete}}</a>
         <a (click)="printCustomer()"><span class="k-icon k-i-print"></span> {{language.print}}</a>
+        <a (click)="settingsWindow = true"><span class="k-icon k-i-cog"></span> {{language.settings}}</a>
       </div>
     </div>
   </div>
@@ -1382,6 +1383,19 @@
         <div class="form-group" style="text-align: center;">
           <button kendoButton [primary]="true" class="form-button" [disabled]="documentEditForm.form.invalid"
             type="submit">{{language.updateDocument}}</button>
+        </div>
+      </form>
+    </kendo-window>
+
+    <kendo-window [title]="language.settings" *ngIf="settingsWindow" [minWidth]="400" [width]="550"
+      [minHeight]="300" (close)="settingsWindow = false">
+      <form name="loginForm" class="loginForm" (ngSubmit)="updateCustomer(customer); settingsWindow = false;" #documentEditForm="ngForm">
+        <div class="col-md-12 col-xs-12">
+          <input type="checkbox" kendoCheckBox [(ngModel)]="data.isConfirm" name="isConfirm" style="margin: 0px" />
+          <span style="font-size: 12px;"> {{language.confirmMessageText}}</span>
+        </div>
+        <div class="updateSettings">
+          <button kendoButton [primary]="true" class="form-button" type="submit">{{language.updateSettings}}</button>
         </div>
       </form>
     </kendo-window>

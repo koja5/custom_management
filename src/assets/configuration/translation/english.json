@@ -106,7 +106,8 @@
     "notConfirmed": "Not confirmed",
     "confirmed": "Confirmed",
     "successTitle": "Successful",
-    "successTextConfirmArrival": "Successful send request confirm for {{QUOTE}}"
+    "successTextConfirmArrival": "Successful send request confirm for {{QUOTE}}",
+    "confirmMessage": "Send confirm message to patient"
   },
   "navigation-menu": {
     "calendar": "Calendar",
@@ -157,7 +158,8 @@
     "errorTitle": "Error",
     "errorTextAdd": "New item is not added in grid!",
     "errorTextEdit": "Selected item is not successful edited!",
-    "successTextDelete": "Selected item is successful deleted!"
+    "successTextDelete": "Selected item is successful deleted!",
+    "confirmMessageText": "Receive confirm message"
   },
   "dashboard": {
     "profile": "Profile",
@@ -277,7 +279,10 @@
     "totalTherapy": "Total therapy",
     "averagePerMonth": "Average per month",
     "therapyForLastMonth": "Last month",
-    "therapyForLastWeek": "Last week"
+    "therapyForLastWeek": "Last week",
+    "settings": "Settings",
+    "confirmMessageText": "Receive confirm message",
+    "updateSettings": "Update settings"
   },
   "store": {
     "pagerPage": "Page",
