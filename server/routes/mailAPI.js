@@ -173,7 +173,7 @@ router.post("/sendConfirmArrivalAgain", function(req, res) {
       });
       return;
     }
-    console.log(req.body);
+    
     conn.query(
       "SELECT c.shortname, c.email, t.start, t.end, u.lastname, u.firstname, th.therapies_title from customers c join tasks t on c.id = t.customer_id join therapy th on t.therapy_id = th.id join users u on t.creator_id = u.id where c.id = '" +
         req.body.customer_id +
@@ -195,13 +195,14 @@ router.post("/sendConfirmArrivalAgain", function(req, res) {
           var endHours = convertToDateEnd.getHours();
           var endMinutes = convertToDateEnd.getMinutes();
           var date =
-            convertToDateStart.getDay() +
+            convertToDateStart.getDate() +
             "." +
-            convertToDateStart.getMonth() +
+            (convertToDateStart.getMonth() + 1 ) +
             "." +
             convertToDateStart.getFullYear();
-          var day = convertToDateStart.getDay();
+          console.log(day);
           var month = monthNames[convertToDateStart.getMonth()];
+          var day = convertToDateStart.getDate();
           var start =
             (startHours < 10 ? "0" + startHours : startHours) +
             ":" +

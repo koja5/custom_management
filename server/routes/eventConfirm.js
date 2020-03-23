@@ -115,12 +115,12 @@ function confirm() {
           var endHours = convertToDateEnd.getHours();
           var endMinutes = convertToDateEnd.getMinutes();
           var date =
-            convertToDateStart.getDay() +
+            convertToDateStart.getDate() +
             "." +
-            convertToDateStart.getMonth() +
+            (convertToDateStart.getMonth() + 1 ) +
             "." +
             convertToDateStart.getFullYear();
-          var day = convertToDateStart.getDay();
+          var day = convertToDateStart.getDate();
           var month = monthNames[convertToDateStart.getMonth()];
           var start =
             (startHours < 10 ? "0" + startHours : startHours) +
