@@ -15,4 +15,6 @@ export class NavigationMenuModel {
     vat_tax?: string;
     CS?: string;
     state?: string;
+    event_category?: string;
+    work_time_colors?: string;
 }

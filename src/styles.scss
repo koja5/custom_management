@@ -7,14 +7,6 @@
 @import '~ngx-toastr/toastr';
 /*@import url(https://fonts.googleapis.com/css?family=Titillium+Web:300,400,600,700,900);*/
 
-/*custom css*/
-/*@import url('./assets/css/custom/theme1.scss');
-@import url('./assets/css/custom/theme2.scss');
-@import url('./assets/css/custom/theme3.scss');
-@import url('./assets/css/custom/theme4.scss');
-@import url('./assets/css/custom/theme5.scss');
-@import url('./assets/css/custom/theme6.scss');*/
-
 .k-tabstrip>.k-content {
     overflow: -webkit-paged-x !important;
     padding: 3vh 4vh !important;
@@ -9155,7 +9147,7 @@ tr.group:hover {
     .page-content-wrapper .page-content {
         margin-left: 235px;
         margin-top: 0;
-        // min-height: 600px;
+        min-height: 600px;
         padding: 80px 20px 0px;
     }
     .page-content-wrapper .page-content.no-min-height {
@@ -11372,7 +11364,7 @@ tr.group:hover {
     .page-content-wrapper .page-content {
         margin-left: 235px;
         margin-top: 0;
-        // min-height: 600px;
+        min-height: 600px;
         padding: 80px 20px 0px;
     }
     .page-content-wrapper .page-content.no-min-height {

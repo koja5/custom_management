@@ -364,28 +364,28 @@
                   </div>
                   <div class="col-sm-12" style="text-align: center; font-weight: bold;">
                     <input type="checkbox" kendoCheckBox [formControl]="formGroup.get('confirm')"
-                      [(ngModel)]="isConfirm" name="isConfirm" style="margin: 0px" /> <span style="font-size: 12px;"> {{language.confirmMessage}}</span>
+                      [(ngModel)]="isConfirm" name="isConfirm" style="margin: 0px" /> <span style="font-size: 12px;">
+                      {{language.confirmMessage}}</span>
                   </div>
                 </div>
               </ng-template>
               <kendo-scheduler-messages today="{{ language.today }}" allDay="{{ language.allDay }}"
-                      dayViewTitle="{{ language.day }}" weekViewTitle="{{ language.week }}"
-                      monthViewTitle="{{ language.month }}" workWeekViewTitle="{{ language.workWeek }}"
-                      multiDayViewTitle="{{ language.multiDay }}" timelineViewTitle="{{ language.timeline }}"
-                      agendaViewTitle="{{ language.agenda }}" showWorkDay="Mostrar horas laborables"
-                      showFullDay="Mostrar día completo">
-                      </kendo-scheduler-messages>
+                dayViewTitle="{{ language.day }}" weekViewTitle="{{ language.week }}"
+                monthViewTitle="{{ language.month }}" workWeekViewTitle="{{ language.workWeek }}"
+                multiDayViewTitle="{{ language.multiDay }}" timelineViewTitle="{{ language.timeline }}"
+                agendaViewTitle="{{ language.agenda }}" showWorkDay="Mostrar horas laborables"
+                showFullDay="Mostrar día completo">
+              </kendo-scheduler-messages>
             </kendo-scheduler>
           </div>
         </div>
 
-        <div *ngIf="item.workTime === undefined" class="calendar">
-          <kendo-scheduler [editable]="true" [kendoSchedulerBinding]="item.events"
-            [kendoSchedulerReactiveEditing]="createFormGroup" [(selectedViewIndex)]="selectedViewIndex"
-            class="{{ zIndex }}" [selectedDate]="selectedDate" scrollTime="08:00" startTime="{{startWork}}"
-            endTime="{{endWork}}" workDayStart="{{startWork}}" workDayEnd="{{endWork}}" style="height: 100%;"
-            (save)="saveHandler($event)" style="height: 100%" [resources]="resources" (dragEnd)="dragEndHandler($event)"
-            (resizeEnd)="resizeEndHandler($event)" (remove)="removeHandler($event)">
+        <div *ngIf="item.workTime === undefined">
+          <kendo-scheduler [editable]="true" [(selectedViewIndex)]="selectedViewIndex"
+            [kendoSchedulerBinding]="item.events" [kendoSchedulerReactiveEditing]="createFormGroup" class="{{ zIndex }}"
+            [selectedDate]="selectedDate" scrollTime="08:00" startTime="{{startWork}}" endTime="{{endWork}}"
+            workDayStart="{{startWork}}" workDayEnd="{{endWork}}" (save)="saveHandler($event)" [resources]="resources"
+            (dragEnd)="dragEndHandler($event)" (resizeEnd)="resizeEndHandler($event)" (remove)="removeHandler($event)">
             <ng-template kendoSchedulerToolbarTemplate let-selectedDate="selectedDate">
               <my-navigation [selectedDate]="selectedDate" style="float: left;">
               </my-navigation>
@@ -595,17 +595,18 @@
                 </div>
                 <div class="col-sm-12" style="text-align: center; font-weight: bold;">
                   <input type="checkbox" kendoCheckBox [formControl]="formGroup.get('confirm')" [(ngModel)]="isConfirm"
-                    name="isConfirm" style="margin: 0px" /> <span style="font-size: 12px;"> {{language.confirmMessage}}</span>
+                    name="isConfirm" style="margin: 0px" /> <span style="font-size: 12px;">
+                    {{language.confirmMessage}}</span>
                 </div>
               </div>
             </ng-template>
             <kendo-scheduler-messages today="{{ language.today }}" allDay="{{ language.allDay }}"
-                    dayViewTitle="{{ language.day }}" weekViewTitle="{{ language.week }}"
-                    monthViewTitle="{{ language.month }}" workWeekViewTitle="{{ language.workWeek }}"
-                    multiDayViewTitle="{{ language.multiDay }}" timelineViewTitle="{{ language.timeline }}"
-                    agendaViewTitle="{{ language.agenda }}" showWorkDay="Mostrar horas laborables"
-                    showFullDay="Mostrar día completo">
-                    </kendo-scheduler-messages>
+              dayViewTitle="{{ language.day }}" weekViewTitle="{{ language.week }}"
+              monthViewTitle="{{ language.month }}" workWeekViewTitle="{{ language.workWeek }}"
+              multiDayViewTitle="{{ language.multiDay }}" timelineViewTitle="{{ language.timeline }}"
+              agendaViewTitle="{{ language.agenda }}" showWorkDay="Mostrar horas laborables"
+              showFullDay="Mostrar día completo">
+            </kendo-scheduler-messages>
           </kendo-scheduler>
         </div>
       </kendo-splitter-pane>
