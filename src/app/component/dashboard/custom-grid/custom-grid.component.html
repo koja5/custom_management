@@ -1,0 +1,474 @@
+<div style="height: 100%" *ngIf="language !== undefined">
+  <kendo-grid [data]="gridView" [style.height]="height" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
+    [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="pageable"
+    (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey" [groupable]="true" [group]="state.group"
+    [pageSize]="pageSize" (groupChange)="groupChange($event)" (sortChange)="sortChange($event)">
+    <kendo-grid-messages pagerPage="{{language.pagerPage}}" pagerOf="{{language.pagerOf}}"
+      pagerItems="{{language.pagerItems}}" pagerItemsPerPage="{{language.pagerItemsPerPage}}">
+    </kendo-grid-messages>
+    <ng-template kendoGridToolbarTemplate>
+      <div class="search">
+        <kendo-textbox-container floatingLabel="{{language.searchAllColumn}}">
+          <input kendoTextBox (input)="onFilter($event.target.value)" [(ngModel)]="searchFilter" />
+        </kendo-textbox-container>
+      </div>
+      <div class="search-combobox" *ngIf="gridConfiguration.search !== undefined">
+        <kendo-textbox-container floatingLabel="{{language.searchAllColumn}}">
+          <kendo-combobox [data]="typeOfUsers" [valuePrimitive]="true" [textField]="'type'" [valueField]="'id'"
+            (selectionChange)="filterUserType($event)" class="col-xs-12 noPadding" [(ngModel)]="selectedUserTypeFilter"
+            name="search">
+          </kendo-combobox>
+        </kendo-textbox-container>
+      </div>
+      <div style="float: right; padding-right: 30px; padding-top: 14px;">
+        <button *ngIf="gridConfiguration.new.open === 'modal'" kendoButton [icon]="'add'" (click)="newMember()"
+          [primary]="true" class="addButton">{{language.createData}}</button>
+        <button *ngIf="gridConfiguration.new.open === 'page'" kendoButton [icon]="'add'"
+          [routerLink]="gridConfiguration.new.link" [primary]="true" class="addButton">{{language.createData}}</button>
+        <div class="dropdown-grid">
+          <button class="btn-grid" style="border-left:1px solid #0d8bf2">
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content-grid">
+            <a style="padding: 0px; text-transform: uppercase;"><label class="uploadFromExcel-{{theme}}"
+                style="padding: 12px; cursor: pointer;"><span class='k-icon k-i-file-excel'></span>
+                {{ language.uploadFromExcel }}<input type="file" name="files[]" multiple id="jsonFile" accept=".xlsx"
+                  (change)="onFileChange($event)" [(ngModel)]="fileValue" /></label></a>
+            <a kendoGridPDFCommand><span class="k-icon k-i-file-pdf"></span> {{language.exportToPDF}}</a>
+            <a kendoGridExcelCommand><span class="k-icon k-i-file-excel"></span> {{language.exportToExcel}}</a>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <kendo-grid-column *ngFor="let item of gridConfiguration.columns; let i = index" [field]="item.field"
+      title="{{language[item.title]}}" [width]="item.width" [hidden]="item.hidden">
+      <ng-template *ngIf="item.type === 'button'" kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+        <div *ngIf="item.action === 'preview'">
+          <button *ngIf="item.open === 'modal'" kendoButton [icon]="item.icon" class='{{item.class}}'
+            (click)="previewUser(dataItem)"></button>
+          <button *ngIf="item.open === 'page'" kendoButton [icon]="item.icon" class='{{item.class}}'
+            (click)="generateLink(item.link, dataItem[item.param])"></button>
+        </div>
+
+        <div *ngIf="item.action === 'edit-member'">
+          <button kendoButton [icon]="item.icon" class='{{item.class}}' (click)="editMember(dataItem)"></button>
+        </div>
+
+        <div *ngIf="item.action === 'delete'">
+          <button kendoButton [icon]="item.icon"
+            (click)="openDialogDelete(dataItem[item.param], item.method, rowIndex)"></button>
+        </div>
+      </ng-template>
+      <ng-template *ngIf="item.type === 'boolean'" kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+        <div *ngIf="item.action === 'active'">
+          <span *ngIf="dataItem[item.field]" class="label label-success ng-star-inserted">Active</span>
+          <span *ngIf="!dataItem[item.field]" class="label label-danger ng-star-inserted">Inactive</span>
+        </div>
+      </ng-template>
+      <ng-template *ngIf="item.type === 'image'" kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+        <img src="{{item.rootPath}}{{dataItem[item.field]}}" class="column-image">
+      </ng-template>
+      <ng-template *ngIf="item.type === 'datetime'" kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+        <div>
+          {{ dataItem[item.field] | date: item.format }}
+        </div>
+      </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-pdf fileName="data.pdf" [allPages]="true">
+      <kendo-grid-pdf-margin top="1cm" left="1cm" right="1cm" bottom="1cm"></kendo-grid-pdf-margin>
+    </kendo-grid-pdf>
+    <!-- <kendo-grid-excel fileName="Customers.xlsx"></kendo-grid-excel> -->
+    <kendo-grid-excel fileName="data.xlsx" [fetchData]="allData"></kendo-grid-excel>
+    <ng-template kendoGridNoRecordsTemplate>
+      <div class="row no-results-element">
+        <div class="text-center">
+          <i class="fa fa-heartbeat no-results-icon"></i><br>
+        </div>
+        <div class="text-center m-t-md">
+          <p class="m-b-none">
+            {{language.noRecords}} </p>
+        </div>
+      </div>
+    </ng-template>
+  </kendo-grid>
+
+  <kendo-dialog title="{{language.adminPleaseConfirm}}" *ngIf="dialogDelete" (close)="dialogDelete = false"
+    [minWidth]="250" [width]="450">
+    <div class="modal-body text-center">
+      <img src="../../../../../assets/img/sent.png" alt="" width="50" height="46">
+      <h3>{{language.areYouSure}}</h3>
+    </div>
+    <kendo-dialog-actions>
+      <button kendoButton (click)="dialogDelete = false">{{language.no}}</button>
+      <button kendoButton (click)="dialogDeleteAction('yes')" primary="true">{{language.yes}}</button>
+    </kendo-dialog-actions>
+  </kendo-dialog>
+
+  <kendo-window title="{{language.createNewCustomer}}" *ngIf="memberWindow" [minWidth]="700" [width]="850"
+    [height]="auto" (close)="memberWindow = false">
+
+    <div class="box shadow-sm rounded bg-white mb-3 overflow-hidden">
+      <ul class="nav border-bottom osahan-line-tab" id="myTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link" [ngClass]="selectedTab === 'profile' ? 'active' : ''" (click)="changeTab('profile')"
+            id="home-tab">{{language.profileAbout}}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [ngClass]="selectedTab === 'bankAccount' ? 'active' : ''"
+            (click)="changeTab('bankAccount')" id="profile-tab">{{language.profileBankAccountTitle}}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [ngClass]="selectedTab === 'other' ? 'active' : ''" (click)="changeTab('other')"
+            id="profile-tab">{{language.profileOtherInfoTitle}}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [ngClass]="selectedTab === 'lookingOffer' ? 'active' : ''"
+            (click)="changeTab('lookingOffer')" id="profile-tab">{{language.profileLookingOfferTitle}}</a>
+        </li>
+
+      </ul>
+    </div>
+
+    <form *ngIf="selectedTab === 'profile'" name="loginForm" class="loginForm"
+      (ngSubmit)="operationMode === 'add' ? createNewMember(data) : updateMember(data)" #customerForm="ngForm">
+      <div class="form-group">
+        <div class="row">
+          <div class="text-center vd_info-parent col-md-4 col-xs-12">
+            <img alt="example image" style="width: 190px; height: 190px;" src="../../../../assets/img/profile_image/{{member.image}}"
+              class="rounded-circle">
+            <h4 class="font-semibold name-member">{{member.firstname}} {{member.lastname}}</h4>
+          </div>
+          <div class="col-md-8 col-xs-12">
+            <div class="row">
+              <div class="col-md-6 col-xs-12">
+                <kendo-textbox-container floatingLabel="{{language.fieldSalutation}}">
+                  <kendo-combobox [data]="salutationItem" [valuePrimitive]="true" [textField]="'title'"
+                    [valueField]="'title'" (selectionChange)="selectedSalutation($event)" class="col-xs-12 noPadding"
+                    [(ngModel)]="member.salutation" name="salutation">
+                  </kendo-combobox>
+                </kendo-textbox-container>
+              </div>
+
+              <div class="col-md-6 col-xs-12">
+                <kendo-textbox-container floatingLabel="{{language.fieldRelationshipStatus}}">
+                  <kendo-combobox [data]="relationshipItem" [valuePrimitive]="true" [textField]="'title'"
+                    [valueField]="'title'" (selectionChange)="selectedRelationship($event)" class="col-xs-12 noPadding"
+                    [(ngModel)]="member.relationship" name="relationship">
+                  </kendo-combobox>
+                </kendo-textbox-container>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 col-xs-12">
+                <kendo-textbox-container floatingLabel="{{language.fieldFirstname}}({{language.required}})">
+                  <input kendoTextBox [(ngModel)]="member.firstname" name="firstname" class="noPadding" required
+                    #firstname="ngModel">
+                </kendo-textbox-container>
+              </div>
+              <div class="col-md-6 col-xs-12">
+                <kendo-textbox-container floatingLabel="{{language.fieldLastname}}({{language.required}})">
+                  <input kendoTextBox [(ngModel)]="member.lastname" name="lastname" class="noPadding" required
+                    #lastname="ngModel">
+                </kendo-textbox-container>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-11">
+                <kendo-textbox-container floatingLabel="{{language.fieldPassword}}({{language.required}})">
+                  <input kendoTextBox [(ngModel)]="member.password" name="password" class="noPadding col-sm-11" required
+                    #password="ngModel" disabled>
+                </kendo-textbox-container>
+              </div>
+              <span class="fa fa-unlock-alt change-icon col-sm-1" (click)="changePasswordWindow = true"></span>
+            </div>
+            <div class="row">
+              <div class="col-md-6 col-xs-12">
+                <kendo-textbox-container floatingLabel="{{language.fieldTitleAfter}}">
+                  <input kendoTextBox [(ngModel)]="member.titleAfter" name="titleAfter" class="noPadding"
+                    #titleAfter="ngModel">
+                </kendo-textbox-container>
+              </div>
+
+              <div class="col-md-6 col-xs-12">
+                <kendo-textbox-container floatingLabel="{{language.fieldTitleBefore}}">
+                  <input kendoTextBox [(ngModel)]="member.titleBefore" name="titleBefore" class="noPadding"
+                    #titleBefore="ngModel">
+                </kendo-textbox-container>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-md-6 col-xs-12" style="padding-top: 5px;">
+                <p style="font-size: 10px; color: #0000006b; margin-bottom: 10px !important;">{{language.fieldGender}}
+                </p>
+                <label class="k-radio-label col-md-6 col-xs-12" for="female">
+                  <input type="radio" name="gender" id="female" class="k-radio"
+                    checked="member.gender === 'female' ? checked : ''" [(ngModel)]="member.gender" [value]="'female'">
+                  {{language.fieldFemale}}</label>
+                <label class="k-radio-label col-md-6 col-xs-12" for="male">
+                  <input type="radio" name="gender" id="male" class="k-radio"
+                    checked="member.gender === 'male' ? checked : ''" [(ngModel)]="member.gender" [value]="'male'">
+                  {{language.fieldMale}}</label>
+              </div>
+              <div class="birthday-container col-md-6 col-xs-12">
+                <kendo-textbox-container floatingLabel="{{language.fieldBirthday}}">
+                  <kendo-datepicker class="email noPadding" name="birthday" [(ngModel)]="member.birthday">
+                  </kendo-datepicker>
+                </kendo-textbox-container>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="email col-md-4 col-xs-12">
+          <kendo-textbox-container floatingLabel="{{language.fieldPhoneNumber}}">
+            <input kendoTextBox type="text" class="col-xs-12" name="phoneNumber" [(ngModel)]="member.phoneNumber"
+              phoneNumber.value=''>
+          </kendo-textbox-container>
+        </div>
+        <div class="email col-md-4 col-xs-12">
+          <kendo-textbox-container floatingLabel="{{language.fieldMobile1}}">
+            <input kendoTextBox type="text" class="col-xs-12" name="mobile1" [(ngModel)]="member.mobile1"
+              mobile1.value=''>
+          </kendo-textbox-container>
+        </div>
+        <div class="email col-md-4 col-xs-12">
+          <kendo-textbox-container floatingLabel="{{language.fieldMobile2}}">
+            <input kendoTextBox type="text" class="col-xs-12" name="mobile2" [(ngModel)]="member.mobile2"
+              mobile2.value=''>
+          </kendo-textbox-container>
+        </div>
+        <div class="email col-md-4 col-xs-12">
+          <kendo-textbox-container floatingLabel="{{language.fieldEmail}}({{language.required}})">
+            <input kendoTextBox type="email" class="col-xs-12" name="email" [(ngModel)]="member.email"
+              [pattern]="emailPattern" #email="ngModel" required #email="ngModel"></kendo-textbox-container>
+        </div>
+        <div class="email col-md-4 col-xs-12">
+          <kendo-textbox-container floatingLabel="{{language.fieldStreet}}">
+            <input kendoTextBox type="text" class="col-xs-12" [(ngModel)]="member.street" name="street">
+          </kendo-textbox-container>
+        </div>
+        <div class="email col-md-4 col-xs-12">
+          <kendo-textbox-container floatingLabel="{{language.fieldZip}}">
+            <input kendoTextBox type="text" class="col-xs-12" [(ngModel)]="member.zip" name="zip">
+          </kendo-textbox-container>
+        </div>
+        <div class="email col-md-4 col-xs-12">
+          <kendo-textbox-container floatingLabel="{{language.fieldLocation}}">
+            <input kendoTextBox type="text" class="col-xs-12" [(ngModel)]="member.location" name="location">
+          </kendo-textbox-container>
+        </div>
+        <div class="email col-md-4 col-xs-12">
+          <kendo-textbox-container floatingLabel="{{language.fieldOrganization}}">
+            <input kendoTextBox type="text" class="col-xs-12" [(ngModel)]="member.organization" name="organization">
+          </kendo-textbox-container>
+        </div>
+        <div class="email col-md-4 col-xs-12">
+          <kendo-textbox-container floatingLabel="{{language.fieldWebsite}}">
+            <input kendoTextBox type="text" class="col-xs-12" [(ngModel)]="member.website" name="website">
+          </kendo-textbox-container>
+        </div>
+
+        <div class="birthday-container col-md-6 col-xs-12">
+          <kendo-textbox-container floatingLabel="{{language.fieldActiveDate}}">
+            <kendo-datepicker class="email noPadding" name="activeDate" [(ngModel)]="member.activeDate">
+            </kendo-datepicker>
+          </kendo-textbox-container>
+        </div>
+        <div class="birthday-container col-md-6 col-xs-12">
+          <kendo-textbox-container floatingLabel="{{language.fieldActivePremiumDate}}">
+            <kendo-datepicker class="email noPadding" name="activePremiumDate" [(ngModel)]="member.activePremiumDate">
+            </kendo-datepicker>
+          </kendo-textbox-container>
+        </div>
+        <div class="email col-md-4 col-xs-6" style="padding-top: 20px; font-weight: bold;">
+          <label class="k-form-field col-md-6" style="text-align: center;">
+            {{language.fieldActive}} &nbsp; <kendo-switch [(ngModel)]="member.active" name='active'></kendo-switch>
+          </label>
+        </div>
+        <div class="col-md-4 col-xs-6">
+          <kendo-textbox-container floatingLabel="{{language.fieldStoreLocation}}({{language.required}})">
+            <kendo-combobox [data]="typeOfUsers" [valuePrimitive]="true" [textField]="'type'" [valueField]="'id'"
+              (selectionChange)="selectionUserType($event)" class="col-xs-12 noPadding" [(ngModel)]="member.type"
+              name="storeId" required>
+            </kendo-combobox>
+          </kendo-textbox-container>
+        </div>
+        <div class="col-md-4 col-xs-6" *ngIf="allDirectors">
+          <kendo-textbox-container floatingLabel="{{language.fieldDirector}}({{language.required}})">
+            <kendo-combobox [data]="allDirectors" [textField]="'fullname'" [valueField]="'id'" [filterable]="true"
+              [(ngModel)]="directorId" [filterable]="true" (filterChange)="searchDirector($event)"
+              (valueChange)="selectedDirector($event)" [valuePrimitive]="true" [loading]="directorLoading"
+              name="directorId" required>
+              <ng-template kendoComboBoxItemTemplate let-dataItem>
+                <p style="height: 45px !important;">
+                  <img style="width: 40px; margin-right: 10px;" class="rounded-circle"
+                    src="../../../../../assets/img/profile_image/{{dataItem.image}}">
+                  <span style="font-weight: bold">{{ dataItem.fullname }}</span>
+                </p>
+              </ng-template>
+            </kendo-combobox>
+          </kendo-textbox-container>
+        </div>
+      </div>
+      <!-- ./remember-row -->
+      <div class="form-group" style="text-align: center; margin-top: 15px;">
+        <button kendoButton [primary]="true" [primary]="true" class="form-button"
+          type="submit">{{operationMode === 'add' ? language.createData : language.updateData}}</button>
+      </div>
+    </form>
+
+    <form *ngIf="selectedTab === 'bankAccount'" name="loginForm" class="loginForm" (ngSubmit)="saveBankAccount(data)"
+      #customerForm="ngForm">
+      <div class="box-body px-3 pt-3 pb-3">
+        <div class="row">
+          <div class="col-sm-12 mb-4">
+            <label id="FROM" class="form-label">{{language.profileBankAccount}}</label>
+            <!-- Input -->
+            <div class="form-group">
+              <input type="text" class="form-control" [(ngModel)]="bankAccount.bankAccount" name="bankAccount">
+            </div>
+            <!-- End Input -->
+          </div>
+        </div>
+
+        <div class="row">
+
+          <div class="col-sm-6 mb-4">
+            <label id="TO" class="form-label">{{language.profileIBAN}}</label>
+            <!-- Input -->
+            <div class="form-group">
+              <input type="text" class="form-control" [ngClass]="badIBAN === true ? 'badIBAN' : ''"
+                [(ngModel)]="bankAccount.iban" name="iban">
+              <small class="form-text text-muted">{{language.profileJustYouCanSee}}</small>
+            </div>
+            <!-- End Input -->
+          </div>
+          <div class="col-sm-6 mb-4">
+            <label id="FROM" class="form-label">{{language.profileBIC}}</label>
+            <!-- Input -->
+            <div class="form-group">
+              <input type="text" class="form-control" [(ngModel)]="bankAccount.bic" name="bic">
+              <small class="form-text text-muted">{{language.profileJustYouCanSee}}</small>
+            </div>
+            <!-- End Input -->
+          </div>
+        </div>
+      </div>
+
+
+      <div class="form-group" style="text-align: center; margin-top: 15px;">
+        <button kendoButton [primary]="true" [primary]="true" class="form-button"
+          type="submit">{{operationMode === 'add' ? language.createData : language.updateData}}</button>
+      </div>
+    </form>
+
+    <form *ngIf="selectedTab === 'other'" name="loginForm" class="loginForm" (ngSubmit)="saveAdditionalInfo(data)"
+      #customerForm="ngForm">
+      <div class="box-body px-3 pt-3 pb-3">
+        <div class="row">
+          <div class="col-sm-6 mb-4">
+            <label id="FROM" class="form-label">{{language.profileAbilitiesAndKnowledge}}</label>
+            <!-- Input -->
+            <div class="input-group">
+              <textarea class="form-control" rows="4" [(ngModel)]="additionalInfo.abilitiesKnowledge" name="looking">
+            </textarea>
+            </div>
+            <!-- End Input -->
+          </div>
+          <div class="col-sm-6 mb-4">
+            <label id="TO" class="form-label">{{language.profileLanguages}}</label>
+            <!-- Input -->
+            <div class="input-group">
+              <textarea class="form-control" rows="4" [(ngModel)]="additionalInfo.languages" name="offer">
+            </textarea>
+            </div>
+            <!-- End Input -->
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6 mb-4">
+            <label id="FROM" class="form-label">{{language.profileQualifications}}</label>
+            <!-- Input -->
+            <div class="input-group">
+              <textarea class="form-control" rows="4" [(ngModel)]="additionalInfo.qualifications" name="looking">
+            </textarea>
+            </div>
+            <!-- End Input -->
+          </div>
+          <div class="col-sm-6 mb-4">
+            <label id="TO" class="form-label">{{language.profileInterests}}</label>
+            <!-- Input -->
+            <div class="input-group">
+              <textarea class="form-control" rows="4" [(ngModel)]="additionalInfo.interests" name="offer">
+            </textarea>
+            </div>
+            <!-- End Input -->
+          </div>
+        </div>
+        <div class="form-group" style="text-align: center; margin-top: 15px;">
+          <button kendoButton [primary]="true" [primary]="true" class="form-button"
+            type="submit">{{operationMode === 'add' ? language.createData : language.updateData}}</button>
+        </div>
+      </div>
+    </form>
+
+    <form *ngIf="selectedTab === 'lookingOffer'" name="loginForm" class="loginForm" (ngSubmit)="saveLookingOffer()"
+      #customerForm="ngForm">
+      <div class="box-body px-3 pt-3 pb-3">
+        <div class="row">
+          <div class="col-sm-6 mb-4">
+            <label id="FROM" class="form-label">{{language.profileLooking}}</label>
+            <!-- Input -->
+            <div class="input-group">
+              <textarea class="form-control" rows="4" [(ngModel)]="lookingOffer.looking" name="looking">
+            </textarea>
+            </div>
+            <!-- End Input -->
+          </div>
+          <div class="col-sm-6 mb-4">
+            <label id="TO" class="form-label">{{language.profileOffer}}</label>
+            <!-- Input -->
+            <div class="input-group">
+              <textarea class="form-control" rows="4" [(ngModel)]="lookingOffer.offer" name="offer">
+            </textarea>
+            </div>
+            <!-- End Input -->
+          </div>
+        </div>
+      </div>
+      <div class="form-group" style="text-align: center; margin-top: 15px;">
+        <button kendoButton [primary]="true" [primary]="true" class="form-button"
+          type="submit">{{operationMode === 'add' ? language.createData : language.updateData}}</button>
+      </div>
+    </form>
+  </kendo-window>
+
+  <kendo-window title="{{language.changePasswordTitle}}" *ngIf="changePasswordWindow"
+    (close)="changePasswordWindow = false" [width]="windowWidth ? windowWidth : 440"
+    [height]="windowHeight ? windowHeight : 310">
+    <form (ngSubmit)="changePassword()">
+      <div class="error-alert" *ngIf="passwordIsNotEqual">{{language.passwordIsNotEqual}}</div>
+      <div class="col-sm-12 mb-2">
+        <label id="positionLabel" class="form-label">{{language.fieldNewPassword}}</label>
+        <div class="input-group">
+          <input type="password" class="form-control" [(ngModel)]="changePasswordData.new" name="new">
+        </div>
+      </div>
+      <div class="col-sm-12 mb-2">
+        <label id="positionLabel" class="form-label">{{language.fieldNewPasswordRepeat}}</label>
+        <div class="input-group">
+          <input type="password" class="form-control" [(ngModel)]="changePasswordData.newRepeat" name="newRepeat">
+        </div>
+      </div>
+      <div class="form-group" style="text-align: center; margin-top: 15px;">
+        <button kendoButton [primary]="true" [primary]="true" class="form-button"
+          type="submit">{{language.updateData}}</button>
+      </div>
+    </form>
+  </kendo-window>
+</div>

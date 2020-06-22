@@ -104,11 +104,11 @@ export class DashboardComponent implements OnInit {
       this.language = JSON.parse(localStorage.getItem("language"));
     } else {
       console.log("english!");
-      this.service.getTranslation("english").subscribe(data => {
+      /*this.service.getTranslation("english").subscribe(data => {
         console.log(data);
         this.language = data;
         localStorage.setItem("language", JSON.stringify(this.language));
-      });
+      });*/
     }
 
     this.getMe();
@@ -232,11 +232,11 @@ export class DashboardComponent implements OnInit {
     this.languageName = name;
     localStorage.setItem("language", name);
     this.language = undefined;
-    this.service.getTranslation(this.languageName).subscribe(data => {
+    /*this.service.getTranslation(this.languageName).subscribe(data => {
       this.language = data;
       localStorage.setItem("language", JSON.stringify(this.language));
       this.message.sendLanguage();
-    });
+    });*/
   }
 
   returnActiveNode(node) {

@@ -36,13 +36,13 @@ export class ChangePasswordComponent implements OnInit {
     if (localStorage.getItem('language') !== null) {
       this.language = JSON.parse(localStorage.getItem('language'))['login'];
     } else {
-      this.dashboardService.getTranslation('english').subscribe(
+      /*this.dashboardService.getTranslation('english').subscribe(
         data => {
           console.log(data);
           localStorage.setItem('translation', JSON.stringify(data));
           this.language = data['login'];
         }
-      );
+      );*/
     }
 
   }

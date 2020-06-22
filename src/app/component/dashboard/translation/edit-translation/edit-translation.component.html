@@ -1,0 +1,20 @@
+<div *ngIf="data !== undefined&&language !== undefined">
+  <button kendobutton style="margin: 1vh;" class="k-button k-primary inputTheme-Theme1" (click)="back()"><i
+      class="fa fa-arrow-left"></i> &nbsp; {{language.backToGrid}}</button>
+
+  <div>
+    <kendo-textbox-container floatingLabel="{{language.language}}">
+      <input kendoTextBox [(ngModel)]="data.language" name="language" />
+    </kendo-textbox-container>
+    <kendo-textbox-container floatingLabel="{{language.countryCode}}">
+      <input kendoTextBox [(ngModel)]="data.countryCode" name="countryCode" />
+    </kendo-textbox-container>
+    <kendo-switch [(ngModel)]="data.active" name="active"></kendo-switch>
+  </div>
+
+  <mat-card class="custom-mat custom-mat-{{type}}" *ngIf="schema !== undefined">
+    <json-schema-form loadExternalAssets="true" [form]="schema" [data]="data.config"
+      (onSubmit)="saveConfiguration($event)" framework="material-design">
+    </json-schema-form>
+  </mat-card>
+</div>

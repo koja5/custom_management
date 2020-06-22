@@ -55,11 +55,11 @@ export class LoginComponent implements OnInit {
     if (localStorage.getItem("language") !== null) {
       this.language = JSON.parse(localStorage.getItem("language"))["login"];
     } else {
-      this.dashboardService.getTranslation("english").subscribe(data => {
+      /*this.dashboardService.getTranslation("english").subscribe(data => {
         console.log(data);
         localStorage.setItem("language", JSON.stringify(data));
         this.language = data["login"];
-      });
+      });*/
     }
   }
 

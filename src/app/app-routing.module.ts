@@ -24,7 +24,9 @@ import { VaucherComponent } from "./component/dashboard/vaucher/vaucher.componen
 import { SettingsComponent } from "./component/dashboard/settings/settings.component";
 import { EventCategoryComponent } from "./component/dashboard/parameters/event-category/event-category.component";
 import { WorkTimeColorsComponent } from "./component/dashboard/parameters/work-time-colors/work-time-colors.component";
-import { NotFoundComponent } from './component/templates/not-found/not-found.component';
+import { NotFoundComponent } from "./component/templates/not-found/not-found.component";
+import { TranslationComponent } from "./component/dashboard/translation/translation.component";
+import { EditTranslationComponent } from "./component/dashboard/translation/edit-translation/edit-translation.component";
 
 const routes: Routes = [
   { path: "", redirectTo: "", pathMatch: "full" },
@@ -32,7 +34,7 @@ const routes: Routes = [
   {
     path: "changePassword/:id",
     component: ChangePasswordComponent,
-    canActivate: [LoggedGuard]
+    canActivate: [LoggedGuard],
   },
   {
     path: "dashboard",
@@ -44,7 +46,7 @@ const routes: Routes = [
       {
         path: "user-details/:id",
         component: UserDetailsComponent,
-        outlet: "dashboard"
+        outlet: "dashboard",
       },
       { path: "store", component: StoreComponent, outlet: "dashboard" },
       { path: "profile", component: ProfileComponent, outlet: "dashboard" },
@@ -52,7 +54,7 @@ const routes: Routes = [
       {
         path: "parameters",
         component: ParametersComponent,
-        outlet: "dashboard"
+        outlet: "dashboard",
       },
       { path: "statistic", component: StatisticComponent, outlet: "dashboard" },
       { path: "vaucher", component: VaucherComponent, outlet: "dashboard" },
@@ -64,30 +66,30 @@ const routes: Routes = [
           {
             path: "change-password",
             component: ChangePasswordComponent,
-            outlet: "settings"
-          }
-        ]
+            outlet: "settings",
+          },
+        ],
       },
       {
         path: "complaint",
         component: ParametersComponent,
-        outlet: "dashboard"
+        outlet: "dashboard",
       },
       { path: "therapy", component: ParametersComponent, outlet: "dashboard" },
       {
         path: "treatment",
         component: ParametersComponent,
-        outlet: "dashboard"
+        outlet: "dashboard",
       },
       {
         path: "recommendation",
         component: ParametersComponent,
-        outlet: "dashboard"
+        outlet: "dashboard",
       },
       {
         path: "relationship",
         component: ParametersComponent,
-        outlet: "dashboard"
+        outlet: "dashboard",
       },
       { path: "social", component: ParametersComponent, outlet: "dashboard" },
       { path: "doctor", component: ParametersComponent, outlet: "dashboard" },
@@ -98,30 +100,40 @@ const routes: Routes = [
       {
         path: "event-category",
         component: EventCategoryComponent,
-        outlet: "dashboard"
+        outlet: "dashboard",
       },
       {
         path: "work-time-colors",
         component: WorkTimeColorsComponent,
-        outlet: "dashboard"
-      }
-    ]
+        outlet: "dashboard",
+      },
+      {
+        path: "translation",
+        component: TranslationComponent,
+        outlet: "dashboard",
+      },
+      {
+        path: "translation/edit/:id",
+        component: EditTranslationComponent,
+        outlet: "dashboard",
+      },
+    ],
   },
   {
     path: "document/server/routes/uploads/:id",
-    component: DocumentPreviewComponent
+    component: DocumentPreviewComponent,
   },
   { path: "template/confirm-arrival", component: ConfirmArrivalComponent },
   {
     path: "**",
     pathMatch: "full",
-    component: NotFoundComponent
-  }
+    component: NotFoundComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule {}
 export const routingComponents = [AppComponent, LoginComponent];
