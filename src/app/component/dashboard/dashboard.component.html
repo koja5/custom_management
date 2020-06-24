@@ -6,7 +6,7 @@
       <div class="page-header-inner ">
         <!-- logo start -->
         <div class="page-logo">
-          <a href="index.html">
+          <a routerLink="/dashboard/home/task">
             <span class="logo-icon fa fa-stethoscope fa-rotate-45"></span>
             <span class="logo-default">Tuina Praxis</span> </a>
         </div>
@@ -49,12 +49,12 @@
               </a>
               <ul class="dropdown-menu dropdown-menu-default {{profile}}">
                 <li>
-                  <a [routerLink]="[{outlets: {'dashboard': ['profile']}}]" (click)="showHideProfile()">
-                    <i class="fa fa-user"></i> {{language['dashboard']['profile']}} </a>
+                  <a routerLink="/dashboard/home/profile" (click)="showHideProfile()">
+                    <i class="fa fa-user"></i> {{language['profile']}} </a>
                 </li>
                 <li>
                   <a (click)="settings.open()" (click)="showHideProfile()">
-                    <i class="fa fa-cog"></i> {{language['dashboard']['settings']}}
+                    <i class="fa fa-cog"></i> {{language['settings']}}
                   </a>
                 </li>
                 <li>
@@ -70,7 +70,7 @@
                 </li>
                 <li>
                   <a (click)="logout(); showHideProfile()">
-                    <i class="fa fa-sign-out"></i> {{language['dashboard']['logout']}} </a>
+                    <i class="fa fa-sign-out"></i> {{language['logout']}} </a>
                 </li>
               </ul>
             </li>
@@ -109,109 +109,102 @@
                   </div>
                 </li>
 
+                <li *ngIf="user && user.id === 4" class="nav-item {{selectedNodeModel.translation}}"><a
+                    (click)="returnActiveNode('translation')" routerLink="/dashboard/home/translation"
+                    class="nav-link"><i class="fa fa-tasks"></i><span
+                      class="title">{{language['translation']}}</span></a>
+                </li>
                 <li class="nav-item {{selectedNodeModel.task}}"><a (click)="returnActiveNode('task')"
-                    [routerLink]="[{outlets: {'dashboard': ['task']}}]" class="nav-link"><i
-                      class="fa fa-calendar"></i><span
-                      class="title">{{language['navigation-menu']['calendar']}}</span></a>
+                    routerLink="/dashboard/home/task" class="nav-link"><i class="fa fa-calendar"></i><span
+                      class="title">{{language['calendar']}}</span></a>
                 </li>
                 <li class="nav-item {{selectedNodeModel.customers}}"><a (click)="returnActiveNode('customers')"
-                    [routerLink]="[{outlets: {'dashboard': ['customers']}}]" class="nav-link"><i
-                      class="fa fa-wheelchair"></i><span
-                      class="title">{{language['navigation-menu']['customer']}}</span></a>
+                    routerLink="/dashboard/home/customers" class="nav-link"><i class="fa fa-wheelchair"></i><span
+                      class="title">{{language['customer']}}</span></a>
                 </li>
                 <li *ngIf="type === 0 || type === 1" class="nav-item {{selectedNodeModel.users}}"><a
-                    (click)="returnActiveNode('users')" [routerLink]="[{outlets: {'dashboard': ['users']}}]"
-                    class="nav-link"><i class="fa fa-user"></i><span
-                      class="title">{{language['navigation-menu']['users']}}</span></a>
+                    (click)="returnActiveNode('users')" routerLink="/dashboard/home/users" class="nav-link"><i
+                      class="fa fa-user"></i><span class="title">{{language['users']}}</span></a>
                 </li>
                 <li *ngIf="type === 0 || type === 1" class="nav-item {{selectedNodeModel.store}}"><a
-                    (click)="returnActiveNode('store')" [routerLink]="[{outlets: {'dashboard': ['store']}}]"
-                    class="nav-link"><i class="fa fa-hospital-o"></i><span
-                      class="title">{{language['navigation-menu']['store']}}</span></a>
+                    (click)="returnActiveNode('store')" routerLink="/dashboard/home/store" class="nav-link"><i
+                      class="fa fa-hospital-o"></i><span class="title">{{language['store']}}</span></a>
                 </li>
                 <li class="nav-item {{selectedNodeModel.vaucher}}"><a (click)="returnActiveNode('vaucher')"
-                    [routerLink]="[{outlets: {'dashboard': ['vaucher']}}]" class="nav-link"><i
-                      class="fa fa-money"></i><span class="title">{{language['navigation-menu']['vaucher']}}</span></a>
+                    routerLink="/dashboard/home/vaucher" class="nav-link"><i class="fa fa-money"></i><span
+                      class="title">{{language['vaucher']}}</span></a>
                 </li>
                 <li *ngIf="type === 0 || type === 1" class="nav-item {{subMenuInd}}"><a (click)="showHideSubMenu()"
-                    class="nav-link"><i class="fa fa-cube"></i><span
-                      class="title">{{language['navigation-menu']['parameters']}}</span></a>
+                    class="nav-link"><i class="fa fa-cube"></i><span class="title">{{language['parameters']}}</span></a>
                   <ul class="sub-menu">
                     <li class="nav-item {{selectedNodeModel.complaint}}">
-                      <a [routerLink]="[{outlets: {'dashboard': ['complaint']}}]"
-                        (click)="returnActiveNode('complaint')" class="nav-link">
+                      <a routerLink="/dashboard/home/complaint" (click)="returnActiveNode('complaint')"
+                        class="nav-link">
                         <span class="fa fa-list-alt"></span> Complaint
                       </a>
                     </li>
                     <li class="nav-item {{selectedNodeModel.therapy}}">
-                      <a [routerLink]="[{outlets: {'dashboard': ['therapy']}}]" (click)="returnActiveNode('therapy')"
-                        class="nav-link">
+                      <a routerLink="/dashboard/home/therapy" (click)="returnActiveNode('therapy')" class="nav-link">
                         <span class="fa fa-medkit"></span> Therapy
                       </a>
                     </li>
                     <li class="nav-item {{selectedNodeModel.treatment}}">
-                      <a [routerLink]="[{outlets: {'dashboard': ['treatment']}}]"
-                        (click)="returnActiveNode('treatment')" class="nav-link">
+                      <a routerLink="/dashboard/home/treatment" (click)="returnActiveNode('treatment')"
+                        class="nav-link">
                         <span class="fa fa-medkit"></span> Treatment
                       </a>
                     </li>
                     <li class="nav-item {{selectedNodeModel.recommendation}}">
-                      <a [routerLink]="[{outlets: {'dashboard': ['recommendation']}}]"
-                        (click)="returnActiveNode('recommendation')" class="nav-link">
+                      <a routerLink="/dashboard/home/recommendation" (click)="returnActiveNode('recommendation')"
+                        class="nav-link">
                         <span class="fa fa-check"></span> Recommendation
                       </a>
                     </li>
                     <li class="nav-item {{selectedNodeModel.relationship}}">
-                      <a [routerLink]="[{outlets: {'dashboard': ['relationship']}}]"
-                        (click)="returnActiveNode('relationship')" class="nav-link">
+                      <a routerLink="/dashboard/home/relationship" (click)="returnActiveNode('relationship')"
+                        class="nav-link">
                         <span class="fa fa-exchange"></span> Relationship
                       </a>
                     </li>
                     <li class="nav-item {{selectedNodeModel.social}}">
-                      <a [routerLink]="[{outlets: {'dashboard': ['social']}}]" (click)="returnActiveNode('social')"
-                        class="nav-link">
+                      <a routerLink="/dashboard/home/social" (click)="returnActiveNode('social')" class="nav-link">
                         <span class="fa fa-life-ring"></span> Social
                       </a>
                     </li>
                     <li class="nav-item {{selectedNodeModel.doctor}}">
-                      <a [routerLink]="[{outlets: {'dashboard': ['doctor']}}]" (click)="returnActiveNode('doctor')"
-                        class="nav-link">
+                      <a routerLink="/dashboard/home/doctor" (click)="returnActiveNode('doctor')" class="nav-link">
                         <span class="fa fa-user"></span> Doctor
                       </a>
                     </li>
                     <li class="nav-item {{selectedNodeModel.doctors}}">
-                      <a [routerLink]="[{outlets: {'dashboard': ['doctors']}}]" (click)="returnActiveNode('doctors')"
-                        class="nav-link">
+                      <a routerLink="/dashboard/home/doctors" (click)="returnActiveNode('doctors')" class="nav-link">
                         <span class="fa fa-users"></span> Doctors
                       </a>
                     </li>
                     <li class="nav-item {{selectedNodeModel.vat_tax}}">
-                      <a [routerLink]="[{outlets: {'dashboard': ['vat_tax']}}]" (click)="returnActiveNode('vat_tax')"
-                        class="nav-link">
+                      <a routerLink="/dashboard/home/vat_tax" (click)="returnActiveNode('vat_tax')" class="nav-link">
                         <span class="fa fa-percent"></span> VAT Tax
                       </a>
                     </li>
                     <li class="nav-item {{selectedNodeModel.CS}}">
-                      <a [routerLink]="[{outlets: {'dashboard': ['CS']}}]" (click)="returnActiveNode('CS')"
-                        class="nav-link">
+                      <a routerLink="/dashboard/home/CS" (click)="returnActiveNode('CS')" class="nav-link">
                         <span class="fa fa-contao"></span> CS
                       </a>
                     </li>
                     <li class="nav-item {{selectedNodeModel.state}}">
-                      <a [routerLink]="[{outlets: {'dashboard': ['state']}}]" (click)="returnActiveNode('state')"
-                        class="nav-link">
+                      <a routerLink="/dashboard/home/state" (click)="returnActiveNode('state')" class="nav-link">
                         <span class="fa fa-thermometer-three-quarters"></span> State
                       </a>
                     </li>
                     <li class="nav-item {{selectedNodeModel.event_category}}">
-                      <a [routerLink]="[{outlets: {'dashboard': ['event-category']}}]"
-                        (click)="returnActiveNode('event_category')" class="nav-link">
+                      <a routerLink="/dashboard/home/event-category" (click)="returnActiveNode('event_category')"
+                        class="nav-link">
                         <span class="fa fa-paint-brush"></span> Event Category
                       </a>
                     </li>
                     <li class="nav-item {{selectedNodeModel.work_time_colors}}">
-                      <a [routerLink]="[{outlets: {'dashboard': ['work-time-colors']}}]"
-                        (click)="returnActiveNode('work_time_colors')" class="nav-link">
+                      <a routerLink="/dashboard/home/work-time-colors" (click)="returnActiveNode('work_time_colors')"
+                        class="nav-link">
                         <span class="fa fa-tint"></span> Work Time Colors
                       </a>
                     </li>
@@ -247,7 +240,7 @@
               <div class="content" style="height: 100%; overflow-y: auto; overflow-x: hidden;">
                 <!-- container-fluid -->
                 <div style="height: 100%">
-                  <router-outlet name="dashboard"></router-outlet>
+                  <router-outlet></router-outlet>
                 </div>
               </div>
             </div>
@@ -260,7 +253,7 @@
 
 <modal #settings modalClass="modal-md top-margin loggerModal adminModal">
   <modal-header>
-    <h2 *ngIf="language !== undefined">{{language['dashboard']['settings']}}</h2>
+    <h2 *ngIf="language !== undefined">{{language['settings']}}</h2>
   </modal-header>
   <modal-content>
     <kendo-tabstrip>

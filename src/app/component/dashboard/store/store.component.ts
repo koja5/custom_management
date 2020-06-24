@@ -67,7 +67,7 @@ export class StoreComponent implements OnInit {
     if (localStorage.getItem("theme") !== null) {
       this.theme = localStorage.getItem("theme");
     }
-    this.language = JSON.parse(localStorage.getItem("language"))["store"];
+    this.language = JSON.parse(localStorage.getItem("language"));
     this.getStore();
 
     this.message.getTheme().subscribe(mess => {

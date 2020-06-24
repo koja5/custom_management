@@ -106,11 +106,11 @@
                             <kendo-textbox-container floatingLabel="{{language.attention}}">
                               <textarea kendoTextArea
                                 *ngIf="data.attention === '' || data.attention === null || data.attention === undefiend"
-                                [autoSize]="true" [disabled]="true" [(ngModel)]="language.noInformation"
+                                [autoSize]="true" [readonly]="true" [(ngModel)]="language.noInformation"
                                 name="attention"></textarea>
                               <textarea kendoTextArea
                                 *ngIf="data.attention !== null && data.attention !== undefined && data.attention !== ''"
-                                [(ngModel)]="data.attention" [autoSize]="true" [disabled]="true"></textarea>
+                                [(ngModel)]="data.attention" [autoSize]="true" [readonly]="true"></textarea>
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -120,11 +120,11 @@
                             <kendo-textbox-container floatingLabel="{{language.physicalComplaint}}">
                               <textarea kendoTextArea
                                 *ngIf="data.physicalComplaint === '' || data.physicalComplaint === null || data.physicalComplaint === undefiend"
-                                [autoSize]="true" [disabled]="true" [(ngModel)]="language.noInformation"
+                                [autoSize]="true" [readonly]="true" [(ngModel)]="language.noInformation"
                                 name="physicalComplaint"></textarea>
                               <textarea kendoTextArea
                                 *ngIf="data.physicalComplaint !== null && data.physicalComplaint !== undefined && data.physicalComplaint !== ''"
-                                [(ngModel)]="data.physicalComplaint" [autoSize]="true" [disabled]="true"></textarea>
+                                [(ngModel)]="data.physicalComplaint" [autoSize]="true" [readonly]="true"></textarea>
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -609,7 +609,7 @@
                       </div>
                       <div class="row-grid" *ngIf="gridComplaint !== undefined">
                         <button kendoButton [primary]="true" [icon]="'add'" style="width: auto; margin-bottom: 2vh;"
-                          (click)="openComplaintModal(); changeTheme(theme);">{{language.addComplaint}}</button>
+                          (click)="openComplaintModal()">{{language.addComplaint}}</button>
                         <kendo-grid [data]="gridComplaint" [height]="390" [resizable]="true"
                           [loading]="loadingGridComplaint">
                           <kendo-grid-column field="date" title="Date" width="120">
@@ -654,7 +654,7 @@
                       </div>
                       <div class="row-grid" *ngIf="gridTherapy !== undefined">
                         <button kendoButton [primary]="true" [icon]="'add'" style="width: auto; margin-bottom: 2vh;"
-                          (click)="openTherapyModal(); changeTheme(theme);">{{language.addTherapy}}</button>
+                          (click)="openTherapyModal()">{{language.addTherapy}}</button>
                         <kendo-grid [data]="gridTherapy" [height]="390" [resizable]="true"
                           [loading]="loadingGridTherapy">
                           <kendo-grid-column field="date" title="Date" width="140" [format]="{ date: 'short' }">
@@ -996,8 +996,8 @@
         </div>
         <div class="col-md-12 col-xs-12">
           <kendo-textbox-container floatingLabel="{{language.stateValue}}({{language.required}})">
-            <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="stateValue" [(ngModel)]="complaintData.state"
-              name="state" required>
+            <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="stateValue" [textField]="'text'"
+              [valueField]="'text'" [(ngModel)]="complaintData.state" name="state" required>
             </kendo-combobox>
           </kendo-textbox-container>
         </div>
@@ -1387,9 +1387,10 @@
       </form>
     </kendo-window>
 
-    <kendo-window [title]="language.settings" *ngIf="settingsWindow" [minWidth]="400" [width]="550"
-      [minHeight]="300" (close)="settingsWindow = false">
-      <form name="loginForm" class="loginForm" (ngSubmit)="updateCustomer(customer); settingsWindow = false;" #documentEditForm="ngForm">
+    <kendo-window [title]="language.settings" *ngIf="settingsWindow" [minWidth]="400" [width]="550" [minHeight]="300"
+      (close)="settingsWindow = false">
+      <form name="loginForm" class="loginForm" (ngSubmit)="updateCustomer(customer); settingsWindow = false;"
+        #documentEditForm="ngForm">
         <div class="col-md-12 col-xs-12">
           <input type="checkbox" kendoCheckBox [(ngModel)]="data.isConfirm" name="isConfirm" style="margin: 0px" />
           <span style="font-size: 12px;"> {{language.confirmMessageText}}</span>

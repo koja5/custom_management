@@ -80,7 +80,7 @@ export class CustomersComponent implements OnInit {
     this.getCustomers();
 
     if (localStorage.getItem("language") !== null) {
-      this.language = JSON.parse(localStorage.getItem("language")).grid;
+      this.language = JSON.parse(localStorage.getItem("language"));
     }
 
     if (localStorage.getItem("theme") !== null) {

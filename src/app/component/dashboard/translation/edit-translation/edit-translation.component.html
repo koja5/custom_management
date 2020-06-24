@@ -2,14 +2,14 @@
   <button kendobutton style="margin: 1vh;" class="k-button k-primary inputTheme-Theme1" (click)="back()"><i
       class="fa fa-arrow-left"></i> &nbsp; {{language.backToGrid}}</button>
 
-  <div>
-    <kendo-textbox-container floatingLabel="{{language.language}}">
+  <div style="width: 500px !important; margin-bottom: 15px;">
+    <kendo-textbox-container floatingLabel="{{language.language}}" style="width: 200px !important">
       <input kendoTextBox [(ngModel)]="data.language" name="language" />
     </kendo-textbox-container>
-    <kendo-textbox-container floatingLabel="{{language.countryCode}}">
+    <kendo-textbox-container floatingLabel="{{language.countryCode}}" style="width: 200px !important">
       <input kendoTextBox [(ngModel)]="data.countryCode" name="countryCode" />
     </kendo-textbox-container>
-    <kendo-switch [(ngModel)]="data.active" name="active"></kendo-switch>
+    <kendo-switch [(ngModel)]="data.active" name="active" style="width: 45px !important"></kendo-switch>
   </div>
 
   <mat-card class="custom-mat custom-mat-{{type}}" *ngIf="schema !== undefined">

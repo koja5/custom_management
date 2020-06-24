@@ -1,0 +1,133 @@
+.search {
+    width: 200px !important;
+    float: left;
+  }
+  
+  .search-combobox {
+    width: 200px !important;
+    float: left;
+    margin-left: 25px;
+  }
+  
+  .addButton {
+    background: #6673fc !important;
+    margin-left: 12px;
+    height: auto !important;
+    /*border-bottom: 1px solid #7883FC*/
+  }
+  
+  .btn-grid {
+    background-color: #6673fc;
+    color: white;
+    font-size: 17px;
+    border: none;
+    outline: none;
+    width: 35px;
+  }
+  
+  .dropdown-grid {
+    position: absolute;
+    display: inline-block;
+  }
+  
+  .dropdown-content-grid {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 200px;
+    z-index: 1;
+    right: 0;
+  }
+  
+  .dropdown-content-grid a {
+    color: black;
+    padding: 12px 12px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+  }
+  
+  .dropdown-content-grid a label {
+    margin-bottom: 0px;
+  }
+  
+  .dropdown-content-grid a:hover {
+    background-color: #ddd;
+  }
+  
+  .dropdown-grid:hover .dropdown-content-grid {
+    display: block;
+  }
+  
+  .btn-grid:hover,
+  .dropdown-grid:hover .btn-grid {
+    background-color: #0b7dda;
+  }
+  
+  input[type="file"] {
+    display: none !important;
+  }
+  
+  .label-success {
+    background-color: #36c6d3 !important;
+  }
+  
+  .label-danger {
+    background-color: #ed6b75 !important;
+  }
+  
+  .label {
+    text-shadow: none !important;
+    color: #fff;
+    font-family: Roboto, sans-serif;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 8px 15px;
+    background: #1ebdcc;
+    line-height: 1;
+    text-align: center;
+  }
+  
+  .label {
+    /* display: inline; */
+    font-size: 75%;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25em;
+  }
+  
+  .column-image {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+  }
+  
+  
+  .k-textbox-container {
+    width: 100% !important;
+  }
+  
+  .form-group {
+    margin-bottom: 0px !important;
+  }
+  
+  .name-member {
+    margin-top: 10px;
+    margin-bottom: 0px;
+  }
+  
+  kendo-combobox {
+    border-bottom: 1px solid;
+  }
+  
+  .change-icon {
+      text-align: center;
+      margin-top: 22px;
+      font-size: 18px;
+      color: #0B6794;
+      cursor: pointer;
+  }
+  
+  .change-icon:hover {
+      color: #1a93cc;
+  }

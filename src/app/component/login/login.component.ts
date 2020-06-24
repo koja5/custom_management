@@ -9,7 +9,7 @@ import { MongoService } from "../../service/mongo.service";
 @Component({
   selector: "app-login",
   templateUrl: "./login.component.html",
-  styleUrls: ["./login.component.scss"]
+  styleUrls: ["./login.component.scss"],
 })
 export class LoginComponent implements OnInit {
   public loginForm = "active";
@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
     telephone: "",
     mobile: "",
     comment: "",
-    storeId: 0
+    storeId: 0,
   };
   // public data: LoginData;
 
@@ -50,10 +50,11 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.initialization();
     // ovde treba da se napravi da se ocita lokacija korisnika i na osnovu toga povuce odgovarajuci jezik
     // kada se korisnik loguje, povlaci se ona konfiguracija koju je on sacuvao...
     if (localStorage.getItem("language") !== null) {
-      this.language = JSON.parse(localStorage.getItem("language"))["login"];
+      this.language = JSON.parse(localStorage.getItem("language"));
     } else {
       /*this.dashboardService.getTranslation("english").subscribe(data => {
         console.log(data);
@@ -61,6 +62,48 @@ export class LoginComponent implements OnInit {
         this.language = data["login"];
       });*/
     }
+  }
+
+  initialization() {
+    this.service.checkCountryLocation().subscribe(
+      (data) => {
+        this.service.getTranslationByCountryCode(data["countryCode"]).subscribe(
+          (language) => {
+            if (language !== null) {
+              this.language = language["config"];
+              localStorage.setItem("language", JSON.stringify(this.language));
+            } else {
+              this.service.getDefaultLanguage().subscribe(
+                (language) => {
+                  if (language !== null) {
+                    this.language = language["config"];
+                    localStorage.setItem(
+                      "language",
+                      JSON.stringify(this.language)
+                    );
+                  } else {
+                    this.router.navigate(["/maintence"]);
+                  }
+                },
+                (error) => {
+                  this.router.navigate(["/maintence"]);
+                }
+              );
+            }
+          },
+          (error) => {
+            this.router.navigate(["/maintence"]);
+          }
+        );
+      },
+      (error) => {
+        console.log(error);
+        this.service.getDefaultLanguage().subscribe((language) => {
+          this.language = language["config"];
+          localStorage.setItem("language", JSON.stringify(this.language));
+        });
+      }
+    );
   }
 
   signUpActive() {
@@ -97,8 +140,8 @@ export class LoginComponent implements OnInit {
         if (isLogin) {
           if (!notActive) {
             this.loginInfo = JSON.parse(localStorage.getItem("language"))[
-              "login"
-            ]["checkMailForActive"];
+              "checkMailForActive"
+            ];
             this.loading = false;
           } else {
             console.log(user);
@@ -112,8 +155,8 @@ export class LoginComponent implements OnInit {
           }
         } else {
           this.loginInfo = JSON.parse(localStorage.getItem("language"))[
-            "login"
-          ]["notCorrectPass"];
+            "notCorrectPass"
+          ];
           this.loading = false;
         }
       }
@@ -129,16 +172,16 @@ export class LoginComponent implements OnInit {
       this.data.shortname &&
       this.data.password !== ""
     ) {
-      this.service.signUp(this.data, val => {
+      this.service.signUp(this.data, (val) => {
         if (!val.success) {
           this.errorInfo = val.info;
         } else {
-          this.mailService.sendMail(this.data, function() {
+          this.mailService.sendMail(this.data, function () {
             console.log("Mail uspesno poslat");
           });
           this.signUpInfo = JSON.parse(localStorage.getItem("language"))[
-            "login"
-          ]["checkMailForActive"];
+            "checkMailForActive"
+          ];
           setTimeout(() => {
             this.loginActive();
           }, 3000);
@@ -146,7 +189,7 @@ export class LoginComponent implements OnInit {
         // form.reset();
       });
     } else {
-      this.errorInfo = JSON.parse(localStorage.getItem("language"))["login"][
+      this.errorInfo = JSON.parse(localStorage.getItem("language"))[
         "fillFields"
       ];
     }
@@ -155,12 +198,12 @@ export class LoginComponent implements OnInit {
   forgotPassword() {
     const thisObject = this;
     if (this.data.email !== "") {
-      this.service.forgotPassword(this.data, function(exist, notVerified) {
+      this.service.forgotPassword(this.data, function (exist, notVerified) {
         setTimeout(() => {
           if (exist) {
             thisObject.mailService
               .sendForgetMail(thisObject.data)
-              .subscribe(data => {
+              .subscribe((data) => {
                 console.log("test");
               });
 
@@ -169,13 +212,13 @@ export class LoginComponent implements OnInit {
             } else {
               document.getElementById("textClass").innerHTML = JSON.parse(
                 localStorage.getItem("language")
-              )["login"]["sendForgotMail"];
+              )["sendForgotMail"];
             }
           }
         }, 100);
       });
     } else {
-      this.errorInfo = JSON.parse(localStorage.getItem("language"))["login"][
+      this.errorInfo = JSON.parse(localStorage.getItem("language"))[
         "fillFields"
       ];
     }
@@ -192,14 +235,10 @@ export class LoginComponent implements OnInit {
   }
 
   getConfigurationFromDatabase(id) {
-    this.mongo.getConfiguration(Number(id)).subscribe(data => {
+    this.mongo.getConfiguration(Number(id)).subscribe((data) => {
       this.setConfiguration(data, id);
-      const thisObject = this;
-      thisObject.router.navigate([
-        "dashboard",
-        { outlets: { dashboard: ["task"] } }
-      ]);
-      this.loading = false;
+      this.router.navigate(["/dashboard/home/task"]);
+      // this.loading = false;
     });
   }
 

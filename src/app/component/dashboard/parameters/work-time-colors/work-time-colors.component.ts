@@ -50,7 +50,7 @@ export class WorkTimeColorsComponent implements OnInit {
     this.height = window.innerHeight - 81;
     this.height += "px";
 
-    this.language = JSON.parse(localStorage.getItem("language")).grid;
+    this.language = JSON.parse(localStorage.getItem("language"));
 
     this.getWorkTimeColors();
   }

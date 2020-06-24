@@ -13,7 +13,7 @@ export class ParametersComponent implements OnInit {
 
   ngOnInit() {
     console.log(window.location.pathname.split('/'));
-    this.currentTab = window.location.pathname.split('/')[2];
+    this.currentTab = window.location.pathname.split('/')[3];
   }
 
   changeTab(tab) {

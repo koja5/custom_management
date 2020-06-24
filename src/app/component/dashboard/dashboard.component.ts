@@ -13,7 +13,7 @@ declare var document: any;
 @Component({
   selector: "app-dashboard",
   templateUrl: "./dashboard.component.html",
-  styleUrls: ["./dashboard.component.scss"]
+  styleUrls: ["./dashboard.component.scss"],
 })
 export class DashboardComponent implements OnInit {
   @ViewChild("settings") settings: Modal;
@@ -32,7 +32,7 @@ export class DashboardComponent implements OnInit {
   public typeOfDesign = "vertical";
   public user: any;
   public pathFromUrl: any;
-  public subMenuInd = '';
+  public subMenuInd = "";
   public sidebarHeight: any;
 
   constructor(
@@ -47,8 +47,7 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    
-    this.sidebarHeight = window.innerHeight - 30 + 'px';
+    this.sidebarHeight = window.innerHeight - 30 + "px";
     this.selectedNode = this.activatedRouter.snapshot["_routerState"].url.split(
       "/"
     )[2];
@@ -65,7 +64,7 @@ export class DashboardComponent implements OnInit {
     this.type = Number(localStorage.getItem("type"));
 
     if (localStorage.getItem("allThemes") !== undefined) {
-      this.service.getThemeConfig().subscribe(data => {
+      this.service.getThemeConfig().subscribe((data) => {
         console.log(data);
         this.allThemes = data;
         localStorage.setItem("allThemes", JSON.stringify(this.allThemes));
@@ -75,7 +74,7 @@ export class DashboardComponent implements OnInit {
     }
 
     if (localStorage.getItem("allLanguage") === null) {
-      this.service.getLanguageConfig().subscribe(data => {
+      this.service.getLanguageConfig().subscribe((data) => {
         this.allLanguage = data;
         localStorage.setItem("allLanguage", JSON.stringify(this.allLanguage));
       });
@@ -103,7 +102,6 @@ export class DashboardComponent implements OnInit {
     if (localStorage.getItem("language") !== null) {
       this.language = JSON.parse(localStorage.getItem("language"));
     } else {
-      console.log("english!");
       /*this.service.getTranslation("english").subscribe(data => {
         console.log(data);
         this.language = data;
@@ -113,7 +111,7 @@ export class DashboardComponent implements OnInit {
 
     this.getMe();
 
-    this.message.getImageProfile().subscribe(mess => {
+    this.message.getImageProfile().subscribe((mess) => {
       this.getMe();
     });
 
@@ -127,31 +125,33 @@ export class DashboardComponent implements OnInit {
   insertThemeForUser(theme: string) {
     const item = {
       user_id: localStorage.getItem("idUser"),
-      theme: theme
+      theme: theme,
     };
 
-    this.mongo.includeConfiguration(item).subscribe(data => {
+    this.mongo.includeConfiguration(item).subscribe((data) => {
       console.log(data);
     });
   }
 
   getMe() {
-    this.users.getMe(localStorage.getItem("idUser"), val => {
+    this.users.getMe(localStorage.getItem("idUser"), (val) => {
       console.log(val);
-      this.user = val[0];
-      if (
-        val[0].img !== null &&
-        val[0].img.data !== undefined &&
-        val[0].img.data.length !== 0
-      ) {
-        const TYPED_ARRAY = new Uint8Array(val[0].img.data);
-        const STRING_CHAR = String.fromCharCode.apply(null, TYPED_ARRAY);
-        const base64String = btoa(STRING_CHAR);
-        const path = this.sanitizer.bypassSecurityTrustUrl(
-          "data:image/png;base64," + base64String
-        );
-        console.log(path);
-        this.imagePath = path;
+      if (val && val.length > 0) {
+        this.user = val[0];
+        if (
+          val[0].img !== null &&
+          val[0].img.data !== undefined &&
+          val[0].img.data.length !== 0
+        ) {
+          const TYPED_ARRAY = new Uint8Array(val[0].img.data);
+          const STRING_CHAR = String.fromCharCode.apply(null, TYPED_ARRAY);
+          const base64String = btoa(STRING_CHAR);
+          const path = this.sanitizer.bypassSecurityTrustUrl(
+            "data:image/png;base64," + base64String
+          );
+          console.log(path);
+          this.imagePath = path;
+        }
       } else {
         this.imagePath = "../../../assets/images/users/defaultUser.png";
       }
@@ -217,13 +217,13 @@ export class DashboardComponent implements OnInit {
           key: "store-3",
           value: {
             id: 3,
-            user: "pera"
-          }
-        }
-      ]
+            user: "pera",
+          },
+        },
+      ],
     };
 
-    this.mongo.includeConfiguration(item).subscribe(data => {
+    this.mongo.includeConfiguration(item).subscribe((data) => {
       console.log(data);
     });
   }
@@ -251,19 +251,22 @@ export class DashboardComponent implements OnInit {
   }
 
   showHideSubMenu() {
-    if(this.subMenuInd === '') {
-      this.subMenuInd = 'active open'
-      this.sidebarHeight = window.innerHeight - 40 + 'px';
+    if (this.subMenuInd === "") {
+      this.subMenuInd = "active open";
+      this.sidebarHeight = window.innerHeight - 40 + "px";
     } else {
-      this.subMenuInd = '';
-      this.sidebarHeight = 'auto';
+      this.subMenuInd = "";
+      this.sidebarHeight = "auto";
     }
   }
 
   toggleFullscreen(): void {
-    const isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null) ||
-      (document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
-      (document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
+    const isInFullScreen =
+      (document.fullscreenElement && document.fullscreenElement !== null) ||
+      (document.webkitFullscreenElement &&
+        document.webkitFullscreenElement !== null) ||
+      (document.mozFullScreenElement &&
+        document.mozFullScreenElement !== null) ||
       (document.msFullscreenElement && document.msFullscreenElement !== null);
 
     const docElm = document.documentElement;
@@ -289,5 +292,4 @@ export class DashboardComponent implements OnInit {
       }
     }
   }
-  
 }

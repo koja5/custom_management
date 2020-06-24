@@ -18,7 +18,8 @@
         </kendo-textbox-container>
       </div>
       <div style="float: right; padding-right: 30px; padding-top: 14px;">
-        <button kendoButton [icon]="'add'" (click)="newUser()" [primary]="true" class="addButton">{{language.newUser}}</button>
+        <button kendoButton [icon]="'add'" (click)="newUser()" [primary]="true"
+          class="addButton">{{language.newUser}}</button>
         <div class="dropdown-grid">
           <button class="btn-grid" style="border-left:1px solid #0d8bf2">
             <i class="fa fa-caret-down"></i>
@@ -52,7 +53,7 @@
     <kendo-grid-column title="" width="100">
       <ng-template kendoGridCellTemplate let-dataItem>
         <button kendoButton [icon]="'k-icon k-i-preview'" class='k-preview'
-          [routerLink]="['../', {outlets: {'dashboard': ['user-details', dataItem.id]}}]"></button>
+          (click)="generateLink('dashboard/home/user-details', dataItem.id)"></button>
       </ng-template>
     </kendo-grid-column>
 

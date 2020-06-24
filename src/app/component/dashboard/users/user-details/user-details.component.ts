@@ -86,7 +86,7 @@ export class UserDetailsComponent implements OnInit {
       }
     });
 
-    this.language = JSON.parse(localStorage.getItem('language'))['user'];
+    this.language = JSON.parse(localStorage.getItem('language'));
 
     this.storeService.getStore(localStorage.getItem('idUser'), val => {
       this.storeLocation = val;

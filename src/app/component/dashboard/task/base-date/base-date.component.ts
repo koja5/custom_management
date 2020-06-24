@@ -117,7 +117,7 @@ export class BaseDateComponent implements OnInit {
       form.append('customer_id', this.data.id);
   };
 
-    this.language = JSON.parse(localStorage.getItem("language"))["user"];
+    this.language = JSON.parse(localStorage.getItem("language"));
 
     this.getParameters();
     this.getDocument();

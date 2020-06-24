@@ -111,7 +111,7 @@ router.post("/forgotmail", function(req, res) {
   );
   var compiledTemplate = hogan.compile(confirmTemplate);
   var verificationLinkButton =
-    "http://localhost:4200/changePassword/" + sha1(req.body.email);
+    "http://localhost:4200/login/changePassword/" + sha1(req.body.email);
 
   var mailOptions = {
     from: '"ClinicNode" info@app-production.eu',

@@ -10,7 +10,6 @@ import {
 } from "@progress/kendo-angular-grid";
 import { FormGroup, FormControl } from "@angular/forms";
 import { SortDescriptor, orderBy } from "@progress/kendo-data-query";
-import { StandardUrlSerializer } from "../../../standardUrlSerializer";
 import { UrlTree, Router, UrlSegment, UrlSegmentGroup } from "@angular/router";
 import { throttleTime } from "rxjs/operators";
 import { UserModel } from "../../../models/user-model";
@@ -92,7 +91,6 @@ export class UsersComponent implements OnInit {
   constructor(
     public service: UsersService,
     public storeService: StoreService,
-    public url: StandardUrlSerializer,
     public router: Router,
     public message: MessageService
   ) {
@@ -107,7 +105,7 @@ export class UsersComponent implements OnInit {
       this.theme = localStorage.getItem("theme");
     }
     this.changeTheme(this.theme);
-    this.language = JSON.parse(localStorage.getItem("language"))["user"];
+    this.language = JSON.parse(localStorage.getItem("language"));
 
     this.message.getTheme().subscribe(mess => {
       this.changeTheme(mess);
@@ -241,11 +239,9 @@ export class UsersComponent implements OnInit {
     three.root = root;
     three.queryParams = queryParams;
     console.log(three);
-
-    console.log(this.url.serialize(three));
   }
 
-  routing(id) {
+  /*routing(id) {
     // this.router.navigate(['user-details'], {queryParams: id});
     const tree = new UrlTree();
     const url = new UrlSegment("/dashboard/user-details", id);
@@ -253,7 +249,7 @@ export class UsersComponent implements OnInit {
     console.log(tree);
     return tree;
     console.log(this.url.serialize(tree));
-  }
+  }*/
 
   excelAction(event) {
     console.log(event);
@@ -483,5 +479,9 @@ export class UsersComponent implements OnInit {
   public sortChange(sort: SortDescriptor[]): void {
     this.state.sort = sort;
     this.gridView = process(this.gridData.data, this.state);
+  }
+
+  public generateLink(link, param) {
+    this.router.navigate([link, param]);
   }
 }

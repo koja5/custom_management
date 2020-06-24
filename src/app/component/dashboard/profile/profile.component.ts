@@ -30,7 +30,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.id = Number(localStorage.getItem("idUser"));
-    this.language = JSON.parse(localStorage.getItem("language"))["user"];
+    this.language = JSON.parse(localStorage.getItem("language"));
     this.service.getMe(localStorage.getItem("idUser"), val => {
       console.log(val);
       this.data = val[0];

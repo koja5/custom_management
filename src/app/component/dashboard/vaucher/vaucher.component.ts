@@ -85,7 +85,7 @@ export class VaucherComponent implements OnInit {
     this.getVauchers();
     this.getUsers();
     if (localStorage.getItem("language") !== null) {
-      this.language = JSON.parse(localStorage.getItem("language")).vaucher;
+      this.language = JSON.parse(localStorage.getItem("language"));
     }
 
     if (localStorage.getItem("theme") !== null) {

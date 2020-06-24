@@ -193,16 +193,14 @@ export class TaskComponent implements OnInit {
     }, 50);
 
     if (localStorage.getItem("language") !== undefined) {
-      this.language = JSON.parse(localStorage.getItem("language"))["calendar"];
-      this.languageUser = JSON.parse(localStorage.getItem("language"))["user"];
+      this.language = JSON.parse(localStorage.getItem("language"));
+      this.languageUser = JSON.parse(localStorage.getItem("language"));
       // this.stateValue = JSON.parse(localStorage.getItem("language"))["state"];
     } else {
       this.message.getLanguage().subscribe(mess => {
         this.language = undefined;
         setTimeout(() => {
-          this.language = JSON.parse(localStorage.getItem("language"))[
-            "calendar"
-          ];
+          this.language = JSON.parse(localStorage.getItem("language"));
           console.log(this.language);
         }, 10);
       });

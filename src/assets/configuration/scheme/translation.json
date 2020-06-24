@@ -39,6 +39,7 @@
       "addVaucher": { "type": "string" },
       "updateVaucher": { "type": "string" },
       "uploadFromExcel": { "type": "string" },
+      "patient": { "type": "string" },
       "exportToExcel": { "type": "string" },
       "exportToPDF": { "type": "string" },
       "pagerPage": { "type": "string" },
@@ -61,6 +62,7 @@
       "successUpdateTitle": { "type": "string" },
       "successUpdateText": { "type": "string" },
       "unsuccessUpdateTitle": { "type": "string" },
+      "unsuccessUpdateText": { "type": "string" },
       "successDeleteTitle": { "type": "string" },
       "successDeleteText": { "type": "string" },
       "successCreateCustomerTitle": { "type": "string" },
@@ -108,6 +110,7 @@
       "store": { "type": "string" },
       "parameters": { "type": "string" },
       "vaucher": { "type": "string" },
+      "translation": { "type": "string" },
       "pagerItemsPerPage": { "type": "string" },
       "addNew": { "type": "string" },
       "add": { "type": "string" },
@@ -122,6 +125,10 @@
       "errorTextEdit": { "type": "string" },
       "successTextDelete": { "type": "string" },
       "confirmMessageText": { "type": "string" },
+      "createData": { "type": "string" },
+      "language": { "type": "string" },
+      "active": { "type": "string" },
+
       "profile": { "type": "string" },
       "settings": { "type": "string" },
       "logout": { "type": "string" },
@@ -241,7 +248,15 @@
             "text": { "type": "string" }
           }
         }
-      }
+      },
+      "adminSuccessCreateTitle": { "type": "string" },
+      "adminSuccessCreateText": { "type": "string" },
+      "adminErrorCreateTitle": { "type": "string" },
+      "adminErrorCreateText": { "type": "string" },
+      "adminSuccessUpdateTitle": { "type": "string" },
+      "adminSuccessUpdateText": { "type": "string" },
+      "adminErrorUpdateTitle": { "type": "string" },
+      "adminErrorUpdateText": { "type": "string" }
     }
   },
   "layout": [
@@ -449,8 +464,17 @@
           "items": [
             { "key": "successDeleteText" },
             { "key": "successCreateCustomerTitle" },
+            { "key": "successCreateCustomerText" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
             { "key": "unsuccessCreateCustomerTitle" },
-            { "key": "unsuccessCreateCustomerText" }
+            { "key": "unsuccessCreateCustomerText" },
+            {}
           ]
         },
         {
@@ -581,7 +605,12 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "parameters" }, { "key": "vaucher" }, {}, {}]
+          "items": [
+            { "key": "parameters" },
+            { "key": "vaucher" },
+            { "key": "translation" },
+            {}
+          ]
         }
       ]
     },
@@ -708,15 +737,21 @@
           "items": [
             { "key": "successTextDelete" },
             { "key": "confirmMessageText" },
-            {},
-            {}
+            { "key": "createData" },
+            { "key": "language" }
           ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [{ "key": "active" }, {}, {}, {}]
         }
       ]
     },
     {
       "type": "section",
-      "title": "Navigation menu",
+      "title": "Dashboard",
       "expandable": true,
       "expanded": false,
       "items": [
@@ -789,10 +824,125 @@
           "items": [
             { "key": "thursday" },
             { "key": "friday" },
-            { "key": "addComplaint" },
-            { "key": "updateComplaint" }
+            { "key": "therapyForLastWeek" },
+            { "key": "updateSettings" }
           ]
         },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "description" },
+            { "key": "totalTherapy" },
+            { "key": "averagePerMonth" },
+            { "key": "therapyForLastMonth" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Store",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "pagerPage" },
+            { "key": "pagerOf" },
+            { "key": "pagerItems" },
+            { "key": "pagerItemsPerPage" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "exist" },
+            { "key": "notAdded" },
+            { "key": "error" },
+            { "key": "successful" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "createNewStore" },
+            { "key": "createStore" },
+            { "key": "updateStore" },
+            { "key": "telephone" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "email" },
+            { "key": "gender" },
+            { "key": "street" },
+            { "key": "streetnumber" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "city" },
+            { "key": "mobile" },
+            { "key": "storename" },
+            { "key": "zipCode" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "place" },
+            { "key": "comment" },
+            { "key": "timeDuration" },
+            { "key": "timeTherapy" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "startWork" },
+            { "key": "endWork" },
+            { "key": "newStore" },
+            { "key": "exportToExcel" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "exportToPDF" },
+            { "key": "uploadFromExcel" },
+            { "key": "required" },
+            { "key": "searchAllColumn" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Customer",
+      "expandable": true,
+      "expanded": false,
+      "items": [
         {
           "type": "div",
           "display": "flex",
@@ -1040,117 +1190,10 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "description" },
-            { "key": "totalTherapy" },
-            { "key": "averagePerMonth" },
-            { "key": "therapyForLastMonth" }
-          ]
-        },
-        {
-          "type": "div",
-          "display": "flex",
-          "flex-direction": "row",
-          "items": [
-            { "key": "therapyForLastWeek" },
+            { "key": "addComplaint" },
+            { "key": "updateComplaint" },
             { "key": "settings" },
-            { "key": "confirmMessageText" },
-            { "key": "updateSettings" }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "section",
-      "title": "Store",
-      "expandable": true,
-      "expanded": false,
-      "items": [
-        {
-          "type": "div",
-          "display": "flex",
-          "flex-direction": "row",
-          "items": [
-            { "key": "pagerPage" },
-            { "key": "pagerOf" },
-            { "key": "pagerItems" },
-            { "key": "pagerItemsPerPage" }
-          ]
-        },
-        {
-          "type": "div",
-          "display": "flex",
-          "flex-direction": "row",
-          "items": [
-            { "key": "exist" },
-            { "key": "notAdded" },
-            { "key": "error" },
-            { "key": "successful" }
-          ]
-        },
-        {
-          "type": "div",
-          "display": "flex",
-          "flex-direction": "row",
-          "items": [
-            { "key": "createNewStore" },
-            { "key": "createStore" },
-            { "key": "updateStore" },
-            { "key": "telephone" }
-          ]
-        },
-        {
-          "type": "div",
-          "display": "flex",
-          "flex-direction": "row",
-          "items": [
-            { "key": "email" },
-            { "key": "gender" },
-            { "key": "street" },
-            { "key": "streetnumber" }
-          ]
-        },
-        {
-          "type": "div",
-          "display": "flex",
-          "flex-direction": "row",
-          "items": [
-            { "key": "city" },
-            { "key": "mobile" },
-            { "key": "storename" },
-            { "key": "zipCode" }
-          ]
-        },
-        {
-          "type": "div",
-          "display": "flex",
-          "flex-direction": "row",
-          "items": [
-            { "key": "place" },
-            { "key": "comment" },
-            { "key": "timeDuration" },
-            { "key": "timeTherapy" }
-          ]
-        },
-        {
-          "type": "div",
-          "display": "flex",
-          "flex-direction": "row",
-          "items": [
-            { "key": "startWork" },
-            { "key": "endWork" },
-            { "key": "newStore" },
-            { "key": "exportToExcel" }
-          ]
-        },
-        {
-          "type": "div",
-          "display": "flex",
-          "flex-direction": "row",
-          "items": [
-            { "key": "exportToPDF" },
-            { "key": "uploadFromExcel" },
-            { "key": "required" },
-            { "key": "searchAllColumn" }
+            { "key": "confirmMessageText" }
           ]
         }
       ]
@@ -1247,6 +1290,36 @@
                 }
               ]
             }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Superadmin",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "adminSuccessCreateTitle" },
+            { "key": "adminSuccessCreateText" },
+            { "key": "adminErrorCreateTitle" },
+            { "key": "adminErrorCreateText" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "adminSuccessUpdateTitle" },
+            { "key": "adminSuccessUpdateText" },
+            { "key": "adminErrorUpdateTitle" },
+            { "key": "adminErrorUpdateText" }
           ]
         }
       ]
