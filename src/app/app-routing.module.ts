@@ -16,7 +16,7 @@ const routes: Routes = [
   },
   {
     path: "dashboard",
-    canActivate: [LoginGuard, DashboardGuard],
+    canActivate: [LoginGuard],
     loadChildren: "./component/dashboard/dashboard.module#DashboardModule",
   },
   { path: "template/confirm-arrival", component: ConfirmArrivalComponent },

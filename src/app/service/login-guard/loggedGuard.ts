@@ -17,23 +17,13 @@ export class LoggedGuard implements CanActivate {
 
   canActivate() {
     if (
-      this.cookie.check("user") === null ||
-      this.cookie.check("user") === undefined ||
-      localStorage.getItem("idUser") === null
+      localStorage.getItem("idUser") === null ||
+      localStorage.getItem("idUser") === undefined
     ) {
       return true;
     } else {
-      /*if (this.cookie.get('user') === '1') {
-                 this._router.navigate(['/dashboard', {outlets: {'dash': ['admin']}}]);
-                 console.log('Ja sam admin');
-                 // ako je admin
-            } else {
-                console.log('ja sam obican user');
-                 this._router.navigate(['user-main']);
-                 // ako je obican korisnik
-            }*/
-      this._router.navigate(["/dashboard/home/task"]);
-      return false;
+      this._router.navigate(["/dashboard"]);
+      false;
     }
   }
 }

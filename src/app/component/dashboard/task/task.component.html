@@ -255,24 +255,21 @@
                   <div class="k-form-field">
                     <kendo-textbox-container floatingLabel="{{languageUser.complaintValue}}">
                       <kendo-multiselect [data]="complaintValue" [textField]="'title'" [valueField]="'id'"
-                        [(ngModel)]="selectedComplaint" name="complaint" [placeholder]="language.choiceComplaint"
-                        [valuePrimitive]="true">
+                        [(ngModel)]="selectedComplaint" name="complaint" [valuePrimitive]="true">
                       </kendo-multiselect>
                     </kendo-textbox-container>
                   </div>
                   <div class="k-form-field">
                     <kendo-textbox-container floatingLabel="{{languageUser.therapyValue}}">
                       <kendo-multiselect [data]="therapyValue" [textField]="'title'" [valueField]="'id'"
-                        [(ngModel)]="selectedTherapies" name="therapies" [placeholder]="language.choiceTherapy"
-                        [valuePrimitive]="true">
+                        [(ngModel)]="selectedTherapies" name="therapies" [valuePrimitive]="true">
                       </kendo-multiselect>
                     </kendo-textbox-container>
                   </div>
                   <div class="k-form-field">
                     <kendo-textbox-container floatingLabel="{{languageUser.treatmentValue}}">
                       <kendo-multiselect [data]="treatmentValue" [textField]="'title'" [valueField]="'id'"
-                        [(ngModel)]="selectedTreatments" name="therapies_previous"
-                        [placeholder]="language.treatmentValue" [valuePrimitive]="true">
+                        [(ngModel)]="selectedTreatments" name="therapies_previous" [valuePrimitive]="true">
                       </kendo-multiselect>
                     </kendo-textbox-container>
                   </div>
@@ -286,8 +283,7 @@
                     <div class="col-sm-4">
                       <kendo-textbox-container floatingLabel="{{languageUser.cs}}">
                         <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="CSValue" [textField]="'title'"
-                          [valueField]="'id'" [(ngModel)]="complaintData.cs" [valuePrimitive]="true"
-                          [placeholder]="language.choiceState">
+                          [valueField]="'id'" [(ngModel)]="complaintData.cs" [valuePrimitive]="true">
                         </kendo-combobox>
                       </kendo-textbox-container>
                     </div>
@@ -295,8 +291,7 @@
                     <div class="col-sm-4">
                       <kendo-textbox-container floatingLabel="{{languageUser.stateValue}}">
                         <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="stateValue" [textField]="'title'"
-                          [valueField]="'id'" [(ngModel)]="complaintData.state" [valuePrimitive]="true"
-                          [placeholder]="language.choiceState">
+                          [valueField]="'id'" [(ngModel)]="complaintData.state" [valuePrimitive]="true">
                         </kendo-combobox>
                       </kendo-textbox-container>
                     </div>
@@ -325,10 +320,9 @@
                         </kendo-datepicker>
                       </kendo-textbox-container>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-4" *ngIf="!formGroup.controls.isAllDay.value">
                       <kendo-textbox-container floatingLabel="{{language.startTime}}">
-                        <kendo-timepicker [formControl]="formGroup.get('start')"
-                          *ngIf="!formGroup.controls.isAllDay.value">
+                        <kendo-timepicker [formControl]="formGroup.get('start')">
                         </kendo-timepicker>
                       </kendo-textbox-container>
                     </div>
@@ -340,10 +334,9 @@
                         </kendo-datepicker>
                       </kendo-textbox-container>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-4" *ngIf="!formGroup.controls.isAllDay.value">
                       <kendo-textbox-container floatingLabel="{{language.endTime}}">
-                        <kendo-timepicker [formControl]="formGroup.get('end')"
-                          *ngIf="!formGroup.controls.isAllDay.value">
+                        <kendo-timepicker [formControl]="formGroup.get('end')">
                         </kendo-timepicker>
                       </kendo-textbox-container>
                     </div>
@@ -488,24 +481,21 @@
                 <div class="k-form-field">
                   <kendo-textbox-container floatingLabel="{{languageUser.complaintValue}}">
                     <kendo-multiselect [data]="complaintValue" [textField]="'title'" [valueField]="'id'"
-                      [(ngModel)]="selectedComplaint" name="complaint" [placeholder]="language.choiceComplaint"
-                      [valuePrimitive]="true">
+                      [(ngModel)]="selectedComplaint" name="complaint" [valuePrimitive]="true">
                     </kendo-multiselect>
                   </kendo-textbox-container>
                 </div>
                 <div class="k-form-field">
                   <kendo-textbox-container floatingLabel="{{languageUser.therapyValue}}">
                     <kendo-multiselect [data]="therapyValue" [textField]="'title'" [valueField]="'id'"
-                      [(ngModel)]="selectedTherapies" name="therapies" [placeholder]="language.choiceTherapy"
-                      [valuePrimitive]="true">
+                      [(ngModel)]="selectedTherapies" name="therapies" [valuePrimitive]="true">
                     </kendo-multiselect>
                   </kendo-textbox-container>
                 </div>
                 <div class="k-form-field">
                   <kendo-textbox-container floatingLabel="{{languageUser.treatmentValue}}">
                     <kendo-multiselect [data]="treatmentValue" [textField]="'title'" [valueField]="'id'"
-                      [(ngModel)]="selectedTreatments" name="therapies_previous" [placeholder]="language.treatmentValue"
-                      [valuePrimitive]="true">
+                      [(ngModel)]="selectedTreatments" name="therapies_previous" [valuePrimitive]="true">
                     </kendo-multiselect>
                   </kendo-textbox-container>
                 </div>
@@ -519,8 +509,7 @@
                   <div class="col-sm-4">
                     <kendo-textbox-container floatingLabel="{{languageUser.cs}}">
                       <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="CSValue" [textField]="'title'"
-                        [valueField]="'id'" [(ngModel)]="complaintData.cs" [valuePrimitive]="true"
-                        [placeholder]="language.choiceState">
+                        [valueField]="'id'" [(ngModel)]="complaintData.cs" [valuePrimitive]="true">
                       </kendo-combobox>
                     </kendo-textbox-container>
                   </div>
@@ -528,8 +517,7 @@
                   <div class="col-sm-4">
                     <kendo-textbox-container floatingLabel="{{languageUser.stateValue}}">
                       <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="stateValue" [textField]="'title'"
-                        [valueField]="'id'" [(ngModel)]="complaintData.state" [valuePrimitive]="true"
-                        [placeholder]="language.choiceState">
+                        [valueField]="'id'" [(ngModel)]="complaintData.state" [valuePrimitive]="true">
                       </kendo-combobox>
                     </kendo-textbox-container>
                   </div>

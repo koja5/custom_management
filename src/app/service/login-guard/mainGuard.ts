@@ -17,7 +17,7 @@ export class MainGuard implements CanActivate {
             return true;
         }
         else {
-            this._router.navigate(['user-main']);
+            this._router.navigate(['/dashboard/home/task']);
         }
         return false;
     }

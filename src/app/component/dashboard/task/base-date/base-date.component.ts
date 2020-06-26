@@ -19,7 +19,7 @@ import { ToastrService } from "ngx-toastr";
 @Component({
   selector: "app-base-date",
   templateUrl: "./base-date.component.html",
-  styleUrls: ["./base-date.component.scss"]
+  styleUrls: ["./base-date.component.scss"],
 })
 export class BaseDateComponent implements OnInit {
   public customer = false;
@@ -90,9 +90,10 @@ export class BaseDateComponent implements OnInit {
   ngOnInit() {
     console.log(location);
     var datetimestamp = Date.now();
-    
+
     this.uploader = new FileUploader({
-      url: this.url/*,
+      url: this
+        .url /*,
       additionalParameter: { comments: this.data.id },
       disableMultipart: true,
       formatDataFunctionIsAsync: true,
@@ -108,14 +109,19 @@ export class BaseDateComponent implements OnInit {
             date: item.formData
           });
         });
-      }*/
+      }*/,
     });
 
     this.uploader.onBuildItemForm = (fileItem: FileItem, form: any) => {
-      form.append('description', fileItem.file.description);
-      form.append('date', fileItem.file.lastModifiedDate !== undefined ? fileItem.file.lastModifiedDate : new Date());
-      form.append('customer_id', this.data.id);
-  };
+      form.append("description", fileItem.file.description);
+      form.append(
+        "date",
+        fileItem.file.lastModifiedDate !== undefined
+          ? fileItem.file.lastModifiedDate
+          : new Date()
+      );
+      form.append("customer_id", this.data.id);
+    };
 
     this.language = JSON.parse(localStorage.getItem("language"));
 
@@ -131,7 +137,7 @@ export class BaseDateComponent implements OnInit {
       this.changeTheme(this.theme);
     }, 500);
 
-    this.message.getTheme().subscribe(mess => {
+    this.message.getTheme().subscribe((mess) => {
       this.changeTheme(mess);
       this.theme = mess;
     });
@@ -146,34 +152,40 @@ export class BaseDateComponent implements OnInit {
   }
 
   getParameters() {
-    this.service.getParameters("Complaint", localStorage.getItem('superadmin')).subscribe((data: []) => {
-      this.complaintValue = data.sort(function(a, b) {
-        return a["sequence"] - b["sequence"];
+    this.service
+      .getParameters("Complaint", localStorage.getItem("superadmin"))
+      .subscribe((data: []) => {
+        this.complaintValue = data.sort(function (a, b) {
+          return a["sequence"] - b["sequence"];
+        });
       });
-    });
 
-    this.service.getParameters("Therapy", localStorage.getItem('superadmin')).subscribe((data: []) => {
-      this.therapyValue = data.sort(function(a, b) {
-        return a["sequence"] - b["sequence"];
+    this.service
+      .getParameters("Therapy", localStorage.getItem("superadmin"))
+      .subscribe((data: []) => {
+        this.therapyValue = data.sort(function (a, b) {
+          return a["sequence"] - b["sequence"];
+        });
       });
-    });
 
-    this.taskService.getCompanyUsers(localStorage.getItem("idUser"), val => {
+    this.taskService.getCompanyUsers(localStorage.getItem("idUser"), (val) => {
       this.allUsers = val;
     });
 
-    this.service.getParameters("Treatment", localStorage.getItem('superadmin')).subscribe((data: []) => {
-      this.treatmentValue = data.sort(function(a, b) {
-        return a["sequence"] - b["sequence"];
+    this.service
+      .getParameters("Treatment", localStorage.getItem("superadmin"))
+      .subscribe((data: []) => {
+        this.treatmentValue = data.sort(function (a, b) {
+          return a["sequence"] - b["sequence"];
+        });
       });
-    });
 
     this.stateValue = JSON.parse(localStorage.getItem("language"))["state"];
   }
 
   getComplaint() {
     this["loadingGridComplaint"] = true;
-    this.service.getComplaintForCustomer(this.data.id).subscribe(data => {
+    this.service.getComplaintForCustomer(this.data.id).subscribe((data) => {
       this.gridComplaint = data;
       this["loadingGridComplaint"] = false;
       this.loading = false;
@@ -194,7 +206,7 @@ export class BaseDateComponent implements OnInit {
 
   getTherapy() {
     this["loadingGridTherapy"] = true;
-    this.service.getTherapyForCustomer(this.data.id).subscribe(data => {
+    this.service.getTherapyForCustomer(this.data.id).subscribe((data) => {
       this.gridTherapy = data;
       this["loadingGridTherapy"] = false;
       this.loading = false;
@@ -203,7 +215,7 @@ export class BaseDateComponent implements OnInit {
 
   getDocument() {
     this["loadingGridDocument"] = true;
-    this.service.getDocuments(this.data.id, val => {
+    this.service.getDocuments(this.data.id, (val) => {
       this.documents = val;
       this["loadingGridDocument"] = false;
       this.loading = false;
@@ -256,7 +268,7 @@ export class BaseDateComponent implements OnInit {
     console.log(event);
     if (event === "yes") {
       console.log(this.data);
-      this.service.deleteCustomer(this.data.id, val => {
+      this.service.deleteCustomer(this.data.id, (val) => {
         console.log(val);
         this.message.sendDeleteCustomer();
         this.dialogOpened = false;
@@ -270,7 +282,7 @@ export class BaseDateComponent implements OnInit {
     console.log(event);
     if (event === "yes") {
       console.log(this.data);
-      this.service.deleteComplaint(this.selectedForDelete).subscribe(data => {
+      this.service.deleteComplaint(this.selectedForDelete).subscribe((data) => {
         console.log(data);
         if (data) {
           this.getComplaint();
@@ -287,7 +299,7 @@ export class BaseDateComponent implements OnInit {
 
   updateCustomer(customer) {
     this.data.shortname = this.data.lastname + " " + this.data.firstname;
-    this.service.updateCustomer(this.data, val => {
+    this.service.updateCustomer(this.data, (val) => {
       console.log(val);
       if (val.success) {
         this.customer = false;
@@ -300,7 +312,7 @@ export class BaseDateComponent implements OnInit {
           type: "success",
           onClose: () => {
             console.log("done!");
-          }
+          },
         });
       }
     });
@@ -313,13 +325,13 @@ export class BaseDateComponent implements OnInit {
   downloadFile(filename: string) {
     console.log(filename);
     this.service.downloadFile(filename).subscribe(
-      data => saveAs(data, filename),
-      error => console.error(error)
+      (data) => saveAs(data, filename),
+      (error) => console.error(error)
     );
   }
 
   previewDocument(filename: string) {
-    this.service.getPdfFile(filename).subscribe(data => {
+    this.service.getPdfFile(filename).subscribe((data) => {
       console.log(data);
       let file = new Blob([data], { type: "application/pdf" });
       console.log(file);
@@ -339,14 +351,14 @@ export class BaseDateComponent implements OnInit {
         path: this.selectedForDelete["path"].replace(
           new RegExp("\\\\", "gi"),
           "/"
-        )
+        ),
       };
-      this.service.deleteDocument(object).subscribe(data => {
+      this.service.deleteDocument(object).subscribe((data) => {
         console.log(data);
       });
       this.service
         .deleteDocumentFromDatabase(this.selectedForDelete["id"])
-        .subscribe(data => {
+        .subscribe((data) => {
           if (data) {
             this.getDocument();
           }
@@ -369,13 +381,17 @@ export class BaseDateComponent implements OnInit {
     this.operationMode = "add";
     // this.complaintValue = JSON.parse(localStorage.getItem('language'))['complaint'];
     // this.therapyValue = JSON.parse(localStorage.getItem('language'))['therapy'];
-    this.service.getParameters("Therapy", localStorage.getItem('superadmin')).subscribe(data => {
-      console.log(data);
-      this.therapyValue = data;
-    });
-    this.service.getParameters("Complaint", localStorage.getItem('superadmin')).subscribe(data => {
-      this.complaintValue = data;
-    });
+    this.service
+      .getParameters("Therapy", localStorage.getItem("superadmin"))
+      .subscribe((data) => {
+        console.log(data);
+        this.therapyValue = data;
+      });
+    this.service
+      .getParameters("Complaint", localStorage.getItem("superadmin"))
+      .subscribe((data) => {
+        this.complaintValue = data;
+      });
     this.complaint = true;
   }
 
@@ -392,13 +408,17 @@ export class BaseDateComponent implements OnInit {
       'complaint'
     ];
     this.therapyValue = JSON.parse(localStorage.getItem('language'))['therapy'];*/
-    this.service.getParameters("Therapy", localStorage.getItem('superadmin')).subscribe(data => {
-      console.log(data);
-      this.therapyValue = data;
-    });
-    this.service.getParameters("Complaint", localStorage.getItem('superadmin')).subscribe(data => {
-      this.complaintValue = data;
-    });
+    this.service
+      .getParameters("Therapy", localStorage.getItem("superadmin"))
+      .subscribe((data) => {
+        console.log(data);
+        this.therapyValue = data;
+      });
+    this.service
+      .getParameters("Complaint", localStorage.getItem("superadmin"))
+      .subscribe((data) => {
+        this.complaintValue = data;
+      });
 
     this.therapy = true;
   }
@@ -448,12 +468,12 @@ export class BaseDateComponent implements OnInit {
     ).title;
 
     if (localStorage.getItem("username") === null) {
-      this.usersService.getMe(localStorage.getItem("idUser"), val => {
+      this.usersService.getMe(localStorage.getItem("idUser"), (val) => {
         console.log(val);
         localStorage.setItem("username", val[0]["shortname"]);
         this.complaintData.employee_name = "Dr. " + val[0]["shortname"];
         console.log(this.complaintData);
-        this.service.addComplaint(this.complaintData).subscribe(data => {
+        this.service.addComplaint(this.complaintData).subscribe((data) => {
           if (data) {
             this.getComplaint();
             this.complaint = false;
@@ -475,14 +495,14 @@ export class BaseDateComponent implements OnInit {
               title: "Error",
               text: "New complaint is not added!",
               timer: 3000,
-              type: "error"
+              type: "error",
             });
           }
         });
       });
     } else {
       this.complaintData.employee_name = localStorage.getItem("username");
-      this.service.addComplaint(this.complaintData).subscribe(data => {
+      this.service.addComplaint(this.complaintData).subscribe((data) => {
         if (data) {
           this.getComplaint();
           this.complaint = false;
@@ -505,7 +525,7 @@ export class BaseDateComponent implements OnInit {
             title: "Error",
             text: "New complaint is not added!",
             timer: 3000,
-            type: "error"
+            type: "error",
           });
         }
       });
@@ -568,7 +588,7 @@ export class BaseDateComponent implements OnInit {
       this.treatmentValue
     ).title;
 
-    this.service.updateComplaint(this.complaintData).subscribe(data => {
+    this.service.updateComplaint(this.complaintData).subscribe((data) => {
       if (data) {
         this.getComplaint();
         this.complaint = false;
@@ -576,14 +596,14 @@ export class BaseDateComponent implements OnInit {
           title: "Successfull!",
           text: "Complaint is successfull updated!",
           timer: 3000,
-          type: "success"
+          type: "success",
         });
       } else {
         Swal.fire({
           title: "Error",
           text: "Complaint is not updated!",
           timer: 3000,
-          type: "error"
+          type: "error",
         });
       }
       this.selectedComplaint = [];
@@ -623,7 +643,7 @@ export class BaseDateComponent implements OnInit {
       this.therapyValue
     ).title;
 
-    this.service.addTherapy(this.complaintData).subscribe(data => {
+    this.service.addTherapy(this.complaintData).subscribe((data) => {
       if (data["success"]) {
         this.getTherapy();
         this.therapy = false;
@@ -631,14 +651,14 @@ export class BaseDateComponent implements OnInit {
           title: "Successfull!",
           text: "New therapy is successfull added!",
           timer: 3000,
-          type: "success"
+          type: "success",
         });
       } else {
         Swal.fire({
           title: "Error",
           text: "New therapy is not added!",
           timer: 3000,
-          type: "error"
+          type: "error",
         });
       }
       this.selectedComplaint = [];
@@ -674,7 +694,7 @@ export class BaseDateComponent implements OnInit {
       this.therapyValue
     ).title;
 
-    this.service.updateTherapy(this.complaintData).subscribe(data => {
+    this.service.updateTherapy(this.complaintData).subscribe((data) => {
       if (data) {
         this.getTherapy();
         this.therapy = false;
@@ -682,14 +702,14 @@ export class BaseDateComponent implements OnInit {
           title: "Successfull!",
           text: "Therapy is successfull updated!",
           timer: 3000,
-          type: "success"
+          type: "success",
         });
       } else {
         Swal.fire({
           title: "Error",
           text: "Therapy is not updated!",
           timer: 3000,
-          type: "error"
+          type: "error",
         });
       }
       this.selectedComplaint = [];
@@ -718,7 +738,7 @@ export class BaseDateComponent implements OnInit {
       this.selectedTreatment = Number(event.therapies_previous);
     }
     if (event.em !== undefined && event.em !== null) {
-      this.userUservice.getUserWithId(event.em, val => {
+      this.userUservice.getUserWithId(event.em, (val) => {
         this.selectedUser = val[0];
         this.loadingTherapy = false;
       });
@@ -732,7 +752,7 @@ export class BaseDateComponent implements OnInit {
   deleteTherapy(event) {
     if (event === "yes") {
       console.log(this.data);
-      this.service.deleteTherapy(this.selectedForDelete).subscribe(data => {
+      this.service.deleteTherapy(this.selectedForDelete).subscribe((data) => {
         console.log(data);
         if (data) {
           this.getTherapy();
@@ -753,7 +773,7 @@ export class BaseDateComponent implements OnInit {
     if (tab === "base_one") {
       this.initializeBaseOneData();
     } else if (tab === "base_two") {
-      this.service.getBaseDataTwo(this.data.id).subscribe(data => {
+      this.service.getBaseDataTwo(this.data.id).subscribe((data) => {
         console.log(data);
         if (data["length"] !== 0) {
           this.baseDataTwo = data[0];
@@ -771,7 +791,7 @@ export class BaseDateComponent implements OnInit {
         }
       });
     } else if (tab === "physical_illness") {
-      this.service.getPhysicallIllness(this.data.id).subscribe(data => {
+      this.service.getPhysicallIllness(this.data.id).subscribe((data) => {
         if (data["length"] !== 0) {
           this.physicalIllness = data[0];
           this.operationMode = "edit";
@@ -821,29 +841,39 @@ export class BaseDateComponent implements OnInit {
   }
 
   initializeBaseOneData() {
-    this.service.getCustomerList("Recommendation", localStorage.getItem('superadmin')).subscribe(data => {
-      console.log(data);
-      this.recommendationList = data;
-    });
+    this.service
+      .getCustomerList("Recommendation", localStorage.getItem("superadmin"))
+      .subscribe((data) => {
+        console.log(data);
+        this.recommendationList = data;
+      });
 
-    this.service.getCustomerList("Relationship", localStorage.getItem('superadmin')).subscribe(data => {
-      this.relationshipList = data;
-    });
+    this.service
+      .getCustomerList("Relationship", localStorage.getItem("superadmin"))
+      .subscribe((data) => {
+        this.relationshipList = data;
+      });
 
-    this.service.getCustomerList("Social", localStorage.getItem('superadmin')).subscribe(data => {
-      this.socialList = data;
-    });
+    this.service
+      .getCustomerList("Social", localStorage.getItem("superadmin"))
+      .subscribe((data) => {
+        this.socialList = data;
+      });
 
-    this.service.getCustomerList("Doctor", localStorage.getItem('superadmin')).subscribe(data => {
-      console.log(data);
-      this.doctorList = data;
-    });
-    this.service.getCustomerList("Doctors", localStorage.getItem('superadmin')).subscribe(data => {
-      console.log(data);
-      this.doctorsList = data;
-    });
+    this.service
+      .getCustomerList("Doctor", localStorage.getItem("superadmin"))
+      .subscribe((data) => {
+        console.log(data);
+        this.doctorList = data;
+      });
+    this.service
+      .getCustomerList("Doctors", localStorage.getItem("superadmin"))
+      .subscribe((data) => {
+        console.log(data);
+        this.doctorsList = data;
+      });
 
-    this.service.getBaseDataOne(this.data.id).subscribe(data => {
+    this.service.getBaseDataOne(this.data.id).subscribe((data) => {
       console.log(data);
       if (data["length"] !== 0) {
         this.baseDataOne = data[0];
@@ -875,19 +905,21 @@ export class BaseDateComponent implements OnInit {
   addBaseDataOne(base) {
     let recommendation = "";
     // tslint:disable-next-line: prefer-for-of
-    for (let i = 0; i < this.selectedRecommendation.length; i++) {
-      recommendation += this.selectedRecommendation[i] + ";";
+    if (this.selectedRecommendation) {
+      for (let i = 0; i < this.selectedRecommendation.length; i++) {
+        recommendation += this.selectedRecommendation[i] + ";";
+      }
+      recommendation = recommendation.substring(0, recommendation.length - 1);
     }
-    recommendation = recommendation.substring(0, recommendation.length - 1);
     this.baseDataOne.customer_id = this.data.id;
     this.baseDataOne.recommendation = recommendation;
-    this.service.addBaseDataOne(this.baseDataOne).subscribe(data => {
+    this.service.addBaseDataOne(this.baseDataOne).subscribe((data) => {
       if (data) {
         Swal.fire({
           title: this.language.successAddDataTitle,
           text: this.language.successAddDataText,
           timer: 3000,
-          type: "success"
+          type: "success",
         });
         this.customer = false;
       }
@@ -899,19 +931,21 @@ export class BaseDateComponent implements OnInit {
     console.log(this.baseDataOne);
     let recommendation = "";
     // tslint:disable-next-line: prefer-for-of
-    for (let i = 0; i < this.selectedRecommendation.length; i++) {
-      recommendation += this.selectedRecommendation[i] + ";";
+    if (this.selectedRecommendation) {
+      for (let i = 0; i < this.selectedRecommendation.length; i++) {
+        recommendation += this.selectedRecommendation[i] + ";";
+      }
+      recommendation = recommendation.substring(0, recommendation.length - 1);
     }
-    recommendation = recommendation.substring(0, recommendation.length - 1);
     this.baseDataOne.customer_id = this.data.id;
     this.baseDataOne.recommendation = recommendation;
-    this.service.updateBaseDataOne(this.baseDataOne).subscribe(data => {
+    this.service.updateBaseDataOne(this.baseDataOne).subscribe((data) => {
       if (data) {
         Swal.fire({
           title: this.language.successUpdateTitle,
           text: this.language.successUpdateData,
           timer: 3000,
-          type: "success"
+          type: "success",
         });
         this.customer = false;
       }
@@ -921,13 +955,13 @@ export class BaseDateComponent implements OnInit {
   addBaseDataTwo(base) {
     console.log(this.baseDataTwo);
     this.baseDataTwo.customer_id = this.data.id;
-    this.service.addBaseDataTwo(this.baseDataTwo).subscribe(data => {
+    this.service.addBaseDataTwo(this.baseDataTwo).subscribe((data) => {
       if (data) {
         Swal.fire({
           title: this.language.successAddDataTitle,
           text: this.language.successAddDataText,
           timer: 3000,
-          type: "success"
+          type: "success",
         });
         this.customer = false;
       }
@@ -937,14 +971,14 @@ export class BaseDateComponent implements OnInit {
   updateBaseDataTwo(base) {
     console.log(this.baseDataTwo);
     this.baseDataTwo.customer_id = this.data.id;
-    this.service.updateBaseDataTwo(this.baseDataTwo).subscribe(data => {
+    this.service.updateBaseDataTwo(this.baseDataTwo).subscribe((data) => {
       console.log(data);
       if (data) {
         Swal.fire({
           title: this.language.successUpdateTitle,
           text: this.language.successUpdateData,
           timer: 3000,
-          type: "success"
+          type: "success",
         });
         this.customer = false;
       }
@@ -953,13 +987,13 @@ export class BaseDateComponent implements OnInit {
 
   addPhysicalIllness(physical) {
     this.physicalIllness.customer_id = this.data.id;
-    this.service.addPhysicalIllness(this.physicalIllness).subscribe(data => {
+    this.service.addPhysicalIllness(this.physicalIllness).subscribe((data) => {
       if (data) {
         Swal.fire({
           title: this.language.successAddDataTitle,
           text: this.language.successAddDataText,
           timer: 3000,
-          type: "success"
+          type: "success",
         });
         this.customer = false;
       }
@@ -968,17 +1002,19 @@ export class BaseDateComponent implements OnInit {
 
   updatePhysicalIllness(physical) {
     this.physicalIllness.customer_id = this.data.id;
-    this.service.updatePhysicalIllness(this.physicalIllness).subscribe(data => {
-      if (data) {
-        Swal.fire({
-          title: this.language.successUpdateTitle,
-          text: this.language.successUpdateData,
-          timer: 3000,
-          type: "success"
-        });
-        this.customer = false;
-      }
-    });
+    this.service
+      .updatePhysicalIllness(this.physicalIllness)
+      .subscribe((data) => {
+        if (data) {
+          Swal.fire({
+            title: this.language.successUpdateTitle,
+            text: this.language.successUpdateData,
+            timer: 3000,
+            type: "success",
+          });
+          this.customer = false;
+        }
+      });
   }
 
   editMode() {
@@ -1118,29 +1154,28 @@ export class BaseDateComponent implements OnInit {
   editDocuments(item) {
     this.document_edit = true;
     this.documentItem = item;
-    if(this.documentItem.date !== null && this.documentItem.date !== undefined) {
+    if (
+      this.documentItem.date !== null &&
+      this.documentItem.date !== undefined
+    ) {
       this.documentItem.date = new Date(this.documentItem.date);
     }
   }
 
   updateDocument(item) {
-    this.service.updateDocument(this.documentItem).subscribe(
-      data => {
-        if(data) {
-          this.document_edit = false;
-          this.toastr.success(
-            "Successfull!",
-            "Document update successfuly!",
-            { timeOut: 7000, positionClass: "toast-bottom-right" }
-          );
-        } else {
-          this.toastr.error(
-            "Error!",
-            "Document is not updated!",
-            { timeOut: 7000, positionClass: "toast-bottom-right" }
-          );
-        }
+    this.service.updateDocument(this.documentItem).subscribe((data) => {
+      if (data) {
+        this.document_edit = false;
+        this.toastr.success("Successfull!", "Document update successfuly!", {
+          timeOut: 7000,
+          positionClass: "toast-bottom-right",
+        });
+      } else {
+        this.toastr.error("Error!", "Document is not updated!", {
+          timeOut: 7000,
+          positionClass: "toast-bottom-right",
+        });
       }
-    )
+    });
   }
 }

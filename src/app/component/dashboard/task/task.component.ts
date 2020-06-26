@@ -295,6 +295,8 @@ export class TaskComponent implements OnInit {
       // this.selectedStore(this.selectedStoreId);
       if (this.value !== null) {
         this.getTaskForSelectedUsers(this.value);
+      } else {
+        this.calendars.push({ name: null, events: [] });
       }
       this.getUserInCompany(this.selectedStoreId);
     } else if (
@@ -415,7 +417,7 @@ export class TaskComponent implements OnInit {
       this.selected = this.eventCategory[0].id;
     }
     if (
-      (this.selectedStoreId === null || this.selectedStoreId === undefined) &&
+      (isNaN(this.selectedStoreId) || this.selectedStoreId === null || this.selectedStoreId === undefined) &&
       this.type !== 3
     ) {
       /*Swal.fire({
