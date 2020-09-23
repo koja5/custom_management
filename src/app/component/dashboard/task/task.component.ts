@@ -5,13 +5,13 @@ import {
   ViewChild,
   ViewEncapsulation,
   HostListener,
-  NgZone
+  NgZone,
 } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
   FormGroup,
-  Validators
+  Validators,
 } from "@angular/forms";
 import { CustomersService } from "../../../service/customers.service";
 import { CustomersComponent } from "../customers/customers.component";
@@ -27,7 +27,7 @@ import {
   SchedulerComponent,
   SlotClickEvent,
   CreateFormGroupArgs,
-  SchedulerEvent
+  SchedulerEvent,
 } from "@progress/kendo-angular-scheduler";
 import "@progress/kendo-angular-intl/locales/de/all";
 import { filter } from "rxjs/operators/filter";
@@ -45,7 +45,7 @@ import { ToastrService } from "ngx-toastr";
   selector: "app-task",
   templateUrl: "./task.component.html",
   styleUrls: ["./task.component.scss"],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class TaskComponent implements OnInit {
   @ViewChild("customerUserModal") customerUserModal: Modal;
@@ -88,7 +88,7 @@ export class TaskComponent implements OnInit {
     physicalComplaint: "",
     storeId: "",
     superadmin: localStorage.getItem("superadmin"),
-    confirm: ""
+    confirm: "",
   };
   public value: any = [];
   public store: any;
@@ -181,7 +181,7 @@ export class TaskComponent implements OnInit {
       this.loading = false;
     });*/
 
-    this.message.getTheme().subscribe(mess => {
+    this.message.getTheme().subscribe((mess) => {
       console.log(mess);
       setTimeout(() => {
         this.changeTheme(mess);
@@ -197,7 +197,7 @@ export class TaskComponent implements OnInit {
       this.languageUser = JSON.parse(localStorage.getItem("language"));
       // this.stateValue = JSON.parse(localStorage.getItem("language"))["state"];
     } else {
-      this.message.getLanguage().subscribe(mess => {
+      this.message.getLanguage().subscribe((mess) => {
         this.language = undefined;
         setTimeout(() => {
           this.language = JSON.parse(localStorage.getItem("language"));
@@ -226,7 +226,7 @@ export class TaskComponent implements OnInit {
     this.eventCategoryService
       .getEventCategory(localStorage.getItem("superadmin"))
       .subscribe((data: []) => {
-        this.eventCategory = data.sort(function(a, b) {
+        this.eventCategory = data.sort(function (a, b) {
           return a["sequence"] - b["sequence"];
         });
         const resourcesObject = {
@@ -235,7 +235,7 @@ export class TaskComponent implements OnInit {
           field: "colorTask",
           valueField: "id",
           textField: "text",
-          colorField: "color"
+          colorField: "color",
         };
         if (this.eventCategory.length > 0) {
           this.selected = this.eventCategory[0].id;
@@ -251,7 +251,7 @@ export class TaskComponent implements OnInit {
     if (this.type === 3) {
       this.selectedStoreId = Number(localStorage.getItem("storeId-" + this.id));
     }
-    this.storeService.getStore(localStorage.getItem("superadmin"), val => {
+    this.storeService.getStore(localStorage.getItem("superadmin"), (val) => {
       this.store = val;
       if (this.store.length !== 0) {
         this.language.selectStore += this.store[0].storename + ")";
@@ -311,7 +311,7 @@ export class TaskComponent implements OnInit {
     } else if (localStorage.getItem("type") === "3") {
       this.service
         .getWorkandTasksForUser(localStorage.getItem("idUser"))
-        .subscribe(data => {
+        .subscribe((data) => {
           console.log(data);
           this.events = [];
           this.workTime = this.pickWorkTimeToTask(data["workTime"]);
@@ -319,11 +319,12 @@ export class TaskComponent implements OnInit {
           const objectCalendar = {
             name: null,
             events: this.events,
-            workTime: this.workTime
+            workTime: this.workTime,
           };
           this.calendars.push(objectCalendar);
           console.log(this.splitterSize);
           this.loading = false;
+          console.log(document.getElementsByClassName("k-scheduler-toolbar"));
           this.setWidthForCalendarHeader();
           this.setSplitterBarEvent();
         });
@@ -359,7 +360,7 @@ export class TaskComponent implements OnInit {
     } else {
       this.service
         .getTasks(localStorage.getItem("superadmin"))
-        .subscribe(data => {
+        .subscribe((data) => {
           console.log(data);
           if (data.length !== 0) {
             for (let i = 0; i < data.length; i++) {
@@ -370,10 +371,11 @@ export class TaskComponent implements OnInit {
             console.log(this.events);
             const objectCalendar = {
               name: null,
-              events: this.events
+              events: this.events,
             };
             this.calendars.push(objectCalendar);
             this.loading = false;
+            console.log(document.getElementsByClassName("k-scheduler-toolbar"));
           } else {
             this.calendars.push({ name: null, events: [] });
           }
@@ -417,7 +419,9 @@ export class TaskComponent implements OnInit {
       this.selected = this.eventCategory[0].id;
     }
     if (
-      (isNaN(this.selectedStoreId) || this.selectedStoreId === null || this.selectedStoreId === undefined) &&
+      (isNaN(this.selectedStoreId) ||
+        this.selectedStoreId === null ||
+        this.selectedStoreId === undefined) &&
       this.type !== 3
     ) {
       /*Swal.fire({
@@ -449,7 +453,7 @@ export class TaskComponent implements OnInit {
         this.customerUsers = [];
         this.customer
           .getCustomerWithId(dataItem.customer_id)
-          .subscribe(data => {
+          .subscribe((data) => {
             console.log(data);
             this.customerUser = data[0];
             this.customerUsers.push(data[0]);
@@ -512,7 +516,7 @@ export class TaskComponent implements OnInit {
           timeDurationInd
             ? new Date(dataItem.start.getTime() + timeDuration * 60000)
             : dataItem.end,
-          Validators.required
+          Validators.required,
         ],
         startTimezone: [dataItem.startTimezone],
         endTimezone: [dataItem.endTimezone],
@@ -527,12 +531,12 @@ export class TaskComponent implements OnInit {
         confirm: dataItem.confirm,
         description: dataItem.description,
         recurrenceRule: dataItem.recurrenceRule,
-        recurrenceId: dataItem.recurrenceId
+        recurrenceId: dataItem.recurrenceId,
       });
 
       setTimeout(() => {
         if (dataItem.therapy_id !== undefined) {
-          this.customer.getTherapy(dataItem.therapy_id).subscribe(data => {
+          this.customer.getTherapy(dataItem.therapy_id).subscribe((data) => {
             console.log(data);
             if (data["length"] !== 0) {
               this.splitToValue(
@@ -635,13 +639,13 @@ export class TaskComponent implements OnInit {
         } else {
           formValue.confirm = -1;
         }
-        this.customer.addTherapy(this.complaintData).subscribe(data => {
+        this.customer.addTherapy(this.complaintData).subscribe((data) => {
           if (data["success"]) {
             formValue.therapy_id = data["id"];
             if (this.type === 0) {
               formValue["storeId"] = this.selectedStoreId;
             }
-            this.service.createTask(formValue, val => {
+            this.service.createTask(formValue, (val) => {
               console.log(val);
               if (val.success) {
                 this.service.create(formValue);
@@ -675,12 +679,12 @@ export class TaskComponent implements OnInit {
             const customerAttentionAndPhysical = {
               id: this.customerUser["id"],
               attention: this.customerUser["attention"],
-              physicalComplaint: this.customerUser["physicalComplaint"]
+              physicalComplaint: this.customerUser["physicalComplaint"],
             };
             console.log(customerAttentionAndPhysical);
             this.customer
               .updateAttentionAndPhysical(customerAttentionAndPhysical)
-              .subscribe(data => {
+              .subscribe((data) => {
                 console.log(data);
               });
           } else {
@@ -688,7 +692,7 @@ export class TaskComponent implements OnInit {
               title: this.language.unsuccessUpdateTitle,
               text: this.language.unsuccessUpdateText,
               timer: 3000,
-              type: "error"
+              type: "error",
             });
           }
           /*this.selectedComplaint = [];
@@ -713,9 +717,9 @@ export class TaskComponent implements OnInit {
         } else {
           formValue.confirm = -1;
         }
-        this.customer.updateTherapy(this.complaintData).subscribe(data => {
+        this.customer.updateTherapy(this.complaintData).subscribe((data) => {
           if (data) {
-            this.service.updateTask(formValue, val => {
+            this.service.updateTask(formValue, (val) => {
               console.log(val);
               if (val.success) {
                 this.handleUpdate(dataItem, formValue, mode);
@@ -747,12 +751,12 @@ export class TaskComponent implements OnInit {
             const customerAttentionAndPhysical = {
               id: this.customerUser["id"],
               attention: this.customerUser["attention"],
-              physicalComplaint: this.customerUser["physicalComplaint"]
+              physicalComplaint: this.customerUser["physicalComplaint"],
             };
             console.log(customerAttentionAndPhysical);
             this.customer
               .updateAttentionAndPhysical(customerAttentionAndPhysical)
-              .subscribe(data => {
+              .subscribe((data) => {
                 console.log(data);
               });
           } else {
@@ -780,7 +784,7 @@ export class TaskComponent implements OnInit {
         title: this.language.unsuccessUpdateTitle,
         text: this.language.unsuccessUpdateText,
         timer: 3000,
-        type: "error"
+        type: "error",
       });
       this.toastr.success(
         this.language.unsuccessUpdateTitle,
@@ -889,7 +893,7 @@ export class TaskComponent implements OnInit {
     } else {
       this.customerUser = {
         attention: "",
-        physicalComplaint: ""
+        physicalComplaint: "",
       };
       this.telephoneValue = null;
       this.mobileValue = null;
@@ -905,7 +909,7 @@ export class TaskComponent implements OnInit {
 
   getComplaintAndTherapyForCustomer(id) {
     console.log(id);
-    this.customer.getTherapyForCustomer(id).subscribe(data => {
+    this.customer.getTherapyForCustomer(id).subscribe((data) => {
       console.log(data);
       if (data["length"] !== 0) {
         const i = data["length"] - 1;
@@ -931,7 +935,7 @@ export class TaskComponent implements OnInit {
   createCustomer(form) {
     console.log(this.data);
     this.data.storeId = localStorage.getItem("superadmin");
-    this.customer.createCustomer(this.data, val => {
+    this.customer.createCustomer(this.data, (val) => {
       console.log(val);
       if (val) {
         this.data.id = val.id;
@@ -1001,6 +1005,13 @@ export class TaskComponent implements OnInit {
     setTimeout(() => {
       let items = document.querySelectorAll(".k-scheduler-toolbar");
       let calendars = document.querySelectorAll(".k-scheduler");
+      console.log(
+        document.getElementsByClassName("k-scheduler-header-all-day")
+      );
+      console.log(
+        document.getElementsByClassName("k-scheduler-header-wrap")[0]
+          .childNodes[0]
+      );
       for (let i = 0; i < items.length; i++) {
         console.log((calendars[i] as HTMLElement).offsetWidth);
         (items[i] as HTMLElement).style.width =
@@ -1078,10 +1089,10 @@ export class TaskComponent implements OnInit {
     const item = {
       user_id: Number(localStorage.getItem("idUser")),
       key: "usersFor-" + this.selectedStoreId + "-" + this.id,
-      value: this.value
+      value: this.value,
     };
 
-    this.mongo.setUsersFor(item).subscribe(data => {
+    this.mongo.setUsersFor(item).subscribe((data) => {
       console.log(data);
     });
   }
@@ -1093,7 +1104,7 @@ export class TaskComponent implements OnInit {
     if (value.length === 0) {
       this.service
         .getTasksForStore(this.selectedStoreId, this.id, this.type)
-        .subscribe(data => {
+        .subscribe((data) => {
           this.events = [];
           this.calendars = [];
           this.events = [];
@@ -1104,12 +1115,13 @@ export class TaskComponent implements OnInit {
           }
           const objectCalendar = {
             name: null,
-            events: this.events
+            events: this.events,
           };
           this.calendars.push(objectCalendar);
           this.size = [];
           this.size.push("100%");
           this.loading = false;
+          console.log(document.getElementsByClassName("k-scheduler-toolbar"));
           this.setWidthForCalendarHeader();
           this.setSplitterBarEvent();
         });
@@ -1150,7 +1162,7 @@ export class TaskComponent implements OnInit {
     setTimeout(() => {
       this.service
         .getWorkandTasksForUser(this.valueLoop[this.loopIndex].id)
-        .subscribe(data => {
+        .subscribe((data) => {
           console.log(data, this.valueLoop[this.loopIndex]);
           this.events = [];
           this.workTime = this.pickWorkTimeToTask(data["workTime"]);
@@ -1158,7 +1170,7 @@ export class TaskComponent implements OnInit {
             userId: this.valueLoop[this.loopIndex].id,
             name: this.valueLoop[this.loopIndex].shortname,
             events: this.pickModelForEvent(data["events"]),
-            workTime: this.workTime
+            workTime: this.workTime,
           };
           this.calendars.push(objectCalendar);
           this.loopIndex++;
@@ -1174,6 +1186,7 @@ export class TaskComponent implements OnInit {
             }
             this.size.push("");
             this.loading = false;
+            console.log(document.getElementsByClassName("k-scheduler-toolbar"));
             this.setWidthForCalendarHeader();
             this.setSplitterBarEvent();
           }
@@ -1222,7 +1235,7 @@ export class TaskComponent implements OnInit {
       if (event !== undefined) {
         this.service
           .getTasksForStore(event, this.id, this.type)
-          .subscribe(data => {
+          .subscribe((data) => {
             this.events = [];
             this.calendars = [];
             for (let i = 0; i < data.length; i++) {
@@ -1233,7 +1246,7 @@ export class TaskComponent implements OnInit {
             const objectCalendar = {
               name: null,
               events: this.events,
-              workTime: undefined
+              workTime: undefined,
             };
             if (!isNaN(event)) {
               this.setStoreWork(event);
@@ -1245,6 +1258,7 @@ export class TaskComponent implements OnInit {
             }
             this.calendars.push(objectCalendar);
             this.loading = false;
+            console.log(document.getElementsByClassName("k-scheduler-toolbar"));
             this.setWidthForCalendarHeader();
             this.setSplitterBarEvent();
           });
@@ -1252,7 +1266,7 @@ export class TaskComponent implements OnInit {
       } else {
         this.service
           .getTasks(localStorage.getItem("superadmin"))
-          .subscribe(data => {
+          .subscribe((data) => {
             console.log(data);
             this.events = [];
             if (data.length !== 0) {
@@ -1265,7 +1279,7 @@ export class TaskComponent implements OnInit {
               const objectCalendar = {
                 name: null,
                 events: this.events,
-                workTime: undefined
+                workTime: undefined,
               };
               this.calendars.push(objectCalendar);
             } else {
@@ -1278,6 +1292,7 @@ export class TaskComponent implements OnInit {
             this.timeDuration = "60";
             this.therapyDuration = 1;
             this.loading = false;
+            console.log(document.getElementsByClassName("k-scheduler-toolbar"));
             this.setWidthForCalendarHeader();
             this.setSplitterBarEvent();
             this.size = [];
@@ -1288,10 +1303,10 @@ export class TaskComponent implements OnInit {
 
     const item = {
       user_id: Number(localStorage.getItem("idUser")),
-      selectedStore: event
+      selectedStore: event,
     };
 
-    this.mongo.setSelectedStore(item).subscribe(data => {
+    this.mongo.setSelectedStore(item).subscribe((data) => {
       console.log(data);
     });
   }
@@ -1336,7 +1351,7 @@ export class TaskComponent implements OnInit {
               ":" +
               new Date(data[i].end_work).getMinutes(),
             time_duration: data[i].time_duration,
-            time_therapy: data[i].time_therapy
+            time_therapy: data[i].time_therapy,
           };
         }
       }
@@ -1345,10 +1360,11 @@ export class TaskComponent implements OnInit {
   }
 
   getUserInCompany(storeId) {
-    this.service.getUsersInCompany(storeId, val => {
+    this.service.getUsersInCompany(storeId, (val) => {
       this.usersInCompany = val;
       // this.language.selectedUsers += this.usersInCompany[0].shortname;
       this.loading = false;
+      console.log(document.getElementsByClassName("k-scheduler-toolbar"));
     });
   }
 
@@ -1356,7 +1372,7 @@ export class TaskComponent implements OnInit {
     console.log(event);
     const formValue = this.colorMapToId(event.dataItem);
     setTimeout(() => {
-      this.service.updateTask(formValue, val => {
+      this.service.updateTask(formValue, (val) => {
         console.log(val);
       });
     }, 50);
@@ -1365,18 +1381,18 @@ export class TaskComponent implements OnInit {
   resizeEndHandler(event) {
     const formValue = this.colorMapToId(event.dataItem);
     setTimeout(() => {
-      this.service.updateTask(formValue, val => {
+      this.service.updateTask(formValue, (val) => {
         console.log(val);
       });
     }, 50);
   }
 
   removeHandler({ sender, dataItem }: RemoveEvent): void {
-    this.service.deleteTask(dataItem.id).subscribe(data => {
+    this.service.deleteTask(dataItem.id).subscribe((data) => {
       if (data) {
         this.customer
           .deleteTherapy(dataItem.therapy_id)
-          .subscribe(data_therapy => {
+          .subscribe((data_therapy) => {
             console.log(data_therapy);
           });
       }
@@ -1423,15 +1439,15 @@ export class TaskComponent implements OnInit {
   convertNumericToDay(numeric) {
     let day = null;
     if (numeric === 1) {
-      day = this.language.monday.toString().toLowerCase();
+      day = "monday";
     } else if (numeric === 2) {
-      day = this.language.tuesday.toLowerCase();
+      day = "tuesday";
     } else if (numeric === 3) {
-      day = this.language.wednesday.toLowerCase();
+      day = "wednesday";
     } else if (numeric === 4) {
-      day = this.language.thursday.toLowerCase();
+      day = "thursday";
     } else if (numeric === 5) {
-      day = this.language.friday.toLowerCase();
+      day = "friday";
     }
     return day;
   }
@@ -1451,14 +1467,14 @@ export class TaskComponent implements OnInit {
           start2: workTime[i][this.convertNumericToDay(j)].split("-")[3],
           end2: workTime[i][this.convertNumericToDay(j)].split("-")[4],
           start3: workTime[i][this.convertNumericToDay(j)].split("-")[5],
-          end3: workTime[i][this.convertNumericToDay(j)].split("-")[6]
+          end3: workTime[i][this.convertNumericToDay(j)].split("-")[6],
         };
         workTimeArray.push(workTimeObject);
       }
       allWorkTime.push({
         change: workTime[i].dateChange,
         color: workTime[i].color,
-        times: workTimeArray
+        times: workTimeArray,
       });
     }
     console.log(allWorkTime);
@@ -1504,14 +1520,14 @@ export class TaskComponent implements OnInit {
       .getParameters("Complaint", superadmin)
       .subscribe((data: []) => {
         console.log(data);
-        this.complaintValue = data.sort(function(a, b) {
+        this.complaintValue = data.sort(function (a, b) {
           return a["sequence"] - b["sequence"];
         });
       });
 
     this.customer.getParameters("Therapy", superadmin).subscribe((data: []) => {
       console.log(data);
-      this.therapyValue = data.sort(function(a, b) {
+      this.therapyValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
@@ -1520,26 +1536,26 @@ export class TaskComponent implements OnInit {
       .getParameters("Treatment", superadmin)
       .subscribe((data: []) => {
         console.log(data);
-        this.treatmentValue = data.sort(function(a, b) {
+        this.treatmentValue = data.sort(function (a, b) {
           return a["sequence"] - b["sequence"];
         });
       });
 
     this.customer.getParameters("CS", superadmin).subscribe((data: []) => {
       console.log(data);
-      this.CSValue = data.sort(function(a, b) {
+      this.CSValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
     this.customer.getParameters("State", superadmin).subscribe((data: []) => {
       console.log(data);
-      this.stateValue = data.sort(function(a, b) {
+      this.stateValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
 
-    this.service.getCompanyUsers(localStorage.getItem("idUser"), val => {
+    this.service.getCompanyUsers(localStorage.getItem("idUser"), (val) => {
       console.log(val);
       if (val.length !== 0) {
         this.allUsers = val.sort((a, b) =>
@@ -1618,12 +1634,13 @@ export class TaskComponent implements OnInit {
   reloadNewCustomer() {
     this.customerUsers = null;
     setTimeout(() => {
-      this.customer.getCustomers(localStorage.getItem("superadmin"), val => {
+      this.customer.getCustomers(localStorage.getItem("superadmin"), (val) => {
         console.log(val);
         this.customerUsers = val.sort((a, b) =>
           a["shortname"].localeCompare(b["shortname"])
         );
         this.loading = false;
+        console.log(document.getElementsByClassName("k-scheduler-toolbar"));
       });
     }, 100);
   }
@@ -1639,7 +1656,7 @@ export class TaskComponent implements OnInit {
       this.customerLoading = true;
       const searchFilter = {
         superadmin: localStorage.getItem("superadmin"),
-        filter: event
+        filter: event,
       };
       this.customer.searchCustomer(searchFilter).subscribe((val: []) => {
         console.log(val);
@@ -1691,7 +1708,7 @@ export class TaskComponent implements OnInit {
     this.confirmArrivalData = {
       id: dataItem.id,
       name: dataItem.title.split("+")[0],
-      customer_id: dataItem.customer_id
+      customer_id: dataItem.customer_id,
     };
     this.requestForConfirmArrival = true;
   }
@@ -1701,7 +1718,7 @@ export class TaskComponent implements OnInit {
     if (answer === "yes") {
       this.service
         .sendConfirmArrivalAgain(this.confirmArrivalData)
-        .subscribe(data => {
+        .subscribe((data) => {
           console.log(data);
         });
 

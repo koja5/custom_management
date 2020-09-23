@@ -1,4 +1,5 @@
 // Get dependencies
+const compression = require('compression')
 const express = require('express');
 const path = require('path');
 const http = require('http');
@@ -21,6 +22,7 @@ const mysql = require('mysql');
 var fs = require("fs");
 var schedule = require('node-schedule');
 var eventConfirm = require('./server/routes/eventConfirm');
+app.use(compression());
 
 var connection = mysql.createPool({
   host: "185.178.193.141",

@@ -152,7 +152,7 @@
             </div>
             <div class="birthday-container col-md-6 col-xs-12">
               <kendo-textbox-container floatingLabel="{{language.birthday}}">
-                <kendo-datepicker class="email noPadding" name="birthday" [(ngModel)]="data.birthday"
+                <kendo-datepicker [format]="'dd.MM.yyyy'" class="email noPadding" name="birthday" [(ngModel)]="data.birthday"
                   (valueChange)="onChange($event)">
                 </kendo-datepicker>
               </kendo-textbox-container>

@@ -339,8 +339,7 @@
           "items": [
             { "key": "notCorrectPass" },
             { "key": "checkMailForActive" },
-            { "key": "fillFields" },
-            {}
+            { "key": "fillFields" }
           ]
         }
       ]

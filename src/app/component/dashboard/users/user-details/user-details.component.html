@@ -345,7 +345,7 @@
                                 [(ngModel)]="language['noInformation']" name="birthday" class="noPadding"
                                 readonly="true">
 
-                              <kendo-datepicker *ngIf="data.birthday !== undefined && data.birthday !== ''"
+                              <kendo-datepicker [format]="'dd.MM.yyyy'" *ngIf="data.birthday !== undefined && data.birthday !== ''"
                                 [(ngModel)]="data.birthday" name="birthday" class="noPadding" readonly="true">
                               </kendo-datepicker>
                             </kendo-textbox-container>
@@ -377,7 +377,7 @@
                     </div>
                     <div class="form-group row">
                       <label class="col-md-2 col-sm-12 col-form-label">Valid from:</label>
-                      <kendo-datepicker class="col-md-5 col-xs-8 noPadding" name="validDate" placeholder="Valid date"
+                      <kendo-datepicker [format]="'dd.MM.yyyy'" class="col-md-5 col-xs-8 noPadding" name="validDate" placeholder="Valid date"
                         [(ngModel)]="validDate" validDate.value='' readonly="true"></kendo-datepicker>
                     </div>
                     <form name="loginForm" class="loginForm"
@@ -523,12 +523,12 @@
               <div class="form-group">
                 <div class="email col-md-6 col-xs-12">
                   <p>{{language.birthday}}</p>
-                  <kendo-datepicker class="col-xs-12 noPadding" name="birthday" placeholder="Birthday"
+                  <kendo-datepicker [format]="'dd.MM.yyyy'" class="col-xs-12 noPadding" name="birthday" placeholder="Birthday"
                     [(ngModel)]="data.birthday" birthday.value=''></kendo-datepicker>
                 </div>
                 <div class="email col-md-6 col-xs-12">
                   <p>{{language.sincecompany}}</p>
-                  <kendo-datepicker class="col-xs-12 noPadding" name="sincecompany" placeholder="Since in company"
+                  <kendo-datepicker [format]="'dd.MM.yyyy'" class="col-xs-12 noPadding" name="sincecompany" placeholder="Since in company"
                     [(ngModel)]="data.incompanysince" incompanysince.value=''></kendo-datepicker>
                 </div>
               </div>
@@ -580,7 +580,7 @@
             </div>
             <div class="form-group row">
               <label class="col-md-2 col-sm-12 col-form-label">Valid from:</label>
-              <kendo-datepicker class="col-md-5 col-xs-8 noPadding" name="validDate" placeholder="Valid date"
+              <kendo-datepicker [format]="'dd.MM.yyyy'" class="col-md-5 col-xs-8 noPadding" name="validDate" placeholder="Valid date"
                 [(ngModel)]="validDate" validDate.value=''></kendo-datepicker>
               <div>
                 <button class="col-md-2 col-xs-4 btn-save" kendoButton [icon]="'k-icon k-i-save'"
@@ -695,9 +695,9 @@
                     [(ngModel)]="data.email" email.value=''>
                 </div>
                 <div class="form-group">
-                  <kendo-datepicker class="email col-md-6 col-xs-12" name="birthday" placeholder="Birthday"
+                  <kendo-datepicker [format]="'dd.MM.yyyy'" class="email col-md-6 col-xs-12" name="birthday" placeholder="Birthday"
                     [(ngModel)]="data.birthday" birthday.value=''></kendo-datepicker>
-                  <kendo-datepicker class="email col-md-6 col-xs-12" name="sincecompany" placeholder="Since in company"
+                  <kendo-datepicker [format]="'dd.MM.yyyy'" class="email col-md-6 col-xs-12" name="sincecompany" placeholder="Since in company"
                     [(ngModel)]="data.incompanysince" incompanysince.value=''></kendo-datepicker>
                 </div>
                 <div class="form-group">
@@ -742,7 +742,7 @@
               </div>
               <div class="form-group row">
                 <label class="col-md-2 col-sm-12 col-form-label">Valid from:</label>
-                <kendo-datepicker class="col-md-5 col-xs-8" name="validDate" placeholder="Valid date"
+                <kendo-datepicker [format]="'dd.MM.yyyy'" class="col-md-5 col-xs-8" name="validDate" placeholder="Valid date"
                   [(ngModel)]="validDate" validDate.value=''></kendo-datepicker>
                 <div>
                   <button class="col-md-2 col-xs-4 btn-save" kendoButton [icon]="'k-icon k-i-save'"

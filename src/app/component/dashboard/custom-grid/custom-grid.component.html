@@ -213,7 +213,7 @@
               </div>
               <div class="birthday-container col-md-6 col-xs-12">
                 <kendo-textbox-container floatingLabel="{{language.fieldBirthday}}">
-                  <kendo-datepicker class="email noPadding" name="birthday" [(ngModel)]="member.birthday">
+                  <kendo-datepicker [format]="'dd.MM.yyyy'" class="email noPadding" name="birthday" [(ngModel)]="member.birthday">
                   </kendo-datepicker>
                 </kendo-textbox-container>
               </div>
@@ -274,13 +274,13 @@
 
         <div class="birthday-container col-md-6 col-xs-12">
           <kendo-textbox-container floatingLabel="{{language.fieldActiveDate}}">
-            <kendo-datepicker class="email noPadding" name="activeDate" [(ngModel)]="member.activeDate">
+            <kendo-datepicker [format]="'dd.MM.yyyy'" class="email noPadding" name="activeDate" [(ngModel)]="member.activeDate">
             </kendo-datepicker>
           </kendo-textbox-container>
         </div>
         <div class="birthday-container col-md-6 col-xs-12">
           <kendo-textbox-container floatingLabel="{{language.fieldActivePremiumDate}}">
-            <kendo-datepicker class="email noPadding" name="activePremiumDate" [(ngModel)]="member.activePremiumDate">
+            <kendo-datepicker [format]="'dd.MM.yyyy'" class="email noPadding" name="activePremiumDate" [(ngModel)]="member.activePremiumDate">
             </kendo-datepicker>
           </kendo-textbox-container>
         </div>

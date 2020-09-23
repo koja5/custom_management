@@ -63,7 +63,7 @@
           <button kendoButton (click)="dateEventChange('prev')"><span class="k-icon k-i-arrow-60-left"></span></button>
           <button kendoButton (click)="dateEventChange('next')"><span class="k-icon k-i-arrow-60-right"></span></button>
         </kendo-buttongroup>
-        <kendo-datepicker [(value)]="currentDate" (valueChange)="chageDate($event)" style="margin-left: 2vh;">
+        <kendo-datepicker [format]="'dd.MM.yyyy'" [(value)]="currentDate" (valueChange)="chageDate($event)" style="margin-left: 2vh;">
         </kendo-datepicker>
       </div>
       <div class="col-md-6 col-sm-12 col-xs-12">
@@ -130,7 +130,7 @@
               (dragEnd)="dragEndHandler($event)" (resizeEnd)="resizeEndHandler($event)" (remove)="removeHandler($event)"
               (change)="changeHandler($event)">
 
-              <ng-template kendoSchedulerToolbarTemplate let-selectedDate="selectedDate">
+              <ng-template kendoSchedulerToolbarTemplate let-selectedDate="selectedDate" id="test">
                 <my-navigation [selectedDate]="selectedDate" style="float: left;">
                 </my-navigation>
                 <span *ngIf="item.name !== null && item.name !== ''" style="text-align: center; font-size: 2vh;">
@@ -316,7 +316,7 @@
                   <div class="k-form-field k-datetime-picker-wrapper">
                     <div class="col-sm-8">
                       <kendo-textbox-container floatingLabel="{{language.start}}">
-                        <kendo-datepicker [formControl]="formGroup.get('start')" class="dateWidth">
+                        <kendo-datepicker [format]="'dd.MM.yyyy'" [formControl]="formGroup.get('start')" class="dateWidth">
                         </kendo-datepicker>
                       </kendo-textbox-container>
                     </div>
@@ -330,7 +330,7 @@
                   <div class="k-form-field k-datetime-picker-wrapper">
                     <div class="col-sm-8">
                       <kendo-textbox-container floatingLabel="{{language.end}}">
-                        <kendo-datepicker [formControl]="formGroup.get('end')" class="dateWidth">
+                        <kendo-datepicker [format]="'dd.MM.yyyy'" [formControl]="formGroup.get('end')" class="dateWidth">
                         </kendo-datepicker>
                       </kendo-textbox-container>
                     </div>
@@ -541,7 +541,7 @@
                 <div class="k-form-field k-datetime-picker-wrapper">
                   <div class="col-sm-8">
                     <kendo-textbox-container floatingLabel="{{language.start}}">
-                      <kendo-datepicker [formControl]="formGroup.get('start')" class="dateWidth">
+                      <kendo-datepicker [format]="'dd.MM.yyyy'" [formControl]="formGroup.get('start')" class="dateWidth">
                       </kendo-datepicker>
                     </kendo-textbox-container>
                   </div>
@@ -556,7 +556,7 @@
                 <div class="k-form-field k-datetime-picker-wrapper">
                   <div class="col-sm-8">
                     <kendo-textbox-container floatingLabel="{{language.end}}">
-                      <kendo-datepicker [formControl]="formGroup.get('end')" class="dateWidth">
+                      <kendo-datepicker [format]="'dd.MM.yyyy'" [formControl]="formGroup.get('end')" class="dateWidth">
                       </kendo-datepicker>
                     </kendo-textbox-container>
                   </div>
@@ -671,7 +671,7 @@
               </div>
               <div class="birthday-container col-md-6 col-xs-12">
                 <kendo-textbox-container floatingLabel="{{language.birthday}}">
-                  <kendo-datepicker class="email noPadding" name="birthday" [(ngModel)]="data.birthday"
+                  <kendo-datepicker [format]="'dd.MM.yyyy'" class="email noPadding" name="birthday" [(ngModel)]="data.birthday"
                     (valueChange)="onChange($event)">
                   </kendo-datepicker>
                 </kendo-textbox-container>
@@ -694,9 +694,9 @@
           </kendo-textbox-container>
         </div>
         <div class="email col-md-4 col-xs-12">
-          <kendo-textbox-container floatingLabel="{{language.email}}({{language.required}})">
+          <kendo-textbox-container floatingLabel="{{language.email}}">
             <input kendoTextBox type="email" class="col-xs-12" name="email" [(ngModel)]="data.email"
-              [pattern]="emailPattern" #email="ngModel" required #email="ngModel"></kendo-textbox-container>
+              [pattern]="emailPattern" #email="ngModel" #email="ngModel"></kendo-textbox-container>
         </div>
         <div class="email col-md-4 col-xs-12">
           <kendo-textbox-container floatingLabel="{{language.street}}">

@@ -141,7 +141,7 @@
     </div>
     <div class="col-md-12 col-xs-12">
       <kendo-textbox-container floatingLabel="{{language.date}}({{language.required}})">
-        <kendo-datepicker class="email col-md-12 col-xs-12 noPadding" name="Date" [(ngModel)]="dateConst"
+        <kendo-datepicker [format]="'dd.MM.yyyy'" class="email col-md-12 col-xs-12 noPadding" name="Date" [(ngModel)]="dateConst"
           dateConst.value='' required>
         </kendo-datepicker>
       </kendo-textbox-container>
@@ -155,7 +155,7 @@
     </div>
     <div class="col-md-12 col-xs-12">
       <kendo-textbox-container floatingLabel="{{language.date_redeemed}}">
-        <kendo-datepicker class="email col-md-12 col-xs-12 noPadding" name="Date redeemed"
+        <kendo-datepicker [format]="'dd.MM.yyyy'" class="email col-md-12 col-xs-12 noPadding" name="Date redeemed"
           [(ngModel)]="dateredeemedConst" dateredeemedConst.value=''>
         </kendo-datepicker>
       </kendo-textbox-container>

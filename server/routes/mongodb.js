@@ -6,8 +6,9 @@ const Schema = mongo.Schema;
 // const url = 'mongodb://localhost:27017/management_mongodb';
 // const url = 'mongodb://appprodu_appproduction_prod:CJr4eUqWg33tT97mxPFx@vps.app-production.eu:42526/management_mongodb'
 // const url = "mongodb://78.47.206.131:27017/management_mongo?gssapiServiceName=mongodb";
+// const url = "mongodb://admin:1234@localhost:27017/business_circle_mongodb?authSource=admin";
 const url =
-  "mongodb://admin:1234@localhost:27017/business_circle_mongodb?authSource=admin";
+  "mongodb://clinic_node:ClinicNode#2019@localhost:27017/business_circle_mongodb?authSource=admin";
 const database_name = "management_mongodb";
 var ObjectId = require("mongodb").ObjectID;
 const mysql = require("mysql");

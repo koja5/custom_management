@@ -228,13 +228,13 @@
     </div>
     <div class="col-md-6 col-xs-12 b-r">
       <kendo-textbox-container floatingLabel="{{language.birthday}}">
-        <kendo-datepicker class="col-xs-12 noPadding" name="birthday" [(ngModel)]="data.birthday" birthday.value=''>
+        <kendo-datepicker [format]="'dd.MM.yyyy'" class="col-xs-12 noPadding" name="birthday" [(ngModel)]="data.birthday" birthday.value=''>
         </kendo-datepicker>
       </kendo-textbox-container>
     </div>
     <div class="col-md-6 col-xs-12 b-r">
       <kendo-textbox-container floatingLabel="{{language.sincecompany}}">
-        <kendo-datepicker class="col-xs-12 noPadding" name="sincecompany" [(ngModel)]="data.incompanysince"
+        <kendo-datepicker [format]="'dd.MM.yyyy'" class="col-xs-12 noPadding" name="sincecompany" [(ngModel)]="data.incompanysince"
           incompanysince.value=''></kendo-datepicker>
       </kendo-textbox-container>
     </div>

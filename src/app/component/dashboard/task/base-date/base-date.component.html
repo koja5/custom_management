@@ -248,11 +248,9 @@
                                 *ngIf="baseDataOne.recommendation === '' || baseDataOne.recommendation === null || baseDataOne.recommendation === undefiend"
                                 [(ngModel)]="language['noInformation']" name="recommendation" class="noPadding"
                                 readonly="true">
-                              <kendo-multiselect
-                                *ngIf="baseDataOne.recommendation"
-                                [data]="recommendationList" [textField]="'title'" [valueField]="'id'"
-                                [(ngModel)]="selectedRecommendation" [valuePrimitive]="true" name="recommendation"
-                                readonly="true">
+                              <kendo-multiselect *ngIf="baseDataOne.recommendation" [data]="recommendationList"
+                                [textField]="'title'" [valueField]="'id'" [(ngModel)]="selectedRecommendation"
+                                [valuePrimitive]="true" name="recommendation" readonly="true">
                               </kendo-multiselect>
                             </kendo-textbox-container>
                           </p>
@@ -265,11 +263,10 @@
                                 *ngIf="baseDataOne.relationship === '' || baseDataOne.relationship === null || baseDataOne.relationship === undefiend"
                                 [(ngModel)]="language['noInformation']" name="relationship" class="noPadding"
                                 readonly="true">
-                              <kendo-combobox
-                                *ngIf="baseDataOne.relationship"
-                                class="col-md-12 col-xs-12 noPadding" [data]="relationshipList" [textField]="'title'"
-                                [valueField]="'id'" [(ngModel)]="baseDataOne.relationship" [valuePrimitive]="true"
-                                name="relationship" readonly="true">
+                              <kendo-combobox *ngIf="baseDataOne.relationship" class="col-md-12 col-xs-12 noPadding"
+                                [data]="relationshipList" [textField]="'title'" [valueField]="'id'"
+                                [(ngModel)]="baseDataOne.relationship" [valuePrimitive]="true" name="relationship"
+                                readonly="true">
                               </kendo-combobox>
                             </kendo-textbox-container>
                           </p>
@@ -281,11 +278,9 @@
                               <input kendoTextBox
                                 *ngIf="baseDataOne.social === '' || baseDataOne.social === null || baseDataOne.social === undefiend"
                                 [(ngModel)]="language['noInformation']" name="social" class="noPadding" readonly="true">
-                              <kendo-combobox
-                                *ngIf="baseDataOne.social"
-                                class="col-md-12 col-xs-12 noPadding" [data]="socialList" [textField]="'title'"
-                                [valueField]="'id'" [(ngModel)]="baseDataOne.social" [valuePrimitive]="true"
-                                name="title" readonly="true">
+                              <kendo-combobox *ngIf="baseDataOne.social" class="col-md-12 col-xs-12 noPadding"
+                                [data]="socialList" [textField]="'title'" [valueField]="'id'"
+                                [(ngModel)]="baseDataOne.social" [valuePrimitive]="true" name="title" readonly="true">
                               </kendo-combobox>
                             </kendo-textbox-container>
                           </p>
@@ -297,11 +292,9 @@
                               <input kendoTextBox
                                 *ngIf="baseDataOne.doctor === '' || baseDataOne.doctor === null || baseDataOne.doctor === undefiend"
                                 [(ngModel)]="language['noInformation']" name="doctor" class="noPadding" readonly="true">
-                              <kendo-combobox
-                                *ngIf="baseDataOne.doctor"
-                                class="col-md-12 col-xs-12 noPadding" [data]="doctorsList" [textField]="'firstname'"
-                                [valueField]="'id'" [(ngModel)]="baseDataOne.doctor" [valuePrimitive]="true"
-                                name="doctors" readonly="true">
+                              <kendo-combobox *ngIf="baseDataOne.doctor" class="col-md-12 col-xs-12 noPadding"
+                                [data]="doctorsList" [textField]="'firstname'" [valueField]="'id'"
+                                [(ngModel)]="baseDataOne.doctor" [valuePrimitive]="true" name="doctors" readonly="true">
                               </kendo-combobox>
                             </kendo-textbox-container>
                           </p>
@@ -314,10 +307,8 @@
                                 *ngIf="baseDataOne.first_date === '' || baseDataOne.first_date === null || baseDataOne.first_date === undefiend"
                                 [(ngModel)]="language['noInformation']" name="first_date" class="noPadding"
                                 readonly="true">
-                              <kendo-datepicker
-                                *ngIf="baseDataOne.first_date"
-                                [(ngModel)]="baseDataOne.first_date" name="first_date" readonly="true"
-                                class="noPadding">
+                              <kendo-datepicker [format]="'dd.MM.yyyy'" *ngIf="baseDataOne.first_date" [(ngModel)]="baseDataOne.first_date"
+                                name="first_date" readonly="true" class="noPadding">
                               </kendo-datepicker>
                             </kendo-textbox-container>
                           </p>
@@ -347,8 +338,8 @@
                               <input kendoTextBox
                                 *ngIf="baseDataTwo.size === '' || baseDataTwo.size === null || baseDataTwo.size === undefiend"
                                 [(ngModel)]="language['noInformation']" name="size" class="noPadding" readonly="true">
-                              <input kendoTextBox *ngIf="baseDataTwo.size"
-                                [(ngModel)]="baseDataTwo.size" name="size" class="noPadding" readonly="true">
+                              <input kendoTextBox *ngIf="baseDataTwo.size" [(ngModel)]="baseDataTwo.size" name="size"
+                                class="noPadding" readonly="true">
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -359,8 +350,8 @@
                               <input kendoTextBox
                                 *ngIf="baseDataTwo.weight === '' || baseDataTwo.weight === null || baseDataTwo.weight === undefiend"
                                 [(ngModel)]="language['noInformation']" name="weight" class="noPadding" readonly="true">
-                              <input kendoTextBox *ngIf="baseDataTwo.weight"
-                                [(ngModel)]="baseDataTwo.weight" name="weight" class="noPadding" readonly="true">
+                              <input kendoTextBox *ngIf="baseDataTwo.weight" [(ngModel)]="baseDataTwo.weight"
+                                name="weight" class="noPadding" readonly="true">
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -372,8 +363,7 @@
                                 *ngIf="baseDataTwo.childs === '' || baseDataTwo.childs === null || baseDataTwo.childs === undefiend"
                                 [(ngModel)]="language['noInformation']" name="childs" class="noPadding" readonly="true">
 
-                              <input kendoTextBox *ngIf="baseDataTwo.childs"
-                                [(ngModel)]="baseDataTwo.childs">
+                              <input kendoTextBox *ngIf="baseDataTwo.childs" [(ngModel)]="baseDataTwo.childs">
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -385,9 +375,9 @@
                                 *ngIf="baseDataTwo.notes === '' || baseDataTwo.notes === null || baseDataTwo.notes === undefiend"
                                 [(ngModel)]="language['noInformation']" name="skin_sensitivity" style="width: 95%;"
                                 readonly="true" [autoSize]="true"></textarea>
-                              <textarea *ngIf="baseDataTwo.notes"
-                                kendoTextArea type="text" [(ngModel)]="baseDataTwo.notes" name="notes"
-                                style="width: 95%;" readonly="true" [autoSize]="true"></textarea>
+                              <textarea *ngIf="baseDataTwo.notes" kendoTextArea type="text"
+                                [(ngModel)]="baseDataTwo.notes" name="notes" style="width: 95%;" readonly="true"
+                                [autoSize]="true"></textarea>
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -399,9 +389,9 @@
                                 *ngIf="baseDataTwo.profession === '' || baseDataTwo.profession === null || baseDataTwo.profession === undefiend"
                                 [(ngModel)]="language['noInformation']" name="skin_sensitivity" style="width: 95%;"
                                 readonly="true" [autoSize]="true"></textarea>
-                              <textarea *ngIf="baseDataTwo.profession"
-                                kendoTextArea type="text" [(ngModel)]="baseDataTwo.profession" name="profession"
-                                style="width: 95%;" readonly="true" [autoSize]="true"></textarea>
+                              <textarea *ngIf="baseDataTwo.profession" kendoTextArea type="text"
+                                [(ngModel)]="baseDataTwo.profession" name="profession" style="width: 95%;"
+                                readonly="true" [autoSize]="true"></textarea>
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -413,9 +403,9 @@
                                 *ngIf="baseDataTwo.useful === '' || baseDataTwo.useful === null || baseDataTwo.useful=== undefined"
                                 [(ngModel)]="language['noInformation']" name="skin_sensitivity" style="width: 95%;"
                                 readonly="true" [autoSize]="true"></textarea>
-                              <textarea *ngIf="baseDataTwo.useful"
-                                kendoTextArea type="text" [(ngModel)]="baseDataTwo.useful" name="useful"
-                                style="width: 95%;" readonly="true" [autoSize]="true"></textarea>
+                              <textarea *ngIf="baseDataTwo.useful" kendoTextArea type="text"
+                                [(ngModel)]="baseDataTwo.useful" name="useful" style="width: 95%;" readonly="true"
+                                [autoSize]="true"></textarea>
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -446,8 +436,7 @@
                                 *ngIf="physicalIllness.internal_organs === '' || physicalIllness.internal_organs === null || physicalIllness.internal_organs === undefined"
                                 [(ngModel)]="language['noInformation']" name="skin_sensitivity" style="width: 95%;"
                                 readonly="true" [autoSize]="true"></textarea>
-                              <textarea kendoTextArea
-                                *ngIf="physicalIllness.internal_organs"
+                              <textarea kendoTextArea *ngIf="physicalIllness.internal_organs"
                                 [(ngModel)]="physicalIllness.internal_organs" name="operations" style="width: 95%;"
                                 readonly="true" [autoSize]="true"></textarea>
                             </kendo-textbox-container>
@@ -462,8 +451,7 @@
                                 *ngIf="physicalIllness.operations === '' || physicalIllness.operations === null || physicalIllness.operations === undefined"
                                 [(ngModel)]="language['noInformation']" name="skin_sensitivity" style="width: 95%;"
                                 readonly="true" [autoSize]="true"></textarea>
-                              <textarea kendoTextArea
-                                *ngIf="physicalIllness.operations"
+                              <textarea kendoTextArea *ngIf="physicalIllness.operations"
                                 [(ngModel)]="physicalIllness.operations" name="operations" style="width: 95%;"
                                 readonly="true" [autoSize]="true"></textarea>
                             </kendo-textbox-container>
@@ -478,8 +466,7 @@
                                 *ngIf="physicalIllness.previous_findings === '' || physicalIllness.previous_findings === null || physicalIllness.previous_findings === undefined"
                                 [(ngModel)]="language['noInformation']" name="skin_sensitivity" style="width: 95%;"
                                 readonly="true" [autoSize]="true"></textarea>
-                              <textarea kendoTextArea
-                                *ngIf="physicalIllness.previous_findings"
+                              <textarea kendoTextArea *ngIf="physicalIllness.previous_findings"
                                 [(ngModel)]="physicalIllness.previous_findings" name="previous_findings"
                                 style="width: 95%;" readonly="true" [autoSize]="true"></textarea>
                             </kendo-textbox-container>
@@ -494,8 +481,7 @@
                                 *ngIf="physicalIllness.medicament === '' || physicalIllness.medicament === null || physicalIllness.medicament === undefined"
                                 [(ngModel)]="language['noInformation']" name="skin_sensitivity" style="width: 95%;"
                                 readonly="true" [autoSize]="true"></textarea>
-                              <textarea kendoTextArea
-                                *ngIf="physicalIllness.medicament"
+                              <textarea kendoTextArea *ngIf="physicalIllness.medicament"
                                 [(ngModel)]="physicalIllness.medicament" name="medicament" style="width: 95%;"
                                 readonly="true" [autoSize]="true"></textarea>
                             </kendo-textbox-container>
@@ -509,8 +495,7 @@
                                 *ngIf="physicalIllness.allergies === '' || physicalIllness.allergies === null || physicalIllness.allergies === undefined"
                                 [(ngModel)]="language['noInformation']" name="skin_sensitivity" style="width: 95%;"
                                 readonly="true" [autoSize]="true"></textarea>
-                              <textarea kendoTextArea
-                                *ngIf="physicalIllness.allergies"
+                              <textarea kendoTextArea *ngIf="physicalIllness.allergies"
                                 [(ngModel)]="physicalIllness.allergies" name="allergies" style="width: 95%;"
                                 readonly="true" [autoSize]="true"></textarea>
                             </kendo-textbox-container>
@@ -525,8 +510,7 @@
                                 *ngIf="physicalIllness.skin_sensitivity === '' || physicalIllness.skin_sensitivity === null || physicalIllness.skin_sensitivity === undefined"
                                 [(ngModel)]="language['noInformation']" name="skin_sensitivity" style="width: 95%;"
                                 readonly="true" [autoSize]="true"></textarea>
-                              <textarea kendoTextArea
-                                *ngIf="physicalIllness.skin_sensitivity"
+                              <textarea kendoTextArea *ngIf="physicalIllness.skin_sensitivity"
                                 [(ngModel)]="physicalIllness.skin_sensitivity" name="skin_sensitivity"
                                 style="width: 95%;" readonly="true" [autoSize]="true"></textarea>
                             </kendo-textbox-container>
@@ -540,8 +524,7 @@
                                 *ngIf="physicalIllness.pregnancy === '' || physicalIllness.pregnancy === null || physicalIllness.pregnancy === undefined"
                                 [(ngModel)]="language['noInformation']" name="skin_sensitivity" style="width: 95%;"
                                 readonly="true" [autoSize]="true"></textarea>
-                              <textarea kendoTextArea
-                                *ngIf="physicalIllness.pregnancy"
+                              <textarea kendoTextArea *ngIf="physicalIllness.pregnancy"
                                 [(ngModel)]="physicalIllness.pregnancy" name="skin_sensitivity" style="width: 95%;"
                                 readonly="true" [autoSize]="true"></textarea>
                             </kendo-textbox-container>
@@ -838,7 +821,7 @@
                         style="width: 95%;"></textarea>
                     </td>
                     <td>
-                      <kendo-datepicker name="birthday" class="date-archive" [(ngModel)]="item.file.lastModifiedDate">
+                      <kendo-datepicker [format]="'dd.MM.yyyy'" name="birthday" class="date-archive" [(ngModel)]="item.file.lastModifiedDate">
                       </kendo-datepicker>
                     </td>
                     <td class="hidden-xs">
@@ -918,8 +901,7 @@
         <div class="col-md-12 col-xs-12">
           <kendo-textbox-container floatingLabel="{{language.treatmentValue}}">
             <kendo-multiselect class="col-xs-12" [data]="treatmentValue" [textField]="'title'" [valueField]="'id'"
-              [(ngModel)]="selectedTherapies" name="therapies" [valuePrimitive]="true" style="padding: 0px !important;"
-              required>
+              [(ngModel)]="selectedTherapies" name="therapies" [valuePrimitive]="true" style="padding: 0px !important;">
             </kendo-multiselect>
           </kendo-textbox-container>
         </div>
@@ -1083,7 +1065,7 @@
                       </div>
                       <div class="birthday-container">
                         <kendo-textbox-container floatingLabel="{{language.birthday}}">
-                          <kendo-datepicker class="email col-md-6 col-xs-12 noPadding" name="birthday"
+                          <kendo-datepicker [format]="'dd.MM.yyyy'" class="email col-md-6 col-xs-12 noPadding" name="birthday"
                             [(ngModel)]="data.birthday" (valueChange)="onChange($event)">
                           </kendo-datepicker>
                         </kendo-textbox-container>
@@ -1108,7 +1090,7 @@
                 <div class="email col-md-4 col-xs-12">
                   <kendo-textbox-container floatingLabel="{{language.email}}">
                     <input kendoTextBox type="email" class="col-xs-12" name="email" [(ngModel)]="data.email"
-                      [pattern]="emailPattern" #email="ngModel" required #email="ngModel"></kendo-textbox-container>
+                      #email="ngModel" #email="ngModel"></kendo-textbox-container>
                 </div>
                 <div class="email col-md-4 col-xs-12">
                   <kendo-textbox-container floatingLabel="{{language.street}}">
@@ -1168,8 +1150,7 @@
                 <div class="col-md-4 col-xs-12 b-r" *ngIf="socialList !== undefiend">
                   <kendo-textbox-container floatingLabel="{{language.social}}">
                     <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="socialList" [textField]="'title'"
-                      [valueField]="'id'" [(ngModel)]="baseDataOne.social" [valuePrimitive]="true" name="title"
-                      >
+                      [valueField]="'id'" [(ngModel)]="baseDataOne.social" [valuePrimitive]="true" name="title">
                     </kendo-combobox>
                   </kendo-textbox-container>
                 </div>
@@ -1183,7 +1164,7 @@
                 </div>
                 <div class="col-md-4 col-xs-12 b-r">
                   <kendo-textbox-container floatingLabel="{{language.firstDate}}">
-                    <kendo-datepicker [(ngModel)]="baseDataOne.first_date" name="first_date" class="noPadding">
+                    <kendo-datepicker [format]="'dd.MM.yyyy'" [(ngModel)]="baseDataOne.first_date" name="first_date" class="noPadding">
                     </kendo-datepicker>
                   </kendo-textbox-container>
                 </div>
@@ -1219,8 +1200,7 @@
                 <div class="panel-body">
                   <div class="col-md-3 col-xs-12 b-r">
                     <kendo-textbox-container floatingLabel="{{language.size}}">
-                      <input kendoTextBox type="number" [(ngModel)]="baseDataTwo.size" name="size"
-                        #size="ngModel">
+                      <input kendoTextBox type="number" [(ngModel)]="baseDataTwo.size" name="size" #size="ngModel">
                     </kendo-textbox-container>
                   </div>
                   <div class="col-md-3 col-xs-12 b-r">
@@ -1354,7 +1334,7 @@
         </div>
         <div class="col-md-12 col-xs-12">
           <kendo-textbox-container floatingLabel="{{language.date}}">
-            <kendo-datepicker [(ngModel)]="documentItem.date" name="date" class="noPadding">
+            <kendo-datepicker [format]="'dd.MM.yyyy'" [(ngModel)]="documentItem.date" name="date" class="noPadding">
             </kendo-datepicker>
           </kendo-textbox-container>
         </div>

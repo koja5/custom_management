@@ -34,7 +34,7 @@ export class ChangePasswordComponent implements OnInit {
     this.data.email = this.mail;
 
     if (localStorage.getItem('language') !== null) {
-      this.language = JSON.parse(localStorage.getItem('language'))['login'];
+      this.language = JSON.parse(localStorage.getItem('language'));
     } else {
       /*this.dashboardService.getTranslation('english').subscribe(
         data => {
