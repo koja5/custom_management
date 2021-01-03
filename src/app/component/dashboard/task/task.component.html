@@ -133,7 +133,7 @@
               <ng-template kendoSchedulerToolbarTemplate let-selectedDate="selectedDate" id="test">
                 <my-navigation [selectedDate]="selectedDate" style="float: left;">
                 </my-navigation>
-                <span *ngIf="item.name !== null && item.name !== ''" style="text-align: center; font-size: 2vh;">
+                <span *ngIf="item.name !== null && item.name !== ''" style="text-align: center; font-size: 12px;">
                   <b>{{ item.name }}</b>
                 </span>
               </ng-template>
@@ -366,8 +366,7 @@
                 dayViewTitle="{{ language.day }}" weekViewTitle="{{ language.week }}"
                 monthViewTitle="{{ language.month }}" workWeekViewTitle="{{ language.workWeek }}"
                 multiDayViewTitle="{{ language.multiDay }}" timelineViewTitle="{{ language.timeline }}"
-                agendaViewTitle="{{ language.agenda }}" showWorkDay="Mostrar horas laborables"
-                showFullDay="Mostrar día completo">
+                agendaViewTitle="{{ language.agenda }}" save="'Sacuvaj'" cancel="'Otkaži'">
               </kendo-scheduler-messages>
             </kendo-scheduler>
           </div>

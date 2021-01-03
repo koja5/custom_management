@@ -40,6 +40,7 @@ import { UsersService } from "src/app/service/users.service";
 import { MongoService } from "../../../service/mongo.service";
 import { EventCategoryService } from "src/app/service/event-category.service";
 import { ToastrService } from "ngx-toastr";
+import { UserModel } from "src/app/models/user-model";
 
 @Component({
   selector: "app-task",
@@ -71,25 +72,7 @@ export class TaskComponent implements OnInit {
   public resources: any[] = [];
   public customerUser = new CustomerModel();
   public mobileValue = "";
-  public data = {
-    id: "",
-    shortname: "",
-    firstname: "",
-    lastname: "",
-    gender: "",
-    street: "",
-    streetnumber: "",
-    city: "",
-    telephone: "",
-    mobile: "",
-    email: "",
-    birthday: "",
-    attention: "",
-    physicalComplaint: "",
-    storeId: "",
-    superadmin: localStorage.getItem("superadmin"),
-    confirm: "",
-  };
+  public data = new UserModel();
   public value: any = [];
   public store: any;
   public calendars: any = [];
@@ -922,6 +905,9 @@ export class TaskComponent implements OnInit {
   newCustomer() {
     // this.zIndex = 'zIndex';
     this.customerModal = true;
+    this.data = new UserModel();
+    this.data.gender = "male";
+    this.data.superadmin = localStorage.getItem("superadmin");
     setTimeout(() => {
       this.changeTheme(this.theme);
     }, 50);
@@ -946,6 +932,7 @@ export class TaskComponent implements OnInit {
         this.userWidth = "65%";
         this.reloadNewCustomer();
         this.customerModal = false;
+        // this.data = new UserModel();
         // form.reset();
       }
     });

@@ -1,6 +1,7 @@
 export class NavigationMenuModel {
     vaucher?: string;
     task?: string;
+    todo?: string;
     customers?: string;
     users?: string;
     store?: string;
@@ -12,6 +13,7 @@ export class NavigationMenuModel {
     relationship?: string;
     social?: string;
     doctor?: string;
+    doctors?: string;
     vat_tax?: string;
     CS?: string;
     state?: string;

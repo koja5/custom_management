@@ -18,6 +18,7 @@ import { TaskComponent } from "./task/task.component";
 import { SettingsComponent } from "./settings/settings.component";
 import { ChangePasswordComponent } from "../login/change-password/change-password.component";
 import { EventCategoryComponent } from "./parameters/event-category/event-category.component";
+import { TodoComponent } from './administrator/todo/todo.component';
 
 const routes: Routes = [
   {
@@ -96,6 +97,10 @@ const routes: Routes = [
         path: "parameters",
         loadChildren: "./parameters/parameters.module#ParametersModule",
       },
+      {
+        path: 'todo',
+        component: TodoComponent
+      }
     ],
   },
 ];

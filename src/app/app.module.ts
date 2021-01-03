@@ -1,7 +1,7 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule, LOCALE_ID } from "@angular/core";
 
-import { registerLocaleData } from "@angular/common";
+import { CommonModule, registerLocaleData } from "@angular/common";
 import localeDE from "@angular/common/locales/de";
 registerLocaleData(localeDE);
 
@@ -42,13 +42,16 @@ import { NotFoundComponent } from "./component/templates/not-found/not-found.com
 import { DashboardModule } from "./component/dashboard/dashboard.module";
 import { ConfirmArrivalComponent } from "./component/templates/confirm-arrival/confirm-arrival.component";
 import { SharedModule } from './shared.module';
+import { DymanicElementsModule } from './component/dynamic-elements/dymanic-elements.module';
+
 @NgModule({
   declarations: [
     AppComponent,
     NotFoundComponent,
-    ConfirmArrivalComponent,
+    ConfirmArrivalComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
@@ -60,7 +63,8 @@ import { SharedModule } from './shared.module';
     ToastrModule.forRoot(),
     ReactiveFormsModule,
     LayoutModule,
-    SharedModule
+    SharedModule,
+    DymanicElementsModule
   ],
   providers: [
     MailService,

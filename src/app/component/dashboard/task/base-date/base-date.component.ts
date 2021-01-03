@@ -41,7 +41,7 @@ export class BaseDateComponent implements OnInit {
   public documents: any;
   public language: any;
   //public url = "http://localhost:3000/upload";
-  public url = "http://78.47.206.131:" + location.port + "/upload";
+  public url = "http://116.203.85.82:" + location.port + "/upload";
   public complaintValue: any;
   public complaintData = new ComplaintTherapyModel();
   public gridComplaint: any;

@@ -5,6 +5,7 @@ export class UserModel {
   firstname?: string;
   lastname?: string;
   street?: string;
+  gender?: string;
   zipcode?: string;
   place?: string;
   email?: string;

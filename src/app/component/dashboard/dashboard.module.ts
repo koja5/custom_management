@@ -56,6 +56,8 @@ import { MyNavigationViewComponent } from "./task/my-navigation-view";
 import { MyNavigationComponent } from "./task/my-navigation";
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { SharedModule } from 'src/app/shared.module';
+import { TodoComponent } from './administrator/todo/todo.component';
+import { DymanicElementsModule } from '../dynamic-elements/dymanic-elements.module';
 
 @NgModule({
   declarations: [
@@ -79,7 +81,8 @@ import { SharedModule } from 'src/app/shared.module';
     WorkTimeColorsComponent,
     TranslationComponent,
     EditTranslationComponent,
-    CustomGridComponent
+    CustomGridComponent,
+    TodoComponent
   ],
   imports: [
     CommonModule,
@@ -108,7 +111,8 @@ import { SharedModule } from 'src/app/shared.module';
     UploadModule,
     FileUploadModule,
     PdfViewerModule,
-    SharedModule
+    SharedModule,
+    DymanicElementsModule
   ],
   providers: [
     {
