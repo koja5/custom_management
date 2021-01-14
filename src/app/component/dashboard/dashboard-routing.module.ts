@@ -19,6 +19,7 @@ import { SettingsComponent } from "./settings/settings.component";
 import { ChangePasswordComponent } from "../login/change-password/change-password.component";
 import { EventCategoryComponent } from "./parameters/event-category/event-category.component";
 import { TodoComponent } from './administrator/todo/todo.component';
+import { DynamicSchedulerComponent } from '../dynamic-elements/dynamic-scheduler/dynamic-scheduler.component';
 
 const routes: Routes = [
   {
@@ -32,6 +33,7 @@ const routes: Routes = [
     children: [
       { path: "", redirectTo: "task", pathMatch: "full" },
       { path: "task", component: TaskComponent },
+      { path: "calendar", component: DynamicSchedulerComponent }, 
       { path: "users", component: UsersComponent },
       {
         path: "user-details/:id",
