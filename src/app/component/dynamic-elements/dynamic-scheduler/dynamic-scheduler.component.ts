@@ -1,4 +1,7 @@
-import { Component, ViewEncapsulation, Inject, ViewChild, OnInit } from '@angular/core';
+import { EventCategoryService } from './../../../service/event-category.service';
+import { UsersService } from './../../../service/users.service';
+import { StoreService } from './../../../service/store.service';
+import { Component, ViewEncapsulation, Inject, ViewChild, OnInit, NgZone } from '@angular/core';
 import { ItemModel } from '@syncfusion/ej2-angular-splitbuttons';
 import { SelectedEventArgs, TextBoxComponent } from '@syncfusion/ej2-angular-inputs';
 import {
@@ -14,6 +17,11 @@ import {
   ClickEventArgs, ContextMenuComponent, MenuItemModel, BeforeOpenCloseMenuEventArgs, MenuEventArgs
 } from '@syncfusion/ej2-angular-navigations';
 import { ChangeEventArgs as TimeEventArgs } from '@syncfusion/ej2-calendars';
+import { TaskService } from '../../../service/task.service';
+import { CustomersService } from '../../../service/customers.service';
+import { MessageService } from '../../../service/message.service';
+import { MongoService } from '../../../service/mongo.service';
+import { ToastrService } from 'ngx-toastr';
 declare var moment: any;
 
 @Component({
@@ -154,7 +162,16 @@ export class DynamicSchedulerComponent implements OnInit {
     }
   ];
 
-  constructor() {
+  constructor(
+    public service: TaskService,
+    public customer: CustomersService,
+    public message: MessageService,
+    public storeService: StoreService,
+    public usersService: UsersService,
+    public mongo: MongoService,
+    public eventCategoryService: EventCategoryService,
+    public ngZone: NgZone,
+    private toastr: ToastrService) {
   }
 
   ngOnInit() {

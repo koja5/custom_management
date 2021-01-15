@@ -1,3 +1,5 @@
+import { ComplaintTherapyModel } from './../../../models/complaint-therapy-model';
+import { UserModel } from './../../../models/user-model';
 import { CustomerModel } from "./../../../models/customer-model";
 import {
   Component,
@@ -35,12 +37,10 @@ import { StoreService } from "../../../service/store.service";
 import { TaskService } from "../../../service/task.service";
 import { isNumber } from "util";
 import Swal from "sweetalert2";
-import { ComplaintTherapyModel } from "src/app/models/complaint-therapy-model";
-import { UsersService } from "src/app/service/users.service";
 import { MongoService } from "../../../service/mongo.service";
-import { EventCategoryService } from "src/app/service/event-category.service";
 import { ToastrService } from "ngx-toastr";
-import { UserModel } from "src/app/models/user-model";
+import { UsersService } from '../../../service/users.service';
+import { EventCategoryService } from '../../../service/event-category.service';
 
 @Component({
   selector: "app-task",
