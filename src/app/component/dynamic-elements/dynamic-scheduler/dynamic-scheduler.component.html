@@ -125,7 +125,7 @@
         </div>
       </div>
       <div class="overview-content">
-        <div class="right-panel filter-panel hide">
+        <div class="right-panel filter-panel hide" [style.height]="height">
           <div class="control-panel e-css">
             <div class="col-row">
               <div class="col-left">
@@ -228,7 +228,7 @@
             </div>
           </div>
         </div>
-        <div class="left-panel">
+        <div class="left-panel" [style.height]="height">
           <div class="overview-scheduler">
             <ejs-schedule #scheduleObj cssClass='schedule-overview' height='100%' [group]='group'
               [(currentView)]="currentView" timezone='UTC' [eventSettings]="eventSettings">
@@ -329,7 +329,7 @@
               (beforeOpen)='onContextMenuBeforeOpen($event)' (select)='onMenuItemSelect($event)'></ejs-contextmenu>
           </div>
         </div>
-        <div class="right-panel settings-panel hide">
+        <div class="right-panel settings-panel hide" [style.height]="height">
           <div class="control-panel e-css">
             <div class="col-row">
               <div class="col-left">

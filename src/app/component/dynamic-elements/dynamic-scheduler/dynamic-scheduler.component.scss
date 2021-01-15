@@ -345,13 +345,13 @@
   }
  
   .schedule-overview .overview-content .left-panel {
-    height: 600px;
+    /*height: 600px;*/
     width: 100%;
   }
  
   .schedule-overview .overview-content .right-panel {
     display: block;
-    height: 600px;
+    /*height: 600px;*/
     transform: translateX(0%);
     transition: transform .5s ease, width 500ms;
     width: 500px;
@@ -647,4 +647,8 @@
     margin: -20px 2px 0 0;
     width: 20px;
     height: 20px;
+  }
+
+  .e-schedule .e-schedule-table {
+    height: 100% !important;
   }

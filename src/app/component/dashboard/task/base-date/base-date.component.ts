@@ -113,7 +113,7 @@ export class BaseDateComponent implements OnInit {
     });
 
     this.uploader.onBuildItemForm = (fileItem: FileItem, form: any) => {
-      form.append("description", fileItem.file.description);
+      form.append("description", fileItem.file['description']);
       form.append(
         "date",
         fileItem.file.lastModifiedDate !== undefined

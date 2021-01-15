@@ -6,4 +6,9 @@ import { Injectable } from '@angular/core';
 export class DynamicSchedulerService {
 
   constructor() { }
+  
+
+  getSchedulerHeight() {
+    return window.innerHeight - 196 + 'px';
+  }
 }

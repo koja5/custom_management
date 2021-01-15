@@ -1,7 +1,7 @@
 import { EventCategoryService } from './../../../service/event-category.service';
 import { UsersService } from './../../../service/users.service';
 import { StoreService } from './../../../service/store.service';
-import { Component, ViewEncapsulation, Inject, ViewChild, OnInit, NgZone } from '@angular/core';
+import { Component, ViewEncapsulation, Inject, ViewChild, OnInit, NgZone, HostListener } from '@angular/core';
 import { ItemModel } from '@syncfusion/ej2-angular-splitbuttons';
 import { SelectedEventArgs, TextBoxComponent } from '@syncfusion/ej2-angular-inputs';
 import {
@@ -22,6 +22,14 @@ import { CustomersService } from '../../../service/customers.service';
 import { MessageService } from '../../../service/message.service';
 import { MongoService } from '../../../service/mongo.service';
 import { ToastrService } from 'ngx-toastr';
+import { DynamicSchedulerService } from 'src/app/service/dynamic-scheduler.service';
+import { ComplaintTherapyModel } from 'src/app/models/complaint-therapy-model';
+import { UserModel } from 'src/app/models/user-model';
+import { CustomerModel } from 'src/app/models/customer-model';
+import { CustomersComponent } from '../../dashboard/customers/customers.component';
+import { SchedulerComponent, SchedulerEvent } from '@progress/kendo-angular-scheduler';
+import { FormGroup } from '@angular/forms';
+import { Modal } from 'ngx-modal';
 declare var moment: any;
 
 @Component({
@@ -161,22 +169,6 @@ export class DynamicSchedulerComponent implements OnInit {
       ]
     }
   ];
-
-  constructor(
-    public service: TaskService,
-    public customer: CustomersService,
-    public message: MessageService,
-    public storeService: StoreService,
-    public usersService: UsersService,
-    public mongo: MongoService,
-    public eventCategoryService: EventCategoryService,
-    public ngZone: NgZone,
-    private toastr: ToastrService) {
-  }
-
-  ngOnInit() {
-
-  }
 
   public generateEvents(): Object[] {
     const eventData: Object[] = [];
@@ -581,4 +573,947 @@ export class DynamicSchedulerComponent implements OnInit {
     }
   }
 
+  /* MY CODE */
+
+  @ViewChild("customerUserModal") customerUserModal: Modal;
+  @ViewChild("scheduler") public scheduler: SchedulerComponent;
+  public customerModal = false;
+  public selectedDate: Date = new Date();
+  public formGroup: FormGroup;
+  public events: SchedulerEvent[] = [];
+  public customerUsers = [];
+  public telephoneValue = "";
+  public type: any;
+  public customerComponent: CustomersComponent;
+  public usersInCompany: any = [];
+  public colorTask: any;
+  public zIndex: string;
+  public theme: string;
+  public selected = "#cac6c3";
+  public palette: any[] = [];
+  public colorPalette: any;
+  public selectedColorId: any;
+  public language: any;
+  public languageUser: any;
+  public resources: any[] = [];
+  public customerUser = new CustomerModel();
+  public mobileValue = "";
+  public data = new UserModel();
+  public value: any = [];
+  public store: any;
+  public calendars: any = [];
+  public loading = true;
+  public createFormLoading: boolean;
+  public orientation = "horizontal";
+  public workTime: any[] = [];
+  public selectedStoreId: number;
+  public splitterSizeFull = 100;
+  public splitterSize: number;
+  public dateEvent: string;
+  public selectedViewIndex = 0;
+  public currentDate = new Date();
+  public startWork = "08:00";
+  public endWork = "22:00";
+  public timeDuration = "60";
+  public therapyDuration = 1;
+  public loopIndex = 0;
+  public valueLoop: any;
+  public size = [];
+  public customerUserModal2 = false;
+  public selectedButtonIndex = [false, false, false, false, false, false];
+  public selectedButtonIndexStyle = ["", "", "", "", "", ""];
+  public imagePath = "defaultUser";
+  public therapyValue: any;
+  public treatmentValue: any;
+  public complaintValue: any;
+  public CSValue: any;
+  public stateValue: any;
+  public complaintData = new ComplaintTherapyModel();
+  public selectedComplaint: any;
+  public selectedTherapies: any;
+  public selectedTreatments: any;
+  public baseDataIndicator = false;
+  public allUsers: any;
+  public selectedUser: any;
+  public userWidth = "22%";
+  public id: number;
+  public customerLoading = false;
+  public quickPreview = false;
+  public quickPreviewEvent: any;
+  public height: any;
+  public calendarHeight: any;
+  public eventCategory: any;
+  public currentTopPosition: any = [];
+  private eventOptions: boolean | { capture?: boolean; passive?: boolean };
+  public step = 0;
+  public pixel = 100;
+  public delay = 1000;
+  public calendarWidth = 80;
+  public requestForConfirmArrival = false;
+  public confirmArrivalData: any;
+  public isConfirm: any;
+
+
+
+  constructor(
+    public service: TaskService,
+    public customer: CustomersService,
+    public message: MessageService,
+    public storeService: StoreService,
+    public usersService: UsersService,
+    public mongo: MongoService,
+    public eventCategoryService: EventCategoryService,
+    public ngZone: NgZone,
+    private toastr: ToastrService,
+    private dynamicService: DynamicSchedulerService) {
+  }
+
+  ngOnInit() {
+    this.initializationConfig();
+
+  }
+
+  @HostListener("window:resize", ["$event"])
+  onResize(event) {
+    this.height = this.dynamicService.getSchedulerHeight();
+  }
+
+  initializationConfig() {
+    this.height = this.dynamicService.getSchedulerHeight();
+
+    if (localStorage.getItem("language") !== undefined) {
+      this.language = JSON.parse(localStorage.getItem("language"));
+      this.languageUser = JSON.parse(localStorage.getItem("language"));
+      // this.stateValue = JSON.parse(localStorage.getItem("language"))["state"];
+    } else {
+      this.message.getLanguage().subscribe((mess) => {
+        this.language = undefined;
+        setTimeout(() => {
+          this.language = JSON.parse(localStorage.getItem("language"));
+          console.log(this.language);
+        }, 10);
+      });
+    }
+
+    if (localStorage.getItem("calendarView") !== null) {
+      this.selectedViewIndex = Number(localStorage.getItem("calendarView"));
+      this.selectedButtonIndex[this.selectedViewIndex] = true;
+      setTimeout(() => {
+        this.selectedButtonIndexStyle[this.selectedViewIndex] =
+          "activeButton" + this.theme;
+      }, 50);
+    } else {
+      this.selectedButtonIndex[0] = true;
+      setTimeout(() => {
+        this.selectedButtonIndexStyle[0] = "activeButton" + this.theme;
+      }, 50);
+    }
+  }
+
+  initializaionData() {
+    this.type = Number(localStorage.getItem("type"));
+    this.id = Number(localStorage.getItem("idUser"));
+    console.log(this.events);
+    this.calendars = [];
+    const superadmin = localStorage.getItem("superadmin");
+
+    this.initializeEventCategory();
+
+    if (this.type === 3) {
+      this.selectedStoreId = Number(localStorage.getItem("storeId-" + this.id));
+    }
+
+    this.initializeStore();
+    this.initializeTasks();
+    this.getParameters(superadmin);
+
+  }
+
+  initializeEventCategory() {
+    this.eventCategoryService
+      .getEventCategory(localStorage.getItem("superadmin"))
+      .subscribe((data: []) => {
+        this.eventCategory = data.sort(function (a, b) {
+          return a["sequence"] - b["sequence"];
+        });
+        const resourcesObject = {
+          name: "tasks",
+          data: data,
+          field: "colorTask",
+          valueField: "id",
+          textField: "text",
+          colorField: "color",
+        };
+        if (this.eventCategory.length > 0) {
+          this.selected = this.eventCategory[0].id;
+        }
+        this.resources.push(resourcesObject);
+        this.colorPalette = data;
+        for (let i = 0; i < data["length"]; i++) {
+          this.palette.push(data[i]["color"]);
+        }
+        console.log(this.resources);
+      });
+  }
+
+  initializeStore() {
+    this.storeService.getStore(localStorage.getItem("superadmin"), (val) => {
+      this.store = val;
+      if (this.store.length !== 0) {
+        this.language.selectStore += this.store[0].storename + ")";
+      }
+      if (!isNaN(this.selectedStoreId) && this.selectedStoreId !== undefined) {
+        const informationAboutStore = this.getStartEndTimeForStore(
+          this.store,
+          this.selectedStoreId
+        );
+        this.startWork = informationAboutStore.start_work;
+        this.endWork = informationAboutStore.end_work;
+        this.timeDuration = informationAboutStore.time_duration;
+        if (
+          Number(this.timeDuration) > Number(informationAboutStore.time_therapy)
+        ) {
+          this.therapyDuration =
+            Number(this.timeDuration) /
+            Number(informationAboutStore.time_therapy);
+        } else {
+          this.therapyDuration =
+            Number(informationAboutStore.time_therapy) /
+            Number(this.timeDuration);
+        }
+      }
+    });
+  }
+
+  initializeTasks() {
+    if (this.type === 3) {
+      this.selectedStoreId = Number(localStorage.getItem("storeId-" + this.id));
+    }
+    this.storeService.getStore(localStorage.getItem("superadmin"), (val) => {
+      this.store = val;
+      if (this.store.length !== 0) {
+        this.language.selectStore += this.store[0].storename + ")";
+      }
+      if (!isNaN(this.selectedStoreId) && this.selectedStoreId !== undefined) {
+        const informationAboutStore = this.getStartEndTimeForStore(
+          this.store,
+          this.selectedStoreId
+        );
+        this.startWork = informationAboutStore.start_work;
+        this.endWork = informationAboutStore.end_work;
+        this.timeDuration = informationAboutStore.time_duration;
+        if (
+          Number(this.timeDuration) > Number(informationAboutStore.time_therapy)
+        ) {
+          this.therapyDuration =
+            Number(this.timeDuration) /
+            Number(informationAboutStore.time_therapy);
+        } else {
+          this.therapyDuration =
+            Number(informationAboutStore.time_therapy) /
+            Number(this.timeDuration);
+        }
+      }
+    });
+
+    if (
+      localStorage.getItem("selectedStore-" + this.id) !== null &&
+      localStorage.getItem("selectedUser-" + this.id) !== null &&
+      JSON.parse(localStorage.getItem("selectedUser-" + this.id)).length !==
+      0 &&
+      this.type !== 3
+    ) {
+      this.calendars = [];
+      this.selectedStoreId = Number(
+        localStorage.getItem("selectedStore-" + this.id)
+      );
+      this.value = JSON.parse(
+        localStorage.getItem("usersFor-" + this.selectedStoreId + "-" + this.id)
+      );
+      // this.selectedStore(this.selectedStoreId);
+      if (this.value !== null) {
+        this.getTaskForSelectedUsers(this.value);
+      } else {
+        this.calendars.push({ name: null, events: [] });
+      }
+      this.getUserInCompany(this.selectedStoreId);
+    } else if (
+      localStorage.getItem("selectedStore-" + this.id) &&
+      this.type !== 3
+    ) {
+      this.calendars = [];
+      this.selectedStoreId = Number(
+        localStorage.getItem("selectedStore-" + this.id)
+      );
+      this.selectedStore(this.selectedStoreId);
+    } else if (localStorage.getItem("type") === "3") {
+      this.service
+        .getWorkandTasksForUser(localStorage.getItem("idUser"))
+        .subscribe((data) => {
+          console.log(data);
+          this.events = [];
+          this.workTime = this.pickWorkTimeToTask(data["workTime"]);
+          this.pickModelForEvent(data["events"]);
+          const objectCalendar = {
+            name: null,
+            events: this.events,
+            workTime: this.workTime,
+          };
+          this.calendars.push(objectCalendar);
+          console.log(this.splitterSize);
+          this.loading = false;
+          console.log(document.getElementsByClassName("k-scheduler-toolbar"));
+          /// this.setWidthForCalendarHeader();
+          ///this.setSplitterBarEvent();
+        });
+      this.size = [];
+      this.size.push("100%");
+    } else {
+      this.service
+        .getTasks(localStorage.getItem("superadmin"))
+        .subscribe((data) => {
+          console.log(data);
+          if (data.length !== 0) {
+            for (let i = 0; i < data.length; i++) {
+              data[i].start = new Date(data[i].start);
+              data[i].end = new Date(data[i].end);
+              this.events.push(data[i]);
+            }
+            console.log(this.events);
+            const objectCalendar = {
+              name: null,
+              events: this.events,
+            };
+            this.calendars.push(objectCalendar);
+            this.loading = false;
+            console.log(document.getElementsByClassName("k-scheduler-toolbar"));
+          } else {
+            this.calendars.push({ name: null, events: [] });
+          }
+          console.log(this.calendars);
+          this.size = [];
+          this.size.push("100%");
+        });
+    }
+  }
+
+  clearAllSelectedData() {
+    this.customerUser = new CustomerModel();
+    this.selectedComplaint = null;
+    this.selectedTherapies = null;
+    this.selectedTreatments = null;
+    this.telephoneValue = "";
+    this.mobileValue = "";
+    this.isConfirm = false;
+    this.complaintData = new ComplaintTherapyModel();
+  }
+
+  public getNextId(): number {
+    const len = this.events.length;
+
+    return len === 0 ? 1 : this.events[this.events.length - 1].id + 1;
+  }
+
+  formatDate(start, end) {
+    const dd = String(start.getDate()).padStart(2, "0");
+    const mm = String(start.getMonth() + 1).padStart(2, "0"); //January is 0!
+    const yyyy = start.getFullYear();
+    const hhStart = start.getHours();
+    const minStart = start.getMinutes();
+    const hhEnd = end.getHours();
+    const minEnd = end.getMinutes();
+    return (
+      dd +
+      "." +
+      mm +
+      "." +
+      yyyy +
+      " / " +
+      (hhStart === 0 ? "00" : hhStart) +
+      ":" +
+      (minStart < 10 ? "0" + minStart : minStart) +
+      "-" +
+      (hhEnd === 0 ? "00" : hhEnd) +
+      ":" +
+      (minEnd < 10 ? "0" + minEnd : minEnd)
+    );
+  }
+
+  addTherapy(customerId) {
+    this.complaintData.customer_id = customerId;
+    this.complaintData.date =
+      new Date().getDay() +
+      "." +
+      new Date().getMonth() +
+      "." +
+      new Date().getFullYear() +
+      ".";
+    // this.initializeParams();
+
+    this.complaintData.complaint = this.pickToModel(
+      this.selectedComplaint,
+      this.complaintValue
+    ).value;
+    this.complaintData.complaint_title = this.pickToModel(
+      this.selectedComplaint,
+      this.complaintValue
+    ).title;
+
+    this.complaintData.therapies = this.pickToModel(
+      this.selectedTherapies,
+      this.therapyValue
+    ).value;
+    this.complaintData.therapies_title = this.pickToModel(
+      this.selectedTherapies,
+      this.therapyValue
+    ).title;
+
+    this.complaintData.therapies_previous = this.pickToModel(
+      this.selectedTreatments,
+      this.therapyValue
+    ).value;
+    this.complaintData.therapies_previous_title = this.pickToModel(
+      this.selectedTreatments,
+      this.therapyValue
+    ).title;
+  }
+
+  getComplaintAndTherapyForCustomer(id) {
+    console.log(id);
+    this.customer.getTherapyForCustomer(id).subscribe((data) => {
+      console.log(data);
+      if (data["length"] !== 0) {
+        const i = data["length"] - 1;
+        this.selectedComplaint = this.stringToArray(data[i]["complaint"]);
+        this.selectedTherapies = this.stringToArray(data[i]["therapies"]);
+      }
+    });
+  }
+
+  newCustomer() {
+    // this.zIndex = 'zIndex';
+    this.customerModal = true;
+    this.data = new UserModel();
+    this.data.gender = "male";
+    this.data.superadmin = localStorage.getItem("superadmin");
+  }
+
+  closeNewCustomer() {
+    this.zIndex = "";
+    this.customerModal = false;
+  }
+
+  createCustomer(form) {
+    console.log(this.data);
+    this.data.storeId = localStorage.getItem("superadmin");
+    this.customer.createCustomer(this.data, (val) => {
+      console.log(val);
+      if (val) {
+        this.data.id = val.id;
+        this.customerUser = this.data;
+        this.formGroup.patchValue({ telephone: this.data.telephone });
+        this.formGroup.patchValue({ mobile: this.data.mobile });
+        this.baseDataIndicator = true;
+        this.userWidth = "65%";
+        /// this.reloadNewCustomer();
+        this.customerModal = false;
+        // this.data = new UserModel();
+        // form.reset();
+      }
+    });
+  }
+
+  colorMapToId(task) {
+    for (let i = 0; i < this.colorPalette.length; i++) {
+      if (this.colorPalette[i].color === task.colorTask) {
+        task.colorTask = Number(this.colorPalette[i].id);
+      }
+    }
+    return task;
+  }
+
+  IdMapToColor(id) {
+    for (let i = 0; i < this.colorPalette.length; i++) {
+      if (this.colorPalette[i].id === id) {
+        return this.colorPalette[i].color;
+      }
+    }
+    return null;
+  }
+
+  baseDataForUser() {
+    this.customerUserModal2 = true;
+  }
+
+  closebaseDataForUser() {
+    this.customerUserModal2 = false;
+  }
+
+  public handleValue(selected) {
+    console.log(selected);
+    this.value = selected;
+    localStorage.setItem("selectedUser-" + this.id, JSON.stringify(this.value));
+    localStorage.setItem(
+      "usersFor-" + this.selectedStoreId + "-" + this.id,
+      JSON.stringify(this.value)
+    );
+    this.getTaskForSelectedUsers(this.value);
+
+    const item = {
+      user_id: Number(localStorage.getItem("idUser")),
+      key: "usersFor-" + this.selectedStoreId + "-" + this.id,
+      value: this.value,
+    };
+
+    this.mongo.setUsersFor(item).subscribe((data) => {
+      console.log(data);
+    });
+  }
+
+  getTaskForSelectedUsers(value) {
+    this.loading = true;
+    console.log(value);
+    this.calendars = [];
+    if (value.length === 0) {
+      this.service
+        .getTasksForStore(this.selectedStoreId, this.id, this.type)
+        .subscribe((data) => {
+          this.events = [];
+          this.calendars = [];
+          this.events = [];
+          for (let i = 0; i < data.length; i++) {
+            data[i].start = new Date(data[i].start);
+            data[i].end = new Date(data[i].end);
+            this.events.push(data[i]);
+          }
+          const objectCalendar = {
+            name: null,
+            events: this.events,
+          };
+          this.calendars.push(objectCalendar);
+          this.size = [];
+          this.size.push("100%");
+          this.loading = false;
+          console.log(document.getElementsByClassName("k-scheduler-toolbar"));
+          /// this.setWidthForCalendarHeader();
+          /// this.setSplitterBarEvent();
+        });
+    } else {
+      this.calendars = [];
+      let index = 0;
+
+      this.loopIndex = 0;
+      this.valueLoop = value;
+      this.myLoop();
+    }
+  }
+
+  myLoop() {
+    setTimeout(() => {
+      this.service
+        .getWorkandTasksForUser(this.valueLoop[this.loopIndex].id)
+        .subscribe((data) => {
+          console.log(data, this.valueLoop[this.loopIndex]);
+          this.events = [];
+          this.workTime = this.pickWorkTimeToTask(data["workTime"]);
+          const objectCalendar = {
+            userId: this.valueLoop[this.loopIndex].id,
+            name: this.valueLoop[this.loopIndex].shortname,
+            events: this.pickModelForEvent(data["events"]),
+            workTime: this.workTime,
+          };
+          this.calendars.push(objectCalendar);
+          this.loopIndex++;
+          this.splitterSize = this.splitterSizeFull / this.valueLoop.length;
+          console.log(this.splitterSize);
+          console.log(this.calendars);
+          this.size = [];
+          if (this.valueLoop.length === this.loopIndex) {
+            const sizePannel = 100 / this.loopIndex + "%";
+            for (let i = 0; i < this.valueLoop.length - 1; i++) {
+              console.log("usao sam ovde!");
+              this.size.push(sizePannel);
+            }
+            this.size.push("");
+            this.loading = false;
+            console.log(document.getElementsByClassName("k-scheduler-toolbar"));
+            /// this.setWidthForCalendarHeader();
+            /// this.setSplitterBarEvent();
+          }
+          if (this.loopIndex < this.valueLoop.length) {
+            this.myLoop();
+          }
+        });
+    }, 100);
+  }
+
+  pickModelForEvent(data) {
+    this.events = [];
+    for (let i = 0; i < data.length; i++) {
+      data[i].start = new Date(data[i].start);
+      data[i].end = new Date(data[i].end);
+      this.events.push(data[i]);
+    }
+    return this.events;
+  }
+
+  selectedStore(event) {
+    console.log(event);
+    this.value = [];
+    // localStorage.removeItem('selectedUser');
+    this.loading = true;
+    this.calendars = [];
+    this.selectedStoreId = event;
+    if (
+      localStorage.getItem(
+        "usersFor-" + this.selectedStoreId + "-" + this.id
+      ) !== null &&
+      JSON.parse(
+        localStorage.getItem("usersFor-" + this.selectedStoreId + "-" + this.id)
+      ).length !== 0 &&
+      event !== undefined
+    ) {
+      this.value = JSON.parse(
+        localStorage.getItem("usersFor-" + this.selectedStoreId + "-" + this.id)
+      );
+      this.getTaskForSelectedUsers(this.value);
+      this.getUserInCompany(event);
+      this.setStoreWork(event);
+      localStorage.setItem("selectedStore-" + this.id, event);
+    } else {
+      this.value = [];
+      if (event !== undefined) {
+        this.service
+          .getTasksForStore(event, this.id, this.type)
+          .subscribe((data) => {
+            this.events = [];
+            this.calendars = [];
+            for (let i = 0; i < data.length; i++) {
+              data[i].start = new Date(data[i].start);
+              data[i].end = new Date(data[i].end);
+              this.events.push(data[i]);
+            }
+            const objectCalendar = {
+              name: null,
+              events: this.events,
+              workTime: undefined,
+            };
+            if (!isNaN(event)) {
+              this.setStoreWork(event);
+            } else {
+              this.startWork = "08:00";
+              this.endWork = "22:00";
+              this.timeDuration = "60";
+              this.therapyDuration = 1;
+            }
+            this.calendars.push(objectCalendar);
+            this.loading = false;
+            console.log(document.getElementsByClassName("k-scheduler-toolbar"));
+            /// this.setWidthForCalendarHeader();
+            /// this.setSplitterBarEvent();
+          });
+        this.getUserInCompany(event);
+      } else {
+        this.service
+          .getTasks(localStorage.getItem("superadmin"))
+          .subscribe((data) => {
+            console.log(data);
+            this.events = [];
+            if (data.length !== 0) {
+              for (let i = 0; i < data.length; i++) {
+                data[i].start = new Date(data[i].start);
+                data[i].end = new Date(data[i].end);
+                this.events.push(data[i]);
+              }
+              console.log(this.events);
+              const objectCalendar = {
+                name: null,
+                events: this.events,
+                workTime: undefined,
+              };
+              this.calendars.push(objectCalendar);
+            } else {
+              this.calendars.push({ name: null, events: [] });
+            }
+            localStorage.removeItem("selectedStore-" + this.id);
+            this.usersInCompany = [];
+            this.startWork = "08:00";
+            this.endWork = "22:00";
+            this.timeDuration = "60";
+            this.therapyDuration = 1;
+            this.loading = false;
+            console.log(document.getElementsByClassName("k-scheduler-toolbar"));
+            /// this.setWidthForCalendarHeader();
+            /// this.setSplitterBarEvent();
+            this.size = [];
+            this.size.push("100%");
+          });
+      }
+    }
+
+    const item = {
+      user_id: Number(localStorage.getItem("idUser")),
+      selectedStore: event,
+    };
+
+    this.mongo.setSelectedStore(item).subscribe((data) => {
+      console.log(data);
+    });
+  }
+
+  setStoreWork(event) {
+    if (this.store !== undefined) {
+      const informationAboutStore = this.getStartEndTimeForStore(
+        this.store,
+        this.selectedStoreId
+      );
+      this.startWork = informationAboutStore.start_work;
+      this.endWork = informationAboutStore.end_work;
+      this.timeDuration = informationAboutStore.time_duration;
+      if (
+        Number(this.timeDuration) > Number(informationAboutStore.time_therapy)
+      ) {
+        this.therapyDuration =
+          Number(this.timeDuration) /
+          Number(informationAboutStore.time_therapy);
+      } else {
+        this.therapyDuration =
+          Number(informationAboutStore.time_therapy) /
+          Number(this.timeDuration);
+      }
+
+      localStorage.setItem("selectedStore-" + this.id, event);
+    }
+  }
+
+  getStartEndTimeForStore(data, id) {
+    if (data !== null && data !== undefined) {
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].id === id) {
+          // tslint:disable-next-line: max-line-length
+          return {
+            start_work:
+              new Date(data[i].start_work).getHours() +
+              ":" +
+              new Date(data[i].start_work).getMinutes(),
+            end_work:
+              new Date(data[i].end_work).getHours() +
+              ":" +
+              new Date(data[i].end_work).getMinutes(),
+            time_duration: data[i].time_duration,
+            time_therapy: data[i].time_therapy,
+          };
+        }
+      }
+    }
+    return null;
+  }
+
+  getUserInCompany(storeId) {
+    this.service.getUsersInCompany(storeId, (val) => {
+      this.usersInCompany = val;
+      // this.language.selectedUsers += this.usersInCompany[0].shortname;
+      this.loading = false;
+      console.log(document.getElementsByClassName("k-scheduler-toolbar"));
+    });
+  }
+
+  dateFormat(date, i, j) {
+    if (
+      // tslint:disable-next-line: max-line-length
+      new Date(this.calendars[i].workTime[j].change) <= new Date(date) &&
+      (j + 1 <= this.calendars[i].workTime.length - 1
+        ? new Date(date) < new Date(this.calendars[i].workTime[j + 1].change)
+        : true) &&
+      new Date(date).getDay() - 1 < 5 &&
+      new Date(date).getDay() !== 0
+    ) {
+      if (
+        (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
+          .start <= new Date(date).getHours() &&
+          this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].end >
+            new Date(date).getHours()) ||
+        (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
+          .start2 <= new Date(date).getHours() &&
+          this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
+            .end2 > new Date(date).getHours()) ||
+        (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
+          .start3 <= new Date(date).getHours() &&
+          this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
+            .end3 > new Date(date).getHours())
+      ) {
+        return "workTime";
+      } else {
+        return "none";
+      }
+    } else {
+      return "noTime";
+    }
+  }
+
+  convertNumericToDay(numeric) {
+    let day = null;
+    if (numeric === 1) {
+      day = "monday";
+    } else if (numeric === 2) {
+      day = "tuesday";
+    } else if (numeric === 3) {
+      day = "wednesday";
+    } else if (numeric === 4) {
+      day = "thursday";
+    } else if (numeric === 5) {
+      day = "friday";
+    }
+    return day;
+  }
+
+  pickWorkTimeToTask(workTime) {
+    let workTimeArray = [];
+    const allWorkTime = [];
+    let workTimeObject = null;
+    // tslint:disable-next-line: prefer-for-of
+    for (let i = 0; i < workTime.length; i++) {
+      workTimeArray = [];
+      for (let j = 1; j < 6; j++) {
+        workTimeObject = {
+          day: Number(workTime[i][this.convertNumericToDay(j)].split("-")[0]),
+          start: workTime[i][this.convertNumericToDay(j)].split("-")[1],
+          end: workTime[i][this.convertNumericToDay(j)].split("-")[2],
+          start2: workTime[i][this.convertNumericToDay(j)].split("-")[3],
+          end2: workTime[i][this.convertNumericToDay(j)].split("-")[4],
+          start3: workTime[i][this.convertNumericToDay(j)].split("-")[5],
+          end3: workTime[i][this.convertNumericToDay(j)].split("-")[6],
+        };
+        workTimeArray.push(workTimeObject);
+      }
+      allWorkTime.push({
+        change: workTime[i].dateChange,
+        color: workTime[i].color,
+        times: workTimeArray,
+      });
+    }
+    console.log(allWorkTime);
+    return allWorkTime;
+  }
+
+  getParameters(superadmin) {
+    this.customer
+      .getParameters("Complaint", superadmin)
+      .subscribe((data: []) => {
+        console.log(data);
+        this.complaintValue = data.sort(function (a, b) {
+          return a["sequence"] - b["sequence"];
+        });
+      });
+
+    this.customer.getParameters("Therapy", superadmin).subscribe((data: []) => {
+      console.log(data);
+      this.therapyValue = data.sort(function (a, b) {
+        return a["sequence"] - b["sequence"];
+      });
+    });
+
+    this.customer
+      .getParameters("Treatment", superadmin)
+      .subscribe((data: []) => {
+        console.log(data);
+        this.treatmentValue = data.sort(function (a, b) {
+          return a["sequence"] - b["sequence"];
+        });
+      });
+
+    this.customer.getParameters("CS", superadmin).subscribe((data: []) => {
+      console.log(data);
+      this.CSValue = data.sort(function (a, b) {
+        return a["sequence"] - b["sequence"];
+      });
+    });
+
+    this.customer.getParameters("State", superadmin).subscribe((data: []) => {
+      console.log(data);
+      this.stateValue = data.sort(function (a, b) {
+        return a["sequence"] - b["sequence"];
+      });
+    });
+
+    this.service.getCompanyUsers(localStorage.getItem("idUser"), (val) => {
+      console.log(val);
+      if (val.length !== 0) {
+        this.allUsers = val.sort((a, b) =>
+          a["shortname"].localeCompare(b["shortname"])
+        );
+      }
+      console.log(this.allUsers);
+    });
+  }
+
+  pickToModel(data: any, titleValue) {
+    let value = "";
+    if (data === undefined || data === null) {
+      data = [];
+    }
+    for (let i = 0; i < data.length; i++) {
+      value += data[i] + ";";
+    }
+    value = value.substring(0, value.length - 1);
+
+    let stringToArray = [];
+    if (value.split(";") !== undefined) {
+      stringToArray = value.split(";").map(Number);
+    } else {
+      stringToArray.push(Number(value));
+    }
+    const title = this.getTitle(titleValue, stringToArray);
+    return { value, title };
+  }
+
+  stringToArray(data) {
+    let array = [];
+    const dataArray = data.split(";");
+    if (dataArray.length > 0) {
+      for (let i = 0; i < dataArray.length; i++) {
+        array.push(Number(dataArray[i]));
+      }
+    } else {
+      array.push(Number(data));
+    }
+    return array;
+  }
+
+  getTitle(data, idArray) {
+    let value = "";
+    for (let i = 0; i < idArray.length; i++) {
+      for (let j = 0; j < data.length; j++) {
+        if (data[j].id === idArray[i]) {
+          value += data[j].title + ";";
+        }
+      }
+    }
+    return value;
+  }
+
+  splitToValue(complaint, therapies, therapies_previous) {
+    if (complaint.split(";") !== undefined) {
+      this.selectedComplaint = complaint.split(";").map(Number);
+    } else {
+      this.selectedComplaint = Number(complaint);
+    }
+
+    if (therapies.split(";") !== undefined) {
+      this.selectedTherapies = therapies.split(";").map(Number);
+    } else {
+      this.selectedTherapies = Number(therapies);
+    }
+
+    if (therapies_previous.split(";") !== undefined) {
+      this.selectedTreatments = therapies_previous.split(";").map(Number);
+    } else {
+      this.selectedTreatments = Number(therapies_previous);
+    }
+  }
+
+  
+
 }
+
+
