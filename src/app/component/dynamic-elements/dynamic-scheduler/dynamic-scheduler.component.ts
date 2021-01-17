@@ -11,7 +11,7 @@ import {
 } from '@syncfusion/ej2-angular-schedule';
 import { addClass, extend, removeClass, closest, remove, isNullOrUndefined, Internationalization } from '@syncfusion/ej2-base';
 import { ChangeEventArgs as SwitchEventArgs } from '@syncfusion/ej2-angular-buttons';
-import { ChangeEventArgs, MultiSelectChangeEventArgs, DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
+import { ChangeEventArgs, MultiSelectChangeEventArgs, DropDownListComponent, MultiSelectComponent } from '@syncfusion/ej2-angular-dropdowns';
 import { DataManager, Predicate, Query } from '@syncfusion/ej2-data';
 import {
   ClickEventArgs, ContextMenuComponent, MenuItemModel, BeforeOpenCloseMenuEventArgs, MenuEventArgs
@@ -577,6 +577,8 @@ export class DynamicSchedulerComponent implements OnInit {
 
   @ViewChild("customerUserModal") customerUserModal: Modal;
   @ViewChild("scheduler") public scheduler: SchedulerComponent;
+  @ViewChild("filterUsers") public filterUsers: MultiSelectComponent;
+  @ViewChild("filterStore") public filterStore: DropDownListComponent;
   public customerModal = false;
   public selectedDate: Date = new Date();
   public formGroup: FormGroup;
@@ -670,7 +672,7 @@ export class DynamicSchedulerComponent implements OnInit {
 
   ngOnInit() {
     this.initializationConfig();
-
+    this.initializaionData();
   }
 
   @HostListener("window:resize", ["$event"])
@@ -1051,13 +1053,13 @@ export class DynamicSchedulerComponent implements OnInit {
 
   public handleValue(selected) {
     console.log(selected);
-    this.value = selected;
+    this.value = selected.value;
     localStorage.setItem("selectedUser-" + this.id, JSON.stringify(this.value));
     localStorage.setItem(
       "usersFor-" + this.selectedStoreId + "-" + this.id,
       JSON.stringify(this.value)
     );
-    this.getTaskForSelectedUsers(this.value);
+    this.getTaskForSelectedUsers(this.getUserObject(this.value));
 
     const item = {
       user_id: Number(localStorage.getItem("idUser")),
@@ -1108,10 +1110,18 @@ export class DynamicSchedulerComponent implements OnInit {
     }
   }
 
+  getUserObject(values) {
+    let users = [];
+    for (let i = 0; i < values.length; i++) {
+      users.push(this.filterUsers.getDataByValue(values[i]));
+    }
+    return users;
+  }
+
   myLoop() {
     setTimeout(() => {
       this.service
-        .getWorkandTasksForUser(this.valueLoop[this.loopIndex].id)
+        .getWorkandTasksForUser(this.valueLoop[this.loopIndex])
         .subscribe((data) => {
           console.log(data, this.valueLoop[this.loopIndex]);
           this.events = [];
@@ -1159,6 +1169,7 @@ export class DynamicSchedulerComponent implements OnInit {
 
   selectedStore(event) {
     console.log(event);
+    event = event.value;
     this.value = [];
     // localStorage.removeItem('selectedUser');
     this.loading = true;
@@ -1176,7 +1187,7 @@ export class DynamicSchedulerComponent implements OnInit {
       this.value = JSON.parse(
         localStorage.getItem("usersFor-" + this.selectedStoreId + "-" + this.id)
       );
-      this.getTaskForSelectedUsers(this.value);
+      this.getTaskForSelectedUsers(this.getUserObject(this.value));
       this.getUserInCompany(event);
       this.setStoreWork(event);
       localStorage.setItem("selectedStore-" + this.id, event);
@@ -1332,7 +1343,7 @@ export class DynamicSchedulerComponent implements OnInit {
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1].end >
-            new Date(date).getHours()) ||
+          new Date(date).getHours()) ||
         (this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
           .start2 <= new Date(date).getHours() &&
           this.calendars[i].workTime[j].times[new Date(date).getDay() - 1]
@@ -1512,7 +1523,7 @@ export class DynamicSchedulerComponent implements OnInit {
     }
   }
 
-  
+
 
 }
 

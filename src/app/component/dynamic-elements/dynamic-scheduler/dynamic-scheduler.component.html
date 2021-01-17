@@ -129,22 +129,22 @@
           <div class="control-panel e-css">
             <div class="col-row">
               <div class="col-left">
-                <label style="line-height: 34px; margin: 0;">First Day of Week</label>
+                <label style="line-height: 34px; margin: 0;">{{language.selectStore}}</label>
               </div>
               <div class="col-right">
-                <ejs-dropdownlist id='weekFirstDay' width='170px' [dataSource]='weekDays'
-                  (change)='onWeekDayChange($event)' [value]='firstDayOfWeek' [fields]='fields' popupHeight='150px'>
+                <ejs-dropdownlist id='weekFirstDay' width='170px' [dataSource]='store'
+                  (change)='selectedStore($event)' [value]='selectedStoreId' [fields]="{text: 'storename', value: 'id'}" popupHeight='150px'>
                 </ejs-dropdownlist>
               </div>
             </div>
             <div class="col-row">
               <div class="col-left">
-                <label style="line-height: 34px; margin: 0;">Work week</label>
+                <label style="line-height: 34px; margin: 0;">{{language.selectUsers}}</label>
               </div>
               <div class="col-right">
-                <ejs-multiselect id='workWeekDays' width='170px' [dataSource]='weekDays' [showClearButton]='false'
-                  [showDropDownIcon]='true' [mode]='checkboxMode' [fields]='fields' popupHeight='150px'
-                  [value]='workDays' (change)='onWorkWeekDayChange($event)'></ejs-multiselect>
+                <ejs-multiselect #filterUsers id='workWeekDays' width='170px' [dataSource]='usersInCompany' [value]="value" [showClearButton]='false'
+                  [showDropDownIcon]='true' [mode]='checkboxMode' [fields]="{text: 'shortname', value: 'id'}" popupHeight='150px'
+                  (change)='handleValue($event)'></ejs-multiselect>
               </div>
             </div>
             <div class="col-row">
