@@ -37,6 +37,7 @@ import { ButtonAllModule, CheckBoxAllModule, SwitchAllModule } from '@syncfusion
 import { DatePickerAllModule, TimePickerAllModule, DateTimePickerAllModule } from '@syncfusion/ej2-angular-calendars';
 import { NumericTextBoxAllModule, TextBoxAllModule } from '@syncfusion/ej2-angular-inputs';
 import { ScheduleAllModule, RecurrenceEditorAllModule } from '@syncfusion/ej2-angular-schedule';
+import { ComboBoxModule, DropDownsModule, MultiSelectModule } from "@progress/kendo-angular-dropdowns";
 
 @NgModule({
   declarations: [DynamicGridComponent, DynamicFormsComponent, DynamicSchedulerComponent],
@@ -70,7 +71,10 @@ import { ScheduleAllModule, RecurrenceEditorAllModule } from '@syncfusion/ej2-an
     TreeViewModule, 
     ButtonAllModule, 
     DropDownButtonAllModule,
-    SwitchModule
+    SwitchModule,
+    DropDownsModule,
+    ComboBoxModule,
+    MultiSelectModule
   ],
   providers: [EditService, ToolbarService, SortService, FilterService, PageService, GroupService, ResizeService],
   entryComponents: [TextboxComponent, TextareaComponent, DatepickerComponent, ButtonComponent, DropdownComponent]

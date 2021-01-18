@@ -132,9 +132,13 @@
                 <label style="line-height: 34px; margin: 0;">{{language.selectStore}}</label>
               </div>
               <div class="col-right">
-                <ejs-dropdownlist id='weekFirstDay' width='170px' [dataSource]='store'
+                <!-- <ejs-dropdownlist id='weekFirstDay' width='170px' [dataSource]='store'
                   (change)='selectedStore($event)' [value]='selectedStoreId' [fields]="{text: 'storename', value: 'id'}" popupHeight='150px'>
-                </ejs-dropdownlist>
+                </ejs-dropdownlist> -->
+                <kendo-combobox [data]="store" [textField]="'storename'" [valueField]="'id'"
+                  [(ngModel)]="selectedStoreId" [valuePrimitive]="true" (valueChange)="selectedStore($event)"
+                  [suggest]="true">
+                </kendo-combobox>
               </div>
             </div>
             <div class="col-row">
@@ -142,9 +146,12 @@
                 <label style="line-height: 34px; margin: 0;">{{language.selectUsers}}</label>
               </div>
               <div class="col-right">
-                <ejs-multiselect #filterUsers id='workWeekDays' width='170px' [dataSource]='usersInCompany' [value]="value" [showClearButton]='false'
-                  [showDropDownIcon]='true' [mode]='checkboxMode' [fields]="{text: 'shortname', value: 'id'}" popupHeight='150px'
-                  (change)='handleValue($event)'></ejs-multiselect>
+                <!-- <ejs-multiselect *ngIf="usersInCompany" #filterUsers id='workWeekDays' width='170px' [dataSource]='usersInCompany' [value]="value" [showClearButton]='false'
+                  [showDropDownIcon]='true' [showSelectAll]="true" [mode]='checkboxMode' [fields]="{text: 'shortname', value: 'id'}" popupHeight='150px'
+                  (change)='handleValue($event)'></ejs-multiselect> -->
+                <kendo-multiselect [data]="usersInCompany" [textField]="'shortname'" [valueField]="'id'"
+                  [(ngModel)]="value" name="usersInCompany" (valueChange)="handleValue($event)">
+                </kendo-multiselect>
               </div>
             </div>
             <div class="col-row">
@@ -230,14 +237,20 @@
         </div>
         <div class="left-panel" [style.height]="height">
           <div class="overview-scheduler">
-            <ejs-schedule #scheduleObj cssClass='schedule-overview' height='100%' [group]='group'
+            <ejs-schedule *ngIf="resources&&eventSettings" #scheduleObj cssClass='schedule-overview' height='100%'
               [(currentView)]="currentView" timezone='UTC' [eventSettings]="eventSettings">
               <ng-template #dateHeaderTemplate let-data>
                 <div class="date-text">{{getDateHeaderText(data.date)}}</div>
               </ng-template>
               <e-views>
                 <e-view option="Day"></e-view>
-                <e-view option="Week"></e-view>
+                <e-view option="Week">
+                  <ng-template #eventTemplate let-data>
+                    <div>
+                      {{data | json}}
+                    </div>
+                  </ng-template>
+                </e-view>
                 <e-view option="WorkWeek"></e-view>
                 <e-view option="Month"></e-view>
                 <e-view option="Year"></e-view>
@@ -249,9 +262,8 @@
                 <e-view option="TimelineYear"></e-view>
               </e-views>
               <e-resources>
-                <e-resource field='CalendarId' title='Calendars' [dataSource]='resourceDataSource'
-                  [query]='resourceQuery' [allowMultiple]='allowMultiple' name='Calendars' textField='CalendarText'
-                  idField='CalendarId' colorField='CalendarColor'>
+                <e-resource field='colorTask' title='Calendars' [dataSource]='resources' [allowMultiple]='allowMultiple'
+                  name='Calendars' textField='text' idField='id' colorField='color'>
                 </e-resource>
               </e-resources>
               <!-- Header template -->
