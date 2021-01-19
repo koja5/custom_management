@@ -128,10 +128,10 @@
         <div class="right-panel filter-panel hide" [style.height]="height">
           <div class="control-panel e-css">
             <div class="col-row">
-              <div class="col-left">
+              <div>
                 <label style="line-height: 34px; margin: 0;">{{language.selectStore}}</label>
               </div>
-              <div class="col-right">
+              <div class="col-sm-12">
                 <!-- <ejs-dropdownlist id='weekFirstDay' width='170px' [dataSource]='store'
                   (change)='selectedStore($event)' [value]='selectedStoreId' [fields]="{text: 'storename', value: 'id'}" popupHeight='150px'>
                 </ejs-dropdownlist> -->
@@ -142,10 +142,10 @@
               </div>
             </div>
             <div class="col-row">
-              <div class="col-left">
+              <div>
                 <label style="line-height: 34px; margin: 0;">{{language.selectUsers}}</label>
               </div>
-              <div class="col-right">
+              <div class="col-sm-12">
                 <!-- <ejs-multiselect *ngIf="usersInCompany" #filterUsers id='workWeekDays' width='170px' [dataSource]='usersInCompany' [value]="value" [showClearButton]='false'
                   [showDropDownIcon]='true' [showSelectAll]="true" [mode]='checkboxMode' [fields]="{text: 'shortname', value: 'id'}" popupHeight='150px'
                   (change)='handleValue($event)'></ejs-multiselect> -->
@@ -154,91 +154,12 @@
                 </kendo-multiselect>
               </div>
             </div>
-            <div class="col-row">
-              <div class="col-left">
-                <label style="line-height: 34px; margin: 0;">Resources</label>
-              </div>
-              <div class="col-right">
-                <ejs-multiselect id='resources' width='170px' [dataSource]='resourceDataSource' [mode]='checkboxMode'
-                  [fields]='calendarFields' popupHeight='150px' [showClearButton]='false' [showDropDownIcon]='true'
-                  [value]='calendarsValue' (change)='onResourceChange($event)'></ejs-multiselect>
-              </div>
-            </div>
-            <div class="col-row">
-              <div class="col-left">
-                <label style="line-height: 34px; margin: 0;">Timezone</label>
-              </div>
-              <div class="col-right">
-                <ejs-dropdownlist id='timezone' width='170px' [dataSource]='timezoneData'
-                  (change)='onTimezoneChange($event)' value='Etc/GMT' [fields]='fields' popupHeight='150px'>
-                </ejs-dropdownlist>
-              </div>
-            </div>
-            <div class="col-row">
-              <div class="col-left">
-                <label style="line-height: 34px; margin: 0;">Day Start Hour</label>
-              </div>
-              <div class="col-right">
-                <ejs-timepicker id='dayStartHour' width='170px' showClearButton='false' [value]='dayStartHourValue'
-                  (change)='onDayStartHourChange($event)'>
-                </ejs-timepicker>
-              </div>
-            </div>
-            <div class="col-row">
-              <div class="col-left">
-                <label style="line-height: 34px; margin: 0;">Day End Hour</label>
-              </div>
-              <div class="col-right">
-                <ejs-timepicker id='dayEndHour' width='170px' showClearButton='false' [value]='dayEndHourValue'
-                  (change)='onDayEndHourChange($event)'>
-                </ejs-timepicker>
-              </div>
-            </div>
-            <div class="col-row">
-              <div class="col-left">
-                <label style="line-height: 34px; margin: 0;">Work Start Hour</label>
-              </div>
-              <div class="col-right">
-                <ejs-timepicker id='workHourStart' width='170px' showClearButton='false' [value]='workStartHourValue'
-                  (change)='onWorkStartHourChange($event)'>
-                </ejs-timepicker>
-              </div>
-            </div>
-            <div class="col-row">
-              <div class="col-left">
-                <label style="line-height: 34px; margin: 0;">Work End Hour</label>
-              </div>
-              <div class="col-right">
-                <ejs-timepicker id='workHourEnd' width='170px' showClearButton='false' [value]='workEndHourValue'
-                  (change)='onWorkEndHourChange($event)'></ejs-timepicker>
-              </div>
-            </div>
-            <div class="col-row">
-              <div class="col-left">
-                <label style="line-height: 34px; margin: 0;">Slot Duration</label>
-              </div>
-              <div class="col-right">
-                <ejs-dropdownlist id='slotDuration' width='170px' [dataSource]='timeSlotDuration'
-                  [fields]='timeSlotFields' (change)='onTimescaleDurationChange($event)' [value]='timeSlotDurationValue'
-                  popupHeight='150px'></ejs-dropdownlist>
-              </div>
-            </div>
-            <div class="col-row">
-              <div class="col-left">
-                <label style="line-height: 34px; margin: 0;">Slot Interval</label>
-              </div>
-              <div class="col-right">
-                <ejs-dropdownlist id='slotInterval' width='170px' [dataSource]='timeSlotCount'
-                  (change)='onTimescaleIntervalChange($event)' [value]='timeSlotCountValue' popupHeight='150px'>
-                </ejs-dropdownlist>
-              </div>
-            </div>
           </div>
         </div>
         <div class="left-panel" [style.height]="height">
           <div class="overview-scheduler">
-            <ejs-schedule *ngIf="resources&&eventSettings" #scheduleObj cssClass='schedule-overview' height='100%'
-              [(currentView)]="currentView" timezone='UTC' [eventSettings]="eventSettings">
+            <ejs-schedule *ngIf="eventSettings.dataSource.length&&resources" #scheduleObj cssClass='schedule-overview'
+              height='100%' [(currentView)]="currentView" timezone='UTC' [eventSettings]="eventSettings">
               <ng-template #dateHeaderTemplate let-data>
                 <div class="date-text">{{getDateHeaderText(data.date)}}</div>
               </ng-template>
@@ -246,9 +167,8 @@
                 <e-view option="Day"></e-view>
                 <e-view option="Week">
                   <ng-template #eventTemplate let-data>
-                    <div>
-                      {{data | json}}
-                    </div>
+                    <div class="subject">{{data.title.split('+')[0]}}</div>
+                    <div class="subject">{{data.title.split('+')[1]}}</div>
                   </ng-template>
                 </e-view>
                 <e-view option="WorkWeek"></e-view>
@@ -262,8 +182,11 @@
                 <e-view option="TimelineYear"></e-view>
               </e-views>
               <e-resources>
+                <!-- <e-resource field='creator_id' title='sharedCalendar' [dataSource]='sharedCalendarResources' [allowMultiple]='allowMultiple'
+                  name='sharedCalendar' textField='shortname' idField='id'>
+                </e-resource> -->
                 <e-resource field='colorTask' title='Calendars' [dataSource]='resources' [allowMultiple]='allowMultiple'
-                  name='Calendars' textField='text' idField='id' colorField='color'>
+                  name='Calendars' textField='category' idField='id' colorField='color'>
                 </e-resource>
               </e-resources>
               <!-- Header template -->
@@ -302,12 +225,12 @@
                 <div class="quick-info-content">
                   <div class="event-content">
                     <div class="meeting-type-wrap">
-                      <label>Subject</label>:
-                      <span>{{data.Subject}}</span>
+                      <label>Complaint</label>:
+                      <span>{{data.title.split('+')[1]}}</span>
                     </div>
                     <div class="meeting-subject-wrap">
-                      <label>Type</label>:
-                      <span>{{getEventType(data)}}</span>
+                      <label>Telephone</label>:
+                      <span>{{data.telephone}}</span>
                     </div>
                     <div class="notes-wrap">
                       <label>Notes</label>:

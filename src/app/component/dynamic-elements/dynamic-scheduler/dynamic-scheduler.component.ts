@@ -52,7 +52,7 @@ export class DynamicSchedulerComponent implements OnInit {
   public intl: Internationalization = new Internationalization();
   public currentView: View = 'Week';
   public liveTimeUpdate: String = new Date().toLocaleTimeString('en-US', { timeZone: 'UTC' });
-  public group: GroupModel = { resources: ['Calendars'] };
+  public group: GroupModel = { resources: ['sharedCalendar'] };
   public resourceDataSource: Object[] = [
     { CalendarText: 'My Calendar', CalendarId: 1, CalendarColor: '#c43081' },
     { CalendarText: 'Company', CalendarId: 2, CalendarColor: '#ff7f50' },
@@ -144,7 +144,14 @@ export class DynamicSchedulerComponent implements OnInit {
   public timeSlotCount: Number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   public timeSlotDurationValue: Number = 60;
   public timeSlotCountValue: Number = 2;
-  public eventSettings: EventSettingsModel = { dataSource: [] };
+  public eventSettings: EventSettingsModel = {
+    dataSource: [/*{
+      'colorTask': 13,
+      "StartTime": new Date("2021-01-20T11:30:00.000Z"),
+      "EndTime": new Date("2021-01-20T12:30:00.000Z"),
+      "Subject": "Doe Test+Kopfschmerzen;"
+    }*/]
+  };
   @ViewChild('menuObj')
   public menuObj: ContextMenuComponent;
   public selectedTarget: Element;
@@ -436,7 +443,7 @@ export class DynamicSchedulerComponent implements OnInit {
     // tslint:disable-next-line: deprecation
     const resources: ResourcesModel = this.scheduleObj.getResourceCollections()[0];
     const resourceData: { [key: string]: Object } = (resources.dataSource as Object[]).filter((resource: { [key: string]: Object }) =>
-      resource.CalendarId === data.CalendarId)[0] as { [key: string]: Object };
+      resource.id === data.colorTask)[0] as { [key: string]: Object };
     return resourceData;
   }
 
@@ -446,7 +453,7 @@ export class DynamicSchedulerComponent implements OnInit {
       return { 'align-items': 'center', 'color': '#919191' };
     } else {
       const resourceData: { [key: string]: Object } = this.getResourceData(data);
-      return { 'background': resourceData.CalendarColor, 'color': '#FFFFFF' };
+      return { 'background': resourceData.color, 'color': '#FFFFFF' };
     }
   }
 
@@ -653,6 +660,8 @@ export class DynamicSchedulerComponent implements OnInit {
   public confirmArrivalData: any;
   public isConfirm: any;
   public allEvents = [];
+  private instance: Internationalization = new Internationalization();
+  public sharedCalendarResources: any;
 
   constructor(
     public service: TaskService,
@@ -747,7 +756,7 @@ export class DynamicSchedulerComponent implements OnInit {
         if (this.eventCategory.length > 0) {
           this.selected = this.eventCategory[0].id;
         }
-        this.resources.push(resourcesObject);
+        this.resources = data;
         this.colorPalette = data;
         for (let i = 0; i < data["length"]; i++) {
           this.palette.push(data[i]["color"]);
@@ -830,6 +839,7 @@ export class DynamicSchedulerComponent implements OnInit {
       this.value = JSON.parse(
         localStorage.getItem("usersFor-" + this.selectedStoreId + "-" + this.id)
       );
+      this.sharedCalendarResources = this.value;
       // this.selectedStore(this.selectedStoreId);
       if (this.value !== null) {
         this.getTaskForSelectedUsers(this.value);
@@ -1055,7 +1065,9 @@ export class DynamicSchedulerComponent implements OnInit {
 
   public handleValue(selected) {
     console.log(selected);
+    this.resetCalendarData();
     this.value = selected;
+    this.sharedCalendarResources = selected;
     localStorage.setItem("selectedUser-" + this.id, JSON.stringify(this.value));
     localStorage.setItem(
       "usersFor-" + this.selectedStoreId + "-" + this.id,
@@ -1119,8 +1131,6 @@ export class DynamicSchedulerComponent implements OnInit {
       this.service
         .getWorkandTasksForUser(this.valueLoop[this.loopIndex].id)
         .subscribe((data) => {
-          this.allEvents.concat(data);
-          this.eventSettings.dataSource = this.allEvents;
           console.log(data, this.valueLoop[this.loopIndex]);
           this.events = [];
           this.workTime = this.pickWorkTimeToTask(data["workTime"]);
@@ -1158,8 +1168,9 @@ export class DynamicSchedulerComponent implements OnInit {
   pickModelForEvent(data) {
     this.events = [];
     for (let i = 0; i < data.length; i++) {
-      data[i].start = new Date(data[i].start);
-      data[i].end = new Date(data[i].end);
+      data[i].StartTime = new Date(data[i].start);
+      data[i].EndTime = new Date(data[i].end);
+      data[i].Subject = data[i].title;
       this.events.push(data[i]);
     }
     if (this.allEvents.length) {
@@ -1190,6 +1201,7 @@ export class DynamicSchedulerComponent implements OnInit {
       this.value = JSON.parse(
         localStorage.getItem("usersFor-" + this.selectedStoreId + "-" + this.id)
       );
+      this.sharedCalendarResources = this.value;
       this.getTaskForSelectedUsers(this.value);
       this.getUserInCompany(event);
       this.setStoreWork(event);
@@ -1530,8 +1542,13 @@ export class DynamicSchedulerComponent implements OnInit {
     }
   }
 
+  getTimeString(value: Date): string {
+    return this.instance.formatDate(value, { skeleton: 'hm' });
+  }
 
-
+  resetCalendarData() {
+    this.eventSettings.dataSource = [];
+  }
 }
 
 
