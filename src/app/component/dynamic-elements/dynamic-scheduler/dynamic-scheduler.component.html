@@ -141,7 +141,7 @@
                 </kendo-combobox>
               </div>
             </div>
-            <div class="col-row">
+            <div class="col-row mt-2">
               <div>
                 <label style="line-height: 34px; margin: 0;">{{language.selectUsers}}</label>
               </div>
@@ -159,7 +159,7 @@
         <div class="left-panel" [style.height]="height">
           <div class="overview-scheduler">
             <ejs-schedule *ngIf="eventSettings.dataSource.length&&resources" #scheduleObj cssClass='schedule-overview'
-              height='100%' [(currentView)]="currentView" timezone='UTC' [eventSettings]="eventSettings">
+              height='100%' [(currentView)]="currentView" timezone='UTC' [group]="group" [eventSettings]="eventSettings" (renderCell)="onRenderCell($event)">
               <ng-template #dateHeaderTemplate let-data>
                 <div class="date-text">{{getDateHeaderText(data.date)}}</div>
               </ng-template>
@@ -182,12 +182,12 @@
                 <e-view option="TimelineYear"></e-view>
               </e-views>
               <e-resources>
-                <!-- <e-resource field='creator_id' title='sharedCalendar' [dataSource]='sharedCalendarResources' [allowMultiple]='allowMultiple'
+                <e-resource field='creator_id' title='sharedCalendar' [dataSource]='sharedCalendarResources' [allowMultiple]='allowMultiple'
                   name='sharedCalendar' textField='shortname' idField='id'>
-                </e-resource> -->
-                <e-resource field='colorTask' title='Calendars' [dataSource]='resources' [allowMultiple]='allowMultiple'
-                  name='Calendars' textField='category' idField='id' colorField='color'>
                 </e-resource>
+                <!-- <e-resource field='colorTask' title='Calendars' [dataSource]='resources' [allowMultiple]='allowMultiple'
+                  name='Calendars' textField='category' idField='id' colorField='color'>
+                </e-resource> -->
               </e-resources>
               <!-- Header template -->
               <ng-template #quickInfoTemplatesHeader let-data>
@@ -222,7 +222,7 @@
                 </div>
               </ng-template>
               <ng-template #eventContent let-data="data">
-                <div class="quick-info-content">
+                <div class="quick-info-content" [style.background]="red">
                   <div class="event-content">
                     <div class="meeting-type-wrap">
                       <label>Complaint</label>:
@@ -238,6 +238,9 @@
                     </div>
                   </div>
                 </div>
+              </ng-template>
+              <ng-template #cellTemplate let-data>
+                <div  style="background: red !important;"></div>
               </ng-template>
               <!-- Footer Template -->
               <ng-template #quickInfoTemplatesFooter let-data>

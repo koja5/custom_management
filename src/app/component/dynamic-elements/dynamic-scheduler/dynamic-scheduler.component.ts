@@ -1133,7 +1133,7 @@ export class DynamicSchedulerComponent implements OnInit {
         .subscribe((data) => {
           console.log(data, this.valueLoop[this.loopIndex]);
           this.events = [];
-          this.workTime = this.pickWorkTimeToTask(data["workTime"]);
+          this.workTime[this.loopIndex] = this.pickWorkTimeToTask(data["workTime"]);
           const objectCalendar = {
             userId: this.valueLoop[this.loopIndex].id,
             name: this.valueLoop[this.loopIndex].shortname,
@@ -1143,13 +1143,10 @@ export class DynamicSchedulerComponent implements OnInit {
           this.calendars.push(objectCalendar);
           this.loopIndex++;
           this.splitterSize = this.splitterSizeFull / this.valueLoop.length;
-          console.log(this.splitterSize);
-          console.log(this.calendars);
           this.size = [];
           if (this.valueLoop.length === this.loopIndex) {
             const sizePannel = 100 / this.loopIndex + "%";
             for (let i = 0; i < this.valueLoop.length - 1; i++) {
-              console.log("usao sam ovde!");
               this.size.push(sizePannel);
             }
             this.size.push("");
@@ -1348,9 +1345,16 @@ export class DynamicSchedulerComponent implements OnInit {
     });
   }
 
+  onRenderCell(event) {
+    // this.dateFormat(event, null, null);
+    return event.element.style.background = "red";
+  }
+
+  onEventRendered(event) {
+  }
+
   dateFormat(date, i, j) {
-    if (
-      // tslint:disable-next-line: max-line-length
+    /*if (
       new Date(this.calendars[i].workTime[j].change) <= new Date(date) &&
       (j + 1 <= this.calendars[i].workTime.length - 1
         ? new Date(date) < new Date(this.calendars[i].workTime[j + 1].change)
@@ -1378,6 +1382,45 @@ export class DynamicSchedulerComponent implements OnInit {
       }
     } else {
       return "noTime";
+    }*/
+
+    if (date.elementType === 'workCells') {
+      if (this.calendars[date.groupIndex]) {
+        for (let i = 0; i < this.calendars[date.groupIndex].workTime.length; i++) {
+          for (let j = 0; j < this.calendars[date.groupIndex].workTime[i].length; j++) {
+            let workItem = this.calendars[date.groupIndex].workTime[i][j];
+            if (
+              new Date(workItem.change) <= date.date &&
+              (j + 1 <= this.calendars[date.groupIndex].workTime[i].length - 1
+                ? date.date < new Date(this.calendars[date.groupIndex].workTime[i][j + 1].change)
+                : true) &&
+              date.date.getDay() - 1 < 5 &&
+              date.date.getDay() !== 0
+            ) {
+              if (
+                (workItem.times[date.date.getDay() - 1]
+                  .start <= date.date.getHours() &&
+                  workItem.times[date.date.getDay() - 1].end >
+                  date.date.getHours()) ||
+                (workItem.times[date.date.getDay() - 1]
+                  .start2 <= date.date.getHours() &&
+                  workItem.times[date.date.getDay() - 1]
+                    .end2 > date.date.getHours()) ||
+                (workItem.times[date.date.getDay() - 1]
+                  .start3 <= date.date.getHours() &&
+                  workItem.times[date.date.getDay() - 1]
+                    .end3 > date.date.getHours())
+              ) {
+                return "workTime";
+              } else {
+                return "none";
+              }
+            } else {
+              return "noTime";
+            }
+          }
+        }
+      }
     }
   }
 
