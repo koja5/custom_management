@@ -1,3 +1,4 @@
+import { LayoutModule } from '@progress/kendo-angular-layout';
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {
@@ -38,6 +39,9 @@ import { DatePickerAllModule, TimePickerAllModule, DateTimePickerAllModule } fro
 import { NumericTextBoxAllModule, TextBoxAllModule } from '@syncfusion/ej2-angular-inputs';
 import { ScheduleAllModule, RecurrenceEditorAllModule } from '@syncfusion/ej2-angular-schedule';
 import { ComboBoxModule, DropDownsModule, MultiSelectModule } from "@progress/kendo-angular-dropdowns";
+import { InputsModule } from '@progress/kendo-angular-inputs';
+import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
+import { ButtonsModule } from '@progress/kendo-angular-buttons';
 
 @NgModule({
   declarations: [DynamicGridComponent, DynamicFormsComponent, DynamicSchedulerComponent],
@@ -74,7 +78,11 @@ import { ComboBoxModule, DropDownsModule, MultiSelectModule } from "@progress/ke
     SwitchModule,
     DropDownsModule,
     ComboBoxModule,
-    MultiSelectModule
+    MultiSelectModule,
+    LayoutModule,
+    InputsModule,
+    DateInputsModule,
+    ButtonsModule
   ],
   providers: [EditService, ToolbarService, SortService, FilterService, PageService, GroupService, ResizeService],
   entryComponents: [TextboxComponent, TextareaComponent, DatepickerComponent, ButtonComponent, DropdownComponent]

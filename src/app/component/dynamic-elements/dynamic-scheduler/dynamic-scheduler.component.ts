@@ -28,7 +28,7 @@ import { UserModel } from 'src/app/models/user-model';
 import { CustomerModel } from 'src/app/models/customer-model';
 import { CustomersComponent } from '../../dashboard/customers/customers.component';
 import { SchedulerComponent, SchedulerEvent } from '@progress/kendo-angular-scheduler';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { Modal } from 'ngx-modal';
 declare var moment: any;
 
@@ -52,7 +52,9 @@ export class DynamicSchedulerComponent implements OnInit {
   public intl: Internationalization = new Internationalization();
   public currentView: View = 'Week';
   public liveTimeUpdate: String = new Date().toLocaleTimeString('en-US', { timeZone: 'UTC' });
-  public group: GroupModel = { resources: ['sharedCalendar'] };
+  public group: GroupModel = {
+    resources: ['sharedCalendar']
+  };
   public resourceDataSource: Object[] = [
     { CalendarText: 'My Calendar', CalendarId: 1, CalendarColor: '#c43081' },
     { CalendarText: 'Company', CalendarId: 2, CalendarColor: '#ff7f50' },
@@ -453,7 +455,8 @@ export class DynamicSchedulerComponent implements OnInit {
       return { 'align-items': 'center', 'color': '#919191' };
     } else {
       const resourceData: { [key: string]: Object } = this.getResourceData(data);
-      return { 'background': resourceData.color, 'color': '#FFFFFF' };
+      // return { 'background': resourceData.color, 'color': '#FFFFFF' };
+      return { 'background': '#007bff', 'color': '#FFFFFF' };
     }
   }
 
@@ -498,12 +501,17 @@ export class DynamicSchedulerComponent implements OnInit {
       this.scheduleObj.deleteEvent(eventDetails, currentAction);
     } else {
       const isCellPopup: boolean = quickPopup.firstElementChild.classList.contains('e-cell-popup');
-      const eventDetails: { [key: string]: Object } = isCellPopup ? getSlotData() :
+      let eventDetails: { [key: string]: Object } = isCellPopup ? getSlotData() :
         this.scheduleObj.activeEventData.event as { [key: string]: Object };
       let currentAction: CurrentAction = isCellPopup ? 'Add' : 'Save';
       if (eventDetails.RecurrenceRule) {
         currentAction = 'EditOccurrence';
       }
+
+      this.createFormGroup(eventDetails);
+      eventDetails.start = this.convertToDate(eventDetails.start.toString());
+      eventDetails.end = this.convertToDate(eventDetails.end.toString());
+      
       this.scheduleObj.openEditor(eventDetails, currentAction, true);
     }
     this.scheduleObj.closeQuickInfoPopup();
@@ -1346,8 +1354,8 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   onRenderCell(event) {
-    // this.dateFormat(event, null, null);
-    return event.element.style.background = "red";
+    this.dateFormat(event, null, null);
+    // return event.element.style.background = "red";
   }
 
   onEventRendered(event) {
@@ -1391,9 +1399,6 @@ export class DynamicSchedulerComponent implements OnInit {
             let workItem = this.calendars[date.groupIndex].workTime[i][j];
             if (
               new Date(workItem.change) <= date.date &&
-              (j + 1 <= this.calendars[date.groupIndex].workTime[i].length - 1
-                ? date.date < new Date(this.calendars[date.groupIndex].workTime[i][j + 1].change)
-                : true) &&
               date.date.getDay() - 1 < 5 &&
               date.date.getDay() !== 0
             ) {
@@ -1411,7 +1416,7 @@ export class DynamicSchedulerComponent implements OnInit {
                   workItem.times[date.date.getDay() - 1]
                     .end3 > date.date.getHours())
               ) {
-                return "workTime";
+                return date.element.style.background = workItem.color;
               } else {
                 return "none";
               }
@@ -1591,6 +1596,182 @@ export class DynamicSchedulerComponent implements OnInit {
 
   resetCalendarData() {
     this.eventSettings.dataSource = [];
+  }
+
+  public createFormGroup(args): FormGroup {
+    this.baseDataIndicator = false;
+    if (this.eventCategory.length > 0) {
+      this.selected = this.eventCategory[0].id;
+    }
+    if (
+      (isNaN(this.selectedStoreId) ||
+        this.selectedStoreId === null ||
+        this.selectedStoreId === undefined) &&
+      this.type !== 3
+    ) {
+      /*Swal.fire({
+        title: this.language.selectStoreIndicatorTitle,
+        text: this.language.selectStoreIndicatorText,
+        timer: 3000,
+        type: "error"
+      });*/
+      this.toastr.success(
+        this.language.selectStoreIndicatorTitle,
+        this.language.selectStoreIndicatorText,
+        { timeOut: 7000, positionClass: "toast-bottom-right" }
+      );
+      this.createFormLoading = false;
+      return this.createFormGroup.bind(this);
+    } else {
+      this.createFormLoading = false;
+      const dataItem = args;
+      // this.clearAllSelectedData();
+      /*this.customerUser = new CustomerModel();
+      this.customerUser.attention = '';
+      this.customerUser.physicalComplaint = '';*/
+      /*this.customerUser.attention = '';
+      this.customerUser.physicalComplaint = '';*/
+      if (
+        typeof dataItem.customer_id === "number" &&
+        dataItem.customer_id !== null
+      ) {
+        this.customerUsers = [];
+        this.customer
+          .getCustomerWithId(dataItem.customer_id)
+          .subscribe((data) => {
+            console.log(data);
+            this.customerUser = data[0];
+            this.customerUsers.push(data[0]);
+            this.telephoneValue = data[0].telephone;
+            this.mobileValue = data[0].mobile;
+            this.baseDataIndicator = true;
+            this.userWidth = "65%";
+          });
+      }
+
+      let timeDurationInd = 0;
+      let timeDuration = 0;
+      if (!isNaN(this.selectedStoreId)) {
+        if (dataItem.id === undefined || dataItem.id === null) {
+          const informationAboutStore = this.getStartEndTimeForStore(
+            this.store,
+            this.selectedStoreId
+          );
+          timeDurationInd =
+            Number(informationAboutStore.time_therapy) !==
+              Number(this.timeDuration)
+              ? 1
+              : 0;
+          timeDuration = Number(informationAboutStore.time_therapy);
+        } else {
+          const informationAboutStore = this.getStartEndTimeForStore(
+            this.store,
+            this.selectedStoreId
+          );
+          if (
+            new Date(dataItem.end).getTime() - new Date(dataItem.start).getTime() !==
+            Number(informationAboutStore.time_therapy) * 60000
+          ) {
+            timeDuration =
+              (new Date(dataItem.end).getTime() - new Date(dataItem.start).getTime()) / 60000;
+          } else {
+            timeDurationInd =
+              Number(informationAboutStore.time_therapy) !==
+                Number(this.timeDuration)
+                ? 1
+                : 0;
+            timeDuration = Number(informationAboutStore.time_therapy);
+          }
+        }
+      }
+
+      if (
+        this.customerUser !== undefined &&
+        this.customerUser !== null &&
+        this.customerUser.id !== undefined
+      ) {
+        this.baseDataIndicator = true;
+        this.userWidth = "65%";
+      }
+
+      const eventDate =
+      {
+        id: args.isNew ? this.getNextId() : dataItem.id,
+        start: [dataItem.start, Validators.required],
+        end: [
+          timeDurationInd
+            ? new Date(dataItem.start).getTime() + timeDuration * 60000
+            : dataItem.end,
+          Validators.required,
+        ],
+        startTimezone: [dataItem.startTimezone],
+        endTimezone: [dataItem.endTimezone],
+        isAllDay: dataItem.isAllDay,
+        colorTask: dataItem.colorTitle,
+        creator_id: Number(localStorage.getItem("idUser")),
+        user: this.customerUser,
+        therapy_id: dataItem.therapy_id,
+        telephone: dataItem.telephone,
+        mobile: dataItem.mobile,
+        superadmin: dataItem.superadmin,
+        confirm: dataItem.confirm,
+        description: dataItem.description,
+        recurrenceRule: dataItem.recurrenceRule,
+        recurrenceId: dataItem.recurrenceId,
+      };
+
+      setTimeout(() => {
+        if (dataItem.therapy_id !== undefined) {
+          this.customer.getTherapy(dataItem.therapy_id).subscribe((data) => {
+            console.log(data);
+            if (data["length"] !== 0) {
+              this.splitToValue(
+                data[0].complaint,
+                data[0].therapies,
+                data[0].therapies_previous
+              );
+              /*this.usersService.getUserWithId(data[0].em, val => {
+                this.selectedUser = val[0];
+              });*/
+              this.complaintData = data[0];
+              this.complaintData.cs = Number(data[0].cs);
+              this.complaintData.state = Number(data[0].state);
+            }
+            this.createFormLoading = true;
+          });
+        } else {
+          this.createFormLoading = true;
+        }
+
+        console.log(dataItem.colorTask);
+        if (dataItem.colorTask !== undefined) {
+          this.selected = dataItem.colorTask;
+          console.log(this.selected);
+        }
+
+        if (dataItem.telephone !== undefined) {
+          this.telephoneValue = dataItem.telephone;
+        }
+        if (dataItem.mobile !== undefined) {
+          this.mobileValue = dataItem.mobile;
+        }
+
+        if (dataItem.confirm !== undefined) {
+          if (dataItem.confirm === -1) {
+            this.isConfirm = 0;
+          } else {
+            this.isConfirm = 1;
+          }
+        }
+
+        return eventDate;
+      }, 100);
+
+    }
+  }
+
+  convertToDate(date) {
+    return new Date(date);
   }
 }
 
