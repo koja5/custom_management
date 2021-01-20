@@ -160,7 +160,7 @@
           <div class="overview-scheduler">
             <ejs-schedule *ngIf="eventSettings.dataSource.length&&resources" #scheduleObj cssClass='schedule-overview'
               height='100%' [(currentView)]="currentView" timezone='UTC' [group]="group" [eventSettings]="eventSettings"
-              (renderCell)="onRenderCell($event)" >
+              (renderCell)="onRenderCell($event)" (actionComplete)="buttonClickActions($event)">
               <ng-template #dateHeaderTemplate let-data>
                 <div class="date-text">{{getDateHeaderText(data.date)}}</div>
               </ng-template>

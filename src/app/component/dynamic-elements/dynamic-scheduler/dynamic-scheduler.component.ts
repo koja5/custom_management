@@ -511,7 +511,7 @@ export class DynamicSchedulerComponent implements OnInit {
       this.createFormGroup(eventDetails);
       eventDetails.start = this.convertToDate(eventDetails.start.toString());
       eventDetails.end = this.convertToDate(eventDetails.end.toString());
-      
+
       this.scheduleObj.openEditor(eventDetails, currentAction, true);
     }
     this.scheduleObj.closeQuickInfoPopup();
@@ -1773,6 +1773,158 @@ export class DynamicSchedulerComponent implements OnInit {
   convertToDate(date) {
     return new Date(date);
   }
+
+  public saveHandler(
+    { sender, formGroup, isNew, dataItem, mode },
+    selectedUser
+  ): void {
+    if (formGroup.valid) {
+      let formValue = null;
+      formValue.colorTask = this.selected;
+      formValue.telephone = this.telephoneValue;
+      formValue.user = this.customerUser;
+      formValue.mobile = this.mobileValue;
+      formValue.title =
+        this.customerUser["lastname"] +
+        " " +
+        this.customerUser["firstname"] +
+        "+" +
+        this.complaintData.complaint_title;
+      formValue.superadmin = localStorage.getItem("superadmin");
+      if (this.type !== 3 && selectedUser !== undefined) {
+        formValue.creator_id = selectedUser;
+      } else {
+        formValue.creator_id = localStorage.getItem("idUser");
+      }
+
+      if (isNew) {
+        formValue = this.colorMapToId(formValue);
+        this.addTherapy(this.customerUser["id"]);
+        formValue.title =
+          this.customerUser["lastname"] +
+          " " +
+          this.customerUser["firstname"] +
+          "+" +
+          this.complaintData.complaint_title;
+        this.complaintData.date = this.formatDate(
+          formValue.start,
+          formValue.end
+        );
+        if (this.isConfirm) {
+          formValue.confirm = 0;
+        } else {
+          formValue.confirm = -1;
+        }
+        this.customer.addTherapy(this.complaintData).subscribe((data) => {
+          if (data["success"]) {
+            formValue.therapy_id = data["id"];
+            if (this.type === 0) {
+              formValue["storeId"] = this.selectedStoreId;
+            }
+            this.service.createTask(formValue, (val) => {
+              console.log(val);
+              if (val.success) {
+                this.service.create(formValue);
+                this.toastr.success(
+                  this.language.successUpdateTitle,
+                  this.language.successUpdateText,
+                  { timeOut: 7000, positionClass: "toast-bottom-right" }
+                );
+              } else {
+                this.toastr.error(
+                  this.language.unsuccessUpdateTitle,
+                  this.language.unsuccessUpdateText,
+                  { timeOut: 7000, positionClass: "toast-bottom-right" }
+                );
+              }
+            });
+
+            console.log(this.data);
+            const customerAttentionAndPhysical = {
+              id: this.customerUser["id"],
+              attention: this.customerUser["attention"],
+              physicalComplaint: this.customerUser["physicalComplaint"],
+            };
+            console.log(customerAttentionAndPhysical);
+            this.customer
+              .updateAttentionAndPhysical(customerAttentionAndPhysical)
+              .subscribe((data) => {
+                console.log(data);
+              });
+          } else {
+            this.toastr.error(
+              this.language.unsuccessUpdateTitle,
+              this.language.unsuccessUpdateText,
+              { timeOut: 7000, positionClass: "toast-bottom-right" }
+            );
+          }
+        });
+      } else {
+        formValue = this.colorMapToId(formValue);
+        this.addTherapy(this.customerUser["id"]);
+        formValue.title =
+          this.customerUser["lastname"] +
+          " " +
+          this.customerUser["firstname"] +
+          "+" +
+          this.complaintData.complaint_title;
+        this.complaintData.date = this.formatDate(
+          formValue.start,
+          formValue.end
+        );
+        if (this.isConfirm) {
+          formValue.confirm = 0;
+        } else {
+          formValue.confirm = -1;
+        }
+        this.customer.updateTherapy(this.complaintData).subscribe((data) => {
+          if (data) {
+            this.service.updateTask(formValue, (val) => {
+              console.log(val);
+              if (val.success) {
+                this.toastr.success(
+                  this.language.successUpdateTitle,
+                  this.language.successUpdateText,
+                  { timeOut: 7000, positionClass: "toast-bottom-right" }
+                );
+              } else {
+                this.toastr.error(
+                  this.language.unsuccessUpdateTitle,
+                  this.language.unsuccessUpdateText,
+                  { timeOut: 7000, positionClass: "toast-bottom-right" }
+                );
+              }
+            });
+            const customerAttentionAndPhysical = {
+              id: this.customerUser["id"],
+              attention: this.customerUser["attention"],
+              physicalComplaint: this.customerUser["physicalComplaint"],
+            };
+            console.log(customerAttentionAndPhysical);
+            this.customer
+              .updateAttentionAndPhysical(customerAttentionAndPhysical)
+              .subscribe((data) => {
+                console.log(data);
+              });
+          } else {
+            this.toastr.success(
+              this.language.unsuccessUpdateTitle,
+              this.language.unsuccessUpdateText,
+              { timeOut: 7000, positionClass: "toast-bottom-right" }
+            );
+          }
+        });
+      }
+
+    } else {
+      this.toastr.success(
+        this.language.unsuccessUpdateTitle,
+        this.language.unsuccessUpdateText,
+        { timeOut: 7000, positionClass: "toast-bottom-right" }
+      );
+    }
+  }
+
 }
 
 
