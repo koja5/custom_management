@@ -160,7 +160,7 @@
           <div class="overview-scheduler">
             <ejs-schedule *ngIf="eventSettings.dataSource.length&&resources" #scheduleObj cssClass='schedule-overview'
               height='100%' [(currentView)]="currentView" timezone='UTC' [group]="group" [eventSettings]="eventSettings"
-              (renderCell)="onRenderCell($event)" (actionComplete)="buttonClickActions($event)">
+              (renderCell)="onRenderCell($event)" (actionComplete)="buttonActions($event)" (popupOpen)="onPopupOpen($event)">
               <ng-template #dateHeaderTemplate let-data>
                 <div class="date-text">{{getDateHeaderText(data.date)}}</div>
               </ng-template>
@@ -191,16 +191,16 @@
                 </e-resource>
               </e-resources>
               <!-- Header template -->
-              <ng-template #quickInfoTemplatesHeader let-data>
+              <!-- <ng-template #quickInfoTemplatesHeader let-data>
                 <div class="quick-info-header">
                   <div class="quick-info-header-content" [ngStyle]="getHeaderStyles(data)">
                     <div class="quick-info-title">{{getHeaderTitle(data)}}</div>
                     <div class="duration-text">{{getHeaderDetails(data)}}</div>
                   </div>
                 </div>
-              </ng-template>
+              </ng-template> -->
               <!-- Content Template -->
-              <ng-template #quickInfoTemplatesContent let-data>
+              <!-- <ng-template #quickInfoTemplatesContent let-data>
                 <ng-container [ngTemplateOutlet]="data.elementType == 'cell' ? cellContent : eventContent"
                   [ngTemplateOutletContext]="{data:data}"></ng-container>
               </ng-template>
@@ -221,8 +221,8 @@
                     </div>
                   </div>
                 </div>
-              </ng-template>
-              <ng-template #eventContent let-data="data">
+              </ng-template> -->
+              <!-- <ng-template #eventContent let-data="data">
                 <div class="quick-info-content" [style.background]="red">
                   <div class="event-content">
                     <div class="meeting-type-wrap">
@@ -239,12 +239,12 @@
                     </div>
                   </div>
                 </div>
-              </ng-template>
+              </ng-template> -->
               <!-- Footer Template -->
-              <ng-template #quickInfoTemplatesFooter let-data>
+              <!-- <ng-template #quickInfoTemplatesFooter let-data>
                 <ng-container [ngTemplateOutlet]="data.elementType == 'cell' ? cellFooter : eventFooter"
                   [ngTemplateOutletContext]="{data:data}"></ng-container>
-              </ng-template>
+              </ng-template> -->
               <ng-template #cellFooter let-data="data">
                 <div class="e-cell-footer">
                   <button ejs-button id="more-details" cssClass="e-flat" (click)="buttonClickActions($event)">More
@@ -372,13 +372,13 @@
                 <div class="k-form-field k-datetime-picker-wrapper">
                   <div class="col-sm-8">
                     <kendo-textbox-container floatingLabel="{{language.start}}">
-                      <kendo-datepicker [format]="'dd.MM.yyyy'" class="dateWidth" [(ngModel)]='data.start'>
+                      <kendo-datepicker [format]="'dd.MM.yyyy'" class="dateWidth" [(ngModel)]='eventTime.start'>
                       </kendo-datepicker>
                     </kendo-textbox-container>
                   </div>
                   <div class="col-sm-4">
                     <kendo-textbox-container floatingLabel="{{language.startTime}}">
-                      <kendo-timepicker [(ngModel)]='data.start'>
+                      <kendo-timepicker [(ngModel)]='eventTime.start'>
                       </kendo-timepicker>
                     </kendo-textbox-container>
                   </div>
@@ -386,13 +386,13 @@
                 <div class="k-form-field k-datetime-picker-wrapper">
                   <div class="col-sm-8">
                     <kendo-textbox-container floatingLabel="{{language.end}}">
-                      <kendo-datepicker [format]="'dd.MM.yyyy'" class="dateWidth" [(ngModel)]="data.end">
+                      <kendo-datepicker [format]="'dd.MM.yyyy'" class="dateWidth" [(ngModel)]="eventTime.end">
                       </kendo-datepicker>
                     </kendo-textbox-container>
                   </div>
                   <div class="col-sm-4">
                     <kendo-textbox-container floatingLabel="{{language.endTime}}">
-                      <kendo-timepicker [(ngModel)]="data.end">
+                      <kendo-timepicker [(ngModel)]="eventTime.end">
                       </kendo-timepicker>
                     </kendo-textbox-container>
                   </div>

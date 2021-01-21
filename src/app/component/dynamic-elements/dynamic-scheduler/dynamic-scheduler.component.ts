@@ -7,7 +7,7 @@ import { SelectedEventArgs, TextBoxComponent } from '@syncfusion/ej2-angular-inp
 import {
   ScheduleComponent, GroupModel, DayService, WeekService, WorkWeekService, MonthService, YearService, AgendaService,
   TimelineViewsService, TimelineMonthService, TimelineYearService, View, EventSettingsModel, Timezone, CurrentAction,
-  CellClickEventArgs, ResourcesModel, EJ2Instance
+  CellClickEventArgs, ResourcesModel, EJ2Instance, PopupOpenEventArgs
 } from '@syncfusion/ej2-angular-schedule';
 import { addClass, extend, removeClass, closest, remove, isNullOrUndefined, Internationalization } from '@syncfusion/ej2-base';
 import { ChangeEventArgs as SwitchEventArgs } from '@syncfusion/ej2-angular-buttons';
@@ -489,7 +489,7 @@ export class DynamicSchedulerComponent implements OnInit {
       addObj.CalendarId = ((quickPopup.querySelector('#eventType') as EJ2Instance).ej2_instances[0] as DropDownListComponent).value;
       return addObj;
     };
-    if ((e.target as HTMLElement).id === 'add') {
+    if (e['addedRecords'].length) {
       const addObj: { [key: string]: Object } = getSlotData();
       this.scheduleObj.addEvent(addObj);
     } else if ((e.target as HTMLElement).id === 'delete') {
@@ -498,6 +498,7 @@ export class DynamicSchedulerComponent implements OnInit {
       if (eventDetails.RecurrenceRule) {
         currentAction = 'DeleteOccurrence';
       }
+      this.deleteTask(eventDetails);
       this.scheduleObj.deleteEvent(eventDetails, currentAction);
     } else {
       const isCellPopup: boolean = quickPopup.firstElementChild.classList.contains('e-cell-popup');
@@ -515,6 +516,122 @@ export class DynamicSchedulerComponent implements OnInit {
       this.scheduleObj.openEditor(eventDetails, currentAction, true);
     }
     this.scheduleObj.closeQuickInfoPopup();
+  }
+
+  createNewTask() {
+    let formValue = null;
+    formValue.colorTask = this.selected;
+    formValue.telephone = this.telephoneValue;
+    formValue.user = this.customerUser;
+    formValue.mobile = this.mobileValue;
+    formValue.title =
+      this.customerUser["lastname"] +
+      " " +
+      this.customerUser["firstname"] +
+      "+" +
+      this.complaintData.complaint_title;
+    formValue.superadmin = localStorage.getItem("superadmin");
+    /*if (this.type !== 3 && selectedUser !== undefined) {
+      formValue.creator_id = selectedUser;
+    } else {
+      formValue.creator_id = localStorage.getItem("idUser");
+    }*/
+    formValue = this.colorMapToId(formValue);
+    this.addTherapy(this.customerUser["id"]);
+    formValue.title =
+      this.customerUser["lastname"] +
+      " " +
+      this.customerUser["firstname"] +
+      "+" +
+      this.complaintData.complaint_title;
+    this.complaintData.date = this.formatDate(
+      this.eventTime.start,
+      this.eventTime.end
+    );
+    if (this.isConfirm) {
+      formValue.confirm = 0;
+    } else {
+      formValue.confirm = -1;
+    }
+    this.customer.addTherapy(this.complaintData).subscribe((data) => {
+      if (data["success"]) {
+        formValue.therapy_id = data["id"];
+        if (this.type === 0) {
+          formValue["storeId"] = this.selectedStoreId;
+        }
+        this.service.createTask(formValue, (val) => {
+          console.log(val);
+          if (val.success) {
+            this.service.create(formValue);
+            this.toastr.success(
+              this.language.successUpdateTitle,
+              this.language.successUpdateText,
+              { timeOut: 7000, positionClass: "toast-bottom-right" }
+            );
+          } else {
+            this.toastr.error(
+              this.language.unsuccessUpdateTitle,
+              this.language.unsuccessUpdateText,
+              { timeOut: 7000, positionClass: "toast-bottom-right" }
+            );
+          }
+        });
+
+        console.log(this.data);
+        const customerAttentionAndPhysical = {
+          id: this.customerUser["id"],
+          attention: this.customerUser["attention"],
+          physicalComplaint: this.customerUser["physicalComplaint"],
+        };
+        console.log(customerAttentionAndPhysical);
+        this.customer
+          .updateAttentionAndPhysical(customerAttentionAndPhysical)
+          .subscribe((data) => {
+            console.log(data);
+          });
+      } else {
+        this.toastr.error(
+          this.language.unsuccessUpdateTitle,
+          this.language.unsuccessUpdateText,
+          { timeOut: 7000, positionClass: "toast-bottom-right" }
+        );
+      }
+    });
+  }
+
+  onPopupOpen(args: PopupOpenEventArgs): void {
+    if (args.type === 'QuickInfo') {
+      args.cancel = true;
+    } else if (args.type === 'Editor') {
+      // args.cancel = true;
+      if (args.data['id']) {
+        this.getSelectEventData(args.data);
+      }
+    }
+  }
+
+  buttonActions(event) {
+    console.log(event);
+    if (event.requestType === 'eventChanged') {
+      if (event['changedRecords'].length) {
+
+      }
+    } else if (event.requestType === 'eventRemoved') {
+      if (event['deletedRecords'].length) {
+        if (event['deletedRecords'][0]) {
+          this.deleteTask(event['deletedRecords'][0]);
+        }
+      }
+    }
+  }
+
+  getSelectEventData(eventDetails) {
+    const quickPopup: HTMLElement = this.scheduleObj.element.querySelector('.e-quick-popup-wrapper') as HTMLElement;
+    this.createFormGroup(eventDetails);
+    eventDetails.start = this.convertToDate(eventDetails.start.toString());
+    eventDetails.end = this.convertToDate(eventDetails.end.toString());
+
+    // this.scheduleObj.openEditor(eventDetails, 'Save', true);
   }
 
   public onContextMenuBeforeOpen(args: BeforeOpenCloseMenuEventArgs): void {
@@ -670,6 +787,10 @@ export class DynamicSchedulerComponent implements OnInit {
   public allEvents = [];
   private instance: Internationalization = new Internationalization();
   public sharedCalendarResources: any;
+  public eventTime = {
+    start: null,
+    end: null
+  };
 
   constructor(
     public service: TaskService,
@@ -1720,6 +1841,11 @@ export class DynamicSchedulerComponent implements OnInit {
         recurrenceId: dataItem.recurrenceId,
       };
 
+      this.eventTime = dataItem.start;
+      this.eventTime.end = timeDurationInd
+        ? dataItem.start + timeDuration * 60000
+        : dataItem.end;
+
       setTimeout(() => {
         if (dataItem.therapy_id !== undefined) {
           this.customer.getTherapy(dataItem.therapy_id).subscribe((data) => {
@@ -1807,8 +1933,8 @@ export class DynamicSchedulerComponent implements OnInit {
           "+" +
           this.complaintData.complaint_title;
         this.complaintData.date = this.formatDate(
-          formValue.start,
-          formValue.end
+          this.eventTime.start,
+          this.eventTime.end
         );
         if (this.isConfirm) {
           formValue.confirm = 0;
@@ -1869,8 +1995,8 @@ export class DynamicSchedulerComponent implements OnInit {
           "+" +
           this.complaintData.complaint_title;
         this.complaintData.date = this.formatDate(
-          formValue.start,
-          formValue.end
+          this.eventTime.start,
+          this.eventTime.end
         );
         if (this.isConfirm) {
           formValue.confirm = 0;
@@ -1922,6 +2048,73 @@ export class DynamicSchedulerComponent implements OnInit {
         this.language.unsuccessUpdateText,
         { timeOut: 7000, positionClass: "toast-bottom-right" }
       );
+    }
+  }
+
+  deleteTask(dataItem): void {
+    this.service.deleteTask(dataItem.id).subscribe((data) => {
+      if (data) {
+        this.customer
+          .deleteTherapy(dataItem.therapy_id)
+          .subscribe((data_therapy) => {
+            if (data_therapy) {
+              this.toastr.success(
+                this.language.unsuccessUpdateTitle,
+                this.language.unsuccessUpdateText,
+                { timeOut: 7000, positionClass: "toast-bottom-right" }
+              );
+            }
+            // this.scheduleObj.deleteEvent(dataItem.Id);
+            this.scheduleObj.refresh();
+          });
+      }
+    });
+  }
+
+  searchCustomer(event) {
+    console.log(event);
+    if (event !== "" && event.length > 2) {
+      this.customerLoading = true;
+      const searchFilter = {
+        superadmin: localStorage.getItem("superadmin"),
+        filter: event,
+      };
+      this.customer.searchCustomer(searchFilter).subscribe((val: []) => {
+        console.log(val);
+        this.customerUsers = val.sort((a, b) =>
+          String(a["shortname"]).localeCompare(String(b["shortname"]))
+        );
+        this.customerLoading = false;
+      });
+    } else {
+      this.customerUsers = [];
+    }
+  }
+
+  onValueChange(event) {
+    console.log(event);
+    if (event !== undefined) {
+      this.customerUser = event;
+      this.telephoneValue = event.telephone;
+      this.mobileValue = event.mobile;
+      this.isConfirm = event.isConfirm;
+      this.getComplaintAndTherapyForCustomer(event.id);
+      this.baseDataIndicator = true;
+      this.userWidth = "65%";
+    } else {
+      this.customerUser = {
+        attention: "",
+        physicalComplaint: "",
+      };
+      this.telephoneValue = null;
+      this.mobileValue = null;
+      this.isConfirm = false;
+      this.baseDataIndicator = false;
+      this.selectedComplaint = null;
+      this.selectedTherapies = null;
+      this.selectedTreatments = null;
+      this.complaintData = new ComplaintTherapyModel();
+      this.userWidth = "22%";
     }
   }
 
