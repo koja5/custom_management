@@ -159,8 +159,9 @@
         <div class="left-panel" [style.height]="height">
           <div class="overview-scheduler">
             <ejs-schedule *ngIf="eventSettings.dataSource.length&&resources" #scheduleObj cssClass='schedule-overview'
-              height='100%' [(currentView)]="currentView" timezone='UTC' [group]="group" [eventSettings]="eventSettings"
-              (renderCell)="onRenderCell($event)" (actionComplete)="buttonActions($event)" (popupOpen)="onPopupOpen($event)">
+              height='100%' [(currentView)]="currentView" [group]="group" [eventSettings]="eventSettings"
+              (renderCell)="onRenderCell($event)" (actionBegin)="onActionBegin($event)"
+              (popupOpen)="onPopupOpen($event)">
               <ng-template #dateHeaderTemplate let-data>
                 <div class="date-text">{{getDateHeaderText(data.date)}}</div>
               </ng-template>
@@ -263,19 +264,19 @@
               <ng-template #editorTemplate let-data>
                 <div class="k-form-field" style="text-align: center; margin: 0px !important;">
                   <div class="col-sm-6" style="margin-bottom: 2vh;">
-                    <div class="row mgbt-xs-0">
+                    <div class="mgbt-xs-0">
                       <label class="col-xs-12 control-label"
                         style="color: red; text-align: left;">{{languageUser.attention}}:</label>
-                      <textarea kendoTextArea class="textAreaInput"
+                      <textarea kendoTextArea class="col-xs-12 textAreaInput"
                         [(ngModel)]="customerUser.attention">{{customerUser.attention}}</textarea>
                       <!-- col-sm-10 -->
                     </div>
                   </div>
                   <div class="col-sm-6" style="margin-bottom: 2vh;">
-                    <div class="row mgbt-xs-0">
+                    <div class="mgbt-xs-0">
                       <label class="col-xs-12 control-label"
                         style="text-align: left;">{{languageUser.physicalComplaint}}:</label>
-                      <textarea kendoTextArea class="textAreaInput"
+                      <textarea kendoTextArea class="col-xs-12 textAreaInput"
                         [(ngModel)]="customerUser.physicalComplaint">{{customerUser.physicalComplaint}}</textarea>
                       <!-- col-sm-10 -->
                     </div>

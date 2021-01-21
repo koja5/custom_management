@@ -7,7 +7,7 @@ import { SelectedEventArgs, TextBoxComponent } from '@syncfusion/ej2-angular-inp
 import {
   ScheduleComponent, GroupModel, DayService, WeekService, WorkWeekService, MonthService, YearService, AgendaService,
   TimelineViewsService, TimelineMonthService, TimelineYearService, View, EventSettingsModel, Timezone, CurrentAction,
-  CellClickEventArgs, ResourcesModel, EJ2Instance, PopupOpenEventArgs
+  CellClickEventArgs, ResourcesModel, EJ2Instance, PopupOpenEventArgs, ActionEventArgs
 } from '@syncfusion/ej2-angular-schedule';
 import { addClass, extend, removeClass, closest, remove, isNullOrUndefined, Internationalization } from '@syncfusion/ej2-base';
 import { ChangeEventArgs as SwitchEventArgs } from '@syncfusion/ej2-angular-buttons';
@@ -30,6 +30,7 @@ import { CustomersComponent } from '../../dashboard/customers/customers.componen
 import { SchedulerComponent, SchedulerEvent } from '@progress/kendo-angular-scheduler';
 import { FormGroup, Validators } from '@angular/forms';
 import { Modal } from 'ngx-modal';
+import { EventModel } from 'src/app/models/event.model';
 declare var moment: any;
 
 @Component({
@@ -519,7 +520,7 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   createNewTask() {
-    let formValue = null;
+    let formValue = new EventModel();
     formValue.colorTask = this.selected;
     formValue.telephone = this.telephoneValue;
     formValue.user = this.customerUser;
@@ -530,12 +531,14 @@ export class DynamicSchedulerComponent implements OnInit {
       this.customerUser["firstname"] +
       "+" +
       this.complaintData.complaint_title;
+    formValue.start = this.eventTime.start;
+    formValue.end = this.eventTime.end;
     formValue.superadmin = localStorage.getItem("superadmin");
-    /*if (this.type !== 3 && selectedUser !== undefined) {
-      formValue.creator_id = selectedUser;
+    if (this.type !== 3 && this.creatorEvent !== undefined) {
+      formValue.creator_id = this.creatorEvent;
     } else {
       formValue.creator_id = localStorage.getItem("idUser");
-    }*/
+    }
     formValue = this.colorMapToId(formValue);
     this.addTherapy(this.customerUser["id"]);
     formValue.title =
@@ -562,7 +565,18 @@ export class DynamicSchedulerComponent implements OnInit {
         this.service.createTask(formValue, (val) => {
           console.log(val);
           if (val.success) {
-            this.service.create(formValue);
+            /*const eventForScheduler = {
+              title: formValue.title,
+              StartTime: new Date(formValue.start),
+              EndTime: new Date(formValue.end)
+            };
+
+            formValue['StartTime'] = new Date(formValue.start);
+            formValue['EndTime'] = new Date(formValue.end);
+
+            this.allEvents.push(formValue);
+*/
+            this.initializaionData();
             this.toastr.success(
               this.language.successUpdateTitle,
               this.language.successUpdateText,
@@ -600,14 +614,22 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   onPopupOpen(args: PopupOpenEventArgs): void {
+    this.setTimeForEditor(args);
     if (args.type === 'QuickInfo') {
       args.cancel = true;
     } else if (args.type === 'Editor') {
-      // args.cancel = true;
-      if (args.data['id']) {
+      this.creatorEvent = args.data['creator_id'];
+      if (!args.data['id']) {
+        this.clearAllSelectedData();
+      } else if (args.data['id']) {
         this.getSelectEventData(args.data);
       }
     }
+  }
+
+  setTimeForEditor(args) {
+    this.eventTime.start = args.data.StartTime;
+    this.eventTime.end = args.data.EndTime;
   }
 
   buttonActions(event) {
@@ -791,6 +813,7 @@ export class DynamicSchedulerComponent implements OnInit {
     start: null,
     end: null
   };
+  public creatorEvent: number;
 
   constructor(
     public service: TaskService,
@@ -1730,12 +1753,6 @@ export class DynamicSchedulerComponent implements OnInit {
         this.selectedStoreId === undefined) &&
       this.type !== 3
     ) {
-      /*Swal.fire({
-        title: this.language.selectStoreIndicatorTitle,
-        text: this.language.selectStoreIndicatorText,
-        timer: 3000,
-        type: "error"
-      });*/
       this.toastr.success(
         this.language.selectStoreIndicatorTitle,
         this.language.selectStoreIndicatorText,
@@ -1746,12 +1763,6 @@ export class DynamicSchedulerComponent implements OnInit {
     } else {
       this.createFormLoading = false;
       const dataItem = args;
-      // this.clearAllSelectedData();
-      /*this.customerUser = new CustomerModel();
-      this.customerUser.attention = '';
-      this.customerUser.physicalComplaint = '';*/
-      /*this.customerUser.attention = '';
-      this.customerUser.physicalComplaint = '';*/
       if (
         typeof dataItem.customer_id === "number" &&
         dataItem.customer_id !== null
@@ -1825,8 +1836,6 @@ export class DynamicSchedulerComponent implements OnInit {
             : dataItem.end,
           Validators.required,
         ],
-        startTimezone: [dataItem.startTimezone],
-        endTimezone: [dataItem.endTimezone],
         isAllDay: dataItem.isAllDay,
         colorTask: dataItem.colorTitle,
         creator_id: Number(localStorage.getItem("idUser")),
@@ -1905,7 +1914,7 @@ export class DynamicSchedulerComponent implements OnInit {
     selectedUser
   ): void {
     if (formGroup.valid) {
-      let formValue = null;
+      let formValue = new EventModel();
       formValue.colorTask = this.selected;
       formValue.telephone = this.telephoneValue;
       formValue.user = this.customerUser;
@@ -1950,7 +1959,7 @@ export class DynamicSchedulerComponent implements OnInit {
             this.service.createTask(formValue, (val) => {
               console.log(val);
               if (val.success) {
-                this.service.create(formValue);
+                // this.service.create(formValue);
                 this.toastr.success(
                   this.language.successUpdateTitle,
                   this.language.successUpdateText,
@@ -2118,6 +2127,15 @@ export class DynamicSchedulerComponent implements OnInit {
     }
   }
 
+  onActionBegin(args: ActionEventArgs) {
+    if (args.requestType === 'eventCreate') {
+      this.createNewTask();
+    }
+    if ((args.requestType === 'eventCreate' || args.requestType === 'eventChange')) {
+      const eventData: any = args.data as any;
+      console.log('Main Event Data : ', eventData);
+    }
+  }
 }
 
 
