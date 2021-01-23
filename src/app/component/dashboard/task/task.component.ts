@@ -929,11 +929,8 @@ export class TaskComponent implements OnInit {
         this.formGroup.patchValue({ telephone: this.data.telephone });
         this.formGroup.patchValue({ mobile: this.data.mobile });
         this.baseDataIndicator = true;
-        this.userWidth = "65%";
         this.reloadNewCustomer();
         this.customerModal = false;
-        // this.data = new UserModel();
-        // form.reset();
       }
     });
   }
@@ -1629,7 +1626,7 @@ export class TaskComponent implements OnInit {
         this.loading = false;
         console.log(document.getElementsByClassName("k-scheduler-toolbar"));
       });
-    }, 100);
+    }, 150);
   }
 
   onValueUserEmChange(event) {

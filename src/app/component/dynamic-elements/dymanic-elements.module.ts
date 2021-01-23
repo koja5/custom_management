@@ -42,6 +42,7 @@ import { ComboBoxModule, DropDownsModule, MultiSelectModule } from "@progress/ke
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
+import { DialogsModule } from '@progress/kendo-angular-dialog';
 
 @NgModule({
   declarations: [DynamicGridComponent, DynamicFormsComponent, DynamicSchedulerComponent],
@@ -82,7 +83,8 @@ import { ButtonsModule } from '@progress/kendo-angular-buttons';
     LayoutModule,
     InputsModule,
     DateInputsModule,
-    ButtonsModule
+    ButtonsModule,
+    DialogsModule
   ],
   providers: [EditService, ToolbarService, SortService, FilterService, PageService, GroupService, ResizeService],
   entryComponents: [TextboxComponent, TextareaComponent, DatepickerComponent, ButtonComponent, DropdownComponent]

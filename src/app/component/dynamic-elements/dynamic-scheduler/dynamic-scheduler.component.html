@@ -158,8 +158,8 @@
         </div>
         <div class="left-panel" [style.height]="height">
           <div class="overview-scheduler">
-            <ejs-schedule *ngIf="eventSettings.dataSource.length&&resources" #scheduleObj cssClass='schedule-overview'
-              height='100%' [(currentView)]="currentView" [group]="group" [eventSettings]="eventSettings"
+            <ejs-schedule *ngIf="!loading&&resources" #scheduleObj cssClass='e-control schedule-overview' height='100%'
+              [(currentView)]="currentView" [group]="group" [eventSettings]="eventSettings"
               (renderCell)="onRenderCell($event)" (actionBegin)="onActionBegin($event)"
               (popupOpen)="onPopupOpen($event)">
               <ng-template #dateHeaderTemplate let-data>
@@ -283,6 +283,19 @@
                   </div>
                 </div>
                 <div class="k-form-field">
+
+                  <div class="mb-3 center">
+                    <button kendoButton [icon]="'user'" [primary]="true" class="patient-options"
+                      (click)="newCustomer()">
+                      {{languageUser.newCustomer}}
+                    </button>
+
+                    <!-- <button kendoButton [icon]="'k-icon k-i-information'" class="ml-2 patient-options" [primary]="true"
+                      (click)="baseDataForUser()" *ngIf="baseDataIndicator">
+                      {{languageUser.baseDate}}
+                    </button> -->
+                  </div>
+
                   <div style="width:100%">
                     <kendo-textbox-container floatingLabel="{{languageUser.patient}}">
                       <kendo-combobox [data]="customerUsers" [textField]="'shortname'" [valueField]="'id'"
@@ -297,17 +310,6 @@
                         </ng-template>
                       </kendo-combobox>
                     </kendo-textbox-container>
-                  </div>
-                  <div style="margin-top: 15px;" style.width="{{userWidth}}">
-                    <button kendoButton [icon]="'user'" [primary]="true" class="patient-options"
-                      (click)="newCustomer()">
-                      {{languageUser.newCustomer}}
-                    </button>
-
-                    <button kendoButton [icon]="'k-icon k-i-information'" class="patient-options" [primary]="true"
-                      (click)="baseDataForUser()" *ngIf="baseDataIndicator">
-                      {{languageUser.baseDate}}
-                    </button>
                   </div>
                 </div>
                 <div class="k-form-field">
@@ -530,3 +532,123 @@
     </div>
   </div>
 </div>
+
+
+<!-- MODALS -->
+<kendo-window title="Create new patient" *ngIf="customerModal" [minWidth]="700" [width]="850" [minHeight]="300"
+  (close)="customerModal = false; reloadNewCustomer()">
+  <form name="loginForm" class="loginForm" (ngSubmit)="createCustomer(customer)" #customerForm="ngForm">
+    <div class="form-group">
+      <div class="panel-body">
+        <div class="text-center vd_info-parent col-md-4 col-xs-12">
+          <img *ngIf="data.gender === ''" alt="example image" style="width: 190px;"
+            src="../../../../assets/images/users/{{imagePath}}.png" class="rounded-circle">
+          <img *ngIf="data.gender !== '' && data.gender === 'male'" alt="example image" style="width: 190px;"
+            src="../../../../assets/images/users/male-patient.png" class="rounded-circle">
+          <img *ngIf="data.gender !== '' && data.gender === 'female'" alt="example image" style="width: 190px;"
+            src="../../../../assets/images/users/female-patient.png" class="rounded-circle">
+          <h2 class="font-semibold">{{data.firstname}} {{data.lastname}}</h2>
+        </div>
+        <div class="col-md-8 col-xs-12">
+          <div class="col-sm-6" style="margin-bottom: 3vh;">
+            <div class="row mgbt-xs-0">
+              <kendo-textbox-container floatingLabel="{{language.attention}}">
+                <textarea kendoTextArea [(ngModel)]="data.attention" [autoSize]="true" name="attention"
+                  style="width: 95%;"></textarea>
+              </kendo-textbox-container>
+            </div>
+          </div>
+          <div class="col-sm-6" style="margin-bottom: 3vh;">
+            <div class="row mgbt-xs-0">
+              <kendo-textbox-container floatingLabel="{{language.physicalComplaint}}">
+                <textarea kendoTextArea [(ngModel)]="data.physicalComplaint" [autoSize]="true" name="physicalComplaint"
+                  style="width: 95%;"></textarea>
+              </kendo-textbox-container>
+            </div>
+          </div>
+          <div>
+            <kendo-textbox-container floatingLabel="{{language.firstname}}({{language.required}})">
+              <input kendoTextBox [(ngModel)]="data.firstname" name="firstname" class="noPadding" required
+                #firstname="ngModel">
+            </kendo-textbox-container>
+          </div>
+          <div>
+            <kendo-textbox-container floatingLabel="{{language.lastname}}({{language.required}})">
+              <input kendoTextBox [(ngModel)]="data.lastname" name="lastname" class="noPadding" required
+                #lastname="ngModel">
+            </kendo-textbox-container>
+          </div>
+          <div class="form-group col-md-12 col-xs-12">
+            <div class="col-md-6 col-xs-12" style="padding-top: 5px;">
+              <p style="font-size: 10px; color: #0000006b;">{{language.gender}}</p>
+              <label class="k-radio-label col-md-6 col-xs-12" for="female">
+                <input type="radio" name="gender" id="female" class="k-radio"
+                  checked="data.gender === 'female' ? checked : ''" [(ngModel)]="data.gender" [value]="'female'">
+                {{language.female}}</label>
+              <label class="k-radio-label col-md-6 col-xs-12" for="male">
+                <input type="radio" name="gender" id="male" class="k-radio"
+                  checked="data.gender === 'male' ? checked : ''" [(ngModel)]="data.gender" [value]="'male'">
+                {{language.male}}</label>
+            </div>
+            <div class="birthday-container col-md-6 col-xs-12">
+              <kendo-textbox-container floatingLabel="{{language.birthday}}">
+                <kendo-datepicker [format]="'dd.MM.yyyy'" class="email noPadding" name="birthday"
+                  [(ngModel)]="data.birthday" (valueChange)="onChange($event)">
+                </kendo-datepicker>
+              </kendo-textbox-container>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="email col-md-4 col-xs-12">
+        <kendo-textbox-container floatingLabel="{{language.telephone}}">
+          <input kendoTextBox type="text" class="col-xs-12" name="telephone" [(ngModel)]="data.telephone"
+            telephone.value=''>
+        </kendo-textbox-container>
+      </div>
+      <div class="email col-md-4 col-xs-12">
+        <kendo-textbox-container floatingLabel="{{language.mobile}}">
+          <input kendoTextBox type="text" class="col-xs-12" name="mobile" [(ngModel)]="data.mobile" mobile.value=''>
+        </kendo-textbox-container>
+      </div>
+      <div class="email col-md-4 col-xs-12">
+        <kendo-textbox-container floatingLabel="{{language.email}}">
+          <input kendoTextBox type="email" class="col-xs-12" name="email" [(ngModel)]="data.email"
+            [pattern]="emailPattern" #email="ngModel" #email="ngModel">
+        </kendo-textbox-container>
+      </div>
+      <div class="email col-md-4 col-xs-12">
+        <kendo-textbox-container floatingLabel="{{language.street}}">
+          <input kendoTextBox type="text" class="col-xs-12" [(ngModel)]="data.street" name="street">
+        </kendo-textbox-container>
+      </div>
+      <div class="email col-md-4 col-xs-12">
+        <kendo-textbox-container floatingLabel="{{language.streetnumber}}">
+          <input kendoTextBox type="text" class="col-xs-12" [(ngModel)]="data.streetnumber" name="streetnumber">
+        </kendo-textbox-container>
+      </div>
+      <div class="email col-md-4 col-xs-12">
+        <kendo-textbox-container floatingLabel="{{language.city}}">
+          <input kendoTextBox type="text" class="col-xs-12" [(ngModel)]="data.city" name="city">
+        </kendo-textbox-container>
+      </div>
+    </div>
+    <!-- ./remember-row -->
+    <div class="form-group" style="text-align: center">
+      <button kendoButton [disabled]="customerForm.form.invalid" [primary]="true" [primary]="true" class="form-button"
+        type="submit">{{language.createNewCustomer}}</button>
+    </div>
+  </form>
+</kendo-window>
+
+<!-- <kendo-window title="Please provide additional data" *ngIf="customerUserModal2&&customerUser !== undefined"
+  [width]="950" [height]="700" (close)="closebaseDataForUser()">
+  <app-base-date [data]="customerUser" *ngIf="customerUser !== undefined">
+  </app-base-date>
+</kendo-window> -->
+
+
+<!-- END MODALS -->

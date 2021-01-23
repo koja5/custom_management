@@ -54,10 +54,10 @@ import {
 import { DocumentPreviewComponent } from "./document-preview/document-preview.component";
 import { MyNavigationViewComponent } from "./task/my-navigation-view";
 import { MyNavigationComponent } from "./task/my-navigation";
-import { PdfViewerModule } from 'ng2-pdf-viewer';
-import { SharedModule } from 'src/app/shared.module';
-import { TodoComponent } from './administrator/todo/todo.component';
-import { DymanicElementsModule } from '../dynamic-elements/dymanic-elements.module';
+import { PdfViewerModule } from "ng2-pdf-viewer";
+import { SharedModule } from "src/app/shared.module";
+import { TodoComponent } from "./administrator/todo/todo.component";
+import { DymanicElementsModule } from "../dynamic-elements/dymanic-elements.module";
 
 @NgModule({
   declarations: [
@@ -82,7 +82,7 @@ import { DymanicElementsModule } from '../dynamic-elements/dymanic-elements.modu
     TranslationComponent,
     EditTranslationComponent,
     CustomGridComponent,
-    TodoComponent
+    TodoComponent,
   ],
   imports: [
     CommonModule,
@@ -112,13 +112,13 @@ import { DymanicElementsModule } from '../dynamic-elements/dymanic-elements.modu
     FileUploadModule,
     PdfViewerModule,
     SharedModule,
-    DymanicElementsModule
+    DymanicElementsModule,
   ],
   providers: [
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
-    }
+    },
   ],
 })
 export class DashboardModule {}

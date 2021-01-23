@@ -1,4 +1,5 @@
-<body *ngIf="language !== undefined" class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md header-white white-sidebar-color logo-indigo {{sidebar}}">
+<body *ngIf="language !== undefined"
+    class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md header-white white-sidebar-color logo-indigo {{sidebar}}">
     <div class="page-wrapper">
         <!-- start header -->
         <div class="page-header navbar navbar-fixed-top">
@@ -11,20 +12,22 @@
                 </div>
                 <!-- logo end -->
                 <ul class="nav navbar-nav navbar-left in">
-                    <li><a (click)="hideShowSidebar()" class="menu-toggler sidebar-toggler"><i class="fa fa-bars"></i></a></li>
+                    <li><a (click)="hideShowSidebar()" class="menu-toggler sidebar-toggler"><i
+                                class="fa fa-bars"></i></a></li>
                 </ul>
                 <form class="search-form-opened" action="#" method="GET">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Search..." name="query">
                         <span class="input-group-btn">
-              <a href="javascript:;" class="btn submit">
-                <i class="icon-magnifier"></i>
-              </a>
-            </span>
+                            <a href="javascript:;" class="btn submit">
+                                <i class="icon-magnifier"></i>
+                            </a>
+                        </span>
                     </div>
                 </form>
                 <!-- start mobile menu -->
-                <a (click)="hideShowSidebarMobile()" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
+                <a (click)="hideShowSidebarMobile()" class="menu-toggler responsive-toggler" data-toggle="collapse"
+                    data-target=".navbar-collapse">
                     <span></span>
                 </a>
                 <!-- end mobile menu -->
@@ -36,12 +39,16 @@
                     <ul class="nav navbar-nav pull-right">
                         <!-- start manage user dropdown -->
                         <li class="dropdown dropdown-user" *ngIf="user !== undefined">
-                            <a (click)="showHideProfile()" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                <img *ngIf="imagePath !== undefined" [src]="imagePath" alt="user" class="rounded-circle">
-                                <span class="username username-hide-on-mobile" *ngIf="user.lastname !== '' && user.firstname !== ''">
-                  {{user.lastname}} {{user.firstname}} </span>
-                                <span class="username username-hide-on-mobile" *ngIf="user.lastname === '' || user.firstname === ''">
-                  {{user.shortname}} </span>
+                            <a (click)="showHideProfile()" class="dropdown-toggle" data-toggle="dropdown"
+                                data-hover="dropdown" data-close-others="true">
+                                <img *ngIf="imagePath !== undefined" [src]="imagePath" alt="user"
+                                    class="rounded-circle">
+                                <span class="username username-hide-on-mobile"
+                                    *ngIf="user.lastname !== '' && user.firstname !== ''">
+                                    {{user.lastname}} {{user.firstname}} </span>
+                                <span class="username username-hide-on-mobile"
+                                    *ngIf="user.lastname === '' || user.firstname === ''">
+                                    {{user.shortname}} </span>
                                 <i class="fa fa-angle-down"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-default {{profile}}">
@@ -82,9 +89,12 @@
             <!-- start sidebar menu -->
             <div class="sidebar-container">
                 <div class="sidemenu-container navbar-collapse collapse fixed-menu {{sidebarMobile}}">
-                    <div id="remove-scroll" class="left-sidemenu" style.height="{{sidebarHeight}}" style="overflow: auto">
+                    <div id="remove-scroll" class="left-sidemenu" style.height="{{sidebarHeight}}"
+                        style="overflow: auto">
                         <perfect-scrollbar style.height="{{sidebarHeight}}" [config]="config">
-                            <ul class="sidemenu  page-header-fixed slimscroll-style {{sidebar}}" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="padding-top: 20px">
+                            <ul class="sidemenu  page-header-fixed slimscroll-style {{sidebar}}"
+                                data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200"
+                                style="padding-top: 20px">
                                 <li class="sidebar-toggler-wrapper hide">
                                     <div class="sidebar-toggler">
                                         <span></span>
@@ -93,105 +103,135 @@
                                 <li class="sidebar-user-panel">
                                     <div class="user-panel">
                                         <div class="pull-left image">
-                                            <img *ngIf="imagePath !== undefined" [src]="imagePath" alt="user" class="img-circle user-img-circle">
+                                            <img *ngIf="imagePath !== undefined" [src]="imagePath" alt="user"
+                                                class="img-circle user-img-circle">
                                         </div>
                                         <div class="pull-left info" *ngIf="user !== undefined">
-                                            <p *ngIf="user.lastname !== '' && user.firstname !== ''"> {{user.lastname}} {{user.firstname}}</p>
-                                            <p *ngIf="user.lastname === '' || user.firstname === ''"> {{user.shortname}} </p>
+                                            <p *ngIf="user.lastname !== '' && user.firstname !== ''"> {{user.lastname}}
+                                                {{user.firstname}}</p>
+                                            <p *ngIf="user.lastname === '' || user.firstname === ''"> {{user.shortname}}
+                                            </p>
                                             <a href="#"><i class="fa fa-circle user-online"></i><span class="txtOnline">
-                          Online</span></a>
+                                                    Online</span></a>
                                         </div>
                                     </div>
                                 </li>
 
-                                <li *ngIf="user && user.id === 4" class="nav-item {{selectedNodeModel.translation}}"><a (click)="returnActiveNode('translation')" routerLink="/dashboard/home/translation" class="nav-link"><i class="fa fa-tasks"></i><span
-                      class="title">{{language['translation']}}</span></a>
+                                <li *ngIf="user && user.id === 4" class="nav-item {{selectedNodeModel.translation}}"><a
+                                        (click)="returnActiveNode('translation')"
+                                        routerLink="/dashboard/home/translation" class="nav-link"><i
+                                            class="fa fa-tasks"></i><span
+                                            class="title">{{language['translation']}}</span></a>
                                 </li>
-                                <li *ngIf="user && user.id === 4" class="nav-item {{selectedNodeModel.todo}}"><a (click)="returnActiveNode('todo')" routerLink="/dashboard/home/todo" class="nav-link"><i
-                      class="fa fa-clipboard"></i><span class="title">{{language['todo']}}</span></a>
+                                <li *ngIf="user && user.id === 4" class="nav-item {{selectedNodeModel.todo}}"><a
+                                        (click)="returnActiveNode('todo')" routerLink="/dashboard/home/todo"
+                                        class="nav-link"><i class="fa fa-clipboard"></i><span
+                                            class="title">{{language['todo']}}</span></a>
                                 </li>
-                                <li class="nav-item {{selectedNodeModel.task}}"><a (click)="returnActiveNode('task')" routerLink="/dashboard/home/task" class="nav-link"><i class="fa fa-calendar"></i><span
-                      class="title">{{language['calendar']}}</span></a>
+                                <li class="nav-item {{selectedNodeModel.task}}"><a (click)="returnActiveNode('task')"
+                                        routerLink="/dashboard/home/task" class="nav-link"><i
+                                            class="fa fa-calendar"></i><span
+                                            class="title">{{language['calendar']}}</span></a>
                                 </li>
-                                <li class="nav-item {{selectedNodeModel.task}}"><a (click)="returnActiveNode('task')" routerLink="/dashboard/home/calendar" class="nav-link"><i class="fa fa-calendar"></i><span
-                      class="title">Calendar 2.0</span></a>
+                                <li class="nav-item {{selectedNodeModel.customers}}"><a
+                                        (click)="returnActiveNode('customers')" routerLink="/dashboard/home/customers"
+                                        class="nav-link"><i class="fa fa-wheelchair"></i><span
+                                            class="title">{{language['customer']}}</span></a>
                                 </li>
-                                <li class="nav-item {{selectedNodeModel.customers}}"><a (click)="returnActiveNode('customers')" routerLink="/dashboard/home/customers" class="nav-link"><i class="fa fa-wheelchair"></i><span
-                      class="title">{{language['customer']}}</span></a>
+                                <li *ngIf="type === 0 || type === 1" class="nav-item {{selectedNodeModel.users}}"><a
+                                        (click)="returnActiveNode('users')" routerLink="/dashboard/home/users"
+                                        class="nav-link"><i class="fa fa-user"></i><span
+                                            class="title">{{language['users']}}</span></a>
                                 </li>
-                                <li *ngIf="type === 0 || type === 1" class="nav-item {{selectedNodeModel.users}}"><a (click)="returnActiveNode('users')" routerLink="/dashboard/home/users" class="nav-link"><i
-                      class="fa fa-user"></i><span class="title">{{language['users']}}</span></a>
+                                <li *ngIf="type === 0 || type === 1" class="nav-item {{selectedNodeModel.store}}"><a
+                                        (click)="returnActiveNode('store')" routerLink="/dashboard/home/store"
+                                        class="nav-link"><i class="fa fa-hospital-o"></i><span
+                                            class="title">{{language['store']}}</span></a>
                                 </li>
-                                <li *ngIf="type === 0 || type === 1" class="nav-item {{selectedNodeModel.store}}"><a (click)="returnActiveNode('store')" routerLink="/dashboard/home/store" class="nav-link"><i
-                      class="fa fa-hospital-o"></i><span class="title">{{language['store']}}</span></a>
+                                <li class="nav-item {{selectedNodeModel.vaucher}}"><a
+                                        (click)="returnActiveNode('vaucher')" routerLink="/dashboard/home/vaucher"
+                                        class="nav-link"><i class="fa fa-money"></i><span
+                                            class="title">{{language['vaucher']}}</span></a>
                                 </li>
-                                <li class="nav-item {{selectedNodeModel.vaucher}}"><a (click)="returnActiveNode('vaucher')" routerLink="/dashboard/home/vaucher" class="nav-link"><i class="fa fa-money"></i><span
-                      class="title">{{language['vaucher']}}</span></a>
-                                </li>
-                                <li *ngIf="type === 0 || type === 1" class="nav-item {{subMenuInd}}"><a (click)="showHideSubMenu()" class="nav-link"><i class="fa fa-cube"></i><span class="title">{{language['parameters']}}</span></a>
+                                <li *ngIf="type === 0 || type === 1" class="nav-item {{subMenuInd}}"><a
+                                        (click)="showHideSubMenu()" class="nav-link"><i class="fa fa-cube"></i><span
+                                            class="title">{{language['parameters']}}</span></a>
                                     <ul class="sub-menu">
                                         <li class="nav-item {{selectedNodeModel.complaint}}">
-                                            <a routerLink="/dashboard/home/complaint" (click)="returnActiveNode('complaint')" class="nav-link">
+                                            <a routerLink="/dashboard/home/complaint"
+                                                (click)="returnActiveNode('complaint')" class="nav-link">
                                                 <span class="fa fa-list-alt"></span> Complaint
                                             </a>
                                         </li>
                                         <li class="nav-item {{selectedNodeModel.therapy}}">
-                                            <a routerLink="/dashboard/home/therapy" (click)="returnActiveNode('therapy')" class="nav-link">
+                                            <a routerLink="/dashboard/home/therapy"
+                                                (click)="returnActiveNode('therapy')" class="nav-link">
                                                 <span class="fa fa-medkit"></span> Therapy
                                             </a>
                                         </li>
                                         <li class="nav-item {{selectedNodeModel.treatment}}">
-                                            <a routerLink="/dashboard/home/treatment" (click)="returnActiveNode('treatment')" class="nav-link">
+                                            <a routerLink="/dashboard/home/treatment"
+                                                (click)="returnActiveNode('treatment')" class="nav-link">
                                                 <span class="fa fa-medkit"></span> Treatment
                                             </a>
                                         </li>
                                         <li class="nav-item {{selectedNodeModel.recommendation}}">
-                                            <a routerLink="/dashboard/home/recommendation" (click)="returnActiveNode('recommendation')" class="nav-link">
+                                            <a routerLink="/dashboard/home/recommendation"
+                                                (click)="returnActiveNode('recommendation')" class="nav-link">
                                                 <span class="fa fa-check"></span> Recommendation
                                             </a>
                                         </li>
                                         <li class="nav-item {{selectedNodeModel.relationship}}">
-                                            <a routerLink="/dashboard/home/relationship" (click)="returnActiveNode('relationship')" class="nav-link">
+                                            <a routerLink="/dashboard/home/relationship"
+                                                (click)="returnActiveNode('relationship')" class="nav-link">
                                                 <span class="fa fa-exchange"></span> Relationship
                                             </a>
                                         </li>
                                         <li class="nav-item {{selectedNodeModel.social}}">
-                                            <a routerLink="/dashboard/home/social" (click)="returnActiveNode('social')" class="nav-link">
+                                            <a routerLink="/dashboard/home/social" (click)="returnActiveNode('social')"
+                                                class="nav-link">
                                                 <span class="fa fa-life-ring"></span> Social
                                             </a>
                                         </li>
                                         <li class="nav-item {{selectedNodeModel.doctor}}">
-                                            <a routerLink="/dashboard/home/doctor" (click)="returnActiveNode('doctor')" class="nav-link">
+                                            <a routerLink="/dashboard/home/doctor" (click)="returnActiveNode('doctor')"
+                                                class="nav-link">
                                                 <span class="fa fa-user"></span> Doctor
                                             </a>
                                         </li>
                                         <li class="nav-item {{selectedNodeModel.doctors}}">
-                                            <a routerLink="/dashboard/home/doctors" (click)="returnActiveNode('doctors')" class="nav-link">
+                                            <a routerLink="/dashboard/home/doctors"
+                                                (click)="returnActiveNode('doctors')" class="nav-link">
                                                 <span class="fa fa-users"></span> Doctors
                                             </a>
                                         </li>
                                         <li class="nav-item {{selectedNodeModel.vat_tax}}">
-                                            <a routerLink="/dashboard/home/vat_tax" (click)="returnActiveNode('vat_tax')" class="nav-link">
+                                            <a routerLink="/dashboard/home/vat_tax"
+                                                (click)="returnActiveNode('vat_tax')" class="nav-link">
                                                 <span class="fa fa-percent"></span> VAT Tax
                                             </a>
                                         </li>
                                         <li class="nav-item {{selectedNodeModel.CS}}">
-                                            <a routerLink="/dashboard/home/CS" (click)="returnActiveNode('CS')" class="nav-link">
+                                            <a routerLink="/dashboard/home/CS" (click)="returnActiveNode('CS')"
+                                                class="nav-link">
                                                 <span class="fa fa-contao"></span> CS
                                             </a>
                                         </li>
                                         <li class="nav-item {{selectedNodeModel.state}}">
-                                            <a routerLink="/dashboard/home/state" (click)="returnActiveNode('state')" class="nav-link">
+                                            <a routerLink="/dashboard/home/state" (click)="returnActiveNode('state')"
+                                                class="nav-link">
                                                 <span class="fa fa-thermometer-three-quarters"></span> State
                                             </a>
                                         </li>
                                         <li class="nav-item {{selectedNodeModel.event_category}}">
-                                            <a routerLink="/dashboard/home/event-category" (click)="returnActiveNode('event_category')" class="nav-link">
+                                            <a routerLink="/dashboard/home/event-category"
+                                                (click)="returnActiveNode('event_category')" class="nav-link">
                                                 <span class="fa fa-paint-brush"></span> Event Category
                                             </a>
                                         </li>
                                         <li class="nav-item {{selectedNodeModel.work_time_colors}}">
-                                            <a routerLink="/dashboard/home/work-time-colors" (click)="returnActiveNode('work_time_colors')" class="nav-link">
+                                            <a routerLink="/dashboard/home/work-time-colors"
+                                                (click)="returnActiveNode('work_time_colors')" class="nav-link">
                                                 <span class="fa fa-tint"></span> Work Time Colors
                                             </a>
                                         </li>
@@ -268,11 +308,14 @@
             <kendo-tabstrip-tab [title]="'Language'">
                 <ng-template kendoTabContent>
                     <div class="row" style="padding: 3%;">
-                        <div class="radio radio-primary radio-primary{{theme}} col-md-6" style="margin-top: -5px; text-align: center;" *ngFor='let item of allLanguage; let i = index' (click)="changeLanguage(item['name'])">
-                            <input type="radio" name="radio1" id="radio{{i}}" value="option{{i}}" [checked]="languageName === item['name'] ? true: false">
+                        <div class="radio radio-primary radio-primary{{theme}} col-md-6"
+                            style="margin-top: -5px; text-align: center;"
+                            *ngFor='let item of allLanguage; let i = index' (click)="changeLanguage(item['name'])">
+                            <input type="radio" name="radio1" id="radio{{i}}" value="option{{i}}"
+                                [checked]="languageName === item['name'] ? true: false">
                             <label for="radio{{i}}">
-                <img src="../../../assets/images/flags/{{item.icon}}">
-              </label>
+                                <img src="../../../assets/images/flags/{{item.icon}}">
+                            </label>
                         </div>
                     </div>
                 </ng-template>
@@ -280,6 +323,7 @@
         </kendo-tabstrip>
     </modal-content>
     <modal-footer>
-        <button kendoButton class="btn-{{theme}} btn-primary" (click)="settings.close()" style="width: 15vh; padding: 1vh;">Close</button>
+        <button kendoButton class="btn-{{theme}} btn-primary" (click)="settings.close()"
+            style="width: 15vh; padding: 1vh;">Close</button>
     </modal-footer>
 </modal>
