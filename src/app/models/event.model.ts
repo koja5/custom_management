@@ -1,4 +1,5 @@
 export class EventModel {
+    id?: number;
     Id?: number;
     title: string;
     colorTask: string;
@@ -8,7 +9,7 @@ export class EventModel {
     superadmin: string;
     creator_id: any;
     confirm?: number;
-    therapy_id: number;
+    therapy_id: any;
     start: string;
     end: string;
 }

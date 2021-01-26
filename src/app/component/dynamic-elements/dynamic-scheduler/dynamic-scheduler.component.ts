@@ -10,7 +10,7 @@ import {
   NgZone,
   HostListener,
 } from "@angular/core";
-import { ItemModel } from "@syncfusion/ej2-angular-splitbuttons";
+import { ItemModel as ItemModelSplit } from "@syncfusion/ej2-angular-splitbuttons";
 import {
   SelectedEventArgs,
   TextBoxComponent,
@@ -38,6 +38,10 @@ import {
   ActionEventArgs,
   ResizeService,
   DragAndDropService,
+  EventRenderedArgs,
+  ExcelExportService,
+  ExportOptions,
+  PrintService,
 } from "@syncfusion/ej2-angular-schedule";
 import {
   addClass,
@@ -61,6 +65,7 @@ import {
   MenuItemModel,
   BeforeOpenCloseMenuEventArgs,
   MenuEventArgs,
+  ItemModel,
 } from "@syncfusion/ej2-angular-navigations";
 import { ChangeEventArgs as TimeEventArgs } from "@syncfusion/ej2-calendars";
 import { TaskService } from "../../../service/task.service";
@@ -80,6 +85,7 @@ import {
 import { FormGroup, Validators } from "@angular/forms";
 import { Modal } from "ngx-modal";
 import { EventModel } from "src/app/models/event.model";
+import { ODataV4Adaptor } from "@syncfusion/ej2-data";
 declare var moment: any;
 
 @Component({
@@ -98,6 +104,8 @@ declare var moment: any;
     TimelineYearService,
     ResizeService,
     DragAndDropService,
+    ExcelExportService,
+    PrintService
   ],
   encapsulation: ViewEncapsulation.None,
 })
@@ -126,7 +134,7 @@ export class DynamicSchedulerComponent implements OnInit {
   public resourceQuery: Query = new Query().where("CalendarId", "equal", 1);
   public allowMultiple: Boolean = true;
   public isTimelineView: Boolean = false;
-  public exportItems: ItemModel[] = [
+  public exportItems: ItemModelSplit[] = [
     { text: "iCalendar", iconCss: "e-icons e-schedule-ical-export" },
     { text: "Excel", iconCss: "e-icons e-schedule-excel-export" },
   ];
@@ -803,18 +811,17 @@ export class DynamicSchedulerComponent implements OnInit {
     });
   }
 
-  updateTask() {
+  updateTask(args) {
+    console.log(args);
     let formValue = new EventModel();
+    formValue.id = args.data.id;
     formValue.colorTask = this.selected;
     formValue.telephone = this.telephoneValue;
     formValue.user = this.customerUser;
+    formValue.therapy_id = args.data.therapy_id;
     formValue.mobile = this.mobileValue;
-    formValue.title =
-      this.customerUser["lastname"] +
-      " " +
-      this.customerUser["firstname"] +
-      "+" +
-      this.complaintData.complaint_title;
+    formValue.start = this.eventTime.start;
+    formValue.end = this.eventTime.end;
     formValue.superadmin = localStorage.getItem("superadmin");
     if (this.type !== 3 && this.creatorEvent !== undefined) {
       formValue.creator_id = this.creatorEvent;
@@ -848,6 +855,7 @@ export class DynamicSchedulerComponent implements OnInit {
               this.language.successUpdateText,
               { timeOut: 7000, positionClass: "toast-bottom-right" }
             );
+            this.initializeTasks();
           } else {
             this.toastr.error(
               this.language.unsuccessUpdateTitle,
@@ -890,6 +898,32 @@ export class DynamicSchedulerComponent implements OnInit {
       }
     }
   }
+
+  /*onPopupOpen(args: PopupOpenEventArgs): void {
+    let data: { [key: string]: Object } = <{ [key: string]: Object }>args.data;
+    if (
+      args.type === "QuickInfo" ||
+      args.type === "Editor" ||
+      args.type === "RecurrenceAlert" ||
+      args.type === "DeleteAlert"
+    ) {
+      let target: HTMLElement =
+        args.type === "RecurrenceAlert" || args.type === "DeleteAlert"
+          ? args.element[0]
+          : args.target;
+      if (
+        !isNullOrUndefined(target) &&
+        target.classList.contains("e-work-cells")
+      ) {
+        if (
+          target.classList.contains("e-read-only-cells") ||
+          !this.scheduleObj.isSlotAvailable(data)
+        ) {
+          args.cancel = true;
+        }
+      }
+    }
+  }*/
 
   setTimeForEditor(args) {
     this.eventTime = {
@@ -952,16 +986,16 @@ export class DynamicSchedulerComponent implements OnInit {
         [key: string]: Object;
       };
       if (eventObj.RecurrenceRule) {
-        this.menuObj.showItems(
+        /*this.menuObj.showItems(
           ["EditRecurrenceEvent", "DeleteRecurrenceEvent"],
           true
         );
         this.menuObj.hideItems(
           ["Add", "AddRecurrence", "Today", "Save", "Delete"],
           true
-        );
+        );*/
       } else {
-        this.menuObj.showItems(["Save", "Delete"], true);
+        /*this.menuObj.showItems(["Save", "Delete"], true);
         this.menuObj.hideItems(
           [
             "Add",
@@ -971,15 +1005,15 @@ export class DynamicSchedulerComponent implements OnInit {
             "DeleteRecurrenceEvent",
           ],
           true
-        );
+        );*/
       }
       return;
     }
-    this.menuObj.hideItems(
+    /*this.menuObj.hideItems(
       ["Save", "Delete", "EditRecurrenceEvent", "DeleteRecurrenceEvent"],
       true
     );
-    this.menuObj.showItems(["Add", "AddRecurrence", "Today"], true);
+    this.menuObj.showItems(["Add", "AddRecurrence", "Today"], true);*/
   }
 
   public onMenuItemSelect(args: MenuEventArgs): void {
@@ -1623,6 +1657,13 @@ export class DynamicSchedulerComponent implements OnInit {
           }
         });
     }, 100);
+    /*const dataManager: DataManager = new DataManager({
+      url: "/api/getWorkandTaskForUser/361",
+      adaptor: new ODataV4Adaptor(),
+      crossDomain: true,
+    });
+
+    console.log(dataManager);*/
   }
 
   pickModelForEvent(data) {
@@ -1810,7 +1851,11 @@ export class DynamicSchedulerComponent implements OnInit {
     // return event.element.style.background = "red";
   }
 
-  onEventRendered(event) {}
+  onEventRendered(args: EventRenderedArgs): void {
+    let data: { [key: string]: Object } = args.data;
+    args.element.setAttribute("aria-readonly", "true");
+    args.element.classList.add("e-read-only");
+  }
 
   dateFormat(date, i, j) {
     /*if (
@@ -2393,6 +2438,7 @@ export class DynamicSchedulerComponent implements OnInit {
                 this.language.unsuccessUpdateText,
                 { timeOut: 7000, positionClass: "toast-bottom-right" }
               );
+              this.initializeTasks();
             }
           });
       }
@@ -2451,17 +2497,65 @@ export class DynamicSchedulerComponent implements OnInit {
       this.createNewTask();
       args.cancel = true;
     } else if (args.requestType === "eventChange") {
-      this.updateTask();
+      this.updateTask(args);
       args.cancel = true;
     } else if (args.requestType === "eventRemove") {
-      this.deleteTask(args.deletedRecords[0]);
-      // this.scheduleObj.deleteEvent(args.data);
-      args.cancel = true;
+      // this.deleteTask(args.deletedRecords[0]);
+      const eventDetails: { [key: string]: Object } = this.scheduleObj
+        .activeEventData.event as { [key: string]: Object };
+      let currentAction: CurrentAction;
+      if (eventDetails.RecurrenceRule) {
+        currentAction = "DeleteOccurrence";
+      }
+      this.deleteTask(eventDetails);
+      // this.scheduleObj.deleteEvent(eventDetails, currentAction);
     }
   }
+
+  /*onActionBegin(args: ActionEventArgs): void {
+    if (
+      args.requestType === "eventCreate" ||
+      args.requestType === "eventChange"
+    ) {
+      let data: { [key: string]: Object };
+      if (args.requestType === "eventCreate") {
+        data = <{ [key: string]: Object }>args.data[0];
+      } else if (args.requestType === "eventChange") {
+        data = <{ [key: string]: Object }>args.data;
+      }
+      if (!this.scheduleObj.isSlotAvailable(data)) {
+        args.cancel = true;
+      }
+    }
+  }*/
 
   onValueUserEmChange(event) {
     this.complaintData.em = event.id;
     this.complaintData.em_title = event.lastname + " " + event.firstname;
+  }
+
+  public onButtonClick(): void {
+    this.scheduleObj.deleteEvent(910);
+    // this.deleteButton.element.setAttribute("disabled", "true");
+  }
+
+  refreshEvents() {
+    this.initializeTasks();
+  }
+
+  public onExportClick(): void {
+    const exportValues: ExportOptions = {
+      fields: ["Id", "Subject", "StartTime", "EndTime", "Location"],
+    };
+    this.scheduleObj.exportToExcel(exportValues);
+  }
+
+  printCalendar() {
+    this.scheduleObj.print();
+  }
+
+  exportCalendar() {
+    const exportValues: ExportOptions = { fields: ['id', 'Subject', 'StartTime', 'EndTime'] };
+    this.scheduleObj.exportToExcel(exportValues);
   }
 }

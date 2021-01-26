@@ -925,8 +925,8 @@ body {
     float: left;
     display: block;
     width: 235px;
-    height: 60px;
-    padding: 10px 20px 0px 30px;
+    height: 60px;    
+    padding: 0px 0px 0px 18px;
     background: #222c3c;
 }
 
@@ -10297,6 +10297,10 @@ tr.group:hover {
     .sidemenu-hover-submenu li:hover>.sub-menu {
         background: #323c4b;
     }
+
+    .logo-short {
+        display: none;
+    }
 }
 
 @media (max-width: 991px) {
@@ -10381,7 +10385,7 @@ tr.group:hover {
 
 @media (min-width: 992px) {
     .sidemenu-closed.sidemenu-closed-hidelogo .page-header.navbar .page-logo {
-        padding: 10px !important;
+        padding: 7px !important;
         width: 45px;
     }
     .sidemenu-closed.sidemenu-closed-hidelogo .page-header.navbar .page-logo .logo-default {
@@ -12869,7 +12873,7 @@ tr.group:hover {
 
 @media (min-width: 992px) {
     .sidemenu-closed.sidemenu-closed-hidelogo .page-header.navbar .page-logo {
-        padding: 10px !important;
+        padding: 7px !important;
         width: 45px;
     }
     .sidemenu-closed.sidemenu-closed-hidelogo .page-header.navbar .page-logo .logo-default {
@@ -13867,3 +13871,13 @@ kendo-grid-filter-cell-operators {
 .px-5 {
 	padding-left: 3rem!important
 }
+
+/* Padding and Margin END */
+
+/* SYNCFUSION START */
+
+.e-schedule .e-vertical-view .e-time-cells-wrap table td, .e-schedule .e-vertical-view .e-work-cells {
+    height: 33px !important;
+}
+
+/* SYNCFUSION END */

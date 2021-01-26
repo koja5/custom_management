@@ -1,6 +1,7 @@
 export class NavigationMenuModel {
     vaucher?: string;
     task?: string;
+    calendar?: string;
     todo?: string;
     customers?: string;
     users?: string;
