@@ -327,7 +327,7 @@ router.get("/getTasks/:id", function(req, res, next) {
             return;
         }
         conn.query(
-            "SELECT * from tasks where superadmin = '" + reqObj + "'",
+            "select t.*, e.color from tasks t join event_category e on t.colorTask = e.id where superadmin = '" + reqObj + "'",
             function(err, rows) {
                 conn.release();
                 if (!err) {
@@ -363,7 +363,7 @@ router.get("/getTasksForUser/:id", function(req, res, next) {
 
         var id = req.params.id;
         conn.query(
-            "SELECT * from tasks where creator_id = ?", [id],
+            "select t.*, e.color from tasks t join event_category e on t.colorTask = e.id where creator_id = ?", [id],
             function(err, rows) {
                 conn.release();
                 if (!err) {
@@ -405,7 +405,7 @@ router.get(
             console.log(typeOfUser, id);
             if (typeOfUser === "0") {
                 conn.query(
-                    "SELECT * from tasks where storeId = ?", [id],
+                    "select t.*, e.color from tasks t join event_category e on t.colorTask = e.id where storeId = ?", [id],
                     function(err, rows) {
                         conn.release();
                         if (!err) {
@@ -421,7 +421,7 @@ router.get(
                 );
             } else {
                 conn.query(
-                    "SELECT * from users u join tasks t on u.id = t.creator_id where u.storeId = ?", [id],
+                    "SELECT u.*,t.*, e.color from users u join tasks t on u.id = t.creator_id join event_category e on t.colorTask = e.id where u.storeId = ?", [id],
                     function(err, rows) {
                         conn.release();
                         if (!err) {
@@ -2201,7 +2201,7 @@ router.get("/getWorkandTaskForUser/:id", function(req, res, next) {
                 console.log(work);
                 if (!err) {
                     conn.query(
-                        "select * from tasks where creator_id = ?", [id],
+                        "select t.*, e.color from tasks t join event_category e on t.colorTask = e.id where creator_id = ?", [id],
                         function(err, events) {
                             conn.release();
                             if (!err) {

@@ -41,23 +41,23 @@
             <ul class="list-group list-group-unbordered">
               <li class="list-group-item">
                 <b>{{language['firstname']}}</b>
-                <span class="pull-right a-color" *ngIf="data.firstname === ''">{{language['noInformation']}}</span>
-                <span class="pull-right a-color" *ngIf="data.firstname !== ''">{{data.firstname}}</span>
+                <span class="pull-right a-color" *ngIf="data.firstname">{{language['noInformation']}}</span>
+                <span class="pull-right a-color" *ngIf="!data.firstname">{{data.firstname}}</span>
               </li>
               <li class="list-group-item">
                 <b>{{language['lastname']}}</b>
-                <span class="pull-right a-color" *ngIf="data.lastname === ''">{{language['noInformation']}}</span>
-                <span class="pull-right a-color" *ngIf="data.lastname !== ''">{{data.lastname}}</span>
+                <span class="pull-right a-color" *ngIf="data.lastname">{{language['noInformation']}}</span>
+                <span class="pull-right a-color" *ngIf="!data.lastname">{{data.lastname}}</span>
               </li>
               <li class="list-group-item">
                 <b>{{language['birthday']}}</b>
-                <span class="pull-right a-color" *ngIf="data.email === ''">{{language['noInformation']}}</span>
-                <span class="pull-right a-color" *ngIf="data.email !== ''">{{data.birthday | date:'MM/dd/yyyy'}}</span>
+                <span class="pull-right a-color" *ngIf="data.email">{{language['noInformation']}}</span>
+                <span class="pull-right a-color" *ngIf="!data.email">{{data.birthday | date:'MM/dd/yyyy'}}</span>
               </li>
               <li class="list-group-item">
                 <b>{{language['gender']}}</b>
-                <span class="pull-right a-color" *ngIf="data.gender === ''">{{language['noInformation']}}</span>
-                <span class="pull-right a-color" *ngIf="data.gender !== ''"><i *ngIf="data.gender === 'male'"
+                <span class="pull-right a-color" *ngIf="data.gender">{{language['noInformation']}}</span>
+                <span class="pull-right a-color" *ngIf="!data.gender"><i *ngIf="data.gender === 'male'"
                     class="fa fa-mars" style="color: blue;"></i><i *ngIf="data.gender === 'female'" class="fa fa-venus"
                     style="color: pink;"></i> {{data.gender}} </span>
               </li>

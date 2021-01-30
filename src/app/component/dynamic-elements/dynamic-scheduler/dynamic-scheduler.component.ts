@@ -105,7 +105,7 @@ declare var moment: any;
     ResizeService,
     DragAndDropService,
     ExcelExportService,
-    PrintService
+    PrintService,
   ],
   encapsulation: ViewEncapsulation.None,
 })
@@ -188,6 +188,7 @@ export class DynamicSchedulerComponent implements OnInit {
     { text: "UTC +14:00", value: "Etc/GMT-14" },
   ];
   public timeSlotDuration: Object[] = [
+    { Name: "0.5 hour", Value: 30 },
     { Name: "1 hour", Value: 60 },
     { Name: "1.5 hours", Value: 90 },
     { Name: "2 hours", Value: 120 },
@@ -215,7 +216,7 @@ export class DynamicSchedulerComponent implements OnInit {
   public timeSlotFields = { text: "Name", value: "Value" };
   public timeSlotCount: Number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   public timeSlotDurationValue: Number = 60;
-  public timeSlotCountValue: Number = 2;
+  public timeSlotCountValue: Number = 1;
   public eventSettings: EventSettingsModel = {
     dataSource: [
       /*{
@@ -628,6 +629,23 @@ export class DynamicSchedulerComponent implements OnInit {
     return resourceData;
   }
 
+  setTimesForStore() {
+    this.onDayStartHourChange({
+      value: this.dayStartHourValue,
+    } as TimeEventArgs);
+    this.onDayEndHourChange({ value: this.dayEndHourValue } as TimeEventArgs);
+    this.onWorkStartHourChange({
+      value: this.workStartHourValue,
+    } as TimeEventArgs);
+    this.onWorkEndHourChange({ value: this.workEndHourValue } as TimeEventArgs);
+    this.onTimescaleDurationChange({
+      value: this.timeSlotDurationValue,
+    } as ChangeEventArgs);
+    this.onTimescaleIntervalChange({
+      value: this.timeSlotCountValue,
+    } as ChangeEventArgs);
+  }
+
   public getHeaderStyles(data: { [key: string]: Object }): Object {
     if (data.elementType === "cell") {
       return { "align-items": "center", color: "#919191" };
@@ -817,28 +835,32 @@ export class DynamicSchedulerComponent implements OnInit {
     formValue.id = args.data.id;
     formValue.colorTask = this.selected;
     formValue.telephone = this.telephoneValue;
-    formValue.user = this.customerUser;
+    formValue.user = this.customerUser.id
+      ? this.customerUser
+      : { id: args.data.customer_id };
     formValue.therapy_id = args.data.therapy_id;
     formValue.mobile = this.mobileValue;
-    formValue.start = this.eventTime.start;
-    formValue.end = this.eventTime.end;
+    formValue.start = this.eventTime.start
+      ? this.eventTime.start
+      : args.data.StartTime;
+    formValue.end = this.eventTime.end ? this.eventTime.end : args.data.EndTime;
     formValue.superadmin = localStorage.getItem("superadmin");
-    if (this.type !== 3 && this.creatorEvent !== undefined) {
-      formValue.creator_id = this.creatorEvent;
-    } else {
-      formValue.creator_id = localStorage.getItem("idUser");
-    }
+    formValue.creator_id = args.data.creator_id;
     formValue = this.colorMapToId(formValue);
     this.addTherapy(this.customerUser["id"]);
-    formValue.title =
-      this.customerUser["lastname"] +
-      " " +
-      this.customerUser["firstname"] +
-      "+" +
-      this.complaintData.complaint_title;
+    if (this.customerUser.id) {
+      formValue.title =
+        this.customerUser["lastname"] +
+        " " +
+        this.customerUser["firstname"] +
+        "+" +
+        this.complaintData.complaint_title;
+    } else {
+      formValue.title = args.data.title;
+    }
     this.complaintData.date = this.formatDate(
-      this.eventTime.start,
-      this.eventTime.end
+      this.eventTime.start ? this.eventTime.start : args.data.StartTime,
+      this.eventTime.end ? this.eventTime.end : args.data.EndTime
     );
     if (this.isConfirm) {
       formValue.confirm = 0;
@@ -1152,6 +1174,7 @@ export class DynamicSchedulerComponent implements OnInit {
     end: null,
   };
   public creatorEvent: number;
+  public displayToolbar = true;
 
   constructor(
     public service: TaskService,
@@ -1173,12 +1196,10 @@ export class DynamicSchedulerComponent implements OnInit {
 
   @HostListener("window:resize", ["$event"])
   onResize(event) {
-    this.height = this.dynamicService.getSchedulerHeight();
+    this.height = this.dynamicService.getSchedulerHeight() + "px";
   }
 
   initializationConfig() {
-    this.height = this.dynamicService.getSchedulerHeight();
-
     if (localStorage.getItem("language") !== undefined) {
       this.language = JSON.parse(localStorage.getItem("language"));
       this.languageUser = JSON.parse(localStorage.getItem("language"));
@@ -1205,6 +1226,17 @@ export class DynamicSchedulerComponent implements OnInit {
       setTimeout(() => {
         this.selectedButtonIndexStyle[0] = "activeButton" + this.theme;
       }, 50);
+    }
+
+    if (localStorage.getItem("displayToolbar")) {
+      this.displayToolbar =
+        localStorage.getItem("displayToolbar") === "true" ? true : false;
+    }
+
+    if (this.displayToolbar) {
+      this.height = this.dynamicService.getSchedulerHeight();
+    } else {
+      this.height = this.dynamicService.getSchedulerHeightWithoutToolbar();
     }
   }
 
@@ -1265,9 +1297,7 @@ export class DynamicSchedulerComponent implements OnInit {
           this.store,
           this.selectedStoreId
         );
-        this.startWork = informationAboutStore.start_work;
-        this.endWork = informationAboutStore.end_work;
-        this.timeDuration = informationAboutStore.time_duration;
+
         if (
           Number(this.timeDuration) > Number(informationAboutStore.time_therapy)
         ) {
@@ -1293,24 +1323,7 @@ export class DynamicSchedulerComponent implements OnInit {
         this.language.selectStore += this.store[0].storename + ")";
       }
       if (!isNaN(this.selectedStoreId) && this.selectedStoreId !== undefined) {
-        const informationAboutStore = this.getStartEndTimeForStore(
-          this.store,
-          this.selectedStoreId
-        );
-        this.startWork = informationAboutStore.start_work;
-        this.endWork = informationAboutStore.end_work;
-        this.timeDuration = informationAboutStore.time_duration;
-        if (
-          Number(this.timeDuration) > Number(informationAboutStore.time_therapy)
-        ) {
-          this.therapyDuration =
-            Number(this.timeDuration) /
-            Number(informationAboutStore.time_therapy);
-        } else {
-          this.therapyDuration =
-            Number(informationAboutStore.time_therapy) /
-            Number(this.timeDuration);
-        }
+        this.setStoreWork();
       }
     });
 
@@ -1352,7 +1365,7 @@ export class DynamicSchedulerComponent implements OnInit {
           console.log(data);
           this.events = [];
           this.workTime = this.pickWorkTimeToTask(data["workTime"]);
-          this.pickModelForEvent(data["events"]);
+          this.packEventsForShow(data["events"]);
           const objectCalendar = {
             name: null,
             events: this.events,
@@ -1361,9 +1374,8 @@ export class DynamicSchedulerComponent implements OnInit {
 
           /*this.eventSettings.dataSource =
             this.calendars.push(objectCalendar);*/
-          console.log(this.splitterSize);
           this.loading = false;
-          console.log(document.getElementsByClassName("k-scheduler-toolbar"));
+          this.setStoreWork();
           /// this.setWidthForCalendarHeader();
           ///this.setSplitterBarEvent();
         });
@@ -1375,20 +1387,14 @@ export class DynamicSchedulerComponent implements OnInit {
         .subscribe((data) => {
           console.log(data);
           if (data.length !== 0) {
-            for (let i = 0; i < data.length; i++) {
-              data[i].start = new Date(data[i].start);
-              data[i].end = new Date(data[i].end);
-              this.events.push(data[i]);
-            }
-            this.allEvents.concat(data);
-            this.eventSettings.dataSource = this.allEvents;
-            console.log(this.events);
+            this.packEventsForShow(data);
             const objectCalendar = {
               name: null,
               events: this.events,
             };
             this.calendars.push(objectCalendar);
             this.loading = false;
+            this.setStoreWork();
             console.log(document.getElementsByClassName("k-scheduler-toolbar"));
           } else {
             this.calendars.push({ name: null, events: [] });
@@ -1533,6 +1539,7 @@ export class DynamicSchedulerComponent implements OnInit {
           a["shortname"].localeCompare(b["shortname"])
         );
         this.loading = false;
+        this.setStoreWork();
         console.log(document.getElementsByClassName("k-scheduler-toolbar"));
       });
     }, 100);
@@ -1598,13 +1605,7 @@ export class DynamicSchedulerComponent implements OnInit {
           this.events = [];
           this.calendars = [];
           this.events = [];
-          for (let i = 0; i < data.length; i++) {
-            data[i].start = new Date(data[i].start);
-            data[i].end = new Date(data[i].end);
-            this.events.push(data[i]);
-          }
-          this.allEvents.concat(data);
-          this.eventSettings.dataSource = this.allEvents;
+          this.packEventsForShow(data);
           const objectCalendar = {
             name: null,
             events: this.events,
@@ -1613,7 +1614,7 @@ export class DynamicSchedulerComponent implements OnInit {
           this.size = [];
           this.size.push("100%");
           this.loading = false;
-          console.log(document.getElementsByClassName("k-scheduler-toolbar"));
+          this.setStoreWork();
           /// this.setWidthForCalendarHeader();
           /// this.setSplitterBarEvent();
         });
@@ -1641,7 +1642,7 @@ export class DynamicSchedulerComponent implements OnInit {
           const objectCalendar = {
             userId: this.valueLoop[this.loopIndex].id,
             name: this.valueLoop[this.loopIndex].shortname,
-            events: this.pickModelForEvent(data["events"]),
+            events: this.packEventsForShow(data["events"]),
             workTime: this.workTime,
           };
           this.calendars.push(objectCalendar);
@@ -1651,6 +1652,7 @@ export class DynamicSchedulerComponent implements OnInit {
           if (this.valueLoop.length === this.loopIndex) {
             this.eventSettings.dataSource = this.allEvents;
             this.loading = false;
+            this.setStoreWork();
           }
           if (this.loopIndex < this.valueLoop.length) {
             this.myLoop();
@@ -1666,7 +1668,8 @@ export class DynamicSchedulerComponent implements OnInit {
     console.log(dataManager);*/
   }
 
-  pickModelForEvent(data) {
+  packEventsForShow(data) {
+    this.allEvents = [];
     for (let i = 0; i < data.length; i++) {
       data[i].StartTime = new Date(data[i].start);
       data[i].EndTime = new Date(data[i].end);
@@ -1678,6 +1681,8 @@ export class DynamicSchedulerComponent implements OnInit {
     } else {
       this.allEvents = data;
     }
+
+    this.eventSettings.dataSource = this.allEvents;
   }
 
   selectedStore(event) {
@@ -1702,7 +1707,7 @@ export class DynamicSchedulerComponent implements OnInit {
       this.sharedCalendarResources = this.value;
       this.getTaskForSelectedUsers(this.value);
       this.getUserInCompany(event);
-      this.setStoreWork(event);
+      this.setStoreWork();
       localStorage.setItem("selectedStore-" + this.id, event);
     } else {
       this.value = [];
@@ -1712,20 +1717,14 @@ export class DynamicSchedulerComponent implements OnInit {
           .subscribe((data) => {
             this.events = [];
             this.calendars = [];
-            for (let i = 0; i < data.length; i++) {
-              data[i].start = new Date(data[i].start);
-              data[i].end = new Date(data[i].end);
-              this.events.push(data[i]);
-            }
-            this.allEvents.concat(data);
-            this.eventSettings.dataSource = this.allEvents;
+            this.packEventsForShow(data);
             const objectCalendar = {
               name: null,
               events: this.events,
               workTime: undefined,
             };
             if (!isNaN(event)) {
-              this.setStoreWork(event);
+              this.setStoreWork();
             } else {
               this.startWork = "08:00";
               this.endWork = "22:00";
@@ -1734,7 +1733,7 @@ export class DynamicSchedulerComponent implements OnInit {
             }
             this.calendars.push(objectCalendar);
             this.loading = false;
-            console.log(document.getElementsByClassName("k-scheduler-toolbar"));
+            this.setStoreWork();
             /// this.setWidthForCalendarHeader();
             /// this.setSplitterBarEvent();
           });
@@ -1746,13 +1745,7 @@ export class DynamicSchedulerComponent implements OnInit {
             console.log(data);
             this.events = [];
             if (data.length !== 0) {
-              for (let i = 0; i < data.length; i++) {
-                data[i].start = new Date(data[i].start);
-                data[i].end = new Date(data[i].end);
-                this.events.push(data[i]);
-              }
-              this.allEvents.concat(data);
-              this.eventSettings.dataSource = this.allEvents;
+              this.packEventsForShow(data);
               console.log(this.events);
               const objectCalendar = {
                 name: null,
@@ -1770,7 +1763,7 @@ export class DynamicSchedulerComponent implements OnInit {
             this.timeDuration = "60";
             this.therapyDuration = 1;
             this.loading = false;
-            console.log(document.getElementsByClassName("k-scheduler-toolbar"));
+            this.setStoreWork();
             /// this.setWidthForCalendarHeader();
             /// this.setSplitterBarEvent();
             this.size = [];
@@ -1789,15 +1782,42 @@ export class DynamicSchedulerComponent implements OnInit {
     });
   }
 
-  setStoreWork(event) {
+  setStoreWork() {
     if (this.store !== undefined) {
       const informationAboutStore = this.getStartEndTimeForStore(
         this.store,
         this.selectedStoreId
       );
-      this.startWork = informationAboutStore.start_work;
-      this.endWork = informationAboutStore.end_work;
-      this.timeDuration = informationAboutStore.time_duration;
+      this.workStartHourValue = new Date(
+        new Date().setHours(
+          Number(informationAboutStore.start_work.split(":")[0]),
+          Number(informationAboutStore.start_work.toString().split(":")[1]),
+          0
+        )
+      );
+      this.workEndHourValue = new Date(
+        new Date().setHours(
+          Number(informationAboutStore.end_work.split(":")[0]),
+          Number(informationAboutStore.end_work.split(":")[1]),
+          0
+        )
+      );
+
+      this.dayStartHourValue = new Date(
+        new Date().setHours(
+          Number(informationAboutStore.start_work.split(":")[0]),
+          Number(informationAboutStore.start_work.toString().split(":")[1]),
+          0
+        )
+      );
+      this.dayEndHourValue = new Date(
+        new Date().setHours(
+          Number(informationAboutStore.end_work.split(":")[0]),
+          Number(informationAboutStore.end_work.split(":")[1]),
+          0
+        )
+      );
+      this.timeSlotDurationValue = Number(informationAboutStore.time_duration);
       if (
         Number(this.timeDuration) > Number(informationAboutStore.time_therapy)
       ) {
@@ -1810,7 +1830,13 @@ export class DynamicSchedulerComponent implements OnInit {
           Number(this.timeDuration);
       }
 
-      localStorage.setItem("selectedStore-" + this.id, event);
+      localStorage.setItem(
+        "selectedStore-" + this.id,
+        this.selectedStoreId.toString()
+      );
+      setTimeout(() => {
+        this.setTimesForStore();
+      }, 200);
     }
   }
 
@@ -1842,7 +1868,6 @@ export class DynamicSchedulerComponent implements OnInit {
       this.usersInCompany = val;
       // this.language.selectedUsers += this.usersInCompany[0].shortname;
       // this.loading = false;
-      console.log(document.getElementsByClassName("k-scheduler-toolbar"));
     });
   }
 
@@ -2555,7 +2580,30 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   exportCalendar() {
-    const exportValues: ExportOptions = { fields: ['id', 'Subject', 'StartTime', 'EndTime'] };
+    const exportValues: ExportOptions = {
+      fields: ["id", "Subject", "StartTime", "EndTime"],
+    };
     this.scheduleObj.exportToExcel(exportValues);
+  }
+
+  onItemDrag(event) {
+    this.eventTime.start = event.startTime;
+    this.eventTime.end = event.endTime;
+  }
+
+  hideToolbar() {
+    if (this.displayToolbar) {
+      this.displayToolbar = false;
+      this.height = this.dynamicService.getSchedulerHeightWithoutToolbar();
+    } else {
+      this.displayToolbar = true;
+      this.height = this.dynamicService.getSchedulerHeight();
+    }
+    this.scheduleObj.refresh();
+    localStorage.setItem("displayToolbar", this.displayToolbar.toString());
+  }
+
+  selectedEventCategory(event) {
+    this.selected = event;
   }
 }
