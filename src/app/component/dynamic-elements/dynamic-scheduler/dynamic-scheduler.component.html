@@ -25,7 +25,7 @@
             </div>
           </div>
           <div class="center-panel">
-            <button
+            <!-- <button
               ejs-button
               id="timezoneBtn"
               cssClass="title-bar-btn"
@@ -41,7 +41,7 @@
               disabled="true"
               iconCss="e-icons e-schedule-clock"
               [content]="liveTimeUpdate"
-            ></button>
+            ></button> -->
           </div>
           <div class="right-panel">
             <div class="control-panel">
@@ -99,7 +99,7 @@
               iconPosition="Top"
               (click)="showFilterPanel($event)"
             >
-              Filter
+              {{ language.filterToolbar }}
             </button>
             <button
               ejs-button
@@ -109,7 +109,7 @@
               iconPosition="Top"
               (click)="refreshEvents()"
             >
-              Refresh Event
+              {{ language.refreshEventToolbar }}
             </button>
           </div>
           <div style="height: 70px; width: calc(100% - 270px)">
@@ -277,7 +277,7 @@
               iconPosition="Top"
               (click)="onSettingsClick($event)"
             >
-              Settings
+              {{ language.settingsToolbar }}
             </button>
           </div>
         </div>
@@ -286,9 +286,9 @@
             <div class="control-panel e-css">
               <div class="col-row">
                 <div>
-                  <label style="line-height: 34px; margin: 0">{{
+                  <!-- <label style="line-height: 34px; margin: 0">{{
                     language.selectStore
-                  }}</label>
+                  }}</label> -->
                 </div>
                 <div class="col-sm-12">
                   <!-- <ejs-dropdownlist id='weekFirstDay' width='170px' [dataSource]='store'
@@ -332,7 +332,7 @@
           <div class="left-panel" [style.height]="height">
             <div class="overview-scheduler">
               <ejs-schedule
-                *ngIf="!loading && resources"
+                *ngIf="!loading && sharedCalendarResources"
                 #scheduleObj
                 cssClass="e-control schedule-overview"
                 height="100%"
@@ -354,7 +354,11 @@
                   <e-view option="Day"></e-view>
                   <e-view option="Week">
                     <ng-template #eventTemplate let-data>
-                      <div class="event-details">
+                      <div
+                        class="event-details"
+                        [style.background]="data.color"
+                        style="border: 2px solid"
+                      >
                         <div class="eventName">
                           {{ data.title.split("+")[0] }}
                         </div>
@@ -362,15 +366,27 @@
                           {{ data.title.split("+")[1] }}
                         </div>
                       </div>
+
+                      <span
+                        *ngIf="data.confirm === 0"
+                        class="fa fa-check-circle-o checkButton notConfirmed"
+                        title="{{ language.notConfirmed }}"
+                        (click)="sendAgainConfirmMail(data)"
+                      ></span>
+                      <span
+                        *ngIf="data.confirm === 1"
+                        class="fa fa-check-circle-o checkButton confirmed"
+                        title="{{ language.confirmed }}"
+                      ></span>
                     </ng-template>
                   </e-view>
                   <e-view option="WorkWeek">
-                    <ng-template
-                      #eventTemplate
-                      let-data
-                    >
-                      <div class="event-details" 
-                      [style.background]="data.color">
+                    <ng-template #eventTemplate let-data>
+                      <div
+                        class="event-details"
+                        [style.background]="data.color"
+                        style="border: 2px solid"
+                      >
                         <div class="eventName">
                           {{ data.title.split("+")[0] }}
                         </div>
@@ -378,6 +394,17 @@
                           {{ data.title.split("+")[1] }}
                         </div>
                       </div>
+                      <span
+                        *ngIf="data.confirm === 0"
+                        class="fa fa-check-circle-o checkButton notConfirmed"
+                        title="{{ language.notConfirmed }}"
+                        (click)="sendAgainConfirmMail(data)"
+                      ></span>
+                      <span
+                        *ngIf="data.confirm === 1"
+                        class="fa fa-check-circle-o checkButton confirmed"
+                        title="{{ language.confirmed }}"
+                      ></span>
                     </ng-template>
                   </e-view>
                   <e-view option="Month"></e-view>
@@ -399,17 +426,6 @@
                     name="sharedCalendar"
                     textField="shortname"
                     idField="id"
-                  >
-                  </e-resource>
-                  <e-resource
-                    field="colorTask"
-                    title="Calendars"
-                    [dataSource]="resources"
-                    [allowMultiple]="allowMultiple"
-                    name="Calendars"
-                    textField="category"
-                    idField="id"
-                    colorField="color"
                   >
                   </e-resource>
                 </e-resources>
@@ -511,311 +527,319 @@
                   </div>
                 </ng-template>
                 <ng-template #editorTemplate let-data>
-                  <div
-                    class="k-form-field"
-                    style="text-align: center; margin: 0px !important"
-                  >
-                    <div class="col-sm-6" style="margin-bottom: 2vh">
-                      <div class="mgbt-xs-0">
-                        <label
-                          class="col-xs-12 control-label"
-                          style="color: red; text-align: left"
-                          >{{ languageUser.attention }}:</label
-                        >
-                        <textarea
-                          kendoTextArea
-                          class="col-xs-12 textAreaInput"
-                          [(ngModel)]="customerUser.attention"
-                          >{{ customerUser.attention }}</textarea
-                        >
-                        <!-- col-sm-10 -->
-                      </div>
-                    </div>
-                    <div class="col-sm-6" style="margin-bottom: 2vh">
-                      <div class="mgbt-xs-0">
-                        <label
-                          class="col-xs-12 control-label"
-                          style="text-align: left"
-                          >{{ languageUser.physicalComplaint }}:</label
-                        >
-                        <textarea
-                          kendoTextArea
-                          class="col-xs-12 textAreaInput"
-                          [(ngModel)]="customerUser.physicalComplaint"
-                          >{{ customerUser.physicalComplaint }}</textarea
-                        >
-                        <!-- col-sm-10 -->
-                      </div>
-                    </div>
+                  <div *ngIf="!createFormLoading">
+                    <div
+                      class="spinner loading"
+                      style="left: 47% !important"
+                    ></div>
                   </div>
-                  <div class="k-form-field">
-                    <div class="mb-3 center">
-                      <button
-                        kendoButton
-                        [icon]="'user'"
-                        [primary]="true"
-                        class="patient-options"
-                        (click)="newCustomer()"
-                      >
-                        {{ languageUser.newCustomer }}
-                      </button>
+                  <div [ngClass]="!createFormLoading ? 'blur-form' : ''">
+                    <div
+                      class="k-form-field"
+                      style="text-align: center; margin: 0px !important"
+                    >
+                      <div class="col-sm-6" style="margin-bottom: 2vh">
+                        <div class="mgbt-xs-0">
+                          <label
+                            class="col-xs-12 control-label"
+                            style="color: red; text-align: left"
+                            >{{ languageUser.attention }}:</label
+                          >
+                          <textarea
+                            kendoTextArea
+                            class="col-xs-12 textAreaInput"
+                            [(ngModel)]="customerUser.attention"
+                            >{{ customerUser.attention }}</textarea
+                          >
+                          <!-- col-sm-10 -->
+                        </div>
+                      </div>
+                      <div class="col-sm-6" style="margin-bottom: 2vh">
+                        <div class="mgbt-xs-0">
+                          <label
+                            class="col-xs-12 control-label"
+                            style="text-align: left"
+                            >{{ languageUser.physicalComplaint }}:</label
+                          >
+                          <textarea
+                            kendoTextArea
+                            class="col-xs-12 textAreaInput"
+                            [(ngModel)]="customerUser.physicalComplaint"
+                            >{{ customerUser.physicalComplaint }}</textarea
+                          >
+                          <!-- col-sm-10 -->
+                        </div>
+                      </div>
+                    </div>
+                    <div class="k-form-field">
+                      <div class="mb-3 center">
+                        <button
+                          kendoButton
+                          [icon]="'user'"
+                          [primary]="true"
+                          class="patient-options"
+                          (click)="newCustomer()"
+                        >
+                          {{ languageUser.newCustomer }}
+                        </button>
 
-                      <!-- <button kendoButton [icon]="'k-icon k-i-information'" class="ml-2 patient-options" [primary]="true"
+                        <!-- <button kendoButton [icon]="'k-icon k-i-information'" class="ml-2 patient-options" [primary]="true"
                       (click)="baseDataForUser()" *ngIf="baseDataIndicator">
                       {{languageUser.baseDate}}
                     </button> -->
-                    </div>
+                      </div>
 
-                    <div style="width: 100%">
-                      <kendo-textbox-container
-                        floatingLabel="{{ languageUser.patient }}"
-                      >
-                        <kendo-combobox
-                          [data]="customerUsers"
-                          [textField]="'shortname'"
-                          [valueField]="'id'"
-                          (valueChange)="onValueChange($event)"
-                          [(ngModel)]="customerUser"
-                          [filterable]="true"
-                          (filterChange)="searchCustomer($event)"
-                          [loading]="customerLoading"
+                      <div style="width: 100%">
+                        <kendo-textbox-container
+                          floatingLabel="{{ languageUser.patient }}"
                         >
-                          <ng-template kendoComboBoxItemTemplate let-dataItem>
-                            <p style="height: 50px !important">
-                              <span style="font-weight: bold">{{
-                                dataItem.shortname
-                              }}</span>
-                              <br />
-                              <span
-                                class="customerInfo"
-                                *ngIf="dataItem.city !== ''"
-                              >
-                                {{ dataItem.city }}</span
-                              >
-                              <span
-                                class="customerInfo"
-                                *ngIf="dataItem.street !== ''"
-                                >/{{ dataItem.street }}</span
-                              >
-                            </p>
-                          </ng-template>
-                        </kendo-combobox>
-                      </kendo-textbox-container>
+                          <kendo-combobox
+                            [data]="customerUsers"
+                            [textField]="'shortname'"
+                            [valueField]="'id'"
+                            (valueChange)="onValueChange($event)"
+                            [(ngModel)]="customerUser"
+                            [filterable]="true"
+                            (filterChange)="searchCustomer($event)"
+                            [loading]="customerLoading"
+                          >
+                            <ng-template kendoComboBoxItemTemplate let-dataItem>
+                              <p style="height: 50px !important">
+                                <span style="font-weight: bold">{{
+                                  dataItem.shortname
+                                }}</span>
+                                <br />
+                                <span
+                                  class="customerInfo"
+                                  *ngIf="dataItem.city !== ''"
+                                >
+                                  {{ dataItem.city }}</span
+                                >
+                                <span
+                                  class="customerInfo"
+                                  *ngIf="dataItem.street !== ''"
+                                  >/{{ dataItem.street }}</span
+                                >
+                              </p>
+                            </ng-template>
+                          </kendo-combobox>
+                        </kendo-textbox-container>
+                      </div>
                     </div>
-                  </div>
-                  <div class="k-form-field">
-                    <kendo-textbox-container
-                      floatingLabel="{{ languageUser.complaintValue }}"
-                    >
-                      <kendo-multiselect
-                        [data]="complaintValue"
-                        [textField]="'title'"
-                        [valueField]="'id'"
-                        [(ngModel)]="selectedComplaint"
-                        name="complaint"
-                        [valuePrimitive]="true"
-                      >
-                      </kendo-multiselect>
-                    </kendo-textbox-container>
-                  </div>
-                  <div class="k-form-field">
-                    <kendo-textbox-container
-                      floatingLabel="{{ languageUser.therapyValue }}"
-                    >
-                      <kendo-multiselect
-                        [data]="therapyValue"
-                        [textField]="'title'"
-                        [valueField]="'id'"
-                        [(ngModel)]="selectedTherapies"
-                        name="therapies"
-                        [valuePrimitive]="true"
-                      >
-                      </kendo-multiselect>
-                    </kendo-textbox-container>
-                  </div>
-                  <div class="k-form-field">
-                    <kendo-textbox-container
-                      floatingLabel="{{ languageUser.treatmentValue }}"
-                    >
-                      <kendo-multiselect
-                        [data]="treatmentValue"
-                        [textField]="'title'"
-                        [valueField]="'id'"
-                        [(ngModel)]="selectedTreatments"
-                        name="therapies_previous"
-                        [valuePrimitive]="true"
-                      >
-                      </kendo-multiselect>
-                    </kendo-textbox-container>
-                  </div>
-                  <div class="k-form-field">
-                    <kendo-textbox-container
-                      floatingLabel="{{ languageUser.comment }}"
-                    >
-                      <textarea
-                        kendoTextArea
-                        type="text"
-                        class="col-md-12 col-xs-12"
-                        name="comment"
-                        [(ngModel)]="complaintData.comment"
-                        comment.value=""
-                        [autoSize]="true"
-                      ></textarea>
-                    </kendo-textbox-container>
-                  </div>
-                  <div class="k-form-field">
-                    <div class="col-sm-4">
+                    <div class="k-form-field">
                       <kendo-textbox-container
-                        floatingLabel="{{ languageUser.cs }}"
+                        floatingLabel="{{ languageUser.complaintValue }}"
                       >
-                        <kendo-combobox
-                          class="col-md-12 col-xs-12 noPadding"
-                          [data]="CSValue"
+                        <kendo-multiselect
+                          [data]="complaintValue"
                           [textField]="'title'"
                           [valueField]="'id'"
-                          [(ngModel)]="complaintData.cs"
+                          [(ngModel)]="selectedComplaint"
+                          name="complaint"
                           [valuePrimitive]="true"
                         >
-                        </kendo-combobox>
+                        </kendo-multiselect>
                       </kendo-textbox-container>
                     </div>
-
-                    <div class="col-sm-4">
+                    <div class="k-form-field">
                       <kendo-textbox-container
-                        floatingLabel="{{ languageUser.stateValue }}"
+                        floatingLabel="{{ languageUser.therapyValue }}"
                       >
-                        <kendo-combobox
-                          class="col-md-12 col-xs-12 noPadding"
-                          [data]="stateValue"
+                        <kendo-multiselect
+                          [data]="therapyValue"
                           [textField]="'title'"
                           [valueField]="'id'"
-                          [(ngModel)]="complaintData.state"
+                          [(ngModel)]="selectedTherapies"
+                          name="therapies"
                           [valuePrimitive]="true"
                         >
-                        </kendo-combobox>
+                        </kendo-multiselect>
                       </kendo-textbox-container>
                     </div>
-
-                    <div class="col-sm-4">
+                    <div class="k-form-field">
                       <kendo-textbox-container
-                        floatingLabel="{{ languageUser.em }}"
+                        floatingLabel="{{ languageUser.treatmentValue }}"
+                      >
+                        <kendo-multiselect
+                          [data]="treatmentValue"
+                          [textField]="'title'"
+                          [valueField]="'id'"
+                          [(ngModel)]="selectedTreatments"
+                          name="therapies_previous"
+                          [valuePrimitive]="true"
+                        >
+                        </kendo-multiselect>
+                      </kendo-textbox-container>
+                    </div>
+                    <div class="k-form-field">
+                      <kendo-textbox-container
+                        floatingLabel="{{ languageUser.comment }}"
+                      >
+                        <textarea
+                          kendoTextArea
+                          type="text"
+                          class="col-md-12 col-xs-12"
+                          name="comment"
+                          [(ngModel)]="complaintData.comment"
+                          comment.value=""
+                          [autoSize]="true"
+                        ></textarea>
+                      </kendo-textbox-container>
+                    </div>
+                    <div class="k-form-field">
+                      <div class="col-sm-4">
+                        <kendo-textbox-container
+                          floatingLabel="{{ languageUser.cs }}"
+                        >
+                          <kendo-combobox
+                            class="col-md-12 col-xs-12 noPadding"
+                            [data]="CSValue"
+                            [textField]="'title'"
+                            [valueField]="'id'"
+                            [(ngModel)]="complaintData.cs"
+                            [valuePrimitive]="true"
+                          >
+                          </kendo-combobox>
+                        </kendo-textbox-container>
+                      </div>
+
+                      <div class="col-sm-4">
+                        <kendo-textbox-container
+                          floatingLabel="{{ languageUser.stateValue }}"
+                        >
+                          <kendo-combobox
+                            class="col-md-12 col-xs-12 noPadding"
+                            [data]="stateValue"
+                            [textField]="'title'"
+                            [valueField]="'id'"
+                            [(ngModel)]="complaintData.state"
+                            [valuePrimitive]="true"
+                          >
+                          </kendo-combobox>
+                        </kendo-textbox-container>
+                      </div>
+
+                      <div class="col-sm-4">
+                        <kendo-textbox-container
+                          floatingLabel="{{ languageUser.em }}"
+                        >
+                          <kendo-combobox
+                            class="col-md-12 col-xs-12 noPadding"
+                            [data]="allUsers"
+                            [textField]="'shortname'"
+                            [valueField]="'id'"
+                            (valueChange)="onValueUserEmChange($event)"
+                            [(ngModel)]="selectedUser"
+                          >
+                          </kendo-combobox>
+                        </kendo-textbox-container>
+                      </div>
+                    </div>
+                    <div class="k-form-field">
+                      <kendo-textbox-container
+                        floatingLabel="{{ language.eventCategory }}"
                       >
                         <kendo-combobox
-                          class="col-md-12 col-xs-12 noPadding"
-                          [data]="allUsers"
-                          [textField]="'shortname'"
+                          class="col-md-12 col-xs-12"
+                          [data]="eventCategory"
+                          [textField]="'category'"
+                          [valuePrimitive]="true"
                           [valueField]="'id'"
-                          (valueChange)="onValueUserEmChange($event)"
-                          [(ngModel)]="selectedUser"
+                          (valueChange)="selectedEventCategory($event)"
+                          [(ngModel)]="selected"
                         >
                         </kendo-combobox>
                       </kendo-textbox-container>
                     </div>
-                  </div>
-                  <div class="k-form-field">
-                    <kendo-textbox-container
-                      floatingLabel="{{ language.eventCategory }}"
-                    >
-                      <kendo-combobox
-                        class="col-md-12 col-xs-12"
-                        [data]="eventCategory"
-                        [textField]="'category'"
-                        [valuePrimitive]="true"
-                        [valueField]="'id'"
-                        (valueChange)="selectedEventCategory($event)"
-                        [(ngModel)]="selected"
-                      >
-                      </kendo-combobox>
-                    </kendo-textbox-container>
-                  </div>
-                  <div class="k-form-field k-datetime-picker-wrapper">
-                    <div class="col-sm-8">
-                      <kendo-textbox-container
-                        floatingLabel="{{ language.start }}"
-                      >
-                        <kendo-datepicker
-                          [format]="'dd.MM.yyyy'"
-                          class="dateWidth"
-                          [(ngModel)]="eventTime.start"
+                    <div class="k-form-field k-datetime-picker-wrapper">
+                      <div class="col-sm-8">
+                        <kendo-textbox-container
+                          floatingLabel="{{ language.start }}"
                         >
-                        </kendo-datepicker>
-                      </kendo-textbox-container>
-                    </div>
-                    <div class="col-sm-4">
-                      <kendo-textbox-container
-                        floatingLabel="{{ language.startTime }}"
-                      >
-                        <kendo-timepicker [(ngModel)]="eventTime.start">
-                        </kendo-timepicker>
-                      </kendo-textbox-container>
-                    </div>
-                  </div>
-                  <div class="k-form-field k-datetime-picker-wrapper">
-                    <div class="col-sm-8">
-                      <kendo-textbox-container
-                        floatingLabel="{{ language.end }}"
-                      >
-                        <kendo-datepicker
-                          [format]="'dd.MM.yyyy'"
-                          class="dateWidth"
-                          [(ngModel)]="eventTime.end"
+                          <kendo-datepicker
+                            [format]="'dd.MM.yyyy'"
+                            class="dateWidth"
+                            [(ngModel)]="eventTime.start"
+                          >
+                          </kendo-datepicker>
+                        </kendo-textbox-container>
+                      </div>
+                      <div class="col-sm-4">
+                        <kendo-textbox-container
+                          floatingLabel="{{ language.startTime }}"
                         >
-                        </kendo-datepicker>
-                      </kendo-textbox-container>
+                          <kendo-timepicker [(ngModel)]="eventTime.start">
+                          </kendo-timepicker>
+                        </kendo-textbox-container>
+                      </div>
                     </div>
-                    <div class="col-sm-4">
-                      <kendo-textbox-container
-                        floatingLabel="{{ language.endTime }}"
-                      >
-                        <kendo-timepicker [(ngModel)]="eventTime.end">
-                        </kendo-timepicker>
-                      </kendo-textbox-container>
+                    <div class="k-form-field k-datetime-picker-wrapper">
+                      <div class="col-sm-8">
+                        <kendo-textbox-container
+                          floatingLabel="{{ language.end }}"
+                        >
+                          <kendo-datepicker
+                            [format]="'dd.MM.yyyy'"
+                            class="dateWidth"
+                            [(ngModel)]="eventTime.end"
+                          >
+                          </kendo-datepicker>
+                        </kendo-textbox-container>
+                      </div>
+                      <div class="col-sm-4">
+                        <kendo-textbox-container
+                          floatingLabel="{{ language.endTime }}"
+                        >
+                          <kendo-timepicker [(ngModel)]="eventTime.end">
+                          </kendo-timepicker>
+                        </kendo-textbox-container>
+                      </div>
                     </div>
-                  </div>
-                  <div class="k-form-field">
-                    <div class="col-sm-6">
-                      <kendo-textbox-container
-                        floatingLabel="{{ language.telephone }}"
-                      >
-                        <input
-                          kendoTextBox
-                          class="k-textbox"
-                          [(ngModel)]="telephoneValue"
-                          name="telephone"
-                          readonly
-                          style="width: 100%"
-                        />
-                      </kendo-textbox-container>
+                    <div class="k-form-field">
+                      <div class="col-sm-6">
+                        <kendo-textbox-container
+                          floatingLabel="{{ language.telephone }}"
+                        >
+                          <input
+                            kendoTextBox
+                            class="k-textbox"
+                            [(ngModel)]="telephoneValue"
+                            name="telephone"
+                            readonly
+                            style="width: 100%"
+                          />
+                        </kendo-textbox-container>
+                      </div>
+                      <div class="col-sm-6">
+                        <kendo-textbox-container
+                          floatingLabel="{{ language.mobile }}"
+                        >
+                          <input
+                            kendoTextBox
+                            class="k-textbox"
+                            [(ngModel)]="mobileValue"
+                            name="mobile"
+                            readonly
+                            style="width: 100%"
+                          />
+                        </kendo-textbox-container>
+                      </div>
                     </div>
-                    <div class="col-sm-6">
-                      <kendo-textbox-container
-                        floatingLabel="{{ language.mobile }}"
-                      >
-                        <input
-                          kendoTextBox
-                          class="k-textbox"
-                          [(ngModel)]="mobileValue"
-                          name="mobile"
-                          readonly
-                          style="width: 100%"
-                        />
-                      </kendo-textbox-container>
-                    </div>
-                  </div>
-                  <div
-                    class="col-sm-12"
-                    style="text-align: center; font-weight: bold"
-                  >
-                    <input
-                      type="checkbox"
-                      kendoCheckBox
-                      [(ngModel)]="isConfirm"
-                      name="isConfirm"
-                      style="margin: 0px"
-                    />
-                    <span style="font-size: 12px">
-                      {{ language.confirmMessage }}</span
+                    <div
+                      class="col-sm-12 mt-4"
+                      style="text-align: center; font-weight: bold"
                     >
+                      <input
+                        type="checkbox"
+                        kendoCheckBox
+                        [(ngModel)]="isConfirm"
+                        name="isConfirm"
+                        style="margin: 0px"
+                      />
+                      <span style="font-size: 12px">
+                        {{ language.confirmMessage }}</span
+                      >
+                    </div>
                   </div>
                 </ng-template>
               </ejs-schedule>

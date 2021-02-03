@@ -4,6 +4,7 @@ export class EventModel {
     title: string;
     colorTask: string;
     user: any;
+    customer_id?: any;
     telephone: string;
     mobile: string;
     superadmin: string;
@@ -12,4 +13,5 @@ export class EventModel {
     therapy_id: any;
     start: string;
     end: string;
+    color?: string;
 }

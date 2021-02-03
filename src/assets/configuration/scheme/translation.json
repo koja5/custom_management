@@ -106,6 +106,9 @@
             "confirmMessage": { "type": "string" },
             "hideToolbarTitle": { "type": "string" },
             "showToolbarTitle": { "type": "string" },
+            "filterToolbar": { "tyle": "string" },
+            "refreshEventToolbar": { "tyle": "string" },
+            "settingsToolbar": { "tyle": "string" },
             "calendar": { "type": "string" },
             "customer": { "type": "string" },
             "users": { "type": "string" },
@@ -587,7 +590,13 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{ "key": "confirmMessage" }, { "key": "hideToolbarTitle" }, { "key": "showToolbarTitle" }, {}]
+                    "items": [{ "key": "confirmMessage" }, { "key": "hideToolbarTitle" }, { "key": "showToolbarTitle" }, { "key": "filterToolbar" }]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [{ "key": "refreshEventToolbar" }, { "key": "settingsToolbar" }, { }, { }]
                 }
             ]
         },

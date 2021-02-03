@@ -34,6 +34,7 @@ export class DashboardComponent implements OnInit {
   public pathFromUrl: any;
   public subMenuInd = "";
   public sidebarHeight: any;
+  
 
   constructor(
     public router: Router,
@@ -120,6 +121,10 @@ export class DashboardComponent implements OnInit {
         console.log(data);
       }
     );*/
+
+    if (localStorage.getItem("sidebar")) {
+      this.sidebar = localStorage.getItem("sidebar");
+    }
   }
 
   insertThemeForUser(theme: string) {
@@ -172,6 +177,8 @@ export class DashboardComponent implements OnInit {
     } else {
       this.sidebar = "";
     }
+
+    localStorage.setItem("sidebar", this.sidebar);
   }
 
   hideShowSidebarMobile() {

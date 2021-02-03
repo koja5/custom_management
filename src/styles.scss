@@ -17,7 +17,7 @@
     position: relative;
     text-align: center;
     position: absolute;
-    top: 46%;
+    top: 50%;
     left: 46%;
 }
 
@@ -13878,6 +13878,26 @@ kendo-grid-filter-cell-operators {
 
 .e-schedule .e-vertical-view .e-time-cells-wrap table td, .e-schedule .e-vertical-view .e-work-cells {
     height: 33px !important;
+}
+
+.e-schedule .e-vertical-view .e-work-cells {
+    border-color: #ccc !important;
+    border-width: 0 0 2px 2px !important;
+
+}
+
+.e-schedule .e-vertical-view .e-date-header-wrap table tbody td {
+    border-color: #ccc !important;
+    border-width: 0 0 2px 2px !important;
+}
+
+.e-schedule .e-schedule-table {
+    border: 1px solid #ccc !important;
+    border-bottom: none !important;
+}
+
+.e-schedule .e-vertical-view .e-header-cells {
+    height: 36px !important;
 }
 
 /* SYNCFUSION END */

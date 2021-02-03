@@ -374,7 +374,8 @@
   height: 72px;
   line-height: 1.6;
   outline: none;
-  width: 100%;
+  width: 90px;
+  white-space: break-spaces;
 }
 
 .overview-toolbar-settings {
@@ -748,4 +749,30 @@
   flex: auto;
   padding: 4px 8px 0;
   text-align: left;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: table;
+}
+
+.checkButton {
+  position: absolute;
+  right: 4px;
+  bottom: 8px;
+  font-size: 21px;
+  z-index: 100;
+}
+
+.confirmed {
+  color: #24c719;
+}
+
+.notConfirmed {
+  color: gray;
+  opacity: 0.6;
+}
+
+.blur-form {
+  opacity: 0.5;
+  filter: blur(2px);
 }

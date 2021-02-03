@@ -413,6 +413,8 @@ export class DynamicSchedulerComponent implements OnInit {
         this.scheduleObj.openEditor(recEventData, "Add", true, 1);
         break;
     }
+
+    localStorage.setItem("currentView", this.currentView);
   }
 
   private getEventData(): Object {
@@ -478,6 +480,8 @@ export class DynamicSchedulerComponent implements OnInit {
         this.currentView = "Agenda";
         break;
     }
+
+    localStorage.setItem("currentView", this.currentView);
   }
 
   public onWeekNumberChange(args: SwitchEventArgs): void {
@@ -585,35 +589,47 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   public onDayStartHourChange(args: TimeEventArgs): void {
-    this.scheduleObj.startHour = this.intl.formatDate(args.value, {
-      skeleton: "Hm",
-    });
+    if (this.scheduleObj) {
+      this.scheduleObj.startHour = this.intl.formatDate(args.value, {
+        skeleton: "Hm",
+      });
+    }
   }
 
   public onDayEndHourChange(args: TimeEventArgs): void {
-    this.scheduleObj.endHour = this.intl.formatDate(args.value, {
-      skeleton: "Hm",
-    });
+    if (this.scheduleObj) {
+      this.scheduleObj.endHour = this.intl.formatDate(args.value, {
+        skeleton: "Hm",
+      });
+    }
   }
 
   public onWorkStartHourChange(args: TimeEventArgs): void {
-    this.scheduleObj.workHours.start = this.intl.formatDate(args.value, {
-      skeleton: "Hm",
-    });
+    if (this.scheduleObj) {
+      this.scheduleObj.workHours.start = this.intl.formatDate(args.value, {
+        skeleton: "Hm",
+      });
+    }
   }
 
   public onWorkEndHourChange(args: TimeEventArgs): void {
-    this.scheduleObj.workHours.end = this.intl.formatDate(args.value, {
-      skeleton: "Hm",
-    });
+    if (this.scheduleObj) {
+      this.scheduleObj.workHours.end = this.intl.formatDate(args.value, {
+        skeleton: "Hm",
+      });
+    }
   }
 
   public onTimescaleDurationChange(args: ChangeEventArgs): void {
-    this.scheduleObj.timeScale.interval = args.value as number;
+    if (this.scheduleObj) {
+      this.scheduleObj.timeScale.interval = args.value as number;
+    }
   }
 
   public onTimescaleIntervalChange(args: ChangeEventArgs): void {
-    this.scheduleObj.timeScale.slotCount = args.value as number;
+    if (this.scheduleObj) {
+      this.scheduleObj.timeScale.slotCount = args.value as number;
+    }
   }
 
   public getResourceData(data: {
@@ -749,6 +765,7 @@ export class DynamicSchedulerComponent implements OnInit {
     formValue.start = this.eventTime.start;
     formValue.end = this.eventTime.end;
     formValue.superadmin = localStorage.getItem("superadmin");
+    formValue.color = this.getColorForEvent(this.selected);
     if (this.type !== 3 && this.creatorEvent !== undefined) {
       formValue.creator_id = this.creatorEvent;
     } else {
@@ -788,6 +805,8 @@ export class DynamicSchedulerComponent implements OnInit {
 
             formValue["StartTime"] = new Date(formValue.start);
             formValue["EndTime"] = new Date(formValue.end);
+
+            formValue.id = val.id;
 
             this.allEvents.push(formValue);
             this.scheduleObj.eventSettings.dataSource = this.allEvents;
@@ -829,21 +848,37 @@ export class DynamicSchedulerComponent implements OnInit {
     });
   }
 
+  getColorForEvent(id) {
+    for (let i = 0; i < this.eventCategory.length; i++) {
+      if (this.eventCategory[i].id == id) {
+        return this.eventCategory[i].color;
+      }
+    }
+  }
+
   updateTask(args) {
     console.log(args);
     let formValue = new EventModel();
+    formValue.Id = args.data.Id;
     formValue.id = args.data.id;
-    formValue.colorTask = this.selected;
+    formValue.colorTask = this.selected ? this.selected : args.data.colorTask;
+    formValue;
     formValue.telephone = this.telephoneValue;
     formValue.user = this.customerUser.id
       ? this.customerUser
       : { id: args.data.customer_id };
+    formValue.customer_id = this.customerUser.id
+      ? this.customerUser.id
+      : args.data.customer_id;
     formValue.therapy_id = args.data.therapy_id;
     formValue.mobile = this.mobileValue;
     formValue.start = this.eventTime.start
       ? this.eventTime.start
       : args.data.StartTime;
     formValue.end = this.eventTime.end ? this.eventTime.end : args.data.EndTime;
+    formValue.color = this.getColorForEvent(
+      this.selected ? this.selected : args.data.colorTask
+    );
     formValue.superadmin = localStorage.getItem("superadmin");
     formValue.creator_id = args.data.creator_id;
     formValue = this.colorMapToId(formValue);
@@ -862,6 +897,8 @@ export class DynamicSchedulerComponent implements OnInit {
       this.eventTime.start ? this.eventTime.start : args.data.StartTime,
       this.eventTime.end ? this.eventTime.end : args.data.EndTime
     );
+    formValue["StartTime"] = new Date(formValue.start);
+    formValue["EndTime"] = new Date(formValue.end);
     if (this.isConfirm) {
       formValue.confirm = 0;
     } else {
@@ -877,7 +914,8 @@ export class DynamicSchedulerComponent implements OnInit {
               this.language.successUpdateText,
               { timeOut: 7000, positionClass: "toast-bottom-right" }
             );
-            this.initializeTasks();
+            // this.initializeTasks();
+            this.updateTaskInScheduler("update", formValue);
           } else {
             this.toastr.error(
               this.language.unsuccessUpdateTitle,
@@ -907,7 +945,35 @@ export class DynamicSchedulerComponent implements OnInit {
     });
   }
 
+  updateTaskInScheduler(typeOfAction, data) {
+    if (typeOfAction === "create") {
+      this.events.push(data);
+    } else {
+      this.updateScheduler(data);
+    }
+  }
+
+  updateScheduler(data) {
+    for (let i = 0; i < this.allEvents.length; i++) {
+      if (this.allEvents[i].id === data.id) {
+        // this.allEvents.splice(i, 1);
+        this.allEvents[i] = data;
+        this.scheduleObj.eventSettings.dataSource = this.allEvents;
+        this.scheduleObj.refreshEvents();
+        return;
+        /*this.eventSettings = {};
+        setTimeout(() => {
+          this.allEvents.push(data);
+          this.scheduleObj.eventSettings.dataSource = this.allEvents;
+          this.scheduleObj.refreshEvents();
+        }, 20);*/
+      }
+    }
+  }
+
   onPopupOpen(args: PopupOpenEventArgs): void {
+    console.log(args);
+    args.element.scrollTop = 0;
     this.setTimeForEditor(args);
     if (args.type === "QuickInfo") {
       args.cancel = true;
@@ -916,6 +982,7 @@ export class DynamicSchedulerComponent implements OnInit {
       if (!args.data["id"]) {
         this.clearAllSelectedData();
       } else if (args.data["id"]) {
+        this.selected = null;
         this.getSelectEventData(args.data);
       }
     }
@@ -948,9 +1015,52 @@ export class DynamicSchedulerComponent implements OnInit {
   }*/
 
   setTimeForEditor(args) {
+    let timeDurationInd = 0;
+    let timeDuration = 0;
+    if (!isNaN(this.selectedStoreId)) {
+      if (args.data.id === undefined || args.data.id === null) {
+        const informationAboutStore = this.getStartEndTimeForStore(
+          this.store,
+          this.selectedStoreId
+        );
+        timeDurationInd =
+          Number(informationAboutStore.time_therapy) !==
+          Number(this.timeDuration)
+            ? 1
+            : 0;
+        timeDuration = Number(informationAboutStore.time_therapy);
+      } else {
+        const informationAboutStore = this.getStartEndTimeForStore(
+          this.store,
+          this.selectedStoreId
+        );
+        if (
+          new Date(args.data.EndTime).getTime() -
+            new Date(args.data.StartTime).getTime() !==
+          Number(informationAboutStore.time_therapy) * 60000
+        ) {
+          timeDuration =
+            (new Date(args.data.EndTime).getTime() -
+              new Date(args.data.StartTime).getTime()) /
+            60000;
+        } else {
+          timeDurationInd =
+            Number(informationAboutStore.time_therapy) !==
+            Number(this.timeDuration)
+              ? 1
+              : 0;
+          timeDuration = Number(informationAboutStore.time_therapy);
+        }
+      }
+    }
+
     this.eventTime = {
       start: args.data.StartTime,
-      end: args.data.EndTime,
+      end: new Date(
+        timeDurationInd
+          ? args.data.StartTime.getTime() + timeDuration * 60000
+          : args.data.EndTime.getTime()
+      ),
     };
   }
 
@@ -1238,6 +1348,10 @@ export class DynamicSchedulerComponent implements OnInit {
     } else {
       this.height = this.dynamicService.getSchedulerHeightWithoutToolbar();
     }
+
+    if (localStorage.getItem("currentView")) {
+      this.currentView = localStorage.getItem("currentView") as View;
+    }
   }
 
   initializaionData() {
@@ -1297,7 +1411,9 @@ export class DynamicSchedulerComponent implements OnInit {
           this.store,
           this.selectedStoreId
         );
-
+        this.startWork = informationAboutStore.start_work;
+        this.endWork = informationAboutStore.end_work;
+        this.timeDuration = informationAboutStore.time_duration;
         if (
           Number(this.timeDuration) > Number(informationAboutStore.time_therapy)
         ) {
@@ -1341,12 +1457,15 @@ export class DynamicSchedulerComponent implements OnInit {
       this.value = JSON.parse(
         localStorage.getItem("usersFor-" + this.selectedStoreId + "-" + this.id)
       );
-      this.sharedCalendarResources = this.value;
       // this.selectedStore(this.selectedStoreId);
       if (this.value !== null) {
         this.getTaskForSelectedUsers(this.value);
+        this.sharedCalendarResources = this.value;
       } else {
-        this.calendars.push({ name: null, events: [] });
+        this.packEventsForShow([]);
+        this.value = [];
+        this.sharedCalendarResources = null;
+        this.loading = false;
       }
       this.getUserInCompany(this.selectedStoreId);
     } else if (
@@ -1416,6 +1535,10 @@ export class DynamicSchedulerComponent implements OnInit {
     this.mobileValue = "";
     this.isConfirm = false;
     this.complaintData = new ComplaintTherapyModel();
+    if (this.eventCategory.length > 0) {
+      this.selected = this.eventCategory[0].id;
+    }
+    this.createFormLoading = true;
   }
 
   public getNextId(): number {
@@ -1515,6 +1638,7 @@ export class DynamicSchedulerComponent implements OnInit {
 
   createCustomer(form) {
     console.log(this.data);
+    this.createFormLoading = false;
     this.data.storeId = localStorage.getItem("superadmin");
     this.customer.createCustomer(this.data, (val) => {
       console.log(val);
@@ -1540,7 +1664,7 @@ export class DynamicSchedulerComponent implements OnInit {
         );
         this.loading = false;
         this.setStoreWork();
-        console.log(document.getElementsByClassName("k-scheduler-toolbar"));
+        this.createFormLoading = true;
       });
     }, 100);
   }
@@ -1602,7 +1726,6 @@ export class DynamicSchedulerComponent implements OnInit {
       this.service
         .getTasksForStore(this.selectedStoreId, this.id, this.type)
         .subscribe((data) => {
-          this.events = [];
           this.calendars = [];
           this.events = [];
           this.packEventsForShow(data);
@@ -1669,7 +1792,6 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   packEventsForShow(data) {
-    this.allEvents = [];
     for (let i = 0; i < data.length; i++) {
       data[i].StartTime = new Date(data[i].start);
       data[i].EndTime = new Date(data[i].end);
@@ -2125,10 +2247,14 @@ export class DynamicSchedulerComponent implements OnInit {
 
   resetCalendarData() {
     this.eventSettings.dataSource = [];
+    this.value = [];
+    this.allEvents = [];
+    this.sharedCalendarResources = null;
   }
 
   public createFormGroup(args): FormGroup {
     this.baseDataIndicator = false;
+    this.createFormLoading = false;
     if (this.eventCategory.length > 0) {
       this.selected = this.eventCategory[0].id;
     }
@@ -2143,10 +2269,8 @@ export class DynamicSchedulerComponent implements OnInit {
         this.language.selectStoreIndicatorText,
         { timeOut: 7000, positionClass: "toast-bottom-right" }
       );
-      this.createFormLoading = false;
       return this.createFormGroup.bind(this);
     } else {
-      this.createFormLoading = false;
       const dataItem = args;
       if (
         typeof dataItem.customer_id === "number" &&
@@ -2166,45 +2290,6 @@ export class DynamicSchedulerComponent implements OnInit {
           });
       }
 
-      let timeDurationInd = 0;
-      let timeDuration = 0;
-      if (!isNaN(this.selectedStoreId)) {
-        if (dataItem.id === undefined || dataItem.id === null) {
-          const informationAboutStore = this.getStartEndTimeForStore(
-            this.store,
-            this.selectedStoreId
-          );
-          timeDurationInd =
-            Number(informationAboutStore.time_therapy) !==
-            Number(this.timeDuration)
-              ? 1
-              : 0;
-          timeDuration = Number(informationAboutStore.time_therapy);
-        } else {
-          const informationAboutStore = this.getStartEndTimeForStore(
-            this.store,
-            this.selectedStoreId
-          );
-          if (
-            new Date(dataItem.end).getTime() -
-              new Date(dataItem.start).getTime() !==
-            Number(informationAboutStore.time_therapy) * 60000
-          ) {
-            timeDuration =
-              (new Date(dataItem.end).getTime() -
-                new Date(dataItem.start).getTime()) /
-              60000;
-          } else {
-            timeDurationInd =
-              Number(informationAboutStore.time_therapy) !==
-              Number(this.timeDuration)
-                ? 1
-                : 0;
-            timeDuration = Number(informationAboutStore.time_therapy);
-          }
-        }
-      }
-
       if (
         this.customerUser !== undefined &&
         this.customerUser !== null &&
@@ -2216,13 +2301,6 @@ export class DynamicSchedulerComponent implements OnInit {
 
       const eventDate = {
         id: args.isNew ? this.getNextId() : dataItem.id,
-        start: [dataItem.start, Validators.required],
-        end: [
-          timeDurationInd
-            ? new Date(dataItem.start).getTime() + timeDuration * 60000
-            : dataItem.end,
-          Validators.required,
-        ],
         isAllDay: dataItem.isAllDay,
         colorTask: dataItem.colorTitle,
         creator_id: Number(localStorage.getItem("idUser")),
@@ -2237,16 +2315,7 @@ export class DynamicSchedulerComponent implements OnInit {
         recurrenceId: dataItem.recurrenceId,
       };
 
-      this.eventTime = {
-        start: new Date(dataItem.start),
-        end: new Date(
-          timeDurationInd ? dataItem.start + timeDuration * 60000 : dataItem.end
-        ),
-      };
-
-      dataItem.EndTime = new Date(
-        timeDurationInd ? dataItem.start + timeDuration * 60000 : dataItem.end
-      );
+      this.selected = dataItem.colorTask;
 
       setTimeout(() => {
         if (dataItem.therapy_id !== undefined) {
@@ -2459,15 +2528,26 @@ export class DynamicSchedulerComponent implements OnInit {
           .subscribe((data_therapy) => {
             if (data_therapy) {
               this.toastr.success(
-                this.language.unsuccessUpdateTitle,
-                this.language.unsuccessUpdateText,
+                this.language.successDeleteTitle,
+                this.language.successDeleteText,
                 { timeOut: 7000, positionClass: "toast-bottom-right" }
               );
-              this.initializeTasks();
+              // this.initializeTasks();
+              this.deleteTaskFromScheduler(dataItem);
             }
           });
       }
     });
+  }
+
+  deleteTaskFromScheduler(dataItem) {
+    for (let i = 0; i < this.allEvents.length; i++) {
+      if (this.allEvents[i].id === dataItem.id) {
+        this.allEvents.splice(i, 1);
+        this.scheduleObj.eventSettings.dataSource = this.allEvents;
+        this.scheduleObj.refreshEvents();
+      }
+    }
   }
 
   searchCustomer(event) {
@@ -2589,6 +2669,7 @@ export class DynamicSchedulerComponent implements OnInit {
   onItemDrag(event) {
     this.eventTime.start = event.startTime;
     this.eventTime.end = event.endTime;
+    this.selected = null;
   }
 
   hideToolbar() {
@@ -2605,5 +2686,15 @@ export class DynamicSchedulerComponent implements OnInit {
 
   selectedEventCategory(event) {
     this.selected = event;
+  }
+
+  sendAgainConfirmMail(dataItem) {
+    console.log(dataItem);
+    this.confirmArrivalData = {
+      id: dataItem.id,
+      name: dataItem.title.split("+")[0],
+      customer_id: dataItem.customer_id,
+    };
+    this.requestForConfirmArrival = true;
   }
 }

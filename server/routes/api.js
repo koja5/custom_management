@@ -2198,7 +2198,6 @@ router.get("/getWorkandTaskForUser/:id", function(req, res, next) {
         conn.query(
             "SELECT * from work where user_id = ?", [id],
             function(err, work) {
-                console.log(work);
                 if (!err) {
                     conn.query(
                         "select t.*, e.color from tasks t join event_category e on t.colorTask = e.id where creator_id = ?", [id],

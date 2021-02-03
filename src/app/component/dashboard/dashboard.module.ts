@@ -119,6 +119,6 @@ import { DymanicElementsModule } from "../dynamic-elements/dymanic-elements.modu
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
     },
-  ],
+  ]
 })
 export class DashboardModule {}
