@@ -29,7 +29,7 @@ export class UserDetailsComponent implements OnInit {
   public storeLocation: any;
   public selectedStore: any;
   public validDate: Date;
-  public selectedColor = '#f7f1db';
+  public selectedColor = null;
   public palette: any[] = [];
   public loading = true;
   public allWorkTime: any;
@@ -505,7 +505,6 @@ export class UserDetailsComponent implements OnInit {
           const clas = items[i].classList;
           for (let j = 0; j < allThemes.length; j++) {
             const themeName = allThemes[j]['name'];
-            console.log(clas);
             clas.remove('k-dialog-titlebar-' + themeName);
             clas.add('k-dialog-titlebar-' + theme);
           }
@@ -584,5 +583,9 @@ export class UserDetailsComponent implements OnInit {
 
   printUser() {
     window.print();
+  }
+
+  changeColorPalette(event) {
+    this.selectedColor = event;
   }
 }

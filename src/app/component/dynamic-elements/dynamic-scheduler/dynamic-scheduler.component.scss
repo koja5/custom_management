@@ -776,3 +776,12 @@
   opacity: 0.5;
   filter: blur(2px);
 }
+
+.event-details {
+  border: 3px solid #fff !important;
+}
+
+.show-hide-toolbar {
+  cursor: pointer; 
+  display: inline;
+}

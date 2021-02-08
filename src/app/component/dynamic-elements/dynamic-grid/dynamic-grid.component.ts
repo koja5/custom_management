@@ -175,7 +175,7 @@ export class DynamicGridComponent implements OnInit {
   tooltip(args: QueryCellInfoEventArgs) {
     const tooltip: Tooltip = new Tooltip(
       {
-        content: args.data[args.column.field].toString(),
+        content: args.data[args.column.field],
       },
       args.cell as HTMLTableCellElement
     );

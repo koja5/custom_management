@@ -106,9 +106,9 @@
             "confirmMessage": { "type": "string" },
             "hideToolbarTitle": { "type": "string" },
             "showToolbarTitle": { "type": "string" },
-            "filterToolbar": { "tyle": "string" },
-            "refreshEventToolbar": { "tyle": "string" },
-            "settingsToolbar": { "tyle": "string" },
+            "filterToolbar": { "type": "string" },
+            "refreshEventToolbar": { "type": "string" },
+            "settingsToolbar": { "type": "string" },
             "calendar": { "type": "string" },
             "customer": { "type": "string" },
             "users": { "type": "string" },
@@ -264,6 +264,15 @@
             "adminErrorUpdateTitle": { "type": "string" },
             "adminErrorUpdateText": { "type": "string" },
             "priority": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "text": { "type": "string" }
+                    }
+                }
+            },
+            "typeOfTask": {
                 "type": "array",
                 "items": {
                     "type": "object",
@@ -1326,6 +1335,30 @@
                         "flex-direction": "row",
                         "items": [{
                             "key": "priority[].text",
+                            "flex": "1 1 50px"
+                        }]
+                    }]
+                }]
+            }]
+        },
+        {
+            "type": "section",
+            "title": "Type of tasks",
+            "expandable": true,
+            "expanded": false,
+            "items": [{
+                "type": "div",
+                "display": "flex",
+                "flex-direction": "row",
+                "items": [{
+                    "key": "typeOfTask",
+                    "type": "array",
+                    "items": [{
+                        "type": "div",
+                        "displayFlex": true,
+                        "flex-direction": "row",
+                        "items": [{
+                            "key": "typeOfTask[].text",
                             "flex": "1 1 50px"
                         }]
                     }]

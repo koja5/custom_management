@@ -58,6 +58,7 @@ import { PdfViewerModule } from "ng2-pdf-viewer";
 import { SharedModule } from "src/app/shared.module";
 import { TodoComponent } from "./administrator/todo/todo.component";
 import { DymanicElementsModule } from "../dynamic-elements/dymanic-elements.module";
+import { DialogModule as  DialogModuleSyncfusion} from '@syncfusion/ej2-angular-popups';
 
 @NgModule({
   declarations: [
@@ -113,6 +114,7 @@ import { DymanicElementsModule } from "../dynamic-elements/dymanic-elements.modu
     PdfViewerModule,
     SharedModule,
     DymanicElementsModule,
+    DialogModuleSyncfusion
   ],
   providers: [
     {

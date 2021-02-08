@@ -383,26 +383,27 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   public onToolbarItemClicked(args: ClickEventArgs): void {
+    let currentViewLocal: View;
     switch (args.item.text) {
       case "Day":
-        this.currentView = this.isTimelineView ? "TimelineDay" : "Day";
+        currentViewLocal = this.isTimelineView ? "TimelineDay" : "Day";
         break;
       case "Week":
-        this.currentView = this.isTimelineView ? "TimelineWeek" : "Week";
+        currentViewLocal = this.isTimelineView ? "TimelineWeek" : "Week";
         break;
       case "WorkWeek":
-        this.currentView = this.isTimelineView
+        currentViewLocal = this.isTimelineView
           ? "TimelineWorkWeek"
           : "WorkWeek";
         break;
       case "Month":
-        this.currentView = this.isTimelineView ? "TimelineMonth" : "Month";
+        currentViewLocal = this.isTimelineView ? "TimelineMonth" : "Month";
         break;
       case "Year":
-        this.currentView = this.isTimelineView ? "TimelineYear" : "Year";
+        currentViewLocal = this.isTimelineView ? "TimelineYear" : "Year";
         break;
       case "Agenda":
-        this.currentView = "Agenda";
+        currentViewLocal = "Agenda";
         break;
       case "New Event":
         const eventData: Object = this.getEventData();
@@ -414,7 +415,11 @@ export class DynamicSchedulerComponent implements OnInit {
         break;
     }
 
-    localStorage.setItem("currentView", this.currentView);
+    setTimeout(() => {
+      this.currentView = currentViewLocal;
+      this.dateHeaderCounter = 0;
+      localStorage.setItem("currentView", this.currentView);
+    }, 100);
   }
 
   private getEventData(): Object {
@@ -489,7 +494,7 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   public onGroupingChange(args: SwitchEventArgs): void {
-    this.scheduleObj.group.resources = args.checked ? ["Calendars"] : [];
+    this.scheduleObj.group.resources = args.checked ? ["sharedCalendar"] : [];
   }
 
   public onGridlinesChange(args: SwitchEventArgs): void {
@@ -754,7 +759,7 @@ export class DynamicSchedulerComponent implements OnInit {
     let formValue = new EventModel();
     formValue.colorTask = this.selected;
     formValue.telephone = this.telephoneValue;
-    formValue.user = this.customerUser;
+    formValue.user = Object.assign({}, this.customerUser);
     formValue.mobile = this.mobileValue;
     formValue.title =
       this.customerUser["lastname"] +
@@ -807,10 +812,11 @@ export class DynamicSchedulerComponent implements OnInit {
             formValue["EndTime"] = new Date(formValue.end);
 
             formValue.id = val.id;
+            // this.customerUser = null;
 
             this.allEvents.push(formValue);
             this.scheduleObj.eventSettings.dataSource = this.allEvents;
-            this.scheduleObj.refresh();
+            this.scheduleObj.refreshEvents();
 
             this.toastr.success(
               this.language.successUpdateTitle,
@@ -864,12 +870,17 @@ export class DynamicSchedulerComponent implements OnInit {
     formValue.colorTask = this.selected ? this.selected : args.data.colorTask;
     formValue;
     formValue.telephone = this.telephoneValue;
-    formValue.user = this.customerUser.id
+    const checkCustomerId = this.customerUser.id
       ? this.customerUser
-      : { id: args.data.customer_id };
-    formValue.customer_id = this.customerUser.id
-      ? this.customerUser.id
-      : args.data.customer_id;
+      : {
+          id: args.data.customer_id
+            ? args.data.customer_id
+            : args.data.user.id
+            ? args.data.user.id
+            : null,
+        };
+    formValue.user = checkCustomerId;
+    formValue.customer_id = checkCustomerId.id;
     formValue.therapy_id = args.data.therapy_id;
     formValue.mobile = this.mobileValue;
     formValue.start = this.eventTime.start
@@ -882,7 +893,7 @@ export class DynamicSchedulerComponent implements OnInit {
     formValue.superadmin = localStorage.getItem("superadmin");
     formValue.creator_id = args.data.creator_id;
     formValue = this.colorMapToId(formValue);
-    this.addTherapy(this.customerUser["id"]);
+    this.addTherapy(formValue.customer_id);
     if (this.customerUser.id) {
       formValue.title =
         this.customerUser["lastname"] +
@@ -1035,14 +1046,11 @@ export class DynamicSchedulerComponent implements OnInit {
           this.selectedStoreId
         );
         if (
-          new Date(args.data.EndTime).getTime() -
-            new Date(args.data.StartTime).getTime() !==
-          Number(informationAboutStore.time_therapy) * 60000
+          args.data.EndTime.getTime() - args.data.StartTime.getTime() !==
+          Number(informationAboutStore.time_duration) * 60000
         ) {
           timeDuration =
-            (new Date(args.data.EndTime).getTime() -
-              new Date(args.data.StartTime).getTime()) /
-            60000;
+            args.data.EndTime.getTime() - args.data.StartTime.getTime() / 60000;
         } else {
           timeDurationInd =
             Number(informationAboutStore.time_therapy) !==
@@ -1285,6 +1293,8 @@ export class DynamicSchedulerComponent implements OnInit {
   };
   public creatorEvent: number;
   public displayToolbar = true;
+  public storeName: string;
+  public dateHeaderCounter = 0;
 
   constructor(
     public service: TaskService,
@@ -1425,6 +1435,7 @@ export class DynamicSchedulerComponent implements OnInit {
             Number(informationAboutStore.time_therapy) /
             Number(this.timeDuration);
         }
+        this.storeName = this.getStoreName(this.selectedStoreId);
       }
     });
   }
@@ -1483,7 +1494,7 @@ export class DynamicSchedulerComponent implements OnInit {
         .subscribe((data) => {
           console.log(data);
           this.events = [];
-          this.workTime = this.pickWorkTimeToTask(data["workTime"]);
+          // this.workTime = this.packWorkTimeToTask(data["workTime"]);
           this.packEventsForShow(data["events"]);
           const objectCalendar = {
             name: null,
@@ -1735,7 +1746,6 @@ export class DynamicSchedulerComponent implements OnInit {
           };
           this.calendars.push(objectCalendar);
           this.size = [];
-          this.size.push("100%");
           this.loading = false;
           this.setStoreWork();
           /// this.setWidthForCalendarHeader();
@@ -1759,7 +1769,7 @@ export class DynamicSchedulerComponent implements OnInit {
         .subscribe((data) => {
           console.log(data, this.valueLoop[this.loopIndex]);
           this.events = [];
-          this.workTime[this.loopIndex] = this.pickWorkTimeToTask(
+          this.workTime[this.loopIndex] = this.packWorkTimeToTask(
             data["workTime"]
           );
           const objectCalendar = {
@@ -1814,6 +1824,7 @@ export class DynamicSchedulerComponent implements OnInit {
     this.loading = true;
     this.calendars = [];
     this.selectedStoreId = event;
+    this.storeName = this.getStoreName(event);
     if (
       localStorage.getItem(
         "usersFor-" + this.selectedStoreId + "-" + this.id
@@ -1902,6 +1913,16 @@ export class DynamicSchedulerComponent implements OnInit {
     this.mongo.setSelectedStore(item).subscribe((data) => {
       console.log(data);
     });
+  }
+
+  getStoreName(id) {
+    if (this.store) {
+      for (let i = 0; i < this.store.length; i++) {
+        if (this.store[i].id === id) {
+          return this.store[i].storename;
+        }
+      }
+    }
   }
 
   setStoreWork() {
@@ -1994,7 +2015,7 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   onRenderCell(event) {
-    this.dateFormat(event, null, null);
+    this.dateFormat(event);
     // return event.element.style.background = "red";
   }
 
@@ -2004,7 +2025,7 @@ export class DynamicSchedulerComponent implements OnInit {
     args.element.classList.add("e-read-only");
   }
 
-  dateFormat(date, i, j) {
+  dateFormat(date) {
     /*if (
       new Date(this.calendars[i].workTime[j].change) <= new Date(date) &&
       (j + 1 <= this.calendars[i].workTime.length - 1
@@ -2035,47 +2056,105 @@ export class DynamicSchedulerComponent implements OnInit {
       return "noTime";
     }*/
 
+    if (date.elementType === "resourceHeader") {
+      if (date.groupIndex < this.calendars.length - 1) {
+        date.element.style.borderRight = "2px solid #6d6d6d";
+        return;
+      }
+    }
+    if (date.elementType === "dateHeader") {
+      if (this.currentView === "WorkWeek") {
+        this.dateHeaderCounter++;
+        if (
+          this.dateHeaderCounter === 5 &&
+          this.calendars.length - 1 > date.groupIndex
+        ) {
+          date.element.style.borderRight = "2px solid #6d6d6d";
+          this.dateHeaderCounter = 0;
+          return;
+        }
+      } else if (this.currentView === "Week" || this.currentView === "Month") {
+        this.dateHeaderCounter++;
+        if (
+          this.dateHeaderCounter === 7 &&
+          this.calendars.length - 1 > date.groupIndex
+        ) {
+          date.element.style.borderRight = "2px solid #6d6d6d";
+          return;
+        }
+      } else if (this.currentView === "Day") {
+        if (this.calendars.length - 1 > date.groupIndex) {
+          date.element.style.borderRight = "2px solid #6d6d6d";
+          return;
+        }
+      }
+    }
     if (date.elementType === "workCells") {
-      if (this.calendars[date.groupIndex]) {
+      if (
+        date.groupIndex !== undefined &&
+        this.calendars[0].workTime[date.groupIndex]
+      ) {
+        const groupIndex = date.groupIndex;
+        if (
+          this.currentView === "WorkWeek" &&
+          date.date.getDay() === 5 &&
+          this.calendars.length - 1 > groupIndex
+        ) {
+          date.element.style.borderRight = "2px solid #6d6d6d";
+        } else if (
+          (this.currentView === "Week" || this.currentView === "Month") &&
+          date.date.getDay() === 6 &&
+          this.calendars.length - 1 > groupIndex
+        ) {
+          date.element.style.borderRight = "2px solid #6d6d6d";
+        } else if (this.currentView === "Day") {
+          if (this.calendars.length - 1 > groupIndex) {
+            date.element.style.borderRight = "2px solid #6d6d6d";
+          }
+        }
         for (
           let i = 0;
-          i < this.calendars[date.groupIndex].workTime.length;
+          i < this.calendars[0].workTime[date.groupIndex].length;
           i++
         ) {
-          for (
-            let j = 0;
-            j < this.calendars[date.groupIndex].workTime[i].length;
-            j++
+          let workItem = this.calendars[0].workTime[date.groupIndex][i];
+          if (
+            new Date(workItem.change) <= date.date &&
+            (i + 1 <= this.calendars[0].workTime[date.groupIndex].length - 1
+              ? date.date <
+                new Date(
+                  this.calendars[0].workTime[date.groupIndex][i + 1].change
+                )
+              : true) &&
+            date.date.getDay() - 1 < 5 &&
+            date.date.getDay() !== 0
           ) {
-            let workItem = this.calendars[date.groupIndex].workTime[i][j];
             if (
-              new Date(workItem.change) <= date.date &&
-              date.date.getDay() - 1 < 5 &&
-              date.date.getDay() !== 0
+              (workItem.times[date.date.getDay() - 1].start <=
+                date.date.getHours() &&
+                workItem.times[date.date.getDay() - 1].end >
+                  date.date.getHours()) ||
+              (workItem.times[date.date.getDay() - 1].start2 <=
+                date.date.getHours() &&
+                workItem.times[date.date.getDay() - 1].end2 >
+                  date.date.getHours()) ||
+              (workItem.times[date.date.getDay() - 1].start3 <=
+                date.date.getHours() &&
+                workItem.times[date.date.getDay() - 1].end3 >
+                  date.date.getHours())
             ) {
-              if (
-                (workItem.times[date.date.getDay() - 1].start <=
-                  date.date.getHours() &&
-                  workItem.times[date.date.getDay() - 1].end >
-                    date.date.getHours()) ||
-                (workItem.times[date.date.getDay() - 1].start2 <=
-                  date.date.getHours() &&
-                  workItem.times[date.date.getDay() - 1].end2 >
-                    date.date.getHours()) ||
-                (workItem.times[date.date.getDay() - 1].start3 <=
-                  date.date.getHours() &&
-                  workItem.times[date.date.getDay() - 1].end3 >
-                    date.date.getHours())
-              ) {
-                return (date.element.style.background = workItem.color);
-              } else {
-                return "none";
-              }
-            } else {
-              return "noTime";
+              date.element.style.background = workItem.color;
             }
           }
         }
+      }
+    }
+    if (date.elementType === "monthDay") {
+      if (
+        date.date.getDay() === 6 &&
+        this.calendars.length - 1 > date.groupIndex
+      ) {
+        date.element.style.borderRight = "2px solid #6d6d6d";
       }
     }
   }
@@ -2096,7 +2175,7 @@ export class DynamicSchedulerComponent implements OnInit {
     return day;
   }
 
-  pickWorkTimeToTask(workTime) {
+  packWorkTimeToTask(workTime) {
     let workTimeArray = [];
     const allWorkTime = [];
     let workTimeObject = null;
@@ -2254,7 +2333,6 @@ export class DynamicSchedulerComponent implements OnInit {
 
   public createFormGroup(args): FormGroup {
     this.baseDataIndicator = false;
-    this.createFormLoading = false;
     if (this.eventCategory.length > 0) {
       this.selected = this.eventCategory[0].id;
     }
@@ -2272,6 +2350,7 @@ export class DynamicSchedulerComponent implements OnInit {
       return this.createFormGroup.bind(this);
     } else {
       const dataItem = args;
+      this.createFormLoading = false;
       if (
         typeof dataItem.customer_id === "number" &&
         dataItem.customer_id !== null
@@ -2317,52 +2396,48 @@ export class DynamicSchedulerComponent implements OnInit {
 
       this.selected = dataItem.colorTask;
 
-      setTimeout(() => {
-        if (dataItem.therapy_id !== undefined) {
-          this.customer.getTherapy(dataItem.therapy_id).subscribe((data) => {
-            console.log(data);
-            if (data["length"] !== 0) {
-              this.splitToValue(
-                data[0].complaint,
-                data[0].therapies,
-                data[0].therapies_previous
-              );
-              /*this.usersService.getUserWithId(data[0].em, val => {
+      if (dataItem.therapy_id !== undefined) {
+        this.customer.getTherapy(dataItem.therapy_id).subscribe((data) => {
+          console.log(data);
+          if (data["length"] !== 0) {
+            this.splitToValue(
+              data[0].complaint,
+              data[0].therapies,
+              data[0].therapies_previous
+            );
+            /*this.usersService.getUserWithId(data[0].em, val => {
                 this.selectedUser = val[0];
               });*/
-              this.complaintData = data[0];
-              this.complaintData.cs = Number(data[0].cs);
-              this.complaintData.state = Number(data[0].state);
-            }
-            this.createFormLoading = true;
-          });
-        } else {
-          this.createFormLoading = true;
-        }
-
-        console.log(dataItem.colorTask);
-        if (dataItem.colorTask !== undefined) {
-          this.selected = dataItem.colorTask;
-          console.log(this.selected);
-        }
-
-        if (dataItem.telephone !== undefined) {
-          this.telephoneValue = dataItem.telephone;
-        }
-        if (dataItem.mobile !== undefined) {
-          this.mobileValue = dataItem.mobile;
-        }
-
-        if (dataItem.confirm !== undefined) {
-          if (dataItem.confirm === -1) {
-            this.isConfirm = 0;
-          } else {
-            this.isConfirm = 1;
+            this.complaintData = data[0];
+            this.complaintData.cs = Number(data[0].cs);
+            this.complaintData.state = Number(data[0].state);
           }
-        }
+          this.createFormLoading = true;
+        });
+      } else {
+        this.createFormLoading = true;
+      }
 
-        return eventDate;
-      }, 100);
+      console.log(dataItem.colorTask);
+      if (dataItem.colorTask !== undefined) {
+        this.selected = dataItem.colorTask;
+        console.log(this.selected);
+      }
+
+      if (dataItem.telephone !== undefined) {
+        this.telephoneValue = dataItem.telephone;
+      }
+      if (dataItem.mobile !== undefined) {
+        this.mobileValue = dataItem.mobile;
+      }
+
+      if (dataItem.confirm !== undefined) {
+        if (dataItem.confirm === -1) {
+          this.isConfirm = 0;
+        } else {
+          this.isConfirm = 1;
+        }
+      }
     }
   }
 
@@ -2615,6 +2690,11 @@ export class DynamicSchedulerComponent implements OnInit {
       this.deleteTask(eventDetails);
       // this.scheduleObj.deleteEvent(eventDetails, currentAction);
     }
+    this.initializeCalendar();
+  }
+
+  initializeCalendar() {
+    this.dateHeaderCounter = 0;
   }
 
   /*onActionBegin(args: ActionEventArgs): void {
@@ -2670,12 +2750,19 @@ export class DynamicSchedulerComponent implements OnInit {
     this.eventTime.start = event.startTime;
     this.eventTime.end = event.endTime;
     this.selected = null;
+    this.customerUser.id = null;
   }
 
   hideToolbar() {
     if (this.displayToolbar) {
       this.displayToolbar = false;
       this.height = this.dynamicService.getSchedulerHeightWithoutToolbar();
+      const settingsPanel: Element = document.querySelector(
+        ".overview-content .filter-panel"
+      );
+      if (!settingsPanel.classList.contains("hide")) {
+        addClass([settingsPanel], "hide");
+      }
     } else {
       this.displayToolbar = true;
       this.height = this.dynamicService.getSchedulerHeight();

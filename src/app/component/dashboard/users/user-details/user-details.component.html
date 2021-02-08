@@ -566,8 +566,8 @@
               <div class="col-sm-6">
                 <span>Color</span>
                 <div>
-                  <kendo-colorpalette [palette]="palette" [value]="selectedColor" [(ngModel)]="selectedColor"
-                    [tileSize]="30">
+                  <kendo-colorpalette [palette]="palette" [value]="selectedColor"
+                    [tileSize]="30"  (valueChange)="changeColorPalette($event)">
                   </kendo-colorpalette>
                 </div>
               </div>

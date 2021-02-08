@@ -9,19 +9,24 @@
               style="border: 1px solid transparent"
               (click)="hideToolbar()"
             >
-              {{
-                displayToolbar
-                  ? language.hideToolbarTitle
-                  : language.showToolbarTitle
-              }}
-              <span
-                *ngIf="displayToolbar"
-                class="fa fa-chevron-circle-up"
-              ></span>
-              <span
-                *ngIf="!displayToolbar"
-                class="fa fa-chevron-circle-down"
-              ></span>
+              <span *ngIf="storeName" style="font-weight: bold"
+                >{{ storeName }} |
+              </span>
+              <p class="show-hide-toolbar">
+                {{
+                  displayToolbar
+                    ? language.hideToolbarTitle
+                    : language.showToolbarTitle
+                }}
+                <span
+                  *ngIf="displayToolbar"
+                  class="fa fa-chevron-circle-up"
+                ></span>
+                <span
+                  *ngIf="!displayToolbar"
+                  class="fa fa-chevron-circle-down"
+                ></span>
+              </p>
             </div>
           </div>
           <div class="center-panel">
@@ -94,7 +99,7 @@
             <button
               ejs-button
               id="settingsBtn"
-              iconCss="e-icons e-schedule-toolbar-settings"
+              iconCss="fa fa-search"
               cssClass="overview-toolbar-settings"
               iconPosition="Top"
               (click)="showFilterPanel($event)"
@@ -184,13 +189,13 @@
                   </ng-template>
                 </e-item>
                 <e-item type="Separator"></e-item>
-                <e-item tooltipText="Week Number">
+                <!-- <e-item tooltipText="Week Number">
                   <ng-template #template>
                     <div style="height: 46px; line-height: 23px">
                       <div class="icon-child" style="text-align: center">
                         <ejs-switch
                           id="week_number"
-                          [checked]="false"
+                          [checked]="true"
                           (change)="onWeekNumberChange($event)"
                         ></ejs-switch>
                       </div>
@@ -264,7 +269,7 @@
                       </div>
                     </div>
                   </ng-template>
-                </e-item>
+                </e-item> -->
               </e-items>
             </ejs-toolbar>
           </div>
@@ -312,7 +317,7 @@
                     language.selectUsers
                   }}</label>
                 </div>
-                <div class="col-sm-12">
+                <div class="col-sm-12" *ngIf="usersInCompany">
                   <!-- <ejs-multiselect *ngIf="usersInCompany" #filterUsers id='workWeekDays' width='170px' [dataSource]='usersInCompany' [value]="value" [showClearButton]='false'
                   [showDropDownIcon]='true' [showSelectAll]="true" [mode]='checkboxMode' [fields]="{text: 'shortname', value: 'id'}" popupHeight='150px'
                   (change)='handleValue($event)'></ejs-multiselect> -->
@@ -338,6 +343,7 @@
                 height="100%"
                 [(currentView)]="currentView"
                 [group]="value.length ? group : []"
+                [showWeekNumber]="true"
                 [eventSettings]="eventSettings"
                 (renderCell)="onRenderCell($event)"
                 (actionBegin)="onActionBegin($event)"
@@ -351,13 +357,37 @@
                   </div>
                 </ng-template>
                 <e-views>
-                  <e-view option="Day"></e-view>
+                  <e-view option="Day">
+                    <ng-template #eventTemplate let-data>
+                      <div
+                        class="event-details"
+                        [style.background]="data.color"
+                      >
+                        <div class="eventName">
+                          {{ data.title.split("+")[0] }}
+                        </div>
+                        <div class="eventTitle">
+                          {{ data.title.split("+")[1] }}
+                        </div>
+                      </div>
+                      <span
+                        *ngIf="data.confirm === 0"
+                        class="fa fa-check-circle-o checkButton notConfirmed"
+                        title="{{ language.notConfirmed }}"
+                        (click)="sendAgainConfirmMail(data)"
+                      ></span>
+                      <span
+                        *ngIf="data.confirm === 1"
+                        class="fa fa-check-circle-o checkButton confirmed"
+                        title="{{ language.confirmed }}"
+                      ></span>
+                    </ng-template>
+                  </e-view>
                   <e-view option="Week">
                     <ng-template #eventTemplate let-data>
                       <div
                         class="event-details"
                         [style.background]="data.color"
-                        style="border: 2px solid"
                       >
                         <div class="eventName">
                           {{ data.title.split("+")[0] }}
@@ -385,7 +415,6 @@
                       <div
                         class="event-details"
                         [style.background]="data.color"
-                        style="border: 2px solid"
                       >
                         <div class="eventName">
                           {{ data.title.split("+")[0] }}

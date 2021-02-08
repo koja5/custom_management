@@ -13551,11 +13551,6 @@ kendo-grid-filter-cell-operators {
     width: 90% !important;
 }
 
-.e-popup.e-popup-open.e-dialog {
-    width: 30% !important;
-    max-height: 70% !important;
-}
-
 
 /*.e-dialog .e-footer-content {
     display: none !important;
@@ -13581,6 +13576,19 @@ kendo-grid-filter-cell-operators {
     outline: 0 !important;
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6) !important;
 }*/
+
+kendo-window {
+    border: 2px solid #6673fc !important;
+    box-shadow: 1px 1px 4px 2px lightgray !important;
+}
+
+.k-colorpalette .k-item:hover, .k-colorpalette .k-item.k-state-hover {
+    box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.8) !important;
+}
+
+.k-colorpalette .k-item.k-state-selected, .k-colorpalette .k-item.k-state-selected:hover, .k-colorpalette .k-item.k-state-focused, .k-colorpalette .k-item:focus {
+    box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.3), inset 0 0 0 1px white !important;
+}
 
 /* Padding and Margin */
 
@@ -13876,28 +13884,52 @@ kendo-grid-filter-cell-operators {
 
 /* SYNCFUSION START */
 
+
+.e-popup.e-popup-open.e-dialog {
+    /*width: 30% !important;*/
+    max-height: 81% !important;
+}
+
+
 .e-schedule .e-vertical-view .e-time-cells-wrap table td, .e-schedule .e-vertical-view .e-work-cells {
     height: 33px !important;
 }
 
 .e-schedule .e-vertical-view .e-work-cells {
-    border-color: #ccc !important;
-    border-width: 0 0 2px 2px !important;
+    /*border-color: #ccc !important;*/
+    /*border-width: 0 0 2px 2px !important;*/
 
 }
 
 .e-schedule .e-vertical-view .e-date-header-wrap table tbody td {
-    border-color: #ccc !important;
-    border-width: 0 0 2px 2px !important;
+    /*border-color: #ccc !important;*/
+    /*border-width: 0 0 2px 2px !important;*/
 }
 
 .e-schedule .e-schedule-table {
-    border: 1px solid #ccc !important;
+    /*border: 1px solid #ccc !important;*/
     border-bottom: none !important;
 }
 
 .e-schedule .e-vertical-view .e-header-cells {
     height: 36px !important;
+}
+
+.e-schedule .e-vertical-view .e-day-wrapper .e-appointment.e-appointment-border, .e-schedule .e-vertical-view .e-day-wrapper .e-appointment:focus {
+    /*border-right: 2px solid !important;*/
+    background: none !important;
+}
+
+.e-schedule .e-vertical-view .e-day-wrapper .e-appointment {
+    border-right: 3px solid #fff !important;
+    background: none !important;
+    width: 100% !important;
+}
+
+.e-schedule .e-vertical-view .e-left-indent-wrap table tbody td.e-header-cells.e-week-number {
+    font-size: 22px !important;
+    font-weight: bold !important;
+    padding-top: 0px !important;
 }
 
 /* SYNCFUSION END */

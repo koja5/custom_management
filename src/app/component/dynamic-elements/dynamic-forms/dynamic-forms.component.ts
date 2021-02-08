@@ -39,9 +39,7 @@ export class DynamicFormsComponent implements OnInit {
     return this.form.value;
   }
 
-  constructor(
-    private fb: FormBuilder
-  ) {}
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
     this.form = this.createGroup();
@@ -100,6 +98,8 @@ export class DynamicFormsComponent implements OnInit {
   }
 
   setValue(name: string, value: any) {
-    this.form.controls[name].setValue(value, { emitEvent: true });
+    if (this.form.controls[name]) {
+      this.form.controls[name].setValue(value, { emitEvent: true });
+    }
   }
 }
