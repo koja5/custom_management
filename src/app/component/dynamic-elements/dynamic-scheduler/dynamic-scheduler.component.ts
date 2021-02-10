@@ -415,11 +415,11 @@ export class DynamicSchedulerComponent implements OnInit {
         break;
     }
 
-    setTimeout(() => {
       this.currentView = currentViewLocal;
       this.dateHeaderCounter = 0;
       localStorage.setItem("currentView", this.currentView);
-    }, 100);
+      this.scheduleObj.refresh();
+    
   }
 
   private getEventData(): Object {
@@ -487,35 +487,42 @@ export class DynamicSchedulerComponent implements OnInit {
     }
 
     localStorage.setItem("currentView", this.currentView);
+    this.scheduleObj.refresh();
   }
 
   public onWeekNumberChange(args: SwitchEventArgs): void {
     this.scheduleObj.showWeekNumber = args.checked;
+    this.scheduleObj.refresh();
   }
 
   public onGroupingChange(args: SwitchEventArgs): void {
     this.scheduleObj.group.resources = args.checked ? ["sharedCalendar"] : [];
+    this.scheduleObj.refresh();
   }
 
   public onGridlinesChange(args: SwitchEventArgs): void {
     this.scheduleObj.timeScale.enable = args.checked;
+    this.scheduleObj.refresh();
   }
 
   public onRowAutoHeightChange(args: SwitchEventArgs): void {
     this.scheduleObj.rowAutoHeight = args.checked;
+    this.scheduleObj.refresh();
   }
 
   public onTooltipChange(args: SwitchEventArgs): void {
     this.scheduleObj.eventSettings.enableTooltip = args.checked;
+    this.scheduleObj.refresh();
   }
 
   public onSelected(args: SelectedEventArgs): void {
     this.scheduleObj.importICalendar(
       (<HTMLInputElement>args.event.target).files[0]
     );
+    this.scheduleObj.refresh();
   }
 
-  public onSettingsClick(args): void {
+  public onSettingsClick(): void {
     const settingsPanel: Element = document.querySelector(
       ".overview-content .settings-panel"
     );
@@ -527,7 +534,7 @@ export class DynamicSchedulerComponent implements OnInit {
     this.scheduleObj.refreshEvents();
   }
 
-  public showFilterPanel(args): void {
+  public showFilterPanel(): void {
     const settingsPanel: Element = document.querySelector(
       ".overview-content .filter-panel"
     );
@@ -539,37 +546,19 @@ export class DynamicSchedulerComponent implements OnInit {
     this.scheduleObj.refreshEvents();
   }
 
-  public getWeatherImage(value: Date): string {
-    switch (value.getDay()) {
-      case 0:
-        return '<img class="weather-image" src="./assets/schedule/images/weather-clear.svg"/><div class="weather-text">25°C</div>';
-      case 1:
-        return '<img class="weather-image" src="./assets/schedule/images/weather-clouds.svg"/><div class="weather-text">18°C</div>';
-      case 2:
-        return '<img class="weather-image" src="./assets/schedule/images/weather-rain.svg"/><div class="weather-text">10°C</div>';
-      case 3:
-        return '<img class="weather-image" src="./assets/schedule/images/weather-clouds.svg"/><div class="weather-text">16°C</div>';
-      case 4:
-        return '<img class="weather-image" src="./assets/schedule/images/weather-rain.svg"/><div class="weather-text">8°C</div>';
-      case 5:
-        return '<img class="weather-image" src="./assets/schedule/images/weather-clear.svg"/><div class="weather-text">27°C</div>';
-      case 6:
-        return '<img class="weather-image" src="./assets/schedule/images/weather-clouds.svg"/><div class="weather-text">17°C</div>';
-      default:
-        return null;
-    }
-  }
-
   public getDateHeaderText(value: Date): string {
     return this.intl.formatDate(value, { skeleton: "Ed" });
+    this.scheduleObj.refresh();
   }
 
   public onWeekDayChange(args: ChangeEventArgs): void {
     this.scheduleObj.firstDayOfWeek = args.value as number;
+    this.scheduleObj.refresh();
   }
 
   public onWorkWeekDayChange(args: MultiSelectChangeEventArgs): void {
     this.scheduleObj.workDays = args.value as number[];
+    this.scheduleObj.refresh();
   }
 
   public onResourceChange(args: MultiSelectChangeEventArgs): void {
@@ -583,6 +572,7 @@ export class DynamicSchedulerComponent implements OnInit {
         resourcePredicate = new Predicate("CalendarId", "equal", value);
       }
     }
+    this.scheduleObj.refresh();
   }
 
   public onTimezoneChange(args: ChangeEventArgs): void {
@@ -591,6 +581,7 @@ export class DynamicSchedulerComponent implements OnInit {
     document.querySelector(".schedule-overview #timezoneBtn").innerHTML =
       '<span class="e-btn-icon e-icons e-schedule-timezone e-icon-left"></span>' +
       args.itemData.text;
+      this.scheduleObj.refresh();
   }
 
   public onDayStartHourChange(args: TimeEventArgs): void {
@@ -598,6 +589,7 @@ export class DynamicSchedulerComponent implements OnInit {
       this.scheduleObj.startHour = this.intl.formatDate(args.value, {
         skeleton: "Hm",
       });
+      this.scheduleObj.refresh();
     }
   }
 
@@ -606,6 +598,7 @@ export class DynamicSchedulerComponent implements OnInit {
       this.scheduleObj.endHour = this.intl.formatDate(args.value, {
         skeleton: "Hm",
       });
+      this.scheduleObj.refresh();
     }
   }
 
@@ -614,6 +607,7 @@ export class DynamicSchedulerComponent implements OnInit {
       this.scheduleObj.workHours.start = this.intl.formatDate(args.value, {
         skeleton: "Hm",
       });
+      this.scheduleObj.refresh();
     }
   }
 
@@ -622,18 +616,21 @@ export class DynamicSchedulerComponent implements OnInit {
       this.scheduleObj.workHours.end = this.intl.formatDate(args.value, {
         skeleton: "Hm",
       });
+      this.scheduleObj.refresh();
     }
   }
 
   public onTimescaleDurationChange(args: ChangeEventArgs): void {
     if (this.scheduleObj) {
       this.scheduleObj.timeScale.interval = args.value as number;
+      this.scheduleObj.refresh();
     }
   }
 
   public onTimescaleIntervalChange(args: ChangeEventArgs): void {
     if (this.scheduleObj) {
       this.scheduleObj.timeScale.slotCount = args.value as number;
+      this.scheduleObj.refresh();
     }
   }
 
@@ -713,8 +710,8 @@ export class DynamicSchedulerComponent implements OnInit {
       addObj.Id = this.scheduleObj.getEventMaxID();
       addObj.Subject = ((quickPopup.querySelector("#title") as EJ2Instance)
         .ej2_instances[0] as TextBoxComponent).value;
-      addObj.StartTime = new Date(+cellDetails.startTime);
-      addObj.EndTime = new Date(+cellDetails.endTime);
+      addObj.StartTime = new Date(cellDetails.startTime);
+      addObj.EndTime = new Date(cellDetails.endTime);
       addObj.Description = ((quickPopup.querySelector("#notes") as EJ2Instance)
         .ej2_instances[0] as TextBoxComponent).value;
       addObj.CalendarId = ((quickPopup.querySelector(
@@ -2757,12 +2754,8 @@ export class DynamicSchedulerComponent implements OnInit {
     if (this.displayToolbar) {
       this.displayToolbar = false;
       this.height = this.dynamicService.getSchedulerHeightWithoutToolbar();
-      const settingsPanel: Element = document.querySelector(
-        ".overview-content .filter-panel"
-      );
-      if (!settingsPanel.classList.contains("hide")) {
-        addClass([settingsPanel], "hide");
-      }
+      this.showFilterPanel();
+      this.onSettingsClick();
     } else {
       this.displayToolbar = true;
       this.height = this.dynamicService.getSchedulerHeight();
@@ -2783,5 +2776,9 @@ export class DynamicSchedulerComponent implements OnInit {
       customer_id: dataItem.customer_id,
     };
     this.requestForConfirmArrival = true;
+  }
+
+  setCalendarSettings(item) {
+    
   }
 }

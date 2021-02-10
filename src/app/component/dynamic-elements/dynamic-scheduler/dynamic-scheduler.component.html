@@ -95,29 +95,7 @@
           </div>
         </div>
         <div class="overview-toolbar" *ngIf="displayToolbar">
-          <div style="height: 70px; width: 180px; display: contents">
-            <button
-              ejs-button
-              id="settingsBtn"
-              iconCss="fa fa-search"
-              cssClass="overview-toolbar-settings"
-              iconPosition="Top"
-              (click)="showFilterPanel($event)"
-            >
-              {{ language.filterToolbar }}
-            </button>
-            <button
-              ejs-button
-              id="settingsBtn"
-              iconCss="e-icons e-schedule-add-recurrence-event"
-              cssClass="overview-toolbar-settings"
-              iconPosition="Top"
-              (click)="refreshEvents()"
-            >
-              {{ language.refreshEventToolbar }}
-            </button>
-          </div>
-          <div style="height: 70px; width: calc(100% - 270px)">
+          <div style="height: 70px; width: 100%">
             <ejs-toolbar
               id="toolbar_options"
               height="70px"
@@ -139,6 +117,37 @@
                 text="New Recurring Event"
               ></e-item>
               <e-item type="Separator"></e-item> -->
+                <e-item tooltipText="Filter Event Toolbar">
+                  <ng-template #template>
+                    <div class="toolbarElement" (click)="showFilterPanel($event)">
+                      <div class="icon-child">
+                        <div>
+                          <span class="fa fa-search"></span>
+                        </div>
+                      </div>
+                      <div class="text-child" style="font-size: 14px">
+                        {{ language.filterToolbar }}
+                      </div>
+                    </div>
+                  </ng-template>
+                </e-item>
+                <e-item tooltipText="Refresh Event Toolbar">
+                  <ng-template #template>
+                    <div class="toolbarElement"  (click)="refreshEvents()">
+                      <div class="icon-child">
+                        <div id="settingsBtn">
+                          <span
+                            class="e-icons e-schedule-add-recurrence-event"
+                          ></span>
+                        </div>
+                      </div>
+                      <div class="text-child" style="font-size: 14px">
+                        {{ language.refreshEventToolbar }}
+                      </div>
+                    </div>
+                  </ng-template>
+                </e-item>
+                <e-item type="Separator"></e-item>
                 <e-item
                   prefixIcon="e-icons e-schedule-day-view"
                   tooltipText="Day"
@@ -189,6 +198,22 @@
                   </ng-template>
                 </e-item>
                 <e-item type="Separator"></e-item>
+                <e-item tooltipText="Refresh Event Toolbar">
+                  <ng-template #template>
+                    <div class="toolbarElement" (click)="onSettingsClick($event)">
+                      <div class="icon-child">
+                        <div>
+                          <span
+                            class="e-icons e-schedule-toolbar-settings"
+                          ></span>
+                        </div>
+                      </div>
+                      <div class="text-child" style="font-size: 14px">
+                        {{ language.settingsToolbar }}
+                      </div>
+                    </div>
+                  </ng-template>
+                </e-item>
                 <!-- <e-item tooltipText="Week Number">
                   <ng-template #template>
                     <div style="height: 46px; line-height: 23px">
@@ -272,18 +297,6 @@
                 </e-item> -->
               </e-items>
             </ejs-toolbar>
-          </div>
-          <div style="height: 70px; width: 90px">
-            <button
-              ejs-button
-              id="settingsBtn"
-              iconCss="e-icons e-schedule-toolbar-settings"
-              cssClass="overview-toolbar-settings"
-              iconPosition="Top"
-              (click)="onSettingsClick($event)"
-            >
-              {{ language.settingsToolbar }}
-            </button>
           </div>
         </div>
         <div class="overview-content">
@@ -888,7 +901,7 @@
             *ngIf="!loading"
           >
             <div class="control-panel e-css">
-              <div class="col-row">
+              <!-- <div class="col-row">
                 <div class="col-left">
                   <label style="line-height: 34px; margin: 0"
                     >First Day of Week</label
@@ -928,25 +941,6 @@
               </div>
               <div class="col-row">
                 <div class="col-left">
-                  <label style="line-height: 34px; margin: 0">Resources</label>
-                </div>
-                <div class="col-right">
-                  <ejs-multiselect
-                    id="resources"
-                    width="170px"
-                    [dataSource]="resourceDataSource"
-                    [mode]="checkboxMode"
-                    [fields]="calendarFields"
-                    popupHeight="150px"
-                    [showClearButton]="false"
-                    [showDropDownIcon]="true"
-                    [value]="calendarsValue"
-                    (change)="onResourceChange($event)"
-                  ></ejs-multiselect>
-                </div>
-              </div>
-              <div class="col-row">
-                <div class="col-left">
                   <label style="line-height: 34px; margin: 0">Timezone</label>
                 </div>
                 <div class="col-right">
@@ -961,7 +955,7 @@
                   >
                   </ejs-dropdownlist>
                 </div>
-              </div>
+              </div> -->
               <div class="col-row">
                 <div class="col-left">
                   <label style="line-height: 34px; margin: 0"
