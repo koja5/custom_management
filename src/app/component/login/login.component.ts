@@ -238,7 +238,6 @@ export class LoginComponent implements OnInit {
     this.mongo.getConfiguration(Number(id)).subscribe((data) => {
       this.setConfiguration(data, id);
       this.router.navigate(["/dashboard/home/task"]);
-      // this.loading = false;
     });
   }
 
@@ -246,7 +245,7 @@ export class LoginComponent implements OnInit {
     localStorage.setItem("theme", data.theme);
     localStorage.setItem("defaultLanguage", data.language);
     if (data.selectedStore !== null && data.selectedStore.length !== 0) {
-      localStorage.setItem("selectedStore-" + id, data.selectedStore[0]);
+      localStorage.setItem("selectedStore-" + id, JSON.stringify(data.selectedStore[0]));
     }
     if (data.usersFor !== null && data.usersFor.length !== 0) {
       this.setUsersForConfiguration(data.usersFor);

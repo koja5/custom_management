@@ -60,4 +60,12 @@ export class HelpService {
   getHeightForGrid() {
     return window.innerHeight - 80 + 'px';
   }
+
+  getMe() {
+    return Number(localStorage.getItem("idUser"));
+  }
+
+  getSuperadmin() {
+    return Number(localStorage.getItem("superadmin"));
+  }
 }

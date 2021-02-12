@@ -76,6 +76,10 @@ export class BaseDateComponent implements OnInit {
   public fileDescription = [];
   public documentItem: any;
   public settingsWindow = false;
+  public loadingGridComplaint = false;
+  public loadingGridTherapy = false;
+  public loadingGridDocument = false;
+
 
   constructor(
     public router: ActivatedRoute,
@@ -902,7 +906,7 @@ export class BaseDateComponent implements OnInit {
     return obj && Object.keys(obj).length === 0;
   }
 
-  addBaseDataOne(base) {
+  addBaseDataOne() {
     let recommendation = "";
     // tslint:disable-next-line: prefer-for-of
     if (this.selectedRecommendation) {
@@ -927,7 +931,7 @@ export class BaseDateComponent implements OnInit {
     console.log(this.baseDataOne);
   }
 
-  updateBaseDataOne(base) {
+  updateBaseDataOne() {
     console.log(this.baseDataOne);
     let recommendation = "";
     // tslint:disable-next-line: prefer-for-of
@@ -952,7 +956,7 @@ export class BaseDateComponent implements OnInit {
     });
   }
 
-  addBaseDataTwo(base) {
+  addBaseDataTwo() {
     console.log(this.baseDataTwo);
     this.baseDataTwo.customer_id = this.data.id;
     this.service.addBaseDataTwo(this.baseDataTwo).subscribe((data) => {
@@ -968,7 +972,7 @@ export class BaseDateComponent implements OnInit {
     });
   }
 
-  updateBaseDataTwo(base) {
+  updateBaseDataTwo() {
     console.log(this.baseDataTwo);
     this.baseDataTwo.customer_id = this.data.id;
     this.service.updateBaseDataTwo(this.baseDataTwo).subscribe((data) => {
@@ -1162,7 +1166,7 @@ export class BaseDateComponent implements OnInit {
     }
   }
 
-  updateDocument(item) {
+  updateDocument() {
     this.service.updateDocument(this.documentItem).subscribe((data) => {
       if (data) {
         this.document_edit = false;

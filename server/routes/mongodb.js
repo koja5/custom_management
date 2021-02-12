@@ -116,6 +116,42 @@ router.post("/setSelectedStore", function (req, res, next) {
   res.json({ code: 201 });
 });
 
+router.post("/setSettingsForStore", function (req, res, next) {
+  mongo.connect(url, function (err, db) {
+    if (err) throw err;
+    var dbo = db.db(database_name);
+    dbo
+      .collection("user_configuration")
+      .findOne({ user_id: Number(req.body.user_id), storeSettings: { $elemMatch: { id: req.body.storeSettings.id } } }, function (err, rows) {
+        if (err) throw err;
+        console.log("storeSettings" + rows);
+        if (rows === null || rows.length === 0) {
+          dbo
+            .collection("user_configuration")
+            .updateOne(
+              { user_id: req.body.user_id },
+              { $push: { storeSettings: req.body.storeSettings } },
+              function (err, res) {
+                if (err) throw err;
+              }
+            );
+        } else {
+          console.log('Radim samo update!!!');
+          dbo
+            .collection("user_configuration")
+            .updateOne(
+              { user_id: req.body.user_id, storeSettings: { $elemMatch: { id: req.body.storeSettings.id } } },
+              { $set: { "storeSettings.0": req.body.storeSettings } },
+              function (err, res) {
+                if (err) throw err;
+              }
+            );
+        }
+      });
+  });
+  res.json({ code: 201 });
+});
+
 router.post("/setUsersFor", function (req, res, next) {
   var item = {
     key: req.body.key,

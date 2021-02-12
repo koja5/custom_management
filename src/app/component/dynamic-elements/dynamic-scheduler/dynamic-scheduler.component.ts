@@ -86,6 +86,7 @@ import { FormGroup, Validators } from "@angular/forms";
 import { Modal } from "ngx-modal";
 import { EventModel } from "src/app/models/event.model";
 import { ODataV4Adaptor } from "@syncfusion/ej2-data";
+import { HelpService } from "src/app/service/help.service";
 declare var moment: any;
 
 @Component({
@@ -415,11 +416,12 @@ export class DynamicSchedulerComponent implements OnInit {
         break;
     }
 
+    if (currentViewLocal) {
       this.currentView = currentViewLocal;
       this.dateHeaderCounter = 0;
       localStorage.setItem("currentView", this.currentView);
       this.scheduleObj.refresh();
-    
+    }
   }
 
   private getEventData(): Object {
@@ -531,7 +533,6 @@ export class DynamicSchedulerComponent implements OnInit {
     } else {
       addClass([settingsPanel], "hide");
     }
-    this.scheduleObj.refreshEvents();
   }
 
   public showFilterPanel(): void {
@@ -543,7 +544,6 @@ export class DynamicSchedulerComponent implements OnInit {
     } else {
       addClass([settingsPanel], "hide");
     }
-    this.scheduleObj.refreshEvents();
   }
 
   public getDateHeaderText(value: Date): string {
@@ -581,7 +581,7 @@ export class DynamicSchedulerComponent implements OnInit {
     document.querySelector(".schedule-overview #timezoneBtn").innerHTML =
       '<span class="e-btn-icon e-icons e-schedule-timezone e-icon-left"></span>' +
       args.itemData.text;
-      this.scheduleObj.refresh();
+    this.scheduleObj.refresh();
   }
 
   public onDayStartHourChange(args: TimeEventArgs): void {
@@ -589,6 +589,10 @@ export class DynamicSchedulerComponent implements OnInit {
       this.scheduleObj.startHour = this.intl.formatDate(args.value, {
         skeleton: "Hm",
       });
+      this.setCalendarSettingsToDatabase(
+        "dayStart",
+        this.scheduleObj.startHour
+      );
       this.scheduleObj.refresh();
     }
   }
@@ -598,6 +602,7 @@ export class DynamicSchedulerComponent implements OnInit {
       this.scheduleObj.endHour = this.intl.formatDate(args.value, {
         skeleton: "Hm",
       });
+      this.setCalendarSettingsToDatabase("dayEnd", this.scheduleObj.endHour);
       this.scheduleObj.refresh();
     }
   }
@@ -607,6 +612,10 @@ export class DynamicSchedulerComponent implements OnInit {
       this.scheduleObj.workHours.start = this.intl.formatDate(args.value, {
         skeleton: "Hm",
       });
+      this.setCalendarSettingsToDatabase(
+        "dayWorkStart",
+        this.scheduleObj.workHours.start
+      );
       this.scheduleObj.refresh();
     }
   }
@@ -616,6 +625,10 @@ export class DynamicSchedulerComponent implements OnInit {
       this.scheduleObj.workHours.end = this.intl.formatDate(args.value, {
         skeleton: "Hm",
       });
+      this.setCalendarSettingsToDatabase(
+        "dayWorkEnd",
+        this.scheduleObj.workHours.end
+      );
       this.scheduleObj.refresh();
     }
   }
@@ -623,6 +636,10 @@ export class DynamicSchedulerComponent implements OnInit {
   public onTimescaleDurationChange(args: ChangeEventArgs): void {
     if (this.scheduleObj) {
       this.scheduleObj.timeScale.interval = args.value as number;
+      this.setCalendarSettingsToDatabase(
+        "timeDuration",
+        this.scheduleObj.timeScale.interval
+      );
       this.scheduleObj.refresh();
     }
   }
@@ -630,8 +647,26 @@ export class DynamicSchedulerComponent implements OnInit {
   public onTimescaleIntervalChange(args: ChangeEventArgs): void {
     if (this.scheduleObj) {
       this.scheduleObj.timeScale.slotCount = args.value as number;
+      this.setCalendarSettingsToDatabase(
+        "timeSlot",
+        this.scheduleObj.timeScale.slotCount
+      );
       this.scheduleObj.refresh();
     }
+  }
+
+  setCalendarSettingsToDatabase(key, value) {
+    this.calendarSettings["id"] = this.selectedStoreId;
+    this.calendarSettings[key] = value;
+
+    const item = {
+      user_id: this.helpService.getMe(),
+      storeSettings: this.calendarSettings,
+    };
+
+    this.mongo.setSettingsForStore(item).subscribe((data) => {
+      console.log(data);
+    });
   }
 
   public getResourceData(data: {
@@ -647,21 +682,34 @@ export class DynamicSchedulerComponent implements OnInit {
     return resourceData;
   }
 
-  setTimesForStore() {
-    this.onDayStartHourChange({
-      value: this.dayStartHourValue,
-    } as TimeEventArgs);
-    this.onDayEndHourChange({ value: this.dayEndHourValue } as TimeEventArgs);
-    this.onWorkStartHourChange({
-      value: this.workStartHourValue,
-    } as TimeEventArgs);
-    this.onWorkEndHourChange({ value: this.workEndHourValue } as TimeEventArgs);
-    this.onTimescaleDurationChange({
-      value: this.timeSlotDurationValue,
-    } as ChangeEventArgs);
-    this.onTimescaleIntervalChange({
-      value: this.timeSlotCountValue,
-    } as ChangeEventArgs);
+  renderTimeInSchedule() {
+    if (this.scheduleObj) {
+      this.scheduleObj.startHour = this.intl.formatDate(
+        this.workStartHourValue,
+        {
+          skeleton: "Hm",
+        }
+      );
+      this.scheduleObj.endHour = this.intl.formatDate(this.dayEndHourValue, {
+        skeleton: "Hm",
+      });
+      this.scheduleObj.workHours.start = this.intl.formatDate(
+        this.workStartHourValue,
+        {
+          skeleton: "Hm",
+        }
+      );
+      this.scheduleObj.workHours.end = this.intl.formatDate(
+        this.workEndHourValue,
+        {
+          skeleton: "Hm",
+        }
+      );
+      this.scheduleObj.timeScale.interval = this
+        .timeSlotDurationValue as number;
+      this.scheduleObj.timeScale.slotCount = this.timeSlotCountValue as number;
+      this.scheduleObj.refresh();
+    }
   }
 
   public getHeaderStyles(data: { [key: string]: Object }): Object {
@@ -766,12 +814,12 @@ export class DynamicSchedulerComponent implements OnInit {
       this.complaintData.complaint_title;
     formValue.start = this.eventTime.start;
     formValue.end = this.eventTime.end;
-    formValue.superadmin = localStorage.getItem("superadmin");
+    formValue.superadmin = this.helpService.getSuperadmin();
     formValue.color = this.getColorForEvent(this.selected);
     if (this.type !== 3 && this.creatorEvent !== undefined) {
       formValue.creator_id = this.creatorEvent;
     } else {
-      formValue.creator_id = localStorage.getItem("idUser");
+      formValue.creator_id = this.helpService.getMe();
     }
     formValue = this.colorMapToId(formValue);
     this.addTherapy(this.customerUser["id"]);
@@ -887,7 +935,7 @@ export class DynamicSchedulerComponent implements OnInit {
     formValue.color = this.getColorForEvent(
       this.selected ? this.selected : args.data.colorTask
     );
-    formValue.superadmin = localStorage.getItem("superadmin");
+    formValue.superadmin = this.helpService.getSuperadmin();
     formValue.creator_id = args.data.creator_id;
     formValue = this.colorMapToId(formValue);
     this.addTherapy(formValue.customer_id);
@@ -1292,6 +1340,8 @@ export class DynamicSchedulerComponent implements OnInit {
   public displayToolbar = true;
   public storeName: string;
   public dateHeaderCounter = 0;
+  public calendarSettings = {};
+  public configurationFromMongoDb: any;
 
   constructor(
     public service: TaskService,
@@ -1303,7 +1353,8 @@ export class DynamicSchedulerComponent implements OnInit {
     public eventCategoryService: EventCategoryService,
     public ngZone: NgZone,
     private toastr: ToastrService,
-    private dynamicService: DynamicSchedulerService
+    private dynamicService: DynamicSchedulerService,
+    private helpService: HelpService
   ) {}
 
   ngOnInit() {
@@ -1364,10 +1415,10 @@ export class DynamicSchedulerComponent implements OnInit {
   initializaionData() {
     this.loading = true;
     this.type = Number(localStorage.getItem("type"));
-    this.id = Number(localStorage.getItem("idUser"));
+    this.id = this.helpService.getMe();
     console.log(this.events);
     this.calendars = [];
-    const superadmin = localStorage.getItem("superadmin");
+    const superadmin = this.helpService.getSuperadmin();
 
     this.initializeEventCategory();
 
@@ -1382,7 +1433,7 @@ export class DynamicSchedulerComponent implements OnInit {
 
   initializeEventCategory() {
     this.eventCategoryService
-      .getEventCategory(localStorage.getItem("superadmin"))
+      .getEventCategory(this.helpService.getSuperadmin())
       .subscribe((data: []) => {
         this.eventCategory = data.sort(function (a, b) {
           return a["sequence"] - b["sequence"];
@@ -1408,7 +1459,7 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   initializeStore() {
-    this.storeService.getStore(localStorage.getItem("superadmin"), (val) => {
+    this.storeService.getStore(this.helpService.getSuperadmin(), (val) => {
       this.store = val;
       if (this.store.length !== 0) {
         this.language.selectStore += this.store[0].storename + ")";
@@ -1418,6 +1469,7 @@ export class DynamicSchedulerComponent implements OnInit {
           this.store,
           this.selectedStoreId
         );
+
         this.startWork = informationAboutStore.start_work;
         this.endWork = informationAboutStore.end_work;
         this.timeDuration = informationAboutStore.time_duration;
@@ -1437,11 +1489,165 @@ export class DynamicSchedulerComponent implements OnInit {
     });
   }
 
+  checkPersonalSettingsForUser(storeId, defaultStoreSettings) {
+    if (this.configurationFromMongoDb) {
+      const personalStoreSettings = this.getPersonalSettingsForStore(
+        this.configurationFromMongoDb,
+        storeId
+      );
+      this.setPersonalOrDefaultSettingsForStore(
+        personalStoreSettings,
+        defaultStoreSettings
+      );
+    } else {
+      this.mongo
+        .getConfiguration(this.helpService.getMe())
+        .subscribe((data) => {
+          this.configurationFromMongoDb = data;
+          const personalStoreSettings = this.getPersonalSettingsForStore(
+            this.configurationFromMongoDb,
+            storeId
+          );
+          this.setPersonalOrDefaultSettingsForStore(
+            personalStoreSettings,
+            defaultStoreSettings
+          );
+        });
+    }
+  }
+
+  setPersonalOrDefaultSettingsForStore(
+    personalStoreSettings,
+    defaultStoreSettings
+  ) {
+    this.setStartDay(personalStoreSettings, defaultStoreSettings);
+    this.setEndDay(personalStoreSettings, defaultStoreSettings);
+    this.setStartWorkHour(personalStoreSettings, defaultStoreSettings);
+    this.setEndWorkHour(personalStoreSettings, defaultStoreSettings);
+    this.setSlotDuration(personalStoreSettings, defaultStoreSettings);
+    this.setSlotInterval(personalStoreSettings);
+
+    /*if (Number(this.timeDuration) > Number(defaultStoreSettings.time_therapy)) {
+      this.therapyDuration =
+        Number(this.timeDuration) / Number(defaultStoreSettings.time_therapy);
+    } else {
+      this.therapyDuration =
+        Number(defaultStoreSettings.time_therapy) / Number(this.timeDuration);
+    }*/
+
+    setTimeout(() => {
+      this.renderTimeInSchedule();
+    }, 100);
+  }
+
+  setStartDay(personalStoreSettings, defaultStoreSettings) {
+    if (personalStoreSettings && personalStoreSettings.dayStart) {
+      this.dayStartHourValue = new Date(
+        new Date().setHours(
+          Number(personalStoreSettings.dayStart.split(":")[0]),
+          Number(personalStoreSettings.dayStart.split(":")[1]),
+          0
+        )
+      );
+    } else {
+      this.dayStartHourValue = new Date(
+        new Date().setHours(
+          Number(defaultStoreSettings.start_work.split(":")[0]),
+          Number(defaultStoreSettings.start_work.toString().split(":")[1]),
+          0
+        )
+      );
+    }
+  }
+
+  setEndDay(personalStoreSettings, defaultStoreSettings) {
+    if (personalStoreSettings && personalStoreSettings.dayEnd) {
+      this.dayEndHourValue = new Date(
+        new Date().setHours(
+          Number(personalStoreSettings.dayEnd.split(":")[0]),
+          Number(personalStoreSettings.dayEnd.split(":")[1]),
+          0
+        )
+      );
+    } else {
+      this.dayEndHourValue = new Date(
+        new Date().setHours(
+          Number(defaultStoreSettings.end_work.split(":")[0]),
+          Number(defaultStoreSettings.end_work.split(":")[1]),
+          0
+        )
+      );
+    }
+  }
+
+  setStartWorkHour(personalStoreSettings, defaultStoreSettings) {
+    if (personalStoreSettings && personalStoreSettings.dayWorkStart) {
+      this.workStartHourValue = new Date(
+        new Date().setHours(
+          Number(personalStoreSettings.dayWorkStart.split(":")[0]),
+          Number(personalStoreSettings.dayWorkStart.split(":")[1]),
+          0
+        )
+      );
+    } else {
+      this.workStartHourValue = new Date(
+        new Date().setHours(
+          Number(defaultStoreSettings.start_work.split(":")[0]),
+          Number(defaultStoreSettings.start_work.toString().split(":")[1]),
+          0
+        )
+      );
+    }
+  }
+
+  setEndWorkHour(personalStoreSettings, defaultStoreSettings) {
+    if (personalStoreSettings && personalStoreSettings.dayWorkEnd) {
+      this.workEndHourValue = new Date(
+        new Date().setHours(
+          Number(personalStoreSettings.dayWorkEnd.split(":")[0]),
+          Number(personalStoreSettings.dayWorkEnd.split(":")[1]),
+          0
+        )
+      );
+    } else {
+      this.workEndHourValue = new Date(
+        new Date().setHours(
+          Number(defaultStoreSettings.end_work.split(":")[0]),
+          Number(defaultStoreSettings.end_work.split(":")[1]),
+          0
+        )
+      );
+    }
+  }
+
+  setSlotDuration(personalStoreSettings, defaultStoreSettings) {
+    if (personalStoreSettings && personalStoreSettings.dayWorkEnd) {
+      this.timeSlotDurationValue = Number(personalStoreSettings.timeDuration);
+    } else {
+      this.timeSlotDurationValue = Number(defaultStoreSettings.time_duration);
+    }
+  }
+
+  setSlotInterval(personalStoreSettings) {
+    if (personalStoreSettings && personalStoreSettings.timeSlot) {
+      this.timeSlotCountValue = personalStoreSettings.timeSlot;
+    }
+  }
+
+  getPersonalSettingsForStore(data, storeId) {
+    for (let i = 0; i < data.storeSettings.length; i++) {
+      if (data.storeSettings[i].id === storeId) {
+        return data.storeSettings[i];
+      }
+    }
+    return null;
+  }
+
   initializeTasks() {
     if (this.type === 3) {
       this.selectedStoreId = Number(localStorage.getItem("storeId-" + this.id));
     }
-    this.storeService.getStore(localStorage.getItem("superadmin"), (val) => {
+    this.storeService.getStore(this.helpService.getSuperadmin(), (val) => {
       this.store = val;
       if (this.store.length !== 0) {
         this.language.selectStore += this.store[0].storename + ")";
@@ -1487,7 +1693,7 @@ export class DynamicSchedulerComponent implements OnInit {
       this.selectedStore(this.selectedStoreId);
     } else if (localStorage.getItem("type") === "3") {
       this.service
-        .getWorkandTasksForUser(localStorage.getItem("idUser"))
+        .getWorkandTasksForUser(this.helpService.getMe())
         .subscribe((data) => {
           console.log(data);
           this.events = [];
@@ -1502,7 +1708,7 @@ export class DynamicSchedulerComponent implements OnInit {
           /*this.eventSettings.dataSource =
             this.calendars.push(objectCalendar);*/
           this.loading = false;
-          this.setStoreWork();
+          // this.setStoreWork();
           /// this.setWidthForCalendarHeader();
           ///this.setSplitterBarEvent();
         });
@@ -1510,7 +1716,7 @@ export class DynamicSchedulerComponent implements OnInit {
       this.size.push("100%");
     } else {
       this.service
-        .getTasks(localStorage.getItem("superadmin"))
+        .getTasks(this.helpService.getSuperadmin())
         .subscribe((data) => {
           console.log(data);
           if (data.length !== 0) {
@@ -1521,7 +1727,7 @@ export class DynamicSchedulerComponent implements OnInit {
             };
             this.calendars.push(objectCalendar);
             this.loading = false;
-            this.setStoreWork();
+            // this.setStoreWork();
             console.log(document.getElementsByClassName("k-scheduler-toolbar"));
           } else {
             this.calendars.push({ name: null, events: [] });
@@ -1636,7 +1842,7 @@ export class DynamicSchedulerComponent implements OnInit {
     this.customerModal = true;
     this.data = new UserModel();
     this.data.gender = "male";
-    this.data.superadmin = localStorage.getItem("superadmin");
+    this.data.superadmin = this.helpService.getSuperadmin();
   }
 
   closeNewCustomer() {
@@ -1647,7 +1853,7 @@ export class DynamicSchedulerComponent implements OnInit {
   createCustomer(form) {
     console.log(this.data);
     this.createFormLoading = false;
-    this.data.storeId = localStorage.getItem("superadmin");
+    this.data.storeId = this.helpService.getSuperadmin();
     this.customer.createCustomer(this.data, (val) => {
       console.log(val);
       if (val) {
@@ -1665,7 +1871,7 @@ export class DynamicSchedulerComponent implements OnInit {
   reloadNewCustomer() {
     this.customerUsers = null;
     setTimeout(() => {
-      this.customer.getCustomers(localStorage.getItem("superadmin"), (val) => {
+      this.customer.getCustomers(this.helpService.getSuperadmin(), (val) => {
         console.log(val);
         this.customerUsers = val.sort((a, b) =>
           a["shortname"].localeCompare(b["shortname"])
@@ -1716,7 +1922,7 @@ export class DynamicSchedulerComponent implements OnInit {
     this.getTaskForSelectedUsers(this.value);
 
     const item = {
-      user_id: Number(localStorage.getItem("idUser")),
+      user_id: this.helpService.getMe(),
       key: "usersFor-" + this.selectedStoreId + "-" + this.id,
       value: this.value,
     };
@@ -1744,7 +1950,7 @@ export class DynamicSchedulerComponent implements OnInit {
           this.calendars.push(objectCalendar);
           this.size = [];
           this.loading = false;
-          this.setStoreWork();
+          // this.setStoreWork();
           /// this.setWidthForCalendarHeader();
           /// this.setSplitterBarEvent();
         });
@@ -1782,7 +1988,7 @@ export class DynamicSchedulerComponent implements OnInit {
           if (this.valueLoop.length === this.loopIndex) {
             this.eventSettings.dataSource = this.allEvents;
             this.loading = false;
-            this.setStoreWork();
+            // this.setStoreWork();
           }
           if (this.loopIndex < this.valueLoop.length) {
             this.myLoop();
@@ -1854,7 +2060,7 @@ export class DynamicSchedulerComponent implements OnInit {
               workTime: undefined,
             };
             if (!isNaN(event)) {
-              this.setStoreWork();
+              // this.setStoreWork();
             } else {
               this.startWork = "08:00";
               this.endWork = "22:00";
@@ -1870,7 +2076,7 @@ export class DynamicSchedulerComponent implements OnInit {
         this.getUserInCompany(event);
       } else {
         this.service
-          .getTasks(localStorage.getItem("superadmin"))
+          .getTasks(this.helpService.getSuperadmin())
           .subscribe((data) => {
             console.log(data);
             this.events = [];
@@ -1903,7 +2109,7 @@ export class DynamicSchedulerComponent implements OnInit {
     }
 
     const item = {
-      user_id: Number(localStorage.getItem("idUser")),
+      user_id: this.helpService.getMe(),
       selectedStore: event,
     };
 
@@ -1924,59 +2130,20 @@ export class DynamicSchedulerComponent implements OnInit {
 
   setStoreWork() {
     if (this.store !== undefined) {
-      const informationAboutStore = this.getStartEndTimeForStore(
+      const defaultStoreSettings = this.getStartEndTimeForStore(
         this.store,
         this.selectedStoreId
       );
-      this.workStartHourValue = new Date(
-        new Date().setHours(
-          Number(informationAboutStore.start_work.split(":")[0]),
-          Number(informationAboutStore.start_work.toString().split(":")[1]),
-          0
-        )
-      );
-      this.workEndHourValue = new Date(
-        new Date().setHours(
-          Number(informationAboutStore.end_work.split(":")[0]),
-          Number(informationAboutStore.end_work.split(":")[1]),
-          0
-        )
-      );
 
-      this.dayStartHourValue = new Date(
-        new Date().setHours(
-          Number(informationAboutStore.start_work.split(":")[0]),
-          Number(informationAboutStore.start_work.toString().split(":")[1]),
-          0
-        )
+      this.checkPersonalSettingsForUser(
+        this.selectedStoreId,
+        defaultStoreSettings
       );
-      this.dayEndHourValue = new Date(
-        new Date().setHours(
-          Number(informationAboutStore.end_work.split(":")[0]),
-          Number(informationAboutStore.end_work.split(":")[1]),
-          0
-        )
-      );
-      this.timeSlotDurationValue = Number(informationAboutStore.time_duration);
-      if (
-        Number(this.timeDuration) > Number(informationAboutStore.time_therapy)
-      ) {
-        this.therapyDuration =
-          Number(this.timeDuration) /
-          Number(informationAboutStore.time_therapy);
-      } else {
-        this.therapyDuration =
-          Number(informationAboutStore.time_therapy) /
-          Number(this.timeDuration);
-      }
 
       localStorage.setItem(
         "selectedStore-" + this.id,
         this.selectedStoreId.toString()
       );
-      setTimeout(() => {
-        this.setTimesForStore();
-      }, 200);
     }
   }
 
@@ -1984,7 +2151,6 @@ export class DynamicSchedulerComponent implements OnInit {
     if (data !== null && data !== undefined) {
       for (let i = 0; i < data.length; i++) {
         if (data[i].id === id) {
-          // tslint:disable-next-line: max-line-length
           return {
             start_work:
               new Date(data[i].start_work).getHours() +
@@ -2241,7 +2407,7 @@ export class DynamicSchedulerComponent implements OnInit {
       });
     });
 
-    this.service.getCompanyUsers(localStorage.getItem("idUser"), (val) => {
+    this.service.getCompanyUsers(this.helpService.getMe(), (val) => {
       console.log(val);
       if (val.length !== 0) {
         this.allUsers = val.sort((a, b) =>
@@ -2379,7 +2545,7 @@ export class DynamicSchedulerComponent implements OnInit {
         id: args.isNew ? this.getNextId() : dataItem.id,
         isAllDay: dataItem.isAllDay,
         colorTask: dataItem.colorTitle,
-        creator_id: Number(localStorage.getItem("idUser")),
+        creator_id: this.helpService.getMe(),
         user: this.customerUser,
         therapy_id: dataItem.therapy_id,
         telephone: dataItem.telephone,
@@ -2458,11 +2624,11 @@ export class DynamicSchedulerComponent implements OnInit {
         this.customerUser["firstname"] +
         "+" +
         this.complaintData.complaint_title;
-      formValue.superadmin = localStorage.getItem("superadmin");
+      formValue.superadmin = this.helpService.getSuperadmin();
       if (this.type !== 3 && selectedUser !== undefined) {
         formValue.creator_id = selectedUser;
       } else {
-        formValue.creator_id = localStorage.getItem("idUser");
+        formValue.creator_id = this.helpService.getMe();
       }
 
       if (isNew) {
@@ -2627,7 +2793,7 @@ export class DynamicSchedulerComponent implements OnInit {
     if (event !== "" && event.length > 2) {
       this.customerLoading = true;
       const searchFilter = {
-        superadmin: localStorage.getItem("superadmin"),
+        superadmin: this.helpService.getSuperadmin(),
         filter: event,
       };
       this.customer.searchCustomer(searchFilter).subscribe((val: []) => {
@@ -2776,9 +2942,5 @@ export class DynamicSchedulerComponent implements OnInit {
       customer_id: dataItem.customer_id,
     };
     this.requestForConfirmArrival = true;
-  }
-
-  setCalendarSettings(item) {
-    
   }
 }

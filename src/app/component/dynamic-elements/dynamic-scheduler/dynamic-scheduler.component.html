@@ -119,7 +119,10 @@
               <e-item type="Separator"></e-item> -->
                 <e-item tooltipText="Filter Event Toolbar">
                   <ng-template #template>
-                    <div class="toolbarElement" (click)="showFilterPanel($event)">
+                    <div
+                      class="toolbarElement"
+                      (click)="showFilterPanel($event)"
+                    >
                       <div class="icon-child">
                         <div>
                           <span class="fa fa-search"></span>
@@ -133,7 +136,7 @@
                 </e-item>
                 <e-item tooltipText="Refresh Event Toolbar">
                   <ng-template #template>
-                    <div class="toolbarElement"  (click)="refreshEvents()">
+                    <div class="toolbarElement" (click)="refreshEvents()">
                       <div class="icon-child">
                         <div id="settingsBtn">
                           <span
@@ -200,7 +203,10 @@
                 <e-item type="Separator"></e-item>
                 <e-item tooltipText="Refresh Event Toolbar">
                   <ng-template #template>
-                    <div class="toolbarElement" (click)="onSettingsClick($event)">
+                    <div
+                      class="toolbarElement"
+                      (click)="onSettingsClick($event)"
+                    >
                       <div class="icon-child">
                         <div>
                           <span
@@ -625,10 +631,15 @@
                           {{ languageUser.newCustomer }}
                         </button>
 
-                        <!-- <button kendoButton [icon]="'k-icon k-i-information'" class="ml-2 patient-options" [primary]="true"
-                      (click)="baseDataForUser()" *ngIf="baseDataIndicator">
-                      {{languageUser.baseDate}}
-                    </button> -->
+                        <!-- <button
+                          kendoButton
+                          [icon]="'k-icon k-i-information'"
+                          class="ml-2 patient-options"
+                          [primary]="true"
+                          (click)="baseDataForUser()"
+                        >
+                          {{ languageUser.baseDate }}
+                        </button> -->
                       </div>
 
                       <div style="width: 100%">
@@ -1209,7 +1220,6 @@
                     class="email noPadding"
                     name="birthday"
                     [(ngModel)]="data.birthday"
-                    (valueChange)="onChange($event)"
                   >
                   </kendo-datepicker>
                 </kendo-textbox-container>
@@ -1251,10 +1261,7 @@
               class="col-xs-12"
               name="email"
               [(ngModel)]="data.email"
-              [pattern]="emailPattern"
-              #email="ngModel"
-              #email="ngModel"
-            />
+            >
           </kendo-textbox-container>
         </div>
         <div class="email col-md-4 col-xs-12">
@@ -1265,7 +1272,7 @@
               class="col-xs-12"
               [(ngModel)]="data.street"
               name="street"
-            />
+            >
           </kendo-textbox-container>
         </div>
         <div class="email col-md-4 col-xs-12">
@@ -1276,7 +1283,7 @@
               class="col-xs-12"
               [(ngModel)]="data.streetnumber"
               name="streetnumber"
-            />
+            >
           </kendo-textbox-container>
         </div>
         <div class="email col-md-4 col-xs-12">
@@ -1287,7 +1294,7 @@
               class="col-xs-12"
               [(ngModel)]="data.city"
               name="city"
-            />
+            >
           </kendo-textbox-container>
         </div>
       </div>
@@ -1307,11 +1314,16 @@
     </form>
   </kendo-window>
 
-  <!-- <kendo-window title="Please provide additional data" *ngIf="customerUserModal2&&customerUser !== undefined"
-  [width]="950" [height]="700" (close)="closebaseDataForUser()">
-  <app-base-date [data]="customerUser" *ngIf="customerUser !== undefined">
-  </app-base-date>
-</kendo-window> -->
+  <!-- <kendo-window
+    title="Please provide additional data"
+    *ngIf="customerUserModal2 && customerUser !== undefined"
+    [width]="950"
+    [height]="700"
+    (close)="closebaseDataForUser()"
+  >
+    <app-base-date [data]="customerUser" *ngIf="customerUser !== undefined">
+    </app-base-date>
+  </kendo-window> -->
 
   <!-- END MODALS -->
 </div>
