@@ -66,6 +66,6 @@ export class HelpService {
   }
 
   getSuperadmin() {
-    return Number(localStorage.getItem("superadmin"));
+    return localStorage.getItem("superadmin");
   }
 }

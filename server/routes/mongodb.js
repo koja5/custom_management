@@ -149,7 +149,7 @@ router.post("/setSettingsForStore", function (req, res, next) {
         }
       });
   });
-  res.json({ code: 201 });
+  res.json(true);
 });
 
 router.post("/setUsersFor", function (req, res, next) {

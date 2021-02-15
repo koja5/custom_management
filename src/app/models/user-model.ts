@@ -16,8 +16,8 @@ export class UserModel {
   birthday?: string;
   incompanysince?: string;
   type?: string;
-  storeId?: number;
-  superadmin?: number;
+  storeId?: any;
+  superadmin?: any;
   active?: number;
   attention?: string;
   physicalComplaint?: string;

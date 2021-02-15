@@ -250,6 +250,9 @@ export class LoginComponent implements OnInit {
     if (data.usersFor !== null && data.usersFor.length !== 0) {
       this.setUsersForConfiguration(data.usersFor);
     }
+    if(data.storeSettings) {
+      localStorage.setItem('storeSettings', JSON.stringify(data.storeSettings));
+    }
   }
 
   setUsersForConfiguration(data) {

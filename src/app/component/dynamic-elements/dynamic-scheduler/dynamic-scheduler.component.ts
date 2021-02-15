@@ -87,6 +87,7 @@ import { Modal } from "ngx-modal";
 import { EventModel } from "src/app/models/event.model";
 import { ODataV4Adaptor } from "@syncfusion/ej2-data";
 import { HelpService } from "src/app/service/help.service";
+import { StorageService } from "src/app/service/storage.service";
 declare var moment: any;
 
 @Component({
@@ -655,10 +656,13 @@ export class DynamicSchedulerComponent implements OnInit {
     }
   }
 
-  setCalendarSettingsToDatabase(key, value) {
+  setCalendarSettingsValue(key, value) {
     this.calendarSettings["id"] = this.selectedStoreId;
     this.calendarSettings[key] = value;
+  }
 
+  setCalendarSettingsToDatabase(key, value) {
+    this.setCalendarSettingsValue(key, value);
     const item = {
       user_id: this.helpService.getMe(),
       storeSettings: this.calendarSettings,
@@ -666,7 +670,26 @@ export class DynamicSchedulerComponent implements OnInit {
 
     this.mongo.setSettingsForStore(item).subscribe((data) => {
       console.log(data);
+      if (data) {
+        this.setNewCalendarSettingsInStore(this.calendarSettings);
+      }
     });
+  }
+
+  setNewCalendarSettingsInStore(newSettings) {
+    const currentCalendarSettings = this.storageService.getStoreSettings();
+    let change = false;
+    for (let i = 0; i < currentCalendarSettings.length; i++) {
+      if (currentCalendarSettings[i].id === newSettings.id) {
+        currentCalendarSettings[i] = newSettings;
+        change = true;
+        break;
+      }
+    }
+    if (!change) {
+      currentCalendarSettings.push(newSettings);
+    }
+    this.storageService.setStoreSettings(currentCalendarSettings);
   }
 
   public getResourceData(data: {
@@ -683,33 +706,36 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   renderTimeInSchedule() {
-    if (this.scheduleObj) {
-      this.scheduleObj.startHour = this.intl.formatDate(
-        this.workStartHourValue,
-        {
+    setTimeout(() => {
+      if (this.scheduleObj) {
+        this.scheduleObj.startHour = this.intl.formatDate(
+          this.dayStartHourValue,
+          {
+            skeleton: "Hm",
+          }
+        );
+        this.scheduleObj.endHour = this.intl.formatDate(this.dayEndHourValue, {
           skeleton: "Hm",
-        }
-      );
-      this.scheduleObj.endHour = this.intl.formatDate(this.dayEndHourValue, {
-        skeleton: "Hm",
-      });
-      this.scheduleObj.workHours.start = this.intl.formatDate(
-        this.workStartHourValue,
-        {
-          skeleton: "Hm",
-        }
-      );
-      this.scheduleObj.workHours.end = this.intl.formatDate(
-        this.workEndHourValue,
-        {
-          skeleton: "Hm",
-        }
-      );
-      this.scheduleObj.timeScale.interval = this
-        .timeSlotDurationValue as number;
-      this.scheduleObj.timeScale.slotCount = this.timeSlotCountValue as number;
-      this.scheduleObj.refresh();
-    }
+        });
+        this.scheduleObj.workHours.start = this.intl.formatDate(
+          this.workStartHourValue,
+          {
+            skeleton: "Hm",
+          }
+        );
+        this.scheduleObj.workHours.end = this.intl.formatDate(
+          this.workEndHourValue,
+          {
+            skeleton: "Hm",
+          }
+        );
+        this.scheduleObj.timeScale.interval = this
+          .timeSlotDurationValue as number;
+        this.scheduleObj.timeScale.slotCount = this
+          .timeSlotCountValue as number;
+        this.scheduleObj.refresh();
+      }
+    }, 100);
   }
 
   public getHeaderStyles(data: { [key: string]: Object }): Object {
@@ -1028,7 +1054,6 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   onPopupOpen(args: PopupOpenEventArgs): void {
-    console.log(args);
     args.element.scrollTop = 0;
     this.setTimeForEditor(args);
     if (args.type === "QuickInfo") {
@@ -1354,7 +1379,8 @@ export class DynamicSchedulerComponent implements OnInit {
     public ngZone: NgZone,
     private toastr: ToastrService,
     private dynamicService: DynamicSchedulerService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private storageService: StorageService
   ) {}
 
   ngOnInit() {
@@ -1490,7 +1516,17 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   checkPersonalSettingsForUser(storeId, defaultStoreSettings) {
-    if (this.configurationFromMongoDb) {
+    const personalStoreSettings = this.getPersonalSettingsForStore(
+      this.storageService.getStoreSettings(),
+      storeId
+    );
+
+    this.setPersonalOrDefaultSettingsForStore(
+      personalStoreSettings,
+      defaultStoreSettings
+    );
+
+    /*if (this.configurationFromMongoDb) {
       const personalStoreSettings = this.getPersonalSettingsForStore(
         this.configurationFromMongoDb,
         storeId
@@ -1513,7 +1549,7 @@ export class DynamicSchedulerComponent implements OnInit {
             defaultStoreSettings
           );
         });
-    }
+    }*/
   }
 
   setPersonalOrDefaultSettingsForStore(
@@ -1534,10 +1570,6 @@ export class DynamicSchedulerComponent implements OnInit {
       this.therapyDuration =
         Number(defaultStoreSettings.time_therapy) / Number(this.timeDuration);
     }*/
-
-    setTimeout(() => {
-      this.renderTimeInSchedule();
-    }, 100);
   }
 
   setStartDay(personalStoreSettings, defaultStoreSettings) {
@@ -1549,6 +1581,7 @@ export class DynamicSchedulerComponent implements OnInit {
           0
         )
       );
+      this.setCalendarSettingsValue("dayStart", personalStoreSettings.dayStart);
     } else {
       this.dayStartHourValue = new Date(
         new Date().setHours(
@@ -1569,6 +1602,7 @@ export class DynamicSchedulerComponent implements OnInit {
           0
         )
       );
+      this.setCalendarSettingsValue("dayEnd", personalStoreSettings.dayEnd);
     } else {
       this.dayEndHourValue = new Date(
         new Date().setHours(
@@ -1588,6 +1622,10 @@ export class DynamicSchedulerComponent implements OnInit {
           Number(personalStoreSettings.dayWorkStart.split(":")[1]),
           0
         )
+      );
+      this.setCalendarSettingsValue(
+        "dayWorkStart",
+        personalStoreSettings.dayWorkStart
       );
     } else {
       this.workStartHourValue = new Date(
@@ -1609,6 +1647,10 @@ export class DynamicSchedulerComponent implements OnInit {
           0
         )
       );
+      this.setCalendarSettingsValue(
+        "dayWorkEnd",
+        personalStoreSettings.dayWorkEnd
+      );
     } else {
       this.workEndHourValue = new Date(
         new Date().setHours(
@@ -1621,8 +1663,12 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   setSlotDuration(personalStoreSettings, defaultStoreSettings) {
-    if (personalStoreSettings && personalStoreSettings.dayWorkEnd) {
+    if (personalStoreSettings && personalStoreSettings.timeDuration) {
       this.timeSlotDurationValue = Number(personalStoreSettings.timeDuration);
+      this.setCalendarSettingsValue(
+        "timeDuration",
+        personalStoreSettings.timeDuration
+      );
     } else {
       this.timeSlotDurationValue = Number(defaultStoreSettings.time_duration);
     }
@@ -1631,13 +1677,18 @@ export class DynamicSchedulerComponent implements OnInit {
   setSlotInterval(personalStoreSettings) {
     if (personalStoreSettings && personalStoreSettings.timeSlot) {
       this.timeSlotCountValue = personalStoreSettings.timeSlot;
+      this.setCalendarSettingsValue("timeSlot", personalStoreSettings.timeSlot);
+    } else {
+      this.timeSlotCountValue = 1;
     }
   }
 
   getPersonalSettingsForStore(data, storeId) {
-    for (let i = 0; i < data.storeSettings.length; i++) {
-      if (data.storeSettings[i].id === storeId) {
-        return data.storeSettings[i];
+    if (data) {
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].id === storeId) {
+          return data[i];
+        }
       }
     }
     return null;
@@ -1678,7 +1729,7 @@ export class DynamicSchedulerComponent implements OnInit {
       } else {
         this.packEventsForShow([]);
         this.value = [];
-        this.sharedCalendarResources = null;
+        this.sharedCalendarResources = [];
         this.loading = false;
       }
       this.getUserInCompany(this.selectedStoreId);
@@ -1708,6 +1759,7 @@ export class DynamicSchedulerComponent implements OnInit {
           /*this.eventSettings.dataSource =
             this.calendars.push(objectCalendar);*/
           this.loading = false;
+          this.sharedCalendarResources = [];
           // this.setStoreWork();
           /// this.setWidthForCalendarHeader();
           ///this.setSplitterBarEvent();
@@ -1727,12 +1779,11 @@ export class DynamicSchedulerComponent implements OnInit {
             };
             this.calendars.push(objectCalendar);
             this.loading = false;
-            // this.setStoreWork();
+            this.sharedCalendarResources = [];
             console.log(document.getElementsByClassName("k-scheduler-toolbar"));
           } else {
             this.calendars.push({ name: null, events: [] });
           }
-          console.log(this.calendars);
           this.size = [];
           this.size.push("100%");
         });
@@ -1950,6 +2001,7 @@ export class DynamicSchedulerComponent implements OnInit {
           this.calendars.push(objectCalendar);
           this.size = [];
           this.loading = false;
+          this.renderTimeInSchedule();
           // this.setStoreWork();
           /// this.setWidthForCalendarHeader();
           /// this.setSplitterBarEvent();
@@ -1988,6 +2040,7 @@ export class DynamicSchedulerComponent implements OnInit {
           if (this.valueLoop.length === this.loopIndex) {
             this.eventSettings.dataSource = this.allEvents;
             this.loading = false;
+            this.renderTimeInSchedule();
             // this.setStoreWork();
           }
           if (this.loopIndex < this.valueLoop.length) {
@@ -2028,6 +2081,7 @@ export class DynamicSchedulerComponent implements OnInit {
     this.calendars = [];
     this.selectedStoreId = event;
     this.storeName = this.getStoreName(event);
+    this.setStoreWork();
     if (
       localStorage.getItem(
         "usersFor-" + this.selectedStoreId + "-" + this.id
@@ -2043,7 +2097,6 @@ export class DynamicSchedulerComponent implements OnInit {
       this.sharedCalendarResources = this.value;
       this.getTaskForSelectedUsers(this.value);
       this.getUserInCompany(event);
-      this.setStoreWork();
       localStorage.setItem("selectedStore-" + this.id, event);
     } else {
       this.value = [];
@@ -2069,7 +2122,8 @@ export class DynamicSchedulerComponent implements OnInit {
             }
             this.calendars.push(objectCalendar);
             this.loading = false;
-            this.setStoreWork();
+            this.sharedCalendarResources = [];
+            this.renderTimeInSchedule();
             /// this.setWidthForCalendarHeader();
             /// this.setSplitterBarEvent();
           });
@@ -2099,7 +2153,8 @@ export class DynamicSchedulerComponent implements OnInit {
             this.timeDuration = "60";
             this.therapyDuration = 1;
             this.loading = false;
-            this.setStoreWork();
+            this.sharedCalendarResources = [];
+            this.renderTimeInSchedule();
             /// this.setWidthForCalendarHeader();
             /// this.setSplitterBarEvent();
             this.size = [];
