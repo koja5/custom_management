@@ -2975,14 +2975,24 @@ export class DynamicSchedulerComponent implements OnInit {
     if (this.displayToolbar) {
       this.displayToolbar = false;
       this.height = this.dynamicService.getSchedulerHeightWithoutToolbar();
-      this.showFilterPanel();
-      this.onSettingsClick();
+      this.hideAllPanels();
     } else {
       this.displayToolbar = true;
       this.height = this.dynamicService.getSchedulerHeight();
     }
     this.scheduleObj.refresh();
     localStorage.setItem("displayToolbar", this.displayToolbar.toString());
+  }
+
+  hideAllPanels() {
+    const filterPanel: Element = document.querySelector(
+      ".overview-content .filter-panel"
+    );
+    const settingsPanel: Element = document.querySelector(
+      ".overview-content .settings-panel"
+    );
+    addClass([filterPanel], "hide");
+    addClass([settingsPanel], "hide");
   }
 
   selectedEventCategory(event) {
