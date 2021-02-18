@@ -18,7 +18,7 @@
             <input kendoTextBox (input)="onFilter($event.target.value)" [(ngModel)]="searchFilter" />
           </kendo-textbox-container>
         </div>
-        <div style="float: right; padding-right: 30px; padding-top: 14px;">
+        <div class="grid-button-operation-group">
           <button kendoButton [icon]="'add'" (click)="newVaucher()" [primary]="true" class="addButton">{{language.newVaucher}}</button>
           <div class="dropdown-grid">
             <button class="btn-grid" style="border-left:1px solid #0d8bf2">

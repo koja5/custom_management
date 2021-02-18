@@ -1,18 +1,40 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+
 import { BaseDateComponent } from "../dashboard/task/base-date/base-date.component";
 
+import { ButtonsModule } from "@progress/kendo-angular-buttons";
+import { InputsModule } from "@progress/kendo-angular-inputs";
+import { LayoutModule } from "@progress/kendo-angular-layout";
+import { DateInputsModule } from "@progress/kendo-angular-dateinputs";
+import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
+import { IntlModule } from "@progress/kendo-angular-intl";
+import { DialogModule } from "@progress/kendo-angular-dialog";
+import { DialogsModule } from "@progress/kendo-angular-dialog";
+import { GridModule } from "@progress/kendo-angular-grid";
+import { ModalModule } from "ngx-modal";
+import { FileUploadModule } from "ng2-file-upload";
 
 @NgModule({
-    declarations: [
-        BaseDateComponent
-    ],
-    exports: [
-        BaseDateComponent
-    ],
-    imports: [CommonModule],
-    providers: [],
-    bootstrap: [],
+  declarations: [BaseDateComponent],
+  exports: [BaseDateComponent],
+  imports: [
+    CommonModule,
+    ButtonsModule,
+    InputsModule,
+    LayoutModule,
+    FormsModule,
+    DateInputsModule,
+    DropDownsModule,
+    IntlModule,
+    DialogModule,
+    DialogsModule,
+    GridModule,
+    ModalModule,
+    FileUploadModule
+  ],
+  providers: [],
+  bootstrap: [],
 })
-export class BaseDateSharedModule {
-}
+export class BaseDateSharedModule {}

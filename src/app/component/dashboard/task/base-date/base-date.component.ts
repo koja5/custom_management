@@ -848,7 +848,6 @@ export class BaseDateComponent implements OnInit {
     this.service
       .getCustomerList("Recommendation", localStorage.getItem("superadmin"))
       .subscribe((data) => {
-        console.log(data);
         this.recommendationList = data;
       });
 
@@ -867,13 +866,11 @@ export class BaseDateComponent implements OnInit {
     this.service
       .getCustomerList("Doctor", localStorage.getItem("superadmin"))
       .subscribe((data) => {
-        console.log(data);
         this.doctorList = data;
       });
     this.service
       .getCustomerList("Doctors", localStorage.getItem("superadmin"))
       .subscribe((data) => {
-        console.log(data);
         this.doctorsList = data;
       });
 

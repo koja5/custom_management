@@ -59,6 +59,7 @@ import { SharedModule } from "src/app/shared.module";
 import { TodoComponent } from "./administrator/todo/todo.component";
 import { DymanicElementsModule } from "../dynamic-elements/dymanic-elements.module";
 import { DialogModule as  DialogModuleSyncfusion} from '@syncfusion/ej2-angular-popups';
+import { BaseDateSharedModule } from "../shared-module/base-date-module";
 
 @NgModule({
   declarations: [
@@ -68,7 +69,6 @@ import { DialogModule as  DialogModuleSyncfusion} from '@syncfusion/ej2-angular-
     StoreComponent,
     ProfileComponent,
     CustomersComponent,
-    BaseDateComponent,
     DocumentPreviewComponent,
     UserDetailsComponent,
     ParametersComponent,
@@ -114,7 +114,8 @@ import { DialogModule as  DialogModuleSyncfusion} from '@syncfusion/ej2-angular-
     PdfViewerModule,
     SharedModule,
     DymanicElementsModule,
-    DialogModuleSyncfusion
+    DialogModuleSyncfusion,
+    BaseDateSharedModule
   ],
   providers: [
     {

@@ -631,15 +631,16 @@
                           {{ languageUser.newCustomer }}
                         </button>
 
-                        <!-- <button
+                        <button
                           kendoButton
                           [icon]="'k-icon k-i-information'"
                           class="ml-2 patient-options"
                           [primary]="true"
                           (click)="baseDataForUser()"
+                          *ngIf="baseDataIndicator"
                         >
                           {{ languageUser.baseDate }}
-                        </button> -->
+                        </button>
                       </div>
 
                       <div style="width: 100%">
@@ -1261,7 +1262,7 @@
               class="col-xs-12"
               name="email"
               [(ngModel)]="data.email"
-            >
+            />
           </kendo-textbox-container>
         </div>
         <div class="email col-md-4 col-xs-12">
@@ -1272,7 +1273,7 @@
               class="col-xs-12"
               [(ngModel)]="data.street"
               name="street"
-            >
+            />
           </kendo-textbox-container>
         </div>
         <div class="email col-md-4 col-xs-12">
@@ -1283,7 +1284,7 @@
               class="col-xs-12"
               [(ngModel)]="data.streetnumber"
               name="streetnumber"
-            >
+            />
           </kendo-textbox-container>
         </div>
         <div class="email col-md-4 col-xs-12">
@@ -1294,7 +1295,7 @@
               class="col-xs-12"
               [(ngModel)]="data.city"
               name="city"
-            >
+            />
           </kendo-textbox-container>
         </div>
       </div>
@@ -1314,16 +1315,16 @@
     </form>
   </kendo-window>
 
-  <!-- <kendo-window
+  <kendo-window
     title="Please provide additional data"
     *ngIf="customerUserModal2 && customerUser !== undefined"
-    [width]="950"
-    [height]="700"
+    [width]="960"
+    [height]="540"
     (close)="closebaseDataForUser()"
   >
     <app-base-date [data]="customerUser" *ngIf="customerUser !== undefined">
     </app-base-date>
-  </kendo-window> -->
+  </kendo-window>
 
   <!-- END MODALS -->
 </div>

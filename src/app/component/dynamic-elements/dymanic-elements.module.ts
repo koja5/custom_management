@@ -43,6 +43,7 @@ import { InputsModule } from '@progress/kendo-angular-inputs';
 import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { DialogsModule } from '@progress/kendo-angular-dialog';
+import { BaseDateSharedModule } from '../shared-module/base-date-module';
 
 @NgModule({
   declarations: [DynamicGridComponent, DynamicFormsComponent, DynamicSchedulerComponent],
@@ -84,7 +85,8 @@ import { DialogsModule } from '@progress/kendo-angular-dialog';
     InputsModule,
     DateInputsModule,
     ButtonsModule,
-    DialogsModule
+    DialogsModule,
+    BaseDateSharedModule
   ],
   providers: [EditService, ToolbarService, SortService, FilterService, PageService, GroupService, ResizeService],
   entryComponents: [TextboxComponent, TextareaComponent, DatepickerComponent, ButtonComponent, DropdownComponent]

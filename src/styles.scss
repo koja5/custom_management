@@ -13491,6 +13491,7 @@ kendo-grid-filter-cell-operators {
 .search .k-textbox-container,
 .search .k-floating-label-container {
     width: 200px !important;
+    margin-left: 15px !important;
 }
 
 .search {
@@ -13933,3 +13934,12 @@ kendo-window {
 }
 
 /* SYNCFUSION END */
+
+.grid-button-operation-group {
+    float: right; 
+    margin: 15px 45px 0px 0px;
+}
+
+.k-grid-add-command {
+    padding: 20px !important;
+}
