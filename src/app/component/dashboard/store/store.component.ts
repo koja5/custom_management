@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 // import * as Excel from '@grapecity/spread-excelio';
 import * as XLSX from "ts-xlsx";
 import { MessageService } from "src/app/service/message.service";
+import { HelpService } from "src/app/service/help.service";
 
 @Component({
   selector: "app-store",
@@ -56,7 +57,7 @@ export class StoreComponent implements OnInit {
     previousNext: true
   };
 
-  constructor(public service: StoreService, public message: MessageService) {
+  constructor(public service: StoreService, public message: MessageService, private helpService: HelpService) {
     // this.excelIO = new Excel.IO();
   }
 
@@ -67,7 +68,8 @@ export class StoreComponent implements OnInit {
     if (localStorage.getItem("theme") !== null) {
       this.theme = localStorage.getItem("theme");
     }
-    this.language = JSON.parse(localStorage.getItem("language"));
+    this.language = this.helpService.getLanguage();
+    this.helpService.setTitleForBrowserTab(this.language.store);
     this.getStore();
 
     this.message.getTheme().subscribe(mess => {

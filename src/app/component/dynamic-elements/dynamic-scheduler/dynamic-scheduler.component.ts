@@ -88,7 +88,125 @@ import { EventModel } from "src/app/models/event.model";
 import { ODataV4Adaptor } from "@syncfusion/ej2-data";
 import { HelpService } from "src/app/service/help.service";
 import { StorageService } from "src/app/service/storage.service";
+import { loadCldr, L10n } from '@syncfusion/ej2-base';
+import * as numberingSystems from '../../../../../node_modules/cldr-data/supplemental/numberingSystems.json';
+import * as gregorian from '../../../../../node_modules/cldr-data/main/fr-CH/ca-gregorian.json';
+import * as numbers from '../../../../../node_modules/cldr-data/main/fr-CH/numbers.json';
+import * as timeZoneNames from '../../../../../node_modules/cldr-data/main/fr-CH/timeZoneNames.json';
 declare var moment: any;
+
+loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
+L10n.load({
+  'fr-CH': {
+    "schedule": {
+      "day": "ngày",
+      "week": "Tuần",
+      "workWeek": "Tuần làm việc",
+      "month": "tháng",
+      "agenda": "Chương trình nghị sự",
+      "weekAgenda": "Chương trình nghị sự tuần",
+      "workWeekAgenda": "Chương trình làm việc trong tuần",
+      "monthAgenda": "Chương trình nghị sự tháng",
+      "today": "Hôm nay",
+      "noEvents": "Không có sự kiện",
+      "emptyContainer": "Không có sự kiện theo lịch trình vào ngày này.",
+      "allDay": "Cả ngày",
+      "start": "Khởi đầu",
+      "end": "Kết thúc",
+      "more": "hơn",
+      "close": "Gần",
+      "cancel": "Hủy bỏ",
+      "noTitle": "(Không tiêu đề)",
+      "delete": "Xóa bỏ",
+      "deleteEvent": "Xóa sự kiện",
+      "deleteMultipleEvent": "Xóa nhiều sự kiện",
+      "selectedItems": "Các mục được chọn",
+      "deleteSeries": "Xóa sê-ri",
+      "edit": "Chỉnh sửa",
+      "editSeries": "Chỉnh sửa sê-ri",
+      "editEvent": "Chỉnh sửa sự kiện",
+      "createEvent": "Tạo nên",
+      "subject": "Môn học",
+      "addTitle": "Thêm tiêu đề",
+      "moreDetails": "Thêm chi tiết",
+      "save": "Tiết kiệm",
+      "editContent": "Bạn có muốn chỉnh sửa chỉ sự kiện này hoặc toàn bộ loạt?",
+      "deleteRecurrenceContent": "Bạn có muốn xóa chỉ sự kiện này hoặc toàn bộ loạt?",
+      "deleteContent": "Bạn có chắc chắn muốn xóa sự kiện này?",
+      "deleteMultipleContent": "Bạn có chắc chắn muốn xóa các sự kiện đã chọn?",
+      "newEvent": "Sự kiện mới",
+      "title": "Chức vụ",
+      "location": "Vị trí",
+      "description": "Sự miêu tả",
+      "timezone": "Múi giờ",
+      "startTimezone": "Bắt đầu múi giờ",
+      "endTimezone": "Múi giờ kết thúc",
+      "repeat": "Nói lại",
+      "saveButton": "Tiết kiệm",
+      "cancelButton": "Hủy bỏ",
+      "deleteButton": "Xóa bỏ",
+      "recurrence": "Sự tái xuất",
+      "wrongPattern": "Mẫu tái phát không hợp lệ.",
+      "seriesChangeAlert": "Các thay đổi được thực hiện cho các phiên bản cụ thể của chuỗi này sẽ bị hủy và các sự kiện đó sẽ khớp với chuỗi đó một lần nữa.",
+      "createError": "Thời gian của sự kiện phải ngắn hơn tần suất xảy ra. Rút ngắn thời lượng hoặc thay đổi mẫu lặp lại trong trình chỉnh sửa sự kiện lặp lại.",
+      "recurrenceDateValidation": "Một số tháng có ít hơn ngày đã chọn. Đối với những tháng này, sự xuất hiện sẽ rơi vào ngày cuối cùng của tháng.",
+      "sameDayAlert": "Hai lần xuất hiện của cùng một sự kiện không thể xảy ra trong cùng một ngày.",
+      "editRecurrence": "Chỉnh sửa tái phát",
+      "repeats": "Lặp lại",
+      "alert": "Thông báo",
+      "startEndError": "Ngày kết thúc được chọn xảy ra trước ngày bắt đầu.",
+      "invalidDateError": "Giá trị ngày nhập không hợp lệ.",
+      "ok": "Được",
+      "occurrence": "Xảy ra",
+      "series": "Loạt",
+      "previous": "Trước",
+      "next": "Kế tiếp",
+      "timelineDay": "Ngày thời gian",
+      "timelineWeek": "Tuần thời gian",
+      "timelineWorkWeek": "Tuần làm việc",
+      "timelineMonth": "Mốc thời gian"
+    },
+    "recurrenceeditor": {
+      "none": "không ai",
+      "daily": "hằng ngày",
+      "weekly": "Hàng tuần",
+      "monthly": "Hàng tháng",
+      "month": "tháng",
+      "yearly": "Hàng năm",
+      "never": "Không bao giờ",
+      "until": "Cho đến khi",
+      "count": "Đếm",
+      "first": "Đầu tiên",
+      "second": "Thứ hai",
+      "third": "Thứ ba",
+      "fourth": "Thứ tư",
+      "last": "Cuối cùng",
+      "repeat": "Nói lại",
+      "repeatEvery": "Lặp lại mỗi",
+      "on": "Lặp lại trên",
+      "end": "Kết thúc",
+      "onDay": "ngày",
+      "days": "Ngày",
+      "weeks": "Tuần",
+      "months": "Tháng)",
+      "years": "Năm",
+      "every": "mỗi",
+      "summaryTimes": "thời gian",
+      "summaryOn": "trên",
+      "summaryUntil": "cho đến khi",
+      "summaryRepeat": "Lặp lại",
+      "summaryDay": "ngày",
+      "summaryWeek": "tuần",
+      "summaryMonth": "tháng)",
+      "summaryYear": "năm",
+      "monthWeek": "Tháng tuần",
+      "monthPosition": "Vị trí tháng",
+      "monthExpander": "Mở rộng tháng",
+      "yearExpander": "Mở rộng năm",
+      "repeatInterval": "Khoảng lặp lại"
+    }
+  }
+});
 
 @Component({
   selector: "app-dynamic-scheduler",
@@ -421,7 +539,7 @@ export class DynamicSchedulerComponent implements OnInit {
       this.currentView = currentViewLocal;
       this.dateHeaderCounter = 0;
       localStorage.setItem("currentView", this.currentView);
-      this.scheduleObj.refresh();
+      // this.scheduleObj.refresh();
     }
   }
 
@@ -1367,6 +1485,7 @@ export class DynamicSchedulerComponent implements OnInit {
   public dateHeaderCounter = 0;
   public calendarSettings = {};
   public configurationFromMongoDb: any;
+  public dateFormatScheduler = 'dd.MM.yyyy';
 
   constructor(
     public service: TaskService,
@@ -1386,6 +1505,7 @@ export class DynamicSchedulerComponent implements OnInit {
   ngOnInit() {
     this.initializationConfig();
     this.initializaionData();
+    this.helpService.setDefaultBrowserTabTitle();
   }
 
   @HostListener("window:resize", ["$event"])
@@ -1489,6 +1609,7 @@ export class DynamicSchedulerComponent implements OnInit {
       this.store = val;
       if (this.store.length !== 0) {
         this.language.selectStore += this.store[0].storename + ")";
+        this.helpService.setTitleForBrowserTab(this.store[0].storename);
       }
       if (!isNaN(this.selectedStoreId) && this.selectedStoreId !== undefined) {
         const informationAboutStore = this.getStartEndTimeForStore(
@@ -1902,11 +2023,9 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   createCustomer(form) {
-    console.log(this.data);
     this.createFormLoading = false;
     this.data.storeId = this.helpService.getSuperadmin();
     this.customer.createCustomer(this.data, (val) => {
-      console.log(val);
       if (val) {
         this.data.id = val.id;
         this.customerUser = this.data;
@@ -1923,7 +2042,6 @@ export class DynamicSchedulerComponent implements OnInit {
     this.customerUsers = null;
     setTimeout(() => {
       this.customer.getCustomers(this.helpService.getSuperadmin(), (val) => {
-        console.log(val);
         this.customerUsers = val.sort((a, b) =>
           a["shortname"].localeCompare(b["shortname"])
         );
@@ -1961,7 +2079,6 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   public handleValue(selected) {
-    console.log(selected);
     this.resetCalendarData();
     this.value = selected;
     this.sharedCalendarResources = selected;
@@ -1979,13 +2096,11 @@ export class DynamicSchedulerComponent implements OnInit {
     };
 
     this.mongo.setUsersFor(item).subscribe((data) => {
-      console.log(data);
     });
   }
 
   getTaskForSelectedUsers(value) {
     this.loading = true;
-    console.log(value);
     this.calendars = [];
     if (value.length === 0) {
       this.service
@@ -2022,7 +2137,6 @@ export class DynamicSchedulerComponent implements OnInit {
       this.service
         .getWorkandTasksForUser(this.valueLoop[this.loopIndex].id)
         .subscribe((data) => {
-          console.log(data, this.valueLoop[this.loopIndex]);
           this.events = [];
           this.workTime[this.loopIndex] = this.packWorkTimeToTask(
             data["workTime"]
@@ -2074,13 +2188,13 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   selectedStore(event) {
-    console.log(event);
     this.value = [];
     // localStorage.removeItem('selectedUser');
     this.loading = true;
     this.calendars = [];
     this.selectedStoreId = event;
     this.storeName = this.getStoreName(event);
+    this.helpService.setTitleForBrowserTab(this.storeName);
     this.setStoreWork();
     if (
       localStorage.getItem(
@@ -2132,11 +2246,9 @@ export class DynamicSchedulerComponent implements OnInit {
         this.service
           .getTasks(this.helpService.getSuperadmin())
           .subscribe((data) => {
-            console.log(data);
             this.events = [];
             if (data.length !== 0) {
               this.packEventsForShow(data);
-              console.log(this.events);
               const objectCalendar = {
                 name: null,
                 events: this.events,

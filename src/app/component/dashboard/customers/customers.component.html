@@ -175,9 +175,9 @@
         </kendo-textbox-container>
       </div>
       <div class="email col-md-4 col-xs-12">
-        <kendo-textbox-container floatingLabel="{{language.email}}({{language.required}})">
+        <kendo-textbox-container floatingLabel="{{language.email}}">
           <input kendoTextBox type="email" class="col-xs-12" name="email" [(ngModel)]="data.email"
-            [pattern]="emailPattern" #email="ngModel" required #email="ngModel"></kendo-textbox-container>
+            [pattern]="emailPattern" #email="ngModel" #email="ngModel"></kendo-textbox-container>
       </div>
       <div class="email col-md-4 col-xs-12">
         <kendo-textbox-container floatingLabel="{{language.street}}">

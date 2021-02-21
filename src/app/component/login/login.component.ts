@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { CookieService } from "ng2-cookies";
 import { DashboardService } from "../../service/dashboard.service";
 import { MongoService } from "../../service/mongo.service";
+import { HelpService } from "src/app/service/help.service";
 
 @Component({
   selector: "app-login",
@@ -41,12 +42,13 @@ export class LoginComponent implements OnInit {
   // public data: LoginData;
 
   constructor(
-    public service: LoginService,
-    public mailService: MailService,
-    public cookie: CookieService,
-    public router: Router,
-    public dashboardService: DashboardService,
-    public mongo: MongoService
+    private service: LoginService,
+    private mailService: MailService,
+    private cookie: CookieService,
+    private router: Router,
+    private dashboardService: DashboardService,
+    private mongo: MongoService,
+    private helpService: HelpService
   ) {}
 
   ngOnInit() {
@@ -104,6 +106,7 @@ export class LoginComponent implements OnInit {
         });
       }
     );
+    this.helpService.setDefaultBrowserTabTitle();
   }
 
   signUpActive() {

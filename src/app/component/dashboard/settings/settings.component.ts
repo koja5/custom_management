@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from "@angular/common";
+import { HelpService } from 'src/app/service/help.service';
 
 @Component({
   selector: 'app-settings',
@@ -8,9 +9,13 @@ import { Location } from "@angular/common";
 })
 export class SettingsComponent implements OnInit {
 
-  constructor(public location: Location) { }
+  public language: any;
+
+  constructor(public location: Location, private helpService: HelpService) { }
 
   ngOnInit() {
+    this.language = this.helpService.getLanguage();
+    this.helpService.setTitleForBrowserTab(this.language.settings);
   }
 
   backToGrid() {

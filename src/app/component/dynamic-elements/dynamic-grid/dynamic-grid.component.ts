@@ -61,8 +61,8 @@ export class DynamicGridComponent implements OnInit {
       mode: "Dialog",
     };
     this.toolbar = ["Add", "Edit", "Delete"];
-    console.log(this.container);
     this.container.nativeElement.style.height = this.helpService.getHeightForGrid();
+    this.helpService.setDefaultBrowserTabTitle();
   }
 
   ngAfterViewInit() {}
@@ -93,12 +93,10 @@ export class DynamicGridComponent implements OnInit {
   }
 
   actionBegin(args: SaveEventArgs): void {
-    console.log(args);
     /*if (args.requestType === "beginEdit" || args.requestType === "add") {
       this.orderData = Object.assign({}, args.rowData);
     }
     if (args.requestType === "save") {
-      console.log(this.dataForm);
       if (this.orderForm.valid) {
         args.data = this.orderData;
       } else {
@@ -112,7 +110,6 @@ export class DynamicGridComponent implements OnInit {
   }
 
   actionComplete(args: DialogEditEventArgs): void {
-    console.log(args);
     if (args.requestType === "beginEdit" || args.requestType === "add") {
       args.dialog.buttons = [];
       setTimeout(() => {
@@ -147,11 +144,9 @@ export class DynamicGridComponent implements OnInit {
   submitEmitter(event) {
     if (this.typeOfModification === "add") {
       this.service.callApiPost("/api/createToDo", event).subscribe((data) => {
-        console.log(data);
       });
     } else if (this.typeOfModification === "beginEdit") {
       this.service.callApiPost("/api/updateToDo", event).subscribe((data) => {
-        console.log(data);
       });
     }
 
@@ -161,7 +156,6 @@ export class DynamicGridComponent implements OnInit {
 
   deleteData(event) {
     this.service.callApiGet("/api/deleteTodo", event.id).subscribe((data) => {
-      console.log(data);
     });
   }
 

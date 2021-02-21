@@ -80,6 +80,6 @@ export class DropdownComponent implements OnInit, Field {
   }
 
   onFiltering(event) {
-    console.log(event);
+    
   }
 }

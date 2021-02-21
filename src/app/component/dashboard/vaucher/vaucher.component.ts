@@ -13,6 +13,7 @@ import { MessageService } from "../../../service/message.service";
 import * as XLSX from "ts-xlsx";
 import { CustomersService } from "src/app/service/customers.service";
 import { UsersService } from "src/app/service/users.service";
+import { HelpService } from "src/app/service/help.service";
 
 @Component({
   selector: "app-vaucher",
@@ -75,18 +76,17 @@ export class VaucherComponent implements OnInit {
     private service: VaucherService,
     private customer: CustomersService,
     private message: MessageService,
-    private userService: UsersService
+    private userService: UsersService,
+    private helpService: HelpService
   ) { }
 
   ngOnInit() {
-    this.height = window.innerHeight - 81;
-    this.height += "px";
+    this.height = this.helpService.getHeightForGrid();
     this.id = Number(localStorage.getItem("idUser"));
     this.getVauchers();
     this.getUsers();
-    if (localStorage.getItem("language") !== null) {
-      this.language = JSON.parse(localStorage.getItem("language"));
-    }
+    this.language = this.helpService.getLanguage();
+    this.helpService.setTitleForBrowserTab(this.language.vaucher);
 
     if (localStorage.getItem("theme") !== null) {
       this.theme = localStorage.getItem("theme");
@@ -111,7 +111,7 @@ export class VaucherComponent implements OnInit {
   getVauchers() {
     this["loadingGridVaucher"] = true;
     this.service
-      .getVauchers(localStorage.getItem("idUser"))
+      .getVauchers(this.helpService.getSuperadmin())
       .subscribe((data: []) => {
         if (data !== null) {
           console.log(data);
@@ -565,8 +565,7 @@ export class VaucherComponent implements OnInit {
   @HostListener("window:resize", ["$event"])
   onResize(event) {
     console.log(window.innerHeight);
-    this.height = window.innerHeight - 81;
-    this.height += "px";
+    this.height = this.helpService.getHeightForGrid();
   }
 
   public onFilter(inputValue: string): void {

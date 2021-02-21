@@ -13,7 +13,7 @@ export class DatepickerComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.group);
+    
   }
 
 }

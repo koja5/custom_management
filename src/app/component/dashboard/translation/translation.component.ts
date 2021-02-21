@@ -1,5 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { DashboardService } from 'src/app/service/dashboard.service';
+import { HelpService } from 'src/app/service/help.service';
 
 @Component({
   selector: 'app-translation',
@@ -10,12 +11,14 @@ export class TranslationComponent implements OnInit {
   public gridConfiguration: any;
   public data: any;
   public height: any;
+  public language: any;
 
-  constructor(private service: DashboardService) {}
+  constructor(private service: DashboardService, private helpService: HelpService) {}
 
   ngOnInit() {
-    this.height = window.innerHeight - 81;
-    this.height += "px";
+    this.height = this.helpService.getHeightForGrid();
+    this.language = this.helpService.getLanguage();
+    this.helpService.setTitleForBrowserTab(this.language.translation);
     this.initialization();
   }
 
@@ -34,8 +37,7 @@ export class TranslationComponent implements OnInit {
 
   @HostListener("window:resize", ["$event"])
   onResize(event) {
-    this.height = window.innerHeight - 81;
-    this.height += "px";
+    this.height = this.helpService.getHeightForGrid();
   }
 
 }

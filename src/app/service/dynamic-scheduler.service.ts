@@ -10,10 +10,10 @@ export class DynamicSchedulerService {
   
 
   getSchedulerHeight() {
-    return window.innerHeight - 196 + 'px';
+    return window.innerHeight - 176 + 'px';
   }
 
   getSchedulerHeightWithoutToolbar() {
-    return window.innerHeight - 124 + 'px';
+    return window.innerHeight - 104 + 'px';
   }
 }

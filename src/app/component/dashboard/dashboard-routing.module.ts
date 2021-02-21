@@ -32,8 +32,8 @@ const routes: Routes = [
     component: DashboardComponent,
     children: [
       { path: "", redirectTo: "task", pathMatch: "full" },
-      { path: "task", component: TaskComponent },
-      { path: "calendar", component: DynamicSchedulerComponent }, 
+      /*{ path: "calendar", component: TaskComponent },*/
+      { path: "task", component: DynamicSchedulerComponent }, 
       { path: "users", component: UsersComponent },
       {
         path: "user-details/:id",

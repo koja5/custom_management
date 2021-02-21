@@ -11,6 +11,7 @@ import {
 } from "@progress/kendo-angular-grid";
 import { SortDescriptor, orderBy } from "@progress/kendo-data-query";
 import { MessageService } from "src/app/service/message.service";
+import { HelpService } from "src/app/service/help.service";
 
 @Component({
   selector: "app-parameter-item",
@@ -64,12 +65,12 @@ export class ParameterItemComponent implements OnInit {
 
   constructor(
     private service: ParameterItemService,
-    public message: MessageService
+    private message: MessageService,
+    private helpService: HelpService
   ) {}
 
   public ngOnInit(): void {
-    this.height = window.innerHeight - 81;
-    this.height += 'px';
+    this.height = this.helpService.getHeightForGrid();
     this.editedRowIndex = -1;
     const superadmin = localStorage.getItem('superadmin');
     // this.editButton[41]=true;
@@ -472,9 +473,7 @@ export class ParameterItemComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    console.log(window.innerHeight);
-    this.height = window.innerHeight - 81;
-    this.height += 'px';
+    this.height = this.helpService.getHeightForGrid();
   }
 }
 

@@ -8,6 +8,7 @@ import { UsersService } from "../../service/users.service";
 import { DomSanitizer } from "@angular/platform-browser";
 import { NavigationMenuModel } from "../../models/navigation-menu";
 import { MongoService } from "../../service/mongo.service";
+import { HelpService } from "src/app/service/help.service";
 declare var document: any;
 
 @Component({
@@ -37,15 +38,18 @@ export class DashboardComponent implements OnInit {
   
 
   constructor(
-    public router: Router,
-    public cookie: CookieService,
-    public message: MessageService,
-    public service: DashboardService,
-    public users: UsersService,
-    public sanitizer: DomSanitizer,
-    public activatedRouter: ActivatedRoute,
-    public mongo: MongoService
-  ) {}
+    private router: Router,
+    private cookie: CookieService,
+    private message: MessageService,
+    private service: DashboardService,
+    private users: UsersService,
+    private sanitizer: DomSanitizer,
+    private activatedRouter: ActivatedRoute,
+    private mongo: MongoService,
+    private helpService: HelpService
+  ) {
+    this.helpService.setTitleForBrowserTab("ClinicNode");
+  }
 
   ngOnInit() {
     this.sidebarHeight = window.innerHeight - 30 + "px";

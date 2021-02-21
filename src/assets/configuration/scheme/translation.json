@@ -131,10 +131,11 @@
             "errorTextEdit": { "type": "string" },
             "successTextDelete": { "type": "string" },
             "confirmMessageText": { "type": "string" },
+            "createNewCustomerDialog": { "type": "string" },
+            "customerInformationDialog": { "type": "string" }, 
             "createData": { "type": "string" },
             "language": { "type": "string" },
             "active": { "type": "string" },
-
             "profile": { "type": "string" },
             "settings": { "type": "string" },
             "logout": { "type": "string" },
@@ -1213,7 +1214,20 @@
                         { "key": "settings" },
                         { "key": "confirmMessageText" }
                     ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        { "key": "createNewCustomerDialog" },
+                        { "key": "customerInformationDialog" },
+                        { },
+                        { }
+                    ]
                 }
+
+                
             ]
         },
         {

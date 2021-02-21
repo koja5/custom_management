@@ -17,6 +17,7 @@ import Swal from "sweetalert2";
 // import * as Excel from "@grapecity/spread-excelio";
 import { WindowModule } from "@progress/kendo-angular-dialog";
 import * as XLSX from "ts-xlsx";
+import { HelpService } from "src/app/service/help.service";
 
 const newLocal = "data";
 @Component({
@@ -66,16 +67,16 @@ export class CustomersComponent implements OnInit {
   };
 
   constructor(
-    public service: CustomersService,
-    public storeService: StoreService,
-    public message: MessageService
+    private service: CustomersService,
+    private storeService: StoreService,
+    private message: MessageService,
+    private helpService: HelpService
   ) {
     // this.excelIO = new Excel.IO();
   }
 
   ngOnInit() {
-    this.height = window.innerHeight - 81;
-    this.height += "px";
+    this.height = this.helpService.getHeightForGrid();
     this.data.gender = 'male';
     this.getCustomers();
 
@@ -101,6 +102,7 @@ export class CustomersComponent implements OnInit {
       this.changeTheme(mess);
       this.theme = mess;
     });
+    this.helpService.setTitleForBrowserTab(this.language.customer);
   }
 
   getCustomers() {
@@ -144,6 +146,8 @@ export class CustomersComponent implements OnInit {
       mobile: "",
       birthday: "",
       storeId: "",
+      attention: "",
+      physicalComplaint: "",
       isConfirm: false
     };
   }
@@ -411,9 +415,7 @@ export class CustomersComponent implements OnInit {
 
   @HostListener("window:resize", ["$event"])
   onResize(event) {
-    console.log(window.innerHeight);
-    this.height = window.innerHeight - 81;
-    this.height += "px";
+    this.height = this.helpService.getHeightForGrid();
   }
 
   public onFilter(inputValue: string): void {

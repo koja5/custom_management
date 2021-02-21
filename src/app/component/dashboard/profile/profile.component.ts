@@ -5,6 +5,7 @@ import { DomSanitizer, EventManager } from "@angular/platform-browser";
 import { MessageService } from "../../../service/message.service";
 import { UploadEvent, RemoveEvent } from "@progress/kendo-angular-upload";
 import Swal from "sweetalert2";
+import { HelpService } from "src/app/service/help.service";
 
 @Component({
   selector: "app-profile",
@@ -25,12 +26,14 @@ export class ProfileComponent implements OnInit {
   constructor(
     public service: UsersService,
     public sanitizer: DomSanitizer,
-    public message: MessageService
+    public message: MessageService,
+    private helpService: HelpService
   ) {}
 
   ngOnInit() {
     this.id = Number(localStorage.getItem("idUser"));
-    this.language = JSON.parse(localStorage.getItem("language"));
+    this.language = this.helpService.getLanguage();
+    this.helpService.setTitleForBrowserTab(this.language.profile);
     this.service.getMe(localStorage.getItem("idUser"), val => {
       console.log(val);
       this.data = val[0];

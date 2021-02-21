@@ -144,9 +144,9 @@ export class TaskComponent implements OnInit {
 
   ngOnInit() {
     var self = this;
-    this.height = window.innerHeight - 81;
+    this.height = window.innerHeight - 61;
     this.height += "px";
-    this.calendarHeight = window.innerHeight - 244;
+    this.calendarHeight = window.innerHeight - 224;
     this.calendarHeight += "px";
 
     this.loading = true;
@@ -1663,9 +1663,9 @@ export class TaskComponent implements OnInit {
   @HostListener("window:resize", ["$event"])
   onResize(event) {
     console.log(event);
-    this.height = window.innerHeight - 81;
+    this.height = window.innerHeight - 61;
     this.height += "px";
-    this.calendarHeight = window.innerHeight - 244;
+    this.calendarHeight = window.innerHeight - 224;
     this.calendarHeight += "px";
     this.setWidthForCalendarHeader();
   }

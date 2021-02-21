@@ -10725,7 +10725,7 @@ tr.group:hover {
         margin-left: 235px;
         margin-top: 0;
         min-height: 600px;
-        padding: 80px 20px 0px;
+        padding: 60px 2px 0px;
     }
     .page-content-wrapper .page-content.no-min-height {
         min-height: auto;
@@ -13213,7 +13213,7 @@ tr.group:hover {
         margin-left: 235px;
         margin-top: 0;
         min-height: 600px;
-        padding: 80px 20px 0px;
+        padding: 60px 2px 0px;
     }
     .page-content-wrapper .page-content.no-min-height {
         min-height: auto;
@@ -13924,7 +13924,7 @@ kendo-window {
 .e-schedule .e-vertical-view .e-day-wrapper .e-appointment {
     border-right: 3px solid #fff !important;
     background: none !important;
-    width: 100% !important;
+    /*width: 100% !important;*/
 }
 
 .e-schedule .e-vertical-view .e-left-indent-wrap table tbody td.e-header-cells.e-week-number {

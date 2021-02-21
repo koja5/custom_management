@@ -1,4 +1,4 @@
-<div class="col-lg-12 control-section">
+<div class="control-section">
   <div class="content-wrapper">
     <div class="schedule-overview">
       <div class="overview-header">
@@ -361,6 +361,7 @@
                 cssClass="e-control schedule-overview"
                 height="100%"
                 [(currentView)]="currentView"
+                [dateFormat]="dateFormatScheduler"
                 [group]="value.length ? group : []"
                 [showWeekNumber]="true"
                 [eventSettings]="eventSettings"
@@ -1002,7 +1003,7 @@
                   </ejs-timepicker>
                 </div>
               </div>
-              <div class="col-row">
+              <!-- <div class="col-row">
                 <div class="col-left">
                   <label style="line-height: 34px; margin: 0"
                     >Work Start Hour</label
@@ -1034,7 +1035,7 @@
                     (change)="onWorkEndHourChange($event)"
                   ></ejs-timepicker>
                 </div>
-              </div>
+              </div> -->
               <div class="col-row">
                 <div class="col-left">
                   <label style="line-height: 34px; margin: 0"
@@ -1080,7 +1081,7 @@
 
   <!-- MODALS -->
   <kendo-window
-    title="Create new patient"
+    title="{{language.createNewCustomerDialog}}"
     *ngIf="customerModal"
     [minWidth]="700"
     [width]="850"
@@ -1316,7 +1317,7 @@
   </kendo-window>
 
   <kendo-window
-    title="Please provide additional data"
+    title="{{language.customerInformationDialog}}"
     *ngIf="customerUserModal2 && customerUser !== undefined"
     [width]="960"
     [height]="540"

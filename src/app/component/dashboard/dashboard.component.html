@@ -205,7 +205,7 @@
                     ><span class="title">{{ language["todo"] }}</span></a
                   >
                 </li>
-                <li class="nav-item {{ selectedNodeModel.task }}">
+                <!-- <li class="nav-item {{ selectedNodeModel.task }}">
                   <a
                     (click)="returnActiveNode('task')"
                     routerLink="/dashboard/home/task"
@@ -213,11 +213,11 @@
                     ><i class="fa fa-calendar"></i
                     ><span class="title">{{ language["calendar"] }}</span></a
                   >
-                </li>
+                </li> -->
                 <li class="nav-item {{ selectedNodeModel.calendar }}">
-                  <a (click)="returnActiveNode('calendar')" routerLink="/dashboard/home/calendar" class="nav-link"
+                  <a (click)="returnActiveNode('calendar')" routerLink="/dashboard/home/task" class="nav-link"
                     ><i class="fa fa-calendar"></i
-                    ><span class="title">Calendar 2.0</span></a
+                    ><span class="title">{{ language["calendar"] }}</span></a
                   >
                 </li>
                 <li class="nav-item {{ selectedNodeModel.customers }}">

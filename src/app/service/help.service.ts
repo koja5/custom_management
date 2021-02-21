@@ -1,12 +1,13 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import {Title} from "@angular/platform-browser";
 import "rxjs/add/operator/map";
 
 @Injectable({
   providedIn: "root",
 })
 export class HelpService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private titleService: Title) {}
 
   postApiRequest(method, parametar) {
     return this.http.post(method, parametar).map((res) => res);
@@ -58,7 +59,7 @@ export class HelpService {
   }
 
   getHeightForGrid() {
-    return window.innerHeight - 80 + 'px';
+    return window.innerHeight - 60 + 'px';
   }
 
   getMe() {
@@ -67,5 +68,13 @@ export class HelpService {
 
   getSuperadmin() {
     return localStorage.getItem("superadmin");
+  }
+
+  setTitleForBrowserTab(value) {
+    this.titleService.setTitle("ClinicNode - " + value);
+  }
+
+  setDefaultBrowserTabTitle() {
+    this.titleService.setTitle("Clinic Node - Management System");
   }
 }

@@ -18,6 +18,7 @@ import Swal from "sweetalert2";
 // import * as Excel from '@grapecity/spread-excelio';
 import * as XLSX from "ts-xlsx";
 import { MessageService } from "src/app/service/message.service";
+import { HelpService } from "src/app/service/help.service";
 
 @Component({
   selector: "app-users",
@@ -89,23 +90,24 @@ export class UsersComponent implements OnInit {
   };
 
   constructor(
-    public service: UsersService,
-    public storeService: StoreService,
-    public router: Router,
-    public message: MessageService
+    private service: UsersService,
+    private storeService: StoreService,
+    private router: Router,
+    private message: MessageService,
+    private helpService: HelpService
   ) {
     // this.excelIO = new Excel.IO();
   }
 
   ngOnInit() {
-    this.height = window.innerHeight - 81;
-    this.height += "px";
+    this.height = this.helpService.getHeightForGrid();
     this.getUser();
     if (localStorage.getItem("theme") !== null) {
       this.theme = localStorage.getItem("theme");
     }
     this.changeTheme(this.theme);
-    this.language = JSON.parse(localStorage.getItem("language"));
+    this.language = this.helpService.getLanguage();
+    this.helpService.setTitleForBrowserTab(this.language.users);
 
     this.message.getTheme().subscribe(mess => {
       this.changeTheme(mess);
@@ -428,9 +430,7 @@ export class UsersComponent implements OnInit {
 
   @HostListener("window:resize", ["$event"])
   onResize(event) {
-    console.log(window.innerHeight);
-    this.height = window.innerHeight - 81;
-    this.height += "px";
+    this.height = this.helpService.getHeightForGrid();
   }
 
   public onFilter(inputValue: string): void {
