@@ -32,5 +32,9 @@ export class MailService {
 
     }
 
+    public sendPatientFormRegistration(data) {
+        return this.http.post('/api/sendPatientFormRegistration', data).map(res => res);
+    }
+
 
 }

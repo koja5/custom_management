@@ -21,4 +21,7 @@ export class NavigationMenuModel {
     event_category?: string;
     work_time_colors?: string;
     translation?: string;
+    my_complaint?: string;
+    my_therapy?: string;
+    my_document?: string;
 }

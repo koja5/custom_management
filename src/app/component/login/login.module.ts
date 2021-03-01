@@ -7,16 +7,22 @@ import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { LoginComponent } from './login.component';
 import { SharedModule } from 'src/app/shared.module';
+import { RegistrationPatientComponent } from './registration-patient/registration-patient.component';
+import { CheckBoxModule, RadioButtonModule } from '@syncfusion/ej2-angular-buttons';
+import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
 
 @NgModule({
-  declarations: [LoginComponent],
+  declarations: [LoginComponent, RegistrationPatientComponent],
   imports: [
     CommonModule,
     LoginRouting,
     FormsModule,
     InputsModule,
     DropDownsModule,
-    SharedModule
+    SharedModule,
+    RadioButtonModule,
+    DatePickerModule,
+    CheckBoxModule
   ]
 })
 export class LoginModule { }

@@ -20,6 +20,8 @@ import { ChangePasswordComponent } from "../login/change-password/change-passwor
 import { EventCategoryComponent } from "./parameters/event-category/event-category.component";
 import { TodoComponent } from './administrator/todo/todo.component';
 import { DynamicSchedulerComponent } from '../dynamic-elements/dynamic-scheduler/dynamic-scheduler.component';
+import { MyComplaintComponent } from "./patient/my-complaint/my-complaint.component";
+import { MyTherapyComponent } from "./patient/my-therapy/my-therapy.component";
 
 const routes: Routes = [
   {
@@ -102,6 +104,14 @@ const routes: Routes = [
       {
         path: 'todo',
         component: TodoComponent
+      },
+      {
+        path: "my-complaint",
+        component: MyComplaintComponent
+      },
+      {
+        path: "my-therapy",
+        component: MyTherapyComponent
       }
     ],
   },

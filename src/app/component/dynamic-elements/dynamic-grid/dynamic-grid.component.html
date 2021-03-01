@@ -1,5 +1,5 @@
 <div #container>
-    <ejs-grid #grid *ngIf="config" width="100%" height="100%" [dataSource]='data' [editSettings]='editSettings' [toolbar]='toolbar' [allowSorting]="config.sorting.enable" [sortSettings]="config.sorting.initalSorting" [allowGrouping]="config.grouping.enable"
+    <ejs-grid #grid *ngIf="config" width="100%" height="100%" [dataSource]='data' [editSettings]='config.editSettings' [toolbar]='config.toolbar' [allowSorting]="config.sorting.enable" [sortSettings]="config.sorting.initalSorting" [allowGrouping]="config.grouping.enable"
         [allowResizing]="config.allowResizing" [allowPaging]="config.paging.enable" [pageSettings]='config.paging.settings' [allowFiltering]="config.filtering.enable" (actionBegin)='actionBegin($event)' (actionComplete)='actionComplete($event)' (queryCellInfo)='tooltip($event)'>
         <e-columns>
             <e-column *ngFor="let item of config.columns" [type]="item.type" [field]="item.field" [headerText]="item.title" [width]="item.width" [isPrimaryKey]="item.isPrimaryKey" [editType]="item.editType ? item.editType : null" [allowEditing]='item.allowEditing'

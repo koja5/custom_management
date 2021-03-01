@@ -43,12 +43,16 @@ import { DashboardModule } from "./component/dashboard/dashboard.module";
 import { ConfirmArrivalComponent } from "./component/templates/confirm-arrival/confirm-arrival.component";
 import { SharedModule } from './shared.module';
 import { DymanicElementsModule } from './component/dynamic-elements/dymanic-elements.module';
+import { DynamicMessageComponent } from './component/templates/dynamic-message/dynamic-message.component';
+import { PatientFormSuccessComponent } from './component/templates/patient-form-success/patient-form-success.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NotFoundComponent,
-    ConfirmArrivalComponent
+    ConfirmArrivalComponent,
+    DynamicMessageComponent,
+    PatientFormSuccessComponent
   ],
   imports: [
     CommonModule,

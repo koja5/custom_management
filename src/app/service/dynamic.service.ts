@@ -26,7 +26,7 @@ export class DynamicService {
     if (parametars) {
       if (parametars.length) {
         for (let i = 0; i < parametars.length; i++) {
-          values += parametars[i] + "/";
+          values += parametars[i];
         }
 
         return method + "/" + values;

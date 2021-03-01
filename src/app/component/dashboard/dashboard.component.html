@@ -13,8 +13,18 @@
           <a routerLink="/dashboard/home/task">
             <!-- <span class="logo-icon fa fa-stethoscope fa-rotate-45"></span>
             <span class="logo-default">Tuina Praxis</span> -->
-            <img *ngIf="sidebar !== ''" src="./assets/images/short-logo.png" class="logo-icon" style="width: 35px;">
-            <img *ngIf="sidebar === ''" src="./assets/images/brand-logo-white.png" class="logo-default" style="width: 180px; height: auto; margin: 0px !important;">
+            <img
+              *ngIf="sidebar !== ''"
+              src="./assets/images/short-logo.png"
+              class="logo-icon"
+              style="width: 35px"
+            />
+            <img
+              *ngIf="sidebar === ''"
+              src="./assets/images/brand-logo-white.png"
+              class="logo-default"
+              style="width: 180px; height: auto; margin: 0px !important"
+            />
           </a>
         </div>
         <!-- logo end -->
@@ -167,16 +177,25 @@
                       />
                     </div>
                     <div class="pull-left info" *ngIf="user !== undefined">
-                      <p *ngIf="user.lastname !== '' && user.firstname !== ''">
+                      <p
+                        *ngIf="user.lastname !== '' && user.firstname !== ''"
+                        class="noMargin bold"
+                      >
                         {{ user.lastname }} {{ user.firstname }}
                       </p>
-                      <p *ngIf="user.lastname === '' || user.firstname === ''">
+                      <p
+                        *ngIf="user.lastname === '' || user.firstname === ''"
+                        class="noMargin bold"
+                      >
                         {{ user.shortname }}
                       </p>
-                      <a href="#"
+                      <span class="txtOnline bold">{{
+                        getUserType(type)
+                      }}</span>
+                      <!-- <a href="#"
                         ><i class="fa fa-circle user-online"></i
                         ><span class="txtOnline"> Online</span></a
-                      >
+                      > -->
                     </div>
                   </div>
                 </li>
@@ -215,12 +234,18 @@
                   >
                 </li> -->
                 <li class="nav-item {{ selectedNodeModel.calendar }}">
-                  <a (click)="returnActiveNode('calendar')" routerLink="/dashboard/home/task" class="nav-link"
+                  <a
+                    (click)="returnActiveNode('calendar')"
+                    routerLink="/dashboard/home/task"
+                    class="nav-link"
                     ><i class="fa fa-calendar"></i
                     ><span class="title">{{ language["calendar"] }}</span></a
                   >
                 </li>
-                <li class="nav-item {{ selectedNodeModel.customers }}">
+                <li
+                  *ngIf="type !== userType.patient"
+                  class="nav-item {{ selectedNodeModel.customers }}"
+                >
                   <a
                     (click)="returnActiveNode('customers')"
                     routerLink="/dashboard/home/customers"
@@ -230,7 +255,7 @@
                   >
                 </li>
                 <li
-                  *ngIf="type === 0 || type === 1"
+                  *ngIf="type === userType.owner || type === userType.admin"
                   class="nav-item {{ selectedNodeModel.users }}"
                 >
                   <a
@@ -242,7 +267,7 @@
                   >
                 </li>
                 <li
-                  *ngIf="type === 0 || type === 1"
+                  *ngIf="type === userType.owner || type === userType.admin"
                   class="nav-item {{ selectedNodeModel.store }}"
                 >
                   <a
@@ -253,7 +278,10 @@
                     ><span class="title">{{ language["store"] }}</span></a
                   >
                 </li>
-                <li class="nav-item {{ selectedNodeModel.vaucher }}">
+                <li
+                  *ngIf="type !== userType.patient"
+                  class="nav-item {{ selectedNodeModel.vaucher }}"
+                >
                   <a
                     (click)="returnActiveNode('vaucher')"
                     routerLink="/dashboard/home/vaucher"
@@ -263,7 +291,7 @@
                   >
                 </li>
                 <li
-                  *ngIf="type === 0 || type === 1"
+                  *ngIf="type === userType.owner || type === userType.admin"
                   class="nav-item {{ subMenuInd }}"
                 >
                   <a (click)="showHideSubMenu()" class="nav-link"
@@ -392,6 +420,30 @@
                       </a>
                     </li>
                   </ul>
+                </li>
+                <li
+                  *ngIf="type === userType.patient"
+                  class="nav-item {{ selectedNodeModel.my_complaint }}"
+                >
+                  <a
+                    (click)="returnActiveNode('my-complaint')"
+                    routerLink="/dashboard/home/my-complaint"
+                    class="nav-link"
+                    ><i class="fa fa-yelp"></i
+                    ><span class="title">{{ language["myComplaint"] }}</span></a
+                  >
+                </li>
+                <li
+                  *ngIf="type === userType.patient"
+                  class="nav-item {{ selectedNodeModel.my_therapy }}"
+                >
+                  <a
+                    (click)="returnActiveNode('my-therapy')"
+                    routerLink="/dashboard/home/my-therapy"
+                    class="nav-link"
+                    ><i class="fa fa-medkit"></i
+                    ><span class="title">{{ language["myTherapy"] }}</span></a
+                  >
                 </li>
               </ul>
             </perfect-scrollbar>

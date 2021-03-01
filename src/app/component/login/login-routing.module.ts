@@ -3,6 +3,7 @@ import { Routes, RouterModule } from "@angular/router";
 import { LoginComponent } from "./login.component";
 import { ChangePasswordComponent } from "./change-password/change-password.component";
 import { LoggedGuard } from 'src/app/service/login-guard/loggedGuard';
+import { RegistrationPatientComponent } from "./registration-patient/registration-patient.component";
 
 const routes: Routes = [
   {
@@ -13,6 +14,10 @@ const routes: Routes = [
     path: "changePassword/:id",
     component: ChangePasswordComponent,
     canActivate: [LoggedGuard]
+  },
+  {
+    path: "registration/:clinic",
+    component: RegistrationPatientComponent
   }
 ];
 

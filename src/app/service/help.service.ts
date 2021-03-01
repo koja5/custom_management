@@ -1,13 +1,18 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import {Title} from "@angular/platform-browser";
+import { Title } from "@angular/platform-browser";
 import "rxjs/add/operator/map";
+import { ToastrService } from "ngx-toastr";
 
 @Injectable({
   providedIn: "root",
 })
 export class HelpService {
-  constructor(private http: HttpClient, private titleService: Title) {}
+  constructor(
+    private http: HttpClient,
+    private titleService: Title,
+    private toastr: ToastrService
+  ) {}
 
   postApiRequest(method, parametar) {
     return this.http.post(method, parametar).map((res) => res);
@@ -55,11 +60,11 @@ export class HelpService {
   }
 
   getLanguage() {
-    return JSON.parse(localStorage.getItem('language'));
+    return JSON.parse(localStorage.getItem("language"));
   }
 
   getHeightForGrid() {
-    return window.innerHeight - 60 + 'px';
+    return window.innerHeight - 60 + "px";
   }
 
   getMe() {
@@ -76,5 +81,37 @@ export class HelpService {
 
   setDefaultBrowserTabTitle() {
     this.titleService.setTitle("Clinic Node - Management System");
+  }
+
+  getLinkForPatientFormRegistration() {
+    return (
+      window.location.protocol +
+      "//" +
+      window.location.hostname + ":" + window.location.port +
+      "/login/registration/" +
+      this.getSuperadmin()
+    );
+  }
+
+  copyToClipboard(value) {
+    
+    let selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = value;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+  }
+
+  successToastr(title, text) {
+    this.toastr.success(title, text, {
+      timeOut: 7000,
+      positionClass: "toast-bottom-right",
+    });
   }
 }

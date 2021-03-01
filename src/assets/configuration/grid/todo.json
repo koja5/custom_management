@@ -5,7 +5,7 @@
     "request": {
         "type": "GET",
         "api": "/api/getToDo",
-        "parametars": [],
+        "parameters": [],
         "fields": "",
         "root": ""
     },
@@ -39,10 +39,14 @@
     "hideable": true,
     "refresh": false,
     "reset": true,
+    "toolbar" : [
+        "Add", "Edit", "Delete"
+    ],
     "editSettings": {
         "allowEditing": true,
         "allowAdding": true,
         "allowDeleting": true,
+        "showDeleteConfirmDialog": true,
         "mode": "Dialog"
     },
     "columns": [{

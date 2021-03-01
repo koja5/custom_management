@@ -6,6 +6,7 @@ import { LoggedGuard } from "./service/login-guard/loggedGuard";
 import { DashboardGuard } from "./service/login-guard/dashboardGuard";
 
 import { NotFoundComponent } from "./component/templates/not-found/not-found.component";
+import { PatientFormSuccessComponent } from "./component/templates/patient-form-success/patient-form-success.component";
 
 const routes: Routes = [
   { path: "", redirectTo: "", pathMatch: "full" },
@@ -20,6 +21,7 @@ const routes: Routes = [
     loadChildren: "./component/dashboard/dashboard.module#DashboardModule",
   },
   { path: "template/confirm-arrival", component: ConfirmArrivalComponent },
+  { path: "template/created-account-successed", component: PatientFormSuccessComponent },
   {
     path: "**",
     pathMatch: "full",

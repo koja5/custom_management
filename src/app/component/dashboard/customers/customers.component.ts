@@ -2,13 +2,18 @@ import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
 import { Modal } from "ngx-modal";
 import { CustomersService } from "../../../service/customers.service";
 import { StoreService } from "../../../service/store.service";
-import { process, State, GroupDescriptor, SortDescriptor } from "@progress/kendo-data-query";
+import {
+  process,
+  State,
+  GroupDescriptor,
+  SortDescriptor,
+} from "@progress/kendo-data-query";
 import { UploadEvent, SelectEvent } from "@progress/kendo-angular-upload";
 import {
   DataStateChangeEvent,
   PageChangeEvent,
   RowArgs,
-  DataBindingDirective
+  DataBindingDirective,
 } from "@progress/kendo-angular-grid";
 import { MessageService } from "../../../service/message.service";
 import { CustomerModel } from "../../../models/customer-model";
@@ -18,12 +23,13 @@ import Swal from "sweetalert2";
 import { WindowModule } from "@progress/kendo-angular-dialog";
 import * as XLSX from "ts-xlsx";
 import { HelpService } from "src/app/service/help.service";
+import { MailService } from "src/app/service/mail.service";
 
 const newLocal = "data";
 @Component({
   selector: "app-customers",
   templateUrl: "./customers.component.html",
-  styleUrls: ["./customers.component.scss"]
+  styleUrls: ["./customers.component.scss"],
 })
 export class CustomersComponent implements OnInit {
   @ViewChild(DataBindingDirective) dataBinding: DataBindingDirective;
@@ -38,7 +44,7 @@ export class CustomersComponent implements OnInit {
   public state: State = {
     skip: 0,
     take: 10,
-    filter: null
+    filter: null,
   };
   public groups: GroupDescriptor[] = [];
   public storeLocation: any;
@@ -63,21 +69,24 @@ export class CustomersComponent implements OnInit {
   public pageSize = 5;
   public pageable = {
     pageSizes: true,
-    previousNext: true
+    previousNext: true,
   };
+  public patientFormRegistrationDialog = false;
+  public patientMail: string;
 
   constructor(
     private service: CustomersService,
     private storeService: StoreService,
     private message: MessageService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private mailService: MailService
   ) {
     // this.excelIO = new Excel.IO();
   }
 
   ngOnInit() {
     this.height = this.helpService.getHeightForGrid();
-    this.data.gender = 'male';
+    this.data.gender = "male";
     this.getCustomers();
 
     if (localStorage.getItem("language") !== null) {
@@ -88,17 +97,17 @@ export class CustomersComponent implements OnInit {
       this.theme = localStorage.getItem("theme");
     }
 
-    this.message.getDeleteCustomer().subscribe(mess => {
+    this.message.getDeleteCustomer().subscribe((mess) => {
       this.getCustomers();
       this.selectedUser = undefined;
     });
 
-    this.message.getBackToCustomerGrid().subscribe(mess => {
+    this.message.getBackToCustomerGrid().subscribe((mess) => {
       this.selectedUser = undefined;
       this.changeTheme(this.theme);
     });
 
-    this.message.getTheme().subscribe(mess => {
+    this.message.getTheme().subscribe((mess) => {
       this.changeTheme(mess);
       this.theme = mess;
     });
@@ -106,12 +115,12 @@ export class CustomersComponent implements OnInit {
   }
 
   getCustomers() {
-    this.service.getCustomers(localStorage.getItem("superadmin"), val => {
+    this.service.getCustomers(localStorage.getItem("superadmin"), (val) => {
       console.log(val);
       if (val !== null) {
         this.currentLoadData = val;
         this.gridData = {
-          data: val
+          data: val,
         };
         this.gridView = process(val, this.state);
         this.loading = false;
@@ -125,7 +134,7 @@ export class CustomersComponent implements OnInit {
   }
 
   newUser() {
-    this.storeService.getStore(localStorage.getItem("idUser"), val => {
+    this.storeService.getStore(localStorage.getItem("idUser"), (val) => {
       console.log(val);
       this.storeLocation = val;
     });
@@ -148,14 +157,14 @@ export class CustomersComponent implements OnInit {
       storeId: "",
       attention: "",
       physicalComplaint: "",
-      isConfirm: false
+      isConfirm: false,
     };
   }
 
   createCustomer(form) {
     console.log(this.data);
     this.data.storeId = localStorage.getItem("superadmin");
-    this.service.createCustomer(this.data, val => {
+    this.service.createCustomer(this.data, (val) => {
       if (val.success) {
         this.data.id = val.id;
         /*this.gridData = {
@@ -173,14 +182,14 @@ export class CustomersComponent implements OnInit {
           title: "Successfull!",
           text: "New customer is successfull added!",
           timer: 3000,
-          type: "success"
+          type: "success",
         });
       } else {
         Swal.fire({
           title: "Error",
           text: "New customer is not added!",
           timer: 3000,
-          type: "error"
+          type: "error",
         });
       }
     });
@@ -232,13 +241,13 @@ export class CustomersComponent implements OnInit {
     if (event === "yes") {
       this.customerDialogOpened = false;
       setTimeout(() => {
-        this.service.insertMultiData(this.gridData).subscribe(data => {
+        this.service.insertMultiData(this.gridData).subscribe((data) => {
           if (data) {
             Swal.fire({
               title: "Successfull!",
               text: "New customer is successfull added",
               timer: 3000,
-              type: "success"
+              type: "success",
             });
             this.getCustomers();
           }
@@ -274,7 +283,7 @@ export class CustomersComponent implements OnInit {
 
     this.customerDialogOpened = true;
     let fileReader = new FileReader();
-    fileReader.onload = e => {
+    fileReader.onload = (e) => {
       this.arrayBuffer = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer);
       var arr = new Array();
@@ -317,7 +326,7 @@ export class CustomersComponent implements OnInit {
     const allData = {
       table: "customers",
       columns: columns,
-      data: dataArray
+      data: dataArray,
     };
     return allData;
   }
@@ -428,35 +437,35 @@ export class CustomersComponent implements OnInit {
           {
             field: "shortname",
             operator: "contains",
-            value: inputValue
+            value: inputValue,
           },
           {
             field: "firstname",
             operator: "contains",
-            value: inputValue
+            value: inputValue,
           },
           {
             field: "lastname",
             operator: "contains",
-            value: inputValue
+            value: inputValue,
           },
           {
             field: "telephone",
             operator: "contains",
-            value: inputValue
+            value: inputValue,
           },
           {
             field: "mobile",
             operator: "contains",
-            value: inputValue
+            value: inputValue,
           },
           {
             field: "email",
             operator: "contains",
-            value: inputValue
-          }
-        ]
-      }
+            value: inputValue,
+          },
+        ],
+      },
     });
     this.gridView = process(this.gridData.data, this.state);
   }
@@ -469,5 +478,22 @@ export class CustomersComponent implements OnInit {
   public sortChange(sort: SortDescriptor[]): void {
     this.state.sort = sort;
     this.gridView = process(this.gridData.data, this.state);
+  }
+
+  copyPatientLinkToClipboard() {
+    this.helpService.copyToClipboard(this.helpService.getLinkForPatientFormRegistration());
+    this.helpService.successToastr("Uspesno ste kopirali link", "");
+  }
+
+  sendPatientFormLinkToMail() {
+    const data = {
+      email: this.patientMail,
+      link: this.helpService.getLinkForPatientFormRegistration()
+    };
+    this.mailService.sendPatientFormRegistration(data).subscribe(
+      data => {
+        console.log(data);
+      }
+    );
   }
 }

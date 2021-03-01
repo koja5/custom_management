@@ -60,6 +60,9 @@ import { TodoComponent } from "./administrator/todo/todo.component";
 import { DymanicElementsModule } from "../dynamic-elements/dymanic-elements.module";
 import { DialogModule as  DialogModuleSyncfusion} from '@syncfusion/ej2-angular-popups';
 import { BaseDateSharedModule } from "../shared-module/base-date-module";
+import { MyComplaintComponent } from './patient/my-complaint/my-complaint.component';
+import { MyTherapyComponent } from './patient/my-therapy/my-therapy.component';
+
 
 @NgModule({
   declarations: [
@@ -84,6 +87,8 @@ import { BaseDateSharedModule } from "../shared-module/base-date-module";
     EditTranslationComponent,
     CustomGridComponent,
     TodoComponent,
+    MyComplaintComponent,
+    MyTherapyComponent,
   ],
   imports: [
     CommonModule,

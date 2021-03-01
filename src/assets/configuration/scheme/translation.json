@@ -10,6 +10,12 @@
             "or": { "type": "string" },
             "email": { "type": "string" },
             "password": { "type": "string" },
+            "requiredSubmitMessage": { "type": "string" },
+            "accountExists" : { "type": "string" },
+            "createAccountSuccessedText1" : { "type": "string" },
+            "createAccountSuccessedText2" : { "type": "string" },
+            "createAccountSuccessedText3" : { "type": "string" },
+            "confirmPassword": { "type": "string" },
             "rememberMe": { "type": "string" },
             "forgotPassword": { "type": "string" },
             "loginWithEmail": { "type": "string" },
@@ -27,6 +33,7 @@
             "recoveryButton": { "type": "string" },
             "sendForgotMail": { "type": "string" },
             "notCorrectPass": { "type": "string" },
+            "passwordsIsNotEqual": { "type": "string" },
             "checkMailForActive": { "type": "string" },
             "fillFields": { "type": "string" },
             "id": { "type": "string" },
@@ -117,6 +124,9 @@
             "vaucher": { "type": "string" },
             "translation": { "type": "string" },
             "todo": { "type": "string" },
+            "myComplaint": { "type": "string" },
+            "myTherapy": { "type": "string" },
+            "myDocument": { "type": "string" },
             "pagerItemsPerPage": { "type": "string" },
             "addNew": { "type": "string" },
             "add": { "type": "string" },
@@ -133,6 +143,10 @@
             "confirmMessageText": { "type": "string" },
             "createNewCustomerDialog": { "type": "string" },
             "customerInformationDialog": { "type": "string" }, 
+            "patientForm": { "type": "string" }, 
+            "sendPatientFormOnMail": { "type": "string" }, 
+            "sendPatientFormButton": { "type": "string" }, 
+            "copyLinkToFormButton": { "type": "string" },
             "createData": { "type": "string" },
             "language": { "type": "string" },
             "active": { "type": "string" },
@@ -264,6 +278,10 @@
             "adminSuccessUpdateText": { "type": "string" },
             "adminErrorUpdateTitle": { "type": "string" },
             "adminErrorUpdateText": { "type": "string" },
+            "owner": { "type": "string" },
+            "manager": { "type": "string" },
+            "nurse": { "type": "string" },
+            "administrator": { "type": "string" },
             "priority": {
                 "type": "array",
                 "items": {
@@ -308,7 +326,8 @@
                         { "key": "signUp" },
                         { "key": "or" },
                         { "key": "email" },
-                        { "key": "password" }
+                        { "key": "password" },
+                        { "key": "confirmPassword" }
                     ]
                 },
                 {
@@ -361,8 +380,21 @@
                     "flex-direction": "row",
                     "items": [
                         { "key": "notCorrectPass" },
+                        { "key": "passwordsIsNotEqual" },
                         { "key": "checkMailForActive" },
-                        { "key": "fillFields" }
+                        { "key": "fillFields" },
+                        { "key": "requiredSubmitMessage" }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        { "key": "accountExists" },
+                        { "key": "createAccountSuccessedText1"},
+                        { "key": "createAccountSuccessedText2"},
+                        { "key": "createAccountSuccessedText3"}
                     ]
                 }
             ]
@@ -635,6 +667,17 @@
                         { "key": "vaucher" },
                         { "key": "translation" },
                         { "key": "todo" }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        { "key": "myComplaint" },
+                        { "key": "myTherapy" },
+                        { "key": "myDocument" },
+                        { }
                     ]
                 }
             ]
@@ -1222,6 +1265,17 @@
                     "items": [
                         { "key": "createNewCustomerDialog" },
                         { "key": "customerInformationDialog" },
+                        { "key": "patientForm" },
+                        { "key": "sendPatientFormOnMail" }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        { "key": "sendPatientFormButton" },
+                        { "key": "copyLinkToFormButton" },
                         { },
                         { }
                     ]
@@ -1327,6 +1381,28 @@
                         { "key": "adminSuccessUpdateText" },
                         { "key": "adminErrorUpdateTitle" },
                         { "key": "adminErrorUpdateText" }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        { "key": "owner" },
+                        { "key": "manager" },
+                        { "key": "doctor" },
+                        { "key": "nurse" }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        { "key": "patient" },
+                        { "key": "administrator" },
+                        { },
+                        { }
                     ]
                 }
             ]

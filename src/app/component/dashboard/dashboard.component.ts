@@ -9,6 +9,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { NavigationMenuModel } from "../../models/navigation-menu";
 import { MongoService } from "../../service/mongo.service";
 import { HelpService } from "src/app/service/help.service";
+import { UserType } from "../enum/user-type";
 declare var document: any;
 
 @Component({
@@ -35,6 +36,7 @@ export class DashboardComponent implements OnInit {
   public pathFromUrl: any;
   public subMenuInd = "";
   public sidebarHeight: any;
+  public userType = UserType;
   
 
   constructor(
@@ -301,6 +303,22 @@ export class DashboardComponent implements OnInit {
       } else if (document.msExitFullscreen) {
         document.msExitFullscreen();
       }
+    }
+  }
+
+  getUserType(type) {
+    if(type === this.userType.owner) {
+      return this.language.owner;
+    } else if(type === this.userType.admin) {
+      return this.language.admin;
+    } else if(type === this.userType.doctor) {
+      return this.language.doctor;
+    } else if(type === this.userType.nurse) {
+      return this.language.nurse;
+    } else if(type === this.userType.patient) {
+      return this.language.patient;
+    } else if(type === this.userType.administrator) {
+      return this.language.administrator;
     }
   }
 }

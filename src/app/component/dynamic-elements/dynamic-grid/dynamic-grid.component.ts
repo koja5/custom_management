@@ -13,8 +13,8 @@ import { GridComponent } from "@syncfusion/ej2-angular-grids";
 import { DialogComponent } from "@syncfusion/ej2-angular-popups";
 import { HelpService } from "src/app/service/help.service";
 import { MessageService } from "src/app/service/message.service";
-import { QueryCellInfoEventArgs } from '@syncfusion/ej2-angular-grids';
-import { Tooltip } from '@syncfusion/ej2-popups';
+import { QueryCellInfoEventArgs } from "@syncfusion/ej2-angular-grids";
+import { Tooltip } from "@syncfusion/ej2-popups";
 
 @Component({
   selector: "app-dynamic-grid",
@@ -87,9 +87,20 @@ export class DynamicGridComponent implements OnInit {
   }
 
   callApiGet(api, parameters) {
-    this.service.callApiGet(api, parameters).subscribe((data) => {
-      this.data = data;
-    });
+    this.service
+      .callApiGet(api, this.packParametersConfig(parameters))
+      .subscribe((data) => {
+        this.data = data;
+      });
+  }
+
+  packParametersConfig(parameters) {
+    for (let i = 0; i < parameters.length; i++) {
+      if (parameters[i] === "getMe") {
+        parameters[i] = this.helpService.getMe();
+      }
+    }
+    return parameters;
   }
 
   actionBegin(args: SaveEventArgs): void {
@@ -143,11 +154,13 @@ export class DynamicGridComponent implements OnInit {
   }
   submitEmitter(event) {
     if (this.typeOfModification === "add") {
-      this.service.callApiPost("/api/createToDo", event).subscribe((data) => {
-      });
+      this.service
+        .callApiPost("/api/createToDo", event)
+        .subscribe((data) => {});
     } else if (this.typeOfModification === "beginEdit") {
-      this.service.callApiPost("/api/updateToDo", event).subscribe((data) => {
-      });
+      this.service
+        .callApiPost("/api/updateToDo", event)
+        .subscribe((data) => {});
     }
 
     this.operations.dialog.close();
@@ -155,8 +168,9 @@ export class DynamicGridComponent implements OnInit {
   }
 
   deleteData(event) {
-    this.service.callApiGet("/api/deleteTodo", event.id).subscribe((data) => {
-    });
+    this.service
+      .callApiGet("/api/deleteTodo", event.id)
+      .subscribe((data) => {});
   }
 
   setValue(fields, values) {

@@ -2410,11 +2410,13 @@ export class DynamicSchedulerComponent implements OnInit {
           this.calendars.length - 1 > date.groupIndex
         ) {
           date.element.style.borderRight = "2px solid #6d6d6d";
+          this.dateHeaderCounter = 0;
           return;
         }
       } else if (this.currentView === "Day") {
         if (this.calendars.length - 1 > date.groupIndex) {
           date.element.style.borderRight = "2px solid #6d6d6d";
+          this.dateHeaderCounter = 0;
           return;
         }
       }

@@ -1,0 +1,159 @@
+<body>
+  <main class="sign-up">
+    <div class="sign-up__container">
+      <div class="sign-up__image">
+        <img
+          class="cover-photo"
+          src="../../../../assets/images/computer-1867758_1920-min_2.jpg"
+        />
+      </div>
+      <div class="sign-up__content">
+        <header class="sign-up__header">
+          <img class="brand-logo" src="../../../assets/images/brand-logo.png" />
+          <h3 class="sign-up__descr"> {{language.signUpTitle}}</h3>
+          <p *ngIf="errorMessage" class="error">{{errorMessage}}</p>
+        </header>
+        <form
+          class="sign-up__form form"
+          #form="ngForm"
+          (ngSubmit)="submitForm($event)"
+        >
+          <div class="form__row form__row--two">
+            <div class="input form__inline-input">
+              <div class="input__container">
+                <label for="first-name">{{language.firstname}} <span [title]="language.required" class="required"></span></label>
+                <input
+                  class="form-control"
+                  name="first-name"
+                  required
+                  type="text"
+                  [(ngModel)]="data.firstname"
+                />
+              </div>
+            </div>
+            <div class="input form__inline-input">
+              <div class="input__container">
+                <label for="last-name">{{language.lastname}} <span [title]="language.required" class="required"></span></label>
+                <input
+                  class="form-control"
+                  name="last-name"
+                  required
+                  type="text"
+                  [(ngModel)]="data.lastname"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="form__row form__row--two">
+            <div class="input form__inline-input">
+              <div class="input__container">
+                <label for="username">{{language.gender}} <span [title]="language.required" class="required"></span></label>
+                <ejs-radiobutton
+                  label="{{language.male}}"
+                  name="gender"
+                  id="male"
+                  value="male"
+                  checked="data.gender === 'male' ? checked : ''"
+                  [(ngModel)]="data.gender"
+                  required
+                ></ejs-radiobutton>
+                <ejs-radiobutton
+                  label="{{language.female}}"
+                  name="gender"
+                  id="male"
+                  value="female"
+                  checked="data.gender === 'female' ? checked : ''"
+                  [(ngModel)]="data.gender"
+                  required
+                ></ejs-radiobutton>
+              </div>
+            </div>
+            <div class="input form__inline-input">
+              <div class="input__container">
+                <label for="last-name">{{language.birthday}}</label>
+                <ejs-datepicker
+                  name="birthday"
+                  [(ngModel)]="data.birthday"
+                ></ejs-datepicker>
+              </div>
+            </div>
+          </div>
+          <div class="form__row form__row--two">
+            <div class="input form__inline-input">
+              <div class="input__container">
+                <label for="email">{{language.email}} <span [title]="language.required" class="required"></span></label>
+                <input
+                  class="form-control"
+                  name="email"
+                  required
+                  type="text"
+                  [(ngModel)]="data.email"
+                />
+              </div>
+            </div>
+            <div class="input form__inline-input">
+              <div class="input__container">
+                <label for="username">{{language.telephone}}</label>
+                <input
+                  class="form-control"
+                  name="telephone"
+                  type="text"
+                  [(ngModel)]="data.telephone"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="form__row form__row--two">
+            <div class="input form__inline-input">
+              <div class="input__container">
+                <label for="password">{{language.password}} <span [title]="language.required" class="required"></span></label>
+                <input
+                  class="form-control"
+                  name="password"
+                  placeholder="Password"
+                  required
+                  type="password"
+                  [(ngModel)]="data.password"
+                />
+              </div>
+            </div>
+            <div class="input form__inline-input">
+              <div class="input__container">
+                <label for="confirm-password">{{language.confirmPassword}} <span [title]="language.required" class="required"></span></label>
+                <input
+                  class="form-control"
+                  name="confirm-password"
+                  required
+                  type="password"
+                  [(ngModel)]="data.confirmPassword"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="form__row">
+            <div class="input-checkbox">
+              <div class="form-group signup-term">
+                By clicking you agree with our
+                <a href="#" class="signup-term-link">Term of use.</a>
+              </div>
+            </div>
+          </div>
+          <div class="form__row">
+            <div class="component component--primary form__button">
+              <button
+                type="submit"
+                class="btn btn--regular"
+                id="sign-up-button"
+                [disabled]="form.form.invalid"
+                [title]="form.form.invalid ? language.requiredSubmitMessage : ''"
+              >
+                {{language.signUpWithEmail}}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+</body>
