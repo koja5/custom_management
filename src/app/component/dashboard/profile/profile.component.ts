@@ -37,7 +37,7 @@ export class ProfileComponent implements OnInit {
     this.service.getMe(localStorage.getItem("idUser"), val => {
       console.log(val);
       this.data = val[0];
-      if (val[0].img.data.length !== 0) {
+      if (val[0].img && val[0].img.data.length !== 0) {
         const TYPED_ARRAY = new Uint8Array(val[0].img.data);
         const STRING_CHAR = String.fromCharCode.apply(null, TYPED_ARRAY);
         let base64String = btoa(STRING_CHAR);

@@ -648,7 +648,7 @@
                         <kendo-textbox-container
                           floatingLabel="{{ languageUser.patient }}"
                         >
-                          <kendo-combobox
+                          <kendo-combobox #customerElement
                             [data]="customerUsers"
                             [textField]="'shortname'"
                             [valueField]="'id'"
@@ -657,6 +657,7 @@
                             [filterable]="true"
                             (filterChange)="searchCustomer($event)"
                             [loading]="customerLoading"
+                            autofocus
                           >
                             <ng-template kendoComboBoxItemTemplate let-dataItem>
                               <p style="height: 50px !important">

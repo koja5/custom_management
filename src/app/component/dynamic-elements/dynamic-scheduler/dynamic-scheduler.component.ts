@@ -1174,6 +1174,8 @@ export class DynamicSchedulerComponent implements OnInit {
   onPopupOpen(args: PopupOpenEventArgs): void {
     args.element.scrollTop = 0;
     this.setTimeForEditor(args);
+    this.customerElement.input.focus();
+    console.log(this.customerElement.focus());
     if (args.type === "QuickInfo") {
       args.cancel = true;
     } else if (args.type === "Editor") {
@@ -1397,6 +1399,7 @@ export class DynamicSchedulerComponent implements OnInit {
 
   @ViewChild("customerUserModal") customerUserModal: Modal;
   @ViewChild("scheduler") public scheduler: SchedulerComponent;
+  @ViewChild("customerElement") customerElement: HTMLElement;
   public customerModal = false;
   public selectedDate: Date = new Date();
   public formGroup: FormGroup;

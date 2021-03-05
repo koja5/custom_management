@@ -22,6 +22,7 @@ import { TodoComponent } from './administrator/todo/todo.component';
 import { DynamicSchedulerComponent } from '../dynamic-elements/dynamic-scheduler/dynamic-scheduler.component';
 import { MyComplaintComponent } from "./patient/my-complaint/my-complaint.component";
 import { MyTherapyComponent } from "./patient/my-therapy/my-therapy.component";
+import { MyDocumentComponent } from "./patient/my-document/my-document.component";
 
 const routes: Routes = [
   {
@@ -112,6 +113,10 @@ const routes: Routes = [
       {
         path: "my-therapy",
         component: MyTherapyComponent
+      },
+      {
+        path: "my-document",
+        component: MyDocumentComponent
       }
     ],
   },

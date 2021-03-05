@@ -5,8 +5,11 @@ var sha1 = require("sha1");
 var hogan = require("hogan.js");
 var fs = require("fs");
 const mysql = require("mysql");
+var url = require("url");
 
 var link = "http://localhost:3000/api/";
+var loginLink = "http://localhost:4200/login";
+
 const monthNames = [
   "January",
   "February",
@@ -254,20 +257,48 @@ router.post("/sendPatientFormRegistration", function (req, res) {
     "utf-8"
   );
   var patientRegistrationForm = hogan.compile(patientRegistrationFormTemplate);
-  /*var verificationLinkButton =
-    link + "korisnik/verifikacija/" + sha1(req.body.email);
-    console.log(req.body);*/
   var mailOptions = {
     from: '"ClinicNode" info@app-production.eu',
     to: req.body.email,
     subject: "Registration form",
     html: patientRegistrationForm.render({
-      link: req.body.link
+      link: req.body.link,
     }),
   };
 
   smtpTransport.sendMail(mailOptions, function (error, response) {
     if (error) {
+      res.send(false);
+    } else {
+      res.send(true);
+    }
+  });
+});
+
+router.post("/sendInfoToPatientForCreatedAccount", function (req, res) {
+  console.log(req.body);
+  var infoCreatedTemplate = fs.readFileSync(
+    "./server/routes/templates/infoForCreatedPatientAccount.hjs",
+    "utf-8"
+  );
+  var infoForCreatedAccount = hogan.compile(infoCreatedTemplate);
+  var mailOptions = {
+    from: '"ClinicNode" info@app-production.eu',
+    to: req.body.email,
+    subject: "Registration form",
+    html: infoForCreatedAccount.render({
+      firstname: req.body.firstname,
+      email: req.body.email,
+      password: req.body.password,
+      loginLink: loginLink
+    })
+  };
+  console.log(mailOptions);
+
+  smtpTransport.sendMail(mailOptions, function (error, response) {
+    if (error) {
+      console.log(error);
+
       res.send(false);
     } else {
       res.send(true);

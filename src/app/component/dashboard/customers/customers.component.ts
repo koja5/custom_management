@@ -184,6 +184,12 @@ export class CustomersComponent implements OnInit {
           timer: 3000,
           type: "success",
         });
+        this.data.password = val.password;
+        this.mailService
+          .sendInfoToPatientForCreatedAccount(this.data)
+          .subscribe((data) => {
+            console.log(data);
+          });
       } else {
         Swal.fire({
           title: "Error",
@@ -481,19 +487,25 @@ export class CustomersComponent implements OnInit {
   }
 
   copyPatientLinkToClipboard() {
-    this.helpService.copyToClipboard(this.helpService.getLinkForPatientFormRegistration());
-    this.helpService.successToastr("Uspesno ste kopirali link", "");
+    this.helpService.copyToClipboard(
+      this.helpService.getLinkForPatientFormRegistration()
+    );
+    this.helpService.successToastr(this.language.successCopiedFormLink, "");
   }
 
   sendPatientFormLinkToMail() {
     const data = {
       email: this.patientMail,
-      link: this.helpService.getLinkForPatientFormRegistration()
+      link: this.helpService.getLinkForPatientFormRegistration(),
     };
-    this.mailService.sendPatientFormRegistration(data).subscribe(
-      data => {
-        console.log(data);
+    this.patientFormRegistrationDialog = false;
+    this.mailService.sendPatientFormRegistration(data).subscribe((data) => {
+      console.log(data);
+      if(data) {
+        this.helpService.successToastr(this.language.successSendFormToMail, "");
+      } else {
+        this.helpService.errorToastr(this.language.errorSendFormToMail, "");
       }
-    );
+    });
   }
 }

@@ -66,7 +66,7 @@
               <b>{{language['birthday']}} </b>
               <div class="profile-desc-item pull-right">
                 <span *ngIf="data.birthday === ''"> {{language['noInformation']}} </span>
-                <span *ngIf="data.birthday !== ''"> {{data.birthday}} </span>
+                <span *ngIf="data.birthday !== ''"> {{data.birthday | date: 'dd.MM.yyyy'}} </span>
               </div>
             </li>
             <li class="list-group-item">

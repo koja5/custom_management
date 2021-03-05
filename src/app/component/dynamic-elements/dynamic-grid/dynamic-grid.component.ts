@@ -75,6 +75,10 @@ export class DynamicGridComponent implements OnInit {
   }
 
   callApi(data) {
+    setTimeout(() => {
+      this.grid.showSpinner();
+    }, 100);
+
     if (data.type === "POST") {
       this.callApiPost(data.api, data.body);
     } else {
@@ -83,7 +87,9 @@ export class DynamicGridComponent implements OnInit {
   }
 
   callApiPost(api, body) {
-    this.service.callApiPost(api, body).subscribe((data) => {});
+    this.service.callApiPost(api, body).subscribe((data) => {
+      this.grid.hideSpinner();
+    });
   }
 
   callApiGet(api, parameters) {
@@ -91,6 +97,7 @@ export class DynamicGridComponent implements OnInit {
       .callApiGet(api, this.packParametersConfig(parameters))
       .subscribe((data) => {
         this.data = data;
+        this.grid.hideSpinner();
       });
   }
 
@@ -171,6 +178,16 @@ export class DynamicGridComponent implements OnInit {
     this.service
       .callApiGet("/api/deleteTodo", event.id)
       .subscribe((data) => {});
+  }
+
+  previewDocument(filename: string) {
+    this.helpService.getPdfFile(filename).subscribe((data) => {
+      console.log(data);
+      let file = new Blob([data], { type: "application/pdf" });
+      console.log(file);
+      var fileURL = URL.createObjectURL(file);
+      window.open(fileURL);
+    });
   }
 
   setValue(fields, values) {

@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Title } from "@angular/platform-browser";
 import "rxjs/add/operator/map";
 import { ToastrService } from "ngx-toastr";
@@ -87,29 +87,54 @@ export class HelpService {
     return (
       window.location.protocol +
       "//" +
-      window.location.hostname + ":" + window.location.port +
+      window.location.hostname +
+      ":" +
+      window.location.port +
       "/login/registration/" +
       this.getSuperadmin()
     );
   }
 
   copyToClipboard(value) {
-    
-    let selBox = document.createElement('textarea');
-    selBox.style.position = 'fixed';
-    selBox.style.left = '0';
-    selBox.style.top = '0';
-    selBox.style.opacity = '0';
+    let selBox = document.createElement("textarea");
+    selBox.style.position = "fixed";
+    selBox.style.left = "0";
+    selBox.style.top = "0";
+    selBox.style.opacity = "0";
     selBox.value = value;
     document.body.appendChild(selBox);
     selBox.focus();
     selBox.select();
-    document.execCommand('copy');
+    document.execCommand("copy");
     document.body.removeChild(selBox);
+  }
+
+  getPdfFile(file: string) {
+    console.log(file);
+    const body = { filename: file };
+
+    return this.http.post("/api/getPdfFile", body, {
+      responseType: "blob",
+      headers: new HttpHeaders().append("Content-Type", "application/json"),
+    });
   }
 
   successToastr(title, text) {
     this.toastr.success(title, text, {
+      timeOut: 7000,
+      positionClass: "toast-bottom-right",
+    });
+  }
+
+  errorToastr(title, text) {
+    this.toastr.error(title, text, {
+      timeOut: 7000,
+      positionClass: "toast-bottom-right",
+    });
+  }
+
+  warningToastr(title, text) {
+    this.toastr.warning(title, text, {
       timeOut: 7000,
       positionClass: "toast-bottom-right",
     });

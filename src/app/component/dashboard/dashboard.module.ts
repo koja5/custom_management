@@ -62,6 +62,7 @@ import { DialogModule as  DialogModuleSyncfusion} from '@syncfusion/ej2-angular-
 import { BaseDateSharedModule } from "../shared-module/base-date-module";
 import { MyComplaintComponent } from './patient/my-complaint/my-complaint.component';
 import { MyTherapyComponent } from './patient/my-therapy/my-therapy.component';
+import { MyDocumentComponent } from './patient/my-document/my-document.component';
 
 
 @NgModule({
@@ -89,6 +90,7 @@ import { MyTherapyComponent } from './patient/my-therapy/my-therapy.component';
     TodoComponent,
     MyComplaintComponent,
     MyTherapyComponent,
+    MyDocumentComponent,
   ],
   imports: [
     CommonModule,

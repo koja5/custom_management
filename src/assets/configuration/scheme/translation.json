@@ -147,6 +147,9 @@
             "sendPatientFormOnMail": { "type": "string" }, 
             "sendPatientFormButton": { "type": "string" }, 
             "copyLinkToFormButton": { "type": "string" },
+            "successCopiedFormLink": { "type": "string" },
+            "successSendFormToMail": { "type": "string" },
+            "errorSendFormToMail": { "type": "string" },
             "createData": { "type": "string" },
             "language": { "type": "string" },
             "active": { "type": "string" },
@@ -1276,12 +1279,21 @@
                     "items": [
                         { "key": "sendPatientFormButton" },
                         { "key": "copyLinkToFormButton" },
+                        { "key": "successCopiedFormLink" },
+                        { "key": "successSendFormToMail" }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        { "key": "errorSendFormToMail" },
+                        { },
                         { },
                         { }
                     ]
                 }
-
-                
             ]
         },
         {

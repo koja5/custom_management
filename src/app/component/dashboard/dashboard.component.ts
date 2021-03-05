@@ -37,7 +37,6 @@ export class DashboardComponent implements OnInit {
   public subMenuInd = "";
   public sidebarHeight: any;
   public userType = UserType;
-  
 
   constructor(
     private router: Router,
@@ -149,11 +148,7 @@ export class DashboardComponent implements OnInit {
       console.log(val);
       if (val && val.length > 0) {
         this.user = val[0];
-        if (
-          val[0].img !== null &&
-          val[0].img.data !== undefined &&
-          val[0].img.data.length !== 0
-        ) {
+        if (val[0].img && val[0].img.data && val[0].img.data.length !== 0) {
           const TYPED_ARRAY = new Uint8Array(val[0].img.data);
           const STRING_CHAR = String.fromCharCode.apply(null, TYPED_ARRAY);
           const base64String = btoa(STRING_CHAR);
@@ -307,17 +302,17 @@ export class DashboardComponent implements OnInit {
   }
 
   getUserType(type) {
-    if(type === this.userType.owner) {
+    if (type === this.userType.owner) {
       return this.language.owner;
-    } else if(type === this.userType.admin) {
+    } else if (type === this.userType.admin) {
       return this.language.admin;
-    } else if(type === this.userType.doctor) {
+    } else if (type === this.userType.doctor) {
       return this.language.doctor;
-    } else if(type === this.userType.nurse) {
+    } else if (type === this.userType.nurse) {
       return this.language.nurse;
-    } else if(type === this.userType.patient) {
+    } else if (type === this.userType.patient) {
       return this.language.patient;
-    } else if(type === this.userType.administrator) {
+    } else if (type === this.userType.administrator) {
       return this.language.administrator;
     }
   }

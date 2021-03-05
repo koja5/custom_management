@@ -30,7 +30,7 @@ export class RegistrationPatientComponent implements OnInit {
     this.language = this.helpService.getLanguage();
   }
 
-  submitForm() {
+  submitForm(event) {
     this.errorMessage = false;
     this.data.storeId = this.id;
     if (this.data.password === this.data.confirmPassword) {

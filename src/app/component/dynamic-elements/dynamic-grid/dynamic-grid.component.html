@@ -4,6 +4,16 @@
         <e-columns>
             <e-column *ngFor="let item of config.columns" [type]="item.type" [field]="item.field" [headerText]="item.title" [width]="item.width" [isPrimaryKey]="item.isPrimaryKey" [editType]="item.editType ? item.editType : null" [allowEditing]='item.allowEditing'
                 [format]="item.format" [validationRules]='item.validation'>
+                <ng-template *ngIf="item.type=='documentPreview'" #template let-data>
+                    <div>
+                        <button
+                                kendoButton
+                                [icon]="'k-icon k-i-preview'"
+                                class="k-preview"
+                                (click)="previewDocument(data.filename)"
+                              ><span *ngIf="item.classIcon" class="item.classIcon"></span></button>
+                    </div>
+                </ng-template>
             </e-column>
         </e-columns>
         <ng-template #editSettingsTemplate let-data>

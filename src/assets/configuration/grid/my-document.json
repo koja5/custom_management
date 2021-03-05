@@ -2,7 +2,7 @@
     "pageSize": 10,
     "request": {
         "type": "GET",
-        "api": "/api/getTherapyForCustomer",
+        "api": "/api/getDocuments",
         "parameters": ["getMe"],
         "fields": "",
         "root": ""
@@ -59,58 +59,32 @@
             "format": { "type": "date", "format": "dd/MM/yyyy" }
         },
         {
-            "title": "Complaint",
+            "title": "Name",
             "width": 250,
             "filterable": true,
             "hideable": true,
             "type": "string",
             "class": "text-align-right",
-            "field": "complaint_title"
+            "field": "name"
         },
         {
-            "title": "Comment",
+            "title": "Description",
             "width": 250,
             "filterable": true,
             "hideable": true,
             "type": "string",
             "class": "text-align-right",
-            "field": "comment"
+            "field": "description"
         },
         {
-            "title": "Therapies",
-            "width": 200,
+            "title": "Preview",
+            "width": 250,
             "filterable": true,
             "hideable": true,
-            "type": "string",
+            "type": "documentPreview",
             "class": "text-align-right",
-            "field": "therapies_title"
-        },
-        {
-            "title": "Previous therapy",
-            "width": 120,
-            "filterable": true,
-            "hideable": true,
-            "type": "string",
-            "class": "text-align-right",
-            "field": "therapies_previous_title"
-        },
-        {
-            "title": "CS",
-            "width": 120,
-            "filterable": true,
-            "hideable": true,
-            "type": "string",
-            "class": "text-align-right",
-            "field": "cs"
-        },
-        {
-            "title": "Em",
-            "width": 120,
-            "filterable": true,
-            "hideable": true,
-            "type": "string",
-            "class": "text-align-right",
-            "field": "em_title"
+            "classIcon": "fa fa-user",
+            "field": "name"
         }
     ],
     "configField": [

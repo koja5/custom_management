@@ -1066,6 +1066,7 @@ router.post("/createCustomer", function (req, res, next) {
       length: 10,
       numbers: true,
     });
+    var notShaPassword = password;
     var podaci = {
       shortname: req.body.lastname + " " + req.body.firstname,
       firstname: req.body.firstname,
@@ -1084,7 +1085,6 @@ router.post("/createCustomer", function (req, res, next) {
       storeId: req.body.storeId,
       isConfirm: req.body.isConfirm,
     };
-    console.log(podaci);
 
     conn.query(
       "SELECT * from customers where email = ?",
@@ -1101,7 +1101,7 @@ router.post("/createCustomer", function (req, res, next) {
                   if (!err) {
                     test.id = rows.insertId;
                     test.success = true;
-                    test.password = password;
+                    test.password = notShaPassword;
                   } else {
                     test.success = false;
                     test.info = "Error";
