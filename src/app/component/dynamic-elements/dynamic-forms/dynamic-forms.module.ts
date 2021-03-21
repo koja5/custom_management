@@ -7,22 +7,28 @@ import { TextareaComponent } from './dynamic-fields/textarea/textarea.component'
 import { NumericComponent } from './dynamic-fields/numeric/numeric.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DynamicFormsComponent } from './dynamic-forms.component';
-import {TextBoxModule} from '@syncfusion/ej2-angular-inputs';
+import {NumericTextBoxModule, TextBoxModule} from '@syncfusion/ej2-angular-inputs';
 import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 import { DatepickerComponent } from './dynamic-fields/datepicker/datepicker.component';
 import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
 import { ButtonComponent } from './dynamic-fields/button/button.component';
+import { CheckBoxModule, RadioButtonModule } from '@syncfusion/ej2-angular-buttons';
+import { RadioComponent } from './dynamic-fields/radio/radio.component';
+import { CheckboxComponent } from './dynamic-fields/checkbox/checkbox.component';
 
 @NgModule({
-  declarations: [DynamicFieldsDirective, DropdownComponent, TextboxComponent, TextareaComponent, NumericComponent, DatepickerComponent, ButtonComponent],
+  declarations: [DynamicFieldsDirective, DropdownComponent, TextboxComponent, TextareaComponent, NumericComponent, DatepickerComponent, ButtonComponent, RadioComponent, CheckboxComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     TextBoxModule, DropDownListModule,
     FormsModule,
-    DatePickerModule
+    DatePickerModule,
+    NumericTextBoxModule,
+    RadioButtonModule,
+    CheckBoxModule
   ],
   exports: [DynamicFieldsDirective],
-  entryComponents: [TextboxComponent, DropdownComponent, TextareaComponent, DatepickerComponent, ButtonComponent],
+  entryComponents: [TextboxComponent, DropdownComponent, TextareaComponent, DatepickerComponent, ButtonComponent, RadioComponent, CheckboxComponent],
 })
 export class DynamicFormsModule { }

@@ -19,6 +19,7 @@ export interface FieldConfig {
   multiline?: boolean;
   request?: Request;
   data?: any;
+  dataArray?: any[];
   fieldConfig?: DropDown;
   positionClass?: string;
 }

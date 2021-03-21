@@ -59,11 +59,22 @@ router.post("/send", function (req, res) {
   var mailOptions = {
     from: '"ClinicNode" info@app-production.eu',
     to: req.body.email,
-    subject: "Confirm registration",
+    subject: req.body.language?.subjectConfirmMail,
     html: compiledTemplate.render({
       firstName: req.body.shortname,
-      verificationLink: verificationLinkButton,
-    }),
+      verificationLink:verificationLinkButton,
+      initialGreeting: req.body.language?.initialGreeting,
+      finalGreeting: req.body.language?.finalGreeting,
+      signature: req.body.language?.signature,
+      thanksForUsing: req.body.language?.thanksForUsing,
+      websiteLink: req.body.language?.websiteLink,
+      ifYouHaveQuestion: req.body.language?.ifYouHaveQuestion,
+      emailAddress: req.body.language?.emailAddress,
+      notReply: req.body.language?.notReply,
+      copyRight: req.body.language?.copyRight,
+      introductoryMessageForConfirmMail: req.body.language?.introductoryMessageForConfirmMail,
+      confirmMailButtonText: req.body.language?.confirmMailButtonText
+    })
   };
 
   smtpTransport.sendMail(mailOptions, function (error, response) {
@@ -123,10 +134,21 @@ router.post("/forgotmail", function (req, res) {
   var mailOptions = {
     from: '"ClinicNode" info@app-production.eu',
     to: req.body.email,
-    subject: "Reset password",
+    subject: req.body.language?.subjectForgotMail,
     html: compiledTemplate.render({
       firstName: req.body.shortname,
       verificationLink: verificationLinkButton,
+      initialGreeting: req.body.language?.initialGreeting,
+      finalGreeting: req.body.language?.finalGreeting,
+      signature: req.body.language?.signature,
+      thanksForUsing: req.body.language?.thanksForUsing,
+      websiteLink: req.body.language?.websiteLink,
+      ifYouHaveQuestion: req.body.language?.ifYouHaveQuestion,
+      emailAddress: req.body.language?.emailAddress,
+      notReply: req.body.language?.notReply,
+      copyRight: req.body.language?.copyRight,
+      introductoryMessageForForgotMail: req.body.language?.introductoryMessageForForgotMail,
+      forgotMailButtonText: req.body.language?.forgotMailButtonText
     }),
   };
 
@@ -220,7 +242,7 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
             (endMinutes < 10 ? "0" + endMinutes : endMinutes);
           var mailOptions = {
             from: '"ClinicNode" info@app-production.eu',
-            subject: "Confirm arrival",
+            subject: req.body.language?.subjectConfirmArrival,
             html: compiledTemplate.render({
               firstName: to.shortname,
               verificationLink: verificationLinkButton,
@@ -231,6 +253,22 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
               doctor: to.lastname + " " + to.firstname,
               month: month,
               day: day,
+              initialGreeting: req.body.language?.initialGreeting,
+              finalGreeting: req.body.language?.finalGreeting,
+              signature: req.body.language?.signature,
+              thanksForUsing: req.body.language?.thanksForUsing,
+              websiteLink: req.body.language?.websiteLink,
+              ifYouHaveQuestion: req.body.language?.ifYouHaveQuestion,
+              emailAddress: req.body.language?.emailAddress,
+              notReply: req.body.language?.notReply,
+              copyRight: req.body.language?.copyRight,
+              introductoryMessageForConfirmArrival: req.body.language?.introductoryMessageForConfirmArrival,
+              dateMessage: req.body.language?.dateMessage,
+              timeMessage: req.body.language?.timeMessage,
+              therapyMessage: req.body.language?.therapyMessage,
+              doctorMessage: req.body.language?.doctorMessage,
+              finalMessageForConfirmArrival: req.body.language?.finalMessageForConfirmArrival,
+              confirmArrivalButtonText: req.body.language?.confirmArrivalButtonText
             }),
           };
           mailOptions.to = to.email;
@@ -260,9 +298,20 @@ router.post("/sendPatientFormRegistration", function (req, res) {
   var mailOptions = {
     from: '"ClinicNode" info@app-production.eu',
     to: req.body.email,
-    subject: "Registration form",
+    subject: req.body.langauge?.subjectFormRegistration,
     html: patientRegistrationForm.render({
       link: req.body.link,
+      initialGreeting: req.body.language?.initialGreeting,
+      finalGreeting: req.body.language?.finalGreeting,
+      signature: req.body.language?.signature,
+      thanksForUsing: req.body.language?.thanksForUsing,
+      websiteLink: req.body.language?.websiteLink,
+      ifYouHaveQuestion: req.body.language?.ifYouHaveQuestion,
+      emailAddress: req.body.language?.emailAddress,
+      notReply: req.body.language?.notReply,
+      copyRight: req.body.language?.copyRight,
+      introductoryMessageForPatientRegistrationForm: req.body.language?.introductoryMessageForPatientRegistrationForm,
+      openForm: req.body.language?.openForm
     }),
   };
 
@@ -285,12 +334,25 @@ router.post("/sendInfoToPatientForCreatedAccount", function (req, res) {
   var mailOptions = {
     from: '"ClinicNode" info@app-production.eu',
     to: req.body.email,
-    subject: "Registration form",
+    subject: req.body.language?.subjectCreatedPatientForm,
     html: infoForCreatedAccount.render({
       firstname: req.body.firstname,
       email: req.body.email,
       password: req.body.password,
-      loginLink: loginLink
+      loginLink: loginLink,
+      initialGreeting: req.body.language?.initialGreeting,
+      finalGreeting: req.body.language?.finalGreeting,
+      signature: req.body.language?.signature,
+      thanksForUsing: req.body.language?.thanksForUsing,
+      websiteLink: req.body.language?.websiteLink,
+      ifYouHaveQuestion: req.body.language?.ifYouHaveQuestion,
+      emailAddress: req.body.language?.emailAddress,
+      notReply: req.body.language?.notReply,
+      copyRight: req.body.language?.copyRight,
+      introductoryMessageForCreatedPatientAccount: req.body.language?.introductoryMessageForCreatedPatientAccount,
+      linkForLogin: req.body.language?.linkForLogin,
+      emailForLogin: req.body.language?.emailForLogin,
+      passwordForLogin: req.body.language?.passwordForLogin
     })
   };
   console.log(mailOptions);

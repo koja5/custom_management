@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
+import { HelpService } from "src/app/service/help.service";
 import { Field } from "../../models/field";
 import { FieldConfig } from "../../models/field-config";
 
@@ -9,9 +10,15 @@ import { FieldConfig } from "../../models/field-config";
   styleUrls: ["./textbox.component.scss"],
 })
 export class TextboxComponent implements OnInit, Field {
-  constructor() {}
   config: FieldConfig;
   group: FormGroup;
+  public language: any;
 
-  ngOnInit() {}
+  constructor(private helpService: HelpService) {
+
+  }
+
+  ngOnInit() {
+    this.language = this.helpService.getLanguage();
+  }
 }

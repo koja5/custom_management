@@ -49,14 +49,13 @@
     "columns": [
         {
             "title": "Date",
-            "width": 120,
+            "width": 150,
             "filterable": true,
             "hideable": true,
-            "type": "date",
+            "type": "string",
             "class": "text-align-right",
             "defaultValue": "no date",
-            "field": "date",
-            "format": { "type": "date", "format": "dd/MM/yyyy" }
+            "field": "date"
         },
         {
             "title": "Complaint",

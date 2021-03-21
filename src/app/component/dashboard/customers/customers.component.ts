@@ -24,6 +24,7 @@ import { WindowModule } from "@progress/kendo-angular-dialog";
 import * as XLSX from "ts-xlsx";
 import { HelpService } from "src/app/service/help.service";
 import { MailService } from "src/app/service/mail.service";
+import { PackLanguageService } from "src/app/service/pack-language.service";
 
 const newLocal = "data";
 @Component({
@@ -79,7 +80,8 @@ export class CustomersComponent implements OnInit {
     private storeService: StoreService,
     private message: MessageService,
     private helpService: HelpService,
-    private mailService: MailService
+    private mailService: MailService,
+    private packLanguage: PackLanguageService
   ) {
     // this.excelIO = new Excel.IO();
   }
@@ -158,6 +160,7 @@ export class CustomersComponent implements OnInit {
       attention: "",
       physicalComplaint: "",
       isConfirm: false,
+      language: null
     };
   }
 
@@ -185,6 +188,7 @@ export class CustomersComponent implements OnInit {
           type: "success",
         });
         this.data.password = val.password;
+        this.data.language = this.packLanguage.getLanguageForCreatedPatientAccount();
         this.mailService
           .sendInfoToPatientForCreatedAccount(this.data)
           .subscribe((data) => {
@@ -497,6 +501,7 @@ export class CustomersComponent implements OnInit {
     const data = {
       email: this.patientMail,
       link: this.helpService.getLinkForPatientFormRegistration(),
+      language: this.packLanguage.getLanguageForPatientRegistrationForm()
     };
     this.patientFormRegistrationDialog = false;
     this.mailService.sendPatientFormRegistration(data).subscribe((data) => {

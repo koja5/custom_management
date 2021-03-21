@@ -19,12 +19,14 @@ export class DropdownComponent implements OnInit, Field {
   constructor(private helpService: HelpService) {}
   config: FieldConfig;
   group: FormGroup;
+  public language: any;
 
   public data: any;
 
   public query: Query = new Query().from("entries");
 
   ngOnInit() {
+    this.language = this.helpService.getLanguage();
     if(this.config.data['translation']) {
       this.data = this.helpService.getLanguage()[this.config.data['translation']['property']]
       this.config.field = this.config.data['translation']['fields'];

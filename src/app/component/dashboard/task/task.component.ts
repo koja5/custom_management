@@ -925,7 +925,7 @@ export class TaskComponent implements OnInit {
       console.log(val);
       if (val) {
         this.data.id = val.id;
-        this.customerUser = this.data;
+        this.customerUser = this.data as CustomerModel;
         this.formGroup.patchValue({ telephone: this.data.telephone });
         this.formGroup.patchValue({ mobile: this.data.mobile });
         this.baseDataIndicator = true;

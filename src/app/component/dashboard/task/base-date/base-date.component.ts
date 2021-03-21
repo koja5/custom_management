@@ -1059,6 +1059,10 @@ export class BaseDateComponent implements OnInit {
     this.complaintData.em_title = event.lastname + " " + event.firstname;
   }
 
+  valueChangeState(event) {
+    this.complaintData.state = event;
+  }
+
   changeTheme(theme: string) {
     setTimeout(() => {
       if (localStorage.getItem("allThemes") !== undefined) {

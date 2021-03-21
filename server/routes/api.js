@@ -757,6 +757,7 @@ router.get("/getUsersInCompany/:id", function (req, res, next) {
   });
 });
 
+//we gave a bug here, we need to check by id and mail address, not just id, because same id can have in different database
 router.get("/getMe/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
@@ -1175,7 +1176,7 @@ router.post("/createCustomerFromPatientForm", function (req, res, next) {
                   test.id = rows.insertId;
                   test.success = true;
                   test.info = 200;
-                  res.json(test)
+                  res.json(test);
                 } else {
                   res.json(err);
                 }
@@ -1223,6 +1224,230 @@ router.get("/getCustomers/:id", function (req, res, next) {
       }
     );
 
+    conn.on("error", function (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database",
+      });
+      return;
+    });
+  });
+});
+
+router.get("/getSuperadmin/:id", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database",
+      });
+      return;
+    }
+    var id = req.params.id;
+    conn.query(
+      "SELECT * from users_superadmin where id = ?",
+      [id],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(null);
+        }
+      }
+    );
+
+    conn.on("error", function (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database",
+      });
+      return;
+    });
+  });
+});
+
+router.post("/updateSuperadmin", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database",
+      });
+      return;
+    }
+    test = {};
+    var id = req.body.id;
+
+    conn.query(
+      "UPDATE users_superadmin SET ? where id = '" + id + "'",
+      [req.body],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            test.success = true;
+          } else {
+            test.success = false;
+          }
+          res.json(test);
+        } else {
+          res.json({
+            code: 100,
+            status: "Error in connection database",
+          });
+          console.log(err);
+        }
+      }
+    );
+    conn.on("error", function (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database",
+      });
+      return;
+    });
+  });
+});
+
+router.post("/updatePasswordForSuperadmin", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database",
+      });
+      return;
+    }
+
+    conn.query(
+      "UPDATE users_superadmin SET password = '" +
+        sha1(req.body.newPassword) +
+        "' where id = '" +
+        req.body.id +
+        "'",
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(true);
+        } else {
+          res.json(err);
+        }
+      }
+    );
+    conn.on("error", function (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database",
+      });
+      return;
+    });
+  });
+});
+
+router.post("/updatePasswordForUser", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database",
+      });
+      return;
+    }
+
+    conn.query(
+      "UPDATE user SET password = '" +
+        sha1(req.body.newPassword) +
+        "' where id = '" +
+        req.body.id +
+        "'",
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(true);
+        } else {
+          res.json(err);
+        }
+      }
+    );
+    conn.on("error", function (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database",
+      });
+      return;
+    });
+  });
+});
+
+router.post("/updatePasswordForCustomer", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database",
+      });
+      return;
+    }
+
+    conn.query(
+      "UPDATE user SET password = '" +
+        sha1(req.body.newPassword) +
+        "' where id = '" +
+        req.body.id +
+        "'",
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(true);
+        } else {
+          res.json(err);
+        }
+      }
+    );
+    conn.on("error", function (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database",
+      });
+      return;
+    });
+  });
+});
+
+router.post("/updateUserFromSettings", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database",
+      });
+      return;
+    }
+    test = {};
+    var id = req.body.id;
+
+    conn.query(
+      "UPDATE user SET ? where id = '" + id + "'",
+      [req.body],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            test.success = true;
+          } else {
+            test.success = false;
+          }
+          res.json(test);
+        } else {
+          res.json({
+            code: 100,
+            status: "Error in connection database",
+          });
+          console.log(err);
+        }
+      }
+    );
     conn.on("error", function (err) {
       res.json({
         code: 100,
@@ -2191,21 +2416,9 @@ router.get("/getUserWithID/:userid", function (req, res, next) {
       function (err, rows) {
         conn.release();
         if (!err) {
-          var test = [];
-
-          for (var i = 0; i < rows.length; i++) {
-            test[i] = rows[i];
-            console.log(rows[i]);
-          }
-
-          console.log("Ovdee :D");
-          console.log(test);
-          res.json(test);
+          res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
         }
       }
     );

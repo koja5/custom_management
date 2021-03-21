@@ -1,14 +1,32 @@
 <div class="form-group" [ngClass]="config.width">
-  <div class="e-float-input e-control-wrapper" [formGroup]="group"
-    [ngClass]="{'e-error': config.field.invalid && (config.field.dirty || config.field.touched)}" style="margin-top: 0px !important;">
-<label for="{{config.name}}"> {{config.label}}</label>
-<ejs-dropdownlist id='ddlelement' [dataSource]='data' [fields]="config.field"
-  [placeholder]="config.placeholder" [allowFiltering]='config.fieldConfig.filter'
-  [ignoreAccent]='config.fieldConfig.ignoreAccent' [filterBarPlaceholder]='config.fieldConfig.filterPlaceholder'
-  (filtering)='onFiltering($event)' [formControlName]="config.name"></ejs-dropdownlist>
-    
+  <label for="{{ config.name }}">  {{language[config.label] ? language[config.label] : config.label}}</label>
+  <div
+    class="e-float-input e-control-wrapper"
+    [formGroup]="group"
+    [ngClass]="{
+      'e-error':
+        config.field.invalid && (config.field.dirty || config.field.touched)
+    }"
+    style="margin-top: 0px !important"
+  >
+    <ejs-dropdownlist
+      id="ddlelement"
+      [dataSource]="data"
+      [fields]="config.field"
+      [placeholder]="config.placeholder ? config.placeholder : ''"
+      [allowFiltering]="config.fieldConfig.filter"
+      [ignoreAccent]="config.fieldConfig.ignoreAccent"
+      [filterBarPlaceholder]="config.fieldConfig.filterPlaceholder"
+      (filtering)="onFiltering($event)"
+      [formControlName]="config.name"
+    ></ejs-dropdownlist>
   </div>
-  <div id="OrderIDError" *ngIf='config.field.invalid && (config.field.dirty || config.field.touched)'>
-    <label class="e-error" id="{{config.name}}-info" style="display: block;">*Order ID is required</label>
+  <div
+    id="OrderIDError"
+    *ngIf="config.field.invalid && (config.field.dirty || config.field.touched)"
+  >
+    <label class="e-error" id="{{ config.name }}-info" style="display: block"
+      >*Order ID is required</label
+    >
   </div>
 </div>

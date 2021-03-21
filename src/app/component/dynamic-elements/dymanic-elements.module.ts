@@ -44,10 +44,11 @@ import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { DialogsModule } from '@progress/kendo-angular-dialog';
 import { BaseDateSharedModule } from '../shared-module/base-date-module';
+import { DynamicConfirmDialogComponent } from './dynamic-dialogs/dynamic-confirm-dialog/dynamic-confirm-dialog.component';
 
 @NgModule({
-  declarations: [DynamicGridComponent, DynamicFormsComponent, DynamicSchedulerComponent],
-  exports: [DynamicGridComponent],
+  declarations: [DynamicGridComponent, DynamicFormsComponent, DynamicSchedulerComponent, DynamicConfirmDialogComponent],
+  exports: [DynamicGridComponent, DynamicFormsComponent, DynamicConfirmDialogComponent],
   imports: [
     CommonModule,
     GridModule,

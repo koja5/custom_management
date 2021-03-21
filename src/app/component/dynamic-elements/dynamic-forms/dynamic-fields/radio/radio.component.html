@@ -1,0 +1,14 @@
+<div *ngIf="language" class="form-group" [ngClass]="config.width">
+  <div class="e-float-input e-control-wrapper" [formGroup]="group">
+    <ul>
+      <li *ngFor="let item of config.dataArray">
+        <ejs-radiobutton
+          [name]="item.name"
+          [value]="item.value"
+          [label]="language[item.label] ? language[item.label] : item.label"
+          [formControlName]="item.name"
+        ></ejs-radiobutton>
+      </li>
+    </ul>
+  </div>
+</div>

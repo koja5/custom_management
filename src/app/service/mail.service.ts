@@ -43,4 +43,5 @@ export class MailService {
       .post("/api/sendInfoToPatientForCreatedAccount", data)
       .map((res) => res);
   }
+
 }

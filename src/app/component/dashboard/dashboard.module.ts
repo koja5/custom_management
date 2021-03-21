@@ -63,7 +63,8 @@ import { BaseDateSharedModule } from "../shared-module/base-date-module";
 import { MyComplaintComponent } from './patient/my-complaint/my-complaint.component';
 import { MyTherapyComponent } from './patient/my-therapy/my-therapy.component';
 import { MyDocumentComponent } from './patient/my-document/my-document.component';
-
+import { SettingsModule } from "./settings/settings.module";
+import { DropDownListModule } from "@syncfusion/ej2-angular-dropdowns";
 
 @NgModule({
   declarations: [
@@ -90,7 +91,8 @@ import { MyDocumentComponent } from './patient/my-document/my-document.component
     TodoComponent,
     MyComplaintComponent,
     MyTherapyComponent,
-    MyDocumentComponent,
+    MyDocumentComponent
+
   ],
   imports: [
     CommonModule,
@@ -122,7 +124,9 @@ import { MyDocumentComponent } from './patient/my-document/my-document.component
     SharedModule,
     DymanicElementsModule,
     DialogModuleSyncfusion,
-    BaseDateSharedModule
+    BaseDateSharedModule,
+    SettingsModule,
+    DropDownListModule
   ],
   providers: [
     {

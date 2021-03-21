@@ -4,8 +4,7 @@
 
 <head style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
   <meta charset="UTF-8" style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
-  <title style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">Confirm Arrival -
-    ClinicNode</title>
+  <title style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">{{subjectCreatedPatientForm}}</title>
   <link rel="stylesheet" href="https://unpkg.com/tailwindcss@0.7.4/dist/tailwind.min.css"
     style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.4/css/all.css"
@@ -61,34 +60,22 @@
         <div class="content__body py-8 border-b"
           style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;border-bottom-width: 1px;padding-top: 2rem;padding-bottom: 2rem;">
           <p style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;">
-            Hey {{firstname}}, <br
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"><br
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">An account has been created for you on the ClinicNode platform. Below is the access data. It is recommended that you change your password in the future.</p>
-
-          <div style="text-align: center; padding: 15px;">
-            <table style="width:80%; margin: auto;">
-              <tr class="date-large">
-                <td>
-                  <p style="text-align: initial; font-size: 13px; margin: 0px">Link for login: <span
-                      style="font-size: 15px; font-weight: bold;">{{loginLink}}</span>
-                  </p>
-                  <p style="text-align: initial; font-size: 13px; margin: 0px">Email: <span
+            {{initialGreeting}} {{firstname}}, <br>
+          <p style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
+            {{introductoryMessageForCreatedPatientAccount}}</p>
+            <br>
+            <p>{{linkForLogin}}: <span
+                      style="font-size: 15px; font-weight: bold;">{{loginLink}}</span></p>
+            <p>{{emailForLogin}}: <span
                       style="font-size: 15px; font-weight: bold;">{{email}}</span></p>
-                  <p style="text-align: initial; font-size: 13px; margin: 0px">Password: <span
+            <p>{{passwordForLogin}}: <span
                       style="font-size: 15px; font-weight: bold;">{{password}}</span></p>
-
-                </td>
-              </tr>
-            </table>
-          </div>
           <br>
-          <p style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;">Please
-            confirm your arrival by clicking the button below or let us know if you are prevented.
-          </p>
           <p class="text-sm"
             style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;font-size: .875rem;">
-            Thanks,<br style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
-            ClinicNode Team
+            {{finalGreeting}},<br
+              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
+            {{signature}}
           </p>
         </div>
 
@@ -96,9 +83,9 @@
           style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin-top: 2rem;text-align: center;color: #606f7b;">
           <h3 class="text-base sm:text-lg mb-4"
             style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;margin-bottom: 1rem;font-size: 1.125rem;">
-            Thanks for using ClinicNode!</h3>
+            {{thanksForUsing}}</h3>
           <p style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;">
-            www.clinicnode.com</p>
+            {{websiteLink}}</p>
         </div>
 
       </div>
@@ -127,17 +114,17 @@
         <div class="meta__help" style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
           <p class="leading-loose"
             style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;line-height: 2;">
-            If you have question? <a href="#" class="text-grey-darkest"
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;background-color: transparent;color: #3d4852;">help@clinicnode.com</a>
+            {{ifYouHaveQuestion}} <a href="#" class="text-grey-darkest"
+              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;background-color: transparent;color: #3d4852;">{{emailAddress}}</a>
           </p>
         </div>
         <div class="auto-generate"
           style="font-size: 10px;box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
           <p style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;">
-            This is an automated email - please do not reply.
+            {{notReply}}
           </p>
           <p style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;">
-            Copyright © 2020 ClinicNode, All rights reserved.
+            {{copyRight}}
           </p>
         </div>
 

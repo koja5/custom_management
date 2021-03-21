@@ -71,6 +71,10 @@ export class HelpService {
     return Number(localStorage.getItem("idUser"));
   }
 
+  getType() {
+    return Number(localStorage.getItem("type"));
+  }
+
   getSuperadmin() {
     return localStorage.getItem("superadmin");
   }

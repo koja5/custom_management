@@ -37,6 +37,7 @@ export class DashboardComponent implements OnInit {
   public subMenuInd = "";
   public sidebarHeight: any;
   public userType = UserType;
+  public permissionPatientMenu: any;
 
   constructor(
     private router: Router,
@@ -129,6 +130,18 @@ export class DashboardComponent implements OnInit {
 
     if (localStorage.getItem("sidebar")) {
       this.sidebar = localStorage.getItem("sidebar");
+    }
+    this.checkPermissionForPatientMenu();
+  }
+
+  checkPermissionForPatientMenu() {
+    const superadmin = this.helpService.getSuperadmin();
+    if(this.type === this.userType.patient) {
+      this.mongo.getPermissionForPatientNavigation(superadmin).subscribe(
+        data => {
+          this.permissionPatientMenu = data;
+        }
+      )
     }
   }
 

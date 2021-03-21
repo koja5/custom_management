@@ -5,18 +5,23 @@ import { FormGroup } from '@angular/forms';
 import { Field } from '../models/field';
 import { FieldConfig } from '../models/field-config';
 import { ButtonComponent } from './button/button.component';
+import { CheckboxComponent } from './checkbox/checkbox.component';
 import { DatepickerComponent } from './datepicker/datepicker.component';
 import { DropdownComponent } from "./dropdown/dropdown.component";
+import { RadioComponent } from './radio/radio.component';
 import { TextareaComponent } from './textarea/textarea.component';
 import { TextboxComponent } from './textbox/textbox.component';
 
 
 const components: {[type: string]: Type<Field>} = {
   textbox: TextboxComponent,
+  password: TextboxComponent,
   textarea: TextareaComponent,
   dropdown: DropdownComponent,
   datepicker: DatepickerComponent,
-  button: ButtonComponent
+  button: ButtonComponent,
+  radio: RadioComponent,
+  checkbox: CheckboxComponent
 };
 
 @Directive({

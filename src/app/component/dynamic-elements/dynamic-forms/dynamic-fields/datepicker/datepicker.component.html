@@ -1,11 +1,27 @@
 <div class="form-group" [ngClass]="config.width">
-  <div class="e-float-input e-control-wrapper" [formGroup]="group"
-    [ngClass]="{'e-error': config.field.invalid && (config.field.dirty || config.field.touched)}" style="margin-top: 0px !important;">
-    <label for="{{config.name}}"> {{config.label}}</label>
-    <ejs-datepicker required [id]="config.name" [placeholder]='config.placeholder'
-      [formControlName]="config.name"></ejs-datepicker>
+  <label class="mb-0" for="{{ config.name }}"> {{language[config.label] ? language[config.label] : config.label}}</label>
+  <div
+    class="e-float-input e-control-wrapper"
+    [formGroup]="group"
+    [ngClass]="{
+      'e-error':
+        config.field.invalid && (config.field.dirty || config.field.touched)
+    }"
+    style="margin-top: 0px !important"
+  >
+    <ejs-datepicker
+      required
+      [id]="config.name"
+      [placeholder]="config.placeholder ? config.placeholder : ''"
+      [formControlName]="config.name"
+    ></ejs-datepicker>
   </div>
-  <div id="OrderIDError" *ngIf='config.field.invalid && (config.field.dirty || config.field.touched)'>
-    <label class="e-error" id="{{config.name}}-info" style="display: block;">*Order ID is required</label>
+  <div
+    id="OrderIDError"
+    *ngIf="config.field.invalid && (config.field.dirty || config.field.touched)"
+  >
+    <label class="e-error" id="{{ config.name }}-info" style="display: block"
+      >*Order ID is required</label
+    >
   </div>
 </div>

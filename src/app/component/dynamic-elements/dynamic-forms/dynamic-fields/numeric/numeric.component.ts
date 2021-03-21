@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { HelpService } from 'src/app/service/help.service';
+import { FieldConfig } from '../../models/field-config';
 
 @Component({
   selector: 'app-numeric',
@@ -6,10 +9,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./numeric.component.scss']
 })
 export class NumericComponent implements OnInit {
-
-  constructor() { }
+  config: FieldConfig;
+  group: FormGroup;
+  public language: any;
+  
+  constructor(private helpService: HelpService) { }
 
   ngOnInit() {
+    this.language = this.helpService.getLanguage();
   }
 
 }

@@ -105,7 +105,7 @@
                   </a>
                 </li>
                 <li>
-                  <a (click)="settings.open()" (click)="showHideProfile()">
+                  <a routerLink="/dashboard/home/settings" (click)="showHideProfile()">
                     <i class="fa fa-cog"></i> {{ language["settings"] }}
                   </a>
                 </li>
@@ -233,7 +233,7 @@
                     ><span class="title">{{ language["calendar"] }}</span></a
                   >
                 </li> -->
-                <li class="nav-item {{ selectedNodeModel.calendar }}">
+                <li *ngIf="type !== userType.patient||(type === userType.patient && permissionPatientMenu?.myCalendar)" class="nav-item {{ selectedNodeModel.calendar }}">
                   <a
                     (click)="returnActiveNode('calendar')"
                     routerLink="/dashboard/home/task"
@@ -422,7 +422,7 @@
                   </ul>
                 </li>
                 <li
-                  *ngIf="type === userType.patient"
+                  *ngIf="type === userType.patient&&permissionPatientMenu?.myComplaint"
                   class="nav-item {{ selectedNodeModel.my_complaint }}"
                 >
                   <a
@@ -434,7 +434,7 @@
                   >
                 </li>
                 <li
-                  *ngIf="type === userType.patient"
+                  *ngIf="type === userType.patient&&permissionPatientMenu?.myTherapy"
                   class="nav-item {{ selectedNodeModel.my_therapy }}"
                 >
                   <a
@@ -446,7 +446,7 @@
                   >
                 </li>
                 <li
-                  *ngIf="type === userType.patient"
+                  *ngIf="type === userType.patient&&permissionPatientMenu?.myDocument"
                   class="nav-item {{ selectedNodeModel.my_document }}"
                 >
                   <a

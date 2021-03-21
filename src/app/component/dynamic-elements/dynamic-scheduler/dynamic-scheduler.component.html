@@ -648,7 +648,8 @@
                         <kendo-textbox-container
                           floatingLabel="{{ languageUser.patient }}"
                         >
-                          <kendo-combobox #customerElement
+                          <kendo-combobox
+                            #customerElement
                             [data]="customerUsers"
                             [textField]="'shortname'"
                             [valueField]="'id'"
@@ -1082,7 +1083,7 @@
 
   <!-- MODALS -->
   <kendo-window
-    title="{{language.createNewCustomerDialog}}"
+    title="{{ language.createNewCustomerDialog }}"
     *ngIf="customerModal"
     [minWidth]="700"
     [width]="850"
@@ -1318,7 +1319,7 @@
   </kendo-window>
 
   <kendo-window
-    title="{{language.customerInformationDialog}}"
+    title="{{ language.customerInformationDialog }}"
     *ngIf="customerUserModal2 && customerUser !== undefined"
     [width]="960"
     [height]="540"
@@ -1327,6 +1328,28 @@
     <app-base-date [data]="customerUser" *ngIf="customerUser !== undefined">
     </app-base-date>
   </kendo-window>
+
+  <kendo-dialog
+    title="Confirmation of arrival"
+    *ngIf="requestForConfirmArrival"
+    (close)="requestForConfirmArrival = false"
+    [minWidth]="250"
+    [width]="450"
+  >
+    <p style="margin: 30px; text-align: center">
+      Do you want to request a confirmation from your client?
+    </p>
+    <kendo-dialog-actions>
+      <button
+        kendoButton
+        (click)="requestForConfirmArrivalAnswer('yes')"
+        primary="true"
+      >
+        Yes
+      </button>
+      <button kendoButton (click)="requestForConfirmArrival = false">No</button>
+    </kendo-dialog-actions>
+  </kendo-dialog>
 
   <!-- END MODALS -->
 </div>

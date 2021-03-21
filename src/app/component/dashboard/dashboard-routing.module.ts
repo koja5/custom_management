@@ -16,13 +16,15 @@ import { WorkTimeColorsComponent } from "./parameters/work-time-colors/work-time
 import { UserDetailsComponent } from "./users/user-details/user-details.component";
 import { TaskComponent } from "./task/task.component";
 import { SettingsComponent } from "./settings/settings.component";
-import { ChangePasswordComponent } from "../login/change-password/change-password.component";
 import { EventCategoryComponent } from "./parameters/event-category/event-category.component";
 import { TodoComponent } from './administrator/todo/todo.component';
 import { DynamicSchedulerComponent } from '../dynamic-elements/dynamic-scheduler/dynamic-scheduler.component';
 import { MyComplaintComponent } from "./patient/my-complaint/my-complaint.component";
 import { MyTherapyComponent } from "./patient/my-therapy/my-therapy.component";
 import { MyDocumentComponent } from "./patient/my-document/my-document.component";
+import { AccountComponent } from "./settings/account/account.component";
+import { ChangePasswordComponent } from "./settings/change-password/change-password.component";
+import { PermissionPatientMenuComponent } from "./settings/permission-patient-menu/permission-patient-menu.component";
 
 const routes: Routes = [
   {
@@ -55,11 +57,16 @@ const routes: Routes = [
         path: "settings",
         component: SettingsComponent,
         children: [
-          { path: "", redirectTo: "change-password", pathMatch: "full" },
+          { path: "", redirectTo: "account", pathMatch: "full" },
+          { path: "account", component: AccountComponent },
           {
             path: "change-password",
             component: ChangePasswordComponent,
           },
+          {
+            path: "permission-patient-menu",
+            component: PermissionPatientMenuComponent
+          }
         ],
       },
       {

@@ -66,37 +66,37 @@
             <ul class="list-group list-group-unbordered">
               <li class="list-group-item">
                 <b>{{ language["firstname"] }}</b>
-                <span class="pull-right a-color" *ngIf="data.firstname">{{
+                <span class="pull-right a-color" *ngIf="!data.firstname">{{
                   language["noInformation"]
                 }}</span>
-                <span class="pull-right a-color" *ngIf="!data.firstname">{{
+                <span class="pull-right a-color" *ngIf="data.firstname">{{
                   data.firstname
                 }}</span>
               </li>
               <li class="list-group-item">
                 <b>{{ language["lastname"] }}</b>
-                <span class="pull-right a-color" *ngIf="data.lastname">{{
+                <span class="pull-right a-color" *ngIf="!data.lastname">{{
                   language["noInformation"]
                 }}</span>
-                <span class="pull-right a-color" *ngIf="!data.lastname">{{
+                <span class="pull-right a-color" *ngIf="data.lastname">{{
                   data.lastname
                 }}</span>
               </li>
               <li class="list-group-item">
                 <b>{{ language["birthday"] }}</b>
-                <span class="pull-right a-color" *ngIf="data.email">{{
+                <span class="pull-right a-color" *ngIf="!data.email">{{
                   language["noInformation"]
                 }}</span>
-                <span class="pull-right a-color" *ngIf="!data.email">{{
+                <span class="pull-right a-color" *ngIf="data.email">{{
                   data.birthday | date: "MM/dd/yyyy"
                 }}</span>
               </li>
               <li class="list-group-item">
                 <b>{{ language["gender"] }}</b>
-                <span class="pull-right a-color" *ngIf="data.gender">{{
+                <span class="pull-right a-color" *ngIf="!data.gender">{{
                   language["noInformation"]
                 }}</span>
-                <span class="pull-right a-color" *ngIf="!data.gender"
+                <span class="pull-right a-color" *ngIf="data.gender"
                   ><i
                     *ngIf="data.gender === 'male'"
                     class="fa fa-mars"
@@ -1921,7 +1921,6 @@
               class="col-md-12 col-xs-12"
               name="comment"
               [(ngModel)]="complaintData.comment"
-              comment.value=""
             />
           </kendo-textbox-container>
         </div>
@@ -1933,7 +1932,6 @@
               class="col-md-12 col-xs-12"
               name="cs"
               [(ngModel)]="complaintData.cs"
-              cs.value=""
           /></kendo-textbox-container>
         </div>
         <div class="col-md-12 col-xs-12">
@@ -1944,6 +1942,8 @@
               [textField]="'text'"
               [valueField]="'text'"
               [(ngModel)]="complaintData.state"
+              (valueChange)="valueChangeState($event)"
+              [valuePrimitive]="true"
               name="state"
               required
             >

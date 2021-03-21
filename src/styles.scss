@@ -13948,3 +13948,18 @@ kendo-window {
 .k-grid-add-command {
     padding: 20px !important;
 }
+
+/* SETTINGS */
+
+@media(min-width: 992px) {
+    .settings-container {
+        width: 80%;
+    }
+}
+
+.settings-container {
+    margin: auto;
+    display: grid;
+}
+
+/* SETTINGS END */

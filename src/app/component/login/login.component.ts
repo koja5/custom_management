@@ -6,6 +6,7 @@ import { CookieService } from "ng2-cookies";
 import { DashboardService } from "../../service/dashboard.service";
 import { MongoService } from "../../service/mongo.service";
 import { HelpService } from "src/app/service/help.service";
+import { PackLanguageService } from "src/app/service/pack-language.service";
 
 @Component({
   selector: "app-login",
@@ -48,7 +49,8 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private dashboardService: DashboardService,
     private mongo: MongoService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private packLanguage: PackLanguageService
   ) {}
 
   ngOnInit() {
@@ -179,6 +181,7 @@ export class LoginComponent implements OnInit {
         if (!val.success) {
           this.errorInfo = val.info;
         } else {
+          this.data['language'] = this.packLanguage.getLanguageForConfirmMail();
           this.mailService.sendMail(this.data, function () {
             console.log("Mail uspesno poslat");
           });
@@ -200,6 +203,7 @@ export class LoginComponent implements OnInit {
 
   forgotPassword() {
     const thisObject = this;
+    thisObject.data['language'] = this.packLanguage.getLanguageForForgotMail();
     if (this.data.email !== "") {
       this.service.forgotPassword(this.data, function (exist, notVerified) {
         setTimeout(() => {

@@ -34,4 +34,16 @@ export class MongoService {
   setSettingsForStore(data) {
     return this.http.post("/api/setSettingsForStore", data).map((res) => res);
   }
+
+  getPermissionForPatientNavigation(clinic) {
+    return this.http
+      .get("/api/getPermissionPatientMenu/" + clinic)
+      .map((res) => res);
+  }
+
+  createOrUpdatePermissionPatientMenu(data) {
+    return this.http
+      .post("api/createOrUpdatePermissionPatientMenu", data)
+      .map((res) => res);
+  }
 }

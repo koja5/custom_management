@@ -7,8 +7,9 @@ const Schema = mongo.Schema;
 // const url = 'mongodb://appprodu_appproduction_prod:CJr4eUqWg33tT97mxPFx@vps.app-production.eu:42526/management_mongodb'
 // const url = "mongodb://116.203.85.82:27017/management_mongo?gssapiServiceName=mongodb";
 // const url = "mongodb://admin:1234@localhost:27017/business_circle_mongodb?authSource=admin";
-const url = "mongodb+srv://clinic_node:1234@cluster0.54i4v.mongodb.net/test?authSource=admin&replicaSet=atlas-8om2st-shard-0&readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=true";
-const database_name = 'management_mongodb';
+const url =
+  "mongodb+srv://clinic_node:1234@cluster0.54i4v.mongodb.net/test?authSource=admin&replicaSet=atlas-8om2st-shard-0&readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=true";
+const database_name = "management_mongodb";
 var ObjectId = require("mongodb").ObjectID;
 const mysql = require("mysql");
 var sha1 = require("sha1");
@@ -120,11 +121,13 @@ router.post("/setSettingsForStore", function (req, res, next) {
   mongo.connect(url, function (err, db) {
     if (err) throw err;
     var dbo = db.db(database_name);
-    dbo
-      .collection("user_configuration")
-      .findOne({ user_id: Number(req.body.user_id), storeSettings: { $elemMatch: { id: req.body.storeSettings.id } } }, function (err, rows) {
+    dbo.collection("user_configuration").findOne(
+      {
+        user_id: Number(req.body.user_id),
+        storeSettings: { $elemMatch: { id: req.body.storeSettings.id } },
+      },
+      function (err, rows) {
         if (err) throw err;
-        console.log("storeSettings" + rows);
         if (rows === null || rows.length === 0) {
           dbo
             .collection("user_configuration")
@@ -136,18 +139,22 @@ router.post("/setSettingsForStore", function (req, res, next) {
               }
             );
         } else {
-          console.log('Radim samo update!!!');
-          dbo
-            .collection("user_configuration")
-            .updateOne(
-              { user_id: req.body.user_id, storeSettings: { $elemMatch: { id: req.body.storeSettings.id } } },
-              { $set: { "storeSettings.0": req.body.storeSettings } },
-              function (err, res) {
-                if (err) throw err;
-              }
-            );
+          console.log("Radim samo update!!!");
+          dbo.collection("user_configuration").updateOne(
+            {
+              user_id: req.body.user_id,
+              storeSettings: {
+                $elemMatch: { id: req.body.storeSettings.id },
+              },
+            },
+            { $set: { "storeSettings.0": req.body.storeSettings } },
+            function (err, res) {
+              if (err) throw err;
+            }
+          );
         }
-      });
+      }
+    );
   });
   res.json(true);
 });
@@ -163,35 +170,35 @@ router.post("/setUsersFor", function (req, res, next) {
     var dbo = db.db(database_name);
     dbo
       .collection("user_configuration")
-      .findOne({ usersFor: { $elemMatch: { key: item.key } } }, function (
-        err,
-        rows
-      ) {
-        console.log(rows);
-        if (err) throw err;
-        if (rows === null || rows.length === 0) {
-          dbo
-            .collection("user_configuration")
-            .updateOne(
-              { user_id: Number(req.body.user_id) },
-              { $push: { usersFor: item } },
-              function (err, res) {
-                if (err) throw err;
-              }
-            );
-        } else {
-          dbo
-            .collection("user_configuration")
-            .updateOne(
-              { usersFor: { $elemMatch: { key: item.key } } },
-              { $set: { "usersFor.$": item } },
-              function (err, res) {
-                if (err) throw err;
-              }
-            );
+      .findOne(
+        { usersFor: { $elemMatch: { key: item.key } } },
+        function (err, rows) {
+          console.log(rows);
+          if (err) throw err;
+          if (rows === null || rows.length === 0) {
+            dbo
+              .collection("user_configuration")
+              .updateOne(
+                { user_id: Number(req.body.user_id) },
+                { $push: { usersFor: item } },
+                function (err, res) {
+                  if (err) throw err;
+                }
+              );
+          } else {
+            dbo
+              .collection("user_configuration")
+              .updateOne(
+                { usersFor: { $elemMatch: { key: item.key } } },
+                { $set: { "usersFor.$": item } },
+                function (err, res) {
+                  if (err) throw err;
+                }
+              );
+          }
+          res.json(201);
         }
-        res.json(201);
-      });
+      );
   });
 });
 
@@ -205,8 +212,6 @@ router.get("/getConfiguration/:id", function (req, res, next) {
       .collection("user_configuration")
       .findOne({ user_id: Number(id) }, function (err, rows) {
         if (err) throw err;
-        console.log(rows);
-        console.log("prosao sam ovde!");
         if (rows !== null) {
           res.json(rows);
         } else {
@@ -334,6 +339,56 @@ router.post("/updateTranslation", function (req, res, next) {
     );
   });
   // res.json({ code: 201 });
+});
+
+router.get("/getPermissionPatientMenu/:clinic", function (req, res, next) {
+  mongo.connect(url, function (err, db) {
+    if (err) throw err;
+    var dbo = db.db(database_name);
+    console.log(dbo);
+    dbo
+      .collection("permission-patient-menu")
+      .findOne({ clinic: req.params.clinic }, function (err, rows) {
+        if (err) throw err;
+        console.log(rows);
+        res.json(rows);
+      });
+  });
+});
+
+router.post("/createOrUpdatePermissionPatientMenu", function (req, res, next) {
+  mongo.connect(url, function (err, db) {
+    if (err) throw err;
+    var dbo = db.db(database_name);
+    dbo
+      .collection("permission-patient-menu")
+      .findOne({ clinic: req.body.clinic }, function (err, rows) {
+        if (err) throw err;
+        console.log(rows);
+        if (rows) {
+          dbo
+            .collection("permission-patient-menu")
+            .updateOne(
+              { clinic: req.body.clinic },
+              { $set: { myCalendar: req.body.myCalendar, myComplaint: req.body.myComplaint, myTherapy: req.body.myTherapy, myDocument: req.body.myDocument } },
+              function (err, rows) {
+                if (err) throw err;
+                res.send(true);
+              }
+            );
+        } else {
+          dbo
+            .collection("permission-patient-menu")
+            .insertOne(req.body, function (err, rows) {
+              if (err) {
+                throw err;
+              } else {
+                res.send(true);
+              }
+            });
+        }
+      });
+  });
 });
 
 module.exports = router;
