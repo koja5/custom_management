@@ -182,6 +182,7 @@ router.post("/createTask", function (req, res, next) {
       therapy_id: req.body.therapy_id,
       superadmin: req.body.superadmin,
       confirm: req.body.confirm,
+      online: req.body?.online
     };
     if (req.body.storeId !== undefined) {
       podaci["storeId"] = req.body.storeId;
@@ -246,6 +247,7 @@ router.post("/updateTask", function (req, res, next) {
       therapy_id: req.body.therapy_id,
       superadmin: req.body.superadmin,
       confirm: req.body.confirm,
+      online: req.body?.online
     };
     if (req.body.storeId !== undefined) {
       data["storeId"] = req.body.storeId;

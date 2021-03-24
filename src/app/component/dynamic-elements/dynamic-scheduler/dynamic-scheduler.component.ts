@@ -94,6 +94,8 @@ import * as gregorian from "../../../../../node_modules/cldr-data/main/fr-CH/ca-
 import * as numbers from "../../../../../node_modules/cldr-data/main/fr-CH/numbers.json";
 import * as timeZoneNames from "../../../../../node_modules/cldr-data/main/fr-CH/timeZoneNames.json";
 import { PackLanguageService } from "src/app/service/pack-language.service";
+import { UserType } from "../../enum/user-type";
+import { AccountService } from "src/app/service/account.service";
 declare var moment: any;
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
@@ -954,6 +956,9 @@ export class DynamicSchedulerComponent implements OnInit {
 
   createNewTask() {
     let formValue = new EventModel();
+    if(this.type === this.userType.patient) {
+      formValue.online = 1;
+    }
     formValue.colorTask = this.selected;
     formValue.telephone = this.telephoneValue;
     formValue.user = Object.assign({}, this.customerUser);
@@ -993,7 +998,7 @@ export class DynamicSchedulerComponent implements OnInit {
     this.customer.addTherapy(this.complaintData).subscribe((data) => {
       if (data["success"]) {
         formValue.therapy_id = data["id"];
-        if (this.type === 0) {
+        if (this.type === this.userType.owner || this.type === this.userType.patient) {
           formValue["storeId"] = this.selectedStoreId;
         }
         this.service.createTask(formValue, (val) => {
@@ -1062,6 +1067,9 @@ export class DynamicSchedulerComponent implements OnInit {
   updateTask(args) {
     console.log(args);
     let formValue = new EventModel();
+    if(this.type === this.userType.patient) {
+      formValue.online = 1;
+    }
     formValue.Id = args.data.Id;
     formValue.id = args.data.id;
     formValue.colorTask = this.selected ? this.selected : args.data.colorTask;
@@ -1182,11 +1190,6 @@ export class DynamicSchedulerComponent implements OnInit {
   onPopupOpen(args: PopupOpenEventArgs): void {
     args.element.scrollTop = 0;
     this.setTimeForEditor(args);
-    setTimeout(() => {
-      this.customerElement.focus();
-      this.customerElement.blur();
-    }, 500);
-    console.log(this.customerElement.focus());
     if (args.type === "QuickInfo") {
       args.cancel = true;
     } else if (args.type === "Editor") {
@@ -1410,7 +1413,6 @@ export class DynamicSchedulerComponent implements OnInit {
 
   @ViewChild("customerUserModal") customerUserModal: Modal;
   @ViewChild("scheduler") public scheduler: SchedulerComponent;
-  @ViewChild("customerElement") customerElement: HTMLElement;
   public customerModal = false;
   public selectedDate: Date = new Date();
   public formGroup: FormGroup;
@@ -1500,6 +1502,7 @@ export class DynamicSchedulerComponent implements OnInit {
   public calendarSettings = {};
   public configurationFromMongoDb: any;
   public dateFormatScheduler = "dd.MM.yyyy";
+  public userType = UserType;
 
   constructor(
     public service: TaskService,
@@ -1514,7 +1517,8 @@ export class DynamicSchedulerComponent implements OnInit {
     private dynamicService: DynamicSchedulerService,
     private helpService: HelpService,
     private storageService: StorageService,
-    private packLanguage: PackLanguageService
+    private packLanguage: PackLanguageService,
+    private accountService: AccountService
   ) {}
 
   ngOnInit() {
@@ -1575,7 +1579,7 @@ export class DynamicSchedulerComponent implements OnInit {
 
   initializaionData() {
     this.loading = true;
-    this.type = Number(localStorage.getItem("type"));
+    this.type = this.helpService.getType();
     this.id = this.helpService.getMe();
     console.log(this.events);
     this.calendars = [];
@@ -1589,7 +1593,18 @@ export class DynamicSchedulerComponent implements OnInit {
 
     this.initializeStore();
     this.initializeTasks();
+    this.checkIfPatientUser();
     this.getParameters(superadmin);
+  }
+
+  checkIfPatientUser() {
+    if (this.type === this.userType.patient) {
+      this.accountService.getCustomerWithId(this.id).subscribe((data) => {
+        if (data["length"]) {
+          this.customerUser = data[0];
+        }
+      });
+    }
   }
 
   initializeEventCategory() {
@@ -1821,10 +1836,10 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   setCalendarView(personalStoreSettings) {
-    if(personalStoreSettings && personalStoreSettings.currentView) {
+    if (personalStoreSettings && personalStoreSettings.currentView) {
       this.currentView = personalStoreSettings.currentView as View;
     } else {
-      this.currentView = ('WorkWeek') as View;
+      this.currentView = "WorkWeek" as View;
     }
   }
 
@@ -1936,7 +1951,9 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   clearAllSelectedData() {
-    this.customerUser = new CustomerModel();
+    if (this.type !== this.userType.patient) {
+      this.customerUser = new CustomerModel();
+    }
     this.baseDataIndicator = false;
     this.selectedComplaint = null;
     this.selectedTherapies = null;

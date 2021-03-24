@@ -14,4 +14,5 @@ export class EventModel {
     start: string;
     end: string;
     color?: string;
+    online?: number;
 }
