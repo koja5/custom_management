@@ -17,14 +17,15 @@ import { UserDetailsComponent } from "./users/user-details/user-details.componen
 import { TaskComponent } from "./task/task.component";
 import { SettingsComponent } from "./settings/settings.component";
 import { EventCategoryComponent } from "./parameters/event-category/event-category.component";
-import { TodoComponent } from './administrator/todo/todo.component';
-import { DynamicSchedulerComponent } from '../dynamic-elements/dynamic-scheduler/dynamic-scheduler.component';
+import { TodoComponent } from "./administrator/todo/todo.component";
+import { DynamicSchedulerComponent } from "../dynamic-elements/dynamic-scheduler/dynamic-scheduler.component";
 import { MyComplaintComponent } from "./patient/my-complaint/my-complaint.component";
 import { MyTherapyComponent } from "./patient/my-therapy/my-therapy.component";
 import { MyDocumentComponent } from "./patient/my-document/my-document.component";
 import { AccountComponent } from "./settings/account/account.component";
 import { ChangePasswordComponent } from "./settings/change-password/change-password.component";
 import { PermissionPatientMenuComponent } from "./settings/permission-patient-menu/permission-patient-menu.component";
+import { ReservationsComponent } from "./reservations/reservations.component";
 
 const routes: Routes = [
   {
@@ -38,7 +39,7 @@ const routes: Routes = [
     children: [
       { path: "", redirectTo: "task", pathMatch: "full" },
       /*{ path: "calendar", component: TaskComponent },*/
-      { path: "task", component: DynamicSchedulerComponent }, 
+      { path: "task", component: DynamicSchedulerComponent },
       { path: "users", component: UsersComponent },
       {
         path: "user-details/:id",
@@ -65,8 +66,8 @@ const routes: Routes = [
           },
           {
             path: "permission-patient-menu",
-            component: PermissionPatientMenuComponent
-          }
+            component: PermissionPatientMenuComponent,
+          },
         ],
       },
       {
@@ -110,21 +111,22 @@ const routes: Routes = [
         loadChildren: "./parameters/parameters.module#ParametersModule",
       },
       {
-        path: 'todo',
-        component: TodoComponent
+        path: "todo",
+        component: TodoComponent,
       },
       {
         path: "my-complaint",
-        component: MyComplaintComponent
+        component: MyComplaintComponent,
       },
       {
         path: "my-therapy",
-        component: MyTherapyComponent
+        component: MyTherapyComponent,
       },
       {
         path: "my-document",
-        component: MyDocumentComponent
-      }
+        component: MyDocumentComponent,
+      },
+      { path: "reservations", component: ReservationsComponent }
     ],
   },
 ];

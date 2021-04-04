@@ -12,6 +12,7 @@ export class MessageService {
   public backToCustomerGrid = new Subject<null>();
   public viewChange = new Subject<any>();
   public dateChange = new Subject<any>();
+  public refreshDynamicGrid = new Subject<null>();
 
   sendTheme(message: string) {
     this.theme.next(message);
@@ -67,5 +68,13 @@ export class MessageService {
 
   getDateChange() {
     return this.dateChange.asObservable();
+  }
+
+  sendRefreshDynamicGrid() {
+    this.refreshDynamicGrid.next();
+  }
+
+  getRefreshDynamicGrid() {
+    return this.refreshDynamicGrid.asObservable();
   }
 }

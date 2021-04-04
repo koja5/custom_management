@@ -77,7 +77,7 @@ import { PatientFormSuccessComponent } from './component/templates/patient-form-
     LoggedGuard,
     DashboardGuard,
     LoginGuard,
-    MessageService,
+    MessageService
   ],
   bootstrap: [AppComponent],
 })

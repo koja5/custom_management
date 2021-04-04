@@ -150,7 +150,6 @@
           >
             <perfect-scrollbar
               style.height="{{ sidebarHeight }}"
-              [config]="config"
             >
               <ul
                 class="sidemenu  page-header-fixed slimscroll-style {{
@@ -240,6 +239,15 @@
                     class="nav-link"
                     ><i class="fa fa-calendar"></i
                     ><span class="title">{{ language["calendar"] }}</span></a
+                  >
+                </li>
+                <li *ngIf="type !== userType.patient" class="nav-item {{ selectedNodeModel.reservations }}">
+                  <a
+                    (click)="returnActiveNode('reservations')"
+                    routerLink="/dashboard/home/reservations"
+                    class="nav-link"
+                    ><i class="fa fa-calendar-check-o"></i
+                    ><span class="title">{{ language["reservations"] }}</span></a
                   >
                 </li>
                 <li

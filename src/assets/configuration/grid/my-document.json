@@ -1,92 +1,92 @@
 {
-    "pageSize": 10,
-    "request": {
-        "type": "GET",
-        "api": "/api/getDocuments",
-        "parameters": ["getMe"],
-        "fields": "",
-        "root": ""
-    },
-    "paging": {
-        "enable": true,
-        "settings": {
-            "pageSize": 10
+  "pageSize": 10,
+  "request": {
+    "type": "GET",
+    "api": "/api/getDocuments",
+    "parameters": ["getMe"],
+    "fields": "",
+    "root": ""
+  },
+  "paging": {
+    "enable": true,
+    "settings": {
+      "pageSize": 10
+    }
+  },
+  "sorting": {
+    "enable": true,
+    "initalSorting": {
+      "columns": [
+        {
+          "field": "date",
+          "direction": "Descending"
         }
+      ]
+    }
+  },
+  "grouping": {
+    "enable": true,
+    "group": [{ "field": "processConfigurationName" }]
+  },
+  "filtering": {
+    "enable": false
+  },
+  "customGrouping": false,
+  "allowResizing": true,
+  "reorderable": true,
+  "selectable": true,
+  "scrollable": false,
+  "hideable": true,
+  "refresh": false,
+  "reset": true,
+  "toolbar": ["Print", "Search"],
+  "editSettings": {
+    "allowEditing": false,
+    "allowAdding": false,
+    "allowDeleting": false,
+    "showDeleteConfirmDialog": false,
+    "mode": "Dialog"
+  },
+  "columns": [
+    {
+      "title": "Date",
+      "width": 120,
+      "filterable": true,
+      "hideable": true,
+      "type": "date",
+      "class": "text-align-right",
+      "defaultValue": "no date",
+      "field": "date",
+      "format": { "type": "date", "format": "dd/MM/yyyy" }
     },
-    "sorting": {
-        "enable": true,
-        "initalSorting": {
-            "columns": [{
-                "field": "date",
-                "direction": "Descending"
-            }]
-        }
+    {
+      "title": "Name",
+      "width": 250,
+      "filterable": true,
+      "hideable": true,
+      "type": "string",
+      "class": "text-align-right",
+      "field": "name"
     },
-    "grouping": {
-        "enable": true,
-        "group": [{ "field": "processConfigurationName" }]
+    {
+      "title": "Description",
+      "width": 250,
+      "filterable": true,
+      "hideable": true,
+      "type": "string",
+      "class": "text-align-right",
+      "field": "description"
     },
-    "filtering": {
-        "enable": true
-    },
-    "customGrouping": false,
-    "allowResizing": true,
-    "reorderable": true,
-    "selectable": true,
-    "scrollable": false,
-    "hideable": true,
-    "refresh": false,
-    "reset": true,
-    "toolbar" : [
-    ],
-    "editSettings": {
-        "allowEditing": false,
-        "allowAdding": false,
-        "allowDeleting": false,
-        "showDeleteConfirmDialog": false,
-        "mode": "Dialog"
-    },
-    "columns": [
-        {
-            "title": "Date",
-            "width": 120,
-            "filterable": true,
-            "hideable": true,
-            "type": "date",
-            "class": "text-align-right",
-            "defaultValue": "no date",
-            "field": "date",
-            "format": { "type": "date", "format": "dd/MM/yyyy" }
-        },
-        {
-            "title": "Name",
-            "width": 250,
-            "filterable": true,
-            "hideable": true,
-            "type": "string",
-            "class": "text-align-right",
-            "field": "name"
-        },
-        {
-            "title": "Description",
-            "width": 250,
-            "filterable": true,
-            "hideable": true,
-            "type": "string",
-            "class": "text-align-right",
-            "field": "description"
-        },
-        {
-            "title": "Preview",
-            "width": 250,
-            "filterable": true,
-            "hideable": true,
-            "type": "documentPreview",
-            "class": "text-align-right",
-            "classIcon": "fa fa-user",
-            "field": "name"
-        }
-    ],
-    "configField": [
-    ]
+    {
+      "title": "Preview",
+      "width": 250,
+      "filterable": true,
+      "hideable": true,
+      "type": "documentPreview",
+      "class": "text-align-right",
+      "classIcon": "fa fa-user",
+      "field": "name"
+    }
+  ],
+  "configField": []
 }

@@ -129,6 +129,7 @@
       "myComplaint": { "type": "string" },
       "myTherapy": { "type": "string" },
       "myDocument": { "type": "string" },
+      "reservations": { "type": "string" },
       "pagerItemsPerPage": { "type": "string" },
       "addNew": { "type": "string" },
       "add": { "type": "string" },
@@ -373,7 +374,22 @@
       "permissionPatientMenuSuccessUpdateTitle": { "type": "string" },
       "permissionPatientMenuSuccessUpdateText": { "type": "string" },
       "permissionPatientMenuErrorUpdateTitle": { "type": "string" },
-      "permissionPatientMenuErrorUpdateText": { "type": "string" }
+      "permissionPatientMenuErrorUpdateText": { "type": "string" },
+      "reservationTitle": { "type": "string" },
+      "reservationConfirmDialogTitle": { "type": "string" },
+      "reservationDialogQuestion": { "type": "string" },
+      "reservationApprove": { "type": "string" },
+      "reservationDeny": { "type": "string" },
+      "reservationSuccessUpdateTitle": { "type": "string" },
+      "reservationSuccessUpdateText": { "type": "string" },
+      "reservationErrorUpdateTitle": { "type": "string" },
+      "reservationErrorUpdateText": { "type": "string" },
+      "subjectApproveReservation": { "type": "string" },
+      "introductoryMessageForApproveReservation": { "type": "string" },
+      "subjectDenyReservation": { "type": "string" },
+      "introductoryMessageForDenyReservation": { "type": "string" },
+      "reservationTooltip": { "type": "string" },
+      "approvedReservationTooltip": { "type": "string" }
     }
   },
   "layout": [
@@ -780,7 +796,7 @@
             { "key": "myComplaint" },
             { "key": "myTherapy" },
             { "key": "myDocument" },
-            {}
+            { "key": "reservations" }
           ]
         }
       ]
@@ -1822,6 +1838,56 @@
     },
     {
       "type": "section",
+      "title": "Mail Template - Approve reservation",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [{ "key": "subjectApproveReservation" }]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "introductoryMessageForApproveReservation",
+              "type": "textarea"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Mail Template - Deny reservation",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [{ "key": "subjectDenyReservation" }]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "introductoryMessageForDenyReservation",
+              "type": "textarea"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
       "title": "Settings",
       "expandable": true,
       "expanded": false,
@@ -1839,16 +1905,16 @@
           ]
         },
         {
-            "type": "div",
-            "display": "flex",
-            "flex-direction": "row",
-            "items": [
-              { "key": "perimissionForPatientNavigationMenu" },
-              { },
-              { },
-              { }
-            ]
-          }
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "perimissionForPatientNavigationMenu" },
+            {},
+            {},
+            {}
+          ]
+        }
       ]
     },
     {
@@ -1994,6 +2060,55 @@
           "items": [
             { "key": "permissionPatientMenuErrorUpdateTitle" },
             { "key": "permissionPatientMenuErrorUpdateText" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Reservation",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "reservationTitle" },
+            { "key": "reservationConfirmDialogTitle" },
+            { "key": "reservationDialogQuestion" },
+            { "key": "reservationApprove" },
+            { "key": "reservationDeny" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "reservationSuccessUpdateTitle" },
+            { "key": "reservationSuccessUpdateText" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "reservationErrorUpdateTitle" },
+            { "key": "reservationErrorUpdateText" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "reservationTooltip" },
+            { "key": "approvedReservationTooltip" },
+            {},
+            {}
           ]
         }
       ]

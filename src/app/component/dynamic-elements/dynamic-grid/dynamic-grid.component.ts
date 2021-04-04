@@ -1,4 +1,12 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { FormGroup, Validators } from "@angular/forms";
 import {
   DialogEditEventArgs,
@@ -15,6 +23,7 @@ import { HelpService } from "src/app/service/help.service";
 import { MessageService } from "src/app/service/message.service";
 import { QueryCellInfoEventArgs } from "@syncfusion/ej2-angular-grids";
 import { Tooltip } from "@syncfusion/ej2-popups";
+import { ClickEventArgs } from "@syncfusion/ej2-navigations";
 
 @Component({
   selector: "app-dynamic-grid",
@@ -24,6 +33,7 @@ import { Tooltip } from "@syncfusion/ej2-popups";
 export class DynamicGridComponent implements OnInit {
   @Input() path: string;
   @Input() name: string;
+  @Output() actionEmitter = new EventEmitter<any>();
   @ViewChild(DynamicFormsComponent) form: DynamicFormsComponent;
   @ViewChild("orderForm") public orderForm: FormGroup;
   @ViewChild("editSettingsTemplate") editSettingsTemplate: DialogComponent;
@@ -45,14 +55,20 @@ export class DynamicGridComponent implements OnInit {
     },
   ];
   public configField: FieldConfig[];
+  public index: number;
+  public height: number;
+  public language: any;
 
   constructor(
     private service: DynamicService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
     this.initialization();
+    this.checkMessageService();
+    this.getConfiguration();
     this.editSettings = {
       allowEditing: true,
       allowAdding: true,
@@ -62,6 +78,7 @@ export class DynamicGridComponent implements OnInit {
     };
     this.toolbar = ["Add", "Edit", "Delete"];
     this.container.nativeElement.style.height = this.helpService.getHeightForGrid();
+    this.height = this.helpService.getHeightForGridWithoutPx();
     this.helpService.setDefaultBrowserTabTitle();
   }
 
@@ -71,6 +88,20 @@ export class DynamicGridComponent implements OnInit {
     this.service.getConfiguration(this.path, this.name).subscribe((data) => {
       this.config = data;
       this.callApi(data["request"]);
+    });
+  }
+
+  getConfiguration() {
+    this.language = this.helpService.getLanguage();
+  }
+
+  checkMessageService() {
+    this.messageService.getRefreshDynamicGrid().subscribe((data) => {
+      this.grid.sortSettings = this.config.sorting.initialSorting;
+      (this.grid.dataSource as object[]).splice(this.index, 1);
+      setTimeout(() => {
+        this.grid.refresh();
+      }, 100);
     });
   }
 
@@ -105,6 +136,8 @@ export class DynamicGridComponent implements OnInit {
     for (let i = 0; i < parameters.length; i++) {
       if (parameters[i] === "getMe") {
         parameters[i] = this.helpService.getMe();
+      } else if (parameters[i] === "superadmin") {
+        parameters[i] = this.helpService.getSuperadmin();
       }
     }
     return parameters;
@@ -206,6 +239,38 @@ export class DynamicGridComponent implements OnInit {
     );
   }
   /* tooltip END */
+
+  action(data, mode, item) {
+    this.index = Number(data.index);
+    const actions = {
+      data: data,
+      mode: mode,
+      request: item.request,
+      id: item.id ? item.id : null
+    };
+    this.actionEmitter.emit(actions);
+  }
+
+  clickHandler(args: ClickEventArgs): void {
+    const target: HTMLElement = (args.originalEvent
+      .target as HTMLElement).closest("button"); // find clicked button
+    if (target.id === "collapse") {
+      // collapse all expanded grouped row
+      this.grid.groupModule.collapseAll();
+    } else if (target.id === "refresh") {
+      this.refreshGrid();
+    } else if (args.item["properties"]["prefixIcon"] === "e-pdfexport") {
+      this.grid.pdfExport();
+    } else if (args.item["properties"]["prefixIcon"] === "e-excelexport") {
+      this.grid.excelExport();
+    } else if (args.item.id === "Grid+csvexport") {
+      this.grid.csvExport();
+    }
+  }
+
+  refreshGrid() {
+    this.ngOnInit();
+  }
 }
 
 export interface IOrderModel {

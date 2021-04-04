@@ -65,6 +65,7 @@ import { MyTherapyComponent } from './patient/my-therapy/my-therapy.component';
 import { MyDocumentComponent } from './patient/my-document/my-document.component';
 import { SettingsModule } from "./settings/settings.module";
 import { DropDownListModule } from "@syncfusion/ej2-angular-dropdowns";
+import { ReservationsComponent } from './reservations/reservations.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +92,8 @@ import { DropDownListModule } from "@syncfusion/ej2-angular-dropdowns";
     TodoComponent,
     MyComplaintComponent,
     MyTherapyComponent,
-    MyDocumentComponent
+    MyDocumentComponent,
+    ReservationsComponent
 
   ],
   imports: [

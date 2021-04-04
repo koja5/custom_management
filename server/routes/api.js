@@ -182,7 +182,7 @@ router.post("/createTask", function (req, res, next) {
       therapy_id: req.body.therapy_id,
       superadmin: req.body.superadmin,
       confirm: req.body.confirm,
-      online: req.body?.online
+      online: req.body?.online,
     };
     if (req.body.storeId !== undefined) {
       podaci["storeId"] = req.body.storeId;
@@ -247,7 +247,7 @@ router.post("/updateTask", function (req, res, next) {
       therapy_id: req.body.therapy_id,
       superadmin: req.body.superadmin,
       confirm: req.body.confirm,
-      online: req.body?.online
+      online: req.body?.online,
     };
     if (req.body.storeId !== undefined) {
       data["storeId"] = req.body.storeId;
@@ -1358,7 +1358,7 @@ router.post("/updatePasswordForUser", function (req, res, next) {
     }
 
     conn.query(
-      "UPDATE user SET password = '" +
+      "UPDATE users SET password = '" +
         sha1(req.body.newPassword) +
         "' where id = '" +
         req.body.id +
@@ -1393,7 +1393,7 @@ router.post("/updatePasswordForCustomer", function (req, res, next) {
     }
 
     conn.query(
-      "UPDATE user SET password = '" +
+      "UPDATE customers SET password = '" +
         sha1(req.body.newPassword) +
         "' where id = '" +
         req.body.id +
@@ -6186,5 +6186,76 @@ router.get("/deleteToDo/:id", (req, res, next) => {
 });
 
 /* END TODO */
+
+/* RESERVATIONS */
+
+router.get("/getReservations/:id", function (req, res, next) {
+  var id = req.params.id;
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database",
+      });
+      return;
+    }
+    conn.query(
+      "select t.*, e.color, c.firstname, c.lastname, c.mobile, c.email, c.birthday, u.shortname from tasks t join event_category e on t.colorTask = e.id join customers c on t.customer_id = c.id join users u on t.creator_id = u.id where t.online = 1 and t.superadmin = ?",
+      [id],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+        }
+      }
+    );
+
+    conn.on("error", function (err) {
+      res.json(err);
+    });
+  });
+});
+
+router.post("/approveReservation", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json(err);
+    }
+    conn.query(
+      "update tasks set online = 2 where id = '" + req.body.id + "'",
+      function (err, rows, fields) {
+        conn.release();
+        if (err) {
+          res.json(err);
+        } else {
+          res.json(true);
+        }
+      }
+    );
+  });
+});
+
+router.post("/denyReservation", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json(err);
+    }
+    conn.query(
+      "delete from tasks where id = '" + req.body.id + "'",
+      function (err, rows, fields) {
+        conn.release();
+        if (err) {
+          res.json(err);
+        } else {
+          res.json(true);
+        }
+      }
+    );
+  });
+});
+
+/* END RESERVATIONS */
 
 module.exports = router;

@@ -44,4 +44,15 @@ export class MailService {
       .map((res) => res);
   }
 
+  public sendInfoForApproveReservation(data) {
+    return this.http
+      .post("/api/sendInfoForApproveReservation", data)
+      .map((res) => res);
+  }
+
+  public sendInfoForDenyReservation(data) {
+    return this.http
+      .post("/api/sendInfoForDenyReservation", data)
+      .map((res) => res);
+  }
 }

@@ -9,7 +9,8 @@ import {
   FilterService,
   PageService,
   GroupService,
-  ResizeService
+  ResizeService,
+  PdfExportService
 } from "@syncfusion/ej2-angular-grids";
 
 // components
@@ -89,7 +90,7 @@ import { DynamicConfirmDialogComponent } from './dynamic-dialogs/dynamic-confirm
     DialogsModule,
     BaseDateSharedModule
   ],
-  providers: [EditService, ToolbarService, SortService, FilterService, PageService, GroupService, ResizeService],
+  providers: [EditService, PdfExportService, ToolbarService, SortService, FilterService, PageService, GroupService, ResizeService ],
   entryComponents: [TextboxComponent, TextareaComponent, DatepickerComponent, ButtonComponent, DropdownComponent]
 })
 export class DymanicElementsModule { }

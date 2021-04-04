@@ -24,4 +24,5 @@ export class NavigationMenuModel {
     my_complaint?: string;
     my_therapy?: string;
     my_document?: string;
+    reservations?: string;
 }

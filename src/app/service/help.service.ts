@@ -59,12 +59,24 @@ export class HelpService {
     return model;
   }
 
+  findValueByField(data, root, field) {
+    if(root) {
+      return data[root][field];
+    } else {
+      return data[field];
+    }
+  }
+
   getLanguage() {
     return JSON.parse(localStorage.getItem("language"));
   }
 
   getHeightForGrid() {
     return window.innerHeight - 60 + "px";
+  }
+
+  getHeightForGridWithoutPx() {
+    return Number(window.innerHeight - 253);
   }
 
   getMe() {
