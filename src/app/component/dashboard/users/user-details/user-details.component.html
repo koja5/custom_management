@@ -1,22 +1,38 @@
-<div *ngIf="loading" style="height: 90vh;">
+<div *ngIf="loading" style="height: 90vh">
   <div class="spinner loading"></div>
 </div>
 
 <div *ngIf="!loading">
+  <button
+    kendoButton
+    [primary]="true"
+    style="margin: 1vh"
+    (click)="backToGrid()"
+  >
+    <i class="fa fa-arrow-left"></i> &nbsp; {{ language.backToGrid }}
+  </button>
 
-  <button kendoButton [primary]="true" style="margin: 1vh;" (click)="backToGrid()"><i class="fa fa-arrow-left"></i>
-    &nbsp; {{language.backToGrid}}</button>
-
-  <div style="float: right; padding-right: 44px; padding-top: 7px;">
-    <button kendoButton [icon]="'edit'" (click)="editOptions()" [primary]="true"
-      style="background: #6673FC !important; margin-left: 12px;">{{language.edit}}</button>
+  <div style="float: right; padding-right: 44px; padding-top: 7px">
+    <button
+      kendoButton
+      [icon]="'edit'"
+      (click)="editOptions()"
+      [primary]="true"
+      style="background: #6673fc !important; margin-left: 12px"
+    >
+      {{ language.edit }}
+    </button>
     <div class="dropdown-grid">
-      <button class="btn-grid" style="border-left:1px solid #0d8bf2">
+      <button class="btn-grid" style="border-left: 1px solid #0d8bf2">
         <i class="fa fa-caret-down"></i>
       </button>
       <div class="dropdown-content-grid">
-        <a (click)="open('dialog')"><span class="k-icon k-i-delete"></span> {{language.delete}}</a>
-        <a (click)="printUser()"><span class="k-icon k-i-print"></span> {{language.print}}</a>
+        <a (click)="open('dialog')"
+          ><span class="k-icon k-i-delete"></span> {{ language.delete }}</a
+        >
+        <a (click)="printUser()"
+          ><span class="k-icon k-i-print"></span> {{ language.print }}</a
+        >
       </div>
     </div>
   </div>
@@ -30,19 +46,30 @@
           <div class="card-body no-padding height-9">
             <div class="row">
               <div class="profile-userpic">
-                <img alt="example image" style="width: 190px;" [src]="imagePath" class="rounded-circle">
+                <img
+                  alt="example image"
+                  style="width: 190px"
+                  [src]="imagePath"
+                  class="rounded-circle"
+                />
               </div>
-              <div style="text-align: center;">
-                <h2 class="font-semibold mgbt-xs-5" style="text-align: center;">{{data.firstname}} {{data.lastname}}
+              <div style="text-align: center">
+                <h2 class="font-semibold mgbt-xs-5" style="text-align: center">
+                  {{ data.firstname }} {{ data.lastname }}
                 </h2>
-                <h4 *ngIf="data.type === 0">Superadmin</h4>
-                <h4 *ngIf="data.type === 1">Admin</h4>
-                <h4 *ngIf="data.type === 2">Manager</h4>
-                <h4 *ngIf="data.type === 3">Employee</h4>
+                <h4 *ngIf="data.type === userTypeEnum.owner">{{language.owner}}</h4>
+                <h4 *ngIf="data.type === userTypeEnum.admin">{{language.admin}}</h4>
+                <h4 *ngIf="data.type === userTypeEnum.doctor">{{language.doctor}}</h4>
+                <h4 *ngIf="data.type === userTypeEnum.nurse">{{language.nurse}}</h4>
+                <h4 *ngIf="data.type === userTypeEnum.administrator">{{language.administrator}}</h4>
               </div>
-              <div class="mgtp-20" style="text-align: center;">
-                <span *ngIf="data.active" class="label label-success">Active</span>
-                <span *ngIf="!data.active" class="label label-danger">Inactive</span>
+              <div class="mgtp-20" style="text-align: center">
+                <span *ngIf="data.active" class="label label-success"
+                  >{{language.active}}</span
+                >
+                <span *ngIf="!data.active" class="label label-danger"
+                  >{{language.inactive}}</span
+                >
               </div>
             </div>
           </div>
@@ -56,18 +83,24 @@
               <header></header>
             </div>
             <div>
-              <div class="tabs widget" style="margin-bottom: 30px;">
+              <div class="tabs widget" style="margin-bottom: 30px">
                 <div class="col-md-5 col-sm-12 status-widget">
                   <div class="card card-stats">
                     <!-- Card body -->
                     <div class="card-body">
                       <div class="row">
                         <div class="col">
-                          <h5 class="card-title text-uppercase text-muted mb-0">{{language.totalTherapy}}</h5>
-                          <span class="h2 font-weight-bold mb-0">{{totalSum}}</span>
+                          <h5 class="card-title text-uppercase text-muted mb-0">
+                            {{ language.totalTherapy }}
+                          </h5>
+                          <span class="h2 font-weight-bold mb-0">{{
+                            totalSum
+                          }}</span>
                         </div>
                         <div class="col-auto">
-                          <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
+                          <div
+                            class="icon icon-shape bg-gradient-red text-white rounded-circle shadow"
+                          >
                             <i class="fa fa-pie-chart"></i>
                           </div>
                         </div>
@@ -85,11 +118,17 @@
                     <div class="card-body">
                       <div class="row">
                         <div class="col">
-                          <h5 class="card-title text-uppercase text-muted mb-0">{{language.averagePerMonth}}</h5>
-                          <span class="h2 font-weight-bold mb-0">{{statisticMonthAverage}}</span>
+                          <h5 class="card-title text-uppercase text-muted mb-0">
+                            {{ language.averagePerMonth }}
+                          </h5>
+                          <span class="h2 font-weight-bold mb-0">{{
+                            statisticMonthAverage
+                          }}</span>
                         </div>
                         <div class="col-auto">
-                          <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
+                          <div
+                            class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow"
+                          >
                             <i class="fa fa-line-chart"></i>
                           </div>
                         </div>
@@ -107,11 +146,17 @@
                     <div class="card-body">
                       <div class="row">
                         <div class="col">
-                          <h5 class="card-title text-uppercase text-muted mb-0">{{language.therapyForLastMonth}}</h5>
-                          <span class="h2 font-weight-bold mb-0">{{statisticMonthLast}}</span>
+                          <h5 class="card-title text-uppercase text-muted mb-0">
+                            {{ language.therapyForLastMonth }}
+                          </h5>
+                          <span class="h2 font-weight-bold mb-0">{{
+                            statisticMonthLast
+                          }}</span>
                         </div>
                         <div class="col-auto">
-                          <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
+                          <div
+                            class="icon icon-shape bg-gradient-green text-white rounded-circle shadow"
+                          >
                             <i class="fa fa-calendar"></i>
                           </div>
                         </div>
@@ -129,11 +174,17 @@
                     <div class="card-body">
                       <div class="row">
                         <div class="col">
-                          <h5 class="card-title text-uppercase text-muted mb-0">{{language.therapyForLastWeek}}</h5>
-                          <span class="h2 font-weight-bold mb-0">{{statisticLastWeek}}</span>
+                          <h5 class="card-title text-uppercase text-muted mb-0">
+                            {{ language.therapyForLastWeek }}
+                          </h5>
+                          <span class="h2 font-weight-bold mb-0">{{
+                            statisticLastWeek
+                          }}</span>
                         </div>
                         <div class="col-auto">
-                          <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
+                          <div
+                            class="icon icon-shape bg-gradient-info text-white rounded-circle shadow"
+                          >
                             <i class="fa fa-area-chart"></i>
                           </div>
                         </div>
@@ -154,7 +205,6 @@
     </div>
 
     <div class="col-md-12">
-
       <div class="profile-content">
         <div class="row">
           <div class="card">
@@ -164,12 +214,21 @@
             <div class="white-box">
               <div class="tabs widget">
                 <ul class="nav nav-tabs widget">
-                  <li [ngClass]="currentTab === 'profile' ? 'active' : ''"> <a
-                      (click)="changeTab('profile')">{{language.profile}}</a></li>
-                  <li [ngClass]="currentTab === 'workTime' ? 'active' : ''"> <a
-                      (click)="changeTab('workTime')">{{language.workTime}}</a></li>
+                  <li [ngClass]="currentTab === 'profile' ? 'active' : ''">
+                    <a (click)="changeTab('profile')">{{ language.profile }}</a>
+                  </li>
+                  <li [ngClass]="currentTab === 'workTime' ? 'active' : ''">
+                    <a (click)="changeTab('workTime')">{{
+                      language.workTime
+                    }}</a>
+                  </li>
+                  <li [ngClass]="currentTab === 'permissions' ? 'active' : ''">
+                    <a (click)="changeTab('permissions')">
+                      {{language.permissions}}
+                    </a>
+                  </li>
                 </ul>
-                <br>
+                <br />
                 <!-- Tab panes -->
                 <div class="tab-content" *ngIf="currentTab === 'profile'">
                   <div class="tab-pane active fontawesome-demo" id="tab1">
@@ -182,250 +241,592 @@
                           <div></div>
                         </div>
                       </div>
-                      <div *ngIf="type === 'calendar'" class="vd_info tr" style="height: 12vh;"> <button kendoButton
-                          class="k-save" [icon]="'k-icon k-i-save'" (click)="newCustomer()"
-                          style="float: right;">SAVE</button>
-                      </div>
                       <div class="row" *ngIf="data !== undefined">
                         <div class="col-md-3 col-xs-6 b-r">
-                          <br>
+                          <br />
                           <p class="text-muted">
-                            <kendo-textbox-container floatingLabel="{{language.firstname}}">
-                              <input kendoTextBox
-                                *ngIf="data.firstname === '' || data.firstname === null || data.firstname === undefined"
-                                [(ngModel)]="language['noInformation']" name="firstname" class="noPadding"
-                                readonly="true">
-                              <input kendoTextBox
-                                *ngIf="data.firstname !== null && data.firstname !== undefined && data.firstname !== ''"
-                                [(ngModel)]="data.firstname" name="firstname" class="noPadding" readonly="true">
+                            <kendo-textbox-container
+                              floatingLabel="{{ language.firstname }}"
+                            >
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.firstname === '' ||
+                                  data.firstname === null ||
+                                  data.firstname === undefined
+                                "
+                                [(ngModel)]="language['noInformation']"
+                                name="firstname"
+                                class="noPadding"
+                                readonly="true"
+                              />
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.firstname !== null &&
+                                  data.firstname !== undefined &&
+                                  data.firstname !== ''
+                                "
+                                [(ngModel)]="data.firstname"
+                                name="firstname"
+                                class="noPadding"
+                                readonly="true"
+                              />
                             </kendo-textbox-container>
                           </p>
                         </div>
                         <div class="col-md-3 col-xs-6 b-r">
-                          <br>
+                          <br />
                           <p class="text-muted">
-                            <kendo-textbox-container floatingLabel="{{language.lastname}}">
-                              <input kendoTextBox
-                                *ngIf="data.lastname === '' || data.lastname === null || data.telephone === undefined"
-                                [(ngModel)]="language['noInformation']" name="lastname" class="noPadding"
-                                readonly="true">
-                              <input kendoTextBox
-                                *ngIf="data.lastname !== null && data.lastname !== undefined && data.lastname !== ''"
-                                [(ngModel)]="data.lastname" name="lastname" class="noPadding" readonly="true">
+                            <kendo-textbox-container
+                              floatingLabel="{{ language.lastname }}"
+                            >
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.lastname === '' ||
+                                  data.lastname === null ||
+                                  data.telephone === undefined
+                                "
+                                [(ngModel)]="language['noInformation']"
+                                name="lastname"
+                                class="noPadding"
+                                readonly="true"
+                              />
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.lastname !== null &&
+                                  data.lastname !== undefined &&
+                                  data.lastname !== ''
+                                "
+                                [(ngModel)]="data.lastname"
+                                name="lastname"
+                                class="noPadding"
+                                readonly="true"
+                              />
                             </kendo-textbox-container>
                           </p>
                         </div>
                         <div class="col-md-3 col-xs-6 b-r">
-                          <br>
+                          <br />
                           <p class="text-muted">
-                            <kendo-textbox-container floatingLabel="{{language.gender}}">
-                              <input kendoTextBox
-                                *ngIf="data.gender === '' || data.gender === null || data.gender === undefined"
-                                [(ngModel)]="language['noInformation']" name="gender" class="noPadding" readonly="true">
-                              <input kendoTextBox
-                                *ngIf="data.gender !== null && data.gender !== undefined &&  data.gender !== ''"
-                                [(ngModel)]="data.gender" name="gender" class="noPadding" readonly="true">
+                            <kendo-textbox-container
+                              floatingLabel="{{ language.gender }}"
+                            >
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.gender === '' ||
+                                  data.gender === null ||
+                                  data.gender === undefined
+                                "
+                                [(ngModel)]="language['noInformation']"
+                                name="gender"
+                                class="noPadding"
+                                readonly="true"
+                              />
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.gender !== null &&
+                                  data.gender !== undefined &&
+                                  data.gender !== ''
+                                "
+                                [(ngModel)]="data.gender"
+                                name="gender"
+                                class="noPadding"
+                                readonly="true"
+                              />
                             </kendo-textbox-container>
                           </p>
                         </div>
                         <div class="col-md-3 col-xs-6 b-r">
-                          <br>
+                          <br />
                           <p class="text-muted">
-                            <kendo-textbox-container floatingLabel="{{language.shortname}}">
-                              <input kendoTextBox
-                                *ngIf="data.shortname === '' || data.shortname === null || data.shortname === undefined"
-                                [(ngModel)]="language['noInformation']" name="shortname" class="noPadding"
-                                readonly="true">
-                              <input kendoTextBox
-                                *ngIf="data.shortname !== null && data.shortname !== undefined && data.shortname !== ''"
-                                [(ngModel)]="data.shortname" name="shortname" class="noPadding" readonly="true">
+                            <kendo-textbox-container
+                              floatingLabel="{{ language.shortname }}"
+                            >
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.shortname === '' ||
+                                  data.shortname === null ||
+                                  data.shortname === undefined
+                                "
+                                [(ngModel)]="language['noInformation']"
+                                name="shortname"
+                                class="noPadding"
+                                readonly="true"
+                              />
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.shortname !== null &&
+                                  data.shortname !== undefined &&
+                                  data.shortname !== ''
+                                "
+                                [(ngModel)]="data.shortname"
+                                name="shortname"
+                                class="noPadding"
+                                readonly="true"
+                              />
                             </kendo-textbox-container>
                           </p>
                         </div>
                         <div class="col-md-3 col-xs-6 b-r">
-                          <br>
+                          <br />
                           <p class="text-muted">
-                            <kendo-textbox-container floatingLabel="{{language.email}}">
-                              <input kendoTextBox
-                                *ngIf="data.email === '' || data.email === null || data.email === undefined"
-                                [(ngModel)]="language['noInformation']" name="email" class="noPadding" readonly="true">
-                              <input kendoTextBox
-                                *ngIf="data.email !== null && data.email !== undefined && data.email !== ''"
-                                [(ngModel)]="data.email" name="email" class="noPadding" readonly="true">
+                            <kendo-textbox-container
+                              floatingLabel="{{ language.email }}"
+                            >
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.email === '' ||
+                                  data.email === null ||
+                                  data.email === undefined
+                                "
+                                [(ngModel)]="language['noInformation']"
+                                name="email"
+                                class="noPadding"
+                                readonly="true"
+                              />
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.email !== null &&
+                                  data.email !== undefined &&
+                                  data.email !== ''
+                                "
+                                [(ngModel)]="data.email"
+                                name="email"
+                                class="noPadding"
+                                readonly="true"
+                              />
                             </kendo-textbox-container>
                           </p>
                         </div>
                         <div class="col-md-3 col-xs-6 b-r">
-                          <br>
+                          <br />
                           <p class="text-muted">
-                            <kendo-textbox-container floatingLabel="{{language.street}}">
-                              <input kendoTextBox
-                                *ngIf="data.street === '' || data.street === null || data.street === undefined"
-                                [(ngModel)]="language['noInformation']" name="street" class="noPadding" readonly="true">
-                              <input kendoTextBox
-                                *ngIf="data.street !== null && data.street !== undefined && data.street !== ''"
-                                [(ngModel)]="data.street" name="street" class="noPadding" readonly="true">
+                            <kendo-textbox-container
+                              floatingLabel="{{ language.street }}"
+                            >
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.street === '' ||
+                                  data.street === null ||
+                                  data.street === undefined
+                                "
+                                [(ngModel)]="language['noInformation']"
+                                name="street"
+                                class="noPadding"
+                                readonly="true"
+                              />
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.street !== null &&
+                                  data.street !== undefined &&
+                                  data.street !== ''
+                                "
+                                [(ngModel)]="data.street"
+                                name="street"
+                                class="noPadding"
+                                readonly="true"
+                              />
                             </kendo-textbox-container>
                           </p>
                         </div>
                         <div class="col-md-3 col-xs-6 b-r">
-                          <br>
+                          <br />
                           <p class="text-muted">
-                            <kendo-textbox-container floatingLabel="{{language.streetnumber}}">
-                              <input kendoTextBox
-                                *ngIf="data.streetnumber === '' || data.streetnumber === null || data.streetnumber === undefined"
-                                [(ngModel)]="language['noInformation']" name="streetnumber" class="noPadding"
-                                readonly="true">
-                              <input kendoTextBox
-                                *ngIf="data.city !== null && data.city !== undefined && data.city !== ''"
-                                [(ngModel)]="data.streetnumber" name="streetnumber" class="noPadding" readonly="true">
+                            <kendo-textbox-container
+                              floatingLabel="{{ language.streetnumber }}"
+                            >
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.streetnumber === '' ||
+                                  data.streetnumber === null ||
+                                  data.streetnumber === undefined
+                                "
+                                [(ngModel)]="language['noInformation']"
+                                name="streetnumber"
+                                class="noPadding"
+                                readonly="true"
+                              />
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.city !== null &&
+                                  data.city !== undefined &&
+                                  data.city !== ''
+                                "
+                                [(ngModel)]="data.streetnumber"
+                                name="streetnumber"
+                                class="noPadding"
+                                readonly="true"
+                              />
                             </kendo-textbox-container>
                           </p>
                         </div>
                         <div class="col-md-3 col-xs-6 b-r">
-                          <br>
+                          <br />
                           <p class="text-muted">
-                            <kendo-textbox-container floatingLabel="{{language.zipcode}}">
-                              <input kendoTextBox
-                                *ngIf="data.zipcode === '' || data.zipcode === null || data.zipcode === undefined"
-                                [(ngModel)]="language['noInformation']" name="zipcode" class="noPadding"
-                                readonly="true">
-                              <input kendoTextBox
-                                *ngIf="data.zipcode !== null && data.zipcode !== undefined && data.zipcode !== ''"
-                                [(ngModel)]="data.zipcode" name="zipcode" class="noPadding" readonly="true">
+                            <kendo-textbox-container
+                              floatingLabel="{{ language.zipcode }}"
+                            >
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.zipcode === '' ||
+                                  data.zipcode === null ||
+                                  data.zipcode === undefined
+                                "
+                                [(ngModel)]="language['noInformation']"
+                                name="zipcode"
+                                class="noPadding"
+                                readonly="true"
+                              />
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.zipcode !== null &&
+                                  data.zipcode !== undefined &&
+                                  data.zipcode !== ''
+                                "
+                                [(ngModel)]="data.zipcode"
+                                name="zipcode"
+                                class="noPadding"
+                                readonly="true"
+                              />
                             </kendo-textbox-container>
                           </p>
                         </div>
                         <div class="col-md-3 col-xs-6 b-r">
-                          <br>
+                          <br />
                           <p class="text-muted">
-                            <kendo-textbox-container floatingLabel="{{language.city}}">
-                              <input kendoTextBox
-                                *ngIf="data.city === '' || data.city === null || data.city === undefined"
-                                [(ngModel)]="language['noInformation']" name="city" class="noPadding" readonly="true">
-                              <input kendoTextBox
-                                *ngIf="data.city !== null && data.city !== undefined && data.city !== ''"
-                                [(ngModel)]="data.city" name="city" class="noPadding" readonly="true">
+                            <kendo-textbox-container
+                              floatingLabel="{{ language.city }}"
+                            >
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.city === '' ||
+                                  data.city === null ||
+                                  data.city === undefined
+                                "
+                                [(ngModel)]="language['noInformation']"
+                                name="city"
+                                class="noPadding"
+                                readonly="true"
+                              />
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.city !== null &&
+                                  data.city !== undefined &&
+                                  data.city !== ''
+                                "
+                                [(ngModel)]="data.city"
+                                name="city"
+                                class="noPadding"
+                                readonly="true"
+                              />
                             </kendo-textbox-container>
                           </p>
                         </div>
                         <div class="col-md-3 col-xs-6 b-r">
-                          <br>
+                          <br />
                           <p class="text-muted">
-                            <kendo-textbox-container floatingLabel="{{language.mobile}}">
-                              <input kendoTextBox
-                                *ngIf="data.mobile === '' || data.mobile === null || data.mobile === undefined"
-                                [(ngModel)]="language['noInformation']" name="mobile" class="noPadding" readonly="true">
-                              <input kendoTextBox
-                                *ngIf="data.mobile !== null && data.mobile !== undefined && data.mobile !== ''"
-                                [(ngModel)]="data.mobile" name="mobile" class="noPadding" readonly="true">
+                            <kendo-textbox-container
+                              floatingLabel="{{ language.mobile }}"
+                            >
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.mobile === '' ||
+                                  data.mobile === null ||
+                                  data.mobile === undefined
+                                "
+                                [(ngModel)]="language['noInformation']"
+                                name="mobile"
+                                class="noPadding"
+                                readonly="true"
+                              />
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.mobile !== null &&
+                                  data.mobile !== undefined &&
+                                  data.mobile !== ''
+                                "
+                                [(ngModel)]="data.mobile"
+                                name="mobile"
+                                class="noPadding"
+                                readonly="true"
+                              />
                             </kendo-textbox-container>
                           </p>
                         </div>
                         <div class="col-md-3 col-xs-6 b-r">
-                          <br>
+                          <br />
                           <p class="text-muted">
-                            <kendo-textbox-container floatingLabel="{{language.telephone}}">
-                              <input kendoTextBox
-                                *ngIf="data.telephone === '' || data.telephone === null || data.telephone === undefined"
-                                [(ngModel)]="language['noInformation']" name="telephone" class="noPadding"
-                                readonly="true">
-                              <input kendoTextBox
-                                *ngIf="data.telephone !== null && data.telephone !== undefined && data.telephone !== ''"
-                                [(ngModel)]="data.telephone" name="telephone" class="noPadding" readonly="true">
+                            <kendo-textbox-container
+                              floatingLabel="{{ language.telephone }}"
+                            >
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.telephone === '' ||
+                                  data.telephone === null ||
+                                  data.telephone === undefined
+                                "
+                                [(ngModel)]="language['noInformation']"
+                                name="telephone"
+                                class="noPadding"
+                                readonly="true"
+                              />
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.telephone !== null &&
+                                  data.telephone !== undefined &&
+                                  data.telephone !== ''
+                                "
+                                [(ngModel)]="data.telephone"
+                                name="telephone"
+                                class="noPadding"
+                                readonly="true"
+                              />
                             </kendo-textbox-container>
                           </p>
                         </div>
                         <div class="col-md-3 col-xs-6 b-r">
-                          <br>
+                          <br />
                           <p class="text-muted">
-                            <kendo-textbox-container floatingLabel="{{language.birthday}}">
-                              <input kendoTextBox
-                                *ngIf="data.birthday === '' || data.birthday === null || data.birthday === undefined"
-                                [(ngModel)]="language['noInformation']" name="birthday" class="noPadding"
-                                readonly="true">
+                            <kendo-textbox-container
+                              floatingLabel="{{ language.birthday }}"
+                            >
+                              <input
+                                kendoTextBox
+                                *ngIf="
+                                  data.birthday === '' ||
+                                  data.birthday === null ||
+                                  data.birthday === undefined
+                                "
+                                [(ngModel)]="language['noInformation']"
+                                name="birthday"
+                                class="noPadding"
+                                readonly="true"
+                              />
 
-                              <kendo-datepicker [format]="'dd.MM.yyyy'" *ngIf="data.birthday !== undefined && data.birthday !== ''"
-                                [(ngModel)]="data.birthday" name="birthday" class="noPadding" readonly="true">
+                              <kendo-datepicker
+                                [format]="'dd.MM.yyyy'"
+                                *ngIf="
+                                  data.birthday !== undefined &&
+                                  data.birthday !== ''
+                                "
+                                [(ngModel)]="data.birthday"
+                                name="birthday"
+                                class="noPadding"
+                                readonly="true"
+                              >
                               </kendo-datepicker>
                             </kendo-textbox-container>
                           </p>
                         </div>
                       </div>
-                      <hr>
+                      <hr />
                     </div>
                   </div>
                 </div>
                 <div *ngIf="currentTab === 'workTime'">
                   <div id="profile-tab" class="tab-pane">
-                    <p *ngIf="noSetWorkTime" class="noSetWorkTime">*For this user work time didn't set!</p>
-                    <div class="k-form-field row" style="padding: 2vh 0 2vh 0;">
+                    <p *ngIf="noSetWorkTime" class="noSetWorkTime">
+                      *{{language.noSetTimeForUserNote}}
+                    </p>
+                    <div class="k-form-field row" style="padding: 2vh 0 2vh 0">
                       <div class="col-sm-6">
-                        <span>Color</span>
+                        <span>{{language.color}}</span>
                         <div>
-                          <kendo-colorpalette [palette]="palette" [value]="selectedColor" [(ngModel)]="selectedColor"
-                            [tileSize]="30" [readonly]="true">
+                          <kendo-colorpalette
+                            [palette]="palette"
+                            [value]="selectedColor"
+                            [(ngModel)]="selectedColor"
+                            [tileSize]="30"
+                            [readonly]="true"
+                          >
                           </kendo-colorpalette>
                         </div>
                       </div>
-                      <div class="col-sm-6" style="padding-top: 2vh;">
-                        <button kendoButton [icon]="'k-icon k-i-undo'" class="col-sm-5 {{previousInd}}"
-                          (click)="previousWorkTime()">Previous</button>
-                        <button kendoButton [icon]="'k-icon k-i-redo'" class="col-sm-5 {{nextInd}}"
-                          (click)="nextWorkTime()">Next</button>
+                      <div class="col-sm-6" style="padding-top: 2vh">
+                        <button
+                          kendoButton
+                          [icon]="'k-icon k-i-undo'"
+                          class="col-sm-5 {{ previousInd }}"
+                          (click)="previousWorkTime()"
+                        >
+                          {{language.previous}}
+                        </button>
+                        <button
+                          kendoButton
+                          [icon]="'k-icon k-i-redo'"
+                          class="col-sm-5 {{ nextInd }}"
+                          (click)="nextWorkTime()"
+                        >
+                          {{language.next}}
+                        </button>
                       </div>
                     </div>
                     <div class="form-group row">
-                      <label class="col-md-2 col-sm-12 col-form-label">Valid from:</label>
-                      <kendo-datepicker [format]="'dd.MM.yyyy'" class="col-md-5 col-xs-8 noPadding" name="validDate" placeholder="Valid date"
-                        [(ngModel)]="validDate" validDate.value='' readonly="true"></kendo-datepicker>
+                      <label class="col-md-2 col-sm-12 col-form-label"
+                        >{{language.validFromDate}}</label
+                      >
+                      <kendo-datepicker
+                        [format]="'dd.MM.yyyy'"
+                        class="col-md-5 col-xs-8 noPadding"
+                        name="validDate"
+                        placeholder="Valid date"
+                        [(ngModel)]="validDate"
+                        validDate.value=""
+                        readonly="true"
+                      ></kendo-datepicker>
                     </div>
-                    <form name="loginForm" class="loginForm"
-                      (ngSubmit)="updateSetIndicator === 1 ? setWorkTimeForUser(workTime) : updateWorkTimeForUser(workTime)">
-                      <div class="form-group row" *ngFor="let item of workTime; let i = index;">
-                        <label for="example-number-input" class="col-sm-2 col-form-label">{{item.day}}</label>
+                    <form
+                      name="loginForm"
+                      class="loginForm"
+                      (ngSubmit)="
+                        updateSetIndicator === 1
+                          ? setWorkTimeForUser(workTime)
+                          : updateWorkTimeForUser(workTime)
+                      "
+                    >
+                      <div
+                        class="form-group row"
+                        *ngFor="let item of workTime; let i = index"
+                      >
+                        <label
+                          for="example-number-input"
+                          class="col-sm-2 col-form-label"
+                          >{{ item.day }}</label
+                        >
                         <div class="col-sm-10">
-                          <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24"
-                            id="example-number-input" value="{{item.start}}" [(ngModel)]="workTime[i].start"
-                            name="{{item.day}}start" readonly="true"><span class="col-sm-1 h">h</span>
+                          <input
+                            kendoTextBox
+                            class="col-sm-2 col-xs-6"
+                            type="number"
+                            min="0"
+                            max="24"
+                            id="example-number-input"
+                            value="{{ item.start }}"
+                            [(ngModel)]="workTime[i].start"
+                            name="{{ item.day }}start"
+                            readonly="true"
+                          /><span class="col-sm-1 h">h</span>
                           <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                             value="{{item.startMin}}" [(ngModel)]="workTime[i].startMin" name="{{item.day}}startMin"><span
                             class="col-sm-1 h">min</span> -->
-                          <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24"
-                            id="example-number-input" value="{{item.end}}" [(ngModel)]="workTime[i].end"
-                            name="{{item.day}}end" readonly="true"> <span class="col-sm-1 h">h</span>
+                          <input
+                            kendoTextBox
+                            class="col-sm-2 col-xs-6"
+                            type="number"
+                            min="0"
+                            max="24"
+                            id="example-number-input"
+                            value="{{ item.end }}"
+                            [(ngModel)]="workTime[i].end"
+                            name="{{ item.day }}end"
+                            readonly="true"
+                          />
+                          <span class="col-sm-1 h">h</span>
                           <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                             value="{{item.endMin}}" [(ngModel)]="workTime[i].endMin" name="{{item.day}}endMin"> <span
                             class="col-sm-1 h">min</span> -->
 
-                          <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24"
-                            id="example-number-input" value="{{item.start2}}" [(ngModel)]="workTime[i].start2"
-                            name="{{item.day}}start2" readonly="true"><span class="col-sm-1 h">h</span>
+                          <input
+                            kendoTextBox
+                            class="col-sm-2 col-xs-6"
+                            type="number"
+                            min="0"
+                            max="24"
+                            id="example-number-input"
+                            value="{{ item.start2 }}"
+                            [(ngModel)]="workTime[i].start2"
+                            name="{{ item.day }}start2"
+                            readonly="true"
+                          /><span class="col-sm-1 h">h</span>
                           <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                             value="{{item.start2Min}}" [(ngModel)]="workTime[i].start2Min" name="{{item.day}}start2Min"><span
                             class="col-sm-1 h">min</span> -->
-                          <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24"
-                            id="example-number-input" value="{{item.end2}}" [(ngModel)]="workTime[i].end2"
-                            name="{{item.day}}end2" readonly="true"> <span class="col-sm-1 h">h</span>
+                          <input
+                            kendoTextBox
+                            class="col-sm-2 col-xs-6"
+                            type="number"
+                            min="0"
+                            max="24"
+                            id="example-number-input"
+                            value="{{ item.end2 }}"
+                            [(ngModel)]="workTime[i].end2"
+                            name="{{ item.day }}end2"
+                            readonly="true"
+                          />
+                          <span class="col-sm-1 h">h</span>
                           <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                             value="{{item.end2Min}}" [(ngModel)]="workTime[i].end2Min" name="{{item.day}}end2Min"> <span
                             class="col-sm-1 h">min</span> -->
 
-                          <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24"
-                            id="example-number-input" value="{{item.start3}}" [(ngModel)]="workTime[i].start3"
-                            name="{{item.day}}start3" readonly="true"><span class="col-sm-1 h">h</span>
+                          <input
+                            kendoTextBox
+                            class="col-sm-2 col-xs-6"
+                            type="number"
+                            min="0"
+                            max="24"
+                            id="example-number-input"
+                            value="{{ item.start3 }}"
+                            [(ngModel)]="workTime[i].start3"
+                            name="{{ item.day }}start3"
+                            readonly="true"
+                          /><span class="col-sm-1 h">h</span>
                           <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                             value="{{item.start3Min}}" [(ngModel)]="workTime[i].start3Min" name="{{item.day}}start3Min"><span
                             class="col-sm-1 h">min</span> -->
-                          <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24"
-                            id="example-number-input" value="{{item.end3}}" [(ngModel)]="workTime[i].end3"
-                            name="{{item.day}}end3" readonly="true"> <span class="col-sm-1 h">h</span>
+                          <input
+                            kendoTextBox
+                            class="col-sm-2 col-xs-6"
+                            type="number"
+                            min="0"
+                            max="24"
+                            id="example-number-input"
+                            value="{{ item.end3 }}"
+                            [(ngModel)]="workTime[i].end3"
+                            name="{{ item.day }}end3"
+                            readonly="true"
+                          />
+                          <span class="col-sm-1 h">h</span>
                           <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                             value="{{item.end3Min}}" [(ngModel)]="workTime[i].end3Min" name="{{item.day}}end3Min"> <span
                             class="col-sm-1 h">min</span> -->
                         </div>
                       </div>
                     </form>
+                  </div>
+                </div>
+                <div class="tab-content" *ngIf="currentTab === 'permissions'">
+                  <div id="profile-tab" class="tab-pane active">
+                    <label
+                      class="k-form-field"
+                      style="text-align: center; padding-top: 30px"
+                    >
+                      <span class="pr-4">{{language.allowedOnlineReservationForUser}}</span>
+                      <kendo-switch
+                        [(ngModel)]="data.allowed_online"
+                        name="allowed_online"
+                      ></kendo-switch>
+                    </label>
                   </div>
                 </div>
               </div>
@@ -436,213 +837,480 @@
       </div>
     </div>
 
-    <kendo-dialog title="Please confirm" *ngIf="dialogOpened" (close)="close('dialog')" [minWidth]="250" [width]="450">
+    <kendo-dialog
+      title="Please confirm"
+      *ngIf="dialogOpened"
+      (close)="close('dialog')"
+      [minWidth]="250"
+      [width]="450"
+    >
       <div class="modal-body text-center">
-        <img src="../../../../../assets/images/sent.png" alt="" width="50" height="46">
-        <h3>Are you sure want to delete?</h3>
+        <img
+          src="../../../../../assets/images/sent.png"
+          alt=""
+          width="50"
+          height="46"
+        />
+        <h3>{{language.deleteDialogTitleAreYouSure}}</h3>
       </div>
       <kendo-dialog-actions>
-        <button kendoButton (click)="action('no')">No</button>
-        <button kendoButton (click)="action('yes')" primary="true">Yes</button>
+        <button kendoButton (click)="action('no')">{{language.no}}</button>
+        <button kendoButton (click)="action('yes')" primary="true">{{language.yes}}</button>
       </kendo-dialog-actions>
     </kendo-dialog>
 
-    <kendo-window [title]="getTranslate(currentTab)" *ngIf="user" [minWidth]="700" [width]="850" [height]="600"
-      (close)="user = false">
+    <kendo-window
+      [title]="getTranslate(currentTab)"
+      *ngIf="user"
+      [minWidth]="700"
+      [width]="850"
+      [height]="600"
+      (close)="user = false"
+    >
       <div class="tabs widget">
         <ul class="nav nav-tabs widget">
-          <li [ngClass]="currentTab === 'profile' ? 'active' : ''"> <a
-              (click)="changeTab('profile')">{{language.profile}}</a></li>
-          <li [ngClass]="currentTab === 'workTime' ? 'active' : ''"> <a (click)="changeTab('workTime')">Work time</a>
+          <li [ngClass]="currentTab === 'profile' ? 'active' : ''">
+            <a (click)="changeTab('profile')">{{ language.profile }}</a>
+          </li>
+          <li [ngClass]="currentTab === 'workTime' ? 'active' : ''">
+            <a (click)="changeTab('workTime')">{{language.workTime}}</a>
+          </li>
+          <li [ngClass]="currentTab === 'permissions' ? 'active' : ''">
+            <a (click)="changeTab('permissions')"
+              >{{language.permissions}}</a
+            >
           </li>
         </ul>
         <div class="tab-content" *ngIf="currentTab === 'profile'">
           <div id="profile-tab" class="tab-pane active">
-            <form name="loginForm" class="loginForm" (ngSubmit)="updateUser(user)">
+            <form
+              name="loginForm"
+              class="loginForm"
+              (ngSubmit)="updateUser(user)"
+            >
               <div class="form-group">
                 <div class="email col-md-6 col-xs-12">
-                  <p>{{language.username}}</p>
-                  <input kendoTextBox type="text" class="col-xs-12" name="shortname" placeholder="Username"
-                    [(ngModel)]="data.shortname" shortname.value=''>
+                  <p>{{ language.username }}</p>
+                  <input
+                    kendoTextBox
+                    type="text"
+                    class="col-xs-12"
+                    name="shortname"
+                    placeholder="Username"
+                    [(ngModel)]="data.shortname"
+                    shortname.value=""
+                  />
                 </div>
                 <div class="email col-md-6 col-xs-12">
-                  <p>{{language.password}}</p>
-                  <input kendoTextBox type="{{hideShow}}" class="col-xs-12 password" name="password"
-                    placeholder="Password" [(ngModel)]="data.password" password.value=''>
-                  <span class="fa {{hideShowEye}} pwd-toggle" (click)="hideShowPassword()"></span>
+                  <p>{{ language.password }}</p>
+                  <input
+                    kendoTextBox
+                    type="password"
+                    class="col-xs-12 password"
+                    name="password"
+                    placeholder="Password"
+                    [(ngModel)]="data.password"
+                    password.value=""
+                  />
                 </div>
               </div>
               <div class="form-group">
                 <div class="email col-md-6 col-xs-12">
-                  <p>{{language.firstname}}</p>
-                  <input kendoTextBox type="text" class="col-xs-12" name="firstname" placeholder="Firstname"
-                    [(ngModel)]="data.firstname" firstname.value=''>
+                  <p>{{ language.firstname }}</p>
+                  <input
+                    kendoTextBox
+                    type="text"
+                    class="col-xs-12"
+                    name="firstname"
+                    placeholder="Firstname"
+                    [(ngModel)]="data.firstname"
+                    firstname.value=""
+                  />
                 </div>
                 <div class="email col-md-6 col-xs-12">
-                  <p>{{language.lastname}}</p>
-                  <input kendoTextBox type="text" class="col-xs-12" name="lastname" placeholder="Lastname"
-                    [(ngModel)]="data.lastname" lastname.value=''>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="email col-md-6 col-xs-12">
-                  <p>{{language.street}}</p>
-                  <input kendoTextBox type="text" class="col-xs-12" name="street" placeholder="Street"
-                    [(ngModel)]="data.street" street.value=''>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="email col-md-6 col-xs-12">
-                  <p>{{language.zipCode}}</p>
-                  <input kendoTextBox type="text" class="col-xs-12" name="zipcode" placeholder="Zipcode"
-                    [(ngModel)]="data.zipcode" zipcode.value=''>
-                </div>
-                <div class="email col-md-6 col-xs-12">
-                  <p>{{language.place}}</p>
-                  <input kendoTextBox type="text" class="col-xs-12" name="place" placeholder="Place"
-                    [(ngModel)]="data.place" place.value=''>
+                  <p>{{ language.lastname }}</p>
+                  <input
+                    kendoTextBox
+                    type="text"
+                    class="col-xs-12"
+                    name="lastname"
+                    placeholder="Lastname"
+                    [(ngModel)]="data.lastname"
+                    lastname.value=""
+                  />
                 </div>
               </div>
               <div class="form-group">
                 <div class="email col-md-6 col-xs-12">
-                  <p>{{language.telephone}}</p>
-                  <input kendoTextBox type="text" class="col-xs-12" name="telephone" placeholder="Telephone"
-                    [(ngModel)]="data.telephone" telephone.value=''>
-                </div>
-                <div class="email col-md-6 col-xs-12">
-                  <p>{{language.mobile}}</p>
-                  <input kendoTextBox type="text" class="col-xs-12" name="mobile" placeholder="mobile"
-                    [(ngModel)]="data.mobile" mobile.value=''>
-                </div>
-                <div class="email col-md-6 col-xs-12">
-                  <p>{{language.email}}</p>
-                  <input kendoTextBox type="email" class="col-xs-12" name="email" placeholder="Email"
-                    [(ngModel)]="data.email" email.value=''>
+                  <p>{{ language.street }}</p>
+                  <input
+                    kendoTextBox
+                    type="text"
+                    class="col-xs-12"
+                    name="street"
+                    placeholder="Street"
+                    [(ngModel)]="data.street"
+                    street.value=""
+                  />
                 </div>
               </div>
               <div class="form-group">
                 <div class="email col-md-6 col-xs-12">
-                  <p>{{language.birthday}}</p>
-                  <kendo-datepicker [format]="'dd.MM.yyyy'" class="col-xs-12 noPadding" name="birthday" placeholder="Birthday"
-                    [(ngModel)]="data.birthday" birthday.value=''></kendo-datepicker>
+                  <p>{{ language.zipCode }}</p>
+                  <input
+                    kendoTextBox
+                    type="text"
+                    class="col-xs-12"
+                    name="zipcode"
+                    placeholder="Zipcode"
+                    [(ngModel)]="data.zipcode"
+                    zipcode.value=""
+                  />
                 </div>
                 <div class="email col-md-6 col-xs-12">
-                  <p>{{language.sincecompany}}</p>
-                  <kendo-datepicker [format]="'dd.MM.yyyy'" class="col-xs-12 noPadding" name="sincecompany" placeholder="Since in company"
-                    [(ngModel)]="data.incompanysince" incompanysince.value=''></kendo-datepicker>
+                  <p>{{ language.place }}</p>
+                  <input
+                    kendoTextBox
+                    type="text"
+                    class="col-xs-12"
+                    name="place"
+                    placeholder="Place"
+                    [(ngModel)]="data.place"
+                    place.value=""
+                  />
                 </div>
               </div>
               <div class="form-group">
                 <div class="email col-md-6 col-xs-12">
-                  <p>{{language.userType}}</p>
-                  <kendo-combobox [data]="userType" (selectionChange)="selectionUserType($event)"
-                    class="col-xs-12 noPadding" [(ngModel)]="selectedValue" name="type">
+                  <p>{{ language.telephone }}</p>
+                  <input
+                    kendoTextBox
+                    type="text"
+                    class="col-xs-12"
+                    name="telephone"
+                    placeholder="Telephone"
+                    [(ngModel)]="data.telephone"
+                    telephone.value=""
+                  />
+                </div>
+                <div class="email col-md-6 col-xs-12">
+                  <p>{{ language.mobile }}</p>
+                  <input
+                    kendoTextBox
+                    type="text"
+                    class="col-xs-12"
+                    name="mobile"
+                    placeholder="mobile"
+                    [(ngModel)]="data.mobile"
+                    mobile.value=""
+                  />
+                </div>
+                <div class="email col-md-6 col-xs-12">
+                  <p>{{ language.email }}</p>
+                  <input
+                    kendoTextBox
+                    type="email"
+                    class="col-xs-12"
+                    name="email"
+                    placeholder="Email"
+                    [(ngModel)]="data.email"
+                    email.value=""
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="email col-md-6 col-xs-12">
+                  <p>{{ language.birthday }}</p>
+                  <kendo-datepicker
+                    [format]="'dd.MM.yyyy'"
+                    class="col-xs-12 noPadding"
+                    name="birthday"
+                    placeholder="Birthday"
+                    [(ngModel)]="data.birthday"
+                    birthday.value=""
+                  ></kendo-datepicker>
+                </div>
+                <div class="email col-md-6 col-xs-12">
+                  <p>{{ language.sincecompany }}</p>
+                  <kendo-datepicker
+                    [format]="'dd.MM.yyyy'"
+                    class="col-xs-12 noPadding"
+                    name="sincecompany"
+                    placeholder="Since in company"
+                    [(ngModel)]="data.incompanysince"
+                    incompanysince.value=""
+                  ></kendo-datepicker>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="email col-md-6 col-xs-12">
+                  <p>{{ language.userType }}</p>
+                  <kendo-combobox
+                    [data]="userType"
+                    (selectionChange)="selectionUserType($event)"
+                    class="col-xs-12 noPadding"
+                    [(ngModel)]="selectedValue"
+                    name="type"
+                  >
                   </kendo-combobox>
                 </div>
-                <label class="k-form-field col-md-6" style="text-align: center; padding-top: 30px;">
-                  Actives &nbsp; <kendo-switch [(ngModel)]="data.active" name='active'></kendo-switch>
+                <label
+                  class="k-form-field col-md-6"
+                  style="text-align: center; padding-top: 30px"
+                >
+                  {{language.active}} &nbsp;
+                  <kendo-switch
+                    [(ngModel)]="data.active"
+                    name="active"
+                  ></kendo-switch>
                 </label>
               </div>
               <div class="form-group">
                 <div class="email col-md-12 col-xs-12">
-                  <p>{{language.storeLocation}}</p>
-                  <kendo-combobox [data]="storeLocation" [textField]="'storename'" [valueField]="'id'"
-                    (selectionChange)="selectionChangeStore($event)" [(ngModel)]="data.storeId" [valuePrimitive]="true"
-                    name="storename" class="col-xs-12 noPadding">
+                  <p>{{ language.storeLocation }}</p>
+                  <kendo-combobox
+                    [data]="storeLocation"
+                    [textField]="'storename'"
+                    [valueField]="'id'"
+                    (selectionChange)="selectionChangeStore($event)"
+                    [(ngModel)]="data.storeId"
+                    [valuePrimitive]="true"
+                    name="storename"
+                    class="col-xs-12 noPadding"
+                  >
                   </kendo-combobox>
                 </div>
               </div>
 
-              <div class="form-group" style="text-align: center;">
-                <button kendoButton [primary]="true" type="submit" class="updateButton">Update user</button>
+              <div class="form-group" style="text-align: center">
+                <button
+                  kendoButton
+                  [primary]="true"
+                  type="submit"
+                  class="updateButton"
+                >
+                  {{language.updateUser}}
+                </button>
               </div>
             </form>
           </div>
         </div>
         <div *ngIf="currentTab === 'workTime'">
           <div id="profile-tab" class="tab-pane active">
-            <p *ngIf="noSetWorkTime" class="noSetWorkTime">*For this user work time didn't set!</p>
-            <div class="k-form-field row" style="padding: 2vh 0 2vh 0;">
+            <p *ngIf="noSetWorkTime" class="noSetWorkTime">
+              *{{language.noSetTimeForUserNote}}
+            </p>
+            <div class="k-form-field row" style="padding: 2vh 0 2vh 0">
               <div class="col-sm-6">
-                <span>Color</span>
+                <span>{{language.color}}</span>
                 <div>
-                  <kendo-colorpalette [palette]="palette" [value]="selectedColor"
-                    [tileSize]="30"  (valueChange)="changeColorPalette($event)">
+                  <kendo-colorpalette
+                    [palette]="palette"
+                    [value]="selectedColor"
+                    [tileSize]="30"
+                    (valueChange)="changeColorPalette($event)"
+                  >
                   </kendo-colorpalette>
                 </div>
               </div>
-              <div class="col-sm-6" style="padding-top: 2vh;">
-                <button kendoButton [icon]="'k-icon k-i-undo'" class="col-sm-5 {{previousInd}}"
-                  (click)="previousWorkTime()">Previous</button>
-                <button kendoButton [icon]="'k-icon k-i-redo'" class="col-sm-5 {{nextInd}}"
-                  (click)="nextWorkTime()">Next</button>
+              <div class="col-sm-6" style="padding-top: 2vh">
+                <button
+                  kendoButton
+                  [icon]="'k-icon k-i-undo'"
+                  class="col-sm-5 {{ previousInd }}"
+                  (click)="previousWorkTime()"
+                >
+                  {{language.previous}}
+                </button>
+                <button
+                  kendoButton
+                  [icon]="'k-icon k-i-redo'"
+                  class="col-sm-5 {{ nextInd }}"
+                  (click)="nextWorkTime()"
+                >
+                  {{language.next}}
+                </button>
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-2 col-sm-12 col-form-label">Valid from:</label>
-              <kendo-datepicker [format]="'dd.MM.yyyy'" class="col-md-5 col-xs-8 noPadding" name="validDate" placeholder="Valid date"
-                [(ngModel)]="validDate" validDate.value=''></kendo-datepicker>
+              <label class="col-md-2 col-sm-12 col-form-label"
+                >{{language.validFromDate}}</label
+              >
+              <kendo-datepicker
+                [format]="'dd.MM.yyyy'"
+                class="col-md-5 col-xs-8 noPadding"
+                name="validDate"
+                placeholder="Valid date"
+                [(ngModel)]="validDate"
+                validDate.value=""
+              ></kendo-datepicker>
               <div>
-                <button class="col-md-2 col-xs-4 btn-save" kendoButton [icon]="'k-icon k-i-save'"
-                  (click)="newValidDate()">Create time</button>
-                <button class="col-md-1 col-xs-4 btn-delete" kendoButton [icon]="'k-icon k-i-delete'"
-                  (click)="deleteWorkTime(workTime)"></button>
+                <button
+                  class="col-md-2 col-xs-4 btn-save"
+                  kendoButton
+                  [icon]="'k-icon k-i-save'"
+                  (click)="newValidDate()"
+                >
+                  {{language.createTime}}
+                </button>
+                <button
+                  class="col-md-1 col-xs-4 btn-delete"
+                  kendoButton
+                  [icon]="'k-icon k-i-delete'"
+                  (click)="deleteWorkTime(workTime)"
+                ></button>
               </div>
             </div>
-            <form name="loginForm" class="loginForm"
-              (ngSubmit)="updateSetIndicator === 1 ? setWorkTimeForUser(workTime) : updateWorkTimeForUser(workTime)">
-              <div class="form-group row" *ngFor="let item of workTime; let i = index;">
-                <label for="example-number-input" class="col-sm-2 col-form-label">{{item.day}}</label>
+            <form
+              name="loginForm"
+              class="loginForm"
+              (ngSubmit)="
+                updateSetIndicator === 1
+                  ? setWorkTimeForUser(workTime)
+                  : updateWorkTimeForUser(workTime)
+              "
+            >
+              <div
+                class="form-group row"
+                *ngFor="let item of workTime; let i = index"
+              >
+                <label
+                  for="example-number-input"
+                  class="col-sm-2 col-form-label"
+                  >{{ item.day }}</label
+                >
                 <div class="col-sm-10">
-                  <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
-                    value="{{item.start}}" [(ngModel)]="workTime[i].start" name="{{item.day}}start"><span
-                    class="col-sm-1 h">h</span>
+                  <input
+                    kendoTextBox
+                    class="col-sm-2 col-xs-6"
+                    type="number"
+                    min="0"
+                    max="24"
+                    id="example-number-input"
+                    value="{{ item.start }}"
+                    [(ngModel)]="workTime[i].start"
+                    name="{{ item.day }}start"
+                  /><span class="col-sm-1 h">h</span>
                   <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.startMin}}" [(ngModel)]="workTime[i].startMin" name="{{item.day}}startMin"><span
                     class="col-sm-1 h">min</span> -->
-                  <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
-                    value="{{item.end}}" [(ngModel)]="workTime[i].end" name="{{item.day}}end"> <span
-                    class="col-sm-1 h">h</span>
+                  <input
+                    kendoTextBox
+                    class="col-sm-2 col-xs-6"
+                    type="number"
+                    min="0"
+                    max="24"
+                    id="example-number-input"
+                    value="{{ item.end }}"
+                    [(ngModel)]="workTime[i].end"
+                    name="{{ item.day }}end"
+                  />
+                  <span class="col-sm-1 h">h</span>
                   <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.endMin}}" [(ngModel)]="workTime[i].endMin" name="{{item.day}}endMin"> <span
                     class="col-sm-1 h">min</span> -->
 
-                  <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
-                    value="{{item.start2}}" [(ngModel)]="workTime[i].start2" name="{{item.day}}start2"><span
-                    class="col-sm-1 h">h</span>
+                  <input
+                    kendoTextBox
+                    class="col-sm-2 col-xs-6"
+                    type="number"
+                    min="0"
+                    max="24"
+                    id="example-number-input"
+                    value="{{ item.start2 }}"
+                    [(ngModel)]="workTime[i].start2"
+                    name="{{ item.day }}start2"
+                  /><span class="col-sm-1 h">h</span>
                   <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.start2Min}}" [(ngModel)]="workTime[i].start2Min" name="{{item.day}}start2Min"><span
                     class="col-sm-1 h">min</span> -->
-                  <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
-                    value="{{item.end2}}" [(ngModel)]="workTime[i].end2" name="{{item.day}}end2"> <span
-                    class="col-sm-1 h">h</span>
+                  <input
+                    kendoTextBox
+                    class="col-sm-2 col-xs-6"
+                    type="number"
+                    min="0"
+                    max="24"
+                    id="example-number-input"
+                    value="{{ item.end2 }}"
+                    [(ngModel)]="workTime[i].end2"
+                    name="{{ item.day }}end2"
+                  />
+                  <span class="col-sm-1 h">h</span>
                   <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.end2Min}}" [(ngModel)]="workTime[i].end2Min" name="{{item.day}}end2Min"> <span
                     class="col-sm-1 h">min</span> -->
 
-                  <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
-                    value="{{item.start3}}" [(ngModel)]="workTime[i].start3" name="{{item.day}}start3"><span
-                    class="col-sm-1 h">h</span>
+                  <input
+                    kendoTextBox
+                    class="col-sm-2 col-xs-6"
+                    type="number"
+                    min="0"
+                    max="24"
+                    id="example-number-input"
+                    value="{{ item.start3 }}"
+                    [(ngModel)]="workTime[i].start3"
+                    name="{{ item.day }}start3"
+                  /><span class="col-sm-1 h">h</span>
                   <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.start3Min}}" [(ngModel)]="workTime[i].start3Min" name="{{item.day}}start3Min"><span
                     class="col-sm-1 h">min</span> -->
-                  <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
-                    value="{{item.end3}}" [(ngModel)]="workTime[i].end3" name="{{item.day}}end3"> <span
-                    class="col-sm-1 h">h</span>
+                  <input
+                    kendoTextBox
+                    class="col-sm-2 col-xs-6"
+                    type="number"
+                    min="0"
+                    max="24"
+                    id="example-number-input"
+                    value="{{ item.end3 }}"
+                    [(ngModel)]="workTime[i].end3"
+                    name="{{ item.day }}end3"
+                  />
+                  <span class="col-sm-1 h">h</span>
                   <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.end3Min}}" [(ngModel)]="workTime[i].end3Min" name="{{item.day}}end3Min"> <span
                     class="col-sm-1 h">min</span> -->
                 </div>
               </div>
-              <div class="form-group" style="text-align: center;">
-                <button *ngIf="updateSetIndicator === 1" kendoButton [primary]="true" type="submit"
-                  class="updateButton">Set
-                  work time</button>
-                <button *ngIf="updateSetIndicator === 0" kendoButton [primary]="true" type="submit"
-                  class="updateButton">Update
-                  work time</button>
+              <div class="form-group" style="text-align: center">
+                <button
+                  *ngIf="updateSetIndicator === 1"
+                  kendoButton
+                  [primary]="true"
+                  type="submit"
+                  class="updateButton"
+                >
+                 {{language.setWorkTime}}
+                </button>
+                <button
+                  *ngIf="updateSetIndicator === 0"
+                  kendoButton
+                  [primary]="true"
+                  type="submit"
+                  class="updateButton"
+                >
+                  {{language.updateWorkTime}}
+                </button>
               </div>
             </form>
+          </div>
+        </div>
+        <div class="tab-content" *ngIf="currentTab === 'permissions'">
+          <div id="profile-tab" class="tab-pane active">
+            <label
+              class="k-form-field"
+              style="text-align: center; padding-top: 30px"
+            >
+              <span class="pr-4">{{language.allowedOnlineReservationForUser}}</span>
+              <kendo-switch
+                [(ngModel)]="data.allowed_online"
+                name="allowed_online"
+              ></kendo-switch>
+            </label>
+          </div>
+          <div class="mt-4 center">
+            <button class="k-button k-primary" (click)="updateUser(user)">
+              {{language.updateUser}}
+            </button>
           </div>
         </div>
       </div>
@@ -788,97 +1456,5 @@
         <button class="btn btn-primary" (click)="user.close()">Close</button>
       </modal-footer>
     </modal> -->
-
-    <modal #upload modalClass="modal-lg top-margin loggerModal adminModal" *ngIf="uploader !== undefined">
-      <modal-header>
-        <h2>File upload</h2>
-      </modal-header>
-      <modal-content>
-        <div>
-          <div class="row">
-            <div class="col-md-12 col-sm-12">
-              <form>
-                <div class="form-group">
-                  <label for="multiple"></label>
-                  <input type="file" class="form-control" name="multiple" ng2FileSelect [uploader]="uploader"
-                    multiple />
-                </div>
-              </form>
-            </div>
-            <div class="col-md-12 col-sm-12">
-              Queue length: {{ uploader?.queue?.length }}
-
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th width="50%">Name</th>
-                    <th class="hidden-xs">Size</th>
-                    <th class="hidden-xs">Progress</th>
-                    <th class="hidden-xs">Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of uploader.queue">
-                    <td><strong>{{ item.file.name }}</strong></td>
-                    <td nowrap>{{ item.file.size/1024/1024 | number:'.2' }} MB</td>
-                    <td class="hidden-xs">
-                      <div class="progress" style="margin-bottom: 0;">
-                        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }">
-                        </div>
-                      </div>
-                    </td>
-                    <td class="text-center hidden-xs">
-                      <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
-                      <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
-                      <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
-                    </td>
-                    <td nowrap>
-                      <button type="button" class="btn btn-success btn-xs hidden-xs" (click)="item.upload()"
-                        [disabled]="item.isReady || item.isUploading || item.isSuccess">
-                        <span class="glyphicon glyphicon-upload"></span> Upload
-                      </button>
-                      <button type="button" class="btn btn-warning btn-xs hidden-xs" (click)="item.cancel()"
-                        [disabled]="!item.isUploading">
-                        <span class="glyphicon glyphicon-ban-circle"></span> Cancel
-                      </button>
-                      <button type="button" class="btn btn-danger btn-xs" (click)="item.remove()">
-                        <span class="glyphicon glyphicon-trash"></span> Remove
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-
-              <div>
-                <div>
-                  Queue progress:
-                  <div class="progress">
-                    <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }">
-                    </div>
-                  </div>
-                </div>
-                <button type="button" class="btn btn-success btn-s" (click)="uploader.uploadAll()"
-                  [disabled]="!uploader.getNotUploadedItems().length">
-                  <span class="glyphicon glyphicon-upload"></span> Upload all
-                </button>
-                <button type="button" class="btn btn-warning btn-s" (click)="uploader.cancelAll()"
-                  [disabled]="!uploader.isUploading">
-                  <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
-                </button>
-                <button type="button" class="btn btn-danger btn-s" (click)="uploader.clearQueue()"
-                  [disabled]="!uploader.queue.length">
-                  <span class="glyphicon glyphicon-trash"></span> Remove all
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </modal-content>
-      <modal-footer>
-        <button class="btn btn-primary" (click)="upload.close()">Close</button>
-      </modal-footer>
-    </modal>
-
   </div>
 </div>

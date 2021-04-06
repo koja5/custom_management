@@ -13,4 +13,5 @@ export class StoreModel {
     time_duration?: string;
     time_therapy?: string;
     superadmin?: string;
+    allowed_online?: number;
 }

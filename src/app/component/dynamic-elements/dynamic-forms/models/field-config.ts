@@ -22,4 +22,6 @@ export interface FieldConfig {
   dataArray?: any[];
   fieldConfig?: DropDown;
   positionClass?: string;
+  onLabel?: string;
+  offLabel?: string;
 }

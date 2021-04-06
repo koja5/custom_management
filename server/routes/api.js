@@ -759,6 +759,42 @@ router.get("/getUsersInCompany/:id", function (req, res, next) {
   });
 });
 
+router.get("/getUsersAllowedOnlineInCompany/:id", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database",
+      });
+      return;
+    }
+    var id = req.params.id;
+    conn.query(
+      "SELECT * from users where allowed_online = 1 and storeId = ?",
+      [id],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json({
+            code: 100,
+            status: "Error in connection database",
+          });
+        }
+      }
+    );
+
+    conn.on("error", function (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database",
+      });
+      return;
+    });
+  });
+});
+
 //we gave a bug here, we need to check by id and mail address, not just id, because same id can have in different database
 router.get("/getMe/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
@@ -963,6 +999,42 @@ router.get("/getStore/:id", function (req, res, next) {
   });
 });
 
+router.get("/getStoreAllowedOnline/:id", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database",
+      });
+      return;
+    }
+    var id = req.params.id;
+    conn.query(
+      "SELECT * from store where allowed_online = 1 and superadmin = ?",
+      [id],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json({
+            code: 100,
+            status: "Error in connection database",
+          });
+        }
+      }
+    );
+
+    conn.on("error", function (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database",
+      });
+      return;
+    });
+  });
+});
+
 router.post("/updateStore", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     console.log(conn);
@@ -990,6 +1062,7 @@ router.post("/updateStore", function (req, res, next) {
       time_duration: req.body.time_duration,
       time_therapy: req.body.time_therapy,
       superadmin: req.body.superadmin,
+      allowed_online: req.body.allowed_online
     };
 
     conn.query(
@@ -1943,6 +2016,7 @@ router.post("/updateUser", function (req, res, next) {
       storeId: req.body.storeId,
       superadmin: req.body.superadmin,
       active: req.body.active,
+      allowed_online: req.body.allowed_online
     };
 
     conn.query(

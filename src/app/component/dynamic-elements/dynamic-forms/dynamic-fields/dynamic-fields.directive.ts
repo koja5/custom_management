@@ -9,6 +9,7 @@ import { CheckboxComponent } from './checkbox/checkbox.component';
 import { DatepickerComponent } from './datepicker/datepicker.component';
 import { DropdownComponent } from "./dropdown/dropdown.component";
 import { RadioComponent } from './radio/radio.component';
+import { SwitchComponent } from './switch/switch.component';
 import { TextareaComponent } from './textarea/textarea.component';
 import { TextboxComponent } from './textbox/textbox.component';
 
@@ -21,7 +22,8 @@ const components: {[type: string]: Type<Field>} = {
   datepicker: DatepickerComponent,
   button: ButtonComponent,
   radio: RadioComponent,
-  checkbox: CheckboxComponent
+  checkbox: CheckboxComponent,
+  switch: SwitchComponent
 };
 
 @Directive({

@@ -37,4 +37,15 @@ export class DynamicService {
 
     return method;
   }
+
+  packValueForData(data, configField) {
+    if (data && configField) {
+      for (let i = 0; i < configField.length; i++) {
+        if (data[configField[i].field]) {
+          configField[i].value = data[configField[i].field];
+        }
+      }
+    }
+    return configField;
+  }
 }

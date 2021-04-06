@@ -390,9 +390,17 @@
                           {{ data.title.split("+")[1] }}
                         </div>
                       </div>
-                      <span *ngIf="data.online === 1" class="fa fa-calendar-plus-o online-icon-reservation" [title]="language.reservationTooltip">
+                      <span
+                        *ngIf="data.online === 1"
+                        class="fa fa-calendar-plus-o online-icon-reservation"
+                        [title]="language.reservationTooltip"
+                      >
                       </span>
-                      <span *ngIf="data.online === 2" class="fa fa-calendar-check-o online-icon-reservation" [title]="language.approvedReservationTooltip"></span>
+                      <span
+                        *ngIf="data.online === 2"
+                        class="fa fa-calendar-check-o online-icon-reservation"
+                        [title]="language.approvedReservationTooltip"
+                      ></span>
                       <span
                         *ngIf="data.confirm === 0"
                         class="fa fa-check-circle-o checkButton notConfirmed"
@@ -419,9 +427,17 @@
                           {{ data.title.split("+")[1] }}
                         </div>
                       </div>
-                      <span *ngIf="data.online === 1" class="fa fa-calendar-plus-o online-icon-reservation" [title]="language.reservationTooltip">
+                      <span
+                        *ngIf="data.online === 1"
+                        class="fa fa-calendar-plus-o online-icon-reservation"
+                        [title]="language.reservationTooltip"
+                      >
                       </span>
-                      <span *ngIf="data.online === 2" class="fa fa-calendar-check-o online-icon-reservation" [title]="language.approvedReservationTooltip"></span>
+                      <span
+                        *ngIf="data.online === 2"
+                        class="fa fa-calendar-check-o online-icon-reservation"
+                        [title]="language.approvedReservationTooltip"
+                      ></span>
                       <span
                         *ngIf="data.confirm === 0"
                         class="fa fa-check-circle-o checkButton notConfirmed"
@@ -448,9 +464,17 @@
                           {{ data.title.split("+")[1] }}
                         </div>
                       </div>
-                      <span *ngIf="data.online === 1" class="fa fa-calendar-plus-o online-icon-reservation" [title]="language.reservationTooltip">
+                      <span
+                        *ngIf="data.online === 1"
+                        class="fa fa-calendar-plus-o online-icon-reservation"
+                        [title]="language.reservationTooltip"
+                      >
                       </span>
-                      <span *ngIf="data.online === 2" class="fa fa-calendar-check-o online-icon-reservation" [title]="language.approvedReservationTooltip"></span>
+                      <span
+                        *ngIf="data.online === 2"
+                        class="fa fa-calendar-check-o online-icon-reservation"
+                        [title]="language.approvedReservationTooltip"
+                      ></span>
                       <span
                         *ngIf="data.confirm === 0"
                         class="fa fa-check-circle-o checkButton notConfirmed"
@@ -890,7 +914,8 @@
                         </kendo-textbox-container>
                       </div>
                     </div>
-                    <div *ngIf="type !== userType.patient"
+                    <div
+                      *ngIf="type !== userType.patient"
                       class="col-sm-12 mt-4"
                       style="text-align: center; font-weight: bold"
                     >

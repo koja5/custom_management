@@ -4,6 +4,7 @@
     "properties": {
       "yes": { "type": "string" },
       "no": { "type": "string" },
+      "deleteDialogTitleAreYouSure": { "type": "string" },
       "welcomeTitle": { "type": "string" },
       "welcomeText": { "type": "string" },
       "loginTitle": { "type": "string" },
@@ -156,6 +157,7 @@
       "createData": { "type": "string" },
       "language": { "type": "string" },
       "active": { "type": "string" },
+      "inactive": { "type": "string" },
       "profile": { "type": "string" },
       "settings": { "type": "string" },
       "logout": { "type": "string" },
@@ -236,6 +238,15 @@
       "therapyForLastMonth": { "type": "string" },
       "therapyForLastWeek": { "type": "string" },
       "updateSettings": { "type": "string" },
+      "permissions": { "type": "string" },
+      "noSetTimeForUserNote": { "type": "string" },
+      "previous": { "type": "string" },
+      "next": { "type": "string" },
+      "validFromDate": { "type": "string" },
+      "allowedOnlineReservationForUser": { "type": "string" },
+      "createTime": { "type": "string" },
+      "setWorkTime": { "type": "string" },
+      "updateWorkTime": { "type": "string" },
       "exist": { "type": "string" },
       "notAdded": { "type": "string" },
       "error": { "type": "string" },
@@ -403,7 +414,7 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "yes" }, { "key": "no" }, {}, {}]
+          "items": [{ "key": "yes" }, { "key": "no" }, {"key": "deleteDialogTitleAreYouSure"}, {}]
         }
       ]
     },
@@ -932,7 +943,7 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "active" }, {}, {}, {}]
+          "items": [{ "key": "active" }, {"key": "inactive"}, {}, {}]
         }
       ]
     },
@@ -1025,7 +1036,40 @@
             { "key": "averagePerMonth" },
             { "key": "therapyForLastMonth" }
           ]
-        }
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "permissions" },
+            { "key": "noSetTimeForUserNote" },
+            { "key": "previous" },
+            { "key": "next" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "validFromDate" },
+            { "key": "allowedOnlineReservationForUser" },
+            { "key": "createTime" },
+            { "key": "setWorkTime" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "updateWorkTime" },
+            { },
+            { },
+            { }
+          ]
+        }        
       ]
     },
     {

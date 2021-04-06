@@ -956,7 +956,7 @@ export class DynamicSchedulerComponent implements OnInit {
 
   createNewTask() {
     let formValue = new EventModel();
-    if(this.type === this.userType.patient) {
+    if (this.type === this.userType.patient) {
       formValue.online = 1;
     }
     formValue.colorTask = this.selected;
@@ -998,7 +998,10 @@ export class DynamicSchedulerComponent implements OnInit {
     this.customer.addTherapy(this.complaintData).subscribe((data) => {
       if (data["success"]) {
         formValue.therapy_id = data["id"];
-        if (this.type === this.userType.owner || this.type === this.userType.patient) {
+        if (
+          this.type === this.userType.owner ||
+          this.type === this.userType.patient
+        ) {
           formValue["storeId"] = this.selectedStoreId;
         }
         this.service.createTask(formValue, (val) => {
@@ -1067,7 +1070,7 @@ export class DynamicSchedulerComponent implements OnInit {
   updateTask(args) {
     console.log(args);
     let formValue = new EventModel();
-    if(this.type === this.userType.patient) {
+    if (this.type === this.userType.patient) {
       formValue.online = 1;
     }
     formValue.Id = args.data.Id;
@@ -1635,35 +1638,49 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   initializeStore() {
-    this.storeService.getStore(this.helpService.getSuperadmin(), (val) => {
-      this.store = val;
-      if (this.store.length !== 0) {
-        this.language.selectStore += this.store[0].storename + ")";
-      }
-      if (!isNaN(this.selectedStoreId) && this.selectedStoreId !== undefined) {
-        const informationAboutStore = this.getStartEndTimeForStore(
-          this.store,
-          this.selectedStoreId
-        );
-
-        this.startWork = informationAboutStore.start_work;
-        this.endWork = informationAboutStore.end_work;
-        this.timeDuration = informationAboutStore.time_duration;
-        if (
-          Number(this.timeDuration) > Number(informationAboutStore.time_therapy)
-        ) {
-          this.therapyDuration =
-            Number(this.timeDuration) /
-            Number(informationAboutStore.time_therapy);
-        } else {
-          this.therapyDuration =
-            Number(informationAboutStore.time_therapy) /
-            Number(this.timeDuration);
+    if (this.helpService.getType() === this.userType.patient) {
+      this.storeService.getStoreAllowedOnline(
+        this.helpService.getSuperadmin(),
+        (val) => {
+          this.store = val;
+          this.setTimesForStore();
         }
-        this.storeName = this.getStoreName(this.selectedStoreId);
-        this.helpService.setTitleForBrowserTab(this.storeName);
+      );
+    } else {
+      this.storeService.getStore(this.helpService.getSuperadmin(), (val) => {
+        this.store = val;
+        this.setTimesForStore();
+      });
+    }
+  }
+
+  setTimesForStore() {
+    if (this.store.length !== 0) {
+      this.language.selectStore += this.store[0].storename + ")";
+    }
+    if (!isNaN(this.selectedStoreId) && this.selectedStoreId !== undefined) {
+      const informationAboutStore = this.getStartEndTimeForStore(
+        this.store,
+        this.selectedStoreId
+      );
+
+      this.startWork = informationAboutStore.start_work;
+      this.endWork = informationAboutStore.end_work;
+      this.timeDuration = informationAboutStore.time_duration;
+      if (
+        Number(this.timeDuration) > Number(informationAboutStore.time_therapy)
+      ) {
+        this.therapyDuration =
+          Number(this.timeDuration) /
+          Number(informationAboutStore.time_therapy);
+      } else {
+        this.therapyDuration =
+          Number(informationAboutStore.time_therapy) /
+          Number(this.timeDuration);
       }
-    });
+      this.storeName = this.getStoreName(this.selectedStoreId);
+      this.helpService.setTitleForBrowserTab(this.storeName);
+    }
   }
 
   checkPersonalSettingsForUser(storeId, defaultStoreSettings) {
@@ -1858,15 +1875,36 @@ export class DynamicSchedulerComponent implements OnInit {
     if (this.type === 3) {
       this.selectedStoreId = Number(localStorage.getItem("storeId-" + this.id));
     }
-    this.storeService.getStore(this.helpService.getSuperadmin(), (val) => {
-      this.store = val;
-      if (this.store.length !== 0) {
-        this.language.selectStore += this.store[0].storename + ")";
-      }
-      if (!isNaN(this.selectedStoreId) && this.selectedStoreId !== undefined) {
-        this.setStoreWork();
-      }
-    });
+    if (this.helpService.getType() === this.userType.patient) {
+      this.storeService.getStoreAllowedOnline(
+        this.helpService.getSuperadmin(),
+        (val) => {
+          this.store = val;
+          if (this.store.length !== 0) {
+            this.language.selectStore += this.store[0].storename + ")";
+          }
+          if (
+            !isNaN(this.selectedStoreId) &&
+            this.selectedStoreId !== undefined
+          ) {
+            this.setStoreWork();
+          }
+        }
+      );
+    } else {
+      this.storeService.getStore(this.helpService.getSuperadmin(), (val) => {
+        this.store = val;
+        if (this.store.length !== 0) {
+          this.language.selectStore += this.store[0].storename + ")";
+        }
+        if (
+          !isNaN(this.selectedStoreId) &&
+          this.selectedStoreId !== undefined
+        ) {
+          this.setStoreWork();
+        }
+      });
+    }
 
     if (
       localStorage.getItem("selectedStore-" + this.id) !== null &&
@@ -2378,11 +2416,15 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   getUserInCompany(storeId) {
-    this.service.getUsersInCompany(storeId, (val) => {
-      this.usersInCompany = val;
-      // this.language.selectedUsers += this.usersInCompany[0].shortname;
-      // this.loading = false;
-    });
+    if (this.type === this.userType.patient) {
+      this.service.getUsersAllowedOnlineInCompany(storeId, (val) => {
+        this.usersInCompany = val;
+      });
+    } else {
+      this.service.getUsersInCompany(storeId, (val) => {
+        this.usersInCompany = val;
+      });
+    }
   }
 
   onRenderCell(event) {

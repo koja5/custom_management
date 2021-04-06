@@ -165,6 +165,13 @@ export class TaskService extends BaseEditService<MyEvent> {
       .subscribe(val => callback(val));
   }
 
+  getUsersAllowedOnlineInCompany(id, callback) {
+    return this.http
+      .get("/api/getUsersAllowedOnlineInCompany/" + id)
+      .map(res => res)
+      .subscribe(val => callback(val));
+  }
+
   getCompanyUsers(id, callback) {
     return this.http
       .get("/api/getUsers/" + id)
