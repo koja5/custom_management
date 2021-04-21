@@ -383,11 +383,27 @@
                         class="event-details"
                         [style.background]="data.color"
                       >
-                        <div class="eventName">
-                          {{ data.title.split("+")[0] }}
+                        <div
+                          *ngIf="
+                            type !== userType.patient ||
+                            (type === userType.patient &&
+                              data.customer_id === id)
+                          "
+                        >
+                          <div class="eventName">
+                            {{ data.title.split("+")[0] }}
+                          </div>
+                          <div class="eventTitle">
+                            {{ data.title.split("+")[1] }}
+                          </div>
                         </div>
-                        <div class="eventTitle">
-                          {{ data.title.split("+")[1] }}
+                        <div
+                          class="reserved-title"
+                          *ngIf="
+                            type === userType.patient && data.customer_id !== id
+                          "
+                        >
+                          {{language.reserved}}
                         </div>
                       </div>
                       <span
@@ -420,11 +436,27 @@
                         class="event-details"
                         [style.background]="data.color"
                       >
-                        <div class="eventName">
-                          {{ data.title.split("+")[0] }}
+                        <div
+                          *ngIf="
+                            type !== userType.patient ||
+                            (type === userType.patient &&
+                              data.customer_id === id)
+                          "
+                        >
+                          <div class="eventName">
+                            {{ data.title.split("+")[0] }}
+                          </div>
+                          <div class="eventTitle">
+                            {{ data.title.split("+")[1] }}
+                          </div>
                         </div>
-                        <div class="eventTitle">
-                          {{ data.title.split("+")[1] }}
+                        <div
+                          class="reserved-title"
+                          *ngIf="
+                            type === userType.patient && data.customer_id !== id
+                          "
+                        >
+                          {{language.reserved}}
                         </div>
                       </div>
                       <span
@@ -457,11 +489,27 @@
                         class="event-details"
                         [style.background]="data.color"
                       >
-                        <div class="eventName">
-                          {{ data.title.split("+")[0] }}
+                        <div
+                          *ngIf="
+                            type !== userType.patient ||
+                            (type === userType.patient &&
+                              data.customer_id === id)
+                          "
+                        >
+                          <div class="eventName">
+                            {{ data.title.split("+")[0] }}
+                          </div>
+                          <div class="eventTitle">
+                            {{ data.title.split("+")[1] }}
+                          </div>
                         </div>
-                        <div class="eventTitle">
-                          {{ data.title.split("+")[1] }}
+                        <div
+                          class="reserved-title"
+                          *ngIf="
+                            type === userType.patient && data.customer_id !== id
+                          "
+                        >
+                          {{language.reserved}}
                         </div>
                       </div>
                       <span
@@ -619,7 +667,7 @@
                       class="k-form-field"
                       style="text-align: center; margin: 0px !important"
                     >
-                      <div class="col-sm-6" style="margin-bottom: 2vh">
+                      <div *ngIf="type !== userType.patient" class="col-sm-6" style="margin-bottom: 2vh">
                         <div class="mgbt-xs-0">
                           <label
                             class="col-xs-12 control-label"
@@ -635,7 +683,7 @@
                           <!-- col-sm-10 -->
                         </div>
                       </div>
-                      <div class="col-sm-6" style="margin-bottom: 2vh">
+                      <div *ngIf="type !== userType.patient" class="col-sm-6" style="margin-bottom: 2vh">
                         <div class="mgbt-xs-0">
                           <label
                             class="col-xs-12 control-label"
@@ -682,6 +730,7 @@
                         >
                           <kendo-combobox
                             #customerElement
+                            id="customerUsers"
                             [data]="customerUsers"
                             [textField]="'shortname'"
                             [valueField]="'id'"
@@ -775,7 +824,7 @@
                         ></textarea>
                       </kendo-textbox-container>
                     </div>
-                    <div class="k-form-field">
+                    <div *ngIf="type !== userType.patient" class="k-form-field">
                       <div class="col-sm-4">
                         <kendo-textbox-container
                           floatingLabel="{{ languageUser.cs }}"
@@ -786,6 +835,7 @@
                             [textField]="'title'"
                             [valueField]="'id'"
                             [(ngModel)]="complaintData.cs"
+                            (valueChange)="onValueChangeCS($event)"
                             [valuePrimitive]="true"
                           >
                           </kendo-combobox>

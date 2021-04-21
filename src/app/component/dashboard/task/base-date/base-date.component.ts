@@ -475,7 +475,7 @@ export class BaseDateComponent implements OnInit {
       this.usersService.getMe(localStorage.getItem("idUser"), (val) => {
         console.log(val);
         localStorage.setItem("username", val[0]["shortname"]);
-        this.complaintData.employee_name = "Dr. " + val[0]["shortname"];
+        this.complaintData.employee_name = val[0]["shortname"];
         console.log(this.complaintData);
         this.service.addComplaint(this.complaintData).subscribe((data) => {
           if (data) {
@@ -767,7 +767,7 @@ export class BaseDateComponent implements OnInit {
   }
 
   initializeParams() {
-    this.complaintData.cs = "";
+    this.complaintData.cs_title = "";
     this.complaintData.em = "";
   }
 

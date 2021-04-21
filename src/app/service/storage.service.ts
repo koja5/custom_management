@@ -15,4 +15,12 @@ export class StorageService {
   setStoreSettings(data) {
     localStorage.setItem('storeSettings', JSON.stringify(data));
   }
+
+  getSelectedStore(id) {
+    return Number(localStorage.getItem("selectedStore-" + id));
+  }
+
+  setSelectedStore(id, value) {
+    localStorage.setItem("selectedStore-" + id, value);
+  }
 }

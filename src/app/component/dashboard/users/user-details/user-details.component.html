@@ -57,19 +57,29 @@
                 <h2 class="font-semibold mgbt-xs-5" style="text-align: center">
                   {{ data.firstname }} {{ data.lastname }}
                 </h2>
-                <h4 *ngIf="data.type === userTypeEnum.owner">{{language.owner}}</h4>
-                <h4 *ngIf="data.type === userTypeEnum.admin">{{language.admin}}</h4>
-                <h4 *ngIf="data.type === userTypeEnum.doctor">{{language.doctor}}</h4>
-                <h4 *ngIf="data.type === userTypeEnum.nurse">{{language.nurse}}</h4>
-                <h4 *ngIf="data.type === userTypeEnum.administrator">{{language.administrator}}</h4>
+                <h4 *ngIf="data.type === userTypeEnum.owner">
+                  {{ language.owner }}
+                </h4>
+                <h4 *ngIf="data.type === userTypeEnum.admin">
+                  {{ language.admin }}
+                </h4>
+                <h4 *ngIf="data.type === userTypeEnum.doctor">
+                  {{ language.doctor }}
+                </h4>
+                <h4 *ngIf="data.type === userTypeEnum.nurse">
+                  {{ language.nurse }}
+                </h4>
+                <h4 *ngIf="data.type === userTypeEnum.administrator">
+                  {{ language.administrator }}
+                </h4>
               </div>
               <div class="mgtp-20" style="text-align: center">
-                <span *ngIf="data.active" class="label label-success"
-                  >{{language.active}}</span
-                >
-                <span *ngIf="!data.active" class="label label-danger"
-                  >{{language.inactive}}</span
-                >
+                <span *ngIf="data.active" class="label label-success">{{
+                  language.active
+                }}</span>
+                <span *ngIf="!data.active" class="label label-danger">{{
+                  language.inactive
+                }}</span>
               </div>
             </div>
           </div>
@@ -224,7 +234,7 @@
                   </li>
                   <li [ngClass]="currentTab === 'permissions' ? 'active' : ''">
                     <a (click)="changeTab('permissions')">
-                      {{language.permissions}}
+                      {{ language.permissions }}
                     </a>
                   </li>
                 </ul>
@@ -647,11 +657,11 @@
                 <div *ngIf="currentTab === 'workTime'">
                   <div id="profile-tab" class="tab-pane">
                     <p *ngIf="noSetWorkTime" class="noSetWorkTime">
-                      *{{language.noSetTimeForUserNote}}
+                      *{{ language.noSetTimeForUserNote }}
                     </p>
                     <div class="k-form-field row" style="padding: 2vh 0 2vh 0">
                       <div class="col-sm-6">
-                        <span>{{language.color}}</span>
+                        <span>{{ language.color }}</span>
                         <div>
                           <kendo-colorpalette
                             [palette]="palette"
@@ -670,7 +680,7 @@
                           class="col-sm-5 {{ previousInd }}"
                           (click)="previousWorkTime()"
                         >
-                          {{language.previous}}
+                          {{ language.previous }}
                         </button>
                         <button
                           kendoButton
@@ -678,14 +688,14 @@
                           class="col-sm-5 {{ nextInd }}"
                           (click)="nextWorkTime()"
                         >
-                          {{language.next}}
+                          {{ language.next }}
                         </button>
                       </div>
                     </div>
                     <div class="form-group row">
-                      <label class="col-md-2 col-sm-12 col-form-label"
-                        >{{language.validFromDate}}</label
-                      >
+                      <label class="col-md-2 col-sm-12 col-form-label">{{
+                        language.validFromDate
+                      }}</label>
                       <kendo-datepicker
                         [format]="'dd.MM.yyyy'"
                         class="col-md-5 col-xs-8 noPadding"
@@ -821,10 +831,13 @@
                       class="k-form-field"
                       style="text-align: center; padding-top: 30px"
                     >
-                      <span class="pr-4">{{language.allowedOnlineReservationForUser}}</span>
+                      <span class="pr-4">{{
+                        language.allowedOnlineReservationForUser
+                      }}</span>
                       <kendo-switch
                         [(ngModel)]="data.allowed_online"
                         name="allowed_online"
+                        readonly="true"
                       ></kendo-switch>
                     </label>
                   </div>
@@ -851,11 +864,13 @@
           width="50"
           height="46"
         />
-        <h3>{{language.deleteDialogTitleAreYouSure}}</h3>
+        <h3>{{ language.deleteDialogTitleAreYouSure }}</h3>
       </div>
       <kendo-dialog-actions>
-        <button kendoButton (click)="action('no')">{{language.no}}</button>
-        <button kendoButton (click)="action('yes')" primary="true">{{language.yes}}</button>
+        <button kendoButton (click)="action('no')">{{ language.no }}</button>
+        <button kendoButton (click)="action('yes')" primary="true">
+          {{ language.yes }}
+        </button>
       </kendo-dialog-actions>
     </kendo-dialog>
 
@@ -873,12 +888,10 @@
             <a (click)="changeTab('profile')">{{ language.profile }}</a>
           </li>
           <li [ngClass]="currentTab === 'workTime' ? 'active' : ''">
-            <a (click)="changeTab('workTime')">{{language.workTime}}</a>
+            <a (click)="changeTab('workTime')">{{ language.workTime }}</a>
           </li>
           <li [ngClass]="currentTab === 'permissions' ? 'active' : ''">
-            <a (click)="changeTab('permissions')"
-              >{{language.permissions}}</a
-            >
+            <a (click)="changeTab('permissions')">{{ language.permissions }}</a>
           </li>
         </ul>
         <div class="tab-content" *ngIf="currentTab === 'profile'">
@@ -1058,7 +1071,7 @@
                   class="k-form-field col-md-6"
                   style="text-align: center; padding-top: 30px"
                 >
-                  {{language.active}} &nbsp;
+                  {{ language.active }} &nbsp;
                   <kendo-switch
                     [(ngModel)]="data.active"
                     name="active"
@@ -1089,7 +1102,7 @@
                   type="submit"
                   class="updateButton"
                 >
-                  {{language.updateUser}}
+                  {{ language.updateUser }}
                 </button>
               </div>
             </form>
@@ -1098,11 +1111,11 @@
         <div *ngIf="currentTab === 'workTime'">
           <div id="profile-tab" class="tab-pane active">
             <p *ngIf="noSetWorkTime" class="noSetWorkTime">
-              *{{language.noSetTimeForUserNote}}
+              *{{ language.noSetTimeForUserNote }}
             </p>
             <div class="k-form-field row" style="padding: 2vh 0 2vh 0">
               <div class="col-sm-6">
-                <span>{{language.color}}</span>
+                <span>{{ language.color }}</span>
                 <div>
                   <kendo-colorpalette
                     [palette]="palette"
@@ -1120,7 +1133,7 @@
                   class="col-sm-5 {{ previousInd }}"
                   (click)="previousWorkTime()"
                 >
-                  {{language.previous}}
+                  {{ language.previous }}
                 </button>
                 <button
                   kendoButton
@@ -1128,14 +1141,14 @@
                   class="col-sm-5 {{ nextInd }}"
                   (click)="nextWorkTime()"
                 >
-                  {{language.next}}
+                  {{ language.next }}
                 </button>
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-md-2 col-sm-12 col-form-label"
-                >{{language.validFromDate}}</label
-              >
+              <label class="col-md-2 col-sm-12 col-form-label">{{
+                language.validFromDate
+              }}</label>
               <kendo-datepicker
                 [format]="'dd.MM.yyyy'"
                 class="col-md-5 col-xs-8 noPadding"
@@ -1151,7 +1164,7 @@
                   [icon]="'k-icon k-i-save'"
                   (click)="newValidDate()"
                 >
-                  {{language.createTime}}
+                  {{ language.createTime }}
                 </button>
                 <button
                   class="col-md-1 col-xs-4 btn-delete"
@@ -1279,7 +1292,7 @@
                   type="submit"
                   class="updateButton"
                 >
-                 {{language.setWorkTime}}
+                  {{ language.setWorkTime }}
                 </button>
                 <button
                   *ngIf="updateSetIndicator === 0"
@@ -1288,7 +1301,7 @@
                   type="submit"
                   class="updateButton"
                 >
-                  {{language.updateWorkTime}}
+                  {{ language.updateWorkTime }}
                 </button>
               </div>
             </form>
@@ -1300,7 +1313,9 @@
               class="k-form-field"
               style="text-align: center; padding-top: 30px"
             >
-              <span class="pr-4">{{language.allowedOnlineReservationForUser}}</span>
+              <span class="pr-4">{{
+                language.allowedOnlineReservationForUser
+              }}</span>
               <kendo-switch
                 [(ngModel)]="data.allowed_online"
                 name="allowed_online"
@@ -1309,7 +1324,7 @@
           </div>
           <div class="mt-4 center">
             <button class="k-button k-primary" (click)="updateUser(user)">
-              {{language.updateUser}}
+              {{ language.updateUser }}
             </button>
           </div>
         </div>

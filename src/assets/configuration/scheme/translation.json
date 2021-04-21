@@ -119,6 +119,7 @@
       "filterToolbar": { "type": "string" },
       "refreshEventToolbar": { "type": "string" },
       "settingsToolbar": { "type": "string" },
+      "reserved": { "type": "string" },
       "calendar": { "type": "string" },
       "customer": { "type": "string" },
       "users": { "type": "string" },
@@ -130,6 +131,7 @@
       "myComplaint": { "type": "string" },
       "myTherapy": { "type": "string" },
       "myDocument": { "type": "string" },
+      "myCalendar": { "type": "string" },
       "reservations": { "type": "string" },
       "pagerItemsPerPage": { "type": "string" },
       "addNew": { "type": "string" },
@@ -765,7 +767,7 @@
           "items": [
             { "key": "refreshEventToolbar" },
             { "key": "settingsToolbar" },
-            {},
+            { "key": "reserved" },
             {}
           ]
         }
@@ -808,6 +810,17 @@
             { "key": "myTherapy" },
             { "key": "myDocument" },
             { "key": "reservations" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "myCalendar" },
+            { },
+            { },
+            { }
           ]
         }
       ]

@@ -41,7 +41,7 @@
         *ngFor="let item of config.columns; let i = index"
         [type]="item.type"
         [field]="item.field"
-        [headerText]="item.title"
+        [headerText]="language[item.title] ? language[item.title] : item.title"
         [width]="item.width"
         [class]="item?.class"
         [textAlign]="item?.position"

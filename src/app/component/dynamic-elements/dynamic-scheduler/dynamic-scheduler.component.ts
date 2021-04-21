@@ -96,6 +96,7 @@ import * as timeZoneNames from "../../../../../node_modules/cldr-data/main/fr-CH
 import { PackLanguageService } from "src/app/service/pack-language.service";
 import { UserType } from "../../enum/user-type";
 import { AccountService } from "src/app/service/account.service";
+import { ComboBoxModule } from "@progress/kendo-angular-dropdowns";
 declare var moment: any;
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
@@ -961,6 +962,9 @@ export class DynamicSchedulerComponent implements OnInit {
     }
     formValue.colorTask = this.selected;
     formValue.telephone = this.telephoneValue;
+    if (this.customerUser && !this.customerUser.id) {
+      this.customerUser.id = this.helpService.getMe().toString();
+    }
     formValue.user = Object.assign({}, this.customerUser);
     formValue.mobile = this.mobileValue;
     formValue.title =
@@ -1017,6 +1021,7 @@ export class DynamicSchedulerComponent implements OnInit {
             formValue["EndTime"] = new Date(formValue.end);
 
             formValue.id = val.id;
+            formValue.customer_id = Number(this.customerUser.id);
             // this.customerUser = null;
 
             this.allEvents.push(formValue);
@@ -1191,18 +1196,22 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   onPopupOpen(args: PopupOpenEventArgs): void {
-    args.element.scrollTop = 0;
-    this.setTimeForEditor(args);
-    if (args.type === "QuickInfo") {
-      args.cancel = true;
-    } else if (args.type === "Editor") {
-      this.creatorEvent = args.data["creator_id"];
-      if (!args.data["id"]) {
-        this.clearAllSelectedData();
-      } else if (args.data["id"]) {
-        this.selected = null;
-        this.getSelectEventData(args.data);
+    if (this.checkConditionForEvent(args)) {
+      args.element.scrollTop = 0;
+      this.setTimeForEditor(args);
+      if (args.type === "QuickInfo") {
+        args.cancel = true;
+      } else if (args.type === "Editor") {
+        this.creatorEvent = args.data["creator_id"];
+        if (!args.data["id"]) {
+          this.clearAllSelectedData();
+        } else if (args.data["id"]) {
+          this.selected = null;
+          this.getSelectEventData(args.data);
+        }
       }
+    } else {
+      args.cancel = true;
     }
   }
 
@@ -1416,6 +1425,7 @@ export class DynamicSchedulerComponent implements OnInit {
 
   @ViewChild("customerUserModal") customerUserModal: Modal;
   @ViewChild("scheduler") public scheduler: SchedulerComponent;
+  @ViewChild("usersInCompany") public customerElement: ComboBoxModule;
   public customerModal = false;
   public selectedDate: Date = new Date();
   public formGroup: FormGroup;
@@ -1643,6 +1653,7 @@ export class DynamicSchedulerComponent implements OnInit {
         this.helpService.getSuperadmin(),
         (val) => {
           this.store = val;
+          this.checkPreselectedForAllowedOnlineStore();
           this.setTimesForStore();
         }
       );
@@ -1651,6 +1662,28 @@ export class DynamicSchedulerComponent implements OnInit {
         this.store = val;
         this.setTimesForStore();
       });
+    }
+  }
+
+  checkPreselectedForAllowedOnlineStore() {
+    let notAllowedOnlinePreselected = true;
+    for (let i = 0; i < this.store.length; i++) {
+      if (this.store[i].id === this.selectedStoreId) {
+        notAllowedOnlinePreselected = false;
+        break;
+      }
+    }
+    if (notAllowedOnlinePreselected) {
+      if (this.store.length) {
+        this.selectedStoreId = this.store[0].id;
+        localStorage.setItem(
+          "selectedStore-" + this.id,
+          this.selectedStoreId.toString()
+        );
+        this.getUserInCompany(this.selectedStoreId);
+      } else {
+        this.selectedStoreId = null;
+      }
     }
   }
 
@@ -2038,7 +2071,11 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   addTherapy(customerId) {
-    this.complaintData.customer_id = customerId;
+    if (customerId) {
+      this.complaintData.customer_id = customerId;
+    } else {
+      this.complaintData.customer_id = this.helpService.getMe();
+    }
     /*this.complaintData.date =
       new Date().getDay() +
       "." +
@@ -2069,11 +2106,11 @@ export class DynamicSchedulerComponent implements OnInit {
 
     this.complaintData.therapies_previous = this.pickToModel(
       this.selectedTreatments,
-      this.therapyValue
+      this.treatmentValue
     ).value;
     this.complaintData.therapies_previous_title = this.pickToModel(
       this.selectedTreatments,
-      this.therapyValue
+      this.treatmentValue
     ).title;
   }
 
@@ -2094,6 +2131,8 @@ export class DynamicSchedulerComponent implements OnInit {
     this.customerModal = true;
     this.data = new UserModel();
     this.data.gender = "male";
+    this.data.attention = null;
+    this.data.physicalComplaint = null;
     this.data.superadmin = this.helpService.getSuperadmin();
   }
 
@@ -2468,7 +2507,6 @@ export class DynamicSchedulerComponent implements OnInit {
     } else {
       return "noTime";
     }*/
-
     if (date.elementType === "resourceHeader") {
       if (date.groupIndex < this.calendars.length - 1) {
         date.element.style.borderRight = "2px solid #6d6d6d";
@@ -2646,7 +2684,6 @@ export class DynamicSchedulerComponent implements OnInit {
       });
 
     this.customer.getParameters("CS", superadmin).subscribe((data: []) => {
-      console.log(data);
       this.CSValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
@@ -3088,24 +3125,40 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   onActionBegin(args: any) {
-    if (args.requestType === "eventCreate") {
-      this.createNewTask();
-      args.cancel = true;
-    } else if (args.requestType === "eventChange") {
-      this.updateTask(args);
-      args.cancel = true;
-    } else if (args.requestType === "eventRemove") {
-      // this.deleteTask(args.deletedRecords[0]);
-      const eventDetails: { [key: string]: Object } = this.scheduleObj
-        .activeEventData.event as { [key: string]: Object };
-      let currentAction: CurrentAction;
-      if (eventDetails.RecurrenceRule) {
-        currentAction = "DeleteOccurrence";
+    if (this.checkConditionForEvent(args)) {
+      if (args.requestType === "eventCreate") {
+        this.createNewTask();
+        args.cancel = true;
+      } else if (args.requestType === "eventChange") {
+        this.updateTask(args);
+        args.cancel = true;
+      } else if (args.requestType === "eventRemove") {
+        // this.deleteTask(args.deletedRecords[0]);
+        const eventDetails: { [key: string]: Object } = this.scheduleObj
+          .activeEventData.event as { [key: string]: Object };
+        let currentAction: CurrentAction;
+        if (eventDetails.RecurrenceRule) {
+          currentAction = "DeleteOccurrence";
+        }
+        this.deleteTask(eventDetails);
+        // this.scheduleObj.deleteEvent(eventDetails, currentAction);
       }
-      this.deleteTask(eventDetails);
-      // this.scheduleObj.deleteEvent(eventDetails, currentAction);
+      this.initializeCalendar();
+    } else {
+      args.cancel = true;
     }
-    this.initializeCalendar();
+  }
+
+  checkConditionForEvent(args) {
+    if (
+      this.type === this.userType.patient &&
+      args.data &&
+      args.data["customer_id"]
+    ) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   initializeCalendar() {
@@ -3129,9 +3182,24 @@ export class DynamicSchedulerComponent implements OnInit {
     }
   }*/
 
+  onValueChangeCS(event) {
+    this.complaintData.cs_title = this.getTitleForCS(event);
+  }
+
   onValueUserEmChange(event) {
     this.complaintData.em = event.id;
     this.complaintData.em_title = event.lastname + " " + event.firstname;
+  }
+
+  getTitleForCS(id) {
+    if (this.CSValue) {
+      for (let i = 0; i < this.CSValue.length; i++) {
+        if (this.CSValue[i].id === id) {
+          return this.CSValue[i].title;
+        }
+      }
+    }
+    return null;
   }
 
   public onButtonClick(): void {

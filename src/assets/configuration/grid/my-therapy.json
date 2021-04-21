@@ -49,7 +49,7 @@
   },
   "columns": [
     {
-      "title": "Date",
+      "title": "date",
       "width": 150,
       "filterable": true,
       "hideable": true,
@@ -59,7 +59,7 @@
       "field": "date"
     },
     {
-      "title": "Complaint",
+      "title": "complaintValue",
       "width": 250,
       "filterable": true,
       "hideable": true,
@@ -101,7 +101,7 @@
       "hideable": true,
       "type": "string",
       "class": "text-align-right",
-      "field": "cs"
+      "field": "cs_title"
     },
     {
       "title": "Em",

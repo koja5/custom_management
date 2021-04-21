@@ -1297,12 +1297,12 @@
                             width="150"
                           >
                           </kendo-grid-column>
-                          <kendo-grid-column field="cs" title="CS" width="60">
+                          <kendo-grid-column field="cs_title" title="CS" width="120">
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="state"
                             title="State"
-                            width="60"
+                            width="120"
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
@@ -1810,7 +1810,7 @@
               type="text"
               class="col-xs-12"
               name="cs"
-              [(ngModel)]="complaintData.cs"
+              [(ngModel)]="complaintData.cs_title"
               cs.value=""
             />
           </kendo-textbox-container>
@@ -1931,7 +1931,7 @@
               type="text"
               class="col-md-12 col-xs-12"
               name="cs"
-              [(ngModel)]="complaintData.cs"
+              [(ngModel)]="complaintData.cs_title"
           /></kendo-textbox-container>
         </div>
         <div class="col-md-12 col-xs-12">

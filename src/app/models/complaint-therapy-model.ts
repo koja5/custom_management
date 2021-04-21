@@ -10,6 +10,7 @@ export class ComplaintTherapyModel {
     therapies_previous?: string;
     therapies_previous_title?: string;
     cs: any;
+    cs_title?: string;
     state?: number;
     em?: any;
     em_title?: string;
