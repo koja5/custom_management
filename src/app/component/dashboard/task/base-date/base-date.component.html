@@ -1181,39 +1181,41 @@
                           [data]="gridComplaint"
                           [height]="390"
                           [resizable]="true"
+                          [sort]="stateComplaint.sort"
+                          (sortChange)="sortChange($event, 'stateComplaint', 'gridComplaint', 'gridComplaintData')"
                           [loading]="loadingGridComplaint"
                         >
                           <kendo-grid-column
                             field="date"
-                            title="Date"
+                            title="{{language.date}}"
                             width="120"
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="complaint_title"
-                            title="Complaint"
+                            title="{{language.complaintValue}}"
                             width="200"
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="comment"
-                            title="Comment"
+                            title="{{language.comment}}"
                             width="150"
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="therapies_title"
-                            title="Therapies"
+                            title="{{language.therapyValue}}"
                             width="120"
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="employee_name"
-                            title="Doctor"
+                            title="{{language.doctor}}"
                             width="100"
                           >
                           </kendo-grid-column>
-                          <kendo-grid-column field="cs" title="CS" width="60">
+                          <kendo-grid-column field="cs" title="{{language.cs}}" width="60">
                           </kendo-grid-column>
                           <kendo-grid-column width="60">
                             <ng-template kendoGridCellTemplate let-dataItem>
@@ -1264,30 +1266,33 @@
                           [data]="gridTherapy"
                           [height]="390"
                           [resizable]="true"
+                          [sortable]="true"
+                          [sort]="stateTherapy.sort"
+                          (sortChange)="sortChange($event, 'stateTherapy', 'gridTherapy', 'gridTherapyData')"
                           [loading]="loadingGridTherapy"
                         >
                           <kendo-grid-column
                             field="date"
-                            title="Date"
+                            title="{{language.date}}"
                             width="140"
                             [format]="{ date: 'short' }"
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="complaint_title"
-                            title="Complaint"
+                            title="{{language.complaintValue}}"
                             width="150"
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="therapies_title"
-                            title="Therapy"
+                            title="{{language.therapyValue}}"
                             width="120"
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="therapies_previous_title"
-                            title="Bisherige Bhandlungen"
+                            title="{{language.treatmentValue}}"
                             width="150"
                           >
                           </kendo-grid-column>
@@ -1297,17 +1302,17 @@
                             width="150"
                           >
                           </kendo-grid-column>
-                          <kendo-grid-column field="cs_title" title="CS" width="120">
+                          <kendo-grid-column field="cs_title" title="{{language.cs}}" width="120">
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="state"
-                            title="State"
+                            title="{{language.stateValue}}"
                             width="120"
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="em_title"
-                            title="Em"
+                            title="{{language.em}}"
                             width="100"
                           >
                           </kendo-grid-column>
@@ -1360,11 +1365,14 @@
                           [data]="documents"
                           [height]="390"
                           [resizable]="true"
+                          [sortable]="true"
+                          [sort]="stateDocument.sort"
+                          (sortChange)="sortChange($event, 'stateDocument', 'documents', 'documentsData')"
                           [loading]="loadingGridDocument"
                         >
                           <kendo-grid-column
                             field="id"
-                            title="Document ID"
+                            title="{{language.documentId}}"
                             width="100"
                           >
                           </kendo-grid-column>
@@ -1397,19 +1405,19 @@
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="name"
-                            title="Document name"
+                            title="{{language.documentName}}"
                             width="180"
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="size"
-                            title="Size"
+                            title="{{language.documentSize}}"
                             width="120"
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="date"
-                            title="Date"
+                            title="{{language.documentDate}}"
                             width="120"
                           >
                             <ng-template kendoGridCellTemplate let-dataItem>
@@ -1418,7 +1426,7 @@
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="description"
-                            title="{{ language.description }}"
+                            title="{{ language.documentDescription }}"
                             width="150"
                           >
                           </kendo-grid-column>
@@ -1472,7 +1480,6 @@
     </div>
 
     <kendo-dialog
-      title="Please confirm"
       *ngIf="dialogOpened"
       (close)="close('dialog')"
       [minWidth]="250"
@@ -1485,16 +1492,15 @@
           width="50"
           height="46"
         />
-        <h3>Are you sure want to delete?</h3>
+        <h3>{{language.deleteDialogTitleAreYouSure}}</h3>
       </div>
       <kendo-dialog-actions>
-        <button kendoButton (click)="action('no')">No</button>
-        <button kendoButton (click)="action('yes')" primary="true">Yes</button>
+        <button kendoButton (click)="action('no')">{{language.no}}</button>
+        <button kendoButton (click)="action('yes')" primary="true">{{language.yes}}</button>
       </kendo-dialog-actions>
     </kendo-dialog>
 
     <kendo-dialog
-      title="Please confirm"
       *ngIf="dialogComplaintOpened"
       (close)="close('dialogComplaint')"
       [minWidth]="250"
@@ -1507,18 +1513,17 @@
           width="50"
           height="46"
         />
-        <h3>Are you sure want to delete this complaint?</h3>
+        <h3>{{language.deleteDialogTitleAreYouSure}}</h3>
       </div>
       <kendo-dialog-actions>
-        <button kendoButton (click)="deleteComplaint('no')">No</button>
+        <button kendoButton (click)="deleteComplaint('no')">{{language.no}}</button>
         <button kendoButton (click)="deleteComplaint('yes')" primary="true">
-          Yes
+          {{language.yes}}
         </button>
       </kendo-dialog-actions>
     </kendo-dialog>
 
     <kendo-dialog
-      title="Please confirm"
       *ngIf="dialogTherapyOpened"
       (close)="close('dialogTherapy')"
       [minWidth]="250"
@@ -1531,18 +1536,17 @@
           width="50"
           height="46"
         />
-        <h3>Are you sure want to delete this therapy?</h3>
+        <h3>{{language.deleteDialogTitleAreYouSure}}</h3>
       </div>
       <kendo-dialog-actions>
-        <button kendoButton (click)="deleteTherapy('no')">No</button>
+        <button kendoButton (click)="deleteTherapy('no')">{{language.no}}</button>
         <button kendoButton (click)="deleteTherapy('yes')" primary="true">
-          Yes
+          {{language.yes}}
         </button>
       </kendo-dialog-actions>
     </kendo-dialog>
 
     <kendo-dialog
-      title="Please confirm"
       *ngIf="dialogDocumentOpened"
       (close)="close('dialogDocument')"
       [minWidth]="250"
@@ -1555,12 +1559,12 @@
           width="50"
           height="46"
         />
-        <h3>Are you sure want to delete this document?</h3>
+        <h3>{{language.deleteDialogTitleAreYouSure}}</h3>
       </div>
       <kendo-dialog-actions>
-        <button kendoButton (click)="deleteDocument('no')">No</button>
+        <button kendoButton (click)="deleteDocument('no')">{{language.no}}</button>
         <button kendoButton (click)="deleteDocument('yes')" primary="true">
-          Yes
+          {{language.yes}}
         </button>
       </kendo-dialog-actions>
     </kendo-dialog>
@@ -1571,7 +1575,7 @@
       *ngIf="uploader !== undefined"
     >
       <modal-header>
-        <h2>File upload</h2>
+        <h2>{{language.fileUploadTitle}}</h2>
       </modal-header>
       <modal-content>
         <div>
@@ -1583,7 +1587,7 @@
                       <input type="file" class="form-control" name="multiple" ng2FileSelect [uploader]="uploader"
                         multiple />-->
                   <label class="uploadFromExcel"
-                    ><span class="k-icon k-i-upload"></span> Upload files<input
+                    ><span class="k-icon k-i-upload"></span> {{language.uploadFileButton}}<input
                       type="file"
                       class="form-control"
                       name="multiple"
@@ -1595,18 +1599,18 @@
               </form>
             </div>
             <div class="col-md-12 col-sm-12">
-              Queue length: {{ uploader?.queue?.length }}
+              {{language.queueLength}}: {{ uploader?.queue?.length }}
 
               <table class="table">
                 <thead>
                   <tr>
-                    <th width="10%">Name</th>
-                    <th class="hidden-xs">Size</th>
-                    <th class="30%">Description</th>
-                    <th class="15%">Date</th>
-                    <th class="hidden-xs">Progress</th>
-                    <th class="hidden-xs">Status</th>
-                    <th>Actions</th>
+                    <th width="10%">{{language.documentName}}</th>
+                    <th class="hidden-xs">{{language.documentSize}}</th>
+                    <th class="30%">{{language.documentDescription}}</th>
+                    <th class="15%">{{language.documentDate}}</th>
+                    <th class="hidden-xs">{{language.documentProgress}}</th>
+                    <th class="hidden-xs">{{language.documentStatus}}</th>
+                    <th>{{language.documentActions}}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1664,7 +1668,7 @@
                           item.isReady || item.isUploading || item.isSuccess
                         "
                       >
-                        <span class="glyphicon glyphicon-upload"></span> Upload
+                        <span class="glyphicon glyphicon-upload"></span> {{language.uploadFile}}
                       </button>
                       <button
                         type="button"
@@ -1673,14 +1677,14 @@
                         [disabled]="!item.isUploading"
                       >
                         <span class="glyphicon glyphicon-ban-circle"></span>
-                        Cancel
+                        {{language.cancelFile}}
                       </button>
                       <button
                         type="button"
                         class="btn btn-danger btn-xs"
                         (click)="item.remove()"
                       >
-                        <span class="glyphicon glyphicon-trash"></span> Remove
+                        <span class="glyphicon glyphicon-trash"></span> {{language.removeFile}}
                       </button>
                     </td>
                   </tr>
@@ -1689,7 +1693,7 @@
 
               <div>
                 <div>
-                  Queue progress:
+                  {{language.queueProgress}}:
                   <div class="progress">
                     <div
                       class="progress-bar"
@@ -1704,7 +1708,7 @@
                   (click)="uploader.uploadAll()"
                   [disabled]="!uploader.getNotUploadedItems().length"
                 >
-                  <span class="glyphicon glyphicon-upload"></span> Upload all
+                  <span class="glyphicon glyphicon-upload"></span> {{language.uploadAll}}
                 </button>
                 <button
                   type="button"
@@ -1712,8 +1716,7 @@
                   (click)="uploader.cancelAll()"
                   [disabled]="!uploader.isUploading"
                 >
-                  <span class="glyphicon glyphicon-ban-circle"></span> Cancel
-                  all
+                  <span class="glyphicon glyphicon-ban-circle"></span> {{language.cancelAll}}
                 </button>
                 <button
                   type="button"
@@ -1721,7 +1724,7 @@
                   (click)="uploader.clearQueue()"
                   [disabled]="!uploader.queue.length"
                 >
-                  <span class="glyphicon glyphicon-trash"></span> Remove all
+                  <span class="glyphicon glyphicon-trash"></span> {{language.removeAll}}
                 </button>
               </div>
             </div>
@@ -1730,7 +1733,7 @@
       </modal-content>
       <modal-footer>
         <button class="btn btn-primary" (click)="closeUploadModal()">
-          Close
+          {{language.closeFileUploader}}
         </button>
       </modal-footer>
     </modal>
@@ -2749,7 +2752,7 @@
           </kendo-textbox-container>
         </div>
         <div class="col-md-12 col-xs-12" style="padding-top: 10px">
-          <kendo-textbox-container floatingLabel="{{ language.description }}">
+          <kendo-textbox-container floatingLabel="{{ language.documentDescription }}">
             <textarea
               kendoTextArea
               [(ngModel)]="documentItem.description"

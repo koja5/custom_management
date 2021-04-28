@@ -9,6 +9,7 @@ import {
   OnInit,
   NgZone,
   HostListener,
+  ElementRef,
 } from "@angular/core";
 import { ItemModel as ItemModelSplit } from "@syncfusion/ej2-angular-splitbuttons";
 import {
@@ -96,7 +97,10 @@ import * as timeZoneNames from "../../../../../node_modules/cldr-data/main/fr-CH
 import { PackLanguageService } from "src/app/service/pack-language.service";
 import { UserType } from "../../enum/user-type";
 import { AccountService } from "src/app/service/account.service";
-import { ComboBoxModule } from "@progress/kendo-angular-dropdowns";
+import {
+  ComboBoxComponent,
+  ComboBoxModule,
+} from "@progress/kendo-angular-dropdowns";
 declare var moment: any;
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
@@ -1195,23 +1199,28 @@ export class DynamicSchedulerComponent implements OnInit {
     }
   }
 
+  //required high version of angular. In angular 7.2 has a problem with static params. Without static doesn't work.
+  //@ViewChild("fieldName1", {static: true}) public fieldName1: ElementRef;
+  // @ViewChild("fieldName1") public fieldName1: ElementRef;
+
   onPopupOpen(args: PopupOpenEventArgs): void {
-    if (this.checkConditionForEvent(args)) {
-      args.element.scrollTop = 0;
-      this.setTimeForEditor(args);
-      if (args.type === "QuickInfo") {
-        args.cancel = true;
-      } else if (args.type === "Editor") {
-        this.creatorEvent = args.data["creator_id"];
-        if (!args.data["id"]) {
-          this.clearAllSelectedData();
-        } else if (args.data["id"]) {
-          this.selected = null;
-          this.getSelectEventData(args.data);
-        }
-      }
+    if (!this.checkConditionForEvent(args)) {
+      this.patientReadOnly = true;
     } else {
+      this.patientReadOnly = false;
+    }
+    args.element.scrollTop = 0;
+    this.setTimeForEditor(args);
+    if (args.type === "QuickInfo") {
       args.cancel = true;
+    } else if (args.type === "Editor") {
+      this.creatorEvent = args.data["creator_id"];
+      if (!args.data["id"]) {
+        this.clearAllSelectedData();
+      } else if (args.data["id"]) {
+        this.selected = null;
+        this.getSelectEventData(args.data);
+      }
     }
   }
 
@@ -1516,6 +1525,7 @@ export class DynamicSchedulerComponent implements OnInit {
   public configurationFromMongoDb: any;
   public dateFormatScheduler = "dd.MM.yyyy";
   public userType = UserType;
+  public patientReadOnly = false;
 
   constructor(
     public service: TaskService,
@@ -2037,6 +2047,10 @@ export class DynamicSchedulerComponent implements OnInit {
       this.selected = this.eventCategory[0].id;
     }
     this.createFormLoading = true;
+    // setTimeout(() => {
+    //   this.fieldName1.toggle(true);
+    //   this.fieldName1.focus();
+    // }, 100);
   }
 
   public getNextId(): number {

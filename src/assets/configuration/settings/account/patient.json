@@ -54,7 +54,8 @@
     "width": "col-md-6",
     "name": "email",
     "label": "email",
-    "field": "email"
+    "field": "email",
+    "disabled": true
   },
   {
     "type": "datepicker",

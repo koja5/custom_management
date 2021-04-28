@@ -49,7 +49,7 @@
   },
   "columns": [
     {
-      "title": "Date",
+      "title": "date",
       "width": 120,
       "filterable": true,
       "hideable": true,
@@ -60,7 +60,7 @@
       "format": { "type": "date", "format": "dd/MM/yyyy" }
     },
     {
-      "title": "Complaint",
+      "title": "complaintValue",
       "width": 250,
       "filterable": true,
       "hideable": true,
@@ -69,7 +69,7 @@
       "field": "complaint_title"
     },
     {
-      "title": "Comment",
+      "title": "comment",
       "width": 250,
       "filterable": true,
       "hideable": true,
@@ -78,7 +78,7 @@
       "field": "comment"
     },
     {
-      "title": "Therapies",
+      "title": "therapyValue",
       "width": 200,
       "filterable": true,
       "hideable": true,
@@ -87,7 +87,7 @@
       "field": "therapies_title"
     },
     {
-      "title": "Doctor",
+      "title": "doctor",
       "width": 120,
       "filterable": true,
       "hideable": true,
@@ -96,7 +96,7 @@
       "field": "employee_name"
     },
     {
-      "title": "CS",
+      "title": "cs",
       "width": 120,
       "filterable": true,
       "hideable": true,

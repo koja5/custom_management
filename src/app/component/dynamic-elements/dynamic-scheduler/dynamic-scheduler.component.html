@@ -342,7 +342,9 @@
                   (change)='handleValue($event)'></ejs-multiselect> -->
                   <kendo-multiselect
                     [data]="usersInCompany"
-                    [textField]="'shortname'"
+                    [textField]="
+                      type !== userType.patient ? 'shortname' : 'alias_name'
+                    "
                     [valueField]="'id'"
                     [(ngModel)]="value"
                     name="usersInCompany"
@@ -369,7 +371,7 @@
                 (actionBegin)="onActionBegin($event)"
                 (popupOpen)="onPopupOpen($event)"
                 (drag)="onItemDrag($event)"
-                (resize)="onItemDrag($event)"
+                (resizeStop)="onItemDrag($event)"
               >
                 <ng-template #dateHeaderTemplate let-data>
                   <div class="date-text">
@@ -403,7 +405,7 @@
                             type === userType.patient && data.customer_id !== id
                           "
                         >
-                          {{language.reserved}}
+                          {{ language.reserved }}
                         </div>
                       </div>
                       <span
@@ -456,7 +458,7 @@
                             type === userType.patient && data.customer_id !== id
                           "
                         >
-                          {{language.reserved}}
+                          {{ language.reserved }}
                         </div>
                       </div>
                       <span
@@ -509,7 +511,7 @@
                             type === userType.patient && data.customer_id !== id
                           "
                         >
-                          {{language.reserved}}
+                          {{ language.reserved }}
                         </div>
                       </div>
                       <span
@@ -667,7 +669,11 @@
                       class="k-form-field"
                       style="text-align: center; margin: 0px !important"
                     >
-                      <div *ngIf="type !== userType.patient" class="col-sm-6" style="margin-bottom: 2vh">
+                      <div
+                        *ngIf="type !== userType.patient"
+                        class="col-sm-6"
+                        style="margin-bottom: 2vh"
+                      >
                         <div class="mgbt-xs-0">
                           <label
                             class="col-xs-12 control-label"
@@ -683,7 +689,11 @@
                           <!-- col-sm-10 -->
                         </div>
                       </div>
-                      <div *ngIf="type !== userType.patient" class="col-sm-6" style="margin-bottom: 2vh">
+                      <div
+                        *ngIf="type !== userType.patient"
+                        class="col-sm-6"
+                        style="margin-bottom: 2vh"
+                      >
                         <div class="mgbt-xs-0">
                           <label
                             class="col-xs-12 control-label"
@@ -729,8 +739,9 @@
                           floatingLabel="{{ languageUser.patient }}"
                         >
                           <kendo-combobox
-                            #customerElement
+                            #fieldName1
                             id="customerUsers"
+                            [suggest]="true"
                             [data]="customerUsers"
                             [textField]="'shortname'"
                             [valueField]="'id'"
@@ -739,7 +750,6 @@
                             [filterable]="true"
                             (filterChange)="searchCustomer($event)"
                             [loading]="customerLoading"
-                            autofocus
                           >
                             <ng-template kendoComboBoxItemTemplate let-dataItem>
                               <p style="height: 50px !important">
@@ -775,6 +785,7 @@
                           [(ngModel)]="selectedComplaint"
                           name="complaint"
                           [valuePrimitive]="true"
+                          [disabled]="patientReadOnly"
                         >
                         </kendo-multiselect>
                       </kendo-textbox-container>
@@ -805,6 +816,7 @@
                           [(ngModel)]="selectedTreatments"
                           name="therapies_previous"
                           [valuePrimitive]="true"
+                          [disabled]="patientReadOnly"
                         >
                         </kendo-multiselect>
                       </kendo-textbox-container>
@@ -821,6 +833,7 @@
                           [(ngModel)]="complaintData.comment"
                           comment.value=""
                           [autoSize]="true"
+                          [disabled]="patientReadOnly"
                         ></textarea>
                       </kendo-textbox-container>
                     </div>
@@ -886,6 +899,7 @@
                           [valueField]="'id'"
                           (valueChange)="selectedEventCategory($event)"
                           [(ngModel)]="selected"
+                          [disabled]="patientReadOnly"
                         >
                         </kendo-combobox>
                       </kendo-textbox-container>
@@ -899,6 +913,7 @@
                             [format]="'dd.MM.yyyy'"
                             class="dateWidth"
                             [(ngModel)]="eventTime.start"
+                            [disabled]="patientReadOnly"
                           >
                           </kendo-datepicker>
                         </kendo-textbox-container>
@@ -907,7 +922,10 @@
                         <kendo-textbox-container
                           floatingLabel="{{ language.startTime }}"
                         >
-                          <kendo-timepicker [(ngModel)]="eventTime.start">
+                          <kendo-timepicker
+                            [(ngModel)]="eventTime.start"
+                            [disabled]="patientReadOnly"
+                          >
                           </kendo-timepicker>
                         </kendo-textbox-container>
                       </div>
@@ -921,6 +939,7 @@
                             [format]="'dd.MM.yyyy'"
                             class="dateWidth"
                             [(ngModel)]="eventTime.end"
+                            [disabled]="patientReadOnly"
                           >
                           </kendo-datepicker>
                         </kendo-textbox-container>
@@ -929,7 +948,10 @@
                         <kendo-textbox-container
                           floatingLabel="{{ language.endTime }}"
                         >
-                          <kendo-timepicker [(ngModel)]="eventTime.end">
+                          <kendo-timepicker
+                            [(ngModel)]="eventTime.end"
+                            [disabled]="patientReadOnly"
+                          >
                           </kendo-timepicker>
                         </kendo-textbox-container>
                       </div>
@@ -946,6 +968,7 @@
                             name="telephone"
                             readonly
                             style="width: 100%"
+                            [disabled]="patientReadOnly"
                           />
                         </kendo-textbox-container>
                       </div>
@@ -960,6 +983,7 @@
                             name="mobile"
                             readonly
                             style="width: 100%"
+                            [disabled]="patientReadOnly"
                           />
                         </kendo-textbox-container>
                       </div>

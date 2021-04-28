@@ -15,6 +15,7 @@ import { BaseTwoModel } from "src/app/models/base-two-model";
 import { PhysicalModel } from "src/app/models/physical-model";
 import { TaskService } from "src/app/service/task.service";
 import { ToastrService } from "ngx-toastr";
+import { SortDescriptor, orderBy, process, State } from '@progress/kendo-data-query';
 
 @Component({
   selector: "app-base-date",
@@ -39,15 +40,18 @@ export class BaseDateComponent implements OnInit {
   public dialogDocumentOpened = false;
   public uploader: FileUploader;
   public documents: any;
+  public documentsData: any;
   public language: any;
   //public url = "http://localhost:3000/upload";
   public url = "http://116.203.85.82:" + location.port + "/upload";
   public complaintValue: any;
   public complaintData = new ComplaintTherapyModel();
   public gridComplaint: any;
+  public gridComplaintData: any;
   public therapyValue: any;
   public treatmentValue: any;
   public gridTherapy: any;
+  public gridTherapyData: any;
   public stateValue: any;
   public loadingGrid: any;
   public loading = true;
@@ -79,7 +83,45 @@ export class BaseDateComponent implements OnInit {
   public loadingGridComplaint = false;
   public loadingGridTherapy = false;
   public loadingGridDocument = false;
-
+  public sort: SortDescriptor[] = [
+    {
+      field: "date",
+      dir: "desc"
+    },
+  ];
+  public stateComplaint: State = {
+    skip: 0,
+    take: 10,
+    filter: null,
+    sort: [
+      {
+        field: "date",
+        dir: "desc"
+      }
+    ]
+  };
+  public stateTherapy: State = {
+    skip: 0,
+    take: 10,
+    filter: null,
+    sort: [
+      {
+        field: "date",
+        dir: "desc"
+      }
+    ]
+  };
+  public stateDocument: State = {
+    skip: 0,
+    take: 10,
+    filter: null,
+    sort: [
+      {
+        field: "date",
+        dir: "desc"
+      }
+    ]
+  };
 
   constructor(
     public router: ActivatedRoute,
@@ -117,7 +159,7 @@ export class BaseDateComponent implements OnInit {
     });
 
     this.uploader.onBuildItemForm = (fileItem: FileItem, form: any) => {
-      form.append("description", fileItem.file['description']);
+      form.append("description", fileItem.file["description"]);
       form.append(
         "date",
         fileItem.file.lastModifiedDate !== undefined
@@ -189,8 +231,9 @@ export class BaseDateComponent implements OnInit {
 
   getComplaint() {
     this["loadingGridComplaint"] = true;
-    this.service.getComplaintForCustomer(this.data.id).subscribe((data) => {
-      this.gridComplaint = data;
+    this.service.getComplaintForCustomer(this.data.id).subscribe((data: []) => {
+      this.gridComplaint = process(data, this.stateComplaint);
+      this.gridComplaintData = data;
       this["loadingGridComplaint"] = false;
       this.loading = false;
     });
@@ -210,8 +253,9 @@ export class BaseDateComponent implements OnInit {
 
   getTherapy() {
     this["loadingGridTherapy"] = true;
-    this.service.getTherapyForCustomer(this.data.id).subscribe((data) => {
-      this.gridTherapy = data;
+    this.service.getTherapyForCustomer(this.data.id).subscribe((data: []) => {
+      this.gridTherapy = process(data, this.stateTherapy);
+      this.gridTherapyData = data;
       this["loadingGridTherapy"] = false;
       this.loading = false;
     });
@@ -219,8 +263,9 @@ export class BaseDateComponent implements OnInit {
 
   getDocument() {
     this["loadingGridDocument"] = true;
-    this.service.getDocuments(this.data.id, (val) => {
-      this.documents = val;
+    this.service.getDocuments(this.data.id, (val:[]) => {
+      this.documents = process(val, this.stateDocument);
+      this.documentsData = val;
       this["loadingGridDocument"] = false;
       this.loading = false;
     });
@@ -1182,5 +1227,10 @@ export class BaseDateComponent implements OnInit {
         });
       }
     });
+  }
+
+  public sortChange(sort: SortDescriptor[], stateType, viewData, allData): void {
+    this[stateType].sort = sort;
+    this[viewData] = process(this[allData], this[stateType]);
   }
 }

@@ -623,6 +623,7 @@ router.post("/createUser", function (req, res, next) {
       firstname: req.body.firstname,
       lastname: req.body.lastname,
       shortname: req.body.shortname,
+      alias_name: req.body.alias_name,
       street: req.body.street,
       zipcode: req.body.zipcode,
       place: req.body.place,
@@ -1062,7 +1063,7 @@ router.post("/updateStore", function (req, res, next) {
       time_duration: req.body.time_duration,
       time_therapy: req.body.time_therapy,
       superadmin: req.body.superadmin,
-      allowed_online: req.body.allowed_online
+      allowed_online: req.body.allowed_online,
     };
 
     conn.query(
@@ -2001,6 +2002,7 @@ router.post("/updateUser", function (req, res, next) {
     var response = null;
     var data = {
       shortname: req.body.shortname,
+      alias_name: req.body.alias_name,
       password: bodyPassword,
       firstname: req.body.firstname,
       lastname: req.body.lastname,
@@ -2016,7 +2018,7 @@ router.post("/updateUser", function (req, res, next) {
       storeId: req.body.storeId,
       superadmin: req.body.superadmin,
       active: req.body.active,
-      allowed_online: req.body.allowed_online
+      allowed_online: req.body.allowed_online,
     };
 
     conn.query(
@@ -2324,10 +2326,7 @@ router.post("/postojikorisnik", (req, res, next) => {
           function (err, rows, fields) {
             if (err) {
               console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
               return next(err);
             }
 
@@ -2348,31 +2347,57 @@ router.post("/postojikorisnik", (req, res, next) => {
                 "SELECT * FROM users_superadmin u WHERE u.email=?",
                 [reqObj.email],
                 function (err, rows, fields) {
-                  conn.release();
                   if (err) {
                     console.error("SQL error:", err);
-                    res.json({
-                      code: 100,
-                      status: "Error in connection database",
-                    });
+                    res.json(err);
                     return next(err);
                   }
 
                   if (rows.length >= 1 && rows[0].active == "1") {
+                    conn.release();
                     res.send({
                       exist: true,
                       notVerified: false,
                     });
                   } else if (rows.length >= 1) {
+                    conn.release();
                     res.send({
                       exist: true,
                       notVerified: true,
                     });
                   } else {
-                    res.send({
-                      exist: false,
-                      notVerified: true,
-                    });
+                    conn.query(
+                      "SELECT * FROM customers u WHERE u.email=?",
+                      [reqObj.email],
+                      function (err, rows, fields) {
+                        conn.release();
+                        if (err) {
+                          console.error("SQL error:", err);
+                          res.json({
+                            code: 100,
+                            status: "Error in connection database",
+                          });
+                          return next(err);
+                        }
+
+                        if (rows.length >= 1 && rows[0].active == "1") {
+                          res.send({
+                            exist: true,
+                            notVerified: false,
+                          });
+                        } else if (rows.length >= 1) {
+                          res.send({
+                            exist: true,
+                            notVerified: true,
+                          });
+                        } else {
+                          res.send({
+                            exist: false,
+                            notVerified: true,
+                          });
+                        }
+                      }
+                    );
                   }
                 }
               );
@@ -2412,10 +2437,7 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
             function (err, rows, fields) {
               if (err) {
                 console.error("SQL error:", err);
-                res.json({
-                  code: 100,
-                  status: "Error in connection database",
-                });
+                res.json(err);
                 return next(err);
               } else if (rows.length !== 0) {
                 conn.query(
@@ -2443,25 +2465,60 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
                 );
               } else {
                 conn.query(
-                  "UPDATE users_superadmin SET password='" +
-                    sha1(newPassword1) +
-                    "' WHERE  sha1(email)='" +
-                    email +
-                    "'",
+                  "select * from users_superadmin WHERE  sha1(email)='" + email + "'",
                   function (err, rows, fields) {
-                    conn.release();
                     if (err) {
                       console.error("SQL error:", err);
-                      res.json({
-                        code: 100,
-                        status: "Error in connection database",
-                      });
+                      res.json(err);
                       return next(err);
+                    } else if (rows.length !== 0) {
+                      conn.query(
+                        "UPDATE users_superadmin SET password='" +
+                          sha1(newPassword1) +
+                          "' WHERE  sha1(email)='" +
+                          email +
+                          "'",
+                        function (err, rows, fields) {
+                          conn.release();
+                          if (err) {
+                            console.error("SQL error:", err);
+                            res.json({
+                              code: 100,
+                              status: "Error in connection database",
+                            });
+                            return next(err);
+                          } else {
+                            res.send({
+                              code: "true",
+                              message: "The password is success change!",
+                            });
+                          }
+                        }
+                      );
                     } else {
-                      res.send({
-                        code: "true",
-                        message: "The password is success change!",
-                      });
+                      conn.query(
+                        "UPDATE customers SET password='" +
+                          sha1(newPassword1) +
+                          "' WHERE  sha1(email)='" +
+                          email +
+                          "'",
+                        function (err, rows, fields) {
+                          conn.release();
+                          if (err) {
+                            console.error("SQL error:", err);
+                            res.json({
+                              code: 100,
+                              status: "Error in connection database",
+                            });
+                            return next(err);
+                          } else {
+                            res.send({
+                              code: "true",
+                              message: "The password is success change!",
+                            });
+                          }
+                        }
+                      );
                     }
                   }
                 );

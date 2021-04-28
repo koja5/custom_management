@@ -249,6 +249,7 @@
       "createTime": { "type": "string" },
       "setWorkTime": { "type": "string" },
       "updateWorkTime": { "type": "string" },
+      "aliasName": { "type": "string" },
       "exist": { "type": "string" },
       "notAdded": { "type": "string" },
       "error": { "type": "string" },
@@ -402,7 +403,27 @@
       "subjectDenyReservation": { "type": "string" },
       "introductoryMessageForDenyReservation": { "type": "string" },
       "reservationTooltip": { "type": "string" },
-      "approvedReservationTooltip": { "type": "string" }
+      "approvedReservationTooltip": { "type": "string" },
+      "fileUploadTitle": { "type": "string" },
+      "uploadFileButton": { "type": "string" },
+      "queueLength": { "type": "string" },
+      "documentId": { "type": "string" },
+      "documentName": { "type": "string" },
+      "documentSize": { "type": "string" },
+      "documentDescription": { "type": "string" },
+      "documentDate": { "type": "string" },
+      "documentProgress": { "type": "string" },
+      "documentStatus": { "type": "string" },
+      "documentActions": { "type": "string" },
+      "uploadFile": { "type": "string" },
+      "cancelFile": { "type": "string" },
+      "removeFile": { "type": "string" },
+      "queueProgress": { "type": "string" },
+      "uploadAll": { "type": "string" },
+      "cancelAll": { "type": "string" },
+      "removeAll": { "type": "string" },
+      "closeFileUploader": { "type": "string" },
+      "previewDocument": { "type": "string" }
     }
   },
   "layout": [
@@ -416,7 +437,12 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "yes" }, { "key": "no" }, {"key": "deleteDialogTitleAreYouSure"}, {}]
+          "items": [
+            { "key": "yes" },
+            { "key": "no" },
+            { "key": "deleteDialogTitleAreYouSure" },
+            {}
+          ]
         }
       ]
     },
@@ -816,12 +842,7 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [
-            { "key": "myCalendar" },
-            { },
-            { },
-            { }
-          ]
+          "items": [{ "key": "myCalendar" }, {}, {}, {}]
         }
       ]
     },
@@ -956,7 +977,7 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "active" }, {"key": "inactive"}, {}, {}]
+          "items": [{ "key": "active" }, { "key": "inactive" }, {}, {}]
         }
       ]
     },
@@ -1076,13 +1097,8 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [
-            { "key": "updateWorkTime" },
-            { },
-            { },
-            { }
-          ]
-        }        
+          "items": [{ "key": "updateWorkTime" }, { "key": "aliasName" }, {}, {}]
+        }
       ]
     },
     {
@@ -1466,7 +1482,12 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "errorSendFormToMail" }, {}, {}, {}]
+          "items": [
+            { "key": "errorSendFormToMail" },
+            { },
+            { },
+            { }
+          ]
         }
       ]
     },
@@ -2166,6 +2187,62 @@
             { "key": "approvedReservationTooltip" },
             {},
             {}
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "File uploads",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "fileUploadTitle" },
+            { "key": "uploadFileButton" },
+            { "key": "queueLength" },
+            { "key": "documentId" },
+            { "key": "documentName" },
+            { "key": "documentSize" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "documentDescription" },
+            { "key": "documentDate" },
+            { "key": "documentProgress" },
+            { "key": "documentStatus" },
+            { "key": "documentActions" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "uploadFile" },
+            { "key": "cancelFile" },
+            { "key": "removeFile" },
+            { "key": "queueProgress" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "uploadAll" },
+            { "key": "cancelAll" },
+            { "key": "removeAll" },
+            { "key": "closeFileUploader" },
+            { "key": "previewDocument" }
           ]
         }
       ]

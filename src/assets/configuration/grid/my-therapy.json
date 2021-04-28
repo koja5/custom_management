@@ -68,7 +68,7 @@
       "field": "complaint_title"
     },
     {
-      "title": "Comment",
+      "title": "comment",
       "width": 250,
       "filterable": true,
       "hideable": true,
@@ -77,7 +77,7 @@
       "field": "comment"
     },
     {
-      "title": "Therapies",
+      "title": "therapyValue",
       "width": 200,
       "filterable": true,
       "hideable": true,
@@ -86,7 +86,7 @@
       "field": "therapies_title"
     },
     {
-      "title": "Previous therapy",
+      "title": "treatmentValue",
       "width": 120,
       "filterable": true,
       "hideable": true,
@@ -95,7 +95,7 @@
       "field": "therapies_previous_title"
     },
     {
-      "title": "CS",
+      "title": "cs",
       "width": 120,
       "filterable": true,
       "hideable": true,
@@ -104,7 +104,7 @@
       "field": "cs_title"
     },
     {
-      "title": "Em",
+      "title": "em",
       "width": 120,
       "filterable": true,
       "hideable": true,

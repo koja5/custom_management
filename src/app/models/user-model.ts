@@ -21,4 +21,6 @@ export class UserModel {
   active?: number;
   attention?: string;
   physicalComplaint?: string;
+  alias_name?: string;
+  allowed_online?: boolean;
 }

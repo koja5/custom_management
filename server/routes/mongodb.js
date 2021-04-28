@@ -139,7 +139,6 @@ router.post("/setSettingsForStore", function (req, res, next) {
               }
             );
         } else {
-          console.log("Radim samo update!!!");
           dbo.collection("user_configuration").updateOne(
             {
               user_id: req.body.user_id,
@@ -147,7 +146,7 @@ router.post("/setSettingsForStore", function (req, res, next) {
                 $elemMatch: { id: req.body.storeSettings.id },
               },
             },
-            { $set: { "storeSettings.0": req.body.storeSettings } },
+            { $set: { "storeSettings.$": req.body.storeSettings } },
             function (err, res) {
               if (err) throw err;
             }
