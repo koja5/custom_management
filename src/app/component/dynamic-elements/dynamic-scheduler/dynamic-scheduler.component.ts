@@ -1204,11 +1204,12 @@ export class DynamicSchedulerComponent implements OnInit {
   // @ViewChild("fieldName1") public fieldName1: ElementRef;
 
   onPopupOpen(args: PopupOpenEventArgs): void {
-    if (!this.checkConditionForEvent(args)) {
+    if (!this.checkConditionForEvent(args) && this.type === this.userType.patient) {
       this.patientReadOnly = true;
     } else {
       this.patientReadOnly = false;
     }
+
     args.element.scrollTop = 0;
     this.setTimeForEditor(args);
     if (args.type === "QuickInfo") {
@@ -1218,8 +1219,15 @@ export class DynamicSchedulerComponent implements OnInit {
       if (!args.data["id"]) {
         this.clearAllSelectedData();
       } else if (args.data["id"]) {
-        this.selected = null;
-        this.getSelectEventData(args.data);
+        if (
+          this.type === this.userType.patient &&
+          args.data["customer_id"] !== this.id
+        ) {
+          args.cancel = true;
+        } else {
+          this.selected = null;
+          this.getSelectEventData(args.data);
+        }
       }
     }
   }
@@ -3139,7 +3147,12 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   onActionBegin(args: any) {
-    if (this.checkConditionForEvent(args)) {
+    if (!this.checkConditionForEvent(args) ||
+      args.requestType === "dateNavigate" ||
+      args.requestType === "eventCreate" ||
+      args.requestType === "eventRemove" ||
+      args.requestType === "viewNavigate"
+    ) {
       if (args.requestType === "eventCreate") {
         this.createNewTask();
         args.cancel = true;
@@ -3165,9 +3178,11 @@ export class DynamicSchedulerComponent implements OnInit {
 
   checkConditionForEvent(args) {
     if (
-      this.type === this.userType.patient &&
-      args.data &&
-      args.data["customer_id"]
+      (this.type === this.userType.patient &&
+        args.data &&
+        args.data["customer_id"] &&
+        args.data["customer_id"] === this.id) ||
+      this.type !== this.userType.patient
     ) {
       return false;
     } else {

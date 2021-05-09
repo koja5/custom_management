@@ -555,7 +555,7 @@
                     [dataSource]="sharedCalendarResources"
                     [allowMultiple]="allowMultiple"
                     name="sharedCalendar"
-                    textField="shortname"
+                    [textField]="type !== userType.patient ? 'shortname' : 'alias_name'"
                     idField="id"
                   >
                   </e-resource>
