@@ -17,10 +17,22 @@ export class StorageService {
   }
 
   getSelectedStore(id) {
-    return Number(localStorage.getItem("selectedStore-" + id));
+    return Number(sessionStorage.getItem("selectedStore-" + id));
   }
 
   setSelectedStore(id, value) {
-    localStorage.setItem("selectedStore-" + id, value);
+    sessionStorage.setItem("selectedStore-" + id, value);
+  }
+
+  removeSelectedStore(id) {
+    localStorage.removeItem("selectedStore-" + id);
+  }
+
+  getSelectedUser(id) {
+    return localStorage.getItem("selectedUser-" + id);
+  }
+
+  setSelectedUser(id, value) {
+    localStorage.setItem("selectedUser-" + id, value);
   }
 }

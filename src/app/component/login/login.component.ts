@@ -7,6 +7,7 @@ import { DashboardService } from "../../service/dashboard.service";
 import { MongoService } from "../../service/mongo.service";
 import { HelpService } from "src/app/service/help.service";
 import { PackLanguageService } from "src/app/service/pack-language.service";
+import { StorageService } from "src/app/service/storage.service";
 
 @Component({
   selector: "app-login",
@@ -50,7 +51,8 @@ export class LoginComponent implements OnInit {
     private dashboardService: DashboardService,
     private mongo: MongoService,
     private helpService: HelpService,
-    private packLanguage: PackLanguageService
+    private packLanguage: PackLanguageService,
+    private storageService: StorageService
   ) {}
 
   ngOnInit() {
@@ -252,7 +254,8 @@ export class LoginComponent implements OnInit {
     localStorage.setItem("theme", data.theme);
     localStorage.setItem("defaultLanguage", data.language);
     if (data.selectedStore !== null && data.selectedStore.length !== 0) {
-      localStorage.setItem("selectedStore-" + id, JSON.stringify(data.selectedStore[0]));
+      // localStorage.setItem("selectedStore-" + id, JSON.stringify(data.selectedStore[0]));
+      this.storageService.setSelectedStore(id, JSON.stringify(data.selectedStore[0]));
     }
     if (data.usersFor !== null && data.usersFor.length !== 0) {
       this.setUsersForConfiguration(data.usersFor);

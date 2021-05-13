@@ -101,6 +101,7 @@ import {
   ComboBoxComponent,
   ComboBoxModule,
 } from "@progress/kendo-angular-dropdowns";
+import { TypeOfEventAction } from "../../enum/typeOfEventAction";
 declare var moment: any;
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
@@ -1204,7 +1205,10 @@ export class DynamicSchedulerComponent implements OnInit {
   // @ViewChild("fieldName1") public fieldName1: ElementRef;
 
   onPopupOpen(args: PopupOpenEventArgs): void {
-    if (!this.checkConditionForEvent(args) && this.type === this.userType.patient) {
+    if (
+      !this.checkConditionForEvent(args) &&
+      this.type === this.userType.patient
+    ) {
       this.patientReadOnly = true;
     } else {
       this.patientReadOnly = false;
@@ -1534,6 +1538,7 @@ export class DynamicSchedulerComponent implements OnInit {
   public dateFormatScheduler = "dd.MM.yyyy";
   public userType = UserType;
   public patientReadOnly = false;
+  public currentEventAction: any;
 
   constructor(
     public service: TaskService,
@@ -1694,10 +1699,7 @@ export class DynamicSchedulerComponent implements OnInit {
     if (notAllowedOnlinePreselected) {
       if (this.store.length) {
         this.selectedStoreId = this.store[0].id;
-        localStorage.setItem(
-          "selectedStore-" + this.id,
-          this.selectedStoreId.toString()
-        );
+        this.storageService.setSelectedStore(this.id, this.selected.toString());
         this.getUserInCompany(this.selectedStoreId);
       } else {
         this.selectedStoreId = null;
@@ -1958,16 +1960,13 @@ export class DynamicSchedulerComponent implements OnInit {
     }
 
     if (
-      localStorage.getItem("selectedStore-" + this.id) !== null &&
-      localStorage.getItem("selectedUser-" + this.id) !== null &&
-      JSON.parse(localStorage.getItem("selectedUser-" + this.id)).length !==
-        0 &&
+      this.storageService.getSelectedStore(this.id) !== null &&
+      this.storageService.getSelectedUser(this.id) !== null &&
+      JSON.parse(this.storageService.getSelectedUser(this.id)).length !== 0 &&
       this.type !== 3
     ) {
       this.calendars = [];
-      this.selectedStoreId = Number(
-        localStorage.getItem("selectedStore-" + this.id)
-      );
+      this.selectedStoreId = this.storageService.getSelectedStore(this.id);
       this.value = JSON.parse(
         localStorage.getItem("usersFor-" + this.selectedStoreId + "-" + this.id)
       );
@@ -1983,12 +1982,12 @@ export class DynamicSchedulerComponent implements OnInit {
       }
       this.getUserInCompany(this.selectedStoreId);
     } else if (
-      localStorage.getItem("selectedStore-" + this.id) &&
+      this.storageService.getSelectedStore(this.id) &&
       this.type !== 3
     ) {
       this.calendars = [];
       this.selectedStoreId = Number(
-        localStorage.getItem("selectedStore-" + this.id)
+        this.storageService.getSelectedStore(this.id)
       );
       this.selectedStore(this.selectedStoreId);
     } else if (localStorage.getItem("type") === "3") {
@@ -2050,6 +2049,8 @@ export class DynamicSchedulerComponent implements OnInit {
     this.telephoneValue = "";
     this.mobileValue = "";
     this.isConfirm = false;
+    this.customerUser.attention = "";
+    this.customerUser.physicalComplaint = "";
     this.complaintData = new ComplaintTherapyModel();
     if (this.eventCategory.length > 0) {
       this.selected = this.eventCategory[0].id;
@@ -2153,8 +2154,8 @@ export class DynamicSchedulerComponent implements OnInit {
     this.customerModal = true;
     this.data = new UserModel();
     this.data.gender = "male";
-    this.data.attention = null;
-    this.data.physicalComplaint = null;
+    this.data.attention = "";
+    this.data.physicalComplaint = "";
     this.data.superadmin = this.helpService.getSuperadmin();
   }
 
@@ -2351,7 +2352,7 @@ export class DynamicSchedulerComponent implements OnInit {
       this.sharedCalendarResources = this.value;
       this.getTaskForSelectedUsers(this.value);
       this.getUserInCompany(event);
-      localStorage.setItem("selectedStore-" + this.id, event);
+      this.storageService.setSelectedStore(this.id, event);
     } else {
       this.value = [];
       if (event !== undefined) {
@@ -2398,7 +2399,7 @@ export class DynamicSchedulerComponent implements OnInit {
             } else {
               this.calendars.push({ name: null, events: [] });
             }
-            localStorage.removeItem("selectedStore-" + this.id);
+            this.storageService.removeSelectedStore(this.id);
             this.usersInCompany = [];
             this.startWork = "08:00";
             this.endWork = "22:00";
@@ -2420,9 +2421,9 @@ export class DynamicSchedulerComponent implements OnInit {
       selectedStore: event,
     };
 
-    this.mongo.setSelectedStore(item).subscribe((data) => {
+    /*this.mongo.setSelectedStore(item).subscribe((data) => {
       console.log(data);
-    });
+    });*/
   }
 
   getStoreName(id) {
@@ -2447,8 +2448,8 @@ export class DynamicSchedulerComponent implements OnInit {
         defaultStoreSettings
       );
 
-      localStorage.setItem(
-        "selectedStore-" + this.id,
+      this.storageService.setSelectedStore(
+        this.id,
         this.selectedStoreId.toString()
       );
     }
@@ -3147,7 +3148,8 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   onActionBegin(args: any) {
-    if (!this.checkConditionForEvent(args) ||
+    if (
+      !this.checkConditionForEvent(args) ||
       args.requestType === "dateNavigate" ||
       args.requestType === "eventCreate" ||
       args.requestType === "eventRemove" ||
@@ -3157,7 +3159,12 @@ export class DynamicSchedulerComponent implements OnInit {
         this.createNewTask();
         args.cancel = true;
       } else if (args.requestType === "eventChange") {
-        this.updateTask(args);
+        if (
+          this.currentEventAction !== TypeOfEventAction.Drag &&
+          this.type !== this.userType.patient
+        ) {
+          this.updateTask(args);
+        }
         args.cancel = true;
       } else if (args.requestType === "eventRemove") {
         // this.deleteTask(args.deletedRecords[0]);
@@ -3259,6 +3266,11 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   onItemDrag(event) {
+    if (this.type === this.userType.patient) {
+      this.currentEventAction = TypeOfEventAction.Drag;
+    } else {
+      this.currentEventAction = null;
+    }
     this.eventTime.start = event.startTime;
     this.eventTime.end = event.endTime;
     this.selected = null;

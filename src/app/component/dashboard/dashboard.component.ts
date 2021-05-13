@@ -10,6 +10,7 @@ import { NavigationMenuModel } from "../../models/navigation-menu";
 import { MongoService } from "../../service/mongo.service";
 import { HelpService } from "src/app/service/help.service";
 import { UserType } from "../enum/user-type";
+import { StorageService } from "src/app/service/storage.service";
 declare var document: any;
 
 @Component({
@@ -48,7 +49,8 @@ export class DashboardComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private activatedRouter: ActivatedRoute,
     private mongo: MongoService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private storageService: StorageService
   ) {
     this.helpService.setTitleForBrowserTab("ClinicNode");
   }
@@ -136,18 +138,18 @@ export class DashboardComponent implements OnInit {
 
   checkPermissionForPatientMenu() {
     const superadmin = this.helpService.getSuperadmin();
-    if(this.type === this.userType.patient) {
-      this.mongo.getPermissionForPatientNavigation(superadmin).subscribe(
-        data => {
+    if (this.type === this.userType.patient) {
+      this.mongo
+        .getPermissionForPatientNavigation(superadmin)
+        .subscribe((data) => {
           this.permissionPatientMenu = data;
-        }
-      )
+        });
     }
   }
 
   insertThemeForUser(theme: string) {
     const item = {
-      user_id: localStorage.getItem("idUser"),
+      user_id: this.helpService.getMe(),
       theme: theme,
     };
 
@@ -157,7 +159,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getMe() {
-    this.users.getMe(localStorage.getItem("idUser"), (val) => {
+    this.users.getMe(this.helpService.getMe(), (val) => {
       console.log(val);
       if (val && val.length > 0) {
         this.user = val[0];
@@ -213,14 +215,24 @@ export class DashboardComponent implements OnInit {
   }
 
   logout() {
+    if (this.helpService.getMe()) {
+      const item = {
+        user_id: this.helpService.getMe(),
+        selectedStore: this.storageService.getSelectedStore(
+          this.helpService.getMe()
+        ),
+      };
+      this.mongo.setSelectedStore(item).subscribe((data) => {
+        console.log(data);
+      });
+    }
     this.cookie.deleteAll("/");
-    localStorage.removeItem("idUser");
     sessionStorage.clear();
+    localStorage.removeItem("idUser");
     this.cookie.deleteAll("/dashboard/home");
     setTimeout(() => {
       this.router.navigate(["login"]);
     }, 50);
-    console.log(this.cookie.get("user"));
   }
 
   changeTheme(name: string) {

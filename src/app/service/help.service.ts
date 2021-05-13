@@ -83,6 +83,10 @@ export class HelpService {
     return Number(localStorage.getItem("idUser"));
   }
 
+  setMe(id) {
+    localStorage.setItem("idUser", id);
+  }
+
   getType() {
     return Number(localStorage.getItem("type"));
   }
