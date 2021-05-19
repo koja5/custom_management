@@ -4,6 +4,7 @@
     "properties": {
       "yes": { "type": "string" },
       "no": { "type": "string" },
+      "close": { "type": "string" },
       "deleteDialogTitleAreYouSure": { "type": "string" },
       "welcomeTitle": { "type": "string" },
       "welcomeText": { "type": "string" },
@@ -156,6 +157,7 @@
       "successCopiedFormLink": { "type": "string" },
       "successSendFormToMail": { "type": "string" },
       "errorSendFormToMail": { "type": "string" },
+      "contactPatient": { "type": "string" },
       "createData": { "type": "string" },
       "language": { "type": "string" },
       "active": { "type": "string" },
@@ -423,7 +425,15 @@
       "cancelAll": { "type": "string" },
       "removeAll": { "type": "string" },
       "closeFileUploader": { "type": "string" },
-      "previewDocument": { "type": "string" }
+      "previewDocument": { "type": "string" },
+      "sendSMSTo": { "type": "string" },
+      "sendSMS": { "type": "string" },
+      "inputSMSMessage": { "type": "string" },
+      "sendSMSTitle": { "type": "string" },
+      "successSendSMSMessageTitle": { "type": "string" },
+      "successSendSMSMessageText": { "type": "string" },
+      "errorSendSMSMessageTitle": { "type": "string" },
+      "errorSendSMSMessageText": { "type": "string" }
     }
   },
   "layout": [
@@ -441,7 +451,7 @@
             { "key": "yes" },
             { "key": "no" },
             { "key": "deleteDialogTitleAreYouSure" },
-            {}
+            { "key": "close" }
           ]
         }
       ]
@@ -1484,9 +1494,9 @@
           "flex-direction": "row",
           "items": [
             { "key": "errorSendFormToMail" },
-            { },
-            { },
-            { }
+            { "key": "contactPatient" },
+            {},
+            {}
           ]
         }
       ]
@@ -2243,6 +2253,43 @@
             { "key": "removeAll" },
             { "key": "closeFileUploader" },
             { "key": "previewDocument" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Send SMS Message",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "sendSMSTitle" },
+            { "key": "sendSMSTo" },
+            { "key": "sendSMS" },
+            { "key": "inputSMSMessage" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "successSendSMSMessageTitle" },
+            { "key": "successSendSMSMessageText" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "errorSendSMSMessageTitle" },
+            { "key": "errorSendSMSMessageText" }
           ]
         }
       ]

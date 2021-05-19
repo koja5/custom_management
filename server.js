@@ -11,7 +11,8 @@ const session = require('express-session');
 const morgan = require('morgan');
 // Get our API routes
 const api = require('./server/routes/api');
-const mongo = require('./server/routes/mongodb')
+const mongo = require('./server/routes/mongodb');
+const sms = require('./server/routes/smsAPI');
 const accessControl = require('./server/routes/accessControl')
 const mail = require('./server/routes/mailAPI');
 const cors = require('cors')
@@ -144,6 +145,7 @@ app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/api', api);
 app.use('/api', mail);
 app.use('/api', mongo);
+api.use('/api', sms);
 
 // Catch all other routes and return the index file
 app.get('*', (req, res) => {

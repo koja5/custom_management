@@ -110,6 +110,18 @@
                   {{ data.gender }}
                 </span>
               </li>
+              <li class="list-group-item">
+                <b>{{ language.contactPatient }}</b>
+                <span class="pull-right a-color" *ngIf="!data.telephone && !data.mobile">{{
+                  language["noInformation"]
+                }}</span>
+                <span class="pull-right a-color">
+                  <app-send-sms *ngIf="data.telephone" [phoneNumber]="data.telephone"></app-send-sms>
+                </span>
+                <span class="pull-right a-color">
+                  <app-send-sms *ngIf="data.mobile" [phoneNumber]="data.mobile"></app-send-sms>
+                </span>
+              </li>
             </ul>
           </div>
         </div>
@@ -657,7 +669,6 @@
                           </p>
                         </div>
                       </div>
-                      <hr />
                     </div>
                   </div>
                 </div>
@@ -860,7 +871,6 @@
                           </p>
                         </div>
                       </div>
-                      <hr />
                     </div>
                   </div>
                 </div>

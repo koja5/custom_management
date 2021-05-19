@@ -46,6 +46,7 @@ import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { DialogsModule } from '@progress/kendo-angular-dialog';
 import { BaseDateSharedModule } from '../shared-module/base-date-module';
 import { DynamicConfirmDialogComponent } from './dynamic-dialogs/dynamic-confirm-dialog/dynamic-confirm-dialog.component';
+import { SendSmsComponent } from '../dashboard/sms/send-sms/send-sms.component';
 
 @NgModule({
   declarations: [DynamicGridComponent, DynamicFormsComponent, DynamicSchedulerComponent, DynamicConfirmDialogComponent],

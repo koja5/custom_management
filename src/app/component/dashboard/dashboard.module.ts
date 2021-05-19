@@ -94,7 +94,6 @@ import { ReservationsComponent } from './reservations/reservations.component';
     MyTherapyComponent,
     MyDocumentComponent,
     ReservationsComponent
-
   ],
   imports: [
     CommonModule,
