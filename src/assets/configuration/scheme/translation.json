@@ -158,6 +158,8 @@
       "successSendFormToMail": { "type": "string" },
       "errorSendFormToMail": { "type": "string" },
       "contactPatient": { "type": "string" },
+      "mobileEdit": { "type": "string" },
+      "telephoneEdit": { "type": "string" },
       "createData": { "type": "string" },
       "language": { "type": "string" },
       "active": { "type": "string" },
@@ -433,7 +435,14 @@
       "successSendSMSMessageTitle": { "type": "string" },
       "successSendSMSMessageText": { "type": "string" },
       "errorSendSMSMessageTitle": { "type": "string" },
-      "errorSendSMSMessageText": { "type": "string" }
+      "errorSendSMSMessageText": { "type": "string" },
+      "sendEmailTo": { "type": "string" },
+      "sendEmail": { "type": "string" },
+      "inputEmailMessage": { "type": "string" },
+      "emailSubject": { "type": "string" },
+      "sendEmailTitle": { "type": "string" },
+      "successSendEmailMessageText": { "type": "string" },
+      "errorSendEmailMessageText": { "type": "string" }
     }
   },
   "layout": [
@@ -1495,8 +1504,8 @@
           "items": [
             { "key": "errorSendFormToMail" },
             { "key": "contactPatient" },
-            {},
-            {}
+            { "key": "mobileEdit"},
+            { "key": "telephoneEdit" }
           ]
         }
       ]
@@ -2279,8 +2288,28 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "successSendSMSMessageTitle" },
-            { "key": "successSendSMSMessageText" }
+            { "key": "successSendSMSMessageText" },
+            { "key": "errorSendSMSMessageText" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Send Email",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "sendEmailTitle" },
+            { "key": "sendEmailTo" },
+            { "key": "sendEmail" },
+            { "key": "inputEmailMessage" },
+            { "key": "emailSubject" }
           ]
         },
         {
@@ -2288,8 +2317,8 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "errorSendSMSMessageTitle" },
-            { "key": "errorSendSMSMessageText" }
+            { "key": "successSendEmailMessageText" },
+            { "key": "errorSendEmailMessageText" }
           ]
         }
       ]

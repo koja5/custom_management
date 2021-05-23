@@ -459,4 +459,22 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
   });
 });
 
+router.post("/sendEmailToPatient", function (req, res) {
+  var mailOptions = {
+    from: '"ClinicNode" info@app-production.eu',
+    to: req.body.email,
+    subject: req.body?.subject,
+    text: req.body?.content
+  };
+  smtpTransport.sendMail(mailOptions, function (error, response) {
+    if (error) {
+      console.log(error);
+
+      res.send(false);
+    } else {
+      res.send(true);
+    }
+  });
+});
+
 module.exports = router;

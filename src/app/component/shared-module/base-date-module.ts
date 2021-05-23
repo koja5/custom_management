@@ -16,9 +16,10 @@ import { GridModule } from "@progress/kendo-angular-grid";
 import { ModalModule } from "ngx-modal";
 import { FileUploadModule } from "ng2-file-upload";
 import { SendSmsComponent } from "../dashboard/sms/send-sms/send-sms.component";
+import { SendEmailComponent } from "../dashboard/email/send-email/send-email.component";
 
 @NgModule({
-  declarations: [BaseDateComponent, SendSmsComponent],
+  declarations: [BaseDateComponent, SendSmsComponent, SendEmailComponent],
   exports: [BaseDateComponent],
   imports: [
     CommonModule,

@@ -12,7 +12,6 @@ export class SendSmsComponent implements OnInit {
 
   @Input() phoneNumber: string;
   @ViewChild("dialogSendSMSForm") dialogSendSMSForm: Modal;
-  // public dialogSendSMSForm = false;
   public language: any;
   public message: any;
   public showDialog = false;
@@ -30,7 +29,7 @@ export class SendSmsComponent implements OnInit {
     return this.phoneNumber;
   }
 
-  sendSMSMessage() {
+  sendSMSMessage(sms) {
     const data = {
       number: this.phoneNumber,
       message: this.message

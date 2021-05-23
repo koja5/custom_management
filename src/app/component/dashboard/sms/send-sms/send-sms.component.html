@@ -5,41 +5,26 @@
   (click)="dialogSendSMSForm.open()"
 ></span>
 
-<modal
-  #dialogSendSMSForm
-  [hideCloseButton]="false"
-  modalClass="modal-md"
->
+<modal #dialogSendSMSForm [hideCloseButton]="false" modalClass="modal-md">
   <modal-header>
-    <h2>{{ language.fileUploadTitle }}</h2>
+    <h2>{{ language.sendSMSTo }} {{ phoneNumber }}</h2>
   </modal-header>
   <modal-content>
-    <form #sendSMSForm="ngForm">
-      <div class="e-float-input e-control-wrapper">
-        <input
-          required
-          [(ngModel)]="phoneNumber"
-          name="phoneNumber"
-          disabled="true"
-        />
-        <label class="e-float-text e-label-top"> {{ language.mobile }}</label>
-      </div>
+    <form (ngSubmit)="sendSMSMessage()" #sendSMSForm="ngForm">
       <div class="e-float-input e-control-wrapper">
         <textarea required [(ngModel)]="message" name="message"></textarea>
         <label class="e-float-text e-label-top" for="OrderID">
-          {{ language.inputSMSMessage }}</label
+          {{ language.inputSMSMessage }}({{ language.required }})</label
         >
+      </div>
+      <div class="end mt-5">
+        <button kendoButton [primary]="true" type="submit" [disabled]="sendSMSForm.form.invalid">
+          {{ language.sendSMS }}
+        </button>
       </div>
     </form>
   </modal-content>
-  <modal-footer>
-    <button kendoButton [primary]="true" (click)="sendSMSMessage()">
-      {{ language.sendSMS }}
-    </button>
-    <button class="btn btn-danger mb-0 ml-2" (click)="dialogSendSMSForm.close()">
-        {{ language.close }}
-      </button>
-  </modal-footer>
+  <modal-footer> </modal-footer>
 </modal>
 
 <!-- <kendo-window

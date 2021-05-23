@@ -9462,7 +9462,7 @@ span.online-status {
     font-size: 18px;
 }
 
-.close {
+/*.close {
     display: inline-block;
     margin-top: 0;
     margin-right: 0;
@@ -9471,7 +9471,7 @@ span.online-status {
     background-repeat: no-repeat !important;
     text-indent: -10000px;
     outline: 0;
-}
+}*/
 
 .help-block {
     margin-top: 5px;
@@ -14015,3 +14015,7 @@ kendo-window {
 }
 
 /* SETTINGS END */
+
+.modal-dialog {
+    margin: 100px auto !important;
+}

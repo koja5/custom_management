@@ -112,7 +112,7 @@
               </li>
               <li class="list-group-item">
                 <b>{{ language.contactPatient }}</b>
-                <span class="pull-right a-color" *ngIf="!data.telephone && !data.mobile">{{
+                <span class="pull-right a-color" *ngIf="!data.telephone && !data.mobile && !data.email">{{
                   language["noInformation"]
                 }}</span>
                 <span class="pull-right a-color">
@@ -120,6 +120,9 @@
                 </span>
                 <span class="pull-right a-color">
                   <app-send-sms *ngIf="data.mobile" [phoneNumber]="data.mobile"></app-send-sms>
+                </span>
+                <span class="pull-right a-color">
+                  <app-send-email *ngIf="data.email" [email]="data.email"></app-send-email>
                 </span>
               </li>
             </ul>
@@ -1635,7 +1638,7 @@
                     <td>
                       <textarea
                         kendoTextArea
-                        [(ngModel)]="item.file.description"
+                        [(ngModel)]="item.file['description']"
                         [autoSize]="true"
                         name="descriprion"
                         style="width: 95%"
@@ -1765,7 +1768,7 @@
             ? operationMode === 'add'
               ? addComplaint(complaint)
               : updateComplaint(complaint)
-            : none
+            : null
         "
         #complaintForm="ngForm"
       >
@@ -1782,8 +1785,8 @@
               [valuePrimitive]="true"
               required
               [class.is-invalid]="
-                complaint.invalid &&
-                (complaint.touched || complaintForm.submitted)
+                complaint['invalid'] &&
+                (complaint['touched'] || complaintForm.submitted)
               "
             >
             </kendo-multiselect>
@@ -1874,7 +1877,7 @@
             ? operationMode === 'add'
               ? addTherapy(therapy)
               : updateTherapy(therapy)
-            : none
+            : null
         "
         #therapyForm="ngForm"
       >
@@ -2208,7 +2211,7 @@
               <div class="form-group">
                 <div class="email col-md-4 col-xs-12">
                   <kendo-textbox-container
-                    floatingLabel="{{ language.telephone }}"
+                    floatingLabel="{{ language.telephoneEdit }}"
                   >
                     <input
                       kendoTextBox
@@ -2222,7 +2225,7 @@
                 </div>
                 <div class="email col-md-4 col-xs-12">
                   <kendo-textbox-container
-                    floatingLabel="{{ language.mobile }}"
+                    floatingLabel="{{ language.mobileEdit }}"
                   >
                     <input
                       kendoTextBox
