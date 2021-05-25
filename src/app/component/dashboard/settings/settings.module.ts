@@ -5,6 +5,7 @@ import { AccountComponent } from './account/account.component';
 import { DymanicElementsModule } from '../../dynamic-elements/dymanic-elements.module';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { PermissionPatientMenuComponent } from './permission-patient-menu/permission-patient-menu.component';
+import { RemindersComponent } from './reminders/reminders.component';
 
 @NgModule({
   imports: [
@@ -12,7 +13,7 @@ import { PermissionPatientMenuComponent } from './permission-patient-menu/permis
     SettingsRoutingModule,
     DymanicElementsModule
   ],
-  declarations: [AccountComponent, ChangePasswordComponent, PermissionPatientMenuComponent],
+  declarations: [AccountComponent, ChangePasswordComponent, PermissionPatientMenuComponent, RemindersComponent],
   exports: [ AccountComponent, ChangePasswordComponent ]
 })
 export class SettingsModule { }

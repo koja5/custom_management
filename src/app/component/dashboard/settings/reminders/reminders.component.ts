@@ -1,16 +1,15 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { DynamicFormsComponent } from "src/app/component/dynamic-elements/dynamic-forms/dynamic-forms.component";
-import { AccountService } from "src/app/service/account.service";
 import { DynamicService } from "src/app/service/dynamic.service";
 import { HelpService } from "src/app/service/help.service";
-import { MongoService } from "src/app/service/mongo.service";
+import { RemindersService } from "src/app/service/reminders.service";
 
 @Component({
-  selector: "app-permission-patient-menu",
-  templateUrl: "./permission-patient-menu.component.html",
-  styleUrls: ["./permission-patient-menu.component.scss"],
+  selector: "app-reminders",
+  templateUrl: "./reminders.component.html",
+  styleUrls: ["./reminders.component.scss"],
 })
-export class PermissionPatientMenuComponent implements OnInit {
+export class RemindersComponent implements OnInit {
   @ViewChild(DynamicFormsComponent) form: DynamicFormsComponent;
   public configField: any;
   public language: any;
@@ -21,10 +20,9 @@ export class PermissionPatientMenuComponent implements OnInit {
   public showDialog = false;
 
   constructor(
-    private service: AccountService,
+    private service: RemindersService,
     private helpService: HelpService,
-    private dynamicService: DynamicService,
-    private mongoService: MongoService
+    private dynamicService: DynamicService
   ) {}
 
   ngOnInit() {
@@ -35,7 +33,7 @@ export class PermissionPatientMenuComponent implements OnInit {
 
   initialization() {
     this.dynamicService
-      .getConfiguration("settings/permission", "permission-patient-menu")
+      .getConfiguration("settings/permission", "reminders")
       .subscribe((config) => {
         this.configField = config;
         this.getData();
@@ -43,20 +41,20 @@ export class PermissionPatientMenuComponent implements OnInit {
   }
 
   getData() {
-    this.mongoService
-      .getPermissionForPatientNavigation(this.superadmin)
-      .subscribe((data) => {
-        this.data = data;
-        this.packValue(data);
-        this.loading = false;
-      });
+    this.service.getReminderSettings(this.superadmin).subscribe((data) => {
+      if (data && data["length"]) {
+        this.data = data[0];
+      }
+      this.packValue(this.data);
+      this.loading = false;
+    });
   }
 
   packValue(data) {
     this.loading = false;
     for (let i = 0; i < this.configField.length; i++) {
       if (data && data[this.configField[i].field]) {
-        this.configField[i].value = data[this.configField[i].field];
+        this.configField[i].value = true;
       } else {
         this.configField[i].value = false;
       }
@@ -71,22 +69,21 @@ export class PermissionPatientMenuComponent implements OnInit {
 
   receiveConfirm(event) {
     if (event) {
-      this.changeData.clinic = this.superadmin;
-      this.mongoService
-        .createOrUpdatePermissionPatientMenu(this.changeData)
-        .subscribe((data) => {
-          if (data) {
-            this.helpService.successToastr(
-              this.language.permissionPatientMenuSuccessUpdateText,
-              ""
-            );
-          } else {
-            this.helpService.errorToastr(
-              this.language.permissionPatientMenuErrorUpdateText,
-              ""
-            );
-          }
-        });
+      this.changeData.superadmin = this.superadmin;
+      this.service.setReminderSettings(this.changeData).subscribe((data) => {
+        console.log(data);
+        if (data) {
+          this.helpService.successToastr(
+            "",
+            this.language.successChangeReminderSettingsText
+          );
+        } else {
+          this.helpService.errorToastr(
+            "",
+            this.language.errorChangeReminderSettingsText
+          );
+        }
+      });
     }
     this.showDialog = false;
   }

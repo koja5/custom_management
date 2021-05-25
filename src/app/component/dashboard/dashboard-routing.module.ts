@@ -26,6 +26,7 @@ import { AccountComponent } from "./settings/account/account.component";
 import { ChangePasswordComponent } from "./settings/change-password/change-password.component";
 import { PermissionPatientMenuComponent } from "./settings/permission-patient-menu/permission-patient-menu.component";
 import { ReservationsComponent } from "./reservations/reservations.component";
+import { RemindersComponent } from "./settings/reminders/reminders.component";
 
 const routes: Routes = [
   {
@@ -67,6 +68,10 @@ const routes: Routes = [
           {
             path: "permission-patient-menu",
             component: PermissionPatientMenuComponent,
+          },
+          {
+            path: "reminders",
+            component: RemindersComponent,
           },
         ],
       },

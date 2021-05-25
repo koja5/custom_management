@@ -6392,7 +6392,7 @@ router.post("/denyReservation", function (req, res, next) {
 /* END RESERVATIONS */
 
 /* SMS Sender */
-const messagebird = require("messagebird")("OwdAco8LGuib3iAuUHkf3lrDM", null, [
+const messagebird = require("messagebird")("A87RrSLj3wWPL0qj2X66fzqoN", null, [
   "ENABLE_CONVERSATIONSAPI_WHATSAPP_SANDBOX",
 ]);
 
@@ -6454,5 +6454,80 @@ router.post("/sendSMS", function (req, res) {
 });
 
 /* END SMS Sender */
+
+/* Settings reminder */
+
+router.get("/getReminderSettings/:superadmin", (req, res, next) => {
+  try {
+    var reqObj = req.params.superadmin;
+
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        res.json(err);
+      } else {
+        conn.query(
+          "select * from reminder where superadmin = '" + reqObj + "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(err);
+            } else {
+              res.json(rows);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    console.error("Internal error: " + ex);
+    return next(ex);
+  }
+});
+
+router.post("/setReminderSettings", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json(err);
+      return;
+    }
+
+    conn.query(
+      "select * from reminder where superadmin = '" + req.body.superadmin + "'",
+      function (err, rows, fields) {
+        if(rows.length > 0) {
+          conn.query(
+            "update reminder set ? where superadmin = ?", [req.body, req.body.superadmin],
+            function (err, rows, fields) {
+              conn.release();
+              if(err) {
+                res.json(err);
+              } else {
+                res.json(true);
+              }
+            }
+          );
+        } else {
+          conn.query(
+            "insert into reminder set ?", [req.body],
+            function (err, rows, fields) {
+              conn.release();
+              if(err) {
+                res.json(err);
+              } else {
+                res.json(true);
+              }
+            }
+          );
+        }
+      }
+    );
+    conn.on("error", function (err) {
+      res.json(err);
+    });
+  });
+});
+
+
+/* END Settings reminder */
 
 module.exports = router;

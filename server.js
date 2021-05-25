@@ -23,7 +23,8 @@ const mysql = require('mysql');
 var fs = require("fs");
 var schedule = require('node-schedule');
 var eventConfirm = require('./server/routes/eventConfirm');
-var reminder = require('./server/routes/reminder');
+var reminderViaEmail = require('./server/routes/reminderViaEmail');
+var reminderViaSMS = require('./server/routes/reminderViaSMS');
 app.use(compression());
 
 var connection = mysql.createPool({
@@ -192,9 +193,12 @@ var j = schedule.scheduleJob('59 23 * * *', function(){
   eventConfirm();
 });
 
-var j = schedule.scheduleJob('31 23 * * *', function(){
-  console.log("Test");
-  reminder();
+var j = schedule.scheduleJob('48 13 * * *', function(){
+  reminderViaEmail();
+});
+
+var j = schedule.scheduleJob('32 13 * * *', function(){
+  reminderViaSMS();
 });
 
 /**

@@ -406,6 +406,10 @@
       "introductoryMessageForApproveReservation": { "type": "string" },
       "subjectDenyReservation": { "type": "string" },
       "introductoryMessageForDenyReservation": { "type": "string" },
+      "subjectForReminderReservation": { "type": "string" },
+      "introductoryMessageForReminderReservation": { "type": "string" },
+      "initialGreetingSMSReminder": { "type": "string" },
+      "introductoryMessageForSMSReminderReservation": { "type": "string" },
       "reservationTooltip": { "type": "string" },
       "approvedReservationTooltip": { "type": "string" },
       "fileUploadTitle": { "type": "string" },
@@ -442,7 +446,16 @@
       "emailSubject": { "type": "string" },
       "sendEmailTitle": { "type": "string" },
       "successSendEmailMessageText": { "type": "string" },
-      "errorSendEmailMessageText": { "type": "string" }
+      "errorSendEmailMessageText": { "type": "string" },
+      "reminderMenu": { "type": "string" },
+      "reminderHeaderTitle": { "type": "string" },
+      "reminderConfirmDialogTitle": { "type": "string" },
+      "reminderDialogQuestion": { "type": "string" },
+      "sendReminderViaEMail": { "type": "string" },
+      "sendReminderViaSMS": { "type": "string" },
+      "changeReminderSettingsButton": { "type": "string" },
+      "successChangeReminderSettingsText": { "type": "string" },
+      "errorChangeReminderSettingsText": { "type": "string" }
     }
   },
   "layout": [
@@ -1985,6 +1998,56 @@
     },
     {
       "type": "section",
+      "title": "Mail Template - Reminder for reservations",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [{ "key": "subjectForReminderReservation" }]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "introductoryMessageForReminderReservation",
+              "type": "textarea"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "SMS Template - Reminder for reservations",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [{ "key": "initialGreetingSMSReminder" }]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "introductoryMessageForSMSReminderReservation",
+              "type": "textarea"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
       "title": "Settings",
       "expandable": true,
       "expanded": false,
@@ -2319,6 +2382,44 @@
           "items": [
             { "key": "successSendEmailMessageText" },
             { "key": "errorSendEmailMessageText" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Reminder settings",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "reminderMenu" },
+            { "key": "reminderHeaderTitle" },
+            { "key": "reminderConfirmDialogTitle" },
+            { "key": "reminderDialogQuestion" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "sendReminderViaEMail" },
+            { "key": "sendReminderViaSMS" },
+            { "key": "changeReminderSettingsButton" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "successChangeReminderSettingsText" },
+            { "key": "errorChangeReminderSettingsText" }
           ]
         }
       ]

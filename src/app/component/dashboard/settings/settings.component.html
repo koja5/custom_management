@@ -55,6 +55,14 @@
                 }}</span></a
               >
             </li>
+            <li *ngIf="type === userType.owner">
+              <a routerLink="/dashboard/home/settings/reminders"
+                ><i class="fa fa-bell"></i>
+                <span>{{
+                  language?.reminderMenu
+                }}</span></a
+              >
+            </li>
           </ul>
         </div>
       </div>

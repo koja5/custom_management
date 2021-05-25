@@ -826,11 +826,12 @@ export class DynamicSchedulerComponent implements OnInit {
     this.storageService.setStoreSettings(currentCalendarSettings);
   }
 
-  public getResourceData(data: {
+  public getResourceData(data: { [key: string]: Object }): {
     [key: string]: Object;
-  }): { [key: string]: Object } {
+  } {
     // tslint:disable-next-line: deprecation
-    const resources: ResourcesModel = this.scheduleObj.getResourceCollections()[0];
+    const resources: ResourcesModel =
+      this.scheduleObj.getResourceCollections()[0];
     const resourceData: {
       [key: string]: Object;
     } = (resources.dataSource as Object[]).filter(
@@ -876,9 +877,8 @@ export class DynamicSchedulerComponent implements OnInit {
     if (data.elementType === "cell") {
       return { "align-items": "center", color: "#919191" };
     } else {
-      const resourceData: { [key: string]: Object } = this.getResourceData(
-        data
-      );
+      const resourceData: { [key: string]: Object } =
+        this.getResourceData(data);
       // return { 'background': resourceData.color, 'color': '#FFFFFF' };
       return { background: "#007bff", color: "#FFFFFF" };
     }
@@ -916,15 +916,20 @@ export class DynamicSchedulerComponent implements OnInit {
       );
       const addObj: { [key: string]: Object } = {};
       addObj.Id = this.scheduleObj.getEventMaxID();
-      addObj.Subject = ((quickPopup.querySelector("#title") as EJ2Instance)
-        .ej2_instances[0] as TextBoxComponent).value;
+      addObj.Subject = (
+        (quickPopup.querySelector("#title") as EJ2Instance)
+          .ej2_instances[0] as TextBoxComponent
+      ).value;
       addObj.StartTime = new Date(cellDetails.startTime);
       addObj.EndTime = new Date(cellDetails.endTime);
-      addObj.Description = ((quickPopup.querySelector("#notes") as EJ2Instance)
-        .ej2_instances[0] as TextBoxComponent).value;
-      addObj.CalendarId = ((quickPopup.querySelector(
-        "#eventType"
-      ) as EJ2Instance).ej2_instances[0] as DropDownListComponent).value;
+      addObj.Description = (
+        (quickPopup.querySelector("#notes") as EJ2Instance)
+          .ej2_instances[0] as TextBoxComponent
+      ).value;
+      addObj.CalendarId = (
+        (quickPopup.querySelector("#eventType") as EJ2Instance)
+          .ej2_instances[0] as DropDownListComponent
+      ).value;
       return addObj;
     };
     if (e["addedRecords"].length) {
@@ -940,9 +945,8 @@ export class DynamicSchedulerComponent implements OnInit {
       this.deleteTask(eventDetails);
       this.scheduleObj.deleteEvent(eventDetails, currentAction);
     } else {
-      const isCellPopup: boolean = quickPopup.firstElementChild.classList.contains(
-        "e-cell-popup"
-      );
+      const isCellPopup: boolean =
+        quickPopup.firstElementChild.classList.contains("e-cell-popup");
       let eventDetails: { [key: string]: Object } = isCellPopup
         ? getSlotData()
         : (this.scheduleObj.activeEventData.event as { [key: string]: Object });
@@ -1408,9 +1412,10 @@ export class DynamicSchedulerComponent implements OnInit {
       case "Add":
       case "AddRecurrence":
         const selectedCells: Element[] = this.scheduleObj.getSelectedElements();
-        const activeCellsData: CellClickEventArgs = this.scheduleObj.getCellDetails(
-          selectedCells.length > 0 ? selectedCells : this.selectedTarget
-        );
+        const activeCellsData: CellClickEventArgs =
+          this.scheduleObj.getCellDetails(
+            selectedCells.length > 0 ? selectedCells : this.selectedTarget
+          );
         if (selectedMenuItem === "Add") {
           this.scheduleObj.openEditor(activeCellsData, "Add");
         } else {
@@ -2588,40 +2593,48 @@ export class DynamicSchedulerComponent implements OnInit {
             date.element.style.borderRight = "2px solid #6d6d6d";
           }
         }
-        for (
-          let i = 0;
-          i < this.calendars[0].workTime[date.groupIndex].length;
-          i++
-        ) {
-          let workItem = this.calendars[0].workTime[date.groupIndex][i];
-          if (
-            new Date(workItem.change) <= date.date &&
-            (i + 1 <= this.calendars[0].workTime[date.groupIndex].length - 1
-              ? date.date <
-                new Date(
-                  this.calendars[0].workTime[date.groupIndex][i + 1].change
-                )
-              : true) &&
-            date.date.getDay() - 1 < 5 &&
-            date.date.getDay() !== 0
+        if (this.calendars[0].workTime[date.groupIndex].length) {
+          for (
+            let i = 0;
+            i < this.calendars[0].workTime[date.groupIndex].length;
+            i++
           ) {
+            let workItem = this.calendars[0].workTime[date.groupIndex][i];
             if (
-              (workItem.times[date.date.getDay() - 1].start <=
-                date.date.getHours() &&
-                workItem.times[date.date.getDay() - 1].end >
-                  date.date.getHours()) ||
-              (workItem.times[date.date.getDay() - 1].start2 <=
-                date.date.getHours() &&
-                workItem.times[date.date.getDay() - 1].end2 >
-                  date.date.getHours()) ||
-              (workItem.times[date.date.getDay() - 1].start3 <=
-                date.date.getHours() &&
-                workItem.times[date.date.getDay() - 1].end3 >
-                  date.date.getHours())
+              new Date(workItem.change) <= date.date &&
+              (i + 1 <= this.calendars[0].workTime[date.groupIndex].length - 1
+                ? date.date <
+                  new Date(
+                    this.calendars[0].workTime[date.groupIndex][i + 1].change
+                  )
+                : true) &&
+              date.date.getDay() - 1 < 5 &&
+              date.date.getDay() !== 0
             ) {
-              date.element.style.background = workItem.color;
+              if (
+                (workItem.times[date.date.getDay() - 1].start <=
+                  date.date.getHours() &&
+                  workItem.times[date.date.getDay() - 1].end >
+                    date.date.getHours()) ||
+                (workItem.times[date.date.getDay() - 1].start2 <=
+                  date.date.getHours() &&
+                  workItem.times[date.date.getDay() - 1].end2 >
+                    date.date.getHours()) ||
+                (workItem.times[date.date.getDay() - 1].start3 <=
+                  date.date.getHours() &&
+                  workItem.times[date.date.getDay() - 1].end3 >
+                    date.date.getHours())
+              ) {
+                date.element.style.background = workItem.color;
+              } else {
+                date.element.style.pointerEvents = "none";
+              }
+            } else {
+              date.element.style.pointerEvents = "none";
             }
           }
+        } else {
+          date.element.style.pointerEvents = "none";
         }
       }
     }

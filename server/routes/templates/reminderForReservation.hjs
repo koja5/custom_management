@@ -59,7 +59,7 @@
               style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;font-weight: 700;height: 6rem;color: #e3342f;font-size: .875rem;"
             >
               <img
-                src="http://app-production.eu:8081/assets/images/clinic_node.png"
+                src="http://app-production.eu:8080/assets/images/brand-logo.png"
                 style="width: 280px;box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;max-width: 100%;height: auto;"
               />
             </div>
@@ -78,7 +78,7 @@
                 style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"
               /><br
                 style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"
-              />{{introductoryMessageForConfirmArrival}}</p>
+              />{{introductoryMessageForReminderReservation}}</p>
 
             <div style="text-align: center; padding: 15px;">
               <table style="width:80%; margin: auto;">
@@ -115,6 +115,12 @@
                       <span
                         style="font-size: 15px; font-weight: bold;"
                       >{{doctor}}</span></p>
+                      <p
+                      style="text-align: initial; font-size: 13px; margin: 0px"
+                    >{{storeLocation}}:
+                      <span
+                        style="font-size: 15px; font-weight: bold;"
+                      >{{storename}}</span></p>
 
                   </td>
                 </tr>

@@ -53,6 +53,12 @@ export class SettingsComponent implements OnInit {
         route: "/dashboard/home/settings/permission-patient-menu",
         icon: "fa fa-user"
       },
+      {
+        menu: this.language.reminderMenu,
+        category: this.language.settingsPermissionNavigation,
+        route: "/dashboard/home/settings/reminders",
+        icon: "fa fa-user"
+      },
     ];
   }
 
