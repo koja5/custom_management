@@ -6392,7 +6392,7 @@ router.post("/denyReservation", function (req, res, next) {
 /* END RESERVATIONS */
 
 /* SMS Sender */
-const messagebird = require("messagebird")("A87RrSLj3wWPL0qj2X66fzqoN", null, [
+const messagebird = require("messagebird")("1ZL5pTqKg9YSTii8LQbZmmFgC", null, [
   "ENABLE_CONVERSATIONSAPI_WHATSAPP_SANDBOX",
 ]);
 

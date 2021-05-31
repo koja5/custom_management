@@ -29,16 +29,16 @@ export class SendSmsComponent implements OnInit {
     return this.phoneNumber;
   }
 
-  sendSMSMessage(sms) {
+  sendSMSMessage() {
     const data = {
       number: this.phoneNumber,
       message: this.message
     };
+    this.dialogSendSMSForm.close();
     this.service.sendSMSMessage(data).subscribe(data => {
       console.log(data);
       // this.dialogSendSMSForm = false;
       this.message = '';
-      this.dialogSendSMSForm.close();
       if(data) {
         this.helpService.successToastr('', this.language.successSendSMSMessageText);
       } else {

@@ -25,19 +25,19 @@ export class SendEmailComponent implements OnInit {
     this.language = this.helpService.getLanguage();
   }
 
-  sendEmail(mail) {
+  sendEmail() {
     const data = {
       email: this.email,
       subject: this.subject,
       content: this.content,
     };
+    this.dialogSendEmailForm.close();
     this.service.sendEmailToPatient(data).subscribe((data) => {
       if(data) {
         this.helpService.successToastr("", this.language.successSendEmailMessageText);
       } else {
         this.helpService.errorToastr("", this.language.errorSendEmailMessageText);
       }
-      this.dialogSendEmailForm.close();
     });
   }
 }

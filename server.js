@@ -197,7 +197,7 @@ var j = schedule.scheduleJob('48 13 * * *', function(){
   reminderViaEmail();
 });
 
-var j = schedule.scheduleJob('32 13 * * *', function(){
+var j = schedule.scheduleJob('23 10 * * *', function(){
   reminderViaSMS();
 });
 

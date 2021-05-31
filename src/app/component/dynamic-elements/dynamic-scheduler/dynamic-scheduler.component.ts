@@ -2626,15 +2626,22 @@ export class DynamicSchedulerComponent implements OnInit {
                     date.date.getHours())
               ) {
                 date.element.style.background = workItem.color;
+                date.element.style.pointerEvents = "auto";
               } else {
-                date.element.style.pointerEvents = "none";
+                if (this.type === this.userType.patient) {
+                  date.element.style.pointerEvents = "none";
+                }
               }
             } else {
-              date.element.style.pointerEvents = "none";
+              if (this.type === this.userType.patient) {
+                date.element.style.pointerEvents = "none";
+              }
             }
           }
         } else {
-          date.element.style.pointerEvents = "none";
+          if (this.type === this.userType.patient) {
+            date.element.style.pointerEvents = "none";
+          }
         }
       }
     }
