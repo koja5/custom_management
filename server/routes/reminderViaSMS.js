@@ -52,7 +52,7 @@ var smtpTransport = nodemailer.createTransport({
   },
 });
 
-const messagebird = require("messagebird")("1ZL5pTqKg9YSTii8LQbZmmFgC", null, [
+const messagebird = require("messagebird")("sbx8Desv4cXJdPMZf7GtBLs9P", null, [
   "ENABLE_CONVERSATIONSAPI_WHATSAPP_SANDBOX",
 ]);
 
@@ -67,7 +67,7 @@ function reminderViaSMS() {
       function (error, response, body) {
         if (!error && response.statusCode === 200) {
           conn.query(
-            "SELECT r.sms, c.telephone, c.mobile, c.shortname, s.storename, t.start, t.end, us.firstname, us.lastname, th.therapies_title FROM reminder r join tasks t on r.superadmin = t.superadmin join customers c on t.customer_id = c.id join store s on t.storeId = s.id join users us on t.creator_id = us.id join therapy th on t.therapy_id = th.id where r.email = 1 and CAST(t.start AS DATE) = CAST((NOW() + interval 2 DAY) as DATE)",
+            "SELECT r.sms, c.telephone, c.mobile, c.shortname, s.storename, t.start, t.end, us.firstname, us.lastname, th.therapies_title FROM reminder r join tasks t on r.superadmin = t.superadmin join customers c on t.customer_id = c.id join store s on t.storeId = s.id join users us on t.creator_id = us.id join therapy th on t.therapy_id = th.id where c.reminderViaSMS = 1 and r.sms = 1 and CAST(t.start AS DATE) = CAST((NOW() + interval 2 DAY) as DATE)",
             function (err, rows, fields) {
               if (err) {
                 console.error("SQL error:", err);

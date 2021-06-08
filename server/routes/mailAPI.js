@@ -59,7 +59,7 @@ router.post("/send", function (req, res) {
   var mailOptions = {
     from: '"ClinicNode" info@app-production.eu',
     to: req.body.email,
-    subject: req.body.language?.subjectConfirmMail,
+    subject: req.body.req.body.language?.subjectConfirmMail,
     html: compiledTemplate.render({
       firstName: req.body.shortname,
       verificationLink: verificationLinkButton,
@@ -418,14 +418,11 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
 });
 
 router.post("/sendInfoForDenyReservation", function (req, res) {
-  console.log(req.body);
   var infoForDenyReservationTemplate = fs.readFileSync(
     "./server/routes/templates/infoForDenyReservation.hjs",
     "utf-8"
   );
-  var infoForDenyReservation = hogan.compile(
-    infoForDenyReservationTemplate
-  );
+  var infoForDenyReservation = hogan.compile(infoForDenyReservationTemplate);
   var mailOptions = {
     from: '"ClinicNode" info@app-production.eu',
     to: req.body.email,
@@ -464,12 +461,81 @@ router.post("/sendEmailToPatient", function (req, res) {
     from: '"ClinicNode" info@app-production.eu',
     to: req.body.email,
     subject: req.body?.subject,
-    text: req.body?.content
+    text: req.body?.content,
   };
   smtpTransport.sendMail(mailOptions, function (error, response) {
     if (error) {
       console.log(error);
 
+      res.send(false);
+    } else {
+      res.send(true);
+    }
+  });
+});
+
+router.post("/sendReminderViaEmailManual", function (req, res) {
+  var reminderTemplate = fs.readFileSync(
+    "./server/routes/templates/reminderForReservation.hjs",
+    "utf-8"
+  );
+  var compiledTemplate = hogan.compile(reminderTemplate);
+
+  var convertToDateStart = new Date(req.body.start);
+  var convertToDateEnd = new Date(req.body.end);
+  var startHours = convertToDateStart.getHours();
+  var startMinutes = convertToDateStart.getMinutes();
+  var endHours = convertToDateEnd.getHours();
+  var endMinutes = convertToDateEnd.getMinutes();
+  var date =
+    convertToDateStart.getDate() +
+    "." +
+    (convertToDateStart.getMonth() + 1) +
+    "." +
+    convertToDateStart.getFullYear();
+  var day = convertToDateStart.getDate();
+  var month = monthNames[convertToDateStart.getMonth()];
+  var start =
+    (startHours < 10 ? "0" + startHours : startHours) +
+    ":" +
+    (startMinutes < 10 ? "0" + startMinutes : startMinutes);
+  var end =
+    (endHours < 10 ? "0" + endHours : endHours) +
+    ":" +
+    (endMinutes < 10 ? "0" + endMinutes : endMinutes);
+
+  var mailOptions = {
+    from: '"ClinicNode" info@app-production.eu',
+    to: req.body.email,
+    subject: req.body.language?.subjectForReminderReservation,
+    html: compiledTemplate.render({
+      initialGreeting: req.body.language?.initialGreeting,
+      introductoryMessageForReminderReservation:
+        req.body.language?.introductoryMessageForReminderReservation,
+      dateMessage: req.body.language?.dateMessage,
+      timeMessage: req.body.language?.timeMessage,
+      therapyMessage: req.body.language?.therapyMessage,
+      doctorMessage: req.body.language?.doctorMessage,
+      storeLocation: req.body.language?.storeLocation,
+      finalGreeting: req.body.language?.finalGreeting,
+      signature: req.body.language?.signature,
+      thanksForUsing: req.body.language?.thanksForUsing,
+      ifYouHaveQuestion: req.body.language?.ifYouHaveQuestion,
+      notReply: req.body.language?.notReply,
+      copyRight: req.body.language?.copyRight,
+      firstName: req.body.shortname,
+      date: date,
+      start: start,
+      end: end,
+      storename: req.body.storename,
+      month: month,
+      day: day,
+    }),
+  };
+
+  smtpTransport.sendMail(mailOptions, function (error, response) {
+    if (error) {
+      console.log(error);
       res.send(false);
     } else {
       res.send(true);

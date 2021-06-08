@@ -178,8 +178,6 @@ io.on('connection', (socket) => {
     socket.emit('numberOfOnlineUsers', numberOfOnlineUsers);
   });
 
-  console.log('New user connected');
-
   socket.on('disconnect', () => {
     numberOfOnlineUsers--;
     socket.emit('numberOfOnlineUsers', numberOfOnlineUsers);
@@ -197,7 +195,8 @@ var j = schedule.scheduleJob('48 13 * * *', function(){
   reminderViaEmail();
 });
 
-var j = schedule.scheduleJob('23 10 * * *', function(){
+var j = schedule.scheduleJob('56 08 * * *', function(){
+  console.log("Pokrenuo sam!");
   reminderViaSMS();
 });
 

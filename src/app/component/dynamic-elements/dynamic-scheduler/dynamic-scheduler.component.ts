@@ -1137,6 +1137,9 @@ export class DynamicSchedulerComponent implements OnInit {
     } else {
       formValue.confirm = -1;
     }
+    formValue.user.isConfirm = this.isConfirm;
+    formValue.user.reminderViaEmail = this.reminderViaEmail;
+    formValue.user.reminderViaSMS = this.reminderViaSMS;
     this.customer.updateTherapy(this.complaintData).subscribe((data) => {
       if (data) {
         this.service.updateTask(formValue, (val) => {
@@ -1165,6 +1168,11 @@ export class DynamicSchedulerComponent implements OnInit {
         console.log(customerAttentionAndPhysical);
         this.customer
           .updateAttentionAndPhysical(customerAttentionAndPhysical)
+          .subscribe((data) => {
+            console.log(data);
+          });
+        this.customer
+          .updateCustomerSendReminderOption(formValue.user)
           .subscribe((data) => {
             console.log(data);
           });
@@ -1473,6 +1481,7 @@ export class DynamicSchedulerComponent implements OnInit {
   public resources: any[] = [];
   public customerUser = new CustomerModel();
   public mobileValue = "";
+  public dataForReminder: any;
   public data = new UserModel();
   public value: any = [];
   public store: any;
@@ -1527,6 +1536,8 @@ export class DynamicSchedulerComponent implements OnInit {
   public requestForConfirmArrival = false;
   public confirmArrivalData: any;
   public isConfirm: any;
+  public reminderViaSMS: any;
+  public reminderViaEmail: any;
   public allEvents = [];
   private instance: Internationalization = new Internationalization();
   public sharedCalendarResources: any;
@@ -1544,6 +1555,8 @@ export class DynamicSchedulerComponent implements OnInit {
   public userType = UserType;
   public patientReadOnly = false;
   public currentEventAction: any;
+  public expandAddional = false;
+  public expandAdditionalIcon = "k-icon k-i-arrow-60-right";
 
   constructor(
     public service: TaskService,
@@ -2054,6 +2067,8 @@ export class DynamicSchedulerComponent implements OnInit {
     this.telephoneValue = "";
     this.mobileValue = "";
     this.isConfirm = false;
+    this.reminderViaSMS = false;
+    this.reminderViaEmail = false;
     this.customerUser.attention = "";
     this.customerUser.physicalComplaint = "";
     this.complaintData = new ComplaintTherapyModel();
@@ -2152,6 +2167,12 @@ export class DynamicSchedulerComponent implements OnInit {
         this.selectedTherapies = this.stringToArray(data[i]["therapies"]);
       }
     });
+  }
+
+  getSendAdditionalOptionForPatient() {
+    this.isConfirm = this.data[0].isConfirm;
+    this.reminderViaSMS = this.data[0].reminderViaSMS;
+    this.reminderViaEmail = this.data[0].reminderViaEmail;
   }
 
   newCustomer() {
@@ -2859,6 +2880,12 @@ export class DynamicSchedulerComponent implements OnInit {
             this.customerUsers.push(data[0]);
             this.telephoneValue = data[0].telephone;
             this.mobileValue = data[0].mobile;
+            this.isConfirm = data[0].isConfirm;
+            this.reminderViaEmail = data[0].reminderViaEmail;
+            this.reminderViaSMS = data[0].reminderViaSMS;
+            this.dataForReminder = this.packDataForSendReminder(
+              data[0].email
+            );
             this.baseDataIndicator = true;
             this.userWidth = "65%";
           });
@@ -2933,6 +2960,20 @@ export class DynamicSchedulerComponent implements OnInit {
           this.isConfirm = 1;
         }
       }
+      if (dataItem.reminderViaSMS !== undefined) {
+        if (dataItem.reminderViaSMS === -1) {
+          this.reminderViaSMS = 0;
+        } else {
+          this.reminderViaSMS = 1;
+        }
+      }
+      if (dataItem.reminderViaEmail !== undefined) {
+        if (dataItem.reminderViaEmail === -1) {
+          this.reminderViaEmail = 0;
+        } else {
+          this.reminderViaEmail = 1;
+        }
+      }
     }
   }
 
@@ -2980,6 +3021,16 @@ export class DynamicSchedulerComponent implements OnInit {
           formValue.confirm = 0;
         } else {
           formValue.confirm = -1;
+        }
+        if (this.reminderViaSMS) {
+          formValue.reminderViaSMS = 0;
+        } else {
+          formValue.reminderViaSMS = -1;
+        }
+        if (this.reminderViaEmail) {
+          formValue.reminderViaEmail = 0;
+        } else {
+          formValue.reminderViaEmail = -1;
         }
         this.customer.addTherapy(this.complaintData).subscribe((data) => {
           if (data["success"]) {
@@ -3042,6 +3093,16 @@ export class DynamicSchedulerComponent implements OnInit {
           formValue.confirm = 0;
         } else {
           formValue.confirm = -1;
+        }
+        if (this.reminderViaSMS) {
+          formValue.reminderViaSMS = 0;
+        } else {
+          formValue.reminderViaSMS = -1;
+        }
+        if (this.reminderViaEmail) {
+          formValue.reminderViaEmail = 0;
+        } else {
+          formValue.reminderViaEmail = -1;
         }
         this.customer.updateTherapy(this.complaintData).subscribe((data) => {
           if (data) {
@@ -3147,6 +3208,8 @@ export class DynamicSchedulerComponent implements OnInit {
       this.telephoneValue = event.telephone;
       this.mobileValue = event.mobile;
       this.isConfirm = event.isConfirm;
+      this.reminderViaEmail = event.reminderViaEmail;
+      this.reminderViaSMS = event.reminderViaSMS;
       this.getComplaintAndTherapyForCustomer(event.id);
       this.baseDataIndicator = true;
       this.userWidth = "65%";
@@ -3158,6 +3221,8 @@ export class DynamicSchedulerComponent implements OnInit {
       this.telephoneValue = null;
       this.mobileValue = null;
       this.isConfirm = false;
+      this.reminderViaSMS = false;
+      this.reminderViaEmail = false;
       this.baseDataIndicator = false;
       this.selectedComplaint = null;
       this.selectedTherapies = null;
@@ -3220,23 +3285,6 @@ export class DynamicSchedulerComponent implements OnInit {
   initializeCalendar() {
     this.dateHeaderCounter = 0;
   }
-
-  /*onActionBegin(args: ActionEventArgs): void {
-    if (
-      args.requestType === "eventCreate" ||
-      args.requestType === "eventChange"
-    ) {
-      let data: { [key: string]: Object };
-      if (args.requestType === "eventCreate") {
-        data = <{ [key: string]: Object }>args.data[0];
-      } else if (args.requestType === "eventChange") {
-        data = <{ [key: string]: Object }>args.data;
-      }
-      if (!this.scheduleObj.isSlotAvailable(data)) {
-        args.cancel = true;
-      }
-    }
-  }*/
 
   onValueChangeCS(event) {
     this.complaintData.cs_title = this.getTitleForCS(event);
@@ -3326,7 +3374,6 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   sendAgainConfirmMail(dataItem) {
-    console.log(dataItem);
     this.confirmArrivalData = {
       id: dataItem.id,
       name: dataItem.title.split("+")[0],
@@ -3355,5 +3402,27 @@ export class DynamicSchedulerComponent implements OnInit {
       );
     }
     this.requestForConfirmArrival = false;
+  }
+
+  packDataForSendReminder(email) {
+    return {
+      email: email,
+      mobile: this.mobileValue,
+      telephone: this.telephoneValue,
+      start: this.eventTime.start,
+      end: this.eventTime.end,
+      shortname: this.customerUser.shortname,
+      storename: this.store[0].storename,
+      therapy: this.complaintData.therapies_title,
+    };
+  }
+
+  expandAdditionalOption() {
+    this.expandAddional = !this.expandAddional;
+    if (this.expandAddional) {
+      this.expandAdditionalIcon = "k-icon k-i-arrow-60-down";
+    } else {
+      this.expandAdditionalIcon = "k-icon k-i-arrow-60-right";
+    }
   }
 }

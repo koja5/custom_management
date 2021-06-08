@@ -144,4 +144,27 @@ export class PackLanguageService {
         language.introductoryMessageForDenyReservation,
     };
   }
+
+  getLanguageForSendReminderViaEmail() {
+    const language = this.helpService.getLanguage();
+    return {
+      subjectForReminderReservation: language.subjectForReminderReservation,
+      initialGreeting: language.initialGreeting,
+      dateMessage: language.dateMessage,
+      timeMessage: language.timeMessage,
+      therapyMessage: language.therapyMessage,
+      doctorMessage: language.doctorMessage,
+      storeLocation: language.storeLocation,
+      finalGreeting: language.finalGreeting,
+      signature: language.signature,
+      thanksForUsing: language.thanksForUsing,
+      websiteLink: language.websiteLink,
+      ifYouHaveQuestion: language.ifYouHaveQuestion,
+      emailAddress: language.emailAddress,
+      notReply: language.notReply,
+      copyRight: language.copyRight,
+      introductoryMessageForReminderReservation:
+        language.introductoryMessageForReminderReservation,
+    };
+  }
 }

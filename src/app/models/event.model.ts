@@ -10,6 +10,8 @@ export class EventModel {
     superadmin: string;
     creator_id: any;
     confirm?: number;
+    reminderViaSMS?: number;
+    reminderViaEmail?: number;
     therapy_id: any;
     start: string;
     end: string;

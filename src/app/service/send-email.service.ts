@@ -10,4 +10,8 @@ export class SendEmailService {
   sendEmailToPatient(data) {
     return this.http.post("/api/sendEmailToPatient", data);
   }
+
+  sendReminderViaEmailManual(data) {
+    return this.http.post("/api/sendReminderViaEmailManual", data);
+  }
 }

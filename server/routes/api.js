@@ -7,6 +7,9 @@ const mysql = require("mysql");
 var fs = require("fs");
 const path = require("path");
 const passwordGenerate = require("generate-password");
+var request = require("request");
+
+var link = "http://localhost:3000/api/";
 
 /*var connection = mysql.createPool({
   host: "185.178.193.141",
@@ -2465,7 +2468,9 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
                 );
               } else {
                 conn.query(
-                  "select * from users_superadmin WHERE  sha1(email)='" + email + "'",
+                  "select * from users_superadmin WHERE  sha1(email)='" +
+                    email +
+                    "'",
                   function (err, rows, fields) {
                     if (err) {
                       console.error("SQL error:", err);
@@ -6392,59 +6397,118 @@ router.post("/denyReservation", function (req, res, next) {
 /* END RESERVATIONS */
 
 /* SMS Sender */
-const messagebird = require("messagebird")("1ZL5pTqKg9YSTii8LQbZmmFgC", null, [
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+const messagebird = require("messagebird")("sbx8Desv4cXJdPMZf7GtBLs9P", null, [
   "ENABLE_CONVERSATIONSAPI_WHATSAPP_SANDBOX",
 ]);
 
 router.post("/sendSMS", function (req, res) {
-  console.log(req.body);
   // Check if phone number is valid
-  messagebird.lookup.read(
-    req.body.number,
-    process.env.COUNTRY_CODE,
-    function (err, response) {
-      console.log(err);
-      console.log(response);
-
-      if (err && err.errors[0].code == 21) {
-        // This error code indicates that the phone number has an unknown format
-        res.send("You need to enter a valid phone number!");
-      } else if (err) {
-        // Some other error occurred
-        res.send("Something went wrong while checking your phone number!");
-      } else if (response.type != "mobile") {
-        // The number lookup was successful but it is not a mobile number
-        res.send(
-          "You have entered a valid phone number, but it's not a mobile number! Provide a mobile number so we can contact you via SMS."
-        );
-      } else {
-        // Everything OK
-        console.log(response);
-        // Send scheduled message with MessageBird API
-        messagebird.messages.create(
-          {
-            originator: "ClinicNode",
-            recipients: [response.phoneNumber], // normalized phone number from lookup request
-            body: req.body.message,
-          },
+  request(
+    link + "/getTranslationByCountryCode/RS",
+    function (error, response, body) {
+      if (req.body.telephone || req.body.mobile) {
+        var phoneNumber = null;
+        if (req.body.telephone) {
+          phoneNumber = req.body.telephone;
+        } else if (req.body.mobile) {
+          phoneNumber = req.body.mobile;
+        }
+        var convertToDateStart = new Date(req.body.start);
+        var convertToDateEnd = new Date(req.body.end);
+        var startHours = convertToDateStart.getHours();
+        var startMinutes = convertToDateStart.getMinutes();
+        var endHours = convertToDateEnd.getHours();
+        var endMinutes = convertToDateEnd.getMinutes();
+        var date =
+          convertToDateStart.getDate() +
+          "." +
+          (convertToDateStart.getMonth() + 1) +
+          "." +
+          convertToDateStart.getFullYear();
+        var day = convertToDateStart.getDate();
+        var month = monthNames[convertToDateStart.getMonth()];
+        var start =
+          (startHours < 10 ? "0" + startHours : startHours) +
+          ":" +
+          (startMinutes < 10 ? "0" + startMinutes : startMinutes);
+        var end =
+          (endHours < 10 ? "0" + endHours : endHours) +
+          ":" +
+          (endMinutes < 10 ? "0" + endMinutes : endMinutes);
+        messagebird.lookup.read(
+          phoneNumber,
+          process.env.COUNTRY_CODE,
           function (err, response) {
-            if (err) {
-              // Request has failed
-              res.send(err);
+            console.log(err);
+            console.log(response);
+
+            if (err && err.errors[0].code == 21) {
+              // This error code indicates that the phone number has an unknown format
+              response.send("You need to enter a valid phone number!");
+            } else if (err) {
+              // Some other error occurred
+              response.send(
+                "Something went wrong while checking your phone number!"
+              );
+            } else if (response.type != "mobile") {
+              // The number lookup was successful but it is not a mobile number
+              response.send(
+                "You have entered a valid phone number, but it's not a mobile number! Provide a mobile number so we can contact you via SMS."
+              );
             } else {
-              /*// Request was successful
-              console.log(response);
-
-              // Create and persist appointment object
-              var appointment = {
-                number: req.body.number,
-                body: req.body.message
-              };
-              AppointmentDatabase.push(appointment);
-
-              // Render confirmation page
-              res.render("confirm", appointment);*/
-              res.send(true);
+              var language = JSON.parse(body)["config"];
+              // Send scheduled message with MessageBird API
+              messagebird.messages.create(
+                {
+                  originator: "ClinicNode",
+                  recipients: [response.phoneNumber], // normalized phone number from lookup request
+                  body:
+                    language?.initialGreetingSMSReminder +
+                    " " +
+                    req.body.shortname +
+                    ", \n" +
+                    "\n" +
+                    language?.introductoryMessageForSMSReminderReservation +
+                    " \n" +
+                    "\n" +
+                    language?.dateMessage +
+                    ": " +
+                    date +
+                    " \n" +
+                    language?.timeMessage +
+                    ": " +
+                    start +
+                    "-" +
+                    end +
+                    " \n" +
+                    language?.storeLocation +
+                    ": " +
+                    req.body.storename,
+                },
+                function (err, response) {
+                  if (err) {
+                    // Request has failed
+                    res.send(err);
+                  } else {
+                    res.send(true);
+                    console.log("Sent message to " + response.phoneNumber);
+                  }
+                }
+              );
             }
           }
         );
@@ -6494,12 +6558,13 @@ router.post("/setReminderSettings", function (req, res, next) {
     conn.query(
       "select * from reminder where superadmin = '" + req.body.superadmin + "'",
       function (err, rows, fields) {
-        if(rows.length > 0) {
+        if (rows.length > 0) {
           conn.query(
-            "update reminder set ? where superadmin = ?", [req.body, req.body.superadmin],
+            "update reminder set ? where superadmin = ?",
+            [req.body, req.body.superadmin],
             function (err, rows, fields) {
               conn.release();
-              if(err) {
+              if (err) {
                 res.json(err);
               } else {
                 res.json(true);
@@ -6508,10 +6573,11 @@ router.post("/setReminderSettings", function (req, res, next) {
           );
         } else {
           conn.query(
-            "insert into reminder set ?", [req.body],
+            "insert into reminder set ?",
+            [req.body],
             function (err, rows, fields) {
               conn.release();
-              if(err) {
+              if (err) {
                 res.json(err);
               } else {
                 res.json(true);
@@ -6527,7 +6593,33 @@ router.post("/setReminderSettings", function (req, res, next) {
   });
 });
 
-
 /* END Settings reminder */
+
+router.post("/updateCustomerSendReminderOption", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.send(err);
+    }
+    conn.query(
+      "update customers SET ? where id = ?",
+      [req.body, req.body.id],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            res.send(true);
+          } else {
+            res.send(false);
+          }
+        } else {
+          res.send(err);
+        }
+      }
+    );
+    conn.on("error", function (err) {
+      console.log("[mysql error]", err);
+    });
+  });
+});
 
 module.exports = router;

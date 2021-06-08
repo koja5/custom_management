@@ -66,6 +66,9 @@ import { MyDocumentComponent } from './patient/my-document/my-document.component
 import { SettingsModule } from "./settings/settings.module";
 import { DropDownListModule } from "@syncfusion/ej2-angular-dropdowns";
 import { ReservationsComponent } from './reservations/reservations.component';
+import { DynamicSendSmsComponent } from './sms/dynamic-send-sms/dynamic-send-sms.component';
+import { SharedEmailModule } from "../shared-module/shared-email-module";
+import { SharedSMSModule } from "../shared-module/shared-sms-module";
 
 @NgModule({
   declarations: [
@@ -127,7 +130,9 @@ import { ReservationsComponent } from './reservations/reservations.component';
     DialogModuleSyncfusion,
     BaseDateSharedModule,
     SettingsModule,
-    DropDownListModule
+    DropDownListModule,
+    SharedEmailModule,
+    SharedSMSModule
   ],
   providers: [
     {

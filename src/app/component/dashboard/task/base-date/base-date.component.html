@@ -2815,6 +2815,30 @@
             {{ language.confirmMessageText }}</span
           >
         </div>
+        <div class="col-md-12 col-xs-12">
+          <input
+            type="checkbox"
+            kendoCheckBox
+            [(ngModel)]="data.reminderViaEmail"
+            name="reminderViaEmail"
+            style="margin: 0px"
+          />
+          <span style="font-size: 12px">
+            {{ language.sendReminderViaEMail }}</span
+          >
+        </div>
+        <div class="col-md-12 col-xs-12">
+          <input
+            type="checkbox"
+            kendoCheckBox
+            [(ngModel)]="data.reminderViaSMS"
+            name="reminderViaSMS"
+            style="margin: 0px"
+          />
+          <span style="font-size: 12px">
+            {{ language.sendReminderViaSMS }}</span
+          >
+        </div>
         <div class="updateSettings">
           <button
             kendoButton

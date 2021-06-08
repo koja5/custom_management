@@ -46,7 +46,8 @@ import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { DialogsModule } from '@progress/kendo-angular-dialog';
 import { BaseDateSharedModule } from '../shared-module/base-date-module';
 import { DynamicConfirmDialogComponent } from './dynamic-dialogs/dynamic-confirm-dialog/dynamic-confirm-dialog.component';
-import { SendSmsComponent } from '../dashboard/sms/send-sms/send-sms.component';
+import { SharedSMSModule } from '../shared-module/shared-sms-module';
+import { SharedEmailModule } from '../shared-module/shared-email-module';
 
 @NgModule({
   declarations: [DynamicGridComponent, DynamicFormsComponent, DynamicSchedulerComponent, DynamicConfirmDialogComponent],
@@ -89,7 +90,9 @@ import { SendSmsComponent } from '../dashboard/sms/send-sms/send-sms.component';
     DateInputsModule,
     ButtonsModule,
     DialogsModule,
-    BaseDateSharedModule
+    BaseDateSharedModule, 
+    SharedSMSModule,
+    SharedEmailModule
   ],
   providers: [EditService, PdfExportService, ToolbarService, SortService, FilterService, PageService, GroupService, ResizeService ],
   entryComponents: [TextboxComponent, TextareaComponent, DatepickerComponent, ButtonComponent, DropdownComponent]

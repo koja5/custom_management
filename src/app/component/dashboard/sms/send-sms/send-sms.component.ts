@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Modal } from 'ngx-modal';
+import { SmsFormModel } from 'src/app/models/sms-form-model';
 import { HelpService } from 'src/app/service/help.service';
 import { SendSmsService } from 'src/app/service/send-sms.service';
 
@@ -12,6 +13,7 @@ export class SendSmsComponent implements OnInit {
 
   @Input() phoneNumber: string;
   @ViewChild("dialogSendSMSForm") dialogSendSMSForm: Modal;
+  public smsFormModel = new SmsFormModel();
   public language: any;
   public message: any;
   public showDialog = false;
@@ -30,12 +32,12 @@ export class SendSmsComponent implements OnInit {
   }
 
   sendSMSMessage() {
-    const data = {
+    this.smsFormModel = {
       number: this.phoneNumber,
-      message: this.message
+      message: this.message,
     };
     this.dialogSendSMSForm.close();
-    this.service.sendSMSMessage(data).subscribe(data => {
+    this.service.sendSMSMessage(this.smsFormModel).subscribe(data => {
       console.log(data);
       // this.dialogSendSMSForm = false;
       this.message = '';

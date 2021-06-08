@@ -66,7 +66,7 @@ function reminderViaEmail() {
       function (error, response, body) {
         if (!error && response.statusCode === 200) {
           conn.query(
-            "SELECT c.email, c.shortname, s.storename, t.start, t.end, us.firstname, us.lastname, th.therapies_title FROM reminder r join tasks t on r.superadmin = t.superadmin join customers c on t.customer_id = c.id join store s on t.storeId = s.id join users us on t.creator_id = us.id join therapy th on t.therapy_id = th.id where r.email = 1 and CAST(t.start AS DATE) = CAST((NOW() + interval 2 DAY) as DATE)",
+            "SELECT c.email, c.shortname, s.storename, t.start, t.end, us.firstname, us.lastname, th.therapies_title FROM reminder r join tasks t on r.superadmin = t.superadmin join customers c on t.customer_id = c.id join store s on t.storeId = s.id join users us on t.creator_id = us.id join therapy th on t.therapy_id = th.id where c.reminderViaEmail = 1 and r.email = 1 and CAST(t.start AS DATE) = CAST((NOW() + interval 2 DAY) as DATE)",
             function (err, rows, fields) {
               if (err) {
                 console.error("SQL error:", err);

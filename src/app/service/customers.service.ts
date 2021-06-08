@@ -201,4 +201,10 @@ export class CustomersService {
   updateDocument(data) {
     return this.http.post("/api/updateDocument", data).map((res) => res);
   }
+
+  updateCustomerSendReminderOption(data) {
+    return this.http
+      .post("/api/updateCustomerSendReminderOption", data)
+      .map((res) => res);
+  }
 }

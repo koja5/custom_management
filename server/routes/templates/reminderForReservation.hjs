@@ -103,18 +103,6 @@
                       <span
                         style="font-size: 15px; font-weight: bold;"
                       >{{start}} - {{end}}</span></p>
-                    <p
-                      style="text-align: initial; font-size: 13px; margin: 0px"
-                    >{{therapyMessage}}:
-                      <span
-                        style="font-size: 15px; font-weight: bold;"
-                      >{{therapy}}</span></p>
-                    <p
-                      style="text-align: initial; font-size: 13px; margin: 0px"
-                    >{{doctorMessage}}:
-                      <span
-                        style="font-size: 15px; font-weight: bold;"
-                      >{{doctor}}</span></p>
                       <p
                       style="text-align: initial; font-size: 13px; margin: 0px"
                     >{{storeLocation}}:
@@ -149,22 +137,10 @@
                       >{{start}} - {{end}}</span></p>
                     <p
                       style="text-align: initial; font-size: 13px; margin: 0px"
-                    >{{therapyMessage}}:
+                    >{{storeLocation}}:
                       <span
                         style="font-size: 15px; font-weight: bold;"
-                      >{{therapy}}</span></p>
-                    <p
-                      style="text-align: initial; font-size: 13px; margin: 0px"
-                    >Store:
-                      <span
-                        style="font-size: 15px; font-weight: bold;"
-                      >{{store}}</span></p>
-                    <p
-                      style="text-align: initial; font-size: 13px; margin: 0px"
-                    >{{doctorMessage}}:
-                      <span
-                        style="font-size: 15px; font-weight: bold;"
-                      >{{doctor}}</span></p>
+                      >{{storename}}</span></p>
 
                   </td>
                 </tr>

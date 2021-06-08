@@ -555,7 +555,9 @@
                     [dataSource]="sharedCalendarResources"
                     [allowMultiple]="allowMultiple"
                     name="sharedCalendar"
-                    [textField]="type !== userType.patient ? 'shortname' : 'alias_name'"
+                    [textField]="
+                      type !== userType.patient ? 'shortname' : 'alias_name'
+                    "
                     idField="id"
                   >
                   </e-resource>
@@ -988,21 +990,76 @@
                         </kendo-textbox-container>
                       </div>
                     </div>
-                    <div
-                      *ngIf="type !== userType.patient"
-                      class="col-sm-12 mt-4"
-                      style="text-align: center; font-weight: bold"
-                    >
-                      <input
-                        type="checkbox"
-                        kendoCheckBox
-                        [(ngModel)]="isConfirm"
-                        name="isConfirm"
-                        style="margin: 0px"
-                      />
-                      <span style="font-size: 12px">
-                        {{ language.confirmMessage }}</span
+                    <div class="additional-send-option">
+                      <div
+                        class="expand-label display-inline-block pt-4 font-bold"
+                        (click)="expandAdditionalOption()"
                       >
+                        <span class="{{ expandAdditionalIcon }}"></span>
+                        Additional option
+                      </div>
+                      <div *ngIf="expandAddional && type !== userType.patient">
+                        <div
+                          class="col-sm-12 mt-2 check-option"
+                        >
+                          <input
+                            type="checkbox"
+                            kendoCheckBox
+                            [(ngModel)]="isConfirm"
+                            name="isConfirm"
+                            style="margin: 0px"
+                          />
+                          <span style="font-size: 12px">
+                            {{ language.confirmMessage }}</span
+                          >
+                        </div>
+                        <div
+                          class="col-sm-12 mt-2 check-option"
+                        >
+                          <input
+                            type="checkbox"
+                            kendoCheckBox
+                            [(ngModel)]="reminderViaEmail"
+                            name="isConfirm"
+                            style="margin: 0px"
+                          />
+                          <span style="font-size: 12px">
+                            {{ language.sendReminderViaEMail }}</span
+                          >
+                        </div>
+                        <div
+                          class="col-sm-12  mt-2 check-option"
+                        >
+                          <input
+                            type="checkbox"
+                            kendoCheckBox
+                            [(ngModel)]="reminderViaSMS"
+                            name="isConfirm"
+                            style="margin: 0px"
+                          />
+                          <span style="font-size: 12px">
+                            {{ language.sendReminderViaSMS }}</span
+                          >
+                        </div>
+                        <div class="row display-flex pt-3">
+                          <div class="col-md-6">
+                            <app-dynamic-send-sms
+                              *ngIf="mobileValue || telephoneValue"
+                              [data]="dataForReminder"
+                              [buttonTitle]="language.sendSMS"
+                              [buttonIcon]="'fa fa-paper-plane'"
+                            ></app-dynamic-send-sms>
+                          </div>
+                          <div class="col-md-6">
+                            <app-dynamic-send-email
+                              *ngIf="dataForReminder?.email"
+                              [data]="dataForReminder"
+                              [buttonTitle]="language.sendEmail"
+                              [buttonIcon]="'fa fa-envelope'"
+                            ></app-dynamic-send-email>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </ng-template>
