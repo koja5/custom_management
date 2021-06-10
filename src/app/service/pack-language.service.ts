@@ -66,6 +66,7 @@ export class PackLanguageService {
       timeMessage: language.timeMessage,
       therapyMessage: language.therapyMessage,
       doctorMessage: language.doctorMessage,
+      storeLocation: language.storeLocation,
       finalMessageForConfirmArrival: language.finalMessageForConfirmArrival,
       confirmArrivalButtonText: language.confirmArrivalButtonText,
     };

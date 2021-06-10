@@ -121,6 +121,7 @@
       "refreshEventToolbar": { "type": "string" },
       "settingsToolbar": { "type": "string" },
       "reserved": { "type": "string" },
+      "additionalSendOptions": { "type": "string" },
       "calendar": { "type": "string" },
       "customer": { "type": "string" },
       "users": { "type": "string" },
@@ -826,7 +827,7 @@
             { "key": "refreshEventToolbar" },
             { "key": "settingsToolbar" },
             { "key": "reserved" },
-            {}
+            { "key": "additionalSendOptions"}
           ]
         }
       ]

@@ -206,7 +206,7 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
     }
 
     conn.query(
-      "SELECT c.shortname, c.email, t.start, t.end, u.lastname, u.firstname, th.therapies_title from customers c join tasks t on c.id = t.customer_id join therapy th on t.therapy_id = th.id join users u on t.creator_id = u.id where c.id = '" +
+      "SELECT c.shortname, c.email, s.storename, t.start, t.end, u.lastname, u.firstname, th.therapies_title from customers c join tasks t on c.id = t.customer_id join therapy th on t.therapy_id = th.id join store s on t.storeId = s.id  join users u on t.creator_id = u.id where c.id = '" +
         req.body.customer_id +
         "' and t.id = '" +
         req.body.id +
@@ -252,6 +252,7 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
               start: start,
               end: end,
               therapy: to.therapies_title,
+              storename: to.storename,
               doctor: to.lastname + " " + to.firstname,
               month: month,
               day: day,
@@ -268,6 +269,7 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
                 req.body.language?.introductoryMessageForConfirmArrival,
               dateMessage: req.body.language?.dateMessage,
               timeMessage: req.body.language?.timeMessage,
+              storeLocation: req.body.language?.storeLocation,
               therapyMessage: req.body.language?.therapyMessage,
               doctorMessage: req.body.language?.doctorMessage,
               finalMessageForConfirmArrival:
@@ -280,9 +282,10 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
           smtpTransport.sendMail(mailOptions, function (error, response) {
             console.log(response);
             if (error) {
-              console.log(error);
+              res.send(error);
             } else {
-              console.log("Message sent: " + response.message);
+              console.log("Sent message success!");
+              res.send(true);
             }
           });
         });

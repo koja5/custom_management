@@ -915,7 +915,7 @@
                             [format]="'dd.MM.yyyy'"
                             class="dateWidth"
                             [(ngModel)]="eventTime.start"
-                            [disabled]="patientReadOnly"
+                            [disabled]="type === userType.patient ? true : false"
                           >
                           </kendo-datepicker>
                         </kendo-textbox-container>
@@ -926,7 +926,7 @@
                         >
                           <kendo-timepicker
                             [(ngModel)]="eventTime.start"
-                            [disabled]="patientReadOnly"
+                            [disabled]="type === userType.patient ? true : false"
                           >
                           </kendo-timepicker>
                         </kendo-textbox-container>
@@ -941,7 +941,7 @@
                             [format]="'dd.MM.yyyy'"
                             class="dateWidth"
                             [(ngModel)]="eventTime.end"
-                            [disabled]="patientReadOnly"
+                            [disabled]="type === userType.patient ? true : false"
                           >
                           </kendo-datepicker>
                         </kendo-textbox-container>
@@ -952,7 +952,7 @@
                         >
                           <kendo-timepicker
                             [(ngModel)]="eventTime.end"
-                            [disabled]="patientReadOnly"
+                            [disabled]="type === userType.patient ? true : false"
                           >
                           </kendo-timepicker>
                         </kendo-textbox-container>
@@ -990,15 +990,15 @@
                         </kendo-textbox-container>
                       </div>
                     </div>
-                    <div class="additional-send-option">
+                    <div class="additional-send-option" *ngIf="type !== userType.patient">
                       <div
                         class="expand-label display-inline-block pt-4 font-bold"
                         (click)="expandAdditionalOption()"
                       >
                         <span class="{{ expandAdditionalIcon }}"></span>
-                        Additional option
+                        {{language.additionalSendOptions}}
                       </div>
-                      <div *ngIf="expandAddional && type !== userType.patient">
+                      <div *ngIf="expandAddional">
                         <div
                           class="col-sm-12 mt-2 check-option"
                         >

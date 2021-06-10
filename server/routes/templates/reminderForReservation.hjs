@@ -184,7 +184,7 @@
           style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin-top: 2rem;text-align: center;color: #606f7b;font-size: .875rem;"
         >
 
-          <div
+          {{!-- <div
             class="meta__social flex justify-center my-4"
             style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;display: flex;justify-content: center;margin-top: 1rem;margin-bottom: 1rem;"
           >
@@ -212,7 +212,7 @@
                 class="fab fa-twitter"
                 style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;-moz-osx-font-smoothing: grayscale;-webkit-font-smoothing: antialiased;display: inline-block;font-style: normal;font-variant: normal;text-rendering: auto;line-height: 1;font-family: Font Awesome\\ 5 Brands;"
               ></i></a>
-          </div>
+          </div> --}}
 
           <div
             class="meta__help"
