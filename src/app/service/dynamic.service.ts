@@ -13,6 +13,10 @@ export class DynamicService {
     return this.http.get(url).map((res) => res);
   }
 
+  getLocalData(path: string) {
+    return this.http.get(path).map((res) => res);
+  }
+
   callApiPost(api, body) {
     return this.http.post(api, body).map((res) => res);
   }

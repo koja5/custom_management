@@ -24,6 +24,7 @@ import { MessageService } from "src/app/service/message.service";
 import { QueryCellInfoEventArgs } from "@syncfusion/ej2-angular-grids";
 import { Tooltip } from "@syncfusion/ej2-popups";
 import { ClickEventArgs } from "@syncfusion/ej2-navigations";
+import { SystemLogsService } from "src/app/service/system-logs.service";
 
 @Component({
   selector: "app-dynamic-grid",
@@ -77,7 +78,8 @@ export class DynamicGridComponent implements OnInit {
       mode: "Dialog",
     };
     this.toolbar = ["Add", "Edit", "Delete"];
-    this.container.nativeElement.style.height = this.helpService.getHeightForGrid();
+    this.container.nativeElement.style.height =
+      this.helpService.getHeightForGrid();
     this.height = this.helpService.getHeightForGridWithoutPx();
     this.helpService.setDefaultBrowserTabTitle();
   }
@@ -87,7 +89,11 @@ export class DynamicGridComponent implements OnInit {
   initialization() {
     this.service.getConfiguration(this.path, this.name).subscribe((data) => {
       this.config = data;
-      this.callApi(data["request"]);
+      if (data["localData"]) {
+        this.getLocalData(data['localData']);
+      } else {
+        this.callApi(data["request"]);
+      }
     });
   }
 
@@ -103,6 +109,14 @@ export class DynamicGridComponent implements OnInit {
         this.grid.refresh();
       }, 100);
     });
+  }
+
+  getLocalData(data) {
+    this.service.getLocalData(data['path']).subscribe(
+      data => {
+        this.data = data;
+      }
+    )
   }
 
   callApi(data) {
@@ -246,14 +260,15 @@ export class DynamicGridComponent implements OnInit {
       data: data,
       mode: mode,
       request: item.request,
-      id: item.id ? item.id : null
+      id: item.id ? item.id : null,
     };
     this.actionEmitter.emit(actions);
   }
 
   clickHandler(args: ClickEventArgs): void {
-    const target: HTMLElement = (args.originalEvent
-      .target as HTMLElement).closest("button"); // find clicked button
+    const target: HTMLElement = (
+      args.originalEvent.target as HTMLElement
+    ).closest("button"); // find clicked button
     if (target.id === "collapse") {
       // collapse all expanded grouped row
       this.grid.groupModule.collapseAll();

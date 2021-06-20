@@ -25,4 +25,8 @@ export class NavigationMenuModel {
     my_therapy?: string;
     my_document?: string;
     reservations?: string;
+    systemLogErrors?: string;
+    systemLogInfo?: string;
+    systemLogWarn?: string;
+    reminder?: string;
 }

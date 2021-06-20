@@ -27,6 +27,9 @@ import { ChangePasswordComponent } from "./settings/change-password/change-passw
 import { PermissionPatientMenuComponent } from "./settings/permission-patient-menu/permission-patient-menu.component";
 import { ReservationsComponent } from "./reservations/reservations.component";
 import { RemindersComponent } from "./settings/reminders/reminders.component";
+import { SystemErrorComponent } from "./administrator/system-logs/system-error/system-error.component";
+import { SystemInfoComponent } from "./administrator/system-logs/system-info/system-info.component";
+import { SystemWarnComponent } from "./administrator/system-logs/system-warn/system-warn.component";
 
 const routes: Routes = [
   {
@@ -69,10 +72,6 @@ const routes: Routes = [
             path: "permission-patient-menu",
             component: PermissionPatientMenuComponent,
           },
-          {
-            path: "reminders",
-            component: RemindersComponent,
-          },
         ],
       },
       {
@@ -107,6 +106,10 @@ const routes: Routes = [
         component: WorkTimeColorsComponent,
       },
       {
+        path: "reminders",
+        component: RemindersComponent,
+      },
+      {
         path: "translation",
         component: TranslationComponent,
       },
@@ -118,6 +121,21 @@ const routes: Routes = [
       {
         path: "todo",
         component: TodoComponent,
+      },
+      {
+        path: "system-logs",
+        children: [
+          { path: "", redirectTo: "error", pathMatch: "full" },
+          { path: "error", component: SystemErrorComponent },
+          {
+            path: "info",
+            component: SystemInfoComponent,
+          },
+          {
+            path: "warn",
+            component: SystemWarnComponent,
+          }
+        ],
       },
       {
         path: "my-complaint",

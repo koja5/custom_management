@@ -69,6 +69,9 @@ import { ReservationsComponent } from './reservations/reservations.component';
 import { DynamicSendSmsComponent } from './sms/dynamic-send-sms/dynamic-send-sms.component';
 import { SharedEmailModule } from "../shared-module/shared-email-module";
 import { SharedSMSModule } from "../shared-module/shared-sms-module";
+import { SystemErrorComponent } from './administrator/system-logs/system-error/system-error.component';
+import { SystemInfoComponent } from './administrator/system-logs/system-info/system-info.component';
+import { SystemWarnComponent } from './administrator/system-logs/system-warn/system-warn.component';
 
 @NgModule({
   declarations: [
@@ -96,7 +99,10 @@ import { SharedSMSModule } from "../shared-module/shared-sms-module";
     MyComplaintComponent,
     MyTherapyComponent,
     MyDocumentComponent,
-    ReservationsComponent
+    ReservationsComponent,
+    SystemErrorComponent,
+    SystemInfoComponent,
+    SystemWarnComponent
   ],
   imports: [
     CommonModule,

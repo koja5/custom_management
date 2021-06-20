@@ -367,6 +367,7 @@
                 [group]="value.length ? group : []"
                 [showWeekNumber]="true"
                 [eventSettings]="eventSettings"
+                [allowKeyboardInteraction]="type === userType.patient ? false : true"
                 (renderCell)="onRenderCell($event)"
                 (actionBegin)="onActionBegin($event)"
                 (popupOpen)="onPopupOpen($event)"
@@ -420,7 +421,7 @@
                         [title]="language.approvedReservationTooltip"
                       ></span>
                       <span
-                        *ngIf="data.confirm === 0"
+                        *ngIf="data.confirm === 0 && type !== userType.patient"
                         class="fa fa-check-circle-o checkButton notConfirmed"
                         title="{{ language.notConfirmed }}"
                         (click)="sendAgainConfirmMail(data)"

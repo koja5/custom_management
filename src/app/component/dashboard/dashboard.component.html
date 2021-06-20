@@ -105,7 +105,10 @@
                   </a>
                 </li>
                 <li>
-                  <a routerLink="/dashboard/home/settings" (click)="showHideProfile()">
+                  <a
+                    routerLink="/dashboard/home/settings"
+                    (click)="showHideProfile()"
+                  >
                     <i class="fa fa-cog"></i> {{ language["settings"] }}
                   </a>
                 </li>
@@ -148,9 +151,7 @@
             style.height="{{ sidebarHeight }}"
             style="overflow: auto"
           >
-            <perfect-scrollbar
-              style.height="{{ sidebarHeight }}"
-            >
+            <perfect-scrollbar style.height="{{ sidebarHeight }}">
               <ul
                 class="sidemenu  page-header-fixed slimscroll-style {{
                   sidebar
@@ -223,16 +224,52 @@
                     ><span class="title">{{ language["todo"] }}</span></a
                   >
                 </li>
-                <!-- <li class="nav-item {{ selectedNodeModel.task }}">
+                <li
+                  *ngIf="user && user.id === 4"
+                  class="nav-item {{ selectedNodeModel.systemLogErrors }}"
+                >
                   <a
-                    (click)="returnActiveNode('task')"
-                    routerLink="/dashboard/home/task"
+                    (click)="returnActiveNode('systemLogErrors')"
+                    routerLink="/dashboard/home/system-logs/error"
                     class="nav-link"
-                    ><i class="fa fa-calendar"></i
-                    ><span class="title">{{ language["calendar"] }}</span></a
+                    ><i class="fa fa-bug"></i
+                    ><span class="title">{{
+                      language.systemLogErrors
+                    }}</span></a
                   >
-                </li> -->
-                <li *ngIf="type !== userType.patient||(type === userType.patient && permissionPatientMenu?.myCalendar)" class="nav-item {{ selectedNodeModel.calendar }}">
+                </li>
+                <li
+                  *ngIf="user && user.id === 4"
+                  class="nav-item {{ selectedNodeModel.systemLogInfo }}"
+                >
+                  <a
+                    (click)="returnActiveNode('systemLogInfo')"
+                    routerLink="/dashboard/home/system-logs/info"
+                    class="nav-link"
+                    ><i class="fa fa-info-circle"></i
+                    ><span class="title">{{ language.systemLogInfo }}</span></a
+                  >
+                </li>
+                <li
+                  *ngIf="user && user.id === 4"
+                  class="nav-item {{ selectedNodeModel.systemLogWarn }}"
+                >
+                  <a
+                    (click)="returnActiveNode('systemLogWarn')"
+                    routerLink="/dashboard/home/system-logs/warn"
+                    class="nav-link"
+                    ><i class="fa fa-exclamation-triangle"></i
+                    ><span class="title">{{ language.systemLogWarn }}</span></a
+                  >
+                </li>
+                <li
+                  *ngIf="
+                    type !== userType.patient ||
+                    (type === userType.patient &&
+                      permissionPatientMenu?.myCalendar)
+                  "
+                  class="nav-item {{ selectedNodeModel.calendar }}"
+                >
                   <a
                     (click)="returnActiveNode('calendar')"
                     routerLink="/dashboard/home/task"
@@ -241,13 +278,18 @@
                     ><span class="title">{{ language["calendar"] }}</span></a
                   >
                 </li>
-                <li *ngIf="type !== userType.patient" class="nav-item {{ selectedNodeModel.reservations }}">
+                <li
+                  *ngIf="type !== userType.patient"
+                  class="nav-item {{ selectedNodeModel.reservations }}"
+                >
                   <a
                     (click)="returnActiveNode('reservations')"
                     routerLink="/dashboard/home/reservations"
                     class="nav-link"
                     ><i class="fa fa-calendar-check-o"></i
-                    ><span class="title">{{ language["reservations"] }}</span></a
+                    ><span class="title">{{
+                      language["reservations"]
+                    }}</span></a
                   >
                 </li>
                 <li
@@ -313,7 +355,8 @@
                         (click)="returnActiveNode('complaint')"
                         class="nav-link"
                       >
-                        <span class="fa fa-list-alt"></span> Complaint
+                        <span class="fa fa-list-alt"></span>
+                        {{ language.complaintMenu }}
                       </a>
                     </li>
                     <li class="nav-item {{ selectedNodeModel.therapy }}">
@@ -322,7 +365,8 @@
                         (click)="returnActiveNode('therapy')"
                         class="nav-link"
                       >
-                        <span class="fa fa-medkit"></span> Therapy
+                        <span class="fa fa-medkit"></span>
+                        {{ language.therapyMenu }}
                       </a>
                     </li>
                     <li class="nav-item {{ selectedNodeModel.treatment }}">
@@ -331,7 +375,8 @@
                         (click)="returnActiveNode('treatment')"
                         class="nav-link"
                       >
-                        <span class="fa fa-medkit"></span> Treatment
+                        <span class="fa fa-medkit"></span>
+                        {{ language.treatmentMenu }}
                       </a>
                     </li>
                     <li class="nav-item {{ selectedNodeModel.recommendation }}">
@@ -340,7 +385,8 @@
                         (click)="returnActiveNode('recommendation')"
                         class="nav-link"
                       >
-                        <span class="fa fa-check"></span> Recommendation
+                        <span class="fa fa-check"></span>
+                        {{ language.recommendationMenu }}
                       </a>
                     </li>
                     <li class="nav-item {{ selectedNodeModel.relationship }}">
@@ -349,7 +395,8 @@
                         (click)="returnActiveNode('relationship')"
                         class="nav-link"
                       >
-                        <span class="fa fa-exchange"></span> Relationship
+                        <span class="fa fa-exchange"></span>
+                        {{ language.relationshipMenu }}
                       </a>
                     </li>
                     <li class="nav-item {{ selectedNodeModel.social }}">
@@ -358,7 +405,8 @@
                         (click)="returnActiveNode('social')"
                         class="nav-link"
                       >
-                        <span class="fa fa-life-ring"></span> Social
+                        <span class="fa fa-life-ring"></span>
+                        {{ language.socialMenu }}
                       </a>
                     </li>
                     <li class="nav-item {{ selectedNodeModel.doctor }}">
@@ -367,7 +415,8 @@
                         (click)="returnActiveNode('doctor')"
                         class="nav-link"
                       >
-                        <span class="fa fa-user"></span> Doctor
+                        <span class="fa fa-user"></span>
+                        {{ language.doctorMenu }}
                       </a>
                     </li>
                     <li class="nav-item {{ selectedNodeModel.doctors }}">
@@ -376,7 +425,8 @@
                         (click)="returnActiveNode('doctors')"
                         class="nav-link"
                       >
-                        <span class="fa fa-users"></span> Doctors
+                        <span class="fa fa-users"></span>
+                        {{ language.doctorsMenu }}
                       </a>
                     </li>
                     <li class="nav-item {{ selectedNodeModel.vat_tax }}">
@@ -385,7 +435,8 @@
                         (click)="returnActiveNode('vat_tax')"
                         class="nav-link"
                       >
-                        <span class="fa fa-percent"></span> VAT Tax
+                        <span class="fa fa-percent"></span>
+                        {{ language.vatTaxMenu }}
                       </a>
                     </li>
                     <li class="nav-item {{ selectedNodeModel.CS }}">
@@ -394,7 +445,7 @@
                         (click)="returnActiveNode('CS')"
                         class="nav-link"
                       >
-                        <span class="fa fa-contao"></span> CS
+                        <span class="fa fa-contao"></span> {{ language.csMenu }}
                       </a>
                     </li>
                     <li class="nav-item {{ selectedNodeModel.state }}">
@@ -404,7 +455,7 @@
                         class="nav-link"
                       >
                         <span class="fa fa-thermometer-three-quarters"></span>
-                        State
+                        {{ language.stateMenu }}
                       </a>
                     </li>
                     <li class="nav-item {{ selectedNodeModel.event_category }}">
@@ -413,7 +464,8 @@
                         (click)="returnActiveNode('event_category')"
                         class="nav-link"
                       >
-                        <span class="fa fa-paint-brush"></span> Event Category
+                        <span class="fa fa-paint-brush"></span>
+                        {{ language.eventCategoryMenu }}
                       </a>
                     </li>
                     <li
@@ -424,13 +476,30 @@
                         (click)="returnActiveNode('work_time_colors')"
                         class="nav-link"
                       >
-                        <span class="fa fa-tint"></span> Work Time Colors
+                        <span class="fa fa-tint"></span>
+                        {{ language.workTimeColorsMenu }}
+                      </a>
+                    </li>
+                    <li
+                      *ngIf="type === userType.owner"
+                      class="nav-item {{ selectedNodeModel.reminder }}"
+                    >
+                      <a
+                        routerLink="/dashboard/home/reminders"
+                        (click)="returnActiveNode('reminder')"
+                        class="nav-link"
+                      >
+                        <span class="fa fa-bell"></span>
+                        {{ language?.reminderMenu }}
                       </a>
                     </li>
                   </ul>
                 </li>
                 <li
-                  *ngIf="type === userType.patient&&permissionPatientMenu?.myComplaint"
+                  *ngIf="
+                    type === userType.patient &&
+                    permissionPatientMenu?.myComplaint
+                  "
                   class="nav-item {{ selectedNodeModel.my_complaint }}"
                 >
                   <a
@@ -442,7 +511,10 @@
                   >
                 </li>
                 <li
-                  *ngIf="type === userType.patient&&permissionPatientMenu?.myTherapy"
+                  *ngIf="
+                    type === userType.patient &&
+                    permissionPatientMenu?.myTherapy
+                  "
                   class="nav-item {{ selectedNodeModel.my_therapy }}"
                 >
                   <a
@@ -454,7 +526,10 @@
                   >
                 </li>
                 <li
-                  *ngIf="type === userType.patient&&permissionPatientMenu?.myDocument"
+                  *ngIf="
+                    type === userType.patient &&
+                    permissionPatientMenu?.myDocument
+                  "
                   class="nav-item {{ selectedNodeModel.my_document }}"
                 >
                   <a

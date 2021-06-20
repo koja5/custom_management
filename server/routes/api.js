@@ -8,6 +8,7 @@ var fs = require("fs");
 const path = require("path");
 const passwordGenerate = require("generate-password");
 var request = require("request");
+const logger = require("./logger");
 
 var link = "http://localhost:3000/api/";
 
@@ -53,10 +54,7 @@ var connection = mysql.createPool({
     database: 'aparatiz_management'
 })*/
 
-connection.getConnection(function (err, conn) {
-  console.log(conn);
-  console.log(err);
-});
+connection.getConnection(function (err, conn) {});
 
 /* GET api listing. */
 router.get("/", (req, res) => {
@@ -78,12 +76,9 @@ router.get("/posts", (req, res) => {
 
 router.post("/signUp", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -109,21 +104,16 @@ router.post("/signUp", function (req, res, next) {
       active: 0,
       img: "",
     };
-    console.log(podaci);
 
     conn.query(
       "SELECT * FROM users_superadmin WHERE email=?",
       [req.body.email],
       function (err, rows, fields) {
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         }
-        console.log(rows);
         if (rows.length >= 1) {
           test.success = false;
           test.info = "Email already exists!";
@@ -135,45 +125,41 @@ router.post("/signUp", function (req, res, next) {
             function (err, rows) {
               conn.release();
               if (!err) {
-                if (!err) {
-                  test.id = rows.insertId;
-                  test.success = true;
-                } else {
-                  test.success = false;
-                  test.info = "Error";
-                }
-                res.json(test);
+                logger.log(
+                  "info",
+                  `User ${req.body.email} is CREATED ACCOUNT!`
+                );
+                test.id = rows.insertId;
+                test.success = true;
               } else {
-                res.json({
-                  code: 100,
-                  status: "Error in connection database",
-                });
-                console.log(err);
+                logger.log(
+                  "warn",
+                  `User ${req.body.email} is NOT CREATED ACCOUNT!`
+                );
+                test.success = false;
+                test.info = "Error";
               }
+              res.json(test);
             }
           );
         }
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
 
 router.post("/createTask", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
     test = {};
-    console.log(req);
     var podaci = {
       creator_id: req.body.creator_id,
       customer_id: req.body.user.id,
@@ -190,8 +176,6 @@ router.post("/createTask", function (req, res, next) {
     if (req.body.storeId !== undefined) {
       podaci["storeId"] = req.body.storeId;
     }
-    console.log(podaci);
-
     conn.query("insert into tasks SET ?", podaci, function (err, rows) {
       conn.release();
       if (!err) {
@@ -202,17 +186,13 @@ router.post("/createTask", function (req, res, next) {
           test.success = false;
         }
         res.json(test);
-        console.log("Usao sam u DB!!!!");
       } else {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
-        console.log(err);
+        res.json(err);
+        logger.log("error", err);
       }
     });
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -221,17 +201,14 @@ router.post("/updateTask", function (req, res, next) {
   req.setMaxListeners(0);
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
     test = {};
 
     var customer_id = null;
-    console.log(req.body);
     if (req.body.user !== undefined && req.body.user.id !== undefined) {
       customer_id = req.body.user.id;
     } else {
@@ -255,7 +232,7 @@ router.post("/updateTask", function (req, res, next) {
     if (req.body.storeId !== undefined) {
       data["storeId"] = req.body.storeId;
     }
-    console.log(data);
+
     conn.query(
       "update tasks SET ? where id = '" + data.id + "'",
       [data],
@@ -269,18 +246,14 @@ router.post("/updateTask", function (req, res, next) {
             test.success = false;
           }
           res.json(test);
-          console.log("Usao sam u DB!!!!");
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
-          console.log(err);
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -289,15 +262,11 @@ router.get("/deleteTask/:id", (req, res, next) => {
   try {
     var reqObj = req.params.id;
 
-    console.log("usao sam u verifikaciju!");
-    console.log(reqObj);
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -305,11 +274,8 @@ router.get("/deleteTask/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
               res.json(true);
@@ -319,7 +285,7 @@ router.get("/deleteTask/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
@@ -328,14 +294,12 @@ router.get("/getTasks/:id", function (req, res, next) {
   var reqObj = req.params.id;
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     conn.query(
-      "select t.*, e.color from tasks t join event_category e on t.colorTask = e.id where superadmin = '" +
+      "select t.*, e.color from tasks t join event_category e on t.colorTask = e.id where e.superadmin = '" +
         reqObj +
         "'",
       function (err, rows) {
@@ -343,19 +307,15 @@ router.get("/getTasks/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -364,10 +324,8 @@ router.get("/getTasks/:id", function (req, res, next) {
 router.get("/getTasksForUser/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -380,19 +338,15 @@ router.get("/getTasksForUser/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -403,17 +357,14 @@ router.get(
   function (req, res, next) {
     connection.getConnection(function (err, conn) {
       if (err) {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return;
       }
 
       var id = req.params.id;
       var typeOfUser = req.params.typeOfUser;
       var idUser = req.params.idUser;
-      console.log(typeOfUser, id);
       if (typeOfUser === "0") {
         conn.query(
           "select t.*, e.color from tasks t join event_category e on t.colorTask = e.id where storeId = ?",
@@ -421,13 +372,10 @@ router.get(
           function (err, rows) {
             conn.release();
             if (!err) {
-              console.log(rows);
               res.json(rows);
             } else {
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
             }
           }
         );
@@ -438,23 +386,18 @@ router.get(
           function (err, rows) {
             conn.release();
             if (!err) {
-              console.log(rows);
               res.json(rows);
             } else {
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
             }
           }
         );
       }
 
       conn.on("error", function (err) {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return;
       });
     });
@@ -462,36 +405,27 @@ router.get(
 );
 
 router.post("/login", (req, res, next) => {
-  console.log("usao sam u login!");
   try {
     var reqObj = req.body;
     connection.getConnection(function (err, conn) {
       if (err) {
-        console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
-        return next(err);
+        res.json(err);
+        logger.log("error", err);
       } else {
-        console.log(reqObj.username, sha1(reqObj.password));
         conn.query(
           "SELECT * FROM users WHERE email=? AND password=?",
           [reqObj.email, sha1(reqObj.password)],
           function (err, rows, fields) {
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
-              return next(err);
+              logger.log("error", err);
+              res.json(err);
             }
             if (rows.length >= 1 && rows[0].active === 1) {
               conn.release();
-              //req.session.user = rows[0];
-              //req.session.auth = true;
-
+              logger.log(
+                "info",
+                `User ${req.body.email} is SUCCESS login on a system like a USER!`
+              );
               res.send({
                 login: true,
                 notVerified: rows[0].active,
@@ -502,23 +436,20 @@ router.post("/login", (req, res, next) => {
                 superadmin: rows[0].superadmin,
               });
             } else {
-              console.log(sha1(reqObj.password));
-              console.log(reqObj.email);
               conn.query(
                 "SELECT * FROM users_superadmin WHERE email=? AND password=?",
                 [reqObj.email, sha1(reqObj.password)],
                 function (err, rows, fields) {
                   if (err) {
-                    console.error("SQL error:", err);
-                    res.json({
-                      code: 100,
-                      status: "Error in connection database",
-                    });
-                    return next(err);
+                    logger.log("error", err);
+                    res.json(err);
                   }
                   if (rows.length >= 1 && rows[0].active === 1) {
                     conn.release();
-
+                    logger.log(
+                      "info",
+                      `User ${req.body.email} is SUCCESS login on a system like a SUPERADMIN!`
+                    );
                     res.send({
                       login: true,
                       notVerified: rows[0].active,
@@ -529,23 +460,21 @@ router.post("/login", (req, res, next) => {
                       superadmin: rows[0].id,
                     });
                   } else {
-                    console.log(reqObj.email, reqObj.password);
                     conn.query(
                       "SELECT * FROM customers WHERE email=? AND password=?",
                       [reqObj.email, sha1(reqObj.password)],
                       function (err, rows, fields) {
                         if (err) {
-                          console.error("SQL error:", err);
-                          res.json({
-                            code: 100,
-                            status: "Error in connection database",
-                          });
-                          return next(err);
+                          logger.log("error", err);
+                          res.json(err);
                         }
-                        console.log(rows);
+
                         if (rows.length >= 1) {
                           conn.release();
-
+                          logger.log(
+                            "info",
+                            `User ${req.body.email} is SUCCESS login on a system like a PATIENT!`
+                          );
                           res.send({
                             login: true,
                             type: 4,
@@ -556,6 +485,11 @@ router.post("/login", (req, res, next) => {
                             superadmin: rows[0].storeId,
                           });
                         } else {
+                          // logger.log('error', `Bad username and password for users ${req.body.email}`);
+                          logger.log(
+                            "warn",
+                            `User ${req.body.email} is NOT SUCCESS login on a system!`
+                          );
                           res.send({
                             login: false,
                           });
@@ -566,48 +500,21 @@ router.post("/login", (req, res, next) => {
                 }
               );
             }
-            /*else {
-                                                   console.log('usao sam u else!');
-                                                   conn.query("SELECT * FROM companies WHERE email=? AND password=?", [reqObj.email, sha1(reqObj.password)],
-                                                       function(err, rows, fields) {
-                                                           conn.release();
-                                                           if (err) {
-                                                               console.error("SQL error:", err);
-                                                               res.json({ "code": 100, "status": "Error in connection database" });
-                                                               return next(err);
-                                                           }
-                                                           console.log(rows);
-                                                           if (rows.length >= 1 && rows[0].active === 1) {
-                                                               console.log('usao sam ovdee u if');
-                                                               //req.session.user = rows[0];
-                                                               //req.session.auth = true;
-
-                                                               res.send({ login: true, notVerified: rows[0].active, user: rows[0].shortname, type: 0, id: rows[0].id, storeId: rows[0].storeId });
-                                                           } else {
-                                                               console.log('usao sam ovdee u else');
-                                                               res.send({ login: false });
-                                                           }
-                                                       }
-                                                   );
-                                               }*/
           }
         );
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", ex);
     return next(ex);
   }
 });
 
 router.post("/createUser", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -619,7 +526,6 @@ router.post("/createUser", function (req, res, next) {
     var pass = sha1(req.body.password);
 
     test = {};
-    console.log(req.body.birthday);
     var podaci = {
       shortname: req.body.shortname,
       password: sha1(req.body.password),
@@ -647,44 +553,40 @@ router.post("/createUser", function (req, res, next) {
       [req.body.email, req.body.superadmin],
       function (err, rows, fields) {
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         }
         if (rows.length >= 1) {
           test.success = false;
           test.info = "Email already exists!";
+          logger.log(
+            "warn",
+            `Error creating user! Email ${req.body.email} already exists!`
+          );
           res.json(test);
         } else {
-          console.log(podaci);
-          console.log("usao sam ovde!");
           conn.query("insert into users SET ?", podaci, function (err, rows) {
             conn.release();
             if (!err) {
-              if (!err) {
-                test.id = rows.insertId;
-                test.success = true;
-              } else {
-                test.success = false;
-                test.info = "Error";
-              }
-              res.json(test);
+              logger.log(
+                "info",
+                `Created users with Email:${req.body.email} and ID: ${rows.insertId} SUCCESS!`
+              );
+              test.id = rows.insertId;
+              test.success = true;
             } else {
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
-              console.log(err);
+              logger.log("error", err);
+              test.success = false;
+              test.info = "Error";
             }
+            res.json(test);
           });
         }
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -692,36 +594,30 @@ router.post("/createUser", function (req, res, next) {
 router.get("/getUsers/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var id = req.params.id;
-    console.log(id);
+
     conn.query(
       "SELECT u.id, u.shortname, u.firstname, u.lastname, u.email, u.street, u.active from users u join store s on u.storeId = s.id where s.superadmin = ?",
       [id],
       function (err, rows) {
         conn.release();
-        console.log(rows);
+
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -730,10 +626,8 @@ router.get("/getUsers/:id", function (req, res, next) {
 router.get("/getUsersInCompany/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var id = req.params.id;
@@ -745,19 +639,15 @@ router.get("/getUsersInCompany/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -766,10 +656,8 @@ router.get("/getUsersInCompany/:id", function (req, res, next) {
 router.get("/getUsersAllowedOnlineInCompany/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var id = req.params.id;
@@ -781,19 +669,15 @@ router.get("/getUsersAllowedOnlineInCompany/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -803,10 +687,8 @@ router.get("/getUsersAllowedOnlineInCompany/:id", function (req, res, next) {
 router.get("/getMe/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var id = req.params.id;
@@ -832,19 +714,14 @@ router.get("/getMe/:id", function (req, res, next) {
                     if (!err) {
                       res.json(rows);
                     } else {
-                      res.json({
-                        code: 100,
-                        status: "Error in connection database",
-                      });
+                      logger.log("error", err);
                     }
                   }
                 );
               }
             } else {
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
             }
           }
         );
@@ -852,10 +729,8 @@ router.get("/getMe/:id", function (req, res, next) {
     });
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -864,10 +739,8 @@ router.get("/getMe/:id", function (req, res, next) {
 router.get("/getCompany/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var id = req.params.id;
@@ -876,18 +749,14 @@ router.get("/getCompany/:id", function (req, res, next) {
       if (!err) {
         res.json(rows);
       } else {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
       }
     });
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -895,12 +764,9 @@ router.get("/getCompany/:id", function (req, res, next) {
 
 router.post("/createStore", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -926,43 +792,46 @@ router.post("/createStore", function (req, res, next) {
       [req.body.email, req.body.superadmin],
       function (err, rows, fields) {
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         }
-        console.log(rows);
+
         if (rows.length >= 1) {
           test.success = false;
           test.info = "exist";
+          logger.log(
+            "warn",
+            `Error creating store! Store with ${req.body.email} already exists!`
+          );
           res.json(test);
         } else {
           conn.query("insert into store SET ?", podaci, function (err, rows) {
             conn.release();
             if (!err) {
               if (!err) {
+                logger.log(
+                  "info",
+                  `Created store with Email:${req.body.email} and ID: ${rows.insertId} SUCCESS!`
+                );
                 test.id = rows.insertId;
                 test.success = true;
               } else {
+                logger.log("error", err);
                 test.success = false;
                 test.info = "notAdded";
               }
               res.json(test);
             } else {
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
-              console.log(err);
+              res.json(err);
+              logger.log("error", err);
             }
           });
         }
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -970,10 +839,8 @@ router.post("/createStore", function (req, res, next) {
 router.get("/getStore/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var id = req.params.id;
@@ -985,19 +852,15 @@ router.get("/getStore/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -1006,10 +869,8 @@ router.get("/getStore/:id", function (req, res, next) {
 router.get("/getStoreAllowedOnline/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var id = req.params.id;
@@ -1021,19 +882,15 @@ router.get("/getStoreAllowedOnline/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -1041,12 +898,9 @@ router.get("/getStoreAllowedOnline/:id", function (req, res, next) {
 
 router.post("/updateStore", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -1075,11 +929,8 @@ router.post("/updateStore", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         } else {
           response = true;
@@ -1088,7 +939,7 @@ router.post("/updateStore", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -1099,10 +950,8 @@ router.get("/deleteStore/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -1110,13 +959,11 @@ router.get("/deleteStore/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
+              logger.log("info", `Store ID:${reqObj} SUCCESSED DELETE!`);
               res.json(true);
               res.end();
             }
@@ -1125,19 +972,16 @@ router.get("/deleteStore/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
 
 router.post("/createCustomer", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -1178,26 +1022,24 @@ router.post("/createCustomer", function (req, res, next) {
               function (err, rows) {
                 conn.release();
                 if (!err) {
-                  if (!err) {
-                    test.id = rows.insertId;
-                    test.success = true;
-                    test.password = notShaPassword;
-                  } else {
-                    test.success = false;
-                    test.info = "Error";
-                  }
-                  res.json(test);
+                  logger.log(
+                    "info",
+                    `Created new patient from employee with EMAIL: ${req.body.email} and ID: ${rows.insertId} for STORE: ${req.body.storeId}`
+                  );
+                  test.id = rows.insertId;
+                  test.success = true;
+                  test.password = notShaPassword;
                 } else {
-                  res.json({
-                    code: 100,
-                    status: "Error in connection database",
-                  });
-                  console.log(err);
+                  logger.log("error", err);
+                  test.success = false;
+                  test.info = "Error";
                 }
+                res.json(test);
               }
             );
           } else {
             conn.release();
+            logger.info("warn", `Patient ${req.body.email} already EXISTS!`);
             test.success = false;
             test.info = "exists";
             res.json(test);
@@ -1210,19 +1052,16 @@ router.post("/createCustomer", function (req, res, next) {
     );
 
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
 
 router.post("/createCustomerFromPatientForm", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -1238,7 +1077,6 @@ router.post("/createCustomerFromPatientForm", function (req, res, next) {
       birthday: req.body.birthday,
       storeId: req.body.storeId,
     };
-    console.log(podaci);
 
     conn.query(
       "SELECT * from customers where email = ?",
@@ -1252,11 +1090,16 @@ router.post("/createCustomerFromPatientForm", function (req, res, next) {
               function (err, rows) {
                 conn.release();
                 if (!err) {
+                  logger.log(
+                    "info",
+                    `Created new patient from patient form with EMAIL: ${req.body.email} and ID: ${rows.insertId} for STORE: ${req.body.storeId}`
+                  );
                   test.id = rows.insertId;
                   test.success = true;
                   test.info = 200;
                   res.json(test);
                 } else {
+                  logger.info("error", err);
                   res.json(err);
                 }
               }
@@ -1275,7 +1118,7 @@ router.post("/createCustomerFromPatientForm", function (req, res, next) {
     );
 
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -1283,10 +1126,8 @@ router.post("/createCustomerFromPatientForm", function (req, res, next) {
 router.get("/getCustomers/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var id = req.params.id;
@@ -1304,10 +1145,8 @@ router.get("/getCustomers/:id", function (req, res, next) {
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -1316,10 +1155,8 @@ router.get("/getCustomers/:id", function (req, res, next) {
 router.get("/getSuperadmin/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var id = req.params.id;
@@ -1337,10 +1174,8 @@ router.get("/getSuperadmin/:id", function (req, res, next) {
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -1349,10 +1184,8 @@ router.get("/getSuperadmin/:id", function (req, res, next) {
 router.post("/updateSuperadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     test = {};
@@ -1371,19 +1204,14 @@ router.post("/updateSuperadmin", function (req, res, next) {
           }
           res.json(test);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
-          console.log(err);
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -1392,10 +1220,8 @@ router.post("/updateSuperadmin", function (req, res, next) {
 router.post("/updatePasswordForSuperadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -1415,10 +1241,8 @@ router.post("/updatePasswordForSuperadmin", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -1427,10 +1251,8 @@ router.post("/updatePasswordForSuperadmin", function (req, res, next) {
 router.post("/updatePasswordForUser", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -1450,10 +1272,8 @@ router.post("/updatePasswordForUser", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -1462,10 +1282,8 @@ router.post("/updatePasswordForUser", function (req, res, next) {
 router.post("/updatePasswordForCustomer", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -1485,10 +1303,8 @@ router.post("/updatePasswordForCustomer", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -1497,10 +1313,8 @@ router.post("/updatePasswordForCustomer", function (req, res, next) {
 router.post("/updateUserFromSettings", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     test = {};
@@ -1519,19 +1333,14 @@ router.post("/updateUserFromSettings", function (req, res, next) {
           }
           res.json(test);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
-          console.log(err);
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -1540,10 +1349,8 @@ router.post("/updateUserFromSettings", function (req, res, next) {
 router.get("/getInfoForCustomer/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var id = req.params.id;
@@ -1561,10 +1368,8 @@ router.get("/getInfoForCustomer/:id", function (req, res, next) {
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -1573,15 +1378,13 @@ router.get("/getInfoForCustomer/:id", function (req, res, next) {
 router.post("/searchCustomer", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var superadmin = req.body.superadmin;
     var filter = req.body.filter;
-    console.log(superadmin);
+
     conn.query(
       "SELECT * from customers where storeId = ? and shortname like '%" +
         filter +
@@ -1598,10 +1401,8 @@ router.post("/searchCustomer", function (req, res, next) {
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -1610,10 +1411,8 @@ router.post("/searchCustomer", function (req, res, next) {
 router.get("/getCustomerWithId/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var id = req.params.id;
@@ -1631,10 +1430,8 @@ router.get("/getCustomerWithId/:id", function (req, res, next) {
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -1643,10 +1440,8 @@ router.get("/getCustomerWithId/:id", function (req, res, next) {
 router.get("/getDocuments/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var id = req.params.id;
@@ -1658,19 +1453,15 @@ router.get("/getDocuments/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -1682,10 +1473,8 @@ router.get("/deleteDocumentFromDatabase/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -1693,11 +1482,8 @@ router.get("/deleteDocumentFromDatabase/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
               res.json(true);
@@ -1708,7 +1494,7 @@ router.get("/deleteDocumentFromDatabase/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
@@ -1726,10 +1512,8 @@ router.post("/deleteDocument", function (req, res, next) {
 router.post("/updateDocument", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     test = {};
@@ -1748,46 +1532,34 @@ router.post("/updateDocument", function (req, res, next) {
           }
           res.json(test);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
-          console.log(err);
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
 });
 
 router.post("/download", function (req, res, next) {
-  console.log(req);
   filepath = path.join(__dirname, "./uploads") + "/" + req.body.filename;
-  console.log(filepath);
   res.sendFile(filepath);
 });
 
 router.post("/getPdfFile", function (req, res, next) {
-  console.log(req);
   filepath = path.join(__dirname, "./uploads") + "/" + req.body.filename;
-  console.log(filepath);
   res.sendFile(filepath);
 });
 
 router.get("/activeUser/:id", function (req, res, next) {
-  console.log("pozvano za edit!!!");
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     test = {};
@@ -1800,44 +1572,40 @@ router.get("/activeUser/:id", function (req, res, next) {
         conn.release();
         if (!err) {
           if (!err) {
+            logger.log("info", `User with ID: ${id} is SUCCESSED ACTIVE!`);
             test.success = true;
           } else {
+            logger.log(
+              "warn",
+              `User with ID: ${id} is NOT SUCCESSED ACTIVE!. ${err}`
+            );
             test.success = false;
           }
           res.json(test);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
-          console.log(err);
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
 });
 
 router.post("/uploadImage", function (req, res, next) {
-  console.log("pozvano za edit!!!");
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     test = {};
-    console.log(req);
+
     var id = req.body.id;
-    // console.log(fs);
     var img = fs.readFileSync(
       "C:\\Users\\Aleksandar\\Pictures\\" + req.body.img
     );
@@ -1856,13 +1624,9 @@ router.post("/uploadImage", function (req, res, next) {
             test.success = false;
           }
           res.json(test);
-          console.log("Usao sam u DB!!!!");
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
-          console.log(err);
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
@@ -1870,13 +1634,10 @@ router.post("/uploadImage", function (req, res, next) {
 });
 
 router.get("/deactiveUser/:id", function (req, res, next) {
-  console.log("pozvano za edit!!!");
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     test = {};
@@ -1889,39 +1650,35 @@ router.get("/deactiveUser/:id", function (req, res, next) {
         conn.release();
         if (!err) {
           if (!err) {
+            logger.log("info", `User with ID: ${id} is SUCCESSED DEACTIVE!`);
             test.success = true;
           } else {
+            logger.log(
+              "warn",
+              `User with ID: ${id} is NOT SUCCESSED DEACTIVE!. ${err}`
+            );
             test.success = false;
           }
           res.json(test);
-          console.log("Usao sam u DB!!!!");
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
-          console.log(err);
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
 });
 
 router.post("/addUser", function (req, res, next) {
-  console.log("pozvano!");
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -1953,8 +1710,6 @@ router.post("/addUser", function (req, res, next) {
       typeOfUser: "2",
     };
 
-    console.log(podaci);
-
     conn.query("insert into users SET ?", podaci, function (err, rows) {
       conn.release();
       if (!err) {
@@ -1965,20 +1720,14 @@ router.post("/addUser", function (req, res, next) {
           test.success = false;
         }
         res.json(test);
-        console.log("Usao sam u DB!!!!");
       } else {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
-        console.log(err);
+        res.json(err);
+        logger.log("error", err);
       }
     });
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -1987,10 +1736,8 @@ router.post("/addUser", function (req, res, next) {
 router.post("/updateUser", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -2036,21 +1783,15 @@ router.post("/updateUser", function (req, res, next) {
             response = false;
           }
           res.json(response);
-          console.log("Usao sam u DB!!!!");
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
-          console.log(err);
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -2062,10 +1803,8 @@ router.get("/deleteUser/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -2073,11 +1812,8 @@ router.get("/deleteUser/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
               res.send(true);
@@ -2087,7 +1823,7 @@ router.get("/deleteUser/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
@@ -2096,15 +1832,11 @@ router.get("/deleteCustomer/:id", (req, res, next) => {
   try {
     var reqObj = req.params.id;
 
-    console.log("usao sam u verifikaciju!");
-    console.log(reqObj);
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -2112,13 +1844,11 @@ router.get("/deleteCustomer/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
+              logger.log("info", `DELETED customer SUCCESS with ID: ${reqObj}`);
               res.json(true);
               res.end();
             }
@@ -2127,7 +1857,7 @@ router.get("/deleteCustomer/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
@@ -2135,10 +1865,8 @@ router.get("/deleteCustomer/:id", (req, res, next) => {
 router.post("/updateCustomer", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     test = {};
@@ -2157,19 +1885,14 @@ router.post("/updateCustomer", function (req, res, next) {
           }
           res.json(test);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
-          console.log(err);
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -2178,15 +1901,13 @@ router.post("/updateCustomer", function (req, res, next) {
 router.post("/updateAttentionAndPhysical", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     test = {};
     var id = req.body.id;
-    console.log(req.body);
+
     conn.query(
       "UPDATE customers SET attention = '" +
         req.body.attention +
@@ -2206,19 +1927,14 @@ router.post("/updateAttentionAndPhysical", function (req, res, next) {
           }
           res.json(test);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
-          console.log(err);
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -2228,15 +1944,11 @@ router.get("/korisnik/verifikacija/:id", (req, res, next) => {
   try {
     var reqObj = req.params.id;
 
-    console.log("usao sam u verifikaciju!");
-    console.log(reqObj);
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -2246,13 +1958,11 @@ router.get("/korisnik/verifikacija/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
+              logger.info("info", `Verification FOR EMAIL: ${email}!`);
               res.writeHead(302, {
                 Location: "/login",
               });
@@ -2263,7 +1973,7 @@ router.get("/korisnik/verifikacija/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
@@ -2271,14 +1981,12 @@ router.get("/korisnik/verifikacija/:id", (req, res, next) => {
 router.get("/sendChangePassword/:id", (req, res, next) => {
   try {
     var reqObj = req.params.id;
-    console.log(reqObj);
+
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -2290,11 +1998,8 @@ router.get("/sendChangePassword/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
             } else {
               res.writeHead(302, {
                 Location: "/changePassword",
@@ -2306,7 +2011,7 @@ router.get("/sendChangePassword/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
@@ -2317,10 +2022,8 @@ router.post("/postojikorisnik", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -2328,7 +2031,6 @@ router.post("/postojikorisnik", (req, res, next) => {
           [reqObj.email],
           function (err, rows, fields) {
             if (err) {
-              console.error("SQL error:", err);
               res.json(err);
               return next(err);
             }
@@ -2351,7 +2053,6 @@ router.post("/postojikorisnik", (req, res, next) => {
                 [reqObj.email],
                 function (err, rows, fields) {
                   if (err) {
-                    console.error("SQL error:", err);
                     res.json(err);
                     return next(err);
                   }
@@ -2375,11 +2076,8 @@ router.post("/postojikorisnik", (req, res, next) => {
                       function (err, rows, fields) {
                         conn.release();
                         if (err) {
-                          console.error("SQL error:", err);
-                          res.json({
-                            code: 100,
-                            status: "Error in connection database",
-                          });
+                          res.json(err);
+                          logger.log("error", err);
                           return next(err);
                         }
 
@@ -2410,7 +2108,7 @@ router.post("/postojikorisnik", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
@@ -2419,19 +2117,17 @@ router.post("/postojikorisnik", (req, res, next) => {
 router.post("/korisnik/forgotpasschange", (req, res, next) => {
   try {
     var reqObj = req.body;
-    console.log("pozvao sam funkciju!!!");
-    console.log(reqObj);
+
     var email = reqObj.email;
     var newPassword1 = reqObj.password;
     var newPassword2 = reqObj.password2;
+    logger.log("info", `Forgot password for EMAIL: ${email}!`);
 
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         if (newPassword1 == newPassword2) {
@@ -2439,7 +2135,6 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
             "select * from users WHERE  sha1(email)='" + email + "'",
             function (err, rows, fields) {
               if (err) {
-                console.error("SQL error:", err);
                 res.json(err);
                 return next(err);
               } else if (rows.length !== 0) {
@@ -2452,13 +2147,10 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
                   function (err, rows, fields) {
                     conn.release();
                     if (err) {
-                      console.error("SQL error:", err);
-                      res.json({
-                        code: 100,
-                        status: "Error in connection database",
-                      });
+                      logger.log("error", err);
                       return next(err);
                     } else {
+                      logger.log("info", `Password SUCCESED changes FOR USER via Forgot option for EMAIL: ${email}`);
                       res.send({
                         code: "true",
                         message: "The password is success change!",
@@ -2473,7 +2165,6 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
                     "'",
                   function (err, rows, fields) {
                     if (err) {
-                      console.error("SQL error:", err);
                       res.json(err);
                       return next(err);
                     } else if (rows.length !== 0) {
@@ -2486,7 +2177,6 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
                         function (err, rows, fields) {
                           conn.release();
                           if (err) {
-                            console.error("SQL error:", err);
                             res.json({
                               code: 100,
                               status: "Error in connection database",
@@ -2510,7 +2200,6 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
                         function (err, rows, fields) {
                           conn.release();
                           if (err) {
-                            console.error("SQL error:", err);
                             res.json({
                               code: 100,
                               status: "Error in connection database",
@@ -2534,7 +2223,7 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
@@ -2542,10 +2231,8 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
 router.get("/getUserWithID/:userid", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     conn.query(
@@ -2562,10 +2249,8 @@ router.get("/getUserWithID/:userid", function (req, res, next) {
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -2573,17 +2258,14 @@ router.get("/getUserWithID/:userid", function (req, res, next) {
 
 router.post("/setWorkTimeForUser", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
     response = {};
-    console.log(req);
+
     var date = {
       user_id: req.body.user_id,
       dateChange: req.body.dateChange,
@@ -2594,7 +2276,6 @@ router.post("/setWorkTimeForUser", function (req, res, next) {
       friday: req.body.friday,
       color: req.body.color,
     };
-    console.log(date);
 
     conn.query("insert into work SET ?", date, function (err, rows) {
       conn.release();
@@ -2607,15 +2288,12 @@ router.post("/setWorkTimeForUser", function (req, res, next) {
         }
         res.json(response);
       } else {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
-        console.log(err);
+        res.json(err);
+        logger.log("error", err);
       }
     });
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -2623,10 +2301,8 @@ router.post("/setWorkTimeForUser", function (req, res, next) {
 router.get("/getWorkTimeForUser/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var id = req.params.id;
@@ -2638,19 +2314,15 @@ router.get("/getWorkTimeForUser/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -2658,17 +2330,14 @@ router.get("/getWorkTimeForUser/:id", function (req, res, next) {
 
 router.post("/updateWorkTimeForUser", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
     response = {};
-    console.log(req);
+
     var date = {
       user_id: req.body.user_id,
       dateChange: req.body.dateChange,
@@ -2679,7 +2348,6 @@ router.post("/updateWorkTimeForUser", function (req, res, next) {
       friday: req.body.friday,
       color: req.body.color,
     };
-    console.log(date);
 
     conn.query(
       "update work SET ? where id = '" + req.body.id + "'",
@@ -2695,16 +2363,13 @@ router.post("/updateWorkTimeForUser", function (req, res, next) {
           }
           res.json(response);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
-          console.log(err);
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -2712,10 +2377,8 @@ router.post("/updateWorkTimeForUser", function (req, res, next) {
 router.get("/getWorkandTaskForUser/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var id = req.params.id;
@@ -2735,10 +2398,8 @@ router.get("/getWorkandTaskForUser/:id", function (req, res, next) {
                   workTime: work,
                 });
               } else {
-                res.json({
-                  code: 100,
-                  status: "Error in connection database",
-                });
+                res.json(err);
+                logger.log("error", err);
               }
             }
           );
@@ -2747,10 +2408,8 @@ router.get("/getWorkandTaskForUser/:id", function (req, res, next) {
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -2758,12 +2417,9 @@ router.get("/getWorkandTaskForUser/:id", function (req, res, next) {
 
 router.post("/addComplaint", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -2784,7 +2440,7 @@ router.post("/addComplaint", function (req, res, next) {
       (hh === 0 ? "00" : hh) +
       ":" +
       (min < 10 ? "0" + min : min);
-    console.log(req);
+
     var date = {
       customer_id: req.body.customer_id,
       employee_name: req.body.employee_name,
@@ -2796,7 +2452,6 @@ router.post("/addComplaint", function (req, res, next) {
       therapies_title: req.body.therapies_title,
       cs: req.body.cs,
     };
-    console.log(date);
 
     conn.query("insert into complaint SET ?", date, function (err, rows) {
       conn.release();
@@ -2808,27 +2463,21 @@ router.post("/addComplaint", function (req, res, next) {
         }
         res.json(response);
       } else {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
-        console.log(err);
+        res.json(err);
+        logger.log("error", err);
       }
     });
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
 
 router.post("/updateComplaint", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -2861,18 +2510,15 @@ router.post("/updateComplaint", function (req, res, next) {
       therapies_title: req.body.therapies_title,
       cs: req.body.cs,
     };
-    console.log(data);
+
     conn.query(
       "update complaint set ? where id = '" + req.body.id + "'",
       data,
       function (err, rows, fields) {
         conn.release();
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         } else {
           response = true;
@@ -2881,7 +2527,7 @@ router.post("/updateComplaint", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -2892,10 +2538,8 @@ router.get("/deleteComplaint/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -2903,11 +2547,8 @@ router.get("/deleteComplaint/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
               res.json(true);
@@ -2918,7 +2559,7 @@ router.get("/deleteComplaint/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
@@ -2926,10 +2567,8 @@ router.get("/deleteComplaint/:id", (req, res, next) => {
 router.get("/getComplaintForCustomer/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var id = req.params.id;
@@ -2941,19 +2580,15 @@ router.get("/getComplaintForCustomer/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -2961,17 +2596,14 @@ router.get("/getComplaintForCustomer/:id", function (req, res, next) {
 
 router.post("/addTherapy", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
     response = {};
-    console.log(req);
+
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, "0");
     var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
@@ -3007,7 +2639,6 @@ router.post("/addTherapy", function (req, res, next) {
       em: req.body.em,
       em_title: req.body.em_title,
     };
-    console.log(date);
 
     conn.query("insert into therapy SET ?", date, function (err, rows) {
       conn.release();
@@ -3021,27 +2652,21 @@ router.post("/addTherapy", function (req, res, next) {
         }
         res.json(response);
       } else {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
-        console.log(err);
+        res.json(err);
+        logger.log("error", err);
       }
     });
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
 
 router.post("/updateTherapy", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -3083,18 +2708,15 @@ router.post("/updateTherapy", function (req, res, next) {
       em: req.body.em,
       em_title: req.body.em_title,
     };
-    console.log(data);
+
     conn.query(
       "update therapy set ? where id = '" + req.body.id + "'",
       data,
       function (err, rows, fields) {
         conn.release();
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         } else {
           response = true;
@@ -3103,7 +2725,7 @@ router.post("/updateTherapy", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -3114,10 +2736,8 @@ router.get("/deleteTherapy/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -3125,11 +2745,8 @@ router.get("/deleteTherapy/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
               res.json(true);
@@ -3140,7 +2757,7 @@ router.get("/deleteTherapy/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
@@ -3148,10 +2765,8 @@ router.get("/deleteTherapy/:id", (req, res, next) => {
 router.get("/getTherapyForCustomer/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var id = req.params.id;
@@ -3163,19 +2778,15 @@ router.get("/getTherapyForCustomer/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -3184,10 +2795,8 @@ router.get("/getTherapyForCustomer/:id", function (req, res, next) {
 router.get("/getTherapy/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var id = req.params.id;
@@ -3199,19 +2808,15 @@ router.get("/getTherapy/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -3220,14 +2825,12 @@ router.get("/getTherapy/:id", function (req, res, next) {
 router.get("/getComplaintList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var superadmin = req.params.superadmin;
-    console.log(superadmin);
+
     conn.query(
       "select * from complaint_list where superadmin = '" + superadmin + "'",
       function (err, rows) {
@@ -3235,19 +2838,15 @@ router.get("/getComplaintList/:superadmin", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -3255,17 +2854,14 @@ router.get("/getComplaintList/:superadmin", function (req, res, next) {
 
 router.post("/addComplaintList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
     response = null;
-    console.log(req);
+
     var date = {
       title: req.body.title,
       sequence: req.body.sequence,
@@ -3282,15 +2878,12 @@ router.post("/addComplaintList", function (req, res, next) {
         }
         res.json(response);
       } else {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
-        console.log(err);
+        res.json(err);
+        logger.log("error", err);
       }
     });
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -3301,10 +2894,8 @@ router.get("/deleteComplaintList/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -3312,11 +2903,8 @@ router.get("/deleteComplaintList/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
               res.json(true);
@@ -3327,19 +2915,16 @@ router.get("/deleteComplaintList/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
 
 router.post("/updateComplaintList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -3357,11 +2942,8 @@ router.post("/updateComplaintList", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         } else {
           response = true;
@@ -3370,7 +2952,7 @@ router.post("/updateComplaintList", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -3380,14 +2962,12 @@ router.post("/updateComplaintList", function (req, res, next) {
 router.get("/getTherapyList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var superadmin = req.params.superadmin;
-    console.log(superadmin);
+
     conn.query(
       "select * from therapy_list where superadmin = '" + superadmin + "'",
       function (err, rows) {
@@ -3395,19 +2975,15 @@ router.get("/getTherapyList/:superadmin", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -3415,17 +2991,14 @@ router.get("/getTherapyList/:superadmin", function (req, res, next) {
 
 router.post("/addTherapyList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
     response = null;
-    console.log(req);
+
     var date = {
       title: req.body.title,
       sequence: req.body.sequence,
@@ -3449,15 +3022,12 @@ router.post("/addTherapyList", function (req, res, next) {
         }
         res.json(response);
       } else {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
-        console.log(err);
+        res.json(err);
+        logger.log("error", err);
       }
     });
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -3468,10 +3038,8 @@ router.get("/deleteTherapyList/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -3479,11 +3047,8 @@ router.get("/deleteTherapyList/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
               res.json(true);
@@ -3494,24 +3059,21 @@ router.get("/deleteTherapyList/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
 
 router.post("/updateTherapyList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
     var response = null;
-    console.log(req.body);
+
     var data = {
       id: req.body.id,
       title: req.body.title,
@@ -3532,11 +3094,8 @@ router.post("/updateTherapyList", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         } else {
           response = true;
@@ -3545,7 +3104,7 @@ router.post("/updateTherapyList", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -3557,10 +3116,8 @@ router.post("/updateTherapyList", function (req, res, next) {
 router.get("/getRecommendationList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var superadmin = req.params.superadmin;
@@ -3573,19 +3130,15 @@ router.get("/getRecommendationList/:superadmin", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -3593,17 +3146,14 @@ router.get("/getRecommendationList/:superadmin", function (req, res, next) {
 
 router.post("/addRecommendationList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
     response = null;
-    console.log(req);
+
     var date = {
       title: req.body.title,
       sequence: req.body.sequence,
@@ -3623,16 +3173,13 @@ router.post("/addRecommendationList", function (req, res, next) {
           }
           res.json(response);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
-          console.log(err);
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -3643,10 +3190,8 @@ router.get("/deleteRecommendationList/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -3654,11 +3199,8 @@ router.get("/deleteRecommendationList/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
               res.json(true);
@@ -3669,19 +3211,16 @@ router.get("/deleteRecommendationList/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
 
 router.post("/updateRecommendationList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -3699,11 +3238,8 @@ router.post("/updateRecommendationList", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         } else {
           response = true;
@@ -3712,7 +3248,7 @@ router.post("/updateRecommendationList", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -3724,10 +3260,8 @@ router.post("/updateRecommendationList", function (req, res, next) {
 router.get("/getRelationshipList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var superadmin = req.params.superadmin;
@@ -3738,19 +3272,15 @@ router.get("/getRelationshipList/:superadmin", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -3758,17 +3288,14 @@ router.get("/getRelationshipList/:superadmin", function (req, res, next) {
 
 router.post("/addRelationshipList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
     response = null;
-    console.log(req);
+
     var date = {
       title: req.body.title,
       sequence: req.body.sequence,
@@ -3788,16 +3315,13 @@ router.post("/addRelationshipList", function (req, res, next) {
           }
           res.json(response);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
-          console.log(err);
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -3808,10 +3332,8 @@ router.get("/deleteRelationshipList/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -3819,11 +3341,8 @@ router.get("/deleteRelationshipList/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
               res.json(true);
@@ -3834,19 +3353,16 @@ router.get("/deleteRelationshipList/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
 
 router.post("/updateRelationshipList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -3864,11 +3380,8 @@ router.post("/updateRelationshipList", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         } else {
           response = true;
@@ -3877,7 +3390,7 @@ router.post("/updateRelationshipList", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -3889,10 +3402,8 @@ router.post("/updateRelationshipList", function (req, res, next) {
 router.get("/getSocialList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var superadmin = req.params.superadmin;
@@ -3903,19 +3414,15 @@ router.get("/getSocialList/:superadmin", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -3923,17 +3430,14 @@ router.get("/getSocialList/:superadmin", function (req, res, next) {
 
 router.post("/addSocialList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
     response = null;
-    console.log(req);
+
     var date = {
       title: req.body.title,
       sequence: req.body.sequence,
@@ -3950,15 +3454,12 @@ router.post("/addSocialList", function (req, res, next) {
         }
         res.json(response);
       } else {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
-        console.log(err);
+        res.json(err);
+        logger.log("error", err);
       }
     });
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -3969,10 +3470,8 @@ router.get("/deleteSocialList/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -3980,11 +3479,8 @@ router.get("/deleteSocialList/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
               res.json(true);
@@ -3995,19 +3491,16 @@ router.get("/deleteSocialList/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
 
 router.post("/updateSocialList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -4025,11 +3518,8 @@ router.post("/updateSocialList", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         } else {
           response = true;
@@ -4038,7 +3528,7 @@ router.post("/updateSocialList", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -4050,10 +3540,8 @@ router.post("/updateSocialList", function (req, res, next) {
 router.get("/getDoctorList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var superadmin = req.params.superadmin;
@@ -4064,19 +3552,15 @@ router.get("/getDoctorList/:superadmin", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -4084,17 +3568,14 @@ router.get("/getDoctorList/:superadmin", function (req, res, next) {
 
 router.post("/addDoctorList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
     response = null;
-    console.log(req);
+
     var date = {
       title: req.body.title,
       sequence: req.body.sequence,
@@ -4111,15 +3592,12 @@ router.post("/addDoctorList", function (req, res, next) {
         }
         res.json(response);
       } else {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
-        console.log(err);
+        res.json(err);
+        logger.log("error", err);
       }
     });
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -4130,10 +3608,8 @@ router.get("/deleteDoctorList/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -4141,11 +3617,8 @@ router.get("/deleteDoctorList/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
               res.json(true);
@@ -4156,19 +3629,16 @@ router.get("/deleteDoctorList/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
 
 router.post("/updateDoctorList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -4186,11 +3656,8 @@ router.post("/updateDoctorList", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         } else {
           response = true;
@@ -4199,7 +3666,7 @@ router.post("/updateDoctorList", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -4211,10 +3678,8 @@ router.post("/updateDoctorList", function (req, res, next) {
 router.get("/getDoctorsList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var superadmin = req.params.superadmin;
@@ -4225,19 +3690,15 @@ router.get("/getDoctorsList/:superadmin", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -4245,17 +3706,14 @@ router.get("/getDoctorsList/:superadmin", function (req, res, next) {
 
 router.post("/addDoctorsList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
     response = null;
-    console.log(req);
+
     var date = {
       firstname: req.body.firstname,
       lastname: req.body.lastname,
@@ -4280,15 +3738,12 @@ router.post("/addDoctorsList", function (req, res, next) {
         }
         res.json(response);
       } else {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
-        console.log(err);
+        res.json(err);
+        logger.log("error", err);
       }
     });
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -4299,10 +3754,8 @@ router.get("/deleteDoctorsList/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -4310,11 +3763,8 @@ router.get("/deleteDoctorsList/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
               res.json(true);
@@ -4325,7 +3775,7 @@ router.get("/deleteDoctorsList/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
@@ -4333,10 +3783,8 @@ router.get("/deleteDoctorsList/:id", (req, res, next) => {
 router.post("/updateDoctorsList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -4362,11 +3810,8 @@ router.post("/updateDoctorsList", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         } else {
           response = true;
@@ -4375,7 +3820,7 @@ router.post("/updateDoctorsList", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -4387,10 +3832,8 @@ router.post("/updateDoctorsList", function (req, res, next) {
 router.get("/getTreatmentList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var superadmin = req.params.superadmin;
@@ -4401,19 +3844,15 @@ router.get("/getTreatmentList/:superadmin", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -4421,17 +3860,14 @@ router.get("/getTreatmentList/:superadmin", function (req, res, next) {
 
 router.post("/addTreatmentList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
     response = null;
-    console.log(req);
+
     var date = {
       title: req.body.title,
       sequence: req.body.sequence,
@@ -4448,15 +3884,12 @@ router.post("/addTreatmentList", function (req, res, next) {
         }
         res.json(response);
       } else {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
-        console.log(err);
+        res.json(err);
+        logger.log("error", err);
       }
     });
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -4467,10 +3900,8 @@ router.get("/deleteTreatmentList/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -4478,11 +3909,8 @@ router.get("/deleteTreatmentList/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
               res.json(true);
@@ -4493,7 +3921,7 @@ router.get("/deleteTreatmentList/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
@@ -4501,10 +3929,8 @@ router.get("/deleteTreatmentList/:id", (req, res, next) => {
 router.post("/updateTreatmentList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -4522,11 +3948,8 @@ router.post("/updateTreatmentList", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         } else {
           response = true;
@@ -4535,7 +3958,7 @@ router.post("/updateTreatmentList", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -4547,10 +3970,8 @@ router.post("/updateTreatmentList", function (req, res, next) {
 router.get("/getVATTaxList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var superadmin = req.params.superadmin;
@@ -4561,19 +3982,15 @@ router.get("/getVATTaxList/:superadmin", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -4581,17 +3998,14 @@ router.get("/getVATTaxList/:superadmin", function (req, res, next) {
 
 router.post("/addVATTaxList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
     response = null;
-    console.log(req);
+
     var date = {
       title: req.body.title,
       sequence: req.body.sequence,
@@ -4608,15 +4022,12 @@ router.post("/addVATTaxList", function (req, res, next) {
         }
         res.json(response);
       } else {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
-        console.log(err);
+        res.json(err);
+        logger.log("error", err);
       }
     });
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -4627,10 +4038,8 @@ router.get("/deleteVATTaxList/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -4638,11 +4047,8 @@ router.get("/deleteVATTaxList/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
               res.json(true);
@@ -4653,7 +4059,7 @@ router.get("/deleteVATTaxList/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
@@ -4661,10 +4067,8 @@ router.get("/deleteVATTaxList/:id", (req, res, next) => {
 router.post("/updateVATTaxList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -4682,11 +4086,8 @@ router.post("/updateVATTaxList", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         } else {
           response = true;
@@ -4695,7 +4096,7 @@ router.post("/updateVATTaxList", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -4707,10 +4108,8 @@ router.post("/updateVATTaxList", function (req, res, next) {
 router.get("/getCSList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var superadmin = req.params.superadmin;
@@ -4721,19 +4120,15 @@ router.get("/getCSList/:superadmin", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -4741,17 +4136,14 @@ router.get("/getCSList/:superadmin", function (req, res, next) {
 
 router.post("/addCSList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
     response = null;
-    console.log(req);
+
     var date = {
       title: req.body.title,
       sequence: req.body.sequence,
@@ -4768,15 +4160,12 @@ router.post("/addCSList", function (req, res, next) {
         }
         res.json(response);
       } else {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
-        console.log(err);
+        res.json(err);
+        logger.log("error", err);
       }
     });
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -4787,10 +4176,8 @@ router.get("/deleteCSList/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -4798,11 +4185,8 @@ router.get("/deleteCSList/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
               res.json(true);
@@ -4813,19 +4197,16 @@ router.get("/deleteCSList/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
 
 router.post("/updateCSList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -4843,11 +4224,8 @@ router.post("/updateCSList", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         } else {
           response = true;
@@ -4856,7 +4234,7 @@ router.post("/updateCSList", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -4868,10 +4246,8 @@ router.post("/updateCSList", function (req, res, next) {
 router.get("/getStateList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var superadmin = req.params.superadmin;
@@ -4882,19 +4258,15 @@ router.get("/getStateList/:superadmin", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -4902,17 +4274,14 @@ router.get("/getStateList/:superadmin", function (req, res, next) {
 
 router.post("/addStateList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
     response = null;
-    console.log(req);
+
     var date = {
       title: req.body.title,
       sequence: req.body.sequence,
@@ -4929,15 +4298,12 @@ router.post("/addStateList", function (req, res, next) {
         }
         res.json(response);
       } else {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
-        console.log(err);
+        res.json(err);
+        logger.log("error", err);
       }
     });
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -4948,10 +4314,8 @@ router.get("/deleteStateList/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -4959,11 +4323,8 @@ router.get("/deleteStateList/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
               res.json(true);
@@ -4974,19 +4335,16 @@ router.get("/deleteStateList/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
 
 router.post("/updateStateList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -5004,11 +4362,8 @@ router.post("/updateStateList", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         } else {
           response = true;
@@ -5017,7 +4372,7 @@ router.post("/updateStateList", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -5030,10 +4385,8 @@ router.get("/getBaseDataOne/:id", function (req, res, next) {
   var id = req.params.id;
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     conn.query(
@@ -5043,19 +4396,15 @@ router.get("/getBaseDataOne/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -5063,17 +4412,14 @@ router.get("/getBaseDataOne/:id", function (req, res, next) {
 
 router.post("/addBaseDataOne", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
     response = null;
-    console.log(req);
+
     var date = {
       customer_id: req.body.customer_id,
       recommendation: req.body.recommendation,
@@ -5094,15 +4440,12 @@ router.post("/addBaseDataOne", function (req, res, next) {
         }
         res.json(response);
       } else {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
-        console.log(err);
+        res.json(err);
+        logger.log("error", err);
       }
     });
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -5110,10 +4453,8 @@ router.post("/addBaseDataOne", function (req, res, next) {
 router.post("/updateBaseDataOne", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -5134,11 +4475,8 @@ router.post("/updateBaseDataOne", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         } else {
           response = true;
@@ -5147,7 +4485,7 @@ router.post("/updateBaseDataOne", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -5160,10 +4498,8 @@ router.get("/getBaseDataTwo/:id", function (req, res, next) {
   var id = req.params.id;
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     conn.query(
@@ -5173,19 +4509,15 @@ router.get("/getBaseDataTwo/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -5193,17 +4525,14 @@ router.get("/getBaseDataTwo/:id", function (req, res, next) {
 
 router.post("/addBaseDataTwo", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
     response = null;
-    console.log(req);
+
     var date = {
       customer_id: req.body.customer_id,
       size: req.body.size,
@@ -5227,15 +4556,12 @@ router.post("/addBaseDataTwo", function (req, res, next) {
         }
         res.json(response);
       } else {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
-        console.log(err);
+        res.json(err);
+        logger.log("error", err);
       }
     });
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -5243,10 +4569,8 @@ router.post("/addBaseDataTwo", function (req, res, next) {
 router.post("/updateBaseDataTwo", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -5270,11 +4594,8 @@ router.post("/updateBaseDataTwo", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         } else {
           response = true;
@@ -5283,7 +4604,7 @@ router.post("/updateBaseDataTwo", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -5296,10 +4617,8 @@ router.get("/getPhysicalIllness/:id", function (req, res, next) {
   var id = req.params.id;
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     conn.query(
@@ -5309,19 +4628,15 @@ router.get("/getPhysicalIllness/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -5329,17 +4644,14 @@ router.get("/getPhysicalIllness/:id", function (req, res, next) {
 
 router.post("/addPhysicalIllness", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
     response = null;
-    console.log(req);
+
     var date = {
       customer_id: req.body.customer_id,
       internal_organs: req.body.internal_organs,
@@ -5364,16 +4676,13 @@ router.post("/addPhysicalIllness", function (req, res, next) {
           }
           res.json(response);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
-          console.log(err);
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -5381,10 +4690,8 @@ router.post("/addPhysicalIllness", function (req, res, next) {
 router.post("/updatePhysicalIllness", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -5406,11 +4713,8 @@ router.post("/updatePhysicalIllness", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         } else {
           response = true;
@@ -5419,7 +4723,7 @@ router.post("/updatePhysicalIllness", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -5429,10 +4733,8 @@ router.post("/updatePhysicalIllness", function (req, res, next) {
 router.post("/insertFromExcel", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -5440,7 +4742,7 @@ router.post("/insertFromExcel", function (req, res, next) {
     var values = "";
     var columns = "";
     var table = req.body.table;
-    console.log(req.body);
+
     for (let i = 0; i < req.body.columns.length; i++) {
       columns += req.body.columns[i] + ",";
     }
@@ -5464,11 +4766,8 @@ router.post("/insertFromExcel", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         } else {
           response = true;
@@ -5477,24 +4776,21 @@ router.post("/insertFromExcel", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
 
 router.post("/createVaucher", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
     response = {};
-    console.log(req);
+
     var data = {
       date: req.body.date,
       amount: req.body.amount,
@@ -5520,15 +4816,12 @@ router.post("/createVaucher", function (req, res, next) {
         }
         res.json(response);
       } else {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
-        console.log(err);
+        res.json(err);
+        logger.log("error", err);
       }
     });
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -5539,10 +4832,8 @@ router.get("/deleteVaucher/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -5550,11 +4841,8 @@ router.get("/deleteVaucher/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
               res.json(true);
@@ -5565,7 +4853,7 @@ router.get("/deleteVaucher/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
@@ -5573,10 +4861,8 @@ router.get("/deleteVaucher/:id", (req, res, next) => {
 router.get("/getVauchers/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var id = req.params.id;
@@ -5588,19 +4874,15 @@ router.get("/getVauchers/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -5609,10 +4891,8 @@ router.get("/getVauchers/:id", function (req, res, next) {
 router.get("/getNextVaucherId", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var id = req.params.id;
@@ -5621,22 +4901,17 @@ router.get("/getNextVaucherId", function (req, res, next) {
       function (err, rows) {
         conn.release();
         if (!err) {
-          console.log(rows);
           res.json(rows[0].id + 1);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -5644,12 +4919,9 @@ router.get("/getNextVaucherId", function (req, res, next) {
 
 router.post("/updateVaucher", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -5675,11 +4947,8 @@ router.post("/updateVaucher", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         } else {
           response = true;
@@ -5688,7 +4957,7 @@ router.post("/updateVaucher", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -5698,10 +4967,8 @@ router.post("/updateVaucher", function (req, res, next) {
 router.get("/getEventCategory/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var id = req.params.id;
@@ -5713,19 +4980,15 @@ router.get("/getEventCategory/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -5733,12 +4996,9 @@ router.get("/getEventCategory/:id", function (req, res, next) {
 
 router.post("/createEventCategory", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -5761,15 +5021,12 @@ router.post("/createEventCategory", function (req, res, next) {
         }
         res.json(response);
       } else {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
-        console.log(err);
+        res.json(err);
+        logger.log("error", err);
       }
     });
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -5780,10 +5037,8 @@ router.get("/deleteEventCategory/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -5791,11 +5046,8 @@ router.get("/deleteEventCategory/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
               res.json(true);
@@ -5806,7 +5058,7 @@ router.get("/deleteEventCategory/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
@@ -5814,10 +5066,8 @@ router.get("/deleteEventCategory/:id", (req, res, next) => {
 router.post("/updateEventCategory", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -5837,11 +5087,8 @@ router.post("/updateEventCategory", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         } else {
           response = true;
@@ -5850,7 +5097,7 @@ router.post("/updateEventCategory", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -5862,10 +5109,8 @@ router.post("/updateEventCategory", function (req, res, next) {
 router.get("/getWorkTimeColors/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     var id = req.params.id;
@@ -5877,19 +5122,15 @@ router.get("/getWorkTimeColors/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -5897,12 +5138,9 @@ router.get("/getWorkTimeColors/:id", function (req, res, next) {
 
 router.post("/createWorkTimeColors", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -5926,16 +5164,13 @@ router.post("/createWorkTimeColors", function (req, res, next) {
           }
           res.json(response);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
-          console.log(err);
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -5946,10 +5181,8 @@ router.get("/deleteWorkTimeColors/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -5957,11 +5190,8 @@ router.get("/deleteWorkTimeColors/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
               res.json(true);
@@ -5972,7 +5202,7 @@ router.get("/deleteWorkTimeColors/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
@@ -5980,10 +5210,8 @@ router.get("/deleteWorkTimeColors/:id", (req, res, next) => {
 router.post("/updateWorkTimeColors", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -6000,11 +5228,8 @@ router.post("/updateWorkTimeColors", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
-          console.error("SQL error:", err);
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
           return next(err);
         } else {
           response = true;
@@ -6013,7 +5238,7 @@ router.post("/updateWorkTimeColors", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -6024,15 +5249,11 @@ router.get("/task/confirmationArrival/:id", (req, res, next) => {
   try {
     var reqObj = req.params.id;
 
-    console.log("usao sam u verifikaciju!");
-    console.log(reqObj);
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
         return next(err);
       } else {
         conn.query(
@@ -6040,14 +5261,10 @@ router.get("/task/confirmationArrival/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
-              console.log(rows);
               res.writeHead(302, {
                 Location: "../../../template/confirm-arrival",
               });
@@ -6058,7 +5275,7 @@ router.get("/task/confirmationArrival/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
@@ -6067,33 +5284,27 @@ router.get("/getCountAllTasksForUser/:id", function (req, res, next) {
   var reqObj = req.params.id;
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     conn.query(
       "SELECT COUNT(*) as total from tasks where creator_id = '" + reqObj + "'",
       function (err, rows) {
         conn.release();
-        console.log(err);
+
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -6103,10 +5314,8 @@ router.get("/getCountAllTasksForUserPerMonth/:id", function (req, res, next) {
   var reqObj = req.params.id;
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     conn.query(
@@ -6115,23 +5324,19 @@ router.get("/getCountAllTasksForUserPerMonth/:id", function (req, res, next) {
         "' GROUP BY MONTH(start)",
       function (err, rows) {
         conn.release();
-        console.log(err);
+
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -6141,10 +5346,8 @@ router.get("/getCountAllTasksForUserPerWeek/:id", function (req, res, next) {
   var reqObj = req.params.id;
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     conn.query(
@@ -6153,23 +5356,19 @@ router.get("/getCountAllTasksForUserPerWeek/:id", function (req, res, next) {
         "' GROUP BY WEEK(start)",
       function (err, rows) {
         conn.release();
-        console.log(err);
+
         if (!err) {
           res.json(rows);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -6179,12 +5378,9 @@ router.get("/getCountAllTasksForUserPerWeek/:id", function (req, res, next) {
 
 router.post("/createToDo", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
@@ -6201,15 +5397,12 @@ router.post("/createToDo", function (req, res, next) {
         }
         res.json(response);
       } else {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
-        console.log(err);
+        res.json(err);
+        logger.log("error", err);
       }
     });
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -6218,10 +5411,8 @@ router.get("/getToDo", function (req, res, next) {
   var reqObj = req.params.id;
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     conn.query("SELECT * from todo", function (err, rows) {
@@ -6229,18 +5420,14 @@ router.get("/getToDo", function (req, res, next) {
       if (!err) {
         res.json(rows);
       } else {
-        res.json({
-          code: 100,
-          status: "Error in connection database",
-        });
+        res.json(err);
+        logger.log("error", err);
       }
     });
 
     conn.on("error", function (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     });
   });
@@ -6248,17 +5435,14 @@ router.get("/getToDo", function (req, res, next) {
 
 router.post("/updateToDo", function (req, res, next) {
   connection.getConnection(function (err, conn) {
-    console.log(conn);
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
 
     response = {};
-    console.log(req.body);
+
     conn.query(
       "update todo SET ? where id = '" + req.body.id + "'",
       [req.body],
@@ -6273,16 +5457,13 @@ router.post("/updateToDo", function (req, res, next) {
           }
           res.json(response);
         } else {
-          res.json({
-            code: 100,
-            status: "Error in connection database",
-          });
-          console.log(err);
+          res.json(err);
+          logger.log("error", err);
         }
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });
@@ -6303,11 +5484,8 @@ router.get("/deleteToDo/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              console.error("SQL error:", err);
-              res.json({
-                code: 100,
-                status: "Error in connection database",
-              });
+              res.json(err);
+              logger.log("error", err);
               return next(err);
             } else {
               res.json(true);
@@ -6318,7 +5496,7 @@ router.get("/deleteToDo/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
@@ -6331,10 +5509,8 @@ router.get("/getReservations/:id", function (req, res, next) {
   var id = req.params.id;
   connection.getConnection(function (err, conn) {
     if (err) {
-      res.json({
-        code: 100,
-        status: "Error in connection database",
-      });
+      res.json(err);
+      logger.log("error", err);
       return;
     }
     conn.query(
@@ -6453,9 +5629,6 @@ router.post("/sendSMS", function (req, res) {
           phoneNumber,
           process.env.COUNTRY_CODE,
           function (err, response) {
-            console.log(err);
-            console.log(response);
-
             if (err && err.errors[0].code == 21) {
               // This error code indicates that the phone number has an unknown format
               response.send("You need to enter a valid phone number!");
@@ -6505,7 +5678,6 @@ router.post("/sendSMS", function (req, res) {
                     res.send(err);
                   } else {
                     res.send(true);
-                    console.log("Sent message to " + response.phoneNumber);
                   }
                 }
               );
@@ -6543,7 +5715,7 @@ router.get("/getReminderSettings/:superadmin", (req, res, next) => {
       }
     });
   } catch (ex) {
-    console.error("Internal error: " + ex);
+    logger.log("error", err);
     return next(ex);
   }
 });
@@ -6617,7 +5789,7 @@ router.post("/updateCustomerSendReminderOption", function (req, res, next) {
       }
     );
     conn.on("error", function (err) {
-      console.log("[mysql error]", err);
+      logger.log("error", err);
     });
   });
 });

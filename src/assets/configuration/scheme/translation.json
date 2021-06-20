@@ -134,6 +134,22 @@
       "myTherapy": { "type": "string" },
       "myDocument": { "type": "string" },
       "myCalendar": { "type": "string" },
+      "systemLogErrors": { "type": "string" },
+      "systemLogInfo": { "type": "string" },
+      "systemLogWarn": { "type": "string" },
+      "complaintMenu": { "type": "string" },
+      "therapyMenu": { "type": "string" },
+      "treatmentMenu": { "type": "string" },
+      "recommendationMenu": { "type": "string" },
+      "relationshipMenu": { "type": "string" },
+      "socialMenu": { "type": "string" },
+      "doctorMenu": { "type": "string" },
+      "doctorsMenu": { "type": "string" },
+      "vatTaxMenu": { "type": "string" },
+      "csMenu": { "type": "string" },
+      "stateMenu": { "type": "string" },
+      "eventCategoryMenu": { "type": "string" },
+      "workTimeColorsMenu": { "type": "string" },
       "reservations": { "type": "string" },
       "pagerItemsPerPage": { "type": "string" },
       "addNew": { "type": "string" },
@@ -827,7 +843,7 @@
             { "key": "refreshEventToolbar" },
             { "key": "settingsToolbar" },
             { "key": "reserved" },
-            { "key": "additionalSendOptions"}
+            { "key": "additionalSendOptions" }
           ]
         }
       ]
@@ -875,7 +891,46 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "myCalendar" }, {}, {}, {}]
+          "items": [
+            { "key": "myCalendar" },
+            { "key": "systemLogErrors" },
+            { "key": "systemLogInfo" },
+            { "key": "systemLogWarn" },
+            { "key": "complaintMenu" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "therapyMenu" },
+            { "key": "treatmentMenu" },
+            { "key": "recommendationMenu" },
+            { "key": "relationshipMenu" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "socialMenu" },
+            { "key": "doctorMenu" },
+            { "key": "doctorsMenu" },
+            { "key": "vatTaxMenu" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "csMenu" },
+            { "key": "stateMenu" },
+            { "key": "eventCategoryMenu" },
+            { "key": "workTimeColorsMenu" }
+          ]
         }
       ]
     },
@@ -1518,7 +1573,7 @@
           "items": [
             { "key": "errorSendFormToMail" },
             { "key": "contactPatient" },
-            { "key": "mobileEdit"},
+            { "key": "mobileEdit" },
             { "key": "telephoneEdit" }
           ]
         }
