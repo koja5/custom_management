@@ -9,6 +9,7 @@ const path = require("path");
 const passwordGenerate = require("generate-password");
 var request = require("request");
 const logger = require("./logger");
+const ftpUploadSMS = require("./ftpUploadSMS");
 
 var link = "http://localhost:3000/api/";
 
@@ -77,9 +78,8 @@ router.get("/posts", (req, res) => {
 router.post("/signUp", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var email = req.body.email;
@@ -111,8 +111,7 @@ router.post("/signUp", function (req, res, next) {
       function (err, rows, fields) {
         if (err) {
           res.json(err);
-          logger.log("error", err);
-          return next(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
         if (rows.length >= 1) {
           test.success = false;
@@ -145,18 +144,14 @@ router.post("/signUp", function (req, res, next) {
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
 router.post("/createTask", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     test = {};
@@ -187,12 +182,9 @@ router.post("/createTask", function (req, res, next) {
         }
         res.json(test);
       } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
       }
-    });
-    conn.on("error", function (err) {
-      logger.log("error", err);
     });
   });
 });
@@ -201,9 +193,8 @@ router.post("/updateTask", function (req, res, next) {
   req.setMaxListeners(0);
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     test = {};
@@ -247,14 +238,11 @@ router.post("/updateTask", function (req, res, next) {
           }
           res.json(test);
         } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
           res.json(err);
-          logger.log("error", err);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -264,10 +252,8 @@ router.get("/deleteTask/:id", (req, res, next) => {
 
     connection.getConnection(function (err, conn) {
       if (err) {
-        console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "delete from tasks where id = '" + reqObj + "'",
@@ -275,8 +261,7 @@ router.get("/deleteTask/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.json(true);
             }
@@ -285,8 +270,8 @@ router.get("/deleteTask/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
@@ -294,9 +279,8 @@ router.get("/getTasks/:id", function (req, res, next) {
   var reqObj = req.params.id;
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     conn.query(
       "select t.*, e.color from tasks t join event_category e on t.colorTask = e.id where e.superadmin = '" +
@@ -308,25 +292,18 @@ router.get("/getTasks/:id", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.get("/getTasksForUser/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var id = req.params.id;
@@ -339,16 +316,10 @@ router.get("/getTasksForUser/:id", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
@@ -357,9 +328,8 @@ router.get(
   function (req, res, next) {
     connection.getConnection(function (err, conn) {
       if (err) {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return;
       }
 
       var id = req.params.id;
@@ -375,7 +345,7 @@ router.get(
               res.json(rows);
             } else {
               res.json(err);
-              logger.log("error", err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             }
           }
         );
@@ -389,16 +359,15 @@ router.get(
               res.json(rows);
             } else {
               res.json(err);
-              logger.log("error", err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             }
           }
         );
       }
 
       conn.on("error", function (err) {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return;
       });
     });
   }
@@ -409,15 +378,15 @@ router.post("/login", (req, res, next) => {
     var reqObj = req.body;
     connection.getConnection(function (err, conn) {
       if (err) {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
       } else {
         conn.query(
           "SELECT * FROM users WHERE email=? AND password=?",
           [reqObj.email, sha1(reqObj.password)],
           function (err, rows, fields) {
             if (err) {
-              logger.log("error", err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(err);
             }
             if (rows.length >= 1 && rows[0].active === 1) {
@@ -441,7 +410,7 @@ router.post("/login", (req, res, next) => {
                 [reqObj.email, sha1(reqObj.password)],
                 function (err, rows, fields) {
                   if (err) {
-                    logger.log("error", err);
+                    logger.log("error", err.sql + ". " + err.sqlMessage);
                     res.json(err);
                   }
                   if (rows.length >= 1 && rows[0].active === 1) {
@@ -465,7 +434,7 @@ router.post("/login", (req, res, next) => {
                       [reqObj.email, sha1(reqObj.password)],
                       function (err, rows, fields) {
                         if (err) {
-                          logger.log("error", err);
+                          logger.log("error", err.sql + ". " + err.sqlMessage);
                           res.json(err);
                         }
 
@@ -506,16 +475,15 @@ router.post("/login", (req, res, next) => {
     });
   } catch (ex) {
     logger.log("error", ex);
-    return next(ex);
+    res.json(ex);
   }
 });
 
 router.post("/createUser", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var firstname = req.body.firstname;
@@ -554,8 +522,7 @@ router.post("/createUser", function (req, res, next) {
       function (err, rows, fields) {
         if (err) {
           res.json(err);
-          logger.log("error", err);
-          return next(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
         if (rows.length >= 1) {
           test.success = false;
@@ -576,7 +543,7 @@ router.post("/createUser", function (req, res, next) {
               test.id = rows.insertId;
               test.success = true;
             } else {
-              logger.log("error", err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
               test.success = false;
               test.info = "Error";
             }
@@ -585,18 +552,14 @@ router.post("/createUser", function (req, res, next) {
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
 router.get("/getUsers/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var id = req.params.id;
 
@@ -610,25 +573,18 @@ router.get("/getUsers/:id", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.get("/getUsersInCompany/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var id = req.params.id;
     conn.query(
@@ -640,25 +596,18 @@ router.get("/getUsersInCompany/:id", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.get("/getUsersAllowedOnlineInCompany/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var id = req.params.id;
     conn.query(
@@ -670,16 +619,10 @@ router.get("/getUsersAllowedOnlineInCompany/:id", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
@@ -687,9 +630,8 @@ router.get("/getUsersAllowedOnlineInCompany/:id", function (req, res, next) {
 router.get("/getMe/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var id = req.params.id;
     conn.query("SELECT * from users where id = ?", [id], function (err, rows) {
@@ -714,24 +656,18 @@ router.get("/getMe/:id", function (req, res, next) {
                     if (!err) {
                       res.json(rows);
                     } else {
-                      logger.log("error", err);
+                      logger.log("error", err.sql + ". " + err.sqlMessage);
                     }
                   }
                 );
               }
             } else {
               res.json(err);
-              logger.log("error", err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             }
           }
         );
       }
-    });
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
     });
   });
 });
@@ -739,9 +675,8 @@ router.get("/getMe/:id", function (req, res, next) {
 router.get("/getCompany/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var id = req.params.id;
     conn.query("SELECT * from store where id = ?", [id], function (err, rows) {
@@ -749,15 +684,9 @@ router.get("/getCompany/:id", function (req, res, next) {
       if (!err) {
         res.json(rows);
       } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
       }
-    });
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
     });
   });
 });
@@ -765,9 +694,8 @@ router.get("/getCompany/:id", function (req, res, next) {
 router.post("/createStore", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     test = {};
@@ -793,8 +721,7 @@ router.post("/createStore", function (req, res, next) {
       function (err, rows, fields) {
         if (err) {
           res.json(err);
-          logger.log("error", err);
-          return next(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
 
         if (rows.length >= 1) {
@@ -817,31 +744,27 @@ router.post("/createStore", function (req, res, next) {
                 test.id = rows.insertId;
                 test.success = true;
               } else {
-                logger.log("error", err);
+                logger.log("error", err.sql + ". " + err.sqlMessage);
                 test.success = false;
                 test.info = "notAdded";
               }
               res.json(test);
             } else {
               res.json(err);
-              logger.log("error", err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             }
           });
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
 router.get("/getStore/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var id = req.params.id;
     conn.query(
@@ -853,25 +776,18 @@ router.get("/getStore/:id", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.get("/getStoreAllowedOnline/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var id = req.params.id;
     conn.query(
@@ -883,25 +799,18 @@ router.get("/getStoreAllowedOnline/:id", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/updateStore", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var response = null;
@@ -930,17 +839,13 @@ router.post("/updateStore", function (req, res, next) {
         conn.release();
         if (err) {
           res.json(err);
-          logger.log("error", err);
-          return next(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
           response = true;
           res.json(response);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -950,9 +855,8 @@ router.get("/deleteStore/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "delete from store where id = '" + reqObj + "'",
@@ -960,29 +864,26 @@ router.get("/deleteStore/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               logger.log("info", `Store ID:${reqObj} SUCCESSED DELETE!`);
               res.json(true);
-              res.end();
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
 router.post("/createCustomer", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     test = {};
@@ -1030,7 +931,7 @@ router.post("/createCustomer", function (req, res, next) {
                   test.success = true;
                   test.password = notShaPassword;
                 } else {
-                  logger.log("error", err);
+                  logger.log("error", err.sql + ". " + err.sqlMessage);
                   test.success = false;
                   test.info = "Error";
                 }
@@ -1039,7 +940,7 @@ router.post("/createCustomer", function (req, res, next) {
             );
           } else {
             conn.release();
-            logger.info("warn", `Patient ${req.body.email} already EXISTS!`);
+            logger.log("warn", `Patient ${req.body.email} already EXISTS!`);
             test.success = false;
             test.info = "exists";
             res.json(test);
@@ -1050,19 +951,14 @@ router.post("/createCustomer", function (req, res, next) {
         }
       }
     );
-
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
 router.post("/createCustomerFromPatientForm", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     test = {};
@@ -1099,7 +995,7 @@ router.post("/createCustomerFromPatientForm", function (req, res, next) {
                   test.info = 200;
                   res.json(test);
                 } else {
-                  logger.info("error", err);
+                  logger.log("error", err);
                   res.json(err);
                 }
               }
@@ -1116,19 +1012,14 @@ router.post("/createCustomerFromPatientForm", function (req, res, next) {
         }
       }
     );
-
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
 router.get("/getCustomers/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var id = req.params.id;
     conn.query(
@@ -1143,21 +1034,14 @@ router.get("/getCustomers/:id", function (req, res, next) {
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.get("/getSuperadmin/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var id = req.params.id;
     conn.query(
@@ -1172,21 +1056,14 @@ router.get("/getSuperadmin/:id", function (req, res, next) {
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/updateSuperadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     test = {};
     var id = req.body.id;
@@ -1205,24 +1082,18 @@ router.post("/updateSuperadmin", function (req, res, next) {
           res.json(test);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/updatePasswordForSuperadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     conn.query(
@@ -1240,20 +1111,14 @@ router.post("/updatePasswordForSuperadmin", function (req, res, next) {
         }
       }
     );
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/updatePasswordForUser", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     conn.query(
@@ -1271,20 +1136,14 @@ router.post("/updatePasswordForUser", function (req, res, next) {
         }
       }
     );
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/updatePasswordForCustomer", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     conn.query(
@@ -1302,20 +1161,14 @@ router.post("/updatePasswordForCustomer", function (req, res, next) {
         }
       }
     );
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/updateUserFromSettings", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     test = {};
     var id = req.body.id;
@@ -1334,24 +1187,18 @@ router.post("/updateUserFromSettings", function (req, res, next) {
           res.json(test);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.get("/getInfoForCustomer/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var id = req.params.id;
     conn.query(
@@ -1366,21 +1213,14 @@ router.get("/getInfoForCustomer/:id", function (req, res, next) {
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/searchCustomer", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var superadmin = req.body.superadmin;
     var filter = req.body.filter;
@@ -1399,21 +1239,14 @@ router.post("/searchCustomer", function (req, res, next) {
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.get("/getCustomerWithId/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var id = req.params.id;
     conn.query(
@@ -1428,21 +1261,14 @@ router.get("/getCustomerWithId/:id", function (req, res, next) {
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.get("/getDocuments/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var id = req.params.id;
     conn.query(
@@ -1454,16 +1280,10 @@ router.get("/getDocuments/:id", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
@@ -1473,9 +1293,8 @@ router.get("/deleteDocumentFromDatabase/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "delete from documents where id = '" + reqObj + "'",
@@ -1483,19 +1302,17 @@ router.get("/deleteDocumentFromDatabase/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.json(true);
-              res.end();
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
@@ -1512,9 +1329,8 @@ router.post("/deleteDocument", function (req, res, next) {
 router.post("/updateDocument", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     test = {};
     var id = req.body.id;
@@ -1533,15 +1349,10 @@ router.post("/updateDocument", function (req, res, next) {
           res.json(test);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
@@ -1558,9 +1369,8 @@ router.post("/getPdfFile", function (req, res, next) {
 router.get("/activeUser/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     test = {};
     var id = req.params.id;
@@ -1584,24 +1394,18 @@ router.get("/activeUser/:id", function (req, res, next) {
           res.json(test);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/uploadImage", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     test = {};
 
@@ -1626,7 +1430,7 @@ router.post("/uploadImage", function (req, res, next) {
           res.json(test);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
@@ -1636,9 +1440,8 @@ router.post("/uploadImage", function (req, res, next) {
 router.get("/deactiveUser/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     test = {};
     var id = req.params.id;
@@ -1662,24 +1465,18 @@ router.get("/deactiveUser/:id", function (req, res, next) {
           res.json(test);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/addUser", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var nameOfClinic = req.body.nameOfClinic;
@@ -1721,14 +1518,9 @@ router.post("/addUser", function (req, res, next) {
         }
         res.json(test);
       } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
       }
-    });
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
     });
   });
 });
@@ -1736,9 +1528,8 @@ router.post("/addUser", function (req, res, next) {
 router.post("/updateUser", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var bodyPassword = null;
@@ -1785,15 +1576,10 @@ router.post("/updateUser", function (req, res, next) {
           res.json(response);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
@@ -1803,9 +1589,8 @@ router.get("/deleteUser/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "delete from users where id = '" + reqObj + "'",
@@ -1813,8 +1598,7 @@ router.get("/deleteUser/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.send(true);
             }
@@ -1823,8 +1607,8 @@ router.get("/deleteUser/:id", (req, res, next) => {
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
@@ -1835,9 +1619,8 @@ router.get("/deleteCustomer/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "delete from customers where id = '" + reqObj + "'",
@@ -1845,29 +1628,26 @@ router.get("/deleteCustomer/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               logger.log("info", `DELETED customer SUCCESS with ID: ${reqObj}`);
               res.json(true);
-              res.end();
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
 router.post("/updateCustomer", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     test = {};
     var id = req.body.id;
@@ -1886,24 +1666,18 @@ router.post("/updateCustomer", function (req, res, next) {
           res.json(test);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/updateAttentionAndPhysical", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     test = {};
     var id = req.body.id;
@@ -1928,15 +1702,10 @@ router.post("/updateAttentionAndPhysical", function (req, res, next) {
           res.json(test);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
@@ -1947,9 +1716,8 @@ router.get("/korisnik/verifikacija/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "UPDATE users_superadmin SET active='1' WHERE SHA1(email)='" +
@@ -1959,22 +1727,20 @@ router.get("/korisnik/verifikacija/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
-              logger.info("info", `Verification FOR EMAIL: ${email}!`);
+              logger.log("info", `Verification FOR EMAIL: ${reqObj}!`);
               res.writeHead(302, {
                 Location: "/login",
               });
-              res.end();
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
@@ -1985,9 +1751,8 @@ router.get("/sendChangePassword/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "UPDATE users_superadmin SET password='" +
@@ -1999,20 +1764,19 @@ router.get("/sendChangePassword/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.writeHead(302, {
                 Location: "/changePassword",
               });
-              res.end();
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
@@ -2022,9 +1786,8 @@ router.post("/postojikorisnik", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "SELECT * FROM users u WHERE u.email=?",
@@ -2032,7 +1795,6 @@ router.post("/postojikorisnik", (req, res, next) => {
           function (err, rows, fields) {
             if (err) {
               res.json(err);
-              return next(err);
             }
 
             if (rows.length >= 1 && rows[0].active == "1") {
@@ -2054,7 +1816,6 @@ router.post("/postojikorisnik", (req, res, next) => {
                 function (err, rows, fields) {
                   if (err) {
                     res.json(err);
-                    return next(err);
                   }
 
                   if (rows.length >= 1 && rows[0].active == "1") {
@@ -2077,8 +1838,7 @@ router.post("/postojikorisnik", (req, res, next) => {
                         conn.release();
                         if (err) {
                           res.json(err);
-                          logger.log("error", err);
-                          return next(err);
+                          logger.log("error", err.sql + ". " + err.sqlMessage);
                         }
 
                         if (rows.length >= 1 && rows[0].active == "1") {
@@ -2108,8 +1868,8 @@ router.post("/postojikorisnik", (req, res, next) => {
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
@@ -2126,9 +1886,8 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         if (newPassword1 == newPassword2) {
           conn.query(
@@ -2136,7 +1895,6 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
             function (err, rows, fields) {
               if (err) {
                 res.json(err);
-                return next(err);
               } else if (rows.length !== 0) {
                 conn.query(
                   "UPDATE users SET password='" +
@@ -2147,10 +1905,12 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
                   function (err, rows, fields) {
                     conn.release();
                     if (err) {
-                      logger.log("error", err);
-                      return next(err);
+                      logger.log("error", err.sql + ". " + err.sqlMessage);
                     } else {
-                      logger.log("info", `Password SUCCESED changes FOR USER via Forgot option for EMAIL: ${email}`);
+                      logger.log(
+                        "info",
+                        `Password SUCCESED changes FOR USER via Forgot option for EMAIL: ${email}`
+                      );
                       res.send({
                         code: "true",
                         message: "The password is success change!",
@@ -2166,7 +1926,6 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
                   function (err, rows, fields) {
                     if (err) {
                       res.json(err);
-                      return next(err);
                     } else if (rows.length !== 0) {
                       conn.query(
                         "UPDATE users_superadmin SET password='" +
@@ -2181,7 +1940,6 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
                               code: 100,
                               status: "Error in connection database",
                             });
-                            return next(err);
                           } else {
                             res.send({
                               code: "true",
@@ -2204,7 +1962,6 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
                               code: 100,
                               status: "Error in connection database",
                             });
-                            return next(err);
                           } else {
                             res.send({
                               code: "true",
@@ -2223,17 +1980,16 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
 router.get("/getUserWithID/:userid", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     conn.query(
       "select * from users where id = ?",
@@ -2247,21 +2003,14 @@ router.get("/getUserWithID/:userid", function (req, res, next) {
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/setWorkTimeForUser", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = {};
@@ -2288,12 +2037,9 @@ router.post("/setWorkTimeForUser", function (req, res, next) {
         }
         res.json(response);
       } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
       }
-    });
-    conn.on("error", function (err) {
-      logger.log("error", err);
     });
   });
 });
@@ -2301,9 +2047,8 @@ router.post("/setWorkTimeForUser", function (req, res, next) {
 router.get("/getWorkTimeForUser/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var id = req.params.id;
     conn.query(
@@ -2315,25 +2060,18 @@ router.get("/getWorkTimeForUser/:id", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/updateWorkTimeForUser", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = {};
@@ -2364,22 +2102,18 @@ router.post("/updateWorkTimeForUser", function (req, res, next) {
           res.json(response);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
 router.get("/getWorkandTaskForUser/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var id = req.params.id;
     conn.query(
@@ -2399,28 +2133,21 @@ router.get("/getWorkandTaskForUser/:id", function (req, res, next) {
                 });
               } else {
                 res.json(err);
-                logger.log("error", err);
+                logger.log("error", err.sql + ". " + err.sqlMessage);
               }
             }
           );
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/addComplaint", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = null;
@@ -2463,12 +2190,9 @@ router.post("/addComplaint", function (req, res, next) {
         }
         res.json(response);
       } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
       }
-    });
-    conn.on("error", function (err) {
-      logger.log("error", err);
     });
   });
 });
@@ -2476,9 +2200,8 @@ router.post("/addComplaint", function (req, res, next) {
 router.post("/updateComplaint", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var response = null;
@@ -2518,17 +2241,13 @@ router.post("/updateComplaint", function (req, res, next) {
         conn.release();
         if (err) {
           res.json(err);
-          logger.log("error", err);
-          return next(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
           response = true;
           res.json(response);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -2538,9 +2257,8 @@ router.get("/deleteComplaint/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "delete from complaint where id = '" + reqObj + "'",
@@ -2548,28 +2266,26 @@ router.get("/deleteComplaint/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.json(true);
-              res.end();
+              res.json(ex);
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
 router.get("/getComplaintForCustomer/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var id = req.params.id;
     conn.query(
@@ -2581,25 +2297,18 @@ router.get("/getComplaintForCustomer/:id", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/addTherapy", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = {};
@@ -2652,12 +2361,9 @@ router.post("/addTherapy", function (req, res, next) {
         }
         res.json(response);
       } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
       }
-    });
-    conn.on("error", function (err) {
-      logger.log("error", err);
     });
   });
 });
@@ -2665,9 +2371,8 @@ router.post("/addTherapy", function (req, res, next) {
 router.post("/updateTherapy", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var response = null;
@@ -2716,17 +2421,13 @@ router.post("/updateTherapy", function (req, res, next) {
         conn.release();
         if (err) {
           res.json(err);
-          logger.log("error", err);
-          return next(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
           response = true;
           res.json(response);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -2736,9 +2437,8 @@ router.get("/deleteTherapy/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "delete from therapy where id = '" + reqObj + "'",
@@ -2746,28 +2446,25 @@ router.get("/deleteTherapy/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.json(true);
-              res.end();
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
 router.get("/getTherapyForCustomer/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var id = req.params.id;
     conn.query(
@@ -2779,25 +2476,18 @@ router.get("/getTherapyForCustomer/:id", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.get("/getTherapy/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var id = req.params.id;
     conn.query(
@@ -2808,26 +2498,19 @@ router.get("/getTherapy/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
           res.json(err);
-          logger.log("error", err);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.get("/getComplaintList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var superadmin = req.params.superadmin;
 
@@ -2839,25 +2522,18 @@ router.get("/getComplaintList/:superadmin", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/addComplaintList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = null;
@@ -2878,12 +2554,9 @@ router.post("/addComplaintList", function (req, res, next) {
         }
         res.json(response);
       } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
       }
-    });
-    conn.on("error", function (err) {
-      logger.log("error", err);
     });
   });
 });
@@ -2894,9 +2567,8 @@ router.get("/deleteComplaintList/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "delete from complaint_list where id = '" + reqObj + "'",
@@ -2904,28 +2576,25 @@ router.get("/deleteComplaintList/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.json(true);
-              res.end();
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
 router.post("/updateComplaintList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var response = null;
@@ -2942,18 +2611,14 @@ router.post("/updateComplaintList", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
           res.json(err);
-          logger.log("error", err);
-          return next(err);
         } else {
           response = true;
           res.json(response);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -2962,9 +2627,8 @@ router.post("/updateComplaintList", function (req, res, next) {
 router.get("/getTherapyList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var superadmin = req.params.superadmin;
 
@@ -2976,25 +2640,18 @@ router.get("/getTherapyList/:superadmin", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/addTherapyList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = null;
@@ -3022,12 +2679,9 @@ router.post("/addTherapyList", function (req, res, next) {
         }
         res.json(response);
       } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
       }
-    });
-    conn.on("error", function (err) {
-      logger.log("error", err);
     });
   });
 });
@@ -3038,9 +2692,8 @@ router.get("/deleteTherapyList/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "delete from therapy_list where id = '" + reqObj + "'",
@@ -3048,28 +2701,25 @@ router.get("/deleteTherapyList/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.json(true);
-              res.end();
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
 router.post("/updateTherapyList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var response = null;
@@ -3095,17 +2745,13 @@ router.post("/updateTherapyList", function (req, res, next) {
         conn.release();
         if (err) {
           res.json(err);
-          logger.log("error", err);
-          return next(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
           response = true;
           res.json(response);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -3116,9 +2762,8 @@ router.post("/updateTherapyList", function (req, res, next) {
 router.get("/getRecommendationList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var superadmin = req.params.superadmin;
     conn.query(
@@ -3131,25 +2776,18 @@ router.get("/getRecommendationList/:superadmin", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/addRecommendationList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = null;
@@ -3174,13 +2812,10 @@ router.post("/addRecommendationList", function (req, res, next) {
           res.json(response);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -3190,9 +2825,8 @@ router.get("/deleteRecommendationList/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "delete from recommendation_list where id = '" + reqObj + "'",
@@ -3200,28 +2834,25 @@ router.get("/deleteRecommendationList/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.json(true);
-              res.end();
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
 router.post("/updateRecommendationList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var response = null;
@@ -3239,17 +2870,13 @@ router.post("/updateRecommendationList", function (req, res, next) {
         conn.release();
         if (err) {
           res.json(err);
-          logger.log("error", err);
-          return next(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
           response = true;
           res.json(response);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -3260,9 +2887,8 @@ router.post("/updateRecommendationList", function (req, res, next) {
 router.get("/getRelationshipList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var superadmin = req.params.superadmin;
     conn.query(
@@ -3273,25 +2899,18 @@ router.get("/getRelationshipList/:superadmin", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/addRelationshipList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = null;
@@ -3316,13 +2935,10 @@ router.post("/addRelationshipList", function (req, res, next) {
           res.json(response);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -3332,9 +2948,8 @@ router.get("/deleteRelationshipList/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "delete from relationship_list where id = '" + reqObj + "'",
@@ -3342,28 +2957,25 @@ router.get("/deleteRelationshipList/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.json(true);
-              res.end();
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
 router.post("/updateRelationshipList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var response = null;
@@ -3381,17 +2993,13 @@ router.post("/updateRelationshipList", function (req, res, next) {
         conn.release();
         if (err) {
           res.json(err);
-          logger.log("error", err);
-          return next(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
           response = true;
           res.json(response);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -3402,9 +3010,8 @@ router.post("/updateRelationshipList", function (req, res, next) {
 router.get("/getSocialList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var superadmin = req.params.superadmin;
     conn.query(
@@ -3415,25 +3022,18 @@ router.get("/getSocialList/:superadmin", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/addSocialList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = null;
@@ -3454,12 +3054,9 @@ router.post("/addSocialList", function (req, res, next) {
         }
         res.json(response);
       } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
       }
-    });
-    conn.on("error", function (err) {
-      logger.log("error", err);
     });
   });
 });
@@ -3470,9 +3067,8 @@ router.get("/deleteSocialList/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "delete from social_list where id = '" + reqObj + "'",
@@ -3480,28 +3076,25 @@ router.get("/deleteSocialList/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.json(true);
-              res.end();
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
 router.post("/updateSocialList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var response = null;
@@ -3519,17 +3112,13 @@ router.post("/updateSocialList", function (req, res, next) {
         conn.release();
         if (err) {
           res.json(err);
-          logger.log("error", err);
-          return next(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
           response = true;
           res.json(response);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -3540,9 +3129,8 @@ router.post("/updateSocialList", function (req, res, next) {
 router.get("/getDoctorList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var superadmin = req.params.superadmin;
     conn.query(
@@ -3553,25 +3141,18 @@ router.get("/getDoctorList/:superadmin", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/addDoctorList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = null;
@@ -3592,12 +3173,9 @@ router.post("/addDoctorList", function (req, res, next) {
         }
         res.json(response);
       } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
       }
-    });
-    conn.on("error", function (err) {
-      logger.log("error", err);
     });
   });
 });
@@ -3608,9 +3186,8 @@ router.get("/deleteDoctorList/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "delete from doctor_list where id = '" + reqObj + "'",
@@ -3618,28 +3195,25 @@ router.get("/deleteDoctorList/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.json(true);
-              res.end();
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
 router.post("/updateDoctorList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var response = null;
@@ -3657,17 +3231,13 @@ router.post("/updateDoctorList", function (req, res, next) {
         conn.release();
         if (err) {
           res.json(err);
-          logger.log("error", err);
-          return next(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
           response = true;
           res.json(response);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -3678,9 +3248,8 @@ router.post("/updateDoctorList", function (req, res, next) {
 router.get("/getDoctorsList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var superadmin = req.params.superadmin;
     conn.query(
@@ -3691,25 +3260,18 @@ router.get("/getDoctorsList/:superadmin", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/addDoctorsList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = null;
@@ -3738,12 +3300,9 @@ router.post("/addDoctorsList", function (req, res, next) {
         }
         res.json(response);
       } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
       }
-    });
-    conn.on("error", function (err) {
-      logger.log("error", err);
     });
   });
 });
@@ -3754,9 +3313,8 @@ router.get("/deleteDoctorsList/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "delete from doctors_list where id = '" + reqObj + "'",
@@ -3764,28 +3322,25 @@ router.get("/deleteDoctorsList/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.json(true);
-              res.end();
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
 router.post("/updateDoctorsList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var response = null;
@@ -3810,18 +3365,14 @@ router.post("/updateDoctorsList", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
           res.json(err);
-          logger.log("error", err);
-          return next(err);
         } else {
           response = true;
           res.json(response);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -3832,9 +3383,8 @@ router.post("/updateDoctorsList", function (req, res, next) {
 router.get("/getTreatmentList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var superadmin = req.params.superadmin;
     conn.query(
@@ -3845,25 +3395,18 @@ router.get("/getTreatmentList/:superadmin", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/addTreatmentList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = null;
@@ -3884,12 +3427,9 @@ router.post("/addTreatmentList", function (req, res, next) {
         }
         res.json(response);
       } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
       }
-    });
-    conn.on("error", function (err) {
-      logger.log("error", err);
     });
   });
 });
@@ -3900,9 +3440,8 @@ router.get("/deleteTreatmentList/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "delete from treatment_list where id = '" + reqObj + "'",
@@ -3910,28 +3449,25 @@ router.get("/deleteTreatmentList/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.json(true);
-              res.end();
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
 router.post("/updateTreatmentList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var response = null;
@@ -3949,17 +3485,13 @@ router.post("/updateTreatmentList", function (req, res, next) {
         conn.release();
         if (err) {
           res.json(err);
-          logger.log("error", err);
-          return next(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
           response = true;
           res.json(response);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -3970,9 +3502,8 @@ router.post("/updateTreatmentList", function (req, res, next) {
 router.get("/getVATTaxList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var superadmin = req.params.superadmin;
     conn.query(
@@ -3983,25 +3514,18 @@ router.get("/getVATTaxList/:superadmin", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/addVATTaxList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = null;
@@ -4022,12 +3546,9 @@ router.post("/addVATTaxList", function (req, res, next) {
         }
         res.json(response);
       } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
       }
-    });
-    conn.on("error", function (err) {
-      logger.log("error", err);
     });
   });
 });
@@ -4038,9 +3559,8 @@ router.get("/deleteVATTaxList/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "delete from vattax_list where id = '" + reqObj + "'",
@@ -4048,28 +3568,25 @@ router.get("/deleteVATTaxList/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.json(true);
-              res.end();
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
 router.post("/updateVATTaxList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var response = null;
@@ -4087,17 +3604,13 @@ router.post("/updateVATTaxList", function (req, res, next) {
         conn.release();
         if (err) {
           res.json(err);
-          logger.log("error", err);
-          return next(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
           response = true;
           res.json(response);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -4108,9 +3621,8 @@ router.post("/updateVATTaxList", function (req, res, next) {
 router.get("/getCSList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var superadmin = req.params.superadmin;
     conn.query(
@@ -4121,25 +3633,18 @@ router.get("/getCSList/:superadmin", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/addCSList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = null;
@@ -4160,12 +3665,9 @@ router.post("/addCSList", function (req, res, next) {
         }
         res.json(response);
       } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
       }
-    });
-    conn.on("error", function (err) {
-      logger.log("error", err);
     });
   });
 });
@@ -4176,9 +3678,8 @@ router.get("/deleteCSList/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "delete from cs_list where id = '" + reqObj + "'",
@@ -4186,28 +3687,25 @@ router.get("/deleteCSList/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.json(true);
-              res.end();
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
 router.post("/updateCSList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var response = null;
@@ -4224,18 +3722,14 @@ router.post("/updateCSList", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
           res.json(err);
-          logger.log("error", err);
-          return next(err);
         } else {
           response = true;
           res.json(response);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -4246,9 +3740,8 @@ router.post("/updateCSList", function (req, res, next) {
 router.get("/getStateList/:superadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var superadmin = req.params.superadmin;
     conn.query(
@@ -4259,25 +3752,18 @@ router.get("/getStateList/:superadmin", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/addStateList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = null;
@@ -4298,12 +3784,9 @@ router.post("/addStateList", function (req, res, next) {
         }
         res.json(response);
       } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
       }
-    });
-    conn.on("error", function (err) {
-      logger.log("error", err);
     });
   });
 });
@@ -4314,9 +3797,8 @@ router.get("/deleteStateList/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "delete from state_list where id = '" + reqObj + "'",
@@ -4324,28 +3806,25 @@ router.get("/deleteStateList/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.json(true);
-              res.end();
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
 router.post("/updateStateList", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var response = null;
@@ -4363,17 +3842,13 @@ router.post("/updateStateList", function (req, res, next) {
         conn.release();
         if (err) {
           res.json(err);
-          logger.log("error", err);
-          return next(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
           response = true;
           res.json(response);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -4385,9 +3860,8 @@ router.get("/getBaseDataOne/:id", function (req, res, next) {
   var id = req.params.id;
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     conn.query(
       "select * from base_one where customer_id = '" + id + "'",
@@ -4397,25 +3871,18 @@ router.get("/getBaseDataOne/:id", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/addBaseDataOne", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = null;
@@ -4440,12 +3907,9 @@ router.post("/addBaseDataOne", function (req, res, next) {
         }
         res.json(response);
       } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
       }
-    });
-    conn.on("error", function (err) {
-      logger.log("error", err);
     });
   });
 });
@@ -4453,9 +3917,8 @@ router.post("/addBaseDataOne", function (req, res, next) {
 router.post("/updateBaseDataOne", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var response = null;
@@ -4476,17 +3939,13 @@ router.post("/updateBaseDataOne", function (req, res, next) {
         conn.release();
         if (err) {
           res.json(err);
-          logger.log("error", err);
-          return next(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
           response = true;
           res.json(response);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -4498,9 +3957,8 @@ router.get("/getBaseDataTwo/:id", function (req, res, next) {
   var id = req.params.id;
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     conn.query(
       "select * from base_two where customer_id = '" + id + "'",
@@ -4510,25 +3968,18 @@ router.get("/getBaseDataTwo/:id", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/addBaseDataTwo", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = null;
@@ -4556,12 +4007,9 @@ router.post("/addBaseDataTwo", function (req, res, next) {
         }
         res.json(response);
       } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
       }
-    });
-    conn.on("error", function (err) {
-      logger.log("error", err);
     });
   });
 });
@@ -4569,9 +4017,8 @@ router.post("/addBaseDataTwo", function (req, res, next) {
 router.post("/updateBaseDataTwo", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var response = null;
@@ -4595,17 +4042,13 @@ router.post("/updateBaseDataTwo", function (req, res, next) {
         conn.release();
         if (err) {
           res.json(err);
-          logger.log("error", err);
-          return next(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
           response = true;
           res.json(response);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -4617,9 +4060,8 @@ router.get("/getPhysicalIllness/:id", function (req, res, next) {
   var id = req.params.id;
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     conn.query(
       "select * from physical_illness where customer_id = '" + id + "'",
@@ -4629,25 +4071,18 @@ router.get("/getPhysicalIllness/:id", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/addPhysicalIllness", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = null;
@@ -4677,22 +4112,18 @@ router.post("/addPhysicalIllness", function (req, res, next) {
           res.json(response);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
 router.post("/updatePhysicalIllness", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var response = null;
@@ -4714,17 +4145,13 @@ router.post("/updatePhysicalIllness", function (req, res, next) {
         conn.release();
         if (err) {
           res.json(err);
-          logger.log("error", err);
-          return next(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
           response = true;
           res.json(response);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -4733,9 +4160,8 @@ router.post("/updatePhysicalIllness", function (req, res, next) {
 router.post("/insertFromExcel", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var response = {};
@@ -4767,26 +4193,21 @@ router.post("/insertFromExcel", function (req, res, next) {
         conn.release();
         if (err) {
           res.json(err);
-          logger.log("error", err);
-          return next(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
           response = true;
           res.send(response);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
 router.post("/createVaucher", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = {};
@@ -4816,12 +4237,9 @@ router.post("/createVaucher", function (req, res, next) {
         }
         res.json(response);
       } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
       }
-    });
-    conn.on("error", function (err) {
-      logger.log("error", err);
     });
   });
 });
@@ -4832,9 +4250,8 @@ router.get("/deleteVaucher/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "delete from vaucher where id = '" + reqObj + "'",
@@ -4842,28 +4259,25 @@ router.get("/deleteVaucher/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.json(true);
-              res.end();
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
 router.get("/getVauchers/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var id = req.params.id;
     conn.query(
@@ -4875,25 +4289,18 @@ router.get("/getVauchers/:id", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.get("/getNextVaucherId", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var id = req.params.id;
     conn.query(
@@ -4904,25 +4311,18 @@ router.get("/getNextVaucherId", function (req, res, next) {
           res.json(rows[0].id + 1);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/updateVaucher", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var response = null;
@@ -4948,17 +4348,13 @@ router.post("/updateVaucher", function (req, res, next) {
         conn.release();
         if (err) {
           res.json(err);
-          logger.log("error", err);
-          return next(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
           response = true;
           res.json(response);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -4967,9 +4363,8 @@ router.post("/updateVaucher", function (req, res, next) {
 router.get("/getEventCategory/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var id = req.params.id;
     conn.query(
@@ -4981,25 +4376,18 @@ router.get("/getEventCategory/:id", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/createEventCategory", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = null;
@@ -5021,12 +4409,9 @@ router.post("/createEventCategory", function (req, res, next) {
         }
         res.json(response);
       } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
       }
-    });
-    conn.on("error", function (err) {
-      logger.log("error", err);
     });
   });
 });
@@ -5037,9 +4422,8 @@ router.get("/deleteEventCategory/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "delete from event_category where id = '" + reqObj + "'",
@@ -5047,28 +4431,25 @@ router.get("/deleteEventCategory/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.json(true);
-              res.end();
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
 router.post("/updateEventCategory", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var response = null;
@@ -5088,17 +4469,13 @@ router.post("/updateEventCategory", function (req, res, next) {
         conn.release();
         if (err) {
           res.json(err);
-          logger.log("error", err);
-          return next(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
           response = true;
           res.json(response);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -5109,9 +4486,8 @@ router.post("/updateEventCategory", function (req, res, next) {
 router.get("/getWorkTimeColors/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     var id = req.params.id;
     conn.query(
@@ -5123,25 +4499,18 @@ router.get("/getWorkTimeColors/:id", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
 router.post("/createWorkTimeColors", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = null;
@@ -5165,13 +4534,10 @@ router.post("/createWorkTimeColors", function (req, res, next) {
           res.json(response);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -5181,9 +4547,8 @@ router.get("/deleteWorkTimeColors/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "delete from work_time_colors where id = '" + reqObj + "'",
@@ -5191,28 +4556,25 @@ router.get("/deleteWorkTimeColors/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.json(true);
-              res.end();
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
 router.post("/updateWorkTimeColors", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     var response = null;
@@ -5229,17 +4591,13 @@ router.post("/updateWorkTimeColors", function (req, res, next) {
         conn.release();
         if (err) {
           res.json(err);
-          logger.log("error", err);
-          return next(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
           response = true;
           res.json(response);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -5252,9 +4610,8 @@ router.get("/task/confirmationArrival/:id", (req, res, next) => {
     connection.getConnection(function (err, conn) {
       if (err) {
         console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
-        return next(err);
       } else {
         conn.query(
           "UPDATE tasks SET confirm=1 WHERE id='" + reqObj + "'",
@@ -5262,21 +4619,19 @@ router.get("/task/confirmationArrival/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.writeHead(302, {
                 Location: "../../../template/confirm-arrival",
               });
-              res.end();
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
@@ -5284,9 +4639,8 @@ router.get("/getCountAllTasksForUser/:id", function (req, res, next) {
   var reqObj = req.params.id;
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     conn.query(
       "SELECT COUNT(*) as total from tasks where creator_id = '" + reqObj + "'",
@@ -5297,16 +4651,10 @@ router.get("/getCountAllTasksForUser/:id", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
@@ -5314,9 +4662,8 @@ router.get("/getCountAllTasksForUserPerMonth/:id", function (req, res, next) {
   var reqObj = req.params.id;
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     conn.query(
       "SELECT COUNT(*) as month from tasks where creator_id = '" +
@@ -5329,16 +4676,10 @@ router.get("/getCountAllTasksForUserPerMonth/:id", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
@@ -5346,9 +4687,8 @@ router.get("/getCountAllTasksForUserPerWeek/:id", function (req, res, next) {
   var reqObj = req.params.id;
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     conn.query(
       "SELECT COUNT(*) as week from tasks where creator_id = '" +
@@ -5361,16 +4701,10 @@ router.get("/getCountAllTasksForUserPerWeek/:id", function (req, res, next) {
           res.json(rows);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
-    });
   });
 });
 
@@ -5379,9 +4713,8 @@ router.get("/getCountAllTasksForUserPerWeek/:id", function (req, res, next) {
 router.post("/createToDo", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = {};
@@ -5397,12 +4730,9 @@ router.post("/createToDo", function (req, res, next) {
         }
         res.json(response);
       } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
       }
-    });
-    conn.on("error", function (err) {
-      logger.log("error", err);
     });
   });
 });
@@ -5411,24 +4741,17 @@ router.get("/getToDo", function (req, res, next) {
   var reqObj = req.params.id;
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     conn.query("SELECT * from todo", function (err, rows) {
       conn.release();
       if (!err) {
         res.json(rows);
       } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
-        logger.log("error", err);
       }
-    });
-
-    conn.on("error", function (err) {
-      res.json(err);
-      logger.log("error", err);
-      return;
     });
   });
 });
@@ -5436,9 +4759,8 @@ router.get("/getToDo", function (req, res, next) {
 router.post("/updateToDo", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
 
     response = {};
@@ -5458,13 +4780,10 @@ router.post("/updateToDo", function (req, res, next) {
           res.json(response);
         } else {
           res.json(err);
-          logger.log("error", err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 
@@ -5477,7 +4796,6 @@ router.get("/deleteToDo/:id", (req, res, next) => {
           code: 100,
           status: err,
         });
-        return next(err);
       } else {
         conn.query(
           "delete from todo where id = '" + req.params.id + "'",
@@ -5485,19 +4803,17 @@ router.get("/deleteToDo/:id", (req, res, next) => {
             conn.release();
             if (err) {
               res.json(err);
-              logger.log("error", err);
-              return next(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.json(true);
-              res.end();
             }
           }
         );
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
@@ -5509,9 +4825,8 @@ router.get("/getReservations/:id", function (req, res, next) {
   var id = req.params.id;
   connection.getConnection(function (err, conn) {
     if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-      logger.log("error", err);
-      return;
     }
     conn.query(
       "select t.*, e.color, c.firstname, c.lastname, c.mobile, c.email, c.birthday, u.shortname from tasks t join event_category e on t.colorTask = e.id join customers c on t.customer_id = c.id join users u on t.creator_id = u.id where t.online = 1 and t.superadmin = ?",
@@ -5525,10 +4840,6 @@ router.get("/getReservations/:id", function (req, res, next) {
         }
       }
     );
-
-    conn.on("error", function (err) {
-      res.json(err);
-    });
   });
 });
 
@@ -5591,7 +4902,7 @@ const messagebird = require("messagebird")("sbx8Desv4cXJdPMZf7GtBLs9P", null, [
   "ENABLE_CONVERSATIONSAPI_WHATSAPP_SANDBOX",
 ]);
 
-router.post("/sendSMS", function (req, res) {
+/*router.post("/sendSMS", function (req, res) {
   // Check if phone number is valid
   request(
     link + "/getTranslationByCountryCode/RS",
@@ -5687,9 +4998,124 @@ router.post("/sendSMS", function (req, res) {
       }
     }
   );
-});
+});*/
 
 /* END SMS Sender */
+
+// generate SMS reminider
+router.post("/sendSMS", function (req, res) {
+  if (
+    (req.body.telephone &&
+      (req.body.telephone.startsWith("+43") ||
+        req.body.telephone.startsWith("43"))) ||
+    (req.body.mobile &&
+      (req.body.mobile.startsWith("+43") || req.body.mobile.startsWith("43")))
+  ) {
+    request(
+      link + "/getTranslationByCountryCode/AT",
+      function (error, response, body) {
+        var phoneNumber = null;
+        if (req.body.telephone) {
+          phoneNumber = req.body.telephone;
+        } else if (req.body.mobile) {
+          phoneNumber = req.body.mobile;
+        }
+        var convertToDateStart = new Date(req.body.start);
+        var convertToDateEnd = new Date(req.body.end);
+        var startHours = convertToDateStart.getHours();
+        var startMinutes = convertToDateStart.getMinutes();
+        var endHours = convertToDateEnd.getHours();
+        var endMinutes = convertToDateEnd.getMinutes();
+        var date =
+          convertToDateStart.getDate() +
+          "." +
+          (convertToDateStart.getMonth() + 1) +
+          "." +
+          convertToDateStart.getFullYear();
+        var day = convertToDateStart.getDate();
+        var month = monthNames[convertToDateStart.getMonth()];
+        var start =
+          (startHours < 10 ? "0" + startHours : startHours) +
+          ":" +
+          (startMinutes < 10 ? "0" + startMinutes : startMinutes);
+        var end =
+          (endHours < 10 ? "0" + endHours : endHours) +
+          ":" +
+          (endMinutes < 10 ? "0" + endMinutes : endMinutes);
+
+        var language = JSON.parse(body)["config"];
+        var message =
+          language?.initialGreetingSMSReminder +
+          " " +
+          req.body.shortname +
+          ", \n" +
+          "\n" +
+          language?.introductoryMessageForSMSReminderReservation +
+          " \n" +
+          "\n" +
+          language?.dateMessage +
+          ": " +
+          date +
+          " \n" +
+          language?.timeMessage +
+          ": " +
+          start +
+          "-" +
+          end +
+          " \n" +
+          language?.storeLocation +
+          ": " +
+          req.body.storename;
+
+        var content = "To: " + phoneNumber + "\r\n\r\n" + message;
+        var fileName = "server/sms/" + phoneNumber + ".txt";
+        console.log(content);
+        fs.writeFile(fileName, content, function (err) {
+          if (err) return logger.log("error", err);
+          logger.log(
+            "info",
+            "Sent AUTOMATE REMINDER to NUMBER: " + phoneNumber
+          );
+          ftpUploadSMS(fileName, phoneNumber + ".txt");
+          res.send(true);
+        });
+      }
+    );
+  } else {
+    res.send(false);
+    logger.log(
+      "warn",
+      `Number ${req.body.number} is not start with available area code!`
+    );
+  }
+});
+
+router.post("/sendCustomSMS", function (req, res) {
+  if (
+    req.body.number &&
+    (req.body.number.startsWith("+43") || req.body.number.startsWith("43"))
+  ) {
+    var phoneNumber = req.body.number;
+    var message = req.body.message;
+
+    var content = "To: " + phoneNumber + "\r\n\r\n" + message;
+    var fileName = "server/sms/" + phoneNumber + ".txt";
+    fs.writeFile(fileName, content, function (err) {
+      if (err) return logger.log("error", err);
+      logger.log("info", "Sent CUSTOM SMS MESSAGE to NUMBER: " + phoneNumber);
+      ftpUploadSMS(fileName, phoneNumber + ".txt");
+      res.send(true);
+    });
+  } else {
+    res.send(false);
+    logger.log(
+      "warn",
+      `Number ${req.body.number} is not start with available area code!`
+    );
+  }
+});
+
+//custom SMS reminder
 
 /* Settings reminder */
 
@@ -5715,8 +5141,8 @@ router.get("/getReminderSettings/:superadmin", (req, res, next) => {
       }
     });
   } catch (ex) {
-    logger.log("error", err);
-    return next(ex);
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
   }
 });
 
@@ -5724,7 +5150,6 @@ router.post("/setReminderSettings", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       res.json(err);
-      return;
     }
 
     conn.query(
@@ -5759,9 +5184,6 @@ router.post("/setReminderSettings", function (req, res, next) {
         }
       }
     );
-    conn.on("error", function (err) {
-      res.json(err);
-    });
   });
 });
 
@@ -5788,9 +5210,6 @@ router.post("/updateCustomerSendReminderOption", function (req, res, next) {
         }
       }
     );
-    conn.on("error", function (err) {
-      logger.log("error", err);
-    });
   });
 });
 

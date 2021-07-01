@@ -9,6 +9,7 @@ const path = require("path");
 var nodemailer = require("nodemailer");
 var hogan = require("hogan.js");
 var request = require("request");
+const logger = require("./logger");
 
 var link = "http://localhost:3000/api/";
 const monthNames = [
@@ -184,9 +185,9 @@ function confirm() {
                 smtpTransport.sendMail(mailOptions, function (error, response) {
                   console.log(response);
                   if (error) {
-                    console.log(error);
+                    logger.log("error", `Error to sent CONFIRM ARRIVAL request to EMAIL: ${to.email}. Error: ${error}`);
                   } else {
-                    console.log("Message sent: " + response.message);
+                    logger.log("info", `Sent CONFIRM ARRIVAL request to EMAIL: ${to.email}`);
                   }
                 });
               });

@@ -37,7 +37,7 @@ export class SendSmsComponent implements OnInit {
       message: this.message,
     };
     this.dialogSendSMSForm.close();
-    this.service.sendSMSMessage(this.smsFormModel).subscribe(data => {
+    this.service.sendCustomSMS(this.smsFormModel).subscribe(data => {
       console.log(data);
       // this.dialogSendSMSForm = false;
       this.message = '';

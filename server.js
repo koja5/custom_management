@@ -25,6 +25,8 @@ var schedule = require('node-schedule');
 var eventConfirm = require('./server/routes/eventConfirm');
 var reminderViaEmail = require('./server/routes/reminderViaEmail');
 var reminderViaSMS = require('./server/routes/reminderViaSMS');
+const deleteSMSTextFileFromFS = require("./server/routes/helpers/deleteSMSTextFileFromFS");
+
 app.use(compression());
 
 var connection = mysql.createPool({
@@ -195,9 +197,12 @@ var j = schedule.scheduleJob('48 13 * * *', function(){
   reminderViaEmail();
 });
 
-var j = schedule.scheduleJob('56 08 * * *', function(){
-  console.log("Pokrenuo sam!");
+var j = schedule.scheduleJob('17 09 * * *', function(){
   reminderViaSMS();
+});
+
+var j = schedule.scheduleJob('39 09 * * *', function(){
+  deleteSMSTextFileFromFS()
 });
 
 /**

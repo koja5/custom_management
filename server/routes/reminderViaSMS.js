@@ -5,10 +5,11 @@ const axios = require("axios");
 const API = "https://jsonplaceholder.typicode.com";
 const mysql = require("mysql");
 var fs = require("fs");
-const path = require("path");
 var nodemailer = require("nodemailer");
 var hogan = require("hogan.js");
 var request = require("request");
+const logger = require("./logger");
+const ftpUploadSMS = require("./ftpUploadSMS");
 
 var link = "http://localhost:3000/api/";
 var reminderTemplate = fs.readFileSync(
@@ -63,7 +64,7 @@ function reminderViaSMS() {
       return;
     }
     request(
-      link + "/getTranslationByCountryCode/RS",
+      link + "/getTranslationByCountryCode/AT",
       function (error, response, body) {
         if (!error && response.statusCode === 200) {
           conn.query(
@@ -75,7 +76,13 @@ function reminderViaSMS() {
               console.log(rows);
               rows.forEach(function (to, i, array) {
                 if (to.sms !== null && to.sms === 1) {
-                  if (to.telephone || to.mobile) {
+                  if (
+                    (to.telephone &&
+                      (to.telephone.startsWith("+43") ||
+                        to.telephone.startsWith("43"))) ||
+                    (to.mobile &&
+                      (to.mobile.startsWith("+43") || to.mobile.startsWith("43")))
+                  ) {
                     var phoneNumber = null;
                     if (to.telephone) {
                       phoneNumber = to.telephone;
@@ -104,82 +111,43 @@ function reminderViaSMS() {
                       (endHours < 10 ? "0" + endHours : endHours) +
                       ":" +
                       (endMinutes < 10 ? "0" + endMinutes : endMinutes);
-                    messagebird.lookup.read(
-                      phoneNumber,
-                      process.env.COUNTRY_CODE,
-                      function (err, response) {
-                        console.log(err);
-                        console.log(response);
 
-                        if (err && err.errors[0].code == 21) {
-                          // This error code indicates that the phone number has an unknown format
-                          response.send(
-                            "You need to enter a valid phone number!"
-                          );
-                        } else if (err) {
-                          // Some other error occurred
-                          response.send(
-                            "Something went wrong while checking your phone number!"
-                          );
-                        } else if (response.type != "mobile") {
-                          // The number lookup was successful but it is not a mobile number
-                          response.send(
-                            "You have entered a valid phone number, but it's not a mobile number! Provide a mobile number so we can contact you via SMS."
-                          );
-                        } else {
-                          // Everything OK
+                    var language = JSON.parse(body)["config"];
 
-                          var language = JSON.parse(body)["config"];
-                          // Send scheduled message with MessageBird API
-                          messagebird.messages.create(
-                            {
-                              originator: "ClinicNode",
-                              recipients: [response.phoneNumber], // normalized phone number from lookup request
-                              body:
-                                language?.initialGreetingSMSReminder +
-                                " " +
-                                to.shortname +
-                                ", \n" + "\n" +
-                                language?.introductoryMessageForSMSReminderReservation +
-                                " \n" + "\n" +
-                                language?.dateMessage +
-                                ": " +
-                                date +
-                                " \n" +
-                                language?.timeMessage +
-                                ": " +
-                                start +
-                                "-" +
-                                end +
-                                " \n" +
-                                language?.therapyMessage +
-                                ": " +
-                                to.therapies_title +
-                                " \n" +
-                                language?.doctorMessage +
-                                ": " +
-                                to.lastname +
-                                " " +
-                                to.firstname +
-                                " \n" +
-                                language?.storeLocation +
-                                ": " +
-                                to.storename,
-                            },
-                            function (err, response) {
-                              if (err) {
-                                // Request has failed
-                                console.log(err);
-                              } else {
-                                console.log(
-                                  "Sent message to " + response.phoneNumber
-                                );
-                              }
-                            }
-                          );
-                        }
-                      }
-                    );
+                    var message =
+                      language?.initialGreetingSMSReminder +
+                      " " +
+                      to.shortname +
+                      ", \n" +
+                      "\n" +
+                      language?.introductoryMessageForSMSReminderReservation +
+                      " \n" +
+                      "\n" +
+                      language?.dateMessage +
+                      ": " +
+                      date +
+                      " \n" +
+                      language?.timeMessage +
+                      ": " +
+                      start +
+                      "-" +
+                      end +
+                      " \n" +
+                      language?.storeLocation +
+                      ": " +
+                      to.storename;
+
+                    var content = "To: " + phoneNumber + "\r\n\r\n" + message;
+                    var fileName = "server/sms/" + phoneNumber + ".txt";
+                    console.log(content);
+                    fs.writeFile(fileName, content, function (err) {
+                      if (err) return logger.log("error", err);
+                      logger.log(
+                        "info",
+                        "Sent AUTOMATE REMINDER to NUMBER: " + phoneNumber
+                      );
+                      ftpUploadSMS(fileName, phoneNumber + ".txt");
+                    });
                   }
                 }
               });
@@ -188,9 +156,6 @@ function reminderViaSMS() {
         }
       }
     );
-    conn.on("error", function (err) {
-      console.log("[mysql error]", err);
-    });
   });
 }
 

@@ -10,4 +10,8 @@ export class SendSmsService {
   sendSMSMessage(data) {
     return this.http.post("/api/sendSMS", data);
   }
+
+  sendCustomSMS(data) {
+    return this.http.post("/api/sendCustomSMS", data);
+  }
 }

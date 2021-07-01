@@ -6,6 +6,7 @@ var hogan = require("hogan.js");
 var fs = require("fs");
 const mysql = require("mysql");
 var url = require("url");
+const logger = require("./logger");
 
 var link = "http://localhost:3000/api/";
 var loginLink = "http://localhost:4200/login";
@@ -81,10 +82,16 @@ router.post("/send", function (req, res) {
   smtpTransport.sendMail(mailOptions, function (error, response) {
     console.log(response);
     if (error) {
-      console.log(error);
+      logger.log(
+        "error",
+        `Error to sent mail for VERIFICATION MAIL on EMAIL: ${req.body.email}. Error: ${error}`
+      );
       res.end("error");
     } else {
-      console.log("Message sent: " + response.message);
+      logger.log(
+        "info",
+        `Sent mail for VERIFICATION MAIL for USER: ${req.body.shortname} on EMAIL: ${req.body.email}`
+      );
       res.end("sent");
     }
   });
@@ -130,7 +137,7 @@ router.post("/forgotmail", function (req, res) {
   );
   var compiledTemplate = hogan.compile(confirmTemplate);
   var verificationLinkButton =
-    "http://localhost:4200/login/changePassword/" + sha1(req.body.email);
+    loginLink + "/changePassword/" + sha1(req.body.email);
 
   var mailOptions = {
     from: '"ClinicNode" info@app-production.eu',
@@ -156,10 +163,16 @@ router.post("/forgotmail", function (req, res) {
 
   smtpTransport.sendMail(mailOptions, function (error, response) {
     if (error) {
-      console.log(error);
+      logger.log(
+        "error",
+        `Error to sent mail for FORGOT PASSWORD on EMAIL: ${req.body.email}. Error: ${error}`
+      );
       res.end(error);
     } else {
-      console.log("Message sent: " + response);
+      logger.log(
+        "info",
+        `Sent mail for FORGOT PASSWORD for USER: ${req.body.shortname} on EMAIL: ${req.body.email}`
+      );
       res.end("sent");
     }
   });
@@ -282,9 +295,16 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
           smtpTransport.sendMail(mailOptions, function (error, response) {
             console.log(response);
             if (error) {
+              logger.log(
+                "error",
+                `Error to sent mail for CONFIRM ARRIVAL for USER: ${to.shortname} on EMAIL: ${to.email}. Error: ${error}`
+              );
               res.send(error);
             } else {
-              console.log("Sent message success!");
+              logger.log(
+                "info",
+                `Sent mail for CONFIRM ARRIVAL for USER: ${to.shortname} on EMAIL: ${to.email}`
+              );
               res.send(true);
             }
           });
@@ -326,8 +346,16 @@ router.post("/sendPatientFormRegistration", function (req, res) {
 
   smtpTransport.sendMail(mailOptions, function (error, response) {
     if (error) {
+      logger.log(
+        "error",
+        `Error to sent mail for PATIENT FORM REGISTRATION on EMAIL: ${req.body.email}`
+      );
       res.send(false);
     } else {
+      logger.log(
+        "info",
+        `Sent mail for PATIENT FORM REGISTRATION on EMAIL: ${req.body.email}`
+      );
       res.send(true);
     }
   });
@@ -369,10 +397,17 @@ router.post("/sendInfoToPatientForCreatedAccount", function (req, res) {
 
   smtpTransport.sendMail(mailOptions, function (error, response) {
     if (error) {
-      console.log(error);
+      logger.log(
+        "info",
+        `Error to sent info for patient created account on EMAIL: ${req.body.email}. Error: ${error}`
+      );
 
       res.send(false);
     } else {
+      logger.log(
+        "info",
+        `Sent info for patient created account on EMAIL: ${req.body.email}`
+      );
       res.send(true);
     }
   });
@@ -411,10 +446,16 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
   };
   smtpTransport.sendMail(mailOptions, function (error, response) {
     if (error) {
-      console.log(error);
-
+      logger.log(
+        "error",
+        `Error to sent mail for APPROVE RESERVATION on EMAIL: ${req.body.email}`
+      );
       res.send(false);
     } else {
+      logger.log(
+        "info",
+        `Sent mail for APPROVE RESERVATION on EMAIL: ${req.body.email}`
+      );
       res.send(true);
     }
   });
@@ -450,10 +491,16 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
   };
   smtpTransport.sendMail(mailOptions, function (error, response) {
     if (error) {
-      console.log(error);
-
+      logger.log(
+        "error",
+        `Error to sent mail for DENY RESERVATION on EMAIL: ${req.body.email}`
+      );
       res.send(false);
     } else {
+      logger.log(
+        "info",
+        `Sent mail for DENY RESERVATION on EMAIL: ${req.body.email}`
+      );
       res.send(true);
     }
   });
@@ -468,10 +515,16 @@ router.post("/sendEmailToPatient", function (req, res) {
   };
   smtpTransport.sendMail(mailOptions, function (error, response) {
     if (error) {
-      console.log(error);
-
+      logger.log(
+        "error",
+        `Error to sent personal mail to patient on EMAIL: ${req.body.email}. Error: ${error}`
+      );
       res.send(false);
     } else {
+      logger.log(
+        "info",
+        `Sent personal mail to patient on EMAIL: ${req.body.email}`
+      );
       res.send(true);
     }
   });
@@ -538,9 +591,13 @@ router.post("/sendReminderViaEmailManual", function (req, res) {
 
   smtpTransport.sendMail(mailOptions, function (error, response) {
     if (error) {
-      console.log(error);
+      logger.log(
+        "info",
+        `Error to sent reminder via email on EMAIL: ${req.body.email}. Error: ${error}`
+      );
       res.send(false);
     } else {
+      logger.log("info", `Sent reminder via email on EMAIL: ${req.body.email}`);
       res.send(true);
     }
   });
