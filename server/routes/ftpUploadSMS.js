@@ -3,10 +3,10 @@ const fs = require("fs");
 const path = require("path");
 
 var FTPAccessData = {
-  host: "bci.dyndns.org",
-  port: 21,
-  user: "sms1",
-  password: "wurschtises",
+  host: "",
+  port: ,
+  user: "",
+  password: "",
 };
 
 async function ftpUploadSMS(pathFile, fileName) {
