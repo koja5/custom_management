@@ -3,17 +3,6 @@ var nodemailer = require("nodemailer");
 var router = express.Router();
 var sha1 = require('sha1');
 
-var smtpTransport = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    requireTLS: true,
-    auth: {
-        user: 'kojaaa95@gmail.com',
-        pass: 'vrbovac12345'
-    }
-});
-
 //slanje maila pri registraciji
 router.post('/send', function(req, res) {
     console.log(req.body.email);
