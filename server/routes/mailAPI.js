@@ -26,26 +26,6 @@ const monthNames = [
   "December",
 ];
 
-var connection = mysql.createPool({
-  host: "185.178.193.141",
-  user: "appproduction.",
-  password: "jBa9$6v7",
-  database: "management_prod",
-});
-
-var smtpTransport = nodemailer.createTransport({
-  host: "116.203.85.82",
-  port: 25,
-  secure: false,
-  tls: {
-    rejectUnauthorized: false,
-  },
-  auth: {
-    user: "info@app-production.eu",
-    pass: "jBa9$6v7",
-  },
-});
-
 //slanje maila pri registraciji
 
 router.post("/send", function (req, res) {
