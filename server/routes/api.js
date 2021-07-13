@@ -7,28 +7,6 @@ const mysql = require('mysql');
 var fs = require("fs");
 const path = require('path');
 
-var connection = mysql.createPool({
-  host: '185.178.193.141',
-  user: 'appproduction.',
-  password: 'jBa9$6v7',
-  database: 'management'
-})
-
-/*var connection = mysql.createPool({
-    host: '144.76.112.98',
-    user: 'aparatiz_koja',
-    password: 'Iva03042019',
-    database: 'aparatiz_management'
-})*/
-
-/*
-var connection = mysql.createPool({
-    host: 'sql9.freemysqlhosting.net',
-    user: 'sql9231131',
-    password: 'p9WBlft2KD',
-    database: 'sql9231131'
-})*/
-
 connection.getConnection(function (err, conn) {
   console.log(conn);
   console.log(err);
