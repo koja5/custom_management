@@ -3,11 +3,6 @@ const router = express.Router();
 const mongo = require("mongodb").MongoClient;
 // var assert = require('assert');
 const Schema = mongo.Schema;
-// const url = 'mongodb://localhost:27017/management_mongodb';
-// const url = 'mongodb://appprodu_appproduction_prod:CJr4eUqWg33tT97mxPFx@vps.app-production.eu:42526/management_mongodb'
-// const url = "mongodb://116.203.85.82:27017/management_mongo?gssapiServiceName=mongodb";
-// const url = "mongodb://admin:1234@localhost:27017/business_circle_mongodb?authSource=admin";
-
 var ObjectId = require("mongodb").ObjectID;
 const mysql = require("mysql");
 var sha1 = require("sha1");
