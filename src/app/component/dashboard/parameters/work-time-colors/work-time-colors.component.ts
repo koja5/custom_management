@@ -1,17 +1,26 @@
-import { Component, OnInit } from "@angular/core";
-import { process, State, GroupDescriptor, SortDescriptor } from "@progress/kendo-data-query";
-import { WorkTimeColorsService } from '../../../../service/work-time-colors.service';
-import { WorkTimeModel } from 'src/app/models/work-time-model';
-import { ServiceHelperService } from 'src/app/service/service-helper.service';
+import { Component, HostListener, OnInit, ViewChild } from "@angular/core";
+import {
+  process,
+  State,
+  GroupDescriptor,
+  SortDescriptor,
+} from "@progress/kendo-data-query";
+import { WorkTimeColorsService } from "../../../../service/work-time-colors.service";
+import { WorkTimeModel } from "src/app/models/work-time-model";
+import { ServiceHelperService } from "src/app/service/service-helper.service";
 import { ToastrService } from "ngx-toastr";
-import { GradientSettings } from '@progress/kendo-angular-inputs';
+import { GradientSettings } from "@progress/kendo-angular-inputs";
+import { Modal } from "ngx-modal";
+import { PageChangeEvent } from "@progress/kendo-angular-grid";
+import { HelpService } from "src/app/service/help.service";
 
 @Component({
   selector: "app-event-category",
   templateUrl: "./work-time-colors.component.html",
-  styleUrls: ["./work-time-colors.component.scss"]
+  styleUrls: ["./work-time-colors.component.scss"],
 })
 export class WorkTimeColorsComponent implements OnInit {
+  @ViewChild("workTimeColorsModal") workTimeColorsModal: Modal;
   public height: any;
   public state: State = {
     skip: 0,
@@ -20,49 +29,58 @@ export class WorkTimeColorsComponent implements OnInit {
     sort: [
       {
         field: "sequence",
-        dir: "asc"
-      }
-    ]
+        dir: "asc",
+      },
+    ],
   };
   public searchFilter: any;
   public pageSize = 5;
   public pageable = {
     pageSizes: true,
-    previousNext: true
+    previousNext: true,
   };
   public currentLoadData: any;
   public data = new WorkTimeModel();
   public gridData: any;
   public gridView: any;
   public language: any;
-  public WorkTimeColorsModal = false;
   public deleteModal = false;
-  public operationMode = 'add';
+  public operationMode = "add";
   public loading = true;
   public settings: GradientSettings = {
-    opacity: false
-  }
+    opacity: false,
+  };
   public importExcel = false;
+  public fileValue: any;
+  public theme: string;
 
-  constructor(private service: WorkTimeColorsService, private serviceHelper: ServiceHelperService, private toastr: ToastrService) { }
+  constructor(
+    private service: WorkTimeColorsService,
+    private serviceHelper: ServiceHelperService,
+    private toastr: ToastrService,
+    private helpService: HelpService
+  ) {}
 
   ngOnInit() {
-    this.height = window.innerHeight - 81;
-    this.height += "px";
-
+    this.height = this.helpService.getHeightForGrid();
     this.language = JSON.parse(localStorage.getItem("language"));
 
     this.getWorkTimeColors();
   }
 
+  @HostListener("window:resize", ["$event"])
+  onResize(event) {
+    this.height = this.helpService.getHeightForGrid();
+  }
+
   getWorkTimeColors() {
-    this.service.getWorkTimeColors(localStorage.getItem("superadmin")).subscribe(
-      (data: []) => {
+    this.service
+      .getWorkTimeColors(localStorage.getItem("superadmin"))
+      .subscribe((data: []) => {
         this.currentLoadData = data;
         this.gridView = process(data, this.state);
         this.loading = false;
-      }
-    )
+      });
   }
 
   public onFilter(inputValue: string): void {
@@ -75,10 +93,10 @@ export class WorkTimeColorsComponent implements OnInit {
           {
             field: "sequence",
             operator: "contains",
-            value: inputValue
-          }
-        ]
-      }
+            value: inputValue,
+          },
+        ],
+      },
     });
     this.gridView = process(this.gridData.data, this.state);
   }
@@ -94,10 +112,17 @@ export class WorkTimeColorsComponent implements OnInit {
   }
 
   addNewModal() {
-    this.WorkTimeColorsModal = true;
+    this.workTimeColorsModal.open();
     this.data = new WorkTimeModel();
-    this.operationMode = 'add';
-    this.data.color = 'rgb(102, 115, 252)';
+    this.operationMode = "add";
+    this.data.color = "rgb(102, 115, 252)";
+  }
+
+  pageChange(event: PageChangeEvent): void {
+    this.state.skip = event.skip;
+    this.state.take = event.take;
+    this.pageSize = event.take;
+    this.gridView = process(this.currentLoadData, this.state);
   }
 
   getTranslate(operationMode) {
@@ -106,65 +131,61 @@ export class WorkTimeColorsComponent implements OnInit {
 
   createWorkTimeColors(event) {
     this.data.superadmin = localStorage.getItem("superadmin");
-    this.service.createWorkTimeColors(this.data).subscribe(
-      data => {
-        if (data) {
-          this.getWorkTimeColors();
-          this.WorkTimeColorsModal = false;
-          /*Swal.fire({
+    this.service.createWorkTimeColors(this.data).subscribe((data) => {
+      if (data) {
+        this.getWorkTimeColors();
+        this.workTimeColorsModal.close();
+        /*Swal.fire({
             title: "Successfull!",
             text: "New complaint is successfull added!",
             timer: 3000,
             type: "success"
           });*/
-          this.toastr.success(
-            this.language.successTitle,
-            this.language.successTextAdd,
-            { timeOut: 7000, positionClass: "toast-bottom-right" }
-          );
-        } else {
-          this.toastr.error(
-            this.language.errorTitle,
-            this.language.errorTextAdd,
-            { timeOut: 7000, positionClass: "toast-bottom-right" }
-          );
-        }
+        this.toastr.success(
+          this.language.successTitle,
+          this.language.successTextAdd,
+          { timeOut: 7000, positionClass: "toast-bottom-right" }
+        );
+      } else {
+        this.toastr.error(
+          this.language.errorTitle,
+          this.language.errorTextAdd,
+          { timeOut: 7000, positionClass: "toast-bottom-right" }
+        );
       }
-    )
+    });
   }
 
   editWorkTimeColors(event) {
     this.data = event;
-    this.operationMode = 'edit';
-    this.WorkTimeColorsModal = true;
+    this.operationMode = "edit";
+    this.workTimeColorsModal.open();
   }
 
   updateWorkTimeColors(event) {
-    this.service.updateWorkTimeColors(this.data).subscribe(
-      data => {
-        if (data) {
-          this.getWorkTimeColors();
-          this.WorkTimeColorsModal = false;
-          /*Swal.fire({
+    this.service.updateWorkTimeColors(this.data).subscribe((data) => {
+      if (data) {
+        this.getWorkTimeColors();
+        this.workTimeColorsModal.close();
+        /*Swal.fire({
             title: "Successfull!",
             text: "New complaint is successfull added!",
             timer: 3000,
             type: "success"
           });*/
-          this.toastr.success(
-            this.language.successTitle,
-            this.language.successTextEdit,
-            { timeOut: 7000, positionClass: "toast-bottom-right" }
-          );
-        } else {
-          this.toastr.error(
-            this.language.errorTitle,
-            this.language.errorTextEdit,
-            { timeOut: 7000, positionClass: "toast-bottom-right" }
-          );
-        }
+        this.toastr.success(
+          this.language.successTitle,
+          this.language.successTextEdit,
+          { timeOut: 7000, positionClass: "toast-bottom-right" }
+        );
+      } else {
+        this.toastr.error(
+          this.language.errorTitle,
+          this.language.errorTextEdit,
+          { timeOut: 7000, positionClass: "toast-bottom-right" }
+        );
       }
-    )
+    });
   }
 
   deleteWorkTimeColors(id) {
@@ -176,7 +197,7 @@ export class WorkTimeColorsComponent implements OnInit {
     console.log(event);
     if (event === "yes") {
       console.log(this.data);
-      this.service.deleteWorkTimeColors(this.data.id).subscribe(data => {
+      this.service.deleteWorkTimeColors(this.data.id).subscribe((data) => {
         console.log(data);
         if (data) {
           this.state.skip = 0;
@@ -195,7 +216,6 @@ export class WorkTimeColorsComponent implements OnInit {
   }
 
   onFileChange(args) {
-
     /*this.customerDialogOpened = true;
     let fileReader = new FileReader();
     fileReader.onload = e => {
@@ -241,7 +261,7 @@ export class WorkTimeColorsComponent implements OnInit {
     const allData = {
       table: "customers",
       columns: columns,
-      data: dataArray
+      data: dataArray,
     };
     return allData;
   }

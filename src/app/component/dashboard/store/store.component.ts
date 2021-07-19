@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
-import { Modal } from "ngx-modal";
+import { Modal, ModalModule } from "ngx-modal";
 import { StoreService } from "../../../service/store.service";
 import { process, State, GroupDescriptor, SortDescriptor } from "@progress/kendo-data-query";
 import {
@@ -22,7 +22,9 @@ import { HelpService } from "src/app/service/help.service";
 })
 export class StoreComponent implements OnInit {
   public store = false;
-  public storeEdit = false;
+  @ViewChild('storeEdit') storeEdit: Modal;
+  @ViewChild('storeCreate') storeCreate: Modal;
+  // public storeEdit = false;
   public data = new StoreModel();
   public currentLoadData: any;
   public gridData: any;
@@ -62,8 +64,7 @@ export class StoreComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.height = window.innerHeight - 81;
-    this.height += "px";
+    this.height = this.helpService.getHeightForGrid();
     this.idUser = localStorage.getItem("superadmin");
     if (localStorage.getItem("theme") !== null) {
       this.theme = localStorage.getItem("theme");
@@ -96,7 +97,7 @@ export class StoreComponent implements OnInit {
   newStore() {
     this.initialParams();
     this.changeTheme(this.theme);
-    this.store = true;
+    this.storeCreate.open();
   }
 
   initialParams() {
@@ -123,7 +124,7 @@ export class StoreComponent implements OnInit {
         console.log(val);
         this.data.id = val.id;
         this.getStore();
-        this.store = false;
+        this.storeCreate.close();
         Swal.fire({
           title: this.language.successful,
           text: this.language[val.info],
@@ -131,7 +132,7 @@ export class StoreComponent implements OnInit {
           type: "success"
         });
       } else {
-        this.store = false;
+        this.storeCreate.close();
         Swal.fire({
           title: this.language.error,
           text: this.language[val.info],
@@ -155,7 +156,7 @@ export class StoreComponent implements OnInit {
           timer: 3000,
           type: "success"
         });
-        this.storeEdit = false;
+        this.storeEdit.open();
       } else {
         Swal.fire({
           title: "Error update",
@@ -197,12 +198,12 @@ export class StoreComponent implements OnInit {
     this.data = store;
     this.start_work = new Date(this.data.start_work);
     this.end_work = new Date(this.data.end_work);
-    this.storeEdit = true;
+    this.storeEdit.open();
     this.changeTheme(this.theme);
   }
 
   storeEditClose() {
-    this.storeEdit = false;
+    this.storeEdit.close();
   }
 
   public close(component) {
@@ -421,9 +422,7 @@ export class StoreComponent implements OnInit {
 
   @HostListener("window:resize", ["$event"])
   onResize(event) {
-    console.log(window.innerHeight);
-    this.height = window.innerHeight - 81;
-    this.height += "px";
+    this.height = this.helpService.getHeightForGrid();
   }
 
   public onFilter(inputValue: string): void {

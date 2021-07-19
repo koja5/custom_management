@@ -208,13 +208,17 @@ export class DynamicGridComponent implements OnInit {
   }
   submitEmitter(event) {
     if (this.typeOfModification === "add") {
-      this.service
-        .callApiPost("/api/createToDo", event)
-        .subscribe((data) => {});
+      // this.service
+      //   .callApiPost(this.config.editSettingsRequest.add, event)
+      //   .subscribe((data) => {});
+        
+      this.callServerMethod(this.config.editSettingsRequest.add, event);
     } else if (this.typeOfModification === "beginEdit") {
-      this.service
-        .callApiPost("/api/updateToDo", event)
-        .subscribe((data) => {});
+      // this.service
+      //   .callApiPost(this.config.editSettingsRequest.edit, event)
+      //   .subscribe((data) => {});
+        
+      this.callServerMethod(this.config.editSettingsRequest.edit, event);
     }
 
     this.operations.dialog.close();
@@ -222,9 +226,24 @@ export class DynamicGridComponent implements OnInit {
   }
 
   deleteData(event) {
+    /*if()
     this.service
       .callApiGet("/api/deleteTodo", event.id)
+      .subscribe((data) => {});*/
+
+      this.callServerMethod(this.config.editSettingsRequest.delete, event.id);
+  }
+
+  callServerMethod(request, data) {
+    if(request.type === "POST") {
+      this.service
+        .callApiPost(request.api, data)
+        .subscribe((data) => {});
+    } else {
+      this.service
+      .callApiGet(request.api, data)
       .subscribe((data) => {});
+    }
   }
 
   previewDocument(filename: string) {

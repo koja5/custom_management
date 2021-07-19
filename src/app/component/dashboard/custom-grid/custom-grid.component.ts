@@ -25,7 +25,8 @@ import { ToastrService } from "ngx-toastr";
 import { UserModel } from "src/app/models/user-model";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import * as sha1 from "sha1";
-import { CustomGridService } from 'src/app/service/custom-grid.service';
+import { CustomGridService } from "src/app/service/custom-grid.service";
+import { HelpService } from "src/app/service/help.service";
 
 @Component({
   selector: "app-custom-grid",
@@ -60,15 +61,19 @@ export class CustomGridComponent implements OnInit {
   public index: number;
   public dialogDelete = false;
 
-  constructor(private router: Router, private toastr: ToastrService, private service: CustomGridService) {
+  constructor(
+    private router: Router,
+    private toastr: ToastrService,
+    private service: CustomGridService,
+    private helpService: HelpService
+  ) {
     this.allData = this.allData.bind(this);
   }
 
   ngOnInit() {
     console.log(this.data);
     this.currentLoadData = this.data;
-    this.height = window.innerHeight - 81;
-    this.height += "px";
+    this.height = this.helpService.getHeightForGrid();
 
     if (localStorage.getItem("language") !== null) {
       this.language = JSON.parse(localStorage.getItem("language"));
@@ -186,9 +191,7 @@ export class CustomGridComponent implements OnInit {
 
   @HostListener("window:resize", ["$event"])
   onResize(event) {
-    console.log(window.innerHeight);
-    this.height = window.innerHeight - 81;
-    this.height += "px";
+    this.height = this.helpService.getHeightForGrid();
   }
 
   public onFilter(inputValue: string): void {

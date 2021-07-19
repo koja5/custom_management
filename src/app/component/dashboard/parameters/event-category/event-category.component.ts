@@ -1,10 +1,13 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, HostListener, OnInit, ViewChild } from "@angular/core";
 import { process, State, GroupDescriptor, SortDescriptor } from "@progress/kendo-data-query";
 import { EventCategoryService } from '../../../../service/event-category.service';
 import { EventCategoryModel } from 'src/app/models/event-category-model';
 import { ServiceHelperService } from 'src/app/service/service-helper.service';
 import { ToastrService } from "ngx-toastr";
 import { GradientSettings } from '@progress/kendo-angular-inputs';
+import { HelpService } from "src/app/service/help.service";
+import { PageChangeEvent } from "@progress/kendo-angular-grid";
+import { Modal } from "ngx-modal";
 
 @Component({
   selector: "app-event-category",
@@ -12,6 +15,7 @@ import { GradientSettings } from '@progress/kendo-angular-inputs';
   styleUrls: ["./event-category.component.scss"]
 })
 export class EventCategoryComponent implements OnInit {
+  @ViewChild("eventCategoryModal") eventCategoryModal: Modal;
   public height: any;
   public state: State = {
     skip: 0,
@@ -35,7 +39,6 @@ export class EventCategoryComponent implements OnInit {
   public gridData: any;
   public gridView: any;
   public language: any;
-  public eventCategoryModal = false;
   public deleteModal = false;
   public operationMode = 'add';
   public loading = true;
@@ -43,16 +46,22 @@ export class EventCategoryComponent implements OnInit {
     opacity: false
   }
   public importExcel = false;
+  public theme: any;
+  public fileValue: any;
 
-  constructor(private service: EventCategoryService, private serviceHelper: ServiceHelperService, private toastr: ToastrService) { }
+  constructor(private service: EventCategoryService, private serviceHelper: ServiceHelperService, private toastr: ToastrService, private helpService: HelpService) { }
 
   ngOnInit() {
-    this.height = window.innerHeight - 81;
-    this.height += "px";
+    this.height = this.helpService.getHeightForGrid();
 
     this.language = JSON.parse(localStorage.getItem("language"));
 
     this.getEventCategory();
+  }
+
+  @HostListener("window:resize", ["$event"])
+  onResize(event) {
+    this.height = this.helpService.getHeightForGrid();
   }
 
   getEventCategory() {
@@ -98,13 +107,20 @@ export class EventCategoryComponent implements OnInit {
     this.gridView = process(this.currentLoadData, this.state);
   }
 
+  pageChange(event: PageChangeEvent): void {
+    this.state.skip = event.skip;
+    this.state.take = event.take;
+    this.pageSize = event.take;
+    this.gridView = process(this.currentLoadData, this.state);
+  }
+
   public sortChange(sort: SortDescriptor[]): void {
     this.state.sort = sort;
     this.gridView = process(this.currentLoadData, this.state);
   }
 
   addNewModal() {
-    this.eventCategoryModal = true;
+    this.eventCategoryModal.open();
     this.data = new EventCategoryModel();
     this.operationMode = 'add';
     this.data.color = 'rgb(102, 115, 252)';
@@ -120,7 +136,7 @@ export class EventCategoryComponent implements OnInit {
       data => {
         if (data) {
           this.getEventCategory();
-          this.eventCategoryModal = false;
+          this.eventCategoryModal.close();
           /*Swal.fire({
             title: "Successfull!",
             text: "New complaint is successfull added!",
@@ -146,7 +162,7 @@ export class EventCategoryComponent implements OnInit {
   editEventCategory(event) {
     this.data = event;
     this.operationMode = 'edit';
-    this.eventCategoryModal = true;
+    this.eventCategoryModal.open();
   }
 
   updateEventCategory(event) {
@@ -154,7 +170,7 @@ export class EventCategoryComponent implements OnInit {
       data => {
         if (data) {
           this.getEventCategory();
-          this.eventCategoryModal = false;
+          this.eventCategoryModal.close();
           /*Swal.fire({
             title: "Successfull!",
             text: "New complaint is successfull added!",

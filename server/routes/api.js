@@ -4905,7 +4905,7 @@ const messagebird = require("messagebird")("sbx8Desv4cXJdPMZf7GtBLs9P", null, [
 /*router.post("/sendSMS", function (req, res) {
   // Check if phone number is valid
   request(
-    link + "/getTranslationByCountryCode/RS",
+    link + "/getTranslationByCountryCode/AT",
     function (error, response, body) {
       if (req.body.telephone || req.body.mobile) {
         var phoneNumber = null;
@@ -5004,115 +5004,126 @@ const messagebird = require("messagebird")("sbx8Desv4cXJdPMZf7GtBLs9P", null, [
 
 // generate SMS reminider
 router.post("/sendSMS", function (req, res) {
-  if (
-    (req.body.telephone &&
-      (req.body.telephone.startsWith("+43") ||
-        req.body.telephone.startsWith("43"))) ||
-    (req.body.mobile &&
-      (req.body.mobile.startsWith("+43") || req.body.mobile.startsWith("43")))
-  ) {
-    request(
-      link + "/getTranslationByCountryCode/AT",
-      function (error, response, body) {
-        var phoneNumber = null;
-        if (req.body.telephone) {
-          phoneNumber = req.body.telephone;
-        } else if (req.body.mobile) {
-          phoneNumber = req.body.mobile;
-        }
-        var convertToDateStart = new Date(req.body.start);
-        var convertToDateEnd = new Date(req.body.end);
-        var startHours = convertToDateStart.getHours();
-        var startMinutes = convertToDateStart.getMinutes();
-        var endHours = convertToDateEnd.getHours();
-        var endMinutes = convertToDateEnd.getMinutes();
-        var date =
-          convertToDateStart.getDate() +
-          "." +
-          (convertToDateStart.getMonth() + 1) +
-          "." +
-          convertToDateStart.getFullYear();
-        var day = convertToDateStart.getDate();
-        var month = monthNames[convertToDateStart.getMonth()];
-        var start =
-          (startHours < 10 ? "0" + startHours : startHours) +
-          ":" +
-          (startMinutes < 10 ? "0" + startMinutes : startMinutes);
-        var end =
-          (endHours < 10 ? "0" + endHours : endHours) +
-          ":" +
-          (endMinutes < 10 ? "0" + endMinutes : endMinutes);
-
-        var language = JSON.parse(body)["config"];
-        var message =
-          language?.initialGreetingSMSReminder +
-          " " +
-          req.body.shortname +
-          ", \n" +
-          "\n" +
-          language?.introductoryMessageForSMSReminderReservation +
-          " \n" +
-          "\n" +
-          language?.dateMessage +
-          ": " +
-          date +
-          " \n" +
-          language?.timeMessage +
-          ": " +
-          start +
-          "-" +
-          end +
-          " \n" +
-          language?.storeLocation +
-          ": " +
-          req.body.storename;
-
-        var content = "To: " + phoneNumber + "\r\n\r\n" + message;
-        var fileName = "server/sms/" + phoneNumber + ".txt";
-        console.log(content);
-        fs.writeFile(fileName, content, function (err) {
-          if (err) return logger.log("error", err);
-          logger.log(
-            "info",
-            "Sent AUTOMATE REMINDER to NUMBER: " + phoneNumber
-          );
-          ftpUploadSMS(fileName, phoneNumber + ".txt");
-          res.send(true);
-        });
-      }
-    );
-  } else {
-    res.send(false);
-    logger.log(
-      "warn",
-      `Number ${req.body.number} is not start with available area code!`
-    );
+  var phoneNumber = null;
+  if (req.body.telephone) {
+    phoneNumber = req.body.telephone;
+  } else if (req.body.mobile) {
+    phoneNumber = req.body.mobile;
   }
+  request(link + "/getAvailableAreaCode", function (error, response, codes) {
+    var phoneNumber = null;
+    if (to.telephone) {
+      phoneNumber = to.telephone;
+    } else if (to.mobile) {
+      phoneNumber = to.mobile;
+    }
+    if (checkAvailableCode(phoneNumber, JSON.parse(codes))) {
+      request(
+        link + "/getTranslationByCountryCode/AT",
+        function (error, response, body) {
+          var convertToDateStart = new Date(req.body.start);
+          var convertToDateEnd = new Date(req.body.end);
+          var startHours = convertToDateStart.getHours();
+          var startMinutes = convertToDateStart.getMinutes();
+          var endHours = convertToDateEnd.getHours();
+          var endMinutes = convertToDateEnd.getMinutes();
+          var date =
+            convertToDateStart.getDate() +
+            "." +
+            (convertToDateStart.getMonth() + 1) +
+            "." +
+            convertToDateStart.getFullYear();
+          var day = convertToDateStart.getDate();
+          var month = monthNames[convertToDateStart.getMonth()];
+          var start =
+            (startHours < 10 ? "0" + startHours : startHours) +
+            ":" +
+            (startMinutes < 10 ? "0" + startMinutes : startMinutes);
+          var end =
+            (endHours < 10 ? "0" + endHours : endHours) +
+            ":" +
+            (endMinutes < 10 ? "0" + endMinutes : endMinutes);
+
+          var language = JSON.parse(body)["config"];
+          var message =
+            language?.initialGreetingSMSReminder +
+            " " +
+            req.body.shortname +
+            ", \n" +
+            "\n" +
+            language?.introductoryMessageForSMSReminderReservation +
+            " \n" +
+            "\n" +
+            language?.dateMessage +
+            ": " +
+            date +
+            " \n" +
+            language?.timeMessage +
+            ": " +
+            start +
+            "-" +
+            end +
+            " \n" +
+            language?.storeLocation +
+            ": " +
+            req.body.storename;
+
+          var content = "To: " + phoneNumber + "\r\n\r\n" + message;
+          var fileName = "server/sms/" + phoneNumber + ".txt";
+          console.log(content);
+          fs.writeFile(fileName, content, function (err) {
+            if (err) return logger.log("error", err);
+            logger.log(
+              "info",
+              "Sent AUTOMATE REMINDER to NUMBER: " + phoneNumber
+            );
+            ftpUploadSMS(fileName, phoneNumber + ".txt");
+            res.send(true);
+          });
+        }
+      );
+    } else {
+      res.send(false);
+      logger.log(
+        "warn",
+        `Number ${req.body.number} is not start with available area code!`
+      );
+    }
+  });
 });
 
-router.post("/sendCustomSMS", function (req, res) {
-  if (
-    req.body.number &&
-    (req.body.number.startsWith("+43") || req.body.number.startsWith("43"))
-  ) {
-    var phoneNumber = req.body.number;
-    var message = req.body.message;
-
-    var content = "To: " + phoneNumber + "\r\n\r\n" + message;
-    var fileName = "server/sms/" + phoneNumber + ".txt";
-    fs.writeFile(fileName, content, function (err) {
-      if (err) return logger.log("error", err);
-      logger.log("info", "Sent CUSTOM SMS MESSAGE to NUMBER: " + phoneNumber);
-      ftpUploadSMS(fileName, phoneNumber + ".txt");
-      res.send(true);
-    });
-  } else {
-    res.send(false);
-    logger.log(
-      "warn",
-      `Number ${req.body.number} is not start with available area code!`
-    );
+function checkAvailableCode(phone, codes) {
+  for (let i = 0; i < codes.length; i++) {
+    if (phone && phone.startsWith(codes[i].area_code)) {
+      return true;
+    }
   }
+  return false;
+}
+
+router.post("/sendCustomSMS", function (req, res) {
+  var phoneNumber = req.body.number;
+  request(link + "/getAvailableAreaCode", function (error, response, codes) {
+    if (checkAvailableCode(phoneNumber, JSON.parse(codes))) {
+      var message = req.body.message;
+      console.log("usao sam!");
+
+      var content = "To: " + phoneNumber + "\r\n\r\n" + message;
+      var fileName = "server/sms/" + phoneNumber + ".txt";
+      fs.writeFile(fileName, content, function (err) {
+        if (err) return logger.log("error", err);
+        logger.log("info", "Sent CUSTOM SMS MESSAGE to NUMBER: " + phoneNumber);
+        ftpUploadSMS(fileName, phoneNumber + ".txt");
+        res.send(true);
+      });
+    } else {
+      res.send(false);
+      logger.log(
+        "warn",
+        `Number ${req.body.number} is not start with available area code!`
+      );
+    }
+  });
 });
 
 //custom SMS reminder
@@ -5212,5 +5223,126 @@ router.post("/updateCustomerSendReminderOption", function (req, res, next) {
     );
   });
 });
+
+/* AVAILABLE CODE */
+
+router.get("/getAvailableAreaCode", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        res.json(err);
+      } else {
+        conn.query(
+          "select * from available_area_code",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(err);
+            } else {
+              res.json(rows);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/createAvailableAreaCode", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+
+    response = {};
+
+    conn.query(
+      "insert available_area_code SET ?",
+      req.body,
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            response.id = rows.insertId;
+            response.success = true;
+          } else {
+            response.success = false;
+          }
+          res.json(response);
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
+      }
+    );
+  });
+});
+
+router.post("/updateAvailableAreaCode", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+
+    response = {};
+
+    conn.query(
+      "update available_area_code SET ? where id = '" + req.body.id + "'",
+      [req.body],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            response.id = rows.insertId;
+            response.success = true;
+          } else {
+            response.success = false;
+          }
+          res.json(response);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
+router.get("/deleteAvailableAreaCode/:id", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "delete from available_area_code where id = '" + req.params.id + "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+/* END AVAILABLE CODE */
 
 module.exports = router;

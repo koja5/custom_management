@@ -18,12 +18,12 @@
       [icon]="'edit'"
       (click)="editOptions()"
       [primary]="true"
-      style="background: #6673fc !important; margin-left: 12px"
+      style="background: #091467 !important; margin-left: 12px"
     >
       {{ language.edit }}
     </button>
     <div class="dropdown-grid">
-      <button class="btn-grid" style="border-left: 1px solid #0d8bf2">
+      <button class="btn-grid" style="border-left: 1px solid #2a3582">
         <i class="fa fa-caret-down"></i>
       </button>
       <div class="dropdown-content-grid">
@@ -109,7 +109,13 @@
                         </div>
                         <div class="col-auto">
                           <div
-                            class="icon icon-shape bg-gradient-red text-white rounded-circle shadow"
+                            class="
+                              icon icon-shape
+                              bg-gradient-red
+                              text-white
+                              rounded-circle
+                              shadow
+                            "
                           >
                             <i class="fa fa-pie-chart"></i>
                           </div>
@@ -137,7 +143,13 @@
                         </div>
                         <div class="col-auto">
                           <div
-                            class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow"
+                            class="
+                              icon icon-shape
+                              bg-gradient-orange
+                              text-white
+                              rounded-circle
+                              shadow
+                            "
                           >
                             <i class="fa fa-line-chart"></i>
                           </div>
@@ -165,7 +177,13 @@
                         </div>
                         <div class="col-auto">
                           <div
-                            class="icon icon-shape bg-gradient-green text-white rounded-circle shadow"
+                            class="
+                              icon icon-shape
+                              bg-gradient-green
+                              text-white
+                              rounded-circle
+                              shadow
+                            "
                           >
                             <i class="fa fa-calendar"></i>
                           </div>
@@ -193,7 +211,13 @@
                         </div>
                         <div class="col-auto">
                           <div
-                            class="icon icon-shape bg-gradient-info text-white rounded-circle shadow"
+                            class="
+                              icon icon-shape
+                              bg-gradient-info
+                              text-white
+                              rounded-circle
+                              shadow
+                            "
                           >
                             <i class="fa fa-area-chart"></i>
                           </div>
@@ -874,473 +898,474 @@
       </kendo-dialog-actions>
     </kendo-dialog>
 
-    <kendo-window
-      [title]="getTranslate(currentTab)"
-      *ngIf="user"
-      [minWidth]="700"
-      [width]="850"
-      [height]="600"
-      (close)="user = false"
-    >
-      <div class="tabs widget">
-        <ul class="nav nav-tabs widget">
-          <li [ngClass]="currentTab === 'profile' ? 'active' : ''">
-            <a (click)="changeTab('profile')">{{ language.profile }}</a>
-          </li>
-          <li [ngClass]="currentTab === 'workTime' ? 'active' : ''">
-            <a (click)="changeTab('workTime')">{{ language.workTime }}</a>
-          </li>
-          <li [ngClass]="currentTab === 'permissions' ? 'active' : ''">
-            <a (click)="changeTab('permissions')">{{ language.permissions }}</a>
-          </li>
-        </ul>
-        <div class="tab-content" *ngIf="currentTab === 'profile'">
-          <div id="profile-tab" class="tab-pane active">
-            <form
-              name="loginForm"
-              class="loginForm"
-              (ngSubmit)="updateUser(user)"
-            >
-              <div class="form-group">
-                <div class="email col-md-4 col-xs-12">
-                  <p>{{ language.username }}</p>
-                  <input
-                    kendoTextBox
-                    type="text"
-                    class="col-xs-12"
-                    name="shortname"
-                    placeholder="{{language.username}}"
-                    [(ngModel)]="data.shortname"
-                    shortname.value=""
-                  />
-                </div>
-                <div class="email col-md-4 col-xs-12">
-                  <p>{{ language.aliasName }}</p>
-                  <input
-                    kendoTextBox
-                    type="text"
-                    class="col-xs-12"
-                    name="alias_name"
-                    placeholder="{{language.aliasName}}"
-                    [(ngModel)]="data.alias_name"
-                    alias_name.value=""
-                  />
-                </div>
-                <div class="email col-md-4 col-xs-12">
-                  <p>{{ language.password }}</p>
-                  <input
-                    kendoTextBox
-                    type="password"
-                    class="col-xs-12 password"
-                    name="password"
-                    placeholder="{{language.password}}"
-                    [(ngModel)]="data.password"
-                    password.value=""
-                  />
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="email col-md-6 col-xs-12">
-                  <p>{{ language.firstname }}</p>
-                  <input
-                    kendoTextBox
-                    type="text"
-                    class="col-xs-12"
-                    name="firstname"
-                    placeholder="{{language.firstname}}"
-                    [(ngModel)]="data.firstname"
-                    firstname.value=""
-                  />
-                </div>
-                <div class="email col-md-6 col-xs-12">
-                  <p>{{ language.lastname }}</p>
-                  <input
-                    kendoTextBox
-                    type="text"
-                    class="col-xs-12"
-                    name="lastname"
-                    placeholder="{{language.lastname}}"
-                    [(ngModel)]="data.lastname"
-                    lastname.value=""
-                  />
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="email col-md-6 col-xs-12">
-                  <p>{{ language.street }}</p>
-                  <input
-                    kendoTextBox
-                    type="text"
-                    class="col-xs-12"
-                    name="street"
-                    placeholder="{{language.street}}"
-                    [(ngModel)]="data.street"
-                    street.value=""
-                  />
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="email col-md-6 col-xs-12">
-                  <p>{{ language.zipCode }}</p>
-                  <input
-                    kendoTextBox
-                    type="text"
-                    class="col-xs-12"
-                    name="zipcode"
-                    placeholder="{{language.zipCode}}"
-                    [(ngModel)]="data.zipcode"
-                    zipcode.value=""
-                  />
-                </div>
-                <div class="email col-md-6 col-xs-12">
-                  <p>{{ language.place }}</p>
-                  <input
-                    kendoTextBox
-                    type="text"
-                    class="col-xs-12"
-                    name="place"
-                    placeholder="{{language.place}}"
-                    [(ngModel)]="data.place"
-                    place.value=""
-                  />
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="email col-md-6 col-xs-12">
-                  <p>{{ language.telephone }}</p>
-                  <input
-                    kendoTextBox
-                    type="text"
-                    class="col-xs-12"
-                    name="telephone"
-                    placeholder="{{language.telephone}}"
-                    [(ngModel)]="data.telephone"
-                    telephone.value=""
-                  />
-                </div>
-                <div class="email col-md-6 col-xs-12">
-                  <p>{{ language.mobile }}</p>
-                  <input
-                    kendoTextBox
-                    type="text"
-                    class="col-xs-12"
-                    name="mobile"
-                    placeholder="{{language.mobile}}"
-                    [(ngModel)]="data.mobile"
-                    mobile.value=""
-                  />
-                </div>
-                <div class="email col-md-6 col-xs-12">
-                  <p>{{ language.email }}</p>
-                  <input
-                    kendoTextBox
-                    type="email"
-                    class="col-xs-12"
-                    name="email"
-                    placeholder="{{language.email}}"
-                    [(ngModel)]="data.email"
-                    email.value=""
-                  />
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="email col-md-6 col-xs-12">
-                  <p>{{ language.birthday }}</p>
-                  <kendo-datepicker
-                    [format]="'dd.MM.yyyy'"
-                    class="col-xs-12 noPadding"
-                    name="birthday"
-                    placeholder="{{language.birthday}}"
-                    [(ngModel)]="data.birthday"
-                    birthday.value=""
-                  ></kendo-datepicker>
-                </div>
-                <div class="email col-md-6 col-xs-12">
-                  <p>{{ language.sincecompany }}</p>
-                  <kendo-datepicker
-                    [format]="'dd.MM.yyyy'"
-                    class="col-xs-12 noPadding"
-                    name="sincecompany"
-                    placeholder="{{language.sincecompany}}"
-                    [(ngModel)]="data.incompanysince"
-                    incompanysince.value=""
-                  ></kendo-datepicker>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="email col-md-6 col-xs-12">
-                  <p>{{ language.userType }}</p>
-                  <kendo-combobox
-                    [data]="userType"
-                    (selectionChange)="selectionUserType($event)"
-                    class="col-xs-12 noPadding"
-                    [(ngModel)]="selectedValue"
-                    name="type"
-                  >
-                  </kendo-combobox>
-                </div>
-                <label
-                  class="k-form-field col-md-6"
-                  style="text-align: center; padding-top: 30px"
-                >
-                  {{ language.active }} &nbsp;
-                  <kendo-switch
-                    [(ngModel)]="data.active"
-                    name="active"
-                  ></kendo-switch>
-                </label>
-              </div>
-              <div class="form-group">
-                <div class="email col-md-12 col-xs-12">
-                  <p>{{ language.storeLocation }}</p>
-                  <kendo-combobox
-                    [data]="storeLocation"
-                    [textField]="'storename'"
-                    [valueField]="'id'"
-                    (selectionChange)="selectionChangeStore($event)"
-                    [(ngModel)]="data.storeId"
-                    [valuePrimitive]="true"
-                    name="storename"
-                    class="col-xs-12 noPadding"
-                  >
-                  </kendo-combobox>
-                </div>
-              </div>
-
-              <div class="form-group" style="text-align: center">
-                <button
-                  kendoButton
-                  [primary]="true"
-                  type="submit"
-                  class="updateButton"
-                >
-                  {{ language.updateUser }}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-        <div *ngIf="currentTab === 'workTime'">
-          <div id="profile-tab" class="tab-pane active">
-            <p *ngIf="noSetWorkTime" class="noSetWorkTime">
-              *{{ language.noSetTimeForUserNote }}
-            </p>
-            <div class="k-form-field row" style="padding: 2vh 0 2vh 0">
-              <div class="col-sm-6">
-                <span>{{ language.color }}</span>
-                <div>
-                  <kendo-colorpalette
-                    [palette]="palette"
-                    [value]="selectedColor"
-                    [tileSize]="30"
-                    (valueChange)="changeColorPalette($event)"
-                  >
-                  </kendo-colorpalette>
-                </div>
-              </div>
-              <div class="col-sm-6" style="padding-top: 2vh">
-                <button
-                  kendoButton
-                  [icon]="'k-icon k-i-undo'"
-                  class="col-sm-5 {{ previousInd }}"
-                  (click)="previousWorkTime()"
-                >
-                  {{ language.previous }}
-                </button>
-                <button
-                  kendoButton
-                  [icon]="'k-icon k-i-redo'"
-                  class="col-sm-5 {{ nextInd }}"
-                  (click)="nextWorkTime()"
-                >
-                  {{ language.next }}
-                </button>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-2 col-sm-12 col-form-label">{{
-                language.validFromDate
-              }}</label>
-              <kendo-datepicker
-                [format]="'dd.MM.yyyy'"
-                class="col-md-5 col-xs-8 noPadding"
-                name="validDate"
-                placeholder="Valid date"
-                [(ngModel)]="validDate"
-                validDate.value=""
-              ></kendo-datepicker>
-              <div>
-                <button
-                  class="col-md-2 col-xs-4 btn-save"
-                  kendoButton
-                  [icon]="'k-icon k-i-save'"
-                  (click)="newValidDate()"
-                >
-                  {{ language.createTime }}
-                </button>
-                <button
-                  class="col-md-1 col-xs-4 btn-delete"
-                  kendoButton
-                  [icon]="'k-icon k-i-delete'"
-                  (click)="deleteWorkTime(workTime)"
-                ></button>
-              </div>
-            </div>
-            <form
-              name="loginForm"
-              class="loginForm"
-              (ngSubmit)="
-                updateSetIndicator === 1
-                  ? setWorkTimeForUser(workTime)
-                  : updateWorkTimeForUser(workTime)
-              "
-            >
-              <div
-                class="form-group row"
-                *ngFor="let item of workTime; let i = index"
+    <modal #user modalClass="modal-lg">
+      <modal-header>
+        <h4>{{ getTranslate(currentTab) }}</h4>
+      </modal-header>
+      <modal-content>
+        <div class="tabs widget">
+          <ul class="nav nav-tabs widget">
+            <li [ngClass]="currentTab === 'profile' ? 'active' : ''">
+              <a (click)="changeTab('profile')">{{ language.profile }}</a>
+            </li>
+            <li [ngClass]="currentTab === 'workTime' ? 'active' : ''">
+              <a (click)="changeTab('workTime')">{{ language.workTime }}</a>
+            </li>
+            <li [ngClass]="currentTab === 'permissions' ? 'active' : ''">
+              <a (click)="changeTab('permissions')">{{
+                language.permissions
+              }}</a>
+            </li>
+          </ul>
+          <div class="tab-content" *ngIf="currentTab === 'profile'">
+            <div id="profile-tab" class="tab-pane active">
+              <form
+                name="loginForm"
+                class="loginForm"
+                (ngSubmit)="updateUser(user)"
               >
-                <label
-                  for="example-number-input"
-                  class="col-sm-2 col-form-label"
-                  >{{ item.day }}</label
+                <div class="form-group">
+                  <div class="email col-md-4 col-xs-12">
+                    <p>{{ language.username }}</p>
+                    <input
+                      kendoTextBox
+                      type="text"
+                      class="col-xs-12"
+                      name="shortname"
+                      placeholder="{{ language.username }}"
+                      [(ngModel)]="data.shortname"
+                      shortname.value=""
+                    />
+                  </div>
+                  <div class="email col-md-4 col-xs-12">
+                    <p>{{ language.aliasName }}</p>
+                    <input
+                      kendoTextBox
+                      type="text"
+                      class="col-xs-12"
+                      name="alias_name"
+                      placeholder="{{ language.aliasName }}"
+                      [(ngModel)]="data.alias_name"
+                      alias_name.value=""
+                    />
+                  </div>
+                  <div class="email col-md-4 col-xs-12">
+                    <p>{{ language.password }}</p>
+                    <input
+                      kendoTextBox
+                      type="password"
+                      class="col-xs-12 password"
+                      name="password"
+                      placeholder="{{ language.password }}"
+                      [(ngModel)]="data.password"
+                      password.value=""
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="email col-md-6 col-xs-12">
+                    <p>{{ language.firstname }}</p>
+                    <input
+                      kendoTextBox
+                      type="text"
+                      class="col-xs-12"
+                      name="firstname"
+                      placeholder="{{ language.firstname }}"
+                      [(ngModel)]="data.firstname"
+                      firstname.value=""
+                    />
+                  </div>
+                  <div class="email col-md-6 col-xs-12">
+                    <p>{{ language.lastname }}</p>
+                    <input
+                      kendoTextBox
+                      type="text"
+                      class="col-xs-12"
+                      name="lastname"
+                      placeholder="{{ language.lastname }}"
+                      [(ngModel)]="data.lastname"
+                      lastname.value=""
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="email col-md-6 col-xs-12">
+                    <p>{{ language.street }}</p>
+                    <input
+                      kendoTextBox
+                      type="text"
+                      class="col-xs-12"
+                      name="street"
+                      placeholder="{{ language.street }}"
+                      [(ngModel)]="data.street"
+                      street.value=""
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="email col-md-6 col-xs-12">
+                    <p>{{ language.zipCode }}</p>
+                    <input
+                      kendoTextBox
+                      type="text"
+                      class="col-xs-12"
+                      name="zipcode"
+                      placeholder="{{ language.zipCode }}"
+                      [(ngModel)]="data.zipcode"
+                      zipcode.value=""
+                    />
+                  </div>
+                  <div class="email col-md-6 col-xs-12">
+                    <p>{{ language.place }}</p>
+                    <input
+                      kendoTextBox
+                      type="text"
+                      class="col-xs-12"
+                      name="place"
+                      placeholder="{{ language.place }}"
+                      [(ngModel)]="data.place"
+                      place.value=""
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="email col-md-6 col-xs-12">
+                    <p>{{ language.telephone }}</p>
+                    <input
+                      kendoTextBox
+                      type="text"
+                      class="col-xs-12"
+                      name="telephone"
+                      placeholder="{{ language.telephone }}"
+                      [(ngModel)]="data.telephone"
+                      telephone.value=""
+                    />
+                  </div>
+                  <div class="email col-md-6 col-xs-12">
+                    <p>{{ language.mobile }}</p>
+                    <input
+                      kendoTextBox
+                      type="text"
+                      class="col-xs-12"
+                      name="mobile"
+                      placeholder="{{ language.mobile }}"
+                      [(ngModel)]="data.mobile"
+                      mobile.value=""
+                    />
+                  </div>
+                  <div class="email col-md-6 col-xs-12">
+                    <p>{{ language.email }}</p>
+                    <input
+                      kendoTextBox
+                      type="email"
+                      class="col-xs-12"
+                      name="email"
+                      placeholder="{{ language.email }}"
+                      [(ngModel)]="data.email"
+                      email.value=""
+                    />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="email col-md-6 col-xs-12">
+                    <p>{{ language.birthday }}</p>
+                    <kendo-datepicker
+                      [format]="'dd.MM.yyyy'"
+                      class="col-xs-12 noPadding"
+                      name="birthday"
+                      placeholder="{{ language.birthday }}"
+                      [(ngModel)]="data.birthday"
+                      birthday.value=""
+                    ></kendo-datepicker>
+                  </div>
+                  <div class="email col-md-6 col-xs-12">
+                    <p>{{ language.sincecompany }}</p>
+                    <kendo-datepicker
+                      [format]="'dd.MM.yyyy'"
+                      class="col-xs-12 noPadding"
+                      name="sincecompany"
+                      placeholder="{{ language.sincecompany }}"
+                      [(ngModel)]="data.incompanysince"
+                      incompanysince.value=""
+                    ></kendo-datepicker>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="email col-md-6 col-xs-12">
+                    <p>{{ language.userType }}</p>
+                    <kendo-combobox
+                      [data]="userType"
+                      (selectionChange)="selectionUserType($event)"
+                      class="col-xs-12 noPadding"
+                      [(ngModel)]="selectedValue"
+                      name="type"
+                    >
+                    </kendo-combobox>
+                  </div>
+                  <label
+                    class="k-form-field col-md-6"
+                    style="text-align: center; padding-top: 30px"
+                  >
+                    {{ language.active }} &nbsp;
+                    <kendo-switch
+                      [(ngModel)]="data.active"
+                      name="active"
+                    ></kendo-switch>
+                  </label>
+                </div>
+                <div class="form-group">
+                  <div class="email col-md-12 col-xs-12">
+                    <p>{{ language.storeLocation }}</p>
+                    <kendo-combobox
+                      [data]="storeLocation"
+                      [textField]="'storename'"
+                      [valueField]="'id'"
+                      (selectionChange)="selectionChangeStore($event)"
+                      [(ngModel)]="data.storeId"
+                      [valuePrimitive]="true"
+                      name="storename"
+                      class="col-xs-12 noPadding"
+                    >
+                    </kendo-combobox>
+                  </div>
+                </div>
+
+                <div class="form-group" style="text-align: center">
+                  <button
+                    kendoButton
+                    [primary]="true"
+                    type="submit"
+                    class="updateButton"
+                  >
+                    {{ language.updateUser }}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div *ngIf="currentTab === 'workTime'">
+            <div id="profile-tab" class="tab-pane active">
+              <p *ngIf="noSetWorkTime" class="noSetWorkTime">
+                *{{ language.noSetTimeForUserNote }}
+              </p>
+              <div class="k-form-field row" style="padding: 2vh 0 2vh 0">
+                <div class="col-sm-6">
+                  <span>{{ language.color }}</span>
+                  <div>
+                    <kendo-colorpalette
+                      [palette]="palette"
+                      [value]="selectedColor"
+                      [tileSize]="30"
+                      (valueChange)="changeColorPalette($event)"
+                    >
+                    </kendo-colorpalette>
+                  </div>
+                </div>
+                <div class="col-sm-6" style="padding-top: 2vh">
+                  <button
+                    kendoButton
+                    [icon]="'k-icon k-i-undo'"
+                    class="col-sm-5 {{ previousInd }}"
+                    (click)="previousWorkTime()"
+                  >
+                    {{ language.previous }}
+                  </button>
+                  <button
+                    kendoButton
+                    [icon]="'k-icon k-i-redo'"
+                    class="col-sm-5 {{ nextInd }}"
+                    (click)="nextWorkTime()"
+                  >
+                    {{ language.next }}
+                  </button>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-2 col-sm-12 col-form-label">{{
+                  language.validFromDate
+                }}</label>
+                <kendo-datepicker
+                  [format]="'dd.MM.yyyy'"
+                  class="col-md-5 col-xs-8 noPadding"
+                  name="validDate"
+                  placeholder="Valid date"
+                  [(ngModel)]="validDate"
+                  validDate.value=""
+                ></kendo-datepicker>
+                <div>
+                  <button
+                    class="col-md-2 col-xs-4 btn-save"
+                    kendoButton
+                    [icon]="'k-icon k-i-save'"
+                    (click)="newValidDate()"
+                  >
+                    {{ language.createTime }}
+                  </button>
+                  <button
+                    class="col-md-1 col-xs-4 btn-delete"
+                    kendoButton
+                    [icon]="'k-icon k-i-delete'"
+                    (click)="deleteWorkTime(workTime)"
+                  ></button>
+                </div>
+              </div>
+              <form
+                name="loginForm"
+                class="loginForm"
+                (ngSubmit)="
+                  updateSetIndicator === 1
+                    ? setWorkTimeForUser(workTime)
+                    : updateWorkTimeForUser(workTime)
+                "
+              >
+                <div
+                  class="form-group row"
+                  *ngFor="let item of workTime; let i = index"
                 >
-                <div class="col-sm-10">
-                  <input
-                    kendoTextBox
-                    class="col-sm-2 col-xs-6"
-                    type="number"
-                    min="0"
-                    max="24"
-                    id="example-number-input"
-                    value="{{ item.start }}"
-                    [(ngModel)]="workTime[i].start"
-                    name="{{ item.day }}start"
-                  /><span class="col-sm-1 h">h</span>
-                  <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                  <label
+                    for="example-number-input"
+                    class="col-sm-2 col-form-label"
+                    >{{ item.day }}</label
+                  >
+                  <div class="col-sm-10">
+                    <input
+                      kendoTextBox
+                      class="col-sm-2 col-xs-6"
+                      type="number"
+                      min="0"
+                      max="24"
+                      id="example-number-input"
+                      value="{{ item.start }}"
+                      [(ngModel)]="workTime[i].start"
+                      name="{{ item.day }}start"
+                    /><span class="col-sm-1 h">h</span>
+                    <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.startMin}}" [(ngModel)]="workTime[i].startMin" name="{{item.day}}startMin"><span
                     class="col-sm-1 h">min</span> -->
-                  <input
-                    kendoTextBox
-                    class="col-sm-2 col-xs-6"
-                    type="number"
-                    min="0"
-                    max="24"
-                    id="example-number-input"
-                    value="{{ item.end }}"
-                    [(ngModel)]="workTime[i].end"
-                    name="{{ item.day }}end"
-                  />
-                  <span class="col-sm-1 h">h</span>
-                  <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                    <input
+                      kendoTextBox
+                      class="col-sm-2 col-xs-6"
+                      type="number"
+                      min="0"
+                      max="24"
+                      id="example-number-input"
+                      value="{{ item.end }}"
+                      [(ngModel)]="workTime[i].end"
+                      name="{{ item.day }}end"
+                    />
+                    <span class="col-sm-1 h">h</span>
+                    <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.endMin}}" [(ngModel)]="workTime[i].endMin" name="{{item.day}}endMin"> <span
                     class="col-sm-1 h">min</span> -->
 
-                  <input
-                    kendoTextBox
-                    class="col-sm-2 col-xs-6"
-                    type="number"
-                    min="0"
-                    max="24"
-                    id="example-number-input"
-                    value="{{ item.start2 }}"
-                    [(ngModel)]="workTime[i].start2"
-                    name="{{ item.day }}start2"
-                  /><span class="col-sm-1 h">h</span>
-                  <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                    <input
+                      kendoTextBox
+                      class="col-sm-2 col-xs-6"
+                      type="number"
+                      min="0"
+                      max="24"
+                      id="example-number-input"
+                      value="{{ item.start2 }}"
+                      [(ngModel)]="workTime[i].start2"
+                      name="{{ item.day }}start2"
+                    /><span class="col-sm-1 h">h</span>
+                    <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.start2Min}}" [(ngModel)]="workTime[i].start2Min" name="{{item.day}}start2Min"><span
                     class="col-sm-1 h">min</span> -->
-                  <input
-                    kendoTextBox
-                    class="col-sm-2 col-xs-6"
-                    type="number"
-                    min="0"
-                    max="24"
-                    id="example-number-input"
-                    value="{{ item.end2 }}"
-                    [(ngModel)]="workTime[i].end2"
-                    name="{{ item.day }}end2"
-                  />
-                  <span class="col-sm-1 h">h</span>
-                  <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                    <input
+                      kendoTextBox
+                      class="col-sm-2 col-xs-6"
+                      type="number"
+                      min="0"
+                      max="24"
+                      id="example-number-input"
+                      value="{{ item.end2 }}"
+                      [(ngModel)]="workTime[i].end2"
+                      name="{{ item.day }}end2"
+                    />
+                    <span class="col-sm-1 h">h</span>
+                    <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.end2Min}}" [(ngModel)]="workTime[i].end2Min" name="{{item.day}}end2Min"> <span
                     class="col-sm-1 h">min</span> -->
 
-                  <input
-                    kendoTextBox
-                    class="col-sm-2 col-xs-6"
-                    type="number"
-                    min="0"
-                    max="24"
-                    id="example-number-input"
-                    value="{{ item.start3 }}"
-                    [(ngModel)]="workTime[i].start3"
-                    name="{{ item.day }}start3"
-                  /><span class="col-sm-1 h">h</span>
-                  <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                    <input
+                      kendoTextBox
+                      class="col-sm-2 col-xs-6"
+                      type="number"
+                      min="0"
+                      max="24"
+                      id="example-number-input"
+                      value="{{ item.start3 }}"
+                      [(ngModel)]="workTime[i].start3"
+                      name="{{ item.day }}start3"
+                    /><span class="col-sm-1 h">h</span>
+                    <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.start3Min}}" [(ngModel)]="workTime[i].start3Min" name="{{item.day}}start3Min"><span
                     class="col-sm-1 h">min</span> -->
-                  <input
-                    kendoTextBox
-                    class="col-sm-2 col-xs-6"
-                    type="number"
-                    min="0"
-                    max="24"
-                    id="example-number-input"
-                    value="{{ item.end3 }}"
-                    [(ngModel)]="workTime[i].end3"
-                    name="{{ item.day }}end3"
-                  />
-                  <span class="col-sm-1 h">h</span>
-                  <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                    <input
+                      kendoTextBox
+                      class="col-sm-2 col-xs-6"
+                      type="number"
+                      min="0"
+                      max="24"
+                      id="example-number-input"
+                      value="{{ item.end3 }}"
+                      [(ngModel)]="workTime[i].end3"
+                      name="{{ item.day }}end3"
+                    />
+                    <span class="col-sm-1 h">h</span>
+                    <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.end3Min}}" [(ngModel)]="workTime[i].end3Min" name="{{item.day}}end3Min"> <span
                     class="col-sm-1 h">min</span> -->
+                  </div>
                 </div>
-              </div>
-              <div class="form-group" style="text-align: center">
-                <button
-                  *ngIf="updateSetIndicator === 1"
-                  kendoButton
-                  [primary]="true"
-                  type="submit"
-                  class="updateButton"
-                >
-                  {{ language.setWorkTime }}
-                </button>
-                <button
-                  *ngIf="updateSetIndicator === 0"
-                  kendoButton
-                  [primary]="true"
-                  type="submit"
-                  class="updateButton"
-                >
-                  {{ language.updateWorkTime }}
-                </button>
-              </div>
-            </form>
+                <div class="form-group" style="text-align: center">
+                  <button
+                    *ngIf="updateSetIndicator === 1"
+                    kendoButton
+                    [primary]="true"
+                    type="submit"
+                    class="updateButton"
+                  >
+                    {{ language.setWorkTime }}
+                  </button>
+                  <button
+                    *ngIf="updateSetIndicator === 0"
+                    kendoButton
+                    [primary]="true"
+                    type="submit"
+                    class="updateButton"
+                  >
+                    {{ language.updateWorkTime }}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="tab-content" *ngIf="currentTab === 'permissions'">
+            <div id="profile-tab" class="tab-pane active">
+              <label
+                class="k-form-field"
+                style="text-align: center; padding-top: 30px"
+              >
+                <span class="pr-4">{{
+                  language.allowedOnlineReservationForUser
+                }}</span>
+                <kendo-switch
+                  [(ngModel)]="data.allowed_online"
+                  name="allowed_online"
+                ></kendo-switch>
+              </label>
+            </div>
+            <div class="mt-4 center">
+              <button class="k-button k-primary" (click)="updateUser(user)">
+                {{ language.updateUser }}
+              </button>
+            </div>
           </div>
         </div>
-        <div class="tab-content" *ngIf="currentTab === 'permissions'">
-          <div id="profile-tab" class="tab-pane active">
-            <label
-              class="k-form-field"
-              style="text-align: center; padding-top: 30px"
-            >
-              <span class="pr-4">{{
-                language.allowedOnlineReservationForUser
-              }}</span>
-              <kendo-switch
-                [(ngModel)]="data.allowed_online"
-                name="allowed_online"
-              ></kendo-switch>
-            </label>
-          </div>
-          <div class="mt-4 center">
-            <button class="k-button k-primary" (click)="updateUser(user)">
-              {{ language.updateUser }}
-            </button>
-          </div>
-        </div>
-      </div>
-    </kendo-window>
+      </modal-content>
+      <modal-footer class="modal-footer-none"> </modal-footer>
+    </modal>
   </div>
 </div>

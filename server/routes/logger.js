@@ -1,5 +1,5 @@
 const { createLogger, format, winston, transports } = require("winston");
-const CustomTransport = require("./helpers/customTransport");
+const CustomTransport = require("./custom-logger/customTransport");
 const moment = require("moment");
 
 /*const logger = createLogger({

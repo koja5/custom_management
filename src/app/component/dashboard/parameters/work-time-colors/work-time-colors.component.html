@@ -1,7 +1,7 @@
 <div style="height: 100%">
   <kendo-grid *ngIf="language !== undefined" [data]="gridView" [style.height]="height" [resizable]="true"
     [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
-    [pageable]="pageable" (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey" [groupable]="true"
+    [pageable]="pageable" (pageChange)="pageChange($event)" [groupable]="true"
     [group]="state.group" [pageSize]="pageSize" (groupChange)="groupChange($event)" (sortChange)="sortChange($event)"
     [loading]="loading">
     <kendo-grid-messages pagerPage="{{language.pagerPage}}" pagerOf="{{language.pagerOf}}"
@@ -16,7 +16,7 @@
       <div style="float: right; padding-right: 30px; padding-top: 14px;">
         <button kendoButton [icon]="'add'" (click)="addNewModal()" [primary]="true" class="addButton">{{language.addNew}}</button>
         <div class="dropdown-grid">
-          <button class="btn-grid" style="border-left:1px solid #0d8bf2">
+          <button class="btn-grid" style="border-left:1px solid #2a3582">
             <i class="fa fa-caret-down"></i>
           </button>
           <div class="dropdown-content-grid">
@@ -101,10 +101,13 @@
     </kendo-dialog-actions>
   </kendo-dialog>
 
-  <kendo-window [title]="getTranslate(operationMode)" *ngIf="WorkTimeColorsModal" [minWidth]="400" [width]="550"
-    [minHeight]="300" (close)="WorkTimeColorsModal = false">
+  <modal #workTimeColorsModal modalClass="modal-md">
+    <modal-header>
+      <h4>{{getTranslate(operationMode)}}</h4>
+    </modal-header>
+    <modal-content>
     <form
-      (ngSubmit)="WorkTimeColorsForm.form.valid === true ? (operationMode === 'add' ? createWorkTimeColors(event) : updateWorkTimeColors(event)) : none"
+      (ngSubmit)="WorkTimeColorsForm.form.valid === true ? (operationMode === 'add' ? createWorkTimeColors($event) : updateWorkTimeColors($event)) : null"
       #WorkTimeColorsForm="ngForm">
       <div class="col-md-12 col-xs-12">
         <kendo-textbox-container floatingLabel="{{language.color}}({{language.required}})">
@@ -124,5 +127,7 @@
           [disabled]="WorkTimeColorsForm.form.invalid" type="submit">{{language.edit}}</button>
       </div>
     </form>
-  </kendo-window>
+  </modal-content>
+  <modal-footer class="modal-footer-none"> </modal-footer>
+  </modal>
 </div>

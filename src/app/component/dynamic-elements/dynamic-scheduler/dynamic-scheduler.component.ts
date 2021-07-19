@@ -1458,9 +1458,11 @@ export class DynamicSchedulerComponent implements OnInit {
   /* MY CODE */
 
   @ViewChild("customerUserModal") customerUserModal: Modal;
+  @ViewChild("customerModal") customerModal: Modal;
+  @ViewChild("customerUserModal2") customerUserModal2: Modal;
+  @ViewChild("quickPreview") quickPreview: Modal;
   @ViewChild("scheduler") public scheduler: SchedulerComponent;
   @ViewChild("usersInCompany") public customerElement: ComboBoxModule;
-  public customerModal = false;
   public selectedDate: Date = new Date();
   public formGroup: FormGroup;
   public events: SchedulerEvent[] = [];
@@ -1503,7 +1505,6 @@ export class DynamicSchedulerComponent implements OnInit {
   public loopIndex = 0;
   public valueLoop: any;
   public size = [];
-  public customerUserModal2 = false;
   public selectedButtonIndex = [false, false, false, false, false, false];
   public selectedButtonIndexStyle = ["", "", "", "", "", ""];
   public imagePath = "defaultUser";
@@ -1522,8 +1523,6 @@ export class DynamicSchedulerComponent implements OnInit {
   public userWidth = "22%";
   public id: number;
   public customerLoading = false;
-  public quickPreview = false;
-  public quickPreviewEvent: any;
   public height: any;
   public calendarHeight: any;
   public eventCategory: any;
@@ -2177,7 +2176,7 @@ export class DynamicSchedulerComponent implements OnInit {
 
   newCustomer() {
     // this.zIndex = 'zIndex';
-    this.customerModal = true;
+    this.customerModal.open();
     this.data = new UserModel();
     this.data.gender = "male";
     this.data.attention = "";
@@ -2187,7 +2186,7 @@ export class DynamicSchedulerComponent implements OnInit {
 
   closeNewCustomer() {
     this.zIndex = "";
-    this.customerModal = false;
+    this.customerModal.close();
   }
 
   createCustomer(form) {
@@ -2201,7 +2200,7 @@ export class DynamicSchedulerComponent implements OnInit {
         this.mobileValue = this.data.mobile;
         this.baseDataIndicator = true;
         this.reloadNewCustomer();
-        this.customerModal = false;
+        this.customerModal.close();
       }
     });
   }
@@ -2239,11 +2238,11 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   baseDataForUser() {
-    this.customerUserModal2 = true;
+    this.customerUserModal2 .open();
   }
 
   closebaseDataForUser() {
-    this.customerUserModal2 = false;
+    this.customerUserModal2 .close();
   }
 
   public handleValue(selected) {
@@ -3424,5 +3423,10 @@ export class DynamicSchedulerComponent implements OnInit {
     } else {
       this.expandAdditionalIcon = "k-icon k-i-arrow-60-right";
     }
+  }
+
+  closeCustomerModal() {
+    this.customerModal.close();
+    this.reloadNewCustomer();
   }
 }

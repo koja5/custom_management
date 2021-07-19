@@ -48,6 +48,7 @@ import { BaseDateSharedModule } from '../shared-module/base-date-module';
 import { DynamicConfirmDialogComponent } from './dynamic-dialogs/dynamic-confirm-dialog/dynamic-confirm-dialog.component';
 import { SharedSMSModule } from '../shared-module/shared-sms-module';
 import { SharedEmailModule } from '../shared-module/shared-email-module';
+import { ModalModule } from 'ngx-modal';
 
 @NgModule({
   declarations: [DynamicGridComponent, DynamicFormsComponent, DynamicSchedulerComponent, DynamicConfirmDialogComponent],
@@ -92,7 +93,8 @@ import { SharedEmailModule } from '../shared-module/shared-email-module';
     DialogsModule,
     BaseDateSharedModule, 
     SharedSMSModule,
-    SharedEmailModule
+    SharedEmailModule,
+    ModalModule
   ],
   providers: [EditService, PdfExportService, ToolbarService, SortService, FilterService, PageService, GroupService, ResizeService ],
   entryComponents: [TextboxComponent, TextareaComponent, DatepickerComponent, ButtonComponent, DropdownComponent]

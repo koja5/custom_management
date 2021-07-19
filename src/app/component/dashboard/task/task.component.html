@@ -600,8 +600,11 @@
     </kendo-splitter>
   </div>
 
-  <kendo-window title="Create new patient" *ngIf="customerModal" [minWidth]="700" [width]="850" [minHeight]="300"
-    (close)="customerModal = false; reloadNewCustomer()">
+  <modal #customerModal (onClose)="closeCustomerModal()" modalClass="modal-lg">
+    <modal-header>
+      <h4>{{language.createNewCustomer}}</h4>
+    </modal-header>
+    <modal-content>
     <form name="loginForm" class="loginForm" (ngSubmit)="createCustomer(customer)" #customerForm="ngForm">
       <div class="form-group">
         <div class="panel-body">
@@ -719,25 +722,36 @@
           type="submit">{{language.createNewCustomer}}</button>
       </div>
     </form>
-  </kendo-window>
+  </modal-content>
+  <modal-footer class="modal-footer-none"> </modal-footer>
+  </modal>
 
-  <kendo-window title="Please provide additional data" *ngIf="customerUserModal2&&customerUser !== undefined"
-    [width]="950" [height]="700" (close)="closebaseDataForUser()">
+  <modal #customerUserModal2 (onClose)="closeCustomerModal()" modalClass="modal-lg">
+    <modal-header>
+      <h4>Please provide additional data</h4>
+    </modal-header>
+    <modal-content>
     <app-base-date [data]="customerUser" *ngIf="customerUser !== undefined">
     </app-base-date>
-  </kendo-window>
+  </modal-content>
+  <modal-footer class="modal-footer-none"> </modal-footer>
+  </modal>
 
-  <kendo-window *ngIf="quickPreview" (close)="quickPreview = false" class="quickPreviewWindow">
-    <div class="customerNameEvent">
-      <h3>{{quickPreviewEvent.title.split('+')[0]}}</h3>
-    </div>
+  <modal #quickPreview modalClass="modal-md">
+    <modal-header>
+      <h4>{{quickPreviewEvent.title.split('+')[0]}}</h4>
+    </modal-header>
+    <modal-content>
+
     <div class="customerTitleEvent">
       <h5><i class="fa fa-calendar" aria-hidden="true"></i>
         {{quickPreviewEvent.start | date: 'dd.MM.yyyy'}}({{quickPreviewEvent.start | date: 'HH:mm'}} -
         {{quickPreviewEvent.end | date: 'HH:mm'}})</h5>
       <h5><i class="fa fa-sticky-note-o" aria-hidden="true"></i> {{quickPreviewEvent.title.split('+')[1]}}</h5>
     </div>
-  </kendo-window>
+  </modal-content>
+  <modal-footer class="modal-footer-none"> </modal-footer>
+  </modal>
 
   <kendo-dialog title="Confirmation of arrival" *ngIf="requestForConfirmArrival"
     (close)="requestForConfirmArrival = false" [minWidth]="250" [width]="450">

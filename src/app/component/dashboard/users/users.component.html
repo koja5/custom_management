@@ -49,7 +49,7 @@
           {{ language.newUser }}
         </button>
         <div class="dropdown-grid">
-          <button class="btn-grid" style="border-left: 1px solid #0d8bf2">
+          <button class="btn-grid" style="border-left: 1px solid #2a3582">
             <i class="fa fa-caret-down"></i>
           </button>
           <div class="dropdown-content-grid">
@@ -80,17 +80,17 @@
         </div>
       </div>
     </ng-template>
-    <kendo-grid-column field="shortname" title="{{ language.username }}">
+    <kendo-grid-column field="shortname" title="{{ language.username }}" width="200">
     </kendo-grid-column>
-    <kendo-grid-column field="email" title="{{ language.email }}">
+    <kendo-grid-column field="email" title="{{ language.email }}" width="230">
     </kendo-grid-column>
-    <kendo-grid-column field="firstname" title="{{ language.firstname }}">
+    <kendo-grid-column field="firstname" title="{{ language.firstname }}" width="120">
     </kendo-grid-column>
-    <kendo-grid-column field="lastname" title="{{ language.lastname }}">
+    <kendo-grid-column field="lastname" title="{{ language.lastname }}" width="120">
     </kendo-grid-column>
-    <kendo-grid-column field="street" title="{{ language.street }}">
+    <kendo-grid-column field="street" title="{{ language.street }}" width="180">
     </kendo-grid-column>
-    <kendo-grid-column field="active" title="{{ language.active }}">
+    <kendo-grid-column field="active" title="{{ language.active }}" width="120">
       <ng-template kendoGridCellTemplate let-dataItem>
         <input type="checkbox" [checked]="dataItem.active" disabled />
       </ng-template>
@@ -130,19 +130,19 @@
           </div>
         </div>
       </ng-template>
-      <kendo-grid-column field="shortname" title="{{ language.username }}">
+      <kendo-grid-column field="shortname" title="{{ language.username }}" width="200">
       </kendo-grid-column>
-      <kendo-grid-column field="alias_name" title="{{ language.aliasName }}">
+      <kendo-grid-column field="alias_name" title="{{ language.aliasName }}" width="230">
       </kendo-grid-column>
-      <kendo-grid-column field="email" title="{{ language.email }}">
+      <kendo-grid-column field="email" title="{{ language.email }}" width="150">
       </kendo-grid-column>
-      <kendo-grid-column field="firstname" title="{{ language.firstname }}">
+      <kendo-grid-column field="firstname" title="{{ language.firstname }}" width="120">
       </kendo-grid-column>
-      <kendo-grid-column field="lastname" title="{{ language.lastname }}">
+      <kendo-grid-column field="lastname" title="{{ language.lastname }}" width="120">
       </kendo-grid-column>
-      <kendo-grid-column field="street" title="{{ language.street }}">
+      <kendo-grid-column field="street" title="{{ language.street }}" width="180">
       </kendo-grid-column>
-      <kendo-grid-column field="active" title="{{ language.active }}">
+      <kendo-grid-column field="active" title="{{ language.active }}" width="120">
       </kendo-grid-column>
     </kendo-grid-pdf>
 
@@ -162,13 +162,12 @@
   </kendo-grid>
 </div>
 
-<kendo-window
-  title="{{ language.createNewUser }}"
-  *ngIf="user"
-  [minWidth]="700"
-  [width]="850"
-  (close)="user = false"
->
+<modal #user modalClass="modal-lg">
+  <modal-header>
+    <h4>{{language.createNewUser}}</h4>
+  </modal-header>
+  <modal-content>
+
   <form
     name="loginForm"
     class="loginForm"
@@ -463,7 +462,9 @@
       </button>
     </div>
   </form>
-</kendo-window>
+</modal-content>
+<modal-footer class="modal-footer-none"> </modal-footer>
+</modal>
 
 <kendo-dialog
   title="Please confirm"

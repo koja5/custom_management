@@ -30,6 +30,7 @@ import { RemindersComponent } from "./settings/reminders/reminders.component";
 import { SystemErrorComponent } from "./administrator/system-logs/system-error/system-error.component";
 import { SystemInfoComponent } from "./administrator/system-logs/system-info/system-info.component";
 import { SystemWarnComponent } from "./administrator/system-logs/system-warn/system-warn.component";
+import { AvailableAreaCodeComponent } from "./administrator/available-area-code/available-area-code.component";
 
 const routes: Routes = [
   {
@@ -136,6 +137,10 @@ const routes: Routes = [
             component: SystemWarnComponent,
           }
         ],
+      },
+      {
+        path: "area-code",
+        component: AvailableAreaCodeComponent
       },
       {
         path: "my-complaint",

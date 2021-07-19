@@ -1247,14 +1247,11 @@
   </div>
 
   <!-- MODALS -->
-  <kendo-window
-    title="{{ language.createNewCustomerDialog }}"
-    *ngIf="customerModal"
-    [minWidth]="700"
-    [width]="850"
-    [minHeight]="300"
-    (close)="customerModal = false; reloadNewCustomer()"
-  >
+  <modal #customerModal (onClose)="closeCustomerModal()" modalClass="modal-lg">
+    <modal-header>
+      <h4>{{ language.createNewCustomerDialog }}</h4>
+    </modal-header>
+    <modal-content>
     <form
       name="loginForm"
       class="loginForm"
@@ -1481,18 +1478,21 @@
         </button>
       </div>
     </form>
-  </kendo-window>
+  </modal-content>
+  <modal-footer class="modal-footer-none"> </modal-footer>
+  </modal>
 
-  <kendo-window
-    title="{{ language.customerInformationDialog }}"
-    *ngIf="customerUserModal2 && customerUser !== undefined"
-    [width]="960"
-    [height]="540"
-    (close)="closebaseDataForUser()"
-  >
+  <modal #customerUserModal2 (onClose)="closebaseDataForUser()" modalClass="modal-lg">
+    <modal-header>
+      <h4>{{ language.customerInformationDialog }}</h4>
+    </modal-header>
+    <modal-content>
+
     <app-base-date [data]="customerUser" *ngIf="customerUser !== undefined">
     </app-base-date>
-  </kendo-window>
+  </modal-content>
+  <modal-footer class="modal-footer-none"> </modal-footer>
+  </modal>
 
   <kendo-dialog
     title="Confirmation of arrival"

@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from "@angular/core";
+import { Component, OnInit, HostListener, ViewChild } from "@angular/core";
 import { VaucherModel } from "src/app/models/vaucher-model";
 import { process, State, GroupDescriptor, SortDescriptor } from "@progress/kendo-data-query";
 import {
@@ -14,6 +14,7 @@ import * as XLSX from "ts-xlsx";
 import { CustomersService } from "src/app/service/customers.service";
 import { UsersService } from "src/app/service/users.service";
 import { HelpService } from "src/app/service/help.service";
+import { Modal } from "ngx-modal";
 
 @Component({
   selector: "app-vaucher",
@@ -21,7 +22,7 @@ import { HelpService } from "src/app/service/help.service";
   styleUrls: ["./vaucher.component.scss"]
 })
 export class VaucherComponent implements OnInit {
-  public vaucher = false;
+  @ViewChild('vaucher') vaucher: Modal;
   public data = new VaucherModel();
   public unamePattern = "^[a-z0-9_-]{8,15}$";
   public emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$";
@@ -139,7 +140,7 @@ export class VaucherComponent implements OnInit {
     this.initializeParams();
     this.getNextVaucherId();
     this.changeTheme(this.theme);
-    this.vaucher = true;
+    this.vaucher.open();
   }
 
   initializeParams() {
@@ -201,7 +202,7 @@ export class VaucherComponent implements OnInit {
           total: this.currentLoadData.length
         };*/
         this.currentLoadData.push(this.data);
-        this.vaucher = false;
+        this.vaucher.close();
         this.getVauchers();
         // form.reset();
         Swal.fire({
@@ -240,7 +241,7 @@ export class VaucherComponent implements OnInit {
     console.log(data);
     this.convertValue(data);
     this.operationMode = "edit";
-    this.vaucher = true;
+    this.vaucher.open();
   }
 
   editVaucher(store) {
@@ -269,7 +270,7 @@ export class VaucherComponent implements OnInit {
           timer: 3000,
           type: "success"
         });
-        this.vaucher = false;
+        this.vaucher.close();
       } else {
         Swal.fire({
           title: "Error update",
@@ -450,7 +451,7 @@ export class VaucherComponent implements OnInit {
   }
 
   closeVaucher() {
-    this.vaucher = false;
+    this.vaucher.close();
   }
 
   getTranslate(title: string) {

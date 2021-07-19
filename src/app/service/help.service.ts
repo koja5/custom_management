@@ -60,7 +60,7 @@ export class HelpService {
   }
 
   findValueByField(data, root, field) {
-    if(root) {
+    if (root) {
       return data[root][field];
     } else {
       return data[field];
@@ -72,7 +72,11 @@ export class HelpService {
   }
 
   getHeightForGrid() {
-    return window.innerHeight - 60 + "px";
+    if (window.innerWidth < 992) {
+      return window.innerHeight - 71 + "px";
+    } else {
+      return window.innerHeight - 60 + "px";
+    }
   }
 
   getHeightForGridWithoutPx() {

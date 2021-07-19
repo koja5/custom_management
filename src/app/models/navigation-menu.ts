@@ -29,4 +29,5 @@ export class NavigationMenuModel {
     systemLogInfo?: string;
     systemLogWarn?: string;
     reminder?: string;
+    area_code?: string;
 }

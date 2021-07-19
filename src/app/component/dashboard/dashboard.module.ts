@@ -72,6 +72,7 @@ import { SharedSMSModule } from "../shared-module/shared-sms-module";
 import { SystemErrorComponent } from './administrator/system-logs/system-error/system-error.component';
 import { SystemInfoComponent } from './administrator/system-logs/system-info/system-info.component';
 import { SystemWarnComponent } from './administrator/system-logs/system-warn/system-warn.component';
+import { AvailableAreaCodeComponent } from './administrator/available-area-code/available-area-code.component';
 
 @NgModule({
   declarations: [
@@ -102,7 +103,8 @@ import { SystemWarnComponent } from './administrator/system-logs/system-warn/sys
     ReservationsComponent,
     SystemErrorComponent,
     SystemInfoComponent,
-    SystemWarnComponent
+    SystemWarnComponent,
+    AvailableAreaCodeComponent
   ],
   imports: [
     CommonModule,

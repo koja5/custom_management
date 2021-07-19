@@ -73,84 +73,88 @@ function reminderViaSMS() {
               if (err) {
                 console.error("SQL error:", err);
               }
-              console.log(rows);
-              rows.forEach(function (to, i, array) {
-                if (to.sms !== null && to.sms === 1) {
-                  if (
-                    (to.telephone &&
-                      (to.telephone.startsWith("+43") ||
-                        to.telephone.startsWith("43"))) ||
-                    (to.mobile &&
-                      (to.mobile.startsWith("+43") || to.mobile.startsWith("43")))
-                  ) {
-                    var phoneNumber = null;
-                    if (to.telephone) {
-                      phoneNumber = to.telephone;
-                    } else if (to.mobile) {
-                      phoneNumber = to.mobile;
-                    }
-                    var convertToDateStart = new Date(to.start);
-                    var convertToDateEnd = new Date(to.end);
-                    var startHours = convertToDateStart.getHours();
-                    var startMinutes = convertToDateStart.getMinutes();
-                    var endHours = convertToDateEnd.getHours();
-                    var endMinutes = convertToDateEnd.getMinutes();
-                    var date =
-                      convertToDateStart.getDate() +
-                      "." +
-                      (convertToDateStart.getMonth() + 1) +
-                      "." +
-                      convertToDateStart.getFullYear();
-                    var day = convertToDateStart.getDate();
-                    var month = monthNames[convertToDateStart.getMonth()];
-                    var start =
-                      (startHours < 10 ? "0" + startHours : startHours) +
-                      ":" +
-                      (startMinutes < 10 ? "0" + startMinutes : startMinutes);
-                    var end =
-                      (endHours < 10 ? "0" + endHours : endHours) +
-                      ":" +
-                      (endMinutes < 10 ? "0" + endMinutes : endMinutes);
+              if (rows.length > 0) {
+                request(
+                  link + "/getAvailableAreaCode",
+                  function (error, response, codes) {
+                    rows.forEach(function (to, i, array) {
+                      if (to.sms !== null && to.sms === 1) {
+                        var phoneNumber = null;
+                        if (to.telephone) {
+                          phoneNumber = to.telephone;
+                        } else if (to.mobile) {
+                          phoneNumber = to.mobile;
+                        }
+                        if (checkAvailableCode(phoneNumber, JSON.parse(codes))) {
+                          console.log(rows);
+                          var convertToDateStart = new Date(to.start);
+                          var convertToDateEnd = new Date(to.end);
+                          var startHours = convertToDateStart.getHours();
+                          var startMinutes = convertToDateStart.getMinutes();
+                          var endHours = convertToDateEnd.getHours();
+                          var endMinutes = convertToDateEnd.getMinutes();
+                          var date =
+                            convertToDateStart.getDate() +
+                            "." +
+                            (convertToDateStart.getMonth() + 1) +
+                            "." +
+                            convertToDateStart.getFullYear();
+                          var day = convertToDateStart.getDate();
+                          var month = monthNames[convertToDateStart.getMonth()];
+                          var start =
+                            (startHours < 10 ? "0" + startHours : startHours) +
+                            ":" +
+                            (startMinutes < 10
+                              ? "0" + startMinutes
+                              : startMinutes);
+                          var end =
+                            (endHours < 10 ? "0" + endHours : endHours) +
+                            ":" +
+                            (endMinutes < 10 ? "0" + endMinutes : endMinutes);
 
-                    var language = JSON.parse(body)["config"];
+                          var language = JSON.parse(body)["config"];
 
-                    var message =
-                      language?.initialGreetingSMSReminder +
-                      " " +
-                      to.shortname +
-                      ", \n" +
-                      "\n" +
-                      language?.introductoryMessageForSMSReminderReservation +
-                      " \n" +
-                      "\n" +
-                      language?.dateMessage +
-                      ": " +
-                      date +
-                      " \n" +
-                      language?.timeMessage +
-                      ": " +
-                      start +
-                      "-" +
-                      end +
-                      " \n" +
-                      language?.storeLocation +
-                      ": " +
-                      to.storename;
+                          var message =
+                            language?.initialGreetingSMSReminder +
+                            " " +
+                            to.shortname +
+                            ", \n" +
+                            "\n" +
+                            language?.introductoryMessageForSMSReminderReservation +
+                            " \n" +
+                            "\n" +
+                            language?.dateMessage +
+                            ": " +
+                            date +
+                            " \n" +
+                            language?.timeMessage +
+                            ": " +
+                            start +
+                            "-" +
+                            end +
+                            " \n" +
+                            language?.storeLocation +
+                            ": " +
+                            to.storename;
 
-                    var content = "To: " + phoneNumber + "\r\n\r\n" + message;
-                    var fileName = "server/sms/" + phoneNumber + ".txt";
-                    console.log(content);
-                    fs.writeFile(fileName, content, function (err) {
-                      if (err) return logger.log("error", err);
-                      logger.log(
-                        "info",
-                        "Sent AUTOMATE REMINDER to NUMBER: " + phoneNumber
-                      );
-                      ftpUploadSMS(fileName, phoneNumber + ".txt");
+                          var content =
+                            "To: " + phoneNumber + "\r\n\r\n" + message;
+                          var fileName = "server/sms/" + phoneNumber + ".txt";
+                          console.log(content);
+                          fs.writeFile(fileName, content, function (err) {
+                            if (err) return logger.log("error", err);
+                            logger.log(
+                              "info",
+                              "Sent AUTOMATE REMINDER to NUMBER: " + phoneNumber
+                            );
+                            ftpUploadSMS(fileName, phoneNumber + ".txt");
+                          });
+                        }
+                      }
                     });
                   }
-                }
-              });
+                );
+              }
             }
           );
         }
@@ -159,4 +163,12 @@ function reminderViaSMS() {
   });
 }
 
+function checkAvailableCode(phone, codes) {
+  for (let i = 0; i < codes.length; i++) {
+    if (phone && phone.startsWith(codes[i].area_code)) {
+      return true;
+    }
+  }
+  return false;
+}
 module.exports = reminderViaSMS;

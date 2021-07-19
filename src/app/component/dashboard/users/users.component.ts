@@ -26,7 +26,8 @@ import { HelpService } from "src/app/service/help.service";
   styleUrls: ["./users.component.scss"]
 })
 export class UsersComponent implements OnInit {
-  public user = false;
+  
+  @ViewChild('user') user: Modal;
   public data = new UserModel();
   public userType = ["Employee", "Manager", "Admin"];
   public gridData: any;
@@ -135,7 +136,7 @@ export class UsersComponent implements OnInit {
       this.storeLocation = val;
     });
     this.changeTheme(this.theme);
-    this.user = true;
+    this.user.open();
   }
 
   initializeParams() {
@@ -161,7 +162,7 @@ export class UsersComponent implements OnInit {
         console.log(val);
         this.gridData.data.push(this.data);
         this.gridView.data.push(this.data);
-        this.user = false;
+        this.user.close();
         Swal.fire({
           title: "Successfull!",
           text: "New user is successfull added!",

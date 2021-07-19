@@ -39,6 +39,9 @@ export class DashboardComponent implements OnInit {
   public sidebarHeight: any;
   public userType = UserType;
   public permissionPatientMenu: any;
+  public showHideCollapse = [];
+  public activeGroup = [];
+  public height: string;
 
   constructor(
     private router: Router,
@@ -56,10 +59,11 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.sidebarHeight = window.innerHeight - 30 + "px";
-    this.selectedNode = this.activatedRouter.snapshot["_routerState"].url.split(
-      "/"
-    )[2];
+    this.height = this.helpService.getHeightForGrid();
+    this.sidebarHeight = window.innerHeight - 60 + "px";
+    this.selectedNode =
+      this.activatedRouter.snapshot["_routerState"].url.split("/")[2];
+    this.initializeCollapse();
 
     this.selectedNodeModel[this.selectedNode] = "active";
 
@@ -136,6 +140,28 @@ export class DashboardComponent implements OnInit {
     this.checkPermissionForPatientMenu();
   }
 
+  @HostListener("window:resize", ["$event"])
+  onResize(event) {
+    this.height = this.helpService.getHeightForGrid();
+  }
+
+  initializeCollapse() {
+    for (let i = 0; i < 3; i++) {
+      this.showHideCollapse[i] = "";
+      this.activeGroup[i] = "";
+    }
+  }
+
+  collapse(index) {
+    if (this.showHideCollapse[index] === "") {
+      this.showHideCollapse[index] = "mm-show";
+      this.activeGroup[index] = "mm-active";
+    } else {
+      this.showHideCollapse[index] = "";
+      this.activeGroup[index] = "";
+    }
+  }
+
   checkPermissionForPatientMenu() {
     const superadmin = this.helpService.getSuperadmin();
     if (this.type === this.userType.patient) {
@@ -189,7 +215,7 @@ export class DashboardComponent implements OnInit {
 
   hideShowSidebar() {
     if (this.sidebar === "") {
-      this.sidebar = "sidemenu-closed";
+      this.sidebar = "sidemenu-closed sidebar-enable";
     } else {
       this.sidebar = "";
     }
@@ -286,7 +312,7 @@ export class DashboardComponent implements OnInit {
   showHideSubMenu() {
     if (this.subMenuInd === "") {
       this.subMenuInd = "active open";
-      this.sidebarHeight = window.innerHeight - 40 + "px";
+      this.sidebarHeight = window.innerHeight - 50 + "px";
     } else {
       this.subMenuInd = "";
       this.sidebarHeight = "auto";

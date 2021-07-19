@@ -150,6 +150,14 @@
       "stateMenu": { "type": "string" },
       "eventCategoryMenu": { "type": "string" },
       "workTimeColorsMenu": { "type": "string" },
+      "areaCode": { "type": "string" },
+      "systemSettingsTitleMenu": { "type": "string" },
+      "systemSettingsTitle": { "type": "string" },
+      "applicationSettingsTitleMenu": { "type": "string" },
+      "systemLogsTitle": { "type": "string" },
+      "userTitleMenu": { "type": "string" },
+      "patientTitleMenu": { "type": "string" },
+      "applicationParametersSettingsTitle": { "type": "string" },
       "reservations": { "type": "string" },
       "pagerItemsPerPage": { "type": "string" },
       "addNew": { "type": "string" },
@@ -930,6 +938,29 @@
             { "key": "stateMenu" },
             { "key": "eventCategoryMenu" },
             { "key": "workTimeColorsMenu" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "areaCode" },
+            { "key": "systemSettingsTitleMenu" },
+            { "key": "systemSettingsTitle" },
+            { "key": "applicationSettingsTitleMenu" },
+            { "key": "systemLogsTitle" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "userTitleMenu" },
+            { "key": "patientTitleMenu" },
+            { "key": "applicationParametersSettingsTitle" },
+            { "key": "" }
           ]
         }
       ]

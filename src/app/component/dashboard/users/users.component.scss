@@ -34,12 +34,11 @@
   text-align: center;
   position: absolute;
   top: 50%;
-  left: 55%;
 }
 
-.form-group .control-label:after { 
-  content:"*";
-  color:red;
+.form-group .control-label:after {
+  content: "*";
+  color: red;
 }
 
 p {

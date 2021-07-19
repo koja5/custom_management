@@ -15,7 +15,12 @@ import { BaseTwoModel } from "src/app/models/base-two-model";
 import { PhysicalModel } from "src/app/models/physical-model";
 import { TaskService } from "src/app/service/task.service";
 import { ToastrService } from "ngx-toastr";
-import { SortDescriptor, orderBy, process, State } from '@progress/kendo-data-query';
+import {
+  SortDescriptor,
+  orderBy,
+  process,
+  State,
+} from "@progress/kendo-data-query";
 
 @Component({
   selector: "app-base-date",
@@ -23,15 +28,17 @@ import { SortDescriptor, orderBy, process, State } from '@progress/kendo-data-qu
   styleUrls: ["./base-date.component.scss"],
 })
 export class BaseDateComponent implements OnInit {
-  public customer = false;
   @ViewChild("upload") upload: Modal;
   @Input() type;
   @Input() data;
   @Input() date;
   @Input() doctor;
-  public complaint = false;
-  public therapy = false;
-  public document_edit = false;
+  @ViewChild("complaint") complaint: Modal;
+  @ViewChild("therapy") therapy: Modal;
+  @ViewChild("customer") customer: Modal;
+  @ViewChild("document_edit") document_edit: Modal;
+  @ViewChild("settingsWindow") settingsWindow: Modal;
+
   public maleImg = "../../../../../assets/images/users/male-patient.png";
   public femaleImg = "../../../../../assets/images/users/female-patient.png";
   public dialogOpened = false;
@@ -79,14 +86,13 @@ export class BaseDateComponent implements OnInit {
   public ourFile: File;
   public fileDescription = [];
   public documentItem: any;
-  public settingsWindow = false;
   public loadingGridComplaint = false;
   public loadingGridTherapy = false;
   public loadingGridDocument = false;
   public sort: SortDescriptor[] = [
     {
       field: "date",
-      dir: "desc"
+      dir: "desc",
     },
   ];
   public stateComplaint: State = {
@@ -96,9 +102,9 @@ export class BaseDateComponent implements OnInit {
     sort: [
       {
         field: "date",
-        dir: "desc"
-      }
-    ]
+        dir: "desc",
+      },
+    ],
   };
   public stateTherapy: State = {
     skip: 0,
@@ -107,9 +113,9 @@ export class BaseDateComponent implements OnInit {
     sort: [
       {
         field: "date",
-        dir: "desc"
-      }
-    ]
+        dir: "desc",
+      },
+    ],
   };
   public stateDocument: State = {
     skip: 0,
@@ -118,9 +124,9 @@ export class BaseDateComponent implements OnInit {
     sort: [
       {
         field: "date",
-        dir: "desc"
-      }
-    ]
+        dir: "desc",
+      },
+    ],
   };
 
   constructor(
@@ -138,8 +144,7 @@ export class BaseDateComponent implements OnInit {
     var datetimestamp = Date.now();
 
     this.uploader = new FileUploader({
-      url: this
-        .url /*,
+      url: this.url /*,
       additionalParameter: { comments: this.data.id },
       disableMultipart: true,
       formatDataFunctionIsAsync: true,
@@ -263,7 +268,7 @@ export class BaseDateComponent implements OnInit {
 
   getDocument() {
     this["loadingGridDocument"] = true;
-    this.service.getDocuments(this.data.id, (val:[]) => {
+    this.service.getDocuments(this.data.id, (val: []) => {
       this.documents = process(val, this.stateDocument);
       this.documentsData = val;
       this["loadingGridDocument"] = false;
@@ -343,7 +348,7 @@ export class BaseDateComponent implements OnInit {
 
   editCustomer() {
     this.date.birthday = new Date(this.date.birthday);
-    this.customer = true;
+    this.customer.open();
   }
 
   updateCustomer(customer) {
@@ -351,7 +356,7 @@ export class BaseDateComponent implements OnInit {
     this.service.updateCustomer(this.data, (val) => {
       console.log(val);
       if (val.success) {
-        this.customer = false;
+        this.customer.close();
         Swal.fire({
           title: this.language.successUpdateTitle,
           text: this.language.successUpdateText
@@ -441,7 +446,7 @@ export class BaseDateComponent implements OnInit {
       .subscribe((data) => {
         this.complaintValue = data;
       });
-    this.complaint = true;
+    this.complaint.open();
   }
 
   openTherapyModal() {
@@ -469,7 +474,7 @@ export class BaseDateComponent implements OnInit {
         this.complaintValue = data;
       });
 
-    this.therapy = true;
+    this.therapy.open();
   }
 
   /*selectComplaint(event) {
@@ -525,7 +530,7 @@ export class BaseDateComponent implements OnInit {
         this.service.addComplaint(this.complaintData).subscribe((data) => {
           if (data) {
             this.getComplaint();
-            this.complaint = false;
+            this.complaint.close();
             /*Swal.fire({
               title: "Successfull!",
               text: "New complaint is successfull added!",
@@ -554,7 +559,7 @@ export class BaseDateComponent implements OnInit {
       this.service.addComplaint(this.complaintData).subscribe((data) => {
         if (data) {
           this.getComplaint();
-          this.complaint = false;
+          this.complaint.close();
           /*Swal.fire({
             title: "Successfull!",
             text: "New complaint is successfull added!",
@@ -640,7 +645,7 @@ export class BaseDateComponent implements OnInit {
     this.service.updateComplaint(this.complaintData).subscribe((data) => {
       if (data) {
         this.getComplaint();
-        this.complaint = false;
+        this.complaint.close();
         Swal.fire({
           title: "Successfull!",
           text: "Complaint is successfull updated!",
@@ -695,7 +700,7 @@ export class BaseDateComponent implements OnInit {
     this.service.addTherapy(this.complaintData).subscribe((data) => {
       if (data["success"]) {
         this.getTherapy();
-        this.therapy = false;
+        this.therapy.close();
         Swal.fire({
           title: "Successfull!",
           text: "New therapy is successfull added!",
@@ -746,7 +751,7 @@ export class BaseDateComponent implements OnInit {
     this.service.updateTherapy(this.complaintData).subscribe((data) => {
       if (data) {
         this.getTherapy();
-        this.therapy = false;
+        this.therapy.close();
         Swal.fire({
           title: "Successfull!",
           text: "Therapy is successfull updated!",
@@ -794,7 +799,7 @@ export class BaseDateComponent implements OnInit {
     } else {
       this.loadingTherapy = false;
     }
-    this.therapy = true;
+    this.therapy.open();
     this.operationMode = "edit";
   }
 
@@ -967,7 +972,7 @@ export class BaseDateComponent implements OnInit {
           timer: 3000,
           type: "success",
         });
-        this.customer = false;
+        this.customer.close();
       }
     });
     console.log(this.baseDataOne);
@@ -993,7 +998,7 @@ export class BaseDateComponent implements OnInit {
           timer: 3000,
           type: "success",
         });
-        this.customer = false;
+        this.customer.close();
       }
     });
   }
@@ -1009,7 +1014,7 @@ export class BaseDateComponent implements OnInit {
           timer: 3000,
           type: "success",
         });
-        this.customer = false;
+        this.customer.close();
       }
     });
   }
@@ -1026,7 +1031,7 @@ export class BaseDateComponent implements OnInit {
           timer: 3000,
           type: "success",
         });
-        this.customer = false;
+        this.customer.close();
       }
     });
   }
@@ -1041,7 +1046,7 @@ export class BaseDateComponent implements OnInit {
           timer: 3000,
           type: "success",
         });
-        this.customer = false;
+        this.customer.close();
       }
     });
   }
@@ -1058,7 +1063,7 @@ export class BaseDateComponent implements OnInit {
             timer: 3000,
             type: "success",
           });
-          this.customer = false;
+          this.customer.close();
         }
       });
   }
@@ -1091,7 +1096,7 @@ export class BaseDateComponent implements OnInit {
       this.selectedTherapies = Number(event.therapies);
     }
     this.operationMode = "edit";
-    this.complaint = true;
+    this.complaint.open();
   }
 
   closeUploadModal() {
@@ -1202,7 +1207,7 @@ export class BaseDateComponent implements OnInit {
   }
 
   editDocuments(item) {
-    this.document_edit = true;
+    this.document_edit.open();
     this.documentItem = item;
     if (
       this.documentItem.date !== null &&
@@ -1215,7 +1220,7 @@ export class BaseDateComponent implements OnInit {
   updateDocument() {
     this.service.updateDocument(this.documentItem).subscribe((data) => {
       if (data) {
-        this.document_edit = false;
+        this.document_edit.close();
         this.toastr.success("Successfull!", "Document update successfuly!", {
           timeOut: 7000,
           positionClass: "toast-bottom-right",
@@ -1229,7 +1234,12 @@ export class BaseDateComponent implements OnInit {
     });
   }
 
-  public sortChange(sort: SortDescriptor[], stateType, viewData, allData): void {
+  public sortChange(
+    sort: SortDescriptor[],
+    stateType,
+    viewData,
+    allData
+  ): void {
     this[stateType].sort = sort;
     this[viewData] = process(this[allData], this[stateType]);
   }

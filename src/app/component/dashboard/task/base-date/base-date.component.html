@@ -17,14 +17,14 @@
     <button
       kendoButton
       [icon]="'edit'"
-      (click)="customer = !customer"
+      (click)="customer.open()"
       [primary]="true"
-      style="background: #6673fc !important; margin-left: 12px"
+      style="background: #091467 !important; margin-left: 12px"
     >
       {{ language.edit }}
     </button>
     <div class="dropdown-grid">
-      <button class="btn-grid" style="border-left: 1px solid #0d8bf2">
+      <button class="btn-grid" style="border-left: 1px solid #2a3582">
         <i class="fa fa-caret-down"></i>
       </button>
       <div class="dropdown-content-grid">
@@ -34,7 +34,7 @@
         <a (click)="printCustomer()"
           ><span class="k-icon k-i-print"></span> {{ language.print }}</a
         >
-        <a (click)="settingsWindow = true"
+        <a (click)="settingsWindow.open()"
           ><span class="k-icon k-i-cog"></span> {{ language.settings }}</a
         >
       </div>
@@ -1459,7 +1459,7 @@
                               <div class="dropdown-grid document-options">
                                 <button
                                   class="btn-grid"
-                                  style="border-left: 1px solid #0d8bf2"
+                                  style="border-left: 1px solid #2a3582"
                                 >
                                   <i class="fa fa-ellipsis-v"></i>
                                 </button>
@@ -1752,14 +1752,11 @@
       </modal-footer>
     </modal>
 
-    <kendo-window
-      [title]="getTranslate(operationMode)"
-      *ngIf="complaint"
-      [minWidth]="400"
-      [width]="550"
-      [minHeight]="300"
-      (close)="complaint = false"
-    >
+    <modal #complaint modalClass="modal-lg">
+      <modal-header>
+        <h4>{{getTranslate(operationMode)}}</h4>
+      </modal-header>
+      <modal-content>
       <form
         name="loginForm"
         class="loginForm"
@@ -1855,16 +1852,15 @@
           </button>
         </div>
       </form>
-    </kendo-window>
+    </modal-content>
+    <modal-footer class="modal-footer-none"> </modal-footer>
+    </modal>
 
-    <kendo-window
-      [title]="getTranslate(operationMode + 'Therapy')"
-      *ngIf="therapy"
-      [minWidth]="400"
-      [width]="550"
-      [minHeight]="500"
-      (close)="therapy = false"
-    >
+    <modal #therapy modalClass="modal-lg">
+      <modal-header>
+        <h4>{{getTranslate(operationMode + 'Therapy')}}</h4>
+      </modal-header>
+      <modal-content>
       <div *ngIf="loadingTherapy" style="height: 90vh">
         <div class="spinner loading"></div>
       </div>
@@ -2004,16 +2000,15 @@
           </button>
         </div>
       </form>
-    </kendo-window>
+    </modal-content>
+    <modal-footer class="modal-footer-none"> </modal-footer>
+    </modal>
 
-    <kendo-window
-      [title]="getTranslate(currentTab)"
-      *ngIf="customer"
-      [minWidth]="700"
-      [width]="850"
-      [height]="670"
-      (close)="customer = false"
-    >
+    <modal #customer modalClass="modal-lg">
+      <modal-header>
+        <h4>{{getTranslate(currentTab)}}</h4>
+      </modal-header>
+      <modal-content>
       <div class="tabs widget">
         <ul class="nav nav-tabs widget">
           <li [ngClass]="currentTab === 'profile' ? 'active' : ''">
@@ -2726,17 +2721,16 @@
           </div>
         </div>
       </div>
-    </kendo-window>
+    </modal-content>
+    <modal-footer class="modal-footer-none"> </modal-footer>
+    </modal>
 
-    <kendo-window
-      [title]="getTranslate(operationMode)"
-      *ngIf="document_edit"
-      [minWidth]="400"
-      [width]="550"
-      [minHeight]="300"
-      (close)="document_edit = false"
-    >
-      <form
+    <modal #document_edit modalClass="modal-lg">
+      <modal-header>
+        <h4>{{getTranslate(operationMode)}}</h4>
+      </modal-header>
+      <modal-content>
+      <form *ngIf="documentItem"
         name="loginForm"
         class="loginForm"
         (ngSubmit)="updateDocument()"
@@ -2787,20 +2781,19 @@
           </button>
         </div>
       </form>
-    </kendo-window>
+    </modal-content>
+    <modal-footer class="modal-footer-none"> </modal-footer>
+    </modal>
 
-    <kendo-window
-      [title]="language.settings"
-      *ngIf="settingsWindow"
-      [minWidth]="400"
-      [width]="550"
-      [minHeight]="300"
-      (close)="settingsWindow = false"
-    >
+    <modal #settingsWindow modalClass="modal-lg">
+      <modal-header>
+        <h4>{{language.settings}}</h4>
+      </modal-header>
+      <modal-content>
       <form
         name="loginForm"
         class="loginForm"
-        (ngSubmit)="updateCustomer(customer); settingsWindow = false"
+        (ngSubmit)="updateCustomer(customer); settingsWindow.open()"
         #documentEditForm="ngForm"
       >
         <div class="col-md-12 col-xs-12">
@@ -2850,6 +2843,8 @@
           </button>
         </div>
       </form>
-    </kendo-window>
+    </modal-content>
+    <modal-footer class="modal-footer-none"> </modal-footer>
+    </modal>
   </div>
 </div>

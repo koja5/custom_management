@@ -18,7 +18,7 @@ import { UserType } from "src/app/component/enum/user-type";
   styleUrls: ["./user-details.component.scss"],
 })
 export class UserDetailsComponent implements OnInit {
-  public user = false;
+  @ViewChild('user') user: Modal;
   public id: string;
   public data: any;
   public imagePath: any;
@@ -212,7 +212,7 @@ export class UserDetailsComponent implements OnInit {
           timer: 3000,
           type: "success",
         });
-        this.user = false;
+        this.user.close();
         const configFieldCopy = JSON.parse(JSON.stringify(this.configField));
         this.configField = null;
         setTimeout(() => {
@@ -295,7 +295,7 @@ export class UserDetailsComponent implements OnInit {
           timer: 3000,
           type: "success",
         });
-        this.user = false;
+        this.user.close();
         this.noSetWorkTime = false;
       }
     });
@@ -383,7 +383,7 @@ export class UserDetailsComponent implements OnInit {
 
   editOptions() {
     this.workTimeData();
-    this.user = true;
+    this.user.open();
     this.changeTheme(this.theme);
   }
 
@@ -465,7 +465,7 @@ export class UserDetailsComponent implements OnInit {
           timer: 3000,
           type: "success",
         });
-        this.user = false;
+        this.user.close();
       }
     });
   }

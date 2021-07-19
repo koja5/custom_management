@@ -34,7 +34,8 @@ const newLocal = "data";
 })
 export class CustomersComponent implements OnInit {
   @ViewChild(DataBindingDirective) dataBinding: DataBindingDirective;
-  public customer = false;
+  @ViewChild('customer') customer: Modal;
+  @ViewChild('patientFormRegistrationDialog') patientFormRegistrationDialog: Modal;
   public data = new CustomerModel();
   public unamePattern = "^[a-z0-9_-]{8,15}$";
   public emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$";
@@ -72,7 +73,6 @@ export class CustomersComponent implements OnInit {
     pageSizes: true,
     previousNext: true,
   };
-  public patientFormRegistrationDialog = false;
   public patientMail: string;
 
   constructor(
@@ -142,7 +142,7 @@ export class CustomersComponent implements OnInit {
     });
     this.initializeParams();
     this.changeTheme(this.theme);
-    this.customer = true;
+    this.customer.open();
   }
 
   initializeParams() {
@@ -179,7 +179,7 @@ export class CustomersComponent implements OnInit {
         };*/
         this.getCustomers();
         this.currentLoadData.push(this.data);
-        this.customer = false;
+        this.customer.close();
         // form.reset();
         Swal.fire({
           title: "Successfull!",
@@ -342,7 +342,7 @@ export class CustomersComponent implements OnInit {
   }
 
   closeCustomer() {
-    this.customer = false;
+    this.customer.close();
   }
 
   changeTheme(theme: string) {
@@ -497,13 +497,17 @@ export class CustomersComponent implements OnInit {
     this.helpService.successToastr(this.language.successCopiedFormLink, "");
   }
 
+  openPatientFormRegistrationDialog() {
+    this.patientFormRegistrationDialog.open();
+  }
+
   sendPatientFormLinkToMail() {
     const data = {
       email: this.patientMail,
       link: this.helpService.getLinkForPatientFormRegistration(),
       language: this.packLanguage.getLanguageForPatientRegistrationForm()
     };
-    this.patientFormRegistrationDialog = false;
+    this.patientFormRegistrationDialog.close();
     this.mailService.sendPatientFormRegistration(data).subscribe((data) => {
       console.log(data);
       if(data) {

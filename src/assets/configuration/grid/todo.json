@@ -28,7 +28,7 @@
   },
   "grouping": {
     "enable": true,
-    "group": [{ "field": "processConfigurationName" }]
+    "group": []
   },
   "filtering": {
     "enable": false
@@ -48,6 +48,30 @@
     "allowDeleting": true,
     "showDeleteConfirmDialog": true,
     "mode": "Dialog"
+  },
+  "editSettingsRequest": {
+    "add": {
+      "type": "POST",
+      "api": "/api/createToDo",
+      "parameters": [],
+      "fields": "",
+      "root": ""
+    },
+    "edit": {
+      "type": "POST",
+      "api": "/api/updateToDo",
+      "parameters": [],
+      "fields": "",
+      "root": ""
+    },
+    "delete": {
+      "type": "POST",
+      "api": "/api/deleteTodo",
+      "parameters": [],
+      "fields": "",
+      "root": ""
+    }
+
   },
   "columns": [
     {
