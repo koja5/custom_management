@@ -163,4 +163,28 @@ export class HelpService {
       positionClass: "toast-bottom-right",
     });
   }
+
+  getFullHostName() {
+    return (
+      window.location.protocol +
+      "://" +
+      window.location.hostname.replace("www.", "") + ":" + window.location.port
+    );
+  }
+
+  setSessionStorage(key, value) {
+    sessionStorage.setItem(key, value);
+  }
+
+  getSessionStorage(key) {
+    return sessionStorage.getItem(key);
+  }
+
+  setLocationStorage(key, value) {
+    localStorage.setItem(key, value);
+  }
+
+  getLocalStorage(key) {
+    return localStorage.getItem(key);
+  }
 }

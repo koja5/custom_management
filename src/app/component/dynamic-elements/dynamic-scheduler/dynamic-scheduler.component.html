@@ -117,7 +117,7 @@
                 text="New Recurring Event"
               ></e-item>
               <e-item type="Separator"></e-item> -->
-                <e-item tooltipText="Filter Event Toolbar">
+                <e-item tooltipText="Filter Event Toolbar" *ngIf="filterToolbarInd">
                   <ng-template #template>
                     <div
                       class="toolbarElement"
@@ -201,7 +201,7 @@
                   </ng-template>
                 </e-item>
                 <e-item type="Separator"></e-item>
-                <e-item tooltipText="Refresh Event Toolbar">
+                <e-item tooltipText="{{ language.settingsToolbar }}">
                   <ng-template #template>
                     <div
                       class="toolbarElement"
@@ -216,6 +216,25 @@
                       </div>
                       <div class="text-child" style="font-size: 14px">
                         {{ language.settingsToolbar }}
+                      </div>
+                    </div>
+                  </ng-template>
+                </e-item>
+                <e-item tooltipText="{{language.copyLinkToTheOnlineClinicReservation}}">
+                  <ng-template #template>
+                    <div
+                      class="toolbarElement"
+                      (click)="copyLinkToTheClinic()"
+                    >
+                      <div class="icon-child">
+                        <div>
+                          <span
+                            class="fa fa-link"
+                          ></span>
+                        </div>
+                      </div>
+                      <div class="text-child" style="font-size: 14px">
+                        {{language.copyLinkToTheOnlineClinicReservation}}
                       </div>
                     </div>
                   </ng-template>

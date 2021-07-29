@@ -102,6 +102,7 @@ import {
   ComboBoxModule,
 } from "@progress/kendo-angular-dropdowns";
 import { TypeOfEventAction } from "../../enum/typeOfEventAction";
+import { ActivatedRoute } from "@angular/router";
 declare var moment: any;
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
@@ -1556,6 +1557,7 @@ export class DynamicSchedulerComponent implements OnInit {
   public currentEventAction: any;
   public expandAddional = false;
   public expandAdditionalIcon = "k-icon k-i-arrow-60-right";
+  public filterToolbarInd = true;
 
   constructor(
     public service: TaskService,
@@ -1571,7 +1573,8 @@ export class DynamicSchedulerComponent implements OnInit {
     private helpService: HelpService,
     private storageService: StorageService,
     private packLanguage: PackLanguageService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private activatedRouter: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -1583,6 +1586,19 @@ export class DynamicSchedulerComponent implements OnInit {
   @HostListener("window:resize", ["$event"])
   onResize(event) {
     this.height = this.dynamicService.getSchedulerHeight() + "px";
+  }
+
+  checkPreselectedStore() {
+    if (this.activatedRouter.snapshot.params.storeId) {
+      this.setSelectedStoreFromUrl();
+      this.filterToolbarInd = false;
+      return true;
+    }
+    return false;
+  }
+
+  setSelectedStoreFromUrl() {
+    this.selectedStoreId = Number(this.activatedRouter.snapshot.params.storeId);
   }
 
   initializationConfig() {
@@ -1640,8 +1656,12 @@ export class DynamicSchedulerComponent implements OnInit {
 
     this.initializeEventCategory();
 
-    if (this.type === 3) {
-      this.selectedStoreId = Number(localStorage.getItem("storeId-" + this.id));
+    if (!this.checkPreselectedStore()) {
+      if (this.type === 3) {
+        this.selectedStoreId = Number(
+          localStorage.getItem("storeId-" + this.id)
+        );
+      }
     }
 
     this.initializeStore();
@@ -1715,8 +1735,13 @@ export class DynamicSchedulerComponent implements OnInit {
     }
     if (notAllowedOnlinePreselected) {
       if (this.store.length) {
-        this.selectedStoreId = this.store[0].id;
-        this.storageService.setSelectedStore(this.id, this.selected.toString());
+        if (this.activatedRouter.snapshot.params.storeId === undefined) {
+          this.selectedStoreId = this.store[0].id;
+          this.storageService.setSelectedStore(
+            this.id,
+            this.selected.toString()
+          );
+        }
         this.getUserInCompany(this.selectedStoreId);
       } else {
         this.selectedStoreId = null;
@@ -1942,9 +1967,7 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   initializeTasks() {
-    if (this.type === 3) {
-      this.selectedStoreId = Number(localStorage.getItem("storeId-" + this.id));
-    }
+    this.selectedStoreId = Number(localStorage.getItem("storeId-" + this.id));
     if (this.helpService.getType() === this.userType.patient) {
       this.storeService.getStoreAllowedOnline(
         this.helpService.getSuperadmin(),
@@ -1983,10 +2006,16 @@ export class DynamicSchedulerComponent implements OnInit {
       this.type !== 3
     ) {
       this.calendars = [];
-      this.selectedStoreId = this.storageService.getSelectedStore(this.id);
-      this.value = JSON.parse(
-        localStorage.getItem("usersFor-" + this.selectedStoreId + "-" + this.id)
-      );
+      if (!this.checkPreselectedStore()) {
+        this.selectedStoreId = this.storageService.getSelectedStore(this.id);
+      }
+      if (this.activatedRouter.snapshot.params.storeId === undefined) {
+        this.value = JSON.parse(
+          localStorage.getItem(
+            "usersFor-" + this.selectedStoreId + "-" + this.id
+          )
+        );
+      }
       // this.selectedStore(this.selectedStoreId);
       if (this.value !== null) {
         this.getTaskForSelectedUsers(this.value);
@@ -2003,9 +2032,11 @@ export class DynamicSchedulerComponent implements OnInit {
       this.type !== 3
     ) {
       this.calendars = [];
-      this.selectedStoreId = Number(
-        this.storageService.getSelectedStore(this.id)
-      );
+      if (!this.checkPreselectedStore()) {
+        this.selectedStoreId = Number(
+          this.storageService.getSelectedStore(this.id)
+        );
+      }
       this.selectedStore(this.selectedStoreId);
     } else if (localStorage.getItem("type") === "3") {
       this.service
@@ -2238,11 +2269,11 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   baseDataForUser() {
-    this.customerUserModal2 .open();
+    this.customerUserModal2.open();
   }
 
   closebaseDataForUser() {
-    this.customerUserModal2 .close();
+    this.customerUserModal2.close();
   }
 
   public handleValue(selected) {
@@ -2371,9 +2402,13 @@ export class DynamicSchedulerComponent implements OnInit {
       ).length !== 0 &&
       event !== undefined
     ) {
-      this.value = JSON.parse(
-        localStorage.getItem("usersFor-" + this.selectedStoreId + "-" + this.id)
-      );
+      if (this.activatedRouter.snapshot.params.storeId === undefined) {
+        this.value = JSON.parse(
+          localStorage.getItem(
+            "usersFor-" + this.selectedStoreId + "-" + this.id
+          )
+        );
+      }
       this.sharedCalendarResources = this.value;
       this.getTaskForSelectedUsers(this.value);
       this.getUserInCompany(event);
@@ -2506,10 +2541,20 @@ export class DynamicSchedulerComponent implements OnInit {
     if (this.type === this.userType.patient) {
       this.service.getUsersAllowedOnlineInCompany(storeId, (val) => {
         this.usersInCompany = val;
+        if (this.activatedRouter.snapshot.params.storeId) {
+          this.value = val;
+          this.sharedCalendarResources = this.value;
+          this.getTaskForSelectedUsers(this.value);
+        }
       });
     } else {
       this.service.getUsersInCompany(storeId, (val) => {
         this.usersInCompany = val;
+        if (this.activatedRouter.snapshot.params.storeId) {
+          this.value = val;
+          this.sharedCalendarResources = this.value;
+          this.getTaskForSelectedUsers(this.value);
+        }
       });
     }
   }
@@ -2882,9 +2927,7 @@ export class DynamicSchedulerComponent implements OnInit {
             this.isConfirm = data[0].isConfirm;
             this.reminderViaEmail = data[0].reminderViaEmail;
             this.reminderViaSMS = data[0].reminderViaSMS;
-            this.dataForReminder = this.packDataForSendReminder(
-              data[0].email
-            );
+            this.dataForReminder = this.packDataForSendReminder(data[0].email);
             this.baseDataIndicator = true;
             this.userWidth = "65%";
           });
@@ -3428,5 +3471,17 @@ export class DynamicSchedulerComponent implements OnInit {
   closeCustomerModal() {
     this.customerModal.close();
     this.reloadNewCustomer();
+  }
+
+  copyLinkToTheClinic() {
+    this.helpService.copyToClipboard(
+      this.helpService.getFullHostName() +
+        "/dashboard/home/task/" +
+        this.selectedStoreId
+    );
+    this.helpService.successToastr(
+      this.language.successCopiedLinkForClinicReservation,
+      ""
+    );
   }
 }

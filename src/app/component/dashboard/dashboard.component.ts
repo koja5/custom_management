@@ -64,6 +64,7 @@ export class DashboardComponent implements OnInit {
     this.selectedNode =
       this.activatedRouter.snapshot["_routerState"].url.split("/")[2];
     this.initializeCollapse();
+    this.checkDefaultLink();
 
     this.selectedNodeModel[this.selectedNode] = "active";
 
@@ -138,6 +139,12 @@ export class DashboardComponent implements OnInit {
       this.sidebar = localStorage.getItem("sidebar");
     }
     this.checkPermissionForPatientMenu();
+  }
+
+  checkDefaultLink() {
+    if(this.helpService.getSessionStorage('defaultLink')) {
+      this.router.navigate([this.helpService.getSessionStorage('defaultLink')]);
+    }
   }
 
   @HostListener("window:resize", ["$event"])

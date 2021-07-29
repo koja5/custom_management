@@ -55,12 +55,12 @@ export class DynamicSendEmailComponent implements OnInit {
         if (data) {
           this.helpService.successToastr(
             "",
-            this.language.successSendSMSMessageText
+            this.language.successSendEmailMessageText
           );
         } else {
           this.helpService.errorToastr(
             "",
-            this.language.errorSendSMSMessageText
+            this.language.errorSendEmailMessageText
           );
         }
       });

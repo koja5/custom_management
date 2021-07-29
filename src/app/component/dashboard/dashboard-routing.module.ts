@@ -45,6 +45,7 @@ const routes: Routes = [
       { path: "", redirectTo: "task", pathMatch: "full" },
       /*{ path: "calendar", component: TaskComponent },*/
       { path: "task", component: DynamicSchedulerComponent },
+      { path: "task/:storeId", component: DynamicSchedulerComponent },
       { path: "users", component: UsersComponent },
       {
         path: "user-details/:id",
