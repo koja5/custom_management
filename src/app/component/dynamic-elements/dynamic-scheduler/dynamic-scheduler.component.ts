@@ -1558,6 +1558,7 @@ export class DynamicSchedulerComponent implements OnInit {
   public expandAddional = false;
   public expandAdditionalIcon = "k-icon k-i-arrow-60-right";
   public filterToolbarInd = true;
+  public calendarRights = true;
 
   constructor(
     public service: TaskService,
@@ -1741,10 +1742,14 @@ export class DynamicSchedulerComponent implements OnInit {
             this.id,
             this.selected.toString()
           );
+          this.getUserInCompany(this.selectedStoreId);
+        } else {
+          this.selectedStoreId = null;
+          this.value = null;
         }
-        this.getUserInCompany(this.selectedStoreId);
       } else {
         this.selectedStoreId = null;
+        this.value = null;
       }
     }
   }
@@ -1759,8 +1764,8 @@ export class DynamicSchedulerComponent implements OnInit {
         this.selectedStoreId
       );
 
-      this.startWork = informationAboutStore.start_work;
-      this.endWork = informationAboutStore.end_work;
+      this.startWork = informationAboutStore ? informationAboutStore.start_work : null;
+      this.endWork = informationAboutStore ? informationAboutStore.end_work : null;
       this.timeDuration = informationAboutStore.time_duration;
       if (
         Number(this.timeDuration) > Number(informationAboutStore.time_therapy)
@@ -2017,12 +2022,12 @@ export class DynamicSchedulerComponent implements OnInit {
         );
       }
       // this.selectedStore(this.selectedStoreId);
-      if (this.value !== null) {
+      if (this.value && this.value.length !== 0) {
         this.getTaskForSelectedUsers(this.value);
         this.sharedCalendarResources = this.value;
       } else {
         this.packEventsForShow([]);
-        this.value = [];
+        this.value = null;
         this.sharedCalendarResources = [];
         this.loading = false;
       }
@@ -2385,7 +2390,7 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   selectedStore(event) {
-    this.value = [];
+    this.value = null;
     // localStorage.removeItem('selectedUser');
     this.loading = true;
     this.calendars = [];
@@ -2414,7 +2419,7 @@ export class DynamicSchedulerComponent implements OnInit {
       this.getUserInCompany(event);
       this.storageService.setSelectedStore(this.id, event);
     } else {
-      this.value = [];
+      this.value = null;
       if (event !== undefined) {
         this.service
           .getTasksForStore(event, this.id, this.type)
@@ -2544,7 +2549,7 @@ export class DynamicSchedulerComponent implements OnInit {
         if (this.activatedRouter.snapshot.params.storeId) {
           this.value = val;
           this.sharedCalendarResources = this.value;
-          this.getTaskForSelectedUsers(this.value);
+          this.handleValue(val);
         }
       });
     } else {
@@ -2553,7 +2558,7 @@ export class DynamicSchedulerComponent implements OnInit {
         if (this.activatedRouter.snapshot.params.storeId) {
           this.value = val;
           this.sharedCalendarResources = this.value;
-          this.getTaskForSelectedUsers(this.value);
+          this.handleValue(val);
         }
       });
     }
@@ -2638,6 +2643,8 @@ export class DynamicSchedulerComponent implements OnInit {
     if (date.elementType === "workCells") {
       if (
         date.groupIndex !== undefined &&
+        this.calendars &&
+        this.calendars.length > 0 &&
         this.calendars[0].workTime[date.groupIndex]
       ) {
         const groupIndex = date.groupIndex;
@@ -2886,7 +2893,7 @@ export class DynamicSchedulerComponent implements OnInit {
 
   resetCalendarData() {
     this.eventSettings.dataSource = [];
-    this.value = [];
+    this.value = null;
     this.allEvents = [];
     this.sharedCalendarResources = null;
   }

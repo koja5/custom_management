@@ -1,4 +1,8 @@
-<div class="control-section">
+<div *ngIf="!calendarRights">
+
+</div>
+
+<div *ngIf="calendarRights" class="control-section">
   <div class="content-wrapper">
     <div class="schedule-overview">
       <div class="overview-header">
@@ -383,7 +387,7 @@
                 height="100%"
                 [(currentView)]="currentView"
                 [dateFormat]="dateFormatScheduler"
-                [group]="value.length ? group : []"
+                [group]="value ? group : []"
                 [showWeekNumber]="true"
                 [eventSettings]="eventSettings"
                 [allowKeyboardInteraction]="type === userType.patient ? false : true"
@@ -567,7 +571,7 @@
                   <e-view option="TimelineMonth"></e-view>
                   <e-view option="TimelineYear"></e-view>
                 </e-views>
-                <e-resources *ngIf="value.length">
+                <e-resources *ngIf="value">
                   <e-resource
                     *ngIf="sharedCalendarResources"
                     field="creator_id"
@@ -926,7 +930,7 @@
                         </kendo-combobox>
                       </kendo-textbox-container>
                     </div>
-                    <div class="k-form-field k-datetime-picker-wrapper">
+                    <div *ngIf="eventTime" class="k-form-field k-datetime-picker-wrapper">
                       <div class="col-sm-8">
                         <kendo-textbox-container
                           floatingLabel="{{ language.start }}"
@@ -952,7 +956,7 @@
                         </kendo-textbox-container>
                       </div>
                     </div>
-                    <div class="k-form-field k-datetime-picker-wrapper">
+                    <div *ngIf="eventTime" class="k-form-field k-datetime-picker-wrapper">
                       <div class="col-sm-8">
                         <kendo-textbox-container
                           floatingLabel="{{ language.end }}"
@@ -1507,7 +1511,7 @@
     </modal-header>
     <modal-content>
 
-    <app-base-date [data]="customerUser" *ngIf="customerUser !== undefined">
+    <app-base-date *ngIf="customerUser" [data]="customerUser">
     </app-base-date>
   </modal-content>
   <modal-footer class="modal-footer-none"> </modal-footer>

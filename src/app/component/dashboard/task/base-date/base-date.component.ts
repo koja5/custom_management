@@ -197,8 +197,10 @@ export class BaseDateComponent implements OnInit {
   }
 
   convertStringToDate() {
-    if (this.data.birthday !== undefined && this.data.birthday !== "") {
+    if (this.data.birthday) {
       this.data.birthday = new Date(this.data.birthday);
+    } else {
+      this.data.birthday = new Date();
     }
   }
 

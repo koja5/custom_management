@@ -84,10 +84,10 @@
               </li>
               <li class="list-group-item">
                 <b>{{ language["birthday"] }}</b>
-                <span class="pull-right a-color" *ngIf="!data.email">{{
+                <span class="pull-right a-color" *ngIf="!data.birthday">{{
                   language["noInformation"]
                 }}</span>
-                <span class="pull-right a-color" *ngIf="data.email">{{
+                <span class="pull-right a-color" *ngIf="data.birthday">{{
                   data.birthday | date: "MM/dd/yyyy"
                 }}</span>
               </li>
@@ -2185,7 +2185,7 @@
                           {{ language.male }}</label
                         >
                       </div>
-                      <div class="birthday-container">
+                      <div *ngIf="data.birthday" class="birthday-container">
                         <kendo-textbox-container
                           floatingLabel="{{ language.birthday }}"
                         >
