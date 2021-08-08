@@ -180,7 +180,7 @@ export class HelpService {
     return sessionStorage.getItem(key);
   }
 
-  setLocationStorage(key, value) {
+  setLocalStorage(key, value) {
     localStorage.setItem(key, value);
   }
 

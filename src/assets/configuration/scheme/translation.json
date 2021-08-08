@@ -386,6 +386,7 @@
       "settingsAccountNavigation": { "type": "string" },
       "settingsAccount": { "type": "string" },
       "settingsChangePassword": { "type": "string" },
+      "settingsChangeLanguage": { "type": "string" },
       "settingsPermissionNavigation": { "type": "string" },
       "perimissionForPatientNavigationMenu": { "type": "string" },
       "accountBasicInformationTitle": { "type": "string" },
@@ -482,7 +483,20 @@
       "sendReminderViaSMS": { "type": "string" },
       "changeReminderSettingsButton": { "type": "string" },
       "successChangeReminderSettingsText": { "type": "string" },
-      "errorChangeReminderSettingsText": { "type": "string" }
+      "errorChangeReminderSettingsText": { "type": "string" },
+      "saveLanguage": { "type": "string" },
+      "labelTitle": { "type": "string" },
+      "successChangeLanguageText": { "type": "string" },
+      "errorChangeLanguageText": { "type": "string" },
+      "languages": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "text": { "type": "string" }
+          }
+        }
+      }
     }
   },
   "layout": [
@@ -863,7 +877,7 @@
           "items": [
             { "key": "copyLinkToTheOnlineClinicReservation" },
             { "key": "successCopiedLinkForClinicReservation" },
-            {  }
+            {}
           ]
         }
       ]
@@ -2169,7 +2183,7 @@
           "flex-direction": "row",
           "items": [
             { "key": "perimissionForPatientNavigationMenu" },
-            {},
+            { "key": "settingsChangeLanguage" },
             {},
             {}
           ]
@@ -2282,6 +2296,49 @@
           "items": [
             { "key": "changePasswordErrorNotEqualTitle" },
             { "key": "changePasswordErrorNotEqualText" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Settings - Change language",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "saveLanguage" },
+            { "key": "labelTitle" },
+            { "key": "successChangeLanguageText" },
+            { "key": "errorChangeLanguageText" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "languages",
+              "type": "array",
+              "items": [
+                {
+                  "type": "div",
+                  "displayFlex": true,
+                  "flex-direction": "row",
+                  "items": [
+                    {
+                      "key": "languages[].text",
+                      "flex": "1 1 50px"
+                    }
+                  ]
+                }
+              ]
+            }
           ]
         }
       ]

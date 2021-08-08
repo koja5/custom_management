@@ -6,14 +6,18 @@ import { DymanicElementsModule } from '../../dynamic-elements/dymanic-elements.m
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { PermissionPatientMenuComponent } from './permission-patient-menu/permission-patient-menu.component';
 import { RemindersComponent } from './reminders/reminders.component';
+import { LanguageComponent } from './language/language.component';
+import { SettingsComponent } from './settings.component';
+import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
+import { MessageService } from 'src/app/service/message.service';
 
 @NgModule({
   imports: [
     CommonModule,
     SettingsRoutingModule,
-    DymanicElementsModule
+    DymanicElementsModule,
+    DropDownListModule
   ],
-  declarations: [AccountComponent, ChangePasswordComponent, PermissionPatientMenuComponent, RemindersComponent],
-  exports: [ AccountComponent, ChangePasswordComponent ]
+  declarations: [SettingsComponent, AccountComponent, ChangePasswordComponent, PermissionPatientMenuComponent, RemindersComponent, LanguageComponent]
 })
 export class SettingsModule { }

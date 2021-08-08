@@ -5010,12 +5010,12 @@ router.post("/sendSMS", function (req, res) {
   } else if (req.body.mobile) {
     phoneNumber = req.body.mobile;
   }
-  request(link + "/getAvailableAreaCode", function (error, response, codes) {
+  request(link + "getAvailableAreaCode", function (error, response, codes) {
     var phoneNumber = null;
-    if (to.telephone) {
-      phoneNumber = to.telephone;
-    } else if (to.mobile) {
-      phoneNumber = to.mobile;
+    if (req.body.telephone) {
+      phoneNumber = req.body.telephone;
+    } else if (req.body.mobile) {
+      phoneNumber = req.body.mobile;
     }
     if (checkAvailableCode(phoneNumber, JSON.parse(codes))) {
       request(
@@ -5075,7 +5075,7 @@ router.post("/sendSMS", function (req, res) {
             if (err) return logger.log("error", err);
             logger.log(
               "info",
-              "Sent AUTOMATE REMINDER to NUMBER: " + phoneNumber
+              "Sent CUSTOM REMINDER to NUMBER: " + phoneNumber
             );
             ftpUploadSMS(fileName, phoneNumber + ".txt");
             res.send(true);

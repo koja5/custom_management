@@ -44,6 +44,12 @@
                 <span>{{ language?.settingsChangePassword }}</span></a
               >
             </li>
+            <li>
+              <a routerLink="/dashboard/home/settings/change-language"
+                ><i class="fa fa-globe"></i>
+                <span>{{ language?.settingsChangeLanguage }}</span></a
+              >
+            </li>
             <li *ngIf="type === userType.owner" class="menu-title">
               {{ language?.settingsPermissionNavigation }}
             </li>

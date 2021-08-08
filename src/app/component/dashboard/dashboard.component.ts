@@ -68,58 +68,57 @@ export class DashboardComponent implements OnInit {
 
     this.selectedNodeModel[this.selectedNode] = "active";
 
-    if (localStorage.getItem("theme") !== null) {
-      this.theme = localStorage.getItem("theme");
+    if (this.helpService.getLocalStorage("theme") !== null) {
+      this.theme = this.helpService.getLocalStorage("theme");
     } else {
       this.theme = "Theme2";
       this.insertThemeForUser(this.theme);
-      localStorage.setItem("theme", this.theme);
+      this.helpService.setLocalStorage("theme", this.theme);
     }
-    this.type = Number(localStorage.getItem("type"));
+    this.type = Number(this.helpService.getLocalStorage("type"));
 
-    if (localStorage.getItem("allThemes") !== undefined) {
+    if (this.helpService.getLocalStorage("allThemes") !== undefined) {
       this.service.getThemeConfig().subscribe((data) => {
         console.log(data);
         this.allThemes = data;
-        localStorage.setItem("allThemes", JSON.stringify(this.allThemes));
+        this.helpService.setLocalStorage("allThemes", JSON.stringify(this.allThemes));
       });
     } else {
-      this.allThemes = localStorage.getItem("allThemes");
+      this.allThemes = this.helpService.getLocalStorage("allThemes");
     }
 
-    if (localStorage.getItem("allLanguage") === null) {
+    if (this.helpService.getLocalStorage("allLanguage") === null) {
       this.service.getLanguageConfig().subscribe((data) => {
         this.allLanguage = data;
-        localStorage.setItem("allLanguage", JSON.stringify(this.allLanguage));
+        this.helpService.setLocalStorage("allLanguage", JSON.stringify(this.allLanguage));
       });
     } else {
-      this.allLanguage = JSON.parse(localStorage.getItem("allLanguage"));
+      this.allLanguage = JSON.parse(this.helpService.getLocalStorage("allLanguage"));
     }
 
     // defined default language
-    setTimeout(() => {
-      if (localStorage.getItem("defaultLanguage") !== null) {
-        console.log("usao sam ovde!");
-        this.languageName = localStorage.getItem("defaultLanguage");
-      } else {
-        console.log(this.allLanguage);
-        for (let i = 0; i < this.allLanguage.length; i++) {
-          if (this.allLanguage[i].default) {
-            this.languageName = this.allLanguage[i].name;
-            localStorage.setItem("defaultLanguage", this.languageName);
-            console.log(this.languageName);
-          }
-        }
-      }
-    }, 500);
+    // setTimeout(() => {
+    //   if (this.helpService.getLocalStorage("defaultLanguage") !== null) {
+    //     this.languageName = this.helpService.getLocalStorage("defaultLanguage");
+    //   } else {
+    //     console.log(this.allLanguage);
+    //     for (let i = 0; i < this.allLanguage.length; i++) {
+    //       if (this.allLanguage[i].default) {
+    //         this.languageName = this.allLanguage[i].name;
+    //         this.helpService.setLocalStorage("defaultLanguage", this.languageName);
+    //         console.log(this.languageName);
+    //       }
+    //     }
+    //   }
+    // }, 500);
 
-    if (localStorage.getItem("language") !== null) {
-      this.language = JSON.parse(localStorage.getItem("language"));
+    if (this.helpService.getLocalStorage("language") !== null) {
+      this.language = JSON.parse(this.helpService.getLocalStorage("language"));
     } else {
       /*this.service.getTranslation("english").subscribe(data => {
         console.log(data);
         this.language = data;
-        localStorage.setItem("language", JSON.stringify(this.language));
+        this.helpService.setLocalStorage("language", JSON.stringify(this.language));
       });*/
     }
 
@@ -129,16 +128,20 @@ export class DashboardComponent implements OnInit {
       this.getMe();
     });
 
-    /*this.mongo.getConfigurationForUser(localStorage.getItem('idUser')).subscribe(
+    /*this.mongo.getConfigurationForUser(this.helpService.getLocalStorage('idUser')).subscribe(
       data => {
         console.log(data);
       }
     );*/
 
-    if (localStorage.getItem("sidebar")) {
-      this.sidebar = localStorage.getItem("sidebar");
+    if (this.helpService.getLocalStorage("sidebar")) {
+      this.sidebar = this.helpService.getLocalStorage("sidebar");
     }
     this.checkPermissionForPatientMenu();
+
+    this.message.getNewLanguage().subscribe((mess) => {
+      this.language = JSON.parse(this.helpService.getLocalStorage('language'));
+    });
   }
 
   checkDefaultLink() {
@@ -227,7 +230,7 @@ export class DashboardComponent implements OnInit {
       this.sidebar = "";
     }
 
-    localStorage.setItem("sidebar", this.sidebar);
+    this.helpService.setLocalStorage("sidebar", this.sidebar);
   }
 
   hideShowSidebarMobile() {
@@ -270,7 +273,7 @@ export class DashboardComponent implements OnInit {
 
   changeTheme(name: string) {
     console.log(name);
-    localStorage.setItem("theme", name);
+    this.helpService.setLocalStorage("theme", name);
     this.theme = name;
     this.message.sendTheme(name);
 
@@ -296,11 +299,11 @@ export class DashboardComponent implements OnInit {
 
   changeLanguage(name: string) {
     this.languageName = name;
-    localStorage.setItem("language", name);
+    this.helpService.setLocalStorage("language", name);
     this.language = undefined;
     /*this.service.getTranslation(this.languageName).subscribe(data => {
       this.language = data;
-      localStorage.setItem("language", JSON.stringify(this.language));
+      this.helpService.setLocalStorage("language", JSON.stringify(this.language));
       this.message.sendLanguage();
     });*/
   }

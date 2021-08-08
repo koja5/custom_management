@@ -18,7 +18,7 @@ export class DynamicService {
   }
 
   callApiPost(api, body) {
-    return this.http.post(api, body).map((res) => res);
+    return this.http.post(api, body);
   }
 
   callApiGet(api, parameters) {

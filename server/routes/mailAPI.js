@@ -33,6 +33,19 @@ var connection = mysql.createPool({
   database: "management_prod",
 });
 
+/*var smtpTransport = nodemailer.createTransport({
+  host: "116.203.85.82",
+  port: 25,
+  secure: false,
+  tls: {
+    rejectUnauthorized: false,
+  },
+  auth: {
+    user: "support@app-production.eu",
+    pass: "Iva#$20191#$2019",
+  },
+});*/
+
 var smtpTransport = nodemailer.createTransport({
   host: "116.203.85.82",
   port: 25,
@@ -41,10 +54,10 @@ var smtpTransport = nodemailer.createTransport({
     rejectUnauthorized: false,
   },
   auth: {
-    user: "info@app-production.eu",
-    pass: "jBa9$6v7",
+      user: "support@app-production.eu",
+      pass: "Iva#$2019#$",
   },
-});
+})
 
 //slanje maila pri registraciji
 
@@ -58,7 +71,7 @@ router.post("/send", function (req, res) {
     link + "korisnik/verifikacija/" + sha1(req.body.email);
 
   var mailOptions = {
-    from: '"ClinicNode" info@app-production.eu',
+    from: '"ClinicNode" support@app-production.eu',
     to: req.body.email,
     subject: req.body.req.body.language?.subjectConfirmMail,
     html: compiledTemplate.render({
@@ -110,7 +123,7 @@ router.post("/send1", function (req, res) {
   mail += "Best regards,\nTuina Praxis!";
 
   var mailOptions = {
-    from: '"ClinicNode" info@app-production.eu',
+    from: '"ClinicNode" support@app-production.eu',
     to: req.body.email,
     subject: "Confirm registration",
     text: mail,
@@ -140,7 +153,7 @@ router.post("/forgotmail", function (req, res) {
     loginLink + "/changePassword/" + sha1(req.body.email);
 
   var mailOptions = {
-    from: '"ClinicNode" info@app-production.eu',
+    from: '"ClinicNode" support@app-production.eu',
     to: req.body.email,
     subject: req.body.language?.subjectForgotMail,
     html: compiledTemplate.render({
@@ -187,7 +200,7 @@ router.post("/askQuestion", function (req, res) {
 
   console.log(mail);
   var mailOptions = {
-    to: "info@app-production.eu",
+    to: "support@app-production.eu",
     subject: naslov,
     text: mail,
   };
@@ -256,7 +269,7 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
             ":" +
             (endMinutes < 10 ? "0" + endMinutes : endMinutes);
           var mailOptions = {
-            from: '"ClinicNode" info@app-production.eu',
+            from: '"ClinicNode" support@app-production.eu',
             subject: req.body.language?.subjectConfirmArrival,
             html: compiledTemplate.render({
               firstName: to.shortname,
@@ -324,7 +337,7 @@ router.post("/sendPatientFormRegistration", function (req, res) {
   );
   var patientRegistrationForm = hogan.compile(patientRegistrationFormTemplate);
   var mailOptions = {
-    from: '"ClinicNode" info@app-production.eu',
+    from: '"ClinicNode" support@app-production.eu',
     to: req.body.email,
     subject: req.body.langauge?.subjectFormRegistration,
     html: patientRegistrationForm.render({
@@ -369,7 +382,7 @@ router.post("/sendInfoToPatientForCreatedAccount", function (req, res) {
   );
   var infoForCreatedAccount = hogan.compile(infoCreatedTemplate);
   var mailOptions = {
-    from: '"ClinicNode" info@app-production.eu',
+    from: '"ClinicNode" support@app-production.eu',
     to: req.body.email,
     subject: req.body.language?.subjectCreatedPatientForm,
     html: infoForCreatedAccount.render({
@@ -423,7 +436,7 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
     infoForApproveReservationTemplate
   );
   var mailOptions = {
-    from: '"ClinicNode" info@app-production.eu',
+    from: '"ClinicNode" support@app-production.eu',
     to: req.body.email,
     subject: req.body.language?.subjectApproveReservation,
     html: infoForApproveReservation.render({
@@ -468,7 +481,7 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
   );
   var infoForDenyReservation = hogan.compile(infoForDenyReservationTemplate);
   var mailOptions = {
-    from: '"ClinicNode" info@app-production.eu',
+    from: '"ClinicNode" support@app-production.eu',
     to: req.body.email,
     subject: req.body.language?.subjectDenyReservation,
     html: infoForDenyReservation.render({
@@ -508,7 +521,7 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
 
 router.post("/sendEmailToPatient", function (req, res) {
   var mailOptions = {
-    from: '"ClinicNode" info@app-production.eu',
+    from: '"ClinicNode" support@app-production.eu',
     to: req.body.email,
     subject: req.body?.subject,
     text: req.body?.content,
@@ -561,7 +574,7 @@ router.post("/sendReminderViaEmailManual", function (req, res) {
     (endMinutes < 10 ? "0" + endMinutes : endMinutes);
 
   var mailOptions = {
-    from: '"ClinicNode" info@app-production.eu',
+    from: '"ClinicNode" support@app-production.eu',
     to: req.body.email,
     subject: req.body.language?.subjectForReminderReservation,
     html: compiledTemplate.render({

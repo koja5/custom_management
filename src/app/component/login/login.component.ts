@@ -64,53 +64,73 @@ export class LoginComponent implements OnInit {
     } else {
       /*this.dashboardService.getTranslation("english").subscribe(data => {
         console.log(data);
-        localStorage.setItem("language", JSON.stringify(data));
+        this.helpService.setLocalStorage("language", JSON.stringify(data));
         this.language = data["login"];
       });*/
     }
   }
 
   initialization() {
+    if (this.helpService.getLocalStorage("defaultLanguage")) {
+      this.language = JSON.parse(this.helpService.getLocalStorage("language"));
+    } else {
+      this.checkCountryLocation();
+    }
+    this.helpService.setDefaultBrowserTabTitle();
+  }
+
+  checkCountryLocation() {
     this.service.checkCountryLocation().subscribe(
       (data) => {
-        this.service.getTranslationByCountryCode(data["countryCode"]).subscribe(
-          (language) => {
-            if (language !== null) {
-              this.language = language["config"];
-              localStorage.setItem("language", JSON.stringify(this.language));
-            } else {
-              this.service.getDefaultLanguage().subscribe(
-                (language) => {
-                  if (language !== null) {
-                    this.language = language["config"];
-                    localStorage.setItem(
-                      "language",
-                      JSON.stringify(this.language)
-                    );
-                  } else {
-                    this.router.navigate(["/maintence"]);
-                  }
-                },
-                (error) => {
-                  this.router.navigate(["/maintence"]);
-                }
-              );
-            }
-          },
-          (error) => {
-            this.router.navigate(["/maintence"]);
-          }
-        );
+        this.getTranslationByCountryCode(data["countryCode"]);
       },
       (error) => {
         console.log(error);
         this.service.getDefaultLanguage().subscribe((language) => {
           this.language = language["config"];
-          localStorage.setItem("language", JSON.stringify(this.language));
+          this.helpService.setLocalStorage(
+            "language",
+            JSON.stringify(this.language)
+          );
         });
       }
     );
-    this.helpService.setDefaultBrowserTabTitle();
+  }
+
+  getTranslationByCountryCode(countryCode: string) {
+    this.service.getTranslationByCountryCode(countryCode).subscribe(
+      (language) => {
+        if (language !== null) {
+          this.language = language["config"];
+          this.helpService.setLocalStorage(
+            "language",
+            JSON.stringify(this.language)
+          );
+          this.router.navigate(["/dashboard/home/task"]);
+        } else {
+          this.service.getDefaultLanguage().subscribe(
+            (language) => {
+              if (language !== null) {
+                this.language = language["config"];
+                this.helpService.setLocalStorage(
+                  "language",
+                  JSON.stringify(this.language)
+                );
+                this.router.navigate(["/dashboard/home/task"]);
+              } else {
+                this.router.navigate(["/maintence"]);
+              }
+            },
+            (error) => {
+              this.router.navigate(["/maintence"]);
+            }
+          );
+        }
+      },
+      (error) => {
+        this.router.navigate(["/maintence"]);
+      }
+    );
   }
 
   signUpActive() {
@@ -153,11 +173,11 @@ export class LoginComponent implements OnInit {
           } else {
             console.log(user);
             this.cookie.set("user", type);
-            localStorage.setItem("type", type);
-            localStorage.setItem("idUser", id);
-            localStorage.setItem("indicatorUser", id);
-            localStorage.setItem("storeId-" + id, storeId);
-            localStorage.setItem("superadmin", superadmin);
+            this.helpService.setLocalStorage("type", type);
+            this.helpService.setLocalStorage("idUser", id);
+            this.helpService.setLocalStorage("indicatorUser", id);
+            this.helpService.setLocalStorage("storeId-" + id, storeId);
+            this.helpService.setLocalStorage("superadmin", superadmin);
             this.getConfigurationFromDatabase(id);
           }
         } else {
@@ -183,7 +203,7 @@ export class LoginComponent implements OnInit {
         if (!val.success) {
           this.errorInfo = val.info;
         } else {
-          this.data['language'] = this.packLanguage.getLanguageForConfirmMail();
+          this.data["language"] = this.packLanguage.getLanguageForConfirmMail();
           this.mailService.sendMail(this.data, function () {
             console.log("Mail uspesno poslat");
           });
@@ -205,7 +225,7 @@ export class LoginComponent implements OnInit {
 
   forgotPassword() {
     const thisObject = this;
-    thisObject.data['language'] = this.packLanguage.getLanguageForForgotMail();
+    thisObject.data["language"] = this.packLanguage.getLanguageForForgotMail();
     if (this.data.email !== "") {
       this.service.forgotPassword(this.data, function (exist, notVerified) {
         setTimeout(() => {
@@ -246,28 +266,46 @@ export class LoginComponent implements OnInit {
   getConfigurationFromDatabase(id) {
     this.mongo.getConfiguration(Number(id)).subscribe((data) => {
       this.setConfiguration(data, id);
-      this.router.navigate(["/dashboard/home/task"]);
     });
   }
 
   setConfiguration(data, id) {
-    localStorage.setItem("theme", data.theme);
-    localStorage.setItem("defaultLanguage", data.language);
+    // this.helpService.setLocalStorage("theme", data.theme);
+    // this.helpService.setLocalStorage("defaultLanguage", data.language);
     if (data.selectedStore !== null && data.selectedStore.length !== 0) {
-      // localStorage.setItem("selectedStore-" + id, JSON.stringify(data.selectedStore[0]));
-      this.storageService.setSelectedStore(id, JSON.stringify(data.selectedStore[0]));
+      // this.helpService.setLocalStorage("selectedStore-" + id, JSON.stringify(data.selectedStore[0]));
+      this.storageService.setSelectedStore(
+        id,
+        JSON.stringify(data.selectedStore[0])
+      );
     }
     if (data.usersFor !== null && data.usersFor.length !== 0) {
       this.setUsersForConfiguration(data.usersFor);
     }
-    if(data.storeSettings) {
-      localStorage.setItem('storeSettings', JSON.stringify(data.storeSettings));
+    if (data.storeSettings) {
+      this.helpService.setLocalStorage(
+        "storeSettings",
+        JSON.stringify(data.storeSettings)
+      );
+    }
+
+    if (
+      data.langauge !== this.helpService.getLocalStorage("defaultLanguage") ||
+      this.helpService.getLocalStorage("language") == undefined
+    ) {
+      this.helpService.setLocalStorage("defaultLanguage", data.language);
+      this.getTranslationByCountryCode(data.language);
+    } else {
+      this.router.navigate(["/dashboard/home/task"]);
     }
   }
 
   setUsersForConfiguration(data) {
     for (let i = 0; i < data.length; i++) {
-      localStorage.setItem(data[i].key, JSON.stringify(data[i].value));
+      this.helpService.setLocalStorage(
+        data[i].key,
+        JSON.stringify(data[i].value)
+      );
     }
   }
 }

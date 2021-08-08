@@ -163,7 +163,6 @@ router.post("/setUsersFor", function (req, res, next) {
     key: req.body.key,
     value: req.body.value,
   };
-  console.log(req.body.user_id);
   mongo.connect(url, function (err, db) {
     if (err) throw err;
     var dbo = db.db(database_name);
@@ -365,16 +364,21 @@ router.post("/createOrUpdatePermissionPatientMenu", function (req, res, next) {
         if (err) throw err;
         console.log(rows);
         if (rows) {
-          dbo
-            .collection("permission-patient-menu")
-            .updateOne(
-              { clinic: req.body.clinic },
-              { $set: { myCalendar: req.body.myCalendar, myComplaint: req.body.myComplaint, myTherapy: req.body.myTherapy, myDocument: req.body.myDocument } },
-              function (err, rows) {
-                if (err) throw err;
-                res.send(true);
-              }
-            );
+          dbo.collection("permission-patient-menu").updateOne(
+            { clinic: req.body.clinic },
+            {
+              $set: {
+                myCalendar: req.body.myCalendar,
+                myComplaint: req.body.myComplaint,
+                myTherapy: req.body.myTherapy,
+                myDocument: req.body.myDocument,
+              },
+            },
+            function (err, rows) {
+              if (err) throw err;
+              res.send(true);
+            }
+          );
         } else {
           dbo
             .collection("permission-patient-menu")
@@ -388,6 +392,29 @@ router.post("/createOrUpdatePermissionPatientMenu", function (req, res, next) {
         }
       });
   });
+});
+
+router.post("/setLanguageForUser", function (req, res, next) {
+  mongo.connect(url, function (err, db) {
+    if (err) throw err;
+    var dbo = db.db(database_name);
+    console.log(req.body);
+    dbo.collection("user_configuration").updateOne(
+      { user_id: Number(req.body.user_id) },
+      {
+        $set: {
+          language: req.body.countryCode,
+        },
+      },
+      { upsert: true },
+      function (err, rows) {
+        if (err) throw err;
+
+        res.json(true);
+      }
+    );
+  });
+  // res.json({ code: 201 });
 });
 
 module.exports = router;

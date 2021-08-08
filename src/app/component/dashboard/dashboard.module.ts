@@ -58,21 +58,21 @@ import { PdfViewerModule } from "ng2-pdf-viewer";
 import { SharedModule } from "src/app/shared.module";
 import { TodoComponent } from "./administrator/todo/todo.component";
 import { DymanicElementsModule } from "../dynamic-elements/dymanic-elements.module";
-import { DialogModule as  DialogModuleSyncfusion} from '@syncfusion/ej2-angular-popups';
+import { DialogModule as DialogModuleSyncfusion } from "@syncfusion/ej2-angular-popups";
 import { BaseDateSharedModule } from "../shared-module/base-date-module";
-import { MyComplaintComponent } from './patient/my-complaint/my-complaint.component';
-import { MyTherapyComponent } from './patient/my-therapy/my-therapy.component';
-import { MyDocumentComponent } from './patient/my-document/my-document.component';
+import { MyComplaintComponent } from "./patient/my-complaint/my-complaint.component";
+import { MyTherapyComponent } from "./patient/my-therapy/my-therapy.component";
+import { MyDocumentComponent } from "./patient/my-document/my-document.component";
 import { SettingsModule } from "./settings/settings.module";
 import { DropDownListModule } from "@syncfusion/ej2-angular-dropdowns";
-import { ReservationsComponent } from './reservations/reservations.component';
-import { DynamicSendSmsComponent } from './sms/dynamic-send-sms/dynamic-send-sms.component';
+import { ReservationsComponent } from "./reservations/reservations.component";
+import { DynamicSendSmsComponent } from "./sms/dynamic-send-sms/dynamic-send-sms.component";
 import { SharedEmailModule } from "../shared-module/shared-email-module";
 import { SharedSMSModule } from "../shared-module/shared-sms-module";
-import { SystemErrorComponent } from './administrator/system-logs/system-error/system-error.component';
-import { SystemInfoComponent } from './administrator/system-logs/system-info/system-info.component';
-import { SystemWarnComponent } from './administrator/system-logs/system-warn/system-warn.component';
-import { AvailableAreaCodeComponent } from './administrator/available-area-code/available-area-code.component';
+import { SystemErrorComponent } from "./administrator/system-logs/system-error/system-error.component";
+import { SystemInfoComponent } from "./administrator/system-logs/system-info/system-info.component";
+import { SystemWarnComponent } from "./administrator/system-logs/system-warn/system-warn.component";
+import { AvailableAreaCodeComponent } from "./administrator/available-area-code/available-area-code.component";
 
 @NgModule({
   declarations: [
@@ -90,7 +90,6 @@ import { AvailableAreaCodeComponent } from './administrator/available-area-code/
     MyNavigationViewComponent,
     StatisticComponent,
     VaucherComponent,
-    SettingsComponent,
     EventCategoryComponent,
     WorkTimeColorsComponent,
     TranslationComponent,
@@ -104,7 +103,7 @@ import { AvailableAreaCodeComponent } from './administrator/available-area-code/
     SystemErrorComponent,
     SystemInfoComponent,
     SystemWarnComponent,
-    AvailableAreaCodeComponent
+    AvailableAreaCodeComponent,
   ],
   imports: [
     CommonModule,
@@ -140,13 +139,13 @@ import { AvailableAreaCodeComponent } from './administrator/available-area-code/
     SettingsModule,
     DropDownListModule,
     SharedEmailModule,
-    SharedSMSModule
+    SharedSMSModule,
   ],
   providers: [
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
-    },
-  ]
+    }
+  ],
 })
 export class DashboardModule {}

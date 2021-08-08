@@ -4,7 +4,6 @@ import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class MessageService {
-
   public theme = new Subject<any>();
   public language = new Subject<null>();
   public imageProfile = new Subject<null>();
@@ -13,6 +12,7 @@ export class MessageService {
   public viewChange = new Subject<any>();
   public dateChange = new Subject<any>();
   public refreshDynamicGrid = new Subject<null>();
+  public newLanguage = new Subject<null>();
 
   sendTheme(message: string) {
     this.theme.next(message);
@@ -26,7 +26,7 @@ export class MessageService {
     this.language.next();
   }
 
-  getLanguage() {
+  getLanguage(): Observable<any> {
     return this.language.asObservable();
   }
 
@@ -76,5 +76,13 @@ export class MessageService {
 
   getRefreshDynamicGrid() {
     return this.refreshDynamicGrid.asObservable();
+  }
+
+  getNewLanguage(): Observable<any> {
+    return this.newLanguage.asObservable();
+  }
+
+  sendNewLanguage(): void {
+    this.newLanguage.next();
   }
 }
