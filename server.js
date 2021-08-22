@@ -30,10 +30,10 @@ const deleteSMSTextFileFromFS = require("./server/routes/helpers/deleteSMSTextFi
 app.use(compression());
 
 var connection = mysql.createPool({
-  host: "185.178.193.141",
-  user: "appproduction.",
-  password: "jBa9$6v7",
-  database: "management_prod"
+  host: "",
+  user: "",
+  password: "",
+  database: ""
 });
 
 //for upload image

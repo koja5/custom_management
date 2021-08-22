@@ -13,48 +13,6 @@ const ftpUploadSMS = require("./ftpUploadSMS");
 
 var link = "http://localhost:3000/api/";
 
-/*var connection = mysql.createPool({
-  host: "185.178.193.141",
-  user: "appproduction.",
-  password: "jBa9$6v7",
-  database: "management"
-});*/
-
-var connection = mysql.createPool({
-  host: "185.178.193.141",
-  user: "appproduction.",
-  password: "jBa9$6v7",
-  database: "management_prod",
-});
-
-/*var connection = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: 'root',
-  database: 'management'
-});*/
-
-/*var connection = mysql.createPool({
-  host: '116.203.85.82',
-  user: 'appprodu_appproduction_prod',
-  password: 'CJr4eUqWg33tT97mxPFx',
-  database: 'appprodu_management_prod_1'
-})*/
-
-/*var connection = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: 'root',
-  database: 'appprodu_management_prod'
-});*/
-
-/*var connection = mysql.createPool({
-    host: '144.76.112.98',
-    user: 'aparatiz_koja',
-    password: 'Iva03042019',
-    database: 'aparatiz_management'
-})*/
-
 connection.getConnection(function (err, conn) {});
 
 /* GET api listing. */
