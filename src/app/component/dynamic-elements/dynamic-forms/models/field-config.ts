@@ -14,6 +14,7 @@ export interface FieldConfig {
   options?: string[];
   placeholder?: string;
   type: string;
+  subtype?: string;
   validation?: ValidatorFn[];
   value?: any;
   multiline?: boolean;

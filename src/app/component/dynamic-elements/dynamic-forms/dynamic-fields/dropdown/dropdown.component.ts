@@ -27,7 +27,7 @@ export class DropdownComponent implements OnInit, Field {
 
   ngOnInit() {
     this.language = this.helpService.getLanguage();
-    if(this.config.data['translation']) {
+    if(this.config.data && this.config.data['translation']) {
       this.data = this.helpService.getLanguage()[this.config.data['translation']['property']]
       this.config.field = this.config.data['translation']['fields'];
     } else {

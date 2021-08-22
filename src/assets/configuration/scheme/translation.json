@@ -493,7 +493,8 @@
         "items": {
           "type": "object",
           "properties": {
-            "text": { "type": "string" }
+            "countryCode": { "type": "string" },
+            "language": { "type": "string" }
           }
         }
       }
@@ -515,6 +516,17 @@
             { "key": "no" },
             { "key": "deleteDialogTitleAreYouSure" },
             { "key": "close" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "successExecutedActionTitle" },
+            { "key": "successExecutedActionText" },
+            { "key": "errorExecutedActionTitle" },
+            { "key": "errorExecutedActionText" }
           ]
         }
       ]
@@ -986,7 +998,7 @@
             { "key": "userTitleMenu" },
             { "key": "patientTitleMenu" },
             { "key": "applicationParametersSettingsTitle" },
-            { "key": "" }
+            { "key": "templateAccount" }
           ]
         }
       ]
@@ -2332,7 +2344,11 @@
                   "flex-direction": "row",
                   "items": [
                     {
-                      "key": "languages[].text",
+                      "key": "languages[].countryCode",
+                      "flex": "1 1 50px"
+                    },
+                    {
+                      "key": "languages[].language",
                       "flex": "1 1 50px"
                     }
                   ]

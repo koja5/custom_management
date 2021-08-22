@@ -1059,6 +1059,24 @@ router.get("/getSuperadmin/:id", function (req, res, next) {
   });
 });
 
+router.get("/getAllSuperadmin", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    var id = req.params.id;
+    conn.query("SELECT * from users_superadmin", [id], function (err, rows) {
+      conn.release();
+      if (!err) {
+        res.json(rows);
+      } else {
+        res.json(null);
+      }
+    });
+  });
+});
+
 router.post("/updateSuperadmin", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
@@ -4787,7 +4805,7 @@ router.post("/updateToDo", function (req, res, next) {
   });
 });
 
-router.get("/deleteToDo/:id", (req, res, next) => {
+router.post("/deleteToDo", (req, res, next) => {
   try {
     connection.getConnection(function (err, conn) {
       if (err) {
@@ -4798,11 +4816,11 @@ router.get("/deleteToDo/:id", (req, res, next) => {
         });
       } else {
         conn.query(
-          "delete from todo where id = '" + req.params.id + "'",
+          "delete from todo where id = '" + req.body.id + "'",
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              res.json(err);
+              res.json(false);
               logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.json(true);
@@ -5344,5 +5362,113 @@ router.get("/deleteAvailableAreaCode/:id", (req, res, next) => {
 });
 
 /* END AVAILABLE CODE */
+
+/* TEMPLATE ACCOUNT */
+
+router.post("/createTemplateAccount", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+
+    conn.query(
+      "select * from users_superadmin where id = ? and password = '" +
+        sha1(req.body.password) +
+        "'",
+      [req.body.account_id],
+      function (err, rows) {
+        if (!err) {
+          if (!err) {
+            console.log(rows);
+            if (rows.length > 0) {
+              const data = {
+                id: req.body.id,
+                name: req.body.name,
+                account_id: req.body.account_id,
+                email: rows[0].email,
+              };
+              conn.query(
+                "insert into template_account SET ?",
+                data,
+                function (err, rows) {
+                  conn.release();
+                  if (!err) {
+                    if (!err) {
+                      res.json(true);
+                    } else {
+                      res.json(false);
+                    }
+                  } else {
+                    logger.log("error", err.sql + ". " + err.sqlMessage);
+                    res.json(err);
+                  }
+                }
+              );
+            } else {
+              res.json(false);
+            }
+          } else {
+            res.json(false);
+          }
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
+      }
+    );
+  });
+});
+
+router.get("/getTemplateAccount", function (req, res, next) {
+  var reqObj = req.params.id;
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query("SELECT * from template_account", function (err, rows) {
+      conn.release();
+      if (!err) {
+        res.json(rows);
+      } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      }
+    });
+  });
+});
+
+router.post("/deleteTemplateAccount", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "delete from template_account where id = '" + req.body.id + "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(false);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+/* END TEMPLATE ACCOUNT */
 
 module.exports = router;

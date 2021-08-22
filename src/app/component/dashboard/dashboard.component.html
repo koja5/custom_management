@@ -453,6 +453,17 @@
                                   }}</span></a
                                 >
                               </li>
+
+                              <li class="{{selectedNodeModel['template_account']}}">
+                                <a
+                                  (click)="returnActiveNode('template_account')"
+                                  routerLink="/dashboard/home/template-account"
+                                  ><i class="fa fa-volume-control-phone"></i
+                                  ><span class="navigation-link">{{
+                                    language["templateAccount"]
+                                  }}</span></a
+                                >
+                              </li>
                             </ul>
                           </li>
 

@@ -90,7 +90,7 @@ export class DynamicGridComponent implements OnInit {
     this.service.getConfiguration(this.path, this.name).subscribe((data) => {
       this.config = data;
       if (data["localData"]) {
-        this.getLocalData(data['localData']);
+        this.getLocalData(data["localData"]);
       } else {
         this.callApi(data["request"]);
       }
@@ -112,11 +112,9 @@ export class DynamicGridComponent implements OnInit {
   }
 
   getLocalData(data) {
-    this.service.getLocalData(data['path']).subscribe(
-      data => {
-        this.data = data;
-      }
-    )
+    this.service.getLocalData(data["path"]).subscribe((data) => {
+      this.data = data;
+    });
   }
 
   callApi(data) {
@@ -211,13 +209,13 @@ export class DynamicGridComponent implements OnInit {
       // this.service
       //   .callApiPost(this.config.editSettingsRequest.add, event)
       //   .subscribe((data) => {});
-        
+
       this.callServerMethod(this.config.editSettingsRequest.add, event);
     } else if (this.typeOfModification === "beginEdit") {
       // this.service
       //   .callApiPost(this.config.editSettingsRequest.edit, event)
       //   .subscribe((data) => {});
-        
+
       this.callServerMethod(this.config.editSettingsRequest.edit, event);
     }
 
@@ -226,23 +224,44 @@ export class DynamicGridComponent implements OnInit {
   }
 
   deleteData(event) {
-    /*if()
-    this.service
-      .callApiGet("/api/deleteTodo", event.id)
-      .subscribe((data) => {});*/
-
-      this.callServerMethod(this.config.editSettingsRequest.delete, event.id);
+    this.callServerMethod(this.config.editSettingsRequest.delete, event);
   }
 
   callServerMethod(request, data) {
-    if(request.type === "POST") {
-      this.service
-        .callApiPost(request.api, data)
-        .subscribe((data) => {});
+    if (request.type === "POST") {
+      this.service.callApiPost(request.api, data).subscribe((response) => {
+        if (response === true || response["success"] === true) {
+          if (response["message"]) {
+            this.helpService.successToastr("", response["message"]);
+          } else if (response["messageLanguageField"]) {
+            this.helpService.successToastr(
+              "",
+              this.language[response["messageLanguageField"]]
+            );
+          } else {
+            this.helpService.successToastr(
+              this.language.successExecutedActionTitle,
+              this.language.successExecutedActionText
+            );
+          }
+        } else {
+          if (response["message"]) {
+            this.helpService.errorToastr("", response["message"]);
+          } else if (response["messageLanguageField"]) {
+            this.helpService.errorToastr(
+              "",
+              this.language[response["messageLanguageField"]]
+            );
+          } else {
+            this.helpService.errorToastr(
+              this.language.errorExecutedActionTitle,
+              this.language.errorExecutedActionText
+            );
+          }
+        }
+      });
     } else {
-      this.service
-      .callApiGet(request.api, data)
-      .subscribe((data) => {});
+      this.service.callApiGet(request.api, data).subscribe((data) => {});
     }
   }
 

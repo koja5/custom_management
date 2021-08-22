@@ -73,6 +73,7 @@ import { SystemErrorComponent } from "./administrator/system-logs/system-error/s
 import { SystemInfoComponent } from "./administrator/system-logs/system-info/system-info.component";
 import { SystemWarnComponent } from "./administrator/system-logs/system-warn/system-warn.component";
 import { AvailableAreaCodeComponent } from "./administrator/available-area-code/available-area-code.component";
+import { TemplateAccountComponent } from './administrator/template-account/template-account.component';
 
 @NgModule({
   declarations: [
@@ -104,6 +105,7 @@ import { AvailableAreaCodeComponent } from "./administrator/available-area-code/
     SystemInfoComponent,
     SystemWarnComponent,
     AvailableAreaCodeComponent,
+    TemplateAccountComponent,
   ],
   imports: [
     CommonModule,

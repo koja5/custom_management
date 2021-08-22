@@ -48,8 +48,29 @@ export class LanguageComponent implements OnInit {
       .subscribe((data) => {
         console.log(data);
         this.data = data;
-        this.loading = false;
+        this.translateTextValue();
       });
+  }
+
+  translateTextValue() {
+    const languageConfig = JSON.parse(
+      this.helpService.getLocalStorage("language")
+    );
+    if (languageConfig) {
+      for (let i = 0; i < this.data.length; i++) {
+        for (let j = 0; j < languageConfig["languages"].length; j++) {
+          if (
+            this.data[i].countryCode ===
+            languageConfig["languages"][j].countryCode
+          ) {
+            this.data[i].language = languageConfig["languages"][j].language;
+            break;
+          }
+        }
+      }
+    }
+
+    this.loading = false;
   }
 
   changeLanguageEvent(event: any) {
@@ -81,6 +102,8 @@ export class LanguageComponent implements OnInit {
               "",
               this.language.successChangeLanguageText
             );
+
+            this.translateTextValue();
           } else {
             this.helpService.errorToastr(
               "",

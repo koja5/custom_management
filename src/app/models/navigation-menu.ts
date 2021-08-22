@@ -30,4 +30,5 @@ export class NavigationMenuModel {
     systemLogWarn?: string;
     reminder?: string;
     area_code?: string;
+    template_account?: string;
 }
