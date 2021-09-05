@@ -53,4 +53,12 @@ export class DashboardService {
   getTranslationWithId(id) {
     return this.http.get("/api/getTranslationWithId/" + id).map((res) => res);
   }
+
+  getTemplateAccount() {
+    return this.http.get("/api/getTemplateAccount");
+  }
+
+  loadTemplateAccount(data) {
+    return this.http.post("/api/loadTemplateAccount", data).map((res) => res);
+  }
 }

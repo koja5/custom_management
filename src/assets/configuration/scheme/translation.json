@@ -6,6 +6,10 @@
       "no": { "type": "string" },
       "close": { "type": "string" },
       "deleteDialogTitleAreYouSure": { "type": "string" },
+      "successExecutedActionTitle": { "type": "string" },
+      "successExecutedActionText": { "type": "string" },
+      "errorExecutedActionTitle": { "type": "string" },
+      "errorExecutedActionText": { "type": "string" },
       "welcomeTitle": { "type": "string" },
       "welcomeText": { "type": "string" },
       "loginTitle": { "type": "string" },
@@ -160,6 +164,7 @@
       "userTitleMenu": { "type": "string" },
       "patientTitleMenu": { "type": "string" },
       "applicationParametersSettingsTitle": { "type": "string" },
+      "templateAccount": { "type": "string" },
       "reservations": { "type": "string" },
       "pagerItemsPerPage": { "type": "string" },
       "addNew": { "type": "string" },
@@ -497,7 +502,16 @@
             "language": { "type": "string" }
           }
         }
-      }
+      },
+      "loadDemoAccountTitle": { "type": "string" },
+      "loadDemoAccountHeader": { "type": "string" },
+      "loadDemoAccountText": { "type": "string" },
+      "loadDemoAccountChooise": { "type": "string" },
+      "loadDemoAccountNoThanks": { "type": "string" },
+      "loadDemoAccountButton": { "type": "string" },
+      "loadingDemoTitle": { "type": "string" },
+      "loadingDemoHeader": { "type": "string" },
+      "loadingDemoText": { "type": "string" }
     }
   },
   "layout": [
@@ -2592,6 +2606,44 @@
           "items": [
             { "key": "successChangeReminderSettingsText" },
             { "key": "errorChangeReminderSettingsText" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Template account",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "loadDemoAccountTitle" },
+            { "key": "loadDemoAccountHeader" },
+            { "key": "loadDemoAccountText" },
+            { "key": "loadDemoAccountChooise" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "loadDemoAccountNoThanks" },
+            { "key": "loadDemoAccountButton" },
+            { "key": "loadingDemoTitle" },
+            { "key": "loadingDemoHeader" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "loadingDemoText" }
           ]
         }
       ]

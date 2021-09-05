@@ -26,7 +26,8 @@ export class LoginService {
           val["type"],
           val["id"],
           val["storeId"],
-          val["superadmin"]
+          val["superadmin"],
+          val["last_login"]
         );
       });
   }

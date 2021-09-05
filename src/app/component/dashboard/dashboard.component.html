@@ -154,7 +154,8 @@
                           <li class="menu-title mt-2" data-key="t-components">
                             {{ language.userTitleMenu }}
                           </li>
-                          <li class="{{selectedNodeModel['calendar']}}"
+                          <li
+                            class="{{ selectedNodeModel['calendar'] }}"
                             *ngIf="
                               type !== userType.patient ||
                               (type === userType.patient &&
@@ -171,7 +172,10 @@
                             >
                           </li>
 
-                          <li class="{{selectedNodeModel['reservations']}}" *ngIf="type !== userType.patient">
+                          <li
+                            class="{{ selectedNodeModel['reservations'] }}"
+                            *ngIf="type !== userType.patient"
+                          >
                             <a
                               (click)="returnActiveNode('reservations')"
                               routerLink="/dashboard/home/reservations"
@@ -181,7 +185,10 @@
                               }}</span></a
                             >
                           </li>
-                          <li class="{{selectedNodeModel['customers']}}" *ngIf="type !== userType.patient">
+                          <li
+                            class="{{ selectedNodeModel['customers'] }}"
+                            *ngIf="type !== userType.patient"
+                          >
                             <a
                               (click)="returnActiveNode('customers')"
                               routerLink="/dashboard/home/customers"
@@ -191,7 +198,10 @@
                               }}</span></a
                             >
                           </li>
-                          <li class="{{selectedNodeModel['vaucher']}}" *ngIf="type !== userType.patient">
+                          <li
+                            class="{{ selectedNodeModel['vaucher'] }}"
+                            *ngIf="type !== userType.patient"
+                          >
                             <a
                               (click)="returnActiveNode('vaucher')"
                               routerLink="/dashboard/home/vaucher"
@@ -202,11 +212,18 @@
                             >
                           </li>
 
-                          <li  *ngIf="type === userType.owner || type === userType.admin" class="menu-title" data-key="t-components">
+                          <li
+                            *ngIf="
+                              type === userType.owner || type === userType.admin
+                            "
+                            class="menu-title"
+                            data-key="t-components"
+                          >
                             {{ language.applicationParametersSettingsTitle }}
                           </li>
 
-                          <li class="{{selectedNodeModel['users']}}"
+                          <li
+                            class="{{ selectedNodeModel['users'] }}"
                             *ngIf="
                               type === userType.owner || type === userType.admin
                             "
@@ -221,7 +238,8 @@
                             >
                           </li>
 
-                          <li class="{{selectedNodeModel['store']}}"
+                          <li
+                            class="{{ selectedNodeModel['store'] }}"
                             *ngIf="
                               type === userType.owner || type === userType.admin
                             "
@@ -236,19 +254,28 @@
                             >
                           </li>
 
-                          <li *ngIf="type === userType.owner || type === userType.admin" class="{{ activeGroup[2] }}">
+                          <li
+                            *ngIf="
+                              type === userType.owner || type === userType.admin
+                            "
+                            class="{{ activeGroup[2] }}"
+                          >
                             <a (click)="collapse(2)" class="has-arrow"
                               ><i class="fa fa fa-file-text"></i
                               ><span class="navigation-link">{{
                                 language.applicationParametersSettingsTitle
                               }}</span></a
                             >
-                            <ul *ngIf="type === userType.owner || type === userType.admin"
+                            <ul
+                              *ngIf="
+                                type === userType.owner ||
+                                type === userType.admin
+                              "
                               class="sub-menu mm-collapse {{
                                 showHideCollapse[2]
                               }}"
                             >
-                              <li class="{{selectedNodeModel['complaint']}}">
+                              <li class="{{ selectedNodeModel['complaint'] }}">
                                 <a
                                   routerLink="/dashboard/home/complaint"
                                   (click)="returnActiveNode('complaint')"
@@ -259,7 +286,7 @@
                                 </a>
                               </li>
 
-                              <li class="{{selectedNodeModel['therapy']}}">
+                              <li class="{{ selectedNodeModel['therapy'] }}">
                                 <a
                                   routerLink="/dashboard/home/therapy"
                                   (click)="returnActiveNode('therapy')"
@@ -270,7 +297,7 @@
                                 </a>
                               </li>
 
-                              <li class="{{selectedNodeModel['treatment']}}">
+                              <li class="{{ selectedNodeModel['treatment'] }}">
                                 <a
                                   routerLink="/dashboard/home/treatment"
                                   (click)="returnActiveNode('treatment')"
@@ -281,7 +308,11 @@
                                 </a>
                               </li>
 
-                              <li class="{{selectedNodeModel['recommendation']}}">
+                              <li
+                                class="{{
+                                  selectedNodeModel['recommendation']
+                                }}"
+                              >
                                 <a
                                   routerLink="/dashboard/home/recommendation"
                                   (click)="returnActiveNode('recommendation')"
@@ -292,7 +323,9 @@
                                 </a>
                               </li>
 
-                              <li class="{{selectedNodeModel['relationship']}}">
+                              <li
+                                class="{{ selectedNodeModel['relationship'] }}"
+                              >
                                 <a
                                   routerLink="/dashboard/home/relationship"
                                   (click)="returnActiveNode('relationship')"
@@ -303,7 +336,7 @@
                                 </a>
                               </li>
 
-                              <li class="{{selectedNodeModel['social']}}">
+                              <li class="{{ selectedNodeModel['social'] }}">
                                 <a
                                   routerLink="/dashboard/home/social"
                                   (click)="returnActiveNode('social')"
@@ -314,7 +347,7 @@
                                 </a>
                               </li>
 
-                              <li class="{{selectedNodeModel['doctor']}}">
+                              <li class="{{ selectedNodeModel['doctor'] }}">
                                 <a
                                   routerLink="/dashboard/home/doctor"
                                   (click)="returnActiveNode('doctor')"
@@ -325,7 +358,7 @@
                                 </a>
                               </li>
 
-                              <li class="{{selectedNodeModel['doctors']}}">
+                              <li class="{{ selectedNodeModel['doctors'] }}">
                                 <a
                                   routerLink="/dashboard/home/doctors"
                                   (click)="returnActiveNode('doctors')"
@@ -336,7 +369,7 @@
                                 </a>
                               </li>
 
-                              <li class="{{selectedNodeModel['vat_tax']}}">
+                              <li class="{{ selectedNodeModel['vat_tax'] }}">
                                 <a
                                   routerLink="/dashboard/home/vat_tax"
                                   (click)="returnActiveNode('vat_tax')"
@@ -347,7 +380,7 @@
                                 </a>
                               </li>
 
-                              <li class="{{selectedNodeModel['CS']}}">
+                              <li class="{{ selectedNodeModel['CS'] }}">
                                 <a
                                   routerLink="/dashboard/home/CS"
                                   (click)="returnActiveNode('CS')"
@@ -358,7 +391,7 @@
                                 </a>
                               </li>
 
-                              <li class="{{selectedNodeModel['state']}}">
+                              <li class="{{ selectedNodeModel['state'] }}">
                                 <a
                                   routerLink="/dashboard/home/state"
                                   (click)="returnActiveNode('state')"
@@ -371,7 +404,11 @@
                                 </a>
                               </li>
 
-                              <li class="{{selectedNodeModel['event_category']}}">
+                              <li
+                                class="{{
+                                  selectedNodeModel['event_category']
+                                }}"
+                              >
                                 <a
                                   routerLink="/dashboard/home/event-category"
                                   (click)="returnActiveNode('event_category')"
@@ -382,7 +419,11 @@
                                 </a>
                               </li>
 
-                              <li class="{{selectedNodeModel['work_time_colors']}}">
+                              <li
+                                class="{{
+                                  selectedNodeModel['work_time_colors']
+                                }}"
+                              >
                                 <a
                                   routerLink="/dashboard/home/work-time-colors"
                                   (click)="returnActiveNode('work_time_colors')"
@@ -393,7 +434,10 @@
                                 </a>
                               </li>
 
-                              <li class="{{selectedNodeModel['reminder']}}" *ngIf="type === userType.owner">
+                              <li
+                                class="{{ selectedNodeModel['reminder'] }}"
+                                *ngIf="type === userType.owner"
+                              >
                                 <a
                                   routerLink="/dashboard/home/reminders"
                                   (click)="returnActiveNode('reminder')"
@@ -405,23 +449,33 @@
                               </li>
                             </ul>
                           </li>
-                          <li *ngIf="user && user.id === 4" class="menu-title" data-key="t-menu">
+                          <li
+                            *ngIf="user && user.id === 4"
+                            class="menu-title"
+                            data-key="t-menu"
+                          >
                             {{ language.systemSettingsTitleMenu }}
                           </li>
 
-                          <li *ngIf="user && user.id === 4" class="{{ activeGroup[0] }}">
+                          <li
+                            *ngIf="user && user.id === 4"
+                            class="{{ activeGroup[0] }}"
+                          >
                             <a (click)="collapse(0)" class="has-arrow"
                               ><i class="fa fa-cogs"></i
                               ><span class="navigation-link">{{
                                 language.systemSettingsTitle
                               }}</span></a
                             >
-                            <ul *ngIf="user && user.id === 4"
+                            <ul
+                              *ngIf="user && user.id === 4"
                               class="sub-menu mm-collapse {{
                                 showHideCollapse[0]
                               }}"
                             >
-                              <li class="{{selectedNodeModel['translation']}}">
+                              <li
+                                class="{{ selectedNodeModel['translation'] }}"
+                              >
                                 <a
                                   (click)="returnActiveNode('translation')"
                                   routerLink="/dashboard/home/translation"
@@ -432,7 +486,7 @@
                                 >
                               </li>
 
-                              <li class="{{selectedNodeModel['todo']}}">
+                              <li class="{{ selectedNodeModel['todo'] }}">
                                 <a
                                   (click)="returnActiveNode('todo')"
                                   routerLink="/dashboard/home/todo"
@@ -443,7 +497,7 @@
                                 >
                               </li>
 
-                              <li class="{{selectedNodeModel['area_code']}}">
+                              <li class="{{ selectedNodeModel['area_code'] }}">
                                 <a
                                   (click)="returnActiveNode('area_code')"
                                   routerLink="/dashboard/home/area-code"
@@ -454,11 +508,15 @@
                                 >
                               </li>
 
-                              <li class="{{selectedNodeModel['template_account']}}">
+                              <li
+                                class="{{
+                                  selectedNodeModel['template_account']
+                                }}"
+                              >
                                 <a
                                   (click)="returnActiveNode('template_account')"
                                   routerLink="/dashboard/home/template-account"
-                                  ><i class="fa fa-volume-control-phone"></i
+                                  ><i class="fa fa-users"></i
                                   ><span class="navigation-link">{{
                                     language["templateAccount"]
                                   }}</span></a
@@ -467,19 +525,27 @@
                             </ul>
                           </li>
 
-                          <li *ngIf="user && user.id === 4" class="{{ activeGroup[1] }}">
+                          <li
+                            *ngIf="user && user.id === 4"
+                            class="{{ activeGroup[1] }}"
+                          >
                             <a (click)="collapse(1)" class="has-arrow"
                               ><i class="fa fa fa-file-text"></i
                               ><span class="navigation-link">{{
                                 language.systemLogsTitle
                               }}</span></a
                             >
-                            <ul *ngIf="user && user.id === 4"
+                            <ul
+                              *ngIf="user && user.id === 4"
                               class="sub-menu mm-collapse {{
                                 showHideCollapse[1]
                               }}"
                             >
-                              <li class="{{selectedNodeModel['systemLogErrors']}}">
+                              <li
+                                class="{{
+                                  selectedNodeModel['systemLogErrors']
+                                }}"
+                              >
                                 <a
                                   (click)="returnActiveNode('systemLogErrors')"
                                   routerLink="/dashboard/home/system-logs/error"
@@ -490,7 +556,9 @@
                                 >
                               </li>
 
-                              <li class="{{selectedNodeModel['systemLogInfo']}}">
+                              <li
+                                class="{{ selectedNodeModel['systemLogInfo'] }}"
+                              >
                                 <a
                                   (click)="returnActiveNode('systemLogInfo')"
                                   routerLink="/dashboard/home/system-logs/info"
@@ -501,7 +569,9 @@
                                 >
                               </li>
 
-                              <li class="{{selectedNodeModel['systemLogWarn']}}">
+                              <li
+                                class="{{ selectedNodeModel['systemLogWarn'] }}"
+                              >
                                 <a
                                   (click)="returnActiveNode('systemLogWarn')"
                                   routerLink="/dashboard/home/system-logs/warn"
@@ -642,7 +712,66 @@
       (click)="settings.close()"
       style="width: 15vh; padding: 1vh"
     >
-      Close
+      {{ language.close }}
     </button>
   </modal-footer>
+</modal>
+
+<modal #firstLogin modalClass="modal-md top-margin loggerModal adminModal">
+  <modal-header>
+    <h3 *ngIf="language !== undefined">{{ language.loadDemoAccountTitle }}</h3>
+  </modal-header>
+  <modal-content>
+    <div class="trophy">
+      <img
+        _ngcontent-nff-c1=""
+        src="./assets/images/trophy.png"
+      />
+      <h3>{{language.loadDemoAccountHeader}}</h3>
+    </div>
+    <div class="message">
+      <p>
+        {{language.loadDemoAccountText}}
+      </p>
+    </div>
+    <div *ngIf="templateAccount">
+      <label>{{language.loadDemoAccountChooise}}</label>
+      <ejs-dropdownlist
+      [dataSource]="templateAccount"
+      [(value)]="templateAccountValue"
+      [fields]="templateAccountFields"
+      allowFiltering="true"
+    ></ejs-dropdownlist>
+    </div>
+  </modal-content>
+  <modal-footer>
+    <button
+      kendoButton
+      class="btn btn-default mb-0"
+      (click)="firstLogin.close()"
+    >
+      {{language.loadDemoAccountNoThanks}}
+    </button>
+    <button kendoButton class="btn btn-primary" (click)="loadTemplateAccount()" [disabled]="templateAccountValue === undefined">{{language.loadDemoAccountButton}}</button>
+  </modal-footer>
+</modal>
+
+<modal #templateLoading modalClass="modal-md top-margin loggerModal adminModal" [hideCloseButton]="true" [closeOnOutsideClick]="false">
+  <modal-header>
+    <h3 *ngIf="language !== undefined">{{ language.loadingDemoTitle }}</h3>
+  </modal-header>
+  <modal-content>
+    <div class="replication">
+      <img
+        _ngcontent-nff-c1=""
+        src="./assets/images/replication.gif"
+      />
+      <h3>{{language.loadingDemoHeader}}</h3>
+    </div>
+    <div class="message">
+      <p>
+        {{language.loadingDemoText}}
+      </p>
+    </div>
+  </modal-content>
 </modal>

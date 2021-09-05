@@ -73,7 +73,7 @@ router.post("/send", function (req, res) {
   var mailOptions = {
     from: '"ClinicNode" support@app-production.eu',
     to: req.body.email,
-    subject: req.body.req.body.language?.subjectConfirmMail,
+    subject: req.body.language?.subjectConfirmMail,
     html: compiledTemplate.render({
       firstName: req.body.shortname,
       verificationLink: verificationLinkButton,

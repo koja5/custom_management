@@ -20,6 +20,8 @@ declare var document: any;
 })
 export class DashboardComponent implements OnInit {
   @ViewChild("settings") settings: Modal;
+  @ViewChild("firstLogin") firstLogin: Modal;
+  @ViewChild("templateLoading") templateLoading: Modal;
   public sidebar = "";
   public sidebarMobile = "";
   public profile = "";
@@ -42,6 +44,12 @@ export class DashboardComponent implements OnInit {
   public showHideCollapse = [];
   public activeGroup = [];
   public height: string;
+  public templateAccount: any;
+  public templateAccountFields = {
+    text: "name",
+    value: "account_id",
+  };
+  public templateAccountValue: any;
 
   constructor(
     private router: Router,
@@ -65,6 +73,7 @@ export class DashboardComponent implements OnInit {
       this.activatedRouter.snapshot["_routerState"].url.split("/")[2];
     this.initializeCollapse();
     this.checkDefaultLink();
+    this.checkFirstLogin();
 
     this.selectedNodeModel[this.selectedNode] = "active";
 
@@ -81,7 +90,10 @@ export class DashboardComponent implements OnInit {
       this.service.getThemeConfig().subscribe((data) => {
         console.log(data);
         this.allThemes = data;
-        this.helpService.setLocalStorage("allThemes", JSON.stringify(this.allThemes));
+        this.helpService.setLocalStorage(
+          "allThemes",
+          JSON.stringify(this.allThemes)
+        );
       });
     } else {
       this.allThemes = this.helpService.getLocalStorage("allThemes");
@@ -90,10 +102,15 @@ export class DashboardComponent implements OnInit {
     if (this.helpService.getLocalStorage("allLanguage") === null) {
       this.service.getLanguageConfig().subscribe((data) => {
         this.allLanguage = data;
-        this.helpService.setLocalStorage("allLanguage", JSON.stringify(this.allLanguage));
+        this.helpService.setLocalStorage(
+          "allLanguage",
+          JSON.stringify(this.allLanguage)
+        );
       });
     } else {
-      this.allLanguage = JSON.parse(this.helpService.getLocalStorage("allLanguage"));
+      this.allLanguage = JSON.parse(
+        this.helpService.getLocalStorage("allLanguage")
+      );
     }
 
     // defined default language
@@ -140,13 +157,13 @@ export class DashboardComponent implements OnInit {
     this.checkPermissionForPatientMenu();
 
     this.message.getNewLanguage().subscribe((mess) => {
-      this.language = JSON.parse(this.helpService.getLocalStorage('language'));
+      this.language = JSON.parse(this.helpService.getLocalStorage("language"));
     });
   }
 
   checkDefaultLink() {
-    if(this.helpService.getSessionStorage('defaultLink')) {
-      this.router.navigate([this.helpService.getSessionStorage('defaultLink')]);
+    if (this.helpService.getSessionStorage("defaultLink")) {
+      this.router.navigate([this.helpService.getSessionStorage("defaultLink")]);
     }
   }
 
@@ -376,5 +393,29 @@ export class DashboardComponent implements OnInit {
     } else if (type === this.userType.administrator) {
       return this.language.administrator;
     }
+  }
+
+  checkFirstLogin() {
+    if (this.helpService.getSessionStorage("first_login")) {
+      this.service.getTemplateAccount().subscribe((data) => {
+        this.templateAccount = data;
+      });
+      this.firstLogin.open();
+      sessionStorage.removeItem("first_login");
+    }
+  }
+
+  loadTemplateAccount() {
+    this.firstLogin.close();
+    this.templateLoading.open();
+    const data = {
+      id: this.helpService.getMe(),
+      account_id: this.templateAccountValue,
+    };
+    this.service.loadTemplateAccount(data).subscribe((response) => {
+      if (response) {
+        this.templateLoading.close();
+      }
+    });
   }
 }

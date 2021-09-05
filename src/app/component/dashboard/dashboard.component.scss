@@ -350,7 +350,7 @@ body[data-layout="horizontal"][data-topbar="colored"]
 #sidebar-menu ul li a {
   display: block;
   padding: 0.62rem 1.5rem;
-  color: #ffffff;
+  color: #b7b0b0;
   position: relative;
   font-size: 1.4rem;
   -webkit-transition: all 0.4s;
@@ -365,7 +365,7 @@ body[data-layout="horizontal"][data-topbar="colored"]
   font-size: 1.25rem;
   line-height: 1.40625rem;
   vertical-align: middle;
-  color: #ffffff;
+  color: #b7b0b0;
   -webkit-transition: all 0.4s;
   transition: all 0.4s;
 }
@@ -1090,4 +1090,20 @@ body[data-sidebar-size="sm"] .vertical-menu #sidebar-menu > ul ul {
 
 li.active a, li.active a i {
   color: #01a9e9;
+}
+
+.trophy, .replication {
+  text-align: center;
+}
+
+.trophy h3 {
+  font-weight: bold;
+}
+
+.trophy img {
+  width: 40%;
+}
+
+.replication img {
+  width: 80%;
 }

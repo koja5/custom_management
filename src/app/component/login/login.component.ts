@@ -162,7 +162,7 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.service.login(
       this.data,
-      (isLogin, notActive, user, type, id, storeId, superadmin) => {
+      (isLogin, notActive, user, type, id, storeId, superadmin, last_login) => {
         console.log("login" + notActive);
         if (isLogin) {
           if (!notActive) {
@@ -171,13 +171,15 @@ export class LoginComponent implements OnInit {
             ];
             this.loading = false;
           } else {
-            console.log(user);
             this.cookie.set("user", type);
             this.helpService.setLocalStorage("type", type);
             this.helpService.setLocalStorage("idUser", id);
             this.helpService.setLocalStorage("indicatorUser", id);
             this.helpService.setLocalStorage("storeId-" + id, storeId);
             this.helpService.setLocalStorage("superadmin", superadmin);
+            if(last_login === null) {
+              this.helpService.setSessionStorage('first_login', true);
+            }
             this.getConfigurationFromDatabase(id);
           }
         } else {
