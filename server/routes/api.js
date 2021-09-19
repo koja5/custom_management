@@ -13,6 +13,41 @@ const ftpUploadSMS = require("./ftpUploadSMS");
 
 var link = "http://localhost:3000/api/";
 
+/*var connection = mysql.createPool({
+  host: "185.178.193.141",
+  user: "appproduction.",
+  password: "jBa9$6v7",
+  database: "management"
+});*/
+
+var connection = mysql.createPool({
+  host: "185.178.193.141",
+  user: "appproduction.",
+  password: "jBa9$6v7",
+  database: "management_prod",
+});
+
+/*var connection = mysql.createPool({
+  host: 'localhost',
+  user: 'root',
+  password: 'root',
+  database: 'management'
+});*/
+
+/*var connection = mysql.createPool({
+  host: '116.203.85.82',
+  user: 'appprodu_appproduction_prod',
+  password: 'CJr4eUqWg33tT97mxPFx',
+  database: 'appprodu_management_prod_1'
+})*/
+
+/*var connection = mysql.createPool({
+  host: 'localhost',
+  user: 'root',
+  password: 'root',
+  database: 'appprodu_management_prod'
+});*/
+
 connection.getConnection(function (err, conn) {});
 
 /* GET api listing. */
@@ -372,7 +407,6 @@ router.post("/login", (req, res, next) => {
                     res.json(err);
                   }
                   if (rows.length >= 1 && rows[0].active === 1) {
-                    conn.release();
                     logger.log(
                       "info",
                       `User ${req.body.email} is SUCCESS login on a system like a SUPERADMIN!`
@@ -385,7 +419,15 @@ router.post("/login", (req, res, next) => {
                       id: rows[0].id,
                       storeId: 0,
                       superadmin: rows[0].id,
+                      last_login: rows[0].last_login,
                     });
+                    conn.query(
+                      "update users_superadmin SET last_login = ? where id = ?",
+                      [new Date(), rows[0].id],
+                      function (err, rows, fields) {
+                        conn.release();
+                      }
+                    );
                   } else {
                     conn.query(
                       "SELECT * FROM customers WHERE email=? AND password=?",
@@ -5378,6 +5420,61 @@ router.post("/createTemplateAccount", function (req, res, next) {
   });
 });
 
+router.post("/updateTemplateAccount", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+
+    conn.query(
+      "select * from users_superadmin where id = ? and password = '" +
+        sha1(req.body.password) +
+        "'",
+      [req.body.account_id],
+      function (err, rows) {
+        if (!err) {
+          if (!err) {
+            console.log(rows);
+            if (rows.length > 0) {
+              const data = {
+                id: req.body.id,
+                name: req.body.name,
+                account_id: req.body.account_id,
+                email: rows[0].email,
+              };
+              conn.query(
+                "update template_account SET ? where id = ?",
+                [data, data.id],
+                function (err, rows) {
+                  conn.release();
+                  if (!err) {
+                    if (!err) {
+                      res.json(true);
+                    } else {
+                      res.json(false);
+                    }
+                  } else {
+                    logger.log("error", err.sql + ". " + err.sqlMessage);
+                    res.json(err);
+                  }
+                }
+              );
+            } else {
+              res.json(false);
+            }
+          } else {
+            res.json(false);
+          }
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
+      }
+    );
+  });
+});
+
 router.get("/getTemplateAccount", function (req, res, next) {
   var reqObj = req.params.id;
   connection.getConnection(function (err, conn) {
@@ -5426,6 +5523,179 @@ router.post("/deleteTemplateAccount", (req, res, next) => {
     res.json(ex);
   }
 });
+
+router.post("/loadTemplateAccount", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    insertFromTemplate(
+      conn,
+      "complaint_list",
+      req.body.account_id,
+      req.body.id
+    );
+    insertFromTemplate(conn, "therapy_list", req.body.account_id, req.body.id);
+    insertFromTemplate(
+      conn,
+      "treatment_list",
+      req.body.account_id,
+      req.body.id
+    );
+    insertFromTemplate(conn, "vattax_list", req.body.account_id, req.body.id);
+    insertFromTemplate(
+      conn,
+      "work_time_colors",
+      req.body.account_id,
+      req.body.id
+    );
+    insertFromTemplate(
+      conn,
+      "recommendation_list",
+      req.body.account_id,
+      req.body.id
+    );
+    insertFromTemplate(
+      conn,
+      "relationship_list",
+      req.body.account_id,
+      req.body.id
+    );
+    insertFromTemplate(conn, "social_list", req.body.account_id, req.body.id);
+    insertFromTemplate(conn, "doctors_list", req.body.account_id, req.body.id);
+    insertFromTemplate(conn, "doctor_list", req.body.account_id, req.body.id);
+    insertFromTemplate(conn, "state_list", req.body.account_id, req.body.id);
+    insertFromTemplate(conn, "cs_list", req.body.account_id, req.body.id);
+    insertFromTemplate(
+      conn,
+      "event_category",
+      req.body.account_id,
+      req.body.id
+    );
+    insertFromTemplate(conn, "tasks", req.body.account_id, req.body.id);
+    //customer
+    getCustomersDemoData(conn, "customers", req.body.account_id, req.body.id);
+    insertFromTemplate(conn, "reminder", req.body.account_id, req.body.id);
+    insertFromTemplate(conn, "vaucher", req.body.account_id, req.body.id);
+    insertFromTemplate(conn, "users", req.body.account_id, req.body.id);
+    insertFromTemplate(conn, "store", req.body.account_id, req.body.id);
+
+    setTimeout(function () {
+      res.json(true);
+      conn.release();
+    }, 60000);
+  });
+});
+
+function insertFromTemplate(conn, category, account_id, id) {
+  conn.query(
+    "SELECT * from " + category + " where superadmin = ?",
+    account_id,
+    function (err, rows) {
+      // conn.release();
+      console.log(rows);
+      if (!err) {
+        rows.forEach(function (to, i, array) {
+          to.superadmin = id;
+          delete to.id;
+          console.log(to);
+          conn.query(
+            "insert into " + category + " SET ?",
+            to,
+            function (err, res) {
+              console.log(err);
+              console.log(res);
+            }
+          );
+        });
+      } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      }
+    }
+  );
+}
+
+function getCustomersDemoData(conn, category, account_id, id) {
+  conn.query(
+    "SELECT * from " + category + " where storeId = ?",
+    account_id,
+    function (err, rows) {
+      // conn.release();
+      console.log(rows);
+      if (!err) {
+        rows.forEach(function (to, i, array) {
+          to.superadmin = id;
+          delete to.id;
+          console.log(to);
+          conn.query(
+            "insert into " + category + " SET ?",
+            to,
+            function (err, res) {
+              console.log(err);
+              console.log(res);
+            }
+          );
+        });
+      } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      }
+    }
+  );
+}
+
+router.post("/insertDemoAccountLanguage", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "insert into account_language SET ?",[req.body],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(false);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.get("/getDemoAccountLanguage/:superadmin", function (req, res, next) {
+  var reqObj = req.params.id;
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query("SELECT * from account_language where superadmin = ?", [req.params.superadmin], function (err, rows) {
+      conn.release();
+      if (!err) {
+        res.json(rows);
+      } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      }
+    });
+  });
+});
+
+
 
 /* END TEMPLATE ACCOUNT */
 

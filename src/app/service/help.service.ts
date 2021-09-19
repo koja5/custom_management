@@ -180,11 +180,19 @@ export class HelpService {
     return sessionStorage.getItem(key);
   }
 
+  clearSessionStorage(key) {
+    sessionStorage.removeItem(key);
+  }
+
   setLocalStorage(key, value) {
     localStorage.setItem(key, value);
   }
 
   getLocalStorage(key) {
     return localStorage.getItem(key);
+  }
+
+  clearLocalStorage(key) {
+    localStorage.removeItem(key);
   }
 }

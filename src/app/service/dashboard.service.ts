@@ -30,6 +30,12 @@ export class DashboardService {
     return this.http.get("/api/getTranslation").map((res) => res);
   }
 
+  getTranslationByDemoAccount(demoCode: string) {
+    return this.http
+      .get("/api/getTranslationByDemoAccount/" + demoCode)
+      .map((res) => res);
+  }
+
   getGridConfiguration(type) {
     return this.http
       .get("../assets/configuration/grid/" + type + ".json")
@@ -60,5 +66,11 @@ export class DashboardService {
 
   loadTemplateAccount(data) {
     return this.http.post("/api/loadTemplateAccount", data).map((res) => res);
+  }
+
+  insertDemoAccountLanguage(data) {
+    return this.http
+      .post("/api/insertDemoAccountLanguage", data)
+      .map((res) => res);
   }
 }

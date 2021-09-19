@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
   public errorInfo: string;
   public emailValid = true;
   public language: any;
+  private superadmin: number;
 
   public data = {
     id: "",
@@ -133,6 +134,27 @@ export class LoginComponent implements OnInit {
     );
   }
 
+  getTranslationByDemoCode(demoCode) {
+    this.dashboardService
+      .getTranslationByDemoAccount(demoCode)
+      .subscribe((language) => {
+        this.language = language["config"];
+        this.helpService.setLocalStorage(
+          "language",
+          JSON.stringify(this.language)
+        );
+        this.helpService.setLocalStorage(
+          "defaultLanguage",
+          language["demoCode"]
+        );
+        this.helpService.setLocalStorage(
+          "demoAccountLanguage",
+          language["demoAccount"]
+        );
+        this.router.navigate(["/dashboard/home/task"]);
+      });
+  }
+
   signUpActive() {
     this.loginForm = "";
     this.recoverForm = "";
@@ -177,8 +199,9 @@ export class LoginComponent implements OnInit {
             this.helpService.setLocalStorage("indicatorUser", id);
             this.helpService.setLocalStorage("storeId-" + id, storeId);
             this.helpService.setLocalStorage("superadmin", superadmin);
-            if(last_login === null) {
-              this.helpService.setSessionStorage('first_login', true);
+            this.superadmin = superadmin;
+            if (last_login === null) {
+              this.helpService.setSessionStorage("first_login", true);
             }
             this.getConfigurationFromDatabase(id);
           }
@@ -267,21 +290,25 @@ export class LoginComponent implements OnInit {
 
   getConfigurationFromDatabase(id) {
     this.mongo.getConfiguration(Number(id)).subscribe((data) => {
-      this.setConfiguration(data, id);
+      if (data) {
+        this.setConfiguration(data, id);
+      } else {
+        this.demoAccountLanguage(null);
+      }
     });
   }
 
   setConfiguration(data, id) {
     // this.helpService.setLocalStorage("theme", data.theme);
     // this.helpService.setLocalStorage("defaultLanguage", data.language);
-    if (data.selectedStore !== null && data.selectedStore.length !== 0) {
+    if (data.selectedStore && data.selectedStore.length !== 0) {
       // this.helpService.setLocalStorage("selectedStore-" + id, JSON.stringify(data.selectedStore[0]));
       this.storageService.setSelectedStore(
         id,
         JSON.stringify(data.selectedStore[0])
       );
     }
-    if (data.usersFor !== null && data.usersFor.length !== 0) {
+    if (data.usersFor && data.usersFor.length !== 0) {
       this.setUsersForConfiguration(data.usersFor);
     }
     if (data.storeSettings) {
@@ -292,14 +319,40 @@ export class LoginComponent implements OnInit {
     }
 
     if (
-      data.langauge !== this.helpService.getLocalStorage("defaultLanguage") ||
+      data.language !== this.helpService.getLocalStorage("defaultLanguage") ||
       this.helpService.getLocalStorage("language") == undefined
     ) {
-      this.helpService.setLocalStorage("defaultLanguage", data.language);
-      this.getTranslationByCountryCode(data.language);
+      this.demoAccountLanguage(data.language);
     } else {
       this.router.navigate(["/dashboard/home/task"]);
     }
+  }
+
+  demoAccountLanguage(language) {
+    this.service
+      .getDemoAccountLanguage(this.superadmin)
+      .subscribe((demoAccount) => {
+        if (language) {
+          this.helpService.setLocalStorage("defaultLanguage", language);
+          this.getTranslationByCountryCode(language);
+        } else if (demoAccount && demoAccount["length"] > 0) {
+          this.getTranslationByCountryCode(demoAccount[0]["demo_code"]);
+          this.helpService.setLocalStorage(
+            "defaultLanguage",
+            demoAccount[0]["demo_code"]
+          );
+        } else {
+          this.getTranslationByCountryCode("US");
+        }
+        if (demoAccount && demoAccount["length"] > 0) {
+          this.helpService.setLocalStorage(
+            "demoAccountLanguage",
+            demoAccount[0]["demo_account"]
+          );
+        } else {
+          this.helpService.clearLocalStorage("demoAccountLanguage");
+        }
+      });
   }
 
   setUsersForConfiguration(data) {

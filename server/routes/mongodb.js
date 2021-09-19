@@ -3,6 +3,13 @@ const router = express.Router();
 const mongo = require("mongodb").MongoClient;
 // var assert = require('assert');
 const Schema = mongo.Schema;
+// const url = 'mongodb://localhost:27017/management_mongodb';
+// const url = 'mongodb://appprodu_appproduction_prod:CJr4eUqWg33tT97mxPFx@vps.app-production.eu:42526/management_mongodb'
+// const url = "mongodb://116.203.85.82:27017/management_mongo?gssapiServiceName=mongodb";
+// const url = "mongodb://admin:1234@localhost:27017/business_circle_mongodb?authSource=admin";
+const url =
+  "mongodb+srv://clinic_node:1234@cluster0.54i4v.mongodb.net/test?authSource=admin&replicaSet=atlas-8om2st-shard-0&readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=true";
+const database_name = "management_mongodb";
 var ObjectId = require("mongodb").ObjectID;
 const mysql = require("mysql");
 var sha1 = require("sha1");
@@ -35,6 +42,7 @@ router.post("/updateLanguage", function (req, res, next) {
   mongo.connect(url, function (err, db, res) {
     if (err) throw err;
     var dbo = db.db(database_name);
+    console.log(req.body.language);
     dbo
       .collection("user_configuration")
       .updateOne(
@@ -203,23 +211,7 @@ router.get("/getConfiguration/:id", function (req, res, next) {
       .collection("user_configuration")
       .findOne({ user_id: Number(id) }, function (err, rows) {
         if (err) throw err;
-        if (rows !== null) {
-          res.json(rows);
-        } else {
-          var item = {
-            user_id: Number(id),
-            language: "english",
-            theme: "Theme1",
-            selectedStore: [],
-            usersFor: [],
-          };
-          dbo
-            .collection("user_configuration")
-            .insertOne(item, function (err, result) {
-              console.log(result);
-              res.json(item);
-            });
-        }
+        res.json(rows);
       });
   });
 });
@@ -236,6 +228,25 @@ router.post("/createTranslation", function (req, res, next) {
         res.send(true);
       }
     });
+  });
+});
+
+router.get("/getAllTranslationsByDemoAccount/:demoAccount", function (req, res, next) {
+  mongo.connect(url, function (err, db) {
+    if (err) throw err;
+    console.log(req.params.demoAccount);
+
+    var dbo = db.db(database_name);
+    dbo
+      .collection("translation")
+      .find({
+        demoAccount:
+          req.params.demoAccount !== "null" ? req.params.demoAccount : null,
+      })
+      .toArray(function (err, rows) {
+        if (err) throw err;
+        res.json(rows);
+      });
   });
 });
 
@@ -287,6 +298,41 @@ router.get("/getTranslationByCountryCode/:code", function (req, res, next) {
   });
 });
 
+router.get("/getTranslationByDemoAccount/:demoAccount", function (req, res, next) {
+  const demoAccount = req.params.demoAccount;
+  mongo.connect(url, function (err, db) {
+    if (err) throw err;
+    var dbo = db.db(database_name);
+    console.log(dbo);
+    dbo
+      .collection("translation")
+      .findOne({ demoAccount: demoAccount, active: true }, function (err, rows) {
+        if (err) throw err;
+        res.json(rows);
+      });
+  });
+});
+
+router.get(
+  "/getAllTranslationForDemoAccount/:demoAccount",
+  function (req, res, next) {
+    console.log(req.params.demoAccount);
+    mongo.connect(url, function (err, db) {
+      if (err) throw err;
+      var dbo = db.db(database_name);
+      console.log(dbo);
+      dbo
+        .collection("translation")
+        .find({ demoAccount: req.params.demoAccount, active: true })
+        .toArray(function (err, rows) {
+          if (err) throw err;
+          console.log(rows);
+          res.json(rows);
+        });
+    });
+  }
+);
+
 router.get("/deleteTranslation/:id", function (req, res, next) {
   const id = req.params.id;
   console.log(id);
@@ -319,6 +365,8 @@ router.post("/updateTranslation", function (req, res, next) {
           countryCode: req.body.countryCode,
           active: req.body.active,
           config: req.body.config,
+          demoAccount: req.body.demoAccount,
+          demoCode: req.body.demoCode,
         },
       },
       { upsert: true },

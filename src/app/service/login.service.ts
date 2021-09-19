@@ -76,4 +76,8 @@ export class LoginService {
       .get("/api/getTranslationByCountryCode/US")
       .map((res) => res);
   }
+
+  getDemoAccountLanguage(id: number) {
+    return this.http.get("/api/getDemoAccountLanguage/" + id).map((res) => res);
+  }
 }

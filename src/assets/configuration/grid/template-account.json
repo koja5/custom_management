@@ -41,9 +41,9 @@
   "hideable": true,
   "refresh": false,
   "reset": true,
-  "toolbar": ["Add", "Delete", "Print", "Search"],
+  "toolbar": ["Add", "Edit", "Delete", "Print", "Search"],
   "editSettings": {
-    "allowEditing": false,
+    "allowEditing": true,
     "allowAdding": true,
     "allowDeleting": true,
     "showDeleteConfirmDialog": true,
@@ -53,6 +53,13 @@
     "add": {
       "type": "POST",
       "api": "/api/createTemplateAccount",
+      "parameters": [],
+      "fields": "",
+      "root": ""
+    },
+    "edit": {
+      "type": "POST",
+      "api": "/api/updateTemplateAccount",
       "parameters": [],
       "fields": "",
       "root": ""
@@ -80,9 +87,31 @@
       "type": "string",
       "class": "text-align-right",
       "field": "name"
+    },
+    {
+      "title": "Email",
+      "filterable": true,
+      "type": "string",
+      "class": "text-align-right",
+      "field": "email"
+    },
+    {
+      "title": "Account Id",
+      "filterable": true,
+      "type": "string",
+      "class": "text-align-right",
+      "field": "account_id"
     }
   ],
   "configField": [
+    {
+      "type": "textbox",
+      "width": "col-md-12",
+      "name": "id",
+      "label": "ID",
+      "field": "id",
+      "readonly": true
+    },
     {
       "type": "textbox",
       "width": "col-md-12",

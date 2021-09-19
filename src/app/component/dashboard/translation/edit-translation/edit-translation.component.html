@@ -9,6 +9,12 @@
     <kendo-textbox-container floatingLabel="{{language.countryCode}}" style="width: 200px !important">
       <input kendoTextBox [(ngModel)]="data.countryCode" name="countryCode" />
     </kendo-textbox-container>
+    <kendo-textbox-container floatingLabel="{{language?.countryCode}}" style="width: 200px !important">
+      <input kendoTextBox [(ngModel)]="data.demoCode" name="demoCode" />
+    </kendo-textbox-container>
+    <kendo-textbox-container floatingLabel="{{language?.countryCode}}" style="width: 200px !important">
+      <input kendoTextBox [(ngModel)]="data.demoAccount" name="demoAccount" />
+    </kendo-textbox-container>
     <kendo-switch [(ngModel)]="data.active" name="active" style="width: 45px !important"></kendo-switch>
   </div>
 

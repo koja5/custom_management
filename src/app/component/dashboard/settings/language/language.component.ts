@@ -43,13 +43,33 @@ export class LanguageComponent implements OnInit {
 
   getAllLanguages() {
     this.loading = true;
+    console.log(this.helpService.getLocalStorage("demoAccountLanguage"));
     this.dynamicService
-      .callApiGet("/api/getTranslation", "")
+      .callApiGet(
+        "/api/getAllTranslationsByDemoAccount",
+        this.helpService.getLocalStorage("demoAccountLanguage")
+      )
       .subscribe((data) => {
         console.log(data);
         this.data = data;
         this.translateTextValue();
       });
+    // if (this.helpService.getLocalStorage("demoAccountLanguage")) {
+    //   this.dynamicService.callApiGet("/api/getAllTranslationForDemoAccount", this.helpService.getLocalStorage("demoAccountLanguage")).subscribe(
+    //     data => {
+    //       this.data = data;
+    //       this.translateTextValue();
+    //     }
+    //   )
+    // } else {
+    //   this.dynamicService
+    //     .callApiGet("/api/getTranslation", this.helpService.getLocalStorage("demoAccountLanguage"))
+    //     .subscribe((data) => {
+    //       console.log(data);
+    //       this.data = data;
+    //       this.translateTextValue();
+    //     });
+    // }
   }
 
   translateTextValue() {

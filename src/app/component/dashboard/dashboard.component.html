@@ -152,7 +152,7 @@
                           id="side-menu"
                         >
                           <li class="menu-title mt-2" data-key="t-components">
-                            {{ language.userTitleMenu }}
+                            {{ language?.userTitleMenu }}
                           </li>
                           <li
                             class="{{ selectedNodeModel['calendar'] }}"
@@ -219,7 +219,7 @@
                             class="menu-title"
                             data-key="t-components"
                           >
-                            {{ language.applicationParametersSettingsTitle }}
+                            {{ language?.applicationParametersSettingsTitle }}
                           </li>
 
                           <li
@@ -263,7 +263,7 @@
                             <a (click)="collapse(2)" class="has-arrow"
                               ><i class="fa fa fa-file-text"></i
                               ><span class="navigation-link">{{
-                                language.applicationParametersSettingsTitle
+                                language?.applicationParametersSettingsTitle
                               }}</span></a
                             >
                             <ul
@@ -281,7 +281,7 @@
                                   (click)="returnActiveNode('complaint')"
                                   ><i class="fa fa-list-alt"></i>
                                   <span class="navigation-link">{{
-                                    language.complaintMenu
+                                    language?.complaintMenu
                                   }}</span>
                                 </a>
                               </li>
@@ -293,7 +293,7 @@
                                   class="nav-link"
                                   ><i class="fa fa-medkit"></i>
                                   <span class="navigation-link"></span>
-                                  {{ language.therapyMenu }}
+                                  {{ language?.therapyMenu }}
                                 </a>
                               </li>
 
@@ -304,7 +304,7 @@
                                   class="nav-link"
                                   ><i class="fa fa-medkit"></i>
                                   <span class="navigation-link"></span>
-                                  {{ language.treatmentMenu }}
+                                  {{ language?.treatmentMenu }}
                                 </a>
                               </li>
 
@@ -319,7 +319,7 @@
                                   class="nav-link"
                                   ><i class="fa fa-check"></i>
                                   <span class="navigation-link"></span>
-                                  {{ language.recommendationMenu }}
+                                  {{ language?.recommendationMenu }}
                                 </a>
                               </li>
 
@@ -332,7 +332,7 @@
                                   class="nav-link"
                                   ><i class="fa fa-exchange"></i>
                                   <span class="navigation-link"></span>
-                                  {{ language.relationshipMenu }}
+                                  {{ language?.relationshipMenu }}
                                 </a>
                               </li>
 
@@ -343,7 +343,7 @@
                                   class="nav-link"
                                   ><i class="fa fa-life-ring"></i>
                                   <span class="navigation-link"></span>
-                                  {{ language.socialMenu }}
+                                  {{ language?.socialMenu }}
                                 </a>
                               </li>
 
@@ -354,7 +354,7 @@
                                   class="nav-link"
                                   ><i class="fa fa-user"></i>
                                   <span class="navigation-link"></span>
-                                  {{ language.doctorMenu }}
+                                  {{ language?.doctorMenu }}
                                 </a>
                               </li>
 
@@ -365,7 +365,7 @@
                                   class="nav-link"
                                   ><i class="fa fa-users"></i>
                                   <span class="navigation-link"></span>
-                                  {{ language.doctorsMenu }}
+                                  {{ language?.doctorsMenu }}
                                 </a>
                               </li>
 
@@ -376,7 +376,7 @@
                                   class="nav-link"
                                   ><i class="fa fa-percent"></i>
                                   <span class="navigation-link"></span>
-                                  {{ language.vatTaxMenu }}
+                                  {{ language?.vatTaxMenu }}
                                 </a>
                               </li>
 
@@ -387,7 +387,7 @@
                                   class="nav-link"
                                   ><i class="fa fa-contao"></i>
                                   <span class="navigation-link"></span>
-                                  {{ language.csMenu }}
+                                  {{ language?.csMenu }}
                                 </a>
                               </li>
 
@@ -400,7 +400,7 @@
                                     class="fa fa-thermometer-three-quarters"
                                   ></i>
                                   <span class="navigation-link"></span>
-                                  {{ language.stateMenu }}
+                                  {{ language?.stateMenu }}
                                 </a>
                               </li>
 
@@ -415,7 +415,7 @@
                                   class="nav-link"
                                   ><i class="fa fa-paint-brush"></i>
                                   <span class="navigation-link"></span>
-                                  {{ language.eventCategoryMenu }}
+                                  {{ language?.eventCategoryMenu }}
                                 </a>
                               </li>
 
@@ -430,7 +430,7 @@
                                   class="nav-link"
                                   ><i class="fa fa-tint"></i>
                                   <span class="navigation-link"></span>
-                                  {{ language.workTimeColorsMenu }}
+                                  {{ language?.workTimeColorsMenu }}
                                 </a>
                               </li>
 
@@ -454,7 +454,7 @@
                             class="menu-title"
                             data-key="t-menu"
                           >
-                            {{ language.systemSettingsTitleMenu }}
+                            {{ language?.systemSettingsTitleMenu }}
                           </li>
 
                           <li
@@ -464,7 +464,7 @@
                             <a (click)="collapse(0)" class="has-arrow"
                               ><i class="fa fa-cogs"></i
                               ><span class="navigation-link">{{
-                                language.systemSettingsTitle
+                                language?.systemSettingsTitle
                               }}</span></a
                             >
                             <ul
@@ -532,7 +532,7 @@
                             <a (click)="collapse(1)" class="has-arrow"
                               ><i class="fa fa fa-file-text"></i
                               ><span class="navigation-link">{{
-                                language.systemLogsTitle
+                                language?.systemLogsTitle
                               }}</span></a
                             >
                             <ul
@@ -551,7 +551,7 @@
                                   routerLink="/dashboard/home/system-logs/error"
                                   ><i class="fa fa-bug"></i
                                   ><span class="navigation-link">{{
-                                    language.systemLogErrors
+                                    language?.systemLogErrors
                                   }}</span></a
                                 >
                               </li>
@@ -564,7 +564,7 @@
                                   routerLink="/dashboard/home/system-logs/info"
                                   ><i class="fa fa-info-circle"></i
                                   ><span class="navigation-link">{{
-                                    language.systemLogInfo
+                                    language?.systemLogInfo
                                   }}</span></a
                                 >
                               </li>
@@ -577,7 +577,7 @@
                                   routerLink="/dashboard/home/system-logs/warn"
                                   ><i class="fa fa-exclamation-triangle"></i
                                   ><span class="navigation-link">{{
-                                    language.systemLogWarn
+                                    language?.systemLogWarn
                                   }}</span></a
                                 >
                               </li>
@@ -712,14 +712,14 @@
       (click)="settings.close()"
       style="width: 15vh; padding: 1vh"
     >
-      {{ language.close }}
+      {{ language?.close }}
     </button>
   </modal-footer>
 </modal>
 
 <modal #firstLogin modalClass="modal-md top-margin loggerModal adminModal">
   <modal-header>
-    <h3 *ngIf="language !== undefined">{{ language.loadDemoAccountTitle }}</h3>
+    <h3 *ngIf="language !== undefined">{{ language?.loadDemoAccountTitle }}</h3>
   </modal-header>
   <modal-content>
     <div class="trophy">
@@ -727,15 +727,15 @@
         _ngcontent-nff-c1=""
         src="./assets/images/trophy.png"
       />
-      <h3>{{language.loadDemoAccountHeader}}</h3>
+      <h3>{{language?.loadDemoAccountHeader}}</h3>
     </div>
     <div class="message">
       <p>
-        {{language.loadDemoAccountText}}
+        {{language?.loadDemoAccountText}}
       </p>
     </div>
     <div *ngIf="templateAccount">
-      <label>{{language.loadDemoAccountChooise}}</label>
+      <label>{{language?.loadDemoAccountChooise}}</label>
       <ejs-dropdownlist
       [dataSource]="templateAccount"
       [(value)]="templateAccountValue"
@@ -750,15 +750,15 @@
       class="btn btn-default mb-0"
       (click)="firstLogin.close()"
     >
-      {{language.loadDemoAccountNoThanks}}
+      {{language?.loadDemoAccountNoThanks}}
     </button>
-    <button kendoButton class="btn btn-primary" (click)="loadTemplateAccount()" [disabled]="templateAccountValue === undefined">{{language.loadDemoAccountButton}}</button>
+    <button kendoButton class="btn btn-primary" (click)="loadTemplateAccount()" [disabled]="templateAccountValue === undefined">{{language?.loadDemoAccountButton}}</button>
   </modal-footer>
 </modal>
 
 <modal #templateLoading modalClass="modal-md top-margin loggerModal adminModal" [hideCloseButton]="true" [closeOnOutsideClick]="false">
   <modal-header>
-    <h3 *ngIf="language !== undefined">{{ language.loadingDemoTitle }}</h3>
+    <h3 *ngIf="language !== undefined">{{ language?.loadingDemoTitle }}</h3>
   </modal-header>
   <modal-content>
     <div class="replication">
@@ -766,11 +766,11 @@
         _ngcontent-nff-c1=""
         src="./assets/images/replication.gif"
       />
-      <h3>{{language.loadingDemoHeader}}</h3>
+      <h3>{{language?.loadingDemoHeader}}</h3>
     </div>
     <div class="message">
       <p>
-        {{language.loadingDemoText}}
+        {{language?.loadingDemoText}}
       </p>
     </div>
   </modal-content>

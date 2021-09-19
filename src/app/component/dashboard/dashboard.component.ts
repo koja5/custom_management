@@ -11,6 +11,7 @@ import { MongoService } from "../../service/mongo.service";
 import { HelpService } from "src/app/service/help.service";
 import { UserType } from "../enum/user-type";
 import { StorageService } from "src/app/service/storage.service";
+import { AccountLanguage } from "src/app/models/account-language";
 declare var document: any;
 
 @Component({
@@ -412,10 +413,42 @@ export class DashboardComponent implements OnInit {
       id: this.helpService.getMe(),
       account_id: this.templateAccountValue,
     };
+    const selectedDemoAccountName = this.getDemoAccountNameById();
+    if (selectedDemoAccountName !== null) {
+      this.service
+        .getTranslationByDemoAccount(selectedDemoAccountName)
+        .subscribe((data) => {
+          console.log(data);
+          if (data) {
+            this.language = data["config"];
+            this.helpService.setLocalStorage("language", JSON.stringify(this.language));
+            let accountLanguage = new AccountLanguage();
+            accountLanguage = {
+              superadmin: this.helpService.getMe(),
+              demo_code: data["demoCode"],
+              demo_account: data["demoAccount"],
+            };
+            this.service
+              .insertDemoAccountLanguage(accountLanguage)
+              .subscribe((data) => {
+                console.log(data);
+              });
+          }
+        });
+    }
     this.service.loadTemplateAccount(data).subscribe((response) => {
       if (response) {
         this.templateLoading.close();
       }
     });
+  }
+
+  getDemoAccountNameById() {
+    for (let i = 0; i < this.templateAccount.length; i++) {
+      if (this.templateAccount[i].account_id === this.templateAccountValue) {
+        return this.templateAccount[i]["name"];
+      }
+    }
+    return null;
   }
 }

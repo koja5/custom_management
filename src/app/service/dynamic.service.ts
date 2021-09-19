@@ -38,6 +38,9 @@ export class DynamicService {
         return method + "/" + parametars;
       }
     }
+    if(parametars === null) {
+      method += '/' + null;
+    }
 
     return method;
   }
