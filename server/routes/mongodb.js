@@ -231,24 +231,27 @@ router.post("/createTranslation", function (req, res, next) {
   });
 });
 
-router.get("/getAllTranslationsByDemoAccount/:demoAccount", function (req, res, next) {
-  mongo.connect(url, function (err, db) {
-    if (err) throw err;
-    console.log(req.params.demoAccount);
+router.get(
+  "/getAllTranslationsByDemoAccount/:demoAccount",
+  function (req, res, next) {
+    mongo.connect(url, function (err, db) {
+      if (err) throw err;
+      console.log(req.params.demoAccount);
 
-    var dbo = db.db(database_name);
-    dbo
-      .collection("translation")
-      .find({
-        demoAccount:
-          req.params.demoAccount !== "null" ? req.params.demoAccount : null,
-      })
-      .toArray(function (err, rows) {
-        if (err) throw err;
-        res.json(rows);
-      });
-  });
-});
+      var dbo = db.db(database_name);
+      dbo
+        .collection("translation")
+        .find({
+          demoAccount:
+            req.params.demoAccount !== "null" ? req.params.demoAccount : null,
+        })
+        .toArray(function (err, rows) {
+          if (err) throw err;
+          res.json(rows);
+        });
+    });
+  }
+);
 
 router.get("/getTranslation", function (req, res, next) {
   mongo.connect(url, function (err, db) {
@@ -257,6 +260,24 @@ router.get("/getTranslation", function (req, res, next) {
     dbo
       .collection("translation")
       .find()
+      .toArray(function (err, rows) {
+        if (err) throw err;
+        console.log(rows);
+        res.json(rows);
+      });
+  });
+});
+
+router.get("/getTranslationWithoutConfig", function (req, res, next) {
+  mongo.connect(url, function (err, db) {
+    if (err) throw err;
+    var dbo = db.db(database_name);
+    dbo
+      .collection("translation")
+      .find(
+        { active: true },
+        { _id: 0, config: 0, active: 0, countryCode: 1, language: 1 }
+      )
       .toArray(function (err, rows) {
         if (err) throw err;
         console.log(rows);
@@ -298,20 +319,58 @@ router.get("/getTranslationByCountryCode/:code", function (req, res, next) {
   });
 });
 
-router.get("/getTranslationByDemoAccount/:demoAccount", function (req, res, next) {
-  const demoAccount = req.params.demoAccount;
+router.get("/getTranslationByLanguage/:language", function (req, res, next) {
   mongo.connect(url, function (err, db) {
     if (err) throw err;
     var dbo = db.db(database_name);
     console.log(dbo);
     dbo
       .collection("translation")
-      .findOne({ demoAccount: demoAccount, active: true }, function (err, rows) {
+      .findOne({ language: req.params.language, active: true }, function (err, rows) {
         if (err) throw err;
+        console.log(rows);
         res.json(rows);
       });
   });
 });
+
+router.get("/getAllTranslationByCountryCode/:code", function (req, res, next) {
+  const code = req.params.code;
+  mongo.connect(url, function (err, db) {
+    if (err) throw err;
+    var dbo = db.db(database_name);
+    console.log(dbo);
+    dbo
+      .collection("translation")
+      .find({ countryCode: code, active: true })
+      .toArray(function (err, rows) {
+        if (err) throw err;
+        console.log(rows);
+        res.json(rows);
+      });
+  });
+});
+
+router.get(
+  "/getTranslationByDemoAccount/:demoAccount",
+  function (req, res, next) {
+    const demoAccount = req.params.demoAccount;
+    mongo.connect(url, function (err, db) {
+      if (err) throw err;
+      var dbo = db.db(database_name);
+      console.log(dbo);
+      dbo
+        .collection("translation")
+        .findOne(
+          { demoAccount: demoAccount, active: true },
+          function (err, rows) {
+            if (err) throw err;
+            res.json(rows);
+          }
+        );
+    });
+  }
+);
 
 router.get(
   "/getAllTranslationForDemoAccount/:demoAccount",

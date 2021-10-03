@@ -1,17 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable, BehaviorSubject } from "rxjs";
+import { map, tap } from "rxjs/operators";
 
-const CREATE_ACTION = 'add';
-const UPDATE_ACTION = 'update';
-const REMOVE_ACTION = 'delete';
+const CREATE_ACTION = "add";
+const UPDATE_ACTION = "update";
+const REMOVE_ACTION = "delete";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class ParameterItemService extends BehaviorSubject<any[]> {
-
   private data: any[] = [];
 
   constructor(private http: HttpClient) {
@@ -22,31 +21,28 @@ export class ParameterItemService extends BehaviorSubject<any[]> {
     /*return this.http.get('/api/get' + type)
       .map(res => res);*/
     console.log(type);
-    this.fetch('read', null, type, superadmin)
+    this.fetch("read", null, type, superadmin)
       .pipe(
-        tap(data => {
+        tap((data) => {
           this.data = data;
         })
       )
-      .subscribe(data => {
+      .subscribe((data) => {
         console.log(data);
         super.next(data);
       });
   }
 
   getDoctorType(superadmin) {
-    return this.http.get('/api/getDoctorList/' + superadmin)
-      .map(res => res);
+    return this.http.get("/api/getDoctorList/" + superadmin).map((res) => res);
   }
 
   getTherapy(superadmin) {
-    return this.http.get('/api/getTherapyList/' + superadmin)
-      .map(res => res);
+    return this.http.get("/api/getTherapyList/" + superadmin).map((res) => res);
   }
 
   getVATTex(superadmin) {
-    return this.http.get('/api/getVATTaxList/' + superadmin)
-      .map(res => res);
+    return this.http.get("/api/getVATTaxList/" + superadmin).map((res) => res);
   }
 
   public addData(data: any, isNew?: boolean, type?: string, superadmin?: any) {
@@ -54,35 +50,68 @@ export class ParameterItemService extends BehaviorSubject<any[]> {
 
     this.reset();
 
-    this.fetch(action, data, type, superadmin)
-      .subscribe(() => this.getData(type, superadmin), () => this.getData(type, superadmin));
+    this.fetch(action, data, type, superadmin).subscribe(
+      () => this.getData(type, superadmin),
+      () => this.getData(type, superadmin)
+    );
   }
 
   public deleteData(data: any, type?: string, superadmin?: any) {
     this.reset();
 
-    this.fetch(REMOVE_ACTION, data, type, superadmin)
-      .subscribe(() => this.getData(type, superadmin), () => this.getData(type, superadmin));
+    this.fetch(REMOVE_ACTION, data, type, superadmin).subscribe(
+      () => this.getData(type, superadmin),
+      () => this.getData(type, superadmin)
+    );
   }
 
   private fetch(action, data, type, superadmin): Observable<any[]> {
-    if (action === 'read') {
+    if (action === "read") {
       console.log(superadmin);
-      return this.http.get('/api/get' + type + 'List/' + superadmin)
-        .pipe(map(res => res as any[]));
-    } else if (action === 'add') {
-      return this.http.post('/api/add' + type + 'List', data)
-        .pipe(map(res => res as any[]));
-    } else if (action === 'delete') {
-      return this.http.get('/api/delete' + type + 'List/' + data)
-        .pipe(map(res => res as any[]));
+      return this.http
+        .get("/api/get" + type + "List/" + superadmin)
+        .pipe(map((res) => res as any[]));
+    } else if (action === "add") {
+      return this.http
+        .post("/api/add" + type + "List", data)
+        .pipe(map((res) => res as any[]));
+    } else if (action === "delete") {
+      return this.http
+        .get("/api/delete" + type + "List/" + data)
+        .pipe(map((res) => res as any[]));
     } else {
-      return this.http.post('/api/update' + type + 'List', data)
-        .pipe(map(res => res as any[]));
+      return this.http
+        .post("/api/update" + type + "List", data)
+        .pipe(map((res) => res as any[]));
     }
   }
 
   private reset() {
     this.data = [];
+  }
+
+  getMailReminderMessage(id: number) {
+    return this.http.get("/api/getMailReminderMessage/" + id);
+  }
+
+  createMailReminderMessage(data) {
+    return this.http.post("/api/createMailReminderMessage", data);
+  }
+
+  updateMailReminderMessage(data) {
+    return this.http.post("/api/updateMailReminderMessage", data);
+  }
+
+  
+  getSmsReminderMessage(id: number) {
+    return this.http.get("/api/getSmsReminderMessage/" + id);
+  }
+
+  createSmsReminderMessage(data) {
+    return this.http.post("/api/createSmsReminderMessage", data);
+  }
+
+  updateSmsReminderMessage(data) {
+    return this.http.post("/api/updateSmsReminderMessage", data);
   }
 }

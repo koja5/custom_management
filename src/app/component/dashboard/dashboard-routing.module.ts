@@ -26,6 +26,8 @@ import { SystemInfoComponent } from "./administrator/system-logs/system-info/sys
 import { SystemWarnComponent } from "./administrator/system-logs/system-warn/system-warn.component";
 import { AvailableAreaCodeComponent } from "./administrator/available-area-code/available-area-code.component";
 import { TemplateAccountComponent } from "./administrator/template-account/template-account.component";
+import { MailReminderComponent } from "./parameters/mail-reminder/mail-reminder.component";
+import { SmsReminderComponent } from "./parameters/sms-reminder/sms-reminder.component";
 
 const routes: Routes = [
   {
@@ -140,7 +142,9 @@ const routes: Routes = [
         component: MyDocumentComponent,
       },
       { path: "reservations", component: ReservationsComponent },
-      { path: "template-account", component: TemplateAccountComponent }
+      { path: "template-account", component: TemplateAccountComponent },
+      { path: "mail-reminder", component: MailReminderComponent },
+      { path: "sms-reminder", component: SmsReminderComponent }
     ],
   },
 ];

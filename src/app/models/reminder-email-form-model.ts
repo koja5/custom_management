@@ -10,4 +10,6 @@ export class ReminderEmailFormModel {
     month: string;
     day: string;
     language?: any;
+    id?: string;
+    countryCode?: string;
 }

@@ -454,7 +454,10 @@ router.post("/login", (req, res, next) => {
                             superadmin: rows[0].storeId,
                           });
                         } else {
-                          // logger.log('error', `Bad username and password for users ${req.body.email}`);
+                          logger.log(
+                            "error",
+                            `Bad username and password for users ${req.body.email}`
+                          );
                           logger.log(
                             "warn",
                             `User ${req.body.email} is NOT SUCCESS login on a system!`
@@ -5036,8 +5039,11 @@ router.post("/sendSMS", function (req, res) {
       phoneNumber = req.body.mobile;
     }
     if (checkAvailableCode(phoneNumber, JSON.parse(codes))) {
+      if (!req.body.countryCode) {
+        req.body.countryCode = "US";
+      }
       request(
-        link + "/getTranslationByCountryCode/AT",
+        link + "/getTranslationByCountryCode/" + req.body.countryCode,
         function (error, response, body) {
           var convertToDateStart = new Date(req.body.start);
           var convertToDateEnd = new Date(req.body.end);
@@ -5063,40 +5069,64 @@ router.post("/sendSMS", function (req, res) {
             (endMinutes < 10 ? "0" + endMinutes : endMinutes);
 
           var language = JSON.parse(body)["config"];
-          var message =
-            language?.initialGreetingSMSReminder +
-            " " +
-            req.body.shortname +
-            ", \n" +
-            "\n" +
-            language?.introductoryMessageForSMSReminderReservation +
-            " \n" +
-            "\n" +
-            language?.dateMessage +
-            ": " +
-            date +
-            " \n" +
-            language?.timeMessage +
-            ": " +
-            start +
-            "-" +
-            end +
-            " \n" +
-            language?.storeLocation +
-            ": " +
-            req.body.storename;
-
-          var content = "To: " + phoneNumber + "\r\n\r\n" + message;
-          var fileName = "server/sms/" + phoneNumber + ".txt";
-          console.log(content);
-          fs.writeFile(fileName, content, function (err) {
-            if (err) return logger.log("error", err);
-            logger.log(
-              "info",
-              "Sent CUSTOM REMINDER to NUMBER: " + phoneNumber
-            );
-            ftpUploadSMS(fileName, phoneNumber + ".txt");
-            res.send(true);
+          connection.getConnection(function (err, conn) {
+            if (err) {
+              res.json(err);
+            } else {
+              conn.query(
+                "select * from customers c join sms_reminder_message sr on c.storeId = sr.superadmin where c.id = ?",
+                [req.body.id],
+                function (err, smsMessage, fields) {
+                  var sms = {};
+                  if (smsMessage.length == 0) {
+                    sms.smsSubject =
+                      language?.initialGreetingSMSReminder;
+                      sms.smsMessage =
+                      language?.introductoryMessageForSMSReminderReservation;
+                      sms.smsDate = language?.dateMessage;
+                      sms.smsTime = language?.timeMessage;
+                      sms.smsClinic = language?.storeLocation;
+                  } else {
+                    sms = smsMessage[0]
+                  }
+                  var message =
+                  sms.smsSubject +
+                    " " +
+                    req.body.shortname +
+                    ", \n" +
+                    "\n" +
+                    sms.smsMessage +
+                    " \n" +
+                    "\n" +
+                    sms.smsDate +
+                    ": " +
+                    date +
+                    " \n" +
+                    sms.smsTime +
+                    ": " +
+                    start +
+                    "-" +
+                    end +
+                    " \n" +
+                    sms.smsClinic +
+                    ": " +
+                    req.body.storename;
+                  console.log(message);
+                  var content = "To: " + phoneNumber + "\r\n\r\n" + message;
+                  var fileName = "server/sms/" + phoneNumber + ".txt";
+                  console.log(content);
+                  fs.writeFile(fileName, content, function (err) {
+                    if (err) return logger.log("error", err);
+                    logger.log(
+                      "info",
+                      "Sent CUSTOM REMINDER to NUMBER: " + phoneNumber
+                    );
+                    ftpUploadSMS(fileName, phoneNumber + ".txt");
+                    res.send(true);
+                  });
+                }
+              );
+            }
           });
         }
       );
@@ -5386,6 +5416,7 @@ router.post("/createTemplateAccount", function (req, res, next) {
                 id: req.body.id,
                 name: req.body.name,
                 account_id: req.body.account_id,
+                language: req.body.language,
                 email: rows[0].email,
               };
               conn.query(
@@ -5442,6 +5473,7 @@ router.post("/updateTemplateAccount", function (req, res, next) {
                 name: req.body.name,
                 account_id: req.body.account_id,
                 email: rows[0].email,
+                language: req.body.language,
               };
               conn.query(
                 "update template_account SET ? where id = ?",
@@ -5657,7 +5689,8 @@ router.post("/insertDemoAccountLanguage", (req, res, next) => {
         });
       } else {
         conn.query(
-          "insert into account_language SET ?",[req.body],
+          "insert into account_language SET ?",
+          [req.body],
           function (err, rows, fields) {
             conn.release();
             if (err) {
@@ -5683,20 +5716,202 @@ router.get("/getDemoAccountLanguage/:superadmin", function (req, res, next) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
     }
-    conn.query("SELECT * from account_language where superadmin = ?", [req.params.superadmin], function (err, rows) {
-      conn.release();
-      if (!err) {
-        res.json(rows);
-      } else {
-        logger.log("error", err.sql + ". " + err.sqlMessage);
-        res.json(err);
+    conn.query(
+      "SELECT * from account_language where superadmin = ?",
+      [req.params.superadmin],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
       }
-    });
+    );
   });
 });
 
-
-
 /* END TEMPLATE ACCOUNT */
+
+/* MAIL REMINDER */
+
+router.get("/getMailReminderMessage/:superadmin", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query(
+      "SELECT * from mail_reminder_message where superadmin = ?",
+      [req.params.superadmin],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
+      }
+    );
+  });
+});
+
+router.post("/createMailReminderMessage", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "insert into mail_reminder_message SET ?",
+          [req.body],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/updateMailReminderMessage", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "update mail_reminder_message SET ? where superadmin = ?",
+          [req.body, req.body.superadmin],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+/* END MAIL REMINDER */
+
+/* SMS REMINDER */
+
+router.get("/getSmsReminderMessage/:superadmin", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query(
+      "SELECT * from sms_reminder_message where superadmin = ?",
+      [req.params.superadmin],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
+      }
+    );
+  });
+});
+
+router.post("/createSmsReminderMessage", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "insert into sms_reminder_message SET ?",
+          [req.body],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/updateSmsReminderMessage", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "update sms_reminder_message SET ? where superadmin = ?",
+          [req.body, req.body.superadmin],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+/* END SMS REMINDER */
 
 module.exports = router;

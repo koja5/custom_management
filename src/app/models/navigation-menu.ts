@@ -31,4 +31,6 @@ export class NavigationMenuModel {
     reminder?: string;
     area_code?: string;
     template_account?: string;
+    mail_reminder?: string;
+    sms_reminder?: string;
 }

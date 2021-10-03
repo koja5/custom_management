@@ -54,10 +54,10 @@ var smtpTransport = nodemailer.createTransport({
     rejectUnauthorized: false,
   },
   auth: {
-      user: "support@app-production.eu",
-      pass: "Iva#$2019#$",
+    user: "support@app-production.eu",
+    pass: "Iva#$2019#$",
   },
-})
+});
 
 //slanje maila pri registraciji
 
@@ -573,46 +573,80 @@ router.post("/sendReminderViaEmailManual", function (req, res) {
     ":" +
     (endMinutes < 10 ? "0" + endMinutes : endMinutes);
 
-  var mailOptions = {
-    from: '"ClinicNode" support@app-production.eu',
-    to: req.body.email,
-    subject: req.body.language?.subjectForReminderReservation,
-    html: compiledTemplate.render({
-      initialGreeting: req.body.language?.initialGreeting,
-      introductoryMessageForReminderReservation:
-        req.body.language?.introductoryMessageForReminderReservation,
-      dateMessage: req.body.language?.dateMessage,
-      timeMessage: req.body.language?.timeMessage,
-      therapyMessage: req.body.language?.therapyMessage,
-      doctorMessage: req.body.language?.doctorMessage,
-      storeLocation: req.body.language?.storeLocation,
-      finalGreeting: req.body.language?.finalGreeting,
-      signature: req.body.language?.signature,
-      thanksForUsing: req.body.language?.thanksForUsing,
-      ifYouHaveQuestion: req.body.language?.ifYouHaveQuestion,
-      notReply: req.body.language?.notReply,
-      copyRight: req.body.language?.copyRight,
-      firstName: req.body.shortname,
-      date: date,
-      start: start,
-      end: end,
-      storename: req.body.storename,
-      month: month,
-      day: day,
-    }),
-  };
+  connection.getConnection(function (err, conn) {
+    conn.query(
+      "select * from customers c join mail_reminder_message mr on c.storeId = mr.superadmin where c.id = ?",
+      [req.body.id],
+      function (err, mailMessage, fields) {
+        if (err) {
+          res.json(false);
+        }
+        var mail = {};
+        if (mailMessage.length == 0) {
+          mail.mailSubject = req.body.language?.subjectForReminderReservation;
+          mail.mailInitialGreeting = req.body.language?.initialGreeting;
+          mail.mailMessage =
+            req.body.language?.introductoryMessageForReminderReservation;
+          mail.mailDate = req.body.language?.dateMessage;
+          mail.mailTime = req.body.language?.timeMessage;
+          mail.mailTherapy = req.body.language?.therapyMessage;
+          mail.mailDoctor = req.body.language?.doctorMessage;
+          mail.mailClinic = req.body.language?.storeLocation;
+          mail.mailFinalGreeting = req.body.language?.finalGreeting;
+          mail.mailSignature = req.body.language?.signature;
+          mail.mailThanksForUsing = req.body.language?.thanksForUsing;
+          mail.mailIfYouHaveQuestion = req.body.language?.ifYouHaveQuestion;
+          mail.mailNotReply = req.body.language?.notReply;
+          mail.mailCopyRight = req.body.language?.copyRight;
+        } else {
+          mail = mailMessage;
+        }
+        console.log(mail);
+        var mailOptions = {
+          from: '"ClinicNode" support@app-production.eu',
+          to: req.body.email,
+          subject: mail.mailSubject,
+          html: compiledTemplate.render({
+            initialGreeting: mail.mailInitialGreeting,
+            introductoryMessageForReminderReservation: mail.mailMessage,
+            dateMessage: mail.mailDate,
+            timeMessage: mail.mailTime,
+            therapyMessage: mail.mailTherapy,
+            doctorMessage: mail.mailDoctor,
+            storeLocation: mail.mailClinic,
+            finalGreeting: mail.mailFinalGreeting,
+            signature: mail.mailSignature,
+            thanksForUsing: mail.mailThanksForUsing,
+            ifYouHaveQuestion: mail.mailIfYouHaveQuestion,
+            notReply: mail.mailNotReply,
+            copyRight: mail.mailCopyRight,
+            firstName: req.body.shortname,
+            date: date,
+            start: start,
+            end: end,
+            storename: req.body.storename,
+            month: month,
+            day: day,
+          }),
+        };
 
-  smtpTransport.sendMail(mailOptions, function (error, response) {
-    if (error) {
-      logger.log(
-        "info",
-        `Error to sent reminder via email on EMAIL: ${req.body.email}. Error: ${error}`
-      );
-      res.send(false);
-    } else {
-      logger.log("info", `Sent reminder via email on EMAIL: ${req.body.email}`);
-      res.send(true);
-    }
+        smtpTransport.sendMail(mailOptions, function (error, response) {
+          if (error) {
+            logger.log(
+              "info",
+              `Error to sent reminder via email on EMAIL: ${req.body.email}. Error: ${error}`
+            );
+            res.send(false);
+          } else {
+            logger.log(
+              "info",
+              `Sent reminder via email on EMAIL: ${req.body.email}`
+            );
+            res.send(true);
+          }
+        });
+      }
+    );
   });
 });
 

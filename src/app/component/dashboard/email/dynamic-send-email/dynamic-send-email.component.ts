@@ -48,6 +48,8 @@ export class DynamicSendEmailComponent implements OnInit {
       month: this.data.month,
       day: this.data.day,
       language: this.packLanguage.getLanguageForSendReminderViaEmail(),
+      id: this.data.id,
+      countryCode: this.data.countryCode
     };
     this.service
       .sendReminderViaEmailManual(this.emailFormModel)

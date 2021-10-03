@@ -982,7 +982,9 @@ export class DynamicSchedulerComponent implements OnInit {
       " " +
       this.customerUser["firstname"] +
       "+" +
-      this.complaintData.complaint_title;
+      this.complaintData.complaint_title +
+      "+" +
+      this.complaintData.comment;
     formValue.start = this.eventTime.start;
     formValue.end = this.eventTime.end;
     formValue.superadmin = this.helpService.getSuperadmin();
@@ -999,7 +1001,9 @@ export class DynamicSchedulerComponent implements OnInit {
       " " +
       this.customerUser["firstname"] +
       "+" +
-      this.complaintData.complaint_title;
+      this.complaintData.complaint_title +
+      "+" +
+      this.complaintData.comment;
     this.complaintData.date = this.formatDate(
       this.eventTime.start,
       this.eventTime.end
@@ -1123,7 +1127,9 @@ export class DynamicSchedulerComponent implements OnInit {
         " " +
         this.customerUser["firstname"] +
         "+" +
-        this.complaintData.complaint_title;
+        this.complaintData.complaint_title +
+        "+" +
+        this.complaintData.comment;
     } else {
       formValue.title = args.data.title;
     }
@@ -1763,20 +1769,28 @@ export class DynamicSchedulerComponent implements OnInit {
         this.store,
         this.selectedStoreId
       );
-
-      this.startWork = informationAboutStore ? informationAboutStore.start_work : null;
-      this.endWork = informationAboutStore ? informationAboutStore.end_work : null;
-      this.timeDuration = informationAboutStore.time_duration;
-      if (
-        Number(this.timeDuration) > Number(informationAboutStore.time_therapy)
-      ) {
-        this.therapyDuration =
-          Number(this.timeDuration) /
-          Number(informationAboutStore.time_therapy);
-      } else {
-        this.therapyDuration =
-          Number(informationAboutStore.time_therapy) /
-          Number(this.timeDuration);
+      if (informationAboutStore) {
+        this.startWork = informationAboutStore
+          ? informationAboutStore.start_work
+          : null;
+        this.endWork = informationAboutStore
+          ? informationAboutStore.end_work
+          : null;
+        this.timeDuration = informationAboutStore
+          ? informationAboutStore.time_duration
+          : null;
+        if (
+          informationAboutStore.time_therapy &&
+          Number(this.timeDuration) > Number(informationAboutStore.time_therapy)
+        ) {
+          this.therapyDuration =
+            Number(this.timeDuration) /
+            Number(informationAboutStore.time_therapy);
+        } else {
+          this.therapyDuration =
+            Number(informationAboutStore.time_therapy) /
+            Number(this.timeDuration);
+        }
       }
       this.storeName = this.getStoreName(this.selectedStoreId);
       this.helpService.setTitleForBrowserTab(this.storeName);
@@ -1852,13 +1866,15 @@ export class DynamicSchedulerComponent implements OnInit {
       );
       this.setCalendarSettingsValue("dayStart", personalStoreSettings.dayStart);
     } else {
-      this.dayStartHourValue = new Date(
-        new Date().setHours(
-          Number(defaultStoreSettings.start_work.split(":")[0]),
-          Number(defaultStoreSettings.start_work.toString().split(":")[1]),
-          0
-        )
-      );
+      if (defaultStoreSettings) {
+        this.dayStartHourValue = new Date(
+          new Date().setHours(
+            Number(defaultStoreSettings.start_work.split(":")[0]),
+            Number(defaultStoreSettings.start_work.toString().split(":")[1]),
+            0
+          )
+        );
+      }
     }
   }
 
@@ -1873,13 +1889,15 @@ export class DynamicSchedulerComponent implements OnInit {
       );
       this.setCalendarSettingsValue("dayEnd", personalStoreSettings.dayEnd);
     } else {
-      this.dayEndHourValue = new Date(
-        new Date().setHours(
-          Number(defaultStoreSettings.end_work.split(":")[0]),
-          Number(defaultStoreSettings.end_work.split(":")[1]),
-          0
-        )
-      );
+      if (defaultStoreSettings) {
+        this.dayEndHourValue = new Date(
+          new Date().setHours(
+            Number(defaultStoreSettings.end_work.split(":")[0]),
+            Number(defaultStoreSettings.end_work.split(":")[1]),
+            0
+          )
+        );
+      }
     }
   }
 
@@ -1897,13 +1915,15 @@ export class DynamicSchedulerComponent implements OnInit {
         personalStoreSettings.dayWorkStart
       );
     } else {
-      this.workStartHourValue = new Date(
-        new Date().setHours(
-          Number(defaultStoreSettings.start_work.split(":")[0]),
-          Number(defaultStoreSettings.start_work.toString().split(":")[1]),
-          0
-        )
-      );
+      if (defaultStoreSettings) {
+        this.workStartHourValue = new Date(
+          new Date().setHours(
+            Number(defaultStoreSettings.start_work.split(":")[0]),
+            Number(defaultStoreSettings.start_work.toString().split(":")[1]),
+            0
+          )
+        );
+      }
     }
   }
 
@@ -1921,13 +1941,15 @@ export class DynamicSchedulerComponent implements OnInit {
         personalStoreSettings.dayWorkEnd
       );
     } else {
-      this.workEndHourValue = new Date(
-        new Date().setHours(
-          Number(defaultStoreSettings.end_work.split(":")[0]),
-          Number(defaultStoreSettings.end_work.split(":")[1]),
-          0
-        )
-      );
+      if (defaultStoreSettings) {
+        this.workEndHourValue = new Date(
+          new Date().setHours(
+            Number(defaultStoreSettings.end_work.split(":")[0]),
+            Number(defaultStoreSettings.end_work.split(":")[1]),
+            0
+          )
+        );
+      }
     }
   }
 
@@ -1939,7 +1961,9 @@ export class DynamicSchedulerComponent implements OnInit {
         personalStoreSettings.timeDuration
       );
     } else {
-      this.timeSlotDurationValue = Number(defaultStoreSettings.time_duration);
+      if (defaultStoreSettings) {
+        this.timeSlotDurationValue = Number(defaultStoreSettings.time_duration);
+      }
     }
   }
 
@@ -3045,7 +3069,9 @@ export class DynamicSchedulerComponent implements OnInit {
         " " +
         this.customerUser["firstname"] +
         "+" +
-        this.complaintData.complaint_title;
+        this.complaintData.complaint_title +
+        "+" +
+        this.complaintData.comment;
       formValue.superadmin = this.helpService.getSuperadmin();
       if (this.type !== 3 && selectedUser !== undefined) {
         formValue.creator_id = selectedUser;
@@ -3061,7 +3087,9 @@ export class DynamicSchedulerComponent implements OnInit {
           " " +
           this.customerUser["firstname"] +
           "+" +
-          this.complaintData.complaint_title;
+          this.complaintData.complaint_title +
+          "+" +
+          this.complaintData.comment;
         this.complaintData.date = this.formatDate(
           this.eventTime.start,
           this.eventTime.end
@@ -3133,7 +3161,9 @@ export class DynamicSchedulerComponent implements OnInit {
           " " +
           this.customerUser["firstname"] +
           "+" +
-          this.complaintData.complaint_title;
+          this.complaintData.complaint_title +
+          "+" +
+          this.complaintData.comment;
         this.complaintData.date = this.formatDate(
           this.eventTime.start,
           this.eventTime.end
@@ -3463,6 +3493,8 @@ export class DynamicSchedulerComponent implements OnInit {
       shortname: this.customerUser.shortname,
       storename: this.store[0].storename,
       therapy: this.complaintData.therapies_title,
+      id: this.customerUser.id,
+      countryCode: this.helpService.getLocalStorage("countryCode"),
     };
   }
 

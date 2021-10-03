@@ -447,6 +447,32 @@
                                   {{ language?.reminderMenu }}
                                 </a>
                               </li>
+                              <li
+                                class="{{ selectedNodeModel['mail_reminder'] }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/mail-reminder"
+                                  (click)="returnActiveNode('mail_reminder')"
+                                  class="nav-link"
+                                  ><i class="fa fa-envelope"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.mailReminderMessage }}
+                                </a>
+                              </li>
+                              <li
+                                class="{{ selectedNodeModel['sms_reminder'] }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/sms-reminder"
+                                  (click)="returnActiveNode('sms_reminder')"
+                                  class="nav-link"
+                                  ><i class="fa fa-comments"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.smsReminderMessage }}
+                                </a>
+                              </li>
                             </ul>
                           </li>
                           <li

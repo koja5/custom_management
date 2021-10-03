@@ -30,10 +30,10 @@ const deleteSMSTextFileFromFS = require("./server/routes/helpers/deleteSMSTextFi
 app.use(compression());
 
 var connection = mysql.createPool({
-  host: "",
-  user: "",
-  password: "",
-  database: ""
+  host: "185.178.193.141",
+  user: "appproduction.",
+  password: "jBa9$6v7",
+  database: "management_prod"
 });
 
 //for upload image
@@ -193,11 +193,11 @@ var j = schedule.scheduleJob('58 09 * * *', function(){
   eventConfirm();
 });
 
-var j = schedule.scheduleJob('48 13 * * *', function(){
+var j = schedule.scheduleJob('10 15 * * *', function(){
   reminderViaEmail();
 });
 
-var j = schedule.scheduleJob('54 14 * * *', function(){
+var j = schedule.scheduleJob('48 23 * * *', function(){
   reminderViaSMS();
 });
 

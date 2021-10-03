@@ -45,12 +45,13 @@ export class DashboardComponent implements OnInit {
   public showHideCollapse = [];
   public activeGroup = [];
   public height: string;
-  public templateAccount: any;
+  public templateAccount: any = [];
   public templateAccountFields = {
     text: "name",
     value: "account_id",
   };
   public templateAccountValue: any;
+  public allTranslationsByCountryCode: any;
 
   constructor(
     private router: Router,
@@ -398,12 +399,34 @@ export class DashboardComponent implements OnInit {
 
   checkFirstLogin() {
     if (this.helpService.getSessionStorage("first_login")) {
-      this.service.getTemplateAccount().subscribe((data) => {
+      /*this.service.getTemplateAccount().subscribe((data) => {
         this.templateAccount = data;
-      });
-      this.firstLogin.open();
-      sessionStorage.removeItem("first_login");
+      });*/
+      this.getTemplateAccountByCountryCode();
     }
+  }
+
+  getTemplateAccountByCountryCode() {
+    this.service
+      .getAllTranslationByCountryCode(
+        this.helpService.getLocalStorage("countryCode")
+      )
+      .subscribe((translations: []) => {
+        this.allTranslationsByCountryCode = translations;
+        this.service.getTemplateAccount().subscribe((data: []) => {
+          for (let j = 0; j < data.length; j++) {
+            for (let i = 0; i < translations.length; i++) {
+              if (translations[i]["language"] === data[j]["language"]) {
+                this.templateAccount.push(data[j]);
+                break;
+              }
+            }
+          }
+
+          this.firstLogin.open();
+          sessionStorage.removeItem("first_login");
+        });
+      });
   }
 
   loadTemplateAccount() {
@@ -414,26 +437,25 @@ export class DashboardComponent implements OnInit {
       account_id: this.templateAccountValue,
     };
     const selectedDemoAccountName = this.getDemoAccountNameById();
+    const languageForSelectedAccount = this.getLanguageForSelectedAccount(
+      selectedDemoAccountName.langauge
+    );
     if (selectedDemoAccountName !== null) {
+      this.language = languageForSelectedAccount["config"];
+      this.helpService.setLocalStorage(
+        "language",
+        JSON.stringify(this.language)
+      );
+      let accountLanguage = new AccountLanguage();
+      accountLanguage = {
+        superadmin: this.helpService.getMe(),
+        demo_account: selectedDemoAccountName.name,
+        language: languageForSelectedAccount["language"],
+      };
       this.service
-        .getTranslationByDemoAccount(selectedDemoAccountName)
+        .insertDemoAccountLanguage(accountLanguage)
         .subscribe((data) => {
           console.log(data);
-          if (data) {
-            this.language = data["config"];
-            this.helpService.setLocalStorage("language", JSON.stringify(this.language));
-            let accountLanguage = new AccountLanguage();
-            accountLanguage = {
-              superadmin: this.helpService.getMe(),
-              demo_code: data["demoCode"],
-              demo_account: data["demoAccount"],
-            };
-            this.service
-              .insertDemoAccountLanguage(accountLanguage)
-              .subscribe((data) => {
-                console.log(data);
-              });
-          }
         });
     }
     this.service.loadTemplateAccount(data).subscribe((response) => {
@@ -446,9 +468,20 @@ export class DashboardComponent implements OnInit {
   getDemoAccountNameById() {
     for (let i = 0; i < this.templateAccount.length; i++) {
       if (this.templateAccount[i].account_id === this.templateAccountValue) {
-        return this.templateAccount[i]["name"];
+        return {
+          name: this.templateAccount[i]["name"],
+          langauge: this.templateAccount[i]["name"],
+        };
       }
     }
     return null;
+  }
+
+  getLanguageForSelectedAccount(language: string) {
+    for (let i = 0; i < this.allTranslationsByCountryCode.length; i++) {
+      if (this.allTranslationsByCountryCode[i].language === language) {
+        return this.allTranslationsByCountryCode[i];
+      }
+    }
   }
 }

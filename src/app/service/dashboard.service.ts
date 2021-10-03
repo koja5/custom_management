@@ -36,6 +36,24 @@ export class DashboardService {
       .map((res) => res);
   }
 
+  getTranslationByCountryCode(countryCode: string) {
+    return this.http
+      .get("/api/getTranslationByCountryCode/" + countryCode)
+      .map((res) => res);
+  }
+
+  getTranslationByLanguage(language: string) {
+    return this.http
+      .get("/api/getTranslationByLanguage/" + language)
+      .map((res) => res);
+  }
+
+  getAllTranslationByCountryCode(countryCode: string) {
+    return this.http
+      .get("/api/getAllTranslationByCountryCode/" + countryCode)
+      .map((res) => res);
+  }
+
   getGridConfiguration(type) {
     return this.http
       .get("../assets/configuration/grid/" + type + ".json")

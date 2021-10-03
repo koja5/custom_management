@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
   }
 
   initialization() {
-    if (this.helpService.getLocalStorage("defaultLanguage")) {
+    if (this.helpService.getLocalStorage("countryCode")) {
       this.language = JSON.parse(this.helpService.getLocalStorage("language"));
     } else {
       this.checkCountryLocation();
@@ -83,7 +83,9 @@ export class LoginComponent implements OnInit {
   checkCountryLocation() {
     this.service.checkCountryLocation().subscribe(
       (data) => {
+        this.helpService.setLocalStorage("countryCode", data["countryCode"]);
         this.getTranslationByCountryCode(data["countryCode"]);
+        this.helpService.setLocalStorage("countryCode", data["countryCode"]);
       },
       (error) => {
         console.log(error);
@@ -94,12 +96,50 @@ export class LoginComponent implements OnInit {
             JSON.stringify(this.language)
           );
         });
+        this.helpService.setLocalStorage("countryCode", "US");
+        this.helpService.setLocalStorage("countryCode", "US");
       }
     );
   }
 
   getTranslationByCountryCode(countryCode: string) {
     this.service.getTranslationByCountryCode(countryCode).subscribe(
+      (language) => {
+        if (language !== null) {
+          this.language = language["config"];
+          this.helpService.setLocalStorage(
+            "language",
+            JSON.stringify(this.language)
+          );
+          this.router.navigate(["/dashboard/home/task"]);
+        } else {
+          this.service.getDefaultLanguage().subscribe(
+            (language) => {
+              if (language !== null) {
+                this.language = language["config"];
+                this.helpService.setLocalStorage(
+                  "language",
+                  JSON.stringify(this.language)
+                );
+                this.router.navigate(["/dashboard/home/task"]);
+              } else {
+                this.router.navigate(["/maintence"]);
+              }
+            },
+            (error) => {
+              this.router.navigate(["/maintence"]);
+            }
+          );
+        }
+      },
+      (error) => {
+        this.router.navigate(["/maintence"]);
+      }
+    );
+  }
+
+  getTranslationByLanguage(language?: any) {
+    this.service.getTranslationByLanguage(language).subscribe(
       (language) => {
         if (language !== null) {
           this.language = language["config"];
@@ -144,7 +184,7 @@ export class LoginComponent implements OnInit {
           JSON.stringify(this.language)
         );
         this.helpService.setLocalStorage(
-          "defaultLanguage",
+          "countryCode",
           language["demoCode"]
         );
         this.helpService.setLocalStorage(
@@ -293,16 +333,13 @@ export class LoginComponent implements OnInit {
       if (data) {
         this.setConfiguration(data, id);
       } else {
-        this.demoAccountLanguage(null);
+        // this.demoAccountLanguage(null);
       }
     });
   }
 
   setConfiguration(data, id) {
-    // this.helpService.setLocalStorage("theme", data.theme);
-    // this.helpService.setLocalStorage("defaultLanguage", data.language);
     if (data.selectedStore && data.selectedStore.length !== 0) {
-      // this.helpService.setLocalStorage("selectedStore-" + id, JSON.stringify(data.selectedStore[0]));
       this.storageService.setSelectedStore(
         id,
         JSON.stringify(data.selectedStore[0])
@@ -318,28 +355,43 @@ export class LoginComponent implements OnInit {
       );
     }
 
-    if (
-      data.language !== this.helpService.getLocalStorage("defaultLanguage") ||
+    /*if (
+      data.language !== this.helpService.getLocalStorage("countryCode") ||
       this.helpService.getLocalStorage("language") == undefined
     ) {
       this.demoAccountLanguage(data.language);
     } else {
       this.router.navigate(["/dashboard/home/task"]);
-    }
+    }*/
+
+    this.checkDemoAccountLanguage();
   }
 
-  demoAccountLanguage(language) {
+  checkDemoAccountLanguage() {
+    this.service.getDemoAccountLanguage(this.superadmin).subscribe((res) => {
+      if (res && res["length"] > 0) {
+        const language = res[0]["language"];
+        this.getTranslationByLanguage(language);
+      } else {
+        this.getTranslationByCountryCode(
+          this.helpService.getLocalStorage("countryCode")
+        );
+      }
+    });
+  }
+
+  /*demoAccountLanguage(language) {
     this.service
       .getDemoAccountLanguage(this.superadmin)
       .subscribe((demoAccount) => {
         if (language) {
-          this.helpService.setLocalStorage("defaultLanguage", language);
-          this.getTranslationByCountryCode(language);
+          this.helpService.setLocalStorage("countryCode", language);
+          this.getTranslationByLanguage(language);
         } else if (demoAccount && demoAccount["length"] > 0) {
-          this.getTranslationByCountryCode(demoAccount[0]["demo_code"]);
+          this.getTranslationByLanguage(demoAccount[0]["language"]);
           this.helpService.setLocalStorage(
-            "defaultLanguage",
-            demoAccount[0]["demo_code"]
+            "countryCode",
+            demoAccount[0]["language"]
           );
         } else {
           this.getTranslationByCountryCode("US");
@@ -347,13 +399,13 @@ export class LoginComponent implements OnInit {
         if (demoAccount && demoAccount["length"] > 0) {
           this.helpService.setLocalStorage(
             "demoAccountLanguage",
-            demoAccount[0]["demo_account"]
+            demoAccount[0]["language"]
           );
         } else {
           this.helpService.clearLocalStorage("demoAccountLanguage");
         }
       });
-  }
+  }*/
 
   setUsersForConfiguration(data) {
     for (let i = 0; i < data.length; i++) {

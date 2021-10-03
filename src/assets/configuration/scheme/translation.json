@@ -10,6 +10,8 @@
       "successExecutedActionText": { "type": "string" },
       "errorExecutedActionTitle": { "type": "string" },
       "errorExecutedActionText": { "type": "string" },
+      "subject": { "type": "string" },
+      "message": { "type": "string" },
       "welcomeTitle": { "type": "string" },
       "welcomeText": { "type": "string" },
       "loginTitle": { "type": "string" },
@@ -165,6 +167,8 @@
       "patientTitleMenu": { "type": "string" },
       "applicationParametersSettingsTitle": { "type": "string" },
       "templateAccount": { "type": "string" },
+      "mailReminderMessage": { "type": "string" },
+      "smsReminderMessage": { "type": "string" },
       "reservations": { "type": "string" },
       "pagerItemsPerPage": { "type": "string" },
       "addNew": { "type": "string" },
@@ -511,7 +515,25 @@
       "loadDemoAccountButton": { "type": "string" },
       "loadingDemoTitle": { "type": "string" },
       "loadingDemoHeader": { "type": "string" },
-      "loadingDemoText": { "type": "string" }
+      "loadingDemoText": { "type": "string" },
+      "mailSubject": { "type": "string" },
+      "mailMessage": { "type": "string" },
+      "mailDate": { "type": "string" },
+      "mailTime": { "type": "string" },
+      "mailClinic": { "type": "string" },
+      "mailTherapy": { "type": "string" },
+      "mailDoctor": { "type": "string" },
+      "mailFinalGreeting": { "type": "string" },
+      "mailSignature": { "type": "string" },
+      "mailThanksForUsing": { "type": "string" },
+      "mailIfYouHaveQuestion": { "type": "string" },
+      "mailNotReply": { "type": "string" },
+      "mailCopyRight": { "type": "string" },
+      "smsSubject": { "type": "string" },
+      "smsMessage": { "type": "string" },
+      "smsDate": { "type": "string" },
+      "smsTime": { "type": "string" },
+      "smsClinic": { "type": "string" }
     }
   },
   "layout": [
@@ -1013,6 +1035,17 @@
             { "key": "patientTitleMenu" },
             { "key": "applicationParametersSettingsTitle" },
             { "key": "templateAccount" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "mailReminderMessage" },
+            { "key": "smsReminderMessage" },
+            {},
+            {}
           ]
         }
       ]
@@ -2642,9 +2675,79 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
+          "items": [{ "key": "loadingDemoText" }]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Mail reminder message",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
           "items": [
-            { "key": "loadingDemoText" }
+            { "key": "mailSubject" },
+            { "key": "mailMessage" },
+            { "key": "mailDate" },
+            { "key": "mailTime" }
           ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "mailClinic" },
+            { "key": "mailTherapy" },
+            { "key": "mailDoctor" },
+            { "key": "mailFinalGreeting" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "mailSignature" },
+            { "key": "mailThanksForUsing" },
+            { "key": "mailIfYouHaveQuestion" },
+            { "key": "mailNotReply" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [{ "key": "mailCopyRight" }, {}, {}, {}]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "SMS reminder message",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "smsSubject" },
+            { "key": "smsMessage" },
+            { "key": "smsDate" },
+            { "key": "smsTime" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [{ "key": "smsClinic" }, {}, {}, {}]
         }
       ]
     }

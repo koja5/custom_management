@@ -141,6 +141,26 @@
       "required": true
     },
     {
+      "type": "dropdown",
+      "width": "col-md-12",
+      "name": "language",
+      "label": "Languages",
+      "field": { "text": "language", "value": "language" },
+      "request": {
+        "type": "GET",
+        "api": "/api/getTranslationWithoutConfig",
+        "parameters": [],
+        "fields": "",
+        "root": ""
+      },
+      "placeholder": "Please select language",
+      "fieldConfig": {
+        "ignoreAccent": false,
+        "filter": true
+      },
+      "required": true
+    },
+    {
       "type": "textbox",
       "subtype": "password",
       "width": "col-md-12",

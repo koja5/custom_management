@@ -1,6 +1,5 @@
 const { createLogger, format, winston, transports } = require("winston");
 const CustomTransport = require("./custom-logger/customTransport");
-const moment = require("moment");
 
 /*const logger = createLogger({
   transports: [
@@ -19,7 +18,7 @@ const moment = require("moment");
   ],
 });*/
 
-const logger = createLogger({
+/*const logger = createLogger({
   format: format.json(),
   transports: [
     new CustomTransport({
@@ -45,18 +44,15 @@ const logger = createLogger({
     }),
   ],
 });
-/*const logger = createLogger({
-  transports: [
-    new transports.Console()
-  ],
-});*/
 
 if (process.env.NODE_ENV !== "production") {
   logger.add(
-    new transports.Console({
-      format: format.simple(),
+    new winston.transports.Console({
+      format: winston.format.simple(),
     })
   );
-}
+}*/
+
+logger = createLogger();
 
 module.exports = logger;

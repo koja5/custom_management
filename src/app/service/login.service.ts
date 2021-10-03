@@ -80,4 +80,10 @@ export class LoginService {
   getDemoAccountLanguage(id: number) {
     return this.http.get("/api/getDemoAccountLanguage/" + id).map((res) => res);
   }
+
+  getTranslationByLanguage(language: string) {
+    return this.http
+      .get("/api/getTranslationByLanguage/" + language)
+      .map((res) => res);
+  }
 }
