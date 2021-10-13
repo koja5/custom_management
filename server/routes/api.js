@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 var sha1 = require("sha1");
@@ -11,7 +12,7 @@ var request = require("request");
 const logger = require("./logger");
 const ftpUploadSMS = require("./ftpUploadSMS");
 
-var link = "http://localhost:3000/api/";
+var link = process.env.link_api;
 
 /*var connection = mysql.createPool({
   host: "185.178.193.141",
@@ -21,10 +22,10 @@ var link = "http://localhost:3000/api/";
 });*/
 
 var connection = mysql.createPool({
-  host: "185.178.193.141",
-  user: "appproduction.",
-  password: "jBa9$6v7",
-  database: "management_prod",
+  host: process.env.host,
+  user: process.env.user,
+  password: process.env.password,
+  database: process.env.database,
 });
 
 /*var connection = mysql.createPool({
@@ -5078,19 +5079,31 @@ router.post("/sendSMS", function (req, res) {
                 [req.body.id],
                 function (err, smsMessage, fields) {
                   var sms = {};
+                  var signature = "";
                   if (smsMessage.length == 0) {
-                    sms.smsSubject =
-                      language?.initialGreetingSMSReminder;
-                      sms.smsMessage =
+                    sms.smsSubject = language?.initialGreetingSMSReminder;
+                    sms.smsMessage =
                       language?.introductoryMessageForSMSReminderReservation;
-                      sms.smsDate = language?.dateMessage;
-                      sms.smsTime = language?.timeMessage;
-                      sms.smsClinic = language?.storeLocation;
+                    sms.smsDate = language?.dateMessage;
+                    sms.smsTime = language?.timeMessage;
+                    sms.smsClinic = language?.storeLocation;
                   } else {
-                    sms = smsMessage[0]
+                    sms = smsMessage[0];
+                    if (sms.smsSignatureStreet) {
+                      signature += sms.smsSignatureStreet + " \n";
+                    }
+                    if (sms.smsSignatureZipCode) {
+                      signature += sms.smsSignatureZipCode + " \n";
+                    }
+                    if (sms.smsSignaturePhone) {
+                      signature += sms.smsSignaturePhone + " \n";
+                    }
+                    if (sms.smsSignatureEmail) {
+                      signature += sms.smsSignatureEmail + " \n";
+                    }
                   }
                   var message =
-                  sms.smsSubject +
+                    sms.smsSubject +
                     " " +
                     req.body.shortname +
                     ", \n" +
@@ -5110,7 +5123,9 @@ router.post("/sendSMS", function (req, res) {
                     " \n" +
                     sms.smsClinic +
                     ": " +
-                    req.body.storename;
+                    req.body.storename +
+                    " \n\n" +
+                    signature;
                   console.log(message);
                   var content = "To: " + phoneNumber + "\r\n\r\n" + message;
                   var fileName = "server/sms/" + phoneNumber + ".txt";
@@ -5823,6 +5838,462 @@ router.post("/updateMailReminderMessage", (req, res, next) => {
 });
 
 /* END MAIL REMINDER */
+
+/* MAIL APPROVE RESERVATION */
+
+router.get("/getMailApproveReservation/:superadmin", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query(
+      "SELECT * from mail_approve_reservation where superadmin = ?",
+      [req.params.superadmin],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
+      }
+    );
+  });
+});
+
+router.post("/createMailApproveReservation", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "insert into mail_approve_reservation SET ?",
+          [req.body],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/updateMailApproveReservation", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "update mail_approve_reservation SET ? where superadmin = ?",
+          [req.body, req.body.superadmin],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+/* END MAIL APPROVE RESERVATION */
+
+/* MAIL CONFIRM ARRIVAL */
+
+router.get("/getMailConfirmArrival/:superadmin", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query(
+      "SELECT * from mail_confirm_arrival where superadmin = ?",
+      [req.params.superadmin],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
+      }
+    );
+  });
+});
+
+router.post("/createMailConfirmArrival", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "insert into mail_confirm_arrival SET ?",
+          [req.body],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/updateMailConfirmArrival", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "update mail_confirm_arrival SET ? where superadmin = ?",
+          [req.body, req.body.superadmin],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+/* END MAIL CONFIRM ARRIVAL */
+
+/* MAIL DENY ARRIVAL */
+
+router.get("/getMailDenyReservation/:superadmin", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query(
+      "SELECT * from mail_deny_reservation where superadmin = ?",
+      [req.params.superadmin],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
+      }
+    );
+  });
+});
+
+router.post("/createMailDenyReservation", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "insert into mail_deny_reservation SET ?",
+          [req.body],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/updateMailDenyReservation", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "update mail_deny_reservation SET ? where superadmin = ?",
+          [req.body, req.body.superadmin],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+/* END MAIL DENY RESERVATION */
+
+/* MAIL PATIENT CREATED ACCOUNT */
+
+router.get(
+  "/getMailPatientCreatedAccount/:superadmin",
+  function (req, res, next) {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      }
+      conn.query(
+        "SELECT * from mail_patient_created_account where superadmin = ?",
+        [req.params.superadmin],
+        function (err, rows) {
+          conn.release();
+          if (!err) {
+            res.json(rows);
+          } else {
+            logger.log("error", err.sql + ". " + err.sqlMessage);
+            res.json(err);
+          }
+        }
+      );
+    });
+  }
+);
+
+router.post("/createMailPatientCreatedAccount", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "insert into mail_patient_created_account SET ?",
+          [req.body],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/updateMailPatientCreatedAccount", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "update mail_patient_created_account SET ? where superadmin = ?",
+          [req.body, req.body.superadmin],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+/* END MAIL PATIENT CREATED ACCOUNT */
+
+/* MAIL PATIENT FORM REGISTRATION */
+
+router.get(
+  "/getMailPatientFormRegistration/:superadmin",
+  function (req, res, next) {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      }
+      conn.query(
+        "SELECT * from mail_patient_form_registration where superadmin = ?",
+        [req.params.superadmin],
+        function (err, rows) {
+          conn.release();
+          if (!err) {
+            res.json(rows);
+          } else {
+            logger.log("error", err.sql + ". " + err.sqlMessage);
+            res.json(err);
+          }
+        }
+      );
+    });
+  }
+);
+
+router.post("/createMailPatientFormRegistration", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "insert into mail_patient_form_registration SET ?",
+          [req.body],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/updateMailPatientFormRegistration", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "update mail_patient_form_registration SET ? where superadmin = ?",
+          [req.body, req.body.superadmin],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+/* END MAIL PATIENT FORM REGISTRATION */
 
 /* SMS REMINDER */
 

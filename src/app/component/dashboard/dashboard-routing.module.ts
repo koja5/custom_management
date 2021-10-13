@@ -28,6 +28,11 @@ import { AvailableAreaCodeComponent } from "./administrator/available-area-code/
 import { TemplateAccountComponent } from "./administrator/template-account/template-account.component";
 import { MailReminderComponent } from "./parameters/mail-reminder/mail-reminder.component";
 import { SmsReminderComponent } from "./parameters/sms-reminder/sms-reminder.component";
+import { MailConfirmArrivalComponent } from "./parameters/mail-parameters/mail-confirm-arrival/mail-confirm-arrival.component";
+import { MailPatientFormRegistrationComponent } from "./parameters/mail-parameters/mail-patient-form-registration/mail-patient-form-registration.component";
+import { MailApproveReservationComponent } from "./parameters/mail-parameters/mail-approve-reservation/mail-approve-reservation.component";
+import { MailDenyReservationComponent } from "./parameters/mail-parameters/mail-deny-reservation/mail-deny-reservation.component";
+import { MailPatientCreatedAccountComponent } from "./parameters/mail-parameters/mail-patient-created-account/mail-patient-created-account.component";
 
 const routes: Routes = [
   {
@@ -144,7 +149,12 @@ const routes: Routes = [
       { path: "reservations", component: ReservationsComponent },
       { path: "template-account", component: TemplateAccountComponent },
       { path: "mail-reminder", component: MailReminderComponent },
-      { path: "sms-reminder", component: SmsReminderComponent }
+      { path: "mail-approve-reservation", component: MailApproveReservationComponent },
+      { path: "mail-deny-reservation", component: MailDenyReservationComponent },
+      { path: "mail-confirm-arrival", component: MailConfirmArrivalComponent },
+      { path: "mail-patient-created-account", component: MailPatientCreatedAccountComponent },
+      { path: "mail-patient-form-registration", component: MailPatientFormRegistrationComponent },
+      { path: "sms-reminder", component: SmsReminderComponent },
     ],
   },
 ];

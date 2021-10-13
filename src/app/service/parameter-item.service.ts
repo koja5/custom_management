@@ -102,7 +102,66 @@ export class ParameterItemService extends BehaviorSubject<any[]> {
     return this.http.post("/api/updateMailReminderMessage", data);
   }
 
-  
+  getMailApproveReservation(id: number) {
+    return this.http.get("/api/getMailApproveReservation/" + id);
+  }
+
+  createMailApproveReservation(data) {
+    return this.http.post("/api/createMailApproveReservation", data);
+  }
+
+  updateMailApproveReservation(data) {
+    return this.http.post("/api/updateMailApproveReservation", data);
+  }
+
+  getMailConfirmArrival(id: number) {
+    return this.http.get("/api/getMailConfirmArrival/" + id);
+  }
+
+  createMailConfirmArrival(data) {
+    return this.http.post("/api/createMailConfirmArrival", data);
+  }
+
+  updateMailConfirmArrival(data) {
+    return this.http.post("/api/updateMailConfirmArrival", data);
+  }
+
+  getMailDenyReservation(id: number) {
+    return this.http.get("/api/getMailDenyReservation/" + id);
+  }
+
+  createMailDenyReservation(data) {
+    return this.http.post("/api/createMailDenyReservation", data);
+  }
+
+  updateMailDenyReservation(data) {
+    return this.http.post("/api/updateMailDenyReservation", data);
+  }
+
+  getMailPatientCreatedAccount(id: number) {
+    return this.http.get("/api/getMailPatientCreatedAccount/" + id);
+  }
+
+  createMailPatientCreatedAccount(data) {
+    return this.http.post("/api/createMailPatientCreatedAccount", data);
+  }
+
+  updateMailPatientCreatedAccount(data) {
+    return this.http.post("/api/updateMailPatientCreatedAccount", data);
+  }
+
+  getMailPatientFormRegistration(id: number) {
+    return this.http.get("/api/getMailPatientFormRegistration/" + id);
+  }
+
+  createMailPatientFormRegistration(data) {
+    return this.http.post("/api/createMailPatientFormRegistration", data);
+  }
+
+  updateMailPatientFormRegistration(data) {
+    return this.http.post("/api/updateMailPatientFormRegistration", data);
+  }
+
   getSmsReminderMessage(id: number) {
     return this.http.get("/api/getSmsReminderMessage/" + id);
   }

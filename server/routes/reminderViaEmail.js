@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 var sha1 = require("sha1");
@@ -11,7 +12,7 @@ var hogan = require("hogan.js");
 var request = require("request");
 const logger = require("./logger");
 
-var link = "http://localhost:3000/api/";
+var link = process.env.link_api;
 var reminderTemplate = fs.readFileSync(
   "./server/routes/templates/reminderForReservation.hjs",
   "utf-8"
@@ -33,23 +34,22 @@ const monthNames = [
 ];
 
 var connection = mysql.createPool({
-  host: "185.178.193.141",
-  user: "appproduction.",
-  password: "jBa9$6v7",
-  database: "management_prod",
+  host: process.env.host,
+  user: process.env.user,
+  password: process.env.password,
+  database: process.env.database,
 });
 
 var smtpTransport = nodemailer.createTransport({
-  host: "116.203.85.82",
-  port: 25,
-  secure: false,
-  // requireTLS: true,
+  host: process.env.smtp_host,
+  port: process.env.smtp_port,
+  secure: process.env.smtp_secure,
   tls: {
-    rejectUnauthorized: false,
+    rejectUnauthorized: process.env.smtp_rejectUnauthorized,
   },
   auth: {
-    user: "info@app-production.eu",
-    pass: "jBa9$6v7",
+    user: process.env.smtp_user,
+    pass: process.env.smtp_pass,
   },
 });
 
@@ -76,15 +76,16 @@ function reminderViaEmail() {
               rows.forEach(function (to, i, array) {
                 console.log(to.email && to.email === 1);
                 if (to.email !== null) {
-                  if(!to.mailSubject || !to.mailMessage) {
+                  if (!to.mailSubject || !to.mailMessage) {
                     to.mailSubject = language?.subjectForReminderReservation;
-                    to.initialGreeting =  language?.initialGreeting;
-                    to.mailMessage = language?.introductoryMessageForReminderReservation;
+                    to.initialGreeting = language?.initialGreeting;
+                    to.mailMessage =
+                      language?.introductoryMessageForReminderReservation;
                     to.mailDate = language?.dateMessage;
-                    to.mailTime =  language?.timeMessage;
-                    to.mailTherapy =  language?.therapyMessage;
+                    to.mailTime = language?.timeMessage;
+                    to.mailTherapy = language?.therapyMessage;
                     to.mailDoctor = language?.doctorMessage;
-                    to.mailClinic =language?.storeLocation;
+                    to.mailClinic = language?.storeLocation;
                     to.mailFinalGreeting = language?.finalGreeting;
                     to.mailSignature = language?.signature;
                     to.mailThanksForUsing = language?.thanksForUsing;
@@ -121,7 +122,7 @@ function reminderViaEmail() {
                     html: compiledTemplate.render({
                       initialGreeting: to?.initialGreeting,
                       introductoryMessageForReminderReservation:
-                      to?.mailMessage,
+                        to?.mailMessage,
                       dateMessage: to?.mailDate,
                       timeMessage: to?.mailTime,
                       therapyMessage: to?.mailTherapy,
@@ -151,9 +152,15 @@ function reminderViaEmail() {
                     function (error, response) {
                       console.log(response);
                       if (error) {
-                        logger.log("error", `Error to sent automate EMAIL REMINDER to EMAIL: ${to.email}. Error: ${error}`);
+                        logger.log(
+                          "error",
+                          `Error to sent automate EMAIL REMINDER to EMAIL: ${to.email}. Error: ${error}`
+                        );
                       } else {
-                        logger.log("info", `Success sent automate EMAIL REMINDER to EMAIL: ${to.email}.`);
+                        logger.log(
+                          "info",
+                          `Success sent automate EMAIL REMINDER to EMAIL: ${to.email}.`
+                        );
                       }
                     }
                   );

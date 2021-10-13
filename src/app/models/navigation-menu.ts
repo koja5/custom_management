@@ -32,5 +32,10 @@ export class NavigationMenuModel {
     area_code?: string;
     template_account?: string;
     mail_reminder?: string;
+    mail_approve_reservation?: string;
+    mail_deny_reservation?: string;
+    mail_confirm_arrival?: string;
+    mail_patient_created_account?: string;
+    mail_patient_form_registration?: string;
     sms_reminder?: string;
 }

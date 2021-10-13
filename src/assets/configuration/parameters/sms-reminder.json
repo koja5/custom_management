@@ -35,6 +35,34 @@
       "field": "smsClinic"
     },
     {
+      "type": "textbox",
+      "width": "col-md-6",
+      "name": "smsSignatureStreet",
+      "label": "smsSignatureStreet",
+      "field": "smsSignatureStreet"
+    },
+    {
+      "type": "textbox",
+      "width": "col-md-6",
+      "name": "smsSignatureZipCode",
+      "label": "smsSignatureZipCode",
+      "field": "smsSignatureZipCode"
+    },
+    {
+      "type": "textbox",
+      "width": "col-md-6",
+      "name": "smsSignaturePhone",
+      "label": "smsSignaturePhone",
+      "field": "smsSignaturePhone"
+    },
+    {
+      "type": "textbox",
+      "width": "col-md-6",
+      "name": "smsSignatureEmail",
+      "label": "smsSignatureEmail",
+      "field": "smsSignatureEmail"
+    },
+    {
       "type": "button",
       "width": "col-md-12",
       "class": "e-control e-btn e-lib e-primary e-flat",

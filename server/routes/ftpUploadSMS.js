@@ -1,12 +1,13 @@
+require("dotenv").config();
 const ftp = require("basic-ftp");
 const fs = require("fs");
 const path = require("path");
 
 var FTPAccessData = {
-  host: "bci.dyndns.org",
-  port: 21,
-  user: "sms1",
-  password: "wurschtises",
+  host: process.env.ftp_host,
+  port: process.env.ftp_port,
+  user: process.env.ftp_user,
+  password: process.env.ftp_password
 };
 
 async function ftpUploadSMS(pathFile, fileName) {

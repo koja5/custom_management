@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 var sha1 = require("sha1");
@@ -11,7 +12,7 @@ var hogan = require("hogan.js");
 var request = require("request");
 const logger = require("./logger");
 
-var link = "http://localhost:3000/api/";
+var link = process.env.link_api;
 const monthNames = [
   "January",
   "February",
@@ -33,23 +34,22 @@ var confirmTemplate = fs.readFileSync(
 var compiledTemplate = hogan.compile(confirmTemplate);
 
 var connection = mysql.createPool({
-  host: "185.178.193.141",
-  user: "appproduction.",
-  password: "jBa9$6v7",
-  database: "management_prod",
+  host: process.env.host,
+  user: process.env.user,
+  password: process.env.password,
+  database: process.env.database,
 });
 
 var smtpTransport = nodemailer.createTransport({
-  host: "116.203.85.82",
-  port: 25,
-  secure: false,
-  // requireTLS: true,
+  host: process.env.smtp_host,
+  port: process.env.smtp_port,
+  secure: process.env.smtp_secure,
   tls: {
-    rejectUnauthorized: false,
+    rejectUnauthorized: process.env.smtp_rejectUnauthorized,
   },
   auth: {
-    user: "info@app-production.eu",
-    pass: "jBa9$6v7",
+    user: process.env.smtp_user,
+    pass: process.env.smtp_pass,
   },
 });
 

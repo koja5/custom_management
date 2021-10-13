@@ -461,6 +461,99 @@
                                 </a>
                               </li>
                               <li
+                                class="{{
+                                  selectedNodeModel['mail_approve_reservation']
+                                }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/mail-approve-reservation"
+                                  (click)="
+                                    returnActiveNode('mail_approve_reservation')
+                                  "
+                                  class="nav-link"
+                                  ><i class="fa fa-envelope"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.mailApproveReservation }}
+                                </a>
+                              </li>
+                              <li
+                                class="{{
+                                  selectedNodeModel['mail_deny_reservation']
+                                }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/mail-deny-reservation"
+                                  (click)="
+                                    returnActiveNode('mail_deny_reservation')
+                                  "
+                                  class="nav-link"
+                                  ><i class="fa fa-envelope"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.mailDenyReservation }}
+                                </a>
+                              </li>
+                              <li
+                                class="{{
+                                  selectedNodeModel['mail_confirm_arrival']
+                                }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/mail-confirm-arrival"
+                                  (click)="
+                                    returnActiveNode('mail_confirm_arrival')
+                                  "
+                                  class="nav-link"
+                                  ><i class="fa fa-envelope"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.mailConfirmArrival }}
+                                </a>
+                              </li>
+                              <li
+                                class="{{
+                                  selectedNodeModel[
+                                    'mail_patient_created_account'
+                                  ]
+                                }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/mail-patient-created-account"
+                                  (click)="
+                                    returnActiveNode(
+                                      'mail_patient_created_account'
+                                    )
+                                  "
+                                  class="nav-link"
+                                  ><i class="fa fa-envelope"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.mailPatientCreatedAccount }}
+                                </a>
+                              </li>
+                              <li
+                                class="{{
+                                  selectedNodeModel[
+                                    'mail_patient_form_registration'
+                                  ]
+                                }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/mail-patient-form-registration"
+                                  (click)="
+                                    returnActiveNode(
+                                      'mail_patient_form_registration'
+                                    )
+                                  "
+                                  class="nav-link"
+                                  ><i class="fa fa-envelope"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.mailPatientFormRegistration }}
+                                </a>
+                              </li>
+                              <li
                                 class="{{ selectedNodeModel['sms_reminder'] }}"
                                 *ngIf="type === userType.owner"
                               >
@@ -749,25 +842,22 @@
   </modal-header>
   <modal-content>
     <div class="trophy">
-      <img
-        _ngcontent-nff-c1=""
-        src="./assets/images/trophy.png"
-      />
-      <h3>{{language?.loadDemoAccountHeader}}</h3>
+      <img _ngcontent-nff-c1="" src="./assets/images/trophy.png" />
+      <h3>{{ language?.loadDemoAccountHeader }}</h3>
     </div>
     <div class="message">
       <p>
-        {{language?.loadDemoAccountText}}
+        {{ language?.loadDemoAccountText }}
       </p>
     </div>
     <div *ngIf="templateAccount">
-      <label>{{language?.loadDemoAccountChooise}}</label>
+      <label>{{ language?.loadDemoAccountChooise }}</label>
       <ejs-dropdownlist
-      [dataSource]="templateAccount"
-      [(value)]="templateAccountValue"
-      [fields]="templateAccountFields"
-      allowFiltering="true"
-    ></ejs-dropdownlist>
+        [dataSource]="templateAccount"
+        [(value)]="templateAccountValue"
+        [fields]="templateAccountFields"
+        allowFiltering="true"
+      ></ejs-dropdownlist>
     </div>
   </modal-content>
   <modal-footer>
@@ -776,27 +866,36 @@
       class="btn btn-default mb-0"
       (click)="firstLogin.close()"
     >
-      {{language?.loadDemoAccountNoThanks}}
+      {{ language?.loadDemoAccountNoThanks }}
     </button>
-    <button kendoButton class="btn btn-primary" (click)="loadTemplateAccount()" [disabled]="templateAccountValue === undefined">{{language?.loadDemoAccountButton}}</button>
+    <button
+      kendoButton
+      class="btn btn-primary"
+      (click)="loadTemplateAccount()"
+      [disabled]="templateAccountValue === undefined"
+    >
+      {{ language?.loadDemoAccountButton }}
+    </button>
   </modal-footer>
 </modal>
 
-<modal #templateLoading modalClass="modal-md top-margin loggerModal adminModal" [hideCloseButton]="true" [closeOnOutsideClick]="false">
+<modal
+  #templateLoading
+  modalClass="modal-md top-margin loggerModal adminModal"
+  [hideCloseButton]="true"
+  [closeOnOutsideClick]="false"
+>
   <modal-header>
     <h3 *ngIf="language !== undefined">{{ language?.loadingDemoTitle }}</h3>
   </modal-header>
   <modal-content>
     <div class="replication">
-      <img
-        _ngcontent-nff-c1=""
-        src="./assets/images/replication.gif"
-      />
-      <h3>{{language?.loadingDemoHeader}}</h3>
+      <img _ngcontent-nff-c1="" src="./assets/images/replication.gif" />
+      <h3>{{ language?.loadingDemoHeader }}</h3>
     </div>
     <div class="message">
       <p>
-        {{language?.loadingDemoText}}
+        {{ language?.loadingDemoText }}
       </p>
     </div>
   </modal-content>

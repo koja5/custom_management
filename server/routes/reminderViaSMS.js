@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 var sha1 = require("sha1");
@@ -11,7 +12,7 @@ var request = require("request");
 const logger = require("./logger");
 const ftpUploadSMS = require("./ftpUploadSMS");
 
-var link = "http://localhost:3000/api/";
+var link = process.env.link_api;
 var reminderTemplate = fs.readFileSync(
   "./server/routes/templates/reminderForReservation.hjs",
   "utf-8"
@@ -33,23 +34,22 @@ const monthNames = [
 ];
 
 var connection = mysql.createPool({
-  host: "185.178.193.141",
-  user: "appproduction.",
-  password: "jBa9$6v7",
-  database: "management_prod",
+  host: process.env.host,
+  user: process.env.user,
+  password: process.env.password,
+  database: process.env.database,
 });
 
 var smtpTransport = nodemailer.createTransport({
-  host: "116.203.85.82",
-  port: 25,
-  secure: false,
-  // requireTLS: true,
+  host: process.env.smtp_host,
+  port: process.env.smtp_port,
+  secure: process.env.smtp_secure,
   tls: {
-    rejectUnauthorized: false,
+    rejectUnauthorized: process.env.smtp_rejectUnauthorized,
   },
   auth: {
-    user: "info@app-production.eu",
-    pass: "jBa9$6v7",
+    user: process.env.smtp_user,
+    pass: process.env.smtp_pass,
   },
 });
 
@@ -68,7 +68,7 @@ function reminderViaSMS() {
       function (error, response, body) {
         if (!error && response.statusCode === 200) {
           conn.query(
-            "SELECT r.sms, c.telephone, c.mobile, c.shortname, s.storename, t.start, t.end, us.firstname, us.lastname, th.therapies_title, sr.smsSubject, sr.smsMessage, sr.smsDate, sr.smsTime, sr.smsClinic FROM reminder r join tasks t on r.superadmin = t.superadmin join customers c on t.customer_id = c.id join store s on t.storeId = s.id join users us on t.creator_id = us.id join therapy th on t.therapy_id = th.id join sms_reminder_message sr on r.superadmin = sr.superadmin where c.reminderViaSMS = 1 and r.sms = 1 and CAST(t.start AS DATE) = CAST((NOW() + interval 2 DAY) as DATE)",
+            "SELECT r.sms, c.telephone, c.mobile, c.shortname, s.storename, t.start, t.end, us.firstname, us.lastname, th.therapies_title, sr.smsSubject, sr.smsMessage, sr.smsDate, sr.smsTime, sr.smsClinic, sr.smsSignatureStreet, sr.smsSignatureZipCode, sr.smsSignaturePhone, sr.smsSignatureEmail FROM reminder r join tasks t on r.superadmin = t.superadmin join customers c on t.customer_id = c.id join store s on t.storeId = s.id join users us on t.creator_id = us.id join therapy th on t.therapy_id = th.id join sms_reminder_message sr on r.superadmin = sr.superadmin where c.reminderViaSMS = 1 and r.sms = 1 and CAST(t.start AS DATE) = CAST((NOW() + interval 2 DAY) as DATE)",
             function (err, rows, fields) {
               if (err) {
                 console.error("SQL error:", err);
@@ -86,13 +86,31 @@ function reminderViaSMS() {
                         } else if (to.mobile) {
                           phoneNumber = to.mobile;
                         }
-                        if (checkAvailableCode(phoneNumber, JSON.parse(codes))) {
-                          if(!to.smsSubject || !to.smsMessage) {
-                            to.smsSubject = language?.initialGreetingSMSReminder;
-                            to.smsMessage = language?.introductoryMessageForSMSReminderReservation;
+                        if (
+                          checkAvailableCode(phoneNumber, JSON.parse(codes))
+                        ) {
+                          var signature = "";
+                          if (!to.smsSubject || !to.smsMessage) {
+                            to.smsSubject =
+                              language?.initialGreetingSMSReminder;
+                            to.smsMessage =
+                              language?.introductoryMessageForSMSReminderReservation;
                             to.smsDate = language?.dateMessage;
                             to.smsTime = language?.timeMessage;
                             to.smsClinic = language?.storeLocation;
+                          } else {
+                            if (to.smsSignatureStreet) {
+                              signature += to.smsSignatureStreet + " \n";
+                            }
+                            if (to.smsSignatureZipCode) {
+                              signature += to.smsSignatureZipCode + " \n";
+                            }
+                            if (to.smsSignaturePhone) {
+                              signature += to.smsSignaturePhone + " \n";
+                            }
+                            if (to.smsSignatureEmail) {
+                              signature += to.smsSignatureEmail + " \n";
+                            }
                           }
                           console.log(rows);
                           var convertToDateStart = new Date(to.start);

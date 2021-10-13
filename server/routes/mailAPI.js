@@ -1,3 +1,4 @@
+require("dotenv").config();
 var express = require("express");
 var nodemailer = require("nodemailer");
 var router = express.Router();
@@ -8,8 +9,9 @@ const mysql = require("mysql");
 var url = require("url");
 const logger = require("./logger");
 
-var link = "http://localhost:3000/api/";
-var loginLink = "http://localhost:4200/login";
+var link = process.env.link_api;
+var linkClient = process.env.link_client;
+var loginLink = process.env.link_client_login;
 
 const monthNames = [
   "January",
@@ -27,35 +29,22 @@ const monthNames = [
 ];
 
 var connection = mysql.createPool({
-  host: "185.178.193.141",
-  user: "appproduction.",
-  password: "jBa9$6v7",
-  database: "management_prod",
+  host: process.env.host,
+  user: process.env.user,
+  password: process.env.password,
+  database: process.env.database,
 });
 
-/*var smtpTransport = nodemailer.createTransport({
-  host: "116.203.85.82",
-  port: 25,
-  secure: false,
-  tls: {
-    rejectUnauthorized: false,
-  },
-  auth: {
-    user: "support@app-production.eu",
-    pass: "Iva#$20191#$2019",
-  },
-});*/
-
 var smtpTransport = nodemailer.createTransport({
-  host: "116.203.85.82",
-  port: 25,
-  secure: false,
+  host: process.env.smtp_host,
+  port: process.env.smtp_port,
+  secure: process.env.smtp_secure,
   tls: {
-    rejectUnauthorized: false,
+    rejectUnauthorized: process.env.smtp_rejectUnauthorized,
   },
   auth: {
-    user: "support@app-production.eu",
-    pass: "Iva#$2019#$",
+    user: process.env.smtp_user,
+    pass: process.env.smtp_pass,
   },
 });
 
@@ -232,95 +221,123 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
     }
 
     conn.query(
-      "SELECT c.shortname, c.email, s.storename, t.start, t.end, u.lastname, u.firstname, th.therapies_title from customers c join tasks t on c.id = t.customer_id join therapy th on t.therapy_id = th.id join store s on t.storeId = s.id  join users u on t.creator_id = u.id where c.id = '" +
-        req.body.customer_id +
-        "' and t.id = '" +
-        req.body.id +
-        "'",
+      "SELECT c.shortname, c.email, s.storename, t.start, t.end, u.lastname, u.firstname, th.therapies_title, c.storeId from customers c join tasks t on c.id = t.customer_id join therapy th on t.therapy_id = th.id join store s on t.storeId = s.id  join users u on t.creator_id = u.id where c.id = ? and t.id",
+      [req.body.customer_id, req.body.id],
       function (err, rows, fields) {
         if (err) {
           console.error("SQL error:", err);
         }
-        console.log(rows);
+
         rows.forEach(function (to, i, array) {
-          var verificationLinkButton =
-            link + "task/confirmationArrival/" + req.body.id;
-          var convertToDateStart = new Date(to.start);
-          var convertToDateEnd = new Date(to.end);
-          var startHours = convertToDateStart.getHours();
-          var startMinutes = convertToDateStart.getMinutes();
-          var endHours = convertToDateEnd.getHours();
-          var endMinutes = convertToDateEnd.getMinutes();
-          var date =
-            convertToDateStart.getDate() +
-            "." +
-            (convertToDateStart.getMonth() + 1) +
-            "." +
-            convertToDateStart.getFullYear();
-          console.log(day);
-          var month = monthNames[convertToDateStart.getMonth()];
-          var day = convertToDateStart.getDate();
-          var start =
-            (startHours < 10 ? "0" + startHours : startHours) +
-            ":" +
-            (startMinutes < 10 ? "0" + startMinutes : startMinutes);
-          var end =
-            (endHours < 10 ? "0" + endHours : endHours) +
-            ":" +
-            (endMinutes < 10 ? "0" + endMinutes : endMinutes);
-          var mailOptions = {
-            from: '"ClinicNode" support@app-production.eu',
-            subject: req.body.language?.subjectConfirmArrival,
-            html: compiledTemplate.render({
-              firstName: to.shortname,
-              verificationLink: verificationLinkButton,
-              date: date,
-              start: start,
-              end: end,
-              therapy: to.therapies_title,
-              storename: to.storename,
-              doctor: to.lastname + " " + to.firstname,
-              month: month,
-              day: day,
-              initialGreeting: req.body.language?.initialGreeting,
-              finalGreeting: req.body.language?.finalGreeting,
-              signature: req.body.language?.signature,
-              thanksForUsing: req.body.language?.thanksForUsing,
-              websiteLink: req.body.language?.websiteLink,
-              ifYouHaveQuestion: req.body.language?.ifYouHaveQuestion,
-              emailAddress: req.body.language?.emailAddress,
-              notReply: req.body.language?.notReply,
-              copyRight: req.body.language?.copyRight,
-              introductoryMessageForConfirmArrival:
-                req.body.language?.introductoryMessageForConfirmArrival,
-              dateMessage: req.body.language?.dateMessage,
-              timeMessage: req.body.language?.timeMessage,
-              storeLocation: req.body.language?.storeLocation,
-              therapyMessage: req.body.language?.therapyMessage,
-              doctorMessage: req.body.language?.doctorMessage,
-              finalMessageForConfirmArrival:
-                req.body.language?.finalMessageForConfirmArrival,
-              confirmArrivalButtonText:
-                req.body.language?.confirmArrivalButtonText,
-            }),
-          };
-          mailOptions.to = to.email;
-          smtpTransport.sendMail(mailOptions, function (error, response) {
-            console.log(response);
-            if (error) {
-              logger.log(
-                "error",
-                `Error to sent mail for CONFIRM ARRIVAL for USER: ${to.shortname} on EMAIL: ${to.email}. Error: ${error}`
-              );
-              res.send(error);
-            } else {
-              logger.log(
-                "info",
-                `Sent mail for CONFIRM ARRIVAL for USER: ${to.shortname} on EMAIL: ${to.email}`
-              );
-              res.send(true);
+          console.log(to);
+          conn.query(
+            "select * from mail_confirm_arrival where superadmin = ?",
+            [to.storeId],
+            function (err, mailRes, fields) {
+              if (err) {
+                console.error("SQL error:", err);
+              }
+              var mail = {};
+              if (mailRes.length > 0) {
+                mail = mailRes[0];
+              }
+              var verificationLinkButton =
+                link + "task/confirmationArrival/" + req.body.id;
+              var convertToDateStart = new Date(to.start);
+              var convertToDateEnd = new Date(to.end);
+              var startHours = convertToDateStart.getHours();
+              var startMinutes = convertToDateStart.getMinutes();
+              var endHours = convertToDateEnd.getHours();
+              var endMinutes = convertToDateEnd.getMinutes();
+              var date =
+                convertToDateStart.getDate() +
+                "." +
+                (convertToDateStart.getMonth() + 1) +
+                "." +
+                convertToDateStart.getFullYear();
+              console.log(day);
+              var month = monthNames[convertToDateStart.getMonth()];
+              var day = convertToDateStart.getDate();
+              var start =
+                (startHours < 10 ? "0" + startHours : startHours) +
+                ":" +
+                (startMinutes < 10 ? "0" + startMinutes : startMinutes);
+              var end =
+                (endHours < 10 ? "0" + endHours : endHours) +
+                ":" +
+                (endMinutes < 10 ? "0" + endMinutes : endMinutes);
+              var mailOptions = {
+                from: '"ClinicNode" support@app-production.eu',
+                subject: mail.mailSubject
+                  ? mail.mailSubject
+                  : req.body.language?.subjectConfirmArrival,
+                html: compiledTemplate.render({
+                  firstName: to.shortname,
+                  verificationLink: verificationLinkButton,
+                  date: date,
+                  start: start,
+                  end: end,
+                  therapy: to.therapies_title,
+                  storename: to.storename,
+                  doctor: to.lastname + " " + to.firstname,
+                  month: month,
+                  day: day,
+                  initialGreeting: mail.mailInitialGreeting
+                    ? mail.mailInitialGreeting
+                    : req.body.language?.initialGreeting,
+                  finalGreeting: mail.mailFinalGreeting
+                    ? mail.mailFinalGreeting
+                    : req.body.language?.finalGreeting,
+                  signature: mail.mailSignature
+                    ? mail.mailSignature
+                    : req.body.language?.signature,
+                  thanksForUsing: mail.mailThanksForUsing
+                    ? mail.mailThanksForUsing
+                    : req.body.language?.thanksForUsing,
+                  websiteLink: req.body.language?.websiteLink,
+                  ifYouHaveQuestion: mail.mailIfYouHaveQuestion
+                    ? mail.mailIfYouHaveQuestion
+                    : req.body.language?.ifYouHaveQuestion,
+                  emailAddress: req.body.language?.emailAddress,
+                  notReply: mail.mailNotReply
+                    ? mail.mailNotReply
+                    : req.body.language?.notReply,
+                  copyRight: mail.mailCopyRight
+                    ? mail.mailCopyRight
+                    : req.body.language?.copyRight,
+                  introductoryMessageForConfirmArrival:
+                    req.body.language?.introductoryMessageForConfirmArrival,
+                  dateMessage: req.body.language?.dateMessage,
+                  timeMessage: req.body.language?.timeMessage,
+                  storeLocation: req.body.language?.storeLocation,
+                  therapyMessage: req.body.language?.therapyMessage,
+                  doctorMessage: req.body.language?.doctorMessage,
+                  finalMessageForConfirmArrival: mail.mailMessage
+                    ? mail.mailMessage
+                    : req.body.language?.finalMessageForConfirmArrival,
+                  confirmArrivalButtonText:
+                    req.body.language?.confirmArrivalButtonText,
+                }),
+              };
+              mailOptions.to = to.email;
+              smtpTransport.sendMail(mailOptions, function (error, response) {
+                console.log(response);
+                if (error) {
+                  logger.log(
+                    "error",
+                    `Error to sent mail for CONFIRM ARRIVAL for USER: ${to.shortname} on EMAIL: ${to.email}. Error: ${error}`
+                  );
+                  res.send(error);
+                } else {
+                  logger.log(
+                    "info",
+                    `Sent mail for CONFIRM ARRIVAL for USER: ${to.shortname} on EMAIL: ${to.email}`
+                  );
+                  res.send(true);
+                }
+              });
             }
-          });
+          );
         });
       }
     );
@@ -336,41 +353,74 @@ router.post("/sendPatientFormRegistration", function (req, res) {
     "utf-8"
   );
   var patientRegistrationForm = hogan.compile(patientRegistrationFormTemplate);
-  var mailOptions = {
-    from: '"ClinicNode" support@app-production.eu',
-    to: req.body.email,
-    subject: req.body.langauge?.subjectFormRegistration,
-    html: patientRegistrationForm.render({
-      link: req.body.link,
-      initialGreeting: req.body.language?.initialGreeting,
-      finalGreeting: req.body.language?.finalGreeting,
-      signature: req.body.language?.signature,
-      thanksForUsing: req.body.language?.thanksForUsing,
-      websiteLink: req.body.language?.websiteLink,
-      ifYouHaveQuestion: req.body.language?.ifYouHaveQuestion,
-      emailAddress: req.body.language?.emailAddress,
-      notReply: req.body.language?.notReply,
-      copyRight: req.body.language?.copyRight,
-      introductoryMessageForPatientRegistrationForm:
-        req.body.language?.introductoryMessageForPatientRegistrationForm,
-      openForm: req.body.language?.openForm,
-    }),
-  };
+  connection.getConnection(function (err, conn) {
+    conn.query(
+      "select mr.* from customers c join mail_patient_form_registration mr on c.storeId = mr.superadmin where c.id = ?",
+      [req.body.id],
+      function (err, mailMessage, fields) {
+        if (err) {
+          res.json(false);
+        }
+        var mail = {};
+        if (mailMessage.length > 0) {
+          mail = mailMessage[0];
+        }
+        var mailOptions = {
+          from: '"ClinicNode" support@app-production.eu',
+          to: req.body.email,
+          subject: mail.mailSubject
+            ? mail.mailSubject
+            : req.body.langauge?.subjectFormRegistration,
+          html: patientRegistrationForm.render({
+            link: req.body.link,
+            initialGreeting: mail.mailInitialGreeting
+              ? mail.mailInitialGreeting
+              : req.body.language?.initialGreeting,
+            finalGreeting: mail.mailFinalGreeting
+              ? mail.mailFinalGreeting
+              : req.body.language?.finalGreeting,
+            signature: mail.mailSignature
+              ? mail.mailSignature
+              : req.body.language?.signature,
+            thanksForUsing: mail.mailThanksForUsing
+              ? mail.mailThanksForUsing
+              : req.body.language?.thanksForUsing,
+            websiteLink: req.body.language?.websiteLink,
+            ifYouHaveQuestion: mail.mailIfYouHaveQuestion
+              ? mail.mailIfYouHaveQuestion
+              : req.body.language?.ifYouHaveQuestion,
+            emailAddress: req.body.language?.emailAddress,
+            notReply: mail.mailNotReply
+              ? mail.mailNotReply
+              : req.body.language?.notReply,
+            copyRight: mail.mailCopyRight
+              ? mail.mailCopyRight
+              : req.body.language?.copyRight,
+            introductoryMessageForPatientRegistrationForm: mail.mailMessage
+              ? mail.mailMessage
+              : req.body.language
+                  ?.introductoryMessageForPatientRegistrationForm,
+            openForm: req.body.language?.openForm,
+          }),
+        };
 
-  smtpTransport.sendMail(mailOptions, function (error, response) {
-    if (error) {
-      logger.log(
-        "error",
-        `Error to sent mail for PATIENT FORM REGISTRATION on EMAIL: ${req.body.email}`
-      );
-      res.send(false);
-    } else {
-      logger.log(
-        "info",
-        `Sent mail for PATIENT FORM REGISTRATION on EMAIL: ${req.body.email}`
-      );
-      res.send(true);
-    }
+        smtpTransport.sendMail(mailOptions, function (error, response) {
+          if (error) {
+            logger.log(
+              "error",
+              `Error to sent mail for PATIENT FORM REGISTRATION on EMAIL: ${req.body.email}`
+            );
+            res.send(false);
+          } else {
+            logger.log(
+              "info",
+              `Sent mail for PATIENT FORM REGISTRATION on EMAIL: ${req.body.email}`
+            );
+            res.send(true);
+          }
+        });
+      }
+    );
   });
 });
 
@@ -381,48 +431,78 @@ router.post("/sendInfoToPatientForCreatedAccount", function (req, res) {
     "utf-8"
   );
   var infoForCreatedAccount = hogan.compile(infoCreatedTemplate);
-  var mailOptions = {
-    from: '"ClinicNode" support@app-production.eu',
-    to: req.body.email,
-    subject: req.body.language?.subjectCreatedPatientForm,
-    html: infoForCreatedAccount.render({
-      firstname: req.body.firstname,
-      email: req.body.email,
-      password: req.body.password,
-      loginLink: loginLink,
-      initialGreeting: req.body.language?.initialGreeting,
-      finalGreeting: req.body.language?.finalGreeting,
-      signature: req.body.language?.signature,
-      thanksForUsing: req.body.language?.thanksForUsing,
-      websiteLink: req.body.language?.websiteLink,
-      ifYouHaveQuestion: req.body.language?.ifYouHaveQuestion,
-      emailAddress: req.body.language?.emailAddress,
-      notReply: req.body.language?.notReply,
-      copyRight: req.body.language?.copyRight,
-      introductoryMessageForCreatedPatientAccount:
-        req.body.language?.introductoryMessageForCreatedPatientAccount,
-      linkForLogin: req.body.language?.linkForLogin,
-      emailForLogin: req.body.language?.emailForLogin,
-      passwordForLogin: req.body.language?.passwordForLogin,
-    }),
-  };
-  console.log(mailOptions);
+  connection.getConnection(function (err, conn) {
+    conn.query(
+      "select mr.* from customers c join mail_patient_created_account mr on c.storeId = mr.superadmin where c.id = ?",
+      [req.body.id],
+      function (err, mailMessage, fields) {
+        if (err) {
+          res.json(false);
+        }
+        var mail = {};
+        if (mailMessage.length > 0) {
+          mail = mailMessage[0];
+        }
+        var mailOptions = {
+          from: '"ClinicNode" support@app-production.eu',
+          to: req.body.email,
+          subject: mail.mailSubject
+            ? mail.mailSubject
+            : req.body.language?.subjectCreatedPatientForm,
+          html: infoForCreatedAccount.render({
+            firstname: req.body.firstname,
+            email: req.body.email,
+            password: req.body.password,
+            loginLink: loginLink,
+            initialGreeting: mail.mailInitialGreeting
+              ? mail.mailInitialGreeting
+              : req.body.language?.initialGreeting,
+            finalGreeting: mail.mailFinalGreeting
+              ? mail.mailFinalGreeting
+              : req.body.language?.finalGreeting,
+            signature: mail.mailSignature
+              ? mail.mailSignature
+              : req.body.language?.signature,
+            thanksForUsing: mail.mailThanksForUsing
+              ? mail.mailThanksForUsing
+              : req.body.language?.thanksForUsing,
+            websiteLink: req.body.language?.websiteLink,
+            ifYouHaveQuestion: mail.mailIfYouHaveQuestion
+              ? mail.mailIfYouHaveQuestion
+              : req.body.language?.ifYouHaveQuestion,
+            emailAddress: req.body.language?.emailAddress,
+            notReply: mail.mailNotReply
+              ? mail.mailNotReply
+              : req.body.language?.notReply,
+            copyRight: mail.mailCopyRight
+              ? mail.mailCopyRight
+              : req.body.language?.copyRight,
+            introductoryMessageForCreatedPatientAccount: mail.mailMessage
+              ? mail.mailMessage
+              : req.body.language?.introductoryMessageForCreatedPatientAccount,
+            linkForLogin: req.body.language?.linkForLogin,
+            emailForLogin: req.body.language?.emailForLogin,
+            passwordForLogin: req.body.language?.passwordForLogin,
+          }),
+        };
+        smtpTransport.sendMail(mailOptions, function (error, response) {
+          if (error) {
+            logger.log(
+              "info",
+              `Error to sent info for patient created account on EMAIL: ${req.body.email}. Error: ${error}`
+            );
 
-  smtpTransport.sendMail(mailOptions, function (error, response) {
-    if (error) {
-      logger.log(
-        "info",
-        `Error to sent info for patient created account on EMAIL: ${req.body.email}. Error: ${error}`
-      );
-
-      res.send(false);
-    } else {
-      logger.log(
-        "info",
-        `Sent info for patient created account on EMAIL: ${req.body.email}`
-      );
-      res.send(true);
-    }
+            res.send(false);
+          } else {
+            logger.log(
+              "info",
+              `Sent info for patient created account on EMAIL: ${req.body.email}`
+            );
+            res.send(true);
+          }
+        });
+      }
+    );
   });
 });
 
@@ -435,42 +515,74 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
   var infoForApproveReservation = hogan.compile(
     infoForApproveReservationTemplate
   );
-  var mailOptions = {
-    from: '"ClinicNode" support@app-production.eu',
-    to: req.body.email,
-    subject: req.body.language?.subjectApproveReservation,
-    html: infoForApproveReservation.render({
-      firstname: req.body.firstname,
-      email: req.body.email,
-      password: req.body.password,
-      loginLink: loginLink,
-      initialGreeting: req.body.language?.initialGreeting,
-      finalGreeting: req.body.language?.finalGreeting,
-      signature: req.body.language?.signature,
-      thanksForUsing: req.body.language?.thanksForUsing,
-      websiteLink: req.body.language?.websiteLink,
-      ifYouHaveQuestion: req.body.language?.ifYouHaveQuestion,
-      emailAddress: req.body.language?.emailAddress,
-      notReply: req.body.language?.notReply,
-      copyRight: req.body.language?.copyRight,
-      introductoryMessageForApproveReservation:
-        req.body.language?.introductoryMessageForApproveReservation,
-    }),
-  };
-  smtpTransport.sendMail(mailOptions, function (error, response) {
-    if (error) {
-      logger.log(
-        "error",
-        `Error to sent mail for APPROVE RESERVATION on EMAIL: ${req.body.email}`
-      );
-      res.send(false);
-    } else {
-      logger.log(
-        "info",
-        `Sent mail for APPROVE RESERVATION on EMAIL: ${req.body.email}`
-      );
-      res.send(true);
-    }
+  connection.getConnection(function (err, conn) {
+    conn.query(
+      "select mr.* from customers c join mail_approve_reservation mr on c.storeId = mr.superadmin where c.id = ?",
+      [req.body.id],
+      function (err, mailMessage, fields) {
+        if (err) {
+          res.json(false);
+        }
+        var mail = {};
+        if (mailMessage.length > 0) {
+          mail = mailMessage[0];
+        }
+        var mailOptions = {
+          from: '"ClinicNode" support@app-production.eu',
+          to: req.body.email,
+          subject: mail.mailSubject
+            ? mail.mailSubject
+            : req.body.language?.subjectApproveReservation,
+          html: infoForApproveReservation.render({
+            firstname: req.body.firstname,
+            email: req.body.email,
+            password: req.body.password,
+            loginLink: loginLink,
+            initialGreeting: mail.mailInitialGreeting
+              ? mail.mailInitialGreeting
+              : req.body.language?.initialGreeting,
+            finalGreeting: mail.mailFinalGreeting
+              ? mail.mailFinalGreeting
+              : req.body.language?.finalGreeting,
+            signature: mail.mailSignature
+              ? mail.mailSignature
+              : req.body.language?.signature,
+            thanksForUsing: mail.mailThanksForUsing
+              ? mail.mailThanksForUsing
+              : req.body.language?.thanksForUsing,
+            websiteLink: req.body.language?.websiteLink,
+            ifYouHaveQuestion: mail.mailIfYouHaveQuestion
+              ? mail.mailIfYouHaveQuestion
+              : req.body.language?.ifYouHaveQuestion,
+            emailAddress: req.body.language?.emailAddress,
+            notReply: mail.mailNotReply
+              ? mail.mailNotReply
+              : req.body.language?.notReply,
+            copyRight: mail.mailCopyRight
+              ? mail.mailCopyRight
+              : req.body.language?.copyRight,
+            introductoryMessageForApproveReservation: mail.mailMessage
+              ? mail.mailMessage
+              : req.body.language?.introductoryMessageForApproveReservation,
+          }),
+        };
+        smtpTransport.sendMail(mailOptions, function (error, response) {
+          if (error) {
+            logger.log(
+              "error",
+              `Error to sent mail for APPROVE RESERVATION on EMAIL: ${req.body.email}`
+            );
+            res.send(false);
+          } else {
+            logger.log(
+              "info",
+              `Sent mail for APPROVE RESERVATION on EMAIL: ${req.body.email}`
+            );
+            res.send(true);
+          }
+        });
+      }
+    );
   });
 });
 
@@ -480,42 +592,74 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
     "utf-8"
   );
   var infoForDenyReservation = hogan.compile(infoForDenyReservationTemplate);
-  var mailOptions = {
-    from: '"ClinicNode" support@app-production.eu',
-    to: req.body.email,
-    subject: req.body.language?.subjectDenyReservation,
-    html: infoForDenyReservation.render({
-      firstname: req.body.firstname,
-      email: req.body.email,
-      password: req.body.password,
-      loginLink: loginLink,
-      initialGreeting: req.body.language?.initialGreeting,
-      finalGreeting: req.body.language?.finalGreeting,
-      signature: req.body.language?.signature,
-      thanksForUsing: req.body.language?.thanksForUsing,
-      websiteLink: req.body.language?.websiteLink,
-      ifYouHaveQuestion: req.body.language?.ifYouHaveQuestion,
-      emailAddress: req.body.language?.emailAddress,
-      notReply: req.body.language?.notReply,
-      copyRight: req.body.language?.copyRight,
-      introductoryMessageForDenyReservation:
-        req.body.language?.introductoryMessageForDenyReservation,
-    }),
-  };
-  smtpTransport.sendMail(mailOptions, function (error, response) {
-    if (error) {
-      logger.log(
-        "error",
-        `Error to sent mail for DENY RESERVATION on EMAIL: ${req.body.email}`
-      );
-      res.send(false);
-    } else {
-      logger.log(
-        "info",
-        `Sent mail for DENY RESERVATION on EMAIL: ${req.body.email}`
-      );
-      res.send(true);
-    }
+  connection.getConnection(function (err, conn) {
+    conn.query(
+      "select mr.* from customers c join mail_deny_reservation mr on c.storeId = mr.superadmin where c.id = ?",
+      [req.body.id],
+      function (err, mailMessage, fields) {
+        if (err) {
+          res.json(false);
+        }
+        var mail = {};
+        if (mailMessage.length > 0) {
+          mail = mailMessage[0];
+        }
+        var mailOptions = {
+          from: '"ClinicNode" support@app-production.eu',
+          to: req.body.email,
+          subject: mail.mailSubject
+            ? mail.mailSubject
+            : req.body.language?.subjectDenyReservation,
+          html: infoForDenyReservation.render({
+            firstname: req.body.firstname,
+            email: req.body.email,
+            password: req.body.password,
+            loginLink: loginLink,
+            initialGreeting: mail.mailInitialGreeting
+              ? mail.mailInitialGreeting
+              : req.body.language?.initialGreeting,
+            finalGreeting: mail.mailFinalGreeting
+              ? mail.mailFinalGreeting
+              : req.body.language?.finalGreeting,
+            signature: mail.mailSignature
+              ? mail.mailSignature
+              : req.body.language?.signature,
+            thanksForUsing: mail.mailThanksForUsing
+              ? mail.mailThanksForUsing
+              : req.body.language?.thanksForUsing,
+            websiteLink: req.body.language?.websiteLink,
+            ifYouHaveQuestion: mail.mailIfYouHaveQuestion
+              ? mail.mailIfYouHaveQuestion
+              : req.body.language?.ifYouHaveQuestion,
+            emailAddress: req.body.language?.emailAddress,
+            notReply: mail.mailNotReply
+              ? mail.mailNotReply
+              : req.body.language?.notReply,
+            copyRight: mail.mailCopyRight
+              ? mail.mailCopyRight
+              : req.body.language?.copyRight,
+            introductoryMessageForDenyReservation: mail.mailMessage
+              ? mail.mailMessage
+              : req.body.language?.introductoryMessageForDenyReservation,
+          }),
+        };
+        smtpTransport.sendMail(mailOptions, function (error, response) {
+          if (error) {
+            logger.log(
+              "error",
+              `Error to sent mail for DENY RESERVATION on EMAIL: ${req.body.email}`
+            );
+            res.send(false);
+          } else {
+            logger.log(
+              "info",
+              `Sent mail for DENY RESERVATION on EMAIL: ${req.body.email}`
+            );
+            res.send(true);
+          }
+        });
+      }
+    );
   });
 });
 
@@ -575,7 +719,7 @@ router.post("/sendReminderViaEmailManual", function (req, res) {
 
   connection.getConnection(function (err, conn) {
     conn.query(
-      "select * from customers c join mail_reminder_message mr on c.storeId = mr.superadmin where c.id = ?",
+      "select mr.* from customers c join mail_reminder_message mr on c.storeId = mr.superadmin where c.id = ?",
       [req.body.id],
       function (err, mailMessage, fields) {
         if (err) {
@@ -599,9 +743,8 @@ router.post("/sendReminderViaEmailManual", function (req, res) {
           mail.mailNotReply = req.body.language?.notReply;
           mail.mailCopyRight = req.body.language?.copyRight;
         } else {
-          mail = mailMessage;
+          mail = mailMessage[0];
         }
-        console.log(mail);
         var mailOptions = {
           from: '"ClinicNode" support@app-production.eu',
           to: req.body.email,

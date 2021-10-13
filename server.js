@@ -1,4 +1,5 @@
 // Get dependencies
+require("dotenv").config();
 const compression = require('compression');
 const express = require('express');
 const path = require('path');
@@ -30,10 +31,10 @@ const deleteSMSTextFileFromFS = require("./server/routes/helpers/deleteSMSTextFi
 app.use(compression());
 
 var connection = mysql.createPool({
-  host: "185.178.193.141",
-  user: "appproduction.",
-  password: "jBa9$6v7",
-  database: "management_prod"
+  host: process.env.host,
+  user: process.env.user,
+  password: process.env.password,
+  database: process.env.database,
 });
 
 //for upload image

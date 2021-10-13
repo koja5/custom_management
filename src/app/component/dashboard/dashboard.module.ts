@@ -73,9 +73,14 @@ import { SystemErrorComponent } from "./administrator/system-logs/system-error/s
 import { SystemInfoComponent } from "./administrator/system-logs/system-info/system-info.component";
 import { SystemWarnComponent } from "./administrator/system-logs/system-warn/system-warn.component";
 import { AvailableAreaCodeComponent } from "./administrator/available-area-code/available-area-code.component";
-import { TemplateAccountComponent } from './administrator/template-account/template-account.component';
+import { TemplateAccountComponent } from "./administrator/template-account/template-account.component";
 import { MailReminderComponent } from "./parameters/mail-reminder/mail-reminder.component";
 import { SmsReminderComponent } from "./parameters/sms-reminder/sms-reminder.component";
+import { MailConfirmArrivalComponent } from "./parameters/mail-parameters/mail-confirm-arrival/mail-confirm-arrival.component";
+import { MailPatientFormRegistrationComponent } from "./parameters/mail-parameters/mail-patient-form-registration/mail-patient-form-registration.component";
+import { MailPatientCreatedAccountComponent } from "./parameters/mail-parameters/mail-patient-created-account/mail-patient-created-account.component";
+import { MailApproveReservationComponent } from "./parameters/mail-parameters/mail-approve-reservation/mail-approve-reservation.component";
+import { MailDenyReservationComponent } from "./parameters/mail-parameters/mail-deny-reservation/mail-deny-reservation.component";
 
 @NgModule({
   declarations: [
@@ -109,7 +114,12 @@ import { SmsReminderComponent } from "./parameters/sms-reminder/sms-reminder.com
     AvailableAreaCodeComponent,
     TemplateAccountComponent,
     MailReminderComponent,
-    SmsReminderComponent
+    MailConfirmArrivalComponent,
+    MailPatientFormRegistrationComponent,
+    MailPatientCreatedAccountComponent,
+    MailApproveReservationComponent,
+    MailDenyReservationComponent,
+    SmsReminderComponent,
   ],
   imports: [
     CommonModule,
@@ -151,7 +161,7 @@ import { SmsReminderComponent } from "./parameters/sms-reminder/sms-reminder.com
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
-    }
+    },
   ],
 })
 export class DashboardModule {}

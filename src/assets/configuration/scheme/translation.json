@@ -168,6 +168,11 @@
       "applicationParametersSettingsTitle": { "type": "string" },
       "templateAccount": { "type": "string" },
       "mailReminderMessage": { "type": "string" },
+      "mailApproveReservation": { "type": "string" },
+      "mailDenyReservation": { "type": "string" },
+      "mailConfirmArrival": { "type": "string" },
+      "mailPatientCreatedAccount": { "type": "string" },
+      "mailPatientFormRegistration": { "type": "string" },
       "smsReminderMessage": { "type": "string" },
       "reservations": { "type": "string" },
       "pagerItemsPerPage": { "type": "string" },
@@ -1043,9 +1048,20 @@
           "flex-direction": "row",
           "items": [
             { "key": "mailReminderMessage" },
+            { "key": "mailApproveReservation" },
+            { "key": "mailDenyReservation" },
+            { "key": "mailConfirmArrival" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "mailPatientCreatedAccount" },
+            { "key": "mailPatientFormRegistration" },
             { "key": "smsReminderMessage" },
-            {},
-            {}
+            { }
           ]
         }
       ]

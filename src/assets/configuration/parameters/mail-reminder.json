@@ -92,7 +92,7 @@
   },
   {
     "type": "textbox",
-    "width": "col-md-4",
+    "width": "col-md-8",
     "name": "mailCopyRight",
     "label": "mailCopyRight",
     "field": "mailCopyRight"
