@@ -1766,6 +1766,41 @@ router.get("/korisnik/verifikacija/:id", (req, res, next) => {
   }
 });
 
+router.get("/customerVerificationMail/:id", (req, res, next) => {
+  try {
+    var reqObj = req.params.id;
+
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      } else {
+        conn.query(
+          "UPDATE customers SET active='1' WHERE SHA1(email)='" +
+            reqObj +
+            "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+            } else {
+              logger.log("info", `Verification FOR EMAIL: ${reqObj}!`);
+              res.writeHead(302, {
+                Location: "/login",
+              });
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
 router.get("/sendChangePassword/:id", (req, res, next) => {
   try {
     var reqObj = req.params.id;

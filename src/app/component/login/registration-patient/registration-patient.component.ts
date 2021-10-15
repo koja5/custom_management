@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { CustomerModel } from "src/app/models/customer-model";
 import { CustomersService } from "src/app/service/customers.service";
 import { HelpService } from "src/app/service/help.service";
+import { MailService } from "src/app/service/mail.service";
+import { PackLanguageService } from "src/app/service/pack-language.service";
 import { CodeStatus } from "../../enum/code-status";
 
 @Component({
@@ -21,7 +23,9 @@ export class RegistrationPatientComponent implements OnInit {
     private service: CustomersService,
     private route: ActivatedRoute,
     private helpService: HelpService,
-    private router: Router
+    private router: Router,
+    private mailService: MailService,
+    private packLanguage: PackLanguageService
   ) {}
 
   ngOnInit() {
@@ -37,10 +41,16 @@ export class RegistrationPatientComponent implements OnInit {
       this.service
         .createCustomerFromPatientForm(this.data)
         .subscribe((data) => {
-          if(data['success']) {
-            this.router.navigate(['template/created-account-successed']);
+          if (data["success"]) {
+            this.router.navigate(["template/created-account-successed"]);
+            this.data.language = this.packLanguage.getLanguageForConfirmMail();
+            this.mailService
+              .sendCustomerVerificationMail(this.data)
+              .subscribe((data) => {
+                console.log(data);
+              });
           } else {
-            if(data['info'] === this.codeStatus.AlreadyExists) {
+            if (data["info"] === this.codeStatus.AlreadyExists) {
               this.errorMessage = this.language.accountExists;
             }
           }

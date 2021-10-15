@@ -17,6 +17,10 @@ export class MailService {
       .subscribe((val) => callback(val));
   }
 
+  public sendCustomerVerificationMail(data: any) {
+    return this.http.post("/api/sendCustomerVerificationMail", data);
+  }
+
   public sendForgetMail(data) {
     const headers = new HttpHeaders();
     headers.append("Content-Type", "application/json");

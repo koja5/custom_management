@@ -10,8 +10,8 @@
       <div class="sign-up__content">
         <header class="sign-up__header">
           <img class="brand-logo" src="../../../assets/images/brand-logo.png" />
-          <h3 class="sign-up__descr"> {{language.signUpTitle}}</h3>
-          <p *ngIf="errorMessage" class="error">{{errorMessage}}</p>
+          <h3 class="sign-up__descr">{{ language.signUpTitle }}</h3>
+          <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
         </header>
         <form
           class="sign-up__form form"
@@ -21,7 +21,10 @@
           <div class="form__row form__row--two">
             <div class="input form__inline-input">
               <div class="input__container">
-                <label for="first-name">{{language.firstname}} <span [title]="language.required" class="required"></span></label>
+                <label for="first-name"
+                  >{{ language.firstname }}
+                  <span [title]="language.required" class="required"></span
+                ></label>
                 <input
                   class="form-control"
                   name="first-name"
@@ -33,7 +36,10 @@
             </div>
             <div class="input form__inline-input">
               <div class="input__container">
-                <label for="last-name">{{language.lastname}} <span [title]="language.required" class="required"></span></label>
+                <label for="last-name"
+                  >{{ language.lastname }}
+                  <span [title]="language.required" class="required"></span
+                ></label>
                 <input
                   class="form-control"
                   name="last-name"
@@ -48,9 +54,12 @@
           <div class="form__row form__row--two">
             <div class="input form__inline-input">
               <div class="input__container">
-                <label for="username">{{language.gender}} <span [title]="language.required" class="required"></span></label>
+                <label for="username"
+                  >{{ language.gender }}
+                  <span [title]="language.required" class="required"></span
+                ></label>
                 <ejs-radiobutton
-                  label="{{language.male}}"
+                  label="{{ language.male }}"
                   name="gender"
                   id="male"
                   value="male"
@@ -59,7 +68,7 @@
                   required
                 ></ejs-radiobutton>
                 <ejs-radiobutton
-                  label="{{language.female}}"
+                  label="{{ language.female }}"
                   name="gender"
                   id="male"
                   value="female"
@@ -71,7 +80,7 @@
             </div>
             <div class="input form__inline-input">
               <div class="input__container">
-                <label for="last-name">{{language.birthday}}</label>
+                <label for="last-name">{{ language.birthday }}</label>
                 <ejs-datepicker
                   name="birthday"
                   [(ngModel)]="data.birthday"
@@ -82,7 +91,10 @@
           <div class="form__row form__row--two">
             <div class="input form__inline-input">
               <div class="input__container">
-                <label for="email">{{language.email}} <span [title]="language.required" class="required"></span></label>
+                <label for="email"
+                  >{{ language.email }}
+                  <span [title]="language.required" class="required"></span
+                ></label>
                 <input
                   class="form-control"
                   name="email"
@@ -94,7 +106,7 @@
             </div>
             <div class="input form__inline-input">
               <div class="input__container">
-                <label for="username">{{language.telephone}}</label>
+                <label for="username">{{ language.telephone }}</label>
                 <input
                   class="form-control"
                   name="telephone"
@@ -107,7 +119,10 @@
           <div class="form__row form__row--two">
             <div class="input form__inline-input">
               <div class="input__container">
-                <label for="password">{{language.password}} <span [title]="language.required" class="required"></span></label>
+                <label for="password"
+                  >{{ language.password }}
+                  <span [title]="language.required" class="required"></span
+                ></label>
                 <input
                   class="form-control"
                   name="password"
@@ -120,7 +135,10 @@
             </div>
             <div class="input form__inline-input">
               <div class="input__container">
-                <label for="confirm-password">{{language.confirmPassword}} <span [title]="language.required" class="required"></span></label>
+                <label for="confirm-password"
+                  >{{ language.confirmPassword }}
+                  <span [title]="language.required" class="required"></span
+                ></label>
                 <input
                   class="form-control"
                   name="confirm-password"
@@ -134,8 +152,10 @@
           <div class="form__row">
             <div class="input-checkbox">
               <div class="form-group signup-term">
-                By clicking you agree with our
-                <a href="#" class="signup-term-link">Term of use.</a>
+                {{ language.clickAgreeText }}
+                <a href="#" class="signup-term-link">{{
+                  language.termOfUse
+                }}</a>
               </div>
             </div>
           </div>
@@ -146,9 +166,11 @@
                 class="btn btn--regular"
                 id="sign-up-button"
                 [disabled]="form.form.invalid"
-                [title]="form.form.invalid ? language.requiredSubmitMessage : ''"
+                [title]="
+                  form.form.invalid ? language.requiredSubmitMessage : ''
+                "
               >
-                {{language.signUpWithEmail}}
+                {{ language.signUpWithEmail }}
               </button>
             </div>
           </div>

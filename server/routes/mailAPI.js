@@ -99,6 +99,55 @@ router.post("/send", function (req, res) {
   });
 });
 
+router.post("/sendCustomerVerificationMail", function (req, res) {
+  var confirmTemplate = fs.readFileSync(
+    "./server/routes/templates/confirmMail.hjs",
+    "utf-8"
+  );
+  var compiledTemplate = hogan.compile(confirmTemplate);
+  var verificationLinkButton =
+    link + "customerVerificationMail/" + sha1(req.body.email);
+
+  var mailOptions = {
+    from: '"ClinicNode" support@app-production.eu',
+    to: req.body.email,
+    subject: req.body.language?.subjectConfirmMail,
+    html: compiledTemplate.render({
+      firstName: req.body.shortname,
+      verificationLink: verificationLinkButton,
+      initialGreeting: req.body.language?.initialGreeting,
+      finalGreeting: req.body.language?.finalGreeting,
+      signature: req.body.language?.signature,
+      thanksForUsing: req.body.language?.thanksForUsing,
+      websiteLink: req.body.language?.websiteLink,
+      ifYouHaveQuestion: req.body.language?.ifYouHaveQuestion,
+      emailAddress: req.body.language?.emailAddress,
+      notReply: req.body.language?.notReply,
+      copyRight: req.body.language?.copyRight,
+      introductoryMessageForConfirmMail:
+        req.body.language?.introductoryMessageForConfirmMail,
+      confirmMailButtonText: req.body.language?.confirmMailButtonText,
+    }),
+  };
+
+  smtpTransport.sendMail(mailOptions, function (error, response) {
+    console.log(response);
+    if (error) {
+      logger.log(
+        "error",
+        `Error to sent mail for VERIFICATION MAIL on EMAIL: ${req.body.email}. Error: ${error}`
+      );
+      res.end("error");
+    } else {
+      logger.log(
+        "info",
+        `Sent mail for VERIFICATION MAIL for USER: ${req.body.shortname} on EMAIL: ${req.body.email}`
+      );
+      res.end("sent");
+    }
+  });
+});
+
 router.post("/send1", function (req, res) {
   console.log(req.body.email);
   let broj = sha1(req.body.email);

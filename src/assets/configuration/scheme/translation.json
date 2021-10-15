@@ -10,6 +10,8 @@
       "successExecutedActionText": { "type": "string" },
       "errorExecutedActionTitle": { "type": "string" },
       "errorExecutedActionText": { "type": "string" },
+      "clickAgreeText": { "type": "string" },
+      "termOfUse": { "type": "string" },
       "subject": { "type": "string" },
       "message": { "type": "string" },
       "welcomeTitle": { "type": "string" },
@@ -522,6 +524,7 @@
       "loadingDemoHeader": { "type": "string" },
       "loadingDemoText": { "type": "string" },
       "mailSubject": { "type": "string" },
+      "mailInitialGreeting": { "type": "string" },
       "mailMessage": { "type": "string" },
       "mailDate": { "type": "string" },
       "mailTime": { "type": "string" },
@@ -569,6 +572,12 @@
             { "key": "errorExecutedActionTitle" },
             { "key": "errorExecutedActionText" }
           ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [{ "key": "clickAgreeText" }, { "key": "termOfUse" }, {}, {}]
         }
       ]
     },
@@ -1061,7 +1070,7 @@
             { "key": "mailPatientCreatedAccount" },
             { "key": "mailPatientFormRegistration" },
             { "key": "smsReminderMessage" },
-            { }
+            {}
           ]
         }
       ]
@@ -2707,6 +2716,7 @@
           "flex-direction": "row",
           "items": [
             { "key": "mailSubject" },
+            { "key": "mailInitialGreeting" },
             { "key": "mailMessage" },
             { "key": "mailDate" },
             { "key": "mailTime" }

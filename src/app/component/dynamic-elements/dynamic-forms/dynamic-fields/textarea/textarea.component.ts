@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { HelpService } from 'src/app/service/help.service';
 import { FieldConfig } from '../../models/field-config';
 
 @Component({
@@ -11,9 +12,12 @@ export class TextareaComponent implements OnInit {
   config: FieldConfig;
   group: FormGroup;
   
-  constructor() { }
+  public language: any;
+
+  constructor(private helpService: HelpService) { }
 
   ngOnInit() {
+    this.language = this.helpService.getLanguage();
   }
 
 }
