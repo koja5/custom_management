@@ -399,9 +399,6 @@ export class DashboardComponent implements OnInit {
 
   checkFirstLogin() {
     if (this.helpService.getSessionStorage("first_login")) {
-      /*this.service.getTemplateAccount().subscribe((data) => {
-        this.templateAccount = data;
-      });*/
       this.getTemplateAccountByCountryCode();
     }
   }
@@ -470,7 +467,7 @@ export class DashboardComponent implements OnInit {
       if (this.templateAccount[i].account_id === this.templateAccountValue) {
         return {
           name: this.templateAccount[i]["name"],
-          langauge: this.templateAccount[i]["name"],
+          langauge: this.templateAccount[i]["language"],
         };
       }
     }

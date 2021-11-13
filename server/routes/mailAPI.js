@@ -270,7 +270,7 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
     }
 
     conn.query(
-      "SELECT c.shortname, c.email, s.storename, t.start, t.end, u.lastname, u.firstname, th.therapies_title, c.storeId from customers c join tasks t on c.id = t.customer_id join therapy th on t.therapy_id = th.id join store s on t.storeId = s.id  join users u on t.creator_id = u.id where c.id = ? and t.id",
+      "SELECT c.shortname, c.email as customer_email, s.*, t.start, t.end, u.lastname, u.firstname, th.therapies_title, c.storeId from customers c join tasks t on c.id = t.customer_id join therapy th on t.therapy_id = th.id join store s on t.storeId = s.id  join users u on t.creator_id = u.id where c.id = ? and t.id = ?",
       [req.body.customer_id, req.body.id],
       function (err, rows, fields) {
         if (err) {
@@ -282,14 +282,19 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
           conn.query(
             "select * from mail_confirm_arrival where superadmin = ?",
             [to.storeId],
-            function (err, mailRes, fields) {
+            function (err, mailMessage, fields) {
               if (err) {
                 console.error("SQL error:", err);
               }
               var mail = {};
-              if (mailRes.length > 0) {
-                mail = mailRes[0];
+              var signatureAvailable = false;
+              if (mailMessage.length > 0) {
+                mail = mailMessage[0];
+                if (mail.signatureAvailable) {
+                  signatureAvailable = true;
+                }
               }
+              console.log(mail);
               var verificationLinkButton =
                 link + "task/confirmationArrival/" + req.body.id;
               var convertToDateStart = new Date(to.start);
@@ -315,6 +320,8 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
                 (endHours < 10 ? "0" + endHours : endHours) +
                 ":" +
                 (endMinutes < 10 ? "0" + endMinutes : endMinutes);
+                console.log(mail);
+                console.log(to);
               var mailOptions = {
                 from: '"ClinicNode" support@app-production.eu',
                 subject: mail.mailSubject
@@ -323,11 +330,11 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
                 html: compiledTemplate.render({
                   firstName: to.shortname,
                   verificationLink: verificationLinkButton,
-                  date: date,
-                  start: start,
-                  end: end,
+                  date: mail.mailDate ? date : "",
+                  start: mail.mailTime ? start + " - " : "",
+                  end: mail.mailTime ? end : "",
                   therapy: to.therapies_title,
-                  storename: to.storename,
+                  storename: mail.mailClinic ? to.storename : "",
                   doctor: to.lastname + " " + to.firstname,
                   month: month,
                   day: day,
@@ -337,9 +344,9 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
                   finalGreeting: mail.mailFinalGreeting
                     ? mail.mailFinalGreeting
                     : req.body.language?.finalGreeting,
-                  signature: mail.mailSignature
-                    ? mail.mailSignature
-                    : req.body.language?.signature,
+                  signature: signatureAvailable && mail.mailSignature
+                      ? mail.mailSignature
+                    : "",
                   thanksForUsing: mail.mailThanksForUsing
                     ? mail.mailThanksForUsing
                     : req.body.language?.thanksForUsing,
@@ -356,9 +363,9 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
                     : req.body.language?.copyRight,
                   introductoryMessageForConfirmArrival:
                     req.body.language?.introductoryMessageForConfirmArrival,
-                  dateMessage: req.body.language?.dateMessage,
-                  timeMessage: req.body.language?.timeMessage,
-                  storeLocation: req.body.language?.storeLocation,
+                  dateMessage: mail.mailDate ? mail.mailDate + " " : "",
+                  timeMessage: mail.mailTime ? mail.mailTime + " " : "",
+                  storeLocation: mail.mailClinic ? mail.mailClinic + " " : "",
                   therapyMessage: req.body.language?.therapyMessage,
                   doctorMessage: req.body.language?.doctorMessage,
                   finalMessageForConfirmArrival: mail.mailMessage
@@ -366,9 +373,33 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
                     : req.body.language?.finalMessageForConfirmArrival,
                   confirmArrivalButtonText:
                     req.body.language?.confirmArrivalButtonText,
+                    signatureAddress:
+                    signatureAvailable &&
+                    mail.signatureAddress &&
+                    (to.street || to.zipcode || to.place)
+                      ? mail.signatureAddress +
+                        "\n" +
+                        to.street +
+                        "\n" +
+                        to.zipcode +
+                        " " +
+                        to.place
+                      : "",
+                  signatureTelephone:
+                    signatureAvailable && mail.signatureTelephone && to.telephone
+                      ? mail.signatureTelephone + " " + to.telephone
+                      : "",
+                  signatureMobile:
+                    signatureAvailable && mail.signatureMobile && to.mobile
+                      ? mail.signatureMobile + " " + to.mobile
+                      : "",
+                  signatureEmail:
+                    signatureAvailable && mail.signatureEmail && to.email
+                      ? mail.signatureEmail + " " + to.email
+                      : "",
                 }),
               };
-              mailOptions.to = to.email;
+              mailOptions.to = to.customer_email;
               smtpTransport.sendMail(mailOptions, function (error, response) {
                 console.log(response);
                 if (error) {
@@ -404,15 +435,19 @@ router.post("/sendPatientFormRegistration", function (req, res) {
   var patientRegistrationForm = hogan.compile(patientRegistrationFormTemplate);
   connection.getConnection(function (err, conn) {
     conn.query(
-      "select mr.* from customers c join mail_patient_form_registration mr on c.storeId = mr.superadmin where c.id = ?",
-      [req.body.id],
+      "select mr.* from customers c join mail_patient_form_registration mr on c.storeId = mr.superadmin where c.email = ?",
+      [req.body.email],
       function (err, mailMessage, fields) {
         if (err) {
           res.json(false);
         }
         var mail = {};
+        var signatureAvailable = false;
         if (mailMessage.length > 0) {
           mail = mailMessage[0];
+          if (mail.signatureAvailable) {
+            signatureAvailable = true;
+          }
         }
         var mailOptions = {
           from: '"ClinicNode" support@app-production.eu',
@@ -428,9 +463,11 @@ router.post("/sendPatientFormRegistration", function (req, res) {
             finalGreeting: mail.mailFinalGreeting
               ? mail.mailFinalGreeting
               : req.body.language?.finalGreeting,
-            signature: mail.mailSignature
+            signature: !signatureAvailable
               ? mail.mailSignature
-              : req.body.language?.signature,
+                ? mail.mailSignature
+                : req.body.language?.signature
+              : "",
             thanksForUsing: mail.mailThanksForUsing
               ? mail.mailThanksForUsing
               : req.body.language?.thanksForUsing,
@@ -450,6 +487,22 @@ router.post("/sendPatientFormRegistration", function (req, res) {
               : req.body.language
                   ?.introductoryMessageForPatientRegistrationForm,
             openForm: req.body.language?.openForm,
+            signatureStreet:
+              signatureAvailable && mail.signatureStreet
+                ? mail.signatureStreet
+                : "",
+            signatureZipCode:
+              signatureAvailable && mail.signatureZipCode
+                ? mail.signatureZipCode
+                : "",
+            signaturePhone:
+              signatureAvailable && mail.signaturePhone
+                ? mail.signaturePhone
+                : "",
+            signatureEmail:
+              signatureAvailable && mail.signatureEmail
+                ? mail.signatureEmail
+                : "",
           }),
         };
 
@@ -489,8 +542,12 @@ router.post("/sendInfoToPatientForCreatedAccount", function (req, res) {
           res.json(false);
         }
         var mail = {};
+        var signatureAvailable = false;
         if (mailMessage.length > 0) {
           mail = mailMessage[0];
+          if (mail.signatureAvailable) {
+            signatureAvailable = true;
+          }
         }
         var mailOptions = {
           from: '"ClinicNode" support@app-production.eu',
@@ -509,9 +566,11 @@ router.post("/sendInfoToPatientForCreatedAccount", function (req, res) {
             finalGreeting: mail.mailFinalGreeting
               ? mail.mailFinalGreeting
               : req.body.language?.finalGreeting,
-            signature: mail.mailSignature
+            signature: !signatureAvailable
               ? mail.mailSignature
-              : req.body.language?.signature,
+                ? mail.mailSignature
+                : req.body.language?.signature
+              : "",
             thanksForUsing: mail.mailThanksForUsing
               ? mail.mailThanksForUsing
               : req.body.language?.thanksForUsing,
@@ -532,6 +591,22 @@ router.post("/sendInfoToPatientForCreatedAccount", function (req, res) {
             linkForLogin: req.body.language?.linkForLogin,
             emailForLogin: req.body.language?.emailForLogin,
             passwordForLogin: req.body.language?.passwordForLogin,
+            signatureStreet:
+              signatureAvailable && mail.signatureStreet
+                ? mail.signatureStreet
+                : "",
+            signatureZipCode:
+              signatureAvailable && mail.signatureZipCode
+                ? mail.signatureZipCode
+                : "",
+            signaturePhone:
+              signatureAvailable && mail.signaturePhone
+                ? mail.signaturePhone
+                : "",
+            signatureEmail:
+              signatureAvailable && mail.signatureEmail
+                ? mail.signatureEmail
+                : "",
           }),
         };
         smtpTransport.sendMail(mailOptions, function (error, response) {
@@ -573,8 +648,12 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
           res.json(false);
         }
         var mail = {};
+        var signatureAvailable = false;
         if (mailMessage.length > 0) {
           mail = mailMessage[0];
+          if (mail.signatureAvailable) {
+            signatureAvailable = true;
+          }
         }
         var mailOptions = {
           from: '"ClinicNode" support@app-production.eu',
@@ -593,9 +672,11 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
             finalGreeting: mail.mailFinalGreeting
               ? mail.mailFinalGreeting
               : req.body.language?.finalGreeting,
-            signature: mail.mailSignature
+            signature: !signatureAvailable
               ? mail.mailSignature
-              : req.body.language?.signature,
+                ? mail.mailSignature
+                : req.body.language?.signature
+              : "",
             thanksForUsing: mail.mailThanksForUsing
               ? mail.mailThanksForUsing
               : req.body.language?.thanksForUsing,
@@ -613,6 +694,22 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
             introductoryMessageForApproveReservation: mail.mailMessage
               ? mail.mailMessage
               : req.body.language?.introductoryMessageForApproveReservation,
+            signatureStreet:
+              signatureAvailable && mail.signatureStreet
+                ? mail.signatureStreet
+                : "",
+            signatureZipCode:
+              signatureAvailable && mail.signatureZipCode
+                ? mail.signatureZipCode
+                : "",
+            signaturePhone:
+              signatureAvailable && mail.signaturePhone
+                ? mail.signaturePhone
+                : "",
+            signatureEmail:
+              signatureAvailable && mail.signatureEmail
+                ? mail.signatureEmail
+                : "",
           }),
         };
         smtpTransport.sendMail(mailOptions, function (error, response) {
@@ -650,8 +747,12 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
           res.json(false);
         }
         var mail = {};
+        var signatureAvailable = false;
         if (mailMessage.length > 0) {
           mail = mailMessage[0];
+          if (mail.signatureAvailable) {
+            signatureAvailable = true;
+          }
         }
         var mailOptions = {
           from: '"ClinicNode" support@app-production.eu',
@@ -670,9 +771,11 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
             finalGreeting: mail.mailFinalGreeting
               ? mail.mailFinalGreeting
               : req.body.language?.finalGreeting,
-            signature: mail.mailSignature
+            signature: !signatureAvailable
               ? mail.mailSignature
-              : req.body.language?.signature,
+                ? mail.mailSignature
+                : req.body.language?.signature
+              : "",
             thanksForUsing: mail.mailThanksForUsing
               ? mail.mailThanksForUsing
               : req.body.language?.thanksForUsing,
@@ -690,6 +793,22 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
             introductoryMessageForDenyReservation: mail.mailMessage
               ? mail.mailMessage
               : req.body.language?.introductoryMessageForDenyReservation,
+            signatureStreet:
+              signatureAvailable && mail.signatureStreet
+                ? mail.signatureStreet
+                : "",
+            signatureZipCode:
+              signatureAvailable && mail.signatureZipCode
+                ? mail.signatureZipCode
+                : "",
+            signaturePhone:
+              signatureAvailable && mail.signaturePhone
+                ? mail.signaturePhone
+                : "",
+            signatureEmail:
+              signatureAvailable && mail.signatureEmail
+                ? mail.signatureEmail
+                : "",
           }),
         };
         smtpTransport.sendMail(mailOptions, function (error, response) {
@@ -768,57 +887,89 @@ router.post("/sendReminderViaEmailManual", function (req, res) {
 
   connection.getConnection(function (err, conn) {
     conn.query(
-      "select mr.* from customers c join mail_reminder_message mr on c.storeId = mr.superadmin where c.id = ?",
-      [req.body.id],
+      "select mr.*, s.*, s.place as store_place from customers c join mail_reminder_message mr on c.storeId = mr.superadmin join store s on c.storeId = s.superadmin where c.id = ? and s.id = ?",
+      [req.body.id, req.body.storeId],
       function (err, mailMessage, fields) {
         if (err) {
           res.json(false);
         }
         var mail = {};
-        if (mailMessage.length == 0) {
-          mail.mailSubject = req.body.language?.subjectForReminderReservation;
-          mail.mailInitialGreeting = req.body.language?.initialGreeting;
-          mail.mailMessage =
-            req.body.language?.introductoryMessageForReminderReservation;
-          mail.mailDate = req.body.language?.dateMessage;
-          mail.mailTime = req.body.language?.timeMessage;
-          mail.mailTherapy = req.body.language?.therapyMessage;
-          mail.mailDoctor = req.body.language?.doctorMessage;
-          mail.mailClinic = req.body.language?.storeLocation;
-          mail.mailFinalGreeting = req.body.language?.finalGreeting;
-          mail.mailSignature = req.body.language?.signature;
-          mail.mailThanksForUsing = req.body.language?.thanksForUsing;
-          mail.mailIfYouHaveQuestion = req.body.language?.ifYouHaveQuestion;
-          mail.mailNotReply = req.body.language?.notReply;
-          mail.mailCopyRight = req.body.language?.copyRight;
-        } else {
+        var signatureAvailable = false;
+        if (mailMessage.length > 0) {
           mail = mailMessage[0];
+          if (mail.signatureAvailable) {
+            signatureAvailable = true;
+          }
         }
         var mailOptions = {
           from: '"ClinicNode" support@app-production.eu',
           to: req.body.email,
           subject: mail.mailSubject,
           html: compiledTemplate.render({
-            initialGreeting: mail.mailInitialGreeting,
-            introductoryMessageForReminderReservation: mail.mailMessage,
-            dateMessage: mail.mailDate,
-            timeMessage: mail.mailTime,
-            therapyMessage: mail.mailTherapy,
-            doctorMessage: mail.mailDoctor,
-            storeLocation: mail.mailClinic,
-            finalGreeting: mail.mailFinalGreeting,
-            signature: mail.mailSignature,
-            thanksForUsing: mail.mailThanksForUsing,
-            ifYouHaveQuestion: mail.mailIfYouHaveQuestion,
-            notReply: mail.mailNotReply,
-            copyRight: mail.mailCopyRight,
+            initialGreeting: mail?.mailInitialGreeting
+              ? mail?.mailInitialGreeting
+              : req.body.language?.initialGreeting,
+            introductoryMessageForReminderReservation: mail?.mailMessage
+              ? mail?.mailMessage
+              : req.body.language?.introductoryMessageForReminderReservation,
+            dateMessage: mail.mailDate ? mail.mailDate + " " : "",
+            timeMessage: mail.mailTime ? mail.mailTime + " " : "",
+            storeLocation: mail.mailClinic ? mail.mailClinic + " " : "",
+            therapyMessage: mail?.mailTherapy
+              ? mail?.mailTherapy
+              : req.body.language?.therapyMessage,
+            doctorMessage: mail?.mailDoctor
+              ? mail?.mailDoctor
+              : req.body.language?.doctorMessage,
+            finalGreeting: mail?.mailFinalGreeting
+              ? mail?.mailFinalGreeting
+              : req.body.language?.finalGreeting,
+            signature: signatureAvailable && mail.mailSignature
+                      ? mail.mailSignature
+                    : "",
+            thanksForUsing: mail?.mailThanksForUsing
+              ? mail?.mailThanksForUsing
+              : req.body.language?.thanksForUsing,
+            ifYouHaveQuestion: mail?.mailIfYouHaveQuestion
+              ? mail?.mailIfYouHaveQuestion
+              : req.body.language?.ifYouHaveQuestion,
+            notReply: mail?.mailNotReply
+              ? mail?.mailNotReply
+              : req.body.language?.notReply,
+            copyRight: mail?.mailCopyRight
+              ? mail?.mailCopyRight
+              : req.body.language?.copyRight,
             firstName: req.body.shortname,
-            date: date,
-            start: start,
-            end: end,
-            storename: req.body.storename,
+            date: mail.mailDate ? date : "",
+            start: mail.mailTime ? start + " - " : "",
+            end: mail.mailTime ? end : "",
+            storename: mail.mailClinic ? req.body.storename : "",
             month: month,
             day: day,
+            signatureAddress:
+              signatureAvailable &&
+              mail.signatureAddress &&
+              (mail.street || mail.zipcode || mail.store_place)
+                ? mail.signatureAddress +
+                  "\n" +
+                  mail.street +
+                  "\n" +
+                  mail.zipcode +
+                  " " +
+                  mail.store_place
+                : "",
+            signatureTelephone:
+              signatureAvailable && mail.signatureTelephone && mail.telephone
+                ? mail.signatureTelephone + " " + mail.telephone
+                : "",
+            signatureMobile:
+              signatureAvailable && mail.signatureMobile && mail.mobile
+                ? mail.signatureMobile + " " + mail.mobile
+                : "",
+            signatureEmail:
+              signatureAvailable && mail.signatureEmail && mail.email
+                ? mail.signatureEmail + " " + mail.email
+                : "",
           }),
         };
 

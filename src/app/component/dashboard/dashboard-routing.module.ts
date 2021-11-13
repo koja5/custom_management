@@ -33,6 +33,8 @@ import { MailPatientFormRegistrationComponent } from "./parameters/mail-paramete
 import { MailApproveReservationComponent } from "./parameters/mail-parameters/mail-approve-reservation/mail-approve-reservation.component";
 import { MailDenyReservationComponent } from "./parameters/mail-parameters/mail-deny-reservation/mail-deny-reservation.component";
 import { MailPatientCreatedAccountComponent } from "./parameters/mail-parameters/mail-patient-created-account/mail-patient-created-account.component";
+import { ChangeSuperadminProfileComponent } from "./parameters/change-superadmin-profile/change-superadmin-profile.component";
+import { PermissionPatientMenuComponent } from "./settings/permission-patient-menu/permission-patient-menu.component";
 
 const routes: Routes = [
   {
@@ -127,12 +129,12 @@ const routes: Routes = [
           {
             path: "warn",
             component: SystemWarnComponent,
-          }
+          },
         ],
       },
       {
         path: "area-code",
-        component: AvailableAreaCodeComponent
+        component: AvailableAreaCodeComponent,
       },
       {
         path: "my-complaint",
@@ -149,12 +151,32 @@ const routes: Routes = [
       { path: "reservations", component: ReservationsComponent },
       { path: "template-account", component: TemplateAccountComponent },
       { path: "mail-reminder", component: MailReminderComponent },
-      { path: "mail-approve-reservation", component: MailApproveReservationComponent },
-      { path: "mail-deny-reservation", component: MailDenyReservationComponent },
+      {
+        path: "mail-approve-reservation",
+        component: MailApproveReservationComponent,
+      },
+      {
+        path: "mail-deny-reservation",
+        component: MailDenyReservationComponent,
+      },
       { path: "mail-confirm-arrival", component: MailConfirmArrivalComponent },
-      { path: "mail-patient-created-account", component: MailPatientCreatedAccountComponent },
-      { path: "mail-patient-form-registration", component: MailPatientFormRegistrationComponent },
+      {
+        path: "mail-patient-created-account",
+        component: MailPatientCreatedAccountComponent,
+      },
+      {
+        path: "mail-patient-form-registration",
+        component: MailPatientFormRegistrationComponent,
+      },
       { path: "sms-reminder", component: SmsReminderComponent },
+      {
+        path: "change-superadmin-profile",
+        component: ChangeSuperadminProfileComponent,
+      },
+      {
+        path: "permission-patient-menu",
+        component: PermissionPatientMenuComponent,
+      },
     ],
   },
 ];

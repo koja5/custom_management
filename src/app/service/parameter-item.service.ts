@@ -173,4 +173,12 @@ export class ParameterItemService extends BehaviorSubject<any[]> {
   updateSmsReminderMessage(data) {
     return this.http.post("/api/updateSmsReminderMessage", data);
   }
+
+  getSuperadminProfile(id) {
+    return this.http.get("/api/getSuperadmin/" + id);
+  }
+
+  updateSuperadminProfile(data) {
+    return this.http.post("/api/updateSuperadmin", data);
+  }
 }

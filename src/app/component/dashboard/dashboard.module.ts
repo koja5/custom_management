@@ -81,6 +81,8 @@ import { MailPatientFormRegistrationComponent } from "./parameters/mail-paramete
 import { MailPatientCreatedAccountComponent } from "./parameters/mail-parameters/mail-patient-created-account/mail-patient-created-account.component";
 import { MailApproveReservationComponent } from "./parameters/mail-parameters/mail-approve-reservation/mail-approve-reservation.component";
 import { MailDenyReservationComponent } from "./parameters/mail-parameters/mail-deny-reservation/mail-deny-reservation.component";
+import { ChangeSuperadminProfileComponent } from "./parameters/change-superadmin-profile/change-superadmin-profile.component";
+import { PermissionPatientMenuComponent } from "./settings/permission-patient-menu/permission-patient-menu.component";
 
 @NgModule({
   declarations: [
@@ -120,6 +122,8 @@ import { MailDenyReservationComponent } from "./parameters/mail-parameters/mail-
     MailApproveReservationComponent,
     MailDenyReservationComponent,
     SmsReminderComponent,
+    ChangeSuperadminProfileComponent,
+    PermissionPatientMenuComponent
   ],
   imports: [
     CommonModule,

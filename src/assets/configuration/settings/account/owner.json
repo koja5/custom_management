@@ -60,6 +60,7 @@
   {
     "type": "datepicker",
     "width": "col-md-6",
+    "format": "dd.MM.yyyy",
     "name": "birthday",
     "label": "birthday",
     "field": "birthday",

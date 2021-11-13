@@ -58,7 +58,10 @@ export class MailReminderComponent implements OnInit {
 
   packValue(data) {
     for (let i = 0; i < this.configField.length; i++) {
-      this.configField[i].value = data[0][this.configField[i].field];
+      this.configField[i].value = this.helpService.convertValue(
+        data[0][this.configField[i].field],
+        this.configField[i].type
+      );
     }
   }
 
@@ -69,36 +72,40 @@ export class MailReminderComponent implements OnInit {
 
   receiveConfirm(event) {
     if (event) {
-      this.changeData['superadmin'] = this.helpService.getMe();
+      this.changeData["superadmin"] = this.helpService.getMe();
       if (this.data && this.data.length) {
-        this.service.updateMailReminderMessage(this.changeData).subscribe((data) => {
-          if (data) {
-            this.helpService.successToastr(
-              this.language.successExecutedActionTitle,
-              this.language.successExecutedActionText
-            );
-          } else {
-            this.helpService.errorToastr(
-              this.language.errorExecutedActionTitle,
-              this.language.errorExecutedActionText
-            );
-          }
-        });
+        this.service
+          .updateMailReminderMessage(this.changeData)
+          .subscribe((data) => {
+            if (data) {
+              this.helpService.successToastr(
+                this.language.successExecutedActionTitle,
+                this.language.successExecutedActionText
+              );
+            } else {
+              this.helpService.errorToastr(
+                this.language.errorExecutedActionTitle,
+                this.language.errorExecutedActionText
+              );
+            }
+          });
       } else {
         this.data = [this.changeData];
-        this.service.createMailReminderMessage(this.changeData).subscribe((data) => {
-          if (data) {
-            this.helpService.successToastr(
-              this.language.successExecutedActionTitle,
-              this.language.successExecutedActionText
-            );
-          } else {
-            this.helpService.errorToastr(
-              this.language.errorExecutedActionTitle,
-              this.language.errorExecutedActionText
-            );
-          }
-        });
+        this.service
+          .createMailReminderMessage(this.changeData)
+          .subscribe((data) => {
+            if (data) {
+              this.helpService.successToastr(
+                this.language.successExecutedActionTitle,
+                this.language.successExecutedActionText
+              );
+            } else {
+              this.helpService.errorToastr(
+                this.language.errorExecutedActionTitle,
+                this.language.errorExecutedActionText
+              );
+            }
+          });
       }
     }
     this.showDialog = false;

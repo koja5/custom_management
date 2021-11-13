@@ -98,6 +98,41 @@
       "field": "mailCopyRight"
     },
     {
+      "type": "switch",
+      "width": "col-md-12",
+      "name": "signatureAvailable",
+      "label": "signatureAvailable",
+      "field": "signatureAvailable"
+    },
+    {
+      "type": "textbox",
+      "width": "col-md-6",
+      "name": "signatureStreet",
+      "label": "signatureStreet",
+      "field": "signatureStreet"
+    },
+    {
+      "type": "textbox",
+      "width": "col-md-6",
+      "name": "signatureZipCode",
+      "label": "signatureZipCode",
+      "field": "signatureZipCode"
+    },
+    {
+      "type": "textbox",
+      "width": "col-md-6",
+      "name": "signaturePhone",
+      "label": "signaturePhone",
+      "field": "signaturePhone"
+    },
+    {
+      "type": "textbox",
+      "width": "col-md-6",
+      "name": "signatureEmail",
+      "label": "signatureEmail",
+      "field": "signatureEmail"
+    },
+    {
       "type": "button",
       "width": "col-md-12",
       "class": "e-control e-btn e-lib e-primary e-flat",

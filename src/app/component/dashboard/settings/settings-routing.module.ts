@@ -14,10 +14,6 @@ const routes: Routes = [
     component: ChangePasswordComponent,
   },
   {
-    path: "permission-patient-menu",
-    component: PermissionPatientMenuComponent,
-  },
-  {
     path: "change-language",
     component: LanguageComponent,
   }

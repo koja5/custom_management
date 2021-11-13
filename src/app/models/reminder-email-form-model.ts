@@ -5,6 +5,7 @@ export class ReminderEmailFormModel {
     end: string;
     shortname: string;
     storename: string;
+    storeId: string;
     therapy: string;
     doctor: string;
     month: string;

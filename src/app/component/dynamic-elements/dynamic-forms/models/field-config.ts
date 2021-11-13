@@ -7,6 +7,7 @@ export interface FieldConfig {
   class?: string;
   width?: string;
   field?: any;
+  format?: string;
   disabled?: boolean;
   readonly?: boolean;
   floatLabel?: string;

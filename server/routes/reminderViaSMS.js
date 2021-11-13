@@ -68,7 +68,7 @@ function reminderViaSMS() {
       function (error, response, body) {
         if (!error && response.statusCode === 200) {
           conn.query(
-            "SELECT r.sms, c.telephone, c.mobile, c.shortname, s.storename, t.start, t.end, us.firstname, us.lastname, th.therapies_title, sr.smsSubject, sr.smsMessage, sr.smsDate, sr.smsTime, sr.smsClinic, sr.smsSignatureStreet, sr.smsSignatureZipCode, sr.smsSignaturePhone, sr.smsSignatureEmail FROM reminder r join tasks t on r.superadmin = t.superadmin join customers c on t.customer_id = c.id join store s on t.storeId = s.id join users us on t.creator_id = us.id join therapy th on t.therapy_id = th.id join sms_reminder_message sr on r.superadmin = sr.superadmin where c.reminderViaSMS = 1 and r.sms = 1 and CAST(t.start AS DATE) = CAST((NOW() + interval 2 DAY) as DATE)",
+            "SELECT r.sms, c.telephone, c.mobile, c.shortname, s.storename, t.start, t.end, us.firstname, us.lastname, th.therapies_title, sr.smsSubject, sr.smsMessage, sr.smsDate, sr.smsTime, sr.smsClinic ,sr.signatureAvailable, sr.smsSignatureStreet, sr.smsSignatureZipCode, sr.smsSignaturePhone, sr.smsSignatureEmail FROM reminder r join tasks t on r.superadmin = t.superadmin join customers c on t.customer_id = c.id join store s on t.storeId = s.id join users us on t.creator_id = us.id join therapy th on t.therapy_id = th.id join sms_reminder_message sr on r.superadmin = sr.superadmin where c.reminderViaSMS = 1 and r.sms = 1 and CAST(t.start AS DATE) = CAST((NOW() + interval 2 DAY) as DATE)",
             function (err, rows, fields) {
               if (err) {
                 console.error("SQL error:", err);
@@ -90,29 +90,44 @@ function reminderViaSMS() {
                           checkAvailableCode(phoneNumber, JSON.parse(codes))
                         ) {
                           var signature = "";
-                          if (!to.smsSubject || !to.smsMessage) {
-                            to.smsSubject =
-                              language?.initialGreetingSMSReminder;
-                            to.smsMessage =
-                              language?.introductoryMessageForSMSReminderReservation;
-                            to.smsDate = language?.dateMessage;
-                            to.smsTime = language?.timeMessage;
-                            to.smsClinic = language?.storeLocation;
-                          } else {
-                            if (to.smsSignatureStreet) {
-                              signature += to.smsSignatureStreet + " \n";
+                          var dateMessage = "";
+                          var time = "";
+                          var clinic = "";
+                          if (to.signatureAvailable) {
+                            if (
+                              (to.street || to.zipcode || to.place) &&
+                              to.smsSignatureAddress
+                            ) {
+                              signature +=
+                                to.smsSignatureAddress +
+                                " \n" +
+                                to.street +
+                                " \n" +
+                                to.zipcode +
+                                " " +
+                                to.place +
+                                "\n";
                             }
-                            if (to.smsSignatureZipCode) {
-                              signature += to.smsSignatureZipCode + " \n";
+                            if (to.telephone && to.smsSignatureTelephone) {
+                              signature +=
+                                to.smsSignatureTelephone +
+                                " " +
+                                to.telephone +
+                                " \n";
                             }
-                            if (to.smsSignaturePhone) {
-                              signature += to.smsSignaturePhone + " \n";
+                            if (to.mobile && to.smsSignatureMobile) {
+                              signature +=
+                                to.smsSignatureMobile +
+                                " " +
+                                to.mobile +
+                                " \n";
                             }
-                            if (to.smsSignatureEmail) {
-                              signature += to.smsSignatureEmail + " \n";
+                            if (to.email && to.smsSignatureEmail) {
+                              signature +=
+                                to.smsSignatureEmail + " " + to.email + " \n";
                             }
                           }
-                          console.log(rows);
+
                           var convertToDateStart = new Date(to.start);
                           var convertToDateEnd = new Date(to.end);
                           var startHours = convertToDateStart.getHours();
@@ -139,40 +154,50 @@ function reminderViaSMS() {
                             (endMinutes < 10 ? "0" + endMinutes : endMinutes);
 
                           var language = JSON.parse(body)["config"];
+                          if (to.smsDate) {
+                            dateMessage = to.smsDate + " " + date + " \n";
+                          }
+                          if (to.smsTime) {
+                            time =
+                              to.smsTime + " " + start + "-" + end + " \n";
+                          }
+                          if (to.smsClinic) {
+                            clinic =
+                              to.smsClinic + " " + to.storename + " \n\n";
+                          }
 
                           var message =
-                            to?.smsSubject +
+                            (to.smsSubject
+                              ? to.smsSubject
+                              : language.initialGreetingSMSReminder) +
                             " " +
                             to.shortname +
                             ", \n" +
                             "\n" +
-                            to?.smsMessage +
+                            (to.smsMessage
+                              ? to.smsMessage
+                              : language.introductoryMessageForSMSReminderReservation) +
                             " \n" +
                             "\n" +
-                            to?.smsDate +
-                            ": " +
-                            date +
-                            " \n" +
-                            to?.smsTime +
-                            ": " +
-                            start +
-                            "-" +
-                            end +
-                            " \n" +
-                            to?.smsClinic +
-                            ": " +
-                            to.storename;
-
+                            dateMessage +
+                            time +
+                            clinic;
+                          console.log(message);
                           var content =
-                            "To: " + phoneNumber + "\r\n\r\n" + message;
+                            "To: " +
+                            phoneNumber +
+                            "\r\n\r\n" +
+                            message +
+                            "\r\n" +
+                            signature;
                           var fileName = "server/sms/" + phoneNumber + ".txt";
                           console.log(content);
                           fs.writeFile(fileName, content, function (err) {
                             if (err) return logger.log("error", err);
-                            /*logger.log(
+                            logger.log(
                               "info",
                               "Sent AUTOMATE REMINDER to NUMBER: " + phoneNumber
-                            );*/
+                            );
                             ftpUploadSMS(fileName, phoneNumber + ".txt");
                           });
                         }
@@ -198,3 +223,4 @@ function checkAvailableCode(phone, codes) {
   return false;
 }
 module.exports = reminderViaSMS;
+

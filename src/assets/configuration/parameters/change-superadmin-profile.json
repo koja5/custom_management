@@ -1,15 +1,14 @@
 [
   {
     "type": "textbox",
-    "width": "col-md-6",
+    "width": "col-md-4",
     "name": "firstname",
     "label": "firstname",
-    "field": "firstname",
-    "value": "Marko"
+    "field": "firstname"
   },
   {
     "type": "textbox",
-    "width": "col-md-6",
+    "width": "col-md-4",
     "name": "lastname",
     "label": "lastname",
     "field": "lastname"
@@ -24,47 +23,52 @@
   {
     "type": "textbox",
     "width": "col-md-4",
-    "name": "streetnumber",
-    "label": "streetnumber",
-    "field": "streetnumber"
+    "name": "zipcode",
+    "label": "zipcode",
+    "field": "zipcode"
   },
   {
     "type": "textbox",
     "width": "col-md-4",
-    "name": "city",
-    "label": "city",
-    "field": "city"
+    "name": "place",
+    "label": "place",
+    "field": "place"
   },
   {
     "type": "textbox",
-    "width": "col-md-6",
+    "width": "col-md-4",
+    "name": "email",
+    "label": "email",
+    "field": "email"
+  },
+  {
+    "type": "textbox",
+    "width": "col-md-4",
     "name": "telephone",
     "label": "telephone",
     "field": "telephone"
   },
   {
     "type": "textbox",
-    "width": "col-md-6",
+    "width": "col-md-4",
     "name": "mobile",
     "label": "mobile",
     "field": "mobile"
   },
   {
-    "type": "textbox",
-    "width": "col-md-6",
-    "name": "email",
-    "label": "email",
-    "field": "email",
-    "disabled": true
-  },
-  {
     "type": "datepicker",
-    "width": "col-md-6",
+    "width": "col-md-4",
     "format": "dd.MM.yyyy",
     "name": "birthday",
     "label": "birthday",
-    "field": "birthday",
-    "placeholder": "Please enter date for initial task!"
+    "field": "birthday"
+  },
+  {
+    "type": "datepicker",
+    "width": "col-md-4",
+    "name": "incompanysince",
+    "label": "incompanysince",
+    "field": "incompanysince"
   },
   {
     "type": "button",

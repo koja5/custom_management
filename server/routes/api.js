@@ -568,7 +568,7 @@ router.get("/getUsers/:id", function (req, res, next) {
     var id = req.params.id;
 
     conn.query(
-      "SELECT u.id, u.shortname, u.firstname, u.lastname, u.email, u.street, u.active from users u join store s on u.storeId = s.id where s.superadmin = ?",
+      "SELECT u.id, u.shortname, u.firstname, u.lastname, u.email, u.street, u.active from users u where u.superadmin = ?",
       [id],
       function (err, rows) {
         conn.release();
@@ -683,15 +683,19 @@ router.get("/getCompany/:id", function (req, res, next) {
       res.json(err);
     }
     var id = req.params.id;
-    conn.query("SELECT * from store where id = ?", [id], function (err, rows) {
-      conn.release();
-      if (!err) {
-        res.json(rows);
-      } else {
-        logger.log("error", err.sql + ". " + err.sqlMessage);
-        res.json(err);
+    conn.query(
+      "SELECT * from users_superadmin where id = ?",
+      [id],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
       }
-    });
+    );
   });
 });
 
@@ -1777,7 +1781,7 @@ router.get("/customerVerificationMail/:id", (req, res, next) => {
         res.json(err);
       } else {
         conn.query(
-          "UPDATE customers SET active='1' WHERE SHA1(email)='" +
+          "UPDATE customers SET isConfirm='1' WHERE SHA1(email)='" +
             reqObj +
             "'",
           function (err, rows, fields) {
@@ -1787,9 +1791,7 @@ router.get("/customerVerificationMail/:id", (req, res, next) => {
               logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               logger.log("info", `Verification FOR EMAIL: ${reqObj}!`);
-              res.writeHead(302, {
-                Location: "/login",
-              });
+              res.redirect("/login");
             }
           }
         );
@@ -3418,7 +3420,7 @@ router.post("/updateDoctorsList", function (req, res, next) {
 
     conn.query(
       "update doctors_list set ? where id = '" + req.body.id + "'",
-      data,
+      req.body,
       function (err, rows, fields) {
         conn.release();
         if (err) {
@@ -5027,17 +5029,17 @@ const messagebird = require("messagebird")("sbx8Desv4cXJdPMZf7GtBLs9P", null, [
                     " \n" +
                     "\n" +
                     language?.dateMessage +
-                    ": " +
+                    " " +
                     date +
                     " \n" +
                     language?.timeMessage +
-                    ": " +
+                    " " +
                     start +
                     "-" +
                     end +
                     " \n" +
                     language?.storeLocation +
-                    ": " +
+                    " " +
                     req.body.storename,
                 },
                 function (err, response) {
@@ -5110,61 +5112,62 @@ router.post("/sendSMS", function (req, res) {
               res.json(err);
             } else {
               conn.query(
-                "select * from customers c join sms_reminder_message sr on c.storeId = sr.superadmin where c.id = ?",
-                [req.body.id],
+                "select * from customers c join sms_reminder_message sr on c.storeId = sr.superadmin join store s on c.storeId = s.superadmin where c.id = ? and s.id = ?",
+                [req.body.id, req.body.storeId],
                 function (err, smsMessage, fields) {
                   var sms = {};
                   var signature = "";
-                  if (smsMessage.length == 0) {
-                    sms.smsSubject = language?.initialGreetingSMSReminder;
-                    sms.smsMessage =
-                      language?.introductoryMessageForSMSReminderReservation;
-                    sms.smsDate = language?.dateMessage;
-                    sms.smsTime = language?.timeMessage;
-                    sms.smsClinic = language?.storeLocation;
-                  } else {
+                  var dateMessage = "";
+                  var time = "";
+                  var clinic = "";
+                  if (smsMessage.length > 0) {
                     sms = smsMessage[0];
-                    if (sms.smsSignatureStreet) {
-                      signature += sms.smsSignatureStreet + " \n";
+                    if (sms.signatureAvailable) {
+                      if ((sms.street || sms.zipcode || sms.place) && sms.smsSignatureAddress) {
+                        signature +=
+                          sms.smsSignatureAddress + "\n" + sms.street + " \n" + sms.zipcode + " " + sms.place + "\n";
+                      }
+                      if (sms.telephone && sms.smsSignatureTelephone ) {
+                        signature += sms.smsSignatureTelephone + " " + sms.telephone + " \n";
+                      }
+                      if (sms.mobile && sms.smsSignatureMobile) {
+                        signature += sms.smsSignatureMobile + " " + sms.mobile + " \n";
+                      }
+                      if (sms.email && sms.smsSignatureEmail) {
+                        signature += sms.smsSignatureEmail + " " + sms.email + " \n";
+                      }
                     }
-                    if (sms.smsSignatureZipCode) {
-                      signature += sms.smsSignatureZipCode + " \n";
+
+                    if (sms.smsDate) {
+                      dateMessage = sms.smsDate + " " + date + " \n";
                     }
-                    if (sms.smsSignaturePhone) {
-                      signature += sms.smsSignaturePhone + " \n";
+                    if (sms.smsTime) {
+                      time = sms.smsTime + " " + start + "-" + end + " \n";
                     }
-                    if (sms.smsSignatureEmail) {
-                      signature += sms.smsSignatureEmail + " \n";
+                    if (sms.smsClinic) {
+                      clinic =
+                        sms.smsClinic + " " + req.body.storename + " \n\n";
                     }
                   }
                   var message =
-                    sms.smsSubject +
+                    (sms.smsSubject
+                      ? sms.smsSubject
+                      : language?.initialGreetingSMSReminder) +
                     " " +
                     req.body.shortname +
                     ", \n" +
                     "\n" +
-                    sms.smsMessage +
+                    (sms.smsMessage
+                      ? sms.smsMessage
+                      : language?.introductoryMessageForSMSReminderReservation) +
                     " \n" +
                     "\n" +
-                    sms.smsDate +
-                    ": " +
-                    date +
-                    " \n" +
-                    sms.smsTime +
-                    ": " +
-                    start +
-                    "-" +
-                    end +
-                    " \n" +
-                    sms.smsClinic +
-                    ": " +
-                    req.body.storename +
-                    " \n\n" +
+                    dateMessage +
+                    time +
+                    clinic +
                     signature;
-                  console.log(message);
                   var content = "To: " + phoneNumber + "\r\n\r\n" + message;
                   var fileName = "server/sms/" + phoneNumber + ".txt";
-                  console.log(content);
                   fs.writeFile(fileName, content, function (err) {
                     if (err) return logger.log("error", err);
                     logger.log(
@@ -5658,9 +5661,9 @@ router.post("/loadTemplateAccount", function (req, res, next) {
     insertFromTemplate(conn, "tasks", req.body.account_id, req.body.id);
     //customer
     getCustomersDemoData(conn, "customers", req.body.account_id, req.body.id);
-    insertFromTemplate(conn, "reminder", req.body.account_id, req.body.id);
+    // insertFromTemplate(conn, "reminder", req.body.account_id, req.body.id);
     insertFromTemplate(conn, "vaucher", req.body.account_id, req.body.id);
-    insertFromTemplate(conn, "users", req.body.account_id, req.body.id);
+    insertFromTemplateForUsers(conn, "users", req.body.account_id, req.body.id);
     insertFromTemplate(conn, "store", req.body.account_id, req.body.id);
 
     setTimeout(function () {
@@ -5699,6 +5702,51 @@ function insertFromTemplate(conn, category, account_id, id) {
   );
 }
 
+
+function insertFromTemplateForUsers(conn, category, account_id, id) {
+  conn.query(
+    "SELECT * from " + category + " where superadmin = ?",
+    account_id,
+    function (err, rows) {
+      // conn.release();
+      console.log(rows);
+      if (!err) {
+        rows.forEach(function (to, i, array) {
+          to.superadmin = id;
+          delete to.id;
+          conn.query(
+            "insert into " + category + " SET ?",
+            to,
+            function (err, res) {
+              console.log(err);
+              console.log(res);
+            }
+          );
+          conn.query(
+            "select w.* from users u join work w on u.id = w.user_id where u.id = ?",
+            to.id,
+            function (err, uw) {
+              uw.user_id = to.id;
+              delete uw.id;
+              conn.query(
+                "insert into work SET ?",
+                uw,
+                function (err, res) {
+                  console.log(err);
+                  console.log(res);
+                }
+              );
+            }
+          );
+        });
+      } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      }
+    }
+  );
+}
+
 function getCustomersDemoData(conn, category, account_id, id) {
   conn.query(
     "SELECT * from " + category + " where storeId = ?",
@@ -5708,7 +5756,7 @@ function getCustomersDemoData(conn, category, account_id, id) {
       console.log(rows);
       if (!err) {
         rows.forEach(function (to, i, array) {
-          to.superadmin = id;
+          to.storeId = id;
           delete to.id;
           console.log(to);
           conn.query(

@@ -1,11 +1,16 @@
 import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
 import { Modal, ModalModule } from "ngx-modal";
 import { StoreService } from "../../../service/store.service";
-import { process, State, GroupDescriptor, SortDescriptor } from "@progress/kendo-data-query";
+import {
+  process,
+  State,
+  GroupDescriptor,
+  SortDescriptor,
+} from "@progress/kendo-data-query";
 import {
   DataStateChangeEvent,
   PageChangeEvent,
-  RowArgs
+  RowArgs,
 } from "@progress/kendo-angular-grid";
 import { StoreModel } from "src/app/models/store-model";
 import Swal from "sweetalert2";
@@ -18,12 +23,12 @@ import { HelpService } from "src/app/service/help.service";
 @Component({
   selector: "app-store",
   templateUrl: "./store.component.html",
-  styleUrls: ["./store.component.scss"]
+  styleUrls: ["./store.component.scss"],
 })
 export class StoreComponent implements OnInit {
   public store = false;
-  @ViewChild('storeEdit') storeEdit: Modal;
-  @ViewChild('storeCreate') storeCreate: Modal;
+  @ViewChild("storeEdit") storeEdit: Modal;
+  @ViewChild("storeCreate") storeCreate: Modal;
   // public storeEdit = false;
   public data = new StoreModel();
   public currentLoadData: any;
@@ -33,7 +38,7 @@ export class StoreComponent implements OnInit {
   public state: State = {
     skip: 0,
     take: 10,
-    filter: null
+    filter: null,
   };
   public idUser: string;
   public loading = true;
@@ -56,10 +61,14 @@ export class StoreComponent implements OnInit {
   public pageSize = 5;
   public pageable = {
     pageSizes: true,
-    previousNext: true
+    previousNext: true,
   };
 
-  constructor(public service: StoreService, public message: MessageService, private helpService: HelpService) {
+  constructor(
+    public service: StoreService,
+    public message: MessageService,
+    private helpService: HelpService
+  ) {
     // this.excelIO = new Excel.IO();
   }
 
@@ -73,7 +82,7 @@ export class StoreComponent implements OnInit {
     this.helpService.setTitleForBrowserTab(this.language.store);
     this.getStore();
 
-    this.message.getTheme().subscribe(mess => {
+    this.message.getTheme().subscribe((mess) => {
       this.changeTheme(mess);
       this.theme = mess;
     });
@@ -81,11 +90,11 @@ export class StoreComponent implements OnInit {
 
   getStore() {
     this.loadingGrid = true;
-    this.service.getStore(this.idUser, val => {
+    this.service.getStore(this.idUser, (val) => {
       console.log(val);
       this.currentLoadData = val;
       this.gridData = {
-        data: val
+        data: val,
       };
       this.gridView = process(val, this.state);
       this.changeTheme(this.theme);
@@ -112,60 +121,77 @@ export class StoreComponent implements OnInit {
       start_work: "",
       end_work: "",
       time_duration: "",
-      superadmin: this.idUser
+      superadmin: this.idUser,
     };
   }
 
   createStore(form) {
     this.data.start_work = this.start_work.toString();
     this.data.end_work = this.end_work.toString();
-    this.service.createStore(this.data, val => {
+    this.service.createStore(this.data, (val) => {
       if (val.success) {
         console.log(val);
         this.data.id = val.id;
         this.getStore();
-        this.storeCreate.close();
-        Swal.fire({
+        this.helpService.successToastr(
+          this.language.successExecutedActionTitle,
+          this.language.successExecutedActionText
+        );
+        /*Swal.fire({
           title: this.language.successful,
           text: this.language[val.info],
           timer: 3000,
-          type: "success"
-        });
+          type: "success",
+        });*/
       } else {
-        this.storeCreate.close();
-        Swal.fire({
+        this.helpService.errorToastr(
+          this.language.errorExecutedActionTitle,
+          this.language.errorExecutedActionText
+        );
+        /*Swal.fire({
           title: this.language.error,
           text: this.language[val.info],
           timer: 3000,
-          type: "error"
-        });
+          type: "error",
+        });*/
       }
     });
+
+    this.storeCreate.close();
   }
 
   updateStore(store) {
     this.data.start_work = this.start_work.toString();
     this.data.end_work = this.end_work.toString();
-    this.service.editStore(this.data).subscribe(data => {
+    this.service.editStore(this.data).subscribe((data) => {
       console.log(data);
       if (data) {
         this.getStore();
-        Swal.fire({
+        this.helpService.successToastr(
+          this.language.successExecutedActionTitle,
+          this.language.successExecutedActionText
+        );
+        /*Swal.fire({
           title: "Successfull update",
           text: "Store data is successfull update!",
           timer: 3000,
           type: "success"
-        });
-        this.storeEdit.open();
+        });*/
       } else {
-        Swal.fire({
+        this.helpService.errorToastr(
+          this.language.errorExecutedActionTitle,
+          this.language.errorExecutedActionText
+        );
+        /*Swal.fire({
           title: "Error update",
           text: "Store data is not successfull update!",
           timer: 3000,
-          type: "error"
-        });
+          type: "error",
+        });*/
       }
     });
+
+    this.storeEdit.close();
   }
 
   deleteStore(store) {}
@@ -220,18 +246,18 @@ export class StoreComponent implements OnInit {
     console.log(event);
     if (event === "yes") {
       console.log(this.data);
-      this.service.deleteStore(this.data.id).subscribe(data => {
+      this.service.deleteStore(this.data.id).subscribe((data) => {
         console.log(data);
         if (data) {
           this.state = {
             skip: 0,
-            take: 10
+            take: 10,
           };
           Swal.fire({
             title: "Successfull!",
             text: "Successfull delete store",
             timer: 3000,
-            type: "success"
+            type: "success",
           });
           this.getStore();
         }
@@ -247,13 +273,13 @@ export class StoreComponent implements OnInit {
     if (event === "yes") {
       this.excelOpened = false;
       setTimeout(() => {
-        this.service.insertMultiData(this.gridData).subscribe(data => {
+        this.service.insertMultiData(this.gridData).subscribe((data) => {
           if (data) {
             Swal.fire({
               title: "Successfull!",
               text: "New stores is successfull added",
               timer: 3000,
-              type: "success"
+              type: "success",
             });
             this.getStore();
           }
@@ -284,7 +310,7 @@ export class StoreComponent implements OnInit {
 
     this.excelOpened = true;
     let fileReader = new FileReader();
-    fileReader.onload = e => {
+    fileReader.onload = (e) => {
       this.arrayBuffer = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer);
       var arr = new Array();
@@ -328,7 +354,7 @@ export class StoreComponent implements OnInit {
     const allData = {
       table: "store",
       columns: columns,
-      data: dataArray
+      data: dataArray,
     };
     return allData;
   }
@@ -435,30 +461,30 @@ export class StoreComponent implements OnInit {
           {
             field: "storename",
             operator: "contains",
-            value: inputValue
+            value: inputValue,
           },
           {
             field: "email",
             operator: "contains",
-            value: inputValue
+            value: inputValue,
           },
           {
             field: "street",
             operator: "contains",
-            value: inputValue
+            value: inputValue,
           },
           {
             field: "place",
             operator: "contains",
-            value: inputValue
+            value: inputValue,
           },
           {
             field: "telephone",
             operator: "contains",
-            value: inputValue
-          }
-        ]
-      }
+            value: inputValue,
+          },
+        ],
+      },
     });
     this.gridView = process(this.gridData.data, this.state);
   }

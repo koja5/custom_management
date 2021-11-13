@@ -18,6 +18,6 @@ import { MessageService } from 'src/app/service/message.service';
     DymanicElementsModule,
     DropDownListModule
   ],
-  declarations: [SettingsComponent, AccountComponent, ChangePasswordComponent, PermissionPatientMenuComponent, RemindersComponent, LanguageComponent]
+  declarations: [SettingsComponent, AccountComponent, ChangePasswordComponent, RemindersComponent, LanguageComponent]
 })
 export class SettingsModule { }

@@ -59,7 +59,7 @@ export class MailDenyReservationComponent implements OnInit {
 
   packValue(data) {
     for (let i = 0; i < this.configField.length; i++) {
-      this.configField[i].value = data[0][this.configField[i].field];
+      this.configField[i].value = this.helpService.convertValue(data[0][this.configField[i].field], this.configField[i].type);
     }
   }
 
@@ -73,7 +73,7 @@ export class MailDenyReservationComponent implements OnInit {
       this.changeData["superadmin"] = this.helpService.getMe();
       if (this.data && this.data.length) {
         this.service
-          .createMailDenyReservation(this.changeData)
+          .updateMailDenyReservation(this.changeData)
           .subscribe((data) => {
             if (data) {
               this.helpService.successToastr(
@@ -90,7 +90,7 @@ export class MailDenyReservationComponent implements OnInit {
       } else {
         this.data = [this.changeData];
         this.service
-          .updateMailDenyReservation(this.changeData)
+          .createMailDenyReservation(this.changeData)
           .subscribe((data) => {
             if (data) {
               this.helpService.successToastr(

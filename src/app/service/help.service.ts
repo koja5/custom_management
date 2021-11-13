@@ -168,7 +168,9 @@ export class HelpService {
     return (
       window.location.protocol +
       "://" +
-      window.location.hostname.replace("www.", "") + ":" + window.location.port
+      window.location.hostname.replace("www.", "") +
+      ":" +
+      window.location.port
     );
   }
 
@@ -194,5 +196,28 @@ export class HelpService {
 
   clearLocalStorage(key) {
     localStorage.removeItem(key);
+  }
+
+  convertValue(data, type) {
+    switch (type) {
+      case "switch" || "checkbox":
+        if (data === 1) {
+          return true;
+        } else {
+          return false;
+        }
+      default:
+        return data;
+    }
+  }
+
+  packValueForParameters(configField, data) {
+    for (let i = 0; i < configField.length; i++) {
+      configField[i].value = this.convertValue(
+        data[0][configField[i].field],
+        configField[i].type
+      );
+    }
+    return configField;
   }
 }

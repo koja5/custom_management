@@ -43,6 +43,7 @@ export class DynamicSendEmailComponent implements OnInit {
       end: this.data.end,
       shortname: this.data.shortname,
       storename: this.data.storename,
+      storeId: this.data.storeId,
       therapy: this.data.therapy,
       doctor: this.data.doctor,
       month: this.data.month,

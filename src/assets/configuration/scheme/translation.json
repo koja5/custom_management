@@ -10,6 +10,7 @@
       "successExecutedActionText": { "type": "string" },
       "errorExecutedActionTitle": { "type": "string" },
       "errorExecutedActionText": { "type": "string" },
+      "actionTitle": { "type": "string" },
       "clickAgreeText": { "type": "string" },
       "termOfUse": { "type": "string" },
       "subject": { "type": "string" },
@@ -176,12 +177,20 @@
       "mailPatientCreatedAccount": { "type": "string" },
       "mailPatientFormRegistration": { "type": "string" },
       "smsReminderMessage": { "type": "string" },
+      "changeSuperadminProfile": { "type": "string" },
       "reservations": { "type": "string" },
       "pagerItemsPerPage": { "type": "string" },
       "addNew": { "type": "string" },
       "add": { "type": "string" },
+      "update": { "type": "string" },
       "edit": { "type": "string" },
+      "discardChanges": { "type": "string" },
+      "noRecordYet": { "type": "string" },
+      "cancel": { "type": "string" },
+      "remove": {"type": "string"},
       "category": { "type": "string" },
+      "webAddress": { "type": "string" },
+      "shortname": { "type": "string" },
       "sequence": { "type": "string" },
       "comment": { "type": "string" },
       "successTextAdd": { "type": "string" },
@@ -296,6 +305,13 @@
       "createTime": { "type": "string" },
       "setWorkTime": { "type": "string" },
       "updateWorkTime": { "type": "string" },
+      "title": { "type": "string" },
+      "order": { "type": "string" },
+      "unit": { "type": "string" },
+      "artNr": { "type": "string" },
+      "netPrice": { "type": "string" },
+      "vat": { "type": "string" },
+      "grossPrice": { "type": "string" },
       "aliasName": { "type": "string" },
       "exist": { "type": "string" },
       "notAdded": { "type": "string" },
@@ -537,11 +553,20 @@
       "mailIfYouHaveQuestion": { "type": "string" },
       "mailNotReply": { "type": "string" },
       "mailCopyRight": { "type": "string" },
+      "signatureAvailable": { "type": "string" },
+      "signatureAddress": { "type": "string" },
+      "signatureTelephone": { "type": "string" },
+      "signatureMobile": { "type": "string" },
+      "signatureEmail": { "type": "string" },
       "smsSubject": { "type": "string" },
       "smsMessage": { "type": "string" },
       "smsDate": { "type": "string" },
       "smsTime": { "type": "string" },
-      "smsClinic": { "type": "string" }
+      "smsClinic": { "type": "string" },
+      "smsSignatureAddress": { "type": "string" },
+      "smsSignatureTelephone": { "type": "string" },
+      "smsSignatureMobile": { "type": "string" },
+      "smsSignatureEmail": { "type": "string" }
     }
   },
   "layout": [
@@ -577,7 +602,12 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "clickAgreeText" }, { "key": "termOfUse" }, {}, {}]
+          "items": [
+            { "key": "clickAgreeText" },
+            { "key": "termOfUse" },
+            { "key": "actionTitle" },
+            {}
+          ]
         }
       ]
     },
@@ -1070,7 +1100,7 @@
             { "key": "mailPatientCreatedAccount" },
             { "key": "mailPatientFormRegistration" },
             { "key": "smsReminderMessage" },
-            {}
+            { "key": "changeSuperadminProfile" }
           ]
         }
       ]
@@ -1164,7 +1194,10 @@
           "flex-direction": "row",
           "items": [
             { "key": "add" },
+            { "key": "update" },
             { "key": "edit" },
+            { "key": "discardChanges" },
+            { "key": "cancel" },
             { "key": "category" },
             { "key": "sequence" }
           ]
@@ -1174,6 +1207,7 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
+            { "key": "remove" },
             { "key": "color" },
             { "key": "comment" },
             { "key": "successTitle" },
@@ -1206,7 +1240,11 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "active" }, { "key": "inactive" }, {}, {}]
+          "items": [
+            { "key": "active" },
+            { "key": "inactive" },
+            { "key": "noRecordYet" }
+          ]
         }
       ]
     },
@@ -1327,6 +1365,47 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [{ "key": "updateWorkTime" }, { "key": "aliasName" }, {}, {}]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Parameters",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "title" },
+            { "key": "order" },
+            { "key": "unit" },
+            { "key": "description" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "artNr" },
+            { "key": "netPrice" },
+            { "key": "vat" },
+            { "key": "grossPrice" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "category" },
+            { "key": "webAddress" },
+            { "key": "shortname" },
+            { }
+          ]
         }
       ]
     },
@@ -2748,7 +2827,23 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "mailCopyRight" }, {}, {}, {}]
+          "items": [
+            { "key": "mailCopyRight" },
+            { "key": "signatureAvailable" },
+            { "key": "signatureAddress" },
+            { "key": "signatureTelephone" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "signatureMobile" },
+            { "key": "signatureEmail" },
+            {},
+            {}
+          ]
         }
       ]
     },
@@ -2773,7 +2868,18 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "smsClinic" }, {}, {}, {}]
+          "items": [
+            { "key": "smsClinic" },
+            { "key": "smsSignatureAddress" },
+            { "key": "smsSignatureTelephone" },
+            { "key": "smsSignatureMobile" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [{ "key": "smsSignatureEmail" }, {}, {}, {}]
         }
       ]
     }

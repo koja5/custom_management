@@ -54,6 +54,7 @@ export class ParameterItemComponent implements OnInit {
   public net_price_value: number;
   public editButton = [];
   public height: any;
+  public language: any;
 
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
@@ -70,6 +71,7 @@ export class ParameterItemComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
+    this.language = this.helpService.getLanguage();
     this.height = this.helpService.getHeightForGrid();
     this.editedRowIndex = -1;
     const superadmin = localStorage.getItem('superadmin');
@@ -133,10 +135,11 @@ export class ParameterItemComponent implements OnInit {
     this.editedRowIndex = -1;
     if (this.type === "Doctors") {
       this.formGroup = new FormGroup({
+        title: new FormControl(),
         firstname: new FormControl(),
         lastname: new FormControl(),
         street: new FormControl(),
-        street_number: new FormControl(),
+        web_address: new FormControl(),
         zip_code: new FormControl(),
         city: new FormControl(),
         telephone: new FormControl(),
@@ -173,10 +176,11 @@ export class ParameterItemComponent implements OnInit {
     if (this.type === "Doctors") {
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
+        title: new FormControl(dataItem.title),
         firstname: new FormControl(dataItem.firstname),
         lastname: new FormControl(dataItem.lastname),
         street: new FormControl(dataItem.street),
-        street_number: new FormControl(dataItem.street_number),
+        web_address: new FormControl(dataItem.web_address),
         zip_code: new FormControl(dataItem.zip_code),
         city: new FormControl(dataItem.city),
         telephone: new FormControl(dataItem.telephone),

@@ -333,7 +333,7 @@ export class LoginComponent implements OnInit {
       if (data) {
         this.setConfiguration(data, id);
       } else {
-        // this.demoAccountLanguage(null);
+        this.checkDemoAccountLanguage();
       }
     });
   }

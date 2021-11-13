@@ -173,6 +173,60 @@
                           </li>
 
                           <li
+                            *ngIf="
+                              type === userType.patient &&
+                              permissionPatientMenu?.myComplaint
+                            "
+                            class="nav-item {{
+                              selectedNodeModel.my_complaint
+                            }}"
+                          >
+                            <a
+                              (click)="returnActiveNode('my_complaint')"
+                              routerLink="/dashboard/home/my-complaint"
+                              class="nav-link"
+                              ><i class="fa fa-heartbeat"></i
+                              ><span class="title">{{
+                                language["myComplaint"]
+                              }}</span></a
+                            >
+                          </li>
+                          <li
+                            *ngIf="
+                              type === userType.patient &&
+                              permissionPatientMenu?.myTherapy
+                            "
+                            class="nav-item {{ selectedNodeModel.my_therapy }}"
+                          >
+                            <a
+                              (click)="returnActiveNode('my_therapy')"
+                              routerLink="/dashboard/home/my-therapy"
+                              class="nav-link"
+                              ><i class="fa fa-medkit"></i
+                              ><span class="title">{{
+                                language["myTherapy"]
+                              }}</span></a
+                            >
+                          </li>
+                          <li
+                            *ngIf="
+                              type === userType.patient &&
+                              permissionPatientMenu?.myDocument
+                            "
+                            class="nav-item {{ selectedNodeModel.my_document }}"
+                          >
+                            <a
+                              (click)="returnActiveNode('my_document')"
+                              routerLink="/dashboard/home/my-document"
+                              class="nav-link"
+                              ><i class="fa fa-file-text"></i
+                              ><span class="title">{{
+                                language["myDocument"]
+                              }}</span></a
+                            >
+                          </li>
+
+                          <li
                             class="{{ selectedNodeModel['reservations'] }}"
                             *ngIf="type !== userType.patient"
                           >
@@ -564,6 +618,45 @@
                                   ><i class="fa fa-comments"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.smsReminderMessage }}
+                                </a>
+                              </li>
+
+                              <li
+                                class="{{
+                                  selectedNodeModel['change_superadmin_profile']
+                                }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/change-superadmin-profile"
+                                  (click)="
+                                    returnActiveNode(
+                                      'change_superadmin_profile'
+                                    )
+                                  "
+                                  class="nav-link"
+                                  ><i class="fa fa-user"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.changeSuperadminProfile }}
+                                </a>
+                              </li>
+                              <li
+                                class="{{
+                                  selectedNodeModel['permission_patient_menu']
+                                }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/permission-patient-menu"
+                                  (click)="
+                                    returnActiveNode('permission_patient_menu')
+                                  "
+                                  class="nav-link"
+                                  ><i class="fa fa-cogs"></i>
+                                  <span class="navigation-link"></span>
+                                  {{
+                                    language?.perimissionForPatientNavigationMenu
+                                  }}
                                 </a>
                               </li>
                             </ul>

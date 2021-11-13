@@ -905,7 +905,7 @@
                       </kendo-textbox-container>
                     </div>
                     <div *ngIf="type !== userType.patient" class="k-form-field">
-                      <div class="col-sm-4">
+                      <div class="col-md-12 col-xs-12">
                         <kendo-textbox-container
                           floatingLabel="{{ languageUser.cs }}"
                         >
@@ -922,7 +922,7 @@
                         </kendo-textbox-container>
                       </div>
 
-                      <div class="col-sm-4">
+                      <div class="col-md-12 col-xs-12">
                         <kendo-textbox-container
                           floatingLabel="{{ languageUser.stateValue }}"
                         >
@@ -938,7 +938,7 @@
                         </kendo-textbox-container>
                       </div>
 
-                      <div class="col-sm-4">
+                      <div class="col-md-12 col-xs-12">
                         <kendo-textbox-container
                           floatingLabel="{{ languageUser.em }}"
                         >
@@ -954,7 +954,7 @@
                         </kendo-textbox-container>
                       </div>
                     </div>
-                    <div class="k-form-field">
+                    <div class="k-form-field" [ngClass]="type === userType.patient ? 'hide' : ''">
                       <kendo-textbox-container
                         floatingLabel="{{ language.eventCategory }}"
                       >
@@ -1038,7 +1038,7 @@
                       </div>
                     </div>
                     <div class="k-form-field">
-                      <div class="col-sm-6">
+                      <div class="col-md-12 col-xs-12">
                         <kendo-textbox-container
                           floatingLabel="{{ language.telephone }}"
                         >
@@ -1053,7 +1053,7 @@
                           />
                         </kendo-textbox-container>
                       </div>
-                      <div class="col-sm-6">
+                      <div class="col-md-12 col-xs-12">
                         <kendo-textbox-container
                           floatingLabel="{{ language.mobile }}"
                         >
@@ -1117,8 +1117,8 @@
                             {{ language.sendReminderViaSMS }}</span
                           >
                         </div>
-                        <div class="row display-flex pt-3">
-                          <div class="col-md-6">
+                        <div class="row">
+                          <div class="col-md-6 pt-3">
                             <app-dynamic-send-sms
                               *ngIf="mobileValue || telephoneValue"
                               [data]="dataForReminder"
@@ -1126,7 +1126,7 @@
                               [buttonIcon]="'fa fa-paper-plane'"
                             ></app-dynamic-send-sms>
                           </div>
-                          <div class="col-md-6">
+                          <div class="col-md-6 pt-3">
                             <app-dynamic-send-email
                               *ngIf="dataForReminder?.email"
                               [data]="dataForReminder"

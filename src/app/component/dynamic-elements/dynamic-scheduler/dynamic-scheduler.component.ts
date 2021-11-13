@@ -1702,7 +1702,7 @@ export class DynamicSchedulerComponent implements OnInit {
           textField: "text",
           colorField: "color",
         };
-        if (this.eventCategory.length > 0) {
+        if (this.eventCategory && this.eventCategory.length > 0) {
           this.selected = this.eventCategory[0].id;
         }
         this.resources = data;
@@ -2131,7 +2131,7 @@ export class DynamicSchedulerComponent implements OnInit {
     this.customerUser.attention = "";
     this.customerUser.physicalComplaint = "";
     this.complaintData = new ComplaintTherapyModel();
-    if (this.eventCategory.length > 0) {
+    if (this.eventCategory && this.eventCategory.length > 0) {
       this.selected = this.eventCategory[0].id;
     }
     this.createFormLoading = true;
@@ -2539,7 +2539,7 @@ export class DynamicSchedulerComponent implements OnInit {
 
       this.storageService.setSelectedStore(
         this.id,
-        this.selectedStoreId.toString()
+        this.selectedStoreId ? this.selectedStoreId.toString() : null
       );
     }
   }
@@ -2924,7 +2924,7 @@ export class DynamicSchedulerComponent implements OnInit {
 
   public createFormGroup(args): FormGroup {
     this.baseDataIndicator = false;
-    if (this.eventCategory.length > 0) {
+    if (this.eventCategory && this.eventCategory.length > 0) {
       this.selected = this.eventCategory[0].id;
     }
     if (
@@ -3491,7 +3491,8 @@ export class DynamicSchedulerComponent implements OnInit {
       start: this.eventTime.start,
       end: this.eventTime.end,
       shortname: this.customerUser.shortname,
-      storename: this.store[0].storename,
+      storename: this.storeName,
+      storeId: this.selectedStoreId,
       therapy: this.complaintData.therapies_title,
       id: this.customerUser.id,
       countryCode: this.helpService.getLocalStorage("countryCode"),

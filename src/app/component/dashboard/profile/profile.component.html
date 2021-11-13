@@ -207,88 +207,6 @@
                   </div>
                   <hr>
                   <p class="m-t-30">No description available!</p>
-                  <!--<p class="m-t-30">Maintaining current and complete documentation in the medical record that reflects the care and services provided to the patient
-                    Performing history and physical assessments as indicated by his/her specialty area
-                    Assesses patient health by interviewing patients; performing physical examinations; obtaining, updating, and studying medical histories
-                    Performs therapeutic procedures by administering injections and immunizations; suturing; managing wounds and infections
-                    Manages medical and surgical emergencies</p>
-                  <p>Developing a plan of treatment / care for the patient that also includes education and follow-up visits
-                    Orders, performs, and interprets diagnostic studies such as lab work and x-rays</p>
-                  <p>Great opportunity to walk into an established, well-respected clinic and immediately begin building your practice
-                    Great opportunity to walk into an established well-respected clinic and immediately begin building your practice
-                    Patient encounters average between 18 – 22 patients per day
-                    32 patient contact hours per week</p>
-                  <p>When I offer or recommend products, I do so because I have
-                    actively researched them and find they are
-                    the best in that category for your health. I ignore
-                    substandard products, and products not directly
-                    pertinent to your health, regardless of any potential
-                    financial upsid</p>
-                  <br>
-                  <h4 class="font-bold">Education</h4>
-                  <hr>
-                  <ul>
-                    <li>M.B.B.S.,Gujarat University, Ahmedabad,India.</li>
-                    <li>M.S.,Gujarat University, Ahmedabad, India.</li>
-                    <li>SPINAL FELLOWSHIP Dr. John Adam, Allegimeines
-                      Krakenhaus, Schwerin, Germany.</li>
-                    <li>Fellowship in Endoscopic Spine Surgery Phoenix, USA.
-                    </li>
-                    <li>D.N.B from AIIMS</li>
-                  </ul>
-                  <br>
-                  <h4 class="font-bold">Experience</h4>
-                  <hr>
-                  <ul>
-                    <li>One year rotatory internship from April-2009 to
-                      march-2010 at B. J. Medical College, Ahmedabad.</li>
-                    <li>Three year residency at V.S. General Hospital as a
-                      resident in orthopedics from April - 2008 to
-                      April - 2011.</li>
-                    <li>I have worked as a part time physiotherapist in Apang
-                      manav mandal from 1st june 2004 to 31st jan
-                      2005.</li>
-                    <li>Clinical and Research fellowship in Scoliosis at
-                      Shaurashtra University and Medical Centre (KUMC) ,
-                      Krishna Hospital , Rajkot from April 2013 to June 2013.
-                    </li>
-                    <li>2.5 Years Worked at Mahatma Gandhi General Hospital,
-                      Surendranagar.</li>
-                    <li>Consultant Orthopedics Surgeon Jalna 2 years.</li>
-                  </ul>
-                  <br>
-                  <h4 class="font-bold">Conferences, Cources &amp; Workshop Attended
-                  </h4>
-                  <hr>
-                  <ul>
-                    <li>3 days conference of Indian Orthopedics Association
-                      (IOACON) held in December 2001 in Ahmedabad,
-                      Gujarat.</li>
-                    <li>4th Annual Karnataka state physiotherapy students
-                      conference</li>
-                    <li>3 day conference of Association of Spine Surgeons of
-                      India(ASSICON) held in Jan 2007 in Ahmedabad,
-                      India.</li>
-                    <li>16th Annual Conference GOACON ' 98 Ahmedabad CME 6th
-                      February, 1998</li>
-                    <li>5 day conference of Indian Orthopedic Association
-                      (IOACON) held in Dec.2005 in Mumbai, India.</li>
-                    <li>Indian Medical Association Kapadwanj C.M.E. on 22nd
-                      April, 2004.</li>
-                    <li>Post Graduate lecture course for Gujarat Orthopaedic
-                      Association Ahmedabad 6th to 7th August, 2005.</li>
-                  </ul>
-                  <br>
-                  <h4 class="font-bold">Professional Affiliations </h4>
-                  <hr>
-                  <ul>
-                    <li>Life member: Association of Spine Surgeons’ of India.
-                    </li>
-                    <li>Life member: Gujarat Orthopaedic Association.</li>
-                    <li>Life Member: The Indian Society for Bone and Mineral
-                      Research (ISBMR).</li>
-                    <li>Life member: Ahmedabad Orthopaedic Society</li>
-                  </ul>-->
                 </div>
               </div>
               <div class="tab-pane" id="tab2">
@@ -333,7 +251,7 @@
                       <br>
                       <p class="text-muted">
                         <span *ngIf="companyData === undefined || companyData.length === 0 || companyData.storename === ''">{{language['noInformation']}}</span>
-                        <span *ngIf="companyData.storename !== ''">{{companyData.storename}}</span>
+                        <span *ngIf="companyData.storename !== ''">{{companyData.shortname}}</span>
                       </p>
                     </div>
                     <div class="col-md-3 col-xs-6 b-r"> <strong>{{language['street']}}</strong>
@@ -376,13 +294,6 @@
                       <p class="text-muted">
                         <span *ngIf="companyData === undefined || companyData.length === 0 || companyData.mobile === ''">{{language['noInformation']}}</span>
                         <span *ngIf="companyData.mobile !== ''">{{companyData.mobile}}</span>
-                      </p>
-                    </div>
-                    <div class="col-md-3 col-xs-6 b-r"> <strong>{{language['comment']}}</strong>
-                      <br>
-                      <p class="text-muted">
-                        <span *ngIf="companyData === undefined || companyData.length === 0 || companyData.comment === ''">{{language['noInformation']}}</span>
-                        <span *ngIf="companyData.comment !== ''">{{companyData.comment}}</span>
                       </p>
                     </div>
                   </div>

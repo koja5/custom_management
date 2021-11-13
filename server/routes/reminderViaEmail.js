@@ -76,23 +76,6 @@ function reminderViaEmail() {
               rows.forEach(function (to, i, array) {
                 console.log(to.email && to.email === 1);
                 if (to.email !== null) {
-                  if (!to.mailSubject || !to.mailMessage) {
-                    to.mailSubject = language?.subjectForReminderReservation;
-                    to.initialGreeting = language?.initialGreeting;
-                    to.mailMessage =
-                      language?.introductoryMessageForReminderReservation;
-                    to.mailDate = language?.dateMessage;
-                    to.mailTime = language?.timeMessage;
-                    to.mailTherapy = language?.therapyMessage;
-                    to.mailDoctor = language?.doctorMessage;
-                    to.mailClinic = language?.storeLocation;
-                    to.mailFinalGreeting = language?.finalGreeting;
-                    to.mailSignature = language?.signature;
-                    to.mailThanksForUsing = language?.thanksForUsing;
-                    to.mailIfYouHaveQuestion = language?.ifYouHaveQuestion;
-                    to.mailNotReply = language?.notReply;
-                    to.mailCopyRight = language?.copyRight;
-                  }
                   var convertToDateStart = new Date(to.start);
                   var convertToDateEnd = new Date(to.end);
                   var startHours = convertToDateStart.getHours();
@@ -116,24 +99,57 @@ function reminderViaEmail() {
                     ":" +
                     (endMinutes < 10 ? "0" + endMinutes : endMinutes);
                   var language = JSON.parse(body)["config"];
+                  var signatureAvailable = false;
+                  if (to.signatureAvailable) {
+                    signatureAvailable = true;
+                  }
                   var mailOptions = {
                     from: '"ClinicNode" info@app-production.eu',
-                    subject: to?.mailSubject,
+                    subject: to.mailSubject
+                      ? to.mailSubject
+                      : language.subjectForReminderReservation,
                     html: compiledTemplate.render({
-                      initialGreeting: to?.initialGreeting,
-                      introductoryMessageForReminderReservation:
-                        to?.mailMessage,
-                      dateMessage: to?.mailDate,
-                      timeMessage: to?.mailTime,
-                      therapyMessage: to?.mailTherapy,
-                      doctorMessage: to?.mailDoctor,
-                      storeLocation: to?.mailClinic,
-                      finalGreeting: to?.mailFinalGreeting,
-                      signature: to?.mailSignature,
-                      thanksForUsing: to?.mailThanksForUsing,
-                      ifYouHaveQuestion: to?.mailIfYouHaveQuestion,
-                      notReply: to?.mailNotReply,
-                      copyRight: to?.mailCopyRight,
+                      initialGreeting: to.initialGreeting
+                        ? to.initialGreeting
+                        : language.initialGreeting,
+                      introductoryMessageForReminderReservation: to.mailMessage
+                        ? to.mailMessage
+                        : language.introductoryMessageForReminderReservation,
+                      dateMessage: to.mailDate
+                        ? to.mailDate
+                        : language.dateMessage,
+                      timeMessage: to.mailTime
+                        ? to.mailTime
+                        : language.timeMessage,
+                      therapyMessage: to.mailTherapy
+                        ? to.mailTherapy
+                        : language.therapyMessage,
+                      doctorMessage: to.mailDoctor
+                        ? to.mailDoctor
+                        : language.doctorMessage,
+                      storeLocation: to.mailClinic
+                        ? to.mailClinic
+                        : language.storeLocation,
+                      finalGreeting: to.mailFinalGreeting
+                        ? to.mailFinalGreeting
+                        : language.finalGreeting,
+                      signature: !signatureAvailable
+                        ? to.mailSignature
+                          ? to.mailSignature
+                          : language.signature
+                        : "",
+                      thanksForUsing: to.mailThanksForUsing
+                        ? to.mailThanksForUsing
+                        : language.thanksForUsing,
+                      ifYouHaveQuestion: to.mailIfYouHaveQuestion
+                        ? to.mailIfYouHaveQuestion
+                        : language.ifYouHaveQuestion,
+                      notReply: to.mailNotReply
+                        ? to.mailNotReply
+                        : language.notReply,
+                      copyRight: to.mailCopyRight
+                        ? to.mailCopyRight
+                        : language.copyRight,
                       firstName: to.shortname,
                       date: date,
                       start: start,
@@ -143,6 +159,22 @@ function reminderViaEmail() {
                       doctor: to.lastname + " " + to.firstname,
                       month: month,
                       day: day,
+                      signatureStreet:
+                        signatureAvailable && to.signatureStreet
+                          ? to.signatureStreet
+                          : "",
+                      signatureZipCode:
+                        signatureAvailable && to.signatureZipCode
+                          ? to.signatureZipCode
+                          : "",
+                      signaturePhone:
+                        signatureAvailable && to.signaturePhone
+                          ? to.signaturePhone
+                          : "",
+                      signatureEmail:
+                        signatureAvailable && to.signatureEmail
+                          ? to.signatureEmail
+                          : "",
                     }),
                   };
 

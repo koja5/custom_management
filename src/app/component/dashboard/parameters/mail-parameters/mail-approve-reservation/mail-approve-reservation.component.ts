@@ -59,7 +59,7 @@ export class MailApproveReservationComponent implements OnInit {
 
   packValue(data) {
     for (let i = 0; i < this.configField.length; i++) {
-      this.configField[i].value = data[0][this.configField[i].field];
+      this.configField[i].value = this.helpService.convertValue(data[0][this.configField[i].field], this.configField[i].type);
     }
   }
 

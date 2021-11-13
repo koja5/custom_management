@@ -38,4 +38,6 @@ export class NavigationMenuModel {
     mail_patient_created_account?: string;
     mail_patient_form_registration?: string;
     sms_reminder?: string;
+    change_superadmin_profile?: string;
+    permission_patient_menu?: string;
 }

@@ -51,7 +51,7 @@ export class ProfileComponent implements OnInit {
       }
     });
 
-    this.service.getCompany(localStorage.getItem("storeId-" + this.id), val => {
+    this.service.getCompany(this.helpService.getSuperadmin(), val => {
       console.log(val);
       if (val.length !== 0) {
         this.companyData = val[0];

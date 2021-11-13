@@ -41,7 +41,7 @@
     </div>
   </div>
 
-  <div class="row" *ngIf="data !== undefined">
+  <div class="row" *ngIf="data">
     <div class="col-md-12">
       <!-- BEGIN PROFILE SIDEBAR -->
       <div class="profile-sidebar">
@@ -112,17 +112,28 @@
               </li>
               <li class="list-group-item">
                 <b>{{ language.contactPatient }}</b>
-                <span class="pull-right a-color" *ngIf="!data.telephone && !data.mobile && !data.email">{{
-                  language["noInformation"]
-                }}</span>
+                <span
+                  class="pull-right a-color"
+                  *ngIf="!data.telephone && !data.mobile && !data.email"
+                  >{{ language["noInformation"] }}</span
+                >
                 <span class="pull-right a-color">
-                  <app-send-sms *ngIf="data.telephone" [phoneNumber]="data.telephone"></app-send-sms>
+                  <app-send-sms
+                    *ngIf="data.telephone"
+                    [phoneNumber]="data.telephone"
+                  ></app-send-sms>
                 </span>
                 <span class="pull-right a-color">
-                  <app-send-sms *ngIf="data.mobile" [phoneNumber]="data.mobile"></app-send-sms>
+                  <app-send-sms
+                    *ngIf="data.mobile"
+                    [phoneNumber]="data.mobile"
+                  ></app-send-sms>
                 </span>
                 <span class="pull-right a-color">
-                  <app-send-email *ngIf="data.email" [email]="data.email"></app-send-email>
+                  <app-send-email
+                    *ngIf="data.email"
+                    [email]="data.email"
+                  ></app-send-email>
                 </span>
               </li>
             </ul>
@@ -178,7 +189,7 @@
                           <div></div>
                         </div>
                       </div>
-                      <div class="row" *ngIf="data !== undefined">
+                      <div class="row" *ngIf="data">
                         <div class="col-md-6 col-xs-6 b-r">
                           <br />
                           <p class="text-muted">
@@ -245,36 +256,17 @@
                         </div>
                         <div class="col-md-3 col-xs-6 b-r">
                           <br />
-                          <p class="text-muted">
-                            <kendo-textbox-container
-                              floatingLabel="{{ language.fullName }}"
-                            >
-                              <input
-                                kendoTextBox
-                                *ngIf="
-                                  data.shortname === '' ||
-                                  data.shortname === null ||
-                                  data.shortname === undefined
-                                "
-                                [(ngModel)]="language['noInformation']"
-                                name="shortname"
-                                class="noPadding"
-                                readonly="true"
-                              />
-                              <input
-                                kendoTextBox
-                                *ngIf="
-                                  data.shortname !== null &&
-                                  data.shortname !== undefined &&
-                                  data.shortname !== ''
-                                "
-                                [(ngModel)]="data.shortname"
-                                name="shortname"
-                                class="noPadding"
-                                readonly="true"
-                              />
-                            </kendo-textbox-container>
-                          </p>
+                          <kendo-textbox-container
+                            floatingLabel="{{ language.fullName }}"
+                          >
+                            <input
+                              kendoTextBox
+                              [(ngModel)]="data.shortname"
+                              name="shortname"
+                              class="noPadding"
+                              readonly="true"
+                            />
+                          </kendo-textbox-container>
                         </div>
                         <div class="col-md-3 col-xs-6 b-r">
                           <br />
@@ -284,24 +276,11 @@
                             >
                               <input
                                 kendoTextBox
-                                *ngIf="
-                                  data.telephone === '' ||
-                                  data.telephone === null ||
-                                  data.telephone === undefined
+                                [(ngModel)]="
+                                  data.telephone
+                                    ? data.telephone
+                                    : language['noInformation']
                                 "
-                                [(ngModel)]="language['noInformation']"
-                                name="telephone"
-                                class="noPadding"
-                                readonly="true"
-                              />
-                              <input
-                                kendoTextBox
-                                *ngIf="
-                                  data.telephone !== null &&
-                                  data.telephone !== undefined &&
-                                  data.telephone !== ''
-                                "
-                                [(ngModel)]="data.telephone"
                                 name="telephone"
                                 class="noPadding"
                                 readonly="true"
@@ -317,24 +296,7 @@
                             >
                               <input
                                 kendoTextBox
-                                *ngIf="
-                                  data.mobile === '' ||
-                                  data.mobile === null ||
-                                  data.mobile === undefined
-                                "
-                                [(ngModel)]="language['noInformation']"
-                                name="mobile"
-                                class="noPadding"
-                                readonly="true"
-                              />
-                              <input
-                                kendoTextBox
-                                *ngIf="
-                                  data.mobile !== null &&
-                                  data.mobile !== undefined &&
-                                  data.mobile !== ''
-                                "
-                                [(ngModel)]="data.mobile"
+                                [(ngModel)]="data.mobile ? data.mobile : language['noInformation']"
                                 name="mobile"
                                 class="noPadding"
                                 readonly="true"
@@ -350,24 +312,7 @@
                             >
                               <input
                                 kendoTextBox
-                                *ngIf="
-                                  data.email === '' ||
-                                  data.email === null ||
-                                  data.email === undefined
-                                "
-                                [(ngModel)]="language['noInformation']"
-                                name="email"
-                                class="noPadding"
-                                readonly="true"
-                              />
-                              <input
-                                kendoTextBox
-                                *ngIf="
-                                  data.email !== null &&
-                                  data.email !== undefined &&
-                                  data.email !== ''
-                                "
-                                [(ngModel)]="data.email"
+                                [(ngModel)]="data.email ? data.email : language['noInformation']"
                                 name="email"
                                 class="noPadding"
                                 readonly="true"
@@ -383,24 +328,7 @@
                             >
                               <input
                                 kendoTextBox
-                                *ngIf="
-                                  data.street === '' ||
-                                  data.street === null ||
-                                  data.street === undefined
-                                "
-                                [(ngModel)]="language['noInformation']"
-                                name="street"
-                                class="noPadding"
-                                readonly="true"
-                              />
-                              <input
-                                kendoTextBox
-                                *ngIf="
-                                  data.street !== null &&
-                                  data.street !== undefined &&
-                                  data.street !== ''
-                                "
-                                [(ngModel)]="data.street"
+                                [(ngModel)]="data.street ? data.street : language['noInformation']"
                                 name="street"
                                 class="noPadding"
                                 readonly="true"
@@ -416,24 +344,7 @@
                             >
                               <input
                                 kendoTextBox
-                                *ngIf="
-                                  data.streetnumber === '' ||
-                                  data.streetnumber === null ||
-                                  data.streetnumber === undefined
-                                "
-                                [(ngModel)]="language['noInformation']"
-                                name="streetnumber"
-                                class="noPadding"
-                                readonly="true"
-                              />
-                              <input
-                                kendoTextBox
-                                *ngIf="
-                                  data.streetnumber !== null &&
-                                  data.streetnumber !== undefined &&
-                                  data.streetnumber !== ''
-                                "
-                                [(ngModel)]="data.streetnumber"
+                                [(ngModel)]="data.streetnumber ? data.streetnumber : language['noInformation']"
                                 name="streetnumber"
                                 class="noPadding"
                                 readonly="true"
@@ -449,24 +360,7 @@
                             >
                               <input
                                 kendoTextBox
-                                *ngIf="
-                                  data.city === '' ||
-                                  data.city === null ||
-                                  data.city === undefined
-                                "
-                                [(ngModel)]="language['noInformation']"
-                                name="city"
-                                class="noPadding"
-                                readonly="true"
-                              />
-                              <input
-                                kendoTextBox
-                                *ngIf="
-                                  data.city !== null &&
-                                  data.city !== undefined &&
-                                  data.city !== ''
-                                "
-                                [(ngModel)]="data.city"
+                                [(ngModel)]="data.city ? data.city : language['noInformation']"
                                 name="city"
                                 class="noPadding"
                                 readonly="true"
@@ -1196,40 +1090,51 @@
                           [resizable]="true"
                           [sortable]="true"
                           [sort]="stateComplaint.sort"
-                          (sortChange)="sortChange($event, 'stateComplaint', 'gridComplaint', 'gridComplaintData')"
+                          (sortChange)="
+                            sortChange(
+                              $event,
+                              'stateComplaint',
+                              'gridComplaint',
+                              'gridComplaintData'
+                            )
+                          "
                           [loading]="loadingGridComplaint"
                         >
                           <kendo-grid-column
                             field="date"
-                            title="{{language.date}}"
+                            title="{{ language.date }}"
                             width="120"
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="complaint_title"
-                            title="{{language.complaintValue}}"
+                            title="{{ language.complaintValue }}"
                             width="200"
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="comment"
-                            title="{{language.comment}}"
+                            title="{{ language.comment }}"
                             width="150"
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="therapies_title"
-                            title="{{language.therapyValue}}"
+                            title="{{ language.therapyValue }}"
                             width="120"
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="employee_name"
-                            title="{{language.doctor}}"
+                            title="{{ language.doctor }}"
                             width="100"
                           >
                           </kendo-grid-column>
-                          <kendo-grid-column field="cs" title="{{language.cs}}" width="60">
+                          <kendo-grid-column
+                            field="cs"
+                            title="{{ language.cs }}"
+                            width="60"
+                          >
                           </kendo-grid-column>
                           <kendo-grid-column width="60">
                             <ng-template kendoGridCellTemplate let-dataItem>
@@ -1282,31 +1187,38 @@
                           [resizable]="true"
                           [sortable]="true"
                           [sort]="stateTherapy.sort"
-                          (sortChange)="sortChange($event, 'stateTherapy', 'gridTherapy', 'gridTherapyData')"
+                          (sortChange)="
+                            sortChange(
+                              $event,
+                              'stateTherapy',
+                              'gridTherapy',
+                              'gridTherapyData'
+                            )
+                          "
                           [loading]="loadingGridTherapy"
                         >
                           <kendo-grid-column
                             field="date"
-                            title="{{language.date}}"
+                            title="{{ language.date }}"
                             width="140"
                             [format]="{ date: 'short' }"
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="complaint_title"
-                            title="{{language.complaintValue}}"
+                            title="{{ language.complaintValue }}"
                             width="150"
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="therapies_title"
-                            title="{{language.therapyValue}}"
+                            title="{{ language.therapyValue }}"
                             width="120"
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="therapies_previous_title"
-                            title="{{language.treatmentValue}}"
+                            title="{{ language.treatmentValue }}"
                             width="150"
                           >
                           </kendo-grid-column>
@@ -1316,17 +1228,21 @@
                             width="150"
                           >
                           </kendo-grid-column>
-                          <kendo-grid-column field="cs_title" title="{{language.cs}}" width="120">
+                          <kendo-grid-column
+                            field="cs_title"
+                            title="{{ language.cs }}"
+                            width="120"
+                          >
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="state"
-                            title="{{language.stateValue}}"
+                            title="{{ language.stateValue }}"
                             width="120"
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="em_title"
-                            title="{{language.em}}"
+                            title="{{ language.em }}"
                             width="100"
                           >
                           </kendo-grid-column>
@@ -1381,12 +1297,19 @@
                           [resizable]="true"
                           [sortable]="true"
                           [sort]="stateDocument.sort"
-                          (sortChange)="sortChange($event, 'stateDocument', 'documents', 'documentsData')"
+                          (sortChange)="
+                            sortChange(
+                              $event,
+                              'stateDocument',
+                              'documents',
+                              'documentsData'
+                            )
+                          "
                           [loading]="loadingGridDocument"
                         >
                           <kendo-grid-column
                             field="id"
-                            title="{{language.documentId}}"
+                            title="{{ language.documentId }}"
                             width="100"
                           >
                           </kendo-grid-column>
@@ -1419,19 +1342,19 @@
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="name"
-                            title="{{language.documentName}}"
+                            title="{{ language.documentName }}"
                             width="180"
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="size"
-                            title="{{language.documentSize}}"
+                            title="{{ language.documentSize }}"
                             width="120"
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="date"
-                            title="{{language.documentDate}}"
+                            title="{{ language.documentDate }}"
                             width="120"
                           >
                             <ng-template kendoGridCellTemplate let-dataItem>
@@ -1506,11 +1429,13 @@
           width="50"
           height="46"
         />
-        <h3>{{language.deleteDialogTitleAreYouSure}}</h3>
+        <h3>{{ language.deleteDialogTitleAreYouSure }}</h3>
       </div>
       <kendo-dialog-actions>
-        <button kendoButton (click)="action('no')">{{language.no}}</button>
-        <button kendoButton (click)="action('yes')" primary="true">{{language.yes}}</button>
+        <button kendoButton (click)="action('no')">{{ language.no }}</button>
+        <button kendoButton (click)="action('yes')" primary="true">
+          {{ language.yes }}
+        </button>
       </kendo-dialog-actions>
     </kendo-dialog>
 
@@ -1527,12 +1452,14 @@
           width="50"
           height="46"
         />
-        <h3>{{language.deleteDialogTitleAreYouSure}}</h3>
+        <h3>{{ language.deleteDialogTitleAreYouSure }}</h3>
       </div>
       <kendo-dialog-actions>
-        <button kendoButton (click)="deleteComplaint('no')">{{language.no}}</button>
+        <button kendoButton (click)="deleteComplaint('no')">
+          {{ language.no }}
+        </button>
         <button kendoButton (click)="deleteComplaint('yes')" primary="true">
-          {{language.yes}}
+          {{ language.yes }}
         </button>
       </kendo-dialog-actions>
     </kendo-dialog>
@@ -1550,12 +1477,14 @@
           width="50"
           height="46"
         />
-        <h3>{{language.deleteDialogTitleAreYouSure}}</h3>
+        <h3>{{ language.deleteDialogTitleAreYouSure }}</h3>
       </div>
       <kendo-dialog-actions>
-        <button kendoButton (click)="deleteTherapy('no')">{{language.no}}</button>
+        <button kendoButton (click)="deleteTherapy('no')">
+          {{ language.no }}
+        </button>
         <button kendoButton (click)="deleteTherapy('yes')" primary="true">
-          {{language.yes}}
+          {{ language.yes }}
         </button>
       </kendo-dialog-actions>
     </kendo-dialog>
@@ -1573,12 +1502,14 @@
           width="50"
           height="46"
         />
-        <h3>{{language.deleteDialogTitleAreYouSure}}</h3>
+        <h3>{{ language.deleteDialogTitleAreYouSure }}</h3>
       </div>
       <kendo-dialog-actions>
-        <button kendoButton (click)="deleteDocument('no')">{{language.no}}</button>
+        <button kendoButton (click)="deleteDocument('no')">
+          {{ language.no }}
+        </button>
         <button kendoButton (click)="deleteDocument('yes')" primary="true">
-          {{language.yes}}
+          {{ language.yes }}
         </button>
       </kendo-dialog-actions>
     </kendo-dialog>
@@ -1589,7 +1520,7 @@
       *ngIf="uploader !== undefined"
     >
       <modal-header>
-        <h2>{{language.fileUploadTitle}}</h2>
+        <h2>{{ language.fileUploadTitle }}</h2>
       </modal-header>
       <modal-content>
         <div>
@@ -1601,7 +1532,9 @@
                       <input type="file" class="form-control" name="multiple" ng2FileSelect [uploader]="uploader"
                         multiple />-->
                   <label class="uploadFromExcel"
-                    ><span class="k-icon k-i-upload"></span> {{language.uploadFileButton}}<input
+                    ><span class="k-icon k-i-upload"></span>
+                    {{ language.uploadFileButton
+                    }}<input
                       type="file"
                       class="form-control"
                       name="multiple"
@@ -1613,18 +1546,18 @@
               </form>
             </div>
             <div class="col-md-12 col-sm-12">
-              {{language.queueLength}}: {{ uploader?.queue?.length }}
+              {{ language.queueLength }}: {{ uploader?.queue?.length }}
 
               <table class="table">
                 <thead>
                   <tr>
-                    <th width="10%">{{language.documentName}}</th>
-                    <th class="hidden-xs">{{language.documentSize}}</th>
-                    <th class="30%">{{language.documentDescription}}</th>
-                    <th class="15%">{{language.documentDate}}</th>
-                    <th class="hidden-xs">{{language.documentProgress}}</th>
-                    <th class="hidden-xs">{{language.documentStatus}}</th>
-                    <th>{{language.documentActions}}</th>
+                    <th width="10%">{{ language.documentName }}</th>
+                    <th class="hidden-xs">{{ language.documentSize }}</th>
+                    <th class="30%">{{ language.documentDescription }}</th>
+                    <th class="15%">{{ language.documentDate }}</th>
+                    <th class="hidden-xs">{{ language.documentProgress }}</th>
+                    <th class="hidden-xs">{{ language.documentStatus }}</th>
+                    <th>{{ language.documentActions }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1682,7 +1615,8 @@
                           item.isReady || item.isUploading || item.isSuccess
                         "
                       >
-                        <span class="glyphicon glyphicon-upload"></span> {{language.uploadFile}}
+                        <span class="glyphicon glyphicon-upload"></span>
+                        {{ language.uploadFile }}
                       </button>
                       <button
                         type="button"
@@ -1691,14 +1625,15 @@
                         [disabled]="!item.isUploading"
                       >
                         <span class="glyphicon glyphicon-ban-circle"></span>
-                        {{language.cancelFile}}
+                        {{ language.cancelFile }}
                       </button>
                       <button
                         type="button"
                         class="btn btn-danger btn-xs"
                         (click)="item.remove()"
                       >
-                        <span class="glyphicon glyphicon-trash"></span> {{language.removeFile}}
+                        <span class="glyphicon glyphicon-trash"></span>
+                        {{ language.removeFile }}
                       </button>
                     </td>
                   </tr>
@@ -1707,7 +1642,7 @@
 
               <div>
                 <div>
-                  {{language.queueProgress}}:
+                  {{ language.queueProgress }}:
                   <div class="progress">
                     <div
                       class="progress-bar"
@@ -1722,7 +1657,8 @@
                   (click)="uploader.uploadAll()"
                   [disabled]="!uploader.getNotUploadedItems().length"
                 >
-                  <span class="glyphicon glyphicon-upload"></span> {{language.uploadAll}}
+                  <span class="glyphicon glyphicon-upload"></span>
+                  {{ language.uploadAll }}
                 </button>
                 <button
                   type="button"
@@ -1730,7 +1666,8 @@
                   (click)="uploader.cancelAll()"
                   [disabled]="!uploader.isUploading"
                 >
-                  <span class="glyphicon glyphicon-ban-circle"></span> {{language.cancelAll}}
+                  <span class="glyphicon glyphicon-ban-circle"></span>
+                  {{ language.cancelAll }}
                 </button>
                 <button
                   type="button"
@@ -1738,7 +1675,8 @@
                   (click)="uploader.clearQueue()"
                   [disabled]="!uploader.queue.length"
                 >
-                  <span class="glyphicon glyphicon-trash"></span> {{language.removeAll}}
+                  <span class="glyphicon glyphicon-trash"></span>
+                  {{ language.removeAll }}
                 </button>
               </div>
             </div>
@@ -1747,1104 +1685,1117 @@
       </modal-content>
       <modal-footer>
         <button class="btn btn-primary" (click)="closeUploadModal()">
-          {{language.closeFileUploader}}
+          {{ language.closeFileUploader }}
         </button>
       </modal-footer>
     </modal>
 
     <modal #complaint modalClass="modal-lg">
       <modal-header>
-        <h4>{{getTranslate(operationMode)}}</h4>
+        <h4>{{ getTranslate(operationMode) }}</h4>
       </modal-header>
       <modal-content>
-      <form
-        name="loginForm"
-        class="loginForm"
-        (ngSubmit)="
-          complaintForm.form.valid === true
-            ? operationMode === 'add'
-              ? addComplaint(complaint)
-              : updateComplaint(complaint)
-            : null
-        "
-        #complaintForm="ngForm"
-      >
-        <div class="col-md-12 col-xs-12">
-          <kendo-textbox-container
-            floatingLabel="{{ language.complaintValue }}"
-          >
-            <kendo-multiselect
-              [data]="complaintValue"
-              [textField]="'title'"
-              [valueField]="'id'"
-              [(ngModel)]="selectedComplaint"
-              name="complaint"
-              [valuePrimitive]="true"
-              required
-              [class.is-invalid]="
-                complaint['invalid'] &&
-                (complaint['touched'] || complaintForm.submitted)
-              "
+        <form
+          name="loginForm"
+          class="loginForm"
+          (ngSubmit)="
+            complaintForm.form.valid === true
+              ? operationMode === 'add'
+                ? addComplaint(complaint)
+                : updateComplaint(complaint)
+              : null
+          "
+          #complaintForm="ngForm"
+        >
+          <div class="col-md-12 col-xs-12">
+            <kendo-textbox-container
+              floatingLabel="{{ language.complaintValue }}"
             >
-            </kendo-multiselect>
-          </kendo-textbox-container>
-        </div>
-        <div class="col-md-12 col-xs-12">
-          <kendo-textbox-container floatingLabel="{{ language.comment }}">
-            <input
-              kendoTextBox
-              type="text"
-              class="col-xs-12"
-              [(ngModel)]="complaintData.comment"
-              name="comment"
-            />
-          </kendo-textbox-container>
-        </div>
-        <div class="col-md-12 col-xs-12">
-          <kendo-textbox-container
-            floatingLabel="{{ language.treatmentValue }}"
-          >
-            <kendo-multiselect
-              class="col-xs-12"
-              [data]="treatmentValue"
-              [textField]="'title'"
-              [valueField]="'id'"
-              [(ngModel)]="selectedTherapies"
-              name="therapies"
-              [valuePrimitive]="true"
-              style="padding: 0px !important"
+              <kendo-multiselect
+                [data]="complaintValue"
+                [textField]="'title'"
+                [valueField]="'id'"
+                [(ngModel)]="selectedComplaint"
+                name="complaint"
+                [valuePrimitive]="true"
+                required
+                [class.is-invalid]="
+                  complaint['invalid'] &&
+                  (complaint['touched'] || complaintForm.submitted)
+                "
+              >
+              </kendo-multiselect>
+            </kendo-textbox-container>
+          </div>
+          <div class="col-md-12 col-xs-12">
+            <kendo-textbox-container floatingLabel="{{ language.comment }}">
+              <input
+                kendoTextBox
+                type="text"
+                class="col-xs-12"
+                [(ngModel)]="complaintData.comment"
+                name="comment"
+              />
+            </kendo-textbox-container>
+          </div>
+          <div class="col-md-12 col-xs-12">
+            <kendo-textbox-container
+              floatingLabel="{{ language.treatmentValue }}"
             >
-            </kendo-multiselect>
-          </kendo-textbox-container>
-        </div>
-        <div class="col-md-12 col-xs-12">
-          <kendo-textbox-container floatingLabel="{{ language.cs }}">
-            <input
-              kendoTextBox
-              type="text"
-              class="col-xs-12"
-              name="cs"
-              [(ngModel)]="complaintData.cs_title"
-              cs.value=""
-            />
-          </kendo-textbox-container>
-        </div>
-        <div class="form-group" style="text-align: center">
-          <button
-            *ngIf="operationMode === 'add'"
-            kendoButton
-            [primary]="true"
-            class="form-button"
-            [disabled]="complaintForm.form.invalid"
-            type="submit"
-          >
-            {{ language.addComplaint }}
-          </button>
-          <button
-            *ngIf="operationMode === 'edit'"
-            kendoButton
-            [primary]="true"
-            class="form-button"
-            [disabled]="complaintForm.form.invalid"
-            type="submit"
-          >
-            {{ language.updateComplaint }}
-          </button>
-        </div>
-      </form>
-    </modal-content>
-    <modal-footer class="modal-footer-none"> </modal-footer>
+              <kendo-multiselect
+                class="col-xs-12"
+                [data]="treatmentValue"
+                [textField]="'title'"
+                [valueField]="'id'"
+                [(ngModel)]="selectedTherapies"
+                name="therapies"
+                [valuePrimitive]="true"
+                style="padding: 0px !important"
+              >
+              </kendo-multiselect>
+            </kendo-textbox-container>
+          </div>
+          <div class="col-md-12 col-xs-12">
+            <kendo-textbox-container floatingLabel="{{ language.cs }}">
+              <input
+                kendoTextBox
+                type="text"
+                class="col-xs-12"
+                name="cs"
+                [(ngModel)]="complaintData.cs_title"
+                cs.value=""
+              />
+            </kendo-textbox-container>
+          </div>
+          <div class="form-group" style="text-align: center">
+            <button
+              *ngIf="operationMode === 'add'"
+              kendoButton
+              [primary]="true"
+              class="form-button"
+              [disabled]="complaintForm.form.invalid"
+              type="submit"
+            >
+              {{ language.addComplaint }}
+            </button>
+            <button
+              *ngIf="operationMode === 'edit'"
+              kendoButton
+              [primary]="true"
+              class="form-button"
+              [disabled]="complaintForm.form.invalid"
+              type="submit"
+            >
+              {{ language.updateComplaint }}
+            </button>
+          </div>
+        </form>
+      </modal-content>
+      <modal-footer class="modal-footer-none"> </modal-footer>
     </modal>
 
     <modal #therapy modalClass="modal-lg">
       <modal-header>
-        <h4>{{getTranslate(operationMode + 'Therapy')}}</h4>
+        <h4>{{ getTranslate(operationMode + "Therapy") }}</h4>
       </modal-header>
       <modal-content>
-      <div *ngIf="loadingTherapy" style="height: 90vh">
-        <div class="spinner loading"></div>
-      </div>
-      <form
-        *ngIf="!loadingTherapy"
-        name="loginForm"
-        class="loginForm"
-        (ngSubmit)="
-          therapyForm.form.valid === true
-            ? operationMode === 'add'
-              ? addTherapy(therapy)
-              : updateTherapy(therapy)
-            : null
-        "
-        #therapyForm="ngForm"
-      >
-        <div class="col-md-12 col-xs-12">
-          <kendo-textbox-container
-            floatingLabel="{{ language.complaintValue }}"
-          >
-            <kendo-multiselect
-              class="col-md-12 col-xs-12 noPadding"
-              [data]="complaintValue"
-              [textField]="'title'"
-              [valueField]="'id'"
-              [(ngModel)]="selectedComplaint"
-              name="complaint"
-              [valuePrimitive]="true"
-              required
+        <div *ngIf="loadingTherapy" style="height: 90vh">
+          <div class="spinner loading"></div>
+        </div>
+        <form
+          *ngIf="!loadingTherapy"
+          name="loginForm"
+          class="loginForm"
+          (ngSubmit)="
+            therapyForm.form.valid === true
+              ? operationMode === 'add'
+                ? addTherapy(therapy)
+                : updateTherapy(therapy)
+              : null
+          "
+          #therapyForm="ngForm"
+        >
+          <div class="col-md-12 col-xs-12">
+            <kendo-textbox-container
+              floatingLabel="{{ language.complaintValue }}"
             >
-            </kendo-multiselect>
-          </kendo-textbox-container>
-        </div>
-        <div class="col-md-12 col-xs-12">
-          <kendo-textbox-container floatingLabel="{{ language.therapyValue }}">
-            <kendo-multiselect
-              class="col-md-12 col-xs-12 noPadding"
-              [data]="therapyValue"
-              [textField]="'title'"
-              [valueField]="'id'"
-              [(ngModel)]="selectedTherapies"
-              name="therapies"
-              [valuePrimitive]="true"
-              required
+              <kendo-multiselect
+                class="col-md-12 col-xs-12 noPadding"
+                [data]="complaintValue"
+                [textField]="'title'"
+                [valueField]="'id'"
+                [(ngModel)]="selectedComplaint"
+                name="complaint"
+                [valuePrimitive]="true"
+                required
+              >
+              </kendo-multiselect>
+            </kendo-textbox-container>
+          </div>
+          <div class="col-md-12 col-xs-12">
+            <kendo-textbox-container
+              floatingLabel="{{ language.therapyValue }}"
             >
-            </kendo-multiselect>
-          </kendo-textbox-container>
-        </div>
-        <div class="col-md-12 col-xs-12">
-          <kendo-textbox-container
-            floatingLabel="{{ language.treatmentValue }}"
-          >
-            <kendo-multiselect
-              class="col-md-12 col-xs-12 noPadding"
-              [data]="treatmentValue"
-              [textField]="'title'"
-              [valueField]="'id'"
-              [(ngModel)]="selectedTreatment"
-              name="therapies_previous"
-              [valuePrimitive]="true"
-              required
+              <kendo-multiselect
+                class="col-md-12 col-xs-12 noPadding"
+                [data]="therapyValue"
+                [textField]="'title'"
+                [valueField]="'id'"
+                [(ngModel)]="selectedTherapies"
+                name="therapies"
+                [valuePrimitive]="true"
+                required
+              >
+              </kendo-multiselect>
+            </kendo-textbox-container>
+          </div>
+          <div class="col-md-12 col-xs-12">
+            <kendo-textbox-container
+              floatingLabel="{{ language.treatmentValue }}"
             >
-            </kendo-multiselect>
-          </kendo-textbox-container>
-        </div>
-        <div class="col-md-12 col-xs-12">
-          <kendo-textbox-container floatingLabel="{{ language.comment }}">
-            <input
-              kendoTextBox
-              type="text"
-              class="col-md-12 col-xs-12"
-              name="comment"
-              [(ngModel)]="complaintData.comment"
-            />
-          </kendo-textbox-container>
-        </div>
-        <div class="col-md-12 col-xs-12">
-          <kendo-textbox-container floatingLabel="{{ language.cs }}">
-            <input
-              kendoTextBox
-              type="text"
-              class="col-md-12 col-xs-12"
-              name="cs"
-              [(ngModel)]="complaintData.cs_title"
-          /></kendo-textbox-container>
-        </div>
-        <div class="col-md-12 col-xs-12">
-          <kendo-textbox-container floatingLabel="{{ language.stateValue }}">
-            <kendo-combobox
-              class="col-md-12 col-xs-12 noPadding"
-              [data]="stateValue"
-              [textField]="'text'"
-              [valueField]="'text'"
-              [(ngModel)]="complaintData.state"
-              (valueChange)="valueChangeState($event)"
-              [valuePrimitive]="true"
-              name="state"
-              required
+              <kendo-multiselect
+                class="col-md-12 col-xs-12 noPadding"
+                [data]="treatmentValue"
+                [textField]="'title'"
+                [valueField]="'id'"
+                [(ngModel)]="selectedTreatment"
+                name="therapies_previous"
+                [valuePrimitive]="true"
+                required
+              >
+              </kendo-multiselect>
+            </kendo-textbox-container>
+          </div>
+          <div class="col-md-12 col-xs-12">
+            <kendo-textbox-container floatingLabel="{{ language.comment }}">
+              <input
+                kendoTextBox
+                type="text"
+                class="col-md-12 col-xs-12"
+                name="comment"
+                [(ngModel)]="complaintData.comment"
+              />
+            </kendo-textbox-container>
+          </div>
+          <div class="col-md-12 col-xs-12">
+            <kendo-textbox-container floatingLabel="{{ language.cs }}">
+              <input
+                kendoTextBox
+                type="text"
+                class="col-md-12 col-xs-12"
+                name="cs"
+                [(ngModel)]="complaintData.cs_title"
+            /></kendo-textbox-container>
+          </div>
+          <div class="col-md-12 col-xs-12">
+            <kendo-textbox-container floatingLabel="{{ language.stateValue }}">
+              <kendo-combobox
+                class="col-md-12 col-xs-12 noPadding"
+                [data]="stateValue"
+                [textField]="'text'"
+                [valueField]="'text'"
+                [(ngModel)]="complaintData.state"
+                (valueChange)="valueChangeState($event)"
+                [valuePrimitive]="true"
+                name="state"
+                required
+              >
+              </kendo-combobox>
+            </kendo-textbox-container>
+          </div>
+          <div class="col-md-12 col-xs-12">
+            <kendo-textbox-container floatingLabel="{{ language.em }}">
+              <kendo-combobox
+                class="col-md-12 col-xs-12 noPadding"
+                [data]="allUsers"
+                [textField]="'shortname'"
+                [valueField]="'id'"
+                (valueChange)="onValueUserEmChange($event)"
+                [(ngModel)]="selectedUser"
+                name="em"
+              >
+              </kendo-combobox>
+            </kendo-textbox-container>
+          </div>
+          <div class="form-group" style="text-align: center">
+            <button
+              *ngIf="operationMode === 'add'"
+              kendoButton
+              [primary]="true"
+              class="form-button"
+              type="submit"
+              [disabled]="therapyForm.form.invalid"
             >
-            </kendo-combobox>
-          </kendo-textbox-container>
-        </div>
-        <div class="col-md-12 col-xs-12">
-          <kendo-textbox-container floatingLabel="{{ language.em }}">
-            <kendo-combobox
-              class="col-md-12 col-xs-12 noPadding"
-              [data]="allUsers"
-              [textField]="'shortname'"
-              [valueField]="'id'"
-              (valueChange)="onValueUserEmChange($event)"
-              [(ngModel)]="selectedUser"
-              name="em"
+              {{ language.addTherapy }}
+            </button>
+            <button
+              *ngIf="operationMode === 'edit'"
+              kendoButton
+              [primary]="true"
+              class="form-button"
+              type="submit"
+              [disabled]="therapyForm.form.invalid"
             >
-            </kendo-combobox>
-          </kendo-textbox-container>
-        </div>
-        <div class="form-group" style="text-align: center">
-          <button
-            *ngIf="operationMode === 'add'"
-            kendoButton
-            [primary]="true"
-            class="form-button"
-            type="submit"
-            [disabled]="therapyForm.form.invalid"
-          >
-            {{ language.addTherapy }}
-          </button>
-          <button
-            *ngIf="operationMode === 'edit'"
-            kendoButton
-            [primary]="true"
-            class="form-button"
-            type="submit"
-            [disabled]="therapyForm.form.invalid"
-          >
-            {{ language.updateTherapy }}
-          </button>
-        </div>
-      </form>
-    </modal-content>
-    <modal-footer class="modal-footer-none"> </modal-footer>
+              {{ language.updateTherapy }}
+            </button>
+          </div>
+        </form>
+      </modal-content>
+      <modal-footer class="modal-footer-none"> </modal-footer>
     </modal>
 
     <modal #customer modalClass="modal-lg">
       <modal-header>
-        <h4>{{getTranslate(currentTab)}}</h4>
+        <h4>{{ getTranslate(currentTab) }}</h4>
       </modal-header>
       <modal-content>
-      <div class="tabs widget">
-        <ul class="nav nav-tabs widget">
-          <li [ngClass]="currentTab === 'profile' ? 'active' : ''">
-            <a (click)="changeTab('profile')">{{ language.profile }}</a>
-          </li>
-          <li [ngClass]="currentTab === 'base_one' ? 'active' : ''">
-            <a (click)="changeTab('base_one')">{{ language.baseOne }}</a>
-          </li>
+        <div class="tabs widget">
+          <ul class="nav nav-tabs widget">
+            <li [ngClass]="currentTab === 'profile' ? 'active' : ''">
+              <a (click)="changeTab('profile')">{{ language.profile }}</a>
+            </li>
+            <li [ngClass]="currentTab === 'base_one' ? 'active' : ''">
+              <a (click)="changeTab('base_one')">{{ language.baseOne }}</a>
+            </li>
 
-          <li [ngClass]="currentTab === 'base_two' ? 'active' : ''">
-            <a (click)="changeTab('base_two')">{{ language.baseTwo }}</a>
-          </li>
+            <li [ngClass]="currentTab === 'base_two' ? 'active' : ''">
+              <a (click)="changeTab('base_two')">{{ language.baseTwo }}</a>
+            </li>
 
-          <li [ngClass]="currentTab === 'physical_illness' ? 'active' : ''">
-            <a (click)="changeTab('physical_illness')">{{
-              language.physicalIllness
-            }}</a>
-          </li>
-        </ul>
-        <!--PROFILE-->
-        <div class="tab-content" *ngIf="currentTab === 'profile'">
-          <div id="profile-tab" class="tab-pane active">
-            <form
-              name="loginForm"
-              class="loginForm"
-              (ngSubmit)="updateCustomer(customer)"
-              #customerForm="ngForm"
-            >
-              <div class="form-group">
-                <div class="panel-body">
-                  <div class="text-center vd_info-parent col-md-4 col-xs-12">
-                    <img
-                      *ngIf="data.gender !== '' && data.gender === 'male'"
-                      alt="example image"
-                      style="width: 190px"
-                      src="../../../../assets/images/users/male-patient.png"
-                      class="rounded-circle"
-                    />
-                    <img
-                      *ngIf="data.gender !== '' && data.gender === 'female'"
-                      alt="example image"
-                      style="width: 190px"
-                      src="../../../../assets/images/users/female-patient.png"
-                      class="rounded-circle"
-                    />
-                    <h2 class="font-semibold">
-                      {{ data.firstname }} {{ data.lastname }}
-                    </h2>
-                  </div>
-                  <div class="col-md-8 col-xs-12">
-                    <div class="col-sm-6" style="margin-bottom: 3vh">
-                      <div class="row mgbt-xs-0">
-                        <kendo-textbox-container
-                          floatingLabel="{{ language.attention }}"
-                        >
-                          <textarea
-                            kendoTextArea
-                            [(ngModel)]="data.attention"
-                            [autoSize]="true"
-                            name="attention"
-                            style="width: 95%"
-                          ></textarea>
-                        </kendo-textbox-container>
-                      </div>
-                    </div>
-                    <div class="col-sm-6" style="margin-bottom: 3vh">
-                      <div class="row mgbt-xs-0">
-                        <kendo-textbox-container
-                          floatingLabel="{{ language.physicalComplaint }}"
-                        >
-                          <textarea
-                            kendoTextArea
-                            [(ngModel)]="data.physicalComplaint"
-                            [autoSize]="true"
-                            name="physicalComplaint"
-                            style="width: 95%"
-                          ></textarea>
-                        </kendo-textbox-container>
-                      </div>
-                    </div>
-                    <div>
-                      <kendo-textbox-container
-                        floatingLabel="{{ language.firstname }}"
-                      >
-                        <input
-                          kendoTextBox
-                          *ngIf="
-                            data.firstname === '' ||
-                            data.firstname === null ||
-                            data.firstname === undefined
-                          "
-                          [(ngModel)]="language['noInformation']"
-                          name="firstname"
-                          class="noPadding"
-                          required
-                        />
-                        <input
-                          kendoTextBox
-                          *ngIf="
-                            data.firstname !== null &&
-                            data.firstname !== undefined &&
-                            data.firstname !== ''
-                          "
-                          [(ngModel)]="data.firstname"
-                          name="firstname"
-                          class="noPadding"
-                          required
-                          #firstname="ngModel"
-                        />
-                      </kendo-textbox-container>
-                    </div>
-                    <div>
-                      <kendo-textbox-container
-                        floatingLabel="{{ language.lastname }}"
-                      >
-                        <input
-                          kendoTextBox
-                          *ngIf="
-                            data.lastname === '' ||
-                            data.lastname === null ||
-                            data.lastname === undefined
-                          "
-                          [(ngModel)]="language['noInformation']"
-                          name="lastname"
-                          class="noPadding"
-                          required
-                        />
-                        <input
-                          kendoTextBox
-                          *ngIf="
-                            data.lastname !== null &&
-                            data.lastname !== undefined &&
-                            data.lastname !== ''
-                          "
-                          [(ngModel)]="data.lastname"
-                          name="lastname"
-                          class="noPadding"
-                          required
-                          #lastname="ngModel"
-                        />
-                      </kendo-textbox-container>
-                    </div>
-                    <div class="form-group col-md-12 col-xs-12">
-                      <div class="col-md-6 col-xs-12">
-                        <p>{{ language.gender }}</p>
-                        <label
-                          class="k-radio-label col-md-6 col-xs-12"
-                          for="female"
-                        >
-                          <input
-                            type="radio"
-                            name="gender"
-                            id="female"
-                            class="k-radio"
-                            checked="data.gender === 'female' ? checked : ''"
-                            [(ngModel)]="data.gender"
-                            [value]="'female'"
-                          />
-                          {{ language.female }}</label
-                        >
-                        <label
-                          class="k-radio-label col-md-6 col-xs-12"
-                          for="male"
-                        >
-                          <input
-                            type="radio"
-                            name="gender"
-                            id="male"
-                            class="k-radio"
-                            checked="data.gender === 'male' ? checked : ''"
-                            [(ngModel)]="data.gender"
-                            [value]="'male'"
-                          />
-                          {{ language.male }}</label
-                        >
-                      </div>
-                      <div *ngIf="data.birthday" class="birthday-container">
-                        <kendo-textbox-container
-                          floatingLabel="{{ language.birthday }}"
-                        >
-                          <kendo-datepicker
-                            [format]="'dd.MM.yyyy'"
-                            class="email col-md-6 col-xs-12 noPadding"
-                            name="birthday"
-                            [(ngModel)]="data.birthday"
-                            (valueChange)="onChange($event)"
-                          >
-                          </kendo-datepicker>
-                        </kendo-textbox-container>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="email col-md-4 col-xs-12">
-                  <kendo-textbox-container
-                    floatingLabel="{{ language.telephoneEdit }}"
-                  >
-                    <input
-                      kendoTextBox
-                      type="text"
-                      class="col-xs-12"
-                      name="telephone"
-                      [(ngModel)]="data.telephone"
-                      telephone.value=""
-                    />
-                  </kendo-textbox-container>
-                </div>
-                <div class="email col-md-4 col-xs-12">
-                  <kendo-textbox-container
-                    floatingLabel="{{ language.mobileEdit }}"
-                  >
-                    <input
-                      kendoTextBox
-                      type="text"
-                      class="col-xs-12"
-                      name="mobile"
-                      [(ngModel)]="data.mobile"
-                      mobile.value=""
-                  /></kendo-textbox-container>
-                </div>
-                <div class="email col-md-4 col-xs-12">
-                  <kendo-textbox-container floatingLabel="{{ language.email }}">
-                    <input
-                      kendoTextBox
-                      type="email"
-                      class="col-xs-12"
-                      name="email"
-                      [(ngModel)]="data.email"
-                      #email="ngModel"
-                      #email="ngModel"
-                  /></kendo-textbox-container>
-                </div>
-                <div class="email col-md-4 col-xs-12">
-                  <kendo-textbox-container
-                    floatingLabel="{{ language.street }}"
-                  >
-                    <input
-                      kendoTextBox
-                      type="text"
-                      class="col-xs-12"
-                      [(ngModel)]="data.street"
-                      name="street"
-                    />
-                  </kendo-textbox-container>
-                </div>
-                <div class="email col-md-4 col-xs-12">
-                  <kendo-textbox-container
-                    floatingLabel="{{ language.streetnumber }}"
-                  >
-                    <input
-                      kendoTextBox
-                      type="text"
-                      class="col-xs-12"
-                      [(ngModel)]="data.streetnumber"
-                      name="streetnumber"
-                  /></kendo-textbox-container>
-                </div>
-                <div class="email col-md-4 col-xs-12">
-                  <kendo-textbox-container floatingLabel="{{ language.city }}">
-                    <input
-                      kendoTextBox
-                      type="text"
-                      class="col-xs-12"
-                      [(ngModel)]="data.city"
-                      name="city"
-                    />
-                  </kendo-textbox-container>
-                </div>
-              </div>
-              <!-- ./remember-row -->
-              <div class="form-group" style="text-align: center">
-                <button
-                  kendoButton
-                  [disabled]="customerForm.form.invalid"
-                  [primary]="true"
-                  class="form-button"
-                  type="submit"
-                >
-                  Update customer
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <!--BASE ONE-->
-        <div class="tab-content" *ngIf="currentTab === 'base_one'">
-          <div
-            *ngIf="baseDataOne === null || baseDataOne === undefined"
-            style="height: 90vh; text-align: center"
-          >
-            <div class="lds-ellipsis lds-ellipsis-form">
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-          </div>
-          <div
-            id="profile-tab"
-            class="tab-pane active"
-            *ngIf="baseDataOne !== undefined && baseDataOne !== null"
-          >
-            <form
-              name="loginForm"
-              class="loginForm"
-              (ngSubmit)="
-                operationMode === 'add' ? addBaseDataOne() : updateBaseDataOne()
-              "
-              #baseOne="ngForm"
-            >
-              <div class="form-group">
-                <div
-                  class="col-md-4 col-xs-12 b-r"
-                  *ngIf="recommendationList !== undefined"
-                >
-                  <kendo-textbox-container
-                    floatingLabel="{{ language.recommendation }}"
-                  >
-                    <kendo-multiselect
-                      [data]="recommendationList"
-                      [textField]="'title'"
-                      [valueField]="'id'"
-                      [(ngModel)]="selectedRecommendation"
-                      [valuePrimitive]="true"
-                      name="recommendation"
-                    >
-                    </kendo-multiselect>
-                  </kendo-textbox-container>
-                </div>
-                <div
-                  class="col-md-4 col-xs-12 b-r"
-                  *ngIf="relationshipList !== undefined"
-                >
-                  <kendo-textbox-container
-                    floatingLabel="{{ language.relationship }}"
-                  >
-                    <kendo-combobox
-                      class="col-md-12 col-xs-12 noPadding"
-                      [data]="relationshipList"
-                      [textField]="'title'"
-                      [valueField]="'id'"
-                      [(ngModel)]="baseDataOne.relationship"
-                      [valuePrimitive]="true"
-                      name="relationship"
-                    >
-                    </kendo-combobox>
-                  </kendo-textbox-container>
-                </div>
-                <div
-                  class="col-md-4 col-xs-12 b-r"
-                  *ngIf="socialList !== undefined"
-                >
-                  <kendo-textbox-container
-                    floatingLabel="{{ language.social }}"
-                  >
-                    <kendo-combobox
-                      class="col-md-12 col-xs-12 noPadding"
-                      [data]="socialList"
-                      [textField]="'title'"
-                      [valueField]="'id'"
-                      [(ngModel)]="baseDataOne.social"
-                      [valuePrimitive]="true"
-                      name="title"
-                    >
-                    </kendo-combobox>
-                  </kendo-textbox-container>
-                </div>
-                <div
-                  class="col-md-4 col-xs-12 b-r"
-                  *ngIf="doctorList !== undefined"
-                >
-                  <kendo-textbox-container
-                    floatingLabel="{{ language.doctor }}"
-                  >
-                    <kendo-combobox
-                      class="col-md-12 col-xs-12 noPadding"
-                      [data]="doctorsList"
-                      [textField]="'firstname'"
-                      [valueField]="'id'"
-                      [(ngModel)]="baseDataOne.doctor"
-                      [valuePrimitive]="true"
-                      (filterChange)="filterDoctor($event)"
-                      name="doctors"
-                    >
-                    </kendo-combobox>
-                  </kendo-textbox-container>
-                </div>
-                <div class="col-md-4 col-xs-12 b-r">
-                  <kendo-textbox-container
-                    floatingLabel="{{ language.firstDate }}"
-                  >
-                    <kendo-datepicker
-                      [format]="'dd.MM.yyyy'"
-                      [(ngModel)]="baseDataOne.first_date"
-                      name="first_date"
-                      class="noPadding"
-                    >
-                    </kendo-datepicker>
-                  </kendo-textbox-container>
-                </div>
-              </div>
-              <div
-                class="col-sm-12"
-                style="text-align: center; padding-top: 30px"
+            <li [ngClass]="currentTab === 'physical_illness' ? 'active' : ''">
+              <a (click)="changeTab('physical_illness')">{{
+                language.physicalIllness
+              }}</a>
+            </li>
+          </ul>
+          <!--PROFILE-->
+          <div class="tab-content" *ngIf="currentTab === 'profile'">
+            <div id="profile-tab" class="tab-pane active">
+              <form
+                name="loginForm"
+                class="loginForm"
+                (ngSubmit)="updateCustomer(customer)"
+                #customerForm="ngForm"
               >
-                <button
-                  kendoButton
-                  [primary]="true"
-                  class="form-button inputTheme-{{ theme }}"
-                  *ngIf="operationMode === 'add'"
-                  type="submit"
-                  [disabled]="baseOne.form.invalid"
-                >
-                  {{ language.addData }}
-                </button>
-                <button
-                  kendoButton
-                  [primary]="true"
-                  [disabled]="baseOne.form.invalid"
-                  class="form-button inputTheme-{{ theme }}"
-                  *ngIf="operationMode === 'edit'"
-                  type="submit"
-                >
-                  {{ language.editData }}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <!--BASE TWO-->
-        <div class="tab-content" *ngIf="currentTab === 'base_two'">
-          <div
-            *ngIf="baseDataTwo === null || baseDataTwo === undefined"
-            style="height: 90vh; text-align: center"
-          >
-            <div class="lds-ellipsis lds-ellipsis-form">
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-          </div>
-          <div
-            id="profile-tab"
-            class="tab-pane active"
-            *ngIf="baseDataTwo !== undefined && baseDataTwo !== null"
-          >
-            <form
-              name="base_two"
-              (ngSubmit)="
-                operationMode === 'add' ? addBaseDataTwo() : updateBaseDataTwo()
-              "
-              #baseTwo="ngForm"
-            >
-              <div class="form-group">
-                <div class="panel-body">
-                  <div class="col-md-3 col-xs-12 b-r">
+                <div class="form-group">
+                  <div class="panel-body">
+                    <div class="text-center vd_info-parent col-md-4 col-xs-12">
+                      <img
+                        *ngIf="data.gender !== '' && data.gender === 'male'"
+                        alt="example image"
+                        style="width: 190px"
+                        src="../../../../assets/images/users/male-patient.png"
+                        class="rounded-circle"
+                      />
+                      <img
+                        *ngIf="data.gender !== '' && data.gender === 'female'"
+                        alt="example image"
+                        style="width: 190px"
+                        src="../../../../assets/images/users/female-patient.png"
+                        class="rounded-circle"
+                      />
+                      <h2 class="font-semibold">
+                        {{ data.firstname }} {{ data.lastname }}
+                      </h2>
+                    </div>
+                    <div class="col-md-8 col-xs-12">
+                      <div class="col-sm-6" style="margin-bottom: 3vh">
+                        <div class="row mgbt-xs-0">
+                          <kendo-textbox-container
+                            floatingLabel="{{ language.attention }}"
+                          >
+                            <textarea
+                              kendoTextArea
+                              [(ngModel)]="data.attention"
+                              [autoSize]="true"
+                              name="attention"
+                              style="width: 95%"
+                            ></textarea>
+                          </kendo-textbox-container>
+                        </div>
+                      </div>
+                      <div class="col-sm-6" style="margin-bottom: 3vh">
+                        <div class="row mgbt-xs-0">
+                          <kendo-textbox-container
+                            floatingLabel="{{ language.physicalComplaint }}"
+                          >
+                            <textarea
+                              kendoTextArea
+                              [(ngModel)]="data.physicalComplaint"
+                              [autoSize]="true"
+                              name="physicalComplaint"
+                              style="width: 95%"
+                            ></textarea>
+                          </kendo-textbox-container>
+                        </div>
+                      </div>
+                      <div>
+                        <kendo-textbox-container
+                          floatingLabel="{{ language.firstname }}"
+                        >
+                          <input
+                            kendoTextBox
+                            *ngIf="
+                              data.firstname === '' ||
+                              data.firstname === null ||
+                              data.firstname === undefined
+                            "
+                            [(ngModel)]="language['noInformation']"
+                            name="firstname"
+                            class="noPadding"
+                            required
+                          />
+                          <input
+                            kendoTextBox
+                            *ngIf="
+                              data.firstname !== null &&
+                              data.firstname !== undefined &&
+                              data.firstname !== ''
+                            "
+                            [(ngModel)]="data.firstname"
+                            name="firstname"
+                            class="noPadding"
+                            required
+                            #firstname="ngModel"
+                          />
+                        </kendo-textbox-container>
+                      </div>
+                      <div>
+                        <kendo-textbox-container
+                          floatingLabel="{{ language.lastname }}"
+                        >
+                          <input
+                            kendoTextBox
+                            *ngIf="
+                              data.lastname === '' ||
+                              data.lastname === null ||
+                              data.lastname === undefined
+                            "
+                            [(ngModel)]="language['noInformation']"
+                            name="lastname"
+                            class="noPadding"
+                            required
+                          />
+                          <input
+                            kendoTextBox
+                            *ngIf="
+                              data.lastname !== null &&
+                              data.lastname !== undefined &&
+                              data.lastname !== ''
+                            "
+                            [(ngModel)]="data.lastname"
+                            name="lastname"
+                            class="noPadding"
+                            required
+                            #lastname="ngModel"
+                          />
+                        </kendo-textbox-container>
+                      </div>
+                      <div class="form-group col-md-12 col-xs-12">
+                        <div class="col-md-6 col-xs-12">
+                          <p>{{ language.gender }}</p>
+                          <label
+                            class="k-radio-label col-md-6 col-xs-12"
+                            for="female"
+                          >
+                            <input
+                              type="radio"
+                              name="gender"
+                              id="female"
+                              class="k-radio"
+                              checked="data.gender === 'female' ? checked : ''"
+                              [(ngModel)]="data.gender"
+                              [value]="'female'"
+                            />
+                            {{ language.female }}</label
+                          >
+                          <label
+                            class="k-radio-label col-md-6 col-xs-12"
+                            for="male"
+                          >
+                            <input
+                              type="radio"
+                              name="gender"
+                              id="male"
+                              class="k-radio"
+                              checked="data.gender === 'male' ? checked : ''"
+                              [(ngModel)]="data.gender"
+                              [value]="'male'"
+                            />
+                            {{ language.male }}</label
+                          >
+                        </div>
+                        <div *ngIf="data.birthday" class="birthday-container">
+                          <kendo-textbox-container
+                            floatingLabel="{{ language.birthday }}"
+                          >
+                            <kendo-datepicker
+                              [format]="'dd.MM.yyyy'"
+                              class="email col-md-6 col-xs-12 noPadding"
+                              name="birthday"
+                              [(ngModel)]="data.birthday"
+                              (valueChange)="onChange($event)"
+                            >
+                            </kendo-datepicker>
+                          </kendo-textbox-container>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="email col-md-4 col-xs-12">
                     <kendo-textbox-container
-                      floatingLabel="{{ language.size }}"
+                      floatingLabel="{{ language.telephoneEdit }}"
                     >
                       <input
                         kendoTextBox
-                        type="number"
-                        [(ngModel)]="baseDataTwo.size"
-                        name="size"
-                        #size="ngModel"
+                        type="text"
+                        class="col-xs-12"
+                        name="telephone"
+                        [(ngModel)]="data.telephone"
+                        telephone.value=""
                       />
                     </kendo-textbox-container>
                   </div>
-                  <div class="col-md-3 col-xs-12 b-r">
+                  <div class="email col-md-4 col-xs-12">
                     <kendo-textbox-container
-                      floatingLabel="{{ language.weight }}"
+                      floatingLabel="{{ language.mobileEdit }}"
                     >
                       <input
                         kendoTextBox
-                        type="number"
-                        [(ngModel)]="baseDataTwo.weight"
-                        name="weight"
-                        #weight="ngModel"
-                      />
-                    </kendo-textbox-container>
+                        type="text"
+                        class="col-xs-12"
+                        name="mobile"
+                        [(ngModel)]="data.mobile"
+                        mobile.value=""
+                    /></kendo-textbox-container>
                   </div>
-                  <div class="col-md-3 col-xs-12 b-r">
+                  <div class="email col-md-4 col-xs-12">
                     <kendo-textbox-container
-                      floatingLabel="{{ language.childs }}"
+                      floatingLabel="{{ language.email }}"
                     >
                       <input
                         kendoTextBox
-                        type="number"
-                        [(ngModel)]="baseDataTwo.childs"
-                        name="childs"
-                        #childs="ngModel"
+                        type="email"
+                        class="col-xs-12"
+                        name="email"
+                        [(ngModel)]="data.email"
+                        #email="ngModel"
+                        #email="ngModel"
+                    /></kendo-textbox-container>
+                  </div>
+                  <div class="email col-md-4 col-xs-12">
+                    <kendo-textbox-container
+                      floatingLabel="{{ language.street }}"
+                    >
+                      <input
+                        kendoTextBox
+                        type="text"
+                        class="col-xs-12"
+                        [(ngModel)]="data.street"
+                        name="street"
                       />
                     </kendo-textbox-container>
                   </div>
-                  <div class="col-md-4 col-xs-12 b-r">
+                  <div class="email col-md-4 col-xs-12">
                     <kendo-textbox-container
-                      floatingLabel="{{ language.notes }}"
+                      floatingLabel="{{ language.streetnumber }}"
                     >
-                      <textarea
-                        kendoTextArea
+                      <input
+                        kendoTextBox
                         type="text"
-                        [(ngModel)]="baseDataTwo.notes"
-                        name="notes"
-                        style="width: 95%"
-                        #notes="ngModel"
-                      ></textarea>
-                    </kendo-textbox-container>
+                        class="col-xs-12"
+                        [(ngModel)]="data.streetnumber"
+                        name="streetnumber"
+                    /></kendo-textbox-container>
                   </div>
-                  <div class="col-md-4 col-xs-12 b-r">
+                  <div class="email col-md-4 col-xs-12">
                     <kendo-textbox-container
-                      floatingLabel="{{ language.profession }}"
+                      floatingLabel="{{ language.city }}"
                     >
-                      <textarea
-                        kendoTextArea
+                      <input
+                        kendoTextBox
                         type="text"
-                        [(ngModel)]="baseDataTwo.profession"
-                        name="profession"
-                        style="width: 95%"
-                        #profession="ngModel"
-                      ></textarea>
-                    </kendo-textbox-container>
-                  </div>
-                  <div class="col-md-4 col-xs-12 b-r">
-                    <kendo-textbox-container
-                      floatingLabel="{{ language.useful }}"
-                    >
-                      <textarea
-                        kendoTextArea
-                        type="text"
-                        [(ngModel)]="baseDataTwo.useful"
-                        name="useful"
-                        style="width: 95%"
-                        #useful="ngModel"
-                      ></textarea>
+                        class="col-xs-12"
+                        [(ngModel)]="data.city"
+                        name="city"
+                      />
                     </kendo-textbox-container>
                   </div>
                 </div>
-              </div>
-              <!-- ./remember-row -->
-              <div class="form-group" style="text-align: center">
-                <button
-                  kendoButton
-                  [primary]="true"
-                  class="form-button inputTheme-{{ theme }}"
-                  *ngIf="operationMode === 'add'"
-                  type="submit"
-                  [disabled]="baseTwo.form.invalid"
-                >
-                  {{ language.addData }}
-                </button>
-                <button
-                  kendoButton
-                  [primary]="true"
-                  [disabled]="baseTwo.form.invalid"
-                  class="form-button inputTheme-{{ theme }}"
-                  *ngIf="operationMode === 'edit'"
-                  type="submit"
-                >
-                  {{ language.editData }}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <!--PHYSICAL ILLNESS-->
-        <div class="tab-content" *ngIf="currentTab === 'physical_illness'">
-          <div
-            *ngIf="physicalIllness === null || physicalIllness === undefined"
-            style="height: 90vh; text-align: center"
-          >
-            <div class="lds-ellipsis lds-ellipsis-form">
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
+                <!-- ./remember-row -->
+                <div class="form-group" style="text-align: center">
+                  <button
+                    kendoButton
+                    [disabled]="customerForm.form.invalid"
+                    [primary]="true"
+                    class="form-button"
+                    type="submit"
+                  >
+                    {{language.updateCustomer}}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
-          <div
-            id="profile-tab"
-            class="tab-pane active"
-            *ngIf="physicalIllness !== undefined && physicalIllness !== null"
-          >
-            <form
-              name="loginForm"
-              class="loginForm"
-              (ngSubmit)="
-                operationMode === 'add'
-                  ? addPhysicalIllness(data)
-                  : updatePhysicalIllness(data)
-              "
-              #physicalForm="ngForm"
+
+          <!--BASE ONE-->
+          <div class="tab-content" *ngIf="currentTab === 'base_one'">
+            <div
+              *ngIf="baseDataOne === null || baseDataOne === undefined"
+              style="height: 90vh; text-align: center"
             >
-              <div class="form-group">
-                <div class="panel-body">
-                  <div class="col-md-4 col-xs-12 b-r">
+              <div class="lds-ellipsis lds-ellipsis-form">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            </div>
+            <div
+              id="profile-tab"
+              class="tab-pane active"
+              *ngIf="baseDataOne !== undefined && baseDataOne !== null"
+            >
+              <form
+                name="loginForm"
+                class="loginForm"
+                (ngSubmit)="
+                  operationMode === 'add'
+                    ? addBaseDataOne()
+                    : updateBaseDataOne()
+                "
+                #baseOne="ngForm"
+              >
+                <div class="form-group">
+                  <div
+                    class="col-md-4 col-xs-12 b-r"
+                    *ngIf="recommendationList !== undefined"
+                  >
                     <kendo-textbox-container
-                      floatingLabel="{{ language.internalOrgans }}"
+                      floatingLabel="{{ language.recommendation }}"
                     >
-                      <textarea
-                        kendoTextArea
-                        [(ngModel)]="physicalIllness.internal_organs"
-                        name="internal_organs"
-                        style="width: 95%"
-                      ></textarea>
+                      <kendo-multiselect
+                        [data]="recommendationList"
+                        [textField]="'title'"
+                        [valueField]="'id'"
+                        [(ngModel)]="selectedRecommendation"
+                        [valuePrimitive]="true"
+                        name="recommendation"
+                      >
+                      </kendo-multiselect>
+                    </kendo-textbox-container>
+                  </div>
+                  <div
+                    class="col-md-4 col-xs-12 b-r"
+                    *ngIf="relationshipList !== undefined"
+                  >
+                    <kendo-textbox-container
+                      floatingLabel="{{ language.relationship }}"
+                    >
+                      <kendo-combobox
+                        class="col-md-12 col-xs-12 noPadding"
+                        [data]="relationshipList"
+                        [textField]="'title'"
+                        [valueField]="'id'"
+                        [(ngModel)]="baseDataOne.relationship"
+                        [valuePrimitive]="true"
+                        name="relationship"
+                      >
+                      </kendo-combobox>
+                    </kendo-textbox-container>
+                  </div>
+                  <div
+                    class="col-md-4 col-xs-12 b-r"
+                    *ngIf="socialList !== undefined"
+                  >
+                    <kendo-textbox-container
+                      floatingLabel="{{ language.social }}"
+                    >
+                      <kendo-combobox
+                        class="col-md-12 col-xs-12 noPadding"
+                        [data]="socialList"
+                        [textField]="'title'"
+                        [valueField]="'id'"
+                        [(ngModel)]="baseDataOne.social"
+                        [valuePrimitive]="true"
+                        name="title"
+                      >
+                      </kendo-combobox>
+                    </kendo-textbox-container>
+                  </div>
+                  <div
+                    class="col-md-4 col-xs-12 b-r"
+                    *ngIf="doctorList !== undefined"
+                  >
+                    <kendo-textbox-container
+                      floatingLabel="{{ language.doctor }}"
+                    >
+                      <kendo-combobox
+                        class="col-md-12 col-xs-12 noPadding"
+                        [data]="doctorsList"
+                        [textField]="'firstname'"
+                        [valueField]="'id'"
+                        [(ngModel)]="baseDataOne.doctor"
+                        [valuePrimitive]="true"
+                        (filterChange)="filterDoctor($event)"
+                        name="doctors"
+                      >
+                      </kendo-combobox>
                     </kendo-textbox-container>
                   </div>
                   <div class="col-md-4 col-xs-12 b-r">
                     <kendo-textbox-container
-                      floatingLabel="{{ language.operations }}"
+                      floatingLabel="{{ language.firstDate }}"
                     >
-                      <textarea
-                        kendoTextArea
-                        [(ngModel)]="physicalIllness.operations"
-                        name="operations"
-                        style="width: 95%"
-                      ></textarea>
-                    </kendo-textbox-container>
-                  </div>
-                  <div class="col-md-4 col-xs-12 b-r">
-                    <kendo-textbox-container
-                      floatingLabel="{{ language.previousFindidngs }}"
-                    >
-                      <textarea
-                        kendoTextArea
-                        [(ngModel)]="physicalIllness.previous_findings"
-                        name="previous_findings"
-                        style="width: 95%"
-                      ></textarea>
-                    </kendo-textbox-container>
-                  </div>
-                  <div class="col-md-4 col-xs-12 b-r">
-                    <kendo-textbox-container
-                      floatingLabel="{{ language.medicament }}"
-                    >
-                      <textarea
-                        kendoTextArea
-                        [(ngModel)]="physicalIllness.medicament"
-                        name="medicament"
-                        style="width: 95%"
-                      ></textarea>
-                    </kendo-textbox-container>
-                  </div>
-                  <div class="col-md-4 col-xs-12 b-r">
-                    <kendo-textbox-container
-                      floatingLabel="{{ language.allergies }}"
-                    >
-                      <textarea
-                        kendoTextArea
-                        [(ngModel)]="physicalIllness.allergies"
-                        name="allergies"
-                        style="width: 95%"
-                      ></textarea>
-                    </kendo-textbox-container>
-                  </div>
-                  <div class="col-md-4 col-xs-12 b-r">
-                    <kendo-textbox-container
-                      floatingLabel="{{ language.skinSensitivity }}"
-                    >
-                      <textarea
-                        kendoTextArea
-                        [(ngModel)]="physicalIllness.skin_sensitivity"
-                        name="skin_sensitivity"
-                        style="width: 95%"
-                      ></textarea>
-                    </kendo-textbox-container>
-                  </div>
-                  <div class="col-md-4 col-xs-12 b-r">
-                    <kendo-textbox-container
-                      floatingLabel="{{ language.pregnancy }}"
-                    >
-                      <textarea
-                        kendoTextArea
-                        [(ngModel)]="physicalIllness.pregnancy"
-                        name="pregnancy"
-                        style="width: 95%"
-                      ></textarea>
+                      <kendo-datepicker
+                        [format]="'dd.MM.yyyy'"
+                        [(ngModel)]="baseDataOne.first_date"
+                        name="first_date"
+                        class="noPadding"
+                      >
+                      </kendo-datepicker>
                     </kendo-textbox-container>
                   </div>
                 </div>
-              </div>
-              <div class="form-group" style="text-align: center">
-                <button
-                  kendoButton
-                  [primary]="true"
-                  class="form-button inputTheme-{{ theme }}"
-                  *ngIf="operationMode === 'add'"
-                  type="submit"
-                  [disabled]="physicalForm.form.invalid"
+                <div
+                  class="col-sm-12"
+                  style="text-align: center; padding-top: 30px"
                 >
-                  {{ language.addData }}
-                </button>
-                <button
-                  kendoButton
-                  [primary]="true"
-                  [disabled]="physicalForm.form.invalid"
-                  class="form-button inputTheme-{{ theme }}"
-                  *ngIf="operationMode === 'edit'"
-                  type="submit"
-                >
-                  {{ language.editData }}
-                </button>
+                  <button
+                    kendoButton
+                    [primary]="true"
+                    class="form-button inputTheme-{{ theme }}"
+                    *ngIf="operationMode === 'add'"
+                    type="submit"
+                    [disabled]="baseOne.form.invalid"
+                  >
+                    {{ language.addData }}
+                  </button>
+                  <button
+                    kendoButton
+                    [primary]="true"
+                    [disabled]="baseOne.form.invalid"
+                    class="form-button inputTheme-{{ theme }}"
+                    *ngIf="operationMode === 'edit'"
+                    type="submit"
+                  >
+                    {{ language.editData }}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!--BASE TWO-->
+          <div class="tab-content" *ngIf="currentTab === 'base_two'">
+            <div
+              *ngIf="baseDataTwo === null || baseDataTwo === undefined"
+              style="height: 90vh; text-align: center"
+            >
+              <div class="lds-ellipsis lds-ellipsis-form">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
               </div>
-            </form>
+            </div>
+            <div
+              id="profile-tab"
+              class="tab-pane active"
+              *ngIf="baseDataTwo !== undefined && baseDataTwo !== null"
+            >
+              <form
+                name="base_two"
+                (ngSubmit)="
+                  operationMode === 'add'
+                    ? addBaseDataTwo()
+                    : updateBaseDataTwo()
+                "
+                #baseTwo="ngForm"
+              >
+                <div class="form-group">
+                  <div class="panel-body">
+                    <div class="col-md-3 col-xs-12 b-r">
+                      <kendo-textbox-container
+                        floatingLabel="{{ language.size }}"
+                      >
+                        <input
+                          kendoTextBox
+                          type="number"
+                          [(ngModel)]="baseDataTwo.size"
+                          name="size"
+                          #size="ngModel"
+                        />
+                      </kendo-textbox-container>
+                    </div>
+                    <div class="col-md-3 col-xs-12 b-r">
+                      <kendo-textbox-container
+                        floatingLabel="{{ language.weight }}"
+                      >
+                        <input
+                          kendoTextBox
+                          type="number"
+                          [(ngModel)]="baseDataTwo.weight"
+                          name="weight"
+                          #weight="ngModel"
+                        />
+                      </kendo-textbox-container>
+                    </div>
+                    <div class="col-md-3 col-xs-12 b-r">
+                      <kendo-textbox-container
+                        floatingLabel="{{ language.childs }}"
+                      >
+                        <input
+                          kendoTextBox
+                          type="number"
+                          [(ngModel)]="baseDataTwo.childs"
+                          name="childs"
+                          #childs="ngModel"
+                        />
+                      </kendo-textbox-container>
+                    </div>
+                    <div class="col-md-4 col-xs-12 b-r">
+                      <kendo-textbox-container
+                        floatingLabel="{{ language.notes }}"
+                      >
+                        <textarea
+                          kendoTextArea
+                          type="text"
+                          [(ngModel)]="baseDataTwo.notes"
+                          name="notes"
+                          style="width: 95%"
+                          #notes="ngModel"
+                        ></textarea>
+                      </kendo-textbox-container>
+                    </div>
+                    <div class="col-md-4 col-xs-12 b-r">
+                      <kendo-textbox-container
+                        floatingLabel="{{ language.profession }}"
+                      >
+                        <textarea
+                          kendoTextArea
+                          type="text"
+                          [(ngModel)]="baseDataTwo.profession"
+                          name="profession"
+                          style="width: 95%"
+                          #profession="ngModel"
+                        ></textarea>
+                      </kendo-textbox-container>
+                    </div>
+                    <div class="col-md-4 col-xs-12 b-r">
+                      <kendo-textbox-container
+                        floatingLabel="{{ language.useful }}"
+                      >
+                        <textarea
+                          kendoTextArea
+                          type="text"
+                          [(ngModel)]="baseDataTwo.useful"
+                          name="useful"
+                          style="width: 95%"
+                          #useful="ngModel"
+                        ></textarea>
+                      </kendo-textbox-container>
+                    </div>
+                  </div>
+                </div>
+                <!-- ./remember-row -->
+                <div class="form-group" style="text-align: center">
+                  <button
+                    kendoButton
+                    [primary]="true"
+                    class="form-button inputTheme-{{ theme }}"
+                    *ngIf="operationMode === 'add'"
+                    type="submit"
+                    [disabled]="baseTwo.form.invalid"
+                  >
+                    {{ language.addData }}
+                  </button>
+                  <button
+                    kendoButton
+                    [primary]="true"
+                    [disabled]="baseTwo.form.invalid"
+                    class="form-button inputTheme-{{ theme }}"
+                    *ngIf="operationMode === 'edit'"
+                    type="submit"
+                  >
+                    {{ language.editData }}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!--PHYSICAL ILLNESS-->
+          <div class="tab-content" *ngIf="currentTab === 'physical_illness'">
+            <div
+              *ngIf="physicalIllness === null || physicalIllness === undefined"
+              style="height: 90vh; text-align: center"
+            >
+              <div class="lds-ellipsis lds-ellipsis-form">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            </div>
+            <div
+              id="profile-tab"
+              class="tab-pane active"
+              *ngIf="physicalIllness !== undefined && physicalIllness !== null"
+            >
+              <form
+                name="loginForm"
+                class="loginForm"
+                (ngSubmit)="
+                  operationMode === 'add'
+                    ? addPhysicalIllness(data)
+                    : updatePhysicalIllness(data)
+                "
+                #physicalForm="ngForm"
+              >
+                <div class="form-group">
+                  <div class="panel-body">
+                    <div class="col-md-4 col-xs-12 b-r">
+                      <kendo-textbox-container
+                        floatingLabel="{{ language.internalOrgans }}"
+                      >
+                        <textarea
+                          kendoTextArea
+                          [(ngModel)]="physicalIllness.internal_organs"
+                          name="internal_organs"
+                          style="width: 95%"
+                        ></textarea>
+                      </kendo-textbox-container>
+                    </div>
+                    <div class="col-md-4 col-xs-12 b-r">
+                      <kendo-textbox-container
+                        floatingLabel="{{ language.operations }}"
+                      >
+                        <textarea
+                          kendoTextArea
+                          [(ngModel)]="physicalIllness.operations"
+                          name="operations"
+                          style="width: 95%"
+                        ></textarea>
+                      </kendo-textbox-container>
+                    </div>
+                    <div class="col-md-4 col-xs-12 b-r">
+                      <kendo-textbox-container
+                        floatingLabel="{{ language.previousFindidngs }}"
+                      >
+                        <textarea
+                          kendoTextArea
+                          [(ngModel)]="physicalIllness.previous_findings"
+                          name="previous_findings"
+                          style="width: 95%"
+                        ></textarea>
+                      </kendo-textbox-container>
+                    </div>
+                    <div class="col-md-4 col-xs-12 b-r">
+                      <kendo-textbox-container
+                        floatingLabel="{{ language.medicament }}"
+                      >
+                        <textarea
+                          kendoTextArea
+                          [(ngModel)]="physicalIllness.medicament"
+                          name="medicament"
+                          style="width: 95%"
+                        ></textarea>
+                      </kendo-textbox-container>
+                    </div>
+                    <div class="col-md-4 col-xs-12 b-r">
+                      <kendo-textbox-container
+                        floatingLabel="{{ language.allergies }}"
+                      >
+                        <textarea
+                          kendoTextArea
+                          [(ngModel)]="physicalIllness.allergies"
+                          name="allergies"
+                          style="width: 95%"
+                        ></textarea>
+                      </kendo-textbox-container>
+                    </div>
+                    <div class="col-md-4 col-xs-12 b-r">
+                      <kendo-textbox-container
+                        floatingLabel="{{ language.skinSensitivity }}"
+                      >
+                        <textarea
+                          kendoTextArea
+                          [(ngModel)]="physicalIllness.skin_sensitivity"
+                          name="skin_sensitivity"
+                          style="width: 95%"
+                        ></textarea>
+                      </kendo-textbox-container>
+                    </div>
+                    <div class="col-md-4 col-xs-12 b-r">
+                      <kendo-textbox-container
+                        floatingLabel="{{ language.pregnancy }}"
+                      >
+                        <textarea
+                          kendoTextArea
+                          [(ngModel)]="physicalIllness.pregnancy"
+                          name="pregnancy"
+                          style="width: 95%"
+                        ></textarea>
+                      </kendo-textbox-container>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group" style="text-align: center">
+                  <button
+                    kendoButton
+                    [primary]="true"
+                    class="form-button inputTheme-{{ theme }}"
+                    *ngIf="operationMode === 'add'"
+                    type="submit"
+                    [disabled]="physicalForm.form.invalid"
+                  >
+                    {{ language.addData }}
+                  </button>
+                  <button
+                    kendoButton
+                    [primary]="true"
+                    [disabled]="physicalForm.form.invalid"
+                    class="form-button inputTheme-{{ theme }}"
+                    *ngIf="operationMode === 'edit'"
+                    type="submit"
+                  >
+                    {{ language.editData }}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-    </modal-content>
-    <modal-footer class="modal-footer-none"> </modal-footer>
+      </modal-content>
+      <modal-footer class="modal-footer-none"> </modal-footer>
     </modal>
 
     <modal #document_edit modalClass="modal-lg">
       <modal-header>
-        <h4>{{getTranslate(operationMode)}}</h4>
+        <h4>{{ getTranslate(operationMode) }}</h4>
       </modal-header>
       <modal-content>
-      <form *ngIf="documentItem"
-        name="loginForm"
-        class="loginForm"
-        (ngSubmit)="updateDocument()"
-        #documentEditForm="ngForm"
-      >
-        <div class="col-md-12 col-xs-12">
-          <kendo-textbox-container floatingLabel="{{ language.name }}">
-            <input
-              kendoTextBox
-              type="text"
-              class="col-xs-12"
-              [(ngModel)]="documentItem.name"
-              name="name"
-              required
-            />
-          </kendo-textbox-container>
-        </div>
-        <div class="col-md-12 col-xs-12">
-          <kendo-textbox-container floatingLabel="{{ language.date }}">
-            <kendo-datepicker
-              [format]="'dd.MM.yyyy'"
-              [(ngModel)]="documentItem.date"
-              name="date"
-              class="noPadding"
+        <form
+          *ngIf="documentItem"
+          name="loginForm"
+          class="loginForm"
+          (ngSubmit)="updateDocument()"
+          #documentEditForm="ngForm"
+        >
+          <div class="col-md-12 col-xs-12">
+            <kendo-textbox-container floatingLabel="{{ language.name }}">
+              <input
+                kendoTextBox
+                type="text"
+                class="col-xs-12"
+                [(ngModel)]="documentItem.name"
+                name="name"
+                required
+              />
+            </kendo-textbox-container>
+          </div>
+          <div class="col-md-12 col-xs-12">
+            <kendo-textbox-container floatingLabel="{{ language.date }}">
+              <kendo-datepicker
+                [format]="'dd.MM.yyyy'"
+                [(ngModel)]="documentItem.date"
+                name="date"
+                class="noPadding"
+              >
+              </kendo-datepicker>
+            </kendo-textbox-container>
+          </div>
+          <div class="col-md-12 col-xs-12" style="padding-top: 10px">
+            <kendo-textbox-container
+              floatingLabel="{{ language.documentDescription }}"
             >
-            </kendo-datepicker>
-          </kendo-textbox-container>
-        </div>
-        <div class="col-md-12 col-xs-12" style="padding-top: 10px">
-          <kendo-textbox-container floatingLabel="{{ language.documentDescription }}">
-            <textarea
-              kendoTextArea
-              [(ngModel)]="documentItem.description"
-              name="description"
-              [autoSize]="true"
-            ></textarea>
-          </kendo-textbox-container>
-        </div>
-        <div class="form-group" style="text-align: center">
-          <button
-            kendoButton
-            [primary]="true"
-            class="form-button"
-            [disabled]="documentEditForm.form.invalid"
-            type="submit"
-          >
-            {{ language.updateDocument }}
-          </button>
-        </div>
-      </form>
-    </modal-content>
-    <modal-footer class="modal-footer-none"> </modal-footer>
+              <textarea
+                kendoTextArea
+                [(ngModel)]="documentItem.description"
+                name="description"
+                [autoSize]="true"
+              ></textarea>
+            </kendo-textbox-container>
+          </div>
+          <div class="form-group" style="text-align: center">
+            <button
+              kendoButton
+              [primary]="true"
+              class="form-button"
+              [disabled]="documentEditForm.form.invalid"
+              type="submit"
+            >
+              {{ language.updateDocument }}
+            </button>
+          </div>
+        </form>
+      </modal-content>
+      <modal-footer class="modal-footer-none"> </modal-footer>
     </modal>
 
     <modal #settingsWindow modalClass="modal-lg">
       <modal-header>
-        <h4>{{language.settings}}</h4>
+        <h4>{{ language.settings }}</h4>
       </modal-header>
       <modal-content>
-      <form
-        name="loginForm"
-        class="loginForm"
-        (ngSubmit)="updateCustomer(customer); settingsWindow.open()"
-        #documentEditForm="ngForm"
-      >
-        <div class="col-md-12 col-xs-12">
-          <input
-            type="checkbox"
-            kendoCheckBox
-            [(ngModel)]="data.isConfirm"
-            name="isConfirm"
-            style="margin: 0px"
-          />
-          <span style="font-size: 12px">
-            {{ language.confirmMessageText }}</span
-          >
-        </div>
-        <div class="col-md-12 col-xs-12">
-          <input
-            type="checkbox"
-            kendoCheckBox
-            [(ngModel)]="data.reminderViaEmail"
-            name="reminderViaEmail"
-            style="margin: 0px"
-          />
-          <span style="font-size: 12px">
-            {{ language.sendReminderViaEMail }}</span
-          >
-        </div>
-        <div class="col-md-12 col-xs-12">
-          <input
-            type="checkbox"
-            kendoCheckBox
-            [(ngModel)]="data.reminderViaSMS"
-            name="reminderViaSMS"
-            style="margin: 0px"
-          />
-          <span style="font-size: 12px">
-            {{ language.sendReminderViaSMS }}</span
-          >
-        </div>
-        <div class="updateSettings">
-          <button
-            kendoButton
-            [primary]="true"
-            class="form-button"
-            type="submit"
-          >
-            {{ language.updateSettings }}
-          </button>
-        </div>
-      </form>
-    </modal-content>
-    <modal-footer class="modal-footer-none"> </modal-footer>
+        <form
+          name="loginForm"
+          class="loginForm"
+          (ngSubmit)="updateCustomer(customer); settingsWindow.open()"
+          #documentEditForm="ngForm"
+        >
+          <div class="col-md-12 col-xs-12">
+            <input
+              type="checkbox"
+              kendoCheckBox
+              [(ngModel)]="data.isConfirm"
+              name="isConfirm"
+              style="margin: 0px"
+            />
+            <span style="font-size: 12px">
+              {{ language.confirmMessageText }}</span
+            >
+          </div>
+          <div class="col-md-12 col-xs-12">
+            <input
+              type="checkbox"
+              kendoCheckBox
+              [(ngModel)]="data.reminderViaEmail"
+              name="reminderViaEmail"
+              style="margin: 0px"
+            />
+            <span style="font-size: 12px">
+              {{ language.sendReminderViaEMail }}</span
+            >
+          </div>
+          <div class="col-md-12 col-xs-12">
+            <input
+              type="checkbox"
+              kendoCheckBox
+              [(ngModel)]="data.reminderViaSMS"
+              name="reminderViaSMS"
+              style="margin: 0px"
+            />
+            <span style="font-size: 12px">
+              {{ language.sendReminderViaSMS }}</span
+            >
+          </div>
+          <div class="updateSettings">
+            <button
+              kendoButton
+              [primary]="true"
+              class="form-button"
+              type="submit"
+            >
+              {{ language.updateSettings }}
+            </button>
+          </div>
+        </form>
+      </modal-content>
+      <modal-footer class="modal-footer-none"> </modal-footer>
     </modal>
   </div>
 </div>

@@ -53,14 +53,6 @@
             <li *ngIf="type === userType.owner" class="menu-title">
               {{ language?.settingsPermissionNavigation }}
             </li>
-            <li *ngIf="type === userType.owner">
-              <a routerLink="/dashboard/home/settings/permission-patient-menu"
-                ><i class="fa fa-cogs"></i>
-                <span>{{
-                  language?.perimissionForPatientNavigationMenu
-                }}</span></a
-              >
-            </li>
           </ul>
         </div>
       </div>
