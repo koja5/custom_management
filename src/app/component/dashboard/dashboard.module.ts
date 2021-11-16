@@ -83,6 +83,8 @@ import { MailApproveReservationComponent } from "./parameters/mail-parameters/ma
 import { MailDenyReservationComponent } from "./parameters/mail-parameters/mail-deny-reservation/mail-deny-reservation.component";
 import { ChangeSuperadminProfileComponent } from "./parameters/change-superadmin-profile/change-superadmin-profile.component";
 import { PermissionPatientMenuComponent } from "./settings/permission-patient-menu/permission-patient-menu.component";
+import { AddHolidayComponent } from './administrator/add-holiday/add-holiday.component';
+import { AgendaService, DayService, MonthAgendaService, MonthService, ScheduleModule, WeekService, WorkWeekService } from "@syncfusion/ej2-angular-schedule";
 
 @NgModule({
   declarations: [
@@ -123,7 +125,8 @@ import { PermissionPatientMenuComponent } from "./settings/permission-patient-me
     MailDenyReservationComponent,
     SmsReminderComponent,
     ChangeSuperadminProfileComponent,
-    PermissionPatientMenuComponent
+    PermissionPatientMenuComponent,
+    AddHolidayComponent,
   ],
   imports: [
     CommonModule,
@@ -160,12 +163,19 @@ import { PermissionPatientMenuComponent } from "./settings/permission-patient-me
     DropDownListModule,
     SharedEmailModule,
     SharedSMSModule,
+    ScheduleModule
   ],
   providers: [
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
     },
-  ],
+    DayService,
+    WeekService,
+    WorkWeekService,
+    MonthService,
+    AgendaService,
+    MonthAgendaService
+  ]
 })
-export class DashboardModule {}
+export class DashboardModule { }

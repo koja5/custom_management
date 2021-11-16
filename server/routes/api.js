@@ -13,14 +13,14 @@ const logger = require("./logger");
 const ftpUploadSMS = require("./ftpUploadSMS");
 
 var link = process.env.link_api;
-
-/*var connection = mysql.createPool({
-  host: "185.178.193.141",
-  user: "appproduction.",
-  password: "jBa9$6v7",
-  database: "management"
-});*/
-
+/*
+var connection = mysql.createPool({
+    host: "185.178.193.141",
+    user: "appproduction.",
+    password: "jBa9$6v7",
+    database: "management"
+});
+ */
 var connection = mysql.createPool({
   host: process.env.host,
   user: process.env.user,
@@ -6467,5 +6467,132 @@ router.post("/updateSmsReminderMessage", (req, res, next) => {
 });
 
 /* END SMS REMINDER */
+
+
+// start holidays
+
+router.post("/createHoliday", (req, res, next) => {
+    try {
+      connection.getConnection(function (err, conn) {
+        if (err) {
+          console.error("SQL Connection error: ", err);
+          res.json({
+            code: 100,
+            status: err,
+          });
+        } else {
+          conn.query(
+            "insert into holidays SET ?",[req.body],
+            function (err, rows, fields) {
+              conn.release();
+              if (err) {
+                logger.log("error", err.sql + ". " + err.sqlMessage);
+                res.json(false);
+                console.log(err);
+              } else {
+                res.json(true);
+              }
+            }
+          );
+        }
+      });
+    } catch (ex) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(ex);
+    }
+  });
+
+  router.post("/updateHoliday", (req, res, next) => {
+    try {
+      connection.getConnection(function (err, conn) {
+        if (err) {
+          console.error("SQL Connection error: ", err);
+          res.json({
+            code: 100,
+            status: err,
+          });
+        } else {
+
+          var data = {
+              Subject: req.body.Subject,
+              StartTime: req.body.StartTime,
+              EndTime: req.body.EndTime,
+          };
+
+          conn.query(           
+            "update holidays SET ? where id = '" + req.body.id  + "'",
+             [data],
+            function (err, rows, fields) {
+              conn.release();
+              if (err) {
+                logger.log("error", err.sql + ". " + err.sqlMessage);
+                res.json(false);
+                console.log(err);
+              } else {
+                res.json(true);
+              }
+            }
+          );
+        }
+      });
+    } catch (ex) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(ex);
+    }
+  });
+  
+router.get("/deleteHoliday/:id", (req, res, next) => {
+  try {
+    var reqObj = req.params.id;
+
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      } else {
+        conn.query(
+          "delete from holidays where id = '" + reqObj + "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.get("/getHolidays/:superAdminId", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    var superAdminId = req.params.superAdminId;
+    conn.query(
+      "select * from holidays where superAdminId = '" + superAdminId + "'",
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
+
+//end holidays
 
 module.exports = router;

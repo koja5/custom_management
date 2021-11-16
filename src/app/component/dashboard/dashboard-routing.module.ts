@@ -1,3 +1,4 @@
+import { AddHolidayComponent } from './administrator/add-holiday/add-holiday.component';
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { DashboardComponent } from "./dashboard.component";
@@ -150,6 +151,7 @@ const routes: Routes = [
       },
       { path: "reservations", component: ReservationsComponent },
       { path: "template-account", component: TemplateAccountComponent },
+      { path: "add-holiday", component: AddHolidayComponent },
       { path: "mail-reminder", component: MailReminderComponent },
       {
         path: "mail-approve-reservation",
@@ -185,4 +187,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DashboardRouting {}
+export class DashboardRouting { }
