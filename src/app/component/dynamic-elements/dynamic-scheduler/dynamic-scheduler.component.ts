@@ -103,6 +103,7 @@ import {
 } from "@progress/kendo-angular-dropdowns";
 import { TypeOfEventAction } from "../../enum/typeOfEventAction";
 import { ActivatedRoute } from "@angular/router";
+import { HolidayService } from "src/app/service/holiday.service";
 declare var moment: any;
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
@@ -1100,12 +1101,12 @@ export class DynamicSchedulerComponent implements OnInit {
     const checkCustomerId = this.customerUser.id
       ? this.customerUser
       : {
-          id: args.data.customer_id
-            ? args.data.customer_id
-            : args.data.user.id
+        id: args.data.customer_id
+          ? args.data.customer_id
+          : args.data.user.id
             ? args.data.user.id
             : null,
-        };
+      };
     formValue.user = checkCustomerId;
     formValue.customer_id = checkCustomerId.id;
     formValue.therapy_id = args.data.therapy_id;
@@ -1292,7 +1293,7 @@ export class DynamicSchedulerComponent implements OnInit {
         );
         timeDurationInd =
           Number(informationAboutStore.time_therapy) !==
-          Number(this.timeDuration)
+            Number(this.timeDuration)
             ? 1
             : 0;
         timeDuration = Number(informationAboutStore.time_therapy);
@@ -1310,7 +1311,7 @@ export class DynamicSchedulerComponent implements OnInit {
         } else {
           timeDurationInd =
             Number(informationAboutStore.time_therapy) !==
-            Number(this.timeDuration)
+              Number(this.timeDuration)
               ? 1
               : 0;
           timeDuration = Number(informationAboutStore.time_therapy);
@@ -1369,7 +1370,7 @@ export class DynamicSchedulerComponent implements OnInit {
     this.selectedTarget = closest(
       targetElement,
       ".e-appointment,.e-work-cells," +
-        ".e-vertical-view .e-date-header-wrap .e-all-day-cells,.e-vertical-view .e-date-header-wrap .e-header-cells"
+      ".e-vertical-view .e-date-header-wrap .e-all-day-cells,.e-vertical-view .e-date-header-wrap .e-header-cells"
     );
     if (isNullOrUndefined(this.selectedTarget)) {
       args.cancel = true;
@@ -1581,18 +1582,53 @@ export class DynamicSchedulerComponent implements OnInit {
     private storageService: StorageService,
     private packLanguage: PackLanguageService,
     private accountService: AccountService,
-    private activatedRouter: ActivatedRoute
-  ) {}
+    private activatedRouter: ActivatedRoute,
+    private holidayService: HolidayService,
+  ) { }
 
   ngOnInit() {
     this.initializationConfig();
     this.initializaionData();
+    this.loadHolidays();
     this.helpService.setDefaultBrowserTabTitle();
   }
 
   @HostListener("window:resize", ["$event"])
   onResize(event) {
     this.height = this.dynamicService.getSchedulerHeight() + "px";
+  }
+
+  public loadHolidays(): void {
+
+    const superAdminId = this.helpService.getSuperadmin();
+    this.holidayService.getHolidays(superAdminId).subscribe(result => {
+      result = [{
+        EndTime: new Date("2021-12-07T23:00:00.000Z"),
+        StartTime: new Date("2021-12-06T23:00:00.000Z"),
+        category: "holiday",
+        Subject: "",
+        superAdminId: "4"
+      }]
+
+      if (result && result.length > 0) {
+
+        console.log('holidayss');
+        result.forEach(r => {
+          this.allEvents.push(
+            {
+              Subject: r.Subject,
+              StartTime: new Date(r.StartTime),
+              EndTime: new Date(r.EndTime)
+            }
+          )
+        });
+
+        this.eventSettings.dataSource = this.allEvents;
+      }
+      else {
+        console.log('no holidayss');
+      }
+    });
   }
 
   checkPreselectedStore() {
@@ -1691,6 +1727,8 @@ export class DynamicSchedulerComponent implements OnInit {
     this.eventCategoryService
       .getEventCategory(this.helpService.getSuperadmin())
       .subscribe((data: []) => {
+
+        console.log(data);
         this.eventCategory = data.sort(function (a, b) {
           return a["sequence"] - b["sequence"];
         });
@@ -2322,7 +2360,7 @@ export class DynamicSchedulerComponent implements OnInit {
       value: this.value,
     };
 
-    this.mongo.setUsersFor(item).subscribe((data) => {});
+    this.mongo.setUsersFor(item).subscribe((data) => { });
   }
 
   getTaskForSelectedUsers(value) {
@@ -2700,9 +2738,9 @@ export class DynamicSchedulerComponent implements OnInit {
               new Date(workItem.change) <= date.date &&
               (i + 1 <= this.calendars[0].workTime[date.groupIndex].length - 1
                 ? date.date <
-                  new Date(
-                    this.calendars[0].workTime[date.groupIndex][i + 1].change
-                  )
+                new Date(
+                  this.calendars[0].workTime[date.groupIndex][i + 1].change
+                )
                 : true) &&
               date.date.getDay() - 1 < 5 &&
               date.date.getDay() !== 0
@@ -2711,15 +2749,15 @@ export class DynamicSchedulerComponent implements OnInit {
                 (workItem.times[date.date.getDay() - 1].start <=
                   date.date.getHours() &&
                   workItem.times[date.date.getDay() - 1].end >
-                    date.date.getHours()) ||
+                  date.date.getHours()) ||
                 (workItem.times[date.date.getDay() - 1].start2 <=
                   date.date.getHours() &&
                   workItem.times[date.date.getDay() - 1].end2 >
-                    date.date.getHours()) ||
+                  date.date.getHours()) ||
                 (workItem.times[date.date.getDay() - 1].start3 <=
                   date.date.getHours() &&
                   workItem.times[date.date.getDay() - 1].end3 >
-                    date.date.getHours())
+                  date.date.getHours())
               ) {
                 date.element.style.background = workItem.color;
                 date.element.style.pointerEvents = "auto";
@@ -2816,6 +2854,7 @@ export class DynamicSchedulerComponent implements OnInit {
     this.customer
       .getParameters("Treatment", superadmin)
       .subscribe((data: []) => {
+
         console.log(data);
         this.treatmentValue = data.sort(function (a, b) {
           return a["sequence"] - b["sequence"];
@@ -3516,8 +3555,8 @@ export class DynamicSchedulerComponent implements OnInit {
   copyLinkToTheClinic() {
     this.helpService.copyToClipboard(
       this.helpService.getFullHostName() +
-        "/dashboard/home/task/" +
-        this.selectedStoreId
+      "/dashboard/home/task/" +
+      this.selectedStoreId
     );
     this.helpService.successToastr(
       this.language.successCopiedLinkForClinicReservation,
