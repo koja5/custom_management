@@ -1,7 +1,7 @@
 export interface Request {
     type: string,
     api: string,
-    parametars: string[],
+    parameters: string[],
     fields: any,
     root?: string
   }

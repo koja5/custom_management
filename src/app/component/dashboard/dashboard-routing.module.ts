@@ -35,6 +35,7 @@ import { MailDenyReservationComponent } from "./parameters/mail-parameters/mail-
 import { MailPatientCreatedAccountComponent } from "./parameters/mail-parameters/mail-patient-created-account/mail-patient-created-account.component";
 import { ChangeSuperadminProfileComponent } from "./parameters/change-superadmin-profile/change-superadmin-profile.component";
 import { PermissionPatientMenuComponent } from "./settings/permission-patient-menu/permission-patient-menu.component";
+import { EventCategoryStatisticComponent } from "./parameters/event-category-statistic/event-category-statistic.component";
 
 const routes: Routes = [
   {
@@ -95,6 +96,10 @@ const routes: Routes = [
       {
         path: "event-category",
         component: EventCategoryComponent,
+      },
+      {
+        path: "event-category-statistic",
+        component: EventCategoryStatisticComponent,
       },
       {
         path: "work-time-colors",

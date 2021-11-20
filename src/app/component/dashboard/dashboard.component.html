@@ -278,9 +278,7 @@
 
                           <li
                             class="{{ selectedNodeModel['users'] }}"
-                            *ngIf="
-                              type === userType.owner || type === userType.admin
-                            "
+                            *ngIf="type === userType.owner"
                           >
                             <a
                               (click)="returnActiveNode('users')"
@@ -470,6 +468,23 @@
                                   ><i class="fa fa-paint-brush"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.eventCategoryMenu }}
+                                </a>
+                              </li>
+
+                              <li
+                                class="{{
+                                  selectedNodeModel['event_category_statistic']
+                                }}"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/event-category-statistic"
+                                  (click)="
+                                    returnActiveNode('event_category_statistic')
+                                  "
+                                  class="nav-link"
+                                  ><i class="fa fa-stack-exchange"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.eventCategoryStatistic }}
                                 </a>
                               </li>
 

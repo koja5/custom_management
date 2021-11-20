@@ -1,16 +1,15 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { HelpService } from "src/app/service/help.service";
-import { Field } from "../../models/field";
 import { FieldConfig } from "../../models/field-config";
 import { Query } from "@syncfusion/ej2-data";
 
 @Component({
-  selector: "app-dropdown",
-  templateUrl: "./dropdown.component.html",
-  styleUrls: ["./dropdown.component.scss"],
+  selector: "app-multiselect",
+  templateUrl: "./multiselect.component.html",
+  styleUrls: ["./multiselect.component.scss"],
 })
-export class DropdownComponent implements OnInit, Field {
+export class MultiselectComponent implements OnInit {
   constructor(private helpService: HelpService) {}
   config: FieldConfig;
   group: FormGroup;
@@ -21,6 +20,7 @@ export class DropdownComponent implements OnInit, Field {
   public query: Query = new Query().from("entries");
 
   ngOnInit() {
+    console.log(this.group);
     this.language = this.helpService.getLanguage();
     if (this.config.data && this.config.data["translation"]) {
       this.data =
@@ -54,10 +54,14 @@ export class DropdownComponent implements OnInit, Field {
     this.helpService
       .getApiRequest(
         this.config.request.api,
-        this.helpService.packParametarGet(
-          this.config.data,
-          this.config.request.fields
-        )
+        this.config.request.fields && this.config.request.fields.length > 0
+          ? this.helpService.packParametarGet(
+              this.config.data,
+              this.config.request.fields
+            )
+          : this.helpService.packRequestValueFromParameters(
+              this.config.request.parameters
+            )
       )
       .subscribe((data) => {
         if (this.config.request.root) {

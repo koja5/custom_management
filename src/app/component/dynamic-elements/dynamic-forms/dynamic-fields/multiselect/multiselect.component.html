@@ -1,25 +1,24 @@
-<div *ngIf="language" class="form-group" [ngClass]="config.width">
-  <div
+<div class="form-group" [ngClass]="config.width">
+  <label for="{{ config.name }}">  {{language[config.label] ? language[config.label] : config.label}}</label>
+  <div *ngIf="data"
     class="e-float-input e-control-wrapper"
     [formGroup]="group"
     [ngClass]="{
       'e-error':
         config.field.invalid && (config.field.dirty || config.field.touched)
     }"
+    style="margin-top: 0px !important"
   >
-    <ejs-numerictextbox
-      [id]="config.name"
+    <kendo-multiselect
+      id="ddlelement"
+      [data]="data"
+      [textField]="config.field.text"
+      [valueField]="config.field.value"
+      [valuePrimitive]="true"
       [placeholder]="config.placeholder ? config.placeholder : ''"
+      (filtering)="onFiltering($event)"
       [formControlName]="config.name"
-      [readonly]="config.readonly"
-      [disabled]="config.disabled"
-    ></ejs-numerictextbox>
-    <span class="e-float-line"></span>
-    <label class="e-float-text e-label-top" for="OrderID">
-      {{
-        language[config.label] ? language[config.label] : config.label
-      }}</label
-    >
+    ></kendo-multiselect>
   </div>
   <div
     id="OrderIDError"

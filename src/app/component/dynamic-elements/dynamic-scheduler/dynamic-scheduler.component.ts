@@ -1565,6 +1565,7 @@ export class DynamicSchedulerComponent implements OnInit {
   public expandAdditionalIcon = "k-icon k-i-arrow-60-right";
   public filterToolbarInd = true;
   public calendarRights = true;
+  public eventStatisticConfiguration: any;
 
   constructor(
     public service: TaskService,
@@ -1711,6 +1712,11 @@ export class DynamicSchedulerComponent implements OnInit {
           this.palette.push(data[i]["color"]);
         }
         console.log(this.resources);
+      });
+    this.service
+      .getEventCategoryStatistic(this.helpService.getSuperadmin())
+      .subscribe((data) => {
+        this.eventStatisticConfiguration = data;
       });
   }
 
@@ -2073,6 +2079,12 @@ export class DynamicSchedulerComponent implements OnInit {
         .subscribe((data) => {
           console.log(data);
           this.events = [];
+          if (this.type !== this.userType.patient) {
+            this.packEventStatistic(
+              data["eventStatistic"],
+              this.helpService.getMe()
+            );
+          }
           // this.workTime = this.packWorkTimeToTask(data["workTime"]);
           this.packEventsForShow(data["events"]);
           const objectCalendar = {
@@ -2364,6 +2376,12 @@ export class DynamicSchedulerComponent implements OnInit {
         .getWorkandTasksForUser(this.valueLoop[this.loopIndex].id)
         .subscribe((data) => {
           this.events = [];
+          if (this.type !== this.userType.patient) {
+            this.packEventStatistic(
+              data["eventStatistic"],
+              this.valueLoop[this.loopIndex].id
+            );
+          }
           this.workTime[this.loopIndex] = this.packWorkTimeToTask(
             data["workTime"]
           );
@@ -2413,9 +2431,55 @@ export class DynamicSchedulerComponent implements OnInit {
     this.eventSettings.dataSource = this.allEvents;
   }
 
+  packEventStatistic(eventStatistic, userId) {
+    for (let p = 0; p < this.eventStatisticConfiguration.length; p++) {
+      if (this.eventStatisticConfiguration[p]["display"]) {
+        let listOfCategorie =
+          this.eventStatisticConfiguration[p]["categorie"].split(",");
+        for (let i = 0; i < this.sharedCalendarResources.length; i++) {
+          let sum = 0;
+          for (let j = 0; j < eventStatistic.length; j++) {
+            if (
+              this.sharedCalendarResources[i].id ===
+                eventStatistic[j].creator_id &&
+              userId === eventStatistic[j].creator_id
+            ) {
+              for (let k = 0; k < listOfCategorie.length; k++) {
+                if (eventStatistic[j].id === Number(listOfCategorie[k])) {
+                  sum += eventStatistic[j].statistic;
+                }
+              }
+              if (j === eventStatistic.length - 1) {
+                if (p === 0) {
+                  this.sharedCalendarResources[i].shortname =
+                    this.sharedCalendarResources[i].lastname +
+                    " " +
+                    this.sharedCalendarResources[i].firstname +
+                    " - ";
+                  this.sharedCalendarResources[i].alias_name =
+                    this.sharedCalendarResources[i].lastname +
+                    " " +
+                    this.sharedCalendarResources[i].firstname +
+                    " - ";
+                }
+                this.sharedCalendarResources[i].shortname +=
+                  this.eventStatisticConfiguration[p].shortname + ": " + sum;
+                this.sharedCalendarResources[i].alias_name +=
+                  this.eventStatisticConfiguration[p].shortname + ": " + sum;
+                if (p < this.eventStatisticConfiguration["length"] - 1) {
+                  this.sharedCalendarResources[i].shortname += ", ";
+                  this.sharedCalendarResources[i].alias_name += ", ";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
   selectedStore(event) {
     this.value = null;
-    // localStorage.removeItem('selectedUser');
     this.loading = true;
     this.calendars = [];
     this.selectedStoreId = event;
@@ -2958,7 +3022,10 @@ export class DynamicSchedulerComponent implements OnInit {
             this.isConfirm = data[0].isConfirm;
             this.reminderViaEmail = data[0].reminderViaEmail;
             this.reminderViaSMS = data[0].reminderViaSMS;
-            this.dataForReminder = this.packDataForSendReminder(data[0].email);
+            this.dataForReminder = this.packDataForSendReminder(
+              data[0].email,
+              dataItem.id
+            );
             this.baseDataIndicator = true;
             this.userWidth = "65%";
           });
@@ -3483,7 +3550,7 @@ export class DynamicSchedulerComponent implements OnInit {
     this.requestForConfirmArrival = false;
   }
 
-  packDataForSendReminder(email) {
+  packDataForSendReminder(email, taskId) {
     return {
       email: email,
       mobile: this.mobileValue,
@@ -3495,6 +3562,7 @@ export class DynamicSchedulerComponent implements OnInit {
       storeId: this.selectedStoreId,
       therapy: this.complaintData.therapies_title,
       id: this.customerUser.id,
+      taskId: taskId,
       countryCode: this.helpService.getLocalStorage("countryCode"),
     };
   }

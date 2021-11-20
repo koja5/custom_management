@@ -8,7 +8,7 @@ import { tap } from "rxjs/operators/tap";
 
 import {
   BaseEditService,
-  SchedulerModelFields
+  SchedulerModelFields,
 } from "@progress/kendo-angular-scheduler";
 import { parseDate } from "@progress/kendo-angular-intl";
 
@@ -29,7 +29,7 @@ const fields: SchedulerModelFields = {
   isAllDay: "IsAllDay",
   recurrenceRule: "RecurrenceRule",
   recurrenceId: "RecurrenceID",
-  recurrenceExceptions: "RecurrenceException"
+  recurrenceExceptions: "RecurrenceException",
 };
 
 @Injectable()
@@ -46,8 +46,8 @@ export class TaskService extends BaseEditService<MyEvent> {
       return;
     }
 
-    this.fetch().subscribe(data => {
-      this.data = data.map(item => this.readEvent(item));
+    this.fetch().subscribe((data) => {
+      this.data = data.map((item) => this.readEvent(item));
       this.source.next(this.data);
     });
   }
@@ -70,7 +70,7 @@ export class TaskService extends BaseEditService<MyEvent> {
       completed.push(this.fetch(CREATE_ACTION, created));
     }
 
-    zip(...completed).subscribe(() => this.read());
+    zip(completed).subscribe(() => this.read());
   }
 
   protected fetch(action: string = "", data?: any): Observable<any[]> {
@@ -86,7 +86,7 @@ export class TaskService extends BaseEditService<MyEvent> {
         "callback"
       )
       .pipe(
-        map(res => <any[]>res),
+        map((res) => <any[]>res),
         tap(() => (this.loading = false))
       );
   }
@@ -96,7 +96,7 @@ export class TaskService extends BaseEditService<MyEvent> {
       ...item,
       Start: parseDate(item.Start),
       End: parseDate(item.End),
-      RecurrenceException: this.parseExceptions(item.RecurrenceException)
+      RecurrenceException: this.parseExceptions(item.RecurrenceException),
     };
   }
 
@@ -105,9 +105,9 @@ export class TaskService extends BaseEditService<MyEvent> {
       return "";
     }
 
-    const data = events.map(event => ({
+    const data = events.map((event) => ({
       ...event,
-      RecurrenceException: this.serializeExceptions(event.RecurrenceException)
+      RecurrenceException: this.serializeExceptions(event.RecurrenceException),
     }));
 
     return `&models=${JSON.stringify(data)}`;
@@ -117,37 +117,41 @@ export class TaskService extends BaseEditService<MyEvent> {
     console.log(data);
     this.http
       .post("/api/createTask", data)
-      .map(res => res)
-      .subscribe(val => callback(val));
+      .map((res) => res)
+      .subscribe((val) => callback(val));
   }
 
   updateTask(data, callback) {
     return this.http
       .post("/api/updateTask", data)
-      .map(res => res)
-      .subscribe(val => callback(val));
+      .map((res) => res)
+      .subscribe((val) => callback(val));
   }
 
   deleteTask(id) {
-    return this.http.get("/api/deleteTask/" + id).map(res => res);
+    return this.http.get("/api/deleteTask/" + id).map((res) => res);
   }
 
   getTasks(id) {
     return this.http
       .get<SchedulerEvent[]>("/api/getTasks/" + id)
-      .map(res => res);
+      .map((res) => res);
+  }
+
+  getEventCategoryStatistic(superadmin) {
+    return this.http.get("/api/getEventCategoryStatistic/" + superadmin);
   }
 
   getTasksForUser(id) {
     return this.http
       .get<SchedulerEvent[]>("/api/getTasksForUser/" + id)
-      .map(res => res);
+      .map((res) => res);
   }
 
   getWorkandTasksForUser(id) {
     return this.http
       .get<SchedulerEvent[]>("/api/getWorkandTaskForUser/" + id)
-      .map(res => res);
+      .map((res) => res);
   }
 
   getTasksForStore(id, idUser, typeOfUser) {
@@ -155,41 +159,43 @@ export class TaskService extends BaseEditService<MyEvent> {
       .get<SchedulerEvent[]>(
         "/api/getTasksForStore/" + id + "/" + idUser + "/" + typeOfUser
       )
-      .map(res => res);
+      .map((res) => res);
   }
 
   getUsersInCompany(id, callback) {
     return this.http
       .get("/api/getUsersInCompany/" + id)
-      .map(res => res)
-      .subscribe(val => callback(val));
+      .map((res) => res)
+      .subscribe((val) => callback(val));
   }
 
   getUsersAllowedOnlineInCompany(id, callback) {
     return this.http
       .get("/api/getUsersAllowedOnlineInCompany/" + id)
-      .map(res => res)
-      .subscribe(val => callback(val));
+      .map((res) => res)
+      .subscribe((val) => callback(val));
   }
 
   getCompanyUsers(id, callback) {
     return this.http
       .get("/api/getUsers/" + id)
-      .map(res => res)
-      .subscribe(val => callback(val));
+      .map((res) => res)
+      .subscribe((val) => callback(val));
   }
 
   getTaskColor() {
     return this.http
       .get("../assets/configuration/task-color.json")
-      .map(res => res);
+      .map((res) => res);
   }
 
   getWorkTimeForUser(id) {
-    return this.http.get("/api/getWorkTimeForUser/" + id).map(res => res);
+    return this.http.get("/api/getWorkTimeForUser/" + id).map((res) => res);
   }
 
   sendConfirmArrivalAgain(data) {
-    return this.http.post("/api/sendConfirmArrivalAgain", data).map(res => res);
+    return this.http
+      .post("/api/sendConfirmArrivalAgain", data)
+      .map((res) => res);
   }
 }

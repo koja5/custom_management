@@ -11,6 +11,7 @@
       "errorExecutedActionTitle": { "type": "string" },
       "errorExecutedActionText": { "type": "string" },
       "actionTitle": { "type": "string" },
+      "areYouSure": { "type": "string" },
       "clickAgreeText": { "type": "string" },
       "termOfUse": { "type": "string" },
       "subject": { "type": "string" },
@@ -97,6 +98,7 @@
       "selectStoreIndicatorTitle": { "type": "string" },
       "selectStoreIndicatorText": { "type": "string" },
       "color": { "type": "string" },
+      "allowSendInformation": { "type": "string" },
       "start": { "type": "string" },
       "startTime": { "type": "string" },
       "end": { "type": "string" },
@@ -160,6 +162,7 @@
       "csMenu": { "type": "string" },
       "stateMenu": { "type": "string" },
       "eventCategoryMenu": { "type": "string" },
+      "eventCategoryStatistic": { "type": "string" },
       "workTimeColorsMenu": { "type": "string" },
       "areaCode": { "type": "string" },
       "systemSettingsTitleMenu": { "type": "string" },
@@ -566,7 +569,12 @@
       "smsSignatureAddress": { "type": "string" },
       "smsSignatureTelephone": { "type": "string" },
       "smsSignatureMobile": { "type": "string" },
-      "smsSignatureEmail": { "type": "string" }
+      "smsSignatureEmail": { "type": "string" },
+      "sequenceOfCount": { "type": "string" },
+      "nameOfCount": { "type": "string" },
+      "shortnameOfCount": { "type": "string" },
+      "categoryOfCount": { "type": "string" },
+      "displayOfCount": { "type": "string" }
     }
   },
   "layout": [
@@ -606,7 +614,7 @@
             { "key": "clickAgreeText" },
             { "key": "termOfUse" },
             { "key": "actionTitle" },
-            {}
+            { "key": "areYouSure" }
           ]
         }
       ]
@@ -1055,6 +1063,7 @@
             { "key": "csMenu" },
             { "key": "stateMenu" },
             { "key": "eventCategoryMenu" },
+            { "key": "eventCategoryStatistic" },
             { "key": "workTimeColorsMenu" }
           ]
         },
@@ -1404,7 +1413,7 @@
             { "key": "category" },
             { "key": "webAddress" },
             { "key": "shortname" },
-            { }
+            { "key": "allowSendInformation" }
           ]
         }
       ]
@@ -2880,6 +2889,36 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [{ "key": "smsSignatureEmail" }, {}, {}, {}]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Event category statistic",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "sequenceOfCount" },
+            { "key": "nameOfCount" },
+            { "key": "shortnameOfCount" },
+            { "key": "categoryOfCount" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "displayOfCount" },
+            { },
+            { },
+            { }
+          ]
         }
       ]
     }

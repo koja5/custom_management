@@ -220,4 +220,22 @@ export class HelpService {
     }
     return configField;
   }
+
+  packRequestValueFromParameters(parameters: any) {
+    let data = [];
+    for(let i = 0; i < parameters.length; i++) {
+      switch(parameters[i]) {
+        case "superadmin": 
+          data.push(this.getSuperadmin());
+          break;
+        case "getMe":
+          data.push(this.getMe());
+          break;
+        default:
+          break;
+      }
+    }
+    return data;
+  }
+
 }

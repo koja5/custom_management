@@ -16,13 +16,16 @@ import { CheckBoxModule, RadioButtonModule, SwitchModule } from '@syncfusion/ej2
 import { RadioComponent } from './dynamic-fields/radio/radio.component';
 import { CheckboxComponent } from './dynamic-fields/checkbox/checkbox.component';
 import { SwitchComponent } from './dynamic-fields/switch/switch.component';
+import { MultiselectComponent } from './dynamic-fields/multiselect/multiselect.component';
+import { MultiSelectModule } from '@progress/kendo-angular-dropdowns';
 
 @NgModule({
-  declarations: [DynamicFieldsDirective, DropdownComponent, TextboxComponent, TextareaComponent, NumericComponent, DatepickerComponent, ButtonComponent, RadioComponent, CheckboxComponent, SwitchComponent],
+  declarations: [DynamicFieldsDirective, DropdownComponent, TextboxComponent, TextareaComponent, NumericComponent, DatepickerComponent, ButtonComponent, RadioComponent, CheckboxComponent, SwitchComponent, MultiselectComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     TextBoxModule, DropDownListModule,
+    MultiSelectModule,
     FormsModule,
     DatePickerModule,
     NumericTextBoxModule,
@@ -31,6 +34,6 @@ import { SwitchComponent } from './dynamic-fields/switch/switch.component';
     SwitchModule
   ],
   exports: [DynamicFieldsDirective],
-  entryComponents: [TextboxComponent, DropdownComponent, TextareaComponent, DatepickerComponent, ButtonComponent, RadioComponent, CheckboxComponent, SwitchComponent],
+  entryComponents: [TextboxComponent, DropdownComponent, TextareaComponent, NumericComponent, DatepickerComponent, ButtonComponent, RadioComponent, CheckboxComponent, SwitchComponent, MultiselectComponent],
 })
 export class DynamicFormsModule { }

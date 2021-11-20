@@ -19,6 +19,7 @@ export class NavigationMenuModel {
     CS?: string;
     state?: string;
     event_category?: string;
+    event_category_statistic?: string;
     work_time_colors?: string;
     translation?: string;
     my_complaint?: string;

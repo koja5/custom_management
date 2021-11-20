@@ -2184,16 +2184,23 @@ router.get("/getWorkandTaskForUser/:id", function (req, res, next) {
             "select t.*, e.color from tasks t join event_category e on t.colorTask = e.id where creator_id = ?",
             [id],
             function (err, events) {
-              conn.release();
-              if (!err) {
-                res.json({
-                  events: events,
-                  workTime: work,
-                });
-              } else {
-                res.json(err);
-                logger.log("error", err.sql + ". " + err.sqlMessage);
-              }
+              conn.query(
+                "select COUNT(t.id) as 'statistic', e.category, e.id, t.creator_id from tasks t join event_category e on t.colorTask = e.id where creator_id = ? GROUP BY e.id",
+                [id],
+                function (err, eventStatistic) {
+                  conn.release();
+                  if (!err) {
+                    res.json({
+                      eventStatistic: eventStatistic,
+                      events: events,
+                      workTime: work,
+                    });
+                  } else {
+                    res.json(err);
+                    logger.log("error", err.sql + ". " + err.sqlMessage);
+                  }
+                }
+              );
             }
           );
         }
@@ -4458,7 +4465,7 @@ router.post("/createEventCategory", function (req, res, next) {
       superadmin: req.body.superadmin,
     };
 
-    conn.query("insert into event_category SET ?", data, function (err, rows) {
+    conn.query("insert into event_category SET ?", req.body, function (err, rows) {
       conn.release();
       if (!err) {
         if (!err) {
@@ -4512,18 +4519,18 @@ router.post("/updateEventCategory", function (req, res, next) {
     }
 
     var response = null;
-    var data = {
+    /*var data = {
       id: req.body.id,
       category: req.body.category,
       sequence: req.body.sequence,
       color: req.body.color,
       comment: req.body.comment,
       superadmin: req.body.superadmin,
-    };
+    };*/
 
     conn.query(
       "update event_category set ? where id = '" + req.body.id + "'",
-      data,
+      req.body,
       function (err, rows, fields) {
         conn.release();
         if (err) {
@@ -5112,14 +5119,15 @@ router.post("/sendSMS", function (req, res) {
               res.json(err);
             } else {
               conn.query(
-                "select * from customers c join sms_reminder_message sr on c.storeId = sr.superadmin join store s on c.storeId = s.superadmin where c.id = ? and s.id = ?",
-                [req.body.id, req.body.storeId],
+                "select * from customers c join sms_reminder_message sr on c.storeId = sr.superadmin join store s on c.storeId = s.superadmin join tasks t on s.id = t.storeId join event_category e on t.colorTask = e.id where c.id = ? and s.id = ? and t.id = ? and e.allowSendInformation = 1",
+                [req.body.id, req.body.storeId, req.body.taskId],
                 function (err, smsMessage, fields) {
                   var sms = {};
                   var signature = "";
                   var dateMessage = "";
                   var time = "";
                   var clinic = "";
+                  console.log(smsMessage);
                   if (smsMessage.length > 0) {
                     sms = smsMessage[0];
                     if (sms.signatureAvailable) {
@@ -5148,6 +5156,7 @@ router.post("/sendSMS", function (req, res) {
                       clinic =
                         sms.smsClinic + " " + req.body.storename + " \n\n";
                     }
+                    console.log(smsMessage);
                   }
                   var message =
                     (sms.smsSubject
@@ -6467,5 +6476,127 @@ router.post("/updateSmsReminderMessage", (req, res, next) => {
 });
 
 /* END SMS REMINDER */
+
+/* EVENT CATEGORY STATISTIC */
+
+router.get("/getEventCategoryStatistic/:superadmin", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query(
+      "SELECT * from event_category_statistic where superadmin = ?",
+      [req.params.superadmin],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
+      }
+    );
+  });
+});
+
+router.post("/createEventCategoryStatistic", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        req.body.categorie = req.body.categorie.join(',');
+        conn.query(
+          "insert into event_category_statistic SET ?",
+          [req.body],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/updateEventCategoryStatistic", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        req.body.categorie = req.body.categorie.join(',');
+        conn.query(
+          "update event_category_statistic SET ? where id = ?",
+          [req.body, req.body.id],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/deleteEventCategoryStatistic", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "delete from event_category_statistic where id = '" + req.body.id + "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(false);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+/* END EVENT CATEGORY STATISTIC */
 
 module.exports = router;

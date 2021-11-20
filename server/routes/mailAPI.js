@@ -270,7 +270,7 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
     }
 
     conn.query(
-      "SELECT c.shortname, c.email as customer_email, s.*, t.start, t.end, u.lastname, u.firstname, th.therapies_title, c.storeId from customers c join tasks t on c.id = t.customer_id join therapy th on t.therapy_id = th.id join store s on t.storeId = s.id  join users u on t.creator_id = u.id where c.id = ? and t.id = ?",
+      "SELECT c.shortname, c.email as customer_email, s.*, t.start, t.end, u.lastname, u.firstname, th.therapies_title, c.storeId from customers c join tasks t on c.id = t.customer_id join therapy th on t.therapy_id = th.id join store s on t.storeId = s.id  join users u on t.creator_id = u.id join event_category e on t.colorTask = e.id where c.id = ? and t.id = ? and e.allowSendInformation = 1",
       [req.body.customer_id, req.body.id],
       function (err, rows, fields) {
         if (err) {
@@ -887,8 +887,8 @@ router.post("/sendReminderViaEmailManual", function (req, res) {
 
   connection.getConnection(function (err, conn) {
     conn.query(
-      "select mr.*, s.*, s.place as store_place from customers c join mail_reminder_message mr on c.storeId = mr.superadmin join store s on c.storeId = s.superadmin where c.id = ? and s.id = ?",
-      [req.body.id, req.body.storeId],
+      "select mr.*, s.*, s.place as store_place from customers c join mail_reminder_message mr on c.storeId = mr.superadmin join store s on c.storeId = s.superadmin join tasks t on s.id = t.storeId join event_category e on t.colorTask = e.id where c.id = ? and s.id = ? and t.id = ? and e.allowSendInformation = 1",
+      [req.body.id, req.body.storeId, req.body.taskId],
       function (err, mailMessage, fields) {
         if (err) {
           res.json(false);

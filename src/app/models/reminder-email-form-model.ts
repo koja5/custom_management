@@ -10,6 +10,7 @@ export class ReminderEmailFormModel {
     doctor: string;
     month: string;
     day: string;
+    taskId?: string;
     language?: any;
     id?: string;
     countryCode?: string;
