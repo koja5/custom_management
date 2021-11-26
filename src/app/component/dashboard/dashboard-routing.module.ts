@@ -36,6 +36,7 @@ import { MailPatientCreatedAccountComponent } from "./parameters/mail-parameters
 import { ChangeSuperadminProfileComponent } from "./parameters/change-superadmin-profile/change-superadmin-profile.component";
 import { PermissionPatientMenuComponent } from "./settings/permission-patient-menu/permission-patient-menu.component";
 import { EventCategoryStatisticComponent } from "./parameters/event-category-statistic/event-category-statistic.component";
+import { UserAccessComponent } from "./parameters/user-access/user-access.component";
 
 const routes: Routes = [
   {
@@ -181,6 +182,10 @@ const routes: Routes = [
       {
         path: "permission-patient-menu",
         component: PermissionPatientMenuComponent,
+      },
+      {
+        path: "user-access",
+        component: UserAccessComponent,
       },
     ],
   },

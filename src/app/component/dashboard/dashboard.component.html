@@ -674,6 +674,25 @@
                                   }}
                                 </a>
                               </li>
+                              <li
+                                class="{{
+                                  selectedNodeModel['user_access']
+                                }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/user-access"
+                                  (click)="
+                                    returnActiveNode('user_access')
+                                  "
+                                  class="nav-link"
+                                  ><i class="fa fa-universal-access"></i>
+                                  <span class="navigation-link"></span>
+                                  {{
+                                    language?.userAccess
+                                  }}
+                                </a>
+                              </li>
                             </ul>
                           </li>
                           <li

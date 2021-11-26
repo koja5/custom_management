@@ -181,6 +181,7 @@
       "mailPatientFormRegistration": { "type": "string" },
       "smsReminderMessage": { "type": "string" },
       "changeSuperadminProfile": { "type": "string" },
+      "userAccess": { "type": "string" },
       "reservations": { "type": "string" },
       "pagerItemsPerPage": { "type": "string" },
       "addNew": { "type": "string" },
@@ -190,7 +191,7 @@
       "discardChanges": { "type": "string" },
       "noRecordYet": { "type": "string" },
       "cancel": { "type": "string" },
-      "remove": {"type": "string"},
+      "remove": { "type": "string" },
       "category": { "type": "string" },
       "webAddress": { "type": "string" },
       "shortname": { "type": "string" },
@@ -574,7 +575,106 @@
       "nameOfCount": { "type": "string" },
       "shortnameOfCount": { "type": "string" },
       "categoryOfCount": { "type": "string" },
-      "displayOfCount": { "type": "string" }
+      "displayOfCount": { "type": "string" },
+      "termsHeaderTitleBrand": {
+        "type": "string"
+      },
+      "termsHeaderTitle": {
+        "type": "string"
+      },
+      "termsEffectiveDate": {
+        "type": "string"
+      },
+      "termsEffectiveDateValue": {
+        "type": "string"
+      },
+      "termsWelcomeTitle": {
+        "type": "string"
+      },
+      "termsWelcomeText": {
+        "type": "string"
+      },
+      "termsShow": {
+        "type": "string"
+      },
+      "termsItems": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "text": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "privacyHeaderTitle": {
+        "type": "string"
+      },
+      "privacyLastModificationDate": {
+        "type": "string"
+      },
+      "privacyLastModificationDateValue": {
+        "type": "string"
+      },
+      "privacyShow": {
+        "type": "string"
+      },
+      "privacyIntroductionTitle": {
+        "type": "string"
+      },
+      "privacyIntroductionText": {
+        "type": "string"
+      },
+      "privacyItems": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "text": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "impressumHeaderTitle": {
+        "type": "string"
+      },
+      "impressumLastModificationDate": {
+        "type": "string"
+      },
+      "impressumLastModificationDateValue": {
+        "type": "string"
+      },
+      "impressumShow": {
+        "type": "string"
+      },
+      "impressumIntroductionTitle": {
+        "type": "string"
+      },
+      "impressumIntroductionText": {
+        "type": "string"
+      },
+      "impressumItems": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "text": {
+              "type": "string"
+            }
+          }
+        }
+      }
     }
   },
   "layout": [
@@ -1111,6 +1211,12 @@
             { "key": "smsReminderMessage" },
             { "key": "changeSuperadminProfile" }
           ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [{ "key": "userAccess" }, {}, {}, {}]
         }
       ]
     },
@@ -2913,11 +3019,243 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
+          "items": [{ "key": "displayOfCount" }, {}, {}, {}]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Terms",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
           "items": [
-            { "key": "displayOfCount" },
-            { },
-            { },
-            { }
+            {
+              "key": "termsHeaderTitleBrand"
+            },
+            {
+              "key": "termsHeaderTitle"
+            },
+            {
+              "key": "termsEffectiveDate"
+            },
+            {
+              "key": "termsEffectiveDateValue"
+            },
+            {
+              "key": "termsShow"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "termsWelcomeTitle"
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "termsWelcomeText",
+              "type": "textarea"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "termsItems",
+              "type": "array",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                {
+                  "type": "div",
+                  "items": [
+                    {
+                      "key": "termsItems[].title"
+                    },
+                    {
+                      "key": "termsItems[].text",
+                      "type": "textarea"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Privacy & policy",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "privacyHeaderTitle"
+            },
+            {
+              "key": "privacyLastModificationDate"
+            },
+            {
+              "key": "privacyLastModificationDateValue"
+            },
+            {
+              "key": "privacyShow"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "privacyIntroductionTitle"
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "privacyIntroductionText",
+              "type": "textarea"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "privacyItems",
+              "type": "array",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                {
+                  "type": "div",
+                  "items": [
+                    {
+                      "key": "privacyItems[].title"
+                    },
+                    {
+                      "key": "privacyItems[].text",
+                      "type": "textarea"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Impressum",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "impressumHeaderTitle"
+            },
+            {
+              "key": "impressumLastModificationDate"
+            },
+            {
+              "key": "impressumLastModificationDateValue"
+            },
+            {
+              "key": "impressumShow"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "impressumIntroductionTitle"
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "impressumIntroductionText",
+              "type": "textarea"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "impressumItems",
+              "type": "array",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                {
+                  "type": "div",
+                  "items": [
+                    {
+                      "key": "impressumItems[].title"
+                    },
+                    {
+                      "key": "impressumItems[].text",
+                      "type": "textarea"
+                    }
+                  ]
+                }
+              ]
+            }
           ]
         }
       ]

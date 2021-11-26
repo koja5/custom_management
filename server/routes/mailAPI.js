@@ -320,8 +320,8 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
                 (endHours < 10 ? "0" + endHours : endHours) +
                 ":" +
                 (endMinutes < 10 ? "0" + endMinutes : endMinutes);
-                console.log(mail);
-                console.log(to);
+              console.log(mail);
+              console.log(to);
               var mailOptions = {
                 from: '"ClinicNode" support@app-production.eu',
                 subject: mail.mailSubject
@@ -344,9 +344,10 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
                   finalGreeting: mail.mailFinalGreeting
                     ? mail.mailFinalGreeting
                     : req.body.language?.finalGreeting,
-                  signature: signatureAvailable && mail.mailSignature
+                  signature:
+                    signatureAvailable && mail.mailSignature
                       ? mail.mailSignature
-                    : "",
+                      : "",
                   thanksForUsing: mail.mailThanksForUsing
                     ? mail.mailThanksForUsing
                     : req.body.language?.thanksForUsing,
@@ -373,7 +374,7 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
                     : req.body.language?.finalMessageForConfirmArrival,
                   confirmArrivalButtonText:
                     req.body.language?.confirmArrivalButtonText,
-                    signatureAddress:
+                  signatureAddress:
                     signatureAvailable &&
                     mail.signatureAddress &&
                     (to.street || to.zipcode || to.place)
@@ -386,7 +387,9 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
                         to.place
                       : "",
                   signatureTelephone:
-                    signatureAvailable && mail.signatureTelephone && to.telephone
+                    signatureAvailable &&
+                    mail.signatureTelephone &&
+                    to.telephone
                       ? mail.signatureTelephone + " " + to.telephone
                       : "",
                   signatureMobile:
@@ -924,9 +927,10 @@ router.post("/sendReminderViaEmailManual", function (req, res) {
             finalGreeting: mail?.mailFinalGreeting
               ? mail?.mailFinalGreeting
               : req.body.language?.finalGreeting,
-            signature: signatureAvailable && mail.mailSignature
-                      ? mail.mailSignature
-                    : "",
+            signature:
+              signatureAvailable && mail.mailSignature
+                ? mail.mailSignature
+                : "",
             thanksForUsing: mail?.mailThanksForUsing
               ? mail?.mailThanksForUsing
               : req.body.language?.thanksForUsing,
@@ -990,6 +994,69 @@ router.post("/sendReminderViaEmailManual", function (req, res) {
         });
       }
     );
+  });
+});
+
+router.post("/confirmUserViaMacAddress", function (req, res) {
+  console.log("MAIL MAIL:");
+  console.log(req.body);
+
+  router.post("/sendReminderViaEmailManual", function (req, res) {
+    var reminderTemplate = fs.readFileSync(
+      "./server/routes/templates/approveUserAccess.hjs",
+      "utf-8"
+    );
+    var compiledTemplate = hogan.compile(reminderTemplate);
+
+    var convertToDate = new Date(req.body.date);
+    var hours = convertToDate.getHours();
+    var minutes = convertToDate.getMinutes();
+    var date =
+      convertToDate.getDate() +
+      "." +
+      (convertToDate.getMonth() + 1) +
+      "." +
+      convertToDate.getFullYear();
+    var day = convertToDate.getDate();
+    var month = monthNames[convertToDate.getMonth()];
+    var start =
+      (hours < 10 ? "0" + hours : hours) +
+      ":" +
+      (hours < 10 ? "0" + hours : hours);
+
+    var mailOptions = {
+      from: '"ClinicNode" support@app-production.eu',
+      to: req.body.email,
+      subject: "Confirm",
+      html: compiledTemplate.render({
+        initialGreeting: "Zdravo",
+        introductoryMessage: "Obavestavamo vas da imamo pokusaj prijavljivanja sa podacima u nastavku. Molimo Vas pristupite kontrolnoj tabli i odobrite pristup!",
+        nameMessage: "Ime",
+        macAddressMessage: "Mac adresa",
+        datumMessage: "Datum prijavljivanja",
+        name: req.body.firstname + " " + req.body.lastname,
+        macAddress: req.body.mac_address,
+        date: day + "." + month + "." + year + " - " + hours + ":" + minutes,
+        month: month,
+        day: day
+      }),
+    };
+
+    smtpTransport.sendMail(mailOptions, function (error, response) {
+      if (error) {
+        logger.log(
+          "info",
+          `Error to sent reminder via email on EMAIL: ${req.body.email}. Error: ${error}`
+        );
+        res.send(false);
+      } else {
+        logger.log(
+          "info",
+          `Sent reminder via email on EMAIL: ${req.body.email}`
+        );
+        res.send(true);
+      }
+    });
   });
 });
 

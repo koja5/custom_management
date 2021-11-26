@@ -41,4 +41,5 @@ export class NavigationMenuModel {
     sms_reminder?: string;
     change_superadmin_profile?: string;
     permission_patient_menu?: string;
+    user_access?: string;
 }

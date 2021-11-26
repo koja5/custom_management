@@ -11,6 +11,7 @@ const passwordGenerate = require("generate-password");
 var request = require("request");
 const logger = require("./logger");
 const ftpUploadSMS = require("./ftpUploadSMS");
+const macAddress = require("os").networkInterfaces();
 
 var link = process.env.link_api;
 
@@ -372,46 +373,161 @@ router.post("/login", (req, res, next) => {
     var reqObj = req.body;
     connection.getConnection(function (err, conn) {
       if (err) {
-        logger.log("error", err.sql + ". " + err.sqlMessage);
+        // logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
       } else {
+        var myMacAddress = macAddress["Wi-Fi"][0]["mac"];
         conn.query(
           "SELECT * FROM users WHERE email=? AND password=?",
           [reqObj.email, sha1(reqObj.password)],
           function (err, rows, fields) {
             if (err) {
-              logger.log("error", err.sql + ". " + err.sqlMessage);
+              // logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(err);
             }
+            console.log(rows);
             if (rows.length >= 1 && rows[0].active === 1) {
-              conn.release();
-              logger.log(
+              /*logger.log(
                 "info",
                 `User ${req.body.email} is SUCCESS login on a system like a USER!`
+              );*/
+              conn.query(
+                "SELECT * FROM user_access where user_id = ?",
+                [rows[0].id],
+                function (err, res_access, fields) {
+                  if (res_access.length > 0) {
+                    var deny_access = true;
+                    for (let i = 0; i < res_access.length; i++) {
+                      if (
+                        res_access[i].mac_address === myMacAddress &&
+                        res_access[i].access
+                      ) {
+                        conn.release();
+                        deny_access = false;
+                        res.send({
+                          login: true,
+                          notVerified: rows[0].active,
+                          user: rows[0].shortname,
+                          type: rows[0].type,
+                          id: rows[0].id,
+                          storeId: rows[0].storeId,
+                          superadmin: rows[0].superadmin,
+                        });
+                      } else if (
+                        res_access[i].mac_address === myMacAddress &&
+                        !res_access[i].access
+                      ) {
+                        conn.release();
+                        deny_access = false;
+                        res.send({
+                          login: false,
+                        });
+                      }
+                    }
+                    if (deny_access) {
+                      res.send({
+                        login: false,
+                      });
+
+                      var access_date = new Date();
+
+                      var access_data = {
+                        user_id: rows[0].id,
+                        superadmin: rows[0].superadmin,
+                        mac_address: myMacAddress,
+                        date: access_date,
+                        access: 0,
+                      };
+
+                      conn.query(
+                        "insert into user_access set ?",
+                        [access_data],
+                        function (err, superadmin, fields) {}
+                      );
+
+                      conn.query(
+                        "select * from users_superadmin where id = ?",
+                        [rows[0].superadmin],
+                        function (err, superadmin, fields) {
+                          conn.release();
+                          console.log(superadmin);
+                          var body = {
+                            email: superadmin[0].email,
+                            firstname: rows[0].firstname,
+                            lastname: rows[0].lastname,
+                            data: access_date,
+                            mac_address: myMacAddress,
+                          };
+
+                          var options = {
+                            url: link + "confirmUserViaMacAddress",
+                            method: "POST",
+                            body: body,
+                            json: true,
+                          };
+                          request(options, function (error, response, body) {});
+                        }
+                      );
+                    }
+                  } else {
+                    res.send({
+                      login: false,
+                    });
+                    var access_date = new Date();
+
+                    var access_data = {
+                      user_id: rows[0].id,
+                      superadmin: rows[0].superadmin,
+                      mac_address: myMacAddress,
+                      date: access_date,
+                      access: 0,
+                    };
+
+                    conn.query(
+                      "insert into user_access set ?",
+                      [access_data],
+                      function (err, superadmin, fields) {}
+                    );
+
+                    conn.query(
+                      "select * from users_superadmin where id = ?",
+                      [rows[0].superadmin],
+                      function (err, superadmin, fields) {
+                        conn.release();
+                        var body = {
+                          email: superadmin[0].email,
+                          firstname: rows[0].firstname,
+                          lastname: rows[0].lastname,
+                          data: access_date,
+                          mac_address: myMacAddress,
+                        };
+
+                        var options = {
+                          url: link + "confirmUserViaMacAddress",
+                          method: "POST",
+                          body: body,
+                          json: true,
+                        };
+                        request(options, function (error, response, body) {});
+                      }
+                    );
+                  }
+                }
               );
-              res.send({
-                login: true,
-                notVerified: rows[0].active,
-                user: rows[0].shortname,
-                type: rows[0].type,
-                id: rows[0].id,
-                storeId: rows[0].storeId,
-                superadmin: rows[0].superadmin,
-              });
             } else {
               conn.query(
                 "SELECT * FROM users_superadmin WHERE email=? AND password=?",
                 [reqObj.email, sha1(reqObj.password)],
                 function (err, rows, fields) {
                   if (err) {
-                    logger.log("error", err.sql + ". " + err.sqlMessage);
+                    // logger.log("error", err.sql + ". " + err.sqlMessage);
                     res.json(err);
                   }
                   if (rows.length >= 1 && rows[0].active === 1) {
-                    logger.log(
+                    /*logger.log(
                       "info",
                       `User ${req.body.email} is SUCCESS login on a system like a SUPERADMIN!`
-                    );
+                    );*/
                     res.send({
                       login: true,
                       notVerified: rows[0].active,
@@ -435,16 +551,16 @@ router.post("/login", (req, res, next) => {
                       [reqObj.email, sha1(reqObj.password)],
                       function (err, rows, fields) {
                         if (err) {
-                          logger.log("error", err.sql + ". " + err.sqlMessage);
+                          // logger.log("error", err.sql + ". " + err.sqlMessage);
                           res.json(err);
                         }
 
                         if (rows.length >= 1) {
                           conn.release();
-                          logger.log(
+                          /*logger.log(
                             "info",
                             `User ${req.body.email} is SUCCESS login on a system like a PATIENT!`
-                          );
+                          );*/
                           res.send({
                             login: true,
                             type: 4,
@@ -455,14 +571,14 @@ router.post("/login", (req, res, next) => {
                             superadmin: rows[0].storeId,
                           });
                         } else {
-                          logger.log(
+                          /* logger.log(
                             "error",
                             `Bad username and password for users ${req.body.email}`
-                          );
-                          logger.log(
+                          );*/
+                          /*logger.log(
                             "warn",
                             `User ${req.body.email} is NOT SUCCESS login on a system!`
-                          );
+                          );*/
                           res.send({
                             login: false,
                           });
@@ -4465,20 +4581,24 @@ router.post("/createEventCategory", function (req, res, next) {
       superadmin: req.body.superadmin,
     };
 
-    conn.query("insert into event_category SET ?", req.body, function (err, rows) {
-      conn.release();
-      if (!err) {
+    conn.query(
+      "insert into event_category SET ?",
+      req.body,
+      function (err, rows) {
+        conn.release();
         if (!err) {
-          response = true;
+          if (!err) {
+            response = true;
+          } else {
+            response.success = false;
+          }
+          res.json(response);
         } else {
-          response.success = false;
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
         }
-        res.json(response);
-      } else {
-        logger.log("error", err.sql + ". " + err.sqlMessage);
-        res.json(err);
       }
-    });
+    );
   });
 });
 
@@ -5131,18 +5251,34 @@ router.post("/sendSMS", function (req, res) {
                   if (smsMessage.length > 0) {
                     sms = smsMessage[0];
                     if (sms.signatureAvailable) {
-                      if ((sms.street || sms.zipcode || sms.place) && sms.smsSignatureAddress) {
+                      if (
+                        (sms.street || sms.zipcode || sms.place) &&
+                        sms.smsSignatureAddress
+                      ) {
                         signature +=
-                          sms.smsSignatureAddress + "\n" + sms.street + " \n" + sms.zipcode + " " + sms.place + "\n";
+                          sms.smsSignatureAddress +
+                          "\n" +
+                          sms.street +
+                          " \n" +
+                          sms.zipcode +
+                          " " +
+                          sms.place +
+                          "\n";
                       }
-                      if (sms.telephone && sms.smsSignatureTelephone ) {
-                        signature += sms.smsSignatureTelephone + " " + sms.telephone + " \n";
+                      if (sms.telephone && sms.smsSignatureTelephone) {
+                        signature +=
+                          sms.smsSignatureTelephone +
+                          " " +
+                          sms.telephone +
+                          " \n";
                       }
                       if (sms.mobile && sms.smsSignatureMobile) {
-                        signature += sms.smsSignatureMobile + " " + sms.mobile + " \n";
+                        signature +=
+                          sms.smsSignatureMobile + " " + sms.mobile + " \n";
                       }
                       if (sms.email && sms.smsSignatureEmail) {
-                        signature += sms.smsSignatureEmail + " " + sms.email + " \n";
+                        signature +=
+                          sms.smsSignatureEmail + " " + sms.email + " \n";
                       }
                     }
 
@@ -5711,7 +5847,6 @@ function insertFromTemplate(conn, category, account_id, id) {
   );
 }
 
-
 function insertFromTemplateForUsers(conn, category, account_id, id) {
   conn.query(
     "SELECT * from " + category + " where superadmin = ?",
@@ -5737,14 +5872,10 @@ function insertFromTemplateForUsers(conn, category, account_id, id) {
             function (err, uw) {
               uw.user_id = to.id;
               delete uw.id;
-              conn.query(
-                "insert into work SET ?",
-                uw,
-                function (err, res) {
-                  console.log(err);
-                  console.log(res);
-                }
-              );
+              conn.query("insert into work SET ?", uw, function (err, res) {
+                console.log(err);
+                console.log(res);
+              });
             }
           );
         });
@@ -6511,7 +6642,7 @@ router.post("/createEventCategoryStatistic", (req, res, next) => {
           status: err,
         });
       } else {
-        req.body.categorie = req.body.categorie.join(',');
+        req.body.categorie = req.body.categorie.join(",");
         conn.query(
           "insert into event_category_statistic SET ?",
           [req.body],
@@ -6544,7 +6675,7 @@ router.post("/updateEventCategoryStatistic", (req, res, next) => {
           status: err,
         });
       } else {
-        req.body.categorie = req.body.categorie.join(',');
+        req.body.categorie = req.body.categorie.join(",");
         conn.query(
           "update event_category_statistic SET ? where id = ?",
           [req.body, req.body.id],
@@ -6578,7 +6709,9 @@ router.post("/deleteEventCategoryStatistic", (req, res, next) => {
         });
       } else {
         conn.query(
-          "delete from event_category_statistic where id = '" + req.body.id + "'",
+          "delete from event_category_statistic where id = '" +
+            req.body.id +
+            "'",
           function (err, rows, fields) {
             conn.release();
             if (err) {
@@ -6599,4 +6732,61 @@ router.post("/deleteEventCategoryStatistic", (req, res, next) => {
 
 /* END EVENT CATEGORY STATISTIC */
 
+/* USER ACCESS */
+
+router.get("/getUserAccess/:superadmin", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query(
+      "SELECT * from user_access ua join users u on ua.user_id = u.id where ua.superadmin = ?",
+      [req.params.superadmin],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
+      }
+    );
+  });
+});
+
+router.post("/updateUserAccess", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "update user_access SET ? where id = ?",
+          [req.body, req.body.id],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+/* END USER ACCESS */
 module.exports = router;
