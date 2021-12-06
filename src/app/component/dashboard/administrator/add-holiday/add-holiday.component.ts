@@ -30,12 +30,12 @@ export class AddHolidayComponent implements OnInit {
   @ViewChild('endTime')
   public endTimeDatePicker: DatePickerComponent;
 
-  public currentView: View = 'Month';
   public language: any;
+  public selectedCell: any;
+  public addNewHoliday: boolean;
 
   public holidays: HolidayModel[] = [];
   public newHoliday;
-
 
   private superAdminId: string;
 
@@ -63,6 +63,7 @@ export class AddHolidayComponent implements OnInit {
         result.forEach(r => {
           this.holidays.push(
             <HolidayModel>{
+              id: r.id,
               Subject: r.Subject,
               StartTime: new Date(r.StartTime),
               EndTime: new Date(r.EndTime),
@@ -95,16 +96,20 @@ export class AddHolidayComponent implements OnInit {
 
   onRenderCell(event) {
     this.holidays.forEach(holiday => {
-      if (event.date >= holiday.StartTime.getTime() && event.date <= holiday.EndTime.getTime()) {
+      if (event.elementType == "monthCells" && event.date >= holiday.StartTime.getTime() && event.date <= holiday.EndTime.getTime()) {
         event.element.style.backgroundColor = "#e9ecef";
+
+        let eventTitle = document.createElement('div');
+        eventTitle.innerHTML = holiday.Subject;
+        console.log(holiday.Subject);
+        eventTitle.classList.add("h4");
+        eventTitle.classList.add("bold");
+        eventTitle.classList.add("mt-4");
+        eventTitle.classList.add("mb-0");
+
+        (event.element).appendChild(eventTitle);
       }
     });
-  }
-
-  onEventRendered(args: EventRenderedArgs): void {
-    let data: { [key: string]: Object } = args.data;
-    args.element.setAttribute("aria-readonly", "true");
-    args.element.classList.add("e-read-only");
   }
 
   onPopupOpen(args: PopupOpenEventArgs): void {
@@ -115,23 +120,30 @@ export class AddHolidayComponent implements OnInit {
 
   onCellClick(args: CellClickEventArgs): void {
 
-    // must use startTime from args
-    if (this.holidays.some(x => args.startTime >= x.StartTime && args.startTime <= x.EndTime)) {
-      return;
-    }
-
+    this.selectedCell = args.element;
     this.endTimeDatePicker.min = args.startTime;
 
+    const holiday = this.holidays.find(x => args.startTime >= x.StartTime && args.startTime <= x.EndTime);
+    // must use startTime from args
+    if (holiday) {
+      this.newHoliday = holiday;
+      this.addNewHoliday = false;
+    } else {
+      this.addNewHoliday = true;
+      this.newHoliday = new HolidayModel(this.superAdminId);
+      this.newHoliday.Subject = '';
+      this.newHoliday.StartTime = args.startTime;
+      this.newHoliday.EndTime = args.endTime;
+    }
     this.addVacationModal.open();
 
-    this.newHoliday = new HolidayModel(this.superAdminId);
-    this.newHoliday.Subject = '';
-    this.newHoliday.StartTime = args.startTime;
-    this.newHoliday.EndTime = args.endTime;
   }
 
   closeAddVacationModal(): void {
     this.addVacationModal.close();
+
+    //to remove cell focus
+    this.selectedCell.classList.remove("e-selected-cell");
   }
 
   addHoliday(): void {
@@ -161,6 +173,64 @@ export class AddHolidayComponent implements OnInit {
       }
     });
   }
+
+
+  updateHoliday(): void {
+
+    this.holidayService.updateHoliday(this.newHoliday, (val) => {
+      console.log(val);
+      if (val) {
+
+        this.toastrService.success(
+          this.language.adminSuccessCreateTitle,
+          this.language.adminSuccessCreateText,
+          { timeOut: 7000, positionClass: "toast-bottom-right" }
+        );
+
+        this.eventSettings.dataSource = this.holidays;
+
+        this.closeAddVacationModal();
+        this.scheduleObj.refresh();
+      } else {
+
+        this.toastrService.error(
+          this.language.adminErrorCreateTitle,
+          this.language.adminErrorCreateText,
+          { timeOut: 7000, positionClass: "toast-bottom-right" }
+        );
+      }
+    });
+  }
+
+
+  deleteHoliday(): void {
+
+    this.holidayService.deleteHoliday(this.newHoliday.id, (val) => {
+      if (val) {
+
+        this.toastrService.success(
+          this.language.adminSuccessCreateTitle,
+          this.language.adminSuccessCreateText,
+          { timeOut: 7000, positionClass: "toast-bottom-right" }
+        );
+
+        //DELETE FROM ARRAY
+        this.holidays = this.holidays.filter(h => h.id !== this.newHoliday.id);
+        this.eventSettings.dataSource = this.holidays;
+
+        this.closeAddVacationModal();
+        this.scheduleObj.refresh();
+      } else {
+
+        this.toastrService.error(
+          this.language.adminErrorCreateTitle,
+          this.language.adminErrorCreateText,
+          { timeOut: 7000, positionClass: "toast-bottom-right" }
+        );
+      }
+    });
+  }
+
 
   setMinEndTime(event): void {
     this.endTimeDatePicker.min = event;

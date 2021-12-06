@@ -14043,6 +14043,10 @@ kendo-window {
     overflow: auto;
 }
 
+.no-footer .modal-body {
+    padding-bottom: 0;
+}
+
 .modal-footer-none {
     display: none;
 }

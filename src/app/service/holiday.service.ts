@@ -21,4 +21,19 @@ export class HolidayService {
       .map(res => res)
       .subscribe(val => callback(val));
   }
+
+  public updateHoliday(data, callback): void {
+    this.httpClient
+      .post("/api/updateHoliday", data)
+      .map(res => res)
+      .subscribe(val => callback(val));
+  }
+
+  public deleteHoliday(id, callback): void {
+    console.log(id);
+    this.httpClient
+      .get("/api/deleteHoliday/" + id)
+      .map(res => res)
+      .subscribe(val => callback(val));
+  }
 }

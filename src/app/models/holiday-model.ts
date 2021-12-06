@@ -1,4 +1,5 @@
 export class HolidayModel {
+    id: number;
     Subject: string;
     StartTime: Date;
     EndTime: Date;

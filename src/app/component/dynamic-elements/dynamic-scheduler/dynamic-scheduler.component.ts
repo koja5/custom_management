@@ -1,3 +1,5 @@
+import { Subject } from 'rxjs';
+import { element } from 'protractor';
 import { EventCategoryService } from "./../../../service/event-category.service";
 import { UsersService } from "./../../../service/users.service";
 import { StoreService } from "./../../../service/store.service";
@@ -104,6 +106,7 @@ import {
 import { TypeOfEventAction } from "../../enum/typeOfEventAction";
 import { ActivatedRoute } from "@angular/router";
 import { HolidayService } from "src/app/service/holiday.service";
+import { retry } from "rxjs-compat/operator/retry";
 declare var moment: any;
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
@@ -395,6 +398,7 @@ export class DynamicSchedulerComponent implements OnInit {
       ],
     },
   ];
+  public holidays = [];
 
   public generateEvents(): Object[] {
     const eventData: Object[] = [];
@@ -1224,7 +1228,7 @@ export class DynamicSchedulerComponent implements OnInit {
   //@ViewChild("fieldName1", {static: true}) public fieldName1: ElementRef;
   // @ViewChild("fieldName1") public fieldName1: ElementRef;
 
-  onPopupOpen(args: PopupOpenEventArgs): void {
+  onPopupOpen(args): void {
     if (
       !this.checkConditionForEvent(args) &&
       this.type === this.userType.patient
@@ -1598,23 +1602,30 @@ export class DynamicSchedulerComponent implements OnInit {
     this.height = this.dynamicService.getSchedulerHeight() + "px";
   }
 
+  get user() {
+    return this.customerUser;
+  }
+
   public loadHolidays(): void {
 
     const superAdminId = this.helpService.getSuperadmin();
     this.holidayService.getHolidays(superAdminId).subscribe(result => {
-      result = [{
-        EndTime: new Date("2021-12-07T23:00:00.000Z"),
-        StartTime: new Date("2021-12-06T23:00:00.000Z"),
-        category: "holiday",
-        Subject: "",
-        superAdminId: "4"
-      }]
 
+      console.log(result);
       if (result && result.length > 0) {
 
         console.log('holidayss');
         result.forEach(r => {
+          console.log(r)
           this.allEvents.push(
+            {
+              Subject: r.Subject,
+              StartTime: new Date(r.StartTime),
+              EndTime: new Date(r.EndTime)
+            }
+          );
+
+          this.holidays.push(
             {
               Subject: r.Subject,
               StartTime: new Date(r.StartTime),
@@ -2628,6 +2639,7 @@ export class DynamicSchedulerComponent implements OnInit {
 
   onRenderCell(event) {
     this.dateFormat(event);
+
     // return event.element.style.background = "red";
   }
 
@@ -2667,6 +2679,44 @@ export class DynamicSchedulerComponent implements OnInit {
     } else {
       return "noTime";
     }*/
+
+    console.log(this.holidays);
+    // this.holidays.forEach(holiday => {
+    //   console.log(holiday);
+    //   if (date.elementType == "monthCells" && date.date >= holiday.StartTime.getTime() && date.date <= holiday.EndTime.getTime()) {
+    //     date.element.style.backgroundColor = "#e9ecef";
+
+    //     let dateTitle = document.createElement('div');
+    //     dateTitle.innerHTML = holiday.Subject;
+    //     dateTitle.classList.add("h4");
+    //     dateTitle.classList.add("bold");
+    //     dateTitle.classList.add("mt-4");
+    //     dateTitle.classList.add("mb-0");
+
+    //     (date.element).appendChild(dateTitle);
+    //   }
+    // });
+
+    const holiday = this.holidays.find(holiday =>
+      date.date.getDate() >= holiday.StartTime.getDate() &&
+      date.date.getMonth() == holiday.StartTime.getMonth() &&
+      date.date.getYear() == holiday.StartTime.getYear() &&
+      date.date.getDate() <= holiday.EndTime.getDate() &&
+      date.date.getMonth() == holiday.EndTime.getMonth() &&
+      date.date.getYear() == holiday.EndTime.getYear());
+
+    if (holiday) {
+      date.element.style.backgroundColor = "#e9ecef";
+      date.element.style.pointerEvents = "none";
+
+      if (date.elementType === "dateHeader" || this.currentView === "Month") {
+        const span = document.createElement("SPAN");
+        date.element.appendChild(span);
+        span.innerHTML = holiday.Subject;
+      }
+      return;
+    }
+
     if (date.elementType === "resourceHeader") {
       if (date.groupIndex < this.calendars.length - 1) {
         date.element.style.borderRight = "2px solid #6d6d6d";
@@ -2787,6 +2837,7 @@ export class DynamicSchedulerComponent implements OnInit {
         date.element.style.borderRight = "2px solid #6d6d6d";
       }
     }
+
   }
 
   convertNumericToDay(numeric) {
@@ -3351,6 +3402,9 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   onActionBegin(args: any) {
+    console.log(args);
+
+    console.log('onActionBegin')
     if (
       !this.checkConditionForEvent(args) ||
       args.requestType === "dateNavigate" ||
