@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit {
   public loginForm = "active";
   public signupForm: string;
   public recoverForm: string;
+  public userAccessForm: string;
   public loading = false;
   public hideShow = "password";
   public hideShowEye = "fa-eye-slash";
@@ -28,6 +29,8 @@ export class LoginComponent implements OnInit {
   public emailValid = true;
   public language: any;
   private superadmin: number;
+  public userAccessId: number;
+  public userAccessDevice: string;
 
   public data = {
     id: "",
@@ -183,10 +186,7 @@ export class LoginComponent implements OnInit {
           "language",
           JSON.stringify(this.language)
         );
-        this.helpService.setLocalStorage(
-          "countryCode",
-          language["demoCode"]
-        );
+        this.helpService.setLocalStorage("countryCode", language["demoCode"]);
         this.helpService.setLocalStorage(
           "demoAccountLanguage",
           language["demoAccount"]
@@ -224,7 +224,18 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.service.login(
       this.data,
-      (isLogin, notActive, user, type, id, storeId, superadmin, last_login) => {
+      (
+        isLogin,
+        notActive,
+        user,
+        type,
+        id,
+        storeId,
+        superadmin,
+        last_login,
+        info,
+        user_access_id
+      ) => {
         console.log("login" + notActive);
         if (isLogin) {
           if (!notActive) {
@@ -246,9 +257,20 @@ export class LoginComponent implements OnInit {
             this.getConfigurationFromDatabase(id);
           }
         } else {
-          this.loginInfo = JSON.parse(localStorage.getItem("language"))[
-            "notCorrectPass"
-          ];
+          if (info === "deny_access") {
+            this.loginInfo = JSON.parse(localStorage.getItem("language"))[
+              "needToSuperadminApproveAccess"
+            ];
+            if (user_access_id) {
+              this.userAccessId = user_access_id;
+              this.loginForm = "";
+              this.userAccessForm = "active";
+            }
+          } else {
+            this.loginInfo = JSON.parse(localStorage.getItem("language"))[
+              "notCorrectPass"
+            ];
+          }
           this.loading = false;
         }
       }
@@ -414,5 +436,17 @@ export class LoginComponent implements OnInit {
         JSON.stringify(data[i].value)
       );
     }
+  }
+
+  createUserAccessDevice(event) {
+    const data = {
+      id: this.userAccessId,
+      device_name: this.userAccessDevice,
+    };
+    this.service.updateUserAccessDevice(data).subscribe((data) => {
+      this.userAccessForm = '';
+      this.loginForm = 'active';
+      this.loginInfo = this.language.successUserAccessDeviceName;
+    });
   }
 }

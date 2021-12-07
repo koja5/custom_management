@@ -167,6 +167,24 @@
       }
     },
     {
+      "type": "dropdown",
+      "name": "eventCategoryPeriod",
+      "label": "periodForEvent",
+      "field": { "text": "text", "value": "id" },
+      "data": {
+        "translation": {
+          "property": "eventCategoryPeriod",
+          "fields": { "text": "text", "value": "id" }
+        }
+      },
+      "placeholder": "Please enter email of user",
+      "fieldConfig": {
+        "ignoreAccent": false,
+        "filter": true
+      },
+      "required": true
+    },
+    {
       "type": "checkbox",
       "width": "col-md-12",
       "name": "display",

@@ -27,7 +27,9 @@ export class LoginService {
           val["id"],
           val["storeId"],
           val["superadmin"],
-          val["last_login"]
+          val["last_login"],
+          val["info"],
+          val["user_access_id"]
         );
       });
   }
@@ -85,5 +87,9 @@ export class LoginService {
     return this.http
       .get("/api/getTranslationByLanguage/" + language)
       .map((res) => res);
+  }
+
+  updateUserAccessDevice(data) {
+    return this.http.post("/api/updateUserAccessDevice", data);
   }
 }

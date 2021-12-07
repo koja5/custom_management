@@ -29,6 +29,11 @@
       "createAccountSuccessedText1": { "type": "string" },
       "createAccountSuccessedText2": { "type": "string" },
       "createAccountSuccessedText3": { "type": "string" },
+      "userAccessFormTitle": { "type": "string" },
+      "userAccessDevice": { "type": "string" },
+      "createUserAccessDevice": { "type": "string" },
+      "successUserAccessDeviceName": { "type": "string" },
+      "needToSuperadminApproveAccess": { "type": "string" },
       "confirmPassword": { "type": "string" },
       "rememberMe": { "type": "string" },
       "forgotPassword": { "type": "string" },
@@ -674,6 +679,20 @@
             }
           }
         }
+      },
+      "eventCategoryPeriod": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "text": {
+              "type": "string"
+            }
+          }
+        }
       }
     }
   },
@@ -814,6 +833,23 @@
             { "key": "createAccountSuccessedText2" },
             { "key": "createAccountSuccessedText3" }
           ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "userAccessFormTitle" },
+            { "key": "userAccessDevice" },
+            { "key": "createUserAccessDevice" },
+            { "key": "successUserAccessDeviceName" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [{ "key": "needToSuperadminApproveAccess" }, {}, {}, {}]
         }
       ]
     },
@@ -3255,6 +3291,26 @@
                   ]
                 }
               ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "array",
+      "title": "Event Category Period",
+      "key": "eventCategoryPeriod",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "items": [
+            {
+              "key": "eventCategoryPeriod[].id"
+            },
+            {
+              "key": "eventCategoryPeriod[].text"
             }
           ]
         }

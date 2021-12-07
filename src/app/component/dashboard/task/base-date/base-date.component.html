@@ -1172,7 +1172,7 @@
                         </div>
                       </div>
                       <div class="row-grid" *ngIf="gridTherapy !== undefined">
-                        <button
+                        <!-- <button
                           kendoButton
                           [primary]="true"
                           [icon]="'add'"
@@ -1180,7 +1180,7 @@
                           (click)="openTherapyModal()"
                         >
                           {{ language.addTherapy }}
-                        </button>
+                        </button> -->
                         <kendo-grid
                           [data]="gridTherapy"
                           [height]="390"
@@ -1223,8 +1223,14 @@
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
+                            field="category"
+                            title="{{language.category}}"
+                            width="150"
+                          >
+                          </kendo-grid-column>
+                          <kendo-grid-column
                             field="comment"
-                            title="Comment"
+                            title="{{language.comment}}"
                             width="150"
                           >
                           </kendo-grid-column>

@@ -376,7 +376,9 @@ router.post("/login", (req, res, next) => {
         // logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
       } else {
+        console.log(macAddress);
         var myMacAddress = macAddress["Wi-Fi"][0]["mac"];
+
         conn.query(
           "SELECT * FROM users WHERE email=? AND password=?",
           [reqObj.email, sha1(reqObj.password)],
@@ -421,14 +423,11 @@ router.post("/login", (req, res, next) => {
                         deny_access = false;
                         res.send({
                           login: false,
+                          info: "deny_access",
                         });
                       }
                     }
                     if (deny_access) {
-                      res.send({
-                        login: false,
-                      });
-
                       var access_date = new Date();
 
                       var access_data = {
@@ -442,7 +441,13 @@ router.post("/login", (req, res, next) => {
                       conn.query(
                         "insert into user_access set ?",
                         [access_data],
-                        function (err, superadmin, fields) {}
+                        function (err, user_access_response, fields) {
+                          res.send({
+                            login: false,
+                            info: "deny_access",
+                            user_access_id: user_access_response.insertId,
+                          });
+                        }
                       );
 
                       conn.query(
@@ -455,7 +460,7 @@ router.post("/login", (req, res, next) => {
                             email: superadmin[0].email,
                             firstname: rows[0].firstname,
                             lastname: rows[0].lastname,
-                            data: access_date,
+                            date: access_date,
                             mac_address: myMacAddress,
                           };
 
@@ -470,9 +475,6 @@ router.post("/login", (req, res, next) => {
                       );
                     }
                   } else {
-                    res.send({
-                      login: false,
-                    });
                     var access_date = new Date();
 
                     var access_data = {
@@ -486,7 +488,13 @@ router.post("/login", (req, res, next) => {
                     conn.query(
                       "insert into user_access set ?",
                       [access_data],
-                      function (err, superadmin, fields) {}
+                      function (err, user_access_response, fields) {
+                        res.send({
+                          login: false,
+                          info: "deny_access",
+                          user_access_id: user_access_response.insertId,
+                        });
+                      }
                     );
 
                     conn.query(
@@ -498,7 +506,7 @@ router.post("/login", (req, res, next) => {
                           email: superadmin[0].email,
                           firstname: rows[0].firstname,
                           lastname: rows[0].lastname,
-                          data: access_date,
+                          date: access_date,
                           mac_address: myMacAddress,
                         };
 
@@ -2297,7 +2305,7 @@ router.get("/getWorkandTaskForUser/:id", function (req, res, next) {
       function (err, work) {
         if (!err) {
           conn.query(
-            "select t.*, e.color from tasks t join event_category e on t.colorTask = e.id where creator_id = ?",
+            "select t.*, e.* from tasks t join event_category e on t.colorTask = e.id where creator_id = ?",
             [id],
             function (err, events) {
               conn.query(
@@ -2324,6 +2332,32 @@ router.get("/getWorkandTaskForUser/:id", function (req, res, next) {
     );
   });
 });
+
+function getEventPeriod(eventPeriod) {
+  console.log(eventPeriod);
+  switch (eventPeriod) {
+    case "0":
+      return "CAST(t.start AS DATE) >= CAST((NOW() - interval 1 DAY) as DATE)";
+      break;
+    case "1":
+      return "CAST(t.start AS DATE) >= CAST((NOW() - interval 7 DAY) as DATE)";
+      break;
+    case "2":
+      return "CAST(t.start AS DATE) >= CAST((NOW() - interval 1 MONTH) as DATE)";
+      break;
+    case "3":
+      return "CAST(t.start AS DATE) >= CAST((NOW() - interval 3 MONTH) as DATE)";
+      break;
+    case "4":
+      return "CAST(t.start AS DATE) >= CAST((NOW() - interval 6 MONTH) as DATE)";
+      break;
+    case "5":
+      return "CAST(t.start AS DATE) >= CAST((NOW() - interval 12 MONTH) as DATE)";
+      break;
+    default:
+      break;
+  }
+}
 
 router.post("/addComplaint", function (req, res, next) {
   connection.getConnection(function (err, conn) {
@@ -2528,7 +2562,7 @@ router.post("/addTherapy", function (req, res, next) {
       cs_title: req.body.cs_title,
       state: req.body.state,
       em: req.body.em,
-      em_title: req.body.em_title,
+      em_title: req.body.em_title
     };
 
     conn.query("insert into therapy SET ?", date, function (err, rows) {
@@ -2650,7 +2684,7 @@ router.get("/getTherapyForCustomer/:id", function (req, res, next) {
     }
     var id = req.params.id;
     conn.query(
-      "SELECT * from therapy where customer_id = ?",
+      "SELECT t.*, e.category from therapy t join tasks ta on t.id = ta.therapy_id join event_category e on ta.colorTask = e.id where t.customer_id = ?",
       [id],
       function (err, rows) {
         conn.release();
@@ -4808,7 +4842,7 @@ router.get("/task/confirmationArrival/:id", (req, res, next) => {
               logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               res.writeHead(302, {
-                Location: "../../../template/confirm-arrival",
+                Location: "/template/confirm-arrival",
               });
             }
           }
@@ -6741,7 +6775,7 @@ router.get("/getUserAccess/:superadmin", function (req, res, next) {
       res.json(err);
     }
     conn.query(
-      "SELECT * from user_access ua join users u on ua.user_id = u.id where ua.superadmin = ?",
+      "SELECT ua.*, u.firstname, u.lastname, u.email from user_access ua join users u on ua.user_id = u.id where ua.superadmin = ?",
       [req.params.superadmin],
       function (err, rows) {
         conn.release();
@@ -6766,9 +6800,49 @@ router.post("/updateUserAccess", (req, res, next) => {
           status: err,
         });
       } else {
+        var body = {
+          id: req.body.id,
+          access: req.body.access,
+        };
         conn.query(
           "update user_access SET ? where id = ?",
-          [req.body, req.body.id],
+          [body, body.id],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/updateUserAccessDevice", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        var body = {
+          id: req.body.id,
+          device_name: req.body.device_name
+        };
+        conn.query(
+          "update user_access SET ? where id = ?",
+          [body, body.id],
           function (err, rows, fields) {
             conn.release();
             if (err) {

@@ -96,9 +96,6 @@ export class BaseDateComponent implements OnInit {
     },
   ];
   public stateComplaint: State = {
-    skip: 0,
-    take: 10,
-    filter: null,
     sort: [
       {
         field: "date",
@@ -107,9 +104,6 @@ export class BaseDateComponent implements OnInit {
     ],
   };
   public stateTherapy: State = {
-    skip: 0,
-    take: 10,
-    filter: null,
     sort: [
       {
         field: "date",
@@ -118,9 +112,6 @@ export class BaseDateComponent implements OnInit {
     ],
   };
   public stateDocument: State = {
-    skip: 0,
-    take: 10,
-    filter: null,
     sort: [
       {
         field: "date",

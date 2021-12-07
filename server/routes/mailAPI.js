@@ -998,65 +998,59 @@ router.post("/sendReminderViaEmailManual", function (req, res) {
 });
 
 router.post("/confirmUserViaMacAddress", function (req, res) {
-  console.log("MAIL MAIL:");
-  console.log(req.body);
+  var template = fs.readFileSync(
+    "./server/routes/templates/approveUserAccess.hjs",
+    "utf-8"
+  );
+  var compiledTemplate = hogan.compile(template);
 
-  router.post("/sendReminderViaEmailManual", function (req, res) {
-    var reminderTemplate = fs.readFileSync(
-      "./server/routes/templates/approveUserAccess.hjs",
-      "utf-8"
-    );
-    var compiledTemplate = hogan.compile(reminderTemplate);
+  var convertToDate = new Date(req.body.date);
+  var hours = convertToDate.getHours();
+  var minutes = convertToDate.getMinutes();
+  var date =
+    convertToDate.getDate() +
+    "." +
+    (convertToDate.getMonth() + 1) +
+    "." +
+    convertToDate.getFullYear();
+  var day = convertToDate.getDate();
+  var month = monthNames[convertToDate.getMonth()];
+  var year = convertToDate.getFullYear();
+  var start =
+    (hours < 10 ? "0" + hours : hours) +
+    ":" +
+    (hours < 10 ? "0" + hours : hours);
 
-    var convertToDate = new Date(req.body.date);
-    var hours = convertToDate.getHours();
-    var minutes = convertToDate.getMinutes();
-    var date =
-      convertToDate.getDate() +
-      "." +
-      (convertToDate.getMonth() + 1) +
-      "." +
-      convertToDate.getFullYear();
-    var day = convertToDate.getDate();
-    var month = monthNames[convertToDate.getMonth()];
-    var start =
-      (hours < 10 ? "0" + hours : hours) +
-      ":" +
-      (hours < 10 ? "0" + hours : hours);
+  var mailOptions = {
+    from: '"ClinicNode" support@app-production.eu',
+    to: req.body.email,
+    subject: "Neue Geräte bestätigen",
+    html: compiledTemplate.render({
+      initialGreeting: "Hallo",
+      introductoryMessage:
+        "Wir möchten Sie darüber informieren, dass wir versuchen, uns mit den untenstehenden Informationen anzumelden. Bitte greifen Sie auf das Dashboard zu und gewähren Sie Zugriff!",
+      nameMessage: "Name",
+      macAddressMessage: "MAC-Adresse",
+      datumMessage: "Registrierungsdatum",
+      name: req.body.firstname + " " + req.body.lastname,
+      macAddress: req.body.mac_address,
+      date: day + "." + month + "." + year + " - " + hours + ":" + minutes,
+      month: month,
+      day: day,
+    }),
+  };
 
-    var mailOptions = {
-      from: '"ClinicNode" support@app-production.eu',
-      to: req.body.email,
-      subject: "Confirm",
-      html: compiledTemplate.render({
-        initialGreeting: "Zdravo",
-        introductoryMessage: "Obavestavamo vas da imamo pokusaj prijavljivanja sa podacima u nastavku. Molimo Vas pristupite kontrolnoj tabli i odobrite pristup!",
-        nameMessage: "Ime",
-        macAddressMessage: "Mac adresa",
-        datumMessage: "Datum prijavljivanja",
-        name: req.body.firstname + " " + req.body.lastname,
-        macAddress: req.body.mac_address,
-        date: day + "." + month + "." + year + " - " + hours + ":" + minutes,
-        month: month,
-        day: day
-      }),
-    };
-
-    smtpTransport.sendMail(mailOptions, function (error, response) {
-      if (error) {
-        logger.log(
-          "info",
-          `Error to sent reminder via email on EMAIL: ${req.body.email}. Error: ${error}`
-        );
-        res.send(false);
-      } else {
-        logger.log(
-          "info",
-          `Sent reminder via email on EMAIL: ${req.body.email}`
-        );
-        res.send(true);
-      }
-    });
+  smtpTransport.sendMail(mailOptions, function (error, response) {
+    if (error) {
+      logger.log(
+        "info",
+        `Error to sent reminder via email on EMAIL: ${req.body.email}. Error: ${error}`
+      );
+      res.send(false);
+    } else {
+      logger.log("info", `Sent reminder via email on EMAIL: ${req.body.email}`);
+      res.send(true);
+    }
   });
 });
 
