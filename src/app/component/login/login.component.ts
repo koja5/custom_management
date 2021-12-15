@@ -8,6 +8,7 @@ import { MongoService } from "../../service/mongo.service";
 import { HelpService } from "src/app/service/help.service";
 import { PackLanguageService } from "src/app/service/pack-language.service";
 import { StorageService } from "src/app/service/storage.service";
+import { HttpClient } from "@angular/common/http";
 
 @Component({
   selector: "app-login",
@@ -44,6 +45,7 @@ export class LoginComponent implements OnInit {
     mobile: "",
     comment: "",
     storeId: 0,
+    ipAddress: "",
   };
   // public data: LoginData;
 
@@ -56,7 +58,8 @@ export class LoginComponent implements OnInit {
     private mongo: MongoService,
     private helpService: HelpService,
     private packLanguage: PackLanguageService,
-    private storageService: StorageService
+    private storageService: StorageService,
+    public http: HttpClient
   ) {}
 
   ngOnInit() {
@@ -81,6 +84,13 @@ export class LoginComponent implements OnInit {
       this.checkCountryLocation();
     }
     this.helpService.setDefaultBrowserTabTitle();
+    this.initializeIpAddress();
+  }
+
+  initializeIpAddress() {
+    this.http.get("http://api.ipify.org/?format=json").subscribe((res: any) => {
+      this.data.ipAddress = res.ip;
+    });
   }
 
   checkCountryLocation() {
@@ -236,7 +246,6 @@ export class LoginComponent implements OnInit {
         info,
         user_access_id
       ) => {
-        console.log("login" + notActive);
         if (isLogin) {
           if (!notActive) {
             this.loginInfo = JSON.parse(localStorage.getItem("language"))[
@@ -444,8 +453,8 @@ export class LoginComponent implements OnInit {
       device_name: this.userAccessDevice,
     };
     this.service.updateUserAccessDevice(data).subscribe((data) => {
-      this.userAccessForm = '';
-      this.loginForm = 'active';
+      this.userAccessForm = "";
+      this.loginForm = "active";
       this.loginInfo = this.language.successUserAccessDeviceName;
     });
   }

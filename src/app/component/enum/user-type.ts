@@ -4,6 +4,7 @@ export enum UserType {
     doctor = 2,
     nurse = 3,
     patient = 4,
-    administrator = 5
+    administrator = 5,
+    readOnlyScheduler = 6
 
 }

@@ -18,11 +18,11 @@ import { UserType } from "src/app/component/enum/user-type";
   styleUrls: ["./user-details.component.scss"],
 })
 export class UserDetailsComponent implements OnInit {
-  @ViewChild('user') user: Modal;
+  @ViewChild("user") user: Modal;
   public id: string;
   public data: any;
   public imagePath: any;
-  public userType = ["Employee", "Manager", "Admin"];
+  public userType = ["Employee", "Manager", "Admin", "Read only scheduler"];
   public selectedValue: string;
   public currentTab = "profile";
   public language: any;
@@ -232,6 +232,8 @@ export class UserDetailsComponent implements OnInit {
       this.selectedValue = "Admin";
     } else if (this.data.type === 2) {
       this.selectedValue = "Manager";
+    } else if (this.data.type === 6) {
+      this.selectedValue = "Read only scheduler";
     } else {
       this.selectedValue = "Employee";
     }
@@ -392,6 +394,8 @@ export class UserDetailsComponent implements OnInit {
       type = 1;
     } else if (type === "Manager") {
       type = 2;
+    } else if (type === "Read only scheduler") {
+      type = 6;
     } else {
       type = 3;
     }
@@ -403,6 +407,8 @@ export class UserDetailsComponent implements OnInit {
       type = "Admin";
     } else if (type === 2) {
       type = "Manager";
+    } else if (type === 6) {
+      type = "Read only scheduler";
     } else {
       type = "Employee";
     }

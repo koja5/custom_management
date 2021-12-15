@@ -42,4 +42,5 @@ export class NavigationMenuModel {
     change_superadmin_profile?: string;
     permission_patient_menu?: string;
     user_access?: string;
+    sms_count?: string;
 }

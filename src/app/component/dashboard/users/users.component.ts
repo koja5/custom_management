@@ -6,7 +6,7 @@ import { process, State, GroupDescriptor } from "@progress/kendo-data-query";
 import {
   DataStateChangeEvent,
   PageChangeEvent,
-  RowArgs
+  RowArgs,
 } from "@progress/kendo-angular-grid";
 import { FormGroup, FormControl } from "@angular/forms";
 import { SortDescriptor, orderBy } from "@progress/kendo-data-query";
@@ -23,20 +23,19 @@ import { HelpService } from "src/app/service/help.service";
 @Component({
   selector: "app-users",
   templateUrl: "./users.component.html",
-  styleUrls: ["./users.component.scss"]
+  styleUrls: ["./users.component.scss"],
 })
 export class UsersComponent implements OnInit {
-  
-  @ViewChild('user') user: Modal;
+  @ViewChild("user") user: Modal;
   public data = new UserModel();
-  public userType = ["Employee", "Manager", "Admin"];
+  public userType = ["Employee", "Manager", "Admin", "Read only scheduler"];
   public gridData: any;
   public gridView: any;
   public currentLoadData: any;
   public state: State = {
     skip: 0,
     take: 10,
-    filter: null
+    filter: null,
   };
   public hideShow = "password";
   public hideShowEye = "fa-eye-slash";
@@ -44,8 +43,8 @@ export class UsersComponent implements OnInit {
   public sort: SortDescriptor[] = [
     {
       field: "id",
-      dir: "asc"
-    }
+      dir: "asc",
+    },
   ];
   // public unamePattern = "^[a-z0-9_-]{8,15}$";
   public passwordPattern =
@@ -65,20 +64,20 @@ export class UsersComponent implements OnInit {
   private icon: string = "cog";
   private settings: Array<any> = [
     {
-      text: "My Profile"
+      text: "My Profile",
     },
     {
-      text: "Friend Requests"
+      text: "Friend Requests",
     },
     {
-      text: "Account Settings"
+      text: "Account Settings",
     },
     {
-      text: "Support"
+      text: "Support",
     },
     {
-      text: "Log Out"
-    }
+      text: "Log Out",
+    },
   ];
   public height: any;
   public searchFilter: any;
@@ -87,7 +86,7 @@ export class UsersComponent implements OnInit {
   public pageSize = 5;
   public pageable = {
     pageSizes: true,
-    previousNext: true
+    previousNext: true,
   };
 
   constructor(
@@ -110,18 +109,18 @@ export class UsersComponent implements OnInit {
     this.language = this.helpService.getLanguage();
     this.helpService.setTitleForBrowserTab(this.language.users);
 
-    this.message.getTheme().subscribe(mess => {
+    this.message.getTheme().subscribe((mess) => {
       this.changeTheme(mess);
       this.theme = mess;
     });
   }
 
   getUser() {
-    this.service.getUsers(localStorage.getItem("superadmin"), val => {
+    this.service.getUsers(localStorage.getItem("superadmin"), (val) => {
       console.log(val);
       this.currentLoadData = val;
       this.gridData = {
-        data: val
+        data: val,
       };
       this.gridView = process(val, this.state);
       this.changeTheme(this.theme);
@@ -131,7 +130,7 @@ export class UsersComponent implements OnInit {
 
   newUser() {
     this.initializeParams();
-    this.storeService.getStore(localStorage.getItem("superadmin"), val => {
+    this.storeService.getStore(localStorage.getItem("superadmin"), (val) => {
       console.log(val);
       this.storeLocation = val;
     });
@@ -157,7 +156,7 @@ export class UsersComponent implements OnInit {
     console.log(this.data);
     this.data.birthday = this.data.birthday.toString();
     this.data.incompanysince = this.data.incompanysince.toString();
-    this.service.createUser(this.data, val => {
+    this.service.createUser(this.data, (val) => {
       if (val.success) {
         console.log(val);
         this.gridData.data.push(this.data);
@@ -167,14 +166,14 @@ export class UsersComponent implements OnInit {
           title: "Successfull!",
           text: "New user is successfull added!",
           timer: 3000,
-          type: "success"
+          type: "success",
         });
       } else {
         Swal.fire({
           title: "Error",
           text: "New user is not added!",
           timer: 3000,
-          type: "error"
+          type: "error",
         });
       }
       // form.reset();
@@ -189,6 +188,8 @@ export class UsersComponent implements OnInit {
       this.data.type = "2";
     } else if (event === "Admin") {
       this.data.type = "1";
+    } else if (event === "Read only scheduler") {
+      this.data.type = "6";
     } else {
       this.data.type = event;
     }
@@ -259,13 +260,13 @@ export class UsersComponent implements OnInit {
     if (event === "yes") {
       this.excelOpened = false;
       setTimeout(() => {
-        this.service.insertMultiData(this.gridData).subscribe(data => {
+        this.service.insertMultiData(this.gridData).subscribe((data) => {
           if (data) {
             Swal.fire({
               title: "Successfull!",
               text: "New users is successfull added",
               timer: 3000,
-              type: "success"
+              type: "success",
             });
             this.getUser();
           }
@@ -294,7 +295,7 @@ export class UsersComponent implements OnInit {
 
     this.excelOpened = true;
     let fileReader = new FileReader();
-    fileReader.onload = e => {
+    fileReader.onload = (e) => {
       this.arrayBuffer = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer);
       var arr = new Array();
@@ -337,7 +338,7 @@ export class UsersComponent implements OnInit {
     const allData = {
       table: "users",
       columns: columns,
-      data: dataArray
+      data: dataArray,
     };
     return allData;
   }
@@ -444,30 +445,30 @@ export class UsersComponent implements OnInit {
           {
             field: "shortname",
             operator: "contains",
-            value: inputValue
+            value: inputValue,
           },
           {
             field: "email",
             operator: "contains",
-            value: inputValue
+            value: inputValue,
           },
           {
             field: "firstname",
             operator: "contains",
-            value: inputValue
+            value: inputValue,
           },
           {
             field: "lastname",
             operator: "contains",
-            value: inputValue
+            value: inputValue,
           },
           {
             field: "street",
             operator: "contains",
-            value: inputValue
-          }
-        ]
-      }
+            value: inputValue,
+          },
+        ],
+      },
     });
     this.gridView = process(this.gridData.data, this.state);
   }

@@ -1225,8 +1225,9 @@ export class DynamicSchedulerComponent implements OnInit {
 
   onPopupOpen(args: PopupOpenEventArgs): void {
     if (
-      !this.checkConditionForEvent(args) &&
-      this.type === this.userType.patient
+      (!this.checkConditionForEvent(args) &&
+        this.type === this.userType.patient) ||
+      this.type === this.userType.readOnlyScheduler
     ) {
       this.patientReadOnly = true;
     } else {
@@ -1243,8 +1244,8 @@ export class DynamicSchedulerComponent implements OnInit {
         this.clearAllSelectedData();
       } else if (args.data["id"]) {
         if (
-          this.type === this.userType.patient &&
-          args.data["customer_id"] !== this.id
+          (this.type === this.userType.patient &&
+          args.data["customer_id"] !== this.id) || this.type === this.userType.readOnlyScheduler
         ) {
           args.cancel = true;
         } else {
@@ -2786,22 +2787,39 @@ export class DynamicSchedulerComponent implements OnInit {
                     date.date.getHours())
               ) {
                 date.element.style.background = workItem.color;
-                date.element.style.pointerEvents = "auto";
+                if (this.type === this.userType.readOnlyScheduler) {
+                  date.element.style.pointerEvents = "none";
+                } else {
+                  date.element.style.pointerEvents = "auto";
+                }
               } else {
-                if (this.type === this.userType.patient) {
+                if (
+                  this.type === this.userType.patient ||
+                  this.type === this.userType.readOnlyScheduler
+                ) {
                   date.element.style.pointerEvents = "none";
                 }
               }
             } else {
-              if (this.type === this.userType.patient) {
+              if (
+                this.type === this.userType.patient ||
+                this.type === this.userType.readOnlyScheduler
+              ) {
                 date.element.style.pointerEvents = "none";
               }
             }
           }
         } else {
-          if (this.type === this.userType.patient) {
+          if (
+            this.type === this.userType.patient ||
+            this.type === this.userType.readOnlyScheduler
+          ) {
             date.element.style.pointerEvents = "none";
           }
+        }
+      } else {
+        if (this.type === this.userType.readOnlyScheduler) {
+          date.element.style.pointerEvents = "none";
         }
       }
     }
@@ -2811,6 +2829,9 @@ export class DynamicSchedulerComponent implements OnInit {
         this.calendars.length - 1 > date.groupIndex
       ) {
         date.element.style.borderRight = "2px solid #6d6d6d";
+      }
+      if (this.type === this.userType.readOnlyScheduler) {
+        date.element.style.pointerEvents = "none";
       }
     }
   }

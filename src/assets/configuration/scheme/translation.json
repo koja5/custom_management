@@ -693,7 +693,11 @@
             }
           }
         }
-      }
+      },
+      "confirmArrivalThankYou": { "type": "string" },
+      "confirmArrivalText1": { "type": "string" },
+      "confirmArrivalText2": { "type": "string" },
+      "confirmArrivalGoToHome": { "type": "string" }
     }
   },
   "layout": [
@@ -1252,7 +1256,7 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "userAccess" }, {}, {}, {}]
+          "items": [{ "key": "userAccess" }, { "key": "smsCount" }, {}, {}]
         }
       ]
     },
@@ -2089,7 +2093,7 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "patient" }, { "key": "administrator" }, {}, {}]
+          "items": [{ "key": "patient" }, { "key": "administrator" }, { "key": "count" }, {}]
         }
       ]
     },
@@ -3312,6 +3316,25 @@
             {
               "key": "eventCategoryPeriod[].text"
             }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Confirm arrival - client page",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "confirmArrivalThankYou" },
+            { "key": "confirmArrivalText1" },
+            { "key": "confirmArrivalText2" },
+            { "key": "confirmArrivalGoToHome" }
           ]
         }
       ]

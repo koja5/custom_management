@@ -223,9 +223,9 @@ export class HelpService {
 
   packRequestValueFromParameters(parameters: any) {
     let data = [];
-    for(let i = 0; i < parameters.length; i++) {
-      switch(parameters[i]) {
-        case "superadmin": 
+    for (let i = 0; i < parameters.length; i++) {
+      switch (parameters[i]) {
+        case "superadmin":
           data.push(this.getSuperadmin());
           break;
         case "getMe":
@@ -237,5 +237,4 @@ export class HelpService {
     }
     return data;
   }
-
 }

@@ -373,18 +373,17 @@ router.post("/login", (req, res, next) => {
     var reqObj = req.body;
     connection.getConnection(function (err, conn) {
       if (err) {
-        // logger.log("error", err.sql + ". " + err.sqlMessage);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
       } else {
-        console.log(macAddress);
-        var myMacAddress = macAddress["Wi-Fi"][0]["mac"];
+        var ipAddress = req.body.ipAddress;
 
         conn.query(
           "SELECT * FROM users WHERE email=? AND password=?",
           [reqObj.email, sha1(reqObj.password)],
           function (err, rows, fields) {
             if (err) {
-              // logger.log("error", err.sql + ". " + err.sqlMessage);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(err);
             }
             console.log(rows);
@@ -401,7 +400,7 @@ router.post("/login", (req, res, next) => {
                     var deny_access = true;
                     for (let i = 0; i < res_access.length; i++) {
                       if (
-                        res_access[i].mac_address === myMacAddress &&
+                        res_access[i].mac_address === ipAddress &&
                         res_access[i].access
                       ) {
                         conn.release();
@@ -416,7 +415,7 @@ router.post("/login", (req, res, next) => {
                           superadmin: rows[0].superadmin,
                         });
                       } else if (
-                        res_access[i].mac_address === myMacAddress &&
+                        res_access[i].mac_address === ipAddress &&
                         !res_access[i].access
                       ) {
                         conn.release();
@@ -433,7 +432,7 @@ router.post("/login", (req, res, next) => {
                       var access_data = {
                         user_id: rows[0].id,
                         superadmin: rows[0].superadmin,
-                        mac_address: myMacAddress,
+                        mac_address: ipAddress,
                         date: access_date,
                         access: 0,
                       };
@@ -461,7 +460,7 @@ router.post("/login", (req, res, next) => {
                             firstname: rows[0].firstname,
                             lastname: rows[0].lastname,
                             date: access_date,
-                            mac_address: myMacAddress,
+                            mac_address: ipAddress,
                           };
 
                           var options = {
@@ -480,7 +479,7 @@ router.post("/login", (req, res, next) => {
                     var access_data = {
                       user_id: rows[0].id,
                       superadmin: rows[0].superadmin,
-                      mac_address: myMacAddress,
+                      mac_address: ipAddress,
                       date: access_date,
                       access: 0,
                     };
@@ -507,7 +506,7 @@ router.post("/login", (req, res, next) => {
                           firstname: rows[0].firstname,
                           lastname: rows[0].lastname,
                           date: access_date,
-                          mac_address: myMacAddress,
+                          mac_address: ipAddress,
                         };
 
                         var options = {
@@ -528,14 +527,14 @@ router.post("/login", (req, res, next) => {
                 [reqObj.email, sha1(reqObj.password)],
                 function (err, rows, fields) {
                   if (err) {
-                    // logger.log("error", err.sql + ". " + err.sqlMessage);
+                    logger.log("error", err.sql + ". " + err.sqlMessage);
                     res.json(err);
                   }
                   if (rows.length >= 1 && rows[0].active === 1) {
-                    /*logger.log(
+                    logger.log(
                       "info",
                       `User ${req.body.email} is SUCCESS login on a system like a SUPERADMIN!`
-                    );*/
+                    );
                     res.send({
                       login: true,
                       notVerified: rows[0].active,
@@ -565,10 +564,10 @@ router.post("/login", (req, res, next) => {
 
                         if (rows.length >= 1) {
                           conn.release();
-                          /*logger.log(
+                          logger.log(
                             "info",
                             `User ${req.body.email} is SUCCESS login on a system like a PATIENT!`
-                          );*/
+                          );
                           res.send({
                             login: true,
                             type: 4,
@@ -579,14 +578,14 @@ router.post("/login", (req, res, next) => {
                             superadmin: rows[0].storeId,
                           });
                         } else {
-                          /* logger.log(
+                          logger.log(
                             "error",
                             `Bad username and password for users ${req.body.email}`
-                          );*/
-                          /*logger.log(
+                          );
+                          logger.log(
                             "warn",
                             `User ${req.body.email} is NOT SUCCESS login on a system!`
-                          );*/
+                          );
                           res.send({
                             login: false,
                           });
@@ -762,41 +761,45 @@ router.get("/getMe/:id", function (req, res, next) {
       res.json(err);
     }
     var id = req.params.id;
-    conn.query("SELECT * from users where id = ?", [id], function (err, rows) {
-      if (!err && rows.length >= 1) {
-        conn.release();
-        res.json(rows);
-      } else {
-        conn.query(
-          "SELECT * from users_superadmin where id = ?",
-          [id],
-          function (err, rows) {
-            if (!err) {
-              if (rows.length !== 0) {
-                conn.release();
-                res.json(rows);
-              } else {
-                conn.query(
-                  "SELECT * from customers where id = ?",
-                  [id],
-                  function (err, rows) {
-                    conn.release();
-                    if (!err) {
-                      res.json(rows);
-                    } else {
-                      logger.log("error", err.sql + ". " + err.sqlMessage);
+    conn.query(
+      "SELECT u.*, us.shortname as 'clinicName' from users u join users_superadmin us on u.superadmin = us.id where u.id = ?",
+      [id],
+      function (err, rows) {
+        if (!err && rows.length >= 1) {
+          conn.release();
+          res.json(rows);
+        } else {
+          conn.query(
+            "SELECT * from users_superadmin where id = ?",
+            [id],
+            function (err, rows) {
+              if (!err) {
+                if (rows.length !== 0) {
+                  conn.release();
+                  res.json(rows);
+                } else {
+                  conn.query(
+                    "SELECT c.*, us.shortname as 'clinicName' from customers c join users_superadmin us on c.storeId = us.id where c.id = ?",
+                    [id],
+                    function (err, rows) {
+                      conn.release();
+                      if (!err) {
+                        res.json(rows);
+                      } else {
+                        logger.log("error", err.sql + ". " + err.sqlMessage);
+                      }
                     }
-                  }
-                );
+                  );
+                }
+              } else {
+                res.json(err);
+                logger.log("error", err.sql + ". " + err.sqlMessage);
               }
-            } else {
-              res.json(err);
-              logger.log("error", err.sql + ". " + err.sqlMessage);
             }
-          }
-        );
+          );
+        }
       }
-    });
+    );
   });
 });
 
@@ -1880,9 +1883,7 @@ router.get("/korisnik/verifikacija/:id", (req, res, next) => {
               logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               logger.log("info", `Verification FOR EMAIL: ${reqObj}!`);
-              res.writeHead(302, {
-                Location: "/login",
-              });
+              return res.redirect("/login");
             }
           }
         );
@@ -1949,9 +1950,7 @@ router.get("/sendChangePassword/:id", (req, res, next) => {
               res.json(err);
               logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
-              res.writeHead(302, {
-                Location: "/changePassword",
-              });
+              return res.redirect("/changePassword");
             }
           }
         );
@@ -2305,7 +2304,7 @@ router.get("/getWorkandTaskForUser/:id", function (req, res, next) {
       function (err, work) {
         if (!err) {
           conn.query(
-            "select t.*, e.* from tasks t join event_category e on t.colorTask = e.id where creator_id = ?",
+            "select t.*, e.color from tasks t join event_category e on t.colorTask = e.id where creator_id = ?",
             [id],
             function (err, events) {
               conn.query(
@@ -2562,7 +2561,7 @@ router.post("/addTherapy", function (req, res, next) {
       cs_title: req.body.cs_title,
       state: req.body.state,
       em: req.body.em,
-      em_title: req.body.em_title
+      em_title: req.body.em_title,
     };
 
     conn.query("insert into therapy SET ?", date, function (err, rows) {
@@ -4841,9 +4840,7 @@ router.get("/task/confirmationArrival/:id", (req, res, next) => {
               res.json(err);
               logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
-              res.writeHead(302, {
-                Location: "/template/confirm-arrival",
-              });
+              return res.redirect("/template/confirm-arrival");
             }
           }
         );
@@ -5327,35 +5324,37 @@ router.post("/sendSMS", function (req, res) {
                         sms.smsClinic + " " + req.body.storename + " \n\n";
                     }
                     console.log(smsMessage);
+                    var message =
+                      (sms.smsSubject
+                        ? sms.smsSubject
+                        : language?.initialGreetingSMSReminder) +
+                      " " +
+                      req.body.shortname +
+                      ", \n" +
+                      "\n" +
+                      (sms.smsMessage
+                        ? sms.smsMessage
+                        : language?.introductoryMessageForSMSReminderReservation) +
+                      " \n" +
+                      "\n" +
+                      dateMessage +
+                      time +
+                      clinic +
+                      signature;
+                    var content = "To: " + phoneNumber + "\r\n\r\n" + message;
+                    var fileName = "server/sms/" + phoneNumber + ".txt";
+                    fs.writeFile(fileName, content, function (err) {
+                      if (err) return logger.log("error", err);
+                      logger.log(
+                        "info",
+                        "Sent CUSTOM REMINDER to NUMBER: " + phoneNumber
+                      );
+                      ftpUploadSMS(fileName, phoneNumber + ".txt");
+                      res.send(true);
+                    });
+                  } else {
+                    res.send(false);
                   }
-                  var message =
-                    (sms.smsSubject
-                      ? sms.smsSubject
-                      : language?.initialGreetingSMSReminder) +
-                    " " +
-                    req.body.shortname +
-                    ", \n" +
-                    "\n" +
-                    (sms.smsMessage
-                      ? sms.smsMessage
-                      : language?.introductoryMessageForSMSReminderReservation) +
-                    " \n" +
-                    "\n" +
-                    dateMessage +
-                    time +
-                    clinic +
-                    signature;
-                  var content = "To: " + phoneNumber + "\r\n\r\n" + message;
-                  var fileName = "server/sms/" + phoneNumber + ".txt";
-                  fs.writeFile(fileName, content, function (err) {
-                    if (err) return logger.log("error", err);
-                    logger.log(
-                      "info",
-                      "Sent CUSTOM REMINDER to NUMBER: " + phoneNumber
-                    );
-                    ftpUploadSMS(fileName, phoneNumber + ".txt");
-                    res.send(true);
-                  });
                 }
               );
             }
@@ -5848,7 +5847,7 @@ router.post("/loadTemplateAccount", function (req, res, next) {
     setTimeout(function () {
       res.json(true);
       conn.release();
-    }, 60000);
+    }, 20000);
   });
 });
 
@@ -5886,30 +5885,31 @@ function insertFromTemplateForUsers(conn, category, account_id, id) {
     "SELECT * from " + category + " where superadmin = ?",
     account_id,
     function (err, rows) {
-      // conn.release();
-      console.log(rows);
       if (!err) {
         rows.forEach(function (to, i, array) {
           to.superadmin = id;
-          delete to.id;
+          var user_data = to;
           conn.query(
             "insert into " + category + " SET ?",
-            to,
+            user_data,
             function (err, res) {
-              console.log(err);
-              console.log(res);
-            }
-          );
-          conn.query(
-            "select w.* from users u join work w on u.id = w.user_id where u.id = ?",
-            to.id,
-            function (err, uw) {
-              uw.user_id = to.id;
-              delete uw.id;
-              conn.query("insert into work SET ?", uw, function (err, res) {
-                console.log(err);
-                console.log(res);
-              });
+              conn.query(
+                "select w.* from users u join work w on u.id = w.user_id where u.id = " +
+                  user_data.id,
+                function (err, uw) {
+                  uw.forEach(function (touw, i, array) {
+                    touw.user_id = to.id;
+                    delete touw.id;
+                    conn.query(
+                      "insert into work SET ?",
+                      touw,
+                      function (err, res) {
+                        console.log(err);
+                      }
+                    );
+                  });
+                }
+              );
             }
           );
         });
@@ -6802,6 +6802,7 @@ router.post("/updateUserAccess", (req, res, next) => {
       } else {
         var body = {
           id: req.body.id,
+          device_name: req.body.device_name,
           access: req.body.access,
         };
         conn.query(
@@ -6838,7 +6839,7 @@ router.post("/updateUserAccessDevice", (req, res, next) => {
       } else {
         var body = {
           id: req.body.id,
-          device_name: req.body.device_name
+          device_name: req.body.device_name,
         };
         conn.query(
           "update user_access SET ? where id = ?",
@@ -6863,4 +6864,125 @@ router.post("/updateUserAccessDevice", (req, res, next) => {
 });
 
 /* END USER ACCESS */
+
+/* SMS COUNT */
+
+router.get("/getSMSCount", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query(
+      "SELECT s.*, us.email from sms_count s join users_superadmin us on s.superadmin = us.id",
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
+      }
+    );
+  });
+});
+
+router.post("/createSmsCount", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        req.body.count = 60;
+        conn.query(
+          "insert into sms_count SET ?",
+          [req.body],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/updateSmsCount", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "update sms_count SET ? where id = ?",
+          [req.body, req.body.id],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/deleteSmsCount", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "delete from sms_count where id = '" + req.body.id + "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(false);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+/* END SMS COUNT */
+
 module.exports = router;

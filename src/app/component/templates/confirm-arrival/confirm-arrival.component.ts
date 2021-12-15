@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HelpService } from 'src/app/service/help.service';
 
 @Component({
   selector: 'app-confirm-arrival',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ConfirmArrivalComponent implements OnInit {
 
-  constructor() { }
+  public language: any;
+
+  constructor(private helpService: HelpService) { }
 
   ngOnInit() {
+    this.language = this.helpService.getLanguage();
   }
 
 }

@@ -37,6 +37,7 @@ import { ChangeSuperadminProfileComponent } from "./parameters/change-superadmin
 import { PermissionPatientMenuComponent } from "./settings/permission-patient-menu/permission-patient-menu.component";
 import { EventCategoryStatisticComponent } from "./parameters/event-category-statistic/event-category-statistic.component";
 import { UserAccessComponent } from "./parameters/user-access/user-access.component";
+import { SmsCountComponent } from "./administrator/sms-count/sms-count.component";
 
 const routes: Routes = [
   {
@@ -186,6 +187,10 @@ const routes: Routes = [
       {
         path: "user-access",
         component: UserAccessComponent,
+      },
+      {
+        path: "sms-count",
+        component: SmsCountComponent,
       },
     ],
   },
