@@ -1,3 +1,12 @@
+<div class="content-wrapper">
+    <div class="row mx-0 mb-3 bg-white">
+        <div class="col-4">
+            <kendo-combobox [data]="templateList" [valueField]="'id'" [textField]="'name'" (selectionChange)="onTemplateSelection()" class="col-4" [(ngModel)]="selectedTemplate" name="template">
+            </kendo-combobox>
+        </div>
+    </div>
+</div>
+
 <ejs-schedule #scheduleObj width='100%' height='100%' currentView='Month' [eventSettings]='eventSettings' (renderCell)="onRenderCell($event)" (popupOpen)='onPopupOpen($event)' (cellClick)="onCellClick($event)">
     <e-views>
         <e-view option='Month'>

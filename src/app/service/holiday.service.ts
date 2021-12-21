@@ -15,9 +15,16 @@ export class HolidayService {
       .get<HolidayModel[]>("/api/getHolidays/" + superAdminId).map((res) => res);
   }
 
-  public createHoliday(data, callback): void {
+  public createHoliday(data, callback) {
     this.httpClient
       .post("/api/createHoliday", data)
+      .map(res => res)
+      .subscribe(val => callback(val));
+  }
+
+  public createHolidayTemplateConnection(data, callback): void {
+    this.httpClient
+      .post("/api/createHolidayTemplate", data)
       .map(res => res)
       .subscribe(val => callback(val));
   }
