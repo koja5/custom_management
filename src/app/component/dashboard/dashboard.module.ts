@@ -86,6 +86,8 @@ import { PermissionPatientMenuComponent } from "./settings/permission-patient-me
 import { EventCategoryStatisticComponent } from "./parameters/event-category-statistic/event-category-statistic.component";
 import { UserAccessComponent } from "./parameters/user-access/user-access.component";
 import { SmsCountComponent } from './administrator/sms-count/sms-count.component';
+import { MassiveEmailComponent } from "./administrator/massive-email/massive-email.component";
+import { MassiveSmsComponent } from './administrator/massive-sms/massive-sms.component';
 
 @NgModule({
   declarations: [
@@ -129,7 +131,9 @@ import { SmsCountComponent } from './administrator/sms-count/sms-count.component
     ChangeSuperadminProfileComponent,
     PermissionPatientMenuComponent,
     UserAccessComponent,
-    SmsCountComponent
+    SmsCountComponent,
+    MassiveEmailComponent,
+    MassiveSmsComponent
   ],
   imports: [
     CommonModule,

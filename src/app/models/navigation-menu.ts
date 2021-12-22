@@ -43,4 +43,6 @@ export class NavigationMenuModel {
     permission_patient_menu?: string;
     user_access?: string;
     sms_count?: string;
+    massive_sms?: string;
+    massive_email?: string;
 }

@@ -68,17 +68,28 @@ function reminderViaSMS() {
       function (error, response, body) {
         if (!error && response.statusCode === 200) {
           conn.query(
-            "SELECT r.sms, c.telephone, c.mobile, c.shortname, s.storename, t.start, t.end, us.firstname, us.lastname, th.therapies_title, sr.*, e.allowSendInformation FROM reminder r join tasks t on r.superadmin = t.superadmin join customers c on t.customer_id = c.id join store s on t.storeId = s.id join users us on t.creator_id = us.id join therapy th on t.therapy_id = th.id join sms_reminder_message sr on r.superadmin = sr.superadmin join event_category e on t.colorTask = e.id where c.reminderViaSMS = 1 and r.sms = 1 and CAST(t.start AS DATE) = CAST((NOW() + interval 2 DAY) as DATE) and e.allowSendInformation = 1",
+            "SELECT r.sms, c.telephone, c.mobile, c.shortname, s.storename, t.start, t.end, us.firstname, us.lastname, th.therapies_title, sr.*, e.allowSendInformation, sc.count, sc.superadmin FROM reminder r join tasks t on r.superadmin = t.superadmin join customers c on t.customer_id = c.id join store s on t.storeId = s.id join users us on t.creator_id = us.id join therapy th on t.therapy_id = th.id join sms_reminder_message sr on r.superadmin = sr.superadmin join event_category e on t.colorTask = e.id join sms_count sc on sr.superadmin = sc.superadmin where c.reminderViaSMS = 1 and r.sms = 1 and CAST(t.start AS DATE) = CAST((NOW() + interval 2 DAY) as DATE) and e.allowSendInformation = 1",
             function (err, rows, fields) {
               if (err) {
                 console.error("SQL error:", err);
               }
               if (rows.length > 0) {
+                var smsCount = {};
                 request(
                   link + "/getAvailableAreaCode",
                   function (error, response, codes) {
                     rows.forEach(function (to, i, array) {
-                      if (to.sms !== null && to.sms === 1) {
+                      if (!smsCount[to.superadmin]) {
+                        smsCount[to.superadmin] = {
+                          superadmin: to.superadmin,
+                          count: to.count,
+                        };
+                      }
+                      if (
+                        to.sms !== null &&
+                        to.sms === 1 &&
+                        smsCount[to.superadmin].count > 0
+                      ) {
                         var phoneNumber = null;
                         if (to.telephone) {
                           phoneNumber = to.telephone;
@@ -116,10 +127,7 @@ function reminderViaSMS() {
                             }
                             if (to.mobile && to.smsSignatureMobile) {
                               signature +=
-                                to.smsSignatureMobile +
-                                " " +
-                                to.mobile +
-                                " \n";
+                                to.smsSignatureMobile + " " + to.mobile + " \n";
                             }
                             if (to.email && to.smsSignatureEmail) {
                               signature +=
@@ -157,8 +165,7 @@ function reminderViaSMS() {
                             dateMessage = to.smsDate + " " + date + " \n";
                           }
                           if (to.smsTime) {
-                            time =
-                              to.smsTime + " " + start + "-" + end + " \n";
+                            time = to.smsTime + " " + start + "-" + end + " \n";
                           }
                           if (to.smsClinic) {
                             clinic =
@@ -181,7 +188,6 @@ function reminderViaSMS() {
                             dateMessage +
                             time +
                             clinic;
-                          console.log(message);
                           var content =
                             "To: " +
                             phoneNumber +
@@ -190,18 +196,33 @@ function reminderViaSMS() {
                             "\r\n" +
                             signature;
                           var fileName = "server/sms/" + phoneNumber + ".txt";
-                          console.log(content);
+                          smsCount[to.superadmin].count = smsCount[to.superadmin].count - 1;
                           fs.writeFile(fileName, content, function (err) {
-                            if (err) return logger.log("error", err);
-                            logger.log(
+                            if (err) return; // logger.log("error", err);
+                            /*logger.log(
                               "info",
                               "Sent AUTOMATE REMINDER to NUMBER: " + phoneNumber
-                            );
+                            );*/
                             ftpUploadSMS(fileName, phoneNumber + ".txt");
                           });
                         }
                       }
                     });
+                    var objectArray = Object.entries(smsCount);
+                    console.log("OBJECT");
+                    console.log(objectArray);
+                    for (var item of objectArray[0]) {
+                      if (item.superadmin) {
+                        console.log(item);
+                        conn.query(
+                          "update sms_count set count = ? where superadmin = ?",
+                          [item.count, item.superadmin],
+                          function (err, rows, fields) {}
+                        );
+                      }
+                    }
+
+                    conn.release();
                   }
                 );
               }
@@ -222,4 +243,3 @@ function checkAvailableCode(phone, codes) {
   return false;
 }
 module.exports = reminderViaSMS;
-

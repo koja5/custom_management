@@ -38,6 +38,8 @@ import { PermissionPatientMenuComponent } from "./settings/permission-patient-me
 import { EventCategoryStatisticComponent } from "./parameters/event-category-statistic/event-category-statistic.component";
 import { UserAccessComponent } from "./parameters/user-access/user-access.component";
 import { SmsCountComponent } from "./administrator/sms-count/sms-count.component";
+import { MassiveSmsComponent } from "./administrator/massive-sms/massive-sms.component";
+import { MassiveEmailComponent } from "./administrator/massive-email/massive-email.component";
 
 const routes: Routes = [
   {
@@ -191,6 +193,14 @@ const routes: Routes = [
       {
         path: "sms-count",
         component: SmsCountComponent,
+      },
+      {
+        path: "massive-sms",
+        component: MassiveSmsComponent,
+      },
+      {
+        path: "massive-email",
+        component: MassiveEmailComponent,
       },
     ],
   },

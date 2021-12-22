@@ -117,7 +117,6 @@ router.post("/signUp", function (req, res, next) {
             "insert into users_superadmin SET ?",
             podaci,
             function (err, rows) {
-              conn.release();
               if (!err) {
                 logger.log(
                   "info",
@@ -125,6 +124,16 @@ router.post("/signUp", function (req, res, next) {
                 );
                 test.id = rows.insertId;
                 test.success = true;
+                var smsCountData = {
+                  superadmin: rows.insertId,
+                  count: 60
+                };
+                conn.query(
+                  "insert into sms_count SET ?",
+                  smsCountData,
+                  function (err, rows) {
+                    conn.release();
+                  });
               } else {
                 logger.log(
                   "warn",
@@ -393,86 +402,21 @@ router.post("/login", (req, res, next) => {
                 `User ${req.body.email} is SUCCESS login on a system like a USER!`
               );*/
               conn.query(
-                "SELECT * FROM user_access where user_id = ?",
-                [rows[0].id],
+                "SELECT * FROM user_access where mac_address = ?",
+                [req.body.ipAddress],
                 function (err, res_access, fields) {
                   if (res_access.length > 0) {
-                    var deny_access = true;
-                    for (let i = 0; i < res_access.length; i++) {
-                      if (
-                        res_access[i].mac_address === ipAddress &&
-                        res_access[i].access
-                      ) {
-                        conn.release();
-                        deny_access = false;
-                        res.send({
-                          login: true,
-                          notVerified: rows[0].active,
-                          user: rows[0].shortname,
-                          type: rows[0].type,
-                          id: rows[0].id,
-                          storeId: rows[0].storeId,
-                          superadmin: rows[0].superadmin,
-                        });
-                      } else if (
-                        res_access[i].mac_address === ipAddress &&
-                        !res_access[i].access
-                      ) {
-                        conn.release();
-                        deny_access = false;
-                        res.send({
-                          login: false,
-                          info: "deny_access",
-                        });
-                      }
-                    }
-                    if (deny_access) {
-                      var access_date = new Date();
-
-                      var access_data = {
-                        user_id: rows[0].id,
-                        superadmin: rows[0].superadmin,
-                        mac_address: ipAddress,
-                        date: access_date,
-                        access: 0,
-                      };
-
-                      conn.query(
-                        "insert into user_access set ?",
-                        [access_data],
-                        function (err, user_access_response, fields) {
-                          res.send({
-                            login: false,
-                            info: "deny_access",
-                            user_access_id: user_access_response.insertId,
-                          });
-                        }
-                      );
-
-                      conn.query(
-                        "select * from users_superadmin where id = ?",
-                        [rows[0].superadmin],
-                        function (err, superadmin, fields) {
-                          conn.release();
-                          console.log(superadmin);
-                          var body = {
-                            email: superadmin[0].email,
-                            firstname: rows[0].firstname,
-                            lastname: rows[0].lastname,
-                            date: access_date,
-                            mac_address: ipAddress,
-                          };
-
-                          var options = {
-                            url: link + "confirmUserViaMacAddress",
-                            method: "POST",
-                            body: body,
-                            json: true,
-                          };
-                          request(options, function (error, response, body) {});
-                        }
-                      );
-                    }
+                    conn.release();
+                    deny_access = false;
+                    res.send({
+                      login: true,
+                      notVerified: rows[0].active,
+                      user: rows[0].shortname,
+                      type: rows[0].type,
+                      id: rows[0].id,
+                      storeId: rows[0].storeId,
+                      superadmin: rows[0].superadmin,
+                    });
                   } else {
                     var access_date = new Date();
 
@@ -5343,15 +5287,43 @@ router.post("/sendSMS", function (req, res) {
                       signature;
                     var content = "To: " + phoneNumber + "\r\n\r\n" + message;
                     var fileName = "server/sms/" + phoneNumber + ".txt";
-                    fs.writeFile(fileName, content, function (err) {
-                      if (err) return logger.log("error", err);
-                      logger.log(
-                        "info",
-                        "Sent CUSTOM REMINDER to NUMBER: " + phoneNumber
-                      );
-                      ftpUploadSMS(fileName, phoneNumber + ".txt");
-                      res.send(true);
-                    });
+                    conn.query(
+                      "select * from sms_count where superadmin = ?",
+                      [sms.superadmin],
+                      function (err, smsCount, fields) {
+                        if (smsCount.length > 0 && smsCount[0].count > 0) {
+                          fs.writeFile(fileName, content, function (err) {
+                            if (err) return logger.log("error", err);
+                            logger.log(
+                              "info",
+                              "Sent CUSTOM REMINDER to NUMBER: " + phoneNumber
+                            );
+                            ftpUploadSMS(fileName, phoneNumber + ".txt");
+                            conn.query(
+                              "update sms_count set count = count - 1 where superadmin = ?",
+                              [sms.superadmin],
+                              function (err, smsCount, fields) {
+                                conn.release();
+                                if (smsCount) {
+                                  res.send(true);
+                                } else {
+                                  res.send(false);
+                                }
+                              }
+                            );
+                          });
+                        } else {
+                          /*logger.log(
+                            "warning",
+                            "User with ID" + req.body.id + " need to buy SMS!"
+                          );*/
+                          res.send({
+                            info: false,
+                            message: "buy_sms",
+                          });
+                        }
+                      }
+                    );
                   } else {
                     res.send(false);
                   }

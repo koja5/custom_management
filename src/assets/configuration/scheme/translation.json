@@ -187,6 +187,9 @@
       "smsReminderMessage": { "type": "string" },
       "changeSuperadminProfile": { "type": "string" },
       "userAccess": { "type": "string" },
+      "smsCount": { "type": "string" },
+      "massiveSms": { "type": "string" },
+      "massiveEmail": { "type": "string" },
       "reservations": { "type": "string" },
       "pagerItemsPerPage": { "type": "string" },
       "addNew": { "type": "string" },
@@ -374,6 +377,7 @@
       "manager": { "type": "string" },
       "nurse": { "type": "string" },
       "administrator": { "type": "string" },
+      "count": { "type": "string" },
       "priority": {
         "type": "array",
         "items": {
@@ -509,6 +513,7 @@
       "successSendSMSMessageText": { "type": "string" },
       "errorSendSMSMessageTitle": { "type": "string" },
       "errorSendSMSMessageText": { "type": "string" },
+      "needToBuySms": { "type": "string" },
       "sendEmailTo": { "type": "string" },
       "sendEmail": { "type": "string" },
       "inputEmailMessage": { "type": "string" },
@@ -1256,7 +1261,12 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "userAccess" }, { "key": "smsCount" }, {}, {}]
+          "items": [
+            { "key": "userAccess" },
+            { "key": "smsCount" },
+            { "key": "massiveSms" },
+            { "key": "massiveEmail" }
+          ]
         }
       ]
     },
@@ -2093,7 +2103,12 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "patient" }, { "key": "administrator" }, { "key": "count" }, {}]
+          "items": [
+            { "key": "patient" },
+            { "key": "administrator" },
+            { "key": "count" },
+            {}
+          ]
         }
       ]
     },
@@ -2830,7 +2845,8 @@
           "flex-direction": "row",
           "items": [
             { "key": "successSendSMSMessageText" },
-            { "key": "errorSendSMSMessageText" }
+            { "key": "errorSendSMSMessageText" },
+            { "key": "needToBuySms" }
           ]
         }
       ]

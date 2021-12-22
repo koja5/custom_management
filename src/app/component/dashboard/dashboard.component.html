@@ -778,6 +778,28 @@
                                   }}</span></a
                                 >
                               </li>
+
+                              <li class="{{ selectedNodeModel['massive_sms'] }}">
+                                <a
+                                  (click)="returnActiveNode('massive_sms')"
+                                  routerLink="/dashboard/home/massive-sms"
+                                  ><i class="fa fa-paper-plane"></i
+                                  ><span class="navigation-link">{{
+                                    language["massiveSms"]
+                                  }}</span></a
+                                >
+                              </li>
+
+                              <li class="{{ selectedNodeModel['massive_email'] }}">
+                                <a
+                                  (click)="returnActiveNode('massive_email')"
+                                  routerLink="/dashboard/home/massive-email"
+                                  ><i class="fa fa-envelope"></i
+                                  ><span class="navigation-link">{{
+                                    language["massiveEmail"]
+                                  }}</span></a
+                                >
+                              </li>
                             </ul>
                           </li>
 
