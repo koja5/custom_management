@@ -244,8 +244,8 @@ export class ParameterItemComponent implements OnInit {
         rowIndex !== -1 && sortedData.data[rowIndex]["gross_price"] !== formGroup.value.gross_price && sortedData.data[rowIndex]['vat'] !== formGroup.value.vat
       ) {
         formGroup.value.net_price = (
-          Number(formGroup.value.gross_price) *
-          (1 - this.getTaxValue(sortedData.data[rowIndex]["vat"]) / 100)).toFixed(2);
+          Number(formGroup.value.gross_price) /
+          (1 + this.getTaxValue(sortedData.data[rowIndex]["vat"]) / 100)).toFixed(2);
       }
     }
     product.gender = this.selectedGender;

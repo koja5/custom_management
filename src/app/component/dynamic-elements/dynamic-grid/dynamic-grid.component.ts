@@ -228,6 +228,7 @@ export class DynamicGridComponent implements OnInit {
   }
 
   callServerMethod(request, data) {
+    data = this.packAdditionalData(request.parameters, data);
     if (request.type === "POST") {
       this.service.callApiPost(request.api, data).subscribe((response) => {
         if (response === true || response["success"] === true) {
@@ -265,6 +266,21 @@ export class DynamicGridComponent implements OnInit {
     }
   }
 
+  packAdditionalData(parameters: any, data: any) {
+    if (parameters && parameters.length > 0) {
+      for (let i = 0; i < parameters.length; i++) {
+        switch (parameters[i]) {
+          case "superadmin":
+            data["superadmin"] = this.helpService.getSuperadmin();
+            break;
+          default:
+            break;
+        }
+      }
+    }
+    return data;
+  }
+
   previewDocument(filename: string) {
     this.helpService.getPdfFile(filename).subscribe((data) => {
       console.log(data);
@@ -277,7 +293,22 @@ export class DynamicGridComponent implements OnInit {
 
   setValue(fields, values) {
     for (let i = 0; i < fields.length; i++) {
-      this.form.setValue(fields[i]["name"], values[fields[i]["name"]]);
+      if (fields[i]["type"] === "multiselect" && values[fields[i]["name"]]) {
+        this.form.setValue(
+          fields[i]["name"],
+          values[fields[i]["name"]].split(",").map(Number)
+        );
+      } else if (
+        fields[i]["type"] === "checkbox" &&
+        values[fields[i]["name"]]
+      ) {
+        this.form.setValue(
+          fields[i]["name"],
+          values[fields[i]["name"]] ? true : false
+        );
+      } else {
+        this.form.setValue(fields[i]["name"], values[fields[i]["name"]]);
+      }
     }
   }
 

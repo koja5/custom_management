@@ -11,6 +11,7 @@ const passwordGenerate = require("generate-password");
 var request = require("request");
 const logger = require("./logger");
 const ftpUploadSMS = require("./ftpUploadSMS");
+const macAddress = require("os").networkInterfaces();
 
 var link = process.env.link_api;
 /*
@@ -116,7 +117,6 @@ router.post("/signUp", function (req, res, next) {
             "insert into users_superadmin SET ?",
             podaci,
             function (err, rows) {
-              conn.release();
               if (!err) {
                 logger.log(
                   "info",
@@ -124,6 +124,16 @@ router.post("/signUp", function (req, res, next) {
                 );
                 test.id = rows.insertId;
                 test.success = true;
+                var smsCountData = {
+                  superadmin: rows.insertId,
+                  count: 60
+                };
+                conn.query(
+                  "insert into sms_count SET ?",
+                  smsCountData,
+                  function (err, rows) {
+                    conn.release();
+                  });
               } else {
                 logger.log(
                   "warn",
@@ -375,6 +385,8 @@ router.post("/login", (req, res, next) => {
         logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
       } else {
+        var ipAddress = req.body.ipAddress;
+
         conn.query(
           "SELECT * FROM users WHERE email=? AND password=?",
           [reqObj.email, sha1(reqObj.password)],
@@ -383,21 +395,76 @@ router.post("/login", (req, res, next) => {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(err);
             }
+            console.log(rows);
             if (rows.length >= 1 && rows[0].active === 1) {
-              conn.release();
-              logger.log(
+              /*logger.log(
                 "info",
                 `User ${req.body.email} is SUCCESS login on a system like a USER!`
+              );*/
+              conn.query(
+                "SELECT * FROM user_access where mac_address = ?",
+                [req.body.ipAddress],
+                function (err, res_access, fields) {
+                  if (res_access.length > 0) {
+                    conn.release();
+                    deny_access = false;
+                    res.send({
+                      login: true,
+                      notVerified: rows[0].active,
+                      user: rows[0].shortname,
+                      type: rows[0].type,
+                      id: rows[0].id,
+                      storeId: rows[0].storeId,
+                      superadmin: rows[0].superadmin,
+                    });
+                  } else {
+                    var access_date = new Date();
+
+                    var access_data = {
+                      user_id: rows[0].id,
+                      superadmin: rows[0].superadmin,
+                      mac_address: ipAddress,
+                      date: access_date,
+                      access: 0,
+                    };
+
+                    conn.query(
+                      "insert into user_access set ?",
+                      [access_data],
+                      function (err, user_access_response, fields) {
+                        res.send({
+                          login: false,
+                          info: "deny_access",
+                          user_access_id: user_access_response.insertId,
+                        });
+                      }
+                    );
+
+                    conn.query(
+                      "select * from users_superadmin where id = ?",
+                      [rows[0].superadmin],
+                      function (err, superadmin, fields) {
+                        conn.release();
+                        var body = {
+                          email: superadmin[0].email,
+                          firstname: rows[0].firstname,
+                          lastname: rows[0].lastname,
+                          date: access_date,
+                          mac_address: ipAddress,
+                        };
+
+                        var options = {
+                          url: link + "confirmUserViaMacAddress",
+                          method: "POST",
+                          body: body,
+                          json: true,
+                        };
+                        request(options, function (error, response, body) {});
+                      }
+                    );
+                  }
+                }
               );
-              res.send({
-                login: true,
-                notVerified: rows[0].active,
-                user: rows[0].shortname,
-                type: rows[0].type,
-                id: rows[0].id,
-                storeId: rows[0].storeId,
-                superadmin: rows[0].superadmin,
-              });
             } else {
               conn.query(
                 "SELECT * FROM users_superadmin WHERE email=? AND password=?",
@@ -435,7 +502,7 @@ router.post("/login", (req, res, next) => {
                       [reqObj.email, sha1(reqObj.password)],
                       function (err, rows, fields) {
                         if (err) {
-                          logger.log("error", err.sql + ". " + err.sqlMessage);
+                          // logger.log("error", err.sql + ". " + err.sqlMessage);
                           res.json(err);
                         }
 
@@ -638,41 +705,45 @@ router.get("/getMe/:id", function (req, res, next) {
       res.json(err);
     }
     var id = req.params.id;
-    conn.query("SELECT * from users where id = ?", [id], function (err, rows) {
-      if (!err && rows.length >= 1) {
-        conn.release();
-        res.json(rows);
-      } else {
-        conn.query(
-          "SELECT * from users_superadmin where id = ?",
-          [id],
-          function (err, rows) {
-            if (!err) {
-              if (rows.length !== 0) {
-                conn.release();
-                res.json(rows);
-              } else {
-                conn.query(
-                  "SELECT * from customers where id = ?",
-                  [id],
-                  function (err, rows) {
-                    conn.release();
-                    if (!err) {
-                      res.json(rows);
-                    } else {
-                      logger.log("error", err.sql + ". " + err.sqlMessage);
+    conn.query(
+      "SELECT u.*, us.shortname as 'clinicName' from users u join users_superadmin us on u.superadmin = us.id where u.id = ?",
+      [id],
+      function (err, rows) {
+        if (!err && rows.length >= 1) {
+          conn.release();
+          res.json(rows);
+        } else {
+          conn.query(
+            "SELECT us.*, us.shortname as 'clinicName' from users_superadmin us where id = ?",
+            [id],
+            function (err, rows) {
+              if (!err) {
+                if (rows.length !== 0) {
+                  conn.release();
+                  res.json(rows);
+                } else {
+                  conn.query(
+                    "SELECT c.*, us.shortname as 'clinicName' from customers c join users_superadmin us on c.storeId = us.id where c.id = ?",
+                    [id],
+                    function (err, rows) {
+                      conn.release();
+                      if (!err) {
+                        res.json(rows);
+                      } else {
+                        logger.log("error", err.sql + ". " + err.sqlMessage);
+                      }
                     }
-                  }
-                );
+                  );
+                }
+              } else {
+                res.json(err);
+                logger.log("error", err.sql + ". " + err.sqlMessage);
               }
-            } else {
-              res.json(err);
-              logger.log("error", err.sql + ". " + err.sqlMessage);
             }
-          }
-        );
+          );
+        }
       }
-    });
+    );
   });
 });
 
@@ -1756,9 +1827,7 @@ router.get("/korisnik/verifikacija/:id", (req, res, next) => {
               logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
               logger.log("info", `Verification FOR EMAIL: ${reqObj}!`);
-              res.writeHead(302, {
-                Location: "/login",
-              });
+              return res.redirect("/login");
             }
           }
         );
@@ -1825,9 +1894,7 @@ router.get("/sendChangePassword/:id", (req, res, next) => {
               res.json(err);
               logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
-              res.writeHead(302, {
-                Location: "/changePassword",
-              });
+              return res.redirect("/changePassword");
             }
           }
         );
@@ -2184,16 +2251,23 @@ router.get("/getWorkandTaskForUser/:id", function (req, res, next) {
             "select t.*, e.color from tasks t join event_category e on t.colorTask = e.id where creator_id = ?",
             [id],
             function (err, events) {
-              conn.release();
-              if (!err) {
-                res.json({
-                  events: events,
-                  workTime: work,
-                });
-              } else {
-                res.json(err);
-                logger.log("error", err.sql + ". " + err.sqlMessage);
-              }
+              conn.query(
+                "select COUNT(t.id) as 'statistic', e.category, e.id, t.creator_id from tasks t join event_category e on t.colorTask = e.id where creator_id = ? GROUP BY e.id",
+                [id],
+                function (err, eventStatistic) {
+                  conn.release();
+                  if (!err) {
+                    res.json({
+                      eventStatistic: eventStatistic,
+                      events: events,
+                      workTime: work,
+                    });
+                  } else {
+                    res.json(err);
+                    logger.log("error", err.sql + ". " + err.sqlMessage);
+                  }
+                }
+              );
             }
           );
         }
@@ -2201,6 +2275,32 @@ router.get("/getWorkandTaskForUser/:id", function (req, res, next) {
     );
   });
 });
+
+function getEventPeriod(eventPeriod) {
+  console.log(eventPeriod);
+  switch (eventPeriod) {
+    case "0":
+      return "CAST(t.start AS DATE) >= CAST((NOW() - interval 1 DAY) as DATE)";
+      break;
+    case "1":
+      return "CAST(t.start AS DATE) >= CAST((NOW() - interval 7 DAY) as DATE)";
+      break;
+    case "2":
+      return "CAST(t.start AS DATE) >= CAST((NOW() - interval 1 MONTH) as DATE)";
+      break;
+    case "3":
+      return "CAST(t.start AS DATE) >= CAST((NOW() - interval 3 MONTH) as DATE)";
+      break;
+    case "4":
+      return "CAST(t.start AS DATE) >= CAST((NOW() - interval 6 MONTH) as DATE)";
+      break;
+    case "5":
+      return "CAST(t.start AS DATE) >= CAST((NOW() - interval 12 MONTH) as DATE)";
+      break;
+    default:
+      break;
+  }
+}
 
 router.post("/addComplaint", function (req, res, next) {
   connection.getConnection(function (err, conn) {
@@ -2527,7 +2627,7 @@ router.get("/getTherapyForCustomer/:id", function (req, res, next) {
     }
     var id = req.params.id;
     conn.query(
-      "SELECT * from therapy where customer_id = ?",
+      "SELECT t.*, e.category from therapy t join tasks ta on t.id = ta.therapy_id join event_category e on ta.colorTask = e.id where t.customer_id = ?",
       [id],
       function (err, rows) {
         conn.release();
@@ -4458,20 +4558,24 @@ router.post("/createEventCategory", function (req, res, next) {
       superadmin: req.body.superadmin,
     };
 
-    conn.query("insert into event_category SET ?", data, function (err, rows) {
-      conn.release();
-      if (!err) {
+    conn.query(
+      "insert into event_category SET ?",
+      req.body,
+      function (err, rows) {
+        conn.release();
         if (!err) {
-          response = true;
+          if (!err) {
+            response = true;
+          } else {
+            response.success = false;
+          }
+          res.json(response);
         } else {
-          response.success = false;
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
         }
-        res.json(response);
-      } else {
-        logger.log("error", err.sql + ". " + err.sqlMessage);
-        res.json(err);
       }
-    });
+    );
   });
 });
 
@@ -4512,18 +4616,18 @@ router.post("/updateEventCategory", function (req, res, next) {
     }
 
     var response = null;
-    var data = {
+    /*var data = {
       id: req.body.id,
       category: req.body.category,
       sequence: req.body.sequence,
       color: req.body.color,
       comment: req.body.comment,
       superadmin: req.body.superadmin,
-    };
+    };*/
 
     conn.query(
       "update event_category set ? where id = '" + req.body.id + "'",
-      data,
+      req.body,
       function (err, rows, fields) {
         conn.release();
         if (err) {
@@ -4680,9 +4784,7 @@ router.get("/task/confirmationArrival/:id", (req, res, next) => {
               res.json(err);
               logger.log("error", err.sql + ". " + err.sqlMessage);
             } else {
-              res.writeHead(302, {
-                Location: "../../../template/confirm-arrival",
-              });
+              return res.redirect("/template/confirm-arrival");
             }
           }
         );
@@ -5112,29 +5214,46 @@ router.post("/sendSMS", function (req, res) {
               res.json(err);
             } else {
               conn.query(
-                "select * from customers c join sms_reminder_message sr on c.storeId = sr.superadmin join store s on c.storeId = s.superadmin where c.id = ? and s.id = ?",
-                [req.body.id, req.body.storeId],
+                "select * from customers c join sms_reminder_message sr on c.storeId = sr.superadmin join store s on c.storeId = s.superadmin join tasks t on s.id = t.storeId join event_category e on t.colorTask = e.id where c.id = ? and s.id = ? and t.id = ? and e.allowSendInformation = 1",
+                [req.body.id, req.body.storeId, req.body.taskId],
                 function (err, smsMessage, fields) {
                   var sms = {};
                   var signature = "";
                   var dateMessage = "";
                   var time = "";
                   var clinic = "";
+                  console.log(smsMessage);
                   if (smsMessage.length > 0) {
                     sms = smsMessage[0];
                     if (sms.signatureAvailable) {
-                      if ((sms.street || sms.zipcode || sms.place) && sms.smsSignatureAddress) {
+                      if (
+                        (sms.street || sms.zipcode || sms.place) &&
+                        sms.smsSignatureAddress
+                      ) {
                         signature +=
-                          sms.smsSignatureAddress + "\n" + sms.street + " \n" + sms.zipcode + " " + sms.place + "\n";
+                          sms.smsSignatureAddress +
+                          "\n" +
+                          sms.street +
+                          " \n" +
+                          sms.zipcode +
+                          " " +
+                          sms.place +
+                          "\n";
                       }
-                      if (sms.telephone && sms.smsSignatureTelephone ) {
-                        signature += sms.smsSignatureTelephone + " " + sms.telephone + " \n";
+                      if (sms.telephone && sms.smsSignatureTelephone) {
+                        signature +=
+                          sms.smsSignatureTelephone +
+                          " " +
+                          sms.telephone +
+                          " \n";
                       }
                       if (sms.mobile && sms.smsSignatureMobile) {
-                        signature += sms.smsSignatureMobile + " " + sms.mobile + " \n";
+                        signature +=
+                          sms.smsSignatureMobile + " " + sms.mobile + " \n";
                       }
                       if (sms.email && sms.smsSignatureEmail) {
-                        signature += sms.smsSignatureEmail + " " + sms.email + " \n";
+                        signature +=
+                          sms.smsSignatureEmail + " " + sms.email + " \n";
                       }
                     }
 
@@ -5148,35 +5267,66 @@ router.post("/sendSMS", function (req, res) {
                       clinic =
                         sms.smsClinic + " " + req.body.storename + " \n\n";
                     }
-                  }
-                  var message =
-                    (sms.smsSubject
-                      ? sms.smsSubject
-                      : language?.initialGreetingSMSReminder) +
-                    " " +
-                    req.body.shortname +
-                    ", \n" +
-                    "\n" +
-                    (sms.smsMessage
-                      ? sms.smsMessage
-                      : language?.introductoryMessageForSMSReminderReservation) +
-                    " \n" +
-                    "\n" +
-                    dateMessage +
-                    time +
-                    clinic +
-                    signature;
-                  var content = "To: " + phoneNumber + "\r\n\r\n" + message;
-                  var fileName = "server/sms/" + phoneNumber + ".txt";
-                  fs.writeFile(fileName, content, function (err) {
-                    if (err) return logger.log("error", err);
-                    logger.log(
-                      "info",
-                      "Sent CUSTOM REMINDER to NUMBER: " + phoneNumber
+                    console.log(smsMessage);
+                    var message =
+                      (sms.smsSubject
+                        ? sms.smsSubject
+                        : language?.initialGreetingSMSReminder) +
+                      " " +
+                      req.body.shortname +
+                      ", \n" +
+                      "\n" +
+                      (sms.smsMessage
+                        ? sms.smsMessage
+                        : language?.introductoryMessageForSMSReminderReservation) +
+                      " \n" +
+                      "\n" +
+                      dateMessage +
+                      time +
+                      clinic +
+                      signature;
+                    var content = "To: " + phoneNumber + "\r\n\r\n" + message;
+                    var fileName = "server/sms/" + phoneNumber + ".txt";
+                    conn.query(
+                      "select * from sms_count where superadmin = ?",
+                      [sms.superadmin],
+                      function (err, smsCount, fields) {
+                        if (smsCount.length > 0 && smsCount[0].count > 0) {
+                          fs.writeFile(fileName, content, function (err) {
+                            if (err) return logger.log("error", err);
+                            logger.log(
+                              "info",
+                              "Sent CUSTOM REMINDER to NUMBER: " + phoneNumber
+                            );
+                            ftpUploadSMS(fileName, phoneNumber + ".txt");
+                            conn.query(
+                              "update sms_count set count = count - 1 where superadmin = ?",
+                              [sms.superadmin],
+                              function (err, smsCount, fields) {
+                                conn.release();
+                                if (smsCount) {
+                                  res.send(true);
+                                } else {
+                                  res.send(false);
+                                }
+                              }
+                            );
+                          });
+                        } else {
+                          /*logger.log(
+                            "warning",
+                            "User with ID" + req.body.id + " need to buy SMS!"
+                          );*/
+                          res.send({
+                            info: false,
+                            message: "buy_sms",
+                          });
+                        }
+                      }
                     );
-                    ftpUploadSMS(fileName, phoneNumber + ".txt");
-                    res.send(true);
-                  });
+                  } else {
+                    res.send(false);
+                  }
                 }
               );
             }
@@ -5669,7 +5819,7 @@ router.post("/loadTemplateAccount", function (req, res, next) {
     setTimeout(function () {
       res.json(true);
       conn.release();
-    }, 60000);
+    }, 20000);
   });
 });
 
@@ -5702,38 +5852,34 @@ function insertFromTemplate(conn, category, account_id, id) {
   );
 }
 
-
 function insertFromTemplateForUsers(conn, category, account_id, id) {
   conn.query(
     "SELECT * from " + category + " where superadmin = ?",
     account_id,
     function (err, rows) {
-      // conn.release();
-      console.log(rows);
       if (!err) {
         rows.forEach(function (to, i, array) {
           to.superadmin = id;
-          delete to.id;
+          var user_data = to;
           conn.query(
             "insert into " + category + " SET ?",
-            to,
+            user_data,
             function (err, res) {
-              console.log(err);
-              console.log(res);
-            }
-          );
-          conn.query(
-            "select w.* from users u join work w on u.id = w.user_id where u.id = ?",
-            to.id,
-            function (err, uw) {
-              uw.user_id = to.id;
-              delete uw.id;
               conn.query(
-                "insert into work SET ?",
-                uw,
-                function (err, res) {
-                  console.log(err);
-                  console.log(res);
+                "select w.* from users u join work w on u.id = w.user_id where u.id = " +
+                  user_data.id,
+                function (err, uw) {
+                  uw.forEach(function (touw, i, array) {
+                    touw.user_id = to.id;
+                    delete touw.id;
+                    conn.query(
+                      "insert into work SET ?",
+                      touw,
+                      function (err, res) {
+                        console.log(err);
+                      }
+                    );
+                  });
                 }
               );
             }
@@ -6467,6 +6613,349 @@ router.post("/updateSmsReminderMessage", (req, res, next) => {
 });
 
 /* END SMS REMINDER */
+
+/* EVENT CATEGORY STATISTIC */
+
+router.get("/getEventCategoryStatistic/:superadmin", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query(
+      "SELECT * from event_category_statistic where superadmin = ?",
+      [req.params.superadmin],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
+      }
+    );
+  });
+});
+
+router.post("/createEventCategoryStatistic", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        req.body.categorie = req.body.categorie.join(",");
+        conn.query(
+          "insert into event_category_statistic SET ?",
+          [req.body],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/updateEventCategoryStatistic", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        req.body.categorie = req.body.categorie.join(",");
+        conn.query(
+          "update event_category_statistic SET ? where id = ?",
+          [req.body, req.body.id],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/deleteEventCategoryStatistic", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "delete from event_category_statistic where id = '" +
+            req.body.id +
+            "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(false);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+/* END EVENT CATEGORY STATISTIC */
+
+/* USER ACCESS */
+
+router.get("/getUserAccess/:superadmin", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query(
+      "SELECT ua.*, u.firstname, u.lastname, u.email from user_access ua join users u on ua.user_id = u.id where ua.superadmin = ?",
+      [req.params.superadmin],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
+      }
+    );
+  });
+});
+
+router.post("/updateUserAccess", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        var body = {
+          id: req.body.id,
+          device_name: req.body.device_name,
+          access: req.body.access,
+        };
+        conn.query(
+          "update user_access SET ? where id = ?",
+          [body, body.id],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/updateUserAccessDevice", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        var body = {
+          id: req.body.id,
+          device_name: req.body.device_name,
+        };
+        conn.query(
+          "update user_access SET ? where id = ?",
+          [body, body.id],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+/* END USER ACCESS */
+
+/* SMS COUNT */
+
+router.get("/getSMSCount", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query(
+      "SELECT s.*, us.email from sms_count s join users_superadmin us on s.superadmin = us.id",
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
+      }
+    );
+  });
+});
+
+router.post("/createSmsCount", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        req.body.count = 60;
+        conn.query(
+          "insert into sms_count SET ?",
+          [req.body],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/updateSmsCount", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "update sms_count SET ? where id = ?",
+          [req.body, req.body.id],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/deleteSmsCount", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "delete from sms_count where id = '" + req.body.id + "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(false);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+/* END SMS COUNT */
 
 
 // start holidays

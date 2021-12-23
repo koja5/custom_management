@@ -11,6 +11,7 @@
       "errorExecutedActionTitle": { "type": "string" },
       "errorExecutedActionText": { "type": "string" },
       "actionTitle": { "type": "string" },
+      "areYouSure": { "type": "string" },
       "clickAgreeText": { "type": "string" },
       "termOfUse": { "type": "string" },
       "subject": { "type": "string" },
@@ -28,6 +29,11 @@
       "createAccountSuccessedText1": { "type": "string" },
       "createAccountSuccessedText2": { "type": "string" },
       "createAccountSuccessedText3": { "type": "string" },
+      "userAccessFormTitle": { "type": "string" },
+      "userAccessDevice": { "type": "string" },
+      "createUserAccessDevice": { "type": "string" },
+      "successUserAccessDeviceName": { "type": "string" },
+      "needToSuperadminApproveAccess": { "type": "string" },
       "confirmPassword": { "type": "string" },
       "rememberMe": { "type": "string" },
       "forgotPassword": { "type": "string" },
@@ -97,6 +103,7 @@
       "selectStoreIndicatorTitle": { "type": "string" },
       "selectStoreIndicatorText": { "type": "string" },
       "color": { "type": "string" },
+      "allowSendInformation": { "type": "string" },
       "start": { "type": "string" },
       "startTime": { "type": "string" },
       "end": { "type": "string" },
@@ -160,6 +167,7 @@
       "csMenu": { "type": "string" },
       "stateMenu": { "type": "string" },
       "eventCategoryMenu": { "type": "string" },
+      "eventCategoryStatistic": { "type": "string" },
       "workTimeColorsMenu": { "type": "string" },
       "areaCode": { "type": "string" },
       "systemSettingsTitleMenu": { "type": "string" },
@@ -178,6 +186,10 @@
       "mailPatientFormRegistration": { "type": "string" },
       "smsReminderMessage": { "type": "string" },
       "changeSuperadminProfile": { "type": "string" },
+      "userAccess": { "type": "string" },
+      "smsCount": { "type": "string" },
+      "massiveSms": { "type": "string" },
+      "massiveEmail": { "type": "string" },
       "reservations": { "type": "string" },
       "pagerItemsPerPage": { "type": "string" },
       "addNew": { "type": "string" },
@@ -187,7 +199,7 @@
       "discardChanges": { "type": "string" },
       "noRecordYet": { "type": "string" },
       "cancel": { "type": "string" },
-      "remove": {"type": "string"},
+      "remove": { "type": "string" },
       "category": { "type": "string" },
       "webAddress": { "type": "string" },
       "shortname": { "type": "string" },
@@ -365,6 +377,7 @@
       "manager": { "type": "string" },
       "nurse": { "type": "string" },
       "administrator": { "type": "string" },
+      "count": { "type": "string" },
       "priority": {
         "type": "array",
         "items": {
@@ -500,6 +513,7 @@
       "successSendSMSMessageText": { "type": "string" },
       "errorSendSMSMessageTitle": { "type": "string" },
       "errorSendSMSMessageText": { "type": "string" },
+      "needToBuySms": { "type": "string" },
       "sendEmailTo": { "type": "string" },
       "sendEmail": { "type": "string" },
       "inputEmailMessage": { "type": "string" },
@@ -566,7 +580,129 @@
       "smsSignatureAddress": { "type": "string" },
       "smsSignatureTelephone": { "type": "string" },
       "smsSignatureMobile": { "type": "string" },
-      "smsSignatureEmail": { "type": "string" }
+      "smsSignatureEmail": { "type": "string" },
+      "sequenceOfCount": { "type": "string" },
+      "nameOfCount": { "type": "string" },
+      "shortnameOfCount": { "type": "string" },
+      "categoryOfCount": { "type": "string" },
+      "displayOfCount": { "type": "string" },
+      "termsHeaderTitleBrand": {
+        "type": "string"
+      },
+      "termsHeaderTitle": {
+        "type": "string"
+      },
+      "termsEffectiveDate": {
+        "type": "string"
+      },
+      "termsEffectiveDateValue": {
+        "type": "string"
+      },
+      "termsWelcomeTitle": {
+        "type": "string"
+      },
+      "termsWelcomeText": {
+        "type": "string"
+      },
+      "termsShow": {
+        "type": "string"
+      },
+      "termsItems": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "text": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "privacyHeaderTitle": {
+        "type": "string"
+      },
+      "privacyLastModificationDate": {
+        "type": "string"
+      },
+      "privacyLastModificationDateValue": {
+        "type": "string"
+      },
+      "privacyShow": {
+        "type": "string"
+      },
+      "privacyIntroductionTitle": {
+        "type": "string"
+      },
+      "privacyIntroductionText": {
+        "type": "string"
+      },
+      "privacyItems": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "text": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "impressumHeaderTitle": {
+        "type": "string"
+      },
+      "impressumLastModificationDate": {
+        "type": "string"
+      },
+      "impressumLastModificationDateValue": {
+        "type": "string"
+      },
+      "impressumShow": {
+        "type": "string"
+      },
+      "impressumIntroductionTitle": {
+        "type": "string"
+      },
+      "impressumIntroductionText": {
+        "type": "string"
+      },
+      "impressumItems": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "text": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "eventCategoryPeriod": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "text": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "confirmArrivalThankYou": { "type": "string" },
+      "confirmArrivalText1": { "type": "string" },
+      "confirmArrivalText2": { "type": "string" },
+      "confirmArrivalGoToHome": { "type": "string" }
     }
   },
   "layout": [
@@ -606,7 +742,7 @@
             { "key": "clickAgreeText" },
             { "key": "termOfUse" },
             { "key": "actionTitle" },
-            {}
+            { "key": "areYouSure" }
           ]
         }
       ]
@@ -706,6 +842,23 @@
             { "key": "createAccountSuccessedText2" },
             { "key": "createAccountSuccessedText3" }
           ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "userAccessFormTitle" },
+            { "key": "userAccessDevice" },
+            { "key": "createUserAccessDevice" },
+            { "key": "successUserAccessDeviceName" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [{ "key": "needToSuperadminApproveAccess" }, {}, {}, {}]
         }
       ]
     },
@@ -1055,6 +1208,7 @@
             { "key": "csMenu" },
             { "key": "stateMenu" },
             { "key": "eventCategoryMenu" },
+            { "key": "eventCategoryStatistic" },
             { "key": "workTimeColorsMenu" }
           ]
         },
@@ -1101,6 +1255,17 @@
             { "key": "mailPatientFormRegistration" },
             { "key": "smsReminderMessage" },
             { "key": "changeSuperadminProfile" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "userAccess" },
+            { "key": "smsCount" },
+            { "key": "massiveSms" },
+            { "key": "massiveEmail" }
           ]
         }
       ]
@@ -1404,7 +1569,7 @@
             { "key": "category" },
             { "key": "webAddress" },
             { "key": "shortname" },
-            { }
+            { "key": "allowSendInformation" }
           ]
         }
       ]
@@ -1938,7 +2103,12 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "patient" }, { "key": "administrator" }, {}, {}]
+          "items": [
+            { "key": "patient" },
+            { "key": "administrator" },
+            { "key": "count" },
+            {}
+          ]
         }
       ]
     },
@@ -2675,7 +2845,8 @@
           "flex-direction": "row",
           "items": [
             { "key": "successSendSMSMessageText" },
-            { "key": "errorSendSMSMessageText" }
+            { "key": "errorSendSMSMessageText" },
+            { "key": "needToBuySms" }
           ]
         }
       ]
@@ -2880,6 +3051,307 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [{ "key": "smsSignatureEmail" }, {}, {}, {}]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Event category statistic",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "sequenceOfCount" },
+            { "key": "nameOfCount" },
+            { "key": "shortnameOfCount" },
+            { "key": "categoryOfCount" }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [{ "key": "displayOfCount" }, {}, {}, {}]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Terms",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "termsHeaderTitleBrand"
+            },
+            {
+              "key": "termsHeaderTitle"
+            },
+            {
+              "key": "termsEffectiveDate"
+            },
+            {
+              "key": "termsEffectiveDateValue"
+            },
+            {
+              "key": "termsShow"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "termsWelcomeTitle"
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "termsWelcomeText",
+              "type": "textarea"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "termsItems",
+              "type": "array",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                {
+                  "type": "div",
+                  "items": [
+                    {
+                      "key": "termsItems[].title"
+                    },
+                    {
+                      "key": "termsItems[].text",
+                      "type": "textarea"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Privacy & policy",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "privacyHeaderTitle"
+            },
+            {
+              "key": "privacyLastModificationDate"
+            },
+            {
+              "key": "privacyLastModificationDateValue"
+            },
+            {
+              "key": "privacyShow"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "privacyIntroductionTitle"
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "privacyIntroductionText",
+              "type": "textarea"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "privacyItems",
+              "type": "array",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                {
+                  "type": "div",
+                  "items": [
+                    {
+                      "key": "privacyItems[].title"
+                    },
+                    {
+                      "key": "privacyItems[].text",
+                      "type": "textarea"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Impressum",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "impressumHeaderTitle"
+            },
+            {
+              "key": "impressumLastModificationDate"
+            },
+            {
+              "key": "impressumLastModificationDateValue"
+            },
+            {
+              "key": "impressumShow"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "impressumIntroductionTitle"
+            },
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "impressumIntroductionText",
+              "type": "textarea"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "impressumItems",
+              "type": "array",
+              "expandable": true,
+              "expanded": false,
+              "items": [
+                {
+                  "type": "div",
+                  "items": [
+                    {
+                      "key": "impressumItems[].title"
+                    },
+                    {
+                      "key": "impressumItems[].text",
+                      "type": "textarea"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "array",
+      "title": "Event Category Period",
+      "key": "eventCategoryPeriod",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "items": [
+            {
+              "key": "eventCategoryPeriod[].id"
+            },
+            {
+              "key": "eventCategoryPeriod[].text"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Confirm arrival - client page",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            { "key": "confirmArrivalThankYou" },
+            { "key": "confirmArrivalText1" },
+            { "key": "confirmArrivalText2" },
+            { "key": "confirmArrivalGoToHome" }
+          ]
         }
       ]
     }

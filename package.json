@@ -75,6 +75,7 @@
     "file-saver": "^2.0.2",
     "font-awesome": "^4.7.0",
     "generate-password": "^1.6.0",
+    "getmac": "^5.20.0",
     "glob": "^7.1.7",
     "hogan.js": "^3.0.2",
     "i": "^0.3.6",

@@ -36,6 +36,11 @@ import { MailDenyReservationComponent } from "./parameters/mail-parameters/mail-
 import { MailPatientCreatedAccountComponent } from "./parameters/mail-parameters/mail-patient-created-account/mail-patient-created-account.component";
 import { ChangeSuperadminProfileComponent } from "./parameters/change-superadmin-profile/change-superadmin-profile.component";
 import { PermissionPatientMenuComponent } from "./settings/permission-patient-menu/permission-patient-menu.component";
+import { EventCategoryStatisticComponent } from "./parameters/event-category-statistic/event-category-statistic.component";
+import { UserAccessComponent } from "./parameters/user-access/user-access.component";
+import { SmsCountComponent } from "./administrator/sms-count/sms-count.component";
+import { MassiveSmsComponent } from "./administrator/massive-sms/massive-sms.component";
+import { MassiveEmailComponent } from "./administrator/massive-email/massive-email.component";
 
 const routes: Routes = [
   {
@@ -96,6 +101,10 @@ const routes: Routes = [
       {
         path: "event-category",
         component: EventCategoryComponent,
+      },
+      {
+        path: "event-category-statistic",
+        component: EventCategoryStatisticComponent,
       },
       {
         path: "work-time-colors",
@@ -178,6 +187,22 @@ const routes: Routes = [
       {
         path: "permission-patient-menu",
         component: PermissionPatientMenuComponent,
+      },
+      {
+        path: "user-access",
+        component: UserAccessComponent,
+      },
+      {
+        path: "sms-count",
+        component: SmsCountComponent,
+      },
+      {
+        path: "massive-sms",
+        component: MassiveSmsComponent,
+      },
+      {
+        path: "massive-email",
+        component: MassiveEmailComponent,
       },
     ],
   },

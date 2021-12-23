@@ -28,7 +28,7 @@
 
                     <button (click)="hideShowSidebar()" type="button" class="
               btn
-              mb-0
+              m-0
               pb-0
               btn-sm
               font-size-16
@@ -37,7 +37,12 @@
             " id="vertical-menu-btn">
             <i class="fa fa-fw fa-bars"></i>
           </button>
-                </div>
+          <div *ngIf="user" class="store-name">
+            <span class="font-bold" *ngIf="user.clinicName">
+              {{ user.clinicName }}
+            </span>
+          </div>
+        </div>
 
                 <div class="d-flex navbar-right">
                     <ul class="nav navbar-nav pull-right">
@@ -172,11 +177,15 @@
                                                         {{ language?.applicationParametersSettingsTitle }}
                                                     </li>
 
-                                                    <li class="{{ selectedNodeModel['users'] }}" *ngIf="
-                              type === userType.owner || type === userType.admin
-                            ">
-                                                        <a (click)="returnActiveNode('users')" routerLink="/dashboard/home/users"><i
-                                class="fa fa-user"></i><span class="navigation-link">{{
+                          <li
+                            class="{{ selectedNodeModel['users'] }}"
+                            *ngIf="type === userType.owner"
+                          >
+                            <a
+                              (click)="returnActiveNode('users')"
+                              routerLink="/dashboard/home/users"
+                              ><i class="fa fa-user"></i
+                              ><span class="navigation-link">{{
                                 language["users"]
                                 }}</span></a>
                                                     </li>
@@ -296,7 +305,25 @@
                                 </a>
                                                             </li>
 
-                                                            <li class="{{
+                              <li
+                                class="{{
+                                  selectedNodeModel['event_category_statistic']
+                                }}"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/event-category-statistic"
+                                  (click)="
+                                    returnActiveNode('event_category_statistic')
+                                  "
+                                  class="nav-link"
+                                  ><i class="fa fa-stack-exchange"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.eventCategoryStatistic }}
+                                </a>
+                              </li>
+
+                              <li
+                                class="{{
                                   selectedNodeModel['work_time_colors']
                                 }}">
                                                                 <a routerLink="/dashboard/home/work-time-colors" (click)="returnActiveNode('work_time_colors')" class="nav-link"><i
@@ -407,12 +434,29 @@
                                   language?.perimissionForPatientNavigationMenu
                                   }}
                                 </a>
-                                                            </li>
-                                                        </ul>
-                                                    </li>
-                                                    <li *ngIf="user && user.id === 4" class="menu-title" data-key="t-menu">
-                                                        {{ language?.systemSettingsTitleMenu }}
-                                                    </li>
+                              </li>
+                              <li
+                                class="{{ selectedNodeModel['user_access'] }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/user-access"
+                                  (click)="returnActiveNode('user_access')"
+                                  class="nav-link"
+                                  ><i class="fa fa-universal-access"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.userAccess }}
+                                </a>
+                              </li>
+                            </ul>
+                          </li>
+                          <li
+                            *ngIf="user && user.id === 4"
+                            class="menu-title"
+                            data-key="t-menu"
+                          >
+                            {{ language?.systemSettingsTitleMenu }}
+                          </li>
 
                                                     <li *ngIf="user && user.id === 4" class="{{ activeGroup[0] }}">
                                                         <a (click)="collapse(0)" class="has-arrow"><i class="fa fa-cogs"></i><span
@@ -449,17 +493,44 @@
                                                                 <a (click)="returnActiveNode('template_account')" routerLink="/dashboard/home/template-account"><i class="fa fa-users"></i><span
                                     class="navigation-link">{{
                                     language["templateAccount"]
-                                    }}</span></a>
-                                                            </li>
+                                  }}</span></a
+                                >
+                              </li>
 
-                                                            <li class="{{ selectedNodeModel['add_holiday'] }}">
-                                                                <a (click)="returnActiveNode('add_holiday')" routerLink="/dashboard/home/add-holiday"><i
-                                    class="fa fa-calendar-plus-o"></i><span class="navigation-link">{{
-                                    language["addHoliday"]
-                                    }}</span></a>
-                                                            </li>
-                                                        </ul>
-                                                    </li>
+                              <li class="{{ selectedNodeModel['sms_count'] }}">
+                                <a
+                                  (click)="returnActiveNode('sms_count')"
+                                  routerLink="/dashboard/home/sms-count"
+                                  ><i class="fa fa-comment"></i
+                                  ><span class="navigation-link">{{
+                                    language["smsCount"]
+                                  }}</span></a
+                                >
+                              </li>
+
+                              <li class="{{ selectedNodeModel['massive_sms'] }}">
+                                <a
+                                  (click)="returnActiveNode('massive_sms')"
+                                  routerLink="/dashboard/home/massive-sms"
+                                  ><i class="fa fa-paper-plane"></i
+                                  ><span class="navigation-link">{{
+                                    language["massiveSms"]
+                                  }}</span></a
+                                >
+                              </li>
+
+                              <li class="{{ selectedNodeModel['massive_email'] }}">
+                                <a
+                                  (click)="returnActiveNode('massive_email')"
+                                  routerLink="/dashboard/home/massive-email"
+                                  ><i class="fa fa-envelope"></i
+                                  ><span class="navigation-link">{{
+                                    language["massiveEmail"]
+                                  }}</span></a
+                                >
+                              </li>
+                            </ul>
+                          </li>
 
                                                     <li *ngIf="user && user.id === 4" class="{{ activeGroup[1] }}">
                                                         <a (click)="collapse(1)" class="has-arrow"><i class="fa fa fa-file-text"></i><span

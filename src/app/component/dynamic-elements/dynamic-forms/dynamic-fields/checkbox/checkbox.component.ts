@@ -17,7 +17,6 @@ export class CheckboxComponent implements OnInit {
   constructor(private helpService: HelpService) { }
 
   ngOnInit() {
-    console.log(this.config);
     if(this.config.value || this.config.value === 1) {
       this.config.value = true;
     } else {

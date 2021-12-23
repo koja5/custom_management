@@ -270,7 +270,7 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
     }
 
     conn.query(
-      "SELECT c.shortname, c.email as customer_email, s.*, t.start, t.end, u.lastname, u.firstname, th.therapies_title, c.storeId from customers c join tasks t on c.id = t.customer_id join therapy th on t.therapy_id = th.id join store s on t.storeId = s.id  join users u on t.creator_id = u.id where c.id = ? and t.id = ?",
+      "SELECT c.shortname, c.email as customer_email, s.*, t.start, t.end, u.lastname, u.firstname, th.therapies_title, c.storeId from customers c join tasks t on c.id = t.customer_id join therapy th on t.therapy_id = th.id join store s on t.storeId = s.id  join users u on t.creator_id = u.id join event_category e on t.colorTask = e.id where c.id = ? and t.id = ? and e.allowSendInformation = 1",
       [req.body.customer_id, req.body.id],
       function (err, rows, fields) {
         if (err) {
@@ -320,8 +320,8 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
                 (endHours < 10 ? "0" + endHours : endHours) +
                 ":" +
                 (endMinutes < 10 ? "0" + endMinutes : endMinutes);
-                console.log(mail);
-                console.log(to);
+              console.log(mail);
+              console.log(to);
               var mailOptions = {
                 from: '"ClinicNode" support@app-production.eu',
                 subject: mail.mailSubject
@@ -344,9 +344,10 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
                   finalGreeting: mail.mailFinalGreeting
                     ? mail.mailFinalGreeting
                     : req.body.language?.finalGreeting,
-                  signature: signatureAvailable && mail.mailSignature
+                  signature:
+                    signatureAvailable && mail.mailSignature
                       ? mail.mailSignature
-                    : "",
+                      : "",
                   thanksForUsing: mail.mailThanksForUsing
                     ? mail.mailThanksForUsing
                     : req.body.language?.thanksForUsing,
@@ -373,7 +374,7 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
                     : req.body.language?.finalMessageForConfirmArrival,
                   confirmArrivalButtonText:
                     req.body.language?.confirmArrivalButtonText,
-                    signatureAddress:
+                  signatureAddress:
                     signatureAvailable &&
                     mail.signatureAddress &&
                     (to.street || to.zipcode || to.place)
@@ -386,7 +387,9 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
                         to.place
                       : "",
                   signatureTelephone:
-                    signatureAvailable && mail.signatureTelephone && to.telephone
+                    signatureAvailable &&
+                    mail.signatureTelephone &&
+                    to.telephone
                       ? mail.signatureTelephone + " " + to.telephone
                       : "",
                   signatureMobile:
@@ -887,8 +890,8 @@ router.post("/sendReminderViaEmailManual", function (req, res) {
 
   connection.getConnection(function (err, conn) {
     conn.query(
-      "select mr.*, s.*, s.place as store_place from customers c join mail_reminder_message mr on c.storeId = mr.superadmin join store s on c.storeId = s.superadmin where c.id = ? and s.id = ?",
-      [req.body.id, req.body.storeId],
+      "select mr.*, s.*, s.place as store_place from customers c join mail_reminder_message mr on c.storeId = mr.superadmin join store s on c.storeId = s.superadmin join tasks t on s.id = t.storeId join event_category e on t.colorTask = e.id where c.id = ? and s.id = ? and t.id = ? and e.allowSendInformation = 1",
+      [req.body.id, req.body.storeId, req.body.taskId],
       function (err, mailMessage, fields) {
         if (err) {
           res.json(false);
@@ -924,9 +927,10 @@ router.post("/sendReminderViaEmailManual", function (req, res) {
             finalGreeting: mail?.mailFinalGreeting
               ? mail?.mailFinalGreeting
               : req.body.language?.finalGreeting,
-            signature: signatureAvailable && mail.mailSignature
-                      ? mail.mailSignature
-                    : "",
+            signature:
+              signatureAvailable && mail.mailSignature
+                ? mail.mailSignature
+                : "",
             thanksForUsing: mail?.mailThanksForUsing
               ? mail?.mailThanksForUsing
               : req.body.language?.thanksForUsing,
@@ -990,6 +994,63 @@ router.post("/sendReminderViaEmailManual", function (req, res) {
         });
       }
     );
+  });
+});
+
+router.post("/confirmUserViaMacAddress", function (req, res) {
+  var template = fs.readFileSync(
+    "./server/routes/templates/approveUserAccess.hjs",
+    "utf-8"
+  );
+  var compiledTemplate = hogan.compile(template);
+
+  var convertToDate = new Date(req.body.date);
+  var hours = convertToDate.getHours();
+  var minutes = convertToDate.getMinutes();
+  var date =
+    convertToDate.getDate() +
+    "." +
+    (convertToDate.getMonth() + 1) +
+    "." +
+    convertToDate.getFullYear();
+  var day = convertToDate.getDate();
+  var month = monthNames[convertToDate.getMonth()];
+  var year = convertToDate.getFullYear();
+  var start =
+    (hours < 10 ? "0" + hours : hours) +
+    ":" +
+    (hours < 10 ? "0" + hours : hours);
+
+  var mailOptions = {
+    from: '"ClinicNode" support@app-production.eu',
+    to: req.body.email,
+    subject: "Neue Geräte bestätigen",
+    html: compiledTemplate.render({
+      initialGreeting: "Hallo",
+      introductoryMessage:
+        "Wir möchten Sie darüber informieren, dass wir versuchen, uns mit den untenstehenden Informationen anzumelden. Bitte greifen Sie auf das Dashboard zu und gewähren Sie Zugriff!",
+      nameMessage: "Name",
+      macAddressMessage: "MAC-Adresse",
+      datumMessage: "Registrierungsdatum",
+      name: req.body.firstname + " " + req.body.lastname,
+      macAddress: req.body.mac_address,
+      date: day + "." + month + "." + year + " - " + hours + ":" + minutes,
+      month: month,
+      day: day,
+    }),
+  };
+
+  smtpTransport.sendMail(mailOptions, function (error, response) {
+    if (error) {
+      logger.log(
+        "info",
+        `Error to sent reminder via email on EMAIL: ${req.body.email}. Error: ${error}`
+      );
+      res.send(false);
+    } else {
+      logger.log("info", `Sent reminder via email on EMAIL: ${req.body.email}`);
+      res.send(true);
+    }
   });
 });
 

@@ -19,6 +19,7 @@ export class NavigationMenuModel {
     CS?: string;
     state?: string;
     event_category?: string;
+    event_category_statistic?: string;
     work_time_colors?: string;
     translation?: string;
     my_complaint?: string;
@@ -40,4 +41,8 @@ export class NavigationMenuModel {
     sms_reminder?: string;
     change_superadmin_profile?: string;
     permission_patient_menu?: string;
+    user_access?: string;
+    sms_count?: string;
+    massive_sms?: string;
+    massive_email?: string;
 }

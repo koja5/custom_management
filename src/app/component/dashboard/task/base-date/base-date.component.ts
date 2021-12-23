@@ -96,9 +96,6 @@ export class BaseDateComponent implements OnInit {
     },
   ];
   public stateComplaint: State = {
-    skip: 0,
-    take: 10,
-    filter: null,
     sort: [
       {
         field: "date",
@@ -107,9 +104,6 @@ export class BaseDateComponent implements OnInit {
     ],
   };
   public stateTherapy: State = {
-    skip: 0,
-    take: 10,
-    filter: null,
     sort: [
       {
         field: "date",
@@ -118,9 +112,6 @@ export class BaseDateComponent implements OnInit {
     ],
   };
   public stateDocument: State = {
-    skip: 0,
-    take: 10,
-    filter: null,
     sort: [
       {
         field: "date",
@@ -140,7 +131,6 @@ export class BaseDateComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log(location);
     var datetimestamp = Date.now();
 
     this.uploader = new FileUploader({
@@ -262,7 +252,10 @@ export class BaseDateComponent implements OnInit {
     this["loadingGridTherapy"] = true;
     this.service.getTherapyForCustomer(this.data.id).subscribe((data: []) => {
       this.gridTherapy = process(data, this.stateTherapy);
-      this.gridTherapyData = data;
+      this.gridTherapyData = data.map((item: []) => {
+        item["date"] = new Date(item["date"]);
+        return item;
+      });
       this["loadingGridTherapy"] = false;
       this.loading = false;
     });

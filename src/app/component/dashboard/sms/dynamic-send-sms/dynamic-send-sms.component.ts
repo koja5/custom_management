@@ -28,10 +28,14 @@ export class DynamicSendSmsComponent implements OnInit {
   onClick(event) {
     this.service.sendSMSMessage(this.data).subscribe((data) => {
       if (data) {
-        this.helpService.successToastr(
-          "",
-          this.language.successSendSMSMessageText
-        );
+        if (data["message"] === "buy_sms") {
+          this.helpService.warningToastr("", this.language.needToBuySms);
+        } else {
+          this.helpService.successToastr(
+            "",
+            this.language.successSendSMSMessageText
+          );
+        }
       } else {
         this.helpService.errorToastr("", this.language.errorSendSMSMessageText);
       }

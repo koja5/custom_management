@@ -159,6 +159,49 @@
               </div>
             </div>
             <!-- ./panel-login -->
+
+            <!-- panel-create user access device -->
+            <div
+              class="authfy-panel panel-signup text-center {{ userAccessForm }}"
+            >
+              <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                  <div class="authfy-heading">
+                    <h3 class="auth-title">
+                      {{ language.userAccessFormTitle }}
+                    </h3>
+                  </div>
+                  <p style="color: red">{{ loginInfo }}</p>
+                  <form
+                    class="signupForm"
+                    (ngSubmit)="createUserAccessDevice($event)"
+                  >
+                    <div class="form-group">
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="device"
+                        placeholder="{{ language.userAccessDevice }}"
+                        required="required"
+                        [(ngModel)]="userAccessDevice"
+                        userAccessDevice.value=""
+                        #email="ngModel"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <button
+                        class="btn btn-lg btn-block btn-primary"
+                        type="submit"
+                      >
+                        {{ language.createUserAccessDevice }}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <!-- ./panel-create user access device -->
+
             <!-- panel-signup start -->
             <div class="authfy-panel panel-signup text-center {{ signupForm }}">
               <div class="row">
@@ -218,9 +261,13 @@
                     <div class="form-group">
                       <p class="term-policy text-muted small">
                         {{ language.agree }}
-                        <a href="#">{{ language.privacyPolicy }}</a>
+                        <a routerLink="/privacy-policy" target="_blank">{{
+                          language.privacyPolicy
+                        }}</a>
                         {{ language.and }}
-                        <a href="#">{{ language.termsOfService }}</a
+                        <a routerLink="/terms" target="_blank">{{
+                          language.termsOfService
+                        }}</a
                         >.
                       </p>
                     </div>

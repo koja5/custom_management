@@ -8,6 +8,8 @@ import { ButtonComponent } from './button/button.component';
 import { CheckboxComponent } from './checkbox/checkbox.component';
 import { DatepickerComponent } from './datepicker/datepicker.component';
 import { DropdownComponent } from "./dropdown/dropdown.component";
+import { MultiselectComponent } from './multiselect/multiselect.component';
+import { NumericComponent } from './numeric/numeric.component';
 import { RadioComponent } from './radio/radio.component';
 import { SwitchComponent } from './switch/switch.component';
 import { TextareaComponent } from './textarea/textarea.component';
@@ -23,7 +25,9 @@ const components: {[type: string]: Type<Field>} = {
   button: ButtonComponent,
   radio: RadioComponent,
   checkbox: CheckboxComponent,
-  switch: SwitchComponent
+  switch: SwitchComponent,
+  multiselect: MultiselectComponent,
+  numeric: NumericComponent
 };
 
 @Directive({

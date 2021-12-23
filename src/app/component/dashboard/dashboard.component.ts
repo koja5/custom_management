@@ -163,6 +163,10 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  getMainStoreName() {
+
+  }
+
   checkDefaultLink() {
     if (this.helpService.getSessionStorage("defaultLink")) {
       this.router.navigate([this.helpService.getSessionStorage("defaultLink")]);
@@ -215,7 +219,6 @@ export class DashboardComponent implements OnInit {
 
   getMe() {
     this.users.getMe(this.helpService.getMe(), (val) => {
-      console.log(val);
       if (val && val.length > 0) {
         this.user = val[0];
         if (val[0].img && val[0].img.data && val[0].img.data.length !== 0) {

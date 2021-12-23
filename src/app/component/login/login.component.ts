@@ -8,6 +8,7 @@ import { MongoService } from "../../service/mongo.service";
 import { HelpService } from "src/app/service/help.service";
 import { PackLanguageService } from "src/app/service/pack-language.service";
 import { StorageService } from "src/app/service/storage.service";
+import { HttpClient } from "@angular/common/http";
 
 @Component({
   selector: "app-login",
@@ -18,6 +19,7 @@ export class LoginComponent implements OnInit {
   public loginForm = "active";
   public signupForm: string;
   public recoverForm: string;
+  public userAccessForm: string;
   public loading = false;
   public hideShow = "password";
   public hideShowEye = "fa-eye-slash";
@@ -28,6 +30,8 @@ export class LoginComponent implements OnInit {
   public emailValid = true;
   public language: any;
   private superadmin: number;
+  public userAccessId: number;
+  public userAccessDevice: string;
 
   public data = {
     id: "",
@@ -41,6 +45,7 @@ export class LoginComponent implements OnInit {
     mobile: "",
     comment: "",
     storeId: 0,
+    ipAddress: "",
   };
   // public data: LoginData;
 
@@ -53,7 +58,8 @@ export class LoginComponent implements OnInit {
     private mongo: MongoService,
     private helpService: HelpService,
     private packLanguage: PackLanguageService,
-    private storageService: StorageService
+    private storageService: StorageService,
+    public http: HttpClient
   ) {}
 
   ngOnInit() {
@@ -78,6 +84,13 @@ export class LoginComponent implements OnInit {
       this.checkCountryLocation();
     }
     this.helpService.setDefaultBrowserTabTitle();
+    this.initializeIpAddress();
+  }
+
+  initializeIpAddress() {
+    this.http.get("http://api.ipify.org/?format=json").subscribe((res: any) => {
+      this.data.ipAddress = res.ip;
+    });
   }
 
   checkCountryLocation() {
@@ -183,10 +196,7 @@ export class LoginComponent implements OnInit {
           "language",
           JSON.stringify(this.language)
         );
-        this.helpService.setLocalStorage(
-          "countryCode",
-          language["demoCode"]
-        );
+        this.helpService.setLocalStorage("countryCode", language["demoCode"]);
         this.helpService.setLocalStorage(
           "demoAccountLanguage",
           language["demoAccount"]
@@ -224,8 +234,18 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.service.login(
       this.data,
-      (isLogin, notActive, user, type, id, storeId, superadmin, last_login) => {
-        console.log("login" + notActive);
+      (
+        isLogin,
+        notActive,
+        user,
+        type,
+        id,
+        storeId,
+        superadmin,
+        last_login,
+        info,
+        user_access_id
+      ) => {
         if (isLogin) {
           if (!notActive) {
             this.loginInfo = JSON.parse(localStorage.getItem("language"))[
@@ -246,9 +266,20 @@ export class LoginComponent implements OnInit {
             this.getConfigurationFromDatabase(id);
           }
         } else {
-          this.loginInfo = JSON.parse(localStorage.getItem("language"))[
-            "notCorrectPass"
-          ];
+          if (info === "deny_access") {
+            this.loginInfo = JSON.parse(localStorage.getItem("language"))[
+              "needToSuperadminApproveAccess"
+            ];
+            if (user_access_id) {
+              this.userAccessId = user_access_id;
+              this.loginForm = "";
+              this.userAccessForm = "active";
+            }
+          } else {
+            this.loginInfo = JSON.parse(localStorage.getItem("language"))[
+              "notCorrectPass"
+            ];
+          }
           this.loading = false;
         }
       }
@@ -414,5 +445,17 @@ export class LoginComponent implements OnInit {
         JSON.stringify(data[i].value)
       );
     }
+  }
+
+  createUserAccessDevice(event) {
+    const data = {
+      id: this.userAccessId,
+      device_name: this.userAccessDevice,
+    };
+    this.service.updateUserAccessDevice(data).subscribe((data) => {
+      this.userAccessForm = "";
+      this.loginForm = "active";
+      this.loginInfo = this.language.successUserAccessDeviceName;
+    });
   }
 }

@@ -5,4 +5,5 @@ export class EventCategoryModel {
     color?: string;
     comment?: string;
     superadmin?: string;
+    allowSendInformation?: boolean;
 }

@@ -45,6 +45,9 @@ import { SharedModule } from './shared.module';
 import { DymanicElementsModule } from './component/dynamic-elements/dymanic-elements.module';
 import { DynamicMessageComponent } from './component/templates/dynamic-message/dynamic-message.component';
 import { PatientFormSuccessComponent } from './component/templates/patient-form-success/patient-form-success.component';
+import { PrivacyPolicyComponent } from "./component/templates/privacy-policy/privacy-policy.component";
+import { TermsComponent } from "./component/templates/terms/terms.component";
+import { ImpressumComponent } from "./component/templates/impressum/impressum.component";
 
 @NgModule({
   declarations: [
@@ -52,7 +55,10 @@ import { PatientFormSuccessComponent } from './component/templates/patient-form-
     NotFoundComponent,
     ConfirmArrivalComponent,
     DynamicMessageComponent,
-    PatientFormSuccessComponent
+    PatientFormSuccessComponent,
+    PrivacyPolicyComponent,
+    TermsComponent,
+    ImpressumComponent
   ],
   imports: [
     CommonModule,

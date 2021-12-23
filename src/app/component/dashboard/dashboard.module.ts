@@ -83,6 +83,11 @@ import { MailApproveReservationComponent } from "./parameters/mail-parameters/ma
 import { MailDenyReservationComponent } from "./parameters/mail-parameters/mail-deny-reservation/mail-deny-reservation.component";
 import { ChangeSuperadminProfileComponent } from "./parameters/change-superadmin-profile/change-superadmin-profile.component";
 import { PermissionPatientMenuComponent } from "./settings/permission-patient-menu/permission-patient-menu.component";
+import { EventCategoryStatisticComponent } from "./parameters/event-category-statistic/event-category-statistic.component";
+import { UserAccessComponent } from "./parameters/user-access/user-access.component";
+import { SmsCountComponent } from './administrator/sms-count/sms-count.component';
+import { MassiveEmailComponent } from "./administrator/massive-email/massive-email.component";
+import { MassiveSmsComponent } from './administrator/massive-sms/massive-sms.component';
 import { AddHolidayComponent } from './administrator/add-holiday/add-holiday.component';
 import { AgendaService, DayService, MonthAgendaService, MonthService, ScheduleModule, WeekService, WorkWeekService } from "@syncfusion/ej2-angular-schedule";
 
@@ -103,6 +108,7 @@ import { AgendaService, DayService, MonthAgendaService, MonthService, ScheduleMo
     StatisticComponent,
     VaucherComponent,
     EventCategoryComponent,
+    EventCategoryStatisticComponent,
     WorkTimeColorsComponent,
     TranslationComponent,
     EditTranslationComponent,
@@ -126,6 +132,10 @@ import { AgendaService, DayService, MonthAgendaService, MonthService, ScheduleMo
     SmsReminderComponent,
     ChangeSuperadminProfileComponent,
     PermissionPatientMenuComponent,
+    UserAccessComponent,
+    SmsCountComponent,
+    MassiveEmailComponent,
+    MassiveSmsComponent,
     AddHolidayComponent,
   ],
   imports: [

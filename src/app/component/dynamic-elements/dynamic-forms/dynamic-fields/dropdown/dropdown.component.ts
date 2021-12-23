@@ -3,12 +3,7 @@ import { FormGroup } from "@angular/forms";
 import { HelpService } from "src/app/service/help.service";
 import { Field } from "../../models/field";
 import { FieldConfig } from "../../models/field-config";
-import {
-  Query,
-  DataManager,
-  ODataV4Adaptor,
-  ReturnOption,
-} from "@syncfusion/ej2-data";
+import { Query } from "@syncfusion/ej2-data";
 
 @Component({
   selector: "app-dropdown",
@@ -27,9 +22,12 @@ export class DropdownComponent implements OnInit, Field {
 
   ngOnInit() {
     this.language = this.helpService.getLanguage();
-    if(this.config.data && this.config.data['translation']) {
-      this.data = this.helpService.getLanguage()[this.config.data['translation']['property']]
-      this.config.field = this.config.data['translation']['fields'];
+    if (this.config.data && this.config.data["translation"]) {
+      this.data =
+        this.helpService.getLanguage()[
+          this.config.data["translation"]["property"]
+        ];
+      this.config.field = this.config.data["translation"]["fields"];
     } else {
       this.initialization();
     }
@@ -40,17 +38,6 @@ export class DropdownComponent implements OnInit, Field {
     } else {
       this.getApiRequest();
     }
-
-    /*new DataManager({
-      url: "https://api.publicapis.org",
-      adaptor: new ODataV4Adaptor(),
-      crossDomain: true,
-    })
-      .executeQuery(new Query().from("entries"))
-      .then((e: ReturnOption) => {
-        console.log(e);
-        this.data = e['result']["entries"];
-      });*/
   }
 
   postApiRequest() {
@@ -81,7 +68,5 @@ export class DropdownComponent implements OnInit, Field {
       });
   }
 
-  onFiltering(event) {
-    
-  }
+  onFiltering(event) {}
 }

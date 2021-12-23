@@ -216,8 +216,6 @@ export class AddHolidayComponent implements OnInit {
       { timeOut: 7000, positionClass: "toast-bottom-right" }
     );
   }
-    });
-  }
 
   public displaySelectTemplateMessage(): void {
     this.toastrService.warning(

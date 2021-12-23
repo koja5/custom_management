@@ -7,6 +7,9 @@ import { DashboardGuard } from "./service/login-guard/dashboardGuard";
 
 import { NotFoundComponent } from "./component/templates/not-found/not-found.component";
 import { PatientFormSuccessComponent } from "./component/templates/patient-form-success/patient-form-success.component";
+import { ImpressumComponent } from "./component/templates/impressum/impressum.component";
+import { PrivacyPolicyComponent } from "./component/templates/privacy-policy/privacy-policy.component";
+import { TermsComponent } from "./component/templates/terms/terms.component";
 
 const routes: Routes = [
   { path: "", redirectTo: "", pathMatch: "full" },
@@ -21,12 +24,27 @@ const routes: Routes = [
     loadChildren: "./component/dashboard/dashboard.module#DashboardModule",
   },
   { path: "template/confirm-arrival", component: ConfirmArrivalComponent },
-  { path: "template/created-account-successed", component: PatientFormSuccessComponent },
+  {
+    path: "template/created-account-successed",
+    component: PatientFormSuccessComponent,
+  },
+  {
+    path: "impressum",
+    component: ImpressumComponent,
+  },
+  {
+    path: "privacy-policy",
+    component: PrivacyPolicyComponent,
+  },
+  {
+    path: "terms",
+    component: TermsComponent,
+  },
   {
     path: "**",
     pathMatch: "full",
     component: NotFoundComponent,
-  },
+  }
 ];
 
 @NgModule({
