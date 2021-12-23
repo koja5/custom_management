@@ -714,7 +714,7 @@ router.get("/getMe/:id", function (req, res, next) {
           res.json(rows);
         } else {
           conn.query(
-            "SELECT * from users_superadmin where id = ?",
+            "SELECT us.*, us.shortname as 'clinicName' from users_superadmin us where id = ?",
             [id],
             function (err, rows) {
               if (!err) {
