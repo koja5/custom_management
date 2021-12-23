@@ -6483,14 +6483,14 @@ router.post("/createHoliday", (req, res, next) => {
         } else {
           conn.query(
             "insert into holidays SET ?",[req.body],
-            function (err, rows, fields) {
+            function (err, results, fields) {
               conn.release();
               if (err) {
                 logger.log("error", err.sql + ". " + err.sqlMessage);
                 res.json(false);
                 console.log(err);
               } else {
-                res.json(true);
+                res.json(results.insertId);
               }
             }
           );
@@ -6578,7 +6578,7 @@ router.get("/getHolidays/:superAdminId", function (req, res, next) {
     }
     var superAdminId = req.params.superAdminId;
     conn.query(
-      "select * from holidays where superAdminId = '" + superAdminId + "'",
+      "SELECT * FROM `holidays` h join `holiday_template` ht on h.id = ht.holidayId join `user_template` ut on ht.templateId=ut.templateId where ut.userId='" + superAdminId + "'",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -6594,5 +6594,72 @@ router.get("/getHolidays/:superAdminId", function (req, res, next) {
 
 
 //end holidays
+
+//holiday-template
+
+
+router.post("/createHolidayTemplate", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "insert into holiday_template SET ?",[req.body],
+          function (err, results, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+
+router.post("/createUserTemplate", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "insert into user_template SET ?",
+          [req.body],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(false);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
 
 module.exports = router;

@@ -22,6 +22,13 @@ export class HolidayService {
       .subscribe(val => callback(val));
   }
 
+  public createHolidayTemplateConnection(data, callback): void {
+    this.httpClient
+      .post("/api/createHolidayTemplate", data)
+      .map(res => res)
+      .subscribe(val => callback(val));
+  }
+
   public updateHoliday(data, callback): void {
     this.httpClient
       .post("/api/updateHoliday", data)

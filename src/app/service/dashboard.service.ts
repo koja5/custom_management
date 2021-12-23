@@ -6,7 +6,7 @@ import "rxjs/add/operator/map";
   providedIn: "root",
 })
 export class DashboardService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getThemeConfig() {
     return this.http
@@ -64,6 +64,11 @@ export class DashboardService {
     return this.http
       .get("../assets/configuration/scheme/" + type + ".json")
       .map((res) => res);
+  }
+
+  createUserTemplateRelation(data) {
+    console.log(data);
+    return this.http.post("/api/createUserTemplate", data).map((res) => res);
   }
 
   createTranslation(data) {

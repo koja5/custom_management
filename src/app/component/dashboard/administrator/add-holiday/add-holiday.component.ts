@@ -1,3 +1,4 @@
+import { DashboardService } from 'src/app/service/dashboard.service';
 import { HolidayService } from '../../../../service/holiday.service';
 import { HolidayModel } from '../../../../models/holiday-model';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -36,14 +37,18 @@ export class AddHolidayComponent implements OnInit {
 
   public holidays: HolidayModel[] = [];
   public newHoliday;
+  public templateList;
 
   private superAdminId: string;
 
   @ViewChild("addVacationModal") addVacationModal: Modal;
+  @ViewChild("selectTemplateModal") selectTemplateModal: Modal;
+  selectedTemplate: any;
 
   constructor(public messageService: MessageService,
     private holidayService: HolidayService,
     private helpService: HelpService,
+    private dashboardService: DashboardService,
     private toastrService: ToastrService) { }
 
 
@@ -54,6 +59,8 @@ export class AddHolidayComponent implements OnInit {
     this.newHoliday = new HolidayModel(this.superAdminId);
 
     this.loadHolidays();
+
+    this.loadTemplates();
   }
 
   public loadHolidays(): void {
@@ -77,6 +84,14 @@ export class AddHolidayComponent implements OnInit {
         this.eventSettings.dataSource = this.holidays;
         this.scheduleObj.refresh();
       }
+    });
+  }
+
+  public loadTemplates(): void {
+    this.dashboardService.getTemplateAccount().subscribe((data: []) => {
+
+      this.templateList = data;
+      console.log('templates:' + data);
     });
   }
 
@@ -120,22 +135,30 @@ export class AddHolidayComponent implements OnInit {
 
   onCellClick(args: CellClickEventArgs): void {
 
-    this.selectedCell = args.element;
-    this.endTimeDatePicker.min = args.startTime;
+    if (this.selectedTemplate == undefined) {
+      this.selectedCell = args.element;
+      this.displaySelectTemplateMessage();
 
-    const holiday = this.holidays.find(x => args.startTime >= x.StartTime && args.startTime <= x.EndTime);
-    // must use startTime from args
-    if (holiday) {
-      this.newHoliday = holiday;
-      this.addNewHoliday = false;
     } else {
-      this.addNewHoliday = true;
-      this.newHoliday = new HolidayModel(this.superAdminId);
-      this.newHoliday.Subject = '';
-      this.newHoliday.StartTime = args.startTime;
-      this.newHoliday.EndTime = args.endTime;
+
+      this.selectedCell = args.element;
+      this.endTimeDatePicker.min = args.startTime;
+
+      const holiday = this.holidays.find(x => args.startTime >= x.StartTime && args.startTime <= x.EndTime);
+      // must use startTime from args
+      if (holiday) {
+        this.newHoliday = holiday;
+        this.addNewHoliday = false;
+      } else {
+        this.addNewHoliday = true;
+        this.newHoliday = new HolidayModel(this.superAdminId);
+        this.newHoliday.Subject = '';
+        this.newHoliday.StartTime = args.startTime;
+        this.newHoliday.EndTime = args.endTime;
+      }
+      this.addVacationModal.open();
+
     }
-    this.addVacationModal.open();
 
   }
 
@@ -148,32 +171,63 @@ export class AddHolidayComponent implements OnInit {
 
   addHoliday(): void {
 
-    this.holidayService.createHoliday(this.newHoliday, (val) => {
-      console.log(val);
-      if (val) {
+    this.holidayService.createHoliday(this.newHoliday, (insertedId) => {
+      console.log(insertedId);
 
-        this.toastrService.success(
-          this.language.adminSuccessCreateTitle,
-          this.language.adminSuccessCreateText,
-          { timeOut: 7000, positionClass: "toast-bottom-right" }
-        );
+      if (insertedId) {
+        console.log(insertedId);
 
-        this.holidays.push(this.newHoliday);
-        this.eventSettings.dataSource = this.holidays;
+        const relation = {
+          holidayId: insertedId,
+          templateId: this.selectedTemplate.id
+        }
 
-        this.closeAddVacationModal();
-        this.scheduleObj.refresh();
-      } else {
+        console.log(relation);
+        this.holidayService.createHolidayTemplateConnection(relation, (result) => {
 
-        this.toastrService.error(
-          this.language.adminErrorCreateTitle,
-          this.language.adminErrorCreateText,
-          { timeOut: 7000, positionClass: "toast-bottom-right" }
-        );
+          if (result) {
+            this.toastrService.success(
+              this.language.adminSuccessCreateTitle,
+              this.language.adminSuccessCreateText,
+              { timeOut: 7000, positionClass: "toast-bottom-right" }
+            );
+
+            this.holidays.push(this.newHoliday);
+            this.eventSettings.dataSource = this.holidays;
+
+            this.closeAddVacationModal();
+            this.scheduleObj.refresh();
+          }
+          else {
+            this.displayErrorMessage();
+          }
+        });
+      }
+      else {
+        this.displayErrorMessage();
       }
     });
   }
 
+  private displayErrorMessage(): void {
+    this.toastrService.error(
+      this.language.adminErrorCreateTitle,
+      this.language.adminErrorCreateText,
+      { timeOut: 7000, positionClass: "toast-bottom-right" }
+    );
+  }
+    });
+  }
+
+  public displaySelectTemplateMessage(): void {
+    this.toastrService.warning(
+      this.language.chooseTemplate,
+      null,
+      { timeOut: 7000, positionClass: "toast-bottom-right" }
+    );
+
+    this.selectedCell.classList.remove("e-selected-cell");
+  }
 
   updateHoliday(): void {
 
@@ -236,4 +290,7 @@ export class AddHolidayComponent implements OnInit {
     this.endTimeDatePicker.min = event;
   }
 
+  onTemplateSelection(): void {
+    console.log(this.selectedTemplate);
+  }
 }

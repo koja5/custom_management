@@ -2680,7 +2680,6 @@ export class DynamicSchedulerComponent implements OnInit {
       return "noTime";
     }*/
 
-    console.log(this.holidays);
     // this.holidays.forEach(holiday => {
     //   console.log(holiday);
     //   if (date.elementType == "monthCells" && date.date >= holiday.StartTime.getTime() && date.date <= holiday.EndTime.getTime()) {
@@ -2698,6 +2697,7 @@ export class DynamicSchedulerComponent implements OnInit {
     // });
 
     const holiday = this.holidays.find(holiday =>
+      date.date &&
       date.date.getDate() >= holiday.StartTime.getDate() &&
       date.date.getMonth() == holiday.StartTime.getMonth() &&
       date.date.getYear() == holiday.StartTime.getYear() &&
@@ -2709,10 +2709,20 @@ export class DynamicSchedulerComponent implements OnInit {
       date.element.style.backgroundColor = "#e9ecef";
       date.element.style.pointerEvents = "none";
 
-      if (date.elementType === "dateHeader" || this.currentView === "Month") {
+      if (this.currentView === "Month") {
+
         const span = document.createElement("SPAN");
         date.element.appendChild(span);
         span.innerHTML = holiday.Subject;
+
+      }
+      else if (date.elementType === "dateHeader") {
+
+        const dateSplitted = date.date.toString().split(' ');
+
+        // date - day - holiday
+        date.element.firstChild.innerText = dateSplitted[2] + " " + dateSplitted[0] + " - " + holiday.Subject;
+
       }
       return;
     }
