@@ -7082,7 +7082,56 @@ router.get("/getHolidays/:superAdminId", function (req, res, next) {
 });
 
 
+router.get("/getHolidaysByTemplate/:superAdminId/:templateId", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    var superAdminId = req.params.superAdminId;
+    var templateId = req.params.templateId;
+    conn.query(
+      "SELECT * FROM `holidays` h join `holiday_template` ht on h.id = ht.holidayId join `user_template` ut on ht.templateId=ut.templateId where ut.userId='" + superAdminId + "' and ut.templateId = '" + templateId + "'",
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
+
 //end holidays
+
+
+router.get("/getTemplateByUserId/:userId", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    var userId = req.params.userId;
+    conn.query(
+      "SELECT templateId FROM `user_template` where userId='" + userId + "'",
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
+
 
 //holiday-template
 

@@ -1,3 +1,4 @@
+import { UserTemplate } from './../models/user-template.model';
 import { Observable } from 'rxjs';
 import { HolidayModel } from './../models/holiday-model';
 import { HttpClient } from '@angular/common/http';
@@ -15,11 +16,21 @@ export class HolidayService {
       .get<HolidayModel[]>("/api/getHolidays/" + superAdminId).map((res) => res);
   }
 
+  public getHolidaysByTemplate(superAdminId: string, templateId: number): Observable<HolidayModel[]> {
+    return this.httpClient
+      .get<HolidayModel[]>("/api/getHolidaysByTemplate/" + superAdminId + "/" + templateId).map((res) => res);
+  }
+
   public createHoliday(data, callback): void {
     this.httpClient
       .post("/api/createHoliday", data)
       .map(res => res)
       .subscribe(val => callback(val));
+  }
+
+  public getTemplateByUserId(userId: string) {
+    return this.httpClient
+      .get("/api/getTemplateByUserId/" + userId).map((res) => res).toPromise();
   }
 
   public createHolidayTemplateConnection(data, callback): void {

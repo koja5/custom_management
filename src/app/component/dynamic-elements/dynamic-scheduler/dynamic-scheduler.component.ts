@@ -107,6 +107,7 @@ import { TypeOfEventAction } from "../../enum/typeOfEventAction";
 import { ActivatedRoute } from "@angular/router";
 import { HolidayService } from "src/app/service/holiday.service";
 import { retry } from "rxjs-compat/operator/retry";
+import { UserTemplate } from 'src/app/models/user-template.model';
 declare var moment: any;
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
@@ -399,6 +400,7 @@ export class DynamicSchedulerComponent implements OnInit {
     },
   ];
   public holidays = [];
+  public template: any;
 
   public generateEvents(): Object[] {
     const eventData: Object[] = [];
@@ -1250,7 +1252,7 @@ export class DynamicSchedulerComponent implements OnInit {
       } else if (args.data["id"]) {
         if (
           (this.type === this.userType.patient &&
-          args.data["customer_id"] !== this.id) || this.type === this.userType.readOnlyScheduler
+            args.data["customer_id"] !== this.id) || this.type === this.userType.readOnlyScheduler
         ) {
           args.cancel = true;
         } else {
@@ -1611,36 +1613,49 @@ export class DynamicSchedulerComponent implements OnInit {
   public loadHolidays(): void {
 
     const superAdminId = this.helpService.getSuperadmin();
-    this.holidayService.getHolidays(superAdminId).subscribe(result => {
+    const userId = this.helpService.getMe().toString();
 
-      console.log(result);
-      if (result && result.length > 0) {
 
-        console.log('holidayss');
-        result.forEach(r => {
-          console.log(r)
-          this.allEvents.push(
-            {
-              Subject: r.Subject,
-              StartTime: new Date(r.StartTime),
-              EndTime: new Date(r.EndTime)
-            }
-          );
+    console.log('userId', userId);
+    console.log('superAdminId', superAdminId);
 
-          this.holidays.push(
-            {
-              Subject: r.Subject,
-              StartTime: new Date(r.StartTime),
-              EndTime: new Date(r.EndTime)
-            }
-          )
-        });
+    this.holidayService.getTemplateByUserId(userId).then((data: { templateId: number }) => {
+      this.template = data;
+      console.log("TEMPLATE BY USER ", data);
 
-        this.eventSettings.dataSource = this.allEvents;
-      }
-      else {
-        console.log('no holidayss');
-      }
+      console.log('ID: ', data.templateId);
+      this.holidayService.getHolidaysByTemplate(superAdminId, data.templateId).subscribe(result => {
+
+        console.log('holidays', result);
+        if (result && result.length > 0) {
+
+          console.log('holidayss');
+          result.forEach(r => {
+            console.log(r)
+            this.allEvents.push(
+              {
+                Subject: r.Subject,
+                StartTime: new Date(r.StartTime),
+                EndTime: new Date(r.EndTime)
+              }
+            );
+
+            this.holidays.push(
+              {
+                Subject: r.Subject,
+                StartTime: new Date(r.StartTime),
+                EndTime: new Date(r.EndTime)
+              }
+            )
+          });
+
+          this.eventSettings.dataSource = this.allEvents;
+        }
+        else {
+          console.log('no holidayss');
+        }
+      });
+
     });
   }
 
@@ -2491,7 +2506,7 @@ export class DynamicSchedulerComponent implements OnInit {
           for (let j = 0; j < eventStatistic.length; j++) {
             if (
               this.sharedCalendarResources[i].id ===
-                eventStatistic[j].creator_id &&
+              eventStatistic[j].creator_id &&
               userId === eventStatistic[j].creator_id
             ) {
               for (let k = 0; k < listOfCategorie.length; k++) {

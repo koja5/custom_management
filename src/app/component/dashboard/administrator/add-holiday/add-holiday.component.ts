@@ -43,7 +43,7 @@ export class AddHolidayComponent implements OnInit {
 
   @ViewChild("addVacationModal") addVacationModal: Modal;
   @ViewChild("selectTemplateModal") selectTemplateModal: Modal;
-  selectedTemplate: any;
+  selectedTemplate = null;
 
   constructor(public messageService: MessageService,
     private holidayService: HolidayService,
@@ -58,13 +58,46 @@ export class AddHolidayComponent implements OnInit {
     this.superAdminId = this.helpService.getSuperadmin();
     this.newHoliday = new HolidayModel(this.superAdminId);
 
-    this.loadHolidays();
+    this.loadTemplates().then(() => {
 
-    this.loadTemplates();
+      this.loadAllHolidays();
+
+    });
   }
 
-  public loadHolidays(): void {
+  public loadAllHolidays(): void {
+    //reset
+    this.holidays = [];
+
     this.holidayService.getHolidays(this.superAdminId).subscribe(result => {
+      console.log(result);
+      if (result && result.length > 0) {
+        result.forEach(r => {
+          console.log('HOLIDAY', r);
+          this.holidays.push(
+            <HolidayModel>{
+              id: r.id,
+              Subject: r.Subject,
+              StartTime: new Date(r.StartTime),
+              EndTime: new Date(r.EndTime),
+              category: r.category,
+              superAdminId: r.superAdminId
+            }
+          )
+        });
+        console.log(result);
+      }
+      this.eventSettings.dataSource = this.holidays;
+      this.scheduleObj.refresh();
+
+    });
+  }
+
+  public loadHolidaysByTemplate(): void {
+    //reset
+    this.holidays = [];
+
+    this.holidayService.getHolidaysByTemplate(this.superAdminId, this.selectedTemplate.id).subscribe(result => {
       console.log(result);
       if (result && result.length > 0) {
         result.forEach(r => {
@@ -80,15 +113,15 @@ export class AddHolidayComponent implements OnInit {
           )
         });
         console.log(result);
-
-        this.eventSettings.dataSource = this.holidays;
-        this.scheduleObj.refresh();
       }
+      this.eventSettings.dataSource = this.holidays;
+      this.scheduleObj.refresh();
+
     });
   }
 
-  public loadTemplates(): void {
-    this.dashboardService.getTemplateAccount().subscribe((data: []) => {
+  public loadTemplates() {
+    return this.dashboardService.getTemplateAccountPromise().then((data: []) => {
 
       this.templateList = data;
       console.log('templates:' + data);
@@ -254,7 +287,6 @@ export class AddHolidayComponent implements OnInit {
     });
   }
 
-
   deleteHoliday(): void {
 
     this.holidayService.deleteHoliday(this.newHoliday.id, (val) => {
@@ -288,7 +320,14 @@ export class AddHolidayComponent implements OnInit {
     this.endTimeDatePicker.min = event;
   }
 
-  onTemplateSelection(): void {
-    console.log(this.selectedTemplate);
+  onTemplateChange(event): void {
+    console.log('valueChange', this.selectedTemplate);
+
+    if (this.selectedTemplate) {
+      this.loadHolidaysByTemplate();
+    } else {
+      this.loadAllHolidays();
+    }
+
   }
 }

@@ -1,7 +1,7 @@
 <div class="content-wrapper">
     <div class="row mx-0 mb-3 bg-white">
         <div class="col-4">
-            <kendo-combobox [data]="templateList" [valueField]="'id'" [textField]="'name'" (selectionChange)="onTemplateSelection()" class="col-4" [(ngModel)]="selectedTemplate" name="template">
+            <kendo-combobox [data]="templateList" [valueField]="'id'" [textField]="'name'" (valueChange)="onTemplateChange()" class="col-4" [(ngModel)]="selectedTemplate" name="template">
             </kendo-combobox>
         </div>
     </div>

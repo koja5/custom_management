@@ -87,6 +87,10 @@ export class DashboardService {
     return this.http.get("/api/getTemplateAccount");
   }
 
+  getTemplateAccountPromise() {
+    return this.http.get("/api/getTemplateAccount").toPromise();
+  }
+
   loadTemplateAccount(data) {
     return this.http.post("/api/loadTemplateAccount", data).map((res) => res);
   }
