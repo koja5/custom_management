@@ -108,6 +108,7 @@ import { ActivatedRoute } from "@angular/router";
 import { HolidayService } from "src/app/service/holiday.service";
 import { retry } from "rxjs-compat/operator/retry";
 import { UserTemplate } from 'src/app/models/user-template.model';
+import { HolidayTemplate } from 'src/app/models/holiday-template.model';
 declare var moment: any;
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
@@ -1615,16 +1616,15 @@ export class DynamicSchedulerComponent implements OnInit {
     const superAdminId = this.helpService.getSuperadmin();
     const userId = this.helpService.getMe().toString();
 
-
     console.log('userId', userId);
     console.log('superAdminId', superAdminId);
 
-    this.holidayService.getTemplateByUserId(userId).then((data: { templateId: number }) => {
-      this.template = data;
-      console.log("TEMPLATE BY USER ", data);
+    this.holidayService.getTemplateByUserId(userId).then((data: HolidayTemplate) => {
+      this.template = data[0];
+      console.log("TEMPLATE BY USER ", this.template);
 
-      console.log('ID: ', data.templateId);
-      this.holidayService.getHolidaysByTemplate(superAdminId, data.templateId).subscribe(result => {
+      console.log('ID: ', this.template.templateId);
+      this.holidayService.getHolidaysByTemplate(superAdminId, this.template.templateId).then(result => {
 
         console.log('holidays', result);
         if (result && result.length > 0) {

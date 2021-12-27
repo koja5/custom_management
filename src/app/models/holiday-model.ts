@@ -7,7 +7,6 @@ export class HolidayModel {
     superAdminId: string;
 
     constructor(superAdminId: string) {
-        this.id = 1;
         this.Subject = '';
         this.category = 'holiday';
         this.StartTime = new Date();

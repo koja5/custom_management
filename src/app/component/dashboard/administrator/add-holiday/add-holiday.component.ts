@@ -60,7 +60,7 @@ export class AddHolidayComponent implements OnInit {
 
     this.loadTemplates().then(() => {
 
-      this.loadAllHolidays();
+      //this.loadAllHolidays();
 
     });
   }
@@ -97,10 +97,11 @@ export class AddHolidayComponent implements OnInit {
     //reset
     this.holidays = [];
 
-    this.holidayService.getHolidaysByTemplate(this.superAdminId, this.selectedTemplate.id).subscribe(result => {
+    this.holidayService.getHolidaysByTemplate(this.superAdminId, this.selectedTemplate.id).then(result => {
       console.log(result);
       if (result && result.length > 0) {
         result.forEach(r => {
+          console.log('R: ', r);
           this.holidays.push(
             <HolidayModel>{
               id: r.id,
@@ -168,6 +169,7 @@ export class AddHolidayComponent implements OnInit {
 
   onCellClick(args: CellClickEventArgs): void {
 
+    console.log(args);
     if (this.selectedTemplate == undefined) {
       this.selectedCell = args.element;
       this.displaySelectTemplateMessage();
@@ -180,7 +182,10 @@ export class AddHolidayComponent implements OnInit {
       const holiday = this.holidays.find(x => args.startTime >= x.StartTime && args.startTime <= x.EndTime);
       // must use startTime from args
       if (holiday) {
+        console.log('holiday ', holiday);
         this.newHoliday = holiday;
+
+
         this.addNewHoliday = false;
       } else {
         this.addNewHoliday = true;
@@ -288,39 +293,39 @@ export class AddHolidayComponent implements OnInit {
   }
 
   deleteHoliday(): void {
+    this.holidayService.deleteHolidayTemplate(this.newHoliday.id).then(() => {
+      this.holidayService.deleteHoliday(this.newHoliday.id, (val) => {
+        if (val) {
 
-    this.holidayService.deleteHoliday(this.newHoliday.id, (val) => {
-      if (val) {
+          this.toastrService.success(
+            this.language.adminSuccessCreateTitle,
+            this.language.adminSuccessCreateText,
+            { timeOut: 7000, positionClass: "toast-bottom-right" }
+          );
 
-        this.toastrService.success(
-          this.language.adminSuccessCreateTitle,
-          this.language.adminSuccessCreateText,
-          { timeOut: 7000, positionClass: "toast-bottom-right" }
-        );
+          //DELETE FROM ARRAY
+          this.holidays = this.holidays.filter(h => h.id !== this.newHoliday.id);
+          this.eventSettings.dataSource = this.holidays;
 
-        //DELETE FROM ARRAY
-        this.holidays = this.holidays.filter(h => h.id !== this.newHoliday.id);
-        this.eventSettings.dataSource = this.holidays;
+          this.closeAddVacationModal();
+          this.scheduleObj.refresh();
+        } else {
 
-        this.closeAddVacationModal();
-        this.scheduleObj.refresh();
-      } else {
-
-        this.toastrService.error(
-          this.language.adminErrorCreateTitle,
-          this.language.adminErrorCreateText,
-          { timeOut: 7000, positionClass: "toast-bottom-right" }
-        );
-      }
+          this.toastrService.error(
+            this.language.adminErrorCreateTitle,
+            this.language.adminErrorCreateText,
+            { timeOut: 7000, positionClass: "toast-bottom-right" }
+          );
+        }
+      });
     });
   }
-
 
   setMinEndTime(event): void {
     this.endTimeDatePicker.min = event;
   }
 
-  onTemplateChange(event): void {
+  onTemplateChange(): void {
     console.log('valueChange', this.selectedTemplate);
 
     if (this.selectedTemplate) {
@@ -328,6 +333,5 @@ export class AddHolidayComponent implements OnInit {
     } else {
       this.loadAllHolidays();
     }
-
   }
 }
