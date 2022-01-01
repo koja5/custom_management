@@ -38,8 +38,10 @@ import { PermissionPatientMenuComponent } from "./settings/permission-patient-me
 import { EventCategoryStatisticComponent } from "./parameters/event-category-statistic/event-category-statistic.component";
 import { UserAccessComponent } from "./parameters/user-access/user-access.component";
 import { SmsCountComponent } from "./administrator/sms-count/sms-count.component";
-import { MassiveSmsComponent } from "./administrator/massive-sms/massive-sms.component";
-import { MassiveEmailComponent } from "./administrator/massive-email/massive-email.component";
+import { MassiveSmsComponent } from "./marketing/massive-sms/massive-sms.component";
+import { MassiveEmailComponent } from "./marketing/massive-email/massive-email.component";
+import { MailMassiveEmailComponent } from "./parameters/mail-parameters/mail-massive-email/mail-massive-email.component";
+import { SmsMassiveComponent } from "./parameters/sms-massive/sms-massive.component";
 
 const routes: Routes = [
   {
@@ -177,7 +179,12 @@ const routes: Routes = [
         path: "mail-patient-form-registration",
         component: MailPatientFormRegistrationComponent,
       },
+      {
+        path: "mail-massive",
+        component: MailMassiveEmailComponent,
+      },
       { path: "sms-reminder", component: SmsReminderComponent },
+      { path: "sms-massive", component: SmsMassiveComponent },
       {
         path: "change-superadmin-profile",
         component: ChangeSuperadminProfileComponent,

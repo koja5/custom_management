@@ -257,6 +257,52 @@
                               }}</span></a
                             >
                           </li>
+
+                          <li
+                            *ngIf="
+                              type === userType.owner || type === userType.admin
+                            "
+                            class="{{ activeGroup[3] }}"
+                          >
+                            <a (click)="collapse(3)" class="has-arrow"
+                              ><i class="fa fa-cogs"></i
+                              ><span class="navigation-link">{{
+                                language?.marketing
+                              }}</span></a
+                            >
+                            <ul
+                              class="sub-menu mm-collapse {{
+                                showHideCollapse[3]
+                              }}"
+                            >
+                              <li
+                                class="{{ selectedNodeModel['massive_sms'] }}"
+                              >
+                                <a
+                                  (click)="returnActiveNode('massive_sms')"
+                                  routerLink="/dashboard/home/massive-sms"
+                                  ><i class="fa fa-paper-plane"></i
+                                  ><span class="navigation-link">{{
+                                    language["massiveSms"]
+                                  }}</span></a
+                                >
+                              </li>
+
+                              <li
+                                class="{{ selectedNodeModel['massive_email'] }}"
+                              >
+                                <a
+                                  (click)="returnActiveNode('massive_email')"
+                                  routerLink="/dashboard/home/massive-email"
+                                  ><i class="fa fa-envelope"></i
+                                  ><span class="navigation-link">{{
+                                    language["massiveEmail"]
+                                  }}</span></a
+                                >
+                              </li>
+                            </ul>
+                          </li>
+
                           <li
                             class="{{ selectedNodeModel['vaucher'] }}"
                             *ngIf="type !== userType.patient"
@@ -628,6 +674,27 @@
                                 </a>
                               </li>
                               <li
+                                class="{{
+                                  selectedNodeModel[
+                                    'mail_massive_message'
+                                  ]
+                                }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/mail-massive"
+                                  (click)="
+                                    returnActiveNode(
+                                      'mail_massive_message'
+                                    )
+                                  "
+                                  class="nav-link"
+                                  ><i class="fa fa-envelope"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.mailMassiveMessage }}
+                                </a>
+                              </li>
+                              <li
                                 class="{{ selectedNodeModel['sms_reminder'] }}"
                                 *ngIf="type === userType.owner"
                               >
@@ -638,6 +705,19 @@
                                   ><i class="fa fa-comments"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.smsReminderMessage }}
+                                </a>
+                              </li>
+                              <li
+                                class="{{ selectedNodeModel['sms_massive_message'] }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/sms-massive"
+                                  (click)="returnActiveNode('sms_massive_message')"
+                                  class="nav-link"
+                                  ><i class="fa fa-comments"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.smsMassiveMessage }}
                                 </a>
                               </li>
 
@@ -775,28 +855,6 @@
                                   ><i class="fa fa-comment"></i
                                   ><span class="navigation-link">{{
                                     language["smsCount"]
-                                  }}</span></a
-                                >
-                              </li>
-
-                              <li class="{{ selectedNodeModel['massive_sms'] }}">
-                                <a
-                                  (click)="returnActiveNode('massive_sms')"
-                                  routerLink="/dashboard/home/massive-sms"
-                                  ><i class="fa fa-paper-plane"></i
-                                  ><span class="navigation-link">{{
-                                    language["massiveSms"]
-                                  }}</span></a
-                                >
-                              </li>
-
-                              <li class="{{ selectedNodeModel['massive_email'] }}">
-                                <a
-                                  (click)="returnActiveNode('massive_email')"
-                                  routerLink="/dashboard/home/massive-email"
-                                  ><i class="fa fa-envelope"></i
-                                  ><span class="navigation-link">{{
-                                    language["massiveEmail"]
                                   }}</span></a
                                 >
                               </li>

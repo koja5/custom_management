@@ -174,6 +174,30 @@ export class ParameterItemService extends BehaviorSubject<any[]> {
     return this.http.post("/api/updateSmsReminderMessage", data);
   }
 
+  getSmsMassiveMessage(id: number) {
+    return this.http.get("/api/getSmsMassiveMessage/" + id);
+  }
+
+  createSmsMassiveMessage(data) {
+    return this.http.post("/api/createSmsMassiveMessage", data);
+  }
+
+  updateSmsMassiveMessage(data) {
+    return this.http.post("/api/updateSmsMassiveMessage", data);
+  }
+
+  getMailMassive(id: number) {
+    return this.http.get("/api/getMailMassive/" + id);
+  }
+
+  createMailMassive(data) {
+    return this.http.post("/api/createMailMassive", data);
+  }
+
+  updateMailMassive(data) {
+    return this.http.post("/api/updateMailMassive", data);
+  }
+
   getSuperadminProfile(id) {
     return this.http.get("/api/getSuperadmin/" + id);
   }

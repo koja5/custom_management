@@ -1054,4 +1054,198 @@ router.post("/confirmUserViaMacAddress", function (req, res) {
   });
 });
 
+router.post("/sendMassiveEMail", function (req, res) {
+  var infoForDenyReservationTemplate = fs.readFileSync(
+    "./server/routes/templates/sendMassiveMails.hjs",
+    "utf-8"
+  );
+  var infoForDenyReservation = hogan.compile(infoForDenyReservationTemplate);
+  var question = "";
+  if (question) {
+    question += " and ";
+  }
+  if (req.body.place) {
+    question = "c.city = '" + req.body.place + "'";
+  }
+  if (req.body.male && req.body.female) {
+    var male = "'male'";
+    var female = "'female'";
+    if (question) {
+      question += " and c.gender = " + male;
+      question += " or c.gender = " + female;
+    } else {
+      question += "c.gender = " + male;
+      question += " or c.gender = " + female;
+    }
+  } else {
+    if (req.body.male) {
+      question = "c.gender = 'male'";
+    } else if (req.body.female) {
+      question = "c.gender = 'female'";
+    }
+  }
+
+  if (req.body.birthdayFrom) {
+    question += "c.birthday <= '" + req.body.birthdayFrom + "'";
+  }
+  if (req.body.birthdayTo) {
+    question += "c.birthday >= '" + req.body.birthdayTo + "'";
+  }
+  if (req.body.message != "") {
+    connection.getConnection(function (err, conn) {
+      conn.query(
+        "select c.email, mm.* from customers c join mail_massive_message mm on c.storeId = mm.superadmin where (c.email != '' and c.email != null) and c.storeId = " +
+          Number(req.body.superadmin) +
+          " and " +
+          question,
+        function (err, rows) {
+          if (err) {
+            res.json(false);
+          }
+          console.log(rows);
+          rows.forEach(function (to, i, array) {
+            var mail = {};
+            var signatureAvailable = false;
+            mail = to;
+            if (mail.signatureAvailable) {
+              signatureAvailable = true;
+            }
+            console.log();
+            var mailOptions = {
+              from: '"ClinicNode" support@app-production.eu',
+              to: to.email,
+              subject: req.body.subject,
+              html: infoForDenyReservation.render({
+                message: req.body.message,
+                initialGreeting: mail.mailInitialGreeting
+                  ? mail.mailInitialGreeting
+                  : req.body.language?.initialGreeting,
+                finalGreeting: mail.mailFinalGreeting
+                  ? mail.mailFinalGreeting
+                  : req.body.language?.finalGreeting,
+                signature: !signatureAvailable
+                  ? mail.mailSignature
+                  : req.body.language?.signature,
+                thanksForUsing: mail.mailThanksForUsing
+                  ? mail.mailThanksForUsing
+                  : req.body.language?.thanksForUsing,
+                websiteLink: req.body.language?.websiteLink,
+                ifYouHaveQuestion: mail.mailIfYouHaveQuestion
+                  ? mail.mailIfYouHaveQuestion
+                  : req.body.language?.ifYouHaveQuestion,
+                emailAddress: req.body.language?.emailAddress,
+                notReply: mail.mailNotReply
+                  ? mail.mailNotReply
+                  : req.body.language?.notReply,
+                copyRight: mail.mailCopyRight
+                  ? mail.mailCopyRight
+                  : req.body.language?.copyRight,
+                introductoryMessageForDenyReservation: mail.mailMessage
+                  ? mail.mailMessage
+                  : req.body.language?.introductoryMessageForDenyReservation,
+                signatureAddress:
+                  signatureAvailable && mail.signatureStreet
+                    ? mail.signatureStreet
+                    : "",
+                signatureTelephone:
+                  signatureAvailable && mail.signatureTelephone
+                    ? mail.signatureZipCode
+                    : "",
+                signatureMobile:
+                  signatureAvailable && mail.signatureTelephone
+                    ? mail.signaturePhone
+                    : "",
+                signatureEmail:
+                  signatureAvailable && mail.signatureEmail
+                    ? mail.signatureEmail
+                    : "",
+              }),
+            };
+            smtpTransport.sendMail(mailOptions, function (error, response) {
+              if (error) {
+                logger.log(
+                  "error",
+                  `Error to sent mail for marketing promotion on EMAIL: ${req.body.email}`
+                );
+                res.send(false);
+              } else {
+                logger.log(
+                  "info",
+                  `Sent mail for marketing promotion on EMAIL: ${req.body.email}`
+                );
+                res.send(true);
+              }
+            });
+          });
+        }
+      );
+    });
+  } else {
+    logger.log(
+      "error",
+      `Client don't input message for send massive mails: ${req.body.email}`
+    );
+    res.send(false);
+  }
+});
+
+router.post("/infoAboutConfirmDenyAccessDevice", function (req, res) {
+  var template = fs.readFileSync(
+    "./server/routes/templates/infoAboutUserAccess.hjs",
+    "utf-8"
+  );
+  var compiledTemplate = hogan.compile(template);
+  console.log(req.body);
+  var convertToDate = new Date(req.body.date);
+  var hours = convertToDate.getHours();
+  var minutes = convertToDate.getMinutes();
+  var date =
+    convertToDate.getDate() +
+    "." +
+    (convertToDate.getMonth() + 1) +
+    "." +
+    convertToDate.getFullYear();
+  var day = convertToDate.getDate();
+  var month = monthNames[convertToDate.getMonth()];
+  var year = convertToDate.getFullYear();
+  var start =
+    (hours < 10 ? "0" + hours : hours) +
+    ":" +
+    (hours < 10 ? "0" + hours : hours);
+
+  var mailOptions = {
+    from: '"ClinicNode" support@app-production.eu',
+    to: req.body.email,
+    subject:
+      (req.body.access ? "Aktiviert" : "Erloschen") + " ist dein Profil!",
+    html: compiledTemplate.render({
+      initialGreeting: "Hallo",
+      introductoryMessage:
+        "Wir informieren Sie, dass Ihr Profil " +
+        (req.body.access ? "Aktiviert" : "Erloschen"),
+      nameMessage: "Name",
+      macAddressMessage: "MAC-Adresse",
+      datumMessage: "Registrierungsdatum",
+      name: req.body.firstname + " " + req.body.lastname,
+      macAddress: req.body.mac_address,
+      date: day + "." + month + "." + year + " - " + hours + ":" + minutes,
+      month: month,
+      day: day,
+    }),
+  };
+
+  smtpTransport.sendMail(mailOptions, function (error, response) {
+    if (error) {
+      logger.log(
+        "info",
+        `Error to sent reminder via email on EMAIL: ${req.body.email}. Error: ${error}`
+      );
+      res.send(false);
+    } else {
+      logger.log("info", `Sent reminder via email on EMAIL: ${req.body.email}`);
+      res.send(true);
+    }
+  });
+});
+
 module.exports = router;

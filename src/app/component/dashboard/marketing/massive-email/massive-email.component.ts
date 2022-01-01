@@ -1,15 +1,17 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
+import { Modal } from "ngx-modal";
 import { DynamicFormsComponent } from "src/app/component/dynamic-elements/dynamic-forms/dynamic-forms.component";
 import { DynamicService } from "src/app/service/dynamic.service";
 import { HelpService } from "src/app/service/help.service";
 
 @Component({
-  selector: "app-massive-sms",
-  templateUrl: "./massive-sms.component.html",
-  styleUrls: ["./massive-sms.component.scss"],
+  selector: "app-massive-email",
+  templateUrl: "./massive-email.component.html",
+  styleUrls: ["./massive-email.component.scss"],
 })
-export class MassiveSmsComponent implements OnInit {
+export class MassiveEmailComponent implements OnInit {
   @ViewChild(DynamicFormsComponent) form: DynamicFormsComponent;
+  @ViewChild("recipients") recipients: Modal;
   public configField: any;
   public language: any;
   public superadmin: string;
@@ -17,6 +19,7 @@ export class MassiveSmsComponent implements OnInit {
   public data: any;
   public changeData: any;
   public showDialog = false;
+  public allRecipients: any;
 
   constructor(
     private helpService: HelpService,
@@ -31,7 +34,7 @@ export class MassiveSmsComponent implements OnInit {
 
   initialization() {
     this.dynamicService
-      .getConfiguration("administarator", "massive-sms")
+      .getConfiguration("administarator", "massive-email")
       .subscribe((config) => {
         this.configField = config;
         this.loading = false;
@@ -39,29 +42,26 @@ export class MassiveSmsComponent implements OnInit {
   }
 
   submitEmitter(event) {
-    console.log(event);
     this.changeData = event;
-    this.showDialog = true;
+    this.changeData.superadmin = this.helpService.getSuperadmin();
+    this.getFilteredRecipients();
+    this.recipients.open();
   }
 
-  receiveConfirm(event) {
-    if (event) {
-      this.dynamicService
-        .callApiPost("/api/sendMassiveSMS", this.changeData)
-        .subscribe((data) => {
-          if (data) {
-            this.helpService.successToastr(
-              this.language.successExecutedActionTitle,
-              this.language.successExecutedActionText
-            );
-          } else {
-            this.helpService.errorToastr(
-              this.language.errorExecutedActionTitle,
-              this.language.errorExecutedActionText
-            );
-          }
-        });
-    }
-    this.showDialog = false;
+  getFilteredRecipients() {
+    this.allRecipients = null;
+    this.dynamicService
+      .callApiPost("/api/getFilteredRecipients", this.changeData)
+      .subscribe((data) => {
+        this.allRecipients = data;
+      });
+  }
+
+  sendMails() {
+    this.dynamicService
+      .callApiPost("/api/sendMassiveEmail", this.changeData)
+      .subscribe((data) => {
+        this.recipients.close();
+      });
   }
 }

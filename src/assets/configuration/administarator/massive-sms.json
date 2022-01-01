@@ -37,13 +37,6 @@
     "field": "birthdayTo"
   },
   {
-    "type": "textbox",
-    "width": "col-md-12",
-    "name": "subject",
-    "label": "subject",
-    "field": "subject"
-  },
-  {
     "type": "textarea",
     "width": "col-md-12",
     "name": "message",
@@ -54,8 +47,8 @@
     "type": "button",
     "width": "col-md-12",
     "class": "e-control e-btn e-lib e-primary e-flat",
-    "name": "submit",
-    "label": "save",
+    "name": "sendMassiveSms",
+    "label": "sendMassiveSms",
     "field": "submit",
     "positionClass": "text-align: end"
   }

@@ -1,0 +1,47 @@
+<div *ngIf="loading" style="height: 80vh">
+  <div class="spinner loading"></div>
+</div>
+<div *ngIf="!loading" class="settings-container">
+  <h3 class="center">{{ language?.massiveEmailTitle }}</h3>
+  <app-dynamic-forms
+    *ngIf="configField"
+    [config]="configField"
+    (submit)="submitEmitter($event)"
+    #form="dynamicForm"
+  >
+  </app-dynamic-forms>
+  <modal #recipients modalClass="modal-md">
+    <modal-header> </modal-header>
+    <modal-content>
+      <div *ngIf="!allRecipients">
+        <div class="spinner loading"></div>
+      </div>
+      <div *ngIf="allRecipients">
+        <div class="mb-2 font-bold" *ngIf="allRecipients">
+          {{ language.countOfRecipientsForEmail }} {{ allRecipients.length }}
+        </div>
+        <kendo-grid
+          *ngIf="allRecipients"
+          [data]="allRecipients"
+          [style.height]="'515px'"
+        >
+          <kendo-grid-column field="firstname" title="{{ language.firstname }}">
+          </kendo-grid-column>
+          <kendo-grid-column field="lastname" title="{{ language.lastname }}">
+          </kendo-grid-column>
+          <kendo-grid-column field="email" title="{{ language.email }}">
+          </kendo-grid-column>
+        </kendo-grid>
+        <div class="mt-4 end">
+          <button
+            class="e-control e-btn e-lib e-primary e-flat"
+            (click)="sendMails()"
+          >
+            {{ language.sendEmail }}
+          </button>
+        </div>
+      </div>
+    </modal-content>
+    <modal-footer class="modal-footer-none"> </modal-footer>
+  </modal>
+</div>

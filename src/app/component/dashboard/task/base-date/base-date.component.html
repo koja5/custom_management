@@ -296,7 +296,11 @@
                             >
                               <input
                                 kendoTextBox
-                                [(ngModel)]="data.mobile ? data.mobile : language['noInformation']"
+                                [(ngModel)]="
+                                  data.mobile
+                                    ? data.mobile
+                                    : language['noInformation']
+                                "
                                 name="mobile"
                                 class="noPadding"
                                 readonly="true"
@@ -312,7 +316,11 @@
                             >
                               <input
                                 kendoTextBox
-                                [(ngModel)]="data.email ? data.email : language['noInformation']"
+                                [(ngModel)]="
+                                  data.email
+                                    ? data.email
+                                    : language['noInformation']
+                                "
                                 name="email"
                                 class="noPadding"
                                 readonly="true"
@@ -328,7 +336,11 @@
                             >
                               <input
                                 kendoTextBox
-                                [(ngModel)]="data.street ? data.street : language['noInformation']"
+                                [(ngModel)]="
+                                  data.street
+                                    ? data.street
+                                    : language['noInformation']
+                                "
                                 name="street"
                                 class="noPadding"
                                 readonly="true"
@@ -344,7 +356,11 @@
                             >
                               <input
                                 kendoTextBox
-                                [(ngModel)]="data.streetnumber ? data.streetnumber : language['noInformation']"
+                                [(ngModel)]="
+                                  data.streetnumber
+                                    ? data.streetnumber
+                                    : language['noInformation']
+                                "
                                 name="streetnumber"
                                 class="noPadding"
                                 readonly="true"
@@ -360,7 +376,11 @@
                             >
                               <input
                                 kendoTextBox
-                                [(ngModel)]="data.city ? data.city : language['noInformation']"
+                                [(ngModel)]="
+                                  data.city
+                                    ? data.city
+                                    : language['noInformation']
+                                "
                                 name="city"
                                 class="noPadding"
                                 readonly="true"
@@ -1201,8 +1221,10 @@
                             field="date"
                             title="{{ language.date }}"
                             width="140"
-                            [format]="{ date: 'short' }"
                           >
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                              {{ dataItem.date | date: "dd.MM.yyyy" }}
+                            </ng-template>
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="complaint_title"
@@ -1224,13 +1246,13 @@
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="category"
-                            title="{{language.category}}"
+                            title="{{ language.category }}"
                             width="150"
                           >
                           </kendo-grid-column>
                           <kendo-grid-column
                             field="comment"
-                            title="{{language.comment}}"
+                            title="{{ language.comment }}"
                             width="150"
                           >
                           </kendo-grid-column>
@@ -2239,7 +2261,7 @@
                     class="form-button"
                     type="submit"
                   >
-                    {{language.updateCustomer}}
+                    {{ language.updateCustomer }}
                   </button>
                 </div>
               </form>

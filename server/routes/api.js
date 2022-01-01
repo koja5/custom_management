@@ -126,14 +126,15 @@ router.post("/signUp", function (req, res, next) {
                 test.success = true;
                 var smsCountData = {
                   superadmin: rows.insertId,
-                  count: 60
+                  count: 60,
                 };
                 conn.query(
                   "insert into sms_count SET ?",
                   smsCountData,
                   function (err, rows) {
                     conn.release();
-                  });
+                  }
+                );
               } else {
                 logger.log(
                   "warn",
@@ -407,16 +408,22 @@ router.post("/login", (req, res, next) => {
                 function (err, res_access, fields) {
                   if (res_access.length > 0) {
                     conn.release();
-                    deny_access = false;
-                    res.send({
-                      login: true,
-                      notVerified: rows[0].active,
-                      user: rows[0].shortname,
-                      type: rows[0].type,
-                      id: rows[0].id,
-                      storeId: rows[0].storeId,
-                      superadmin: rows[0].superadmin,
-                    });
+                    if (res_access[0].access) {
+                      res.send({
+                        login: true,
+                        notVerified: rows[0].active,
+                        user: rows[0].shortname,
+                        type: rows[0].type,
+                        id: rows[0].id,
+                        storeId: rows[0].storeId,
+                        superadmin: rows[0].superadmin,
+                      });
+                    } else {
+                      res.send({
+                        login: false,
+                        info: "deny_access",
+                      });
+                    }
                   } else {
                     var access_date = new Date();
 
@@ -2914,7 +2921,7 @@ router.post("/updateTherapyList", function (req, res, next) {
   });
 });
 
-// end therapy_list
+// end therapy_listgetFilteredRecipients
 
 // start recommendation_list
 
@@ -5059,109 +5066,6 @@ const monthNames = [
   "November",
   "December",
 ];
-const messagebird = require("messagebird")("sbx8Desv4cXJdPMZf7GtBLs9P", null, [
-  "ENABLE_CONVERSATIONSAPI_WHATSAPP_SANDBOX",
-]);
-
-/*router.post("/sendSMS", function (req, res) {
-  // Check if phone number is valid
-  request(
-    link + "/getTranslationByCountryCode/AT",
-    function (error, response, body) {
-      if (req.body.telephone || req.body.mobile) {
-        var phoneNumber = null;
-        if (req.body.telephone) {
-          phoneNumber = req.body.telephone;
-        } else if (req.body.mobile) {
-          phoneNumber = req.body.mobile;
-        }
-        var convertToDateStart = new Date(req.body.start);
-        var convertToDateEnd = new Date(req.body.end);
-        var startHours = convertToDateStart.getHours();
-        var startMinutes = convertToDateStart.getMinutes();
-        var endHours = convertToDateEnd.getHours();
-        var endMinutes = convertToDateEnd.getMinutes();
-        var date =
-          convertToDateStart.getDate() +
-          "." +
-          (convertToDateStart.getMonth() + 1) +
-          "." +
-          convertToDateStart.getFullYear();
-        var day = convertToDateStart.getDate();
-        var month = monthNames[convertToDateStart.getMonth()];
-        var start =
-          (startHours < 10 ? "0" + startHours : startHours) +
-          ":" +
-          (startMinutes < 10 ? "0" + startMinutes : startMinutes);
-        var end =
-          (endHours < 10 ? "0" + endHours : endHours) +
-          ":" +
-          (endMinutes < 10 ? "0" + endMinutes : endMinutes);
-        messagebird.lookup.read(
-          phoneNumber,
-          process.env.COUNTRY_CODE,
-          function (err, response) {
-            if (err && err.errors[0].code == 21) {
-              // This error code indicates that the phone number has an unknown format
-              response.send("You need to enter a valid phone number!");
-            } else if (err) {
-              // Some other error occurred
-              response.send(
-                "Something went wrong while checking your phone number!"
-              );
-            } else if (response.type != "mobile") {
-              // The number lookup was successful but it is not a mobile number
-              response.send(
-                "You have entered a valid phone number, but it's not a mobile number! Provide a mobile number so we can contact you via SMS."
-              );
-            } else {
-              var language = JSON.parse(body)["config"];
-              // Send scheduled message with MessageBird API
-              messagebird.messages.create(
-                {
-                  originator: "ClinicNode",
-                  recipients: [response.phoneNumber], // normalized phone number from lookup request
-                  body:
-                    language?.initialGreetingSMSReminder +
-                    " " +
-                    req.body.shortname +
-                    ", \n" +
-                    "\n" +
-                    language?.introductoryMessageForSMSReminderReservation +
-                    " \n" +
-                    "\n" +
-                    language?.dateMessage +
-                    " " +
-                    date +
-                    " \n" +
-                    language?.timeMessage +
-                    " " +
-                    start +
-                    "-" +
-                    end +
-                    " \n" +
-                    language?.storeLocation +
-                    " " +
-                    req.body.storename,
-                },
-                function (err, response) {
-                  if (err) {
-                    // Request has failed
-                    res.send(err);
-                  } else {
-                    res.send(true);
-                  }
-                }
-              );
-            }
-          }
-        );
-      }
-    }
-  );
-});*/
-
-/* END SMS Sender */
 
 // generate SMS reminider
 router.post("/sendSMS", function (req, res) {
@@ -5222,7 +5126,6 @@ router.post("/sendSMS", function (req, res) {
                   var dateMessage = "";
                   var time = "";
                   var clinic = "";
-                  console.log(smsMessage);
                   if (smsMessage.length > 0) {
                     sms = smsMessage[0];
                     if (sms.signatureAvailable) {
@@ -5352,6 +5255,7 @@ function checkAvailableCode(phone, codes) {
   return false;
 }
 
+//custom send SMS
 router.post("/sendCustomSMS", function (req, res) {
   var phoneNumber = req.body.number;
   request(link + "/getAvailableAreaCode", function (error, response, codes) {
@@ -5377,7 +5281,174 @@ router.post("/sendCustomSMS", function (req, res) {
   });
 });
 
-//custom SMS reminder
+//send massive SMS
+
+router.post("/sendMassiveSMS", function (req, res) {
+  var phoneNumber = req.body.number;
+  if (req.body.message != "") {
+    request(link + "/getAvailableAreaCode", function (error, response, codes) {
+      connection.getConnection(function (err, conn) {
+        if (err) {
+          res.json(err);
+        }
+        var question = getSqlQuery(req.body);
+        conn.query(
+          "select distinct c.* from customers c join sms_massive_message sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin where (c.mobile != '' || c.telephone != '') and c.storeId = " +
+            Number(req.body.superadmin) +
+            " and " +
+            question,
+          function (err, rows) {
+            console.log(rows);
+            rows.forEach(function (to, i, array) {
+              var phoneNumber = to.moble ? to.mobile : to.telephone;
+              console.log(phoneNumber);
+              if (
+                checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
+                req.body.message
+              ) {
+                var message = req.body.message;
+                var signature = "";
+                if (to.signatureAvailable) {
+                  if (
+                    (to.street || to.zipcode || to.place) &&
+                    to.smsSignatureAddress
+                  ) {
+                    signature +=
+                      to.smsSignatureAddress +
+                      "\n" +
+                      to.street +
+                      " \n" +
+                      to.zipcode +
+                      " " +
+                      to.place +
+                      "\n";
+                  }
+                  if (to.telephone && to.smsSignatureTelephone) {
+                    signature +=
+                      to.smsSignatureTelephone + " " + to.telephone + " \n";
+                  }
+                  if (to.mobile && to.smsSignatureMobile) {
+                    signature +=
+                      to.smsSignatureMobile + " " + to.mobile + " \n";
+                  }
+                  if (to.email && to.smsSignatureEmail) {
+                    signature += to.smsSignatureEmail + " " + to.email + " \n";
+                  }
+                }
+                var content =
+                  "To: " + phoneNumber + "\r\n\r\n" + message + signature;
+                var fileName = "server/sms/" + phoneNumber + ".txt";
+                fs.writeFile(fileName, content, function (err) {
+                  console.log(err);
+                  if (err) return logger.log("error", err);
+                  /*logger.log(
+                  "info",
+                  "Sent CUSTOM SMS MESSAGE to NUMBER: " + phoneNumber
+                );*/
+                  ftpUploadSMS(fileName, phoneNumber + ".txt");
+                  res.send(true);
+                });
+              } else {
+                res.send(false);
+                logger.log(
+                  "warn",
+                  `Number ${req.body.number} is not start with available area code!`
+                );
+              }
+            });
+          }
+        );
+      });
+    });
+  } else {
+    res.send(false);
+    logger.log(
+      "error",
+      `Client don't input message for send massive sms: ${req.body.email}`
+    );
+  }
+});
+
+function getSqlQuery(body) {
+  var question = "";
+  if (question) {
+    question += " and ";
+  }
+  if (body.place) {
+    question = "c.city = '" + body.place + "'";
+  }
+  if (body.male && body.female) {
+    var male = "'male'";
+    var female = "'female'";
+    if (question) {
+      question += " and (c.gender = " + male;
+      question += " or c.gender = " + female + ")";
+    } else {
+      question += "(c.gender = " + male;
+      question += " or c.gender = " + female + ")";
+    }
+  } else {
+    if (body.male) {
+      if (question) {
+        question += " and c.gender = 'male'";
+      } else {
+        question += "c.gender = 'male'";
+      }
+    } else if (body.female) {
+      if (question) {
+        question += " and c.gender = 'female'";
+      } else {
+        question += "c.gender = 'female'";
+      }
+    }
+  }
+
+  if (body.birthdayFrom) {
+    if (question) {
+      question += " and c.birthday >= '" + body.birthdayFrom + "'";
+    } else {
+      question += "c.birthday >= '" + body.birthdayFrom + "'";
+    }
+  }
+  if (body.birthdayTo) {
+    if (question) {
+      question += " and c.birthday <= '" + body.birthdayTo + "'";
+    } else {
+      question += "c.birthday <= '" + body.birthdayTo + "'";
+    }
+  }
+
+  return question;
+}
+
+router.post("/getFilteredRecipients", function (req, res) {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        res.json(err);
+      }
+      var question = getSqlQuery(req.body);
+
+      console.log(question);
+      conn.query(
+        "select distinct c.* from customers c join sms_massive_message sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin where c.storeId = " +
+          Number(req.body.superadmin) +
+          " and (" +
+          question +
+          ")",
+        function (err, rows) {
+          conn.release();
+          console.log(rows);
+          if (err) return err;
+          res.json(rows);
+        }
+      );
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
 
 /* Settings reminder */
 
@@ -6614,6 +6685,96 @@ router.post("/updateSmsReminderMessage", (req, res, next) => {
 
 /* END SMS REMINDER */
 
+/* SMS REMINDER */
+
+router.get("/getSmsMassiveMessage/:superadmin", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query(
+      "SELECT * from sms_massive_message where superadmin = ?",
+      [req.params.superadmin],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
+      }
+    );
+  });
+});
+
+router.post("/createSmsMassiveMessage", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "insert into sms_massive_message SET ?",
+          [req.body],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/updateSmsMassiveMessage", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "update sms_massive_message SET ? where superadmin = ?",
+          [req.body, req.body.superadmin],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+/* END SMS REMINDER */
+
 /* EVENT CATEGORY STATISTIC */
 
 router.get("/getEventCategoryStatistic/:superadmin", function (req, res, next) {
@@ -6956,5 +7117,95 @@ router.post("/deleteSmsCount", (req, res, next) => {
 });
 
 /* END SMS COUNT */
+
+/* MAIL REMINDER */
+
+router.get("/getMailMassive/:superadmin", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query(
+      "SELECT * from mail_massive_message where superadmin = ?",
+      [req.params.superadmin],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
+      }
+    );
+  });
+});
+
+router.post("/createMailMassive", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "insert into mail_massive_message SET ?",
+          [req.body],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/updateMailMassive", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "update mail_massive_message SET ? where superadmin = ?",
+          [req.body, req.body.superadmin],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+/* END MAIL REMINDER */
 
 module.exports = router;

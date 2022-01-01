@@ -1,20 +1,20 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { DynamicFormsComponent } from "src/app/component/dynamic-elements/dynamic-forms/dynamic-forms.component";
-import { SmsReminderModel } from "src/app/models/sms-reminder-model";
+import { MailReminderModel } from "src/app/models/mail-reminder-model";
 import { DynamicService } from "src/app/service/dynamic.service";
 import { HelpService } from "src/app/service/help.service";
 import { ParameterItemService } from "src/app/service/parameter-item.service";
 
 @Component({
-  selector: "app-sms-reminder",
-  templateUrl: "./sms-reminder.component.html",
-  styleUrls: ["./sms-reminder.component.scss"],
+  selector: "app-mail-massive-email",
+  templateUrl: "./mail-massive-email.component.html",
+  styleUrls: ["./mail-massive-email.component.scss"],
 })
-export class SmsReminderComponent implements OnInit {
+export class MailMassiveEmailComponent implements OnInit {
   @ViewChild(DynamicFormsComponent) form: DynamicFormsComponent;
   public path = "parameters";
-  public file = "sms-reminder";
-  public mailReminderData = new SmsReminderModel();
+  public file = "mail-massive";
+  public mailReminderData = new MailReminderModel();
   public loading = true;
   public type: number;
   public id: number;
@@ -47,7 +47,7 @@ export class SmsReminderComponent implements OnInit {
   }
 
   getData(id) {
-    this.service.getSmsReminderMessage(id).subscribe((data) => {
+    this.service.getMailMassive(id).subscribe((data) => {
       this.data = data;
       if (data && data["length"] > 0) {
         this.packValue(data);
@@ -75,7 +75,7 @@ export class SmsReminderComponent implements OnInit {
       this.changeData["superadmin"] = this.helpService.getMe();
       if (this.data && this.data.length) {
         this.service
-          .updateSmsReminderMessage(this.changeData)
+          .updateMailMassive(this.changeData)
           .subscribe((data) => {
             if (data) {
               this.helpService.successToastr(
@@ -92,7 +92,7 @@ export class SmsReminderComponent implements OnInit {
       } else {
         this.data = [this.changeData];
         this.service
-          .createSmsReminderMessage(this.changeData)
+          .createMailMassive(this.changeData)
           .subscribe((data) => {
             if (data) {
               this.helpService.successToastr(

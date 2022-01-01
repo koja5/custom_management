@@ -6,14 +6,14 @@ import { HelpService } from "src/app/service/help.service";
 import { ParameterItemService } from "src/app/service/parameter-item.service";
 
 @Component({
-  selector: "app-sms-reminder",
-  templateUrl: "./sms-reminder.component.html",
-  styleUrls: ["./sms-reminder.component.scss"],
+  selector: "app-sms-massive",
+  templateUrl: "./sms-massive.component.html",
+  styleUrls: ["./sms-massive.component.scss"],
 })
-export class SmsReminderComponent implements OnInit {
+export class SmsMassiveComponent implements OnInit {
   @ViewChild(DynamicFormsComponent) form: DynamicFormsComponent;
   public path = "parameters";
-  public file = "sms-reminder";
+  public file = "sms-massive";
   public mailReminderData = new SmsReminderModel();
   public loading = true;
   public type: number;
@@ -47,7 +47,7 @@ export class SmsReminderComponent implements OnInit {
   }
 
   getData(id) {
-    this.service.getSmsReminderMessage(id).subscribe((data) => {
+    this.service.getSmsMassiveMessage(id).subscribe((data) => {
       this.data = data;
       if (data && data["length"] > 0) {
         this.packValue(data);
@@ -75,7 +75,7 @@ export class SmsReminderComponent implements OnInit {
       this.changeData["superadmin"] = this.helpService.getMe();
       if (this.data && this.data.length) {
         this.service
-          .updateSmsReminderMessage(this.changeData)
+          .updateSmsMassiveMessage(this.changeData)
           .subscribe((data) => {
             if (data) {
               this.helpService.successToastr(
@@ -92,7 +92,7 @@ export class SmsReminderComponent implements OnInit {
       } else {
         this.data = [this.changeData];
         this.service
-          .createSmsReminderMessage(this.changeData)
+          .createSmsMassiveMessage(this.changeData)
           .subscribe((data) => {
             if (data) {
               this.helpService.successToastr(
