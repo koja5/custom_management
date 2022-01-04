@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit {
     private packLanguage: PackLanguageService,
     private storageService: StorageService,
     public http: HttpClient
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.initialization();
@@ -255,12 +255,14 @@ export class LoginComponent implements OnInit {
           } else {
             this.cookie.set("user", type);
             this.helpService.setLocalStorage("type", type);
+            console.log('TYPEEE: ', type);
             this.helpService.setLocalStorage("idUser", id);
             this.helpService.setLocalStorage("indicatorUser", id);
             this.helpService.setLocalStorage("storeId-" + id, storeId);
             this.helpService.setLocalStorage("superadmin", superadmin);
             this.superadmin = superadmin;
             if (last_login === null) {
+              console.log('last login NULL');
               this.helpService.setSessionStorage("first_login", true);
             }
             this.getConfigurationFromDatabase(id);

@@ -5599,6 +5599,7 @@ router.get("/deleteAvailableAreaCode/:id", (req, res, next) => {
 /* TEMPLATE ACCOUNT */
 
 router.post("/createTemplateAccount", function (req, res, next) {
+  
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
@@ -5728,6 +5729,27 @@ router.get("/getTemplateAccount", function (req, res, next) {
     });
   });
 });
+
+
+router.get("/getTemplateAccountByUserId/:id", function (req, res, next) {
+  var reqObj = req.params.id;
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query("SELECT ta.id, ta.name, ta.account_id, ta.language, ta.email from `user_template` ut join `template_account` ta on ut.templateId=ta.id where ut.userId='" +  req.params.id +"'", function (err, rows) {
+      conn.release();
+      if (!err) {
+        res.json(rows);
+      } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      }
+    });
+  });
+});
+
 
 router.post("/deleteTemplateAccount", (req, res, next) => {
   try {
@@ -7090,15 +7112,15 @@ router.get("/deleteHolidayTemplate/:id", (req, res, next) => {
 });
 
 
-router.get("/getHolidays/:superAdminId", function (req, res, next) {
+router.get("/getHolidays/:userId", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
     }
-    var superAdminId = req.params.superAdminId;
+    var userId = req.params.userId;
     conn.query(
-      "SELECT * FROM `holidays` h join `holiday_template` ht on h.id = ht.holidayId join `user_template` ut on ht.templateId=ut.templateId where ut.userId='" + superAdminId + "'",
+      "SELECT * FROM `holidays` where userId=" + userId,
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -7113,16 +7135,16 @@ router.get("/getHolidays/:superAdminId", function (req, res, next) {
 });
 
 
-router.get("/getHolidaysByTemplate/:superAdminId/:templateId", function (req, res, next) {
+router.get("/getHolidaysByTemplate/:userId/:templateId", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
     }
-    var superAdminId = req.params.superAdminId;
+    var userId = req.params.userId;
     var templateId = req.params.templateId;
     conn.query(
-      "SELECT h.id, h.Subject, h.StartTime, h.EndTime, h.category, h.superAdminId FROM `holidays` h join `holiday_template` ht on h.id = ht.holidayId join `user_template` ut on ht.templateId=ut.templateId where ut.userId='" + superAdminId + "' and ut.templateId = '" + templateId + "'",
+      "SELECT h.id, h.Subject, h.StartTime, h.EndTime, h.category, h.userId FROM `holidays` h join `holiday_template` ht on h.id = ht.holidayId join `user_template` ut on ht.templateId=ut.templateId where ut.userId='" + userId + "' and ut.templateId = '" + templateId + "'",
       function (err, rows) {
         conn.release();
         if (!err) {

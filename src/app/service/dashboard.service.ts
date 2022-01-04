@@ -68,7 +68,7 @@ export class DashboardService {
 
   createUserTemplateRelation(data) {
     console.log(data);
-    return this.http.post("/api/createUserTemplate", data).map((res) => res);
+    return this.http.post("/api/createUserTemplate", data).toPromise();
   }
 
   createTranslation(data) {
@@ -87,8 +87,8 @@ export class DashboardService {
     return this.http.get("/api/getTemplateAccount");
   }
 
-  getTemplateAccountPromise() {
-    return this.http.get("/api/getTemplateAccount").toPromise();
+  getTemplateAccountByUserId(id) {
+    return this.http.get("/api/getTemplateAccountByUserId/" + id).toPromise();
   }
 
   loadTemplateAccount(data) {

@@ -5,9 +5,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MonthService, ScheduleComponent, EventSettingsModel, View, CellClickEventArgs, PopupOpenEventArgs, EventRenderedArgs } from '@syncfusion/ej2-angular-schedule';
 import { Modal } from 'ngx-modal';
 import { MessageService } from 'src/app/service/message.service';
-import { ToastrService } from 'ngx-toastr';
+import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { HelpService } from 'src/app/service/help.service';
 import { DatePickerComponent } from '@progress/kendo-angular-dateinputs';
+import { UserType } from 'src/app/component/enum/user-type';
 
 @Component({
   selector: 'app-add-holiday',
@@ -36,14 +37,16 @@ export class AddHolidayComponent implements OnInit {
   public addNewHoliday: boolean;
 
   public holidays: HolidayModel[] = [];
-  public newHoliday;
+  public newHoliday: HolidayModel;
   public templateList;
+  public isOwner: boolean;
 
   private superAdminId: string;
 
   @ViewChild("addVacationModal") addVacationModal: Modal;
   @ViewChild("selectTemplateModal") selectTemplateModal: Modal;
   selectedTemplate = null;
+  overrideMessage: Partial<IndividualConfig> = { timeOut: 7000, positionClass: "toast-bottom-right" };
 
   constructor(public messageService: MessageService,
     private holidayService: HolidayService,
@@ -51,21 +54,17 @@ export class AddHolidayComponent implements OnInit {
     private dashboardService: DashboardService,
     private toastrService: ToastrService) { }
 
-
   ngOnInit() {
     this.initializationConfig();
 
     this.superAdminId = this.helpService.getSuperadmin();
     this.newHoliday = new HolidayModel(this.superAdminId);
+    this.isOwner = this.helpService.getType() === UserType.owner;
 
-    this.loadTemplates().then(() => {
-
-      //this.loadAllHolidays();
-
-    });
+    this.loadTemplates();
   }
 
-  public loadAllHolidays(): void {
+  public loadHolidaysForUser(): void {
     //reset
     this.holidays = [];
 
@@ -81,7 +80,7 @@ export class AddHolidayComponent implements OnInit {
               StartTime: new Date(r.StartTime),
               EndTime: new Date(r.EndTime),
               category: r.category,
-              superAdminId: r.superAdminId
+              userId: r.userId
             }
           )
         });
@@ -109,7 +108,7 @@ export class AddHolidayComponent implements OnInit {
               StartTime: new Date(r.StartTime),
               EndTime: new Date(r.EndTime),
               category: r.category,
-              superAdminId: r.superAdminId
+              userId: r.userId
             }
           )
         });
@@ -122,7 +121,7 @@ export class AddHolidayComponent implements OnInit {
   }
 
   public loadTemplates() {
-    return this.dashboardService.getTemplateAccountPromise().then((data: []) => {
+    return this.dashboardService.getTemplateAccountByUserId(this.superAdminId).then((data: []) => {
 
       this.templateList = data;
       console.log('templates:' + data);
@@ -155,6 +154,9 @@ export class AddHolidayComponent implements OnInit {
         eventTitle.classList.add("bold");
         eventTitle.classList.add("mt-4");
         eventTitle.classList.add("mb-0");
+        eventTitle.style.overflow = 'hidden';
+        eventTitle.style.whiteSpace = 'nowrap';
+        eventTitle.style.textOverflow = 'ellipsis';
 
         (event.element).appendChild(eventTitle);
       }
@@ -213,55 +215,58 @@ export class AddHolidayComponent implements OnInit {
       console.log(insertedId);
 
       if (insertedId) {
-        console.log(insertedId);
 
-        const relation = {
-          holidayId: insertedId,
-          templateId: this.selectedTemplate.id
+        this.newHoliday.id = insertedId;
+
+        if (this.isOwner) {
+          const relation = {
+            holidayId: insertedId,
+            templateId: this.selectedTemplate.id
+          }
+
+          console.log(relation);
+          this.holidayService.createHolidayTemplateConnection(relation, (result) => {
+
+            if (result) {
+              this.displaySuccessMessage(this.language.adminSuccessCreateTitle, this.language.adminSuccessCreateText);
+
+              this.holidays.push(this.newHoliday);
+              this.eventSettings.dataSource = this.holidays;
+
+              this.closeAddVacationModal();
+              this.scheduleObj.refresh();
+            }
+            else {
+              this.displayErrorMessage(this.language.adminErrorCreateTitle, this.language.adminErrorCreateText);
+            }
+          });
+        } else {
+          this.displaySuccessMessage(this.language.adminSuccessCreateTitle, this.language.adminSuccessCreateText);
+
+          this.holidays.push(this.newHoliday);
+          this.eventSettings.dataSource = this.holidays;
+
+          this.closeAddVacationModal();
+          this.scheduleObj.refresh();
         }
-
-        console.log(relation);
-        this.holidayService.createHolidayTemplateConnection(relation, (result) => {
-
-          if (result) {
-            this.toastrService.success(
-              this.language.adminSuccessCreateTitle,
-              this.language.adminSuccessCreateText,
-              { timeOut: 7000, positionClass: "toast-bottom-right" }
-            );
-
-            this.holidays.push(this.newHoliday);
-            this.eventSettings.dataSource = this.holidays;
-
-            this.closeAddVacationModal();
-            this.scheduleObj.refresh();
-          }
-          else {
-            this.displayErrorMessage();
-          }
-        });
       }
       else {
-        this.displayErrorMessage();
+        this.displayErrorMessage(this.language.adminErrorCreateTitle, this.language.adminErrorCreateText);
       }
     });
+
   }
 
-  private displayErrorMessage(): void {
-    this.toastrService.error(
-      this.language.adminErrorCreateTitle,
-      this.language.adminErrorCreateText,
-      { timeOut: 7000, positionClass: "toast-bottom-right" }
-    );
+  private displaySuccessMessage(message: string, title: string): void {
+    this.toastrService.success(message, title, { timeOut: 7000, positionClass: "toast-bottom-right" });
+  }
+
+  private displayErrorMessage(message: string, title: string): void {
+    this.toastrService.error(message, title, this.overrideMessage);
   }
 
   public displaySelectTemplateMessage(): void {
-    this.toastrService.warning(
-      this.language.chooseTemplate,
-      null,
-      { timeOut: 7000, positionClass: "toast-bottom-right" }
-    );
-
+    this.toastrService.warning(this.language.chooseTemplate, null, this.overrideMessage);
     this.selectedCell.classList.remove("e-selected-cell");
   }
 
@@ -271,37 +276,42 @@ export class AddHolidayComponent implements OnInit {
       console.log(val);
       if (val) {
 
-        this.toastrService.success(
-          this.language.adminSuccessCreateTitle,
-          this.language.adminSuccessCreateText,
-          { timeOut: 7000, positionClass: "toast-bottom-right" }
-        );
+        this.displaySuccessMessage(this.language.adminSuccessUpdateTitle, this.language.adminSuccessUpdateText);
 
         this.eventSettings.dataSource = this.holidays;
 
         this.closeAddVacationModal();
         this.scheduleObj.refresh();
       } else {
-
-        this.toastrService.error(
-          this.language.adminErrorCreateTitle,
-          this.language.adminErrorCreateText,
-          { timeOut: 7000, positionClass: "toast-bottom-right" }
-        );
+        this.displayErrorMessage(this.language.adminErrorUpdateTitle, this.language.adminErrorUpdateText);
       }
     });
   }
 
   deleteHoliday(): void {
-    this.holidayService.deleteHolidayTemplate(this.newHoliday.id).then(() => {
+    if (this.isOwner) {
+      this.holidayService.deleteHolidayTemplate(this.newHoliday.id).then(() => {
+        this.holidayService.deleteHoliday(this.newHoliday.id, (val) => {
+          if (val) {
+
+            this.displaySuccessMessage(this.language.adminSuccessDeleteTitle, this.language.adminSuccessDeleteText);
+
+            //DELETE FROM ARRAY
+            this.holidays = this.holidays.filter(h => h.id !== this.newHoliday.id);
+            this.eventSettings.dataSource = this.holidays;
+
+            this.closeAddVacationModal();
+            this.scheduleObj.refresh();
+          } else {
+            this.displayErrorMessage(this.language.adminErrorDeleteTitle, this.language.adminErrorDeleteText);
+          }
+        });
+      });
+    }
+    else {
       this.holidayService.deleteHoliday(this.newHoliday.id, (val) => {
         if (val) {
-
-          this.toastrService.success(
-            this.language.adminSuccessCreateTitle,
-            this.language.adminSuccessCreateText,
-            { timeOut: 7000, positionClass: "toast-bottom-right" }
-          );
+          this.displaySuccessMessage(this.language.adminSuccessCreateTitle, this.language.adminSuccessCreateText);
 
           //DELETE FROM ARRAY
           this.holidays = this.holidays.filter(h => h.id !== this.newHoliday.id);
@@ -310,15 +320,10 @@ export class AddHolidayComponent implements OnInit {
           this.closeAddVacationModal();
           this.scheduleObj.refresh();
         } else {
-
-          this.toastrService.error(
-            this.language.adminErrorCreateTitle,
-            this.language.adminErrorCreateText,
-            { timeOut: 7000, positionClass: "toast-bottom-right" }
-          );
+          this.displayErrorMessage(this.language.adminErrorDeleteTitle, this.language.adminErrorDeleteText);
         }
       });
-    });
+    }
   }
 
   setMinEndTime(event): void {
@@ -329,9 +334,16 @@ export class AddHolidayComponent implements OnInit {
     console.log('valueChange', this.selectedTemplate);
 
     if (this.selectedTemplate) {
-      this.loadHolidaysByTemplate();
+      if (this.isOwner) {
+        this.loadHolidaysByTemplate();
+      } else {
+        this.loadHolidaysForUser();
+      }
     } else {
-      this.loadAllHolidays();
+      //reset
+      this.holidays = [];
+      this.eventSettings.dataSource = this.holidays;
+      this.scheduleObj.refresh();
     }
   }
 }

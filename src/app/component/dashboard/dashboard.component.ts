@@ -1,3 +1,4 @@
+import { HolidayService } from 'src/app/service/holiday.service';
 import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
 import { CookieService } from "ng2-cookies";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -63,7 +64,8 @@ export class DashboardComponent implements OnInit {
     private activatedRouter: ActivatedRoute,
     private mongo: MongoService,
     private helpService: HelpService,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private holidayService: HolidayService
   ) {
     this.helpService.setTitleForBrowserTab("ClinicNode");
   }
@@ -443,6 +445,9 @@ export class DashboardComponent implements OnInit {
       templateId: this.templateAccountValue
     }
 
+    console.log(relation);
+
+
     const selectedDemoAccountName = this.getDemoAccountNameById();
     const languageForSelectedAccount = this.getLanguageForSelectedAccount(
       selectedDemoAccountName.langauge
@@ -464,9 +469,31 @@ export class DashboardComponent implements OnInit {
         .subscribe((data) => {
           console.log(data);
 
+          const superAdminId = this.helpService.getSuperadmin();
 
-          this.dashboardService.createUserTemplateRelation(relation).subscribe((data) => {
+          this.dashboardService.createUserTemplateRelation(relation).then((data) => {
             console.log(data);
+
+            this.holidayService.getHolidaysByTemplate(superAdminId, relation.templateId).then(result => {
+              console.log(result);
+              if (result && result.length > 0) {
+                result.forEach(r => {
+
+                  const newHoliday = {
+                    Subject: r.Subject,
+                    StartTime: new Date(r.StartTime),
+                    EndTime: new Date(r.EndTime),
+                    category: r.category,
+                    userId: superAdminId
+                  }
+
+                  this.holidayService.createHoliday(newHoliday, (insertedId) => {
+                    console.log('DODATO!!!');
+                  });
+
+                });
+              }
+            });
           });
         });
 

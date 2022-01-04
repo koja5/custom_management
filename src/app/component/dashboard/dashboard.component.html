@@ -417,6 +417,13 @@
                                 </a>
                               </li>
 
+                              <li class="{{ selectedNodeModel['add_holiday'] }}">
+                                <a (click)="returnActiveNode('add_holiday')" routerLink="/dashboard/home/add-holiday"><i
+                                    class="fa fa-calendar-plus-o"></i><span class="navigation-link">{{
+                                    language["addHoliday"]
+                                    }}</span></a>
+                              </li>
+
                               <li class="{{
                                   selectedNodeModel['change_superadmin_profile']
                                 }}" *ngIf="type === userType.owner">
@@ -512,14 +519,6 @@
                                   routerLink="/dashboard/home/massive-email"><i class="fa fa-envelope"></i><span
                                     class="navigation-link">{{
                                     language["massiveEmail"]
-                                    }}</span></a>
-                              </li>
-
-
-                              <li class="{{ selectedNodeModel['add_holiday'] }}">
-                                <a (click)="returnActiveNode('add_holiday')" routerLink="/dashboard/home/add-holiday"><i
-                                    class="fa fa-calendar-plus-o"></i><span class="navigation-link">{{
-                                    language["addHoliday"]
                                     }}</span></a>
                               </li>
                             </ul>
