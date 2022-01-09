@@ -1887,6 +1887,21 @@
               "key": "save"
             }
           ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "subject"
+            },
+            {
+              "key": "message"
+            },
+            {},
+            {}
+          ]
         }
       ]
     },

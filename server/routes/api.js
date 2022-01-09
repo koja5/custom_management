@@ -5293,7 +5293,7 @@ router.post("/sendMassiveSMS", function (req, res) {
         }
         var question = getSqlQuery(req.body);
         conn.query(
-          "select distinct c.* from customers c join sms_massive_message sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin where (c.mobile != '' || c.telephone != '') and c.storeId = " +
+          "select distinct c.* from customers c join sms_massive_message sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin where ((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL)) and c.storeId = " +
             Number(req.body.superadmin) +
             " and " +
             question,
