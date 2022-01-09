@@ -14,14 +14,14 @@ const ftpUploadSMS = require("./ftpUploadSMS");
 const macAddress = require("os").networkInterfaces();
 
 var link = process.env.link_api;
-
-/*var connection = mysql.createPool({
-  host: "185.178.193.141",
-  user: "appproduction.",
-  password: "jBa9$6v7",
-  database: "management"
-});*/
-
+/*
+var connection = mysql.createPool({
+    host: "185.178.193.141",
+    user: "appproduction.",
+    password: "jBa9$6v7",
+    database: "management"
+});
+ */
 var connection = mysql.createPool({
   host: process.env.host,
   user: process.env.user,
@@ -5670,6 +5670,7 @@ router.get("/deleteAvailableAreaCode/:id", (req, res, next) => {
 /* TEMPLATE ACCOUNT */
 
 router.post("/createTemplateAccount", function (req, res, next) {
+  
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
@@ -5799,6 +5800,27 @@ router.get("/getTemplateAccount", function (req, res, next) {
     });
   });
 });
+
+
+router.get("/getTemplateAccountByUserId/:id", function (req, res, next) {
+  var reqObj = req.params.id;
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query("SELECT ta.id, ta.name, ta.account_id, ta.language, ta.email from `user_template` ut join `template_account` ta on ut.templateId=ta.id where ut.userId='" +  req.params.id +"'", function (err, rows) {
+      conn.release();
+      if (!err) {
+        res.json(rows);
+      } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      }
+    });
+  });
+});
+
 
 router.post("/deleteTemplateAccount", (req, res, next) => {
   try {

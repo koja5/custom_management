@@ -6,7 +6,7 @@ import "rxjs/add/operator/map";
   providedIn: "root",
 })
 export class DashboardService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getThemeConfig() {
     return this.http
@@ -66,6 +66,11 @@ export class DashboardService {
       .map((res) => res);
   }
 
+  createUserTemplateRelation(data) {
+    console.log(data);
+    return this.http.post("/api/createUserTemplate", data).toPromise();
+  }
+
   createTranslation(data) {
     return this.http.post("/api/createTranslation", data).map((res) => res);
   }
@@ -80,6 +85,10 @@ export class DashboardService {
 
   getTemplateAccount() {
     return this.http.get("/api/getTemplateAccount");
+  }
+
+  getTemplateAccountByUserId(id) {
+    return this.http.get("/api/getTemplateAccountByUserId/" + id).toPromise();
   }
 
   loadTemplateAccount(data) {

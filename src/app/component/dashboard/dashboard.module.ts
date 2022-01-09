@@ -85,11 +85,21 @@ import { ChangeSuperadminProfileComponent } from "./parameters/change-superadmin
 import { PermissionPatientMenuComponent } from "./settings/permission-patient-menu/permission-patient-menu.component";
 import { EventCategoryStatisticComponent } from "./parameters/event-category-statistic/event-category-statistic.component";
 import { UserAccessComponent } from "./parameters/user-access/user-access.component";
-import { SmsCountComponent } from './administrator/sms-count/sms-count.component';
+import { SmsCountComponent } from "./administrator/sms-count/sms-count.component";
 import { MassiveEmailComponent } from "./marketing/massive-email/massive-email.component";
-import { MassiveSmsComponent } from './marketing/massive-sms/massive-sms.component';
+import { MassiveSmsComponent } from "./marketing/massive-sms/massive-sms.component";
 import { MailMassiveEmailComponent } from "./parameters/mail-parameters/mail-massive-email/mail-massive-email.component";
 import { SmsMassiveComponent } from "./parameters/sms-massive/sms-massive.component";
+import { AddHolidayComponent } from "./administrator/add-holiday/add-holiday.component";
+import {
+  AgendaService,
+  DayService,
+  MonthAgendaService,
+  MonthService,
+  ScheduleModule,
+  WeekService,
+  WorkWeekService,
+} from "@syncfusion/ej2-angular-schedule";
 
 @NgModule({
   declarations: [
@@ -137,7 +147,8 @@ import { SmsMassiveComponent } from "./parameters/sms-massive/sms-massive.compon
     MassiveEmailComponent,
     MassiveSmsComponent,
     MailMassiveEmailComponent,
-    SmsMassiveComponent
+    SmsMassiveComponent,
+    AddHolidayComponent,
   ],
   imports: [
     CommonModule,
@@ -174,12 +185,19 @@ import { SmsMassiveComponent } from "./parameters/sms-massive/sms-massive.compon
     DropDownListModule,
     SharedEmailModule,
     SharedSMSModule,
+    ScheduleModule,
   ],
   providers: [
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
     },
+    DayService,
+    WeekService,
+    WorkWeekService,
+    MonthService,
+    AgendaService,
+    MonthAgendaService,
   ],
 })
 export class DashboardModule {}

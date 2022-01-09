@@ -1,3 +1,4 @@
+import { HolidayService } from 'src/app/service/holiday.service';
 import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
 import { CookieService } from "ng2-cookies";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -48,7 +49,7 @@ export class DashboardComponent implements OnInit {
   public templateAccount: any = [];
   public templateAccountFields = {
     text: "name",
-    value: "account_id",
+    value: "id",
   };
   public templateAccountValue: any;
   public allTranslationsByCountryCode: any;
@@ -57,13 +58,14 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private cookie: CookieService,
     private message: MessageService,
-    private service: DashboardService,
+    private dashboardService: DashboardService,
     private users: UsersService,
     private sanitizer: DomSanitizer,
     private activatedRouter: ActivatedRoute,
     private mongo: MongoService,
     private helpService: HelpService,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private holidayService: HolidayService
   ) {
     this.helpService.setTitleForBrowserTab("ClinicNode");
   }
@@ -89,7 +91,7 @@ export class DashboardComponent implements OnInit {
     this.type = Number(this.helpService.getLocalStorage("type"));
 
     if (this.helpService.getLocalStorage("allThemes") !== undefined) {
-      this.service.getThemeConfig().subscribe((data) => {
+      this.dashboardService.getThemeConfig().subscribe((data) => {
         console.log(data);
         this.allThemes = data;
         this.helpService.setLocalStorage(
@@ -102,7 +104,7 @@ export class DashboardComponent implements OnInit {
     }
 
     if (this.helpService.getLocalStorage("allLanguage") === null) {
-      this.service.getLanguageConfig().subscribe((data) => {
+      this.dashboardService.getLanguageConfig().subscribe((data) => {
         this.allLanguage = data;
         this.helpService.setLocalStorage(
           "allLanguage",
@@ -407,13 +409,13 @@ export class DashboardComponent implements OnInit {
   }
 
   getTemplateAccountByCountryCode() {
-    this.service
+    this.dashboardService
       .getAllTranslationByCountryCode(
         this.helpService.getLocalStorage("countryCode")
       )
       .subscribe((translations: []) => {
         this.allTranslationsByCountryCode = translations;
-        this.service.getTemplateAccount().subscribe((data: []) => {
+        this.dashboardService.getTemplateAccount().subscribe((data: []) => {
           for (let j = 0; j < data.length; j++) {
             for (let i = 0; i < translations.length; i++) {
               if (translations[i]["language"] === data[j]["language"]) {
@@ -432,10 +434,20 @@ export class DashboardComponent implements OnInit {
   loadTemplateAccount() {
     this.firstLogin.close();
     this.templateLoading.open();
+
     const data = {
       id: this.helpService.getMe(),
-      account_id: this.templateAccountValue,
+      account_id: this.templateAccount.find(t => t.id === this.templateAccountValue).account_id,
     };
+
+    const relation = {
+      userId: this.helpService.getMe(),
+      templateId: this.templateAccountValue
+    }
+
+    console.log(relation);
+
+
     const selectedDemoAccountName = this.getDemoAccountNameById();
     const languageForSelectedAccount = this.getLanguageForSelectedAccount(
       selectedDemoAccountName.langauge
@@ -452,13 +464,42 @@ export class DashboardComponent implements OnInit {
         demo_account: selectedDemoAccountName.name,
         language: languageForSelectedAccount["language"],
       };
-      this.service
+      this.dashboardService
         .insertDemoAccountLanguage(accountLanguage)
         .subscribe((data) => {
           console.log(data);
+
+          const superAdminId = this.helpService.getSuperadmin();
+
+          this.dashboardService.createUserTemplateRelation(relation).then((data) => {
+            console.log(data);
+
+            this.holidayService.getHolidaysByTemplate(superAdminId, relation.templateId).then(result => {
+              console.log(result);
+              if (result && result.length > 0) {
+                result.forEach(r => {
+
+                  const newHoliday = {
+                    Subject: r.Subject,
+                    StartTime: new Date(r.StartTime),
+                    EndTime: new Date(r.EndTime),
+                    category: r.category,
+                    userId: superAdminId
+                  }
+
+                  this.holidayService.createHoliday(newHoliday, (insertedId) => {
+                    console.log('DODATO!!!');
+                  });
+
+                });
+              }
+            });
+          });
         });
+
+
     }
-    this.service.loadTemplateAccount(data).subscribe((response) => {
+    this.dashboardService.loadTemplateAccount(data).subscribe((response) => {
       if (response) {
         this.templateLoading.close();
       }
@@ -467,7 +508,7 @@ export class DashboardComponent implements OnInit {
 
   getDemoAccountNameById() {
     for (let i = 0; i < this.templateAccount.length; i++) {
-      if (this.templateAccount[i].account_id === this.templateAccountValue) {
+      if (this.templateAccount[i].id === this.templateAccountValue) {
         return {
           name: this.templateAccount[i]["name"],
           langauge: this.templateAccount[i]["language"],
