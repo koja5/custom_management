@@ -666,7 +666,7 @@ router.get("/getUsersInCompany/:id", function (req, res, next) {
     }
     var id = req.params.id;
     conn.query(
-      "SELECT * from users where storeId = ?",
+      "SELECT * from users where active = 1 and storeId = ?",
       [id],
       function (err, rows) {
         conn.release();
@@ -2478,10 +2478,10 @@ router.post("/addTherapy", function (req, res, next) {
     }
 
     response = {};
-
+    /*
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, "0");
-    var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+    var mm = String(today.getMonth() + 1).padStart(2, "0");
     var yyyy = today.getFullYear();
     var hh = today.getHours();
     var min = today.getMinutes();
@@ -2497,10 +2497,11 @@ router.post("/addTherapy", function (req, res, next) {
       (min < 10 ? "0" + min : min);
     if (req.body.date === null || req.body.date === undefined) {
       req.body.date = fullDate;
-    }
+    }*/
     var date = {
       customer_id: req.body.customer_id,
       date: req.body.date,
+      time: req.body.time,
       complaint: req.body.complaint,
       complaint_title: req.body.complaint_title,
       therapies: req.body.therapies,
@@ -5160,6 +5161,10 @@ router.post("/sendSMS", function (req, res) {
                       }
                     }
 
+                    if (language?.smsSignaturePoweredBy) {
+                      signature += language?.smsSignaturePoweredBy + " \n";
+                    }
+
                     if (sms.smsDate) {
                       dateMessage = sms.smsDate + " " + date + " \n";
                     }
@@ -5170,7 +5175,6 @@ router.post("/sendSMS", function (req, res) {
                       clinic =
                         sms.smsClinic + " " + req.body.storename + " \n\n";
                     }
-                    console.log(smsMessage);
                     var message =
                       (sms.smsSubject
                         ? sms.smsSubject
@@ -5227,6 +5231,11 @@ router.post("/sendSMS", function (req, res) {
                         }
                       }
                     );
+                  } else if (smsMessage.length === 0) {
+                    res.send({
+                      info: false,
+                      message: "need_configure",
+                    });
                   } else {
                     res.send(false);
                   }
@@ -5286,80 +5295,105 @@ router.post("/sendCustomSMS", function (req, res) {
 router.post("/sendMassiveSMS", function (req, res) {
   var phoneNumber = req.body.number;
   if (req.body.message != "") {
-    request(link + "/getAvailableAreaCode", function (error, response, codes) {
-      connection.getConnection(function (err, conn) {
-        if (err) {
-          res.json(err);
-        }
-        var question = getSqlQuery(req.body);
-        conn.query(
-          "select distinct c.* from customers c join sms_massive_message sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin where ((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL)) and c.storeId = " +
-            Number(req.body.superadmin) +
-            " and " +
-            question,
-          function (err, rows) {
-            console.log(rows);
-            rows.forEach(function (to, i, array) {
-              var phoneNumber = to.moble ? to.mobile : to.telephone;
-              console.log(phoneNumber);
-              if (
-                checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
-                req.body.message
-              ) {
-                var message = req.body.message;
-                var signature = "";
-                if (to.signatureAvailable) {
-                  if (
-                    (to.street || to.zipcode || to.place) &&
-                    to.smsSignatureAddress
-                  ) {
-                    signature +=
-                      to.smsSignatureAddress +
-                      "\n" +
-                      to.street +
-                      " \n" +
-                      to.zipcode +
-                      " " +
-                      to.place +
-                      "\n";
-                  }
-                  if (to.telephone && to.smsSignatureTelephone) {
-                    signature +=
-                      to.smsSignatureTelephone + " " + to.telephone + " \n";
-                  }
-                  if (to.mobile && to.smsSignatureMobile) {
-                    signature +=
-                      to.smsSignatureMobile + " " + to.mobile + " \n";
-                  }
-                  if (to.email && to.smsSignatureEmail) {
-                    signature += to.smsSignatureEmail + " " + to.email + " \n";
-                  }
-                }
-                var content =
-                  "To: " + phoneNumber + "\r\n\r\n" + message + signature;
-                var fileName = "server/sms/" + phoneNumber + ".txt";
-                fs.writeFile(fileName, content, function (err) {
-                  console.log(err);
-                  if (err) return logger.log("error", err);
-                  /*logger.log(
-                  "info",
-                  "Sent CUSTOM SMS MESSAGE to NUMBER: " + phoneNumber
-                );*/
-                  ftpUploadSMS(fileName, phoneNumber + ".txt");
-                  res.send(true);
-                });
-              } else {
-                res.send(false);
-                logger.log(
-                  "warn",
-                  `Number ${req.body.number} is not start with available area code!`
-                );
+    request(
+      link + "/getTranslationByCountryCode/" + req.body.countryCode,
+      function (error, language, body) {
+        var language = JSON.parse(body)["config"];
+        request(
+          link + "/getAvailableAreaCode",
+          function (error, response, codes) {
+            connection.getConnection(function (err, conn) {
+              if (err) {
+                res.json(err);
               }
+              var question = getSqlQuery(req.body);
+              conn.query(
+                "select distinct c.* from customers c join sms_massive_message sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin where ((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL)) and c.storeId = " +
+                  Number(req.body.superadmin) +
+                  " and " +
+                  question,
+                function (err, rows) {
+                  console.log(rows);
+                  rows.forEach(function (to, i, array) {
+                    var phoneNumber = to.mobile ? to.mobile : to.telephone;
+                    console.log(phoneNumber);
+                    if (
+                      checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
+                      req.body.message
+                    ) {
+                      var message = req.body.message;
+                      var signature = "";
+                      if (to.signatureAvailable) {
+                        if (
+                          (to.street || to.zipcode || to.place) &&
+                          to.smsSignatureAddress
+                        ) {
+                          signature +=
+                            to.smsSignatureAddress +
+                            "\n" +
+                            to.street +
+                            " \n" +
+                            to.zipcode +
+                            " " +
+                            to.place +
+                            "\n";
+                        }
+                        if (to.telephone && to.smsSignatureTelephone) {
+                          signature +=
+                            to.smsSignatureTelephone +
+                            " " +
+                            to.telephone +
+                            " \n";
+                        }
+                        if (to.mobile && to.smsSignatureMobile) {
+                          signature +=
+                            to.smsSignatureMobile + " " + to.mobile + " \n";
+                        }
+                        if (to.email && to.smsSignatureEmail) {
+                          signature +=
+                            to.smsSignatureEmail + " " + to.email + " \n";
+                        }
+                        if (to.smsSignaturePoweredBy) {
+                          signature += to.smsSignaturePoweredBy + " \n";
+                        }
+                      }
+                      if (language?.smsSignaturePoweredByMassive) {
+                        signature +=
+                          language?.smsSignaturePoweredByMassive + " \n";
+                      }
+                      var content =
+                        "To: " +
+                        phoneNumber +
+                        "\r\n\r\n" +
+                        message +
+                        "\n\n" +
+                        signature;
+                      var fileName = "server/sms/" + phoneNumber + ".txt";
+                      fs.writeFile(fileName, content, function (err) {
+                        console.log(err);
+                        if (err) return logger.log("error", err);
+                        logger.log(
+                          "info",
+                          "Sent CUSTOM SMS MESSAGE to NUMBER: " + phoneNumber
+                        );
+                        ftpUploadSMS(fileName, phoneNumber + ".txt");
+                        res.send(true);
+                      });
+                    } else {
+                      res.send(false);
+                      logger.log(
+                        "warn",
+                        `Number ${req.body.number} is not start with available area code!`
+                      );
+                    }
+                  });
+                }
+              );
             });
           }
         );
-      });
-    });
+      }
+    );
   } else {
     res.send(false);
     logger.log(
@@ -5428,10 +5462,22 @@ router.post("/getFilteredRecipients", function (req, res) {
         res.json(err);
       }
       var question = getSqlQuery(req.body);
+      var table = "";
+      if (req.body.mode && req.body.mode === "mail") {
+        var checkAdditionalQuery = "(c.email != '' and c.email IS NOT NULL)";
+        table = "mail_massive_message";
+      } else {
+        var checkAdditionalQuery =
+          "((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL))";
+        table = "sms_massive_message";
+      }
 
-      console.log(question);
       conn.query(
-        "select distinct c.* from customers c join sms_massive_message sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin where c.storeId = " +
+        "select distinct c.* from customers c join " +
+          table +
+          " sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin where " +
+          checkAdditionalQuery +
+          " and c.storeId = " +
           Number(req.body.superadmin) +
           " and (" +
           question +

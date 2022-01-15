@@ -1004,10 +1004,7 @@ export class DynamicSchedulerComponent implements OnInit {
       this.complaintData.complaint_title +
       "+" +
       this.complaintData.comment;
-    this.complaintData.date = this.formatDate(
-      this.eventTime.start,
-      this.eventTime.end
-    );
+    this.formatDate(this.eventTime.start, this.eventTime.end);
     if (this.isConfirm) {
       formValue.confirm = 0;
     } else {
@@ -1133,7 +1130,7 @@ export class DynamicSchedulerComponent implements OnInit {
     } else {
       formValue.title = args.data.title;
     }
-    this.complaintData.date = this.formatDate(
+    this.formatDate(
       this.eventTime.start ? this.eventTime.start : args.data.StartTime,
       this.eventTime.end ? this.eventTime.end : args.data.EndTime
     );
@@ -1245,7 +1242,8 @@ export class DynamicSchedulerComponent implements OnInit {
       } else if (args.data["id"]) {
         if (
           (this.type === this.userType.patient &&
-          args.data["customer_id"] !== this.id) || this.type === this.userType.readOnlyScheduler
+            args.data["customer_id"] !== this.id) ||
+          this.type === this.userType.readOnlyScheduler
         ) {
           args.cancel = true;
         } else {
@@ -2161,7 +2159,7 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   formatDate(start, end) {
-    const dd = String(start.getDate()).padStart(2, "0");
+    /*const dd = String(start.getDate()).padStart(2, "0");
     const mm = String(start.getMonth() + 1).padStart(2, "0"); //January is 0!
     const yyyy = start.getFullYear();
     const hhStart = start.getHours();
@@ -2182,7 +2180,20 @@ export class DynamicSchedulerComponent implements OnInit {
       (hhEnd === 0 ? "00" : hhEnd) +
       ":" +
       (minEnd < 10 ? "0" + minEnd : minEnd)
-    );
+    );*/
+    this.complaintData.date = start;
+    const hhStart = start.getHours();
+    const minStart = start.getMinutes();
+    const hhEnd = end.getHours();
+    const minEnd = end.getMinutes();
+    this.complaintData.time =
+      (hhStart === 0 ? "00" : hhStart) +
+      ":" +
+      (minStart < 10 ? "0" + minStart : minStart) +
+      "-" +
+      (hhEnd === 0 ? "00" : hhEnd) +
+      ":" +
+      (minEnd < 10 ? "0" + minEnd : minEnd);
   }
 
   addTherapy(customerId) {
@@ -2191,15 +2202,6 @@ export class DynamicSchedulerComponent implements OnInit {
     } else {
       this.complaintData.customer_id = this.helpService.getMe();
     }
-    /*this.complaintData.date =
-      new Date().getDay() +
-      "." +
-      new Date().getMonth() +
-      "." +
-      new Date().getFullYear() +
-      ".";*/
-    this.complaintData.date = new Date().toString();
-    // this.initializeParams();
 
     this.complaintData.complaint = this.pickToModel(
       this.selectedComplaint,
@@ -3178,10 +3180,7 @@ export class DynamicSchedulerComponent implements OnInit {
           this.complaintData.complaint_title +
           "+" +
           this.complaintData.comment;
-        this.complaintData.date = this.formatDate(
-          this.eventTime.start,
-          this.eventTime.end
-        );
+        this.formatDate(this.eventTime.start, this.eventTime.end);
         if (this.isConfirm) {
           formValue.confirm = 0;
         } else {
@@ -3252,10 +3251,7 @@ export class DynamicSchedulerComponent implements OnInit {
           this.complaintData.complaint_title +
           "+" +
           this.complaintData.comment;
-        this.complaintData.date = this.formatDate(
-          this.eventTime.start,
-          this.eventTime.end
-        );
+        this.formatDate(this.eventTime.start, this.eventTime.end);
         if (this.isConfirm) {
           formValue.confirm = 0;
         } else {

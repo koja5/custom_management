@@ -2,6 +2,7 @@ export class ComplaintTherapyModel {
     customer_id?: number;
     employee_name: string;
     date?: string;
+    time?: string;
     complaint?: string;
     complaint_title?: string;
     comment?: string;

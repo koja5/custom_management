@@ -92,7 +92,7 @@ function reminderViaSMS() {
                           var dateMessage = "";
                           var time = "";
                           var clinic = "";
-                          console.log(to);
+                          var language = JSON.parse(body)["config"];
                           if (to.signatureAvailable) {
                             if (
                               (to.street || to.zipcode || to.place) &&
@@ -128,6 +128,11 @@ function reminderViaSMS() {
                             }
                           }
 
+                          if (language?.smsSignaturePoweredBy) {
+                            signature +=
+                              language?.smsSignaturePoweredBy + " \n";
+                          }
+
                           var convertToDateStart = new Date(to.start);
                           var convertToDateEnd = new Date(to.end);
                           var startHours = convertToDateStart.getHours();
@@ -153,13 +158,11 @@ function reminderViaSMS() {
                             ":" +
                             (endMinutes < 10 ? "0" + endMinutes : endMinutes);
 
-                          var language = JSON.parse(body)["config"];
                           if (to.smsDate) {
                             dateMessage = to.smsDate + " " + date + " \n";
                           }
                           if (to.smsTime) {
-                            time =
-                              to.smsTime + " " + start + "-" + end + " \n";
+                            time = to.smsTime + " " + start + "-" + end + " \n";
                           }
                           if (to.smsClinic) {
                             clinic =

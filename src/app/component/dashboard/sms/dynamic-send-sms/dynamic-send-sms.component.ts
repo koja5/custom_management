@@ -30,6 +30,11 @@ export class DynamicSendSmsComponent implements OnInit {
       if (data) {
         if (data["message"] === "buy_sms") {
           this.helpService.warningToastr("", this.language.needToBuySms);
+        } else if (data["message"] === "need_config") {
+          this.helpService.warningToastr(
+            "",
+            this.language.needToConfigurationParams
+          );
         } else {
           this.helpService.successToastr(
             "",

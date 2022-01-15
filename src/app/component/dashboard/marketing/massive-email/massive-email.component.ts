@@ -44,6 +44,7 @@ export class MassiveEmailComponent implements OnInit {
   submitEmitter(event) {
     this.changeData = event;
     this.changeData.superadmin = this.helpService.getSuperadmin();
+    this.changeData.mode = 'mail';
     this.getFilteredRecipients();
     this.recipients.open();
   }
@@ -53,7 +54,16 @@ export class MassiveEmailComponent implements OnInit {
     this.dynamicService
       .callApiPost("/api/getFilteredRecipients", this.changeData)
       .subscribe((data) => {
-        this.allRecipients = data;
+        console.log(data);
+        if (data && data["length"] > 0) {
+          this.allRecipients = data;
+        } else {
+          this.recipients.close();
+          this.helpService.warningToastr(
+            "",
+            this.language.needToConfigurationParams
+          );
+        }
       });
   }
 
@@ -61,6 +71,10 @@ export class MassiveEmailComponent implements OnInit {
     this.dynamicService
       .callApiPost("/api/sendMassiveEmail", this.changeData)
       .subscribe((data) => {
+        this.helpService.successToastr(
+          this.language.successExecutedActionTitle,
+          this.language.successExecutedActionText
+        );
         this.recipients.close();
       });
   }
