@@ -51,14 +51,20 @@ export class DropdownComponent implements OnInit, Field {
   }
 
   getApiRequest() {
+    let params: any;
+    if (this.config.data && this.config.request.fields) {
+      params = this.helpService.packParametarGet(
+        this.config.data,
+        this.config.request.fields
+      );
+    }
+    if (this.config.request.parameters) {
+      params = this.helpService.packRequestValueFromParameters(
+        this.config.request.parameters
+      );
+    }
     this.helpService
-      .getApiRequest(
-        this.config.request.api,
-        this.helpService.packParametarGet(
-          this.config.data,
-          this.config.request.fields
-        )
-      )
+      .getApiRequest(this.config.request.api, params)
       .subscribe((data) => {
         if (this.config.request.root) {
           this.data = data[this.config.request.root];

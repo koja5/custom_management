@@ -11,6 +11,7 @@ const passwordGenerate = require("generate-password");
 var request = require("request");
 const logger = require("./logger");
 const ftpUploadSMS = require("./ftpUploadSMS");
+const { updateFloatLabelState } = require("@syncfusion/ej2-angular-dropdowns");
 const macAddress = require("os").networkInterfaces();
 
 var link = process.env.link_api;
@@ -5308,7 +5309,7 @@ router.post("/sendMassiveSMS", function (req, res) {
               }
               var question = getSqlQuery(req.body);
               conn.query(
-                "select distinct c.* from customers c join sms_massive_message sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin where ((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL)) and c.storeId = " +
+                "select distinct c.* from customers c join sms_massive_message sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin join tasks t on c.id = t.customer_id where ((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL)) and c.storeId = " +
                   Number(req.body.superadmin) +
                   " and " +
                   question,
@@ -5452,6 +5453,97 @@ function getSqlQuery(body) {
     }
   }
 
+  if (body.category) {
+    if (question) {
+      question += " and t.colorTask = " + body.category;
+    } else {
+      question += " t.colorTask = " + body.category;
+    }
+  }
+
+  if (body.start) {
+    if (question) {
+      question += " and t.start >= '" + body.start + "'";
+    } else {
+      question += " t.start >= '" + body.start + "'";
+    }
+  }
+
+  if (body.end) {
+    if (question) {
+      question += " and t.end <= '" + body.end + "'";
+    } else {
+      question += " t.end <= '" + body.end + "'";
+    }
+  }
+
+  if (body.creator_id) {
+    if (question) {
+      question += " and t.creator_id = " + body.creator_id;
+    } else {
+      question += " t.creator_id = " + body.creator_id;
+    }
+  }
+
+  if (body.store) {
+    if (question) {
+      question += " and t.storeId = " + body.store;
+    } else {
+      question += " t.storeId = " + body.store;
+    }
+  }
+
+  if (body.recommendation) {
+    if (question) {
+      question += " and bo.recommendation = " + body.recommendation;
+    } else {
+      question += " bo.recommendation = " + body.recommendation;
+    }
+  }
+
+  if (body.relationship) {
+    if (question) {
+      question += " and bo.relationship = " + body.relationship;
+    } else {
+      question += " bo.relationship = " + body.relationship;
+    }
+  }
+
+  if (body.social) {
+    if (question) {
+      question += " and bo.social = " + body.social;
+    } else {
+      question += " bo.social = " + body.social;
+    }
+  }
+
+  if (body.doctor) {
+    if (question) {
+      question += " and bo.doctor = " + body.doctor;
+    } else {
+      question += " bo.doctor = " + body.doctor;
+    }
+  }
+  
+  if (body.profession) {
+    if (question) {
+      question += " and bt.profession = " + body.profession;
+    } else {
+      question += " bt.profession = " + body.profession;
+    }
+  }
+  
+  if (body.childs) {
+    if (question) {
+      question += " and bt.childs = " + body.childs;
+    } else {
+      question += " bt.childs = " + body.childs;
+    }
+  }
+
+
+  console.log(question);
+
   return question;
 }
 
@@ -5475,7 +5567,7 @@ router.post("/getFilteredRecipients", function (req, res) {
       conn.query(
         "select distinct c.* from customers c join " +
           table +
-          " sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin where " +
+          " sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin join tasks t on c.id = t.customer_id join base_one bo on c.id = bo.customer_id join base_two bt on c.id = bt.customer_id where " +
           checkAdditionalQuery +
           " and c.storeId = " +
           Number(req.body.superadmin) +
@@ -5484,6 +5576,7 @@ router.post("/getFilteredRecipients", function (req, res) {
           ")",
         function (err, rows) {
           conn.release();
+          console.log(err);
           console.log(rows);
           if (err) return err;
           res.json(rows);
