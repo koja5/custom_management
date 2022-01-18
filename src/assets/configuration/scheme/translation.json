@@ -170,6 +170,9 @@
       "date": {
         "type": "string"
       },
+      "time": {
+        "type": "string"
+      },
       "amount": {
         "type": "string"
       },
@@ -1097,6 +1100,9 @@
       "needToBuySms": {
         "type": "string"
       },
+      "needToConfigurationParams": {
+        "type": "string"
+      },
       "countOfRecipientsForSms": {
         "type": "string"
       },
@@ -1661,6 +1667,9 @@
       "smsSignatureEmail": {
         "type": "string"
       },
+      "smsSignaturePoweredBy": {
+        "type": "string"
+      },
       "sequenceOfCount": {
         "type": "string"
       },
@@ -1817,6 +1826,9 @@
         "type": "string"
       },
       "sendMassiveEmail": {
+        "type": "string"
+      },
+      "smsSignaturePoweredByMassive": {
         "type": "string"
       }
     }
@@ -2119,6 +2131,9 @@
             },
             {
               "key": "date"
+            },
+            {
+              "key": "time"
             },
             {
               "key": "amount"
@@ -5130,6 +5145,19 @@
               "key": "countOfRecipientsForSms"
             }
           ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "needToConfigurationParams"
+            },
+            {},
+            {},
+            {}
+          ]
         }
       ]
     },
@@ -5445,7 +5473,9 @@
             {
               "key": "smsSignatureEmail"
             },
-            {},
+            {
+              "key": "smsSignaturePoweredBy"
+            },
             {},
             {}
           ]
@@ -5812,7 +5842,9 @@
             {
               "key": "sendMassiveEmail"
             },
-            {},
+            {
+              "key": "smsSignaturePoweredByMassive"
+            },
             {}
           ]
         }

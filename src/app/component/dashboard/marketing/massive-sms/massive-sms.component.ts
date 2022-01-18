@@ -45,6 +45,8 @@ export class MassiveSmsComponent implements OnInit {
     this.allRecipients = null;
     this.changeData = event;
     this.changeData.superadmin = this.helpService.getSuperadmin();
+    this.changeData.countryCode =
+      this.helpService.getLocalStorage("countryCode");
     this.getFilteredRecipients();
     this.recipients.open();
   }
@@ -53,7 +55,15 @@ export class MassiveSmsComponent implements OnInit {
     this.dynamicService
       .callApiPost("/api/getFilteredRecipients", this.changeData)
       .subscribe((data) => {
-        this.allRecipients = data;
+        if (data && data["length"] > 0) {
+          this.allRecipients = data;
+        } else {
+          this.recipients.close();
+          this.helpService.warningToastr(
+            "",
+            this.language.needToConfigurationParams
+          );
+        }
       });
   }
 

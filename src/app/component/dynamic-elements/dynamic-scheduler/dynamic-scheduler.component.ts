@@ -1,4 +1,4 @@
-import { element } from 'protractor';
+import { element } from "protractor";
 import { EventCategoryService } from "./../../../service/event-category.service";
 import { UsersService } from "./../../../service/users.service";
 import { StoreService } from "./../../../service/store.service";
@@ -95,9 +95,7 @@ import * as timeZoneNames from "../../../../../node_modules/cldr-data/main/fr-CH
 import { PackLanguageService } from "src/app/service/pack-language.service";
 import { UserType } from "../../enum/user-type";
 import { AccountService } from "src/app/service/account.service";
-import {
-  ComboBoxModule,
-} from "@progress/kendo-angular-dropdowns";
+import { ComboBoxModule } from "@progress/kendo-angular-dropdowns";
 import { TypeOfEventAction } from "../../enum/typeOfEventAction";
 import { ActivatedRoute } from "@angular/router";
 import { HolidayService } from "src/app/service/holiday.service";
@@ -1009,10 +1007,7 @@ export class DynamicSchedulerComponent implements OnInit {
       this.complaintData.complaint_title +
       "+" +
       this.complaintData.comment;
-    this.complaintData.date = this.formatDate(
-      this.eventTime.start,
-      this.eventTime.end
-    );
+    this.formatDate(this.eventTime.start, this.eventTime.end);
     if (this.isConfirm) {
       formValue.confirm = 0;
     } else {
@@ -1093,7 +1088,7 @@ export class DynamicSchedulerComponent implements OnInit {
 
   updateTask(args) {
     console.log(args);
-    console.log('updateTask');
+    console.log("updateTask");
     let formValue = new EventModel();
     if (this.type === this.userType.patient) {
       formValue.online = 1;
@@ -1106,12 +1101,12 @@ export class DynamicSchedulerComponent implements OnInit {
     const checkCustomerId = this.customerUser.id
       ? this.customerUser
       : {
-        id: args.data.customer_id
-          ? args.data.customer_id
-          : args.data.user.id
+          id: args.data.customer_id
+            ? args.data.customer_id
+            : args.data.user.id
             ? args.data.user.id
             : null,
-      };
+        };
     formValue.user = checkCustomerId;
     formValue.customer_id = checkCustomerId.id;
     formValue.therapy_id = args.data.therapy_id;
@@ -1139,7 +1134,7 @@ export class DynamicSchedulerComponent implements OnInit {
     } else {
       formValue.title = args.data.title;
     }
-    this.complaintData.date = this.formatDate(
+    this.formatDate(
       this.eventTime.start ? this.eventTime.start : args.data.StartTime,
       this.eventTime.end ? this.eventTime.end : args.data.EndTime
     );
@@ -1252,7 +1247,8 @@ export class DynamicSchedulerComponent implements OnInit {
       } else if (args.data["id"]) {
         if (
           (this.type === this.userType.patient &&
-            args.data["customer_id"] !== this.id) || this.type === this.userType.readOnlyScheduler
+            args.data["customer_id"] !== this.id) ||
+          this.type === this.userType.readOnlyScheduler
         ) {
           args.cancel = true;
         } else {
@@ -1306,7 +1302,7 @@ export class DynamicSchedulerComponent implements OnInit {
         );
         timeDurationInd =
           Number(informationAboutStore.time_therapy) !==
-            Number(this.timeDuration)
+          Number(this.timeDuration)
             ? 1
             : 0;
         timeDuration = Number(informationAboutStore.time_therapy);
@@ -1324,7 +1320,7 @@ export class DynamicSchedulerComponent implements OnInit {
         } else {
           timeDurationInd =
             Number(informationAboutStore.time_therapy) !==
-              Number(this.timeDuration)
+            Number(this.timeDuration)
               ? 1
               : 0;
           timeDuration = Number(informationAboutStore.time_therapy);
@@ -1383,7 +1379,7 @@ export class DynamicSchedulerComponent implements OnInit {
     this.selectedTarget = closest(
       targetElement,
       ".e-appointment,.e-work-cells," +
-      ".e-vertical-view .e-date-header-wrap .e-all-day-cells,.e-vertical-view .e-date-header-wrap .e-header-cells"
+        ".e-vertical-view .e-date-header-wrap .e-all-day-cells,.e-vertical-view .e-date-header-wrap .e-header-cells"
     );
     if (isNullOrUndefined(this.selectedTarget)) {
       args.cancel = true;
@@ -1598,7 +1594,7 @@ export class DynamicSchedulerComponent implements OnInit {
     private accountService: AccountService,
     private activatedRouter: ActivatedRoute,
     private holidayService: HolidayService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.initializationConfig();
@@ -1607,7 +1603,6 @@ export class DynamicSchedulerComponent implements OnInit {
     this.helpService.setDefaultBrowserTabTitle();
     this.loadUser();
   }
-
 
   @HostListener("window:resize", ["$event"])
   onResize(event) {
@@ -1631,35 +1626,29 @@ export class DynamicSchedulerComponent implements OnInit {
   public loadHolidays(): void {
     const superAdminId = this.helpService.getSuperadmin();
 
-    console.log('superAdminId', superAdminId);
-    this.holidayService.getHolidays(superAdminId).subscribe(result => {
-      console.log('holidays', result);
+    console.log("superAdminId", superAdminId);
+    this.holidayService.getHolidays(superAdminId).subscribe((result) => {
+      console.log("holidays", result);
       if (result && result.length > 0) {
+        console.log("holidayss");
+        result.forEach((r) => {
+          console.log(r);
+          this.allEvents.push({
+            Subject: r.Subject,
+            StartTime: new Date(r.StartTime),
+            EndTime: new Date(r.EndTime),
+          });
 
-        console.log('holidayss');
-        result.forEach(r => {
-          console.log(r)
-          this.allEvents.push(
-            {
-              Subject: r.Subject,
-              StartTime: new Date(r.StartTime),
-              EndTime: new Date(r.EndTime)
-            }
-          );
-
-          this.holidays.push(
-            {
-              Subject: r.Subject,
-              StartTime: new Date(r.StartTime),
-              EndTime: new Date(r.EndTime)
-            }
-          )
+          this.holidays.push({
+            Subject: r.Subject,
+            StartTime: new Date(r.StartTime),
+            EndTime: new Date(r.EndTime),
+          });
         });
 
         this.eventSettings.dataSource = this.allEvents;
-      }
-      else {
-        console.log('no holidayss');
+      } else {
+        console.log("no holidayss");
       }
     });
   }
@@ -1760,7 +1749,6 @@ export class DynamicSchedulerComponent implements OnInit {
     this.eventCategoryService
       .getEventCategory(this.helpService.getSuperadmin())
       .subscribe((data: []) => {
-
         console.log(data);
         this.eventCategory = data.sort(function (a, b) {
           return a["sequence"] - b["sequence"];
@@ -2230,7 +2218,7 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   formatDate(start, end) {
-    const dd = String(start.getDate()).padStart(2, "0");
+    /*const dd = String(start.getDate()).padStart(2, "0");
     const mm = String(start.getMonth() + 1).padStart(2, "0"); //January is 0!
     const yyyy = start.getFullYear();
     const hhStart = start.getHours();
@@ -2251,7 +2239,20 @@ export class DynamicSchedulerComponent implements OnInit {
       (hhEnd === 0 ? "00" : hhEnd) +
       ":" +
       (minEnd < 10 ? "0" + minEnd : minEnd)
-    );
+    );*/
+    this.complaintData.date = start;
+    const hhStart = start.getHours();
+    const minStart = start.getMinutes();
+    const hhEnd = end.getHours();
+    const minEnd = end.getMinutes();
+    this.complaintData.time =
+      (hhStart === 0 ? "00" : hhStart) +
+      ":" +
+      (minStart < 10 ? "0" + minStart : minStart) +
+      "-" +
+      (hhEnd === 0 ? "00" : hhEnd) +
+      ":" +
+      (minEnd < 10 ? "0" + minEnd : minEnd);
   }
 
   addTherapy(customerId) {
@@ -2260,15 +2261,6 @@ export class DynamicSchedulerComponent implements OnInit {
     } else {
       this.complaintData.customer_id = this.helpService.getMe();
     }
-    /*this.complaintData.date =
-      new Date().getDay() +
-      "." +
-      new Date().getMonth() +
-      "." +
-      new Date().getFullYear() +
-      ".";*/
-    this.complaintData.date = new Date().toString();
-    // this.initializeParams();
 
     this.complaintData.complaint = this.pickToModel(
       this.selectedComplaint,
@@ -2404,7 +2396,7 @@ export class DynamicSchedulerComponent implements OnInit {
       value: this.value,
     };
 
-    this.mongo.setUsersFor(item).subscribe((data) => { });
+    this.mongo.setUsersFor(item).subscribe((data) => {});
   }
 
   getTaskForSelectedUsers(value) {
@@ -2511,7 +2503,7 @@ export class DynamicSchedulerComponent implements OnInit {
           for (let j = 0; j < eventStatistic.length; j++) {
             if (
               this.sharedCalendarResources[i].id ===
-              eventStatistic[j].creator_id &&
+                eventStatistic[j].creator_id &&
               userId === eventStatistic[j].creator_id
             ) {
               for (let k = 0; k < listOfCategorie.length; k++) {
@@ -2765,19 +2757,20 @@ export class DynamicSchedulerComponent implements OnInit {
       return "noTime";
     }*/
 
-    const holiday = this.holidays.find(holiday =>
-      date.date &&
-      date.date.getDate() >= holiday.StartTime.getDate() &&
-      date.date.getMonth() == holiday.StartTime.getMonth() &&
-      date.date.getYear() == holiday.StartTime.getYear() &&
-      date.date.getDate() <= holiday.EndTime.getDate() &&
-      date.date.getMonth() == holiday.EndTime.getMonth() &&
-      date.date.getYear() == holiday.EndTime.getYear());
+    const holiday = this.holidays.find(
+      (holiday) =>
+        date.date &&
+        date.date.getDate() >= holiday.StartTime.getDate() &&
+        date.date.getMonth() == holiday.StartTime.getMonth() &&
+        date.date.getYear() == holiday.StartTime.getYear() &&
+        date.date.getDate() <= holiday.EndTime.getDate() &&
+        date.date.getMonth() == holiday.EndTime.getMonth() &&
+        date.date.getYear() == holiday.EndTime.getYear()
+    );
 
     if (holiday) {
       date.element.style.backgroundColor = "#e9ecef";
       date.element.style.pointerEvents = "none";
-
 
       // if (date.elementType !== "monthDay" && this.currentView === "Month") {
 
@@ -2792,12 +2785,11 @@ export class DynamicSchedulerComponent implements OnInit {
 
       console.log(this.currentView);
       if (date.elementType === "dateHeader" && this.currentView !== "Month") {
-
-        const dateSplitted = date.date.toString().split(' ');
+        const dateSplitted = date.date.toString().split(" ");
 
         // date - day - holiday
-        date.element.firstChild.innerText = dateSplitted[2] + " " + dateSplitted[0] + " - " + holiday.Subject;
-
+        date.element.firstChild.innerText =
+          dateSplitted[2] + " " + dateSplitted[0] + " - " + holiday.Subject;
       }
       return;
     }
@@ -2873,9 +2865,9 @@ export class DynamicSchedulerComponent implements OnInit {
               new Date(workItem.change) <= date.date &&
               (i + 1 <= this.calendars[0].workTime[date.groupIndex].length - 1
                 ? date.date <
-                new Date(
-                  this.calendars[0].workTime[date.groupIndex][i + 1].change
-                )
+                  new Date(
+                    this.calendars[0].workTime[date.groupIndex][i + 1].change
+                  )
                 : true) &&
               date.date.getDay() - 1 < 5 &&
               date.date.getDay() !== 0
@@ -2884,15 +2876,15 @@ export class DynamicSchedulerComponent implements OnInit {
                 (workItem.times[date.date.getDay() - 1].start <=
                   date.date.getHours() &&
                   workItem.times[date.date.getDay() - 1].end >
-                  date.date.getHours()) ||
+                    date.date.getHours()) ||
                 (workItem.times[date.date.getDay() - 1].start2 <=
                   date.date.getHours() &&
                   workItem.times[date.date.getDay() - 1].end2 >
-                  date.date.getHours()) ||
+                    date.date.getHours()) ||
                 (workItem.times[date.date.getDay() - 1].start3 <=
                   date.date.getHours() &&
                   workItem.times[date.date.getDay() - 1].end3 >
-                  date.date.getHours())
+                    date.date.getHours())
               ) {
                 date.element.style.background = workItem.color;
                 if (this.type === this.userType.readOnlyScheduler) {
@@ -2942,7 +2934,6 @@ export class DynamicSchedulerComponent implements OnInit {
         date.element.style.pointerEvents = "none";
       }
     }
-
   }
 
   convertNumericToDay(numeric) {
@@ -3010,7 +3001,6 @@ export class DynamicSchedulerComponent implements OnInit {
     this.customer
       .getParameters("Treatment", superadmin)
       .subscribe((data: []) => {
-
         console.log(data);
         this.treatmentValue = data.sort(function (a, b) {
           return a["sequence"] - b["sequence"];
@@ -3288,10 +3278,7 @@ export class DynamicSchedulerComponent implements OnInit {
           this.complaintData.complaint_title +
           "+" +
           this.complaintData.comment;
-        this.complaintData.date = this.formatDate(
-          this.eventTime.start,
-          this.eventTime.end
-        );
+        this.formatDate(this.eventTime.start, this.eventTime.end);
         if (this.isConfirm) {
           formValue.confirm = 0;
         } else {
@@ -3362,10 +3349,7 @@ export class DynamicSchedulerComponent implements OnInit {
           this.complaintData.complaint_title +
           "+" +
           this.complaintData.comment;
-        this.complaintData.date = this.formatDate(
-          this.eventTime.start,
-          this.eventTime.end
-        );
+        this.formatDate(this.eventTime.start, this.eventTime.end);
         if (this.isConfirm) {
           formValue.confirm = 0;
         } else {
@@ -3512,7 +3496,7 @@ export class DynamicSchedulerComponent implements OnInit {
   onActionBegin(args: any) {
     console.log(args);
 
-    console.log('onActionBegin')
+    console.log("onActionBegin");
     if (
       !this.checkConditionForEvent(args) ||
       args.requestType === "dateNavigate" ||
@@ -3728,8 +3712,8 @@ export class DynamicSchedulerComponent implements OnInit {
   copyLinkToTheClinic() {
     this.helpService.copyToClipboard(
       this.helpService.getFullHostName() +
-      "/dashboard/home/task/" +
-      this.selectedStoreId
+        "/dashboard/home/task/" +
+        this.selectedStoreId
     );
     this.helpService.successToastr(
       this.language.successCopiedLinkForClinicReservation,
@@ -3738,22 +3722,19 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   public downloadPDF(): void {
-
     console.log(this.selectedTherapies);
 
     const netPrices = [];
     const grossPrices = [];
     const therapies = [];
 
-    this.selectedTherapies.forEach(id => {
-
-      const temp = this.therapyValue.find(therapy => therapy.id === id);
+    this.selectedTherapies.forEach((id) => {
+      const temp = this.therapyValue.find((therapy) => therapy.id === id);
       if (temp) {
-        netPrices.push(parseFloat(temp['net_price']));
-        grossPrices.push(parseFloat(temp['gross_price']));
+        netPrices.push(parseFloat(temp["net_price"]));
+        grossPrices.push(parseFloat(temp["gross_price"]));
         therapies.push(temp);
       }
-
     });
 
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
@@ -3773,8 +3754,8 @@ export class DynamicSchedulerComponent implements OnInit {
             [
               {
                 text: this.language.invoiceTitle,
-                style: 'invoiceTitle',
-                width: '*'
+                style: "invoiceTitle",
+                width: "*",
               },
               {
                 stack: [
@@ -3782,49 +3763,47 @@ export class DynamicSchedulerComponent implements OnInit {
                     columns: [
                       {
                         text: this.language.invoiceSubTitle,
-                        style: 'invoiceSubTitle',
-                        width: '*'
-
+                        style: "invoiceSubTitle",
+                        width: "*",
                       },
                       {
-                        text: this.complaintData['id'],
-                        style: 'invoiceSubValue',
-                        width: 130
-
-                      }
-                    ]
+                        text: this.complaintData["id"],
+                        style: "invoiceSubValue",
+                        width: 130,
+                      },
+                    ],
                   },
                   {
                     columns: [
                       {
                         text: this.language.dateTitle,
-                        style: 'invoiceSubTitle',
-                        width: '*'
+                        style: "invoiceSubTitle",
+                        width: "*",
                       },
                       {
-                        text: this.complaintData['date'],
-                        style: 'invoiceSubValue',
-                        width: 130
-                      }
-                    ]
+                        text: this.complaintData["date"],
+                        style: "invoiceSubValue",
+                        width: 130,
+                      },
+                    ],
                   },
 
                   {
                     columns: [
                       {
-                        text: '\n',
-                        style: 'invoiceSubTitle',
-                        width: '*'
+                        text: "\n",
+                        style: "invoiceSubTitle",
+                        width: "*",
                       },
                       {
-                        text: '\n',
-                        style: 'invoiceSubValue',
-                        width: '*'
-                      }
-                    ]
+                        text: "\n",
+                        style: "invoiceSubValue",
+                        width: "*",
+                      },
+                    ],
                   },
-                ]
-              }
+                ],
+              },
             ],
           ],
         },
@@ -3833,57 +3812,70 @@ export class DynamicSchedulerComponent implements OnInit {
           columns: [
             {
               text: this.language.invoiceBillingTitleFrom,
-              style: 'invoiceBillingTitleLeft',
-
+              style: "invoiceBillingTitleLeft",
             },
             {
               text: this.language.invoiceBillingTitleTo,
-              style: 'invoiceBillingTitleRight',
-
+              style: "invoiceBillingTitleRight",
             },
-          ]
+          ],
         },
         // Billing Details
         {
           columns: [
             {
               text: this.adminUser.clinicName,
-              style: 'invoiceBillingDetailsLeft'
+              style: "invoiceBillingDetailsLeft",
             },
             {
               text: this.customerUser["shortname"],
-              style: 'invoiceBillingDetailsRight'
+              style: "invoiceBillingDetailsRight",
             },
-          ]
+          ],
         },
         // Billing Address Title
         {
           columns: [
             {
               text: this.language.invoiceAddress,
-              style: 'invoiceBillingAddressTitleLeft'
+              style: "invoiceBillingAddressTitleLeft",
             },
             {
               text: this.language.invoiceAddress,
-              style: 'invoiceBillingAddressTitleRight'
+              style: "invoiceBillingAddressTitleRight",
             },
-          ]
+          ],
         },
         // Billing Address
         {
           columns: [
             {
-              text: this.adminUser.street + '\n ' + this.adminUser.place + " " + this.adminUser.zipcode + "\n" + this.adminUser.telephone,
-              style: 'invoiceBillingAddressLeft'
+              text:
+                this.adminUser.street +
+                "\n " +
+                this.adminUser.place +
+                " " +
+                this.adminUser.zipcode +
+                "\n" +
+                this.adminUser.telephone,
+              style: "invoiceBillingAddressLeft",
             },
             {
-              text: this.customerUser["street"] + " " + this.customerUser["streetnumber"] + "\n" + this.customerUser["city"] + "\n" + this.customerUser["telephone"] + '\n',
-              style: 'invoiceBillingAddressRight'
+              text:
+                this.customerUser["street"] +
+                " " +
+                this.customerUser["streetnumber"] +
+                "\n" +
+                this.customerUser["city"] +
+                "\n" +
+                this.customerUser["telephone"] +
+                "\n",
+              style: "invoiceBillingAddressRight",
             },
-          ]
+          ],
         },
         // Line breaks
-        '\n\n',
+        "\n\n",
         // Items
         {
           layout: {
@@ -3892,32 +3884,32 @@ export class DynamicSchedulerComponent implements OnInit {
               if (i === 0 || i === node.table.body.length) {
                 return 0;
               }
-              return (i === node.table.headerRows) ? 2 : 1;
+              return i === node.table.headerRows ? 2 : 1;
             },
             vLineWidth: function (i) {
               return 0;
             },
             hLineColor: function (i) {
-              return i === 1 ? 'black' : '#aaa';
+              return i === 1 ? "black" : "#aaa";
             },
             paddingLeft: function (i) {
               return i === 0 ? 0 : 8;
             },
             paddingRight: function (i, node) {
-              return (i === node.table.widths.length - 1) ? 0 : 8;
+              return i === node.table.widths.length - 1 ? 0 : 8;
             },
             // code for zebra style:
             fillColor: function (i, node) {
-              return (i % 2 === 0) ? '#CCCCCC' : null;
-            }
+              return i % 2 === 0 ? "#CCCCCC" : null;
+            },
           },
           table: {
             // headers are automatically repeated if the table spans over multiple pages
             // you can declare how many rows should be treated as headers
             headerRows: 1,
-            widths: ['*', 'auto', 'auto'],
+            widths: ["*", "auto", "auto"],
 
-            body: this.createItemsTable(therapies)
+            body: this.createItemsTable(therapies),
           }, // table
           //  layout: 'lightHorizontalLines'
         },
@@ -3927,60 +3919,59 @@ export class DynamicSchedulerComponent implements OnInit {
             // headers are automatically repeated if the table spans over multiple pages
             // you can declare how many rows should be treated as headers
             headerRows: 0,
-            widths: ['*', 80],
+            widths: ["*", 80],
 
             body: [
               // Total
               [
                 {
                   text: this.language.invoiceSubtotal,
-                  style: 'itemsFooterSubTitle'
+                  style: "itemsFooterSubTitle",
                 },
                 {
                   text: subtotal + "€",
-                  style: 'itemsFooterSubValue'
-                }
+                  style: "itemsFooterSubValue",
+                },
               ],
               [
                 {
                   text: this.language.invoiceTax,
-                  style: 'itemsFooterSubTitle'
+                  style: "itemsFooterSubTitle",
                 },
                 {
                   text: tax + "€",
-                  style: 'itemsFooterSubValue'
-                }
+                  style: "itemsFooterSubValue",
+                },
               ],
               [
                 {
                   text: this.language.invoiceTotal,
-                  style: 'itemsFooterTotalTitle'
+                  style: "itemsFooterTotalTitle",
                 },
                 {
                   text: total + "€",
-                  style: 'itemsFooterTotalValue'
-                }
+                  style: "itemsFooterTotalValue",
+                },
               ],
-            ]
+            ],
           }, // table
-          layout: 'lightHorizontalLines'
+          layout: "lightHorizontalLines",
         },
         // Signature
         {
           columns: [
             {
-              text: '',
+              text: "",
             },
             {
               stack: [
                 {
-                  text: '_________________________________',
-                  style: 'signaturePlaceholder'
+                  text: "_________________________________",
+                  style: "signaturePlaceholder",
                 },
                 {
                   text: this.language.invoiceYourName,
-                  style: 'signatureName'
-
+                  style: "signatureName",
                 },
                 /* {
                    text: 'Your job title',
@@ -3988,9 +3979,9 @@ export class DynamicSchedulerComponent implements OnInit {
    
                  }*/
               ],
-              width: 180
+              width: 180,
             },
-          ]
+          ],
         },
         /*{
           text: 'NOTES',
@@ -4006,55 +3997,55 @@ export class DynamicSchedulerComponent implements OnInit {
         documentHeaderLeft: {
           fontSize: 10,
           margin: [5, 5, 5, 5],
-          alignment: 'left'
+          alignment: "left",
         },
         documentHeaderCenter: {
           fontSize: 10,
           margin: [5, 5, 5, 5],
-          alignment: 'center'
+          alignment: "center",
         },
         documentHeaderRight: {
           fontSize: 10,
           margin: [5, 5, 5, 5],
-          alignment: 'right'
+          alignment: "right",
         },
         // Document Footer
         documentFooterLeft: {
           fontSize: 10,
           margin: [5, 5, 5, 5],
-          alignment: 'left'
+          alignment: "left",
         },
         documentFooterCenter: {
           fontSize: 10,
           margin: [5, 5, 5, 5],
-          alignment: 'center'
+          alignment: "center",
         },
         documentFooterRight: {
           fontSize: 10,
           margin: [5, 5, 5, 5],
-          alignment: 'right'
+          alignment: "right",
         },
         // Invoice Title
         invoiceTitle: {
           fontSize: 22,
           bold: true,
-          alignment: 'right',
-          margin: [0, 0, 0, 15]
+          alignment: "right",
+          margin: [0, 0, 0, 15],
         },
         // Invoice Details
         invoiceSubTitle: {
           fontSize: 12,
-          alignment: 'right'
+          alignment: "right",
         },
         invoiceSubValue: {
           fontSize: 12,
-          alignment: 'right'
+          alignment: "right",
         },
         // Billing Headers
         invoiceBillingTitleLeft: {
           fontSize: 14,
           bold: true,
-          alignment: 'left',
+          alignment: "left",
           margin: [0, 20, 0, 5],
         },
 
@@ -4062,38 +4053,36 @@ export class DynamicSchedulerComponent implements OnInit {
         invoiceBillingTitleRight: {
           fontSize: 14,
           bold: true,
-          alignment: 'right',
+          alignment: "right",
           margin: [0, 20, 0, 5],
         },
         // Billing Details
         invoiceBillingDetailsLeft: {
-          alignment: 'left'
-
+          alignment: "left",
         },
         invoiceBillingDetailsRight: {
-          alignment: 'right'
-
+          alignment: "right",
         },
         invoiceBillingAddressTitleLeft: {
           margin: [0, 7, 0, 3],
           bold: true,
-          alignment: 'left'
+          alignment: "left",
         },
         invoiceBillingAddressTitleRight: {
           margin: [0, 7, 0, 3],
           bold: true,
-          alignment: 'right'
+          alignment: "right",
         },
         invoiceBillingAddressLeft: {
-          alignment: 'left'
+          alignment: "left",
         },
         invoiceBillingAddressRight: {
-          alignment: 'right'
+          alignment: "right",
         },
         // Items Header
         itemsHeader: {
           margin: [0, 5, 0, 5],
-          bold: true
+          bold: true,
         },
         // Item Title
         itemTitle: {
@@ -4101,50 +4090,50 @@ export class DynamicSchedulerComponent implements OnInit {
         },
         itemSubTitle: {
           italics: true,
-          fontSize: 11
+          fontSize: 11,
         },
         itemNumber: {
           margin: [0, 5, 0, 5],
-          alignment: 'center',
+          alignment: "center",
         },
         itemTotal: {
           margin: [0, 5, 0, 5],
           bold: true,
-          alignment: 'center',
+          alignment: "center",
         },
 
         // Items Footer (Subtotal, Total, Tax, etc)
         itemsFooterSubTitle: {
           margin: [0, 5, 0, 5],
           bold: true,
-          alignment: 'right',
+          alignment: "right",
         },
         itemsFooterSubValue: {
           margin: [0, 5, 0, 5],
           bold: true,
-          alignment: 'center',
+          alignment: "center",
         },
         itemsFooterTotalTitle: {
           margin: [0, 5, 0, 5],
           bold: true,
-          alignment: 'right',
+          alignment: "right",
         },
         itemsFooterTotalValue: {
           margin: [0, 5, 0, 5],
           bold: true,
-          alignment: 'center',
+          alignment: "center",
         },
         signaturePlaceholder: {
           margin: [0, 70, 0, 0],
         },
         signatureName: {
           bold: true,
-          alignment: 'center',
+          alignment: "center",
         },
         signatureJobTitle: {
           italics: true,
           fontSize: 10,
-          alignment: 'center',
+          alignment: "center",
         },
         notesTitle: {
           fontSize: 10,
@@ -4152,19 +4141,21 @@ export class DynamicSchedulerComponent implements OnInit {
           margin: [0, 50, 0, 3],
         },
         notesText: {
-          fontSize: 10
+          fontSize: 10,
         },
         center: {
-          alignment: 'center',
+          alignment: "center",
         },
       },
       defaultStyle: {
         columnGap: 20,
-      }
-    }
+      },
+    };
 
-    // pass file name 
-    pdfMake.createPdf(docDefinition).download(this.customerUser["firstname"] + this.customerUser["lastname"]);
+    // pass file name
+    pdfMake
+      .createPdf(docDefinition)
+      .download(this.customerUser["firstname"] + this.customerUser["lastname"]);
   }
   createItemsTable(therapies) {
     const arr = [
@@ -4172,60 +4163,57 @@ export class DynamicSchedulerComponent implements OnInit {
       [
         {
           text: this.language.invoiceItem,
-          style: 'itemsHeader'
+          style: "itemsHeader",
         },
         {
           text: this.language.invoiceNetPrice,
-          style: ['itemsHeader', 'center']
+          style: ["itemsHeader", "center"],
         },
         {
           text: this.language.invoiceGrossPrice,
-          style: ['itemsHeader', 'center']
-        }
-      ]
-    ]
+          style: ["itemsHeader", "center"],
+        },
+      ],
+    ];
 
-    therapies.forEach(therapy => {
+    therapies.forEach((therapy) => {
       const obj = [
         {
-          text: therapy.description ? therapy.title + '\n' + therapy.description : therapy.title,
-          style: 'itemTitle'
+          text: therapy.description
+            ? therapy.title + "\n" + therapy.description
+            : therapy.title,
+          style: "itemTitle",
         },
         {
           text: therapy.net_price,
-          style: 'itemNumber'
+          style: "itemNumber",
         },
         {
           text: therapy.gross_price,
-          style: 'itemNumber'
-        }
+          style: "itemNumber",
+        },
       ];
 
       arr.push(obj);
     });
 
-
     return arr;
   }
 
-
   public printPDF(): void {
-
     console.log(this.selectedTherapies);
 
     const netPrices = [];
     const grossPrices = [];
     const therapies = [];
 
-    this.selectedTherapies.forEach(id => {
-
-      const temp = this.therapyValue.find(therapy => therapy.id === id);
+    this.selectedTherapies.forEach((id) => {
+      const temp = this.therapyValue.find((therapy) => therapy.id === id);
       if (temp) {
-        netPrices.push(parseFloat(temp['net_price']));
-        grossPrices.push(parseFloat(temp['gross_price']));
+        netPrices.push(parseFloat(temp["net_price"]));
+        grossPrices.push(parseFloat(temp["gross_price"]));
         therapies.push(temp);
       }
-
     });
 
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
@@ -4245,8 +4233,8 @@ export class DynamicSchedulerComponent implements OnInit {
             [
               {
                 text: this.language.invoiceTitle,
-                style: 'invoiceTitle',
-                width: '*'
+                style: "invoiceTitle",
+                width: "*",
               },
               {
                 stack: [
@@ -4254,49 +4242,47 @@ export class DynamicSchedulerComponent implements OnInit {
                     columns: [
                       {
                         text: this.language.invoiceSubTitle,
-                        style: 'invoiceSubTitle',
-                        width: '*'
-
+                        style: "invoiceSubTitle",
+                        width: "*",
                       },
                       {
-                        text: this.complaintData['id'],
-                        style: 'invoiceSubValue',
-                        width: 130
-
-                      }
-                    ]
+                        text: this.complaintData["id"],
+                        style: "invoiceSubValue",
+                        width: 130,
+                      },
+                    ],
                   },
                   {
                     columns: [
                       {
                         text: this.language.dateTitle,
-                        style: 'invoiceSubTitle',
-                        width: '*'
+                        style: "invoiceSubTitle",
+                        width: "*",
                       },
                       {
-                        text: this.complaintData['date'],
-                        style: 'invoiceSubValue',
-                        width: 130
-                      }
-                    ]
+                        text: this.complaintData["date"],
+                        style: "invoiceSubValue",
+                        width: 130,
+                      },
+                    ],
                   },
 
                   {
                     columns: [
                       {
-                        text: '\n',
-                        style: 'invoiceSubTitle',
-                        width: '*'
+                        text: "\n",
+                        style: "invoiceSubTitle",
+                        width: "*",
                       },
                       {
-                        text: '\n',
-                        style: 'invoiceSubValue',
-                        width: '*'
-                      }
-                    ]
+                        text: "\n",
+                        style: "invoiceSubValue",
+                        width: "*",
+                      },
+                    ],
                   },
-                ]
-              }
+                ],
+              },
             ],
           ],
         },
@@ -4305,57 +4291,70 @@ export class DynamicSchedulerComponent implements OnInit {
           columns: [
             {
               text: this.language.invoiceBillingTitleFrom,
-              style: 'invoiceBillingTitleLeft',
-
+              style: "invoiceBillingTitleLeft",
             },
             {
               text: this.language.invoiceBillingTitleTo,
-              style: 'invoiceBillingTitleRight',
-
+              style: "invoiceBillingTitleRight",
             },
-          ]
+          ],
         },
         // Billing Details
         {
           columns: [
             {
               text: this.adminUser.clinicName,
-              style: 'invoiceBillingDetailsLeft'
+              style: "invoiceBillingDetailsLeft",
             },
             {
               text: this.customerUser["shortname"],
-              style: 'invoiceBillingDetailsRight'
+              style: "invoiceBillingDetailsRight",
             },
-          ]
+          ],
         },
         // Billing Address Title
         {
           columns: [
             {
               text: this.language.invoiceAddress,
-              style: 'invoiceBillingAddressTitleLeft'
+              style: "invoiceBillingAddressTitleLeft",
             },
             {
               text: this.language.invoiceAddress,
-              style: 'invoiceBillingAddressTitleRight'
+              style: "invoiceBillingAddressTitleRight",
             },
-          ]
+          ],
         },
         // Billing Address
         {
           columns: [
             {
-              text: this.adminUser.street + '\n ' + this.adminUser.place + " " + this.adminUser.zipcode + "\n" + this.adminUser.telephone,
-              style: 'invoiceBillingAddressLeft'
+              text:
+                this.adminUser.street +
+                "\n " +
+                this.adminUser.place +
+                " " +
+                this.adminUser.zipcode +
+                "\n" +
+                this.adminUser.telephone,
+              style: "invoiceBillingAddressLeft",
             },
             {
-              text: this.customerUser["street"] + " " + this.customerUser["streetnumber"] + "\n" + this.customerUser["city"] + "\n" + this.customerUser["telephone"] + '\n',
-              style: 'invoiceBillingAddressRight'
+              text:
+                this.customerUser["street"] +
+                " " +
+                this.customerUser["streetnumber"] +
+                "\n" +
+                this.customerUser["city"] +
+                "\n" +
+                this.customerUser["telephone"] +
+                "\n",
+              style: "invoiceBillingAddressRight",
             },
-          ]
+          ],
         },
         // Line breaks
-        '\n\n',
+        "\n\n",
         // Items
         {
           layout: {
@@ -4364,32 +4363,32 @@ export class DynamicSchedulerComponent implements OnInit {
               if (i === 0 || i === node.table.body.length) {
                 return 0;
               }
-              return (i === node.table.headerRows) ? 2 : 1;
+              return i === node.table.headerRows ? 2 : 1;
             },
             vLineWidth: function (i) {
               return 0;
             },
             hLineColor: function (i) {
-              return i === 1 ? 'black' : '#aaa';
+              return i === 1 ? "black" : "#aaa";
             },
             paddingLeft: function (i) {
               return i === 0 ? 0 : 8;
             },
             paddingRight: function (i, node) {
-              return (i === node.table.widths.length - 1) ? 0 : 8;
+              return i === node.table.widths.length - 1 ? 0 : 8;
             },
             // code for zebra style:
             fillColor: function (i, node) {
-              return (i % 2 === 0) ? '#CCCCCC' : null;
-            }
+              return i % 2 === 0 ? "#CCCCCC" : null;
+            },
           },
           table: {
             // headers are automatically repeated if the table spans over multiple pages
             // you can declare how many rows should be treated as headers
             headerRows: 1,
-            widths: ['*', 'auto', 'auto'],
+            widths: ["*", "auto", "auto"],
 
-            body: this.createItemsTable(therapies)
+            body: this.createItemsTable(therapies),
           }, // table
           //  layout: 'lightHorizontalLines'
         },
@@ -4399,60 +4398,59 @@ export class DynamicSchedulerComponent implements OnInit {
             // headers are automatically repeated if the table spans over multiple pages
             // you can declare how many rows should be treated as headers
             headerRows: 0,
-            widths: ['*', 80],
+            widths: ["*", 80],
 
             body: [
               // Total
               [
                 {
                   text: this.language.invoiceSubtotal,
-                  style: 'itemsFooterSubTitle'
+                  style: "itemsFooterSubTitle",
                 },
                 {
                   text: subtotal + "€",
-                  style: 'itemsFooterSubValue'
-                }
+                  style: "itemsFooterSubValue",
+                },
               ],
               [
                 {
                   text: this.language.invoiceTax,
-                  style: 'itemsFooterSubTitle'
+                  style: "itemsFooterSubTitle",
                 },
                 {
                   text: tax + "€",
-                  style: 'itemsFooterSubValue'
-                }
+                  style: "itemsFooterSubValue",
+                },
               ],
               [
                 {
                   text: this.language.invoiceTotal,
-                  style: 'itemsFooterTotalTitle'
+                  style: "itemsFooterTotalTitle",
                 },
                 {
                   text: total + "€",
-                  style: 'itemsFooterTotalValue'
-                }
+                  style: "itemsFooterTotalValue",
+                },
               ],
-            ]
+            ],
           }, // table
-          layout: 'lightHorizontalLines'
+          layout: "lightHorizontalLines",
         },
         // Signature
         {
           columns: [
             {
-              text: '',
+              text: "",
             },
             {
               stack: [
                 {
-                  text: '_________________________________',
-                  style: 'signaturePlaceholder'
+                  text: "_________________________________",
+                  style: "signaturePlaceholder",
                 },
                 {
                   text: this.language.invoiceYourName,
-                  style: 'signatureName'
-
+                  style: "signatureName",
                 },
                 /* {
                    text: 'Your job title',
@@ -4460,9 +4458,9 @@ export class DynamicSchedulerComponent implements OnInit {
    
                  }*/
               ],
-              width: 180
+              width: 180,
             },
-          ]
+          ],
         },
         /*{
           text: 'NOTES',
@@ -4478,55 +4476,55 @@ export class DynamicSchedulerComponent implements OnInit {
         documentHeaderLeft: {
           fontSize: 10,
           margin: [5, 5, 5, 5],
-          alignment: 'left'
+          alignment: "left",
         },
         documentHeaderCenter: {
           fontSize: 10,
           margin: [5, 5, 5, 5],
-          alignment: 'center'
+          alignment: "center",
         },
         documentHeaderRight: {
           fontSize: 10,
           margin: [5, 5, 5, 5],
-          alignment: 'right'
+          alignment: "right",
         },
         // Document Footer
         documentFooterLeft: {
           fontSize: 10,
           margin: [5, 5, 5, 5],
-          alignment: 'left'
+          alignment: "left",
         },
         documentFooterCenter: {
           fontSize: 10,
           margin: [5, 5, 5, 5],
-          alignment: 'center'
+          alignment: "center",
         },
         documentFooterRight: {
           fontSize: 10,
           margin: [5, 5, 5, 5],
-          alignment: 'right'
+          alignment: "right",
         },
         // Invoice Title
         invoiceTitle: {
           fontSize: 22,
           bold: true,
-          alignment: 'right',
-          margin: [0, 0, 0, 15]
+          alignment: "right",
+          margin: [0, 0, 0, 15],
         },
         // Invoice Details
         invoiceSubTitle: {
           fontSize: 12,
-          alignment: 'right'
+          alignment: "right",
         },
         invoiceSubValue: {
           fontSize: 12,
-          alignment: 'right'
+          alignment: "right",
         },
         // Billing Headers
         invoiceBillingTitleLeft: {
           fontSize: 14,
           bold: true,
-          alignment: 'left',
+          alignment: "left",
           margin: [0, 20, 0, 5],
         },
 
@@ -4534,38 +4532,36 @@ export class DynamicSchedulerComponent implements OnInit {
         invoiceBillingTitleRight: {
           fontSize: 14,
           bold: true,
-          alignment: 'right',
+          alignment: "right",
           margin: [0, 20, 0, 5],
         },
         // Billing Details
         invoiceBillingDetailsLeft: {
-          alignment: 'left'
-
+          alignment: "left",
         },
         invoiceBillingDetailsRight: {
-          alignment: 'right'
-
+          alignment: "right",
         },
         invoiceBillingAddressTitleLeft: {
           margin: [0, 7, 0, 3],
           bold: true,
-          alignment: 'left'
+          alignment: "left",
         },
         invoiceBillingAddressTitleRight: {
           margin: [0, 7, 0, 3],
           bold: true,
-          alignment: 'right'
+          alignment: "right",
         },
         invoiceBillingAddressLeft: {
-          alignment: 'left'
+          alignment: "left",
         },
         invoiceBillingAddressRight: {
-          alignment: 'right'
+          alignment: "right",
         },
         // Items Header
         itemsHeader: {
           margin: [0, 5, 0, 5],
-          bold: true
+          bold: true,
         },
         // Item Title
         itemTitle: {
@@ -4573,50 +4569,50 @@ export class DynamicSchedulerComponent implements OnInit {
         },
         itemSubTitle: {
           italics: true,
-          fontSize: 11
+          fontSize: 11,
         },
         itemNumber: {
           margin: [0, 5, 0, 5],
-          alignment: 'center',
+          alignment: "center",
         },
         itemTotal: {
           margin: [0, 5, 0, 5],
           bold: true,
-          alignment: 'center',
+          alignment: "center",
         },
 
         // Items Footer (Subtotal, Total, Tax, etc)
         itemsFooterSubTitle: {
           margin: [0, 5, 0, 5],
           bold: true,
-          alignment: 'right',
+          alignment: "right",
         },
         itemsFooterSubValue: {
           margin: [0, 5, 0, 5],
           bold: true,
-          alignment: 'center',
+          alignment: "center",
         },
         itemsFooterTotalTitle: {
           margin: [0, 5, 0, 5],
           bold: true,
-          alignment: 'right',
+          alignment: "right",
         },
         itemsFooterTotalValue: {
           margin: [0, 5, 0, 5],
           bold: true,
-          alignment: 'center',
+          alignment: "center",
         },
         signaturePlaceholder: {
           margin: [0, 70, 0, 0],
         },
         signatureName: {
           bold: true,
-          alignment: 'center',
+          alignment: "center",
         },
         signatureJobTitle: {
           italics: true,
           fontSize: 10,
-          alignment: 'center',
+          alignment: "center",
         },
         notesTitle: {
           fontSize: 10,
@@ -4624,16 +4620,16 @@ export class DynamicSchedulerComponent implements OnInit {
           margin: [0, 50, 0, 3],
         },
         notesText: {
-          fontSize: 10
+          fontSize: 10,
         },
         center: {
-          alignment: 'center',
+          alignment: "center",
         },
       },
       defaultStyle: {
         columnGap: 20,
-      }
-    }
+      },
+    };
     pdfMake.createPdf(docDefinition).print();
   }
 }
