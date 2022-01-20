@@ -416,6 +416,9 @@
       "successCopiedLinkForClinicReservation": {
         "type": "string"
       },
+      "generateInvoice": {
+        "type": "string"
+      },
       "reserved": {
         "type": "string"
       },
@@ -579,6 +582,9 @@
         "type": "string"
       },
       "massiveEmail": {
+        "type": "string"
+      },
+      "addHoliday": {
         "type": "string"
       },
       "reservations": {
@@ -2550,7 +2556,9 @@
             {
               "key": "successCopiedLinkForClinicReservation"
             },
-            {}
+            {
+              "key": "generateInvoice"
+            }
           ]
         }
       ]
@@ -2805,6 +2813,19 @@
             {
               "key": "massiveEmail"
             }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "addHoliday"
+            },
+            {},
+            {},
+            {}
           ]
         }
       ]
