@@ -2,7 +2,7 @@ import { UsersService } from './../../../../service/users.service';
 import { DashboardService } from 'src/app/service/dashboard.service';
 import { HolidayService } from '../../../../service/holiday.service';
 import { HolidayModel } from '../../../../models/holiday-model';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MonthService, ScheduleComponent, EventSettingsModel, View, CellClickEventArgs, PopupOpenEventArgs, EventRenderedArgs } from '@syncfusion/ej2-angular-schedule';
 import { Modal } from 'ngx-modal';
 import { MessageService } from 'src/app/service/message.service';
@@ -13,6 +13,7 @@ import { UserType } from 'src/app/component/enum/user-type';
 import { GroupDescriptor, SortDescriptor, State, process } from '@progress/kendo-data-query';
 import { PageChangeEvent } from '@progress/kendo-angular-grid';
 import { Template } from 'src/app/models/template-model';
+import { DynamicSchedulerService } from 'src/app/service/dynamic-scheduler.service';
 
 
 @Component({
@@ -79,12 +80,14 @@ export class AddHolidayComponent implements OnInit {
 
   public user;
   deleteTemplateId: any;
+  height: string;
 
   constructor(public messageService: MessageService,
     private holidayService: HolidayService,
     private helpService: HelpService,
     private dashboardService: DashboardService,
     private usersService: UsersService,
+    private dynamicService: DynamicSchedulerService,
     private toastrService: ToastrService) { }
 
   ngOnInit() {
@@ -100,7 +103,16 @@ export class AddHolidayComponent implements OnInit {
       console.log(data);
       this.user = data;
     });
+
+    this.height = this.dynamicService.getHolidayCalendarHeight();
   }
+
+
+  @HostListener("window:resize", ["$event"])
+  onResize(event) {
+    this.height = this.dynamicService.getHolidayCalendarHeight();
+  }
+
 
   public loadHolidaysForUser(): void {
     //reset
