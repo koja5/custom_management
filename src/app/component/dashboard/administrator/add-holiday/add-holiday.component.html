@@ -132,8 +132,8 @@
         <form (ngSubmit)="
         templateForm.form.valid === true
             ? operationMode === 'add'
-              ? createTemplate($event)
-              : updateTemplate($event)
+              ? createTemplate()
+              : updateTemplate()
             : null
         " #templateForm="ngForm">
             <div class="form-group">
