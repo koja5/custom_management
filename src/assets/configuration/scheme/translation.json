@@ -1782,6 +1782,69 @@
       },
       "confirmArrivalGoToHome": {
         "type": "string"
+      },
+      "addHoliday": {
+        "type": "string"
+      },
+      "chooseTemplate": {
+        "type": "string"
+      },
+      "templatesTitle": {
+        "type": "string"
+      },
+      "holidaysTitle": {
+        "type": "string"
+      },
+      "dateTitle": {
+        "type": "string"
+      },
+      "adminSuccessDeleteTitle": {
+        "type": "string"
+      },
+      "adminSuccessDeleteText": {
+        "type": "string"
+      },
+      "adminErrorDeleteTitle": {
+        "type": "string"
+      },
+      "adminErrorDeleteText": {
+        "type": "string"
+      },
+      "invoiceTitle": {
+        "type": "string"
+      },
+      "invoiceSubTitle": {
+        "type": "string"
+      },
+      "invoiceBillingTitleFrom": {
+        "type": "string"
+      },
+      "invoiceBillingTitleTo": {
+        "type": "string"
+      },
+      "invoiceAddress": {
+        "type": "string"
+      },
+      "invoiceSubtotal": {
+        "type": "string"
+      },
+      "invoiceTax": {
+        "type": "string"
+      },
+      "invoiceTotal": {
+        "type": "string"
+      },
+      "invoiceYourName": {
+        "type": "string"
+      },
+      "invoiceItem": {
+        "type": "string"
+      },
+      "invoiceNetPrice": {
+        "type": "string"
+      },
+      "invoiceGrossPrice": {
+        "type": "string"
       }
     }
   },
