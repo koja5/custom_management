@@ -188,21 +188,25 @@ export class AddHolidayComponent implements OnInit {
 
   createTemplate(): void {
     this.dashboardService.createTemplate(this.data).then(insertedId => {
-      const relation = {
-        userId: this.helpService.getMe(),
-        templateId: insertedId
-      }
-
-      this.dashboardService.createUserTemplateRelation(relation).then(result => {
-        if (result) {
-          this.displaySuccessMessage(this.language.adminSuccessCreateTitle, this.language.adminSuccessCreateText);
-          this.loadTemplates();
-
-          this.closeTemplateModal();
-        } else {
-          this.displayErrorMessage(this.language.adminErrorCreateTitle, this.language.adminErrorCreateText);
+      if (insertedId) {
+        const relation = {
+          userId: this.helpService.getMe(),
+          templateId: insertedId
         }
-      });
+
+        this.dashboardService.createUserTemplateRelation(relation).then(result => {
+          if (result) {
+            this.displaySuccessMessage(this.language.adminSuccessCreateTitle, this.language.adminSuccessCreateText);
+            this.loadTemplates();
+
+            this.closeTemplateModal();
+          } else {
+            this.displayErrorMessage(this.language.adminErrorCreateTitle, this.language.adminErrorCreateText);
+          }
+        });
+      } else {
+        this.displayErrorMessage(this.language.adminErrorCreateTitle, this.language.adminErrorCreateText);
+      }
     });
   }
 

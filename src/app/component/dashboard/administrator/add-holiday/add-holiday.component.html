@@ -138,8 +138,7 @@
         " #templateForm="ngForm">
             <div class="form-group">
                 <kendo-textbox-container floatingLabel="{{ language.title }}">
-                    <input kendoTextBox required type="text" class="col-12" pattern="[a-zA-Z0-9 ]+"
-                        [(ngModel)]="data.name" name="name" />
+                    <input kendoTextBox required type="text" class="col-12" [(ngModel)]="data.name" name="name" />
                 </kendo-textbox-container>
             </div>
 

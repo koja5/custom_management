@@ -4207,6 +4207,25 @@
           "flex-direction": "row",
           "items": [
             {
+              "key": "adminSuccessDeleteTitle"
+            },
+            {
+              "key": "adminSuccessDeleteText"
+            },
+            {
+              "key": "adminErrorDeleteTitle"
+            },
+            {
+              "key": "adminErrorDeleteText"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
               "key": "owner"
             },
             {
