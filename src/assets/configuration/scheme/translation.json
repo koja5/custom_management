@@ -1836,6 +1836,66 @@
       },
       "smsSignaturePoweredByMassive": {
         "type": "string"
+      },
+      "chooseTemplate": {
+        "type": "string"
+      },
+      "templatesTitle": {
+        "type": "string"
+      },
+      "holidaysTitle": {
+        "type": "string"
+      },
+      "dateTitle": {
+        "type": "string"
+      },
+      "adminSuccessDeleteTitle": {
+        "type": "string"
+      },
+      "adminSuccessDeleteText": {
+        "type": "string"
+      },
+      "adminErrorDeleteTitle": {
+        "type": "string"
+      },
+      "adminErrorDeleteText": {
+        "type": "string"
+      },
+      "invoiceTitle": {
+        "type": "string"
+      },
+      "invoiceSubTitle": {
+        "type": "string"
+      },
+      "invoiceBillingTitleFrom": {
+        "type": "string"
+      },
+      "invoiceBillingTitleTo": {
+        "type": "string"
+      },
+      "invoiceAddress": {
+        "type": "string"
+      },
+      "invoiceSubtotal": {
+        "type": "string"
+      },
+      "invoiceTax": {
+        "type": "string"
+      },
+      "invoiceTotal": {
+        "type": "string"
+      },
+      "invoiceYourName": {
+        "type": "string"
+      },
+      "invoiceItem": {
+        "type": "string"
+      },
+      "invoiceNetPrice": {
+        "type": "string"
+      },
+      "invoiceGrossPrice": {
+        "type": "string"
       }
     }
   },
@@ -4128,25 +4188,6 @@
           "flex-direction": "row",
           "items": [
             {
-              "key": "adminSuccessCreateTitle"
-            },
-            {
-              "key": "adminSuccessCreateText"
-            },
-            {
-              "key": "adminErrorCreateTitle"
-            },
-            {
-              "key": "adminErrorCreateText"
-            }
-          ]
-        },
-        {
-          "type": "div",
-          "display": "flex",
-          "flex-direction": "row",
-          "items": [
-            {
               "key": "adminSuccessUpdateTitle"
             },
             {
@@ -5886,6 +5927,111 @@
               "key": "smsSignaturePoweredByMassive"
             },
             {}
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Invoice",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "invoiceTitle"
+            },
+            {
+              "key": "invoiceSubTitle"
+            },
+            {
+              "key": "invoiceBillingTitleFrom"
+            },
+            {
+              "key": "invoiceBillingTitleTo"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "invoiceAddress"
+            },
+            {
+              "key": "invoiceYourName"
+            },
+            {
+              "key": "invoiceItem"
+            },
+            {
+              "key": "invoiceNetPrice"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "invoiceGrossPrice"
+            },
+            {
+              "key": "invoiceSubtotal"
+            },
+            {
+              "key": "invoiceTax"
+            },
+            {
+              "key": "invoiceTotal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Holidays",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "holidaysTitle"
+            },
+            {
+              "key": "templatesTitle"
+            },
+            {
+              "key": "addHoliday"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "title"
+            },
+            {
+              "key": "chooseTemplate"
+            },
+            {
+              "key": "dateTitle"
+            }
           ]
         }
       ]

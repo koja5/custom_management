@@ -7608,6 +7608,35 @@ try {
 }
 });
 
+router.post("/deleteHolidayTemplateByTemplateId", (req, res, next) => {
+  try {
+    var id = req.body.id;
+
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      } else {
+        conn.query(
+          "delete from holiday_template where templateId = '" + id + "';",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
 
 router.post("/createUserTemplate", (req, res, next) => {
 try {
