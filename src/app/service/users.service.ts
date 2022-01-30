@@ -61,6 +61,11 @@ export class UsersService {
       .subscribe(val => callback(val));
   }
 
+  getUserWithIdPromise(id) {
+    return this.http
+      .get('/api/getUserWithId/' + id).toPromise();
+  }
+
   getWorkTime() {
     return this.http
       .get('../assets/configuration/workTime.json')

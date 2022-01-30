@@ -7,7 +7,7 @@ import { HttpClient } from "@angular/common/http";
 export class DynamicSchedulerService {
 
   constructor(private http: HttpClient) { }
-  
+
 
   getSchedulerHeight() {
     return window.innerHeight - 176 + 'px';
@@ -16,4 +16,9 @@ export class DynamicSchedulerService {
   getSchedulerHeightWithoutToolbar() {
     return window.innerHeight - 104 + 'px';
   }
+
+  getHolidayCalendarHeight() {
+    return window.innerHeight - 149 + 'px';
+  }
+
 }

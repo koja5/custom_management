@@ -4128,6 +4128,25 @@
           "flex-direction": "row",
           "items": [
             {
+              "key": "adminSuccessCreateTitle"
+            },
+            {
+              "key": "adminSuccessCreateText"
+            },
+            {
+              "key": "adminErrorCreateTitle"
+            },
+            {
+              "key": "adminErrorCreateText"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
               "key": "adminSuccessUpdateTitle"
             },
             {
