@@ -1,0 +1,29 @@
+
+  .expand-label {
+    cursor: pointer;
+  }
+  
+  .check-option {
+    font-weight: bold;
+  }
+
+  .date-range-label {
+    display: block;
+    font-weight: bold;
+    color: #656565;
+  }
+
+  
+  
+  .toolbarElement {
+    min-width: 45px;
+    text-align: center;
+  }
+  
+  div.disabled
+{
+  pointer-events: none;
+
+  /* for "disabled" effect */
+  opacity: 0.5;
+}

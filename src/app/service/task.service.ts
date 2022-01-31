@@ -198,4 +198,9 @@ export class TaskService extends BaseEditService<MyEvent> {
       .post("/api/sendConfirmArrivalAgain", data)
       .map((res) => res);
   }
+
+  getDataForMassiveInvoice(patientId, typeOfUser) {
+    return this.http.get<SchedulerEvent[]>("/api/getDataForMassiveInvoice/" + patientId + "/" + typeOfUser).toPromise();
+  }
+
 }

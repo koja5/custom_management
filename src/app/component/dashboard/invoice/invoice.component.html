@@ -1,0 +1,167 @@
+<div class="overview-toolbar">
+  <div style="height: 70px; width: 100%">
+    <ejs-toolbar id="toolbar_options" height="70px" overflowMode="Scrollable" scrollStep="100">
+      <e-items>
+        <e-item tooltipText="Filter Event Toolbar">
+          <ng-template #template>
+            <div class="toolbarElement float-left" (click)="showFilterPanel()">
+              <div class="icon-child">
+                <div>
+                  <span class="fa fa-search"></span>
+                </div>
+              </div>
+              <div class="text-child" style="font-size: 14px">
+                {{ language.filterToolbar }}
+              </div>
+            </div>
+          </ng-template>
+        </e-item>
+
+        <e-item tooltipText="Generate PDF">
+          <ng-template #template>
+            <div class="toolbarElement float-right" [ngClass]="{'disabled': !isPDFEnabled}" (click)="downloadPDF()">
+              <div class="icon-child">
+                <div>
+                  <span class="fa fa-file-pdf-o"></span>
+                </div>
+              </div>
+              <div class="text-child" style="font-size: 14px">
+                {{ language.exportToPDF }}
+              </div>
+            </div>
+          </ng-template>
+        </e-item>
+
+        <e-item tooltipText="Print PDF">
+          <ng-template #template>
+            <div class="toolbarElement float-right" [ngClass]="{'disabled': !isPDFEnabled}" (click)="printPDF()">
+              <div class="icon-child">
+                <div>
+                  <span class="fa fa-print"></span>
+                </div>
+              </div>
+              <div class="text-child" style="font-size: 14px">
+                {{ language.print }}
+              </div>
+            </div>
+          </ng-template>
+        </e-item>
+        <e-item tooltipText="Download Word">
+          <ng-template #template>
+            <div class="toolbarElement float-right" [ngClass]="{'disabled': !isPDFEnabled}" (click)="downloadWord()">
+              <div class="icon-child">
+                <div>
+                  <span class="fa fa-file-word-o"></span>
+                </div>
+              </div>
+              <div class="text-child" style="font-size: 14px">
+                {{ language.downloadWord }} Download Word
+              </div>
+            </div>
+          </ng-template>
+        </e-item>
+      </e-items>
+    </ejs-toolbar>
+  </div>
+</div>
+<div class="overview-content">
+  <div *ngIf="displayToolbar" class="right-panel filter-panel" [style.height]="height"
+    style="margin-left: 1.5rem; margin-top: 1.5rem; ">
+    <div class="control-panel e-css">
+      <div style="width: 25%">
+        <kendo-textbox-container floatingLabel="{{ languageUser.patient }}">
+          <kendo-combobox #fieldName1 id="customerUsers" [suggest]="true" [data]="customerUsers"
+            [textField]="'shortname'" [valueField]="'id'" (valueChange)="onValueChange($event)"
+            [(ngModel)]="customerUser" [filterable]="true" (filterChange)="searchCustomer($event)"
+            [loading]="customerLoading">
+            <ng-template kendoComboBoxItemTemplate let-dataItem>
+              <p style="height: 50px !important">
+                <span style="font-weight: bold">{{
+                  dataItem.shortname
+                  }}</span>
+                <br />
+                <span class="customerInfo" *ngIf="dataItem.city !== ''">
+                  {{ dataItem.city }}</span>
+                <span class="customerInfo" *ngIf="dataItem.street !== ''">/{{ dataItem.street }}</span>
+              </p>
+            </ng-template>
+          </kendo-combobox>
+        </kendo-textbox-container>
+      </div>
+      <div class="row mx-auto mt-4">
+        <div class="col-sm-12">
+          <kendo-daterange>
+            <label class="mr-4">
+              <span class="date-range-label">Start</span>
+              <kendo-dateinput kendoDateRangeStartInput [navigateCalendarOnFocus]="true" [(value)]="range.start">
+              </kendo-dateinput>
+            </label>
+            <label>
+              <span class="date-range-label">End</span>
+              <kendo-dateinput kendoDateRangeEndInput [navigateCalendarOnFocus]="true" (valueChange)="popup.toggle()"
+                [(value)]="range.end">
+              </kendo-dateinput>
+            </label>
+            <kendo-daterange-popup [anchor]="anchor" #popup></kendo-daterange-popup>
+          </kendo-daterange>
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-sm-12">
+          <div class="btn btn-primary" [ngClass]="{'disabled': noDataSelected}" (click)="filter()">Filter</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="left-panel" *ngIf="!displayToolbar">
+    <div class="control-section" style="height: 100%">
+      <kendo-grid [style.height]="height" [kendoGridSelectBy]="id" [selectedKeys]="mySelection"
+        [selectable]="{enabled: true, checkboxOnly: true, mode: 'multiple'}" [data]="gridViewData" [pageSize]="pageSize"
+        [skip]="skip" [pageable]="true" (pageChange)="pageChange($event)" [resizable]="true" [sort]="state.sort"
+        [filter]="state.filter" [sortable]="true" (sortChange)="sortChange($event)" [loading]="loading">
+
+        <ng-template kendoGridNoRecordsTemplate>
+
+          <div class="row mx-auto" style="margin-top:20%">
+            <div class="col-12 d-flex justify-content-center">
+              <h4>Filter data to see results. </h4>
+
+              <div class="btn btn-default" (click)="showFilterPanel()">Click here to filter
+              </div>
+            </div>
+          </div>
+        </ng-template>
+
+        <kendo-grid-checkbox-column [width]="100">
+          <ng-template kendoGridHeaderTemplate>
+            <div class="text-center">
+              <input class="k-checkbox" id="chkHeader" type="checkbox" [(ngModel)]="isChecked">
+              <label class="k-checkbox-label" for="chkHeader"></label>
+            </div>
+            <div style="margin-left: -4px;">{{myCustomText}}</div>
+          </ng-template>
+
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <div class="text-center">
+              <input type="checkbox" kendoCheckBox (click)=setSelectedItem(dataItem) />
+            </div>
+          </ng-template>
+        </kendo-grid-checkbox-column>
+
+        <kendo-grid-column field="complaint_title" title="{{ language.complaintMenu}}"></kendo-grid-column>
+        <kendo-grid-column field="date" title="{{ language.date}}"></kendo-grid-column>
+        <kendo-grid-column title="{{ language.doctorMenu}}">
+          <ng-template kendoGridCellTemplate let-dataItem>
+            <h4>{{ dataItem.firstname }} {{ dataItem.lastname}}</h4>
+            <h6>{{ dataItem.email }}</h6>
+            <p>{{ dataItem.telephone }}</p>
+          </ng-template>
+        </kendo-grid-column>
+
+        <kendo-grid-column field="therapies_title" title="{{ language.therapyMenu}}"></kendo-grid-column>
+      </kendo-grid>
+    </div>
+  </div>
+</div>

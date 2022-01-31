@@ -1,3 +1,4 @@
+import { ToolbarModule } from '@syncfusion/ej2-angular-navigations';
 import { NgModule } from "@angular/core";
 import { DashboardRouting } from "./dashboard-routing.module";
 import { CommonModule } from "@angular/common";
@@ -41,10 +42,8 @@ import { CustomersComponent } from "./customers/customers.component";
 import { WorkTimeColorsComponent } from "./parameters/work-time-colors/work-time-colors.component";
 import { UserDetailsComponent } from "./users/user-details/user-details.component";
 import { TaskComponent } from "./task/task.component";
-import { SettingsComponent } from "./settings/settings.component";
 import { EventCategoryComponent } from "./parameters/event-category/event-category.component";
 import { EditTranslationComponent } from "./translation/edit-translation/edit-translation.component";
-import { BaseDateComponent } from "./task/base-date/base-date.component";
 import { UploadModule } from "@progress/kendo-angular-upload";
 import { FileUploadModule } from "ng2-file-upload";
 import {
@@ -66,7 +65,6 @@ import { MyDocumentComponent } from "./patient/my-document/my-document.component
 import { SettingsModule } from "./settings/settings.module";
 import { DropDownListModule } from "@syncfusion/ej2-angular-dropdowns";
 import { ReservationsComponent } from "./reservations/reservations.component";
-import { DynamicSendSmsComponent } from "./sms/dynamic-send-sms/dynamic-send-sms.component";
 import { SharedEmailModule } from "../shared-module/shared-email-module";
 import { SharedSMSModule } from "../shared-module/shared-sms-module";
 import { SystemErrorComponent } from "./administrator/system-logs/system-error/system-error.component";
@@ -100,6 +98,7 @@ import {
   WeekService,
   WorkWeekService,
 } from "@syncfusion/ej2-angular-schedule";
+import { InvoiceComponent } from './invoice/invoice.component';
 
 @NgModule({
   declarations: [
@@ -149,6 +148,7 @@ import {
     MailMassiveEmailComponent,
     SmsMassiveComponent,
     AddHolidayComponent,
+    InvoiceComponent,
   ],
   imports: [
     CommonModule,
@@ -186,6 +186,7 @@ import {
     SharedEmailModule,
     SharedSMSModule,
     ScheduleModule,
+    ToolbarModule
   ],
   providers: [
     {
@@ -200,4 +201,4 @@ import {
     MonthAgendaService,
   ],
 })
-export class DashboardModule {}
+export class DashboardModule { }

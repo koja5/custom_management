@@ -1,4 +1,3 @@
-import { element } from "protractor";
 import { EventCategoryService } from "./../../../service/event-category.service";
 import { UsersService } from "./../../../service/users.service";
 import { StoreService } from "./../../../service/store.service";
@@ -1101,12 +1100,12 @@ export class DynamicSchedulerComponent implements OnInit {
     const checkCustomerId = this.customerUser.id
       ? this.customerUser
       : {
-          id: args.data.customer_id
-            ? args.data.customer_id
-            : args.data.user.id
+        id: args.data.customer_id
+          ? args.data.customer_id
+          : args.data.user.id
             ? args.data.user.id
             : null,
-        };
+      };
     formValue.user = checkCustomerId;
     formValue.customer_id = checkCustomerId.id;
     formValue.therapy_id = args.data.therapy_id;
@@ -1302,7 +1301,7 @@ export class DynamicSchedulerComponent implements OnInit {
         );
         timeDurationInd =
           Number(informationAboutStore.time_therapy) !==
-          Number(this.timeDuration)
+            Number(this.timeDuration)
             ? 1
             : 0;
         timeDuration = Number(informationAboutStore.time_therapy);
@@ -1320,7 +1319,7 @@ export class DynamicSchedulerComponent implements OnInit {
         } else {
           timeDurationInd =
             Number(informationAboutStore.time_therapy) !==
-            Number(this.timeDuration)
+              Number(this.timeDuration)
               ? 1
               : 0;
           timeDuration = Number(informationAboutStore.time_therapy);
@@ -1379,7 +1378,7 @@ export class DynamicSchedulerComponent implements OnInit {
     this.selectedTarget = closest(
       targetElement,
       ".e-appointment,.e-work-cells," +
-        ".e-vertical-view .e-date-header-wrap .e-all-day-cells,.e-vertical-view .e-date-header-wrap .e-header-cells"
+      ".e-vertical-view .e-date-header-wrap .e-all-day-cells,.e-vertical-view .e-date-header-wrap .e-header-cells"
     );
     if (isNullOrUndefined(this.selectedTarget)) {
       args.cancel = true;
@@ -1594,7 +1593,7 @@ export class DynamicSchedulerComponent implements OnInit {
     private accountService: AccountService,
     private activatedRouter: ActivatedRoute,
     private holidayService: HolidayService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.initializationConfig();
@@ -2396,7 +2395,7 @@ export class DynamicSchedulerComponent implements OnInit {
       value: this.value,
     };
 
-    this.mongo.setUsersFor(item).subscribe((data) => {});
+    this.mongo.setUsersFor(item).subscribe((data) => { });
   }
 
   getTaskForSelectedUsers(value) {
@@ -2503,7 +2502,7 @@ export class DynamicSchedulerComponent implements OnInit {
           for (let j = 0; j < eventStatistic.length; j++) {
             if (
               this.sharedCalendarResources[i].id ===
-                eventStatistic[j].creator_id &&
+              eventStatistic[j].creator_id &&
               userId === eventStatistic[j].creator_id
             ) {
               for (let k = 0; k < listOfCategorie.length; k++) {
@@ -2865,9 +2864,9 @@ export class DynamicSchedulerComponent implements OnInit {
               new Date(workItem.change) <= date.date &&
               (i + 1 <= this.calendars[0].workTime[date.groupIndex].length - 1
                 ? date.date <
-                  new Date(
-                    this.calendars[0].workTime[date.groupIndex][i + 1].change
-                  )
+                new Date(
+                  this.calendars[0].workTime[date.groupIndex][i + 1].change
+                )
                 : true) &&
               date.date.getDay() - 1 < 5 &&
               date.date.getDay() !== 0
@@ -2876,15 +2875,15 @@ export class DynamicSchedulerComponent implements OnInit {
                 (workItem.times[date.date.getDay() - 1].start <=
                   date.date.getHours() &&
                   workItem.times[date.date.getDay() - 1].end >
-                    date.date.getHours()) ||
+                  date.date.getHours()) ||
                 (workItem.times[date.date.getDay() - 1].start2 <=
                   date.date.getHours() &&
                   workItem.times[date.date.getDay() - 1].end2 >
-                    date.date.getHours()) ||
+                  date.date.getHours()) ||
                 (workItem.times[date.date.getDay() - 1].start3 <=
                   date.date.getHours() &&
                   workItem.times[date.date.getDay() - 1].end3 >
-                    date.date.getHours())
+                  date.date.getHours())
               ) {
                 date.element.style.background = workItem.color;
                 if (this.type === this.userType.readOnlyScheduler) {
@@ -3712,8 +3711,8 @@ export class DynamicSchedulerComponent implements OnInit {
   copyLinkToTheClinic() {
     this.helpService.copyToClipboard(
       this.helpService.getFullHostName() +
-        "/dashboard/home/task/" +
-        this.selectedStoreId
+      "/dashboard/home/task/" +
+      this.selectedStoreId
     );
     this.helpService.successToastr(
       this.language.successCopiedLinkForClinicReservation,

@@ -869,6 +869,30 @@ router.get("/getStore/:id", function (req, res, next) {
   });
 });
 
+
+router.get("/getStoreById/:id", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    var id = req.params.id;
+    conn.query(
+      "SELECT * from store where id = ?",
+      [id],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
 router.get("/getStoreAllowedOnline/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
@@ -5309,9 +5333,9 @@ router.post("/sendMassiveSMS", function (req, res) {
               var question = getSqlQuery(req.body);
               conn.query(
                 "select distinct c.* from customers c join sms_massive_message sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin join tasks t on c.id = t.customer_id where ((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL)) and c.storeId = " +
-                  Number(req.body.superadmin) +
-                  " and " +
-                  question,
+                Number(req.body.superadmin) +
+                " and " +
+                question,
                 function (err, rows) {
                   console.log(rows);
                   rows.forEach(function (to, i, array) {
@@ -5523,7 +5547,7 @@ function getSqlQuery(body) {
       question += " bo.doctor = " + body.doctor;
     }
   }
-  
+
   if (body.profession) {
     if (question) {
       question += " and bt.profession = " + body.profession;
@@ -5531,7 +5555,7 @@ function getSqlQuery(body) {
       question += " bt.profession = " + body.profession;
     }
   }
-  
+
   if (body.childs) {
     if (question) {
       question += " and bt.childs = " + body.childs;
@@ -5565,14 +5589,14 @@ router.post("/getFilteredRecipients", function (req, res) {
 
       conn.query(
         "select distinct c.* from customers c join " +
-          table +
-          " sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin join tasks t on c.id = t.customer_id join base_one bo on c.id = bo.customer_id join base_two bt on c.id = bt.customer_id where " +
-          checkAdditionalQuery +
-          " and c.storeId = " +
-          Number(req.body.superadmin) +
-          " and (" +
-          question +
-          ")",
+        table +
+        " sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin join tasks t on c.id = t.customer_id join base_one bo on c.id = bo.customer_id join base_two bt on c.id = bt.customer_id where " +
+        checkAdditionalQuery +
+        " and c.storeId = " +
+        Number(req.body.superadmin) +
+        " and (" +
+        question +
+        ")",
         function (err, rows) {
           conn.release();
           console.log(err);
@@ -7381,7 +7405,7 @@ router.post("/createHoliday", (req, res, next) => {
         });
       } else {
         conn.query(
-          "insert into holidays SET ?",[req.body],
+          "insert into holidays SET ?", [req.body],
           function (err, results, fields) {
             conn.release();
             if (err) {
@@ -7413,14 +7437,14 @@ router.post("/updateHoliday", (req, res, next) => {
       } else {
 
         var data = {
-            Subject: req.body.Subject,
-            StartTime: req.body.StartTime,
-            EndTime: req.body.EndTime,
+          Subject: req.body.Subject,
+          StartTime: req.body.StartTime,
+          EndTime: req.body.EndTime,
         };
 
-        conn.query(           
-          "update holidays SET ? where id = '" + req.body.id  + "'",
-           [data],
+        conn.query(
+          "update holidays SET ? where id = '" + req.body.id + "'",
+          [data],
           function (err, rows, fields) {
             conn.release();
             if (err) {
@@ -7441,109 +7465,109 @@ router.post("/updateHoliday", (req, res, next) => {
 });
 
 router.get("/deleteHoliday/:id", (req, res, next) => {
-try {
-  var reqObj = req.params.id;
+  try {
+    var reqObj = req.params.id;
 
-  connection.getConnection(function (err, conn) {
-    if (err) {
-      logger.log("error", err.sql + ". " + err.sqlMessage);
-      res.json(err);
-    } else {
-      conn.query(
-        "delete from holidays where id = '" + reqObj + "'",
-        function (err, rows, fields) {
-          conn.release();
-          if (err) {
-            res.json(err);
-            logger.log("error", err.sql + ". " + err.sqlMessage);
-          } else {
-            res.json(true);
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      } else {
+        conn.query(
+          "delete from holidays where id = '" + reqObj + "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+            } else {
+              res.json(true);
+            }
           }
-        }
-      );
-    }
-  });
-} catch (ex) {
-  logger.log("error", err.sql + ". " + err.sqlMessage);
-  res.json(ex);
-}
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
 });
 
 
 router.get("/deleteHolidayTemplate/:id", (req, res, next) => {
-try {
-  var reqObj = req.params.id;
+  try {
+    var reqObj = req.params.id;
 
-  connection.getConnection(function (err, conn) {
-    if (err) {
-      logger.log("error", err.sql + ". " + err.sqlMessage);
-      res.json(err);
-    } else {
-      conn.query(
-        "delete from holiday_template where holidayId = '" + reqObj + "';",
-        function (err, rows, fields) {
-          conn.release();
-          if (err) {
-            res.json(err);
-            logger.log("error", err.sql + ". " + err.sqlMessage);
-          } else {
-            res.json(true);
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      } else {
+        conn.query(
+          "delete from holiday_template where holidayId = '" + reqObj + "';",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+            } else {
+              res.json(true);
+            }
           }
-        }
-      );
-    }
-  });
-} catch (ex) {
-  logger.log("error", err.sql + ". " + err.sqlMessage);
-  res.json(ex);
-}
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
 });
 
 
 router.get("/getHolidays/:userId", function (req, res, next) {
-connection.getConnection(function (err, conn) {
-  if (err) {
-    logger.log("error", err.sql + ". " + err.sqlMessage);
-    res.json(err);
-  }
-  var userId = req.params.userId;
-  conn.query(
-    "SELECT * FROM `holidays` where userId=" + userId,
-    function (err, rows) {
-      conn.release();
-      if (!err) {
-        res.json(rows);
-      } else {
-        res.json(err);
-        logger.log("error", err.sql + ". " + err.sqlMessage);
-      }
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
     }
-  );
-});
+    var userId = req.params.userId;
+    conn.query(
+      "SELECT * FROM `holidays` where userId=" + userId,
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
 });
 
 
 router.get("/getHolidaysByTemplate/:userId/:templateId", function (req, res, next) {
-connection.getConnection(function (err, conn) {
-  if (err) {
-    logger.log("error", err.sql + ". " + err.sqlMessage);
-    res.json(err);
-  }
-  var userId = req.params.userId;
-  var templateId = req.params.templateId;
-  conn.query(
-    "SELECT h.id, h.Subject, h.StartTime, h.EndTime, h.category, h.userId FROM `holidays` h join `holiday_template` ht on h.id = ht.holidayId join `user_template` ut on ht.templateId=ut.templateId where ut.userId='" + userId + "' and ut.templateId = '" + templateId + "'",
-    function (err, rows) {
-      conn.release();
-      if (!err) {
-        res.json(rows);
-      } else {
-        res.json(err);
-        logger.log("error", err.sql + ". " + err.sqlMessage);
-      }
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
     }
-  );
-});
+    var userId = req.params.userId;
+    var templateId = req.params.templateId;
+    conn.query(
+      "SELECT h.id, h.Subject, h.StartTime, h.EndTime, h.category, h.userId FROM `holidays` h join `holiday_template` ht on h.id = ht.holidayId join `user_template` ut on ht.templateId=ut.templateId where ut.userId='" + userId + "' and ut.templateId = '" + templateId + "'",
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
 });
 
 
@@ -7551,25 +7575,25 @@ connection.getConnection(function (err, conn) {
 
 
 router.get("/getTemplateByUserId/:userId", function (req, res, next) {
-connection.getConnection(function (err, conn) {
-  if (err) {
-    logger.log("error", err.sql + ". " + err.sqlMessage);
-    res.json(err);
-  }
-  var userId = req.params.userId;
-  conn.query(
-    "SELECT * FROM `user_template` where userId='" + userId + "'",
-    function (err, rows) {
-      conn.release();
-      if (!err) {
-        res.json(rows);
-      } else {
-        res.json(err);
-        logger.log("error", err.sql + ". " + err.sqlMessage);
-      }
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
     }
-  );
-});
+    var userId = req.params.userId;
+    conn.query(
+      "SELECT * FROM `user_template` where userId='" + userId + "'",
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
 });
 
 
@@ -7578,34 +7602,34 @@ connection.getConnection(function (err, conn) {
 
 
 router.post("/createHolidayTemplate", (req, res, next) => {
-try {
-  connection.getConnection(function (err, conn) {
-    if (err) {
-      console.error("SQL Connection error: ", err);
-      res.json({
-        code: 100,
-        status: err,
-      });
-    } else {
-      conn.query(
-        "insert into holiday_template SET ?",[req.body],
-        function (err, results, fields) {
-          conn.release();
-          if (err) {
-            logger.log("error", err.sql + ". " + err.sqlMessage);
-            res.json(false);
-            console.log(err);
-          } else {
-            res.json(true);
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "insert into holiday_template SET ?", [req.body],
+          function (err, results, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
           }
-        }
-      );
-    }
-  });
-} catch (ex) {
-  logger.log("error", err.sql + ". " + err.sqlMessage);
-  res.json(ex);
-}
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
 });
 
 router.post("/deleteHolidayTemplateByTemplateId", (req, res, next) => {
@@ -7639,34 +7663,34 @@ router.post("/deleteHolidayTemplateByTemplateId", (req, res, next) => {
 
 
 router.post("/createUserTemplate", (req, res, next) => {
-try {
-  connection.getConnection(function (err, conn) {
-    if (err) {
-      console.error("SQL Connection error: ", err);
-      res.json({
-        code: 100,
-        status: err,
-      });
-    } else {
-      conn.query(
-        "insert into user_template SET ?",
-        [req.body],
-        function (err, rows, fields) {
-          conn.release();
-          if (err) {
-            res.json(false);
-            logger.log("error", err.sql + ". " + err.sqlMessage);
-          } else {
-            res.json(true);
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "insert into user_template SET ?",
+          [req.body],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(false);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+            } else {
+              res.json(true);
+            }
           }
-        }
-      );
-    }
-  });
-} catch (ex) {
-  logger.log("error", err.sql + ". " + err.sqlMessage);
-  res.json(ex);
-}
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
 });
 
 router.post("/createTemplate", (req, res, next) => {
@@ -7791,6 +7815,51 @@ router.post("/deleteTemplate", function (req, res, next) {
         }
       }
     );
+  });
+});
+
+router.get("/getDataForMassiveInvoice/:customerId/:typeOfUser", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+
+    var customerId = req.params.customerId;
+    var typeOfUser = req.params.typeOfUser;
+
+    if (typeOfUser === "0") {
+      conn.query(
+        "select t.*, tp.*, u.* from tasks t join therapy tp on t.therapy_id= tp.id join users u on u.id = t.creator_id where t.customer_id =" + customerId,
+        function (err, rows) {
+          conn.release();
+          if (!err) {
+            res.json(rows);
+          } else {
+            res.json(err);
+            logger.log("error", err.sql + ". " + err.sqlMessage);
+          }
+        }
+      );
+    } else {
+      conn.query(
+        "SELECT u.*,t.*, tp.*, c.* from users u join tasks t on u.id = t.creator_id join therapy tp on t.therapy_id= tp.id join complaint c on tp.complaint = c.id  where u.storeId =  " + idStore + " and u.id in (" + idUser + ")",
+        function (err, rows) {
+          conn.release();
+          if (!err) {
+            res.json(rows);
+          } else {
+            res.json(err);
+            logger.log("error", err.sql + ". " + err.sqlMessage);
+          }
+        }
+      );
+    }
+
+    conn.on("error", function (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    });
   });
 });
 

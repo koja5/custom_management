@@ -43,6 +43,7 @@ import { MassiveSmsComponent } from "./marketing/massive-sms/massive-sms.compone
 import { MassiveEmailComponent } from "./marketing/massive-email/massive-email.component";
 import { MailMassiveEmailComponent } from "./parameters/mail-parameters/mail-massive-email/mail-massive-email.component";
 import { SmsMassiveComponent } from "./parameters/sms-massive/sms-massive.component";
+import { InvoiceComponent } from './invoice/invoice.component';
 
 const routes: Routes = [
   {
@@ -66,6 +67,7 @@ const routes: Routes = [
       { path: "store", component: StoreComponent },
       { path: "profile", component: ProfileComponent },
       { path: "customers", component: CustomersComponent },
+      { path: "invoice", component: InvoiceComponent },
       {
         path: "parameters",
         component: ParametersComponent,

@@ -710,6 +710,9 @@
       "logout": {
         "type": "string"
       },
+      "invoice": {
+        "type": "string"
+      },
       "backToGrid": {
         "type": "string"
       },
@@ -3154,6 +3157,9 @@
             },
             {
               "key": "logout"
+            },
+            {
+              "key": "invoice"
             }
           ]
         }
