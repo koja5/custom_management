@@ -64,8 +64,10 @@ export class ReservationsComponent implements OnInit {
         this.messageService.sendRefreshDynamicGrid();
         if (this.data.id === "approve") {
           const mail = {
+            id: data,
             email: this.data.data.email,
-            language: this.packLanguage.getLanguageForInfoForApproveReservation(),
+            language:
+              this.packLanguage.getLanguageForInfoForApproveReservation(),
           };
           this.mailService
             .sendInfoForApproveReservation(mail)
@@ -74,6 +76,7 @@ export class ReservationsComponent implements OnInit {
             });
         } else if (this.data.id === "deny") {
           const mail = {
+            id: data,
             email: this.data.data.email,
             language: this.packLanguage.getLanguageForInfoForDenyReservation(),
           };

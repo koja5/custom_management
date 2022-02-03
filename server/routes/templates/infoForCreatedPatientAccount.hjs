@@ -60,7 +60,7 @@
         <div class="content__body py-8 border-b"
           style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;border-bottom-width: 1px;padding-top: 2rem;padding-bottom: 2rem;">
           <p style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;">
-            {{initialGreeting}} {{firstname}}, <br>
+            {{initialGreeting}} {{firstName}}, <br>
           <p style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
             {{introductoryMessageForCreatedPatientAccount}}</p>
             <br>

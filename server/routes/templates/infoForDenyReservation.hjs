@@ -67,7 +67,8 @@
             <p
               style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;"
             >
-              {{initialGreeting}}</p>,
+              {{initialGreeting}}
+              {{firstName}},</p>
             <br />
             <br />
             <p
@@ -126,7 +127,7 @@
               style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;background-color: #22292f;border-radius: 9999px;display: flex;align-items: center;justify-content: center;height: 2rem;margin-right: 1rem;color: #fff;text-decoration: none;width: 2rem;"
             ><i
                 class="fab fa-facebook-f"
-                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;-moz-osx-font-smoothing: grayscale;-webkit-font-smoothing: antialiased;display: inline-block;font-style: normal;font-variant: normal;text-rendering: auto;line-height: 1;font-family: Font Awesome\\\ 5 Brands;"
+                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;-moz-osx-font-smoothing: grayscale;-webkit-font-smoothing: antialiased;display: inline-block;font-style: normal;font-variant: normal;text-rendering: auto;line-height: 1;font-family: Font Awesome\\\\ 5 Brands;"
               ></i></a>
             <a
               href="#"
@@ -134,7 +135,7 @@
               style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;background-color: #22292f;border-radius: 9999px;display: flex;align-items: center;justify-content: center;height: 2rem;margin-right: 1rem;color: #fff;text-decoration: none;width: 2rem;"
             ><i
                 class="fab fa-instagram"
-                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;-moz-osx-font-smoothing: grayscale;-webkit-font-smoothing: antialiased;display: inline-block;font-style: normal;font-variant: normal;text-rendering: auto;line-height: 1;font-family: Font Awesome\\\ 5 Brands;"
+                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;-moz-osx-font-smoothing: grayscale;-webkit-font-smoothing: antialiased;display: inline-block;font-style: normal;font-variant: normal;text-rendering: auto;line-height: 1;font-family: Font Awesome\\\\ 5 Brands;"
               ></i></a>
             <a
               href="#"
@@ -142,7 +143,7 @@
               style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;background-color: #22292f;border-radius: 9999px;display: flex;align-items: center;justify-content: center;height: 2rem;color: #fff;text-decoration: none;width: 2rem;"
             ><i
                 class="fab fa-twitter"
-                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;-moz-osx-font-smoothing: grayscale;-webkit-font-smoothing: antialiased;display: inline-block;font-style: normal;font-variant: normal;text-rendering: auto;line-height: 1;font-family: Font Awesome\\\ 5 Brands;"
+                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;-moz-osx-font-smoothing: grayscale;-webkit-font-smoothing: antialiased;display: inline-block;font-style: normal;font-variant: normal;text-rendering: auto;line-height: 1;font-family: Font Awesome\\\\ 5 Brands;"
               ></i></a>
           </div>
 

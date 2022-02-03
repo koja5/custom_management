@@ -559,7 +559,7 @@ router.post("/sendInfoToPatientForCreatedAccount", function (req, res) {
             ? mail.mailSubject
             : req.body.language?.subjectCreatedPatientForm,
           html: infoForCreatedAccount.render({
-            firstname: req.body.firstname,
+            firstName: req.body.firstname,
             email: req.body.email,
             password: req.body.password,
             loginLink: loginLink,
@@ -644,7 +644,7 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
   );
   connection.getConnection(function (err, conn) {
     conn.query(
-      "select mr.* from customers c join mail_approve_reservation mr on c.storeId = mr.superadmin where c.id = ?",
+      "select mr.* from tasks t join mail_approve_reservation mr on t.superadmin = mr.superadmin where t.id = ?",
       [req.body.id],
       function (err, mailMessage, fields) {
         if (err) {
@@ -665,7 +665,7 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
             ? mail.mailSubject
             : req.body.language?.subjectApproveReservation,
           html: infoForApproveReservation.render({
-            firstname: req.body.firstname,
+            firstName: req.body.firstname,
             email: req.body.email,
             password: req.body.password,
             loginLink: loginLink,
@@ -743,7 +743,7 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
   var infoForDenyReservation = hogan.compile(infoForDenyReservationTemplate);
   connection.getConnection(function (err, conn) {
     conn.query(
-      "select mr.* from customers c join mail_deny_reservation mr on c.storeId = mr.superadmin where c.id = ?",
+      "select mr.* from tasks t join mail_deny_reservation mr on t.superadmin = mr.superadmin where t.id = ?",
       [req.body.id],
       function (err, mailMessage, fields) {
         if (err) {
@@ -764,7 +764,7 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
             ? mail.mailSubject
             : req.body.language?.subjectDenyReservation,
           html: infoForDenyReservation.render({
-            firstname: req.body.firstname,
+            firstName: req.body.firstname,
             email: req.body.email,
             password: req.body.password,
             loginLink: loginLink,
@@ -1094,7 +1094,7 @@ router.post("/sendMassiveEMail", function (req, res) {
   if (req.body.message != "") {
     connection.getConnection(function (err, conn) {
       conn.query(
-        "select c.email, mm.* from customers c join mail_massive_message mm on c.storeId = mm.superadmin where (c.email != '' and c.email != null) and c.storeId = " +
+        "select c.email, c.shortname, mm.* from customers c join mail_massive_message mm on c.storeId = mm.superadmin where (c.email != '' and c.email != null) and c.storeId = " +
           Number(req.body.superadmin) +
           " and " +
           question,
@@ -1116,6 +1116,7 @@ router.post("/sendMassiveEMail", function (req, res) {
               to: to.email,
               subject: req.body.subject,
               html: infoForDenyReservation.render({
+                firstName: to.shortname,
                 message: req.body.message,
                 initialGreeting: mail.mailInitialGreeting
                   ? mail.mailInitialGreeting

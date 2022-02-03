@@ -72,7 +72,7 @@
             <p
               style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;"
             >
-              {{initialGreeting}},
+              {{initialGreeting}}
               <br
                 style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"
               /><br

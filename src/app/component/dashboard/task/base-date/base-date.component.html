@@ -2368,14 +2368,38 @@
                     >
                       <kendo-combobox
                         class="col-md-12 col-xs-12 noPadding"
+                        [suggest]="true"
                         [data]="doctorsList"
                         [textField]="'firstname'"
                         [valueField]="'id'"
                         [(ngModel)]="baseDataOne.doctor"
                         [valuePrimitive]="true"
+                        [filterable]="true"
                         (filterChange)="filterDoctor($event)"
                         name="doctors"
                       >
+                        <ng-template kendoComboBoxItemTemplate let-dataItem>
+                          <p style="height: 50px !important">
+                            <span style="font-weight: bold; font-size: 13px;"
+                              >{{ dataItem.firstname }}
+                              {{ dataItem.lastname }}</span
+                            >
+                            <br />
+                            <span
+                              class="customerInfo"
+                              *ngIf="dataItem.city !== ''"
+                              style="font-size: 11px"
+                            >
+                              {{ dataItem.city }}</span
+                            >
+                            <span
+                              class="customerInfo"
+                              *ngIf="dataItem.street !== ''"
+                              style="font-size: 11px"
+                              >/{{ dataItem.street }}</span
+                            >
+                          </p>
+                        </ng-template>
                       </kendo-combobox>
                     </kendo-textbox-container>
                   </div>
