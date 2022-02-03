@@ -115,9 +115,9 @@
     </div>
 
   </div>
-  <div class="left-panel" *ngIf="!displayToolbar">
-    <div class="control-section" style="height: 100%">
-      <kendo-grid [style.height]="height" [kendoGridSelectBy]="id" [selectedKeys]="mySelection"
+  <div class="left-panel">
+    <div class="control-section" style="height: 50%">
+      <kendo-grid [style.height]="height/2" [kendoGridSelectBy]="id" [selectedKeys]="mySelection"
         [selectable]="{enabled: true, checkboxOnly: true, mode: 'multiple'}" [data]="gridViewData" [pageSize]="pageSize"
         [skip]="skip" [pageable]="true" (pageChange)="pageChange($event)" [resizable]="true" [sort]="state.sort"
         [filter]="state.filter" [sortable]="true" (sortChange)="sortChange($event)" [loading]="loading">

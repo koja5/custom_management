@@ -1,4 +1,3 @@
-import { PizZip } from 'pizzip';
 import { PDFService } from './../../../service/pdf.service';
 import { AccountService } from 'src/app/service/account.service';
 import { Component, HostListener, OnInit } from '@angular/core';
@@ -18,13 +17,11 @@ import { UserType } from '../../enum/user-type';
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
 import Docxtemplater from "docxtemplater";
+import PizZip from "pizzip";
 import PizZipUtils from "pizzip/utils/index.js";
 import { saveAs } from "file-saver";
-
-function loadFile(url, callback) {
-  PizZipUtils.getBinaryContent(url, callback);
-}
 
 @Component({
   selector: 'app-invoice',
@@ -44,6 +41,13 @@ export class InvoiceComponent implements OnInit {
       this.height = this.dynamicSchedulerService.getSchedulerHeightWithoutToolbar();
     }
   }
+
+
+
+  loadFile(url, callback) {
+    PizZipUtils.getBinaryContent(url, callback);
+  }
+
 
   public complaintValue: any;
   public currentLoadData: any[] = [];
@@ -611,50 +615,64 @@ export class InvoiceComponent implements OnInit {
 
   downloadWord(): void {
     console.log('downloadWord');
-
-    loadFile("C:/Users/Marijana/OneDrive/Documents/Invoice_template.docx", function (
-      error,
-      content
-    ) {
-      if (error) {
-        throw error;
-      }
-      const zip = new PizZip(content);
-      const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
-      doc.setData({
-        first_name: this.customerUser["firstname"],
-        last_name: this.customerUser["lastname"],
-        phone: this.customerUser["telephone"],
-        description: "New Website"
-      });
-      try {
-        // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
-        doc.render();
-      } catch (error) {
-        // The error thrown here contains additional information when logged with JSON.stringify (it contains a properties object containing all suberrors).
-        this.replaceErrors();
-        // console.log(JSON.stringify({ error: error }, replaceErrors));
-
-        if (error.properties && error.properties.errors instanceof Array) {
-          const errorMessages = error.properties.errors
-            .map(function (error) {
-              return error.properties.explanation;
-            })
-            .join("\n");
-          console.log("errorMessages", errorMessages);
-          // errorMessages is a humanly readable message looking like this :
-          // 'The tag beginning with "foobar" is unopened'
+    const that = this;
+    this.loadFile("http://127.0.0.1:8887/Invoice_template.docx",
+      // loadFile("http://app-production.eu:8080/assets/Invoice_template.docx", //CORS
+      function (
+        error,
+        content
+      ) {
+        if (error) {
+          throw error;
         }
-        throw error;
+        const zip = new PizZip(content);
+
+        const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
+        doc.setData({
+          invoice_title: that.language.invoiceTitle,
+          invoice_number: that.language.invoiceSubTitle,
+          invoice_id: 1,//that.complaintData["id"],
+          invoice_generated_date: new Date().toDateString(),
+          billing_from_title: that.language.invoiceBillingTitleFrom,
+          billing_to_title: that.language.invoiceBillingTitleTo,
+          clinic_name: that.store.storename,
+          customer_name: that.customerUser.lastname + " " + that.customerUser.firstname,
+          clinic_street: that.store.street,
+          customer_street: that.customerUser.street + " " + that.customerUser.streenumber,
+          clinic_city: that.store.zipcode + " " + that.store.place,
+          customer_city: that.customerUser.zipcode + " " + that.customerUser.city,
+          clinic_telephone: that.store.telephone,
+          clinic_email: that.store.email,
+        });
+        try {
+          // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
+          doc.render();
+        } catch (error) {
+          // The error thrown here contains additional information when logged with JSON.stringify (it contains a properties object containing all suberrors).
+          this.replaceErrors();
+          // console.log(JSON.stringify({ error: error }, replaceErrors));
+
+          if (error.properties && error.properties.errors instanceof Array) {
+            const errorMessages = error.properties.errors
+              .map(function (error) {
+                return error.properties.explanation;
+              })
+              .join("\n");
+            console.log("errorMessages", errorMessages);
+            // errorMessages is a humanly readable message looking like this :
+            // 'The tag beginning with "foobar" is unopened'
+          }
+          throw error;
+        }
+        const out = doc.getZip().generate({
+          type: "blob",
+          mimeType:
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        });
+        // Output the document using Data-URI
+        saveAs(out, "output.docx");
       }
-      const out = doc.getZip().generate({
-        type: "blob",
-        mimeType:
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-      });
-      // Output the document using Data-URI
-      saveAs(out, "output.docx");
-    });
+    );
   }
 
   replaceErrors(value) {
