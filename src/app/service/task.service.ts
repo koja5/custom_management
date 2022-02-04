@@ -199,8 +199,8 @@ export class TaskService extends BaseEditService<MyEvent> {
       .map((res) => res);
   }
 
-  getDataForMassiveInvoice(patientId, typeOfUser) {
-    return this.http.get<SchedulerEvent[]>("/api/getDataForMassiveInvoice/" + patientId + "/" + typeOfUser).toPromise();
+  getDataForMassiveInvoice(patientId) {
+    return this.http.get<any[]>("/api/getDataForMassiveInvoice/" + patientId).toPromise();
   }
 
 }

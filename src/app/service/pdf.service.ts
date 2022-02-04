@@ -1,11 +1,25 @@
 import { Injectable } from '@angular/core';
+import { MessageService } from './message.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PDFService {
+  public language: any;
 
-  constructor() { }
+  constructor(private messageService: MessageService) {
+    if (localStorage.getItem("language") !== undefined) {
+      this.language = JSON.parse(localStorage.getItem("language"));
+    } else {
+      this.messageService.getLanguage().subscribe(() => {
+        this.language = undefined;
+        setTimeout(() => {
+          this.language = JSON.parse(localStorage.getItem("language"));
+          console.log(this.language);
+        }, 10);
+      });
+    }
+  }
 
   getStyles() {
     return {
@@ -26,6 +40,11 @@ export class PDFService {
         alignment: "right",
       },
       // Document Footer
+      documentFooter: {
+        fontSize: 11,
+        alignment: "center",
+        color: 'gray'
+      },
       documentFooterLeft: {
         fontSize: 10,
         margin: [5, 5, 5, 5],
@@ -43,9 +62,10 @@ export class PDFService {
       },
       // Invoice Title
       invoiceTitle: {
-        fontSize: 22,
-        bold: true,
-        alignment: "right",
+        fontSize: 28,
+        bold: false,
+        underline: true,
+        alignment: "left",
         margin: [0, 0, 0, 15],
       },
       // Invoice Details
@@ -102,15 +122,21 @@ export class PDFService {
       },
       // Item Title
       itemTitle: {
-        bold: true,
+        bold: false,
       },
       itemSubTitle: {
         italics: true,
         fontSize: 11,
       },
+      itemDate: {
+        alignment: "left",
+      },
       itemNumber: {
         margin: [0, 5, 0, 5],
         alignment: "center",
+      },
+      itemGrossPrice: {
+        alignment: "right",
       },
       itemTotal: {
         margin: [0, 5, 0, 5],
@@ -122,22 +148,26 @@ export class PDFService {
       itemsFooterSubTitle: {
         margin: [0, 5, 0, 5],
         bold: true,
+        fontSize: 13,
         alignment: "right",
       },
       itemsFooterSubValue: {
         margin: [0, 5, 0, 5],
         bold: true,
-        alignment: "center",
+        fontSize: 13,
+        alignment: "right",
       },
       itemsFooterTotalTitle: {
         margin: [0, 5, 0, 5],
         bold: true,
+        fontSize: 16,
         alignment: "right",
       },
       itemsFooterTotalValue: {
         margin: [0, 5, 0, 5],
         bold: true,
-        alignment: "center",
+        fontSize: 16,
+        alignment: "right",
       },
       notesTitle: {
         fontSize: 14,
@@ -155,5 +185,64 @@ export class PDFService {
         alignment: "center",
       },
     };
+  }
+
+  public createItemsTable(therapies) {
+    const arr = [
+      // Table Header
+      [
+        {
+          text: this.language.date,
+          style: ["itemsHeader", "left"],
+        },
+        {
+          text: this.language.invoiceItem,
+          style: "itemsHeader",
+        },
+        {
+          text: this.language.invoiceNetPrice,
+          style: ["itemsHeader", "center"],
+        },
+        {
+          text: this.language.vat + " (%)",
+          style: ["itemsHeader", "center"],
+        },
+        {
+          text: this.language.invoiceGrossPrice,
+          style: ["itemsHeader", "center"],
+        },
+      ],
+    ];
+
+    therapies.forEach((therapy) => {
+      const obj = [
+        {
+          text: therapy.date,
+          style: "itemDate",
+        },
+        {
+          text: therapy.description
+            ? therapy.title + "\n" + therapy.description
+            : therapy.title,
+          style: "itemTitle",
+        },
+        {
+          text: this.language.euroSign + " " + therapy.net_price,
+          style: "itemNumber",
+        },
+        {
+          text: therapy.vat,
+          style: "itemNumber",
+        },
+        {
+          text: this.language.euroSign + " " + therapy.gross_price,
+          style: "itemGrossPrice"
+        }
+      ];
+
+      arr.push(obj);
+    });
+
+    return arr;
   }
 }

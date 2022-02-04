@@ -6,7 +6,7 @@ import { callbackify } from "util";
   providedIn: "root",
 })
 export class CustomersService {
-  constructor(public http: HttpClient) {}
+  constructor(public http: HttpClient) { }
 
   createCustomer(data, callback) {
     console.log("Pozivam funkciju signup!");
@@ -43,6 +43,10 @@ export class CustomersService {
 
   searchCustomer(search) {
     return this.http.post("/api/searchCustomer", search).map((res) => res);
+  }
+
+  searchCustomerForOwner(search) {
+    return this.http.post("/api/searchCustomerForOwner", search).map((res) => res);
   }
 
   updateCustomer(data, callback) {

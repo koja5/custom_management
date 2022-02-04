@@ -1133,8 +1133,7 @@ router.get("/getCustomers/:id", function (req, res, next) {
     }
     var id = req.params.id;
     conn.query(
-      "SELECT * from customers where storeId = ?",
-      [id],
+      "SELECT * from customers where storeId = ?", [id],
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -1354,10 +1353,7 @@ router.post("/searchCustomer", function (req, res, next) {
     var filter = req.body.filter;
 
     conn.query(
-      "SELECT * from customers where storeId = ? and shortname like '%" +
-      filter +
-      "%'",
-      [superadmin],
+      "SELECT * from customers where storeId = ? and shortname like '%" + filter + "%'", [superadmin],
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -1369,6 +1365,29 @@ router.post("/searchCustomer", function (req, res, next) {
     );
   });
 });
+
+router.post("/searchCustomerForOwner", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    var filter = req.body.filter;
+
+    conn.query(
+      "SELECT * from customers where shortname like '%" + filter + "%'",
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(null);
+        }
+      }
+    );
+  });
+});
+
 
 router.get("/getCustomerWithId/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
@@ -7818,7 +7837,7 @@ router.post("/deleteTemplate", function (req, res, next) {
   });
 });
 
-router.get("/getDataForMassiveInvoice/:customerId/:typeOfUser", function (req, res, next) {
+router.get("/getDataForMassiveInvoice/:customerId", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
@@ -7826,36 +7845,19 @@ router.get("/getDataForMassiveInvoice/:customerId/:typeOfUser", function (req, r
     }
 
     var customerId = req.params.customerId;
-    var typeOfUser = req.params.typeOfUser;
 
-    if (typeOfUser === "0") {
-      conn.query(
-        "select t.*, tp.*, u.* from tasks t join therapy tp on t.therapy_id= tp.id join users u on u.id = t.creator_id where t.customer_id =" + customerId,
-        function (err, rows) {
-          conn.release();
-          if (!err) {
-            res.json(rows);
-          } else {
-            res.json(err);
-            logger.log("error", err.sql + ". " + err.sqlMessage);
-          }
+    conn.query(
+      "select t.id as taskId, t.*, tp.*, u.* from tasks t join therapy tp on t.therapy_id = tp.id join users u on u.id = t.creator_id where t.customer_id =" + customerId,
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
-      );
-    } else {
-      conn.query(
-        "SELECT u.*,t.*, tp.*, c.* from users u join tasks t on u.id = t.creator_id join therapy tp on t.therapy_id= tp.id join complaint c on tp.complaint = c.id  where u.storeId =  " + idStore + " and u.id in (" + idUser + ")",
-        function (err, rows) {
-          conn.release();
-          if (!err) {
-            res.json(rows);
-          } else {
-            res.json(err);
-            logger.log("error", err.sql + ". " + err.sqlMessage);
-          }
-        }
-      );
-    }
-
+      }
+    );
     conn.on("error", function (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);

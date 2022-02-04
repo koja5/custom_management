@@ -404,6 +404,9 @@
       "filterToolbar": {
         "type": "string"
       },
+      "filterTooltip": {
+        "type": "string"
+      },
       "refreshEventToolbar": {
         "type": "string"
       },
@@ -1899,6 +1902,42 @@
       },
       "invoiceGrossPrice": {
         "type": "string"
+      },
+      "generatePDFTooltip": {
+        "type": "string"
+      },
+      "printPDFTooltip": {
+        "type": "string"
+      },
+      "downloadWordTooltip": {
+        "type": "string"
+      },
+      "downloadWord": {
+        "type": "string"
+      },
+      "startDateLabel": {
+        "type": "string"
+      },
+      "endDateLabel": {
+        "type": "string"
+      },
+      "emptyGridMessage": {
+        "type": "string"
+      },
+      "clickHere": {
+        "type": "string"
+      },
+      "notesTitle": {
+        "type": "string"
+      },
+      "notesText": {
+        "type": "string"
+      },
+      "notesDate": {
+        "type": "string"
+      },
+      "euroSign": {
+        "type": "string"
       }
     }
   },
@@ -1980,8 +2019,12 @@
             {
               "key": "message"
             },
-            {},
-            {}
+            {
+              "key": "clickHere"
+            },
+            {
+              "key": "emptyGridMessage"
+            }
           ]
         }
       ]
@@ -2462,6 +2505,19 @@
           "flex-direction": "row",
           "items": [
             {
+              "key": "startDateLabel"
+            },
+            {
+              "key": "endDateLabel"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
               "key": "telephone"
             },
             {
@@ -2621,6 +2677,9 @@
             },
             {
               "key": "generateInvoice"
+            },
+            {
+              "key": "filterTooltip"
             }
           ]
         }
@@ -5958,7 +6017,7 @@
     },
     {
       "type": "section",
-      "title": "Invoice",
+      "title": "PDF/Word",
       "expandable": true,
       "expanded": false,
       "items": [
@@ -6016,6 +6075,44 @@
             },
             {
               "key": "invoiceTotal"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "notesTitle"
+            },
+            {
+              "key": "notesText"
+            },
+            {
+              "key": "notesDate"
+            },
+            {
+              "key": "euroSign"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "generatePDFTooltip"
+            },
+            {
+              "key": "printPDFTooltip"
+            },
+            {
+              "key": "downloadWordTooltip"
+            },
+            {
+              "key": "downloadWord"
             }
           ]
         }

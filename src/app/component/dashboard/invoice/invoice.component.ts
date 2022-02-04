@@ -1,27 +1,25 @@
-import { PDFService } from './../../../service/pdf.service';
-import { AccountService } from 'src/app/service/account.service';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { CustomerModel } from 'src/app/models/customer-model';
 import { CustomersService } from 'src/app/service/customers.service';
 import { DateRangeService } from '@progress/kendo-angular-dateinputs';
-import { DynamicSchedulerService } from 'src/app/service/dynamic-scheduler.service';
 import { FormGroup } from '@angular/forms';
 import { GridDataResult, PageChangeEvent } from '@progress/kendo-angular-grid';
 import { HelpService } from 'src/app/service/help.service';
 import { MessageService } from 'src/app/service/message.service';
+import { PDFService } from './../../../service/pdf.service';
+import { saveAs } from "file-saver";
 import { SortDescriptor, State, process } from '@progress/kendo-data-query';
+import { StoreModel } from 'src/app/models/store-model';
 import { StoreService } from 'src/app/service/store.service';
 import { TaskService } from 'src/app/service/task.service';
 import { UserModel } from 'src/app/models/user-model';
 import { UserType } from '../../enum/user-type';
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
 import Docxtemplater from "docxtemplater";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import pdfMake from "pdfmake/build/pdfmake";
 import PizZip from "pizzip";
 import PizZipUtils from "pizzip/utils/index.js";
-import { saveAs } from "file-saver";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-invoice',
@@ -31,58 +29,45 @@ import { saveAs } from "file-saver";
 })
 export class InvoiceComponent implements OnInit {
 
+
   @HostListener("window:resize", ["$event"])
   onResize() {
 
     if (this.displayToolbar) {
-      this.height = this.dynamicSchedulerService.getSchedulerHeight();
+      this.height = 75;
     }
     else {
-      this.height = this.dynamicSchedulerService.getSchedulerHeightWithoutToolbar();
+      this.height = 95;
     }
   }
 
-
-
-  loadFile(url, callback) {
-    PizZipUtils.getBinaryContent(url, callback);
-  }
-
-
-  public complaintValue: any;
+  private invoiceID: number;
+  private height: number;
   public currentLoadData: any[] = [];
   public customerLoading = false;
-  public customerUser;
-  public customerUsers = [];
+  public customerUser: CustomerModel;
+  public customerUsers: CustomerModel[] = [];
   public data = new UserModel();
   public displayToolbar = false;
   public formGroup: FormGroup;
   public gridViewData: GridDataResult;
-  public height: any;
-  public id: number;
+  public isAllChecked = false;
   public language: any;
-  public languageUser: any;
   public loading = false;
-  public mySelection: any = [];
-  public pageSize = 10;
+  public loggedInUserId: number;
   public range = { start: null, end: null };
-  public selected = "#cac6c3";
-  public selectedComplaint: any;
   public selectedItemIDs = [];
   public selectedTherapies: any;
-  public selectedUser: any;
-  public skip = 0;
-  public startWork = "08:00";
-  public stateValue: any;
-  public step = 0;
-  public store;
+  public store: StoreModel;
   public superadmin: string;
   public therapyValue: any;
-  public type: any;
+  public type: UserType;
   public userType = UserType;
+
+  public pageSize = 10;
   public state: State = {
     skip: 0,
-    take: 10,
+    take: this.pageSize,
     filter: null,
     sort: [
       {
@@ -96,9 +81,21 @@ export class InvoiceComponent implements OnInit {
     return !this.customerUser;
   }
 
+  public get isWordOrPDFEnabled(): boolean {
+    return this.selectedItemIDs.length > 0;
+  }
+
+  public get gridHeight(): number {
+    if (this.displayToolbar) {
+      this.height = 75;
+    }
+    else {
+      this.height = 95;
+    }
+
+    return this.height;
+  }
   constructor(
-    private accountService: AccountService,
-    private dynamicSchedulerService: DynamicSchedulerService,
     private helpService: HelpService,
     private customerService: CustomersService,
     private messageService: MessageService,
@@ -111,98 +108,12 @@ export class InvoiceComponent implements OnInit {
     this.initializationData();
 
     this.helpService.setDefaultBrowserTabTitle();
-    this.height = this.dynamicSchedulerService.getHolidayCalendarHeight();
-  }
-
-  reloadNewCustomer() {
-    this.customerUsers = null;
-    setTimeout(() => {
-      this.customerService.getCustomers(this.superadmin, (val) => {
-        this.customerUsers = val.sort((a, b) =>
-          a["shortname"].localeCompare(b["shortname"])
-        );
-        this.loading = false;
-      });
-    }, 100);
-  }
-
-  searchCustomer(event) {
-    if (event !== "" && event.length > 2) {
-      this.customerLoading = true;
-      const searchFilter = {
-        superadmin: this.superadmin,
-        filter: event,
-      };
-      this.customerService.searchCustomer(searchFilter).subscribe((val: []) => {
-        this.customerUsers = val.sort((a, b) =>
-          String(a["shortname"]).localeCompare(String(b["shortname"]))
-        );
-        this.customerLoading = false;
-      });
-    } else {
-      this.customerUsers = [];
-    }
-  }
-
-  onValueChange(event) {
-    if (event !== undefined) {
-      this.customerUser = event;
-      this.getComplaintAndTherapyForCustomer(event.id);
-    }
-  }
-
-  getComplaintAndTherapyForCustomer(id) {
-    this.customerService.getTherapyForCustomer(id).subscribe((data) => {
-      if (data["length"] !== 0) {
-        const i = data["length"] - 1;
-        this.selectedComplaint = this.stringToArray(data[i]["complaint"]);
-        this.selectedTherapies = this.stringToArray(data[i]["therapies"]);
-      }
-    });
-  }
-
-  stringToArray(data) {
-    let array = [];
-    const dataArray = data.split(";");
-    if (dataArray.length > 0) {
-      for (let i = 0; i < dataArray.length; i++) {
-        array.push(Number(dataArray[i]));
-      }
-    } else {
-      array.push(Number(data));
-    }
-    return array;
-  }
-
-
-  public showFilterPanel(): void {
-    this.displayToolbar = !this.displayToolbar;
-  }
-
-  public initializationData(): void {
-    this.type = this.helpService.getType();
-    this.id = this.helpService.getMe();
-    this.superadmin = this.helpService.getSuperadmin();
-
-    this.checkIfPatientUser();
-    this.getParameters();
-
-  }
-
-  public checkIfPatientUser(): void {
-    if (this.type === this.userType.patient) {
-      this.accountService.getCustomerWithId(this.id).subscribe((data) => {
-        if (data["length"]) {
-          this.customerUser = data[0];
-        }
-      });
-    }
+    this.invoiceID = Math.ceil(Math.random() * 10000);
   }
 
   public initializationConfig(): void {
     if (localStorage.getItem("language") !== undefined) {
       this.language = JSON.parse(localStorage.getItem("language"));
-      this.languageUser = JSON.parse(localStorage.getItem("language"));
     } else {
       this.messageService.getLanguage().subscribe(() => {
         this.language = undefined;
@@ -214,62 +125,146 @@ export class InvoiceComponent implements OnInit {
     }
   }
 
-  public getDataForMassiveInvoice(): void {
-    const patientId = this.customerUser.id;
+  public initializationData(): void {
+    this.type = this.helpService.getType();
+    this.loggedInUserId = this.helpService.getMe();
+    this.superadmin = this.helpService.getSuperadmin();
 
-    this.taskService
-      .getDataForMassiveInvoice(patientId, this.type)
-      .then((data) => {
-        console.log('getDataForMassiveInvoice : ', data);
-
-        this.currentLoadData = [];
-
-        if (this.range.start && this.range.end) {
-          data.forEach(element => {
-
-            const startDate = this.range.start.getTime();
-            const endDate = this.range.end.getTime();
-            const start = element.start;
-            const end = element.end;
-
-            element.start = new Date(start);
-            element.end = new Date(end);
-
-            if (element.start.getTime() >= startDate && element.end.getTime() <= endDate) {
-              this.currentLoadData.push(element);
-            }
-          });
-        } else {
-          this.currentLoadData = data;
-        }
-
-        console.log(this.currentLoadData);
-
-        this.storeService.getStoreById(this.currentLoadData[0].storeId).then(data => {
-          console.log(data);
-          this.store = data[0];
-        });
-
-        this.gridViewData = process(this.currentLoadData, this.state);
-        this.loading = false;
-      });
-
+    this.getParameters();
   }
 
-  getParameters() {
-    this.customerService
-      .getParameters("Complaint", this.superadmin)
-      .subscribe((data: []) => {
-        this.complaintValue = data.sort(function (a, b) {
-          return a["sequence"] - b["sequence"];
-        });
-      });
-
+  public getParameters(): void {
     this.customerService.getParameters("Therapy", this.superadmin).subscribe((data: []) => {
       this.therapyValue = data.sort(function (a, b) {
         return a["sequence"] - b["sequence"];
       });
     });
+  }
+
+  public searchCustomer(event): void {
+    if (event !== "" && event.length > 2) {
+      this.customerLoading = true;
+
+      if (this.type === this.userType.owner) {
+        const searchFilter = {
+          filter: event
+        };
+
+        this.customerService.searchCustomerForOwner(searchFilter).subscribe((val: []) => {
+          this.customerUsers = val.sort((a, b) =>
+            String(a["shortname"]).localeCompare(String(b["shortname"]))
+          );
+          this.customerLoading = false;
+        });
+
+      } else {
+        const searchFilter = {
+          superadmin: this.superadmin,
+          filter: event,
+        };
+
+        this.customerService.searchCustomer(searchFilter).subscribe((val: []) => {
+          this.customerUsers = val.sort((a, b) =>
+            String(a["shortname"]).localeCompare(String(b["shortname"]))
+          );
+          this.customerLoading = false;
+        });
+      }
+    } else {
+      this.customerUsers = [];
+    }
+  }
+
+  public onValueChange(event: CustomerModel): void {
+    if (event !== undefined) {
+      this.customerUser = event;
+    }
+  }
+
+  public selectAll(): void {
+    this.isAllChecked = !this.isAllChecked;
+    this.selectedItemIDs = [];
+
+    if (this.isAllChecked) {
+      this.selectedItemIDs = this.currentLoadData.map(elem => elem.taskId);
+    }
+
+    this.currentLoadData.forEach(elem => {
+      elem.checked = this.isAllChecked;
+    })
+  }
+
+  public setSelectedItem(dataItem): void {
+    if (dataItem.checked) {
+      let index: number = this.selectedItemIDs.indexOf(dataItem.taskId);
+      if (index !== -1) {
+        this.selectedItemIDs.splice(index, 1);
+      }
+    }
+    else {
+      this.selectedItemIDs.push(dataItem.taskId);
+    }
+
+    dataItem.checked = !dataItem.checked;
+    this.currentLoadData.every(elem => elem.checked === true) ?
+      this.isAllChecked = true :
+      this.isAllChecked = false;
+  }
+
+  public showFilterPanel(): void {
+    this.displayToolbar = !this.displayToolbar;
+  }
+
+  public openFilterPanel(): void {
+    if (!this.displayToolbar) {
+      this.displayToolbar = true;
+    }
+  }
+
+  public getDataForMassiveInvoice(): void {
+    const patientId = this.customerUser.id;
+    this.loading = true;
+
+    this.taskService.getDataForMassiveInvoice(patientId).then((data) => {
+      // console.log('getDataForMassiveInvoice : ', data);
+      this.currentLoadData = [];
+
+      if (this.range.start && this.range.end) {
+        data.forEach(element => {
+
+          const startDate = this.range.start.getTime();
+          const endDate = this.range.end.getTime();
+          const start = element.start;
+          const end = element.end;
+
+          element.start = new Date(start);
+          element.end = new Date(end);
+
+          element.checked = false;
+
+          if (element.start.getTime() >= startDate && element.end.getTime() <= endDate) {
+            this.currentLoadData.push(element);
+          }
+        });
+      } else {
+
+        data.forEach(elem => {
+          elem.checked = false;
+        })
+        this.currentLoadData = data;
+      }
+
+      if (this.currentLoadData.length > 0) {
+        this.storeService.getStoreById(this.currentLoadData[0].storeId).then(data => {
+          // console.log(data);
+          this.store = data[0];
+        });
+      }
+
+      this.gridViewData = process(this.currentLoadData, this.state);
+      this.loading = false;
+    });
+
   }
 
   public pageChange(event: PageChangeEvent): void {
@@ -293,7 +288,6 @@ export class InvoiceComponent implements OnInit {
     this.displayToolbar = false;
   }
 
-
   public downloadPDF(): void {
     const docDefinition = this.setupPDF();
 
@@ -302,138 +296,85 @@ export class InvoiceComponent implements OnInit {
       .download(this.customerUser["firstname"] + this.customerUser["lastname"]);
   }
 
-  get isPDFEnabled(): boolean {
-    return this.selectedItemIDs.length > 0;
-  }
-
   public printPDF(): void {
-    // console.log(this.mySelection);
-
     const docDefinition = this.setupPDF();
     pdfMake.createPdf(docDefinition).print();
   }
 
-  setSelectedItem(dataItem) {
-    console.log(dataItem);
-    if (this.selectedItemIDs.indexOf(dataItem.id) === -1) {
-      this.selectedItemIDs.push(dataItem.id)
-    }
-    else {
-      let index: number = this.selectedItemIDs.indexOf(dataItem.id);
-      if (index !== -1) {
-        this.selectedItemIDs.splice(index, 1);
-      }
-    }
-    console.log('selectedItemIds:', this.selectedItemIDs);
-  }
-
-  checked(event): void {
-    console.log(event);
-  }
-
-  createItemsTable(therapies) {
-    const arr = [
-      // Table Header
-      [
-        {
-          text: this.language.invoiceItem,
-          style: "itemsHeader",
-        },
-        {
-          text: this.language.date,
-          style: ["itemsHeader", "center"],
-        },
-        {
-          text: this.language.invoiceNetPrice,
-          style: ["itemsHeader", "center"],
-        },
-        {
-          text: this.language.invoiceGrossPrice,
-          style: ["itemsHeader", "center"],
-        },
-      ],
-    ];
-
-    therapies.forEach((therapy) => {
-      console.log(therapy)
-      const obj = [
-        {
-          text: therapy.description
-            ? therapy.title + "\n" + therapy.description
-            : therapy.title,
-          style: "itemTitle",
-        },
-        {
-          text: therapy.date,
-          style: "itemNumber",
-        },
-        {
-          text: therapy.net_price,
-          style: "itemNumber",
-        },
-        {
-          text: therapy.gross_price,
-          style: "itemNumber",
-        },
-      ];
-
-      arr.push(obj);
-    });
-
-    return arr;
-  }
-
   private setupPDF() {
+    const dotSign = ' • ';
+    const data = this.getTherapyAndPricesData();
 
-    const netPrices = [];
-    const grossPrices = [];
-    const therapies = [];
-
-    let selectedTherapies = [];
-
-    this.currentLoadData.forEach(element => {
-
-      if (this.selectedItemIDs.indexOf(element.id) === -1) {
-        return;
-      }
-
-      selectedTherapies = [];
-      console.log(element.therapies);
-      if (element.therapies) {
-        selectedTherapies = element.therapies.indexOf(';') != -1 ? element.therapies.split(';') : selectedTherapies.push(element.therapies);
-
-      }
-
-      if (selectedTherapies.length > 0) {
-        selectedTherapies.forEach((id) => {
-          const temp = this.therapyValue.find((therapy) => therapy.id == id);
-          console.log(temp);
-          if (temp) {
-            netPrices.push(parseFloat(temp["net_price"]));
-            grossPrices.push(parseFloat(temp["gross_price"]));
-            temp.date = element.date;
-            therapies.push(temp);
-          }
-        });
-      }
-
-    });
+    const therapies = data.therapies;
+    const netPrices = data.netPrices;
+    const brutoPrices = data.brutoPrices;
 
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
-    const total = grossPrices.reduce((a, b) => a + b, 0).toFixed(2);
-    const tax = (total - subtotal).toFixed(2);
+    const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
     let docDefinition = {
       content: [
         // Header
         {
           columns: [
+            // {
+            //   image: 'data:image/png;base64,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',
+            //   width: 150
+            // },
+
             [
               {
                 text: this.language.invoiceTitle,
                 style: "invoiceTitle",
                 width: "*",
-              }
+              },
+              {
+                stack: [
+                  {
+                    columns: [
+                      {
+                        text: this.language.invoiceSubTitle,
+                        style: "invoiceSubTitle",
+                        width: "*",
+                      },
+                      {
+                        text: this.invoiceID,
+                        style: "invoiceSubValue",
+                        width: 130,
+                      },
+                    ],
+                  },
+                  {
+                    columns: [
+                      {
+                        text: this.language.dateTitle,
+                        style: "invoiceSubTitle",
+                        width: "*",
+                      },
+                      {
+                        text: new Date().toLocaleString(),
+                        style: "invoiceSubValue",
+                        width: 130,
+                      },
+                    ],
+                  },
+
+                  {
+                    columns: [
+                      {
+                        text: "\n",
+                        style: "invoiceSubTitle",
+                        width: "*",
+                      },
+                      {
+                        text: "\n",
+                        style: "invoiceSubValue",
+                        width: "*",
+                      },
+                    ],
+                  },
+                ],
+              },
             ],
           ],
         },
@@ -441,11 +382,11 @@ export class InvoiceComponent implements OnInit {
         {
           columns: [
             {
-              text: this.language.invoiceBillingTitleFrom,
+              text: this.language.invoiceBillingTitleFrom + "\n \n",
               style: "invoiceBillingTitleLeft",
             },
             {
-              text: this.language.invoiceBillingTitleTo,
+              text: this.language.invoiceBillingTitleTo + "\n \n",
               style: "invoiceBillingTitleRight",
             },
           ],
@@ -458,21 +399,8 @@ export class InvoiceComponent implements OnInit {
               style: "invoiceBillingDetailsLeft",
             },
             {
-              text: this.customerUser["shortname"],
+              text: this.customerUser.lastname + this.customerUser.firstname,
               style: "invoiceBillingDetailsRight",
-            },
-          ],
-        },
-        // Billing Address Title
-        {
-          columns: [
-            {
-              text: this.language.invoiceAddress,
-              style: "invoiceBillingAddressTitleLeft",
-            },
-            {
-              text: this.language.invoiceAddress,
-              style: "invoiceBillingAddressTitleRight",
             },
           ],
         },
@@ -483,11 +411,9 @@ export class InvoiceComponent implements OnInit {
               text:
                 this.store.street +
                 "\n " +
-                this.store.place +
-                " " +
                 this.store.zipcode +
-                "\n" +
-                this.store.telephone,
+                " " +
+                this.store.place,
               style: "invoiceBillingAddressLeft",
             },
             {
@@ -497,8 +423,6 @@ export class InvoiceComponent implements OnInit {
                 this.customerUser["streetnumber"] +
                 "\n" +
                 this.customerUser["city"] +
-                "\n" +
-                this.customerUser["telephone"] +
                 "\n",
               style: "invoiceBillingAddressRight",
             },
@@ -511,7 +435,7 @@ export class InvoiceComponent implements OnInit {
           layout: {
             // code from lightHorizontalLines:
             hLineWidth: function (i, node) {
-              if (i === 0 || i === node.table.body.length) {
+              if (i === 0) {
                 return 0;
               }
               return i === node.table.headerRows ? 2 : 1;
@@ -520,7 +444,7 @@ export class InvoiceComponent implements OnInit {
               return 0;
             },
             hLineColor: function (i) {
-              return i === 1 ? "black" : "#aaa";
+              return "black";
             },
             paddingLeft: function (i) {
               return i === 0 ? 0 : 8;
@@ -528,21 +452,23 @@ export class InvoiceComponent implements OnInit {
             paddingRight: function (i, node) {
               return i === node.table.widths.length - 1 ? 0 : 8;
             },
-            // code for zebra style:
-            fillColor: function (i) {
-              return i % 2 === 0 ? "#CCCCCC" : null;
-            },
+            // // code for zebra style:
+            // fillColor: function (i) {
+            //   return i % 2 === 0 ? "#CCCCCC" : null;
+            // },
           },
           table: {
             // headers are automatically repeated if the table spans over multiple pages
             // you can declare how many rows should be treated as headers
             headerRows: 1,
-            widths: ["*", "auto", "auto", "auto"],
+            widths: ["*", "*", "auto", "auto", "auto"],
 
-            body: this.createItemsTable(therapies),
+            body: this.pdfService.createItemsTable(therapies),
           }, // table
           //  layout: 'lightHorizontalLines'
         },
+        // Line break
+        "\n",
         // TOTAL
         {
           table: {
@@ -559,17 +485,7 @@ export class InvoiceComponent implements OnInit {
                   style: "itemsFooterSubTitle",
                 },
                 {
-                  text: subtotal + "€",
-                  style: "itemsFooterSubValue",
-                },
-              ],
-              [
-                {
-                  text: this.language.invoiceTax,
-                  style: "itemsFooterSubTitle",
-                },
-                {
-                  text: tax + "€",
+                  text: this.language.euroSign + " " + subtotal,
                   style: "itemsFooterSubValue",
                 },
               ],
@@ -579,31 +495,39 @@ export class InvoiceComponent implements OnInit {
                   style: "itemsFooterTotalTitle",
                 },
                 {
-                  text: total + "€",
+                  text: this.language.euroSign + " " + total,
                   style: "itemsFooterTotalValue",
                 },
               ],
             ],
-          }, // table
+          },
           layout: "lightHorizontalLines",
         },
-        {
-          text: 'NOTES',
-          style: 'notesTitle'
-        },
-        {
-          text: "Der Betrag enthält MwSt. \n \n Betrag dankend erhalten \n \n",
-          style: 'notesText'
-        },
-        {
-          text: "\n \n",
-          style: 'notesText'
-        },
-        {
-          text: "Datum, Ort \n" + new Date().toLocaleDateString() + ", " + this.store.storename,
-          style: 'notesTextBold'
-        }
+        // {
+        //   text: this.language.notesTitle,
+        //   style: 'notesTitle'
+        // },
+        // {
+        //   text: this.language.notesText,
+        //   style: 'notesTextBold'
+        // },
+        // {
+        //   text: "\n \n",
+        //   style: 'notesText'
+        // },
+        // {
+        //   text: this.language.notesDate + new Date().toLocaleDateString() + ", " + this.store.storename,
+        //   style: 'notesTextBold'
+        // }
       ],
+      footer: {
+        columns: [
+          {
+            text: this.store.storename + dotSign + this.store.street + dotSign + this.store.zipcode + " " + this.store.place + "\n" + this.store.telephone + dotSign + this.store.email,
+            style: 'documentFooter'
+          }
+        ]
+      },
       styles: this.pdfService.getStyles(),
       defaultStyle: {
         columnGap: 20,
@@ -613,37 +537,128 @@ export class InvoiceComponent implements OnInit {
     return docDefinition;
   }
 
-  downloadWord(): void {
-    console.log('downloadWord');
-    const that = this;
+  private getTherapyAndPricesData() {
+
+    const therapies = [];
+    const netPrices = [];
+    const brutoPrices = [];
+    let selectedTherapies = [];
+    let bruto = 0;
+
+    this.currentLoadData.forEach(element => {
+      if (this.selectedItemIDs.indexOf(element.taskId) === -1) {
+        return;
+      }
+
+      selectedTherapies = [];
+      console.log(element.therapies);
+      if (element.therapies) {
+        selectedTherapies = element.therapies.indexOf(';') != -1 ? element.therapies.split(';') : selectedTherapies = element.therapies;
+      }
+      console.log(selectedTherapies)
+
+      if (selectedTherapies.length > 0) {
+
+        for (let i = 0; i < selectedTherapies.length; i++) {
+          const id = selectedTherapies[i];
+          const temp = this.therapyValue.find((therapy) => therapy.id == id);
+
+          console.log(temp);
+          if (temp) {
+            temp.date = element.date;
+            netPrices.push(parseFloat(temp.net_price));
+
+            bruto = parseFloat(temp.net_price) * (1 + temp.vat / 100);
+            brutoPrices.push(bruto);
+
+            therapies.push({
+              title: temp.title,
+              description: temp.description ? temp.description : '',
+              date: ((selectedTherapies.length > 1 && i == 0) || selectedTherapies.length === 1) ? this.formatDate(temp.date) : '',
+              net_price: parseFloat(temp.net_price).toFixed(2),
+              vat: temp.vat,
+              gross_price: bruto.toFixed(2)
+            });
+
+          }
+        }
+      }
+    });
+
+    return {
+      therapies: therapies,
+      netPrices: netPrices,
+      brutoPrices: brutoPrices
+    };
+  }
+
+  private formatDate(value) {
+    return new Date(value.split('/')[0]).toLocaleDateString('en-CA');
+  }
+
+  public downloadWord(): void {
+    const componentRef = this;
+
+    const data = this.getTherapyAndPricesData();
+
+    const therapies = data.therapies;
+    const netPrices = data.netPrices;
+    const brutoPrices = data.brutoPrices;
+    const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
+    const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
+
     this.loadFile("http://127.0.0.1:8887/Invoice_template.docx",
       // loadFile("http://app-production.eu:8080/assets/Invoice_template.docx", //CORS
-      function (
-        error,
-        content
-      ) {
+      function (error, content) {
         if (error) {
           throw error;
         }
-        const zip = new PizZip(content);
 
-        const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
+        const zip = new PizZip(content);
+        const doc = new Docxtemplater(zip,
+          {
+            paragraphLoop: true,
+            linebreaks: true,
+            nullGetter: function () {
+              return "";
+            }
+          }
+        );
+
         doc.setData({
-          invoice_title: that.language.invoiceTitle,
-          invoice_number: that.language.invoiceSubTitle,
-          invoice_id: 1,//that.complaintData["id"],
-          invoice_generated_date: new Date().toDateString(),
-          billing_from_title: that.language.invoiceBillingTitleFrom,
-          billing_to_title: that.language.invoiceBillingTitleTo,
-          clinic_name: that.store.storename,
-          customer_name: that.customerUser.lastname + " " + that.customerUser.firstname,
-          clinic_street: that.store.street,
-          customer_street: that.customerUser.street + " " + that.customerUser.streenumber,
-          clinic_city: that.store.zipcode + " " + that.store.place,
-          customer_city: that.customerUser.zipcode + " " + that.customerUser.city,
-          clinic_telephone: that.store.telephone,
-          clinic_email: that.store.email,
+          invoice_title: componentRef.language.invoiceTitle,
+          invoice_number: componentRef.language.invoiceSubTitle,
+          invoice_id: componentRef.invoiceID,
+          invoice_generated_date: new Date().toLocaleString(),
+          billing_from_title: componentRef.language.invoiceBillingTitleFrom,
+          billing_to_title: componentRef.language.invoiceBillingTitleTo,
+          clinic_name: componentRef.store.storename,
+          customer_lastname: componentRef.customerUser.lastname,
+          customer_firstname: componentRef.customerUser.firstname,
+          clinic_street: componentRef.store.street,
+          customer_street: componentRef.customerUser.street,
+          customer_streetnumber: componentRef.customerUser.streetnumber,
+          clinic_zipcode: componentRef.store.zipcode,
+          clinic_city: componentRef.store.place,
+          customer_city: componentRef.customerUser.city,
+          clinic_telephone: componentRef.store.telephone,
+          clinic_email: componentRef.store.email,
+          subtotal_title: componentRef.language.invoiceSubtotal,
+          total_title: componentRef.language.invoiceTotal,
+          products: therapies,
+          subtotal_price: componentRef.language.euroSign + " " + subtotal,
+          total_price: componentRef.language.euroSign + " " + total,
+          item_date: componentRef.language.date,
+          item_title: componentRef.language.invoiceItem,
+          netto_price_title: componentRef.language.invoiceNetPrice,
+          vat: componentRef.language.vat + " (%)",
+          gross_price_title: componentRef.language.invoiceGrossPrice,
+          date_title: componentRef.language.dateTitle,
+          price_title: componentRef.language.invoiceNetPrice,
+          // notes_title: componentRef.language,
+          // notes_text: componentRef.language
         });
+
         try {
           // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
           doc.render();
@@ -670,7 +685,9 @@ export class InvoiceComponent implements OnInit {
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         });
         // Output the document using Data-URI
-        saveAs(out, "output.docx");
+
+        const filename = componentRef.customerUser.lastname + componentRef.customerUser.firstname + ".docx";
+        saveAs(out, filename);
       }
     );
   }
@@ -689,4 +706,7 @@ export class InvoiceComponent implements OnInit {
     return value;
   }
 
+  private loadFile(url, callback) {
+    PizZipUtils.getBinaryContent(url, callback);
+  }
 }
