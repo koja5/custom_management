@@ -77,11 +77,11 @@
               style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
             {{signature}}
               <br />
-              {{signatureStreet}}
+             {{signatureAddress}}
               <br />
-              {{signatureZipCode}}
+              {{signatureTelephone}}
               <br />
-              {{signaturePhone}}
+              {{signatureMobile}}
               <br />
               {{signatureEmail}}
           </p>

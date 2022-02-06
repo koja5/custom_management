@@ -642,7 +642,7 @@ router.get("/getUsers/:id", function (req, res, next) {
     var id = req.params.id;
 
     conn.query(
-      "SELECT u.id, u.shortname, u.firstname, u.lastname, u.email, u.street, u.active from users u where u.active = 1 and u.superadmin = ?",
+      "SELECT u.id, u.shortname, u.firstname, u.lastname, u.email, u.street, u.active from users u where u.superadmin = ?",
       [id],
       function (err, rows) {
         conn.release();

@@ -85,11 +85,11 @@
               />
               {{signature}}
               <br />
-              {{signatureStreet}}
+              {{signatureAddress}}
               <br />
-              {{signatureZipCode}}
+              {{signatureTelephone}}
               <br />
-              {{signaturePhone}}
+              {{signatureMobile}}
               <br />
               {{signatureEmail}}
             </p>
