@@ -490,21 +490,29 @@ router.post("/sendPatientFormRegistration", function (req, res) {
               : req.body.language
                   ?.introductoryMessageForPatientRegistrationForm,
             openForm: req.body.language?.openForm,
-            signatureStreet:
-              signatureAvailable && mail.signatureStreet
-                ? mail.signatureStreet
+            signatureAddress:
+              signatureAvailable &&
+              mail.signatureAddress &&
+              (mail.street || mail.zipcode || mail.store_place)
+                ? mail.signatureAddress +
+                  "\n" +
+                  mail.street +
+                  "\n" +
+                  mail.zipcode +
+                  " " +
+                  mail.store_place
                 : "",
-            signatureZipCode:
-              signatureAvailable && mail.signatureZipCode
-                ? mail.signatureZipCode
+            signatureTelephone:
+              signatureAvailable && mail.signatureTelephone && mail.telephone
+                ? mail.signatureTelephone + " " + mail.telephone
                 : "",
-            signaturePhone:
-              signatureAvailable && mail.signaturePhone
-                ? mail.signaturePhone
+            signatureMobile:
+              signatureAvailable && mail.signatureMobile && mail.mobile
+                ? mail.signatureMobile + " " + mail.mobile
                 : "",
             signatureEmail:
-              signatureAvailable && mail.signatureEmail
-                ? mail.signatureEmail
+              signatureAvailable && mail.signatureEmail && mail.email
+                ? mail.signatureEmail + " " + mail.email
                 : "",
           }),
         };
@@ -559,7 +567,7 @@ router.post("/sendInfoToPatientForCreatedAccount", function (req, res) {
             ? mail.mailSubject
             : req.body.language?.subjectCreatedPatientForm,
           html: infoForCreatedAccount.render({
-            firstname: req.body.firstname,
+            firstName: req.body.firstname,
             email: req.body.email,
             password: req.body.password,
             loginLink: loginLink,
@@ -594,21 +602,29 @@ router.post("/sendInfoToPatientForCreatedAccount", function (req, res) {
             linkForLogin: req.body.language?.linkForLogin,
             emailForLogin: req.body.language?.emailForLogin,
             passwordForLogin: req.body.language?.passwordForLogin,
-            signatureStreet:
-              signatureAvailable && mail.signatureStreet
-                ? mail.signatureStreet
+            signatureAddress:
+              signatureAvailable &&
+              mail.signatureAddress &&
+              (mail.street || mail.zipcode || mail.store_place)
+                ? mail.signatureAddress +
+                  "\n" +
+                  mail.street +
+                  "\n" +
+                  mail.zipcode +
+                  " " +
+                  mail.store_place
                 : "",
-            signatureZipCode:
-              signatureAvailable && mail.signatureZipCode
-                ? mail.signatureZipCode
+            signatureTelephone:
+              signatureAvailable && mail.signatureTelephone && mail.telephone
+                ? mail.signatureTelephone + " " + mail.telephone
                 : "",
-            signaturePhone:
-              signatureAvailable && mail.signaturePhone
-                ? mail.signaturePhone
+            signatureMobile:
+              signatureAvailable && mail.signatureMobile && mail.mobile
+                ? mail.signatureMobile + " " + mail.mobile
                 : "",
             signatureEmail:
-              signatureAvailable && mail.signatureEmail
-                ? mail.signatureEmail
+              signatureAvailable && mail.signatureEmail && mail.email
+                ? mail.signatureEmail + " " + mail.email
                 : "",
           }),
         };
@@ -644,7 +660,7 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
   );
   connection.getConnection(function (err, conn) {
     conn.query(
-      "select mr.* from customers c join mail_approve_reservation mr on c.storeId = mr.superadmin where c.id = ?",
+      "select mr.*, s.* from tasks t join mail_approve_reservation mr on t.superadmin = mr.superadmin join store s on t.storeId = s.id where t.id = ?",
       [req.body.id],
       function (err, mailMessage, fields) {
         if (err) {
@@ -665,7 +681,7 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
             ? mail.mailSubject
             : req.body.language?.subjectApproveReservation,
           html: infoForApproveReservation.render({
-            firstname: req.body.firstname,
+            firstName: req.body.firstname,
             email: req.body.email,
             password: req.body.password,
             loginLink: loginLink,
@@ -697,21 +713,29 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
             introductoryMessageForApproveReservation: mail.mailMessage
               ? mail.mailMessage
               : req.body.language?.introductoryMessageForApproveReservation,
-            signatureStreet:
-              signatureAvailable && mail.signatureStreet
-                ? mail.signatureStreet
+            signatureAddress:
+              signatureAvailable &&
+              mail.signatureAddress &&
+              (mail.street || mail.zipcode || mail.store_place)
+                ? mail.signatureAddress +
+                  "\n" +
+                  mail.street +
+                  "\n" +
+                  mail.zipcode +
+                  " " +
+                  mail.store_place
                 : "",
-            signatureZipCode:
-              signatureAvailable && mail.signatureZipCode
-                ? mail.signatureZipCode
+            signatureTelephone:
+              signatureAvailable && mail.signatureTelephone && mail.telephone
+                ? mail.signatureTelephone + " " + mail.telephone
                 : "",
-            signaturePhone:
-              signatureAvailable && mail.signaturePhone
-                ? mail.signaturePhone
+            signatureMobile:
+              signatureAvailable && mail.signatureMobile && mail.mobile
+                ? mail.signatureMobile + " " + mail.mobile
                 : "",
             signatureEmail:
-              signatureAvailable && mail.signatureEmail
-                ? mail.signatureEmail
+              signatureAvailable && mail.signatureEmail && mail.email
+                ? mail.signatureEmail + " " + mail.email
                 : "",
           }),
         };
@@ -743,7 +767,7 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
   var infoForDenyReservation = hogan.compile(infoForDenyReservationTemplate);
   connection.getConnection(function (err, conn) {
     conn.query(
-      "select mr.* from customers c join mail_deny_reservation mr on c.storeId = mr.superadmin where c.id = ?",
+      "select mr.*, s.* from tasks t join mail_deny_reservation mr on t.superadmin = mr.superadmin join store s on t.storeId = s.id where t.id = ?",
       [req.body.id],
       function (err, mailMessage, fields) {
         if (err) {
@@ -764,7 +788,7 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
             ? mail.mailSubject
             : req.body.language?.subjectDenyReservation,
           html: infoForDenyReservation.render({
-            firstname: req.body.firstname,
+            firstName: req.body.firstname,
             email: req.body.email,
             password: req.body.password,
             loginLink: loginLink,
@@ -796,21 +820,29 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
             introductoryMessageForDenyReservation: mail.mailMessage
               ? mail.mailMessage
               : req.body.language?.introductoryMessageForDenyReservation,
-            signatureStreet:
-              signatureAvailable && mail.signatureStreet
-                ? mail.signatureStreet
+            signatureAddress:
+              signatureAvailable &&
+              mail.signatureAddress &&
+              (mail.street || mail.zipcode || mail.store_place)
+                ? mail.signatureAddress +
+                  "\n" +
+                  mail.street +
+                  "\n" +
+                  mail.zipcode +
+                  " " +
+                  mail.store_place
                 : "",
-            signatureZipCode:
-              signatureAvailable && mail.signatureZipCode
-                ? mail.signatureZipCode
+            signatureTelephone:
+              signatureAvailable && mail.signatureTelephone && mail.telephone
+                ? mail.signatureTelephone + " " + mail.telephone
                 : "",
-            signaturePhone:
-              signatureAvailable && mail.signaturePhone
-                ? mail.signaturePhone
+            signatureMobile:
+              signatureAvailable && mail.signatureMobile && mail.mobile
+                ? mail.signatureMobile + " " + mail.mobile
                 : "",
             signatureEmail:
-              signatureAvailable && mail.signatureEmail
-                ? mail.signatureEmail
+              signatureAvailable && mail.signatureEmail && mail.email
+                ? mail.signatureEmail + " " + mail.email
                 : "",
           }),
         };
@@ -1094,7 +1126,7 @@ router.post("/sendMassiveEMail", function (req, res) {
   if (req.body.message != "") {
     connection.getConnection(function (err, conn) {
       conn.query(
-        "select c.email, mm.* from customers c join mail_massive_message mm on c.storeId = mm.superadmin where (c.email != '' and c.email != null) and c.storeId = " +
+        "select c.email, c.shortname, mm.* from customers c join mail_massive_message mm on c.storeId = mm.superadmin where (c.email != '' and c.email != null) and c.storeId = " +
           Number(req.body.superadmin) +
           " and " +
           question,
@@ -1116,6 +1148,7 @@ router.post("/sendMassiveEMail", function (req, res) {
               to: to.email,
               subject: req.body.subject,
               html: infoForDenyReservation.render({
+                firstName: to.shortname,
                 message: req.body.message,
                 initialGreeting: mail.mailInitialGreeting
                   ? mail.mailInitialGreeting
@@ -1144,16 +1177,16 @@ router.post("/sendMassiveEMail", function (req, res) {
                   ? mail.mailMessage
                   : req.body.language?.introductoryMessageForDenyReservation,
                 signatureAddress:
-                  signatureAvailable && mail.signatureStreet
-                    ? mail.signatureStreet
+                  signatureAvailable && mail.signatureAddress
+                    ? mail.signatureAddress
                     : "",
                 signatureTelephone:
                   signatureAvailable && mail.signatureTelephone
-                    ? mail.signatureZipCode
+                    ? mail.signatureTelephone
                     : "",
                 signatureMobile:
-                  signatureAvailable && mail.signatureTelephone
-                    ? mail.signaturePhone
+                  signatureAvailable && mail.signatureMobile
+                    ? mail.signatureMobile
                     : "",
                 signatureEmail:
                   signatureAvailable && mail.signatureEmail

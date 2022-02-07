@@ -185,7 +185,6 @@ function reminderViaSMS() {
                             dateMessage +
                             time +
                             clinic;
-                          console.log(message);
                           var content =
                             "To: " +
                             phoneNumber +

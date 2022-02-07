@@ -1167,6 +1167,15 @@
       "copyRight": {
         "type": "string"
       },
+      "signatureStreet": {
+        "type": "string"
+      },
+      "signatureZipCode": {
+        "type": "string"
+      },
+      "signaturePhone": {
+        "type": "string"
+      },
       "subjectConfirmArrival": {
         "type": "string"
       },
@@ -4437,6 +4446,25 @@
             },
             {
               "key": "copyRight"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "signatureStreet"
+            },
+            {
+              "key": "signatureZipCode"
+            },
+            {
+              "key": "signaturePhone"
+            },
+            {
+              "key": "signatureEmail"
             }
           ]
         }

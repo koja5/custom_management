@@ -50,7 +50,7 @@ var connection = mysql.createPool({
   database: 'appprodu_management_prod'
 });*/
 
-connection.getConnection(function (err, conn) { });
+connection.getConnection(function (err, conn) {});
 
 /* GET api listing. */
 router.get("/", (req, res) => {
@@ -289,8 +289,8 @@ router.get("/getTasks/:id", function (req, res, next) {
     }
     conn.query(
       "select t.*, e.color from tasks t join event_category e on t.colorTask = e.id where e.superadmin = '" +
-      reqObj +
-      "'",
+        reqObj +
+        "'",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -389,7 +389,7 @@ router.post("/login", (req, res, next) => {
         var ipAddress = req.body.ipAddress;
 
         conn.query(
-          "SELECT * FROM users WHERE email=? AND password=?",
+          "SELECT * FROM users WHERE active = 1 AND email=? AND password=?",
           [reqObj.email, sha1(reqObj.password)],
           function (err, rows, fields) {
             if (err) {
@@ -466,7 +466,7 @@ router.post("/login", (req, res, next) => {
                           body: body,
                           json: true,
                         };
-                        request(options, function (error, response, body) { });
+                        request(options, function (error, response, body) {});
                       }
                     );
                   }
@@ -689,7 +689,7 @@ router.get("/getUsersAllowedOnlineInCompany/:id", function (req, res, next) {
     }
     var id = req.params.id;
     conn.query(
-      "SELECT * from users where allowed_online = 1 and storeId = ?",
+      "SELECT * from users where active = 1 and allowed_online = 1 and storeId = ?",
       [id],
       function (err, rows) {
         conn.release();
@@ -1225,10 +1225,10 @@ router.post("/updatePasswordForSuperadmin", function (req, res, next) {
 
     conn.query(
       "UPDATE users_superadmin SET password = '" +
-      sha1(req.body.newPassword) +
-      "' where id = '" +
-      req.body.id +
-      "'",
+        sha1(req.body.newPassword) +
+        "' where id = '" +
+        req.body.id +
+        "'",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -1250,10 +1250,10 @@ router.post("/updatePasswordForUser", function (req, res, next) {
 
     conn.query(
       "UPDATE users SET password = '" +
-      sha1(req.body.newPassword) +
-      "' where id = '" +
-      req.body.id +
-      "'",
+        sha1(req.body.newPassword) +
+        "' where id = '" +
+        req.body.id +
+        "'",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -1275,10 +1275,10 @@ router.post("/updatePasswordForCustomer", function (req, res, next) {
 
     conn.query(
       "UPDATE customers SET password = '" +
-      sha1(req.body.newPassword) +
-      "' where id = '" +
-      req.body.id +
-      "'",
+        sha1(req.body.newPassword) +
+        "' where id = '" +
+        req.body.id +
+        "'",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -1831,12 +1831,12 @@ router.post("/updateAttentionAndPhysical", function (req, res, next) {
 
     conn.query(
       "UPDATE customers SET attention = '" +
-      req.body.attention +
-      "', physicalComplaint = '" +
-      req.body.physicalComplaint +
-      "' where id = '" +
-      id +
-      "'",
+        req.body.attention +
+        "', physicalComplaint = '" +
+        req.body.physicalComplaint +
+        "' where id = '" +
+        id +
+        "'",
       [req.body],
       function (err, rows) {
         conn.release();
@@ -1868,8 +1868,8 @@ router.get("/korisnik/verifikacija/:id", (req, res, next) => {
       } else {
         conn.query(
           "UPDATE users_superadmin SET active='1' WHERE SHA1(email)='" +
-          reqObj +
-          "'",
+            reqObj +
+            "'",
           function (err, rows, fields) {
             conn.release();
             if (err) {
@@ -1901,8 +1901,8 @@ router.get("/customerVerificationMail/:id", (req, res, next) => {
       } else {
         conn.query(
           "UPDATE customers SET isConfirm='1' WHERE SHA1(email)='" +
-          reqObj +
-          "'",
+            reqObj +
+            "'",
           function (err, rows, fields) {
             conn.release();
             if (err) {
@@ -1934,10 +1934,10 @@ router.get("/sendChangePassword/:id", (req, res, next) => {
       } else {
         conn.query(
           "UPDATE users_superadmin SET password='" +
-          reqObj +
-          "' WHERE SHA1(email)='" +
-          reqObj +
-          "'",
+            reqObj +
+            "' WHERE SHA1(email)='" +
+            reqObj +
+            "'",
           function (err, rows, fields) {
             conn.release();
             if (err) {
@@ -2074,10 +2074,10 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
               } else if (rows.length !== 0) {
                 conn.query(
                   "UPDATE users SET password='" +
-                  sha1(newPassword1) +
-                  "' WHERE  sha1(email)='" +
-                  email +
-                  "'",
+                    sha1(newPassword1) +
+                    "' WHERE  sha1(email)='" +
+                    email +
+                    "'",
                   function (err, rows, fields) {
                     conn.release();
                     if (err) {
@@ -2096,19 +2096,19 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
                 );
               } else {
                 conn.query(
-                  "select * from users_superadmin WHERE  sha1(email)='" +
-                  email +
-                  "'",
+                  "select * from users_superadmin WHERE sha1(email)='" +
+                    email +
+                    "'",
                   function (err, rows, fields) {
                     if (err) {
                       res.json(err);
                     } else if (rows.length !== 0) {
                       conn.query(
                         "UPDATE users_superadmin SET password='" +
-                        sha1(newPassword1) +
-                        "' WHERE  sha1(email)='" +
-                        email +
-                        "'",
+                          sha1(newPassword1) +
+                          "' WHERE  sha1(email)='" +
+                          email +
+                          "'",
                         function (err, rows, fields) {
                           conn.release();
                           if (err) {
@@ -2127,10 +2127,10 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
                     } else {
                       conn.query(
                         "UPDATE customers SET password='" +
-                        sha1(newPassword1) +
-                        "' WHERE  sha1(email)='" +
-                        email +
-                        "'",
+                          sha1(newPassword1) +
+                          "' WHERE  sha1(email)='" +
+                          email +
+                          "'",
                         function (err, rows, fields) {
                           conn.release();
                           if (err) {
@@ -2168,7 +2168,7 @@ router.get("/getUserWithID/:userid", function (req, res, next) {
       res.json(err);
     }
     conn.query(
-      "select * from users where id = ?",
+      "select * from users where active = 1 and id = ?",
       [req.params.userid],
       function (err, rows) {
         conn.release();
@@ -2978,8 +2978,8 @@ router.get("/getRecommendationList/:superadmin", function (req, res, next) {
     var superadmin = req.params.superadmin;
     conn.query(
       "select * from recommendation_list where superadmin = '" +
-      superadmin +
-      "'",
+        superadmin +
+        "'",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -4879,8 +4879,8 @@ router.get("/getCountAllTasksForUserPerMonth/:id", function (req, res, next) {
     }
     conn.query(
       "SELECT COUNT(*) as month from tasks where creator_id = '" +
-      reqObj +
-      "' GROUP BY MONTH(start)",
+        reqObj +
+        "' GROUP BY MONTH(start)",
       function (err, rows) {
         conn.release();
 
@@ -4904,8 +4904,8 @@ router.get("/getCountAllTasksForUserPerWeek/:id", function (req, res, next) {
     }
     conn.query(
       "SELECT COUNT(*) as week from tasks where creator_id = '" +
-      reqObj +
-      "' GROUP BY WEEK(start)",
+        reqObj +
+        "' GROUP BY WEEK(start)",
       function (err, rows) {
         conn.release();
 
@@ -5583,7 +5583,6 @@ function getSqlQuery(body) {
     }
   }
 
-
   console.log(question);
 
   return question;
@@ -5851,7 +5850,6 @@ router.get("/deleteAvailableAreaCode/:id", (req, res, next) => {
 /* TEMPLATE ACCOUNT */
 
 router.post("/createTemplateAccount", function (req, res, next) {
-
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
@@ -5860,8 +5858,8 @@ router.post("/createTemplateAccount", function (req, res, next) {
 
     conn.query(
       "select * from users_superadmin where id = ? and password = '" +
-      sha1(req.body.password) +
-      "'",
+        sha1(req.body.password) +
+        "'",
       [req.body.account_id],
       function (err, rows) {
         if (!err) {
@@ -5916,8 +5914,8 @@ router.post("/updateTemplateAccount", function (req, res, next) {
 
     conn.query(
       "select * from users_superadmin where id = ? and password = '" +
-      sha1(req.body.password) +
-      "'",
+        sha1(req.body.password) +
+        "'",
       [req.body.account_id],
       function (err, rows) {
         if (!err) {
@@ -5982,7 +5980,6 @@ router.get("/getTemplateAccount", function (req, res, next) {
   });
 });
 
-
 router.get("/getTemplateAccountByUserId/:id", function (req, res, next) {
   var reqObj = req.params.id;
   connection.getConnection(function (err, conn) {
@@ -5990,18 +5987,22 @@ router.get("/getTemplateAccountByUserId/:id", function (req, res, next) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
     }
-    conn.query("SELECT ta.* from `user_template` ut join `template_account` ta on ut.templateId=ta.id where ut.userId='" + req.params.id + "'", function (err, rows) {
-      conn.release();
-      if (!err) {
-        res.json(rows);
-      } else {
-        logger.log("error", err.sql + ". " + err.sqlMessage);
-        res.json(err);
+    conn.query(
+      "SELECT ta.* from `user_template` ut join `template_account` ta on ut.templateId=ta.id where ut.userId='" +
+        req.params.id +
+        "'",
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
       }
-    });
+    );
   });
 });
-
 
 router.post("/deleteTemplateAccount", (req, res, next) => {
   try {
@@ -6141,7 +6142,7 @@ function insertFromTemplateForUsers(conn, category, account_id, id) {
             function (err, res) {
               conn.query(
                 "select w.* from users u join work w on u.id = w.user_id where u.id = " +
-                user_data.id,
+                  user_data.id,
                 function (err, uw) {
                   uw.forEach(function (touw, i, array) {
                     touw.user_id = to.id;
@@ -7080,8 +7081,8 @@ router.post("/deleteEventCategoryStatistic", (req, res, next) => {
       } else {
         conn.query(
           "delete from event_category_statistic where id = '" +
-          req.body.id +
-          "'",
+            req.body.id +
+            "'",
           function (err, rows, fields) {
             conn.release();
             if (err) {
@@ -7454,7 +7455,6 @@ router.post("/updateHoliday", (req, res, next) => {
           status: err,
         });
       } else {
-
         var data = {
           Subject: req.body.Subject,
           StartTime: req.body.StartTime,
@@ -7512,7 +7512,6 @@ router.get("/deleteHoliday/:id", (req, res, next) => {
   }
 });
 
-
 router.get("/deleteHolidayTemplate/:id", (req, res, next) => {
   try {
     var reqObj = req.params.id;
@@ -7541,7 +7540,6 @@ router.get("/deleteHolidayTemplate/:id", (req, res, next) => {
     res.json(ex);
   }
 });
-
 
 router.get("/getHolidays/:userId", function (req, res, next) {
   connection.getConnection(function (err, conn) {
@@ -7592,7 +7590,6 @@ router.get("/getHolidaysByTemplate/:userId/:templateId", function (req, res, nex
 
 //end holidays
 
-
 router.get("/getTemplateByUserId/:userId", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
@@ -7615,10 +7612,7 @@ router.get("/getTemplateByUserId/:userId", function (req, res, next) {
   });
 });
 
-
-
 //holiday-template
-
 
 router.post("/createHolidayTemplate", (req, res, next) => {
   try {
@@ -7679,7 +7673,6 @@ router.post("/deleteHolidayTemplateByTemplateId", (req, res, next) => {
     res.json(ex);
   }
 });
-
 
 router.post("/createUserTemplate", (req, res, next) => {
   try {
@@ -7743,7 +7736,6 @@ router.post("/createTemplate", (req, res, next) => {
   }
 });
 
-
 router.post("/updateTemplate", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
@@ -7773,7 +7765,6 @@ router.post("/updateTemplate", function (req, res, next) {
     );
   });
 });
-
 
 router.post("/deleteUserTemplate", function (req, res, next) {
   connection.getConnection(function (err, conn) {
@@ -7805,9 +7796,7 @@ router.post("/deleteUserTemplate", function (req, res, next) {
   });
 });
 
-
 router.post("/deleteTemplate", function (req, res, next) {
-
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
@@ -7864,6 +7853,5 @@ router.get("/getDataForMassiveInvoice/:customerId", function (req, res, next) {
     });
   });
 });
-
 
 module.exports = router;
