@@ -553,7 +553,9 @@ export class InvoiceComponent implements OnInit {
       selectedTherapies = [];
       console.log(element.therapies);
       if (element.therapies) {
-        selectedTherapies = element.therapies.indexOf(';') != -1 ? element.therapies.split(';') : selectedTherapies = element.therapies;
+        selectedTherapies = element.therapies.indexOf(';') != -1 ? element.therapies.split(';') : selectedTherapies.push(element.therapies);
+
+        selectedTherapies = selectedTherapies.filter(elem => elem != "");
       }
       console.log(selectedTherapies)
 
@@ -563,7 +565,7 @@ export class InvoiceComponent implements OnInit {
           const id = selectedTherapies[i];
           const temp = this.therapyValue.find((therapy) => therapy.id == id);
 
-          console.log(temp);
+          console.log(temp)
           if (temp) {
             temp.date = element.date;
             netPrices.push(parseFloat(temp.net_price));
