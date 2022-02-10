@@ -3446,6 +3446,7 @@ router.post("/addDoctorsList", function (req, res, next) {
     var date = {
       firstname: req.body.firstname,
       lastname: req.body.lastname,
+      shortname: req.body.lastname + " " + req.body.firstname,
       gender: req.body.gender,
       street: req.body.street,
       street_number: req.body.street_number,
