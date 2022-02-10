@@ -541,7 +541,7 @@
                                 *ngIf="baseDataOne.doctor"
                                 class="col-md-12 col-xs-12 noPadding"
                                 [data]="doctorsList"
-                                [textField]="'firstname'"
+                                [textField]="'shortname'"
                                 [valueField]="'id'"
                                 [(ngModel)]="baseDataOne.doctor"
                                 [valuePrimitive]="true"
@@ -2370,7 +2370,7 @@
                         class="col-md-12 col-xs-12 noPadding"
                         [suggest]="true"
                         [data]="doctorsList"
-                        [textField]="'firstname'"
+                        [textField]="'shortname'"
                         [valueField]="'id'"
                         [(ngModel)]="baseDataOne.doctor"
                         [valuePrimitive]="true"
@@ -2380,7 +2380,7 @@
                       >
                         <ng-template kendoComboBoxItemTemplate let-dataItem>
                           <p style="height: 50px !important">
-                            <span style="font-weight: bold; font-size: 13px;"
+                            <span style="font-weight: bold; font-size: 13px"
                               >{{ dataItem.firstname }}
                               {{ dataItem.lastname }}</span
                             >
