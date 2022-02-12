@@ -135,8 +135,8 @@
           <kendo-grid-checkbox-column [width]="100">
             <ng-template kendoGridHeaderTemplate>
               <div class="text-center">
-                <input class="k-checkbox" id="chkHeader" type="checkbox" (click)="selectAll()"
-                  [(ngModel)]="isAllChecked">
+                <input class="k-checkbox" id="chkHeader" type="checkbox" [disabled]="isCheckBoxDisabled"
+                  (click)="selectAll()" [(ngModel)]="isAllChecked">
                 <label class="k-checkbox-label" for="chkHeader"></label>
               </div>
             </ng-template>
