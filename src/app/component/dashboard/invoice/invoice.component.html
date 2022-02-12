@@ -4,7 +4,7 @@
     <div class="d-flex w-100 h-auto">
       <ejs-toolbar id="toolbar_options" height="auto" width="100%">
         <e-items>
-          <e-item tooltipText="language.filterTooltip">
+          <e-item tooltipText="{{ language.filterTooltip }}">
             <ng-template #template>
               <div class="toolbarElement float-left" (click)="showFilterPanel()">
                 <div class="icon-child">
@@ -19,7 +19,7 @@
             </ng-template>
           </e-item>
 
-          <e-item tooltipText="language.generatePDFTooltip">
+          <e-item tooltipText="{{ language.generatePDFTooltip }}">
             <ng-template #template>
               <div class="toolbarElement float-right" [ngClass]="{'disabled': !isWordOrPDFEnabled}"
                 (click)="downloadPDF()">
@@ -35,7 +35,7 @@
             </ng-template>
           </e-item>
 
-          <e-item tooltipText="language.printPDFTooltip">
+          <e-item tooltipText="{{ language.printPDFTooltip }}">
             <ng-template #template>
               <div class="toolbarElement float-right" [ngClass]="{'disabled': !isWordOrPDFEnabled}"
                 (click)="printPDF()">
@@ -50,7 +50,7 @@
               </div>
             </ng-template>
           </e-item>
-          <e-item tooltipText="language.downloadWordTooltip">
+          <e-item tooltipText="{{ language.downloadWordTooltip }}">
             <ng-template #template>
               <div class="toolbarElement float-right" [ngClass]="{'disabled': !isWordOrPDFEnabled}"
                 (click)="downloadWord()">
