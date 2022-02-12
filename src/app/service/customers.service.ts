@@ -45,10 +45,6 @@ export class CustomersService {
     return this.http.post("/api/searchCustomer", search).map((res) => res);
   }
 
-  searchCustomerForOwner(search) {
-    return this.http.post("/api/searchCustomerForOwner", search).map((res) => res);
-  }
-
   updateCustomer(data, callback) {
     this.http
       .post("/api/updateCustomer", data)

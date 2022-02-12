@@ -1,3 +1,4 @@
+import { ParameterItemService } from 'src/app/service/parameter-item.service';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { CustomerModel } from 'src/app/models/customer-model';
 import { CustomersService } from 'src/app/service/customers.service';
@@ -28,6 +29,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
   styleUrls: ['./invoice.component.scss']
 })
 export class InvoiceComponent implements OnInit {
+  isDateSet: boolean;
 
 
   @HostListener("window:resize", ["$event"])
@@ -63,6 +65,7 @@ export class InvoiceComponent implements OnInit {
   public therapyValue: any;
   public type: UserType;
   public userType = UserType;
+  public vatTaxList;
 
   public pageSize = 10;
   public state: State = {
@@ -101,6 +104,7 @@ export class InvoiceComponent implements OnInit {
     private messageService: MessageService,
     private storeService: StoreService,
     private taskService: TaskService,
+    private parameterItemService: ParameterItemService,
     private pdfService: PDFService) { }
 
   ngOnInit() {
@@ -139,37 +143,29 @@ export class InvoiceComponent implements OnInit {
         return a["sequence"] - b["sequence"];
       });
     });
+
+    this.parameterItemService.getVATTex(this.superadmin).subscribe((data: []) => {
+      this.vatTaxList = data;
+      console.log(data);
+    });
   }
 
   public searchCustomer(event): void {
     if (event !== "" && event.length > 2) {
       this.customerLoading = true;
 
-      if (this.type === this.userType.owner) {
-        const searchFilter = {
-          filter: event
-        };
+      const searchFilter = {
+        superadmin: this.superadmin,
+        filter: event,
+      };
 
-        this.customerService.searchCustomerForOwner(searchFilter).subscribe((val: []) => {
-          this.customerUsers = val.sort((a, b) =>
-            String(a["shortname"]).localeCompare(String(b["shortname"]))
-          );
-          this.customerLoading = false;
-        });
+      this.customerService.searchCustomer(searchFilter).subscribe((val: []) => {
+        this.customerUsers = val.sort((a, b) =>
+          String(a["shortname"]).localeCompare(String(b["shortname"]))
+        );
+        this.customerLoading = false;
+      });
 
-      } else {
-        const searchFilter = {
-          superadmin: this.superadmin,
-          filter: event,
-        };
-
-        this.customerService.searchCustomer(searchFilter).subscribe((val: []) => {
-          this.customerUsers = val.sort((a, b) =>
-            String(a["shortname"]).localeCompare(String(b["shortname"]))
-          );
-          this.customerLoading = false;
-        });
-      }
     } else {
       this.customerUsers = [];
     }
@@ -267,6 +263,10 @@ export class InvoiceComponent implements OnInit {
 
   }
 
+  public get isCheckBoxDisabled(): boolean {
+    return this.currentLoadData.length === 0 || this.loading;
+  }
+
   public pageChange(event: PageChangeEvent): void {
     this.state.skip = event.skip;
     this.state.take = event.take;
@@ -283,6 +283,18 @@ export class InvoiceComponent implements OnInit {
     if (this.noDataSelected) {
       return;
     }
+
+    this.state = {
+      skip: 0,
+      take: this.pageSize,
+      filter: null,
+      sort: [
+        {
+          field: "sequence",
+          dir: "asc",
+        },
+      ],
+    };
 
     this.getDataForMassiveInvoice();
     this.displayToolbar = false;
@@ -352,7 +364,7 @@ export class InvoiceComponent implements OnInit {
                         width: "*",
                       },
                       {
-                        text: new Date().toLocaleString(),
+                        text: this.currentDateFormatted,
                         style: "invoiceSubValue",
                         width: 130,
                       },
@@ -551,9 +563,13 @@ export class InvoiceComponent implements OnInit {
       }
 
       selectedTherapies = [];
-      console.log(element.therapies);
+      this.isDateSet = false;
+      // console.log(element);
+
       if (element.therapies) {
-        selectedTherapies = element.therapies.indexOf(';') != -1 ? element.therapies.split(';') : selectedTherapies.push(element.therapies);
+        selectedTherapies = element.therapies.indexOf(';') != -1 ? element.therapies.split(';') : [element.therapies];
+
+        selectedTherapies = selectedTherapies.filter(elem => elem != "");
       }
       console.log(selectedTherapies)
 
@@ -561,25 +577,29 @@ export class InvoiceComponent implements OnInit {
 
         for (let i = 0; i < selectedTherapies.length; i++) {
           const id = selectedTherapies[i];
-          const temp = this.therapyValue.find((therapy) => therapy.id == id);
+          const therapy = this.therapyValue.find((therapy) => therapy.id == id);
 
-          console.log(temp)
-          if (temp) {
-            temp.date = element.date;
-            netPrices.push(parseFloat(temp.net_price));
+          console.log(therapy)
+          if (therapy) {
+            const vatDefinition = this.vatTaxList.find((elem) => elem.id === therapy.vat);
+            // console.log(vatDefinition);
 
-            bruto = parseFloat(temp.net_price) * (1 + temp.vat / 100);
+            therapy.date = element.date;
+            netPrices.push(parseFloat(therapy.net_price));
+
+            bruto = parseFloat(therapy.net_price) * (1 + Number(vatDefinition.title) / 100);
             brutoPrices.push(bruto);
 
+            const shouldSetDate = (selectedTherapies.length > 1 && i == 0) || selectedTherapies.length === 1 || !this.isDateSet;
+
             therapies.push({
-              title: temp.title,
-              description: temp.description ? temp.description : '',
-              date: ((selectedTherapies.length > 1 && i == 0) || selectedTherapies.length === 1) ? this.formatDate(temp.date) : '',
-              net_price: parseFloat(temp.net_price).toFixed(2),
-              vat: temp.vat,
+              title: therapy.title,
+              description: therapy.description ? therapy.description : '',
+              date: shouldSetDate ? this.formatDate(therapy.date) : '',
+              net_price: parseFloat(therapy.net_price).toFixed(2),
+              vat: vatDefinition.title,
               gross_price: bruto.toFixed(2)
             });
-
           }
         }
       }
@@ -593,7 +613,27 @@ export class InvoiceComponent implements OnInit {
   }
 
   private formatDate(value) {
-    return new Date(value.split('/')[0]).toLocaleDateString('en-CA');
+    this.isDateSet = true;
+
+    let date: string = value.split('/')[0];
+    return this.reverseString(date.trim());
+  }
+
+  private reverseString(str) {
+    // Step 1. Use the split() method to return a new array
+    var splitString = str.split(".");
+    console.log(splitString);
+
+    // Step 2. Use the reverse() method to reverse the new created array
+    var reverseArray = splitString.reverse();
+    console.log(reverseArray)
+
+    // Step 3. Use the join() method to join all elements of the array into a string
+    var joinArray = reverseArray.join("/");
+    console.log(joinArray)
+
+    //Step 4. Return the reversed string
+    return joinArray;
   }
 
   public downloadWord(): void {
@@ -607,8 +647,8 @@ export class InvoiceComponent implements OnInit {
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
-    this.loadFile("http://127.0.0.1:8887/Invoice_template.docx",
-      // loadFile("http://app-production.eu:8080/assets/Invoice_template.docx", //CORS
+    // this.loadFile("http://127.0.0.1:8887/Invoice_template.docx",
+    this.loadFile("http://app-production.eu:8080/assets/Invoice_template.docx", //CORS
       function (error, content) {
         if (error) {
           throw error;
@@ -629,7 +669,7 @@ export class InvoiceComponent implements OnInit {
           invoice_title: componentRef.language.invoiceTitle,
           invoice_number: componentRef.language.invoiceSubTitle,
           invoice_id: componentRef.invoiceID,
-          invoice_generated_date: new Date().toLocaleString(),
+          invoice_generated_date: componentRef.currentDateFormatted,
           billing_from_title: componentRef.language.invoiceBillingTitleFrom,
           billing_to_title: componentRef.language.invoiceBillingTitleTo,
           clinic_name: componentRef.store.storename,
@@ -708,5 +748,9 @@ export class InvoiceComponent implements OnInit {
 
   private loadFile(url, callback) {
     PizZipUtils.getBinaryContent(url, callback);
+  }
+
+  private get currentDateFormatted(): string {
+    return new Date().toLocaleString().replace(/(.*)\D\d+/, '$1');
   }
 }
