@@ -619,14 +619,25 @@ export class InvoiceComponent implements OnInit {
 
   private formatDate(value) {
     this.isDateSet = true;
+    let date: string;
+    if (value.indexOf('/')) {
+      date = value.split('/')[0];
 
-    let date: string = value.split('/')[0];
+    } else if (value.indexOf(' ')) {
+      date = value.split(' ')[0];
+    }
     return this.reverseString(date.trim());
   }
 
   private reverseString(str) {
     // Step 1. Use the split() method to return a new array
-    var splitString = str.split(".");
+    var splitString;
+    if (str.indexOf('.')) {
+      splitString = str.split(".");
+    } else if (str.indexOf('-')) {
+      splitString = str.split("-");
+    }
+
     console.log(splitString);
 
     // Step 2. Use the reverse() method to reverse the new created array
