@@ -227,7 +227,7 @@ export class PDFService {
           style: "itemTitle",
         },
         {
-          text: this.language.euroSign + " " + therapy.net_price,
+          text: therapy.net_price,
           style: "itemNumber",
         },
         {
@@ -235,7 +235,7 @@ export class PDFService {
           style: "itemNumber",
         },
         {
-          text: this.language.euroSign + " " + therapy.gross_price,
+          text: therapy.gross_price,
           style: "itemGrossPrice"
         }
       ];
