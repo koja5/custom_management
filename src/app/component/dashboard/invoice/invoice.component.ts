@@ -602,7 +602,7 @@ export class InvoiceComponent implements OnInit {
               description: therapy.description ? therapy.description : '',
               date: shouldSetDate ? this.formatDate(therapy.date) : '',
               net_price: parseFloat(therapy.net_price).toFixed(2),
-              vat: vatDefinition.title ? vatDefinition.title : 20,
+              vat: vatDefinition ? vatDefinition.title : 20,
               gross_price: bruto.toFixed(2)
             });
           }
