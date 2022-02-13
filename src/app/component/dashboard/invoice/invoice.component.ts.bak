@@ -648,7 +648,7 @@ export class InvoiceComponent implements OnInit {
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
     // this.loadFile("http://127.0.0.1:8887/Invoice_template.docx",
-    this.loadFile("http://clinicnode.herokuapp.com/assets/Invoice_template.docx", //CORS
+    this.loadFile("http://app-production.eu:8080/assets/Invoice_template.docx", //CORS
       function (error, content) {
         if (error) {
           throw error;
