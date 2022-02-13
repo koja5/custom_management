@@ -587,7 +587,12 @@ export class InvoiceComponent implements OnInit {
             therapy.date = element.date;
             netPrices.push(parseFloat(therapy.net_price));
 
-            bruto = parseFloat(therapy.net_price) * (1 + Number(vatDefinition.title) / 100);
+            if (vatDefinition) {
+              bruto = parseFloat(therapy.net_price) * (1 + Number(vatDefinition.title) / 100);
+            } else {
+              bruto = parseFloat(therapy.net_price) * (1 + 20 / 100);
+            }
+
             brutoPrices.push(bruto);
 
             const shouldSetDate = (selectedTherapies.length > 1 && i == 0) || selectedTherapies.length === 1 || !this.isDateSet;
@@ -597,7 +602,7 @@ export class InvoiceComponent implements OnInit {
               description: therapy.description ? therapy.description : '',
               date: shouldSetDate ? this.formatDate(therapy.date) : '',
               net_price: parseFloat(therapy.net_price).toFixed(2),
-              vat: vatDefinition.title,
+              vat: vatDefinition.title ? vatDefinition.title : 20,
               gross_price: bruto.toFixed(2)
             });
           }
