@@ -1924,6 +1924,9 @@
       "downloadWord": {
         "type": "string"
       },
+      "noDataAvailable": {
+        "type": "string"
+      },
       "startDateLabel": {
         "type": "string"
       },
@@ -6141,6 +6144,25 @@
             },
             {
               "key": "downloadWord"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "noDataAvailable"
+            },
+            {
+              "key": ""
+            },
+            {
+              "key": ""
+            },
+            {
+              "key": ""
             }
           ]
         }

@@ -70,35 +70,39 @@
     </div>
     <div *ngIf="displayToolbar" class="d-flex w-100 h-auto right-panel filter-panel ml-3">
       <div class="control-panel e-css">
-        <div class="col-sm-3">
-          <kendo-textbox-container floatingLabel="{{ language.patient }}">
-            <kendo-combobox #fieldName1 id="customerUsers" [suggest]="true" [data]="customerUsers"
-              [textField]="'shortname'" [valueField]="'id'" (valueChange)="onValueChange($event)"
-              [(ngModel)]="customerUser" [filterable]="true" (filterChange)="searchCustomer($event)"
-              [loading]="customerLoading">
-              <ng-template kendoComboBoxItemTemplate let-dataItem>
-                <p style="height: 50px !important">
-                  <span style="font-weight: bold">{{ dataItem.shortname }}</span>
-                  <br />
-                  <span class="customerInfo" *ngIf="dataItem.city !== ''"> {{ dataItem.city }}</span>
-                  <span class="customerInfo" *ngIf="dataItem.street !== ''">/{{ dataItem.street }}</span>
-                </p>
-              </ng-template>
-            </kendo-combobox>
-          </kendo-textbox-container>
+        <div class="row mt-2">
+          <div class="col-sm-3 pr-0">
+            <kendo-textbox-container floatingLabel="{{ language.patient }}">
+              <kendo-combobox #fieldName1 id="customerUsers" [suggest]="true" [data]="customerUsers"
+                [textField]="'shortname'" [valueField]="'id'" (valueChange)="onValueChange($event)"
+                [(ngModel)]="customerUser" [filterable]="true" (filterChange)="searchCustomer($event)"
+                [loading]="customerLoading">
+                <ng-template kendoComboBoxItemTemplate let-dataItem>
+                  <p style="height: 50px !important">
+                    <span style="font-weight: bold">{{ dataItem.shortname }}</span>
+                    <br />
+                    <span class="customerInfo" *ngIf="dataItem.city !== ''"> {{ dataItem.city }}</span>
+                    <span class="customerInfo" *ngIf="dataItem.street !== ''">/{{ dataItem.street }}</span>
+                  </p>
+                </ng-template>
+              </kendo-combobox>
+            </kendo-textbox-container>
+          </div>
         </div>
-        <div class="row mx-auto mt-4">
-          <div class="col-sm-12">
+
+        <div class="row mt-4">
+          <div class="col-sm-6">
             <kendo-daterange>
               <label class="mr-4">
                 <span class="date-range-label"> {{ language.startDateLabel }}</span>
-                <kendo-dateinput kendoDateRangeStartInput [navigateCalendarOnFocus]="true" [(value)]="range.start">
+                <kendo-dateinput class="full-width" kendoDateRangeStartInput [navigateCalendarOnFocus]="true"
+                  [(value)]="range.start">
                 </kendo-dateinput>
               </label>
               <label>
                 <span class="date-range-label"> {{ language.endDateLabel }} </span>
-                <kendo-dateinput kendoDateRangeEndInput [navigateCalendarOnFocus]="true" (valueChange)="popup.toggle()"
-                  [(value)]="range.end">
+                <kendo-dateinput class="full-width" kendoDateRangeEndInput [navigateCalendarOnFocus]="true"
+                  (valueChange)="popup.toggle()" [(value)]="range.end">
                 </kendo-dateinput>
               </label>
               <kendo-daterange-popup [anchor]="anchor" #popup></kendo-daterange-popup>
@@ -106,8 +110,8 @@
           </div>
         </div>
 
-        <div class="row mt-2">
-          <div class="col-sm-12">
+        <div class="row mt-4">
+          <div class="col-sm-4">
             <div class="btn btn-primary" [ngClass]="{'disabled': noDataSelected}" (click)="filter()">{{
               language.filterToolbar }}</div>
           </div>
@@ -116,7 +120,7 @@
     </div>
   </div>
 
-  <div class="grid w-100" style="height: 100%">
+  <div class="grid w-100" style="height: 97%">
     <div class="left-panel" style="height: 100%">
       <div class="control-section" style="height: 100%">
         <kendo-grid [style.height.%]="gridHeight" [selectable]="{enabled: true, checkboxOnly: true, mode: 'multiple'}"
@@ -127,7 +131,8 @@
             <div class="row mx-auto" style="margin-top:20%" *ngIf="!loading">
               <div class="col-12 d-flex justify-content-center">
                 <h4> {{ language.emptyGridMessage }} </h4>
-                <div class="btn btn-default" (click)="openFilterPanel()"> {{ language.clickHere }} </div>
+                <div *ngIf="!displayToolbar" class="btn btn-default" (click)="openFilterPanel()"> {{ language.clickHere
+                  }} </div>
               </div>
             </div>
           </ng-template>

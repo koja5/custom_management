@@ -99,6 +99,7 @@ import { TypeOfEventAction } from "../../enum/typeOfEventAction";
 import { ActivatedRoute } from "@angular/router";
 import { HolidayService } from "src/app/service/holiday.service";
 import { PDFService } from "src/app/service/pdf.service";
+import { ParameterItemService } from "src/app/service/parameter-item.service";
 declare var moment: any;
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
@@ -1576,6 +1577,7 @@ export class DynamicSchedulerComponent implements OnInit {
   public filterToolbarInd = true;
   public calendarRights = true;
   public eventStatisticConfiguration: any;
+  public vatTaxList;
 
   constructor(
     public service: TaskService,
@@ -1594,7 +1596,8 @@ export class DynamicSchedulerComponent implements OnInit {
     private accountService: AccountService,
     private activatedRouter: ActivatedRoute,
     private holidayService: HolidayService,
-    private pdfService: PDFService
+    private pdfService: PDFService,
+    private parameterItemService: ParameterItemService,
   ) { }
 
   ngOnInit() {
@@ -3030,6 +3033,11 @@ export class DynamicSchedulerComponent implements OnInit {
       }
       console.log(this.allUsers);
     });
+
+    this.parameterItemService.getVATTex(superadmin).subscribe((data: []) => {
+      this.vatTaxList = data;
+      // console.log(data);
+    });
   }
 
   pickToModel(data: any, titleValue) {
@@ -3749,30 +3757,49 @@ export class DynamicSchedulerComponent implements OnInit {
       const temp = this.therapyValue.find((therapy) => therapy.id == id);
 
       if (temp) {
+        const vatDefinition = this.vatTaxList.find((elem) => elem.id === temp.vat);
+        // console.log(vatDefinition);
 
         temp.date = this.formatDateForPDF(this.eventTime.start);
 
         console.log("temp.date", temp.date);
 
-        netPrices.push(parseFloat(temp.net_price));
 
-        bruto = parseFloat(temp.net_price) * (1 + temp.vat / 100);
-        brutoPrices.push(bruto);
+        const isNaNPrice = isNaN(parseFloat(temp.net_price));
 
+        if (isNaNPrice) {
+          console.log('Not a number: ', temp.net_price);
+        }
+
+        isNaNPrice ? netPrices.push(-1) : netPrices.push(parseFloat(temp.net_price));
+
+        if (!isNaNPrice) {
+          if (vatDefinition) {
+            bruto = parseFloat(temp.net_price) * (1 + Number(vatDefinition.title) / 100);
+          } else {
+            bruto = parseFloat(temp.net_price) * (1 + 20 / 100);
+          }
+          brutoPrices.push(bruto);
+        } else {
+          brutoPrices.push(-1);
+        }
         therapies.push({
           title: temp.title,
           description: temp.description ? temp.description : '',
           date: ((this.selectedTherapies.length > 1 && i == 0) || this.selectedTherapies.length === 1) ? temp.date : '',
-          net_price: parseFloat(temp.net_price).toFixed(2),
-          vat: temp.vat,
-          gross_price: bruto.toFixed(2)
+          net_price: isNaNPrice ? this.language.noDataAvailable : this.language.euroSign + ' ' + parseFloat(temp.net_price).toFixed(2),
+          vat: vatDefinition ? vatDefinition.title : 20,
+          gross_price: isNaNPrice ? this.language.noDataAvailable : this.language.euroSign + ' ' + bruto.toFixed(2)
         });
 
       }
     }
 
-    const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
-    const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
+    const filteredNetPrices = netPrices.filter(num => !isNaN(parseFloat(num)));
+    const filteredBrutoPrices = brutoPrices.filter(num => !isNaN(parseFloat(num)));
+
+    const subtotal = filteredNetPrices.reduce((a, b) => a + b, 0).toFixed(2);
+    const total = filteredBrutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
     let docDefinition = {
       content: [
@@ -3947,7 +3974,7 @@ export class DynamicSchedulerComponent implements OnInit {
                   style: "itemsFooterSubTitle",
                 },
                 {
-                  text: this.language.euroSign + " " + subtotal,
+                  text: filteredNetPrices.length === 0 ? this.language.noDataAvailable : (this.language.euroSign + " " + subtotal),
                   style: "itemsFooterSubValue",
                 },
               ],
@@ -3957,7 +3984,7 @@ export class DynamicSchedulerComponent implements OnInit {
                   style: "itemsFooterTotalTitle",
                 },
                 {
-                  text: this.language.euroSign + " " + total,
+                  text: filteredBrutoPrices.length === 0 ? this.language.noDataAvailable : (this.language.euroSign + " " + total),
                   style: "itemsFooterTotalValue",
                 },
               ],

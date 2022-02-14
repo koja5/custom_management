@@ -47,7 +47,7 @@ export class InvoiceComponent implements OnInit {
   public customerUser: CustomerModel;
   public customerUsers: CustomerModel[] = [];
   public data = new UserModel();
-  public displayToolbar = false;
+  public displayToolbar = true;
   public formGroup: FormGroup;
   public gridViewData: GridDataResult;
   public isAllChecked = false;
@@ -120,7 +120,6 @@ export class InvoiceComponent implements OnInit {
         this.language = undefined;
         setTimeout(() => {
           this.language = JSON.parse(localStorage.getItem("language"));
-          console.log(this.language);
         }, 10);
       });
     }
@@ -143,12 +142,10 @@ export class InvoiceComponent implements OnInit {
         });
       });
 
-    this.parameterItemService
-      .getVATTex(this.superadmin)
-      .subscribe((data: []) => {
-        this.vatTaxList = data;
-        console.log(data);
-      });
+    this.parameterItemService.getVATTex(this.superadmin).subscribe((data: []) => {
+      this.vatTaxList = data;
+      // console.log(data);
+    });
   }
 
   public searchCustomer(event): void {
@@ -298,7 +295,6 @@ export class InvoiceComponent implements OnInit {
     };
 
     this.getDataForMassiveInvoice();
-    this.displayToolbar = false;
   }
 
   public downloadPDF(): void {
@@ -320,8 +316,8 @@ export class InvoiceComponent implements OnInit {
     const data = this.getTherapyAndPricesData();
 
     const therapies = data.therapies;
-    const netPrices = data.netPrices;
-    const brutoPrices = data.brutoPrices;
+    const netPrices = data.netPrices.filter(num => !isNaN(parseFloat(num)));
+    const brutoPrices = data.brutoPrices.filter(num => !isNaN(parseFloat(num)));
 
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
@@ -499,7 +495,7 @@ export class InvoiceComponent implements OnInit {
                   style: "itemsFooterSubTitle",
                 },
                 {
-                  text: this.language.euroSign + " " + subtotal,
+                  text: netPrices.length === 0 ? this.language.noDataAvailable : (this.language.euroSign + " " + subtotal),
                   style: "itemsFooterSubValue",
                 },
               ],
@@ -509,7 +505,7 @@ export class InvoiceComponent implements OnInit {
                   style: "itemsFooterTotalTitle",
                 },
                 {
-                  text: this.language.euroSign + " " + total,
+                  text: brutoPrices.length === 0 ? this.language.noDataAvailable : (this.language.euroSign + " " + total),
                   style: "itemsFooterTotalValue",
                 },
               ],
@@ -586,14 +582,14 @@ export class InvoiceComponent implements OnInit {
 
         selectedTherapies = selectedTherapies.filter((elem) => elem != "");
       }
-      console.log(selectedTherapies);
+      // console.log(selectedTherapies)
 
       if (selectedTherapies.length > 0) {
         for (let i = 0; i < selectedTherapies.length; i++) {
           const id = selectedTherapies[i];
           const therapy = this.therapyValue.find((therapy) => therapy.id == id);
 
-          console.log(therapy);
+          // console.log(therapy)
           if (therapy) {
             const vatDefinition = this.vatTaxList.find(
               (elem) => elem.id === therapy.vat
@@ -601,6 +597,13 @@ export class InvoiceComponent implements OnInit {
             // console.log(vatDefinition);
 
             therapy.date = element.date;
+
+            const isNaNPrice = isNaN(parseFloat(therapy.net_price));
+
+            if (isNaNPrice) {
+              console.log('Not a number: ', therapy.net_price);
+            }
+
             netPrices.push(parseFloat(therapy.net_price));
 
             if (vatDefinition) {
@@ -610,7 +613,6 @@ export class InvoiceComponent implements OnInit {
             } else {
               bruto = parseFloat(therapy.net_price) * (1 + 20 / 100);
             }
-
             brutoPrices.push(bruto);
 
             const shouldSetDate =
@@ -620,11 +622,11 @@ export class InvoiceComponent implements OnInit {
 
             therapies.push({
               title: therapy.title,
-              description: therapy.description ? therapy.description : "",
-              date: shouldSetDate ? this.formatDate(therapy.date) : "",
-              net_price: parseFloat(therapy.net_price).toFixed(2),
+              description: therapy.description ? therapy.description : '',
+              date: shouldSetDate ? this.formatDate(therapy.date) : '',
+              net_price: isNaNPrice ? this.language.noDataAvailable : this.language.euroSign + ' ' + parseFloat(therapy.net_price).toFixed(2),
               vat: vatDefinition ? vatDefinition.title : 20,
-              gross_price: bruto.toFixed(2),
+              gross_price: isNaNPrice ? this.language.noDataAvailable : this.language.euroSign + ' ' + bruto.toFixed(2)
             });
           }
         }
@@ -641,32 +643,36 @@ export class InvoiceComponent implements OnInit {
   private formatDate(value) {
     this.isDateSet = true;
     let date: string;
-    if (value.indexOf("/")) {
-      date = value.split("/")[0];
-    } else if (value.indexOf(" ")) {
-      date = value.split(" ")[0];
+
+    if (value.indexOf('/') != -1) {
+      date = value.split('/')[0];
+
+    } else if (value.indexOf(' ') != -1) {
+      date = value.split(' ')[0];
     }
+
+    // console.log(date);
     return this.reverseString(date.trim());
   }
 
   private reverseString(str) {
     // Step 1. Use the split() method to return a new array
     var splitString;
-    if (str.indexOf(".")) {
+    if (str.indexOf('.') != -1) {
       splitString = str.split(".");
-    } else if (str.indexOf("-")) {
+    } else if (str.indexOf('-') != -1) {
       splitString = str.split("-");
     }
 
-    console.log(splitString);
+    // console.log(splitString);
 
     // Step 2. Use the reverse() method to reverse the new created array
     var reverseArray = splitString.reverse();
-    console.log(reverseArray);
+    // console.log(reverseArray)
 
     // Step 3. Use the join() method to join all elements of the array into a string
     var joinArray = reverseArray.join("/");
-    console.log(joinArray);
+    // console.log(joinArray)
 
     //Step 4. Return the reversed string
     return joinArray;
@@ -678,21 +684,14 @@ export class InvoiceComponent implements OnInit {
     const data = this.getTherapyAndPricesData();
 
     const therapies = data.therapies;
-    const netPrices = data.netPrices;
-    const brutoPrices = data.brutoPrices;
+    const netPrices = data.netPrices.filter(num => !isNaN(parseFloat(num)));
+    const brutoPrices = data.brutoPrices.filter(num => !isNaN(parseFloat(num)));
+
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
-    // this.loadFile("http://127.0.0.1:8887/Invoice_template.docx",
-    const link =
-      window.location.protocol +
-      "//" +
-      window.location.hostname +
-      ":" +
-      window.location.port +
-      "/assets/Invoice_template.docx";
-    this.loadFile(
-      link, //CORS
+    this.loadFile("http://127.0.0.1:8887/Invoice_template.docx",
+      // this.loadFile("http://app-production.eu:8080/assets/Invoice_template.docx", //CORS
       function (error, content) {
         if (error) {
           throw error;
@@ -728,8 +727,8 @@ export class InvoiceComponent implements OnInit {
           subtotal_title: componentRef.language.invoiceSubtotal,
           total_title: componentRef.language.invoiceTotal,
           products: therapies,
-          subtotal_price: componentRef.language.euroSign + " " + subtotal,
-          total_price: componentRef.language.euroSign + " " + total,
+          subtotal_price: netPrices.length === 0 ? componentRef.language.noDataAvailable : (componentRef.language.euroSign + " " + subtotal),
+          total_price: brutoPrices.length === 0 ? componentRef.language.noDataAvailable : (componentRef.language.euroSign + " " + total),
           item_date: componentRef.language.date,
           item_title: componentRef.language.invoiceItem,
           netto_price_title: componentRef.language.invoiceNetPrice,

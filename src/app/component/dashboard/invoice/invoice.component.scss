@@ -27,3 +27,19 @@
   /* for "disabled" effect */
   opacity: 0.5;
 }
+
+.up {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+@media (max-width: 767.98px) {
+  .full-width {
+    width:100vw;
+  }
+}
