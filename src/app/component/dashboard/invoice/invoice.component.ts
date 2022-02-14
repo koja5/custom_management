@@ -1,20 +1,20 @@
-import { ParameterItemService } from 'src/app/service/parameter-item.service';
-import { Component, HostListener, OnInit } from '@angular/core';
-import { CustomerModel } from 'src/app/models/customer-model';
-import { CustomersService } from 'src/app/service/customers.service';
-import { DateRangeService } from '@progress/kendo-angular-dateinputs';
-import { FormGroup } from '@angular/forms';
-import { GridDataResult, PageChangeEvent } from '@progress/kendo-angular-grid';
-import { HelpService } from 'src/app/service/help.service';
-import { MessageService } from 'src/app/service/message.service';
-import { PDFService } from './../../../service/pdf.service';
+import { ParameterItemService } from "src/app/service/parameter-item.service";
+import { Component, HostListener, OnInit } from "@angular/core";
+import { CustomerModel } from "src/app/models/customer-model";
+import { CustomersService } from "src/app/service/customers.service";
+import { DateRangeService } from "@progress/kendo-angular-dateinputs";
+import { FormGroup } from "@angular/forms";
+import { GridDataResult, PageChangeEvent } from "@progress/kendo-angular-grid";
+import { HelpService } from "src/app/service/help.service";
+import { MessageService } from "src/app/service/message.service";
+import { PDFService } from "./../../../service/pdf.service";
 import { saveAs } from "file-saver";
-import { SortDescriptor, State, process } from '@progress/kendo-data-query';
-import { StoreModel } from 'src/app/models/store-model';
-import { StoreService } from 'src/app/service/store.service';
-import { TaskService } from 'src/app/service/task.service';
-import { UserModel } from 'src/app/models/user-model';
-import { UserType } from '../../enum/user-type';
+import { SortDescriptor, State, process } from "@progress/kendo-data-query";
+import { StoreModel } from "src/app/models/store-model";
+import { StoreService } from "src/app/service/store.service";
+import { TaskService } from "src/app/service/task.service";
+import { UserModel } from "src/app/models/user-model";
+import { UserType } from "../../enum/user-type";
 import Docxtemplater from "docxtemplater";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import pdfMake from "pdfmake/build/pdfmake";
@@ -23,22 +23,19 @@ import PizZipUtils from "pizzip/utils/index.js";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
-  selector: 'app-invoice',
+  selector: "app-invoice",
   providers: [DateRangeService],
-  templateUrl: './invoice.component.html',
-  styleUrls: ['./invoice.component.scss']
+  templateUrl: "./invoice.component.html",
+  styleUrls: ["./invoice.component.scss"],
 })
 export class InvoiceComponent implements OnInit {
   isDateSet: boolean;
 
-
   @HostListener("window:resize", ["$event"])
   onResize() {
-
     if (this.displayToolbar) {
       this.height = 75;
-    }
-    else {
+    } else {
       this.height = 95;
     }
   }
@@ -91,8 +88,7 @@ export class InvoiceComponent implements OnInit {
   public get gridHeight(): number {
     if (this.displayToolbar) {
       this.height = 75;
-    }
-    else {
+    } else {
       this.height = 95;
     }
 
@@ -105,7 +101,8 @@ export class InvoiceComponent implements OnInit {
     private storeService: StoreService,
     private taskService: TaskService,
     private parameterItemService: ParameterItemService,
-    private pdfService: PDFService) { }
+    private pdfService: PDFService
+  ) {}
 
   ngOnInit() {
     this.initializationConfig();
@@ -138,16 +135,20 @@ export class InvoiceComponent implements OnInit {
   }
 
   public getParameters(): void {
-    this.customerService.getParameters("Therapy", this.superadmin).subscribe((data: []) => {
-      this.therapyValue = data.sort(function (a, b) {
-        return a["sequence"] - b["sequence"];
+    this.customerService
+      .getParameters("Therapy", this.superadmin)
+      .subscribe((data: []) => {
+        this.therapyValue = data.sort(function (a, b) {
+          return a["sequence"] - b["sequence"];
+        });
       });
-    });
 
-    this.parameterItemService.getVATTex(this.superadmin).subscribe((data: []) => {
-      this.vatTaxList = data;
-      console.log(data);
-    });
+    this.parameterItemService
+      .getVATTex(this.superadmin)
+      .subscribe((data: []) => {
+        this.vatTaxList = data;
+        console.log(data);
+      });
   }
 
   public searchCustomer(event): void {
@@ -165,7 +166,6 @@ export class InvoiceComponent implements OnInit {
         );
         this.customerLoading = false;
       });
-
     } else {
       this.customerUsers = [];
     }
@@ -182,12 +182,12 @@ export class InvoiceComponent implements OnInit {
     this.selectedItemIDs = [];
 
     if (this.isAllChecked) {
-      this.selectedItemIDs = this.currentLoadData.map(elem => elem.taskId);
+      this.selectedItemIDs = this.currentLoadData.map((elem) => elem.taskId);
     }
 
-    this.currentLoadData.forEach(elem => {
+    this.currentLoadData.forEach((elem) => {
       elem.checked = this.isAllChecked;
-    })
+    });
   }
 
   public setSelectedItem(dataItem): void {
@@ -196,15 +196,14 @@ export class InvoiceComponent implements OnInit {
       if (index !== -1) {
         this.selectedItemIDs.splice(index, 1);
       }
-    }
-    else {
+    } else {
       this.selectedItemIDs.push(dataItem.taskId);
     }
 
     dataItem.checked = !dataItem.checked;
-    this.currentLoadData.every(elem => elem.checked === true) ?
-      this.isAllChecked = true :
-      this.isAllChecked = false;
+    this.currentLoadData.every((elem) => elem.checked === true)
+      ? (this.isAllChecked = true)
+      : (this.isAllChecked = false);
   }
 
   public showFilterPanel(): void {
@@ -226,8 +225,7 @@ export class InvoiceComponent implements OnInit {
       this.currentLoadData = [];
 
       if (this.range.start && this.range.end) {
-        data.forEach(element => {
-
+        data.forEach((element) => {
           const startDate = this.range.start.getTime();
           const endDate = this.range.end.getTime();
           const start = element.start;
@@ -238,29 +236,32 @@ export class InvoiceComponent implements OnInit {
 
           element.checked = false;
 
-          if (element.start.getTime() >= startDate && element.end.getTime() <= endDate) {
+          if (
+            element.start.getTime() >= startDate &&
+            element.end.getTime() <= endDate
+          ) {
             this.currentLoadData.push(element);
           }
         });
       } else {
-
-        data.forEach(elem => {
+        data.forEach((elem) => {
           elem.checked = false;
-        })
+        });
         this.currentLoadData = data;
       }
 
       if (this.currentLoadData.length > 0) {
-        this.storeService.getStoreById(this.currentLoadData[0].storeId).then(data => {
-          // console.log(data);
-          this.store = data[0];
-        });
+        this.storeService
+          .getStoreById(this.currentLoadData[0].storeId)
+          .then((data) => {
+            // console.log(data);
+            this.store = data[0];
+          });
       }
 
       this.gridViewData = process(this.currentLoadData, this.state);
       this.loading = false;
     });
-
   }
 
   public get isCheckBoxDisabled(): boolean {
@@ -304,7 +305,8 @@ export class InvoiceComponent implements OnInit {
     const docDefinition = this.setupPDF();
 
     // pass file name
-    pdfMake.createPdf(docDefinition)
+    pdfMake
+      .createPdf(docDefinition)
       .download(this.customerUser["firstname"] + this.customerUser["lastname"]);
   }
 
@@ -314,7 +316,7 @@ export class InvoiceComponent implements OnInit {
   }
 
   private setupPDF() {
-    const dotSign = ' • ';
+    const dotSign = " • ";
     const data = this.getTherapyAndPricesData();
 
     const therapies = data.therapies;
@@ -535,10 +537,21 @@ export class InvoiceComponent implements OnInit {
       footer: {
         columns: [
           {
-            text: this.store.storename + dotSign + this.store.street + dotSign + this.store.zipcode + " " + this.store.place + "\n" + this.store.telephone + dotSign + this.store.email,
-            style: 'documentFooter'
-          }
-        ]
+            text:
+              this.store.storename +
+              dotSign +
+              this.store.street +
+              dotSign +
+              this.store.zipcode +
+              " " +
+              this.store.place +
+              "\n" +
+              this.store.telephone +
+              dotSign +
+              this.store.email,
+            style: "documentFooter",
+          },
+        ],
       },
       styles: this.pdfService.getStyles(),
       defaultStyle: {
@@ -550,14 +563,13 @@ export class InvoiceComponent implements OnInit {
   }
 
   private getTherapyAndPricesData() {
-
     const therapies = [];
     const netPrices = [];
     const brutoPrices = [];
     let selectedTherapies = [];
     let bruto = 0;
 
-    this.currentLoadData.forEach(element => {
+    this.currentLoadData.forEach((element) => {
       if (this.selectedItemIDs.indexOf(element.taskId) === -1) {
         return;
       }
@@ -567,43 +579,52 @@ export class InvoiceComponent implements OnInit {
       // console.log(element);
 
       if (element.therapies) {
-        selectedTherapies = element.therapies.indexOf(';') != -1 ? element.therapies.split(';') : [element.therapies];
+        selectedTherapies =
+          element.therapies.indexOf(";") != -1
+            ? element.therapies.split(";")
+            : [element.therapies];
 
-        selectedTherapies = selectedTherapies.filter(elem => elem != "");
+        selectedTherapies = selectedTherapies.filter((elem) => elem != "");
       }
-      console.log(selectedTherapies)
+      console.log(selectedTherapies);
 
       if (selectedTherapies.length > 0) {
-
         for (let i = 0; i < selectedTherapies.length; i++) {
           const id = selectedTherapies[i];
           const therapy = this.therapyValue.find((therapy) => therapy.id == id);
 
-          console.log(therapy)
+          console.log(therapy);
           if (therapy) {
-            const vatDefinition = this.vatTaxList.find((elem) => elem.id === therapy.vat);
+            const vatDefinition = this.vatTaxList.find(
+              (elem) => elem.id === therapy.vat
+            );
             // console.log(vatDefinition);
 
             therapy.date = element.date;
             netPrices.push(parseFloat(therapy.net_price));
 
             if (vatDefinition) {
-              bruto = parseFloat(therapy.net_price) * (1 + Number(vatDefinition.title) / 100);
+              bruto =
+                parseFloat(therapy.net_price) *
+                (1 + Number(vatDefinition.title) / 100);
             } else {
               bruto = parseFloat(therapy.net_price) * (1 + 20 / 100);
             }
 
             brutoPrices.push(bruto);
 
-            const shouldSetDate = (selectedTherapies.length > 1 && i == 0) || selectedTherapies.length === 1 || !this.isDateSet;
+            const shouldSetDate =
+              (selectedTherapies.length > 1 && i == 0) ||
+              selectedTherapies.length === 1 ||
+              !this.isDateSet;
 
             therapies.push({
               title: therapy.title,
-              description: therapy.description ? therapy.description : '',
-              date: shouldSetDate ? this.formatDate(therapy.date) : '',
+              description: therapy.description ? therapy.description : "",
+              date: shouldSetDate ? this.formatDate(therapy.date) : "",
               net_price: parseFloat(therapy.net_price).toFixed(2),
               vat: vatDefinition ? vatDefinition.title : 20,
-              gross_price: bruto.toFixed(2)
+              gross_price: bruto.toFixed(2),
             });
           }
         }
@@ -613,18 +634,17 @@ export class InvoiceComponent implements OnInit {
     return {
       therapies: therapies,
       netPrices: netPrices,
-      brutoPrices: brutoPrices
+      brutoPrices: brutoPrices,
     };
   }
 
   private formatDate(value) {
     this.isDateSet = true;
     let date: string;
-    if (value.indexOf('/')) {
-      date = value.split('/')[0];
-
-    } else if (value.indexOf(' ')) {
-      date = value.split(' ')[0];
+    if (value.indexOf("/")) {
+      date = value.split("/")[0];
+    } else if (value.indexOf(" ")) {
+      date = value.split(" ")[0];
     }
     return this.reverseString(date.trim());
   }
@@ -632,9 +652,9 @@ export class InvoiceComponent implements OnInit {
   private reverseString(str) {
     // Step 1. Use the split() method to return a new array
     var splitString;
-    if (str.indexOf('.')) {
+    if (str.indexOf(".")) {
       splitString = str.split(".");
-    } else if (str.indexOf('-')) {
+    } else if (str.indexOf("-")) {
       splitString = str.split("-");
     }
 
@@ -642,11 +662,11 @@ export class InvoiceComponent implements OnInit {
 
     // Step 2. Use the reverse() method to reverse the new created array
     var reverseArray = splitString.reverse();
-    console.log(reverseArray)
+    console.log(reverseArray);
 
     // Step 3. Use the join() method to join all elements of the array into a string
     var joinArray = reverseArray.join("/");
-    console.log(joinArray)
+    console.log(joinArray);
 
     //Step 4. Return the reversed string
     return joinArray;
@@ -664,22 +684,28 @@ export class InvoiceComponent implements OnInit {
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
     // this.loadFile("http://127.0.0.1:8887/Invoice_template.docx",
-    this.loadFile("http://clinicnode.herokuapp.com/assets/Invoice_template.docx", //CORS
+    const link =
+      window.location.protocol +
+      "//" +
+      window.location.hostname +
+      ":" +
+      window.location.port +
+      "/assets/Invoice_template.docx";
+    this.loadFile(
+      link, //CORS
       function (error, content) {
         if (error) {
           throw error;
         }
 
         const zip = new PizZip(content);
-        const doc = new Docxtemplater(zip,
-          {
-            paragraphLoop: true,
-            linebreaks: true,
-            nullGetter: function () {
-              return "";
-            }
-          }
-        );
+        const doc = new Docxtemplater(zip, {
+          paragraphLoop: true,
+          linebreaks: true,
+          nullGetter: function () {
+            return "";
+          },
+        });
 
         doc.setData({
           invoice_title: componentRef.language.invoiceTitle,
@@ -738,11 +764,14 @@ export class InvoiceComponent implements OnInit {
         const out = doc.getZip().generate({
           type: "blob",
           mimeType:
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         });
         // Output the document using Data-URI
 
-        const filename = componentRef.customerUser.lastname + componentRef.customerUser.firstname + ".docx";
+        const filename =
+          componentRef.customerUser.lastname +
+          componentRef.customerUser.firstname +
+          ".docx";
         saveAs(out, filename);
       }
     );
@@ -750,14 +779,10 @@ export class InvoiceComponent implements OnInit {
 
   replaceErrors(value) {
     if (value instanceof Error) {
-      return Object.getOwnPropertyNames(value).reduce(function (
-        error,
-        key
-      ) {
+      return Object.getOwnPropertyNames(value).reduce(function (error, key) {
         error[key] = value[key];
         return error;
-      },
-        {});
+      }, {});
     }
     return value;
   }
@@ -767,6 +792,6 @@ export class InvoiceComponent implements OnInit {
   }
 
   private get currentDateFormatted(): string {
-    return new Date().toLocaleString().replace(/(.*)\D\d+/, '$1');
+    return new Date().toLocaleString().replace(/(.*)\D\d+/, "$1");
   }
 }
