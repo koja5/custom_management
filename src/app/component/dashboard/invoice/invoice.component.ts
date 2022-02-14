@@ -20,7 +20,6 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import pdfMake from "pdfmake/build/pdfmake";
 import PizZip from "pizzip";
 import PizZipUtils from "pizzip/utils/index.js";
-import { regex } from '@syncfusion/ej2-angular-inputs';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
