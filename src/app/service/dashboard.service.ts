@@ -27,7 +27,7 @@ export class DashboardService {
   }*/
 
   getTranslation() {
-    return this.http.get("/api/getTranslation").map((res) => res);
+    return this.http.get<any[]>("/api/getTranslation").map((res) => res);
   }
 
   getTranslationByDemoAccount(demoCode: string) {

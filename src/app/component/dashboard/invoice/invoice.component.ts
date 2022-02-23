@@ -20,6 +20,7 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import pdfMake from "pdfmake/build/pdfmake";
 import PizZip from "pizzip";
 import PizZipUtils from "pizzip/utils/index.js";
+import { DashboardService } from "src/app/service/dashboard.service";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -63,6 +64,9 @@ export class InvoiceComponent implements OnInit {
   public type: UserType;
   public userType = UserType;
   public vatTaxList;
+  public isPriceIncluded: boolean = true;
+  public languageList;
+  public invoiceLanguage;
 
   public pageSize = 10;
   public state: State = {
@@ -101,8 +105,9 @@ export class InvoiceComponent implements OnInit {
     private storeService: StoreService,
     private taskService: TaskService,
     private parameterItemService: ParameterItemService,
-    private pdfService: PDFService
-  ) {}
+    private pdfService: PDFService,
+    private dashboardService: DashboardService
+  ) { }
 
   ngOnInit() {
     this.initializationConfig();
@@ -131,6 +136,24 @@ export class InvoiceComponent implements OnInit {
     this.superadmin = this.helpService.getSuperadmin();
 
     this.getParameters();
+
+    this.dashboardService.getTranslation().subscribe(
+      data => {
+        console.log(data);
+        this.languageList = [];
+
+        data.forEach(elem => {
+          this.languageList.push({
+            'text': elem.language,
+            'value': elem.config
+          })
+        });
+      }
+    );
+  }
+  valueChange(event) {
+    this.invoiceLanguage = event.value;
+    console.log(this.invoiceLanguage);
   }
 
   public getParameters(): void {
@@ -216,9 +239,10 @@ export class InvoiceComponent implements OnInit {
   public getDataForMassiveInvoice(): void {
     const patientId = this.customerUser.id;
     this.loading = true;
+    this.isAllChecked = false;
 
     this.taskService.getDataForMassiveInvoice(patientId).then((data) => {
-      // console.log('getDataForMassiveInvoice : ', data);
+      console.log('getDataForMassiveInvoice : ', data);
       this.currentLoadData = [];
 
       if (this.range.start && this.range.end) {
@@ -322,6 +346,9 @@ export class InvoiceComponent implements OnInit {
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
+
+    console.log(this.invoiceLanguage);
+
     let docDefinition = {
       content: [
         // Header
@@ -334,7 +361,7 @@ export class InvoiceComponent implements OnInit {
 
             [
               {
-                text: this.language.invoiceTitle,
+                text: this.invoiceLanguage.invoiceTitle,
                 style: "invoiceTitle",
                 width: "*",
               },
@@ -343,7 +370,7 @@ export class InvoiceComponent implements OnInit {
                   {
                     columns: [
                       {
-                        text: this.language.invoiceSubTitle,
+                        text: this.invoiceLanguage.invoiceSubTitle,
                         style: "invoiceSubTitle",
                         width: "*",
                       },
@@ -357,7 +384,7 @@ export class InvoiceComponent implements OnInit {
                   {
                     columns: [
                       {
-                        text: this.language.dateTitle,
+                        text: this.invoiceLanguage.dateTitle,
                         style: "invoiceSubTitle",
                         width: "*",
                       },
@@ -392,11 +419,11 @@ export class InvoiceComponent implements OnInit {
         {
           columns: [
             {
-              text: this.language.invoiceBillingTitleFrom + "\n \n",
+              text: this.invoiceLanguage.invoiceBillingTitleFrom + "\n \n",
               style: "invoiceBillingTitleLeft",
             },
             {
-              text: this.language.invoiceBillingTitleTo + "\n \n",
+              text: this.invoiceLanguage.invoiceBillingTitleTo + "\n \n",
               style: "invoiceBillingTitleRight",
             },
           ],
@@ -473,7 +500,7 @@ export class InvoiceComponent implements OnInit {
             headerRows: 1,
             widths: ["*", "*", "auto", "auto", "auto"],
 
-            body: this.pdfService.createItemsTable(therapies),
+            body: this.pdfService.createItemsTable(therapies, this.isPriceIncluded),
           }, // table
           //  layout: 'lightHorizontalLines'
         },
@@ -491,21 +518,21 @@ export class InvoiceComponent implements OnInit {
               // Total
               [
                 {
-                  text: this.language.invoiceSubtotal,
+                  text: this.invoiceLanguage.invoiceSubtotal,
                   style: "itemsFooterSubTitle",
                 },
                 {
-                  text: netPrices.length === 0 ? this.language.noDataAvailable : (this.language.euroSign + " " + subtotal),
+                  text: netPrices.length === 0 ? this.invoiceLanguage.noDataAvailable : (this.invoiceLanguage.euroSign + " " + subtotal),
                   style: "itemsFooterSubValue",
                 },
               ],
               [
                 {
-                  text: this.language.invoiceTotal,
+                  text: this.invoiceLanguage.invoiceTotal,
                   style: "itemsFooterTotalTitle",
                 },
                 {
-                  text: brutoPrices.length === 0 ? this.language.noDataAvailable : (this.language.euroSign + " " + total),
+                  text: brutoPrices.length === 0 ? this.invoiceLanguage.noDataAvailable : (this.invoiceLanguage.euroSign + " " + total),
                   style: "itemsFooterTotalValue",
                 },
               ],
@@ -514,11 +541,11 @@ export class InvoiceComponent implements OnInit {
           layout: "lightHorizontalLines",
         },
         // {
-        //   text: this.language.notesTitle,
+        //   text: this.invoiceLanguage.notesTitle,
         //   style: 'notesTitle'
         // },
         // {
-        //   text: this.language.notesText,
+        //   text: this.invoiceLanguage.notesText,
         //   style: 'notesTextBold'
         // },
         // {
@@ -526,7 +553,7 @@ export class InvoiceComponent implements OnInit {
         //   style: 'notesText'
         // },
         // {
-        //   text: this.language.notesDate + new Date().toLocaleDateString() + ", " + this.store.storename,
+        //   text: this.invoiceLanguage.notesDate + new Date().toLocaleDateString() + ", " + this.store.storename,
         //   style: 'notesTextBold'
         // }
       ],
@@ -624,9 +651,9 @@ export class InvoiceComponent implements OnInit {
               title: therapy.title,
               description: therapy.description ? therapy.description : '',
               date: shouldSetDate ? this.formatDate(therapy.date) : '',
-              net_price: isNaNPrice ? this.language.noDataAvailable : this.language.euroSign + ' ' + parseFloat(therapy.net_price).toFixed(2),
-              vat: vatDefinition ? vatDefinition.title : 20,
-              gross_price: isNaNPrice ? this.language.noDataAvailable : this.language.euroSign + ' ' + bruto.toFixed(2)
+              net_price: this.isPriceIncluded ? (isNaNPrice ? this.invoiceLanguage.noDataAvailable : this.invoiceLanguage.euroSign + ' ' + parseFloat(therapy.net_price).toFixed(2)) : '',
+              vat: this.isPriceIncluded ? (vatDefinition ? vatDefinition.title : 20) : '',
+              gross_price: this.isPriceIncluded ? (isNaNPrice ? this.invoiceLanguage.noDataAvailable : this.invoiceLanguage.euroSign + ' ' + bruto.toFixed(2)) : ''
             });
           }
         }
@@ -662,20 +689,22 @@ export class InvoiceComponent implements OnInit {
       splitString = str.split(".");
     } else if (str.indexOf('-') != -1) {
       splitString = str.split("-");
+    } else if (str.indexOf('/') != -1) {
+      splitString = str.split("/");
     }
 
-    // console.log(splitString);
+    console.log(splitString);
 
     // Step 2. Use the reverse() method to reverse the new created array
-    var reverseArray = splitString.reverse();
+    // var reverseArray = splitString.reverse();
     // console.log(reverseArray)
 
     // Step 3. Use the join() method to join all elements of the array into a string
-    var joinArray = reverseArray.join("/");
+    var joinArray = splitString.join(".");
     // console.log(joinArray)
 
     //Step 4. Return the reversed string
-    return joinArray;
+    return joinArray + '.';
   }
 
   public downloadWord(): void {
@@ -690,7 +719,7 @@ export class InvoiceComponent implements OnInit {
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
-	const link =
+    const link =
       window.location.protocol +
       "//" +
       window.location.hostname +
@@ -714,12 +743,12 @@ export class InvoiceComponent implements OnInit {
         });
 
         doc.setData({
-          invoice_title: componentRef.language.invoiceTitle,
-          invoice_number: componentRef.language.invoiceSubTitle,
+          invoice_title: componentRef.invoiceLanguage.invoiceTitle,
+          invoice_number: componentRef.invoiceLanguage.invoiceSubTitle,
           invoice_id: componentRef.invoiceID,
           invoice_generated_date: componentRef.currentDateFormatted,
-          billing_from_title: componentRef.language.invoiceBillingTitleFrom,
-          billing_to_title: componentRef.language.invoiceBillingTitleTo,
+          billing_from_title: componentRef.invoiceLanguage.invoiceBillingTitleFrom,
+          billing_to_title: componentRef.invoiceLanguage.invoiceBillingTitleTo,
           clinic_name: componentRef.store.storename,
           customer_lastname: componentRef.customerUser.lastname,
           customer_firstname: componentRef.customerUser.firstname,
@@ -731,20 +760,20 @@ export class InvoiceComponent implements OnInit {
           customer_city: componentRef.customerUser.city,
           clinic_telephone: componentRef.store.telephone,
           clinic_email: componentRef.store.email,
-          subtotal_title: componentRef.language.invoiceSubtotal,
-          total_title: componentRef.language.invoiceTotal,
+          subtotal_title: componentRef.invoiceLanguage.invoiceSubtotal,
+          total_title: componentRef.invoiceLanguage.invoiceTotal,
           products: therapies,
-          subtotal_price: netPrices.length === 0 ? componentRef.language.noDataAvailable : (componentRef.language.euroSign + " " + subtotal),
-          total_price: brutoPrices.length === 0 ? componentRef.language.noDataAvailable : (componentRef.language.euroSign + " " + total),
-          item_date: componentRef.language.date,
-          item_title: componentRef.language.invoiceItem,
-          netto_price_title: componentRef.language.invoiceNetPrice,
-          vat: componentRef.language.vat + " (%)",
-          gross_price_title: componentRef.language.invoiceGrossPrice,
-          date_title: componentRef.language.dateTitle,
-          price_title: componentRef.language.invoiceNetPrice,
-          // notes_title: componentRef.language,
-          // notes_text: componentRef.language
+          subtotal_price: netPrices.length === 0 ? componentRef.invoiceLanguage.noDataAvailable : (componentRef.invoiceLanguage.euroSign + " " + subtotal),
+          total_price: brutoPrices.length === 0 ? componentRef.invoiceLanguage.noDataAvailable : (componentRef.invoiceLanguage.euroSign + " " + total),
+          item_date: componentRef.invoiceLanguage.date,
+          item_title: componentRef.invoiceLanguage.invoiceItem,
+          netto_price_title: componentRef.isPriceIncluded ? componentRef.invoiceLanguage.invoiceNetPrice : '',
+          vat: componentRef.isPriceIncluded ? componentRef.invoiceLanguage.vat + " (%)" : '',
+          gross_price_title: componentRef.isPriceIncluded ? componentRef.invoiceLanguage.invoiceGrossPrice : '',
+          date_title: componentRef.invoiceLanguage.dateTitle,
+          price_title: componentRef.invoiceLanguage.invoiceNetPrice,
+          // notes_title: componentRef.invoiceLanguage,
+          // notes_text: componentRef.invoiceLanguage
         });
 
         try {
@@ -798,6 +827,10 @@ export class InvoiceComponent implements OnInit {
   }
 
   private get currentDateFormatted(): string {
-    return new Date().toLocaleString().replace(/(.*)\D\d+/, "$1");
+    // return new Date().toLocaleString().replace(/(.*)\D\d+/, "$1");
+
+    const date = new Date().toLocaleDateString('en-GB');
+    console.log(date);
+    return this.reverseString(date);
   }
 }

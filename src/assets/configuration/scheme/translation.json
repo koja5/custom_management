@@ -1950,6 +1950,9 @@
       },
       "euroSign": {
         "type": "string"
+      },
+      "doctorColumnTitle": {
+        "type": "string"
       }
     }
   },
@@ -6156,7 +6159,7 @@
               "key": "noDataAvailable"
             },
             {
-              "key": ""
+              "key": "doctorColumnTitle"
             },
             {
               "key": ""

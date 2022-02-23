@@ -187,7 +187,7 @@ export class PDFService {
     };
   }
 
-  public createItemsTable(therapies) {
+  public createItemsTable(therapies, isPriceIncluded = true) {
     const arr = [
       // Table Header
       [
@@ -200,15 +200,15 @@ export class PDFService {
           style: "itemsHeader",
         },
         {
-          text: this.language.invoiceNetPrice,
+          text: isPriceIncluded ? this.language.invoiceNetPrice : '',
           style: ["itemsHeader", "center"],
         },
         {
-          text: this.language.vat + " (%)",
+          text: isPriceIncluded ? this.language.vat + " (%)" : '',
           style: ["itemsHeader", "center"],
         },
         {
-          text: this.language.invoiceGrossPrice,
+          text: isPriceIncluded ? this.language.invoiceGrossPrice : '',
           style: ["itemsHeader", "center"],
         },
       ],
@@ -227,15 +227,15 @@ export class PDFService {
           style: "itemTitle",
         },
         {
-          text: therapy.net_price,
+          text: isPriceIncluded ? therapy.net_price : '',
           style: "itemNumber",
         },
         {
-          text: therapy.vat,
+          text: isPriceIncluded ? therapy.vat : '',
           style: "itemNumber",
         },
         {
-          text: therapy.gross_price,
+          text: isPriceIncluded ? therapy.gross_price : '',
           style: "itemGrossPrice"
         }
       ];
