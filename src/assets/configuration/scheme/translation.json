@@ -1953,6 +1953,9 @@
       },
       "doctorColumnTitle": {
         "type": "string"
+      },
+      "invoicePrefix": {
+        "type": "string"
       }
     }
   },
@@ -6162,7 +6165,7 @@
               "key": "doctorColumnTitle"
             },
             {
-              "key": ""
+              "key": "invoicePrefix"
             },
             {
               "key": ""

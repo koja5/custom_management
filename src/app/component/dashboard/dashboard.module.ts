@@ -99,6 +99,7 @@ import {
   WorkWeekService,
 } from "@syncfusion/ej2-angular-schedule";
 import { InvoiceComponent } from './invoice/invoice.component';
+import { InvoicePrefixComponent } from './administrator/invoice-prefix/invoice-prefix.component';
 
 @NgModule({
   declarations: [
@@ -149,6 +150,7 @@ import { InvoiceComponent } from './invoice/invoice.component';
     SmsMassiveComponent,
     AddHolidayComponent,
     InvoiceComponent,
+    InvoicePrefixComponent,
   ],
   imports: [
     CommonModule,

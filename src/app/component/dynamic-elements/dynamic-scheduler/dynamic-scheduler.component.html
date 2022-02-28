@@ -308,7 +308,7 @@
                 " (renderCell)="onRenderCell($event)" (actionBegin)="onActionBegin($event)"
                 (popupOpen)="onPopupOpen($event)" (drag)="onItemDrag($event)" (resizeStop)="onItemDrag($event)">
                 <ng-template #dateHeaderTemplate let-data>
-                  <div class="date-text">
+                  <div class="date-text" title=" {{ getDateHeaderText(data.date) }}">
                     {{ getDateHeaderText(data.date) }}
                   </div>
                 </ng-template>
@@ -434,7 +434,13 @@
                         title="{{ language.confirmed }}"></span>
                     </ng-template>
                   </e-view>
-                  <e-view option="Month"></e-view>
+                  <e-view option="Month">
+                    <ng-template #eventSettingsTemplate let-data>
+                      <div class='template-wrap'>
+                        <div class="subject">{{data.Subject}}</div>
+                      </div>
+                    </ng-template>
+                  </e-view>
                   <e-view option="Year"></e-view>
                   <e-view option="Agenda"></e-view>
                   <e-view option="TimelineDay"></e-view>

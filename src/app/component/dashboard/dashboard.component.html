@@ -502,6 +502,16 @@
                                   {{ language?.userAccess }}
                                 </a>
                               </li>
+
+
+                              <li class="{{ selectedNodeModel['invoice_prefix'] }}"
+                                *ngIf="type === userType.owner || type === userType.admin">
+                                <a (click)="returnActiveNode('invoice')" routerLink="/dashboard/home/invoice-prefix"><i
+                                    class="fa fa-font"></i><span class="navigation-link">{{
+                                    language["invoicePrefix"]
+                                    }}</span></a>
+                              </li>
+
                             </ul>
                           </li>
                           <li *ngIf="user && user.id === 4" class="menu-title" data-key="t-menu">

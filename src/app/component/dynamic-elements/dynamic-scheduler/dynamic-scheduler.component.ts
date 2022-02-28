@@ -687,7 +687,6 @@ export class DynamicSchedulerComponent implements OnInit {
 
   public getDateHeaderText(value: Date): string {
     return this.intl.formatDate(value, { skeleton: "Ed" });
-    this.scheduleObj.refresh();
   }
 
   public onWeekDayChange(args: ChangeEventArgs): void {
@@ -1641,12 +1640,14 @@ export class DynamicSchedulerComponent implements OnInit {
             Subject: r.Subject,
             StartTime: new Date(r.StartTime),
             EndTime: new Date(r.EndTime),
+            IsAllDay: true
           });
 
           this.holidays.push({
             Subject: r.Subject,
             StartTime: new Date(r.StartTime),
             EndTime: new Date(r.EndTime),
+            IsAllDay: true
           });
         });
 
@@ -2720,8 +2721,6 @@ export class DynamicSchedulerComponent implements OnInit {
 
   onRenderCell(event) {
     this.dateFormat(event);
-
-    // return event.element.style.background = "red";
   }
 
   onEventRendered(args: EventRenderedArgs): void {
@@ -2775,27 +2774,6 @@ export class DynamicSchedulerComponent implements OnInit {
     if (holiday) {
       date.element.style.backgroundColor = "#e9ecef";
       date.element.style.pointerEvents = "none";
-
-      // if (date.elementType !== "monthDay" && this.currentView === "Month") {
-
-      //   const span = document.createElement("SPAN");
-      //   date.element.appendChild(span);
-      //   span.innerHTML = holiday.Subject;
-      //   span.style.overflow = 'hidden';
-      //   span.style.whiteSpace = 'nowrap';
-      //   span.style.textOverflow = 'ellipsis';
-
-      // }
-
-      console.log(this.currentView);
-      if (date.elementType === "dateHeader" && this.currentView !== "Month") {
-        const dateSplitted = date.date.toString().split(" ");
-
-        // date - day - holiday
-        date.element.firstChild.innerText =
-          dateSplitted[2] + " " + dateSplitted[0] + " - " + holiday.Subject;
-      }
-      return;
     }
 
     if (date.elementType === "resourceHeader") {

@@ -3,7 +3,7 @@ import { DashboardService } from 'src/app/service/dashboard.service';
 import { HolidayService } from '../../../../service/holiday.service';
 import { HolidayModel } from '../../../../models/holiday-model';
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { MonthService, ScheduleComponent, EventSettingsModel, View, CellClickEventArgs, PopupOpenEventArgs, EventRenderedArgs } from '@syncfusion/ej2-angular-schedule';
+import { MonthService, ScheduleComponent, EventSettingsModel, CellClickEventArgs, PopupOpenEventArgs } from '@syncfusion/ej2-angular-schedule';
 import { Modal } from 'ngx-modal';
 import { MessageService } from 'src/app/service/message.service';
 import { IndividualConfig, ToastrService } from 'ngx-toastr';
@@ -14,7 +14,7 @@ import { GroupDescriptor, SortDescriptor, State, process } from '@progress/kendo
 import { PageChangeEvent } from '@progress/kendo-angular-grid';
 import { Template } from 'src/app/models/template-model';
 import { DynamicSchedulerService } from 'src/app/service/dynamic-scheduler.service';
-
+import { TabType } from 'src/app/component/enum/tab-type';
 
 @Component({
   selector: 'app-add-holiday',
@@ -23,15 +23,14 @@ import { DynamicSchedulerService } from 'src/app/service/dynamic-scheduler.servi
   styleUrls: ['./add-holiday.component.scss']
 })
 export class AddHolidayComponent implements OnInit {
-  @ViewChild('scheduleObj')
-  public scheduleObj: ScheduleComponent;
+  @ViewChild('scheduleObj') public scheduleObj: ScheduleComponent;
   public eventSettings: EventSettingsModel = {
     dataSource: [],
     fields: {
       id: 'Id',
       subject: { name: 'Subject', title: 'Event Name' },
       startTime: { name: 'StartTime', title: 'Start Duration' },
-      endTime: { name: 'EndTime', title: 'End Duration' }
+      endTime: { name: 'EndTime', title: 'End Duration' },
     }
   };
 
@@ -48,7 +47,8 @@ export class AddHolidayComponent implements OnInit {
   public newHoliday: HolidayModel;
   public templateList;
   public isOwner: boolean;
-  public currentTab = "holidays";
+  public currentTab = TabType.Holidays;
+  public tabType = TabType;
   public operationMode = 'add';
 
   public gridTemplateData: any;
@@ -97,12 +97,12 @@ export class AddHolidayComponent implements OnInit {
     this.newHoliday = new HolidayModel(this.superAdminId);
     this.isOwner = this.helpService.getType() === UserType.owner;
 
-    this.loadTemplates();
-
     this.usersService.getUserWithIdPromise(this.helpService.getMe()).then(data => {
       console.log(data);
       this.user = data;
     });
+
+    this.loadTemplates();
 
     this.height = this.dynamicService.getHolidayCalendarHeight();
   }
@@ -112,7 +112,6 @@ export class AddHolidayComponent implements OnInit {
   onResize(event) {
     this.height = this.dynamicService.getHolidayCalendarHeight();
   }
-
 
   public loadHolidaysForUser(): void {
     //reset
@@ -136,8 +135,10 @@ export class AddHolidayComponent implements OnInit {
         });
         console.log(result);
       }
-      this.eventSettings.dataSource = this.holidays;
+      this.scheduleObj.eventSettings.dataSource = this.holidays;
       this.scheduleObj.refresh();
+      this.scheduleObj.refreshEvents();
+
 
     });
   }
@@ -150,7 +151,7 @@ export class AddHolidayComponent implements OnInit {
       console.log(result);
       if (result && result.length > 0) {
         result.forEach(r => {
-          console.log('R: ', r);
+          // console.log('R: ', r);
           this.holidays.push(
             <HolidayModel>{
               id: r.id,
@@ -162,11 +163,10 @@ export class AddHolidayComponent implements OnInit {
             }
           )
         });
-        console.log(result);
       }
-      this.eventSettings.dataSource = this.holidays;
+      this.scheduleObj.eventSettings.dataSource = this.holidays;
       this.scheduleObj.refresh();
-
+      this.scheduleObj.refreshEvents();
     });
   }
 
@@ -281,16 +281,11 @@ export class AddHolidayComponent implements OnInit {
     this.gridTemplateData = process(this.templateList, this.state);
   }
 
-
-  public loadTemplates() {
-    return this.dashboardService.getTemplateAccountByUserId(this.superAdminId).then((data: []) => {
-
-      this.templateList = data;
-      console.log('templates:', data);
-
-      this.gridTemplateData = process(this.templateList, this.state);
-
-    });
+  public async loadTemplates() {
+    const data = await this.dashboardService.getTemplateAccountByUserId(this.superAdminId);
+    // console.log('templates:', data);
+    this.templateList = data;
+    this.gridTemplateData = process(this.templateList, this.state);
   }
 
   initializationConfig() {
@@ -307,7 +302,21 @@ export class AddHolidayComponent implements OnInit {
     }
   }
 
-  changeTab(value: string) {
+  changeTab(value: TabType) {
+
+    if (this.currentTab === value) {
+      return;
+    }
+
+    if (this.currentTab == TabType.Holidays) {
+      this.selectedTemplate = null;
+      this.holidays = [];
+      this.eventSettings.dataSource = [];
+      this.scheduleObj.eventSettings.dataSource = [];
+      this.scheduleObj.refreshEvents();
+      this.scheduleObj.refresh();
+    }
+
     this.currentTab = value;
   }
 
@@ -315,19 +324,7 @@ export class AddHolidayComponent implements OnInit {
     this.holidays.forEach(holiday => {
       if (event.elementType == "monthCells" && event.date >= holiday.StartTime.getTime() && event.date <= holiday.EndTime.getTime()) {
         event.element.style.backgroundColor = "#e9ecef";
-
-        let eventTitle = document.createElement('div');
-        eventTitle.innerHTML = holiday.Subject;
-        console.log(holiday.Subject);
-        eventTitle.classList.add("h4");
-        eventTitle.classList.add("bold");
-        eventTitle.classList.add("mt-4");
-        eventTitle.classList.add("mb-0");
-        eventTitle.style.overflow = 'hidden';
-        eventTitle.style.whiteSpace = 'nowrap';
-        eventTitle.style.textOverflow = 'ellipsis';
-
-        (event.element).appendChild(eventTitle);
+        event.element.style.pointerEvents = "none";
       }
     });
   }
@@ -340,11 +337,12 @@ export class AddHolidayComponent implements OnInit {
 
   onCellClick(args: CellClickEventArgs): void {
 
-    console.log(args);
+    //console.log(args);
     if (this.selectedTemplate == undefined) {
       this.selectedCell = args.element;
       this.displaySelectTemplateMessage();
 
+      console.log(this.selectedCell);
     } else {
 
       this.selectedCell = args.element;
@@ -366,7 +364,6 @@ export class AddHolidayComponent implements OnInit {
         this.newHoliday.EndTime = args.endTime;
       }
       this.addVacationModal.open();
-
     }
 
   }
@@ -404,6 +401,7 @@ export class AddHolidayComponent implements OnInit {
 
               this.closeAddVacationModal();
               this.scheduleObj.refresh();
+              this.scheduleObj.refreshEvents();
             }
             else {
               this.displayErrorMessage(this.language.adminErrorCreateTitle, this.language.adminErrorCreateText);
@@ -416,6 +414,7 @@ export class AddHolidayComponent implements OnInit {
           this.eventSettings.dataSource = this.holidays;
 
           this.closeAddVacationModal();
+          this.scheduleObj.refreshEvents();
           this.scheduleObj.refresh();
         }
       }
@@ -437,6 +436,8 @@ export class AddHolidayComponent implements OnInit {
   public displaySelectTemplateMessage(): void {
     this.toastrService.warning(this.language.chooseTemplate, null, this.overrideMessage);
     this.selectedCell.classList.remove("e-selected-cell");
+
+    this.scheduleObj.refresh();
   }
 
   updateHoliday(): void {
@@ -451,6 +452,7 @@ export class AddHolidayComponent implements OnInit {
 
         this.closeAddVacationModal();
         this.scheduleObj.refresh();
+        this.scheduleObj.refreshEvents();
       } else {
         this.displayErrorMessage(this.language.adminErrorUpdateTitle, this.language.adminErrorUpdateText);
       }
@@ -471,6 +473,8 @@ export class AddHolidayComponent implements OnInit {
 
             this.closeAddVacationModal();
             this.scheduleObj.refresh();
+            this.scheduleObj.refresh();
+            this.scheduleObj.refreshEvents();
           } else {
             this.displayErrorMessage(this.language.adminErrorDeleteTitle, this.language.adminErrorDeleteText);
           }
@@ -487,6 +491,7 @@ export class AddHolidayComponent implements OnInit {
           this.eventSettings.dataSource = this.holidays;
 
           this.closeAddVacationModal();
+          this.scheduleObj.refreshEvents();
           this.scheduleObj.refresh();
         } else {
           this.displayErrorMessage(this.language.adminErrorDeleteTitle, this.language.adminErrorDeleteText);
@@ -501,6 +506,8 @@ export class AddHolidayComponent implements OnInit {
 
   onTemplateChange(): void {
     console.log('valueChange', this.selectedTemplate);
+    this.scheduleObj.refresh();
+    this.scheduleObj.refreshEvents();
 
     if (this.selectedTemplate) {
       if (this.isOwner) {
@@ -511,7 +518,9 @@ export class AddHolidayComponent implements OnInit {
     } else {
       //reset
       this.holidays = [];
-      this.eventSettings.dataSource = this.holidays;
+      this.eventSettings.dataSource = [];
+      this.scheduleObj.eventSettings.dataSource = [];
+      this.scheduleObj.refreshEvents();
       this.scheduleObj.refresh();
     }
   }

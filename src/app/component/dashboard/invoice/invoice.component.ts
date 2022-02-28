@@ -120,6 +120,7 @@ export class InvoiceComponent implements OnInit {
   public initializationConfig(): void {
     if (localStorage.getItem("language") !== undefined) {
       this.language = JSON.parse(localStorage.getItem("language"));
+      this.invoiceLanguage = this.language;
     } else {
       this.messageService.getLanguage().subscribe(() => {
         this.language = undefined;
@@ -456,9 +457,9 @@ export class InvoiceComponent implements OnInit {
             {
               text:
                 this.customerUser["street"] +
-                " " +
-                this.customerUser["streetnumber"] +
                 "\n" +
+                this.customerUser["streetnumber"] +
+                " " +
                 this.customerUser["city"] +
                 "\n",
               style: "invoiceBillingAddressRight",

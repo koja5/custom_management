@@ -2,10 +2,10 @@
     <ul class="nav nav-tabs widget mb-0">
         <li *ngIf="type === userType.owner || type === userType.admin"
             [ngClass]="currentTab === 'holidays' ? 'active' : ''">
-            <a (click)="changeTab('holidays')">{{ language.holidaysTitle }}</a>
+            <a (click)="changeTab(tabType.Holidays)">{{ language.holidaysTitle }}</a>
         </li>
         <li *ngIf="isOwner" [ngClass]="currentTab === 'templates' ? 'active' : ''">
-            <a (click)="changeTab('templates')">{{ language.templatesTitle }}</a>
+            <a (click)="changeTab(tabType.Templates)">{{ language.templatesTitle }}</a>
         </li>
     </ul>
 
@@ -13,7 +13,7 @@
 
 
 <!-- Tab panes -->
-<div *ngIf="currentTab === 'holidays'" class="content-wrapper" [style.height]="height">
+<div *ngIf="currentTab === tabType.Holidays" class="content-wrapper" [style.height]="height">
     <div class="row mx-0 mb-3">
         <div class="col-4">
             <kendo-combobox [data]="templateList" [valueField]="'id'" [textField]="'name'"
@@ -23,10 +23,16 @@
     </div>
 
     <div [style.height]="height">
-        <ejs-schedule #scheduleObj width='100%' height='100%' currentView='Month' [eventSettings]='eventSettings'
-            (renderCell)="onRenderCell($event)" (popupOpen)='onPopupOpen($event)' (cellClick)="onCellClick($event)">
+        <ejs-schedule #scheduleObj width='100%' height='100%' currentView='Month' cssClass='custom-class'
+            [eventSettings]='eventSettings' [allowDragAndDrop]='false' (renderCell)="onRenderCell($event)"
+            (popupOpen)='onPopupOpen($event)' (cellClick)="onCellClick($event)">
             <e-views>
                 <e-view option='Month'>
+                    <ng-template #eventSettingsTemplate let-data>
+                        <div class='template-wrap w-100 h-100'>
+                            <div class="subject">{{data.Subject}}</div>
+                        </div>
+                    </ng-template>
                 </e-view>
             </e-views>
 
@@ -35,7 +41,7 @@
 </div>
 
 
-<div class="content-wrapper" *ngIf="currentTab === 'templates'">
+<div class="content-wrapper" *ngIf="currentTab === tabType.Templates">
     <div class="h-100">
         <kendo-grid *ngIf="language !== undefined" [data]="gridTemplateData" style="height:89.5vh;" [resizable]="true"
             [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [sortable]="true" [pageable]="pageable"
