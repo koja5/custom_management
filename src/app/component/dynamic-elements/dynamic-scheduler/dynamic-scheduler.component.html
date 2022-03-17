@@ -310,6 +310,8 @@
                 <ng-template #dateHeaderTemplate let-data>
                   <div class="date-text" title=" {{ getDateHeaderText(data.date) }}">
                     {{ getDateHeaderText(data.date) }}
+                    <br>
+                    {{ getDateHoliday(data.date) }}
                   </div>
                 </ng-template>
                 <e-views>
@@ -435,11 +437,11 @@
                     </ng-template>
                   </e-view>
                   <e-view option="Month">
-                    <ng-template #eventSettingsTemplate let-data>
-                      <div class='template-wrap'>
-                        <div class="subject">{{data.Subject}}</div>
+                    <!-- <ng-template #eventSettingsTemplate let-data>
+                      <div class='template-wrap w-100 h-100'>
+                        <div class="subject"> {{ getDateHoliday(data.date) }}</div>
                       </div>
-                    </ng-template>
+                    </ng-template> -->
                   </e-view>
                   <e-view option="Year"></e-view>
                   <e-view option="Agenda"></e-view>

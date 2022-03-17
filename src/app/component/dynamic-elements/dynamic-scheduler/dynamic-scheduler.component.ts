@@ -1,3 +1,4 @@
+import { Subject } from 'rxjs/Subject';
 import { EventCategoryService } from "./../../../service/event-category.service";
 import { UsersService } from "./../../../service/users.service";
 import { StoreService } from "./../../../service/store.service";
@@ -685,8 +686,27 @@ export class DynamicSchedulerComponent implements OnInit {
     }
   }
 
-  public getDateHeaderText(value: Date): string {
-    return this.intl.formatDate(value, { skeleton: "Ed" });
+  public getDateHeaderText(date): string {
+
+    return this.intl.formatDate(date, { skeleton: "Ed" });
+  }
+
+  public getDateHoliday(value): string {
+    const date = value.getDate();
+    const month = value.getMonth();
+    const year = value.getYear();
+    const holiday = this.holidays.find(
+      (elem) =>
+        value &&
+        date >= elem.StartTime.getDate() &&
+        month == elem.StartTime.getMonth() &&
+        year == elem.StartTime.getYear() &&
+        date <= elem.EndTime.getDate() &&
+        month == elem.EndTime.getMonth() &&
+        year == elem.EndTime.getYear()
+    );
+
+    return holiday ? holiday.Subject : '';
   }
 
   public onWeekDayChange(args: ChangeEventArgs): void {
@@ -2774,6 +2794,10 @@ export class DynamicSchedulerComponent implements OnInit {
     if (holiday) {
       date.element.style.backgroundColor = "#e9ecef";
       date.element.style.pointerEvents = "none";
+
+      if (this.currentView === 'Month') {
+        date.element.innerHTML = holiday.Subject;
+      }
     }
 
     if (date.elementType === "resourceHeader") {
