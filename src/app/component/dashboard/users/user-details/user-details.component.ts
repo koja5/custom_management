@@ -40,6 +40,7 @@ export class UserDetailsComponent implements OnInit {
   public nextInd = "disabled-button";
   public updateSetIndicator = 0;
   public dialogOpened = false;
+  public modalDeletedWorkTimeConfirm = false;
   public theme: string;
   public totalSum: any;
   public statisticMonthLast: any;
@@ -476,8 +477,19 @@ export class UserDetailsComponent implements OnInit {
     });
   }
 
-  deleteWorkTime(workTime) {
-    const id = this.allWorkTime[this.index].id;
+  deleteWorkTime(answer) {
+    if (answer === "yes") {
+      const id = this.allWorkTime[this.index].id;
+      this.service.deleteWorkTime(id).subscribe((data) => {
+        if (data) {
+          this.allWorkTime.splice(this.index, 1);
+          if (this.allWorkTime.length === 0) {
+            this.noSetWorkTime = true;
+          }
+        }
+      });
+    }
+    this.modalDeletedWorkTimeConfirm = false;
   }
 
   createNewWorkTime() {

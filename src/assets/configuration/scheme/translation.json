@@ -407,6 +407,24 @@
       "filterTooltip": {
         "type": "string"
       },
+      "call": {
+        "type": "string"
+      },
+      "firstDayOfWeek": {
+        "type": "string"
+      },
+      "dayStartHour": {
+        "type": "string"
+      },
+      "dayEndHour": {
+        "type": "string"
+      },
+      "slotDuration": {
+        "type": "string"
+      },
+      "slotInterval": {
+        "type": "string"
+      },
       "refreshEventToolbar": {
         "type": "string"
       },
@@ -2692,6 +2710,31 @@
             },
             {
               "key": "filterTooltip"
+            },
+            {
+              "key": "call"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "firstDayOfWeek"
+            },
+            {
+              "key": "dayStartHour"
+            },
+            {
+              "key": "dayEndHour"
+            },
+            {
+              "key": "slotDuration"
+            },
+            {
+              "key": "slotInterval"
             }
           ]
         }

@@ -85,8 +85,14 @@
               />
               {{signature}}
               <br />
-              {{signatureAddress}}
-              <br />
+              {{signatureCompanyName}}
+              <br>
+              {{signatureAddress1}}
+              <br>
+              {{signatureAddress2}}
+              <br>
+              {{signatureAddress3}}
+              <br>
               {{signatureTelephone}}
               <br />
               {{signatureMobile}}

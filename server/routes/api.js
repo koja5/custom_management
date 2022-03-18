@@ -2219,6 +2219,36 @@ router.get("/getWorkTimeForUser/:id", function (req, res, next) {
   });
 });
 
+router.get("/deleteWorkTime/:id", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "delete from work where id = '" + req.params.id + "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(err);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
 router.post("/updateWorkTimeForUser", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
@@ -2274,7 +2304,7 @@ router.get("/getWorkandTaskForUser/:id", function (req, res, next) {
       function (err, work) {
         if (!err) {
           conn.query(
-            "select t.*, e.color from tasks t join event_category e on t.colorTask = e.id where creator_id = ?",
+            "select t.*, e.color, c.mobile from tasks t join event_category e on t.colorTask = e.id join customers c on t.customer_id = c.id where creator_id = ?",
             [id],
             function (err, events) {
               conn.query(
@@ -5312,6 +5342,127 @@ router.post("/sendCustomSMS", function (req, res) {
 
 //send massive SMS
 
+// router.post("/sendMassiveSMS", function (req, res) {
+//   var phoneNumber = req.body.number;
+//   if (req.body.message != "") {
+//     request(
+//       link + "/getTranslationByCountryCode/" + req.body.countryCode,
+//       function (error, language, body) {
+//         var language = JSON.parse(body)["config"];
+//         request(
+//           link + "/getAvailableAreaCode",
+//           function (error, response, codes) {
+//             connection.getConnection(function (err, conn) {
+//               if (err) {
+//                 res.json(err);
+//               }
+//               var question = getSqlQuery(req.body);
+//               conn.query(
+//                 "select distinct c.telephone, c.mobile, c.shortname, s.storename, s.street, s.zipcode, s.place, s.telephone as storeTelephone, s.mobile as storeMobile, s.email, sm.* from customers c join sms_massive_message sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin join tasks t on c.id = t.customer_id where ((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL)) and c.storeId = " +
+//                   Number(req.body.superadmin) +
+//                   " and " +
+//                   question,
+//                 function (err, rows) {
+//                   console.log(rows);
+//                   rows.forEach(function (to, i, array) {
+//                     var phoneNumber = to.mobile ? to.mobile : to.telephone;
+//                     console.log(phoneNumber);
+//                     if (
+//                       checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
+//                       req.body.message
+//                     ) {
+//                       var message =
+//                         (to.smsSubject
+//                           ? to.smsSubject
+//                           : language.initialGreetingSMSReminder) +
+//                         " " +
+//                         to.shortname +
+//                         ", \n \n" +
+//                         req.body.message;
+//                       var signature = "";
+//                       if (to.signatureAvailable) {
+//                         if (
+//                           (to.street || to.zipcode || to.place) &&
+//                           to.smsSignatureAddress
+//                         ) {
+//                           signature +=
+//                             to.smsSignatureAddress +
+//                             "\n" +
+//                             to.street +
+//                             " \n" +
+//                             to.zipcode +
+//                             " " +
+//                             to.place +
+//                             "\n";
+//                         }
+//                         if (to.telephone && to.smsSignatureTelephone) {
+//                           signature +=
+//                             to.smsSignatureTelephone +
+//                             " " +
+//                             to.storeTelephone +
+//                             " \n";
+//                         }
+//                         if (to.mobile && to.smsSignatureMobile) {
+//                           signature +=
+//                             to.smsSignatureMobile +
+//                             " " +
+//                             to.storeMobile +
+//                             " \n";
+//                         }
+//                         if (to.email && to.smsSignatureEmail) {
+//                           signature +=
+//                             to.smsSignatureEmail + " " + to.email + " \n";
+//                         }
+//                         if (to.smsSignaturePoweredBy) {
+//                           signature += to.smsSignaturePoweredBy + " \n";
+//                         }
+//                       }
+//                       if (language?.smsSignaturePoweredByMassive) {
+//                         signature +=
+//                           language?.smsSignaturePoweredByMassive + " \n";
+//                       }
+//                       var content =
+//                         "To: " +
+//                         phoneNumber +
+//                         "\r\n\r\n" +
+//                         message +
+//                         "\n\n" +
+//                         signature;
+//                       var fileName = "server/sms/" + phoneNumber + ".txt";
+//                       fs.writeFile(fileName, content, function (err) {
+//                         console.log(err);
+//                         if (err) return logger.log("error", err);
+//                         logger.log(
+//                           "info",
+//                           "Sent CUSTOM SMS MESSAGE to NUMBER: " + phoneNumber
+//                         );
+//                         ftpUploadSMS(fileName, phoneNumber + ".txt");
+//                         res.send(true);
+//                       });
+//                     } else {
+//                       res.send(false);
+//                       logger.log(
+//                         "warn",
+//                         `Number ${req.body.number} is not start with available area code!`
+//                       );
+//                     }
+//                   });
+//                 }
+//               );
+//             });
+//           }
+//         );
+//       }
+//     );
+//   } else {
+//     res.send(false);
+//     logger.log(
+//       "error",
+//       `Client don't input message for send massive sms: ${req.body.email}`
+//     );
+//   }
+// });
+
 router.post("/sendMassiveSMS", function (req, res) {
   var phoneNumber = req.body.number;
   if (req.body.message != "") {
@@ -5328,7 +5479,7 @@ router.post("/sendMassiveSMS", function (req, res) {
               }
               var question = getSqlQuery(req.body);
               conn.query(
-                "select distinct c.* from customers c join sms_massive_message sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin join tasks t on c.id = t.customer_id where ((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL)) and c.storeId = " +
+                "select distinct c.telephone, c.mobile, c.shortname, sm.* from customers c join sms_massive_message sm on c.storeId = sm.superadmin where ((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL)) and c.storeId = " +
                   Number(req.body.superadmin) +
                   " and " +
                   question,
@@ -5341,45 +5492,37 @@ router.post("/sendMassiveSMS", function (req, res) {
                       checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
                       req.body.message
                     ) {
-                      var message = req.body.message;
+                      var message =
+                        (to.smsSubject
+                          ? to.smsSubject
+                          : language.initialGreetingSMSReminder) +
+                        " " +
+                        to.shortname +
+                        ", \n \n" +
+                        req.body.message;
                       var signature = "";
                       if (to.signatureAvailable) {
-                        if (
-                          (to.street || to.zipcode || to.place) &&
-                          to.smsSignatureAddress
-                        ) {
-                          signature +=
-                            to.smsSignatureAddress +
-                            "\n" +
-                            to.street +
-                            " \n" +
-                            to.zipcode +
-                            " " +
-                            to.place +
-                            "\n";
+                        if (to.smsSignatureCompanyName) {
+                          signature += to.smsSignatureCompanyName + "\n";
                         }
-                        if (to.telephone && to.smsSignatureTelephone) {
-                          signature +=
-                            to.smsSignatureTelephone +
-                            " " +
-                            to.telephone +
-                            " \n";
+                        if (to.smsSignatureAddress1) {
+                          signature += to.smsSignatureAddress1 + "\n";
                         }
-                        if (to.mobile && to.smsSignatureMobile) {
-                          signature +=
-                            to.smsSignatureMobile + " " + to.mobile + " \n";
+                        if (to.smsSignatureAddress2) {
+                          signature += to.smsSignatureAddress2 + "\n";
                         }
-                        if (to.email && to.smsSignatureEmail) {
-                          signature +=
-                            to.smsSignatureEmail + " " + to.email + " \n";
+                        if (to.smsSignatureAddress3) {
+                          signature += to.smsSignatureAddress3 + "\n";
                         }
-                        if (to.smsSignaturePoweredBy) {
-                          signature += to.smsSignaturePoweredBy + " \n";
+                        if (to.smsSignatureTelephone) {
+                          signature += to.smsSignatureTelephone + " \n";
                         }
-                      }
-                      if (language?.smsSignaturePoweredByMassive) {
-                        signature +=
-                          language?.smsSignaturePoweredByMassive + " \n";
+                        if (to.smsSignatureMobile) {
+                          signature += to.smsSignatureMobile + " \n";
+                        }
+                        if (to.smsSignatureEmail) {
+                          signature += to.smsSignatureEmail + " \n";
+                        }
                       }
                       var content =
                         "To: " +
@@ -5403,7 +5546,7 @@ router.post("/sendMassiveSMS", function (req, res) {
                       res.send(false);
                       logger.log(
                         "warn",
-                        `Number ${req.body.number} is not start with available area code!`
+                        `Number ${phoneNumber} is not start with available area code!`
                       );
                     }
                   });

@@ -12,7 +12,7 @@
     <i class="fa fa-arrow-left"></i> &nbsp; {{ language.backToGrid }}
   </button>
 
-  <div style="float: right; padding-right: 44px; padding-top: 7px">
+  <div style="text-align: end; padding-right: 44px; padding-top: 7px">
     <button
       kendoButton
       [icon]="'edit'"
@@ -109,13 +109,7 @@
                         </div>
                         <div class="col-auto">
                           <div
-                            class="
-                              icon icon-shape
-                              bg-gradient-red
-                              text-white
-                              rounded-circle
-                              shadow
-                            "
+                            class="icon icon-shape bg-gradient-red text-white rounded-circle shadow"
                           >
                             <i class="fa fa-pie-chart"></i>
                           </div>
@@ -143,13 +137,7 @@
                         </div>
                         <div class="col-auto">
                           <div
-                            class="
-                              icon icon-shape
-                              bg-gradient-orange
-                              text-white
-                              rounded-circle
-                              shadow
-                            "
+                            class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow"
                           >
                             <i class="fa fa-line-chart"></i>
                           </div>
@@ -177,13 +165,7 @@
                         </div>
                         <div class="col-auto">
                           <div
-                            class="
-                              icon icon-shape
-                              bg-gradient-green
-                              text-white
-                              rounded-circle
-                              shadow
-                            "
+                            class="icon icon-shape bg-gradient-green text-white rounded-circle shadow"
                           >
                             <i class="fa fa-calendar"></i>
                           </div>
@@ -211,13 +193,7 @@
                         </div>
                         <div class="col-auto">
                           <div
-                            class="
-                              icon icon-shape
-                              bg-gradient-info
-                              text-white
-                              rounded-circle
-                              shadow
-                            "
+                            class="icon icon-shape bg-gradient-info text-white rounded-circle shadow"
                           >
                             <i class="fa fa-area-chart"></i>
                           </div>
@@ -898,6 +874,32 @@
       </kendo-dialog-actions>
     </kendo-dialog>
 
+    <kendo-dialog
+      title="Please confirm"
+      *ngIf="modalDeletedWorkTimeConfirm"
+      (close)="modalDeletedWorkTimeConfirm = false; user.open()"
+      [minWidth]="250"
+      [width]="450"
+    >
+      <div class="modal-body text-center">
+        <img
+          src="../../../../../assets/images/sent.png"
+          alt=""
+          width="50"
+          height="46"
+        />
+        <h3>{{ language.deleteDialogTitleAreYouSure }}</h3>
+      </div>
+      <kendo-dialog-actions>
+        <button kendoButton (click)="modalDeletedWorkTimeConfirm = false; user.open()">
+          {{ language.no }}
+        </button>
+        <button kendoButton (click)="deleteWorkTime('yes')" primary="true">
+          {{ language.yes }}
+        </button>
+      </kendo-dialog-actions>
+    </kendo-dialog>
+
     <modal #user modalClass="modal-lg">
       <modal-header>
         <h4>{{ getTranslate(currentTab) }}</h4>
@@ -1205,7 +1207,7 @@
                     class="col-md-1 col-xs-4 btn-delete"
                     kendoButton
                     [icon]="'k-icon k-i-delete'"
-                    (click)="deleteWorkTime(workTime)"
+                    (click)="modalDeletedWorkTimeConfirm = true; user.close()"
                   ></button>
                 </div>
               </div>
