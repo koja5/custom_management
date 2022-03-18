@@ -911,6 +911,9 @@
       "company": {
         "type": "string"
       },
+      "companyName": {
+        "type": "string"
+      },
       "noInformation": {
         "type": "string"
       },
@@ -4019,6 +4022,9 @@
             },
             {
               "key": "company"
+            },
+            {
+              "key": "companyName"
             },
             {
               "key": "noInformation"

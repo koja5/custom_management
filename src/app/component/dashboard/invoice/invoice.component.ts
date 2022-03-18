@@ -32,6 +32,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 })
 export class InvoiceComponent implements OnInit {
   isDateSet: boolean;
+  superadminProfile: any;
 
   @HostListener("window:resize", ["$event"])
   onResize() {
@@ -280,6 +281,12 @@ export class InvoiceComponent implements OnInit {
             // console.log(data);
             this.store = data[0];
           });
+
+        this.parameterItemService.getSuperadminProfile(this.superadmin).subscribe((data) => {
+          this.superadminProfile = data[0];
+
+          console.log(data);
+        });
       }
 
       this.gridViewData = process(this.currentLoadData, this.state);
@@ -444,7 +451,7 @@ export class InvoiceComponent implements OnInit {
         {
           columns: [
             {
-              text: this.store.storename,
+              text: this.store.companyname ? this.store.companyname : this.superadminProfile.companyname,
               style: "invoiceBillingDetailsLeft",
             },
             {
@@ -459,10 +466,12 @@ export class InvoiceComponent implements OnInit {
             {
               text:
                 this.store.street +
-                "\n " +
-                this.store.zipcode +
-                " " +
-                this.store.place,
+                  "\n " +
+                  this.store.zipcode +
+                  " " +
+                  this.store.place +
+                  "\n" +
+                  this.language.vat + this.store.vatcode ? this.store.vatcode : this.superadminProfile.vatcode,
               style: "invoiceBillingAddressLeft",
             },
             {
@@ -556,10 +565,10 @@ export class InvoiceComponent implements OnInit {
         //   text: this.invoiceLanguage.notesTitle,
         //   style: 'notesTitle'
         // },
-        // {
-        //   text: this.invoiceLanguage.notesText,
-        //   style: 'notesTextBold'
-        // },
+        {
+          text: this.invoiceLanguage.notesText,
+          style: 'notesTextBold'
+        },
         // {
         //   text: "\n \n",
         //   style: 'notesText'
@@ -573,7 +582,7 @@ export class InvoiceComponent implements OnInit {
         columns: [
           {
             text:
-              this.store.storename +
+              (this.store.companyname ? this.store.companyname : this.superadminProfile.companyname) +
               dotSign +
               this.store.street +
               dotSign +
@@ -770,7 +779,7 @@ export class InvoiceComponent implements OnInit {
           invoice_generated_date: componentRef.currentDateFormatted,
           billing_from_title: componentRef.invoiceLanguage.invoiceBillingTitleFrom,
           billing_to_title: componentRef.invoiceLanguage.invoiceBillingTitleTo,
-          clinic_name: componentRef.store.storename,
+          clinic_name: componentRef.store.companyname ? componentRef.store.companyname : componentRef.superadminProfile.companyname,
           customer_lastname: componentRef.customerUser.lastname,
           customer_firstname: componentRef.customerUser.firstname,
           clinic_street: componentRef.store.street,
@@ -792,12 +801,14 @@ export class InvoiceComponent implements OnInit {
           item_title: componentRef.invoiceLanguage.invoiceItem,
           netto_price_title: componentRef.isPriceIncluded ? componentRef.invoiceLanguage.invoiceNetPrice : '',
           vat: componentRef.isPriceIncluded ? componentRef.invoiceLanguage.vat + " (%)" : '',
+          vat_title: componentRef.invoiceLanguage.vat,
+          vat_code: componentRef.store.vatcode ? componentRef.store.vatcode : componentRef.superadminProfile.vatcode,
           vat_price: componentRef.isPriceIncluded ? vat : '',
           gross_price_title: componentRef.isPriceIncluded ? componentRef.invoiceLanguage.invoiceGrossPrice : '',
           date_title: componentRef.invoiceLanguage.dateTitle,
           price_title: componentRef.invoiceLanguage.invoiceNetPrice,
           // notes_title: componentRef.invoiceLanguage,
-          // notes_text: componentRef.invoiceLanguage
+          notes_text: componentRef.invoiceLanguage.notesText
         });
 
         try {

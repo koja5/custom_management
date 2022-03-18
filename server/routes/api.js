@@ -787,6 +787,8 @@ router.post("/createStore", function (req, res, next) {
     test = {};
     var podaci = {
       storename: req.body.storename,
+      companyname: req.body.companyname,
+      vatcode: req.body.vatcode,
       street: req.body.street,
       zipcode: req.body.zipcode,
       place: req.body.place,
@@ -940,6 +942,8 @@ router.post("/updateStore", function (req, res, next) {
       time_therapy: req.body.time_therapy,
       superadmin: req.body.superadmin,
       allowed_online: req.body.allowed_online,
+      companyname: req.body.companyname,
+      vatcode: req.body.vatcode
     };
 
     conn.query(

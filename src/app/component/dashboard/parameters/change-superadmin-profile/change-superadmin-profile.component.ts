@@ -24,7 +24,7 @@ export class ChangeSuperadminProfileComponent implements OnInit {
     private service: ParameterItemService,
     private helpService: HelpService,
     private dynamicService: DynamicService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.language = this.helpService.getLanguage();
@@ -59,20 +59,23 @@ export class ChangeSuperadminProfileComponent implements OnInit {
   }
 
   receiveConfirm(event) {
-    this.changeData['id'] = this.data[0].id;
-    this.service.updateSuperadminProfile(this.changeData).subscribe((data) => {
-      if (data) {
-        this.helpService.successToastr(
-          this.language.successExecutedActionTitle,
-          this.language.successExecutedActionText
-        );
-      } else {
-        this.helpService.errorToastr(
-          this.language.errorExecutedActionTitle,
-          this.language.errorExecutedActionText
-        );
-      }
-    });
+    if (event) {
+      this.changeData['id'] = this.data[0].id;
+      this.service.updateSuperadminProfile(this.changeData).subscribe((data) => {
+        if (data) {
+          this.helpService.successToastr(
+            this.language.successExecutedActionTitle,
+            this.language.successExecutedActionText
+          );
+        } else {
+          this.helpService.errorToastr(
+            this.language.errorExecutedActionTitle,
+            this.language.errorExecutedActionText
+          );
+        }
+      });
+    }
+
     this.showDialog = false;
   }
 }
