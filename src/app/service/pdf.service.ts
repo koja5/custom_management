@@ -163,10 +163,17 @@ export class PDFService {
         fontSize: 16,
         alignment: "right",
       },
+
+      itemsFooterVATValue: {
+        margin: [0, 5, 0, 5],
+        bold: true,
+        fontSize: 13,
+        alignment: "right",
+      },
       itemsFooterTotalValue: {
         margin: [0, 5, 0, 5],
         bold: true,
-        fontSize: 16,
+        fontSize: 13,
         alignment: "right",
       },
       notesTitle: {

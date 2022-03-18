@@ -21,6 +21,7 @@ import pdfMake from "pdfmake/build/pdfmake";
 import PizZip from "pizzip";
 import PizZipUtils from "pizzip/utils/index.js";
 import { DashboardService } from "src/app/service/dashboard.service";
+import { validateComplexValues } from "@progress/kendo-angular-dropdowns/dist/es2015/util";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -340,10 +341,20 @@ export class InvoiceComponent implements OnInit {
     const dotSign = " • ";
     const data = this.getTherapyAndPricesData();
 
+
     const therapies = data.therapies;
     const netPrices = data.netPrices.filter(num => !isNaN(parseFloat(num)));
     const brutoPrices = data.brutoPrices.filter(num => !isNaN(parseFloat(num)));
 
+    let vatValues = brutoPrices.map(function (item, index) {
+      // In this case item correspond to currentValue of array a, 
+      // using index to get value from array b
+      return item - netPrices[index];
+    });
+
+    console.log(vatValues);
+
+    const vat = vatValues.reduce((a, b) => a + b, 0).toFixed(2);
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
@@ -513,27 +524,27 @@ export class InvoiceComponent implements OnInit {
             // headers are automatically repeated if the table spans over multiple pages
             // you can declare how many rows should be treated as headers
             headerRows: 0,
-            widths: ["*", 80],
+            widths: ["63%", "auto", "auto", "auto"],
 
             body: [
               // Total
               [
                 {
-                  text: this.invoiceLanguage.invoiceSubtotal,
-                  style: "itemsFooterSubTitle",
+                  text: "",
                 },
                 {
-                  text: netPrices.length === 0 ? this.invoiceLanguage.noDataAvailable : (this.invoiceLanguage.euroSign + " " + subtotal),
+                  text: this.isPriceIncluded ?
+                    (netPrices.length === 0 ? this.invoiceLanguage.noDataAvailable : (this.invoiceLanguage.euroSign + " " + subtotal)) : '',
                   style: "itemsFooterSubValue",
                 },
-              ],
-              [
                 {
-                  text: this.invoiceLanguage.invoiceTotal,
-                  style: "itemsFooterTotalTitle",
+                  text: this.isPriceIncluded ?
+                    (netPrices.length === 0 ? this.invoiceLanguage.noDataAvailable : (this.invoiceLanguage.euroSign + " " + vat)) : '',
+                  style: "itemsFooterVATValue",
                 },
                 {
-                  text: brutoPrices.length === 0 ? this.invoiceLanguage.noDataAvailable : (this.invoiceLanguage.euroSign + " " + total),
+                  text: this.isPriceIncluded ?
+                    (brutoPrices.length === 0 ? this.invoiceLanguage.noDataAvailable : (this.invoiceLanguage.euroSign + " " + total)) : '',
                   style: "itemsFooterTotalValue",
                 },
               ],
@@ -590,6 +601,7 @@ export class InvoiceComponent implements OnInit {
     const therapies = [];
     const netPrices = [];
     const brutoPrices = [];
+    const vatValues = [];
     let selectedTherapies = [];
     let bruto = 0;
 
@@ -642,7 +654,6 @@ export class InvoiceComponent implements OnInit {
               bruto = parseFloat(therapy.net_price) * (1 + 20 / 100);
             }
             brutoPrices.push(bruto);
-
             const shouldSetDate =
               (selectedTherapies.length > 1 && i == 0) ||
               selectedTherapies.length === 1 ||
@@ -713,22 +724,31 @@ export class InvoiceComponent implements OnInit {
 
     const data = this.getTherapyAndPricesData();
 
+    let vatValues = [];
     const therapies = data.therapies;
     const netPrices = data.netPrices.filter(num => !isNaN(parseFloat(num)));
     const brutoPrices = data.brutoPrices.filter(num => !isNaN(parseFloat(num)));
 
+    vatValues = brutoPrices.map(function (item, index) {
+      // In this case item correspond to currentValue of array a, 
+      // using index to get value from array b
+      return item - netPrices[index];
+    });
+
+    const vat = vatValues.reduce((a, b) => a + b, 0).toFixed(2);
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
+    /*
+        const link =
+          window.location.protocol +
+          "//" +
+          window.location.hostname +
+          ":" +
+          window.location.port +
+          "/assets/Invoice_template.docx";*/
 
-    const link =
-      window.location.protocol +
-      "//" +
-      window.location.hostname +
-      ":" +
-      window.location.port +
-      "/assets/Invoice_template.docx";
+    const link = "http://127.0.0.1:8887/Invoice_template.docx";
     this.loadFile(link,
-      // this.loadFile("http://app-production.eu:8080/assets/Invoice_template.docx", //CORS
       function (error, content) {
         if (error) {
           throw error;
@@ -764,12 +784,15 @@ export class InvoiceComponent implements OnInit {
           subtotal_title: componentRef.invoiceLanguage.invoiceSubtotal,
           total_title: componentRef.invoiceLanguage.invoiceTotal,
           products: therapies,
-          subtotal_price: netPrices.length === 0 ? componentRef.invoiceLanguage.noDataAvailable : (componentRef.invoiceLanguage.euroSign + " " + subtotal),
-          total_price: brutoPrices.length === 0 ? componentRef.invoiceLanguage.noDataAvailable : (componentRef.invoiceLanguage.euroSign + " " + total),
+          subtotal_price: componentRef.isPriceIncluded ?
+            (netPrices.length === 0 ? componentRef.invoiceLanguage.noDataAvailable : (componentRef.invoiceLanguage.euroSign + " " + subtotal)) : '',
+          total_price: componentRef.isPriceIncluded ?
+            (brutoPrices.length === 0 ? componentRef.invoiceLanguage.noDataAvailable : (componentRef.invoiceLanguage.euroSign + " " + total)) : '',
           item_date: componentRef.invoiceLanguage.date,
           item_title: componentRef.invoiceLanguage.invoiceItem,
           netto_price_title: componentRef.isPriceIncluded ? componentRef.invoiceLanguage.invoiceNetPrice : '',
           vat: componentRef.isPriceIncluded ? componentRef.invoiceLanguage.vat + " (%)" : '',
+          vat_price: componentRef.isPriceIncluded ? vat : '',
           gross_price_title: componentRef.isPriceIncluded ? componentRef.invoiceLanguage.invoiceGrossPrice : '',
           date_title: componentRef.invoiceLanguage.dateTitle,
           price_title: componentRef.invoiceLanguage.invoiceNetPrice,
