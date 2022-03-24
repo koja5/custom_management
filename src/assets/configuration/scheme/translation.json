@@ -1293,6 +1293,9 @@
       "accountConfirmDialogQuestion": {
         "type": "string"
       },
+      "invoiceConfirmDialogQuestion": {
+        "type": "string"
+      },
       "accountSuccessUpdatedAccountTitle": {
         "type": "string"
       },
@@ -1976,6 +1979,9 @@
         "type": "string"
       },
       "invoicePrefix": {
+        "type": "string"
+      },
+      "invoicePrefixTitle": {
         "type": "string"
       }
     }
@@ -6217,7 +6223,10 @@
               "key": "invoicePrefix"
             },
             {
-              "key": ""
+              "key": "invoicePrefixTitle"
+            },
+            {
+              "key": "invoiceConfirmDialogQuestion"
             }
           ]
         }
