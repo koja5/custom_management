@@ -166,12 +166,8 @@ export class InvoiceComponent implements OnInit {
   }
 
   valueChange(event) {
-    // console.log('language: ', event);
-
     this.invoiceLanguage = event.value;
     this.selectedInvoiceLanguage = event;
-
-    // console.log(this.invoiceLanguage);
   }
 
   public getParameters(): void {
