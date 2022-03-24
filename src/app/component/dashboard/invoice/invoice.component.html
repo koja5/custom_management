@@ -97,8 +97,8 @@
           </div>
 
           <div class="col-sm-3">
-            <kendo-dropdownlist [data]="languageList" textField="text" valueField="value" [(ngModel)]="invoiceLanguage"
-              (valueChange)="valueChange($event)">
+            <kendo-dropdownlist [data]="languageList" textField="text" valueField="value"
+              [(ngModel)]="selectedInvoiceLanguage" (valueChange)="valueChange($event)">
             </kendo-dropdownlist>
           </div>
         </div>

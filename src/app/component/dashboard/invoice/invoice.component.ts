@@ -33,6 +33,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 export class InvoiceComponent implements OnInit {
   isDateSet: boolean;
   superadminProfile: any;
+  selectedInvoiceLanguage: any;
 
   @HostListener("window:resize", ["$event"])
   onResize() {
@@ -165,8 +166,12 @@ export class InvoiceComponent implements OnInit {
   }
 
   valueChange(event) {
+    // console.log('language: ', event);
+
     this.invoiceLanguage = event.value;
-    console.log(this.invoiceLanguage);
+    this.selectedInvoiceLanguage = event;
+
+    // console.log(this.invoiceLanguage);
   }
 
   public getParameters(): void {
