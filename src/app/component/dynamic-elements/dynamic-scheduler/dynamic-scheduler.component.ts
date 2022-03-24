@@ -711,6 +711,10 @@ export class DynamicSchedulerComponent implements OnInit {
 
   public onWeekDayChange(args: ChangeEventArgs): void {
     this.scheduleObj.firstDayOfWeek = args.value as number;
+    this.setCalendarSettingsToDatabase(
+      "weekDayChange",
+      this.scheduleObj.firstDayOfWeek
+    );
     this.scheduleObj.refresh();
   }
 
@@ -813,6 +817,14 @@ export class DynamicSchedulerComponent implements OnInit {
     }
   }
 
+  public onFirstDayOfWeekChange(args: ChangeEventArgs): void {
+    if (this.scheduleObj) {
+      this.firstDayOfWeek = args.value as number;
+      this.setCalendarSettingsToDatabase("firstDayOfWeek", this.firstDayOfWeek);
+      this.scheduleObj.refresh();
+    }
+  }
+
   setCalendarSettingsValue(key, value) {
     this.calendarSettings["id"] = this.selectedStoreId;
     this.calendarSettings[key] = value;
@@ -892,6 +904,7 @@ export class DynamicSchedulerComponent implements OnInit {
           .timeSlotDurationValue as number;
         this.scheduleObj.timeScale.slotCount = this
           .timeSlotCountValue as number;
+        this.scheduleObj.firstDayOfWeek = this.firstDayOfWeek as number;
         this.scheduleObj.refresh();
       }
     }, 100);
@@ -995,6 +1008,7 @@ export class DynamicSchedulerComponent implements OnInit {
     }
     formValue.colorTask = this.selected;
     formValue.telephone = this.telephoneValue;
+    formValue.mobile = this.mobileValue;
     if (this.customerUser && !this.customerUser.id) {
       this.customerUser.id = this.helpService.getMe().toString();
     }
@@ -1121,12 +1135,12 @@ export class DynamicSchedulerComponent implements OnInit {
     const checkCustomerId = this.customerUser.id
       ? this.customerUser
       : {
-        id: args.data.customer_id
-          ? args.data.customer_id
-          : args.data.user.id
+          id: args.data.customer_id
+            ? args.data.customer_id
+            : args.data.user.id
             ? args.data.user.id
             : null,
-      };
+        };
     formValue.user = checkCustomerId;
     formValue.customer_id = checkCustomerId.id;
     formValue.therapy_id = args.data.therapy_id;
@@ -1322,7 +1336,7 @@ export class DynamicSchedulerComponent implements OnInit {
         );
         timeDurationInd =
           Number(informationAboutStore.time_therapy) !==
-            Number(this.timeDuration)
+          Number(this.timeDuration)
             ? 1
             : 0;
         timeDuration = Number(informationAboutStore.time_therapy);
@@ -1340,7 +1354,7 @@ export class DynamicSchedulerComponent implements OnInit {
         } else {
           timeDurationInd =
             Number(informationAboutStore.time_therapy) !==
-              Number(this.timeDuration)
+            Number(this.timeDuration)
               ? 1
               : 0;
           timeDuration = Number(informationAboutStore.time_therapy);
@@ -1351,7 +1365,7 @@ export class DynamicSchedulerComponent implements OnInit {
     this.eventTime = {
       start: args.data.StartTime,
       end: new Date(
-        timeDurationInd
+        timeDurationInd && args.data.id === undefined
           ? args.data.StartTime.getTime() + timeDuration * 60000
           : args.data.EndTime.getTime()
       ),
@@ -1399,7 +1413,7 @@ export class DynamicSchedulerComponent implements OnInit {
     this.selectedTarget = closest(
       targetElement,
       ".e-appointment,.e-work-cells," +
-      ".e-vertical-view .e-date-header-wrap .e-all-day-cells,.e-vertical-view .e-date-header-wrap .e-header-cells"
+        ".e-vertical-view .e-date-header-wrap .e-all-day-cells,.e-vertical-view .e-date-header-wrap .e-header-cells"
     );
     if (isNullOrUndefined(this.selectedTarget)) {
       args.cancel = true;
@@ -1597,6 +1611,9 @@ export class DynamicSchedulerComponent implements OnInit {
   public calendarRights = true;
   public eventStatisticConfiguration: any;
   public vatTaxList;
+  public eventMoveConfirm = false;
+  public modalConfirmEventMove = false;
+  public mobileEventChange: any;
 
   constructor(
     public service: TaskService,
@@ -1616,8 +1633,8 @@ export class DynamicSchedulerComponent implements OnInit {
     private activatedRouter: ActivatedRoute,
     private holidayService: HolidayService,
     private pdfService: PDFService,
-    private parameterItemService: ParameterItemService,
-  ) { }
+    private parameterItemService: ParameterItemService
+  ) {}
 
   ngOnInit() {
     this.initializationConfig();
@@ -1934,6 +1951,7 @@ export class DynamicSchedulerComponent implements OnInit {
     this.setSlotDuration(personalStoreSettings, defaultStoreSettings);
     this.setSlotInterval(personalStoreSettings);
     this.setCalendarView(personalStoreSettings);
+    this.setWeekDayChange(personalStoreSettings);
 
     /*if (Number(this.timeDuration) > Number(defaultStoreSettings.time_therapy)) {
       this.therapyDuration =
@@ -2062,6 +2080,16 @@ export class DynamicSchedulerComponent implements OnInit {
       this.setCalendarSettingsValue("timeSlot", personalStoreSettings.timeSlot);
     } else {
       this.timeSlotCountValue = 1;
+    }
+  }
+
+  setWeekDayChange(personalStoreSettings) {
+    if (personalStoreSettings && personalStoreSettings.weekDayChange) {
+      this.firstDayOfWeek = personalStoreSettings.weekDayChange;
+      this.setCalendarSettingsValue(
+        "weekDayChange",
+        personalStoreSettings.weekDayChange
+      );
     }
   }
 
@@ -2421,7 +2449,7 @@ export class DynamicSchedulerComponent implements OnInit {
       value: this.value,
     };
 
-    this.mongo.setUsersFor(item).subscribe((data) => { });
+    this.mongo.setUsersFor(item).subscribe((data) => {});
   }
 
   getTaskForSelectedUsers(value) {
@@ -2528,7 +2556,7 @@ export class DynamicSchedulerComponent implements OnInit {
           for (let j = 0; j < eventStatistic.length; j++) {
             if (
               this.sharedCalendarResources[i].id ===
-              eventStatistic[j].creator_id &&
+                eventStatistic[j].creator_id &&
               userId === eventStatistic[j].creator_id
             ) {
               for (let k = 0; k < listOfCategorie.length; k++) {
@@ -2845,13 +2873,13 @@ export class DynamicSchedulerComponent implements OnInit {
         const groupIndex = date.groupIndex;
         if (
           this.currentView === "WorkWeek" &&
-          date.date.getDay() === 5 &&
+          date.date.getDay() === this.getWorkWeekEndDay() &&
           this.calendars.length - 1 > groupIndex
         ) {
           date.element.style.borderRight = "2px solid #6d6d6d";
         } else if (
           (this.currentView === "Week" || this.currentView === "Month") &&
-          date.date.getDay() === 6 &&
+          date.date.getDay() === this.getWorkEndDay() &&
           this.calendars.length - 1 > groupIndex
         ) {
           date.element.style.borderRight = "2px solid #6d6d6d";
@@ -2871,9 +2899,9 @@ export class DynamicSchedulerComponent implements OnInit {
               new Date(workItem.change) <= date.date &&
               (i + 1 <= this.calendars[0].workTime[date.groupIndex].length - 1
                 ? date.date <
-                new Date(
-                  this.calendars[0].workTime[date.groupIndex][i + 1].change
-                )
+                  new Date(
+                    this.calendars[0].workTime[date.groupIndex][i + 1].change
+                  )
                 : true) &&
               date.date.getDay() - 1 < 5 &&
               date.date.getDay() !== 0
@@ -2882,15 +2910,15 @@ export class DynamicSchedulerComponent implements OnInit {
                 (workItem.times[date.date.getDay() - 1].start <=
                   date.date.getHours() &&
                   workItem.times[date.date.getDay() - 1].end >
-                  date.date.getHours()) ||
+                    date.date.getHours()) ||
                 (workItem.times[date.date.getDay() - 1].start2 <=
                   date.date.getHours() &&
                   workItem.times[date.date.getDay() - 1].end2 >
-                  date.date.getHours()) ||
+                    date.date.getHours()) ||
                 (workItem.times[date.date.getDay() - 1].start3 <=
                   date.date.getHours() &&
                   workItem.times[date.date.getDay() - 1].end3 >
-                  date.date.getHours())
+                    date.date.getHours())
               ) {
                 date.element.style.background = workItem.color;
                 if (this.type === this.userType.readOnlyScheduler) {
@@ -2931,7 +2959,7 @@ export class DynamicSchedulerComponent implements OnInit {
     }
     if (date.elementType === "monthDay") {
       if (
-        date.date.getDay() === 6 &&
+        date.date.getDay() === this.getWorkEndDay() &&
         this.calendars.length - 1 > date.groupIndex
       ) {
         date.element.style.borderRight = "2px solid #6d6d6d";
@@ -2939,6 +2967,26 @@ export class DynamicSchedulerComponent implements OnInit {
       if (this.type === this.userType.readOnlyScheduler) {
         date.element.style.pointerEvents = "none";
       }
+    }
+  }
+
+  getWorkWeekEndDay() {
+    if (
+      this.scheduleObj.firstDayOfWeek === 0 ||
+      this.scheduleObj.firstDayOfWeek === 1 ||
+      this.scheduleObj.firstDayOfWeek === 6
+    ) {
+      return 5;
+    } else {
+      return this.scheduleObj.firstDayOfWeek - 1;
+    }
+  }
+
+  getWorkEndDay() {
+    if (this.scheduleObj.firstDayOfWeek === 0) {
+      return 6;
+    } else {
+      return this.scheduleObj.firstDayOfWeek - 1;
     }
   }
 
@@ -3506,41 +3554,53 @@ export class DynamicSchedulerComponent implements OnInit {
 
   onActionBegin(args: any) {
     console.log(args);
+    console.log(window.innerWidth);
 
-    console.log("onActionBegin");
-    if (
-      !this.checkConditionForEvent(args) ||
-      args.requestType === "dateNavigate" ||
-      args.requestType === "eventCreate" ||
-      args.requestType === "eventRemove" ||
-      args.requestType === "viewNavigate"
-    ) {
-      if (args.requestType === "eventCreate") {
-        this.createNewTask();
-
-        args.cancel = true;
-      } else if (args.requestType === "eventChange") {
-        if (
-          this.currentEventAction !== TypeOfEventAction.Drag &&
-          this.type !== this.userType.patient
-        ) {
-          this.updateTask(args);
-        }
-        args.cancel = true;
-      } else if (args.requestType === "eventRemove") {
-        // this.deleteTask(args.deletedRecords[0]);
-        const eventDetails: { [key: string]: Object } = this.scheduleObj
-          .activeEventData.event as { [key: string]: Object };
-        let currentAction: CurrentAction;
-        if (eventDetails.RecurrenceRule) {
-          currentAction = "DeleteOccurrence";
-        }
-        this.deleteTask(eventDetails);
-        // this.scheduleObj.deleteEvent(eventDetails, currentAction);
+    if (window.innerWidth > 992 || this.eventMoveConfirm) {
+      console.log("onActionBegin");
+      if (!args) {
+        args = this.mobileEventChange;
       }
-      this.initializeCalendar();
-    } else {
-      args.cancel = true;
+      if (
+        !this.checkConditionForEvent(args) ||
+        args.requestType === "dateNavigate" ||
+        args.requestType === "eventCreate" ||
+        args.requestType === "eventRemove" ||
+        args.requestType === "viewNavigate"
+      ) {
+        if (args.requestType === "eventCreate") {
+          this.createNewTask();
+
+          args.cancel = true;
+        } else if (args.requestType === "eventChange") {
+          if (
+            this.currentEventAction !== TypeOfEventAction.Drag &&
+            this.type !== this.userType.patient
+          ) {
+            this.updateTask(args);
+          }
+          args.cancel = true;
+        } else if (args.requestType === "eventRemove") {
+          // this.deleteTask(args.deletedRecords[0]);
+          const eventDetails: { [key: string]: Object } = this.scheduleObj
+            .activeEventData.event as { [key: string]: Object };
+          let currentAction: CurrentAction;
+          if (eventDetails.RecurrenceRule) {
+            currentAction = "DeleteOccurrence";
+          }
+          this.deleteTask(eventDetails);
+          // this.scheduleObj.deleteEvent(eventDetails, currentAction);
+        }
+        this.initializeCalendar();
+      } else {
+        args.cancel = true;
+      }
+      this.eventMoveConfirm = false;
+      this.modalConfirmEventMove = false;
+    } else if (args.requestType === "eventChange") {
+      this.modalConfirmEventMove = true;
+      this.eventMoveConfirm = true;
+      this.mobileEventChange = args;
     }
   }
 
@@ -3723,8 +3783,8 @@ export class DynamicSchedulerComponent implements OnInit {
   copyLinkToTheClinic() {
     this.helpService.copyToClipboard(
       this.helpService.getFullHostName() +
-      "/dashboard/home/task/" +
-      this.selectedStoreId
+        "/dashboard/home/task/" +
+        this.selectedStoreId
     );
     this.helpService.successToastr(
       this.language.successCopiedLinkForClinicReservation,
@@ -3737,7 +3797,9 @@ export class DynamicSchedulerComponent implements OnInit {
     const docDefinition = this.setupPDF();
 
     // pass file name
-    pdfMake.createPdf(docDefinition).download(this.customerUser["firstname"] + this.customerUser["lastname"]);
+    pdfMake
+      .createPdf(docDefinition)
+      .download(this.customerUser["firstname"] + this.customerUser["lastname"]);
   }
 
   public printPDF(): void {
@@ -3748,7 +3810,7 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   private setupPDF() {
-    const dotSign = ' • ';
+    const dotSign = " • ";
 
     const therapies = [];
     const netPrices = [];
@@ -3759,25 +3821,30 @@ export class DynamicSchedulerComponent implements OnInit {
       const temp = this.therapyValue.find((therapy) => therapy.id == id);
 
       if (temp) {
-        const vatDefinition = this.vatTaxList.find((elem) => elem.id === temp.vat);
+        const vatDefinition = this.vatTaxList.find(
+          (elem) => elem.id === temp.vat
+        );
         // console.log(vatDefinition);
 
         temp.date = this.formatDateForPDF(this.eventTime.start);
 
         console.log("temp.date", temp.date);
 
-
         const isNaNPrice = isNaN(parseFloat(temp.net_price));
 
         if (isNaNPrice) {
-          console.log('Not a number: ', temp.net_price);
+          console.log("Not a number: ", temp.net_price);
         }
 
-        isNaNPrice ? netPrices.push(-1) : netPrices.push(parseFloat(temp.net_price));
+        isNaNPrice
+          ? netPrices.push(-1)
+          : netPrices.push(parseFloat(temp.net_price));
 
         if (!isNaNPrice) {
           if (vatDefinition) {
-            bruto = parseFloat(temp.net_price) * (1 + Number(vatDefinition.title) / 100);
+            bruto =
+              parseFloat(temp.net_price) *
+              (1 + Number(vatDefinition.title) / 100);
           } else {
             bruto = parseFloat(temp.net_price) * (1 + 20 / 100);
           }
@@ -3787,18 +3854,31 @@ export class DynamicSchedulerComponent implements OnInit {
         }
         therapies.push({
           title: temp.title,
-          description: temp.description ? temp.description : '',
-          date: ((this.selectedTherapies.length > 1 && i == 0) || this.selectedTherapies.length === 1) ? temp.date : '',
-          net_price: isNaNPrice ? this.language.noDataAvailable : this.language.euroSign + ' ' + parseFloat(temp.net_price).toFixed(2),
+          description: temp.description ? temp.description : "",
+          date:
+            (this.selectedTherapies.length > 1 && i == 0) ||
+            this.selectedTherapies.length === 1
+              ? temp.date
+              : "",
+          net_price: isNaNPrice
+            ? this.language.noDataAvailable
+            : this.language.euroSign +
+              " " +
+              parseFloat(temp.net_price).toFixed(2),
           vat: vatDefinition ? vatDefinition.title : 20,
-          gross_price: isNaNPrice ? this.language.noDataAvailable : this.language.euroSign + ' ' + bruto.toFixed(2)
+          gross_price: isNaNPrice
+            ? this.language.noDataAvailable
+            : this.language.euroSign + " " + bruto.toFixed(2),
         });
-
       }
     }
 
-    const filteredNetPrices = netPrices.filter(num => !isNaN(parseFloat(num)));
-    const filteredBrutoPrices = brutoPrices.filter(num => !isNaN(parseFloat(num)));
+    const filteredNetPrices = netPrices.filter(
+      (num) => !isNaN(parseFloat(num))
+    );
+    const filteredBrutoPrices = brutoPrices.filter(
+      (num) => !isNaN(parseFloat(num))
+    );
 
     const subtotal = filteredNetPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = filteredBrutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
@@ -3843,7 +3923,9 @@ export class DynamicSchedulerComponent implements OnInit {
                         width: "*",
                       },
                       {
-                        text: new Date(this.complaintData["date"]).toLocaleString(),
+                        text: new Date(
+                          this.complaintData["date"]
+                        ).toLocaleString(),
                         style: "invoiceSubValue",
                         width: 130,
                       },
@@ -3976,7 +4058,10 @@ export class DynamicSchedulerComponent implements OnInit {
                   style: "itemsFooterSubTitle",
                 },
                 {
-                  text: filteredNetPrices.length === 0 ? this.language.noDataAvailable : (this.language.euroSign + " " + subtotal),
+                  text:
+                    filteredNetPrices.length === 0
+                      ? this.language.noDataAvailable
+                      : this.language.euroSign + " " + subtotal,
                   style: "itemsFooterSubValue",
                 },
               ],
@@ -3986,7 +4071,10 @@ export class DynamicSchedulerComponent implements OnInit {
                   style: "itemsFooterTotalTitle",
                 },
                 {
-                  text: filteredBrutoPrices.length === 0 ? this.language.noDataAvailable : (this.language.euroSign + " " + total),
+                  text:
+                    filteredBrutoPrices.length === 0
+                      ? this.language.noDataAvailable
+                      : this.language.euroSign + " " + total,
                   style: "itemsFooterTotalValue",
                 },
               ],
@@ -4014,10 +4102,21 @@ export class DynamicSchedulerComponent implements OnInit {
       footer: {
         columns: [
           {
-            text: this.adminUser.clinicName + dotSign + this.adminUser.street + dotSign + this.adminUser.zipcode + " " + this.adminUser.place + "\n" + this.adminUser.telephone + dotSign + this.adminUser.email,
-            style: 'documentFooter'
-          }
-        ]
+            text:
+              this.adminUser.clinicName +
+              dotSign +
+              this.adminUser.street +
+              dotSign +
+              this.adminUser.zipcode +
+              " " +
+              this.adminUser.place +
+              "\n" +
+              this.adminUser.telephone +
+              dotSign +
+              this.adminUser.email,
+            style: "documentFooter",
+          },
+        ],
       },
       styles: this.pdfService.getStyles(),
       defaultStyle: {
@@ -4029,8 +4128,9 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   private formatDateForPDF(value) {
-    if (!value) { return };
-    return new Date(value).toLocaleDateString('en-CA');
+    if (!value) {
+      return;
+    }
+    return new Date(value).toLocaleDateString("en-CA");
   }
-
 }
