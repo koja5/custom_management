@@ -610,7 +610,6 @@ export class InvoiceComponent implements OnInit {
     const therapies = [];
     const netPrices = [];
     const brutoPrices = [];
-    const vatValues = [];
     let selectedTherapies = [];
     let bruto = 0;
 
@@ -669,7 +668,7 @@ export class InvoiceComponent implements OnInit {
               !this.isDateSet;
 
             therapies.push({
-              title: therapy.title,
+              title: therapy.printOnInvoice ? therapy.titleOnInvoice : therapy.title,
               description: therapy.description ? therapy.description : '',
               date: shouldSetDate ? this.formatDate(therapy.date) : '',
               net_price: this.isPriceIncluded ? (isNaNPrice ? this.invoiceLanguage.noDataAvailable : this.invoiceLanguage.euroSign + ' ' + parseFloat(therapy.net_price).toFixed(2)) : '',

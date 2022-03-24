@@ -55,6 +55,7 @@ export class ParameterItemComponent implements OnInit {
   public editButton = [];
   public height: any;
   public language: any;
+  disabled: boolean = true;
 
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
@@ -68,7 +69,7 @@ export class ParameterItemComponent implements OnInit {
     private service: ParameterItemService,
     private message: MessageService,
     private helpService: HelpService
-  ) {}
+  ) { }
 
   public ngOnInit(): void {
     this.language = this.helpService.getLanguage();
@@ -90,17 +91,22 @@ export class ParameterItemComponent implements OnInit {
 
     if (this.type === "Therapy") {
       this.service.getVATTex(superadmin).subscribe((data: []) => {
-        this.vatTexList = data.sort(function(a, b) {
+        this.vatTexList = data.sort(function (a, b) {
           return a["sequence"] - b["sequence"];
         });
-        this.firstVatTexList= this.vatTexList;
+        this.firstVatTexList = this.vatTexList;
       });
-     
+
     }
 
     this.view = this.service.pipe(
       map(data => {
         this.currentLoadData = data;
+
+        // data.forEach(elem => {
+        //   elem.printOnInvoice = elem.printOnInvoice ? true : false;
+        // })
+
         return process(data, this.gridState);
       })
     );
@@ -149,6 +155,8 @@ export class ParameterItemComponent implements OnInit {
       this.formGroup = new FormGroup({
         id: new FormControl(),
         title: new FormControl(),
+        titleOnInvoice: new FormControl(),
+        printOnInvoice: new FormControl(),
         sequence: new FormControl(),
         unit: new FormControl(),
         description: new FormControl(),
@@ -173,6 +181,8 @@ export class ParameterItemComponent implements OnInit {
     this.closeEditor(sender);
     console.log(dataItem);
 
+    this.disabled = false;
+
     if (this.type === "Doctors") {
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
@@ -192,6 +202,8 @@ export class ParameterItemComponent implements OnInit {
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
         title: new FormControl(dataItem.title),
+        titleOnInvoice: new FormControl(dataItem.titleOnInvoice),
+        printOnInvoice: new FormControl(dataItem.printOnInvoice),
         sequence: new FormControl(dataItem.sequence),
         unit: new FormControl(dataItem.unit),
         description: new FormControl(dataItem.description),
@@ -201,7 +213,7 @@ export class ParameterItemComponent implements OnInit {
         category: new FormControl(dataItem.category)
       });
       this.selectedVAT = dataItem.vat;
-      
+
     } else {
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
@@ -224,8 +236,19 @@ export class ParameterItemComponent implements OnInit {
     this.changeTheme(this.theme);
   }
 
+
+  setSelectedItem(dataItem): void {
+    console.log(dataItem);
+    dataItem.printOnInvoice = !dataItem.printOnInvoice;
+
+    this.formGroup.value.printOnInvoice = dataItem.printOnInvoice;
+  }
+
   public saveHandler({ sender, rowIndex, formGroup, isNew }) {
+    this.disabled = true;
+
     console.log(formGroup);
+
     this.editedRowIndex = -1;
     const product = formGroup.value;
     console.log(product);
@@ -253,6 +276,9 @@ export class ParameterItemComponent implements OnInit {
     product.therapy_id = this.selectedTherapy;
     product.vat = this.selectedVAT;
     product.superadmin = localStorage.getItem('superadmin');
+
+
+    console.log(product)
 
     this.service.addData(product, isNew, this.type, localStorage.getItem('superadmin'));
 
@@ -465,7 +491,7 @@ export class ParameterItemComponent implements OnInit {
         }
       }
     }, 150);
-    }
+  }
 
   NetPriceChange(event) {
     console.log(event);

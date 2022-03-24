@@ -2878,6 +2878,8 @@ router.post("/addTherapyList", function (req, res, next) {
 
     var date = {
       title: req.body.title,
+      titleOnInvoice: req.body.titleOnInvoice,
+      printOnInvoice: req.body.printOnInvoice,
       sequence: req.body.sequence,
       unit: req.body.unit,
       description: req.body.description,
@@ -2947,6 +2949,8 @@ router.post("/updateTherapyList", function (req, res, next) {
     var data = {
       id: req.body.id,
       title: req.body.title,
+      titleOnInvoice: req.body.titleOnInvoice,
+      printOnInvoice: req.body.printOnInvoice,
       sequence: req.body.sequence,
       unit: req.body.unit,
       description: req.body.description,
