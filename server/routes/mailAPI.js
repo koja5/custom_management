@@ -1126,7 +1126,7 @@ router.post("/sendMassiveEMail", function (req, res) {
   if (req.body.message != "") {
     connection.getConnection(function (err, conn) {
       conn.query(
-        "select c.email, c.shortname, mm.* from customers c join mail_massive_message mm on c.storeId = mm.superadmin where (c.email != '' and c.email != null) and c.storeId = " +
+        "select distinct c.email, c.shortname, mm.* from customers c join mail_massive_message mm on c.storeId = mm.superadmin join base_one bo on c.id = bo.customer_id join base_two bt on c.id = bt.customer_id where (c.email != '' and c.email IS NOT NULL) and c.storeId = " +
           Number(req.body.superadmin) +
           " and " +
           question,
@@ -1134,6 +1134,7 @@ router.post("/sendMassiveEMail", function (req, res) {
           if (err) {
             res.json(false);
           }
+          console.log(question);
           console.log(rows);
           rows.forEach(function (to, i, array) {
             var mail = {};
@@ -1142,7 +1143,7 @@ router.post("/sendMassiveEMail", function (req, res) {
             if (mail.signatureAvailable) {
               signatureAvailable = true;
             }
-            console.log();
+            console.log(to);
             var mailOptions = {
               from: '"ClinicNode" support@app-production.eu',
               to: to.email,
