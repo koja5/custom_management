@@ -181,7 +181,6 @@ export class InvoiceComponent implements OnInit {
 
     this.parameterItemService.getVATTex(this.superadmin).subscribe((data: []) => {
       this.vatTaxList = data;
-      // console.log(data);
     });
   }
 
@@ -621,7 +620,6 @@ export class InvoiceComponent implements OnInit {
 
       selectedTherapies = [];
       this.isDateSet = false;
-      // console.log(element);
 
       if (element.therapies) {
         selectedTherapies =
@@ -631,7 +629,6 @@ export class InvoiceComponent implements OnInit {
 
         selectedTherapies = selectedTherapies.filter((elem) => elem != "");
       }
-      // console.log(selectedTherapies)
 
       if (selectedTherapies.length > 0) {
         for (let i = 0; i < selectedTherapies.length; i++) {
@@ -650,19 +647,29 @@ export class InvoiceComponent implements OnInit {
             const isNaNPrice = isNaN(parseFloat(therapy.net_price));
 
             if (isNaNPrice) {
-              console.log('Not a number: ', therapy.net_price);
+              console.log('Net price not a number: ', therapy.net_price);
             }
 
             netPrices.push(parseFloat(therapy.net_price));
 
-            if (vatDefinition) {
-              bruto =
-                parseFloat(therapy.net_price) *
-                (1 + Number(vatDefinition.title) / 100);
-            } else {
-              bruto = parseFloat(therapy.net_price) * (1 + 20 / 100);
+
+            const isNaNBrutoPrice = isNaN(parseFloat(therapy.gross_price));
+
+            if (isNaNBrutoPrice) {
+              console.log('Bruto price not a number: ', therapy.gross_price);
             }
-            brutoPrices.push(bruto);
+
+            brutoPrices.push(parseFloat(therapy.gross_price));
+
+            // if (vatDefinition) {
+            //   bruto =
+            //     parseFloat(therapy.net_price) *
+            //     (1 + Number(vatDefinition.title) / 100);
+            // } else {
+            //   bruto = parseFloat(therapy.net_price) * (1 + 20 / 100);
+            // }
+            // brutoPrices.push(bruto);
+
             const shouldSetDate =
               (selectedTherapies.length > 1 && i == 0) ||
               selectedTherapies.length === 1 ||
@@ -674,7 +681,7 @@ export class InvoiceComponent implements OnInit {
               date: shouldSetDate ? this.formatDate(therapy.date) : '',
               net_price: this.isPriceIncluded ? (isNaNPrice ? this.invoiceLanguage.noDataAvailable : this.invoiceLanguage.euroSign + ' ' + parseFloat(therapy.net_price).toFixed(2)) : '',
               vat: this.isPriceIncluded ? (vatDefinition ? vatDefinition.title : 20) : '',
-              gross_price: this.isPriceIncluded ? (isNaNPrice ? this.invoiceLanguage.noDataAvailable : this.invoiceLanguage.euroSign + ' ' + bruto.toFixed(2)) : ''
+              gross_price: this.isPriceIncluded ? (isNaNBrutoPrice ? this.invoiceLanguage.noDataAvailable : this.invoiceLanguage.euroSign + ' ' + parseFloat(therapy.gross_price).toFixed(2)) : ''
             });
           }
         }
@@ -747,16 +754,16 @@ export class InvoiceComponent implements OnInit {
     const vat = vatValues.reduce((a, b) => a + b, 0).toFixed(2);
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
-    /*
-        const link =
-          window.location.protocol +
-          "//" +
-          window.location.hostname +
-          ":" +
-          window.location.port +
-          "/assets/Invoice_template.docx";*/
 
-    const link = "http://127.0.0.1:8887/Invoice_template.docx";
+    const link =
+      window.location.protocol +
+      "//" +
+      window.location.hostname +
+      ":" +
+      window.location.port +
+      "/assets/Invoice_template.docx";
+
+    // const link = "http://127.0.0.1:8887/Invoice_template.docx";
     this.loadFile(link,
       function (error, content) {
         if (error) {
