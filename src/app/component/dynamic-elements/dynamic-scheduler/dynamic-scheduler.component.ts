@@ -2815,7 +2815,6 @@ export class DynamicSchedulerComponent implements OnInit {
 
       // }
 
-      console.log(this.currentView);
       if (date.elementType === "dateHeader" && this.currentView !== "Month") {
         const dateSplitted = date.date.toString().split(" ");
 
@@ -3554,8 +3553,7 @@ export class DynamicSchedulerComponent implements OnInit {
     console.log(args);
     console.log(window.innerWidth);
 
-    if (window.innerWidth > 992 || this.eventMoveConfirm) {
-      console.log("onActionBegin");
+    if (window.innerWidth > 992 || this.eventMoveConfirm || args.requestType !== "eventChange") {
       if (!args) {
         args = this.mobileEventChange;
       }

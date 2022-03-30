@@ -12,41 +12,40 @@ const logger = require("./logger");
 var link = process.env.link_api;
 var linkClient = process.env.link_client;
 var loginLink = process.env.link_client_login;
-
-const monthNames = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
 ];
 
 var connection = mysql.createPool({
-  host: process.env.host,
-  user: process.env.user,
-  password: process.env.password,
-  database: process.env.database,
+    host: '116.203.85.82',
+    user: 'appprodu_appproduction',
+    password: 'CJr4eUqWg33tT97mxPFx',
+    database: 'appprodu_management'
 });
 
+
+/*var smtpTransport = nodemailer.createTransport({
+  host: "116.203.85.82",
+  secure: false,
+   port: 587,
+   auth: {
+      user: "support@app-production.eu",
+      pass: "Iva#$2019#$",
+   },
+});*/
+
 var smtpTransport = nodemailer.createTransport({
-  host: process.env.smtp_host,
-  port: process.env.smtp_port,
-  secure: process.env.smtp_secure,
+  host: "116.203.85.82",
+  port: 25,
+  secure: false,
   tls: {
-    rejectUnauthorized: process.env.smtp_rejectUnauthorized,
+    rejectUnauthorized: false,
   },
   auth: {
-    user: process.env.smtp_user,
-    pass: process.env.smtp_pass,
+      user: "support@app-production.eu",
+      pass: "])3!~0YFU)S]",
   },
-});
+})
 
 //slanje maila pri registraciji
 
@@ -78,7 +77,7 @@ router.post("/send", function (req, res) {
       introductoryMessageForConfirmMail:
         req.body.language?.introductoryMessageForConfirmMail,
       confirmMailButtonText: req.body.language?.confirmMailButtonText,
-    }),
+    })
   };
 
   smtpTransport.sendMail(mailOptions, function (error, response) {
@@ -1087,42 +1086,13 @@ router.post("/confirmUserViaMacAddress", function (req, res) {
 });
 
 router.post("/sendMassiveEMail", function (req, res) {
-  var infoForDenyReservationTemplate = fs.readFileSync(
+  var sendMassiveTemplate = fs.readFileSync(
     "./server/routes/templates/sendMassiveMails.hjs",
     "utf-8"
   );
-  var infoForDenyReservation = hogan.compile(infoForDenyReservationTemplate);
-  var question = "";
-  if (question) {
-    question += " and ";
-  }
-  if (req.body.place) {
-    question = "c.city = '" + req.body.place + "'";
-  }
-  if (req.body.male && req.body.female) {
-    var male = "'male'";
-    var female = "'female'";
-    if (question) {
-      question += " and c.gender = " + male;
-      question += " or c.gender = " + female;
-    } else {
-      question += "c.gender = " + male;
-      question += " or c.gender = " + female;
-    }
-  } else {
-    if (req.body.male) {
-      question = "c.gender = 'male'";
-    } else if (req.body.female) {
-      question = "c.gender = 'female'";
-    }
-  }
-
-  if (req.body.birthdayFrom) {
-    question += "c.birthday <= '" + req.body.birthdayFrom + "'";
-  }
-  if (req.body.birthdayTo) {
-    question += "c.birthday >= '" + req.body.birthdayTo + "'";
-  }
+  var sendMassive = hogan.compile(sendMassiveTemplate);
+  var question = getSqlQuery(req.body);
+  
   if (req.body.message != "") {
     connection.getConnection(function (err, conn) {
       conn.query(
@@ -1132,6 +1102,7 @@ router.post("/sendMassiveEMail", function (req, res) {
           question,
         function (err, rows) {
           if (err) {
+            logger.log("error", err);
             res.json(false);
           }
           console.log(question);
@@ -1147,8 +1118,8 @@ router.post("/sendMassiveEMail", function (req, res) {
             var mailOptions = {
               from: '"ClinicNode" support@app-production.eu',
               to: to.email,
-              subject: req.body.subject,
-              html: infoForDenyReservation.render({
+              subject: req.body.subject ? req.body.subject : mail.mailSubject,
+              html: sendMassive.render({
                 firstName: to.shortname,
                 message: req.body.message,
                 initialGreeting: mail.mailInitialGreeting
@@ -1177,9 +1148,23 @@ router.post("/sendMassiveEMail", function (req, res) {
                 introductoryMessageForDenyReservation: mail.mailMessage
                   ? mail.mailMessage
                   : req.body.language?.introductoryMessageForDenyReservation,
-                signatureAddress:
-                  signatureAvailable && mail.signatureAddress
-                    ? mail.signatureAddress
+                signature: mail.mailSignature
+                  ? mail.mailSignature
+                  : "",
+                signatureCompanyName:
+                  signatureAvailable && mail.signatureCompanyName
+                    ? mail.signatureCompanyName : "",
+                signatureAddress1:
+                  signatureAvailable && mail.signatureAddress1
+                    ? mail.signatureAddress1
+                    : "",
+                signatureAddress2:
+                  signatureAvailable && mail.signatureAddress2
+                    ? mail.signatureAddress2
+                    : "",
+                signatureAddress3:
+                  signatureAvailable && mail.signatureAddress3
+                    ? mail.signatureAddress3
                     : "",
                 signatureTelephone:
                   signatureAvailable && mail.signatureTelephone
@@ -1197,15 +1182,12 @@ router.post("/sendMassiveEMail", function (req, res) {
             };
             smtpTransport.sendMail(mailOptions, function (error, response) {
               if (error) {
-                logger.log(
-                  "error",
-                  `Error to sent mail for marketing promotion on EMAIL: ${req.body.email}`
-                );
+                logger.log("error", error);
                 res.send(false);
               } else {
                 logger.log(
                   "info",
-                  `Sent mail for marketing promotion on EMAIL: ${req.body.email}`
+                  `Sent mail for marketing promotion on EMAIL: ${to.email}`
                 );
                 res.send(true);
               }
@@ -1222,6 +1204,148 @@ router.post("/sendMassiveEMail", function (req, res) {
     res.send(false);
   }
 });
+
+function getSqlQuery(body) {
+  var question = "";
+  if (question) {
+    question += " and ";
+  }
+  if (body.place) {
+    question = "c.city = '" + body.place + "'";
+  }
+  if (body.male && body.female) {
+    var male = "'male'";
+    var female = "'female'";
+    if (question) {
+      question += " and (c.gender = " + male;
+      question += " or c.gender = " + female + ")";
+    } else {
+      question += "(c.gender = " + male;
+      question += " or c.gender = " + female + ")";
+    }
+  } else {
+    if (body.male) {
+      if (question) {
+        question += " and c.gender = 'male'";
+      } else {
+        question += "c.gender = 'male'";
+      }
+    } else if (body.female) {
+      if (question) {
+        question += " and c.gender = 'female'";
+      } else {
+        question += "c.gender = 'female'";
+      }
+    }
+  }
+
+  if (body.birthdayFrom) {
+    if (question) {
+      question += " and c.birthday >= '" + body.birthdayFrom + "'";
+    } else {
+      question += "c.birthday >= '" + body.birthdayFrom + "'";
+    }
+  }
+  if (body.birthdayTo) {
+    if (question) {
+      question += " and c.birthday <= '" + body.birthdayTo + "'";
+    } else {
+      question += "c.birthday <= '" + body.birthdayTo + "'";
+    }
+  }
+
+  if (body.category) {
+    if (question) {
+      question += " and t.colorTask = " + body.category;
+    } else {
+      question += " t.colorTask = " + body.category;
+    }
+  }
+
+  if (body.start) {
+    if (question) {
+      question += " and t.start >= '" + body.start + "'";
+    } else {
+      question += " t.start >= '" + body.start + "'";
+    }
+  }
+
+  if (body.end) {
+    if (question) {
+      question += " and t.end <= '" + body.end + "'";
+    } else {
+      question += " t.end <= '" + body.end + "'";
+    }
+  }
+
+  if (body.creator_id) {
+    if (question) {
+      question += " and t.creator_id = " + body.creator_id;
+    } else {
+      question += " t.creator_id = " + body.creator_id;
+    }
+  }
+
+  if (body.store) {
+    if (question) {
+      question += " and t.storeId = " + body.store;
+    } else {
+      question += " t.storeId = " + body.store;
+    }
+  }
+
+  if (body.recommendation) {
+    if (question) {
+      question += " and bo.recommendation = " + body.recommendation;
+    } else {
+      question += " bo.recommendation = " + body.recommendation;
+    }
+  }
+
+  if (body.relationship) {
+    if (question) {
+      question += " and bo.relationship = " + body.relationship;
+    } else {
+      question += " bo.relationship = " + body.relationship;
+    }
+  }
+
+  if (body.social) {
+    if (question) {
+      question += " and bo.social = " + body.social;
+    } else {
+      question += " bo.social = " + body.social;
+    }
+  }
+
+  if (body.doctor) {
+    if (question) {
+      question += " and bo.doctor = " + body.doctor;
+    } else {
+      question += " bo.doctor = " + body.doctor;
+    }
+  }
+
+  if (body.profession) {
+    if (question) {
+      question += " and bt.profession = " + body.profession;
+    } else {
+      question += " bt.profession = " + body.profession;
+    }
+  }
+
+  if (body.childs) {
+    if (question) {
+      question += " and bt.childs = " + body.childs;
+    } else {
+      question += " bt.childs = " + body.childs;
+    }
+  }
+
+  console.log(question);
+
+  return question;
+}
 
 router.post("/infoAboutConfirmDenyAccessDevice", function (req, res) {
   var template = fs.readFileSync(
