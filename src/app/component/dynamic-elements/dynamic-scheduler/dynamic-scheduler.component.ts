@@ -2823,8 +2823,23 @@ export class DynamicSchedulerComponent implements OnInit {
       date.element.style.backgroundColor = "#e9ecef";
       date.element.style.pointerEvents = "none";
 
-      if (this.currentView === 'Month') {
-        date.element.innerHTML = holiday.Subject;
+      // if (date.elementType !== "monthDay" && this.currentView === "Month") {
+
+      //   const span = document.createElement("SPAN");
+      //   date.element.appendChild(span);
+      //   span.innerHTML = holiday.Subject;
+      //   span.style.overflow = 'hidden';
+      //   span.style.whiteSpace = 'nowrap';
+      //   span.style.textOverflow = 'ellipsis';
+
+      // }
+
+      if (date.elementType === "dateHeader" && this.currentView !== "Month") {
+        const dateSplitted = date.date.toString().split(" ");
+
+        // date - day - holiday
+        date.element.firstChild.innerText =
+          dateSplitted[2] + " " + dateSplitted[0] + " - " + holiday.Subject;
       }
     }
 
@@ -3556,8 +3571,7 @@ export class DynamicSchedulerComponent implements OnInit {
     console.log(args);
     console.log(window.innerWidth);
 
-    if (window.innerWidth > 992 || this.eventMoveConfirm) {
-      console.log("onActionBegin");
+    if (window.innerWidth > 992 || this.eventMoveConfirm || args.requestType !== "eventChange") {
       if (!args) {
         args = this.mobileEventChange;
       }
