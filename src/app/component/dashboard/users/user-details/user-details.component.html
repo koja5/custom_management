@@ -673,26 +673,32 @@
                           </kendo-colorpalette>
                         </div>
                       </div>
-                      <div class="col-sm-6" style="padding-top: 2vh">
+                      <div
+                        class="col-sm-6"
+                        *ngIf="!noSetWorkTime"
+                        style="padding-top: 2vh"
+                      >
                         <button
-                          kendoButton
-                          [icon]="'k-icon k-i-undo'"
-                          class="col-sm-5 {{ previousInd }}"
+                          class="btn btn-warning mr-3 {{ previousInd }}"
                           (click)="previousWorkTime()"
                         >
+                          <i class="fa fa-arrow-left"></i>
                           {{ language.previous }}
                         </button>
                         <button
-                          kendoButton
-                          [icon]="'k-icon k-i-redo'"
-                          class="col-sm-5 {{ nextInd }}"
+                          class="btn btn-warning {{ nextInd }}"
                           (click)="nextWorkTime()"
                         >
+                          <i class="fa fa-arrow-right"></i>
                           {{ language.next }}
                         </button>
                       </div>
                     </div>
                     <div class="form-group row">
+                      <h4 class="col-sm-12">
+                        {{ language.orderNumber }}:
+                        {{ allWorkTime.length - index }}
+                      </h4>
                       <label class="col-md-2 col-sm-12 col-form-label">{{
                         language.validFromDate
                       }}</label>
@@ -891,7 +897,10 @@
         <h3>{{ language.deleteDialogTitleAreYouSure }}</h3>
       </div>
       <kendo-dialog-actions>
-        <button kendoButton (click)="modalDeletedWorkTimeConfirm = false; user.open()">
+        <button
+          kendoButton
+          (click)="modalDeletedWorkTimeConfirm = false; user.open()"
+        >
           {{ language.no }}
         </button>
         <button kendoButton (click)="deleteWorkTime('yes')" primary="true">
@@ -1163,26 +1172,31 @@
                     </kendo-colorpalette>
                   </div>
                 </div>
-                <div class="col-sm-6" style="padding-top: 2vh">
+                <div
+                  *ngIf="!noSetWorkTime"
+                  class="col-sm-6"
+                  style="padding-top: 2vh"
+                >
                   <button
-                    kendoButton
-                    [icon]="'k-icon k-i-undo'"
-                    class="col-sm-5 {{ previousInd }}"
+                    class="btn btn-warning mr-3 {{ previousInd }}"
                     (click)="previousWorkTime()"
                   >
+                    <i class="fa fa-arrow-left"></i>
                     {{ language.previous }}
                   </button>
                   <button
-                    kendoButton
-                    [icon]="'k-icon k-i-redo'"
-                    class="col-sm-5 {{ nextInd }}"
+                    class="btn btn-warning {{ nextInd }}"
                     (click)="nextWorkTime()"
                   >
+                    <i class="fa fa-arrow-right"></i>
                     {{ language.next }}
                   </button>
                 </div>
               </div>
               <div class="form-group row">
+                <h4 class="col-sm-12">
+                  {{ language.orderNumber }}: {{ allWorkTime.length - index }}
+                </h4>
                 <label class="col-md-2 col-sm-12 col-form-label">{{
                   language.validFromDate
                 }}</label>

@@ -10,7 +10,7 @@ const path = require("path");
 const passwordGenerate = require("generate-password");
 var request = require("request");
 const logger = require("./logger");
-const ftpUploadSMS = require("./ftpUploadSMS");
+const sendSmsFromMail = require("./ftpUploadSMS");
 const macAddress = require("os").networkInterfaces();
 
 var link = process.env.link_api;
@@ -50,7 +50,7 @@ var connection = mysql.createPool({
   database: 'appprodu_management_prod'
 });*/
 
-connection.getConnection(function (err, conn) { });
+connection.getConnection(function (err, conn) {});
 
 /* GET api listing. */
 router.get("/", (req, res) => {
@@ -289,8 +289,8 @@ router.get("/getTasks/:id", function (req, res, next) {
     }
     conn.query(
       "select t.*, e.color from tasks t join event_category e on t.colorTask = e.id where e.superadmin = '" +
-      reqObj +
-      "'",
+        reqObj +
+        "'",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -466,7 +466,7 @@ router.post("/login", (req, res, next) => {
                           body: body,
                           json: true,
                         };
-                        request(options, function (error, response, body) { });
+                        request(options, function (error, response, body) {});
                       }
                     );
                   }
@@ -938,7 +938,7 @@ router.post("/updateStore", function (req, res, next) {
       superadmin: req.body.superadmin,
       allowed_online: req.body.allowed_online,
       companyname: req.body.companyname,
-      vatcode: req.body.vatcode
+      vatcode: req.body.vatcode,
     };
 
     conn.query(
@@ -1225,10 +1225,10 @@ router.post("/updatePasswordForSuperadmin", function (req, res, next) {
 
     conn.query(
       "UPDATE users_superadmin SET password = '" +
-      sha1(req.body.newPassword) +
-      "' where id = '" +
-      req.body.id +
-      "'",
+        sha1(req.body.newPassword) +
+        "' where id = '" +
+        req.body.id +
+        "'",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -1250,10 +1250,10 @@ router.post("/updatePasswordForUser", function (req, res, next) {
 
     conn.query(
       "UPDATE users SET password = '" +
-      sha1(req.body.newPassword) +
-      "' where id = '" +
-      req.body.id +
-      "'",
+        sha1(req.body.newPassword) +
+        "' where id = '" +
+        req.body.id +
+        "'",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -1275,10 +1275,10 @@ router.post("/updatePasswordForCustomer", function (req, res, next) {
 
     conn.query(
       "UPDATE customers SET password = '" +
-      sha1(req.body.newPassword) +
-      "' where id = '" +
-      req.body.id +
-      "'",
+        sha1(req.body.newPassword) +
+        "' where id = '" +
+        req.body.id +
+        "'",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -1354,8 +1354,8 @@ router.post("/searchCustomer", function (req, res, next) {
 
     conn.query(
       "SELECT * from customers where storeId = ? and shortname like '%" +
-      filter +
-      "%'",
+        filter +
+        "%'",
       [superadmin],
       function (err, rows) {
         conn.release();
@@ -1811,12 +1811,12 @@ router.post("/updateAttentionAndPhysical", function (req, res, next) {
 
     conn.query(
       "UPDATE customers SET attention = '" +
-      req.body.attention +
-      "', physicalComplaint = '" +
-      req.body.physicalComplaint +
-      "' where id = '" +
-      id +
-      "'",
+        req.body.attention +
+        "', physicalComplaint = '" +
+        req.body.physicalComplaint +
+        "' where id = '" +
+        id +
+        "'",
       [req.body],
       function (err, rows) {
         conn.release();
@@ -1848,8 +1848,8 @@ router.get("/korisnik/verifikacija/:id", (req, res, next) => {
       } else {
         conn.query(
           "UPDATE users_superadmin SET active='1' WHERE SHA1(email)='" +
-          reqObj +
-          "'",
+            reqObj +
+            "'",
           function (err, rows, fields) {
             conn.release();
             if (err) {
@@ -1881,8 +1881,8 @@ router.get("/customerVerificationMail/:id", (req, res, next) => {
       } else {
         conn.query(
           "UPDATE customers SET isConfirm='1' WHERE SHA1(email)='" +
-          reqObj +
-          "'",
+            reqObj +
+            "'",
           function (err, rows, fields) {
             conn.release();
             if (err) {
@@ -1914,10 +1914,10 @@ router.get("/sendChangePassword/:id", (req, res, next) => {
       } else {
         conn.query(
           "UPDATE users_superadmin SET password='" +
-          reqObj +
-          "' WHERE SHA1(email)='" +
-          reqObj +
-          "'",
+            reqObj +
+            "' WHERE SHA1(email)='" +
+            reqObj +
+            "'",
           function (err, rows, fields) {
             conn.release();
             if (err) {
@@ -2054,10 +2054,10 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
               } else if (rows.length !== 0) {
                 conn.query(
                   "UPDATE users SET password='" +
-                  sha1(newPassword1) +
-                  "' WHERE  sha1(email)='" +
-                  email +
-                  "'",
+                    sha1(newPassword1) +
+                    "' WHERE  sha1(email)='" +
+                    email +
+                    "'",
                   function (err, rows, fields) {
                     conn.release();
                     if (err) {
@@ -2077,18 +2077,18 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
               } else {
                 conn.query(
                   "select * from users_superadmin WHERE sha1(email)='" +
-                  email +
-                  "'",
+                    email +
+                    "'",
                   function (err, rows, fields) {
                     if (err) {
                       res.json(err);
                     } else if (rows.length !== 0) {
                       conn.query(
                         "UPDATE users_superadmin SET password='" +
-                        sha1(newPassword1) +
-                        "' WHERE  sha1(email)='" +
-                        email +
-                        "'",
+                          sha1(newPassword1) +
+                          "' WHERE  sha1(email)='" +
+                          email +
+                          "'",
                         function (err, rows, fields) {
                           conn.release();
                           if (err) {
@@ -2107,10 +2107,10 @@ router.post("/korisnik/forgotpasschange", (req, res, next) => {
                     } else {
                       conn.query(
                         "UPDATE customers SET password='" +
-                        sha1(newPassword1) +
-                        "' WHERE  sha1(email)='" +
-                        email +
-                        "'",
+                          sha1(newPassword1) +
+                          "' WHERE  sha1(email)='" +
+                          email +
+                          "'",
                         function (err, rows, fields) {
                           conn.release();
                           if (err) {
@@ -2992,8 +2992,8 @@ router.get("/getRecommendationList/:superadmin", function (req, res, next) {
     var superadmin = req.params.superadmin;
     conn.query(
       "select * from recommendation_list where superadmin = '" +
-      superadmin +
-      "'",
+        superadmin +
+        "'",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -3477,7 +3477,9 @@ router.get("/getDoctorsList/:superadmin", function (req, res, next) {
     }
     var superadmin = req.params.superadmin;
     conn.query(
-      "select * from doctors_list where superadmin = '" + superadmin + "'",
+      "select *, concat(concat(d.firstname, ' '), d.lastname) as 'fullname' from doctors_list d where d.superadmin = '" +
+        superadmin +
+        "'",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -3503,7 +3505,7 @@ router.post("/addDoctorsList", function (req, res, next) {
     var date = {
       firstname: req.body.firstname,
       lastname: req.body.lastname,
-      shortname: req.body.lastname + " " + req.body.firstname,
+      shortname: req.body.firstname + " " + req.body.lastname,
       gender: req.body.gender,
       street: req.body.street,
       street_number: req.body.street_number,
@@ -4894,8 +4896,8 @@ router.get("/getCountAllTasksForUserPerMonth/:id", function (req, res, next) {
     }
     conn.query(
       "SELECT COUNT(*) as month from tasks where creator_id = '" +
-      reqObj +
-      "' GROUP BY MONTH(start)",
+        reqObj +
+        "' GROUP BY MONTH(start)",
       function (err, rows) {
         conn.release();
 
@@ -4919,8 +4921,8 @@ router.get("/getCountAllTasksForUserPerWeek/:id", function (req, res, next) {
     }
     conn.query(
       "SELECT COUNT(*) as week from tasks where creator_id = '" +
-      reqObj +
-      "' GROUP BY WEEK(start)",
+        reqObj +
+        "' GROUP BY WEEK(start)",
       function (err, rows) {
         conn.release();
 
@@ -5185,6 +5187,7 @@ router.post("/sendSMS", function (req, res) {
                   var dateMessage = "";
                   var time = "";
                   var clinic = "";
+                  console.log(smsMessage);
                   if (smsMessage.length > 0) {
                     sms = smsMessage[0];
                     if (sms.signatureAvailable) {
@@ -5256,27 +5259,22 @@ router.post("/sendSMS", function (req, res) {
                       "select * from sms_count where superadmin = ?",
                       [sms.superadmin],
                       function (err, smsCount, fields) {
+                        console.log("PROSAO!!");
                         if (smsCount.length > 0 && smsCount[0].count > 0) {
-                          fs.writeFile(fileName, content, function (err) {
-                            if (err) return logger.log("error", err);
-                            logger.log(
-                              "info",
-                              "Sent CUSTOM REMINDER to NUMBER: " + phoneNumber
-                            );
-                            ftpUploadSMS(fileName, phoneNumber + ".txt");
-                            conn.query(
-                              "update sms_count set count = count - 1 where superadmin = ?",
-                              [sms.superadmin],
-                              function (err, smsCount, fields) {
-                                conn.release();
-                                if (smsCount) {
-                                  res.send(true);
-                                } else {
-                                  res.send(false);
-                                }
+                          console.log("PROSAO!!");
+                          sendSmsFromMail(phoneNumber, message);
+                          conn.query(
+                            "update sms_count set count = count - 1 where superadmin = ?",
+                            [sms.superadmin],
+                            function (err, smsCount, fields) {
+                              conn.release();
+                              if (smsCount) {
+                                res.send(true);
+                              } else {
+                                res.send(false);
                               }
-                            );
-                          });
+                            }
+                          );
                         } else {
                           /*logger.log(
                             "warning",
@@ -5329,15 +5327,10 @@ router.post("/sendCustomSMS", function (req, res) {
     if (checkAvailableCode(phoneNumber, JSON.parse(codes))) {
       var message = req.body.message;
       console.log("usao sam!");
-
       var content = "To: " + phoneNumber + "\r\n\r\n" + message;
       var fileName = "server/sms/" + phoneNumber + ".txt";
-      fs.writeFile(fileName, content, function (err) {
-        if (err) return logger.log("error", err);
-        logger.log("info", "Sent CUSTOM SMS MESSAGE to NUMBER: " + phoneNumber);
-        ftpUploadSMS(fileName, phoneNumber + ".txt");
-        res.send(true);
-      });
+      sendSmsFromMail(phoneNumber, message);
+      res.send(true);
     } else {
       res.send(false);
       logger.log(
@@ -5488,11 +5481,10 @@ router.post("/sendMassiveSMS", function (req, res) {
               var question = getSqlQuery(req.body);
               conn.query(
                 "select distinct c.telephone, c.mobile, c.shortname, sm.* from customers c join sms_massive_message sm on c.storeId = sm.superadmin where ((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL)) and c.storeId = " +
-                Number(req.body.superadmin) +
-                " and " +
-                question,
+                  Number(req.body.superadmin) +
+                  " and " +
+                  question,
                 function (err, rows) {
-                  console.log(rows);
                   rows.forEach(function (to, i, array) {
                     var phoneNumber = to.mobile ? to.mobile : to.telephone;
                     console.log(phoneNumber);
@@ -5539,17 +5531,12 @@ router.post("/sendMassiveSMS", function (req, res) {
                         message +
                         "\n\n" +
                         signature;
+                      const fullMessage = message + "\n\n" + signature;
                       var fileName = "server/sms/" + phoneNumber + ".txt";
-                      fs.writeFile(fileName, content, function (err) {
-                        console.log(err);
-                        if (err) return logger.log("error", err);
-                        logger.log(
-                          "info",
-                          "Sent CUSTOM SMS MESSAGE to NUMBER: " + phoneNumber
-                        );
-                        ftpUploadSMS(fileName, phoneNumber + ".txt");
-                        res.send(true);
-                      });
+                      console.log(phoneNumber);
+                      console.log(fullMessage);
+                      sendSmsFromMail(phoneNumber, fullMessage);
+                      res.send(true);
                     } else {
                       res.send(false);
                       logger.log(
@@ -5735,14 +5722,14 @@ router.post("/getFilteredRecipients", function (req, res) {
 
       conn.query(
         "select distinct c.* from customers c join " +
-        table +
-        " sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin join tasks t on c.id = t.customer_id join base_one bo on c.id = bo.customer_id join base_two bt on c.id = bt.customer_id where " +
-        checkAdditionalQuery +
-        " and c.storeId = " +
-        Number(req.body.superadmin) +
-        " and (" +
-        question +
-        ")",
+          table +
+          " sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin join tasks t on c.id = t.customer_id join base_one bo on c.id = bo.customer_id join base_two bt on c.id = bt.customer_id where " +
+          checkAdditionalQuery +
+          " and c.storeId = " +
+          Number(req.body.superadmin) +
+          " and (" +
+          question +
+          ")",
         function (err, rows) {
           conn.release();
           console.log(err);
@@ -5986,8 +5973,8 @@ router.post("/createTemplateAccount", function (req, res, next) {
 
     conn.query(
       "select * from users_superadmin where id = ? and password = '" +
-      sha1(req.body.password) +
-      "'",
+        sha1(req.body.password) +
+        "'",
       [req.body.account_id],
       function (err, rows) {
         if (!err) {
@@ -6042,8 +6029,8 @@ router.post("/updateTemplateAccount", function (req, res, next) {
 
     conn.query(
       "select * from users_superadmin where id = ? and password = '" +
-      sha1(req.body.password) +
-      "'",
+        sha1(req.body.password) +
+        "'",
       [req.body.account_id],
       function (err, rows) {
         if (!err) {
@@ -6117,8 +6104,8 @@ router.get("/getTemplateAccountByUserId/:id", function (req, res, next) {
     }
     conn.query(
       "SELECT ta.* from `user_template` ut join `template_account` ta on ut.templateId=ta.id where ut.userId='" +
-      req.params.id +
-      "'",
+        req.params.id +
+        "'",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -6275,7 +6262,7 @@ function insertFromTemplateForUsers(conn, category, account_id, id) {
               arrayOldNewUserId[old_user_id] = res.insertId;
               conn.query(
                 "select distinct w.* from users u join work w on u.id = w.user_id where u.id = " +
-                old_user_id,
+                  old_user_id,
                 function (err, uw) {
                   uw.forEach(function (touw, i, array) {
                     touw.user_id = arrayOldNewUserId[old_user_id];
@@ -6292,7 +6279,7 @@ function insertFromTemplateForUsers(conn, category, account_id, id) {
               );
               conn.query(
                 "select distinct s.* from users u join store s on u.storeId = s.id where s.id = " +
-                old_store_id,
+                  old_store_id,
                 function (err, st) {
                   st.forEach(function (tost, i, array) {
                     tost.superadmin = id;
@@ -6304,7 +6291,7 @@ function insertFromTemplateForUsers(conn, category, account_id, id) {
                         conn.query(
                           "update users set storeId = ? where id = ?",
                           [store_res.insertId, arrayOldNewUserId[old_user_id]],
-                          function (err, st) { }
+                          function (err, st) {}
                         );
                       }
                     );
@@ -7235,8 +7222,8 @@ router.post("/deleteEventCategoryStatistic", (req, res, next) => {
       } else {
         conn.query(
           "delete from event_category_statistic where id = '" +
-          req.body.id +
-          "'",
+            req.body.id +
+            "'",
           function (err, rows, fields) {
             conn.release();
             if (err) {
@@ -7730,10 +7717,10 @@ router.get(
       var templateId = req.params.templateId;
       conn.query(
         "SELECT h.id, h.Subject, h.StartTime, h.EndTime, h.category, h.userId FROM `holidays` h join `holiday_template` ht on h.id = ht.holidayId join `user_template` ut on ht.templateId=ut.templateId where ut.userId='" +
-        userId +
-        "' and ut.templateId = '" +
-        templateId +
-        "'",
+          userId +
+          "' and ut.templateId = '" +
+          templateId +
+          "'",
         function (err, rows) {
           conn.release();
           if (!err) {
@@ -7997,7 +7984,8 @@ router.get("/getDataForMassiveInvoice/:customerId", function (req, res, next) {
     var customerId = req.params.customerId;
 
     conn.query(
-      "select t.id as taskId, t.*, tp.*, u.*, e.id as eventId, e.category as event_category from tasks t join therapy tp on t.therapy_id = tp.id join users u on u.id = t.creator_id join event_category e on t.colorTask = e.id where t.customer_id =" + customerId,
+      "select t.id as taskId, t.*, tp.*, u.*, e.id as eventId, e.category as event_category from tasks t join therapy tp on t.therapy_id = tp.id join users u on u.id = t.creator_id join event_category e on t.colorTask = e.id where t.customer_id =" +
+        customerId,
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -8014,7 +8002,6 @@ router.get("/getDataForMassiveInvoice/:customerId", function (req, res, next) {
     });
   });
 });
-
 
 router.post("/createInvoicePrefix", (req, res, next) => {
   try {
@@ -8047,7 +8034,6 @@ router.post("/createInvoicePrefix", (req, res, next) => {
   }
 });
 
-
 router.post("/updateInvoicePrefix", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
@@ -8077,7 +8063,6 @@ router.post("/updateInvoicePrefix", function (req, res, next) {
     );
   });
 });
-
 
 router.get("/getInvoicePrefix/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {

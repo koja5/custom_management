@@ -44,6 +44,14 @@ export class RegistrationPatientComponent implements OnInit {
           if (data["success"]) {
             this.router.navigate(["template/created-account-successed"]);
             this.data.language = this.packLanguage.getLanguageForConfirmMail();
+            const registrationData = {
+              email: this.data.email,
+              password: this.data.password,
+            };
+            this.helpService.setLocalStorage(
+              "registrationData",
+              JSON.stringify(registrationData)
+            );
             this.mailService
               .sendCustomerVerificationMail(this.data)
               .subscribe((data) => {
