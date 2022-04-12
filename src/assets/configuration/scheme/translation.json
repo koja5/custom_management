@@ -1983,6 +1983,9 @@
       },
       "invoicePrefixTitle": {
         "type": "string"
+      },
+      "printBruttoNettoPrice": {
+        "type": "string"
       }
     }
   },
@@ -6186,6 +6189,9 @@
             },
             {
               "key": "euroSign"
+            },
+            {
+              "key": "printBruttoNettoPrice"
             }
           ]
         },
