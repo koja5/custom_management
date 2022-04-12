@@ -732,7 +732,7 @@ export class InvoiceComponent implements OnInit {
     // console.log(joinArray)
 
     //Step 4. Return the reversed string
-    return joinArray + '.';
+    return joinArray;
   }
 
   public downloadWord(): void {
@@ -872,7 +872,7 @@ export class InvoiceComponent implements OnInit {
     // return new Date().toLocaleString().replace(/(.*)\D\d+/, "$1");
 
     const date = new Date().toLocaleDateString('en-GB');
-    console.log(date);
+
     return this.reverseString(date);
   }
 }
