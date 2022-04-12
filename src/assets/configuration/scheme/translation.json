@@ -1986,6 +1986,12 @@
       },
       "printBruttoNettoPrice": {
         "type": "string"
+      },
+      "titleOnInvoice": {
+        "type": "string"
+      },
+      "printOnInvoice": {
+        "type": "string"
       }
     }
   },
@@ -6233,6 +6239,19 @@
             },
             {
               "key": "invoiceConfirmDialogQuestion"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "titleOnInvoice"
+            },
+            {
+              "key": "printOnInvoice"
             }
           ]
         }

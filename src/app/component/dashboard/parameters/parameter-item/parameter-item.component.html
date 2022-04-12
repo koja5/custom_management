@@ -114,7 +114,7 @@
     <kendo-grid-column field="titleOnInvoice" title="{{ language.titleOnInvoice }}" width="150"></kendo-grid-column>
     <kendo-grid-column field="sequence" title="{{ language.order }}" width="120"></kendo-grid-column>
 
-    <kendo-grid-checkbox-column field="printOnInvoice" [width]="100">
+    <kendo-grid-checkbox-column field="printOnInvoice" title="{{ language.printOnInvoice }}" [width]="100">
       <ng-template kendoGridCellTemplate let-dataItem>
         <div class="text-center">
           <input type="checkbox" kendoCheckBox [disabled]="disabled" (click)=setSelectedItem(dataItem)
