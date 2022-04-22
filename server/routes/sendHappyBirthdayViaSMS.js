@@ -45,6 +45,7 @@ function sendHappyBirthdayViaSMS() {
               if (err) {
                 console.error("SQL error:", err);
               }
+              console.log(rows);
               if (rows.length > 0 && rows[0].congratulationBirthday === 1) {
                 request(
                   link + "/getAvailableAreaCode",
@@ -57,98 +58,41 @@ function sendHappyBirthdayViaSMS() {
                         phoneNumber = to.mobile;
                       }
                       if (checkAvailableCode(phoneNumber, JSON.parse(codes))) {
-                        var signature = "";
-                        var dateMessage = "";
-                        var time = "";
-                        var clinic = "";
                         var language = JSON.parse(body)["config"];
-                        if (to.signatureAvailable) {
-                          if (
-                            (to.street || to.zipcode || to.place) &&
-                            to.smsSignatureAddress
-                          ) {
-                            signature +=
-                              to.smsSignatureAddress +
-                              " \n" +
-                              to.street +
-                              " \n" +
-                              to.zipcode +
-                              " " +
-                              to.place +
-                              "\n";
-                          }
-                          if (to.storeTelephone && to.smsSignatureTelephone) {
-                            signature +=
-                              to.smsSignatureTelephone +
-                              " " +
-                              to.storeTelephone +
-                              " \n";
-                          }
-                          if (to.storeMobile && to.smsSignatureMobile) {
-                            signature +=
-                              to.smsSignatureMobile +
-                              " " +
-                              to.storeMobile +
-                              " \n";
-                          }
-                          if (to.email && to.smsSignatureEmail) {
-                            signature +=
-                              to.smsSignatureEmail + " " + to.email + " \n";
-                          }
-                        }
-
-                        if (language?.smsSignaturePoweredBy) {
-                          signature += language?.smsSignaturePoweredBy + " \n";
-                        }
-
-                        var convertToDateStart = new Date(to.start);
-                        var convertToDateEnd = new Date(to.end);
-                        var startHours = convertToDateStart.getHours();
-                        var startMinutes = convertToDateStart.getMinutes();
-                        var endHours = convertToDateEnd.getHours();
-                        var endMinutes = convertToDateEnd.getMinutes();
-                        var date =
-                          convertToDateStart.getDate() +
-                          "." +
-                          (convertToDateStart.getMonth() + 1) +
-                          "." +
-                          convertToDateStart.getFullYear();
-                        var start =
-                          (startHours < 10 ? "0" + startHours : startHours) +
-                          ":" +
-                          (startMinutes < 10
-                            ? "0" + startMinutes
-                            : startMinutes);
-                        var end =
-                          (endHours < 10 ? "0" + endHours : endHours) +
-                          ":" +
-                          (endMinutes < 10 ? "0" + endMinutes : endMinutes);
-
-                        if (to.smsDate) {
-                          dateMessage = to.smsDate + " " + date + " \n";
-                        }
-                        if (to.smsTime) {
-                          time = to.smsTime + " " + start + "-" + end + " \n";
-                        }
-                        if (to.smsClinic) {
-                          clinic = to.smsClinic + " " + to.storename + " \n\n";
-                        }
-
                         var message =
-                          (to.smsSubject
-                            ? to.smsSubject
+                          (to.initialGreeting
+                            ? to.initialGreeting
                             : language.initialGreetingSMSReminder) +
                           " " +
                           to.shortname +
-                          ", \n" +
-                          "\n" +
-                          (to.smsMessage ? to.smsMessage : "") +
-                          " \n" +
-                          "\n" +
-                          dateMessage +
-                          time +
-                          clinic;
-                        const fullMessage = message + "\r\n" + signature;
+                          ", \n \n" +
+                          to.smsSubject;
+                        var signature = "";
+                        if (to.signatureAvailable) {
+                          if (to.smsSignatureCompanyName) {
+                            signature += to.smsSignatureCompanyName + "\n";
+                          }
+                          if (to.smsSignatureAddress1) {
+                            signature += to.smsSignatureAddress1 + "\n";
+                          }
+                          if (to.smsSignatureAddress2) {
+                            signature += to.smsSignatureAddress2 + "\n";
+                          }
+                          if (to.smsSignatureAddress3) {
+                            signature += to.smsSignatureAddress3 + "\n";
+                          }
+                          if (to.smsSignatureTelephone) {
+                            signature += to.smsSignatureTelephone + " \n";
+                          }
+                          if (to.smsSignatureMobile) {
+                            signature += to.smsSignatureMobile + " \n";
+                          }
+                          if (to.smsSignatureEmail) {
+                            signature += to.smsSignatureEmail + " \n";
+                          }
+                        }
+                        const fullMessage = message + "\n\n" + signature;
+                        console.log(fullMessage);
                         sendSmsFromMail(phoneNumber, fullMessage);
                       }
                     });
