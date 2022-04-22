@@ -205,4 +205,28 @@ export class ParameterItemService extends BehaviorSubject<any[]> {
   updateSuperadminProfile(data) {
     return this.http.post("/api/updateSuperadmin", data);
   }
+
+  getSmsBirthdayCongratulation(id: number) {
+    return this.http.get("/api/getSmsBirthdayCongratulation/" + id);
+  }
+
+  createSmsBirthdayCongratulation(data) {
+    return this.http.post("/api/createSmsBirthdayCongratulation", data);
+  }
+
+  updateSmsBirthdayCongratulation(data) {
+    return this.http.post("/api/updateSmsBirthdayCongratulation", data);
+  }
+
+  getMailBirthdayCongratulation(id: number) {
+    return this.http.get("/api/getMailBirthdayCongratulation/" + id);
+  }
+
+  createMailBirthdayCongratulation(data) {
+    return this.http.post("/api/createMailBirthdayCongratulation", data);
+  }
+
+  updateMailBirthdayCongratulation(data) {
+    return this.http.post("/api/updateMailBirthdayCongratulation", data);
+  }
 }

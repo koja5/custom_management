@@ -17,49 +17,49 @@
     "type": "textbox",
     "width": "col-md-12",
     "name": "smsSignatureCompanyName",
-    "label": "smsSignatureCompanyName",
+    "label": "signatureCompanyName",
     "field": "smsSignatureCompanyName"
   },
   {
     "type": "textbox",
     "width": "col-md-4",
     "name": "smsSignatureAddress1",
-    "label": "smsSignatureAddress1",
+    "label": "signatureAddress1",
     "field": "smsSignatureAddress1"
   },
   {
     "type": "textbox",
     "width": "col-md-4",
     "name": "smsSignatureAddress2",
-    "label": "smsSignatureAddress2",
+    "label": "signatureAddress2",
     "field": "smsSignatureAddress2"
   },
   {
     "type": "textbox",
     "width": "col-md-4",
     "name": "smsSignatureAddress3",
-    "label": "smsSignatureAddress3",
+    "label": "signatureAddress3",
     "field": "smsSignatureAddress3"
   },
   {
     "type": "textbox",
     "width": "col-md-4",
     "name": "smsSignatureTelephone",
-    "label": "smsSignatureTelephone",
+    "label": "signatureTelephone",
     "field": "smsSignatureTelephone"
   },
   {
     "type": "textbox",
     "width": "col-md-4",
     "name": "smsSignatureMobile",
-    "label": "smsSignatureMobile",
+    "label": "signatureMobile",
     "field": "smsSignatureMobile"
   },
   {
     "type": "textbox",
     "width": "col-md-4",
     "name": "smsSignatureEmail",
-    "label": "smsSignatureEmail",
+    "label": "signatureEmail",
     "field": "smsSignatureEmail"
   },
   {

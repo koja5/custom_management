@@ -47,4 +47,6 @@ export class NavigationMenuModel {
   massive_sms?: string;
   massive_email?: string;
   sms_massive_message?: string;
+  sms_birthday_congratulation?: string;
+  email_birthday_congratulation?: string;
 }

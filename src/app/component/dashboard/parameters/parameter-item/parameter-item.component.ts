@@ -7,7 +7,7 @@ import { map } from "rxjs/operators";
 import { ParameterItemService } from "../../../../service/parameter-item.service";
 import {
   DataStateChangeEvent,
-  PageChangeEvent
+  PageChangeEvent,
 } from "@progress/kendo-angular-grid";
 import { SortDescriptor, orderBy } from "@progress/kendo-data-query";
 import { MessageService } from "src/app/service/message.service";
@@ -16,7 +16,7 @@ import { HelpService } from "src/app/service/help.service";
 @Component({
   selector: "app-parameter-item",
   templateUrl: "./parameter-item.component.html",
-  styleUrls: ["./parameter-item.component.scss"]
+  styleUrls: ["./parameter-item.component.scss"],
 })
 export class ParameterItemComponent implements OnInit {
   @Input() type: string;
@@ -25,17 +25,17 @@ export class ParameterItemComponent implements OnInit {
     sort: [
       {
         field: "sequence",
-        dir: "asc"
-      }
+        dir: "asc",
+      },
     ],
     skip: 0,
-    take: 10
+    take: 10,
   };
   public sort: SortDescriptor[] = [
     {
       field: "sequence",
-      dir: "asc"
-    }
+      dir: "asc",
+    },
   ];
   public formGroup: FormGroup;
   public loading = false;
@@ -69,22 +69,22 @@ export class ParameterItemComponent implements OnInit {
     private service: ParameterItemService,
     private message: MessageService,
     private helpService: HelpService
-  ) { }
+  ) {}
 
   public ngOnInit(): void {
     this.language = this.helpService.getLanguage();
     this.height = this.helpService.getHeightForGrid();
     this.editedRowIndex = -1;
-    const superadmin = localStorage.getItem('superadmin');
+    const superadmin = localStorage.getItem("superadmin");
     // this.editButton[41]=true;
     if (this.type === "Doctors") {
-      this.service.getDoctorType(superadmin).subscribe(data => {
+      this.service.getDoctorType(superadmin).subscribe((data) => {
         this.doctorTypeList = data;
       });
     }
 
     if (this.type === "Therapies") {
-      this.service.getTherapy(superadmin).subscribe(data => {
+      this.service.getTherapy(superadmin).subscribe((data) => {
         this.therapyList = data;
       });
     }
@@ -96,11 +96,10 @@ export class ParameterItemComponent implements OnInit {
         });
         this.firstVatTexList = this.vatTexList;
       });
-
     }
 
     this.view = this.service.pipe(
-      map(data => {
+      map((data) => {
         this.currentLoadData = data;
 
         // data.forEach(elem => {
@@ -118,7 +117,7 @@ export class ParameterItemComponent implements OnInit {
       this.theme = localStorage.getItem("theme");
     }
 
-    this.message.getTheme().subscribe(mess => {
+    this.message.getTheme().subscribe((mess) => {
       this.changeTheme(mess);
       this.theme = mess;
     });
@@ -149,7 +148,7 @@ export class ParameterItemComponent implements OnInit {
         zip_code: new FormControl(),
         city: new FormControl(),
         telephone: new FormControl(),
-        email: new FormControl()
+        email: new FormControl(),
       });
     } else if (this.type === "Therapy") {
       this.formGroup = new FormGroup({
@@ -163,13 +162,13 @@ export class ParameterItemComponent implements OnInit {
         art_nr: new FormControl(),
         net_price: new FormControl(),
         gross_price: new FormControl(),
-        category: new FormControl()
+        category: new FormControl(),
       });
     } else {
       this.formGroup = new FormGroup({
         title: new FormControl(),
         sequence: new FormControl(),
-        superadmin: new FormControl()
+        superadmin: new FormControl(),
       });
     }
 
@@ -194,7 +193,7 @@ export class ParameterItemComponent implements OnInit {
         zip_code: new FormControl(dataItem.zip_code),
         city: new FormControl(dataItem.city),
         telephone: new FormControl(dataItem.telephone),
-        email: new FormControl(dataItem.email)
+        email: new FormControl(dataItem.email),
       });
       this.selectedDoctorType = dataItem.doctor_type;
       this.selectedGender = dataItem.gender;
@@ -210,10 +209,9 @@ export class ParameterItemComponent implements OnInit {
         art_nr: new FormControl(dataItem.art_nr),
         net_price: new FormControl(dataItem.net_price),
         gross_price: new FormControl(dataItem.gross_price),
-        category: new FormControl(dataItem.category)
+        category: new FormControl(dataItem.category),
       });
       this.selectedVAT = dataItem.vat;
-
     } else {
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
@@ -227,7 +225,6 @@ export class ParameterItemComponent implements OnInit {
     this.refreshData();
   }
 
-
   public cancelHandler({ sender, rowIndex }) {
     this.editedRowIndex = -1;
     this.vatTexList = this.firstVatTexList;
@@ -235,7 +232,6 @@ export class ParameterItemComponent implements OnInit {
     this.refreshData();
     this.changeTheme(this.theme);
   }
-
 
   setSelectedItem(dataItem): void {
     console.log(dataItem);
@@ -255,32 +251,43 @@ export class ParameterItemComponent implements OnInit {
     if (this.type === "Therapy") {
       const sortedData = {
         data: orderBy(this.currentLoadData, this.sort),
-        total: this.currentLoadData.length
+        total: this.currentLoadData.length,
       };
       if (
-        rowIndex !== -1 && sortedData.data[rowIndex]["net_price"] !== formGroup.value.net_price && sortedData.data[rowIndex]['vat'] !== formGroup.value.vat
+        rowIndex !== -1 &&
+        sortedData.data[rowIndex]["net_price"] !== formGroup.value.net_price &&
+        sortedData.data[rowIndex]["vat"] !== formGroup.value.vat
       ) {
         formGroup.value.gross_price = (
           Number(formGroup.value.net_price) *
-          (1 + this.getTaxValue(sortedData.data[rowIndex]["vat"]) / 100)).toFixed(2);
+          (1 + this.getTaxValue(sortedData.data[rowIndex]["vat"]) / 100)
+        ).toFixed(2);
       } else if (
-        rowIndex !== -1 && sortedData.data[rowIndex]["gross_price"] !== formGroup.value.gross_price && sortedData.data[rowIndex]['vat'] !== formGroup.value.vat
+        rowIndex !== -1 &&
+        sortedData.data[rowIndex]["gross_price"] !==
+          formGroup.value.gross_price &&
+        sortedData.data[rowIndex]["vat"] !== formGroup.value.vat
       ) {
         formGroup.value.net_price = (
           Number(formGroup.value.gross_price) /
-          (1 + this.getTaxValue(sortedData.data[rowIndex]["vat"]) / 100)).toFixed(2);
+          (1 + this.getTaxValue(sortedData.data[rowIndex]["vat"]) / 100)
+        ).toFixed(2);
       }
     }
     product.gender = this.selectedGender;
     product.doctor_type = this.selectedDoctorType;
     product.therapy_id = this.selectedTherapy;
     product.vat = this.selectedVAT;
-    product.superadmin = localStorage.getItem('superadmin');
+    product.superadmin = localStorage.getItem("superadmin");
 
+    console.log(product);
 
-    console.log(product)
-
-    this.service.addData(product, isNew, this.type, localStorage.getItem('superadmin'));
+    this.service.addData(
+      product,
+      isNew,
+      this.type,
+      localStorage.getItem("superadmin")
+    );
 
     sender.closeRow(rowIndex);
     this.refreshData();
@@ -288,19 +295,23 @@ export class ParameterItemComponent implements OnInit {
 
   public removeHandler({ dataItem }) {
     console.log(dataItem);
-    this.service.deleteData(dataItem.id, this.type, localStorage.getItem('superadmin'));
+    this.service.deleteData(
+      dataItem.id,
+      this.type,
+      localStorage.getItem("superadmin")
+    );
     this.refreshData();
   }
 
   refreshData() {
     this.view = this.service.pipe(
-      map(data => {
+      map((data) => {
         this.currentLoadData = data;
         return process(data, this.gridState);
       })
     );
 
-    this.service.getData(this.type, localStorage.getItem('superadmin'));
+    this.service.getData(this.type, localStorage.getItem("superadmin"));
   }
 
   private closeEditor(grid, rowIndex = this.editedRowIndex) {
@@ -324,17 +335,24 @@ export class ParameterItemComponent implements OnInit {
   }
 
   selectionVAT(event, rowIndex) {
-    console.log(this.view);
+    console.log(this.view["source"]["value"][rowIndex - 1]);
+    console.log(rowIndex);
+    const realIndex = rowIndex - 2;
     /*const allData = process(this.currentLoadData, this.gridState);
     this.view.source['data'] = allData.data;
     this.view.source['data'].length = allData.total;*/
+    console.log(this.formGroup.value);
+    console.log(this.formGroup.controls["gross_price"]);
     if (event !== undefined) {
       this.selectedVAT = event;
       if (
         this.formGroup !== undefined &&
         this.formGroup.value.net_price !== "" &&
         this.formGroup.value.net_price !== undefined &&
-        this.formGroup.value.net_price !== null
+        this.formGroup.value.net_price !== null &&
+        (this.view["source"]["value"][realIndex]["gross_price"] ===
+          this.formGroup.value.gross_price ||
+          !this.formGroup.value.gross_price)
       ) {
         const procent = 1 + this.getTaxValue(event) / 100;
         // this.formGroup.value.gross_price = Number(this.formGroup.value.net_price) * procent;
@@ -346,7 +364,10 @@ export class ParameterItemComponent implements OnInit {
         this.formGroup !== undefined &&
         this.formGroup.value.gross_price !== "" &&
         this.formGroup.value.gross_price !== undefined &&
-        this.formGroup.value.gross_price !== null
+        this.formGroup.value.gross_price !== null &&
+        (this.view["source"]["value"][realIndex]["net_price"] ===
+          this.formGroup.value.net_price ||
+          !this.formGroup.value.net_price)
       ) {
         const procent = 1 - this.getTaxValue(event) / 100;
         this.formGroup.controls["net_price"].setValue(
@@ -389,7 +410,7 @@ export class ParameterItemComponent implements OnInit {
 
   loadProducts(): void {
     this.view = this.service.pipe(
-      map(data => {
+      map((data) => {
         return process(this.currentLoadData, this.gridState);
       })
     );
@@ -398,7 +419,7 @@ export class ParameterItemComponent implements OnInit {
   dataStateChange(state: DataStateChangeEvent): void {
     this.gridState = state;
     this.view = this.service.pipe(
-      map(data => process(this.currentLoadData, this.gridState))
+      map((data) => process(this.currentLoadData, this.gridState))
     );
   }
 
@@ -501,9 +522,8 @@ export class ParameterItemComponent implements OnInit {
     console.log(event);
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener("window:resize", ["$event"])
   onResize(event) {
     this.height = this.helpService.getHeightForGrid();
   }
 }
-

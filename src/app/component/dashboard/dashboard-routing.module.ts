@@ -1,5 +1,5 @@
-import { InvoicePrefixComponent } from './administrator/invoice-prefix/invoice-prefix.component';
-import { AddHolidayComponent } from './administrator/add-holiday/add-holiday.component';
+import { InvoicePrefixComponent } from "./administrator/invoice-prefix/invoice-prefix.component";
+import { AddHolidayComponent } from "./administrator/add-holiday/add-holiday.component";
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { DashboardComponent } from "./dashboard.component";
@@ -44,7 +44,9 @@ import { MassiveSmsComponent } from "./marketing/massive-sms/massive-sms.compone
 import { MassiveEmailComponent } from "./marketing/massive-email/massive-email.component";
 import { MailMassiveEmailComponent } from "./parameters/mail-parameters/mail-massive-email/mail-massive-email.component";
 import { SmsMassiveComponent } from "./parameters/sms-massive/sms-massive.component";
-import { InvoiceComponent } from './invoice/invoice.component';
+import { InvoiceComponent } from "./invoice/invoice.component";
+import { SmsBirthdayCongratulationComponent } from "./parameters/sms-birthday-congratulation/sms-birthday-congratulation.component";
+import { MailBirthdayCongratulationComponent } from "./parameters/mail-birthday-congratulation/mail-birthday-congratulation.component";
 
 const routes: Routes = [
   {
@@ -215,6 +217,14 @@ const routes: Routes = [
         path: "massive-email",
         component: MassiveEmailComponent,
       },
+      {
+        path: "sms-birthday-congratulation",
+        component: SmsBirthdayCongratulationComponent,
+      },
+      {
+        path: "mail-birthday-congratulation",
+        component: MailBirthdayCongratulationComponent,
+      },
     ],
   },
 ];
@@ -223,4 +233,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DashboardRouting { }
+export class DashboardRouting {}

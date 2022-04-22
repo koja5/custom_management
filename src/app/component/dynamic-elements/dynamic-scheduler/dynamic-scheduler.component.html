@@ -402,9 +402,12 @@
                 (resizeStop)="onItemDrag($event)"
               >
                 <ng-template #dateHeaderTemplate let-data>
-                  <div class="date-text" title=" {{ getDateHeaderText(data.date) }}">
+                  <div
+                    class="date-text"
+                    title=" {{ getDateHeaderText(data.date) }}"
+                  >
                     {{ getDateHeaderText(data.date) }}
-                    <br>
+                    <br />
                     {{ getDateHoliday(data.date) }}
                   </div>
                 </ng-template>
@@ -1673,14 +1676,13 @@
   </modal>
 
   <kendo-dialog
-    title="Confirmation of arrival"
     *ngIf="requestForConfirmArrival"
     (close)="requestForConfirmArrival = false"
     [minWidth]="250"
     [width]="365"
   >
     <p style="margin: 30px; text-align: center">
-      Do you want to request a confirmation from your client?
+      {{ language.confirmRequestFromClient }}
     </p>
     <kendo-dialog-actions>
       <button
@@ -1697,7 +1699,6 @@
   </kendo-dialog>
 
   <kendo-dialog
-    title="Confirmation of arrival"
     *ngIf="modalConfirmEventMove"
     (close)="modalConfirmEventMove = false; refreshEvents()"
     [minWidth]="250"

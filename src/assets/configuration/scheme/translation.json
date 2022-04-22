@@ -425,6 +425,9 @@
       "slotInterval": {
         "type": "string"
       },
+      "confirmRequestFromClient": {
+        "type": "string"
+      },
       "refreshEventToolbar": {
         "type": "string"
       },
@@ -606,6 +609,15 @@
         "type": "string"
       },
       "addHoliday": {
+        "type": "string"
+      },
+      "smsBirthdayCongratulation": {
+        "type": "string"
+      },
+      "emailBirthdayCongratulation": {
+        "type": "string"
+      },
+      "invoicePrefixMenu": {
         "type": "string"
       },
       "reservations": {
@@ -1879,6 +1891,21 @@
       "smsSignaturePoweredByMassive": {
         "type": "string"
       },
+      "congratulationBirthday": {
+        "type": "string"
+      },
+      "signatureCompanyName": {
+        "type": "string"
+      },
+      "signatureAddress1": {
+        "type": "string"
+      },
+      "signatureAddress2": {
+        "type": "string"
+      },
+      "signatureAddress3": {
+        "type": "string"
+      },
       "chooseTemplate": {
         "type": "string"
       },
@@ -2755,6 +2782,19 @@
               "key": "slotInterval"
             }
           ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "confirmRequestFromClient"
+            },
+            {},
+            {},
+            {}
+          ]
         }
       ]
     },
@@ -3016,11 +3056,17 @@
           "flex-direction": "row",
           "items": [
             {
+              "key": "invoicePrefixMenu"
+            },
+            {
               "key": "addHoliday"
             },
-            {},
-            {},
-            {}
+            {
+              "key": "smsBirthdayCongratulation"
+            },
+            {
+              "key": "emailBirthdayCongratulation"
+            }
           ]
         }
       ]
@@ -6106,8 +6152,29 @@
             },
             {
               "key": "smsSignaturePoweredByMassive"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "congratulationBirthday"
             },
-            {}
+            {
+              "key": "signatureCompanyName"
+            },
+            {
+              "key": "signatureAddress1"
+            },
+            {
+              "key": "signatureAddress2"
+            },
+            {
+              "key": "signatureAddress3"
+            }
           ]
         }
       ]

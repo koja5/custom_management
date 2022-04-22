@@ -100,6 +100,8 @@ import {
 } from "@syncfusion/ej2-angular-schedule";
 import { InvoiceComponent } from './invoice/invoice.component';
 import { InvoicePrefixComponent } from './administrator/invoice-prefix/invoice-prefix.component';
+import { SmsBirthdayCongratulationComponent } from './parameters/sms-birthday-congratulation/sms-birthday-congratulation.component';
+import { MailBirthdayCongratulationComponent } from './parameters/mail-birthday-congratulation/mail-birthday-congratulation.component';
 
 @NgModule({
   declarations: [
@@ -151,6 +153,8 @@ import { InvoicePrefixComponent } from './administrator/invoice-prefix/invoice-p
     AddHolidayComponent,
     InvoiceComponent,
     InvoicePrefixComponent,
+    SmsBirthdayCongratulationComponent,
+    MailBirthdayCongratulationComponent
   ],
   imports: [
     CommonModule,
