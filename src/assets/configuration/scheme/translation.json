@@ -1992,6 +1992,12 @@
       },
       "printOnInvoice": {
         "type": "string"
+      },
+      "additionalInvoiceOptionsTitle": {
+        "type": "string"
+      },
+      "selectInvoiceLanguage": {
+        "type": "string"
       }
     }
   },
@@ -6252,6 +6258,12 @@
             },
             {
               "key": "printOnInvoice"
+            },
+            {
+              "key": "additionalInvoiceOptionsTitle"
+            },
+            {
+              "key": "selectInvoiceLanguage"
             }
           ]
         }

@@ -1,27 +1,25 @@
+.expand-label {
+  cursor: pointer;
+}
 
-  .expand-label {
-    cursor: pointer;
-  }
-  
-  .check-option {
-    font-weight: bold;
-  }
+.check-option {
+  font-weight: bold;
+}
 
-  .date-range-label {
-    display: block;
-    font-weight: bold;
-    color: #656565;
-  }
+.date-range-label {
+  display: block;
+  font-weight: bold;
+  color: #656565;
+}
 
-  
-  
-  .toolbarElement {
-    min-width: 45px;
-    text-align: center;
-  }
-  
-  div.disabled
-{
+
+
+.toolbarElement {
+  min-width: 45px;
+  text-align: center;
+}
+
+div.disabled {
   pointer-events: none;
 
   /* for "disabled" effect */
@@ -40,6 +38,10 @@
 
 @media (max-width: 767.98px) {
   .full-width {
-    width:100vw;
+    width: 100vw;
   }
+}
+
+.border-right {
+  border-right: 1px solid lightgray;
 }
