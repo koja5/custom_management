@@ -5483,15 +5483,17 @@ router.post("/sendMassiveSMS", function (req, res) {
                 res.json(err);
               }
               var question = getSqlQuery(req.body);
+              var joinTable = getJoinTable(req.body);
               conn.query(
-                "select distinct c.telephone, c.mobile, c.shortname, sm.* from customers c join sms_massive_message sm on c.storeId = sm.superadmin where ((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL)) and c.storeId = " +
+                "select distinct c.telephone, c.mobile, c.shortname, sm.* from customers c join sms_massive_message sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin " +
+                  joinTable +
+                  " where ((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL)) and c.storeId = " +
                   Number(req.body.superadmin) +
                   " and " +
                   question,
                 function (err, rows) {
                   rows.forEach(function (to, i, array) {
                     var phoneNumber = to.mobile ? to.mobile : to.telephone;
-                    console.log(phoneNumber);
                     if (
                       checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
                       req.body.message
@@ -5537,8 +5539,6 @@ router.post("/sendMassiveSMS", function (req, res) {
                         signature;
                       const fullMessage = message + "\n\n" + signature;
                       var fileName = "server/sms/" + phoneNumber + ".txt";
-                      console.log(phoneNumber);
-                      console.log(fullMessage);
                       sendSmsFromMail(phoneNumber, fullMessage);
                       res.send(true);
                     } else {
@@ -5599,6 +5599,7 @@ function getSqlQuery(body) {
     }
   }
 
+  console.log(body);
   if (body.birthdayFrom) {
     if (question) {
       question += " and c.birthday >= '" + body.birthdayFrom + "'";
@@ -5707,6 +5708,31 @@ function getSqlQuery(body) {
   return question;
 }
 
+//join tasks t on c.id = t.customer_id join base_one bo on c.id = bo.customer_id join base_two bt on c.id = bt.customer_id
+
+function getJoinTable(body) {
+  let joinTable = "";
+  if (
+    body.category ||
+    body.start ||
+    body.end ||
+    body.creator_id ||
+    body.store
+  ) {
+    joinTable += "join tasks t on c.id = t.customer_id";
+  }
+
+  if (body.recommendation || body.relationship || body.social || body.doctor) {
+    joinTable += "join base_one bo on c.id = bo.customer_id";
+  }
+
+  if (body.profession || body.childs) {
+    joinTable = "join base_two bt on c.id = bt.customer_id";
+  }
+
+  return joinTable;
+}
+
 router.post("/getFilteredRecipients", function (req, res) {
   try {
     connection.getConnection(function (err, conn) {
@@ -5714,6 +5740,7 @@ router.post("/getFilteredRecipients", function (req, res) {
         res.json(err);
       }
       var question = getSqlQuery(req.body);
+      var joinTable = getJoinTable(req.body);
       var table = "";
       if (req.body.mode && req.body.mode === "mail") {
         var checkAdditionalQuery = "(c.email != '' and c.email IS NOT NULL)";
@@ -5727,7 +5754,9 @@ router.post("/getFilteredRecipients", function (req, res) {
       conn.query(
         "select distinct c.* from customers c join " +
           table +
-          " sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin join tasks t on c.id = t.customer_id join base_one bo on c.id = bo.customer_id join base_two bt on c.id = bt.customer_id where " +
+          " sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin " +
+          joinTable +
+          " where " +
           checkAdditionalQuery +
           " and c.storeId = " +
           Number(req.body.superadmin) +

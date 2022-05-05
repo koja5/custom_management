@@ -41,13 +41,15 @@ function sendHappyBirthdayViaEmail() {
       function (error, response, body) {
         if (!error && response.statusCode === 200) {
           conn.query(
-            "SELECT distinct c.*, mb.* from customers c join mail_birthday_congratulation mb on c.storeId = mb.superadmin where DAY(c.birthday + interval 1 DAY) = DAY(CURRENT_DATE()) and MONTH(c.birthday) = MONTH(CURRENT_DATE())",
+            /*"SELECT distinct c.*, mb.* from customers c join mail_birthday_congratulation mb on c.storeId = mb.superadmin where DAY(c.birthday + interval 1 DAY) = DAY(CURRENT_DATE()) and MONTH(c.birthday) = MONTH(CURRENT_DATE())",*/
+            "SELECT distinct c.*, mb.* from customers c join mail_birthday_congratulation mb on c.storeId = mb.superadmin where DAY(c.birthday) = DAY(CURRENT_DATE()) and MONTH(c.birthday) = MONTH(CURRENT_DATE())",
             function (err, rows) {
               if (err) {
                 logger.log("error", err);
                 res.json(false);
               }
               var language = JSON.parse(body)["config"];
+              console.log(rows);
               rows.forEach(function (to, i, array) {
                 var mail = {};
                 var signatureAvailable = false;
@@ -131,6 +133,10 @@ function sendHappyBirthdayViaEmail() {
                     response.send(true);
                   }
                 });
+                logger.log(
+                      "info",
+                      `Sent mail for marketing promotion on EMAIL: ${to.email}`
+                    );
               });
             }
           );

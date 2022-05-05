@@ -12,17 +12,27 @@ const logger = require("./logger");
 var link = process.env.link_api;
 var linkClient = process.env.link_client;
 var loginLink = process.env.link_client_login;
-const monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 var connection = mysql.createPool({
-    host: '116.203.85.82',
-    user: 'appprodu_appproduction',
-    password: 'CJr4eUqWg33tT97mxPFx',
-    database: 'appprodu_management'
+  host: "116.203.85.82",
+  user: "appprodu_appproduction",
+  password: "CJr4eUqWg33tT97mxPFx",
+  database: "appprodu_management",
 });
-
 
 /*var smtpTransport = nodemailer.createTransport({
   host: "116.203.85.82",
@@ -42,10 +52,10 @@ var smtpTransport = nodemailer.createTransport({
     rejectUnauthorized: false,
   },
   auth: {
-      user: "support@app-production.eu",
-      pass: "])3!~0YFU)S]",
+    user: "support@app-production.eu",
+    pass: "])3!~0YFU)S]",
   },
-})
+});
 
 //slanje maila pri registraciji
 
@@ -77,7 +87,7 @@ router.post("/send", function (req, res) {
       introductoryMessageForConfirmMail:
         req.body.language?.introductoryMessageForConfirmMail,
       confirmMailButtonText: req.body.language?.confirmMailButtonText,
-    })
+    }),
   };
 
   smtpTransport.sendMail(mailOptions, function (error, response) {
@@ -1092,11 +1102,14 @@ router.post("/sendMassiveEMail", function (req, res) {
   );
   var sendMassive = hogan.compile(sendMassiveTemplate);
   var question = getSqlQuery(req.body);
-  
+  var joinTable = getJoinTable(req.body);
+
   if (req.body.message != "") {
     connection.getConnection(function (err, conn) {
       conn.query(
-        "select distinct c.email, c.shortname, mm.* from customers c join mail_massive_message mm on c.storeId = mm.superadmin join base_one bo on c.id = bo.customer_id join base_two bt on c.id = bt.customer_id where (c.email != '' and c.email IS NOT NULL) and c.storeId = " +
+        "select distinct c.email, c.shortname, mm.* from customers c join mail_massive_message mm on c.storeId = mm.superadmin join store s on c.storeId = s.superadmin " +
+          joinTable +
+          " where (c.email != '' and c.email IS NOT NULL) and c.storeId = " +
           Number(req.body.superadmin) +
           " and " +
           question,
@@ -1148,12 +1161,11 @@ router.post("/sendMassiveEMail", function (req, res) {
                 introductoryMessageForDenyReservation: mail.mailMessage
                   ? mail.mailMessage
                   : req.body.language?.introductoryMessageForDenyReservation,
-                signature: mail.mailSignature
-                  ? mail.mailSignature
-                  : "",
+                signature: mail.mailSignature ? mail.mailSignature : "",
                 signatureCompanyName:
                   signatureAvailable && mail.signatureCompanyName
-                    ? mail.signatureCompanyName : "",
+                    ? mail.signatureCompanyName
+                    : "",
                 signatureAddress1:
                   signatureAvailable && mail.signatureAddress1
                     ? mail.signatureAddress1
@@ -1342,9 +1354,30 @@ function getSqlQuery(body) {
     }
   }
 
-  console.log(question);
-
   return question;
+}
+
+function getJoinTable(body) {
+  let joinTable = "";
+  if (
+    body.category ||
+    body.start ||
+    body.end ||
+    body.creator_id ||
+    body.store
+  ) {
+    joinTable += "join tasks t on c.id = t.customer_id";
+  }
+
+  if (body.recommendation || body.relationship || body.social || body.doctor) {
+    joinTable += "join base_one bo on c.id = bo.customer_id";
+  }
+
+  if (body.profession || body.childs) {
+    joinTable = "join base_two bt on c.id = bt.customer_id";
+  }
+
+  return joinTable;
 }
 
 router.post("/infoAboutConfirmDenyAccessDevice", function (req, res) {

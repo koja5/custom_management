@@ -7,11 +7,18 @@
         "field": "congratulationBirthday"
     },
     {
-        "type": "textarea",
+        "type": "textbox",
         "width": "col-md-12",
         "name": "smsSubject",
         "label": "smsSubject",
         "field": "smsSubject"
+    },
+    {
+        "type": "textarea",
+        "width": "col-md-12",
+        "name": "smsMessage",
+        "label": "smsMessage",
+        "field": "smsMessage"
     },
     {
         "type": "switch",

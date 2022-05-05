@@ -636,10 +636,7 @@
 
                               <kendo-datepicker
                                 [format]="'dd.MM.yyyy'"
-                                *ngIf="
-                                  data.birthday !== undefined &&
-                                  data.birthday !== ''
-                                "
+                                *ngIf="data.birthday"
                                 [(ngModel)]="data.birthday"
                                 name="birthday"
                                 class="noPadding"

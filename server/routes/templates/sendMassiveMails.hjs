@@ -51,7 +51,7 @@
           >
             <div
               class="text-red text-sm font-bold h-24"
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;font-weight: 700;height: 6rem;color: #e3342f;font-size: .875rem;"
+              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;font-weight: 700;height: 6rem;color: #e3342f;font-size: 12px; font-family: Arial, Helvetica, sans-serif;"
             >
               <img
                 src="http://app-production.eu:8080/assets/images/brand-logo.png"
@@ -69,30 +69,28 @@
             >
               {{initialGreeting}}
               {{firstName}},</p>
-            <br />
-            <br />
-            <p
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7; white-space: pre-line;"
+            <pre
+              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7; white-space: pre-line; font-size: 12px; font-family: Arial, Helvetica, sans-serif;"
             >
-              {{message}}</p>
+              {{message}}</pre>
 
             <p
               class="text-sm"
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;font-size: .875rem;"
+              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;font-size: 12px; font-family: Arial, Helvetica, sans-serif;"
             >
-              {{finalGreeting}},<br
+              {{finalGreeting}}<br
                 style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"
               />
               {{signature}}
               <br />
               {{signatureCompanyName}}
-              <br>
+              <br />
               {{signatureAddress1}}
-              <br>
+              <br />
               {{signatureAddress2}}
-              <br>
+              <br />
               {{signatureAddress3}}
-              <br>
+              <br />
               {{signatureTelephone}}
               <br />
               {{signatureMobile}}
@@ -120,38 +118,8 @@
 
         <div
           class="mail__meta text-center text-sm text-grey-darker mt-8"
-          style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin-top: 2rem;text-align: center;color: #606f7b;font-size: .875rem;"
+          style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin-top: 2rem;text-align: center;color: #606f7b;font-size: 12px; font-family: Arial, Helvetica, sans-serif;"
         >
-
-          <div
-            class="meta__social flex justify-center my-4"
-            style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;display: flex;justify-content: center;margin-top: 1rem;margin-bottom: 1rem;"
-          >
-            <a
-              href="#"
-              class="flex items-center justify-center mr-4 bg-black text-white rounded-full w-8 h-8 no-underline"
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;background-color: #22292f;border-radius: 9999px;display: flex;align-items: center;justify-content: center;height: 2rem;margin-right: 1rem;color: #fff;text-decoration: none;width: 2rem;"
-            ><i
-                class="fab fa-facebook-f"
-                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;-moz-osx-font-smoothing: grayscale;-webkit-font-smoothing: antialiased;display: inline-block;font-style: normal;font-variant: normal;text-rendering: auto;line-height: 1;font-family: Font Awesome\\\\ 5 Brands;"
-              ></i></a>
-            <a
-              href="#"
-              class="flex items-center justify-center mr-4 bg-black text-white rounded-full w-8 h-8 no-underline"
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;background-color: #22292f;border-radius: 9999px;display: flex;align-items: center;justify-content: center;height: 2rem;margin-right: 1rem;color: #fff;text-decoration: none;width: 2rem;"
-            ><i
-                class="fab fa-instagram"
-                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;-moz-osx-font-smoothing: grayscale;-webkit-font-smoothing: antialiased;display: inline-block;font-style: normal;font-variant: normal;text-rendering: auto;line-height: 1;font-family: Font Awesome\\\\ 5 Brands;"
-              ></i></a>
-            <a
-              href="#"
-              class="flex items-center justify-center bg-black text-white rounded-full w-8 h-8 no-underline"
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;background-color: #22292f;border-radius: 9999px;display: flex;align-items: center;justify-content: center;height: 2rem;color: #fff;text-decoration: none;width: 2rem;"
-            ><i
-                class="fab fa-twitter"
-                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;-moz-osx-font-smoothing: grayscale;-webkit-font-smoothing: antialiased;display: inline-block;font-style: normal;font-variant: normal;text-rendering: auto;line-height: 1;font-family: Font Awesome\\\\ 5 Brands;"
-              ></i></a>
-          </div>
 
           <div
             class="meta__help"

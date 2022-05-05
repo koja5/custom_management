@@ -428,6 +428,9 @@
       "confirmRequestFromClient": {
         "type": "string"
       },
+      "confirmEventMove": {
+        "type": "string"
+      },
       "refreshEventToolbar": {
         "type": "string"
       },
@@ -2791,7 +2794,9 @@
             {
               "key": "confirmRequestFromClient"
             },
-            {},
+            {
+              "key": "confirmEventMove"
+            },
             {},
             {}
           ]
