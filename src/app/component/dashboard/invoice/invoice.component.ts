@@ -1,6 +1,6 @@
 import { InvoiceService } from './../../../service/invoice.service';
 import { ParameterItemService } from "src/app/service/parameter-item.service";
-import { Component, HostListener, OnInit } from "@angular/core";
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from "@angular/core";
 import { CustomerModel } from "src/app/models/customer-model";
 import { CustomersService } from "src/app/service/customers.service";
 import { DateRangeService } from "@progress/kendo-angular-dateinputs";
@@ -35,8 +35,12 @@ export class InvoiceComponent implements OnInit {
   superadminProfile: any;
   selectedInvoiceLanguage: any;
 
+  @ViewChild("filter") filterElement: ElementRef<HTMLElement>;
+  @ViewChild("contentWrapper") contentElement: ElementRef<HTMLElement>;
+
+
   @HostListener("window:resize", ["$event"])
-  onResize() {
+  onResize(): void {
     if (this.displayToolbar) {
       this.height = 75;
     } else {
@@ -102,6 +106,14 @@ export class InvoiceComponent implements OnInit {
 
     return this.height;
   }
+
+  public get tableHeight(): number {
+
+    let height = 100 - (100 * this.filterElement.nativeElement.clientHeight) / this.contentElement.nativeElement.clientHeight;
+
+    return height;
+  }
+
   constructor(
     private helpService: HelpService,
     private customerService: CustomersService,
@@ -677,7 +689,6 @@ export class InvoiceComponent implements OnInit {
 
             therapies.push({
               title: therapy.printOnInvoice ? therapy.titleOnInvoice : therapy.title,
-              description: therapy.description ? therapy.description : '',
               date: shouldSetDate ? this.formatDate(therapy.date) : '',
               net_price: this.isPriceIncluded ? (isNaNPrice ? this.invoiceLanguage.noDataAvailable : this.invoiceLanguage.euroSign + ' ' + parseFloat(therapy.net_price).toFixed(2)) : '',
               vat: this.isPriceIncluded ? (vatDefinition ? vatDefinition.title : 20) : '',

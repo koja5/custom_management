@@ -1,6 +1,6 @@
-<div class="content-wrapper w-100" style="overflow:hidden; height: 100%;">
+<div #contentWrapper class="content-wrapper w-100" style="height: 100%;">
 
-  <div class="filter-toolbar w-100 h-auto">
+  <div #filter class="filter-toolbar w-100 h-auto">
     <div class="d-flex w-100 h-auto">
       <ejs-toolbar id="toolbar_options" height="auto" width="100%">
         <e-items>
@@ -135,17 +135,18 @@
 
       <div class="row mt-4">
         <div class="col-sm-4">
-          <div class="btn btn-primary" [ngClass]="{'disabled': noDataSelected}" (click)="filter()">{{
-            language.filterToolbar }}</div>
+          <div class="btn btn-primary" [ngClass]="{'disabled': noDataSelected}" (click)="filter()">
+            {{language.filterToolbar }}
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="grid w-100" style="height: 97%">
+  <div class="grid w-100" style="height: 100%">
     <div class="left-panel" style="height: 100%">
       <div class="control-section" style="height: 100%">
-        <kendo-grid [style.height.%]="gridHeight" [selectable]="{enabled: true, checkboxOnly: true, mode: 'multiple'}"
+        <kendo-grid [style.height.%]="tableHeight" [selectable]="{enabled: true, checkboxOnly: true, mode: 'multiple'}"
           [data]="gridViewData" [pageSize]="pageSize" [skip]="state.skip" [pageable]="true"
           (pageChange)="pageChange($event)" [filter]="state.filter" [loading]="loading">
 
