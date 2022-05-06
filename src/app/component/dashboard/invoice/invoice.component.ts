@@ -689,13 +689,18 @@ export class InvoiceComponent implements OnInit {
               selectedTherapies.length === 1 ||
               !this.isDateSet;
 
-            therapies.push({
-              title: therapy.printOnInvoice ? therapy.titleOnInvoice : therapy.title,
-              date: shouldSetDate ? this.formatDate(therapy.date) : '',
-              net_price: this.isPriceIncluded ? (isNaNPrice ? this.invoiceLanguage.noDataAvailable : this.invoiceLanguage.euroSign + ' ' + parseFloat(therapy.net_price).toFixed(2)) : '',
-              vat: this.isPriceIncluded ? (vatDefinition ? vatDefinition.title : 20) : '',
-              gross_price: this.isPriceIncluded ? (isNaNBrutoPrice ? this.invoiceLanguage.noDataAvailable : this.invoiceLanguage.euroSign + ' ' + parseFloat(therapy.gross_price).toFixed(2)) : ''
-            });
+
+            if (therapy.printOnInvoice) {
+              therapies.push({
+                title: (therapy.titleOnInvoice && therapy.titleOnInvoice.trim() !== "") ? therapy.titleOnInvoice : therapy.title,
+                date: shouldSetDate ? this.formatDate(therapy.date) : '',
+                net_price: this.isPriceIncluded ? (isNaNPrice ? this.invoiceLanguage.noDataAvailable : this.invoiceLanguage.euroSign + ' ' + parseFloat(therapy.net_price).toFixed(2)) : '',
+                vat: this.isPriceIncluded ? (vatDefinition ? vatDefinition.title : 20) : '',
+                gross_price: this.isPriceIncluded ? (isNaNBrutoPrice ? this.invoiceLanguage.noDataAvailable : this.invoiceLanguage.euroSign + ' ' + parseFloat(therapy.gross_price).toFixed(2)) : ''
+              });
+            }
+
+
           }
         }
       }
