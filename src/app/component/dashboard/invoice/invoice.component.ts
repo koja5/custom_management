@@ -22,6 +22,7 @@ import pdfMake from "pdfmake/build/pdfmake";
 import PizZip from "pizzip";
 import PizZipUtils from "pizzip/utils/index.js";
 import { DashboardService } from "src/app/service/dashboard.service";
+import { LoadingScreenService } from 'src/app/shared/loading-screen/loading-screen.service';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -35,7 +36,7 @@ export class InvoiceComponent implements OnInit {
   superadminProfile: any;
   selectedInvoiceLanguage: any;
 
-  @ViewChild("filter") filterElement: ElementRef<HTMLElement>;
+  @ViewChild("filterToolbar") filterToolbar: ElementRef<HTMLElement>;
   @ViewChild("contentWrapper") contentElement: ElementRef<HTMLElement>;
 
 
@@ -109,7 +110,7 @@ export class InvoiceComponent implements OnInit {
 
   public get tableHeight(): number {
 
-    let height = 100 - (100 * this.filterElement.nativeElement.clientHeight) / this.contentElement.nativeElement.clientHeight;
+    let height = 100 - (100 * this.filterToolbar.nativeElement.clientHeight) / this.contentElement.nativeElement.clientHeight;
 
     return height;
   }
@@ -123,7 +124,8 @@ export class InvoiceComponent implements OnInit {
     private parameterItemService: ParameterItemService,
     private pdfService: PDFService,
     private dashboardService: DashboardService,
-    private invoiceService: InvoiceService
+    private invoiceService: InvoiceService,
+    private loadingScreenService: LoadingScreenService
   ) { }
 
   ngOnInit() {
@@ -861,8 +863,10 @@ export class InvoiceComponent implements OnInit {
           componentRef.customerUser.firstname +
           ".docx";
         saveAs(out, filename);
+
+        componentRef.loadingScreenService.stopLoading();
       }
-    );
+    )
   }
 
   replaceErrors(value) {
@@ -876,7 +880,9 @@ export class InvoiceComponent implements OnInit {
   }
 
   private loadFile(url, callback) {
-    PizZipUtils.getBinaryContent(url, callback);
+    this.loadingScreenService.startLoading();
+
+    return PizZipUtils.getBinaryContent(url, callback);
   }
 
   private get currentDateFormatted(): string {

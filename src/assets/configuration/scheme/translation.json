@@ -1960,6 +1960,9 @@
       "emptyGridMessage": {
         "type": "string"
       },
+      "loading": {
+        "type": "string"
+      },
       "clickHere": {
         "type": "string"
       },
@@ -2084,6 +2087,9 @@
             },
             {
               "key": "emptyGridMessage"
+            },
+            {
+              "key": "loading"
             }
           ]
         }
