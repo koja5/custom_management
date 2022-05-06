@@ -408,7 +408,7 @@ export class InvoiceComponent implements OnInit {
                         width: "*",
                       },
                       {
-                        text: this.invoicePrefix ? this.invoicePrefix + " " + this.invoiceID : this.invoiceID,
+                        text: this.invoicePrefix ? this.invoicePrefix + this.invoiceID : this.invoiceID,
                         style: "invoiceSubValue",
                         width: 130,
                       },
@@ -465,7 +465,7 @@ export class InvoiceComponent implements OnInit {
         {
           columns: [
             {
-              text: this.store.companyname ? this.store.companyname : this.superadminProfile.companyname,
+              text: this.store.companyname ? this.store.companyname : this.store.storename,
               style: "invoiceBillingDetailsLeft",
             },
             {
@@ -596,7 +596,7 @@ export class InvoiceComponent implements OnInit {
         columns: [
           {
             text:
-              (this.store.companyname ? this.store.companyname : this.superadminProfile.companyname) +
+              (this.store.companyname ? this.store.companyname : this.store.storename) +
               dotSign +
               this.store.street +
               dotSign +
@@ -781,7 +781,7 @@ export class InvoiceComponent implements OnInit {
       window.location.port +
       "/assets/Invoice_template.docx";
 
-    // const link = "http://127.0.0.1:8887/Invoice_template.docx";
+    //const link = "http://127.0.0.1:8887/Invoice_template.docx";
     this.loadFile(link,
       function (error, content) {
         if (error) {
@@ -804,7 +804,7 @@ export class InvoiceComponent implements OnInit {
           invoice_generated_date: componentRef.currentDateFormatted,
           billing_from_title: componentRef.invoiceLanguage.invoiceBillingTitleFrom,
           billing_to_title: componentRef.invoiceLanguage.invoiceBillingTitleTo,
-          clinic_name: componentRef.store.companyname ? componentRef.store.companyname : componentRef.superadminProfile.companyname,
+          clinic_name: componentRef.store.companyname ? componentRef.store.companyname : componentRef.store.storename,
           customer_lastname: componentRef.customerUser.lastname,
           customer_firstname: componentRef.customerUser.firstname,
           clinic_street: componentRef.store.street,
