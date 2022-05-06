@@ -59,7 +59,7 @@ export class EventCategoryComponent implements OnInit {
     private serviceHelper: ServiceHelperService,
     private toastr: ToastrService,
     private helpService: HelpService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.height = this.helpService.getHeightForGrid();

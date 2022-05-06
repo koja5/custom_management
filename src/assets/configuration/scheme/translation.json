@@ -1993,6 +1993,9 @@
       "emptyGridMessage": {
         "type": "string"
       },
+      "loading": {
+        "type": "string"
+      },
       "clickHere": {
         "type": "string"
       },
@@ -2015,6 +2018,24 @@
         "type": "string"
       },
       "invoicePrefixTitle": {
+        "type": "string"
+      },
+      "printBruttoNettoPrice": {
+        "type": "string"
+      },
+      "titleOnInvoice": {
+        "type": "string"
+      },
+      "printOnInvoice": {
+        "type": "string"
+      },
+      "additionalInvoiceOptionsTitle": {
+        "type": "string"
+      },
+      "selectInvoiceLanguage": {
+        "type": "string"
+      },
+      "showAtInvoice": {
         "type": "string"
       }
     }
@@ -2102,6 +2123,9 @@
             },
             {
               "key": "emptyGridMessage"
+            },
+            {
+              "key": "loading"
             }
           ]
         }
@@ -6263,6 +6287,9 @@
             },
             {
               "key": "euroSign"
+            },
+            {
+              "key": "printBruttoNettoPrice"
             }
           ]
         },
@@ -6304,6 +6331,28 @@
             },
             {
               "key": "invoiceConfirmDialogQuestion"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "titleOnInvoice"
+            },
+            {
+              "key": "printOnInvoice"
+            },
+            {
+              "key": "additionalInvoiceOptionsTitle"
+            },
+            {
+              "key": "selectInvoiceLanguage"
+            },
+            {
+              "key": "showAtInvoice"
             }
           ]
         }

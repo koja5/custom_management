@@ -1,6 +1,6 @@
 import { InvoiceService } from './../../../service/invoice.service';
 import { ParameterItemService } from "src/app/service/parameter-item.service";
-import { Component, HostListener, OnInit } from "@angular/core";
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from "@angular/core";
 import { CustomerModel } from "src/app/models/customer-model";
 import { CustomersService } from "src/app/service/customers.service";
 import { DateRangeService } from "@progress/kendo-angular-dateinputs";
@@ -22,6 +22,7 @@ import pdfMake from "pdfmake/build/pdfmake";
 import PizZip from "pizzip";
 import PizZipUtils from "pizzip/utils/index.js";
 import { DashboardService } from "src/app/service/dashboard.service";
+import { LoadingScreenService } from 'src/app/shared/loading-screen/loading-screen.service';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -35,8 +36,12 @@ export class InvoiceComponent implements OnInit {
   superadminProfile: any;
   selectedInvoiceLanguage: any;
 
+  @ViewChild("filterToolbar") filterToolbar: ElementRef<HTMLElement>;
+  @ViewChild("contentWrapper") contentElement: ElementRef<HTMLElement>;
+
+
   @HostListener("window:resize", ["$event"])
-  onResize() {
+  onResize(): void {
     if (this.displayToolbar) {
       this.height = 75;
     } else {
@@ -102,6 +107,14 @@ export class InvoiceComponent implements OnInit {
 
     return this.height;
   }
+
+  public get tableHeight(): number {
+
+    let height = 100 - (100 * this.filterToolbar.nativeElement.clientHeight) / this.contentElement.nativeElement.clientHeight;
+
+    return height;
+  }
+
   constructor(
     private helpService: HelpService,
     private customerService: CustomersService,
@@ -111,7 +124,8 @@ export class InvoiceComponent implements OnInit {
     private parameterItemService: ParameterItemService,
     private pdfService: PDFService,
     private dashboardService: DashboardService,
-    private invoiceService: InvoiceService
+    private invoiceService: InvoiceService,
+    private loadingScreenService: LoadingScreenService
   ) { }
 
   ngOnInit() {
@@ -394,7 +408,7 @@ export class InvoiceComponent implements OnInit {
                         width: "*",
                       },
                       {
-                        text: this.invoicePrefix ? this.invoicePrefix + " " + this.invoiceID : this.invoiceID,
+                        text: this.invoicePrefix ? this.invoicePrefix + this.invoiceID : this.invoiceID,
                         style: "invoiceSubValue",
                         width: 130,
                       },
@@ -451,7 +465,7 @@ export class InvoiceComponent implements OnInit {
         {
           columns: [
             {
-              text: this.store.companyname ? this.store.companyname : this.superadminProfile.companyname,
+              text: this.store.companyname ? this.store.companyname : this.store.storename,
               style: "invoiceBillingDetailsLeft",
             },
             {
@@ -582,7 +596,7 @@ export class InvoiceComponent implements OnInit {
         columns: [
           {
             text:
-              (this.store.companyname ? this.store.companyname : this.superadminProfile.companyname) +
+              (this.store.companyname ? this.store.companyname : this.store.storename) +
               dotSign +
               this.store.street +
               dotSign +
@@ -611,7 +625,6 @@ export class InvoiceComponent implements OnInit {
     const netPrices = [];
     const brutoPrices = [];
     let selectedTherapies = [];
-    let bruto = 0;
 
     this.currentLoadData.forEach((element) => {
       if (this.selectedItemIDs.indexOf(element.taskId) === -1) {
@@ -675,14 +688,18 @@ export class InvoiceComponent implements OnInit {
               selectedTherapies.length === 1 ||
               !this.isDateSet;
 
-            therapies.push({
-              title: therapy.printOnInvoice ? therapy.titleOnInvoice : therapy.title,
-              description: therapy.description ? therapy.description : '',
-              date: shouldSetDate ? this.formatDate(therapy.date) : '',
-              net_price: this.isPriceIncluded ? (isNaNPrice ? this.invoiceLanguage.noDataAvailable : this.invoiceLanguage.euroSign + ' ' + parseFloat(therapy.net_price).toFixed(2)) : '',
-              vat: this.isPriceIncluded ? (vatDefinition ? vatDefinition.title : 20) : '',
-              gross_price: this.isPriceIncluded ? (isNaNBrutoPrice ? this.invoiceLanguage.noDataAvailable : this.invoiceLanguage.euroSign + ' ' + parseFloat(therapy.gross_price).toFixed(2)) : ''
-            });
+
+            if (therapy.printOnInvoice) {
+              therapies.push({
+                title: (therapy.titleOnInvoice && therapy.titleOnInvoice.trim() !== "") ? therapy.titleOnInvoice : therapy.title,
+                date: shouldSetDate ? this.formatDate(therapy.date) : '',
+                net_price: this.isPriceIncluded ? (isNaNPrice ? this.invoiceLanguage.noDataAvailable : this.invoiceLanguage.euroSign + ' ' + parseFloat(therapy.net_price).toFixed(2)) : '',
+                vat: this.isPriceIncluded ? (vatDefinition ? vatDefinition.title : 20) : '',
+                gross_price: this.isPriceIncluded ? (isNaNBrutoPrice ? this.invoiceLanguage.noDataAvailable : this.invoiceLanguage.euroSign + ' ' + parseFloat(therapy.gross_price).toFixed(2)) : ''
+              });
+            }
+
+
           }
         }
       }
@@ -732,7 +749,7 @@ export class InvoiceComponent implements OnInit {
     // console.log(joinArray)
 
     //Step 4. Return the reversed string
-    return joinArray + '.';
+    return joinArray;
   }
 
   public downloadWord(): void {
@@ -763,7 +780,7 @@ export class InvoiceComponent implements OnInit {
       window.location.port +
       "/assets/Invoice_template.docx";
 
-    // const link = "http://127.0.0.1:8887/Invoice_template.docx";
+    //const link = "http://127.0.0.1:8887/Invoice_template.docx";
     this.loadFile(link,
       function (error, content) {
         if (error) {
@@ -786,7 +803,7 @@ export class InvoiceComponent implements OnInit {
           invoice_generated_date: componentRef.currentDateFormatted,
           billing_from_title: componentRef.invoiceLanguage.invoiceBillingTitleFrom,
           billing_to_title: componentRef.invoiceLanguage.invoiceBillingTitleTo,
-          clinic_name: componentRef.store.companyname ? componentRef.store.companyname : componentRef.superadminProfile.companyname,
+          clinic_name: componentRef.store.companyname ? componentRef.store.companyname : componentRef.store.storename,
           customer_lastname: componentRef.customerUser.lastname,
           customer_firstname: componentRef.customerUser.firstname,
           clinic_street: componentRef.store.street,
@@ -850,8 +867,10 @@ export class InvoiceComponent implements OnInit {
           componentRef.customerUser.firstname +
           ".docx";
         saveAs(out, filename);
+
+        componentRef.loadingScreenService.stopLoading();
       }
-    );
+    )
   }
 
   replaceErrors(value) {
@@ -865,14 +884,16 @@ export class InvoiceComponent implements OnInit {
   }
 
   private loadFile(url, callback) {
-    PizZipUtils.getBinaryContent(url, callback);
+    this.loadingScreenService.startLoading();
+
+    return PizZipUtils.getBinaryContent(url, callback);
   }
 
   private get currentDateFormatted(): string {
     // return new Date().toLocaleString().replace(/(.*)\D\d+/, "$1");
 
     const date = new Date().toLocaleDateString('en-GB');
-    console.log(date);
+
     return this.reverseString(date);
   }
 }

@@ -7,7 +7,7 @@ registerLocaleData(localeDE);
 
 import { AppRoutingModule } from "./app-routing.module";
 import { HttpModule } from "@angular/http";
-import { HttpClientModule, HttpClientJsonpModule } from "@angular/common/http";
+import { HttpClientModule, HttpClientJsonpModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
@@ -48,6 +48,7 @@ import { PatientFormSuccessComponent } from './component/templates/patient-form-
 import { PrivacyPolicyComponent } from "./component/templates/privacy-policy/privacy-policy.component";
 import { TermsComponent } from "./component/templates/terms/terms.component";
 import { ImpressumComponent } from "./component/templates/impressum/impressum.component";
+import { SharedComponentsModule } from "./shared/shared-components.module";
 
 @NgModule({
   declarations: [
@@ -74,7 +75,8 @@ import { ImpressumComponent } from "./component/templates/impressum/impressum.co
     ReactiveFormsModule,
     LayoutModule,
     SharedModule,
-    DymanicElementsModule
+    DymanicElementsModule,
+    SharedComponentsModule
   ],
   providers: [
     MailService,
@@ -83,8 +85,8 @@ import { ImpressumComponent } from "./component/templates/impressum/impressum.co
     LoggedGuard,
     DashboardGuard,
     LoginGuard,
-    MessageService
+    MessageService,
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

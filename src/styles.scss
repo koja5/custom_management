@@ -2731,7 +2731,15 @@ form.search-form-opened .btn.submit {
 
 .page-header-fixed .page-container {
   /* margin-top: 50px */
+
 }
+
+.page-header-fixed .page-container .page-content-wrapper {
+  @media (min-width: 768px) and (max-width: 991.98px) {
+    margin-top: 40px !important;
+  }
+}
+
 
 .page-full-width.page-header-fixed .page-container {
   margin-top: 110px;

@@ -19,7 +19,6 @@ import { DynamicFormsComponent } from "./dynamic-forms/dynamic-forms.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { DropDownListModule } from '@syncfusion/ej2-angular-dropdowns';
 import { TextBoxModule } from '@syncfusion/ej2-angular-inputs';
-import { DynamicFieldsDirective } from './dynamic-forms/dynamic-fields/dynamic-fields.directive';
 import { TextboxComponent } from './dynamic-forms/dynamic-fields/textbox/textbox.component';
 import { TextareaComponent } from './dynamic-forms/dynamic-fields/textarea/textarea.component';
 import { DatepickerComponent } from './dynamic-forms/dynamic-fields/datepicker/datepicker.component';
@@ -35,7 +34,7 @@ import { TreeViewModule } from '@syncfusion/ej2-angular-navigations';
 import { DropDownListAllModule, MultiSelectAllModule } from '@syncfusion/ej2-angular-dropdowns';
 import { MaskedTextBoxModule, UploaderAllModule } from '@syncfusion/ej2-angular-inputs';
 import { ToolbarAllModule, ContextMenuAllModule } from '@syncfusion/ej2-angular-navigations';
-import { ButtonAllModule, CheckBoxAllModule, SwitchAllModule } from '@syncfusion/ej2-angular-buttons';
+import { ButtonAllModule, CheckBoxAllModule } from '@syncfusion/ej2-angular-buttons';
 import { DatePickerAllModule, TimePickerAllModule, DateTimePickerAllModule } from '@syncfusion/ej2-angular-calendars';
 import { NumericTextBoxAllModule, TextBoxAllModule } from '@syncfusion/ej2-angular-inputs';
 import { ScheduleAllModule, RecurrenceEditorAllModule } from '@syncfusion/ej2-angular-schedule';
@@ -65,22 +64,22 @@ import { ModalModule } from 'ngx-modal';
     DynamicFormsModule,
     MaskedTextBoxModule,
     UploaderAllModule,
-    ScheduleAllModule, 
-    RecurrenceEditorAllModule, 
-    NumericTextBoxAllModule, 
-    TextBoxAllModule, 
-    DatePickerAllModule, 
-    TimePickerAllModule, 
-    DateTimePickerAllModule, 
-    CheckBoxAllModule, 
-    ToolbarAllModule, 
-    DropDownListAllModule, 
-    ContextMenuAllModule, 
-    MaskedTextBoxModule, 
-    UploaderAllModule, 
-    MultiSelectAllModule, 
-    TreeViewModule, 
-    ButtonAllModule, 
+    ScheduleAllModule,
+    RecurrenceEditorAllModule,
+    NumericTextBoxAllModule,
+    TextBoxAllModule,
+    DatePickerAllModule,
+    TimePickerAllModule,
+    DateTimePickerAllModule,
+    CheckBoxAllModule,
+    ToolbarAllModule,
+    DropDownListAllModule,
+    ContextMenuAllModule,
+    MaskedTextBoxModule,
+    UploaderAllModule,
+    MultiSelectAllModule,
+    TreeViewModule,
+    ButtonAllModule,
     DropDownButtonAllModule,
     SwitchModule,
     DropDownsModule,
@@ -91,12 +90,12 @@ import { ModalModule } from 'ngx-modal';
     DateInputsModule,
     ButtonsModule,
     DialogsModule,
-    BaseDateSharedModule, 
+    BaseDateSharedModule,
     SharedSMSModule,
     SharedEmailModule,
     ModalModule
   ],
-  providers: [EditService, PdfExportService, ToolbarService, SortService, FilterService, PageService, GroupService, ResizeService ],
+  providers: [EditService, PdfExportService, ToolbarService, SortService, FilterService, PageService, GroupService, ResizeService],
   entryComponents: [TextboxComponent, TextareaComponent, DatepickerComponent, ButtonComponent, DropdownComponent]
 })
 export class DymanicElementsModule { }
