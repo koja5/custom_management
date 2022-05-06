@@ -6,4 +6,5 @@ export class EventCategoryModel {
     comment?: string;
     superadmin?: string;
     allowSendInformation?: boolean;
+    showAtInvoice?: boolean;
 }
