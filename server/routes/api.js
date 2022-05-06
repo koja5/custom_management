@@ -4622,6 +4622,7 @@ router.post("/createEventCategory", function (req, res, next) {
       color: req.body.color,
       comment: req.body.comment,
       superadmin: req.body.superadmin,
+      showAtInvoice: req.body.showAtInvoice
     };
 
     conn.query(
@@ -7997,7 +7998,7 @@ router.get("/getDataForMassiveInvoice/:customerId", function (req, res, next) {
     var customerId = req.params.customerId;
 
     conn.query(
-      "select t.id as taskId, t.*, tp.*, u.*, s.storename as store, e.id as eventId, e.category as event_category from tasks t join therapy tp on t.therapy_id = tp.id join users u on u.id = t.creator_id join store s on s.id = t.storeId  join event_category e on t.colorTask = e.id where t.customer_id =" + customerId,
+      "select t.id as taskId, t.*, tp.*, u.*, s.storename as store, e.id as eventId, e.category as event_category from tasks t join therapy tp on t.therapy_id = tp.id join users u on u.id = t.creator_id join store s on s.id = t.storeId  join event_category e on t.colorTask = e.id where e.showAtInvoice = 1 and  t.customer_id =" + customerId,
       function (err, rows) {
         conn.release();
         if (!err) {

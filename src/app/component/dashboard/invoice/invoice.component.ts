@@ -625,7 +625,6 @@ export class InvoiceComponent implements OnInit {
     const netPrices = [];
     const brutoPrices = [];
     let selectedTherapies = [];
-    let bruto = 0;
 
     this.currentLoadData.forEach((element) => {
       if (this.selectedItemIDs.indexOf(element.taskId) === -1) {

@@ -2001,6 +2001,9 @@
       },
       "selectInvoiceLanguage": {
         "type": "string"
+      },
+      "showAtInvoice": {
+        "type": "string"
       }
     }
   },
@@ -6270,6 +6273,9 @@
             },
             {
               "key": "selectInvoiceLanguage"
+            },
+            {
+              "key": "showAtInvoice"
             }
           ]
         }

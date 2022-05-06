@@ -48,6 +48,8 @@ export class EventCategoryComponent implements OnInit {
   public importExcel = false;
   public theme: any;
   public fileValue: any;
+  public disabled: boolean = true;
+
 
   constructor(private service: EventCategoryService, private serviceHelper: ServiceHelperService, private toastr: ToastrService, private helpService: HelpService) { }
 
@@ -162,6 +164,7 @@ export class EventCategoryComponent implements OnInit {
   editEventCategory(event) {
     this.data = event;
     this.operationMode = 'edit';
+    this.disabled = false;
     this.eventCategoryModal.open();
   }
 
@@ -189,6 +192,9 @@ export class EventCategoryComponent implements OnInit {
             { timeOut: 7000, positionClass: "toast-bottom-right" }
           );
         }
+
+        this.disabled = true;
+
       }
     )
   }
