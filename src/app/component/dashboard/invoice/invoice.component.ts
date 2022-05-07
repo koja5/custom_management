@@ -485,7 +485,7 @@ export class InvoiceComponent implements OnInit {
                   " " +
                   this.store.place +
                   "\n" +
-                  this.language.vat + this.store.vatcode ? this.store.vatcode : this.superadminProfile.vatcode,
+                  this.language.vat + " " + this.store.vatcode ? this.store.vatcode : this.superadminProfile.vatcode,
               style: "invoiceBillingAddressLeft",
             },
             {
@@ -575,22 +575,14 @@ export class InvoiceComponent implements OnInit {
           },
           layout: "lightHorizontalLines",
         },
-        // {
-        //   text: this.invoiceLanguage.notesTitle,
-        //   style: 'notesTitle'
-        // },
         {
-          text: this.invoiceLanguage.notesText,
+          text: this.invoiceLanguage.notesTitle,
           style: 'notesTextBold'
         },
-        // {
-        //   text: "\n \n",
-        //   style: 'notesText'
-        // },
-        // {
-        //   text: this.invoiceLanguage.notesDate + new Date().toLocaleDateString() + ", " + this.store.storename,
-        //   style: 'notesTextBold'
-        // }
+        {
+          text: this.invoiceLanguage.notesText,
+          style: 'notesText'
+        },
       ],
       footer: {
         columns: [
