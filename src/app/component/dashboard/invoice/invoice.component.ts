@@ -478,14 +478,9 @@ export class InvoiceComponent implements OnInit {
         {
           columns: [
             {
-              text:
-                this.store.street +
-                  "\n " +
-                  this.store.zipcode +
-                  " " +
-                  this.store.place +
-                  "\n" +
-                  this.language.vat + " " + this.store.vatcode ? this.store.vatcode : this.superadminProfile.vatcode,
+              text: this.store.vatcode ?
+                this.store.street + "\n " + this.store.zipcode + " " + this.store.place + "\n" + this.invoiceLanguage.vat + " " + this.store.vatcode
+                : this.store.street + "\n " + this.store.zipcode + " " + this.store.place + "\n" + this.invoiceLanguage.vat + " " + this.superadminProfile.vatcode,
               style: "invoiceBillingAddressLeft",
             },
             {
