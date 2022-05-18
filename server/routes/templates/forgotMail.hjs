@@ -1,4 +1,3 @@
-
 <html
   lang="en"
   style="box-sizing: border-box;border-width: 0;border-style: solid;border-color: #dae1e7;line-height: 1.15;-webkit-text-size-adjust: 100%;font-family: sans-serif;"
@@ -24,6 +23,10 @@
       href="https://use.fontawesome.com/releases/v5.0.4/css/all.css"
       style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"
     />
+
+    <style>
+      p, pre { font-size: 12px; font-family: Arial, Helvetica, sans-serif; }
+    </style>
 
   </head>
 
@@ -98,10 +101,10 @@
             class="content__footer mt-8 text-center text-grey-darker"
             style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin-top: 2rem;text-align: center;color: #606f7b;"
           >
-            <h3
+            <p
               class="text-base sm:text-lg mb-4"
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;margin-bottom: 1rem;font-size: 1.125rem;"
-            >{{thanksForUsing}}</h3>
+              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;margin-bottom: 1rem;"
+            >{{thanksForUsing}}</p>
             <p
               style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;"
             >{{websiteLink}}</p>

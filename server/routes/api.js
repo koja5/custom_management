@@ -5540,15 +5540,14 @@ router.post("/sendMassiveSMS", function (req, res) {
                       const fullMessage = message + "\n\n" + signature;
                       var fileName = "server/sms/" + phoneNumber + ".txt";
                       sendSmsFromMail(phoneNumber, fullMessage);
-                      res.send(true);
                     } else {
-                      res.send(false);
                       logger.log(
                         "warn",
                         `Number ${phoneNumber} is not start with available area code!`
                       );
                     }
                   });
+                  res.send(true);
                 }
               );
             });
