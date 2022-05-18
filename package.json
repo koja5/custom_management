@@ -81,7 +81,7 @@
     "hogan.js": "^3.0.2",
     "i": "^0.3.6",
     "jquery": "^3.4.0",
-    "lodash-es": "^4.17.15",
+    "lodash-es": "^4.17.21",
     "messagebird": "^3.6.2",
     "mongodb": "^3.4.1",
     "mongoose": "^5.8.11",
