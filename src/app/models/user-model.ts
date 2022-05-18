@@ -5,6 +5,9 @@ export class UserModel {
   firstname?: string;
   lastname?: string;
   street?: string;
+  streetnumber?: string;
+  city?: string;
+  gender?: string;
   zipcode?: string;
   place?: string;
   email?: string;
@@ -13,6 +16,11 @@ export class UserModel {
   birthday?: string;
   incompanysince?: string;
   type?: string;
-  storeId?: string;
+  storeId?: any;
+  superadmin?: any;
   active?: number;
+  attention?: string;
+  physicalComplaint?: string;
+  alias_name?: string;
+  allowed_online?: boolean;
 }

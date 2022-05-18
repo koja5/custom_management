@@ -1,0 +1,10 @@
+<div *ngIf="language&&config" class="form-group" [ngClass]="config.width">
+  <div [formGroup]="group">
+    <ejs-checkbox
+      [name]="config.name"
+      [checked]="config.value"
+      [label]="language[config.label] ? language[config.label] : config.label"
+      [formControlName]="config.name"
+    ></ejs-checkbox>
+  </div>
+</div>

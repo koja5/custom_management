@@ -1,41 +1,167 @@
-<div *ngIf="loading" style="height: 90vh;">
+<div *ngIf="loading" style="height: 90vh">
   <div class="spinner loading"></div>
 </div>
 
-<div *ngIf="!loading">
-
-  <h2 style="text-align: center; padding: 1vh;">
+<div *ngIf="!loading" style="height: 100%">
+  <!--<h2 style="text-align: center; padding: 1vh;">
     {{type}}
-  </h2>
+  </h2>-->
 
-  <kendo-grid *ngIf="type !== 'Doctors' && type !== 'Therapies'" [data]="view | async" [style.height]="'76vh'"
-    [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort" [pageable]="true" [sortable]="true"
+  <kendo-grid *ngIf="type !== 'Doctors' && type !== 'Therapy' && type !== 'VATTax'" [data]="view | async"
+    [style.height]="height" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
+    [pageable]="true" [sortable]="true" [resizable]="true" (dataStateChange)="onStateChange($event)"
+    (edit)="editHandler($event)" (cancel)="cancelHandler($event)" (save)="saveHandler($event)"
+    (remove)="removeHandler($event)" (add)="addHandler($event)" [navigable]="true" [loading]="loading"
+    (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)" (sortChange)="sortChange($event)"
+    [kendoGridSelectBy]="mySelectionKey">
+    <ng-template kendoGridToolbarTemplate>
+      <button class="uploadFromExcel-{{ theme }}" kendoGridAddCommand>
+        {{ language.addNew }}
+      </button>
+    </ng-template>
+    <kendo-grid-column field="id" title="{{ language.id }}" [hidden]="true"></kendo-grid-column>
+    <kendo-grid-column field="title" title="{{ language.title }}"></kendo-grid-column>
+
+    <kendo-grid-column field="sequence" title="{{ language.order }}"></kendo-grid-column>
+
+    <kendo-grid-command-column title="{{ language.actionTitle }}" width="300">
+      <ng-template kendoGridCellTemplate let-isNew="isNew">
+        <button kendoGridEditCommand [primary]="true" (click)="changeTheme(theme)">
+          {{ language.edit }}
+        </button>
+        <button kendoGridRemoveCommand (click)="changeTheme(theme)">
+          {{ language.remove }}
+        </button>
+        <button kendoGridSaveCommand [disabled]="formGroup?.invalid" (click)="changeTheme(theme)">
+          {{ isNew ? language.add : language.update }}
+        </button>
+        <button kendoGridCancelCommand>
+          {{ isNew ? language.discardChanges : language.cancel }}
+        </button>
+      </ng-template>
+    </kendo-grid-command-column>
+    <ng-template kendoGridNoRecordsTemplate>
+      <div class="row no-results-element">
+        <div class="text-center">
+          <i class="fa fa-heartbeat no-results-icon"></i><br />
+        </div>
+        <div class="text-center m-t-md">
+          <p class="m-b-none">
+            {{ language.noRecordYet }}
+          </p>
+        </div>
+      </div>
+    </ng-template>
+  </kendo-grid>
+
+  <kendo-grid *ngIf="type === 'VATTax'" [data]="view | async" [style.height]="height" [pageSize]="gridState.take"
+    [skip]="gridState.skip" [sort]="gridState.sort" [pageable]="true" [sortable]="true" [resizable]="true"
     (dataStateChange)="onStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)"
     (save)="saveHandler($event)" (remove)="removeHandler($event)" (add)="addHandler($event)" [navigable]="true"
     [loading]="loading" (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)"
-    (sortChange)="sortChange($event)">
+    (sortChange)="sortChange($event)" [kendoGridSelectBy]="mySelectionKey">
     <ng-template kendoGridToolbarTemplate>
-      <button kendoGridAddCommand>Add new</button>
+      <button class="uploadFromExcel-{{ theme }}" kendoGridAddCommand>
+        {{ language.addNew }}
+      </button>
     </ng-template>
-    <kendo-grid-column field="id" title="ID" [hidden]="true"></kendo-grid-column>
-    <kendo-grid-column field="title" title="Title"></kendo-grid-column>
-    <kendo-grid-column field="sequence" title="Order"></kendo-grid-column>
-    <kendo-grid-command-column title="command" width="220">
+    <kendo-grid-column field="id" title="{{ language.id }}" [hidden]="true"></kendo-grid-column>
+    <kendo-grid-column field="title" title="{{ language.title }}"></kendo-grid-column>
+    <kendo-grid-column field="sequence" title="{{ language.order }}"></kendo-grid-column>
+    <kendo-grid-command-column title="{{ language.actionTitle }}" width="300">
       <ng-template kendoGridCellTemplate let-isNew="isNew">
-        <button kendoGridEditCommand [primary]="true">Edit</button>
-        <button kendoGridRemoveCommand>Remove</button>
-        <button kendoGridSaveCommand [disabled]="formGroup?.invalid">{{ isNew ? 'Add' : 'Update' }}</button>
-        <button kendoGridCancelCommand>{{ isNew ? 'Discard changes' : 'Cancel' }}</button>
+        <button kendoGridEditCommand [primary]="true" (click)="changeTheme(theme)">
+          {{ language.edit }}
+        </button>
+        <button kendoGridRemoveCommand (click)="changeTheme(theme)">
+          {{ language.remove }}
+        </button>
+        <button kendoGridSaveCommand [disabled]="formGroup?.invalid" (click)="changeTheme(theme)">
+          {{ isNew ? language.add : language.update }}
+        </button>
+        <button kendoGridCancelCommand>
+          {{ isNew ? language.discardChanges : language.cancel }}
+        </button>
       </ng-template>
     </kendo-grid-command-column>
+    <ng-template kendoGridNoRecordsTemplate>
+      <div class="row no-results-element">
+        <div class="text-center">
+          <i class="fa fa-heartbeat no-results-icon"></i><br />
+        </div>
+        <div class="text-center m-t-md">
+          <p class="m-b-none">
+            {{ language.noRecordYet }}
+          </p>
+        </div>
+      </div>
+    </ng-template>
   </kendo-grid>
 
-  <kendo-grid *ngIf="type === 'Therapies'" [data]="view | async" [style.height]="'76vh'" [pageSize]="gridState.take"
+  <kendo-grid *ngIf="type === 'Therapy'" [data]="view | async" [style.height]="height" [pageSize]="gridState.take"
+    [skip]="gridState.skip" [sort]="gridState.sort" [pageable]="true" [sortable]="true" [resizable]="true"
+    (dataStateChange)="onStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)"
+    (save)="saveHandler($event)" (remove)="removeHandler($event)" (add)="addHandler($event)" [navigable]="true"
+    [loading]="loading" (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)"
+    (sortChange)="sortChange($event)" [kendoGridSelectBy]="mySelectionKey">
+    <ng-template kendoGridToolbarTemplate>
+      <button class="uploadFromExcel-{{ theme }}" kendoGridAddCommand>
+        {{ language.addNew }}
+      </button>
+    </ng-template>
+    <kendo-grid-column field="id" title="{{ language.id }}" [hidden]="true"></kendo-grid-column>
+    <kendo-grid-column field="title" title="{{ language.title }}" width="150"></kendo-grid-column>
+    <kendo-grid-column field="titleOnInvoice" title="{{ language.titleOnInvoice }}" width="150"></kendo-grid-column>
+    <kendo-grid-column field="sequence" title="{{ language.order }}" width="120"></kendo-grid-column>
+
+    <kendo-grid-checkbox-column field="printOnInvoice" [width]="100">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <div class="text-center">
+          <input type="checkbox" kendoCheckBox [disabled]="disabled" (click)=setSelectedItem(dataItem)
+            [(ngModel)]="dataItem.printOnInvoice" />
+        </div>
+      </ng-template>
+    </kendo-grid-checkbox-column>
+
+    <kendo-grid-column field="unit" title="{{ language.unit }}" width="120"></kendo-grid-column>
+    <kendo-grid-column field="description" title="{{ language.description }}" width="150"></kendo-grid-column>
+    <kendo-grid-column field="art_nr" title="{{ language.artNr }}" width="120"></kendo-grid-column>
+    <kendo-grid-column field="net_price" title="{{ language.netPrice }}" width="120"></kendo-grid-column>
+    <kendo-grid-column field="vat" title="{{ language.vat }}" width="180">
+      <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex" *ngIf="vatTexList !== undefined">
+        <kendo-combobox [data]="vatTexList" [textField]="'title'" [valueField]="'id'"
+          (valueChange)="selectionVAT($event, rowIndex)" [disabled]="editedRowIndex != rowIndex"
+          [(ngModel)]="dataItem.vat" [valuePrimitive]="true" name="vat"></kendo-combobox>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="gross_price" title="{{ language.grossPrice }}" width="120"></kendo-grid-column>
+    <kendo-grid-column field="category" title="{{ language.category }}" width="120"></kendo-grid-column>
+    <kendo-grid-command-column title="{{ language.actionTitle }}" width="300">
+      <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem>
+        <button kendoGridEditCommand [primary]="true" (click)="changeTheme(theme)">
+          {{ language.edit }}
+        </button>
+        <button kendoGridRemoveCommand (click)="changeTheme(theme)">
+          {{ language.remove }}
+        </button>
+        <button kendoGridSaveCommand [disabled]="formGroup?.invalid" (click)="changeTheme(theme)">
+          {{ isNew ? language.add : language.update }}
+        </button>
+        <button kendoGridCancelCommand>
+          {{ isNew ? language.discardChanges : language.cancel }}
+        </button>
+      </ng-template>
+    </kendo-grid-command-column>
+
+    <!-- the rest of confguration -->
+  </kendo-grid>
+
+  <!--<kendo-grid *ngIf="type === 'Therapies'" [data]="view | async" [style.height]="'76vh'" [pageSize]="gridState.take"
     [skip]="gridState.skip" [sort]="gridState.sort" [pageable]="true" [sortable]="true"
     (dataStateChange)="onStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)"
     (save)="saveHandler($event)" (remove)="removeHandler($event)" (add)="addHandler($event)" [navigable]="true"
     [loading]="loading" (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)"
-    (sortChange)="sortChange($event)" [loading]="loading">
+    (sortChange)="sortChange($event)" [loading]="loading" [kendoGridSelectBy]="mySelectionKey">
     <ng-template kendoGridToolbarTemplate>
       <button kendoGridAddCommand>Add new</button>
     </ng-template>
@@ -53,50 +179,72 @@
       <ng-template kendoGridCellTemplate let-isNew="isNew">
         <button kendoGridEditCommand [primary]="true">Edit</button>
         <button kendoGridRemoveCommand>Remove</button>
-        <button kendoGridSaveCommand [disabled]="formGroup?.invalid">{{ isNew ? 'Add' : 'Update' }}</button>
+        <button kendoGridSaveCommand [disabled]="formGroup?.invalid" (click)="changeTheme(theme)">{{ isNew ? 'Add' : 'Update' }}</button>
         <button kendoGridCancelCommand>{{ isNew ? 'Discard changes' : 'Cancel' }}</button>
       </ng-template>
     </kendo-grid-command-column>
-  </kendo-grid>
+  </kendo-grid>-->
 
-  <kendo-grid *ngIf="type === 'Doctors'" [data]="view | async" [style.height]="'76vh'" [pageSize]="gridState.take"
-    [skip]="gridState.skip" [sort]="gridState.sort" [pageable]="true" [sortable]="true"
+  <kendo-grid *ngIf="type === 'Doctors'" [data]="view | async" [style.height]="height" [pageSize]="gridState.take"
+    [skip]="gridState.skip" [sort]="gridState.sort" [pageable]="true" [sortable]="true" [resizable]="true"
     (dataStateChange)="onStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)"
     (save)="saveHandler($event)" (remove)="removeHandler($event)" (add)="addHandler($event)" [navigable]="true"
     [loading]="loading" (dataStateChange)="dataStateChange($event)" (pageChange)="pageChange($event)"
-    (sortChange)="sortChange($event)" [loading]="loading">
+    (sortChange)="sortChange($event)" [loading]="loading" [kendoGridSelectBy]="mySelectionKey">
     <ng-template kendoGridToolbarTemplate>
-      <button kendoGridAddCommand>Add new</button>
+      <button class="uploadFromExcel-{{ theme }}" kendoGridAddCommand>
+        {{ language.addNew }}
+      </button>
     </ng-template>
     <kendo-grid-column field="id" title="ID" [hidden]="true"></kendo-grid-column>
-    <kendo-grid-column field="firstname" title="First name"></kendo-grid-column>
-    <kendo-grid-column field="lastname" title="Last name"></kendo-grid-column>
-    <kendo-grid-column field="gender" title="Gender">
-      <ng-template kendoGridCellTemplate let-dataItem>
-        <kendo-combobox [data]="genderList" [(ngModel)]="dataItem.gender" (selectionChange)="selectionGender($event)">
+    <kendo-grid-column field="title" title="{{ language.title }}" width="150"></kendo-grid-column>
+    <kendo-grid-column field="firstname" title="{{ language.firstname }}" width="150"></kendo-grid-column>
+    <kendo-grid-column field="lastname" title="{{ language.lastname }}" width="150"></kendo-grid-column>
+    <kendo-grid-column field="gender" title="{{ language.gender }}" width="180">
+      <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+        <kendo-combobox [data]="genderList" [(ngModel)]="dataItem.gender" [disabled]="editedRowIndex != rowIndex"
+          (selectionChange)="selectionGender($event)">
         </kendo-combobox>
       </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="street" title="Street"></kendo-grid-column>
-    <kendo-grid-column field="street_number" title="Street number"></kendo-grid-column>
-    <kendo-grid-column field="zip_code" title="Zip code"></kendo-grid-column>
-    <kendo-grid-column field="city" title="City"></kendo-grid-column>
-    <kendo-grid-column field="telephone" title="Telephone"></kendo-grid-column>
-    <kendo-grid-column field="email" title="Email"></kendo-grid-column>
-    <kendo-grid-column field="doctor_type" title="Doctor type">
-      <ng-template kendoGridCellTemplate let-dataItem *ngIf="doctorTypeList !== undefined">
+    <kendo-grid-column field="street" title="{{ language.street }}" width="150"></kendo-grid-column>
+    <kendo-grid-column field="web_address" title="{{ language.webAddress }}" width="150"></kendo-grid-column>
+    <kendo-grid-column field="zip_code" title="{{ language.zipCode }}" width="120"></kendo-grid-column>
+    <kendo-grid-column field="city" title="{{ language.city }}" width="120"></kendo-grid-column>
+    <kendo-grid-column field="telephone" title="{{ language.telephone }}" width="150"></kendo-grid-column>
+    <kendo-grid-column field="email" title="{{ language.email }}" width="150"></kendo-grid-column>
+    <kendo-grid-column field="doctor_type" title="{{ language.doctorType }}" width="180">
+      <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex" *ngIf="doctorTypeList !== undefined">
         <kendo-combobox [data]="doctorTypeList" [textField]="'title'" [valueField]="'id'"
-          (selectionChange)="selectionDoctorType($event)" [(ngModel)]="dataItem.doctor_type" [valuePrimitive]="true"
-          name="storename"></kendo-combobox>
+          (selectionChange)="selectionDoctorType($event)" [(ngModel)]="dataItem.doctor_type"
+          [disabled]="editedRowIndex != rowIndex" [valuePrimitive]="true" name="doctorType"></kendo-combobox>
       </ng-template>
     </kendo-grid-column>
-    <kendo-grid-command-column title="command" width="180">
+    <kendo-grid-command-column title="{{ language.actionTitle }}" width="300">
       <ng-template kendoGridCellTemplate let-isNew="isNew">
-        <button kendoGridEditCommand [primary]="true">Edit</button>
-        <button kendoGridRemoveCommand>Remove</button>
-        <button kendoGridSaveCommand [disabled]="formGroup?.invalid">{{ isNew ? 'Add' : 'Update' }}</button>
-        <button kendoGridCancelCommand>{{ isNew ? 'Discard changes' : 'Cancel' }}</button>
+        <button kendoGridEditCommand [primary]="true">
+          {{ language.edit }}
+        </button>
+        <button kendoGridRemoveCommand>{{ language.delete }}</button>
+        <button kendoGridSaveCommand [disabled]="formGroup?.invalid" (click)="changeTheme(theme)">
+          {{ isNew ? language.add : language.update }}
+        </button>
+        <button kendoGridCancelCommand>
+          {{ isNew ? language.discardChanges : language.cancel }}
+        </button>
       </ng-template>
     </kendo-grid-command-column>
+    <ng-template kendoGridNoRecordsTemplate>
+      <div class="row no-results-element">
+        <div class="text-center">
+          <i class="fa fa-heartbeat no-results-icon"></i><br />
+        </div>
+        <div class="text-center m-t-md">
+          <p class="m-b-none">
+            {{ language.noRecordYet }}
+          </p>
+        </div>
+      </div>
+    </ng-template>
   </kendo-grid>
 </div>

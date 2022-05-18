@@ -1,41 +1,53 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { UsersService } from '../../../../service/users.service';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Modal } from 'ngx-modal';
-import { Location } from '@angular/common';
-import { StoreService } from '../../../../service/store.service';
-import { TaskService } from '../../../../service/task.service';
-import Swal from 'sweetalert2';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { UsersService } from "../../../../service/users.service";
+import { DomSanitizer } from "@angular/platform-browser";
+import { Modal } from "ngx-modal";
+import { Location } from "@angular/common";
+import { StoreService } from "../../../../service/store.service";
+import { TaskService } from "../../../../service/task.service";
+import Swal from "sweetalert2";
+import { MessageService } from "src/app/service/message.service";
+import { WorkTimeColorsService } from "src/app/service/work-time-colors.service";
+import { DynamicService } from "src/app/service/dynamic.service";
+import { UserType } from "src/app/component/enum/user-type";
 
 @Component({
-  selector: 'app-user-details',
-  templateUrl: './user-details.component.html',
-  styleUrls: ['./user-details.component.scss']
+  selector: "app-user-details",
+  templateUrl: "./user-details.component.html",
+  styleUrls: ["./user-details.component.scss"],
 })
 export class UserDetailsComponent implements OnInit {
-  @ViewChild('user') user: Modal;
+  @ViewChild("user") user: Modal;
   public id: string;
   public data: any;
   public imagePath: any;
-  public userType = ['Employee', 'Manager', 'Admin'];
+  public userType = ["Employee", "Manager", "Admin", "Read only scheduler"];
   public selectedValue: string;
-  public currentTab = 'profile';
+  public currentTab = "profile";
   public language: any;
   public workTime: any;
   public noSetWorkTime = false;
   public storeLocation: any;
   public selectedStore: any;
   public validDate: Date;
-  public selectedColor = '#fe413b';
+  public selectedColor = null;
   public palette: any[] = [];
   public loading = true;
   public allWorkTime: any;
   public index = 0;
-  public previousInd = '';
-  public nextInd = 'disabled-button';
+  public previousInd = "";
+  public nextInd = "disabled-button";
   public updateSetIndicator = 0;
   public dialogOpened = false;
+  public modalDeletedWorkTimeConfirm = false;
+  public theme: string;
+  public totalSum: any;
+  public statisticMonthLast: any;
+  public statisticMonthAverage: any;
+  public statisticLastWeek: any;
+  public configField: any;
+  public userTypeEnum = UserType;
 
   constructor(
     public route: ActivatedRoute,
@@ -43,59 +55,134 @@ export class UserDetailsComponent implements OnInit {
     public sanitizer: DomSanitizer,
     public location: Location,
     public storeService: StoreService,
-    public taskService: TaskService
-  ) { }
+    public taskService: TaskService,
+    public message: MessageService,
+    public workTimeColorService: WorkTimeColorsService,
+    private dynamicService: DynamicService
+  ) {}
 
   ngOnInit() {
-    console.log(this.route.snapshot.params['id']);
-    this.id = this.route.snapshot.params['id'];
-    this.service.getUserWithId(this.id, val => {
+    this.id = this.route.snapshot.params["id"];
+    this.service.getUserWithId(this.id, (val) => {
       console.log(val);
       this.data = val[0];
       this.modelData();
-      if (val[0].img.data.length !== 0) {
+      if (
+        val[0].img !== null &&
+        val[0].img.data !== undefined &&
+        val[0].img.data.length !== 0
+      ) {
         const TYPED_ARRAY = new Uint8Array(val[0].img.data);
         const STRING_CHAR = String.fromCharCode.apply(null, TYPED_ARRAY);
         let base64String = btoa(STRING_CHAR);
         let path = this.sanitizer.bypassSecurityTrustUrl(
-          'data:image/png;base64,' + base64String
+          "data:image/png;base64," + base64String
         );
         console.log(path);
         this.imagePath = path;
       } else {
         if (this.data.type === 1) {
-          this.imagePath = '../../../../assets/images/users/admin-user.png';
+          this.imagePath = "../../../../assets/images/users/admin-user.png";
         } else if (this.data.type === 2) {
-          this.imagePath = '../../../../assets/images/users/manager-user.png';
+          this.imagePath = "../../../../assets/images/users/manager-user.png";
         } else {
-          this.imagePath = '../../../../../assets/images/users/defaultUser.png';
+          this.imagePath = "../../../../../assets/images/users/defaultUser.png";
         }
         console.log(this.imagePath);
       }
     });
 
-    this.language = JSON.parse(localStorage.getItem('language'))['user'];
+    this.language = JSON.parse(localStorage.getItem("language"));
 
-    this.storeService.getStore(localStorage.getItem('idUser'), val => {
+    this.storeService.getStore(localStorage.getItem("idUser"), (val) => {
       this.storeLocation = val;
     });
 
-    this.taskService.getTaskColor().subscribe(data => {
+    /*this.taskService.getTaskColor().subscribe(data => {
       for (let i = 0; i < data['length']; i++) {
         this.palette.push(data[i].color);
       }
-    });
+    });*/
+
+    this.workTimeColorService
+      .getWorkTimeColors(localStorage.getItem("superadmin"))
+      .subscribe((data: []) => {
+        const colors = data.sort(function (a, b) {
+          return a["sequence"] - b["sequence"];
+        });
+        console.log(data);
+        for (let i = 0; i < colors["length"]; i++) {
+          this.palette.push(colors[i]["color"]);
+        }
+      });
 
     this.workTimeData();
+
+    if (localStorage.getItem("theme") !== null) {
+      this.theme = localStorage.getItem("theme");
+    }
+
+    setTimeout(() => {
+      this.changeTheme(this.theme);
+    }, 500);
+
+    this.message.getTheme().subscribe((mess) => {
+      this.changeTheme(mess);
+      this.theme = mess;
+    });
+
+    this.onInitData();
+  }
+
+  onInitData() {
+    this.service.getCountAllTasksForUser(this.id).subscribe((data) => {
+      console.log(data);
+      if (data["length"] !== 0) {
+        this.totalSum = data[0].total;
+      } else {
+        this.totalSum = 0;
+      }
+    });
+
+    this.service.getCountAllTasksForUserPerMonth(this.id).subscribe((data) => {
+      console.log(data);
+      if (data["length"] !== 0) {
+        let sum = 0;
+        let i = 0;
+        for (i = 0; i < data["length"]; i++) {
+          sum += data[i].month;
+          if (i === data["length"] - 2) {
+            this.statisticMonthLast = data[i].month;
+          } else if (i === data["length"] - 1) {
+            this.statisticMonthLast = data[i].month;
+          }
+        }
+        this.statisticMonthAverage = parseFloat((sum / i).toString()).toFixed(
+          2
+        );
+      } else {
+        this.statisticMonthLast = 0;
+        this.statisticMonthAverage = 0;
+      }
+    });
+
+    this.service.getCountAllTasksForUserPerWeek(this.id).subscribe((data) => {
+      console.log(data);
+      if (data["length"] !== 0) {
+        this.statisticLastWeek = data[data["length"] - 2].week;
+      } else {
+        this.statisticLastWeek = 0;
+      }
+    });
   }
 
   workTimeData() {
     this.workTime = null;
     this.service.getWorkTimeForUser(this.id).subscribe((data: []) => {
-      if (data['length'] === 0) {
+      if (data["length"] === 0) {
         this.noSetWorkTime = true;
         this.validDate = new Date();
-        this.service.getWorkTime().subscribe(data => {
+        this.service.getWorkTime().subscribe((data) => {
           this.workTime = this.convertNumericToDay(data);
         });
       } else {
@@ -103,11 +190,12 @@ export class UserDetailsComponent implements OnInit {
         let dataSort = [];
         dataSort = data.sort((val1, val2) => {
           return (
-            (new Date(val2['dateChange']) as any) -
-            (new Date(val1['dateChange']) as any)
+            (new Date(val2["dateChange"]) as any) -
+            (new Date(val1["dateChange"]) as any)
           );
         });
         console.log(dataSort[0]);
+        this.selectedColor = dataSort[0].color;
         this.allWorkTime = dataSort;
         this.validDate = new Date(dataSort[0].dateChange);
         this.workTime = this.packWorkTimeFromDatabase(dataSort[0]);
@@ -116,11 +204,24 @@ export class UserDetailsComponent implements OnInit {
     });
   }
 
-  updateUser(user) {
-    console.log(this.data);
-    this.service.updateUser(this.data).subscribe(data => {
+  updateUser() {
+    this.service.updateUser(this.data).subscribe((data) => {
       if (data) {
+        Swal.fire({
+          title: "Successfull!",
+          text: "Successful update user!",
+          timer: 3000,
+          type: "success",
+        });
         this.user.close();
+        const configFieldCopy = JSON.parse(JSON.stringify(this.configField));
+        this.configField = null;
+        setTimeout(() => {
+          this.configField = this.dynamicService.packValueForData(
+            this.data,
+            configFieldCopy
+          );
+        }, 100);
       }
     });
   }
@@ -129,17 +230,27 @@ export class UserDetailsComponent implements OnInit {
     this.data.birthday = new Date(this.data.birthday);
     this.data.incompanysince = new Date(this.data.incompanysince);
     if (this.data.type === 1) {
-      this.selectedValue = 'Admin';
+      this.selectedValue = "Admin";
     } else if (this.data.type === 2) {
-      this.selectedValue = 'Manager';
+      this.selectedValue = "Manager";
+    } else if (this.data.type === 6) {
+      this.selectedValue = "Read only scheduler";
     } else {
-      this.selectedValue = 'Employee';
+      this.selectedValue = "Employee";
     }
     this.loading = false;
   }
 
   changeTab(value: string) {
     this.currentTab = value;
+  }
+
+  getTabConfiguration(value) {
+    this.dynamicService.getConfiguration("user", value).subscribe((conf) => {
+      console.log(conf);
+      // this.configField = conf;
+      this.configField = this.dynamicService.packValueForData(this.data, conf);
+    });
   }
 
   convertNumericToDay(days) {
@@ -178,14 +289,14 @@ export class UserDetailsComponent implements OnInit {
 
   setWorkTimeForUser(workTime) {
     workTime = this.packWorkTime(workTime);
-    this.service.setWorkTimeForUser(workTime).subscribe(data => {
+    this.service.setWorkTimeForUser(workTime).subscribe((data) => {
       console.log(data);
-      if (data['success']) {
+      if (data["success"]) {
         Swal.fire({
-          title: 'Successfull!',
-          text: 'Successful create new worktime!',
+          title: "Successfull!",
+          text: "Successful create new worktime!",
           timer: 3000,
-          type: 'success'
+          type: "success",
         });
         this.user.close();
         this.noSetWorkTime = false;
@@ -199,18 +310,22 @@ export class UserDetailsComponent implements OnInit {
       const day = workTime[i].day;
       time[day.toString().toLowerCase()] =
         this.convertDayToNumeric(day.toString().toLowerCase()) +
-        '-' +
+        "-" +
         workTime[i].start +
-        '-' +
+        "-" +
         workTime[i].end +
-        '-' +
+        "-" +
         workTime[i].start2 +
-        '-' +
-        workTime[i].end2;
+        "-" +
+        workTime[i].end2 +
+        "-" +
+        workTime[i].start3 +
+        "-" +
+        workTime[i].end3;
     }
-    time['user_id'] = this.id;
-    time['dateChange'] = this.validDate.toString();
-    time['color'] = this.selectedColor;
+    time["user_id"] = this.id;
+    time["dateChange"] = this.validDate.toString();
+    time["color"] = this.selectedColor;
     return time;
   }
 
@@ -218,39 +333,49 @@ export class UserDetailsComponent implements OnInit {
     const model = [
       {
         day: this.language.monday,
-        start: workTime.monday.split('-')[1],
-        end: workTime.monday.split('-')[2],
-        start2: workTime.monday.split('-')[3],
-        end2: workTime.monday.split('-')[4]
+        start: workTime.monday.split("-")[1],
+        end: workTime.monday.split("-")[2],
+        start2: workTime.monday.split("-")[3],
+        end2: workTime.monday.split("-")[4],
+        start3: workTime.monday.split("-")[5],
+        end3: workTime.monday.split("-")[6],
       },
       {
         day: this.language.tuesday,
-        start: workTime.tuesday.split('-')[1],
-        end: workTime.tuesday.split('-')[2],
-        start2: workTime.tuesday.split('-')[3],
-        end2: workTime.tuesday.split('-')[4]
+        start: workTime.tuesday.split("-")[1],
+        end: workTime.tuesday.split("-")[2],
+        start2: workTime.tuesday.split("-")[3],
+        end2: workTime.tuesday.split("-")[4],
+        start3: workTime.tuesday.split("-")[5],
+        end3: workTime.tuesday.split("-")[6],
       },
       {
         day: this.language.wednesday,
-        start: workTime.wednesday.split('-')[1],
-        end: workTime.wednesday.split('-')[2],
-        start2: workTime.wednesday.split('-')[3],
-        end2: workTime.wednesday.split('-')[4]
+        start: workTime.wednesday.split("-")[1],
+        end: workTime.wednesday.split("-")[2],
+        start2: workTime.wednesday.split("-")[3],
+        end2: workTime.wednesday.split("-")[4],
+        start3: workTime.wednesday.split("-")[5],
+        end3: workTime.wednesday.split("-")[6],
       },
       {
         day: this.language.thursday,
-        start: workTime.thursday.split('-')[1],
-        end: workTime.thursday.split('-')[2],
-        start2: workTime.thursday.split('-')[3],
-        end2: workTime.thursday.split('-')[4]
+        start: workTime.thursday.split("-")[1],
+        end: workTime.thursday.split("-")[2],
+        start2: workTime.thursday.split("-")[3],
+        end2: workTime.thursday.split("-")[4],
+        start3: workTime.thursday.split("-")[5],
+        end3: workTime.thursday.split("-")[6],
       },
       {
         day: this.language.friday,
-        start: workTime.friday.split('-')[1],
-        end: workTime.friday.split('-')[2],
-        start2: workTime.friday.split('-')[3],
-        end2: workTime.friday.split('-')[4]
-      }
+        start: workTime.friday.split("-")[1],
+        end: workTime.friday.split("-")[2],
+        start2: workTime.friday.split("-")[3],
+        end2: workTime.friday.split("-")[4],
+        start3: workTime.friday.split("-")[5],
+        end3: workTime.friday.split("-")[6],
+      },
     ];
     return model;
   }
@@ -262,13 +387,16 @@ export class UserDetailsComponent implements OnInit {
   editOptions() {
     this.workTimeData();
     this.user.open();
+    this.changeTheme(this.theme);
   }
 
   convertTypeStringToInt(type) {
-    if (type === 'Admin') {
+    if (type === "Admin") {
       type = 1;
-    } else if (type === 'Manager') {
+    } else if (type === "Manager") {
       type = 2;
+    } else if (type === "Read only scheduler") {
+      type = 6;
     } else {
       type = 3;
     }
@@ -277,11 +405,13 @@ export class UserDetailsComponent implements OnInit {
 
   convertIntToTypeString(type) {
     if (type === 1) {
-      type = 'Admin';
+      type = "Admin";
     } else if (type === 2) {
-      type = 'Manager';
+      type = "Manager";
+    } else if (type === 6) {
+      type = "Read only scheduler";
     } else {
-      type = 'Employee';
+      type = "Employee";
     }
     return type;
   }
@@ -308,10 +438,10 @@ export class UserDetailsComponent implements OnInit {
     }
 
     if (this.index === this.allWorkTime.length - 1) {
-      this.previousInd = 'disabled-button';
+      this.previousInd = "disabled-button";
     }
 
-    this.nextInd = '';
+    this.nextInd = "";
     this.workTime = this.packWorkTimeFromDatabase(this.allWorkTime[this.index]);
     this.validDate = new Date(this.allWorkTime[this.index].dateChange);
   }
@@ -323,29 +453,43 @@ export class UserDetailsComponent implements OnInit {
     }
 
     if (this.index === 0) {
-      this.nextInd = 'disabled-button';
+      this.nextInd = "disabled-button";
     }
-    this.previousInd = '';
+    this.previousInd = "";
     this.workTime = this.packWorkTimeFromDatabase(this.allWorkTime[this.index]);
     this.validDate = new Date(this.allWorkTime[this.index].dateChange);
   }
 
   updateWorkTimeForUser(workTime) {
-
     const work = this.packWorkTime(workTime);
-    work['id'] = this.allWorkTime[this.index].id;
-    this.service.updateWorkTime(work).subscribe(
-      data => {
-        console.log(data);
-        if (data['success']) {
-          this.user.close();
-        }
+    work["id"] = this.allWorkTime[this.index].id;
+    this.service.updateWorkTime(work).subscribe((data) => {
+      console.log(data);
+      if (data["success"]) {
+        Swal.fire({
+          title: "Successfull!",
+          text: "Successful update worktime for user!",
+          timer: 3000,
+          type: "success",
+        });
+        this.user.close();
       }
-    )
+    });
   }
 
-  deleteWorkTime(workTime) {
-    const id = this.allWorkTime[this.index].id;
+  deleteWorkTime(answer) {
+    if (answer === "yes") {
+      const id = this.allWorkTime[this.index].id;
+      this.service.deleteWorkTime(id).subscribe((data) => {
+        if (data) {
+          this.allWorkTime.splice(this.index, 1);
+          if (this.allWorkTime.length === 0) {
+            this.noSetWorkTime = true;
+          }
+        }
+      });
+    }
+    this.modalDeletedWorkTimeConfirm = false;
   }
 
   createNewWorkTime() {
@@ -353,32 +497,139 @@ export class UserDetailsComponent implements OnInit {
   }
 
   public close(component) {
-    this[component + 'Opened'] = false;
+    this[component + "Opened"] = false;
   }
 
   open(component, id) {
-    this[component + 'Opened'] = true;
+    this[component + "Opened"] = true;
   }
 
   action(event) {
     console.log(event);
-    if (event === 'yes') {
+    if (event === "yes") {
       console.log(this.data);
-      this.service.deleteUser(this.id).subscribe(
-        data => {
-          if (data) {
-            Swal.fire({
-              title: 'Successfull!',
-              text: 'Successful delete user!',
-              timer: 3000,
-              type: 'success'
-            });
-            this.location.back();
-          }
+      this.service.deleteUser(this.id).subscribe((data) => {
+        if (data) {
+          Swal.fire({
+            title: "Successfull!",
+            text: "Successful delete user!",
+            timer: 3000,
+            type: "success",
+          });
+          this.location.back();
         }
-      );
+      });
     } else {
       this.dialogOpened = false;
     }
   }
+
+  getTranslate(title) {
+    if (title === "profile") {
+      return this.language.profile;
+    } else if (title === "workTime") {
+      return this.language.workTime;
+    }
+    return null;
+  }
+
+  changeTheme(theme: string) {
+    setTimeout(() => {
+      if (localStorage.getItem("allThemes") !== undefined) {
+        const allThemes = JSON.parse(localStorage.getItem("allThemes"));
+        console.log(allThemes);
+        let items = document.querySelectorAll(".k-dialog-titlebar");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const themeName = allThemes[j]["name"];
+            clas.remove("k-dialog-titlebar-" + themeName);
+            clas.add("k-dialog-titlebar-" + theme);
+          }
+        }
+
+        items = document.querySelectorAll(".k-header");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("gridHeader-" + element);
+
+            clas.add("gridHeader-" + this.theme);
+          }
+        }
+        items = document.querySelectorAll(".k-pager-numbers");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-pager-numbers-" + element);
+            clas.add("k-pager-numbers-" + this.theme);
+          }
+        }
+
+        items = document.querySelectorAll(".k-select");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-select-" + element);
+            clas.add("k-select-" + this.theme);
+          }
+        }
+
+        items = document.querySelectorAll(".k-grid-table");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-grid-table-" + element);
+            clas.add("k-grid-table-" + this.theme);
+          }
+        }
+        items = document.querySelectorAll(".k-grid-header");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-grid-header-" + element);
+            clas.add("k-grid-header-" + this.theme);
+          }
+        }
+        items = document.querySelectorAll(".k-pager-wrap");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("k-pager-wrap-" + element);
+            clas.add("k-pager-wrap-" + this.theme);
+          }
+        }
+
+        items = document.querySelectorAll(".k-button");
+        for (let i = 0; i < items.length; i++) {
+          const clas = items[i].classList;
+          for (let j = 0; j < allThemes.length; j++) {
+            const element = allThemes[j]["name"];
+            clas.remove("inputTheme-" + element);
+            clas.add("inputTheme-" + this.theme);
+          }
+        }
+      }
+    }, 50);
+  }
+
+  printUser() {
+    window.print();
+  }
+
+  changeColorPalette(event) {
+    this.selectedColor = event;
+  }
+
+  /*submitEmitter(event) {
+    console.log(event);
+    this.data.allowed_online = event.allowed_online;
+    this.updateUser();
+  }*/
 }

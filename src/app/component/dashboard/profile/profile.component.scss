@@ -59,11 +59,11 @@ body{background-color:#f0f0f0;font-size:13px;font-family:'Open Sans','arial';lin
 }
 
 .nav>li>a:focus, .nav>li>a:hover {
-    background-color: #2180c0 !important;
+    background-color: #091467 !important;
 }
 
 li.active {
-    background-color: #2180c0 !important;
+    background-color: #091467 !important;
 }
 
 input[type="text"]:disabled {
@@ -75,7 +75,18 @@ input[type="email"]:disabled {
     opacity: 0.5;
 }
 
+.a-color {
+    color: #2399D5;
+}
 
-.col-xs-12 {
-    margin: 1%;
+.status-green {
+    background-color: #e5faf3;
+    border: 1px solid #00ce7c;
+    color: #00ce7c;
+}
+
+.status-red {
+    background-color: #ffe5e6;
+    border: 1px solid #fe0000;
+    color: #fe0000;
 }

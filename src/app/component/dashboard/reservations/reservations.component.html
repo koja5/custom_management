@@ -1,0 +1,2 @@
+<app-dynamic-grid [path]="path" [name]="name" (actionEmitter)="actionEmitter($event)"></app-dynamic-grid>
+<app-dynamic-confirm-dialog [showDialog]="showDialog" [title]="language?.reservationConfirmDialogTitle" [question]="language?.reservationDialogQuestion" (sendEmitter)="receiveConfirm($event)"></app-dynamic-confirm-dialog>

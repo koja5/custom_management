@@ -1,0 +1,11 @@
+<div
+  [style.height]="height"
+  *ngIf="data === undefined || gridConfiguration === undefined" style="left: 57% !important"
+>
+  <div class="spinner loading"></div>
+</div>
+<app-custom-grid
+  *ngIf="data !== undefined && gridConfiguration !== undefined"
+  [data]="data"
+  [gridConfiguration]="gridConfiguration"
+></app-custom-grid>

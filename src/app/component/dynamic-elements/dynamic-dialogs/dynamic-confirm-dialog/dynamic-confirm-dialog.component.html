@@ -1,0 +1,21 @@
+<kendo-dialog
+  [title]="title"
+  *ngIf="showDialog"
+  (close)="confirm(false)"
+  [minWidth]="250"
+  [width]="450"
+>
+  <p style="margin: 30px; text-align: center">
+    {{question}}
+  </p>
+  <kendo-dialog-actions>
+    <button
+      kendoButton
+      (click)="confirm(true)"
+      primary="true"
+    >
+      {{language.yes}}
+    </button>
+    <button kendoButton (click)="confirm(false)">{{language.no}}</button>
+  </kendo-dialog-actions>
+</kendo-dialog>

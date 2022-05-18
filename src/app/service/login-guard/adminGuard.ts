@@ -16,7 +16,7 @@ export class AdminGuard implements CanActivate {
         if (this.cookie.check('user') && this.cookie.get('user') === '1') {
             return true;
         } else {
-            this._router.navigate(['user-main']);
+            this._router.navigate(['/dashboard/home/task']);
             // ako je obican korisnik
 
             return false;

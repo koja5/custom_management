@@ -1,0 +1,21 @@
+<div class="settings-container">
+  <h3 class="center">{{ language?.settingsChangeLanguage }}</h3>
+  <div *ngIf="loading" style="height: 80vh">
+    <div class="spinner loading"></div>
+  </div>
+  <div *ngIf="!loading" class="form">
+    <div>
+      <label for="language">{{language?.labelTitle}}</label>
+      <ejs-dropdownlist
+        [dataSource]="data"
+        [(value)]="value"
+        [fields]="fields"
+        [popupHeight]="height"
+        (select)="changeLanguageEvent($event)"
+      ></ejs-dropdownlist>
+    </div>
+    <div class="end mt-5">
+      <button class="btn btn-info" (click)="saveLanguageConfig()">{{language?.saveLanguage}}</button>
+    </div>
+  </div>
+</div>

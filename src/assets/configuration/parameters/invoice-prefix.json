@@ -1,0 +1,18 @@
+[
+    {
+        "type": "textbox",
+        "width": "col-md-12",
+        "name": "prefix",
+        "label": "invoicePrefix",
+        "field": "prefix"
+    },
+    {
+        "type": "button",
+        "width": "col-md-12",
+        "class": "e-control e-btn e-lib e-primary e-flat",
+        "name": "submit",
+        "label": "save",
+        "field": "submit",
+        "positionClass": "text-align: end"
+    }
+]

@@ -1,6 +1,8 @@
 export class StoreModel {
     id?: string;
     storename?: string;
+    companyname?: string;
+    vatcode?: string;
     street?: string;
     zipcode?: string;
     place?: string;
@@ -11,5 +13,7 @@ export class StoreModel {
     start_work?: string;
     end_work?: string;
     time_duration?: string;
+    time_therapy?: string;
     superadmin?: string;
+    allowed_online?: number;
 }

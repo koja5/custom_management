@@ -1,0 +1,58 @@
+<span
+  title="{{ language.sendSMSTo }} {{ phoneNumber }}"
+  class="fa fa-paper-plane sms-blue"
+  aria-hidden="true"
+  (click)="dialogSendSMSForm.open()"
+></span>
+
+<modal #dialogSendSMSForm [hideCloseButton]="false" modalClass="modal-md">
+  <modal-header>
+    <h2>{{ language.sendSMSTo }} {{ phoneNumber }}</h2>
+  </modal-header>
+  <modal-content>
+    <form (ngSubmit)="sendSMSMessage()" #sendSMSForm="ngForm">
+      <div class="e-float-input e-control-wrapper">
+        <textarea required [(ngModel)]="message" name="message"></textarea>
+        <label class="e-float-text e-label-top" for="OrderID">
+          {{ language.inputSMSMessage }}({{ language.required }})</label
+        >
+      </div>
+      <div class="end mt-5">
+        <button kendoButton [primary]="true" type="submit" [disabled]="sendSMSForm.form.invalid">
+          {{ language.sendSMS }}
+        </button>
+      </div>
+    </form>
+  </modal-content>
+  <modal-footer> </modal-footer>
+</modal>
+
+<!-- <kendo-window
+  *ngIf="dialogSendSMSForm"
+  (close)="dialogSendSMSForm = false"
+  [minWidth]="450"
+  [width]="450"
+>
+  <form (ngSubmit)="sendSMSMessage()" #sendSMSForm="ngForm">
+    <div class="e-float-input e-control-wrapper">
+      <input
+        required
+        [(ngModel)]="phoneNumber"
+        name="phoneNumber"
+        disabled="true"
+      />
+      <label class="e-float-text e-label-top"> {{ language.mobile }}</label>
+    </div>
+    <div class="e-float-input e-control-wrapper">
+      <textarea required [(ngModel)]="message" name="message"></textarea>
+      <label class="e-float-text e-label-top" for="OrderID">
+        {{ language.inputSMSMessage }}</label
+      >
+    </div>
+    <div class="end">
+      <button kendoButton type="submit" [primary]="true">
+        {{ language.sendSMS }}
+      </button>
+    </div>
+  </form>
+</kendo-window> -->

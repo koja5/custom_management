@@ -41,7 +41,8 @@
   color: white;
   /*height: 2.7vh;
   width: 31.5vh;*/
-  height: 19px;
+  // height: 35px !important;
+  height: 33px !important;
   width: 100%;
   border-radius: 2px;
 }
@@ -55,7 +56,7 @@
 }
 
 .k-nonwork-hour {
-  pointer-events: none !important;
+  // pointer-events: none !important;
 }
 
 .noWorkTime {
@@ -74,21 +75,172 @@
 }
 
 .calendar {
-  height: 72vh;
+  /*height: 76vh;*/
   overflow: auto;
+  margin-top: 50px;
 }
 
 .tasks {
   overflow: hidden;
-  height: 89vh;
+  /*height: 92vh;*/
 }
 
-@media (max-height: 768px) {
+/*@media (max-height: 768px) {
   .k-dialog-wrapper .k-dialog {
     margin-top: -30vh !important;
   }
-}
+}*/
 
 .k-scheduler-toolbar {
   text-align: center !important;
+  padding: 6px !important;
+  position: fixed;
+  z-index: 1;
+  margin-top: -35px;
+}
+
+.k-dialog {
+  overflow: auto !important;
+  min-width: auto !important;
+}
+
+.dateWidth {
+  margin-right: 2%;
+  width: 70%;
+}
+
+.noPaddingNoMargin {
+  margin-left: 0px;
+  padding-left: 0px;
+}
+
+.customerInfo {
+  font-size: 11.5px !important; 
+  color: #727070 !important;
+  margin-left: 2px !important;
+}
+
+kendo-multiselect {
+  background: none !important;
+}
+
+.patient-options {
+  font-size: 9px;
+}
+
+kendo-scheduler .k-event:hover {
+  cursor: pointer;
+  filter: brightness(0.9);
+}
+
+.eventName {
+  font-weight: bold; 
+  padding: 0px; 
+  color: black;
+  font-size: 13px !important;
+  margin: 0px;
+  line-height: initial;
+}
+
+.eventTitle {
+  color: black;
+  font-size: 12px !important;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre-line;
+  margin: 0px;
+  padding: 0px !important;
+  line-height: initial;
+  // word-spacing: 9999px;
+}
+
+.quickPreviewWindow {
+  background: #091467 !important;
+}
+
+.quickPreviewWindow kendo-window-titlebar {
+  padding: 5px 24px !important;
+}
+
+.quickPreviewWindow .k-window-content {
+  padding: 0px !important;
+}
+
+.customerNameEvent {
+  padding: 0px 24px;
+  color: #fff;
+  font-weight: 300;
+}
+
+.customerTitleEvent {
+  padding: 24px;
+  background: #fff !important;
+}
+
+kendo-colorpalette {
+  width: 100% !important;
+}
+
+k-window-content {
+  max-width: 700px !important;
+}
+
+/*.eventDiv {
+  top: 38%;
+  vertical-align: middle;
+  text-align: center;
+  width: 100%;
+}*/
+
+.eventDiv {
+  width: 90%;
+  padding-top: 8px;
+  height: 85%;
+  overflow: hidden;
+}
+
+kendo-scheduler .k-event {
+  padding: 0px !important;
+  margin-top: 1px;
+  border: 2px solid !important;
+}
+
+
+kendo-scheduler multi-day-view .k-event {
+  width: 19.5% !important;
+}
+
+div.monthviewitem .k-event {
+  width: auto !important;
+}
+
+.textAreaInput {
+  width: 90% !important;
+  resize: none;
+  overflow: auto;
+  height: 80px;
+  padding: 7px;
+}
+
+.checkButton {
+  position: absolute;
+  right: 7px;
+  bottom: 8px;
+  font-size: 21px;
+  z-index: 10000;
+}
+
+.confirmed {
+  color: #24c719;
+}
+
+.notConfirmed {
+  color: gray;
+  opacity: 0.6;
+}
+
+kendo-scheduler month-view .k-event {
+  height: 11% !important;
 }

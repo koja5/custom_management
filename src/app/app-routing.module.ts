@@ -1,49 +1,54 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { AppComponent } from './app.component';
-import { LoginGuard } from './service/login-guard/loginGuard';
-import { LoggedGuard } from './service/login-guard/loggedGuard';
-import { DashboardGuard } from './service/login-guard/dashboardGuard';
+import { ConfirmArrivalComponent } from "./component/templates/confirm-arrival/confirm-arrival.component";
+import { NgModule } from "@angular/core";
+import { Routes, RouterModule } from "@angular/router";
+import { LoginGuard } from "./service/login-guard/loginGuard";
+import { LoggedGuard } from "./service/login-guard/loggedGuard";
+import { DashboardGuard } from "./service/login-guard/dashboardGuard";
 
-//components
-import { LoginComponent } from './component/login/login.component';
-import { ChangePasswordComponent } from './component/login/change-password/change-password.component';
-import { DashboardComponent } from './component/dashboard/dashboard.component';
-import { TaskComponent } from './component/dashboard/task/task.component';
-import { UsersComponent } from './component/dashboard/users/users.component';
-import { StoreComponent } from './component/dashboard/store/store.component';
-import { ProfileComponent } from './component/dashboard/profile/profile.component';
-import { CustomersComponent } from './component/dashboard/customers/customers.component';
-import { BaseDateComponent } from './component/dashboard/task/base-date/base-date.component';
-import { DocumentPreviewComponent } from './component/dashboard/document-preview/document-preview.component';
-import { UserDetailsComponent } from './component/dashboard/users/user-details/user-details.component';
-import { ParametersComponent } from './component/dashboard/parameters/parameters.component';
-import { StatisticComponent } from './component/dashboard/statistic/statistic.component';
+import { NotFoundComponent } from "./component/templates/not-found/not-found.component";
+import { PatientFormSuccessComponent } from "./component/templates/patient-form-success/patient-form-success.component";
+import { ImpressumComponent } from "./component/templates/impressum/impressum.component";
+import { PrivacyPolicyComponent } from "./component/templates/privacy-policy/privacy-policy.component";
+import { TermsComponent } from "./component/templates/terms/terms.component";
 
 const routes: Routes = [
-  { path: '', redirectTo: '', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent, canActivate: [LoggedGuard] },
-  { path: 'changePassword/:id', component: ChangePasswordComponent, canActivate: [LoggedGuard] },
+  { path: "", redirectTo: "", pathMatch: "full" },
   {
-    path: 'dashboard', component: DashboardComponent, canActivate: [LoginGuard, DashboardGuard],
-    children: [
-      { path: 'task', component: TaskComponent, outlet: 'dashboard' },
-      { path: 'users', component: UsersComponent, outlet: 'dashboard' },
-      { path: 'user-details/:id', component: UserDetailsComponent, outlet: 'dashboard' },
-      { path: 'store', component: StoreComponent, outlet: 'dashboard' },
-      { path: 'profile', component: ProfileComponent, outlet: 'dashboard' },
-      { path: 'customers', component: CustomersComponent, outlet: 'dashboard' },
-      { path: 'parameters', component: ParametersComponent, outlet: 'dashboard' },
-      { path: 'statistic', component: StatisticComponent, outlet: 'dashboard' }
-    ]
+    path: "login",
+    canActivate: [LoggedGuard],
+    loadChildren: "./component/login/login.module#LoginModule",
   },
-  { path: 'document/server/routes/uploads/:id', component: DocumentPreviewComponent }
+  {
+    path: "dashboard",
+    canActivate: [LoginGuard],
+    loadChildren: "./component/dashboard/dashboard.module#DashboardModule",
+  },
+  { path: "template/confirm-arrival", component: ConfirmArrivalComponent },
+  {
+    path: "template/created-account-successed",
+    component: PatientFormSuccessComponent,
+  },
+  {
+    path: "impressum",
+    component: ImpressumComponent,
+  },
+  {
+    path: "privacy-policy",
+    component: PrivacyPolicyComponent,
+  },
+  {
+    path: "terms",
+    component: TermsComponent,
+  },
+  {
+    path: "**",
+    pathMatch: "full",
+    component: NotFoundComponent,
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-
-export class AppRoutingModule { }
-export const routingComponents = [AppComponent, LoginComponent];
+export class AppRoutingModule {}

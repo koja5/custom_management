@@ -1,0 +1,125 @@
+<div #container>
+  <ejs-grid
+    #grid
+    *ngIf="config"
+    width="100%"
+    [height]="height"
+    [dataSource]="data"
+    [editSettings]="config.editSettings"
+    [toolbar]="config.toolbar"
+    [allowSorting]="config?.sorting?.enable"
+    [sortSettings]="config?.sorting?.initialSorting"
+    [allowGrouping]="config.grouping.enable"
+    [allowResizing]="config.allowResizing"
+    [allowPaging]="config.paging.enable"
+    [pageSettings]="config.paging.settings"
+    [allowFiltering]="config.filtering.enable"
+    (actionBegin)="actionBegin($event)"
+    (actionComplete)="actionComplete($event)"
+    (toolbarClick)="clickHandler($event)"
+  >
+    <!-- <ng-template *ngIf="config.customToolbar" #toolbarTemplate let-data>
+      <ejs-toolbar>
+        <e-items>
+          <e-item
+            (click)="clickHandler($event)"
+            id="collapse"
+            prefixIcon="fa fa-bars"
+          ></e-item>
+          <e-item
+            (click)="refreshGrid()"
+            id="refresh"
+            prefixIcon="fa fa-refresh"
+          ></e-item>
+        </e-items>
+      </ejs-toolbar>
+    </ng-template> -->
+
+    <e-columns>
+      <e-column
+        *ngFor="let item of config.columns; let i = index"
+        [type]="item.type"
+        [field]="item.field"
+        [headerText]="language[item.title] ? language[item.title] : item.title"
+        [width]="item.width"
+        [class]="item?.class"
+        [textAlign]="item?.position"
+        [isPrimaryKey]="item.isPrimaryKey"
+        [editType]="item.editType ? item.editType : null"
+        [allowEditing]="item.allowEditing"
+        [format]="item.format"
+        [validationRules]="item.validation"
+      >
+        <ng-template *ngIf="item?.type == 'documentPreview'" class="item?.position" #template let-data>
+          <div>
+            <button
+              kendoButton
+              [icon]="'k-icon k-i-preview'"
+              class="k-preview"
+              (click)="previewDocument(data.filename)"
+            >
+              <span *ngIf="item.classIcon" class="item.classIcon"></span>
+            </button>
+          </div>
+        </ng-template>
+        <ng-template *ngIf="item?.type == 'button'" class="item?.position" #template let-data>
+          <button
+            *ngIf="item?.mode === 'action'"
+            kendoButton
+            [class]="item?.class"
+            (click)="action(data, item.mode, item)"
+          >
+            <span *ngIf="item.classIcon" class="{{ item.classIcon }}"></span>
+            {{ language[item?.label] ? language[item?.label] : item?.label }}
+          </button>
+        </ng-template>
+      </e-column>
+    </e-columns>
+    <ng-template #editSettingsTemplate let-data>
+      <div ngForm #orderForm="ngForm" style="max-height: 70% !important">
+        <div class="form-row">
+          <!-- <div class="form-group col-md-6">
+                    <div class="e-float-input e-control-wrapper"
+                        [ngClass]="{'e-error': OrderID.invalid && (OrderID.dirty || OrderID.touched)}">
+                        <input [(ngModel)]="orderData.OrderID" required id="OrderID" name="OrderID" type="text"
+                            [attr.disabled]="!data.isAdd ? '' : null" #OrderID="ngModel">
+                        <span class="e-float-line"></span>
+                        <label class="e-float-text e-label-top" for="OrderID"> Order ID</label>
+                    </div>
+                    <div id="OrderIDError" *ngIf='OrderID.invalid && (OrderID.dirty || OrderID.touched)'>
+                        <label class="e-error" id="OrderID-info" style="display: block;">*Order ID is required</label>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <div class="e-float-input e-control-wrapper"
+                        [ngClass]="{'e-error': CustomerID.invalid && (CustomerID.dirty || CustomerID.touched)}">
+                        <input [(ngModel)]="orderData.CustomerID" required id="CustomerID" name="CustomerID" type="text"
+                            #CustomerID="ngModel">
+                        <span class="e-float-line"></span>
+                        <label class="e-float-text e-label-top" for="CustomerID">Customer Name</label>
+                    </div>
+                    <div id="CustomerIDError" *ngIf='CustomerID.invalid && (CustomerID.dirty || CustomerID.touched)'>
+                        <label class="e-error" id="CustomerID-info" style="display: block;">*Customer Name is
+                            required</label>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-12">
+                    <div class="e-float-input e-control-wrapper">
+                        <textarea [(ngModel)]="orderData.ShipAddress" id="ShipAddress" name="ShipAddress"
+                            type="text"></textarea>
+                        <span class="e-float-line"></span>
+                        <label class="e-float-text e-label-top" for="ShipAddress">Ship Address</label>
+                    </div>
+                </div> -->
+          <app-dynamic-forms
+            [config]="config.configField"
+            (submit)="submitEmitter($event)"
+            #form="dynamicForm"
+          >
+          </app-dynamic-forms>
+        </div>
+      </div>
+    </ng-template>
+  </ejs-grid>
+</div>

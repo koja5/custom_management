@@ -1,0 +1,28 @@
+<div *ngIf="language&&config" class="form-group {{config?.class}}" [ngClass]="config?.width">
+  <div [formGroup]="group">
+    <table class="size">
+      <tr>
+        <td class="pr-6">
+          {{ language[config.label] ? language[config.label] : config.label }}
+        </td>
+        <td class="pt-2">
+          <ejs-switch [id]="config.name" name="{{config.name}}"
+            onLabel="{{
+              language[config?.onLabel]
+                ? language[config?.onLabel]
+                : config?.onLabel
+            }}"
+            offLabel="{{
+              language[config?.offLabel]
+                ? language[config?.offLabel]
+                : config?.offLabel
+            }}"
+            [value]="config.value"
+            [checked]="config.value"
+            [formControlName]="config.name"
+          ></ejs-switch>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

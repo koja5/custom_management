@@ -1,0 +1,5 @@
+<div class="dynamic-field" style="text-align: end;">
+    <button [disabled]="config.disabled" type="submit" [class]="config.class">
+    {{ language[config.label] ? language[config.label] : config.label }}
+  </button>
+</div>

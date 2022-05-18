@@ -1,0 +1,38 @@
+<span
+  title="{{ language.sendEmailTo }} {{ email }}"
+  class="fa fa-envelope email-orange mr-2"
+  aria-hidden="true"
+  (click)="dialogSendEmailForm.open()"
+></span>
+
+<modal #dialogSendEmailForm [hideCloseButton]="false" modalClass="modal-md">
+  <modal-header>
+    <h2>{{ language.sendEmailTo }} {{ email }}</h2>
+  </modal-header>
+  <modal-content>
+    <form (ngSubmit)="sendEmail()" #sendEmailForm="ngForm">
+      <div class="e-float-input e-control-wrapper">
+        <input required [(ngModel)]="subject" name="subject" />
+        <label class="e-float-text e-label-top">
+          {{ language.emailSubject }}({{ language.required }})</label
+        >
+      </div>
+      <div class="e-float-input e-control-wrapper">
+        <textarea required [(ngModel)]="content" name="message"></textarea>
+        <label class="e-float-text e-label-top" for="OrderID">
+          {{ language.inputEmailMessage }}({{ language.required }})</label
+        >
+      </div>
+      <div class="end mt-5">
+        <button
+          kendoButton
+          [primary]="true"
+          type="submit"
+          [disabled]="sendEmailForm.form.invalid"
+        >
+          {{ language.sendEmail }}
+        </button>
+      </div>
+    </form>
+  </modal-content>
+</modal>

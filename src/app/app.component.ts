@@ -7,6 +7,7 @@ import { concat } from 'rxjs/observable/concat';
 import { delay } from 'rxjs/operators/delay';
 import { UsersService } from './service/users.service';
 import * as io from 'socket.io-client';
+import { HelpService } from './service/help.service';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +25,7 @@ export class UploadInterceptor implements HttpInterceptor, OnInit {
   socket;
   numberOfOnlineUsers: number;
 
-  constructor(public service: UsersService) {
+  constructor(public service: UsersService, private helpService: HelpService) {
     this.socket = io();
   }
 

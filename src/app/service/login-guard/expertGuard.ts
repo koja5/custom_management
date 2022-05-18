@@ -20,7 +20,7 @@ export class ExpertGuard implements CanActivate {
                 this._router.navigate(['admin']);
                 // ako je admin
             } else {
-                this._router.navigate(['user-main']);
+                this._router.navigate(['/dashboard/home/task']);
                 // ako je obican korisnik
             }
             return false;
