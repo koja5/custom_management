@@ -60,7 +60,7 @@
     "@syncfusion/ej2-angular-splitbuttons": "^18.4.31",
     "@syncfusion/ej2-lists": "^18.4.32",
     "angular6-json-schema-form": "^8.0.0",
-    "axios": "^0.19.0",
+    "axios": "^0.21.2",
     "basic-ftp": "^4.6.6",
     "body-parser": "^1.18.2",
     "bootstrap": "^3.3.7",
