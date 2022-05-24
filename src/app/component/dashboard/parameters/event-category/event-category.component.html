@@ -167,7 +167,7 @@
   </kendo-grid>
 
   <kendo-dialog
-    title="Please confirm"
+    title="{{language.pleaseConfirm}}"
     *ngIf="importExcel"
     (close)="importExcel = false"
     [minWidth]="250"
@@ -183,7 +183,7 @@
   </kendo-dialog>
 
   <kendo-dialog
-    title="Please confirm"
+    title="{{language.pleaseConfirm}}"
     *ngIf="deleteModal"
     (close)="deleteModal = false"
     [minWidth]="250"

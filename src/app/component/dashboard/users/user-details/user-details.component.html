@@ -854,7 +854,7 @@
     </div>
 
     <kendo-dialog
-      title="Please confirm"
+      title="{{ language.pleaseConfirm }}"
       *ngIf="dialogOpened"
       (close)="close('dialog')"
       [minWidth]="250"
@@ -878,7 +878,7 @@
     </kendo-dialog>
 
     <kendo-dialog
-      title="Please confirm"
+      title="{{ language.pleaseConfirm }}"
       *ngIf="modalDeletedWorkTimeConfirm"
       (close)="modalDeletedWorkTimeConfirm = false; user.open()"
       [minWidth]="250"

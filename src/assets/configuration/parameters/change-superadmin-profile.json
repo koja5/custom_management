@@ -17,7 +17,7 @@
     "type": "textbox",
     "width": "col-md-4",
     "name": "companyname",
-    "label": "companyname",
+    "label": "companyName",
     "field": "companyname"
   },
   {

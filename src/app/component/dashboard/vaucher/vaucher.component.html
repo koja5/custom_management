@@ -215,23 +215,25 @@
   </div>
 
   <kendo-dialog
-    title="Please confirm"
+    title="{{ language.pleaseConfirm }}"
     *ngIf="vaucherDialogOpened"
     (close)="vaucherDialogOpened = false"
     [minWidth]="250"
     [width]="450"
   >
     <p style="margin: 30px; text-align: center">
-      Are you sure you want to import data from excel?
+      {{ language.areYouSure }}
     </p>
     <kendo-dialog-actions>
-      <button kendoButton (click)="action('no')">No</button>
-      <button kendoButton (click)="action('yes')" primary="true">Yes</button>
+      <button kendoButton (click)="action('no')">{{ language.no }}</button>
+      <button kendoButton (click)="action('yes')" primary="true">
+        {{ language.yes }}
+      </button>
     </kendo-dialog-actions>
   </kendo-dialog>
 
   <kendo-dialog
-    title="Please confirm"
+    title="{{ language.pleaseConfirm }}"
     *ngIf="dialog"
     (close)="dialog = false"
     [minWidth]="250"
@@ -244,12 +246,14 @@
         width="50"
         height="46"
       />
-      <h3>Are you sure want to delete this Voucher?</h3>
+      <h3>{{ language.areYouSure }}</h3>
     </div>
     <kendo-dialog-actions>
-      <button kendoButton (click)="deleteVaucher('no')">No</button>
+      <button kendoButton (click)="deleteVaucher('no')">
+        {{ language.no }}
+      </button>
       <button kendoButton (click)="deleteVaucher('yes')" primary="true">
-        Yes
+        {{ language.yes }}
       </button>
     </kendo-dialog-actions>
   </kendo-dialog>

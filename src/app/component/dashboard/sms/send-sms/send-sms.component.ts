@@ -1,16 +1,15 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { Modal } from 'ngx-modal';
-import { SmsFormModel } from 'src/app/models/sms-form-model';
-import { HelpService } from 'src/app/service/help.service';
-import { SendSmsService } from 'src/app/service/send-sms.service';
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Modal } from "ngx-modal";
+import { SmsFormModel } from "src/app/models/sms-form-model";
+import { HelpService } from "src/app/service/help.service";
+import { SendSmsService } from "src/app/service/send-sms.service";
 
 @Component({
-  selector: 'app-send-sms',
-  templateUrl: './send-sms.component.html',
-  styleUrls: ['./send-sms.component.scss']
+  selector: "app-send-sms",
+  templateUrl: "./send-sms.component.html",
+  styleUrls: ["./send-sms.component.scss"],
 })
 export class SendSmsComponent implements OnInit {
-
   @Input() phoneNumber: string;
   @ViewChild("dialogSendSMSForm") dialogSendSMSForm: Modal;
   public smsFormModel = new SmsFormModel();
@@ -18,7 +17,10 @@ export class SendSmsComponent implements OnInit {
   public message: any;
   public showDialog = false;
 
-  constructor(private service: SendSmsService, private helpService: HelpService) { }
+  constructor(
+    private service: SendSmsService,
+    private helpService: HelpService
+  ) {}
 
   ngOnInit() {
     this.language = this.helpService.getLanguage();
@@ -35,18 +37,21 @@ export class SendSmsComponent implements OnInit {
     this.smsFormModel = {
       number: this.phoneNumber,
       message: this.message,
+      superadmin: this.helpService.getSuperadmin(),
     };
     this.dialogSendSMSForm.close();
-    this.service.sendCustomSMS(this.smsFormModel).subscribe(data => {
+    this.service.sendCustomSMS(this.smsFormModel).subscribe((data) => {
       console.log(data);
       // this.dialogSendSMSForm = false;
-      this.message = '';
-      if(data) {
-        this.helpService.successToastr('', this.language.successSendSMSMessageText);
+      this.message = "";
+      if (data) {
+        this.helpService.successToastr(
+          "",
+          this.language.successSendSMSMessageText
+        );
       } else {
-        this.helpService.errorToastr('', this.language.errorSendSMSMessageText);
+        this.helpService.errorToastr("", this.language.errorSendSMSMessageText);
       }
     });
   }
-
 }
