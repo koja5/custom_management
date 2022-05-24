@@ -11,6 +11,7 @@ const passwordGenerate = require("generate-password");
 var request = require("request");
 const logger = require("./logger");
 const sendSmsFromMail = require("./ftpUploadSMS");
+const { delay } = require("rxjs-compat/operator/delay");
 const macAddress = require("os").networkInterfaces();
 
 var link = process.env.link_api;
@@ -4624,7 +4625,6 @@ router.post("/createEventCategory", function (req, res, next) {
       color: req.body.color,
       comment: req.body.comment,
       superadmin: req.body.superadmin,
-      showAtInvoice: req.body.showAtInvoice
     };
 
     conn.query(
@@ -5325,15 +5325,54 @@ function checkAvailableCode(phone, codes) {
   return false;
 }
 
+function checkSMSCount(superadmin, needCount) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      return err;
+    }
+    conn.query(
+      "select * from sms_count where superadmin = ?",
+      [superadmin],
+      function (err, rows) {
+        if (rows && rows.length > 0) {
+          console.log(rows);
+          if (rows[0].count > needCount) {
+            const updateCount = rows[0].count - needCount;
+            conn.query(
+              "update sms_count set count = ? where superadmin = ?",
+              [updateCount, superadmin],
+              function (err, rows) {
+                console.log(err);
+                if (!err) {
+                  console.log("USAO SAM OVDE!");
+                  return true;
+                } else {
+                  return false;
+                }
+              }
+            );
+          } else {
+            return false;
+          }
+        } else {
+          return false;
+        }
+      }
+    );
+  });
+}
+
 //custom send SMS
 router.post("/sendCustomSMS", function (req, res) {
   var phoneNumber = req.body.number;
   request(link + "/getAvailableAreaCode", function (error, response, codes) {
     if (checkAvailableCode(phoneNumber, JSON.parse(codes))) {
       var message = req.body.message;
-      console.log("usao sam!");
       var content = "To: " + phoneNumber + "\r\n\r\n" + message;
       var fileName = "server/sms/" + phoneNumber + ".txt";
+
+      console.log("USAO!!!");
       sendSmsFromMail(phoneNumber, message);
       res.send(true);
     } else {
@@ -5469,6 +5508,8 @@ router.post("/sendCustomSMS", function (req, res) {
 //   }
 // });
 
+const timer = (ms) => new Promise((res) => setTimeout(res, ms));
+
 router.post("/sendMassiveSMS", function (req, res) {
   var phoneNumber = req.body.number;
   if (req.body.message != "") {
@@ -5493,63 +5534,64 @@ router.post("/sendMassiveSMS", function (req, res) {
                   " and " +
                   question,
                 function (err, rows) {
-                  rows.forEach(function (to, i, array) {
-                    var phoneNumber = to.mobile ? to.mobile : to.telephone;
-                    if (
-                      checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
-                      req.body.message
-                    ) {
-                      var message =
-                        (to.smsSubject
-                          ? to.smsSubject
-                          : language.initialGreetingSMSReminder) +
-                        " " +
-                        to.shortname +
-                        ", \n \n" +
-                        req.body.message;
-                      var signature = "";
-                      if (to.signatureAvailable) {
-                        if (to.smsSignatureCompanyName) {
-                          signature += to.smsSignatureCompanyName + "\n";
-                        }
-                        if (to.smsSignatureAddress1) {
-                          signature += to.smsSignatureAddress1 + "\n";
-                        }
-                        if (to.smsSignatureAddress2) {
-                          signature += to.smsSignatureAddress2 + "\n";
-                        }
-                        if (to.smsSignatureAddress3) {
-                          signature += to.smsSignatureAddress3 + "\n";
-                        }
-                        if (to.smsSignatureTelephone) {
-                          signature += to.smsSignatureTelephone + " \n";
-                        }
-                        if (to.smsSignatureMobile) {
-                          signature += to.smsSignatureMobile + " \n";
-                        }
-                        if (to.smsSignatureEmail) {
-                          signature += to.smsSignatureEmail + " \n";
-                        }
-                      }
-                      var content =
-                        "To: " +
-                        phoneNumber +
-                        "\r\n\r\n" +
-                        message +
-                        "\n\n" +
-                        signature;
-                      const fullMessage = message + "\n\n" + signature;
-                      var fileName = "server/sms/" + phoneNumber + ".txt";
-                      sendSmsFromMail(phoneNumber, fullMessage);
-                      res.send(true);
-                    } else {
-                      res.send(false);
-                      logger.log(
-                        "warn",
-                        `Number ${phoneNumber} is not start with available area code!`
-                      );
-                    }
-                  });
+                  splitSenderToPartArray(rows, codes, req);
+                  // rows.forEach(async function (to, i, array) {
+                  //   count++;
+                  //   var phoneNumber = to.mobile ? to.mobile : to.telephone;
+                  //   if (
+                  //     checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
+                  //     req.body.message
+                  //   ) {
+                  //     var message =
+                  //       (to.smsSubject
+                  //         ? to.smsSubject
+                  //         : language.initialGreetingSMSReminder) +
+                  //       " " +
+                  //       to.shortname +
+                  //       ", \n \n" +
+                  //       req.body.message;
+                  //     var signature = "";
+                  //     if (to.signatureAvailable) {
+                  //       if (to.smsSignatureCompanyName) {
+                  //         signature += to.smsSignatureCompanyName + "\n";
+                  //       }
+                  //       if (to.smsSignatureAddress1) {
+                  //         signature += to.smsSignatureAddress1 + "\n";
+                  //       }
+                  //       if (to.smsSignatureAddress2) {
+                  //         signature += to.smsSignatureAddress2 + "\n";
+                  //       }
+                  //       if (to.smsSignatureAddress3) {
+                  //         signature += to.smsSignatureAddress3 + "\n";
+                  //       }
+                  //       if (to.smsSignatureTelephone) {
+                  //         signature += to.smsSignatureTelephone + " \n";
+                  //       }
+                  //       if (to.smsSignatureMobile) {
+                  //         signature += to.smsSignatureMobile + " \n";
+                  //       }
+                  //       if (to.smsSignatureEmail) {
+                  //         signature += to.smsSignatureEmail + " \n";
+                  //       }
+                  //     }
+                  //     var content =
+                  //       "To: " +
+                  //       phoneNumber +
+                  //       "\r\n\r\n" +
+                  //       message +
+                  //       "\n\n" +
+                  //       signature;
+                  //     const fullMessage = message + "\n\n" + signature;
+                  //     var fileName = "server/sms/" + phoneNumber + ".txt";
+                  //     sendSmsFromMail(phoneNumber, fullMessage);
+                  //   } else {
+                  //     logger.log(
+                  //       "warn",
+                  //       `Number ${phoneNumber} is not start with available area code!`
+                  //     );
+                  //   }
+                  // });
+                  res.send(true);
                 }
               );
             });
@@ -5565,6 +5607,94 @@ router.post("/sendMassiveSMS", function (req, res) {
     );
   }
 });
+
+let globalCount = 0;
+let timeCount = 0;
+let count = 0;
+
+function splitSenderArray(rows) {
+  setTimeout(() => {
+    let count = 0;
+    rows.forEach(async function (to, i, array) {
+      count++;
+      globalCount++;
+      console.log(to.shortname);
+      if (count === 10) {
+        timeCount++;
+        console.log("-----------------------------");
+        splitSenderArray(rows.splice(globalCount, count));
+      } else if (rows.length < 10) {
+        console.log(to.shortname);
+        return;
+      }
+    });
+  }, timeCount * 1000);
+}
+
+function splitSenderToPartArray(rows, codes, req) {
+  setTimeout(() => {
+    rows.forEach(async function (to, i, array) {
+      count++;
+      var phoneNumber = to.mobile ? to.mobile : to.telephone;
+      if (
+        checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
+        req.body.message
+      ) {
+        var message =
+          (to.smsSubject
+            ? to.smsSubject
+            : language.initialGreetingSMSReminder) +
+          " " +
+          to.shortname +
+          ", \n \n" +
+          req.body.message;
+        var signature = "";
+        if (to.signatureAvailable) {
+          if (to.smsSignatureCompanyName) {
+            signature += to.smsSignatureCompanyName + "\n";
+          }
+          if (to.smsSignatureAddress1) {
+            signature += to.smsSignatureAddress1 + "\n";
+          }
+          if (to.smsSignatureAddress2) {
+            signature += to.smsSignatureAddress2 + "\n";
+          }
+          if (to.smsSignatureAddress3) {
+            signature += to.smsSignatureAddress3 + "\n";
+          }
+          if (to.smsSignatureTelephone) {
+            signature += to.smsSignatureTelephone + " \n";
+          }
+          if (to.smsSignatureMobile) {
+            signature += to.smsSignatureMobile + " \n";
+          }
+          if (to.smsSignatureEmail) {
+            signature += to.smsSignatureEmail + " \n";
+          }
+        }
+        var content =
+          "To: " + phoneNumber + "\r\n\r\n" + message + "\n\n" + signature;
+        const fullMessage = message + "\n\n" + signature;
+        var fileName = "server/sms/" + phoneNumber + ".txt";
+        count++;
+        globalCount++;
+        if (count === 50) {
+          timeCount++;
+          console.log("-----------------------------");
+          count = 0;
+          splitSenderToPartArray(rows.splice(globalCount, count), codes, req);
+        }
+        // console.log(phoneNumber);
+        sendSmsFromMail(phoneNumber, fullMessage);
+      } else {
+        logger.log(
+          "warn",
+          `Number ${phoneNumber} is not start with available area code!`
+        );
+      }
+    });
+  }, timeCount * 30000);
+}
 
 function getSqlQuery(body) {
   var question = "";
@@ -8204,7 +8334,8 @@ router.get("/getDataForMassiveInvoice/:customerId", function (req, res, next) {
     var customerId = req.params.customerId;
 
     conn.query(
-      "select t.id as taskId, t.*, tp.*, u.*, s.storename as store, e.id as eventId, e.category as event_category from tasks t join therapy tp on t.therapy_id = tp.id join users u on u.id = t.creator_id join store s on s.id = t.storeId  join event_category e on t.colorTask = e.id where e.showAtInvoice = 1 and  t.customer_id =" + customerId,
+      "select t.id as taskId, t.*, tp.*, u.*, e.id as eventId, e.category as event_category from tasks t join therapy tp on t.therapy_id = tp.id join users u on u.id = t.creator_id join event_category e on t.colorTask = e.id where t.customer_id =" +
+        customerId,
       function (err, rows) {
         conn.release();
         if (!err) {

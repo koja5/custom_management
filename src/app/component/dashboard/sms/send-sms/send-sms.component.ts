@@ -35,6 +35,7 @@ export class SendSmsComponent implements OnInit {
     this.smsFormModel = {
       number: this.phoneNumber,
       message: this.message,
+      superadmin: this.helpService.getSuperadmin()
     };
     this.dialogSendSMSForm.close();
     this.service.sendCustomSMS(this.smsFormModel).subscribe(data => {
