@@ -708,6 +708,11 @@ export class InvoiceComponent implements OnInit {
 
     } else if (value.indexOf(' ') != -1) {
       date = value.split(' ')[0];
+    } else if (value.indexOf('T') != -1) { // 2022-03-29T06:00:00.000Z
+      date = value.split('T')[0];
+
+      //console.log(date.split("-").reverse().join("-"));
+      date = date.split("-").reverse().join("-");
     }
 
     // console.log(date);
