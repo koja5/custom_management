@@ -97,14 +97,14 @@
               <kendo-daterange>
                 <label class="mr-4">
                   <span class="date-range-label"> {{ language.startDateLabel }}</span>
-                  <kendo-dateinput class="full-width" kendoDateRangeStartInput [navigateCalendarOnFocus]="true"
-                    [(value)]="range.start">
+                  <kendo-dateinput format="dd.MM.yyyy" class="full-width" kendoDateRangeStartInput
+                    [navigateCalendarOnFocus]="true" [(value)]="range.start">
                   </kendo-dateinput>
                 </label>
                 <label>
                   <span class="date-range-label"> {{ language.endDateLabel }} </span>
-                  <kendo-dateinput class="full-width" kendoDateRangeEndInput [navigateCalendarOnFocus]="true"
-                    (valueChange)="popup.toggle()" [(value)]="range.end">
+                  <kendo-dateinput format="dd.MM.yyyy" class="full-width" kendoDateRangeEndInput
+                    [navigateCalendarOnFocus]="true" (valueChange)="popup.toggle()" [(value)]="range.end">
                   </kendo-dateinput>
                 </label>
                 <kendo-daterange-popup [anchor]="anchor" #popup></kendo-daterange-popup>
