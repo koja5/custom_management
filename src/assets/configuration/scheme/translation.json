@@ -314,6 +314,12 @@
       "allowSendInformation": {
         "type": "string"
       },
+      "titleOnInvoice": {
+        "type": "string"
+      },
+      "printOnInvoice": {
+        "type": "string"
+      },
       "start": {
         "type": "string"
       },
@@ -1996,6 +2002,9 @@
       "loading": {
         "type": "string"
       },
+      "pleaseConfirm": {
+        "type": "string"
+      },
       "clickHere": {
         "type": "string"
       },
@@ -2127,6 +2136,19 @@
             {
               "key": "loading"
             }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "pleaseConfirm"
+            },
+            {},
+            {},
+            {}
           ]
         }
       ]
@@ -3610,6 +3632,21 @@
             {
               "key": "allowSendInformation"
             }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "titleOnInvoice"
+            },
+            {
+              "key": "printOnInvoice"
+            },
+            {},
+            {}
           ]
         }
       ]

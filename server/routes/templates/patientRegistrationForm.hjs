@@ -24,6 +24,10 @@
       style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"
     />
 
+    <style>
+      p, pre { font-size: 12px; font-family: Arial, Helvetica, sans-serif; }
+    </style>
+
   </head>
 
   <body
@@ -105,11 +109,11 @@
             class="content__footer mt-8 text-center text-grey-darker"
             style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin-top: 2rem;text-align: center;color: #606f7b;"
           >
-            <h3
+            <p
               class="text-base sm:text-lg mb-4"
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;margin-bottom: 1rem;font-size: 1.125rem;"
+              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;margin-bottom: 1rem;"
             >
-              {{thanksForUsing}}</h3>
+              {{thanksForUsing}}</p>
             <p
               style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;"
             >

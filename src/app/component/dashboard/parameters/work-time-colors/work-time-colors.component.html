@@ -82,7 +82,7 @@
     </ng-template>
   </kendo-grid>
 
-  <kendo-dialog title="Please confirm" *ngIf="importExcel" (close)="importExcel = false" [minWidth]="250" [width]="450">
+  <kendo-dialog title="{{language.pleaseConfirm}}" *ngIf="importExcel" (close)="importExcel = false" [minWidth]="250" [width]="450">
     <p style="margin: 30px; text-align: center;">Are you sure you want to import data from excel?</p>
     <kendo-dialog-actions>
       <button kendoButton (click)="action('no')">No</button>
@@ -90,14 +90,14 @@
     </kendo-dialog-actions>
   </kendo-dialog>
 
-  <kendo-dialog title="Please confirm" *ngIf="deleteModal" (close)="deleteModal = false" [minWidth]="250" [width]="450">
+  <kendo-dialog title="{{language.pleaseConfirm}}" *ngIf="deleteModal" (close)="deleteModal = false" [minWidth]="250" [width]="450">
     <div class="modal-body text-center">
       <img src="../../../../assets/images/sent.png" alt="" width="50" height="46">
       <h3>Are you sure you want to continue?</h3>
     </div>
     <kendo-dialog-actions>
-      <button kendoButton (click)="action('no')">No</button>
-      <button kendoButton (click)="action('yes')" primary="true">Yes</button>
+      <button kendoButton (click)="action('no')">{{language.no}}</button>
+      <button kendoButton (click)="action('yes')" primary="true">{{language.yes}}</button>
     </kendo-dialog-actions>
   </kendo-dialog>
 

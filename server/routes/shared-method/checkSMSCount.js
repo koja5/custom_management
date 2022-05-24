@@ -22,8 +22,9 @@ function checkSMSCount(superadmin, needCount) {
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
-      return err;
+      res.json(err);
     }
+
     conn.query(
       "select * from sms_count where superadmin = ?",
       [superadmin],
@@ -36,7 +37,6 @@ function checkSMSCount(superadmin, needCount) {
               "update sms_count set count = ? where superadmin = ?",
               [updateCount, superadmin],
               function (err, rows) {
-                console.log(err);
                 if (!err) {
                   return true;
                 } else {

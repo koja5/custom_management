@@ -13,6 +13,7 @@ const logger = require("./logger");
 const sendSmsFromMail = require("./ftpUploadSMS");
 const { delay } = require("rxjs-compat/operator/delay");
 const macAddress = require("os").networkInterfaces();
+const checkSMSCount = require("./shared-method/checkSMSCount");
 
 var link = process.env.link_api;
 /*
@@ -5374,6 +5375,7 @@ router.post("/sendCustomSMS", function (req, res) {
 
       console.log("USAO!!!");
       sendSmsFromMail(phoneNumber, message);
+      checkSMSCount(req.body.superadmin, 1);
       res.send(true);
     } else {
       res.send(false);

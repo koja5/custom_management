@@ -1195,16 +1195,15 @@ router.post("/sendMassiveEMail", function (req, res) {
             smtpTransport.sendMail(mailOptions, function (error, response) {
               if (error) {
                 logger.log("error", error);
-                res.send(false);
               } else {
                 logger.log(
                   "info",
                   `Sent mail for marketing promotion on EMAIL: ${to.email}`
                 );
-                res.send(true);
               }
             });
           });
+          res.send(true);
         }
       );
     });
