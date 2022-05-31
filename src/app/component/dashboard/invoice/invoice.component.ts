@@ -23,6 +23,7 @@ import PizZip from "pizzip";
 import PizZipUtils from "pizzip/utils/index.js";
 import { DashboardService } from "src/app/service/dashboard.service";
 import { LoadingScreenService } from 'src/app/shared/loading-screen/loading-screen.service';
+import { DateService } from 'src/app/service/date.service';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -125,7 +126,8 @@ export class InvoiceComponent implements OnInit {
     private pdfService: PDFService,
     private dashboardService: DashboardService,
     private invoiceService: InvoiceService,
-    private loadingScreenService: LoadingScreenService
+    private loadingScreenService: LoadingScreenService,
+    private dateService: DateService
   ) { }
 
   ngOnInit() {
@@ -172,7 +174,6 @@ export class InvoiceComponent implements OnInit {
     );
 
     this.invoiceService.getInvoicePrefix(this.superadmin).then(data => {
-      console.log(data);
       if (data && data.length) {
         this.invoicePrefix = data[0].prefix;
       }
@@ -369,240 +370,9 @@ export class InvoiceComponent implements OnInit {
   }
 
   private setupPDF() {
-    const dotSign = " • ";
-    const data = this.getTherapyAndPricesData();
+    const therapyPricesData = this.getTherapyAndPricesData();
 
-
-    const therapies = data.therapies;
-    const netPrices = data.netPrices.filter(num => !isNaN(parseFloat(num)));
-    const brutoPrices = data.brutoPrices.filter(num => !isNaN(parseFloat(num)));
-
-    let vatValues = brutoPrices.map(function (item, index) {
-      // In this case item correspond to currentValue of array a, 
-      // using index to get value from array b
-      return item - netPrices[index];
-    });
-
-    const vat = vatValues.reduce((a, b) => a + b, 0).toFixed(2);
-    const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
-    const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
-
-    let docDefinition = {
-      content: [
-        // Header
-        {
-          columns: [
-            [
-              {
-                text: this.invoiceLanguage.invoiceTitle,
-                style: "invoiceTitle",
-                width: "*",
-              },
-              {
-                stack: [
-                  {
-                    columns: [
-                      {
-                        text: this.invoiceLanguage.invoiceSubTitle,
-                        style: "invoiceSubTitle",
-                        width: "*",
-                      },
-                      {
-                        text: this.invoicePrefix ? this.invoicePrefix + this.invoiceID : this.invoiceID,
-                        style: "invoiceSubValue",
-                        width: 130,
-                      },
-                    ],
-                  },
-                  {
-                    columns: [
-                      {
-                        text: this.invoiceLanguage.dateTitle,
-                        style: "invoiceSubTitle",
-                        width: "*",
-                      },
-                      {
-                        text: this.currentDateFormatted,
-                        style: "invoiceSubValue",
-                        width: 130,
-                      },
-                    ],
-                  },
-
-                  {
-                    columns: [
-                      {
-                        text: "\n",
-                        style: "invoiceSubTitle",
-                        width: "*",
-                      },
-                      {
-                        text: "\n",
-                        style: "invoiceSubValue",
-                        width: "*",
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          ],
-        },
-        // Billing Headers
-        {
-          columns: [
-            {
-              text: this.invoiceLanguage.invoiceBillingTitleFrom + "\n \n",
-              style: "invoiceBillingTitleLeft",
-            },
-            {
-              text: this.invoiceLanguage.invoiceBillingTitleTo + "\n \n",
-              style: "invoiceBillingTitleRight",
-            },
-          ],
-        },
-        // Billing Details
-        {
-          columns: [
-            {
-              text: this.store.companyname ? this.store.companyname : this.store.storename,
-              style: "invoiceBillingDetailsLeft",
-            },
-            {
-              text: this.customerUser.lastname + this.customerUser.firstname,
-              style: "invoiceBillingDetailsRight",
-            },
-          ],
-        },
-        // Billing Address
-        {
-          columns: [
-            {
-              text: this.store.vatcode ?
-                this.store.street + "\n " + this.store.zipcode + " " + this.store.place + "\n" + this.invoiceLanguage.vat + " " + this.store.vatcode
-                : this.store.street + "\n " + this.store.zipcode + " " + this.store.place + "\n" + this.invoiceLanguage.vat + " " + this.superadminProfile.vatcode,
-              style: "invoiceBillingAddressLeft",
-            },
-            {
-              text:
-                this.customerUser["street"] +
-                "\n" +
-                this.customerUser["streetnumber"] +
-                " " +
-                this.customerUser["city"] +
-                "\n",
-              style: "invoiceBillingAddressRight",
-            },
-          ],
-        },
-        // Line breaks
-        "\n\n",
-        // Items
-        {
-          layout: {
-            // code from lightHorizontalLines:
-            hLineWidth: function (i, node) {
-              if (i === 0) {
-                return 0;
-              }
-              return i === node.table.headerRows ? 2 : 1;
-            },
-            vLineWidth: function () {
-              return 0;
-            },
-            hLineColor: function (i) {
-              return "black";
-            },
-            paddingLeft: function (i) {
-              return i === 0 ? 0 : 8;
-            },
-            paddingRight: function (i, node) {
-              return i === node.table.widths.length - 1 ? 0 : 8;
-            },
-            // // code for zebra style:
-            // fillColor: function (i) {
-            //   return i % 2 === 0 ? "#CCCCCC" : null;
-            // },
-          },
-          table: {
-            // headers are automatically repeated if the table spans over multiple pages
-            // you can declare how many rows should be treated as headers
-            headerRows: 1,
-            widths: ["*", "*", "auto", "auto", "auto"],
-
-            body: this.pdfService.createItemsTable(therapies, this.isPriceIncluded),
-          }, // table
-          //  layout: 'lightHorizontalLines'
-        },
-        // Line break
-        "\n",
-        // TOTAL
-        {
-          table: {
-            // headers are automatically repeated if the table spans over multiple pages
-            // you can declare how many rows should be treated as headers
-            headerRows: 0,
-            widths: ["63%", "auto", "auto", "auto"],
-
-            body: [
-              // Total
-              [
-                {
-                  text: "",
-                },
-                {
-                  text: this.isPriceIncluded ?
-                    (netPrices.length === 0 ? this.invoiceLanguage.noDataAvailable : (this.invoiceLanguage.euroSign + " " + subtotal)) : '',
-                  style: "itemsFooterSubValue",
-                },
-                {
-                  text: this.isPriceIncluded ?
-                    (netPrices.length === 0 ? this.invoiceLanguage.noDataAvailable : (this.invoiceLanguage.euroSign + " " + vat)) : '',
-                  style: "itemsFooterVATValue",
-                },
-                {
-                  text: this.isPriceIncluded ?
-                    (brutoPrices.length === 0 ? this.invoiceLanguage.noDataAvailable : (this.invoiceLanguage.euroSign + " " + total)) : '',
-                  style: "itemsFooterTotalValue",
-                },
-              ],
-            ],
-          },
-          layout: "lightHorizontalLines",
-        },
-        {
-          text: this.invoiceLanguage.notesTitle,
-          style: 'notesTextBold'
-        },
-        {
-          text: this.invoiceLanguage.notesText,
-          style: 'notesText'
-        },
-      ],
-      footer: {
-        columns: [
-          {
-            text:
-              (this.store.companyname ? this.store.companyname : this.store.storename) +
-              dotSign +
-              this.store.street +
-              dotSign +
-              this.store.zipcode +
-              " " +
-              this.store.place +
-              "\n" +
-              this.store.telephone +
-              dotSign +
-              this.store.email,
-            style: "documentFooter",
-          },
-        ],
-      },
-      styles: this.pdfService.getStyles(),
-      defaultStyle: {
-        columnGap: 20,
-      },
-    };
+    let docDefinition = this.pdfService.getPDFDefinition(this.superadminProfile, this.store, this.customerUser, therapyPricesData, this.isPriceIncluded, this.invoicePrefix, this.invoiceLanguage);
 
     return docDefinition;
   }
@@ -661,15 +431,6 @@ export class InvoiceComponent implements OnInit {
 
             brutoPrices.push(parseFloat(therapy.gross_price));
 
-            // if (vatDefinition) {
-            //   bruto =
-            //     parseFloat(therapy.net_price) *
-            //     (1 + Number(vatDefinition.title) / 100);
-            // } else {
-            //   bruto = parseFloat(therapy.net_price) * (1 + 20 / 100);
-            // }
-            // brutoPrices.push(bruto);
-
             const shouldSetDate =
               (selectedTherapies.length > 1 && i == 0) ||
               selectedTherapies.length === 1 ||
@@ -685,8 +446,6 @@ export class InvoiceComponent implements OnInit {
                 gross_price: this.isPriceIncluded ? (isNaNBrutoPrice ? this.invoiceLanguage.noDataAvailable : this.invoiceLanguage.euroSign + ' ' + parseFloat(therapy.gross_price).toFixed(2)) : ''
               });
             }
-
-
           }
         }
       }
@@ -701,47 +460,8 @@ export class InvoiceComponent implements OnInit {
 
   private formatDate(value) {
     this.isDateSet = true;
-    let date: string;
 
-    if (value.indexOf('/') != -1) {
-      date = value.split('/')[0];
-
-    } else if (value.indexOf(' ') != -1) {
-      date = value.split(' ')[0];
-    } else if (value.indexOf('T') != -1) { // 2022-03-29T06:00:00.000Z
-      date = value.split('T')[0];
-
-      //console.log(date.split("-").reverse().join("-"));
-      date = date.split("-").reverse().join("-");
-    }
-
-    // console.log(date);
-    return this.reverseString(date.trim());
-  }
-
-  private reverseString(str) {
-    // Step 1. Use the split() method to return a new array
-    var splitString;
-    if (str.indexOf('.') != -1) {
-      splitString = str.split(".");
-    } else if (str.indexOf('-') != -1) {
-      splitString = str.split("-");
-    } else if (str.indexOf('/') != -1) {
-      splitString = str.split("/");
-    }
-
-    console.log(splitString);
-
-    // Step 2. Use the reverse() method to reverse the new created array
-    // var reverseArray = splitString.reverse();
-    // console.log(reverseArray)
-
-    // Step 3. Use the join() method to join all elements of the array into a string
-    var joinArray = splitString.join(".");
-    // console.log(joinArray)
-
-    //Step 4. Return the reversed string
-    return joinArray;
+    this.dateService.formatDate(value);
   }
 
   public downloadWord(): void {
@@ -764,15 +484,15 @@ export class InvoiceComponent implements OnInit {
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
-    const link =
-      window.location.protocol +
-      "//" +
-      window.location.hostname +
-      ":" +
-      window.location.port +
-      "/assets/Invoice_template.docx";
+    // const link =
+    //   window.location.protocol +
+    //   "//" +
+    //   window.location.hostname +
+    //   ":" +
+    //   window.location.port +
+    //   "/assets/Invoice_template.docx";
 
-    //const link = "http://127.0.0.1:8887/Invoice_template.docx";
+    const link = "http://127.0.0.1:8887/Invoice_template.docx";
     this.loadFile(link,
       function (error, content) {
         if (error) {
@@ -882,10 +602,6 @@ export class InvoiceComponent implements OnInit {
   }
 
   private get currentDateFormatted(): string {
-    // return new Date().toLocaleString().replace(/(.*)\D\d+/, "$1");
-
-    const date = new Date().toLocaleDateString('en-GB');
-
-    return this.reverseString(date);
+    return this.dateService.currentDateFormatted;
   }
 }

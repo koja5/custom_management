@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
+import { DateService } from './date.service';
 import { MessageService } from './message.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PDFService {
+  private dotSign = " • ";
+
   public language: any;
 
-  constructor(private messageService: MessageService) {
+  constructor(private messageService: MessageService,
+    private dateService: DateService) {
     if (localStorage.getItem("language") !== undefined) {
       this.language = JSON.parse(localStorage.getItem("language"));
     } else {
@@ -19,6 +23,242 @@ export class PDFService {
         }, 10);
       });
     }
+  }
+
+  getPDFDefinition(superadminProfile, store, customerUser, therapyPricesData, isPriceIncluded, invoicePrefix, selectedLanguage?) {
+    const invoiceLanguage = selectedLanguage ? selectedLanguage : this.language;
+
+    const therapies = therapyPricesData.therapies;
+    const netPrices = therapyPricesData.netPrices.filter(num => !isNaN(parseFloat(num)));
+    const brutoPrices = therapyPricesData.brutoPrices.filter(num => !isNaN(parseFloat(num)));
+
+    let vatValues = brutoPrices.map(function (item, index) {
+      // In this case item correspond to currentValue of array a, 
+      // using index to get value from array b
+      return item - netPrices[index];
+    });
+
+    const vat = vatValues.reduce((a, b) => a + b, 0).toFixed(2);
+    const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
+    const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
+
+
+
+    let definition = {
+      header: {
+        columns: [
+          {
+            stack: [
+              {
+                columns: [
+                  {
+                    text: invoiceLanguage.invoiceSubTitle,
+                    style: "invoiceSubTitle",
+                    width: "*",
+                  },
+                  {
+                    text: invoicePrefix ? invoicePrefix + 0 : 0,
+                    style: "invoiceSubValue",
+                    width: 130,
+                  },
+                ],
+              },
+              {
+                columns: [
+                  {
+                    text: invoiceLanguage.dateTitle,
+                    style: "invoiceSubTitle",
+                    width: "*",
+                  },
+                  {
+                    text: this.dateService.currentDateFormatted,
+                    style: "invoiceSubValue",
+                    width: 130,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      content: [
+        // Header
+        {
+          columns: [
+            [
+              {
+                text: invoiceLanguage.invoiceTitle,
+                style: "invoiceTitle",
+                width: "*",
+              },
+              {
+                columns: [
+                  {
+                    text: "\n",
+                    style: "invoiceSubTitle",
+                    width: "*",
+                  },
+                  {
+                    text: "\n",
+                    style: "invoiceSubValue",
+                    width: "*",
+                  },
+                ],
+              },
+            ],
+          ],
+        },
+        // Billing Headers
+        {
+          columns: [
+            {
+              text: invoiceLanguage.invoiceBillingTitleFrom + "\n \n",
+              style: "invoiceBillingTitleLeft",
+            },
+            {
+              text: invoiceLanguage.invoiceBillingTitleTo + "\n \n",
+              style: "invoiceBillingTitleRight",
+            },
+          ],
+        },
+        // Billing Details
+        {
+          columns: [
+            {
+              text: store.companyname ? store.companyname : store.storename,
+              style: "invoiceBillingDetailsLeft",
+            },
+            {
+              text: customerUser.lastname + customerUser.firstname,
+              style: "invoiceBillingDetailsRight",
+            },
+          ],
+        },
+        // Billing Address
+        {
+          columns: [
+            {
+              text: store.vatcode ?
+                store.street + "\n " + store.zipcode + " " + store.place + "\n" + invoiceLanguage.vat + " " + store.vatcode
+                : store.street + "\n " + store.zipcode + " " + store.place + "\n" + invoiceLanguage.vat + " " + superadminProfile.vatcode,
+              style: "invoiceBillingAddressLeft",
+            },
+            {
+              text:
+                customerUser["street"] +
+                "\n" +
+                customerUser["streetnumber"] +
+                " " +
+                customerUser["city"] +
+                "\n",
+              style: "invoiceBillingAddressRight",
+            },
+          ],
+        },
+        // Line breaks
+        "\n\n",
+        // Items
+        {
+          layout: {
+            // code from lightHorizontalLines:
+            hLineWidth: function (i, node) {
+              if (i === 0) {
+                return 0;
+              }
+              return i === node.table.headerRows ? 2 : 1;
+            },
+            vLineWidth: function () {
+              return 0;
+            },
+            hLineColor: function (i) {
+              return "black";
+            },
+            paddingLeft: function (i) {
+              return i === 0 ? 0 : 8;
+            },
+            paddingRight: function (i, node) {
+              return i === node.table.widths.length - 1 ? 0 : 8;
+            },
+          },
+          table: {
+            // headers are automatically repeated if the table spans over multiple pages
+            // you can declare how many rows should be treated as headers
+            headerRows: 1,
+            widths: ["*", "*", "auto", "auto", "auto"],
+
+            body: this.createItemsTable(therapies, isPriceIncluded),
+          }, // table
+          //  layout: 'lightHorizontalLines'
+        },
+        // Line break
+        "\n",
+        // TOTAL
+        {
+          table: {
+            // headers are automatically repeated if the table spans over multiple pages
+            // you can declare how many rows should be treated as headers
+            headerRows: 0,
+            widths: ["63%", "auto", "auto", "auto"],
+
+            body: [
+              // Total
+              [
+                {
+                  text: "",
+                },
+                {
+                  text: isPriceIncluded ?
+                    (netPrices.length === 0 ? invoiceLanguage.noDataAvailable : (invoiceLanguage.euroSign + " " + subtotal)) : '',
+                  style: "itemsFooterSubValue",
+                },
+                {
+                  text: isPriceIncluded ?
+                    (netPrices.length === 0 ? invoiceLanguage.noDataAvailable : (invoiceLanguage.euroSign + " " + vat)) : '',
+                  style: "itemsFooterVATValue",
+                },
+                {
+                  text: isPriceIncluded ?
+                    (brutoPrices.length === 0 ? invoiceLanguage.noDataAvailable : (invoiceLanguage.euroSign + " " + total)) : '',
+                  style: "itemsFooterTotalValue",
+                },
+              ],
+            ],
+          },
+          layout: "lightHorizontalLines",
+        },
+        {
+          text: invoiceLanguage.notesTitle,
+          style: 'notesTextBold'
+        },
+        {
+          text: invoiceLanguage.notesText,
+          style: 'notesText'
+        },
+      ],
+      footer: {
+        columns: [
+          {
+            text:
+              (store.companyname ? store.companyname : store.storename) +
+              this.dotSign +
+              store.street +
+              this.dotSign +
+              store.zipcode +
+              " " +
+              store.place +
+              "\n" +
+              store.telephone +
+              this.dotSign +
+              store.email,
+            style: "documentFooter",
+          },
+        ],
+      },
+      styles: this.getStyles(),
+      defaultStyle: {
+        columnGap: 20,
+      },
+    };
   }
 
   getStyles() {
@@ -193,6 +433,7 @@ export class PDFService {
       },
     };
   }
+
 
   public createItemsTable(therapies, isPriceIncluded = true) {
     const arr = [
