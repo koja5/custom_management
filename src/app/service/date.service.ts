@@ -16,6 +16,7 @@ export class DateService {
 
 
   public formatDate(value) {
+    console.log(value);
     let date: string;
 
     if (value.indexOf('/') != -1) {
