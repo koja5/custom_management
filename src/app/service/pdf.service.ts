@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { DateService } from './date.service';
 import { MessageService } from './message.service';
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import pdfMake from "pdfmake/build/pdfmake";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Injectable({
   providedIn: 'root'
@@ -43,51 +46,28 @@ export class PDFService {
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
 
-
     let definition = {
       header: {
         columns: [
           {
-            stack: [
-              {
-                columns: [
-                  {
-                    text: invoiceLanguage.invoiceSubTitle,
-                    style: "invoiceSubTitle",
-                    width: "*",
-                  },
-                  {
-                    text: invoicePrefix ? invoicePrefix + 0 : 0,
-                    style: "invoiceSubValue",
-                    width: 130,
-                  },
-                ],
-              },
-              {
-                columns: [
-                  {
-                    text: invoiceLanguage.dateTitle,
-                    style: "invoiceSubTitle",
-                    width: "*",
-                  },
-                  {
-                    text: this.dateService.currentDateFormatted,
-                    style: "invoiceSubValue",
-                    width: 130,
-                  },
-                ],
-              },
-            ],
+            text: invoiceLanguage.invoiceSubTitle + " " + (invoicePrefix ? invoicePrefix + 0 : 0),
+            style: "documentHeaderLeft",
+            width: "*",
+          },
+          {
+            text: invoiceLanguage.dateTitle + " " + this.dateService.currentDateFormatted,
+            style: "documentHeaderRight",
+            width: "*",
           },
         ],
       },
       content: [
-        // Header
+        // Title headers
         {
           columns: [
             [
               {
-                text: invoiceLanguage.invoiceTitle,
+                text: "\n" + invoiceLanguage.invoiceTitle,
                 style: "invoiceTitle",
                 width: "*",
               },
@@ -259,46 +239,31 @@ export class PDFService {
         columnGap: 20,
       },
     };
+
+    return definition;
   }
 
   getStyles() {
     return {
       // Document Header
       documentHeaderLeft: {
-        fontSize: 10,
-        margin: [5, 5, 5, 5],
+        fontSize: 11,
+        // margin: [left, top, right, bottom]
+        margin: [45, 25, 0, 0],
         alignment: "left",
-      },
-      documentHeaderCenter: {
-        fontSize: 10,
-        margin: [5, 5, 5, 5],
-        alignment: "center",
+        color: 'gray'
       },
       documentHeaderRight: {
-        fontSize: 10,
-        margin: [5, 5, 5, 5],
+        fontSize: 11,
+        margin: [0, 25, 45, 0],
         alignment: "right",
+        color: 'gray'
       },
       // Document Footer
       documentFooter: {
         fontSize: 11,
         alignment: "center",
         color: 'gray'
-      },
-      documentFooterLeft: {
-        fontSize: 10,
-        margin: [5, 5, 5, 5],
-        alignment: "left",
-      },
-      documentFooterCenter: {
-        fontSize: 10,
-        margin: [5, 5, 5, 5],
-        alignment: "center",
-      },
-      documentFooterRight: {
-        fontSize: 10,
-        margin: [5, 5, 5, 5],
-        alignment: "right",
       },
       // Invoice Title
       invoiceTitle: {
@@ -337,16 +302,6 @@ export class PDFService {
         alignment: "left",
       },
       invoiceBillingDetailsRight: {
-        alignment: "right",
-      },
-      invoiceBillingAddressTitleLeft: {
-        margin: [0, 7, 0, 3],
-        bold: true,
-        alignment: "left",
-      },
-      invoiceBillingAddressTitleRight: {
-        margin: [0, 7, 0, 3],
-        bold: true,
         alignment: "right",
       },
       invoiceBillingAddressLeft: {
