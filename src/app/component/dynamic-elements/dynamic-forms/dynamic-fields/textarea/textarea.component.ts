@@ -19,5 +19,6 @@ export class TextareaComponent implements OnInit {
 
   ngOnInit() {
     this.language = this.helpService.getLanguage();
+    this.value = this.group.value[this.config.field];
   }
 }

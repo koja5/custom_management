@@ -44,6 +44,7 @@ export class ParameterItemComponent implements OnInit {
   public selectedGender: string;
   public selectedDoctorType: string;
   public selectedVAT: string;
+  public selectedVATEvent: number;
   public editedRowIndex: number;
   public currentLoadData: any;
   public therapyList: any;
@@ -242,13 +243,9 @@ export class ParameterItemComponent implements OnInit {
 
   public saveHandler({ sender, rowIndex, formGroup, isNew }) {
     this.disabled = true;
-
-    console.log(formGroup);
-
     this.editedRowIndex = -1;
     const product = formGroup.value;
-    console.log(product);
-    if (this.type === "Therapy") {
+    if (this.type === "Therapy" && !this.selectedVATEvent) {
       const sortedData = {
         data: orderBy(this.currentLoadData, this.sort),
         total: this.currentLoadData.length,
@@ -280,7 +277,7 @@ export class ParameterItemComponent implements OnInit {
     product.vat = this.selectedVAT;
     product.superadmin = localStorage.getItem("superadmin");
 
-    console.log(product);
+    this.selectedVATEvent = null;
 
     this.service.addData(
       product,
@@ -335,28 +332,30 @@ export class ParameterItemComponent implements OnInit {
   }
 
   selectionVAT(event, rowIndex) {
-    console.log(this.view["source"]["value"][rowIndex - 1]);
-    console.log(rowIndex);
+    this.selectedVAT = event;
+    this.selectedVATEvent = event;
+    if (this.gridState.sort[0].dir === "asc") {
+      this.view["source"]["value"].sort((a, b) => {
+        return a.sequence - b.sequence;
+      });
+    } else if (this.gridState.sort[0].dir === "desc") {
+      this.view["source"]["value"].sort((a, b) => {
+        return b.sequence - a.sequence;
+      });
+    }
     const realIndex = rowIndex - 2;
-    /*const allData = process(this.currentLoadData, this.gridState);
-    this.view.source['data'] = allData.data;
-    this.view.source['data'].length = allData.total;*/
-    console.log(this.formGroup.value);
-    console.log(this.formGroup.controls["gross_price"]);
-    if (event !== undefined) {
+    if (event !== undefined && rowIndex !== -1) {
       this.selectedVAT = event;
       if (
         this.formGroup !== undefined &&
         this.formGroup.value.net_price !== "" &&
         this.formGroup.value.net_price !== undefined &&
         this.formGroup.value.net_price !== null &&
-        (this.view["source"]["value"][realIndex]["gross_price"] ===
+        (this.view["source"]["value"][rowIndex]["gross_price"] ===
           this.formGroup.value.gross_price ||
           !this.formGroup.value.gross_price)
       ) {
         const procent = 1 + this.getTaxValue(event) / 100;
-        // this.formGroup.value.gross_price = Number(this.formGroup.value.net_price) * procent;
-        // this.setViewValue(this.formGroup.value.id, this.formGroup.value.gross_price, 'gross_price');
         this.formGroup.controls["gross_price"].setValue(
           Number(this.formGroup.value.net_price) * procent
         );
@@ -365,7 +364,7 @@ export class ParameterItemComponent implements OnInit {
         this.formGroup.value.gross_price !== "" &&
         this.formGroup.value.gross_price !== undefined &&
         this.formGroup.value.gross_price !== null &&
-        (this.view["source"]["value"][realIndex]["net_price"] ===
+        (this.view["source"]["value"][rowIndex]["net_price"] ===
           this.formGroup.value.net_price ||
           !this.formGroup.value.net_price)
       ) {
@@ -376,7 +375,11 @@ export class ParameterItemComponent implements OnInit {
       }
       this.formGroup.value.vat = event;
     } else {
-      this.selectedVAT = "-1";
+      this.selectedVAT = event;
+      const procent = 1 + this.getTaxValue(event) / 100;
+      this.formGroup.controls["gross_price"].setValue(
+        Number(this.formGroup.value.net_price) * procent
+      );
     }
   }
 

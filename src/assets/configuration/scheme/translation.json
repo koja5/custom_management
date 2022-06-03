@@ -122,6 +122,9 @@
       "aggree": {
         "type": "string"
       },
+      "needToAgree": {
+        "type": "string"
+      },
       "privacyPolicy": {
         "type": "string"
       },
@@ -2229,6 +2232,9 @@
             },
             {
               "key": "aggree"
+            },
+            {
+              "key": "needToAgree"
             },
             {
               "key": "privacyPolicy"
