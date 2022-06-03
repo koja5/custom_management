@@ -1323,6 +1323,12 @@
       "subjectFormRegistration": {
         "type": "string"
       },
+      "currentPageInfo": {
+        "type": "string"
+      },
+      "totalItemsInfo": {
+        "type": "string"
+      },
       "introductoryMessageForPatientRegistrationForm": {
         "type": "string"
       },
@@ -3697,6 +3703,12 @@
           "items": [
             {
               "key": "EmptyRecord"
+            },
+            {
+              "key": "currentPageInfo"
+            },
+            {
+              "key": "totalItemsInfo"
             }
           ]
         }
