@@ -131,9 +131,6 @@
       "and": {
         "type": "string"
       },
-      "termsOfService": {
-        "type": "string"
-      },
       "signUpWithEmail": {
         "type": "string"
       },
@@ -2103,12 +2100,6 @@
           "flex-direction": "row",
           "items": [
             {
-              "key": "clickAgreeText"
-            },
-            {
-              "key": "termOfUse"
-            },
-            {
               "key": "actionTitle"
             },
             {
@@ -2234,6 +2225,9 @@
               "key": "aggree"
             },
             {
+              "key": "clickAgreeText"
+            },
+            {
               "key": "needToAgree"
             },
             {
@@ -2250,7 +2244,7 @@
           "flex-direction": "row",
           "items": [
             {
-              "key": "termsOfService"
+              "key": "termOfUse"
             },
             {
               "key": "signUpWithEmail"

@@ -259,17 +259,28 @@
                       </div>
                     </div>
                     <div class="form-group">
-                      <p class="term-policy text-muted small">
-                        {{ language.agree }}
-                        <a routerLink="/privacy-policy" target="_blank">{{
-                          language.privacyPolicy
-                        }}</a>
-                        {{ language.and }}
-                        <a routerLink="/terms" target="_blank">{{
-                          language.termsOfService
-                        }}</a
-                        >.
-                      </p>
+                      <label class="checkbox text-left">
+                        <input
+                          type="checkbox"
+                          [(ngModel)]="agreeValue"
+                          name="agreeValue"
+                        /><span class="label-text"
+                          >{{ language.clickAgreeText }}
+                          <a
+                            routerLink="/terms"
+                            target="_blank"
+                            class="signup-term-link"
+                            >{{ language.termOfUse }}</a
+                          >
+                          {{ language.and }}
+                          <a
+                            routerLink="/privacy-policy"
+                            target="_blank"
+                            class="signup-term-link"
+                            >{{ language.privacyPolicy }}</a
+                          ></span
+                        >
+                      </label>
                     </div>
                     <div class="form-group">
                       <button
