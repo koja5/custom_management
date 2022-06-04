@@ -5601,6 +5601,11 @@ router.post("/sendMassiveSMS", function (req, res) {
                           signature += to.smsSignatureEmail + " \n";
                         }
                       }
+
+                      if (language.smsSignaturePoweredBy) {
+                        signature += language.smsSignaturePoweredBy + " \n";
+                      }
+
                       var content =
                         "To: " +
                         phoneNumber +
@@ -5618,7 +5623,6 @@ router.post("/sendMassiveSMS", function (req, res) {
                       );
                     }
                   });
-                  console.log(count);
                   updateAvailableSMSCount(count, req.body.superadmin);
                   res.send(true);
                 }

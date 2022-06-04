@@ -35,6 +35,7 @@ export class DynamicSendSmsComponent implements OnInit {
       )
       .subscribe((data) => {
         if (data && data[0] && data[0].count > 0) {
+          this.data['superadmin'] = this.helpService.getSuperadmin();
           this.service.sendSMSMessage(this.data).subscribe((data) => {
             if (data) {
               if (data["message"] === "buy_sms") {
