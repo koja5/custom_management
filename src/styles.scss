@@ -7,6 +7,15 @@
 @import url("../node_modules/font-awesome/css/font-awesome.min.css");
 @import "~ngx-toastr/toastr";
 @import url("./assets/css/custom/custom-elements/syncfusion-grid.css");
+@import '../node_modules/@syncfusion/ej2-base/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-icons/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-buttons/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-inputs/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-lists/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-navigations/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-popups/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-richtexteditor/styles/material.css';
 .k-tabstrip > .k-content {
   overflow: -webkit-paged-x !important;
   padding: 3vh 4vh !important;

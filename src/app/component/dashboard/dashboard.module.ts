@@ -102,6 +102,24 @@ import { InvoiceComponent } from './invoice/invoice.component';
 import { InvoicePrefixComponent } from './administrator/invoice-prefix/invoice-prefix.component';
 import { SmsBirthdayCongratulationComponent } from './parameters/sms-birthday-congratulation/sms-birthday-congratulation.component';
 import { MailBirthdayCongratulationComponent } from './parameters/mail-birthday-congratulation/mail-birthday-congratulation.component';
+import { HelpCenterComponent } from './help-center/help-center.component';
+
+//ej2-richtexteditor
+import { SwitchModule } from '@syncfusion/ej2-angular-buttons';
+
+import { TabModule } from '@syncfusion/ej2-angular-navigations';
+
+import { ButtonModule } from '@syncfusion/ej2-angular-buttons';
+
+import { TextBoxModule } from '@syncfusion/ej2-angular-inputs';
+
+import { NumericTextBoxModule } from '@syncfusion/ej2-angular-inputs';
+
+import { RadioButtonModule } from '@syncfusion/ej2-angular-buttons';
+
+import { CheckBoxModule } from '@syncfusion/ej2-angular-buttons';
+
+import { RichTextEditorAllModule } from '@syncfusion/ej2-angular-richtexteditor';
 
 @NgModule({
   declarations: [
@@ -154,7 +172,8 @@ import { MailBirthdayCongratulationComponent } from './parameters/mail-birthday-
     InvoiceComponent,
     InvoicePrefixComponent,
     SmsBirthdayCongratulationComponent,
-    MailBirthdayCongratulationComponent
+    MailBirthdayCongratulationComponent,
+    HelpCenterComponent
   ],
   imports: [
     CommonModule,
@@ -192,7 +211,15 @@ import { MailBirthdayCongratulationComponent } from './parameters/mail-birthday-
     SharedEmailModule,
     SharedSMSModule,
     ScheduleModule,
-    ToolbarModule
+    ToolbarModule,
+    RichTextEditorAllModule,
+    SwitchModule,
+    TabModule,
+    ButtonModule,
+    TextBoxModule,
+    NumericTextBoxModule,
+    RadioButtonModule,
+    CheckBoxModule
   ],
   providers: [
     {
