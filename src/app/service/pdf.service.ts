@@ -35,13 +35,15 @@ export class PDFService {
     const netPrices = therapyPricesData.netPrices.filter(num => !isNaN(parseFloat(num)));
     const brutoPrices = therapyPricesData.brutoPrices.filter(num => !isNaN(parseFloat(num)));
 
-    let vatValues = brutoPrices.map(function (item, index) {
+    console.log(therapies);
+
+    let vatPrices = brutoPrices.map(function (item, index) {
       // In this case item correspond to currentValue of array a, 
       // using index to get value from array b
       return item - netPrices[index];
     });
 
-    const vat = vatValues.reduce((a, b) => a + b, 0).toFixed(2);
+    const vat = vatPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
@@ -174,37 +176,26 @@ export class PDFService {
         "\n",
         // TOTAL
         {
-          table: {
-            // headers are automatically repeated if the table spans over multiple pages
-            // you can declare how many rows should be treated as headers
-            headerRows: 0,
-            widths: ["63%", "auto", "auto", "auto"],
-
-            body: [
-              // Total
-              [
-                {
-                  text: "",
-                },
-                {
-                  text: isPriceIncluded ?
-                    (netPrices.length === 0 ? invoiceLanguage.noDataAvailable : (invoiceLanguage.euroSign + " " + subtotal)) : '',
-                  style: "itemsFooterSubValue",
-                },
-                {
-                  text: isPriceIncluded ?
-                    (netPrices.length === 0 ? invoiceLanguage.noDataAvailable : (invoiceLanguage.euroSign + " " + vat)) : '',
-                  style: "itemsFooterVATValue",
-                },
-                {
-                  text: isPriceIncluded ?
-                    (brutoPrices.length === 0 ? invoiceLanguage.noDataAvailable : (invoiceLanguage.euroSign + " " + total)) : '',
-                  style: "itemsFooterTotalValue",
-                },
-              ],
-            ],
-          },
-          layout: "lightHorizontalLines",
+          columns: [
+            {
+              text: isPriceIncluded ?
+                (netPrices.length === 0 ? invoiceLanguage.noDataAvailable : (invoiceLanguage.euroSign + " " + subtotal)) : '',
+              style: "itemsFooterSubValue",
+              width: 'auto',
+            },
+            {
+              text: isPriceIncluded ?
+                (vatPrices.length === 0 ? invoiceLanguage.noDataAvailable : (invoiceLanguage.euroSign + " " + vat)) : '',
+              style: "itemsFooterVATValue",
+              width: 'auto',
+            },
+            {
+              text: isPriceIncluded ?
+                (brutoPrices.length === 0 ? invoiceLanguage.noDataAvailable : (invoiceLanguage.euroSign + " " + total)) : '',
+              style: "itemsFooterTotalValue",
+              width: 'auto',
+            },
+          ],
         },
         {
           text: invoiceLanguage.notesTitle,
@@ -324,6 +315,7 @@ export class PDFService {
         fontSize: 11,
       },
       itemDate: {
+        margin: [0, 5, 0, 5],
         alignment: "left",
       },
       itemNumber: {
@@ -331,6 +323,7 @@ export class PDFService {
         alignment: "center",
       },
       itemGrossPrice: {
+        margin: [0, 5, 0, 5],
         alignment: "right",
       },
       itemTotal: {
@@ -347,7 +340,7 @@ export class PDFService {
         alignment: "right",
       },
       itemsFooterSubValue: {
-        margin: [0, 5, 0, 5],
+        margin: [300, 5, 0, 5],
         bold: true,
         fontSize: 13,
         alignment: "right",
@@ -424,9 +417,7 @@ export class PDFService {
           style: "itemDate",
         },
         {
-          text: therapy.description
-            ? therapy.title + "\n" + therapy.description
-            : therapy.title,
+          text: therapy.title,
           style: "itemTitle",
         },
         {

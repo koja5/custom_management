@@ -1,4 +1,3 @@
-import { Subject } from 'rxjs/Subject';
 import { EventCategoryService } from "./../../../service/event-category.service";
 import { UsersService } from "./../../../service/users.service";
 import { StoreService } from "./../../../service/store.service";
@@ -402,6 +401,7 @@ export class DynamicSchedulerComponent implements OnInit {
   public template: any;
   invoicePrefix: any;
   superadminProfile: any;
+  isDateSet: boolean = false;
 
   public generateEvents(): Object[] {
     const eventData: Object[] = [];
@@ -3824,7 +3824,7 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   public downloadPDF(): void {
-    console.log(this.selectedTherapies);
+
     const docDefinition = this.setupPDF();
 
     // pass file name
@@ -3834,14 +3834,17 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   public printPDF(): void {
-    console.log(this.selectedTherapies);
+
+    console.log(this.store);
+
 
     const docDefinition = this.setupPDF();
     pdfMake.createPdf(docDefinition).print();
   }
 
   private setupPDF() {
-    const dotSign = " • ";
+
+    const selectedStore = this.store.filter(s => s.id = this.selectedStoreId)[0];
 
     const therapies = [];
     const netPrices = [];
@@ -3849,53 +3852,59 @@ export class DynamicSchedulerComponent implements OnInit {
     let bruto = 0;
     for (let i = 0; i < this.selectedTherapies.length; i++) {
       const id = this.selectedTherapies[i];
-      const temp = this.therapyValue.find((therapy) => therapy.id == id);
+      const therapy = this.therapyValue.find((therapy) => therapy.id == id);
 
-      if (temp) {
+      if (therapy) {
         const vatDefinition = this.vatTaxList.find(
-          (elem) => elem.id === temp.vat
+          (elem) => elem.id === therapy.vat
         );
         // console.log(vatDefinition);
 
-        temp.date = this.dateService.formatDate(new Date(this.eventTime.start).toLocaleDateString("en-CA").toString());
+        therapy.date = this.dateService.formatDate(new Date(this.eventTime.start).toLocaleDateString("en-CA").toString());
 
-        console.log("temp.date", temp.date);
+        console.log("temp.date", therapy.date);
 
-        const isNaNPrice = isNaN(parseFloat(temp.net_price));
+        const isNaNPrice = isNaN(parseFloat(therapy.net_price));
 
         if (isNaNPrice) {
-          console.log("Not a number: ", temp.net_price);
+          console.log("Not a number: ", therapy.net_price);
         }
 
         isNaNPrice
           ? netPrices.push(-1)
-          : netPrices.push(parseFloat(temp.net_price));
+          : netPrices.push(parseFloat(therapy.net_price));
 
         if (!isNaNPrice) {
           if (vatDefinition) {
             bruto =
-              parseFloat(temp.net_price) *
+              parseFloat(therapy.net_price) *
               (1 + Number(vatDefinition.title) / 100);
           } else {
-            bruto = parseFloat(temp.net_price) * (1 + 20 / 100);
+            bruto = parseFloat(therapy.net_price) * (1 + 20 / 100);
           }
           brutoPrices.push(bruto);
         } else {
           brutoPrices.push(-1);
         }
+
+        const shouldSetDate =
+          (this.selectedTherapies.length > 1 && i == 0) ||
+          this.selectedTherapies.length === 1 ||
+          !this.isDateSet;
+
+
+        console.log(shouldSetDate + ' should set date');
+
         therapies.push({
-          title: temp.title,
-          description: temp.description ? temp.description : "",
-          date:
-            (this.selectedTherapies.length > 1 && i == 0) ||
-              this.selectedTherapies.length === 1
-              ? temp.date
-              : "",
+          title: (therapy.titleOnInvoice && therapy.titleOnInvoice.trim() !== "") ? therapy.titleOnInvoice : therapy.title,
+          date: shouldSetDate
+            ? therapy.date
+            : "",
           net_price: isNaNPrice
             ? this.language.noDataAvailable
             : this.language.euroSign +
             " " +
-            parseFloat(temp.net_price).toFixed(2),
+            parseFloat(therapy.net_price).toFixed(2),
           vat: vatDefinition ? vatDefinition.title : 20,
           gross_price: isNaNPrice
             ? this.language.noDataAvailable
@@ -3910,7 +3919,12 @@ export class DynamicSchedulerComponent implements OnInit {
     const filteredBrutoPrices = brutoPrices.filter(
       (num) => !isNaN(parseFloat(num))
     );
-
+    let vatValues = brutoPrices.map(function (item, index) {
+      // In this case item correspond to currentValue of array a, 
+      // using index to get value from array b
+      return item - netPrices[index];
+    });
+    const vat = vatValues.reduce((a, b) => a + b, 0).toFixed(2);
     const subtotal = filteredNetPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = filteredBrutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
@@ -3973,7 +3987,7 @@ export class DynamicSchedulerComponent implements OnInit {
         {
           columns: [
             {
-              text: this.store.companyname ? this.store.companyname : this.store.storename,
+              text: selectedStore.companyname ? selectedStore.companyname : selectedStore.storename,
               style: "invoiceBillingDetailsLeft",
             },
             {
@@ -3986,9 +4000,9 @@ export class DynamicSchedulerComponent implements OnInit {
         {
           columns: [
             {
-              text: this.store.vatcode ?
-                this.store.street + "\n " + this.store.zipcode + " " + this.store.place + "\n" + this.language.vat + " " + this.store.vatcode
-                : this.store.street + "\n " + this.store.zipcode + " " + this.store.place + "\n" + this.language.vat + " " + this.superadminProfile.vatcode,
+              text: selectedStore.vatcode ?
+                selectedStore.street + "\n " + selectedStore.zipcode + " " + selectedStore.place + "\n" + this.language.vat + " " + selectedStore.vatcode
+                : selectedStore.street + "\n " + selectedStore.zipcode + " " + selectedStore.place + "\n" + this.language.vat + " " + this.superadminProfile.vatcode,
               style: "invoiceBillingAddressLeft",
             },
             {
@@ -4041,43 +4055,23 @@ export class DynamicSchedulerComponent implements OnInit {
         "\n",
         // TOTAL
         {
-          table: {
-            // headers are automatically repeated if the table spans over multiple pages
-            // you can declare how many rows should be treated as headers
-            headerRows: 0,
-            widths: ["*", 80],
-
-            body: [
-              // Total
-              [
-                {
-                  text: this.language.invoiceSubtotal,
-                  style: "itemsFooterSubTitle",
-                },
-                {
-                  text:
-                    filteredNetPrices.length === 0
-                      ? this.language.noDataAvailable
-                      : this.language.euroSign + " " + subtotal,
-                  style: "itemsFooterSubValue",
-                },
-              ],
-              [
-                {
-                  text: this.language.invoiceTotal,
-                  style: "itemsFooterTotalTitle",
-                },
-                {
-                  text:
-                    filteredBrutoPrices.length === 0
-                      ? this.language.noDataAvailable
-                      : this.language.euroSign + " " + total,
-                  style: "itemsFooterTotalValue",
-                },
-              ],
-            ],
-          },
-          layout: "lightHorizontalLines",
+          columns: [
+            {
+              text: netPrices.length === 0 ? this.language.noDataAvailable : (this.language.euroSign + " " + subtotal),
+              style: "itemsFooterSubValue",
+              width: 'auto',
+            },
+            {
+              text: netPrices.length === 0 ? this.language.noDataAvailable : (this.language.euroSign + " " + vat),
+              style: "itemsFooterVATValue",
+              width: 'auto',
+            },
+            {
+              text: brutoPrices.length === 0 ? this.language.noDataAvailable : (this.language.euroSign + " " + total),
+              style: "itemsFooterTotalValue",
+              width: 'auto',
+            },
+          ],
         },
         {
           text: this.language.notesTitle,
@@ -4092,17 +4086,17 @@ export class DynamicSchedulerComponent implements OnInit {
         columns: [
           {
             text:
-              (this.store.companyname ? this.store.companyname : this.store.storename) +
+              (selectedStore.companyname ? selectedStore.companyname : selectedStore.storename) +
               this.dotSign +
-              this.store.street +
+              selectedStore.street +
               this.dotSign +
-              this.store.zipcode +
+              selectedStore.zipcode +
               " " +
-              this.store.place +
+              selectedStore.place +
               "\n" +
-              this.store.telephone +
+              selectedStore.telephone +
               this.dotSign +
-              this.store.email,
+              selectedStore.email,
             style: "documentFooter",
           },
         ],
@@ -4117,10 +4111,9 @@ export class DynamicSchedulerComponent implements OnInit {
   }
   private dotSign = " • ";
 
-  private formatDateForPDF(value) {
-    if (!value) {
-      return;
-    }
-    return new Date(value).toLocaleDateString("en-CA");
+  private formatDateForInvoice(value) {
+    this.isDateSet = true;
+
+    this.dateService.formatDate(value);
   }
 }

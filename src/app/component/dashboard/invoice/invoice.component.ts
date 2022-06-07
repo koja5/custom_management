@@ -436,6 +436,7 @@ export class InvoiceComponent implements OnInit {
               selectedTherapies.length === 1 ||
               !this.isDateSet;
 
+            console.log(shouldSetDate + ' should set date');
 
             if (therapy.printOnInvoice) {
               therapies.push({
@@ -451,6 +452,7 @@ export class InvoiceComponent implements OnInit {
       }
     });
 
+    console.log(therapies);
     return {
       therapies: therapies,
       netPrices: netPrices,
@@ -461,7 +463,7 @@ export class InvoiceComponent implements OnInit {
   private formatDate(value) {
     this.isDateSet = true;
 
-    this.dateService.formatDate(value);
+    return this.dateService.formatDate(value);
   }
 
   public downloadWord(): void {

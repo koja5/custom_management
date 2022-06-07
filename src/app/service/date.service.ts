@@ -11,7 +11,7 @@ export class DateService {
   public get currentDateFormatted(): string {
     const date = new Date().toLocaleDateString('en-GB');
 
-    return this.reverseString(date);
+    return this.formatDateWithDot(date);
   }
 
 
@@ -27,15 +27,17 @@ export class DateService {
     } else if (value.indexOf('T') != -1) { // 2022-03-29T06:00:00.000Z
       date = value.split('T')[0];
 
-      //console.log(date.split("-").reverse().join("-"));
+      console.log(date.split("-").reverse().join("-"));
       date = date.split("-").reverse().join("-");
+    } else {
+      date = value.split("-").reverse().join("-");;
     }
 
-    // console.log(date);
-    return this.reverseString(date.trim());
+    console.log(date);
+    return this.formatDateWithDot(date.trim());
   }
 
-  private reverseString(str) {
+  private formatDateWithDot(str) {
     // Step 1. Use the split() method to return a new array
     var splitString;
     if (str.indexOf('.') != -1) {
