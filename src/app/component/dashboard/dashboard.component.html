@@ -1,5 +1,5 @@
-<body *ngIf="language !== undefined" class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md  header-white white-sidebar-color logo-indigo {{
-    sidebar 
+<body *ngIf="language !== undefined" class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md header-white white-sidebar-color logo-indigo {{
+    sidebar
   }}">
   <div class="page-wrapper">
     <header id="page-topbar">
@@ -73,6 +73,11 @@
                 <li>
                   <a href="lock_screen.html" (click)="showHideProfile()">
                     <i class="icon-lock"></i> Lock
+                  </a>
+                </li>
+                <li>
+                  <a (click)="onAboutUsClick()">
+                    <i class="icon-lock"></i> {{language.aboutUs}}
                   </a>
                 </li>
                 <li>
@@ -777,9 +782,11 @@
           <div>
             <div [style.height]="height">
               <!-- Start content -->
-              <div class="content" style="height: 100%; overflow-y: auto; overflow-x: hidden">
+              <div
+                [ngClass]="{'content-sidebar-enabled':sidebar==='sidemenu-closed sidebar-enable','conent':sidebar===''}"
+                style="overflow-y: auto; overflow-x: hidden">
                 <!-- container-fluid -->
-                <div style="height: 100%">
+                <div>
                   <router-outlet></router-outlet>
                 </div>
               </div>

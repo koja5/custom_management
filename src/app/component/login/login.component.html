@@ -194,131 +194,140 @@
               </div>
             </div>
           </div>
-          <!-- ./panel-login -->
-
-          <!-- panel-create user access device -->
-          <div class="authfy-panel panel-signup text-center {{ userAccessForm }}">
-            <div class="row">
-              <div class="col-xs-12 col-sm-12">
-                <div class="authfy-heading">
-                  <h3 class="auth-title">
-                    {{ language.userAccessFormTitle }}
-                  </h3>
-                </div>
-                <p style="color: red">{{ loginInfo }}</p>
-                <form class="signupForm" (ngSubmit)="createUserAccessDevice($event)">
-                  <div class="form-group">
-                    <input type="text" class="form-control" name="device" placeholder="{{ language.userAccessDevice }}"
-                      required="required" [(ngModel)]="userAccessDevice" userAccessDevice.value="" #email="ngModel" />
-                  </div>
-                  <div class="form-group">
-                    <button class="btn btn-lg btn-block btn-primary" type="submit">
-                      {{ language.createUserAccessDevice }}
-                    </button>
-                  </div>
-                </form>
-              </div>
+          <div class="row">
+            <div class="col-12 links-wrapper">
+              <span class="link" (click)="onGoTo('/terms')">Terms of Use</span>
+              <span class="link" (click)="onGoTo('/about-us')">About Us</span>
+              <span class="link" (click)="onGoTo('/impressum')">Impressum</span>
+              <span class="link" (click)="onGoTo('privacy-policy')">Private Policy</span>
             </div>
           </div>
-          <!-- ./panel-create user access device -->
+        </div>
+        <!-- ./panel-login -->
 
-          <!-- panel-signup start -->
-          <div class="authfy-panel panel-signup text-center {{ signupForm }}">
-            <div class="row">
-              <div class="col-xs-12 col-sm-12">
-                <div class="authfy-heading">
-                  <h3 class="auth-title">{{ language.signUpTitle }}</h3>
-                  <p>{{ signUpInfo }}</p>
-                  <p style="color: red">{{ errorInfo }}</p>
+        <!-- panel-create user access device -->
+        <div class="authfy-panel panel-signup text-center {{ userAccessForm }}">
+          <div class="row">
+            <div class="col-xs-12 col-sm-12">
+              <div class="authfy-heading">
+                <h3 class="auth-title">
+                  {{ language.userAccessFormTitle }}
+                </h3>
+              </div>
+              <p style="color: red">{{ loginInfo }}</p>
+              <form class="signupForm" (ngSubmit)="createUserAccessDevice($event)">
+                <div class="form-group">
+                  <input type="text" class="form-control" name="device" placeholder="{{ language.userAccessDevice }}"
+                    required="required" [(ngModel)]="userAccessDevice" userAccessDevice.value="" #email="ngModel" />
                 </div>
-                <form name="signupForm" class="signupForm" (ngSubmit)="signUp($event)">
-                  <div class="form-group">
-                    <input type="email" class="form-control" name="email" placeholder="{{ language.email }}"
-                      required="required" [(ngModel)]="data.email" email.value="" #email="ngModel" />
-                  </div>
+                <div class="form-group">
+                  <button class="btn btn-lg btn-block btn-primary" type="submit">
+                    {{ language.createUserAccessDevice }}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- ./panel-create user access device -->
 
-                  <div class="form-group">
-                    <input type="text" class="form-control" name="fullname" placeholder="{{ language.fullName }}"
-                      required="required" [(ngModel)]="data.shortname" shortname.value="" #shortname="ngModel" />
-                  </div>
-                  <div class="form-group">
-                    <div class="pwdMask">
-                      <input type="{{ hideShow }}" class="form-control password" name="password"
-                        placeholder="{{ language.password }}" [(ngModel)]="data.password" password.value=""
-                        #password="ngModel" />
-                      <span class="fa {{ hideShowEye }} pwd-toggle" (click)="hideShowPassword()"></span>
-                      <div class="form-group">
-                        <button class="btn btn-lg btn-block btn-primary" type="submit">
-                          {{ language.signUpWithEmail }}
-                        </button>
-                      </div>
+        <!-- panel-signup start -->
+        <div class="authfy-panel panel-signup text-center {{ signupForm }}">
+          <div class="row">
+            <div class="col-xs-12 col-sm-12">
+              <div class="authfy-heading">
+                <h3 class="auth-title">{{ language.signUpTitle }}</h3>
+                <p>{{ signUpInfo }}</p>
+                <p style="color: red">{{ errorInfo }}</p>
+              </div>
+              <form name="signupForm" class="signupForm" (ngSubmit)="signUp($event)">
+                <div class="form-group">
+                  <input type="email" class="form-control" name="email" placeholder="{{ language.email }}"
+                    required="required" [(ngModel)]="data.email" email.value="" #email="ngModel" />
+                </div>
+
+                <div class="form-group">
+                  <input type="text" class="form-control" name="fullname" placeholder="{{ language.fullName }}"
+                    required="required" [(ngModel)]="data.shortname" shortname.value="" #shortname="ngModel" />
+                </div>
+                <div class="form-group">
+                  <div class="pwdMask">
+                    <input type="{{ hideShow }}" class="form-control password" name="password"
+                      placeholder="{{ language.password }}" [(ngModel)]="data.password" password.value=""
+                      #password="ngModel" />
+                    <span class="fa {{ hideShowEye }} pwd-toggle" (click)="hideShowPassword()"></span>
+                    <div class="form-group">
+                      <button class="btn btn-lg btn-block btn-primary" type="submit">
+                        {{ language.signUpWithEmail }}
+                      </button>
                     </div>
                   </div>
-                </form>
-                <a class="lnk-toggler" data-panel=".panel-login" (click)="loginActive()">{{
-                  language.alreadyHaveAnAccount
-                  }}</a>
-              </div>
-            </div>
-          </div>
-          <!-- ./panel-signup -->
-          <!-- panel-forget start -->
-          <div class="authfy-panel panel-forgot {{ recoverForm }}">
-            <div class="row">
-              <div class="col-xs-12 col-sm-12">
-                <div class="authfy-heading">
-                  <h3 class="auth-title">{{ language.recoveryTitle }}</h3>
-                  <p>{{ language.recoveryText }}</p>
-                  <p id="textClass" style="color: red"></p>
-                  <p style="color: red">{{ errorInfo }}</p>
                 </div>
-                <form name="forgetForm" class="forgetForm" (ngSubmit)="forgotPassword($event)">
-                  <div class="form-group">
-                    <input type="email" class="form-control" name="username" placeholder="{{ language.email }}"
-                      required="required" [(ngModel)]="data.email" email.value="" #email="ngModel" />
-                  </div>
-                  <div class="form-group">
-                    <button class="btn btn-lg btn-block btn-primary" type="submit">
-                      {{ language.recoveryYourPassword }}
-                    </button>
-                  </div>
-                  <div class="form-group">
-                    <a class="lnk-toggler" data-panel=".panel-login" (click)="loginActive()">{{
-                      language.alreadyHaveAnAccount }}</a>
-                  </div>
-                  <div class="form-group">
-                    <a class="lnk-toggler" data-panel=".panel-signup" (click)="signUpActive()">{{ language.haventAccount
-                      }}</a>
-                  </div>
-                </form>
-              </div>
+              </form>
+              <a class="lnk-toggler" data-panel=".panel-login" (click)="loginActive()">{{
+                language.alreadyHaveAnAccount
+                }}</a>
             </div>
           </div>
-          <!-- ./panel-forgot -->
         </div>
-        <div class="row bottom-holder">
-          <div class="col-12 links-wrapper">
-            <span class="no-underline-link" (click)="onGoTo('/terms')">{{language.termOfUse}}</span>
-            <span class="no-underline-link" (click)="onGoTo('/about-us')">{{language.aboutUs}}</span>
-            <span class="no-underline-link" (click)="onGoTo('/impressum')">{{language.impressum}}</span>
-            <span class="no-underline-link" (click)="onGoTo('privacy-policy')">{{language.privatePolicy}}</span>
+        <!-- ./panel-signup -->
+        <!-- panel-forget start -->
+        <div class="authfy-panel panel-forgot {{ recoverForm }}">
+          <div class="row">
+            <div class="col-xs-12 col-sm-12">
+              <div class="authfy-heading">
+                <h3 class="auth-title">{{ language.recoveryTitle }}</h3>
+                <p>{{ language.recoveryText }}</p>
+                <p id="textClass" style="color: red"></p>
+                <p style="color: red">{{ errorInfo }}</p>
+              </div>
+              <form name="forgetForm" class="forgetForm" (ngSubmit)="forgotPassword($event)">
+                <div class="form-group">
+                  <input type="email" class="form-control" name="username" placeholder="{{ language.email }}"
+                    required="required" [(ngModel)]="data.email" email.value="" #email="ngModel" />
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-lg btn-block btn-primary" type="submit">
+                    {{ language.recoveryYourPassword }}
+                  </button>
+                </div>
+                <div class="form-group">
+                  <a class="lnk-toggler" data-panel=".panel-login" (click)="loginActive()">{{
+                    language.alreadyHaveAnAccount }}</a>
+                </div>
+                <div class="form-group">
+                  <a class="lnk-toggler" data-panel=".panel-signup" (click)="signUpActive()">{{ language.haventAccount
+                    }}</a>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-        <!-- ./authfy-login -->
+        <!-- ./panel-forgot -->
+      </div>
+      <div class="row bottom-holder">
+        <div class="col-12 links-wrapper">
+          <span class="no-underline-link" (click)="onGoTo('/terms')">{{language.termOfUse}}</span>
+          <span class="no-underline-link" (click)="onGoTo('/about-us')">{{language.aboutUs}}</span>
+          <span class="no-underline-link" (click)="onGoTo('/impressum')">{{language.impressum}}</span>
+          <span class="no-underline-link" (click)="onGoTo('privacy-policy')">{{language.privatePolicy}}</span>
+        </div>
       </div>
       <!-- ./authfy-login -->
-
     </div>
-    <!-- ./authfy-panel-left -->
-    <div class="col-md-7 col-lg-8 authfy-panel-right hidden-xs hidden-sm">
-      <div class="hero-heading">
-        <div class="headline">
-          <h3>{{ language.welcomeTitle }} ClinicNode</h3>
-          <p>{{ language.welcomeText }}</p>
-        </div>
+    <!-- ./authfy-login -->
+
+  </div>
+  <!-- ./authfy-panel-left -->
+  <div class="col-md-7 col-lg-8 authfy-panel-right hidden-xs hidden-sm">
+    <div class="hero-heading">
+      <div class="headline">
+        <h3>{{ language.welcomeTitle }} ClinicNode</h3>
+        <p>{{ language.welcomeText }}</p>
       </div>
     </div>
-    <!-- ./row -->
+  </div>
+  <!-- ./row -->
   </div>
 
   <!-- ./container -->
