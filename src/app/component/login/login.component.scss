@@ -428,25 +428,12 @@ a:hover {
 }
 
 .links-wrapper {
+    border-top: 1px silver solid;
     padding-top: 5px;
-    display: flex;
-    justify-content: space-around;
-    text-align: center;
 }
 
-.no-underline-link {
+.link {
     display: inline-block;
     margin-left: 10px;
     margin-right: 10px;
-}
-
-.no-underline-link:hover {
-    color: blue !important;
-    cursor: pointer;
-}
-
-.bottom-holder {
-    position: absolute;
-    bottom: 0px;
-    width: 100%;
 }

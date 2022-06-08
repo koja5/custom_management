@@ -904,7 +904,7 @@
   <modal-content>
     <div id="intro" class="mb-4">
       <!-- Title -->
-      <div class="border-bottom">
+      <div class="border-bottom pb-4 mb-4">
         <h2 class="font-weight-light mt-0">
           <span class="font-weight-bold">
             {{language.aboutUsIntroductionTitle}}
@@ -913,14 +913,11 @@
       </div>
       <!-- End Title -->
       <p class="string-new-line">{{language.aboutUsIntroductionText}}</p>
-
+      <div class="col-12 links-wrapper text-primary center-items ">
+        <span class="link-first" (click)="onGoTo('/terms')">Terms of Use</span>&#124;
+        <span class="link" (click)="onGoTo('/impressum')">Impressum</span>&#124;
+        <span class="link" (click)="onGoTo('privacy-policy')">Private Policy</span>
+      </div>
     </div>
   </modal-content>
-  <modal-footer>
-    <div class="col-12 links-wrapper text-primary center-items ">
-      <span class="link-first" (click)="onGoTo('/terms')">{{language.termOfUse}}</span>
-      <span class="link" (click)="onGoTo('/impressum')">{{language.impressum}}</span>
-      <span class="link" (click)="onGoTo('privacy-policy')">{{language.privatePolicy}}</span>
-    </div>
-  </modal-footer>
 </modal>
