@@ -1,9 +1,6 @@
-<body
-  *ngIf="language !== undefined"
-  class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md header-white white-sidebar-color logo-indigo {{
+<body *ngIf="language !== undefined" class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md header-white white-sidebar-color logo-indigo {{
     sidebar
-  }}"
->
+  }}">
   <div class="page-wrapper">
     <header id="page-topbar">
       <div class="navbar-header">
@@ -15,11 +12,7 @@
                 <img src="./assets/images/short-logo.png" alt="" height="24" />
               </span>
               <span class="logo-lg">
-                <img
-                  src="./assets/images/brand-logo-white.png"
-                  alt=""
-                  height="48"
-                />
+                <img src="./assets/images/brand-logo-white.png" alt="" height="48" />
               </span>
             </a>
 
@@ -28,21 +21,13 @@
                 <img src="./assets/images/short-logo.png" alt="" height="24" />
               </span>
               <span class="logo-lg">
-                <img
-                  src="./assets/images/brand-logo-white.png"
-                  alt=""
-                  height="48"
-                />
+                <img src="./assets/images/brand-logo-white.png" alt="" height="48" />
               </span>
             </a>
           </div>
 
-          <button
-            (click)="hideShowSidebar()"
-            type="button"
-            class="btn m-0 pb-0 btn-sm font-size-16 header-item btn-background-none"
-            id="vertical-menu-btn"
-          >
+          <button (click)="hideShowSidebar()" type="button"
+            class="btn m-0 pb-0 btn-sm font-size-16 header-item btn-background-none" id="vertical-menu-btn">
             <i class="fa fa-fw fa-bars"></i>
           </button>
           <div *ngIf="user" class="store-name">
@@ -56,47 +41,26 @@
           <ul class="nav navbar-nav pull-right">
             <!-- start manage user dropdown -->
             <li class="dropdown dropdown-user" *ngIf="user !== undefined">
-              <a
-                (click)="showHideProfile()"
-                class="dropdown-toggle"
-                data-toggle="dropdown"
-                data-hover="dropdown"
-                data-close-others="true"
-              >
-                <img
-                  *ngIf="imagePath !== undefined"
-                  [src]="imagePath"
-                  alt="user"
-                  class="rounded-circle profile-image"
-                />
-                <span
-                  class="username username-hide-on-mobile"
-                  *ngIf="user.lastname !== '' && user.firstname !== ''"
-                >
+              <a (click)="showHideProfile()" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                data-close-others="true">
+                <img *ngIf="imagePath !== undefined" [src]="imagePath" alt="user"
+                  class="rounded-circle profile-image" />
+                <span class="username username-hide-on-mobile" *ngIf="user.lastname !== '' && user.firstname !== ''">
                   {{ user.lastname }} {{ user.firstname }}
                 </span>
-                <span
-                  class="username username-hide-on-mobile"
-                  *ngIf="user.lastname === '' || user.firstname === ''"
-                >
+                <span class="username username-hide-on-mobile" *ngIf="user.lastname === '' || user.firstname === ''">
                   {{ user.shortname }}
                 </span>
                 <i class="fa fa-angle-down"></i>
               </a>
               <ul class="dropdown-menu dropdown-menu-default {{ profile }}">
                 <li>
-                  <a
-                    routerLink="/dashboard/home/profile"
-                    (click)="showHideProfile()"
-                  >
+                  <a routerLink="/dashboard/home/profile" (click)="showHideProfile()">
                     <i class="fa fa-user"></i> {{ language["profile"] }}
                   </a>
                 </li>
                 <li>
-                  <a
-                    routerLink="/dashboard/home/settings"
-                    (click)="showHideProfile()"
-                  >
+                  <a routerLink="/dashboard/home/settings" (click)="showHideProfile()">
                     <i class="fa fa-cog"></i> {{ language["settings"] }}
                   </a>
                 </li>
@@ -109,6 +73,11 @@
                 <li>
                   <a href="lock_screen.html" (click)="showHideProfile()">
                     <i class="icon-lock"></i> Lock
+                  </a>
+                </li>
+                <li>
+                  <a (click)="onAboutUsClick()">
+                    <i class="icon-lock"></i> {{language.aboutUs}}
                   </a>
                 </li>
                 <li>
@@ -135,868 +104,538 @@
             </div>
             <div class="simplebar-mask">
               <div class="simplebar-offset" style="right: 0px; bottom: 0px">
-                <div
-                  class="simplebar-content-wrapper"
-                  style="height: 100%; overflow: hidden"
-                >
+                <div class="simplebar-content-wrapper" style="height: 100%; overflow: hidden">
                   <div class="simplebar-content" style="padding: 0px">
                     <!--- Sidemenu -->
                     <perfect-scrollbar style.height="{{ sidebarHeight }}">
                       <div id="sidebar-menu" class="mm-active">
                         <!-- Left Menu Start -->
-                        <ul
-                          class="metismenu list-unstyled mm-show"
-                          id="side-menu"
-                        >
+                        <ul class="metismenu list-unstyled mm-show" id="side-menu">
                           <li class="menu-title mt-2" data-key="t-components">
                             {{ language?.userTitleMenu }}
                           </li>
-                          <li
-                            class="{{ selectedNodeModel['calendar'] }}"
-                            *ngIf="
+                          <li class="{{ selectedNodeModel['calendar'] }}" *ngIf="
                               type !== userType.patient ||
                               (type === userType.patient &&
                                 permissionPatientMenu?.myCalendar)
-                            "
-                          >
-                            <a
-                              (click)="returnActiveNode('calendar')"
-                              routerLink="/dashboard/home/task"
-                              ><i class="fa fa-calendar"></i
-                              ><span class="navigation-link">{{
+                            ">
+                            <a (click)="returnActiveNode('calendar')" routerLink="/dashboard/home/task"><i
+                                class="fa fa-calendar"></i><span class="navigation-link">{{
                                 language["calendar"]
-                              }}</span></a
-                            >
+                                }}</span></a>
                           </li>
 
-                          <li
-                            *ngIf="
+                          <li *ngIf="
                               type === userType.patient &&
                               permissionPatientMenu?.myComplaint
-                            "
-                            class="nav-item {{
+                            " class="nav-item {{
                               selectedNodeModel.my_complaint
-                            }}"
-                          >
-                            <a
-                              (click)="returnActiveNode('my_complaint')"
-                              routerLink="/dashboard/home/my-complaint"
-                              class="nav-link"
-                              ><i class="fa fa-heartbeat"></i
-                              ><span class="title">{{
+                            }}">
+                            <a (click)="returnActiveNode('my_complaint')" routerLink="/dashboard/home/my-complaint"
+                              class="nav-link"><i class="fa fa-heartbeat"></i><span class="title">{{
                                 language["myComplaint"]
-                              }}</span></a
-                            >
+                                }}</span></a>
                           </li>
-                          <li
-                            *ngIf="
+                          <li *ngIf="
                               type === userType.patient &&
                               permissionPatientMenu?.myTherapy
-                            "
-                            class="nav-item {{ selectedNodeModel.my_therapy }}"
-                          >
-                            <a
-                              (click)="returnActiveNode('my_therapy')"
-                              routerLink="/dashboard/home/my-therapy"
-                              class="nav-link"
-                              ><i class="fa fa-medkit"></i
-                              ><span class="title">{{
+                            " class="nav-item {{ selectedNodeModel.my_therapy }}">
+                            <a (click)="returnActiveNode('my_therapy')" routerLink="/dashboard/home/my-therapy"
+                              class="nav-link"><i class="fa fa-medkit"></i><span class="title">{{
                                 language["myTherapy"]
-                              }}</span></a
-                            >
+                                }}</span></a>
                           </li>
-                          <li
-                            *ngIf="
+                          <li *ngIf="
                               type === userType.patient &&
                               permissionPatientMenu?.myDocument
-                            "
-                            class="nav-item {{ selectedNodeModel.my_document }}"
-                          >
-                            <a
-                              (click)="returnActiveNode('my_document')"
-                              routerLink="/dashboard/home/my-document"
-                              class="nav-link"
-                              ><i class="fa fa-file-text"></i
-                              ><span class="title">{{
+                            " class="nav-item {{ selectedNodeModel.my_document }}">
+                            <a (click)="returnActiveNode('my_document')" routerLink="/dashboard/home/my-document"
+                              class="nav-link"><i class="fa fa-file-text"></i><span class="title">{{
                                 language["myDocument"]
-                              }}</span></a
-                            >
+                                }}</span></a>
                           </li>
 
-                          <li
-                            class="{{ selectedNodeModel['reservations'] }}"
-                            *ngIf="type !== userType.patient"
-                          >
-                            <a
-                              (click)="returnActiveNode('reservations')"
-                              routerLink="/dashboard/home/reservations"
-                              ><i class="fa fa-calendar-check-o"></i
-                              ><span class="navigation-link">{{
+                          <li class="{{ selectedNodeModel['reservations'] }}" *ngIf="type !== userType.patient">
+                            <a (click)="returnActiveNode('reservations')" routerLink="/dashboard/home/reservations"><i
+                                class="fa fa-calendar-check-o"></i><span class="navigation-link">{{
                                 language["reservations"]
-                              }}</span></a
-                            >
+                                }}</span></a>
                           </li>
-                          <li
-                            class="{{ selectedNodeModel['customers'] }}"
-                            *ngIf="type !== userType.patient"
-                          >
-                            <a
-                              (click)="returnActiveNode('customers')"
-                              routerLink="/dashboard/home/customers"
-                              ><i class="fa fa-wheelchair"></i
-                              ><span class="navigation-link">{{
+                          <li class="{{ selectedNodeModel['customers'] }}" *ngIf="type !== userType.patient">
+                            <a (click)="returnActiveNode('customers')" routerLink="/dashboard/home/customers"><i
+                                class="fa fa-wheelchair"></i><span class="navigation-link">{{
                                 language["customer"]
-                              }}</span></a
-                            >
+                                }}</span></a>
                           </li>
-                          <li
-                            class="{{ selectedNodeModel['invoice'] }}"
-                            *ngIf="type !== userType.patient"
-                          >
-                            <a
-                              (click)="returnActiveNode('invoice')"
-                              routerLink="/dashboard/home/invoice"
-                              ><i class="fa fa-files-o"></i
-                              ><span class="navigation-link">{{
+                          <li class="{{ selectedNodeModel['invoice'] }}" *ngIf="type !== userType.patient">
+                            <a (click)="returnActiveNode('invoice')" routerLink="/dashboard/home/invoice"><i
+                                class="fa fa-files-o"></i><span class="navigation-link">{{
                                 language["invoice"]
-                              }}</span></a
-                            >
+                                }}</span></a>
                           </li>
 
-                          <li
-                            *ngIf="
+                          <li *ngIf="
                               type === userType.owner || type === userType.admin
-                            "
-                            class="{{ activeGroup[3] }}"
-                          >
-                            <a (click)="collapse(3)" class="has-arrow"
-                              ><i class="fa fa-cogs"></i
-                              ><span class="navigation-link">{{
+                            " class="{{ activeGroup[3] }}">
+                            <a (click)="collapse(3)" class="has-arrow"><i class="fa fa-cogs"></i><span
+                                class="navigation-link">{{
                                 language?.marketing
-                              }}</span></a
-                            >
-                            <ul
-                              class="sub-menu mm-collapse {{
+                                }}</span></a>
+                            <ul class="sub-menu mm-collapse {{
                                 showHideCollapse[3]
-                              }}"
-                            >
-                              <li
-                                class="{{ selectedNodeModel['massive_sms'] }}"
-                              >
-                                <a
-                                  (click)="returnActiveNode('massive_sms')"
-                                  routerLink="/dashboard/home/massive-sms"
-                                  ><i class="fa fa-paper-plane"></i
-                                  ><span class="navigation-link">{{
+                              }}">
+                              <li class="{{ selectedNodeModel['massive_sms'] }}">
+                                <a (click)="returnActiveNode('massive_sms')" routerLink="/dashboard/home/massive-sms"><i
+                                    class="fa fa-paper-plane"></i><span class="navigation-link">{{
                                     language["massiveSms"]
-                                  }}</span></a
-                                >
+                                    }}</span></a>
                               </li>
 
-                              <li
-                                class="{{ selectedNodeModel['massive_email'] }}"
-                              >
-                                <a
-                                  (click)="returnActiveNode('massive_email')"
-                                  routerLink="/dashboard/home/massive-email"
-                                  ><i class="fa fa-envelope"></i
-                                  ><span class="navigation-link">{{
+                              <li class="{{ selectedNodeModel['massive_email'] }}">
+                                <a (click)="returnActiveNode('massive_email')"
+                                  routerLink="/dashboard/home/massive-email"><i class="fa fa-envelope"></i><span
+                                    class="navigation-link">{{
                                     language["massiveEmail"]
-                                  }}</span></a
-                                >
+                                    }}</span></a>
                               </li>
                             </ul>
                           </li>
 
-                          <li
-                            class="{{ selectedNodeModel['vaucher'] }}"
-                            *ngIf="type !== userType.patient"
-                          >
-                            <a
-                              (click)="returnActiveNode('vaucher')"
-                              routerLink="/dashboard/home/vaucher"
-                              ><i class="fa fa-money"></i
-                              ><span class="navigation-link">{{
+                          <li class="{{ selectedNodeModel['vaucher'] }}" *ngIf="type !== userType.patient">
+                            <a (click)="returnActiveNode('vaucher')" routerLink="/dashboard/home/vaucher"><i
+                                class="fa fa-money"></i><span class="navigation-link">{{
                                 language["vaucher"]
-                              }}</span></a
-                            >
+                                }}</span></a>
                           </li>
 
-                          <li
-                            *ngIf="
+                          <li *ngIf="
                               type === userType.owner || type === userType.admin
-                            "
-                            class="menu-title"
-                            data-key="t-components"
-                          >
+                            " class="menu-title" data-key="t-components">
                             {{ language?.applicationParametersSettingsTitle }}
                           </li>
 
-                          <li
-                            class="{{ selectedNodeModel['users'] }}"
-                            *ngIf="type === userType.owner"
-                          >
-                            <a
-                              (click)="returnActiveNode('users')"
-                              routerLink="/dashboard/home/users"
-                              ><i class="fa fa-user"></i
-                              ><span class="navigation-link">{{
+                          <li class="{{ selectedNodeModel['users'] }}" *ngIf="type === userType.owner">
+                            <a (click)="returnActiveNode('users')" routerLink="/dashboard/home/users"><i
+                                class="fa fa-user"></i><span class="navigation-link">{{
                                 language["users"]
-                              }}</span></a
-                            >
+                                }}</span></a>
                           </li>
 
-                          <li
-                            class="{{ selectedNodeModel['store'] }}"
-                            *ngIf="
+                          <li class="{{ selectedNodeModel['store'] }}" *ngIf="
                               type === userType.owner || type === userType.admin
-                            "
-                          >
-                            <a
-                              (click)="returnActiveNode('store')"
-                              routerLink="/dashboard/home/store"
-                              ><i class="fa fa-hospital-o"></i
-                              ><span class="navigation-link">{{
+                            ">
+                            <a (click)="returnActiveNode('store')" routerLink="/dashboard/home/store"><i
+                                class="fa fa-hospital-o"></i><span class="navigation-link">{{
                                 language["store"]
-                              }}</span></a
-                            >
+                                }}</span></a>
                           </li>
 
-                          <li
-                            *ngIf="
+                          <li *ngIf="
                               type === userType.owner || type === userType.admin
-                            "
-                            class="{{ activeGroup[2] }}"
-                          >
-                            <a (click)="collapse(2)" class="has-arrow"
-                              ><i class="fa fa fa-file-text"></i
-                              ><span class="navigation-link">{{
+                            " class="{{ activeGroup[2] }}">
+                            <a (click)="collapse(2)" class="has-arrow"><i class="fa fa fa-file-text"></i><span
+                                class="navigation-link">{{
                                 language?.applicationParametersSettingsTitle
-                              }}</span></a
-                            >
-                            <ul
-                              *ngIf="
+                                }}</span></a>
+                            <ul *ngIf="
                                 type === userType.owner ||
                                 type === userType.admin
-                              "
-                              class="sub-menu mm-collapse {{
+                              " class="sub-menu mm-collapse {{
                                 showHideCollapse[2]
-                              }}"
-                            >
+                              }}">
                               <li class="{{ selectedNodeModel['complaint'] }}">
-                                <a
-                                  routerLink="/dashboard/home/complaint"
-                                  (click)="returnActiveNode('complaint')"
-                                  ><i class="fa fa-list-alt"></i>
+                                <a routerLink="/dashboard/home/complaint" (click)="returnActiveNode('complaint')"><i
+                                    class="fa fa-list-alt"></i>
                                   <span class="navigation-link">{{
                                     language?.complaintMenu
-                                  }}</span>
+                                    }}</span>
                                 </a>
                               </li>
 
                               <li class="{{ selectedNodeModel['therapy'] }}">
-                                <a
-                                  routerLink="/dashboard/home/therapy"
-                                  (click)="returnActiveNode('therapy')"
-                                  class="nav-link"
-                                  ><i class="fa fa-medkit"></i>
+                                <a routerLink="/dashboard/home/therapy" (click)="returnActiveNode('therapy')"
+                                  class="nav-link"><i class="fa fa-medkit"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.therapyMenu }}
                                 </a>
                               </li>
 
                               <li class="{{ selectedNodeModel['treatment'] }}">
-                                <a
-                                  routerLink="/dashboard/home/treatment"
-                                  (click)="returnActiveNode('treatment')"
-                                  class="nav-link"
-                                  ><i class="fa fa-medkit"></i>
+                                <a routerLink="/dashboard/home/treatment" (click)="returnActiveNode('treatment')"
+                                  class="nav-link"><i class="fa fa-medkit"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.treatmentMenu }}
                                 </a>
                               </li>
 
-                              <li
-                                class="{{
+                              <li class="{{
                                   selectedNodeModel['recommendation']
-                                }}"
-                              >
-                                <a
-                                  routerLink="/dashboard/home/recommendation"
-                                  (click)="returnActiveNode('recommendation')"
-                                  class="nav-link"
-                                  ><i class="fa fa-check"></i>
+                                }}">
+                                <a routerLink="/dashboard/home/recommendation"
+                                  (click)="returnActiveNode('recommendation')" class="nav-link"><i
+                                    class="fa fa-check"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.recommendationMenu }}
                                 </a>
                               </li>
 
-                              <li
-                                class="{{ selectedNodeModel['relationship'] }}"
-                              >
-                                <a
-                                  routerLink="/dashboard/home/relationship"
-                                  (click)="returnActiveNode('relationship')"
-                                  class="nav-link"
-                                  ><i class="fa fa-exchange"></i>
+                              <li class="{{ selectedNodeModel['relationship'] }}">
+                                <a routerLink="/dashboard/home/relationship" (click)="returnActiveNode('relationship')"
+                                  class="nav-link"><i class="fa fa-exchange"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.relationshipMenu }}
                                 </a>
                               </li>
 
                               <li class="{{ selectedNodeModel['social'] }}">
-                                <a
-                                  routerLink="/dashboard/home/social"
-                                  (click)="returnActiveNode('social')"
-                                  class="nav-link"
-                                  ><i class="fa fa-life-ring"></i>
+                                <a routerLink="/dashboard/home/social" (click)="returnActiveNode('social')"
+                                  class="nav-link"><i class="fa fa-life-ring"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.socialMenu }}
                                 </a>
                               </li>
 
                               <li class="{{ selectedNodeModel['doctor'] }}">
-                                <a
-                                  routerLink="/dashboard/home/doctor"
-                                  (click)="returnActiveNode('doctor')"
-                                  class="nav-link"
-                                  ><i class="fa fa-user"></i>
+                                <a routerLink="/dashboard/home/doctor" (click)="returnActiveNode('doctor')"
+                                  class="nav-link"><i class="fa fa-user"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.doctorMenu }}
                                 </a>
                               </li>
 
                               <li class="{{ selectedNodeModel['doctors'] }}">
-                                <a
-                                  routerLink="/dashboard/home/doctors"
-                                  (click)="returnActiveNode('doctors')"
-                                  class="nav-link"
-                                  ><i class="fa fa-users"></i>
+                                <a routerLink="/dashboard/home/doctors" (click)="returnActiveNode('doctors')"
+                                  class="nav-link"><i class="fa fa-users"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.doctorsMenu }}
                                 </a>
                               </li>
 
                               <li class="{{ selectedNodeModel['vat_tax'] }}">
-                                <a
-                                  routerLink="/dashboard/home/vat_tax"
-                                  (click)="returnActiveNode('vat_tax')"
-                                  class="nav-link"
-                                  ><i class="fa fa-percent"></i>
+                                <a routerLink="/dashboard/home/vat_tax" (click)="returnActiveNode('vat_tax')"
+                                  class="nav-link"><i class="fa fa-percent"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.vatTaxMenu }}
                                 </a>
                               </li>
 
                               <li class="{{ selectedNodeModel['CS'] }}">
-                                <a
-                                  routerLink="/dashboard/home/CS"
-                                  (click)="returnActiveNode('CS')"
-                                  class="nav-link"
-                                  ><i class="fa fa-contao"></i>
+                                <a routerLink="/dashboard/home/CS" (click)="returnActiveNode('CS')" class="nav-link"><i
+                                    class="fa fa-contao"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.csMenu }}
                                 </a>
                               </li>
 
                               <li class="{{ selectedNodeModel['state'] }}">
-                                <a
-                                  routerLink="/dashboard/home/state"
-                                  (click)="returnActiveNode('state')"
-                                  class="nav-link"
-                                  ><i
-                                    class="fa fa-thermometer-three-quarters"
-                                  ></i>
+                                <a routerLink="/dashboard/home/state" (click)="returnActiveNode('state')"
+                                  class="nav-link"><i class="fa fa-thermometer-three-quarters"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.stateMenu }}
                                 </a>
                               </li>
 
-                              <li
-                                class="{{
+                              <li class="{{
                                   selectedNodeModel['event_category']
-                                }}"
-                              >
-                                <a
-                                  routerLink="/dashboard/home/event-category"
-                                  (click)="returnActiveNode('event_category')"
-                                  class="nav-link"
-                                  ><i class="fa fa-paint-brush"></i>
+                                }}">
+                                <a routerLink="/dashboard/home/event-category"
+                                  (click)="returnActiveNode('event_category')" class="nav-link"><i
+                                    class="fa fa-paint-brush"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.eventCategoryMenu }}
                                 </a>
                               </li>
 
-                              <li
-                                class="{{
+                              <li class="{{
                                   selectedNodeModel['event_category_statistic']
-                                }}"
-                              >
-                                <a
-                                  routerLink="/dashboard/home/event-category-statistic"
-                                  (click)="
+                                }}">
+                                <a routerLink="/dashboard/home/event-category-statistic" (click)="
                                     returnActiveNode('event_category_statistic')
-                                  "
-                                  class="nav-link"
-                                  ><i class="fa fa-stack-exchange"></i>
+                                  " class="nav-link"><i class="fa fa-stack-exchange"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.eventCategoryStatistic }}
                                 </a>
                               </li>
 
-                              <li
-                                class="{{
+                              <li class="{{
                                   selectedNodeModel['work_time_colors']
-                                }}"
-                              >
-                                <a
-                                  routerLink="/dashboard/home/work-time-colors"
-                                  (click)="returnActiveNode('work_time_colors')"
-                                  class="nav-link"
-                                  ><i class="fa fa-tint"></i>
+                                }}">
+                                <a routerLink="/dashboard/home/work-time-colors"
+                                  (click)="returnActiveNode('work_time_colors')" class="nav-link"><i
+                                    class="fa fa-tint"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.workTimeColorsMenu }}
                                 </a>
                               </li>
 
-                              <li
-                                class="{{ selectedNodeModel['reminder'] }}"
-                                *ngIf="type === userType.owner"
-                              >
-                                <a
-                                  routerLink="/dashboard/home/reminders"
-                                  (click)="returnActiveNode('reminder')"
-                                  class="nav-link"
-                                  ><i class="fa fa-bell"></i>
+                              <li class="{{ selectedNodeModel['reminder'] }}" *ngIf="type === userType.owner">
+                                <a routerLink="/dashboard/home/reminders" (click)="returnActiveNode('reminder')"
+                                  class="nav-link"><i class="fa fa-bell"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.reminderMenu }}
                                 </a>
                               </li>
-                              <li
-                                class="{{ selectedNodeModel['mail_reminder'] }}"
-                                *ngIf="type === userType.owner"
-                              >
-                                <a
-                                  routerLink="/dashboard/home/mail-reminder"
-                                  (click)="returnActiveNode('mail_reminder')"
-                                  class="nav-link"
-                                  ><i class="fa fa-envelope"></i>
+                              <li class="{{ selectedNodeModel['mail_reminder'] }}" *ngIf="type === userType.owner">
+                                <a routerLink="/dashboard/home/mail-reminder"
+                                  (click)="returnActiveNode('mail_reminder')" class="nav-link"><i
+                                    class="fa fa-envelope"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.mailReminderMessage }}
                                 </a>
                               </li>
-                              <li
-                                class="{{
+                              <li class="{{
                                   selectedNodeModel['mail_approve_reservation']
-                                }}"
-                                *ngIf="type === userType.owner"
-                              >
-                                <a
-                                  routerLink="/dashboard/home/mail-approve-reservation"
-                                  (click)="
+                                }}" *ngIf="type === userType.owner">
+                                <a routerLink="/dashboard/home/mail-approve-reservation" (click)="
                                     returnActiveNode('mail_approve_reservation')
-                                  "
-                                  class="nav-link"
-                                  ><i class="fa fa-envelope"></i>
+                                  " class="nav-link"><i class="fa fa-envelope"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.mailApproveReservation }}
                                 </a>
                               </li>
-                              <li
-                                class="{{
+                              <li class="{{
                                   selectedNodeModel['mail_deny_reservation']
-                                }}"
-                                *ngIf="type === userType.owner"
-                              >
-                                <a
-                                  routerLink="/dashboard/home/mail-deny-reservation"
-                                  (click)="
+                                }}" *ngIf="type === userType.owner">
+                                <a routerLink="/dashboard/home/mail-deny-reservation" (click)="
                                     returnActiveNode('mail_deny_reservation')
-                                  "
-                                  class="nav-link"
-                                  ><i class="fa fa-envelope"></i>
+                                  " class="nav-link"><i class="fa fa-envelope"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.mailDenyReservation }}
                                 </a>
                               </li>
-                              <li
-                                class="{{
+                              <li class="{{
                                   selectedNodeModel['mail_confirm_arrival']
-                                }}"
-                                *ngIf="type === userType.owner"
-                              >
-                                <a
-                                  routerLink="/dashboard/home/mail-confirm-arrival"
-                                  (click)="
+                                }}" *ngIf="type === userType.owner">
+                                <a routerLink="/dashboard/home/mail-confirm-arrival" (click)="
                                     returnActiveNode('mail_confirm_arrival')
-                                  "
-                                  class="nav-link"
-                                  ><i class="fa fa-envelope"></i>
+                                  " class="nav-link"><i class="fa fa-envelope"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.mailConfirmArrival }}
                                 </a>
                               </li>
-                              <li
-                                class="{{
+                              <li class="{{
                                   selectedNodeModel[
                                     'mail_patient_created_account'
                                   ]
-                                }}"
-                                *ngIf="type === userType.owner"
-                              >
-                                <a
-                                  routerLink="/dashboard/home/mail-patient-created-account"
-                                  (click)="
+                                }}" *ngIf="type === userType.owner">
+                                <a routerLink="/dashboard/home/mail-patient-created-account" (click)="
                                     returnActiveNode(
                                       'mail_patient_created_account'
                                     )
-                                  "
-                                  class="nav-link"
-                                  ><i class="fa fa-envelope"></i>
+                                  " class="nav-link"><i class="fa fa-envelope"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.mailPatientCreatedAccount }}
                                 </a>
                               </li>
-                              <li
-                                class="{{
+                              <li class="{{
                                   selectedNodeModel[
                                     'mail_patient_form_registration'
                                   ]
-                                }}"
-                                *ngIf="type === userType.owner"
-                              >
-                                <a
-                                  routerLink="/dashboard/home/mail-patient-form-registration"
-                                  (click)="
+                                }}" *ngIf="type === userType.owner">
+                                <a routerLink="/dashboard/home/mail-patient-form-registration" (click)="
                                     returnActiveNode(
                                       'mail_patient_form_registration'
                                     )
-                                  "
-                                  class="nav-link"
-                                  ><i class="fa fa-envelope"></i>
+                                  " class="nav-link"><i class="fa fa-envelope"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.mailPatientFormRegistration }}
                                 </a>
                               </li>
-                              <li
-                                class="{{
+                              <li class="{{
                                   selectedNodeModel['mail_massive_message']
-                                }}"
-                                *ngIf="type === userType.owner"
-                              >
-                                <a
-                                  routerLink="/dashboard/home/mail-massive"
-                                  (click)="
+                                }}" *ngIf="type === userType.owner">
+                                <a routerLink="/dashboard/home/mail-massive" (click)="
                                     returnActiveNode('mail_massive_message')
-                                  "
-                                  class="nav-link"
-                                  ><i class="fa fa-envelope"></i>
+                                  " class="nav-link"><i class="fa fa-envelope"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.mailMassiveMessage }}
                                 </a>
                               </li>
-                              <li
-                                class="{{ selectedNodeModel['sms_reminder'] }}"
-                                *ngIf="type === userType.owner"
-                              >
-                                <a
-                                  routerLink="/dashboard/home/sms-reminder"
-                                  (click)="returnActiveNode('sms_reminder')"
-                                  class="nav-link"
-                                  ><i class="fa fa-comments"></i>
+                              <li class="{{ selectedNodeModel['sms_reminder'] }}" *ngIf="type === userType.owner">
+                                <a routerLink="/dashboard/home/sms-reminder" (click)="returnActiveNode('sms_reminder')"
+                                  class="nav-link"><i class="fa fa-comments"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.smsReminderMessage }}
                                 </a>
                               </li>
-                              <li
-                                class="{{
+                              <li class="{{
                                   selectedNodeModel['sms_massive_message']
-                                }}"
-                                *ngIf="type === userType.owner"
-                              >
-                                <a
-                                  routerLink="/dashboard/home/sms-massive"
-                                  (click)="
+                                }}" *ngIf="type === userType.owner">
+                                <a routerLink="/dashboard/home/sms-massive" (click)="
                                     returnActiveNode('sms_massive_message')
-                                  "
-                                  class="nav-link"
-                                  ><i class="fa fa-comments"></i>
+                                  " class="nav-link"><i class="fa fa-comments"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.smsMassiveMessage }}
                                 </a>
                               </li>
 
-                              <li
-                                class="{{ selectedNodeModel['add_holiday'] }}"
-                              >
-                                <a
-                                  (click)="returnActiveNode('add_holiday')"
-                                  routerLink="/dashboard/home/add-holiday"
-                                  ><i class="fa fa-calendar-plus-o"></i
-                                  ><span class="navigation-link">{{
+                              <li class="{{ selectedNodeModel['add_holiday'] }}">
+                                <a (click)="returnActiveNode('add_holiday')" routerLink="/dashboard/home/add-holiday"><i
+                                    class="fa fa-calendar-plus-o"></i><span class="navigation-link">{{
                                     language["addHoliday"]
-                                  }}</span></a
-                                >
+                                    }}</span></a>
                               </li>
 
-                              <li
-                                class="{{
+                              <li class="{{
                                   selectedNodeModel['change_superadmin_profile']
-                                }}"
-                                *ngIf="type === userType.owner"
-                              >
-                                <a
-                                  routerLink="/dashboard/home/change-superadmin-profile"
-                                  (click)="
+                                }}" *ngIf="type === userType.owner">
+                                <a routerLink="/dashboard/home/change-superadmin-profile" (click)="
                                     returnActiveNode(
                                       'change_superadmin_profile'
                                     )
-                                  "
-                                  class="nav-link"
-                                  ><i class="fa fa-user"></i>
+                                  " class="nav-link"><i class="fa fa-user"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.changeSuperadminProfile }}
                                 </a>
                               </li>
-                              <li
-                                class="{{
+                              <li class="{{
                                   selectedNodeModel['permission_patient_menu']
-                                }}"
-                                *ngIf="type === userType.owner"
-                              >
-                                <a
-                                  routerLink="/dashboard/home/permission-patient-menu"
-                                  (click)="
+                                }}" *ngIf="type === userType.owner">
+                                <a routerLink="/dashboard/home/permission-patient-menu" (click)="
                                     returnActiveNode('permission_patient_menu')
-                                  "
-                                  class="nav-link"
-                                  ><i class="fa fa-cogs"></i>
+                                  " class="nav-link"><i class="fa fa-cogs"></i>
                                   <span class="navigation-link"></span>
                                   {{
-                                    language?.perimissionForPatientNavigationMenu
+                                  language?.perimissionForPatientNavigationMenu
                                   }}
                                 </a>
                               </li>
-                              <li
-                                class="{{ selectedNodeModel['user_access'] }}"
-                                *ngIf="type === userType.owner"
-                              >
-                                <a
-                                  routerLink="/dashboard/home/user-access"
-                                  (click)="returnActiveNode('user_access')"
-                                  class="nav-link"
-                                  ><i class="fa fa-universal-access"></i>
+                              <li class="{{ selectedNodeModel['user_access'] }}" *ngIf="type === userType.owner">
+                                <a routerLink="/dashboard/home/user-access" (click)="returnActiveNode('user_access')"
+                                  class="nav-link"><i class="fa fa-universal-access"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.userAccess }}
                                 </a>
                               </li>
 
-                              <li
-                                class="{{
+                              <li class="{{
                                   selectedNodeModel['invoice_prefix']
-                                }}"
-                                *ngIf="
+                                }}" *ngIf="
                                   type === userType.owner ||
                                   type === userType.admin
-                                "
-                              >
-                                <a
-                                  (click)="returnActiveNode('invoice_prefix')"
-                                  routerLink="/dashboard/home/invoice-prefix"
-                                  ><i class="fa fa-font"></i
-                                  ><span class="navigation-link">{{
+                                ">
+                                <a (click)="returnActiveNode('invoice_prefix')"
+                                  routerLink="/dashboard/home/invoice-prefix"><i class="fa fa-font"></i><span
+                                    class="navigation-link">{{
                                     language["invoicePrefixMenu"]
-                                  }}</span></a
-                                >
+                                    }}</span></a>
                               </li>
 
-                              <li
-                                class="{{
+                              <li class="{{
                                   selectedNodeModel[
                                     'sms_birthday_congratulation'
                                   ]
-                                }}"
-                                *ngIf="type === userType.owner"
-                              >
-                                <a
-                                  routerLink="/dashboard/home/sms-birthday-congratulation"
-                                  (click)="
+                                }}" *ngIf="type === userType.owner">
+                                <a routerLink="/dashboard/home/sms-birthday-congratulation" (click)="
                                     returnActiveNode(
                                       'sms_birthday_congratulation'
                                     )
-                                  "
-                                  class="nav-link"
-                                  ><i class="fa fa-comments"></i>
+                                  " class="nav-link"><i class="fa fa-comments"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.smsBirthdayCongratulation }}
                                 </a>
                               </li>
 
-                              <li
-                                class="{{
+                              <li class="{{
                                   selectedNodeModel[
                                     'email_birthday_congratulation'
                                   ]
-                                }}"
-                                *ngIf="type === userType.owner"
-                              >
-                                <a
-                                  routerLink="/dashboard/home/mail-birthday-congratulation"
-                                  (click)="
+                                }}" *ngIf="type === userType.owner">
+                                <a routerLink="/dashboard/home/mail-birthday-congratulation" (click)="
                                     returnActiveNode(
                                       'email_birthday_congratulation'
                                     )
-                                  "
-                                  class="nav-link"
-                                  ><i class="fa fa-envelope"></i>
+                                  " class="nav-link"><i class="fa fa-envelope"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.emailBirthdayCongratulation }}
                                 </a>
                               </li>
                             </ul>
                           </li>
-                          <li
-                            *ngIf="user && user.id === 4"
-                            class="menu-title"
-                            data-key="t-menu"
-                          >
+                          <li *ngIf="user && user.id === 4" class="menu-title" data-key="t-menu">
                             {{ language?.systemSettingsTitleMenu }}
                           </li>
 
-                          <li
-                            *ngIf="user && user.id === 4"
-                            class="{{ activeGroup[0] }}"
-                          >
-                            <a (click)="collapse(0)" class="has-arrow"
-                              ><i class="fa fa-cogs"></i
-                              ><span class="navigation-link">{{
+                          <li *ngIf="user && user.id === 4" class="{{ activeGroup[0] }}">
+                            <a (click)="collapse(0)" class="has-arrow"><i class="fa fa-cogs"></i><span
+                                class="navigation-link">{{
                                 language?.systemSettingsTitle
-                              }}</span></a
-                            >
-                            <ul
-                              *ngIf="user && user.id === 4"
-                              class="sub-menu mm-collapse {{
+                                }}</span></a>
+                            <ul *ngIf="user && user.id === 4" class="sub-menu mm-collapse {{
                                 showHideCollapse[0]
-                              }}"
-                            >
-                              <li
-                                class="{{ selectedNodeModel['translation'] }}"
-                              >
-                                <a
-                                  (click)="returnActiveNode('translation')"
-                                  routerLink="/dashboard/home/translation"
-                                  ><i class="fa fa-tasks"></i
-                                  ><span class="navigation-link">{{
+                              }}">
+                              <li class="{{ selectedNodeModel['translation'] }}">
+                                <a (click)="returnActiveNode('translation')" routerLink="/dashboard/home/translation"><i
+                                    class="fa fa-tasks"></i><span class="navigation-link">{{
                                     language["translation"]
-                                  }}</span></a
-                                >
+                                    }}</span></a>
                               </li>
 
                               <li class="{{ selectedNodeModel['todo'] }}">
-                                <a
-                                  (click)="returnActiveNode('todo')"
-                                  routerLink="/dashboard/home/todo"
-                                  ><i class="fa fa-clipboard"></i
-                                  ><span class="navigation-link">{{
+                                <a (click)="returnActiveNode('todo')" routerLink="/dashboard/home/todo"><i
+                                    class="fa fa-clipboard"></i><span class="navigation-link">{{
                                     language["todo"]
-                                  }}</span></a
-                                >
+                                    }}</span></a>
                               </li>
 
                               <li class="{{ selectedNodeModel['area_code'] }}">
-                                <a
-                                  (click)="returnActiveNode('area_code')"
-                                  routerLink="/dashboard/home/area-code"
-                                  ><i class="fa fa-volume-control-phone"></i
-                                  ><span class="navigation-link">{{
+                                <a (click)="returnActiveNode('area_code')" routerLink="/dashboard/home/area-code"><i
+                                    class="fa fa-volume-control-phone"></i><span class="navigation-link">{{
                                     language["areaCode"]
-                                  }}</span></a
-                                >
+                                    }}</span></a>
                               </li>
 
-                              <li
-                                class="{{
+                              <li class="{{
                                   selectedNodeModel['template_account']
-                                }}"
-                              >
-                                <a
-                                  (click)="returnActiveNode('template_account')"
-                                  routerLink="/dashboard/home/template-account"
-                                  ><i class="fa fa-users"></i
-                                  ><span class="navigation-link">{{
+                                }}">
+                                <a (click)="returnActiveNode('template_account')"
+                                  routerLink="/dashboard/home/template-account"><i class="fa fa-users"></i><span
+                                    class="navigation-link">{{
                                     language["templateAccount"]
-                                  }}</span></a
-                                >
+                                    }}</span></a>
                               </li>
 
                               <li class="{{ selectedNodeModel['sms_count'] }}">
-                                <a
-                                  (click)="returnActiveNode('sms_count')"
-                                  routerLink="/dashboard/home/sms-count"
-                                  ><i class="fa fa-comment"></i
-                                  ><span class="navigation-link">{{
+                                <a (click)="returnActiveNode('sms_count')" routerLink="/dashboard/home/sms-count"><i
+                                    class="fa fa-comment"></i><span class="navigation-link">{{
                                     language["smsCount"]
-                                  }}</span></a
-                                >
+                                    }}</span></a>
                               </li>
                             </ul>
                           </li>
 
-                          <li
-                            *ngIf="user && user.id === 4"
-                            class="{{ activeGroup[1] }}"
-                          >
-                            <a (click)="collapse(1)" class="has-arrow"
-                              ><i class="fa fa fa-file-text"></i
-                              ><span class="navigation-link">{{
+                          <li *ngIf="user && user.id === 4" class="{{ activeGroup[1] }}">
+                            <a (click)="collapse(1)" class="has-arrow"><i class="fa fa fa-file-text"></i><span
+                                class="navigation-link">{{
                                 language?.systemLogsTitle
-                              }}</span></a
-                            >
-                            <ul
-                              *ngIf="user && user.id === 4"
-                              class="sub-menu mm-collapse {{
+                                }}</span></a>
+                            <ul *ngIf="user && user.id === 4" class="sub-menu mm-collapse {{
                                 showHideCollapse[1]
-                              }}"
-                            >
-                              <li
-                                class="{{
+                              }}">
+                              <li class="{{
                                   selectedNodeModel['systemLogErrors']
-                                }}"
-                              >
-                                <a
-                                  (click)="returnActiveNode('systemLogErrors')"
-                                  routerLink="/dashboard/home/system-logs/error"
-                                  ><i class="fa fa-bug"></i
-                                  ><span class="navigation-link">{{
+                                }}">
+                                <a (click)="returnActiveNode('systemLogErrors')"
+                                  routerLink="/dashboard/home/system-logs/error"><i class="fa fa-bug"></i><span
+                                    class="navigation-link">{{
                                     language?.systemLogErrors
-                                  }}</span></a
-                                >
+                                    }}</span></a>
                               </li>
 
-                              <li
-                                class="{{ selectedNodeModel['systemLogInfo'] }}"
-                              >
-                                <a
-                                  (click)="returnActiveNode('systemLogInfo')"
-                                  routerLink="/dashboard/home/system-logs/info"
-                                  ><i class="fa fa-info-circle"></i
-                                  ><span class="navigation-link">{{
+                              <li class="{{ selectedNodeModel['systemLogInfo'] }}">
+                                <a (click)="returnActiveNode('systemLogInfo')"
+                                  routerLink="/dashboard/home/system-logs/info"><i class="fa fa-info-circle"></i><span
+                                    class="navigation-link">{{
                                     language?.systemLogInfo
-                                  }}</span></a
-                                >
+                                    }}</span></a>
                               </li>
 
-                              <li
-                                class="{{ selectedNodeModel['systemLogWarn'] }}"
-                              >
-                                <a
-                                  (click)="returnActiveNode('systemLogWarn')"
-                                  routerLink="/dashboard/home/system-logs/warn"
-                                  ><i class="fa fa-exclamation-triangle"></i
-                                  ><span class="navigation-link">{{
+                              <li class="{{ selectedNodeModel['systemLogWarn'] }}">
+                                <a (click)="returnActiveNode('systemLogWarn')"
+                                  routerLink="/dashboard/home/system-logs/warn"><i
+                                    class="fa fa-exclamation-triangle"></i><span class="navigation-link">{{
                                     language?.systemLogWarn
-                                  }}</span></a
-                                >
+                                    }}</span></a>
                               </li>
                             </ul>
                           </li>
@@ -1009,27 +648,15 @@
               </div>
             </div>
           </div>
-          <div
-            class="simplebar-track simplebar-horizontal"
-            style="visibility: hidden"
-          >
-            <div
-              class="simplebar-scrollbar"
-              style="transform: translate3d(0px, 0px, 0px); display: none"
-            ></div>
+          <div class="simplebar-track simplebar-horizontal" style="visibility: hidden">
+            <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); display: none"></div>
           </div>
-          <div
-            class="simplebar-track simplebar-vertical"
-            style="visibility: hidden"
-          >
-            <div
-              class="simplebar-scrollbar"
-              style="
+          <div class="simplebar-track simplebar-vertical" style="visibility: hidden">
+            <div class="simplebar-scrollbar" style="
                 height: 55px;
                 transform: translate3d(0px, 0px, 0px);
                 display: none;
-              "
-            ></div>
+              "></div>
           </div>
         </div>
       </div>
@@ -1056,11 +683,10 @@
             <div [style.height]="height">
               <!-- Start content -->
               <div
-                class="content"
-                style="height: 100%; overflow-y: auto; overflow-x: hidden"
-              >
+                [ngClass]="{'content-sidebar-enabled':sidebar==='sidemenu-closed sidebar-enable','conent':sidebar===''}"
+                style="overflow-y: auto; overflow-x: hidden">
                 <!-- container-fluid -->
-                <div style="height: 100%">
+                <div>
                   <router-outlet></router-outlet>
                 </div>
               </div>
@@ -1102,19 +728,11 @@
       <kendo-tabstrip-tab [title]="'Language'">
         <ng-template kendoTabContent>
           <div class="row" style="padding: 3%">
-            <div
-              class="radio radio-primary radio-primary{{ theme }} col-md-6"
-              style="margin-top: -5px; text-align: center"
-              *ngFor="let item of allLanguage; let i = index"
-              (click)="changeLanguage(item['name'])"
-            >
-              <input
-                type="radio"
-                name="radio1"
-                id="radio{{ i }}"
-                value="option{{ i }}"
-                [checked]="languageName === item['name'] ? true : false"
-              />
+            <div class="radio radio-primary radio-primary{{ theme }} col-md-6"
+              style="margin-top: -5px; text-align: center" *ngFor="let item of allLanguage; let i = index"
+              (click)="changeLanguage(item['name'])">
+              <input type="radio" name="radio1" id="radio{{ i }}" value="option{{ i }}"
+                [checked]="languageName === item['name'] ? true : false" />
               <label for="radio{{ i }}"> </label>
             </div>
           </div>
@@ -1123,12 +741,8 @@
     </kendo-tabstrip>
   </modal-content>
   <modal-footer>
-    <button
-      kendoButton
-      class="btn-{{ theme }} btn-primary"
-      (click)="settings.close()"
-      style="width: 15vh; padding: 1vh"
-    >
+    <button kendoButton class="btn-{{ theme }} btn-primary" (click)="settings.close()"
+      style="width: 15vh; padding: 1vh">
       {{ language?.close }}
     </button>
   </modal-footer>
@@ -1150,39 +764,23 @@
     </div>
     <div *ngIf="templateAccount">
       <label>{{ language?.loadDemoAccountChooise }}</label>
-      <ejs-dropdownlist
-        [dataSource]="templateAccount"
-        [(value)]="templateAccountValue"
-        [fields]="templateAccountFields"
-        allowFiltering="true"
-      ></ejs-dropdownlist>
+      <ejs-dropdownlist [dataSource]="templateAccount" [(value)]="templateAccountValue" [fields]="templateAccountFields"
+        allowFiltering="true"></ejs-dropdownlist>
     </div>
   </modal-content>
   <modal-footer>
-    <button
-      kendoButton
-      class="btn btn-default mb-0"
-      (click)="firstLogin.close()"
-    >
+    <button kendoButton class="btn btn-default mb-0" (click)="firstLogin.close()">
       {{ language?.loadDemoAccountNoThanks }}
     </button>
-    <button
-      kendoButton
-      class="btn btn-primary"
-      (click)="loadTemplateAccount()"
-      [disabled]="templateAccountValue === undefined"
-    >
+    <button kendoButton class="btn btn-primary" (click)="loadTemplateAccount()"
+      [disabled]="templateAccountValue === undefined">
       {{ language?.loadDemoAccountButton }}
     </button>
   </modal-footer>
 </modal>
 
-<modal
-  #templateLoading
-  modalClass="modal-md top-margin loggerModal adminModal"
-  [hideCloseButton]="true"
-  [closeOnOutsideClick]="false"
->
+<modal #templateLoading modalClass="modal-md top-margin loggerModal adminModal" [hideCloseButton]="true"
+  [closeOnOutsideClick]="false">
   <modal-header>
     <h3 *ngIf="language !== undefined">{{ language?.loadingDemoTitle }}</h3>
   </modal-header>
@@ -1195,6 +793,31 @@
       <p>
         {{ language?.loadingDemoText }}
       </p>
+    </div>
+  </modal-content>
+</modal>
+
+<modal #aboutUs modalClass="modal-md top-margin loggerModal adminModal" class=" padding-5px">
+  <modal-header>
+    {{language.aboutUs}}
+  </modal-header>
+  <modal-content>
+    <div id="intro" class="mb-4">
+      <!-- Title -->
+      <div class="border-bottom pb-4 mb-4">
+        <h2 class="font-weight-light mt-0">
+          <span class="font-weight-bold">
+            {{language.aboutUsIntroductionTitle}}
+          </span>
+        </h2>
+      </div>
+      <!-- End Title -->
+      <p class="string-new-line">{{language.aboutUsIntroductionText}}</p>
+      <div class="col-12 links-wrapper text-primary center-items ">
+        <span class="link-first" (click)="onGoTo('/terms')">Terms of Use</span>&#124;
+        <span class="link" (click)="onGoTo('/impressum')">Impressum</span>&#124;
+        <span class="link" (click)="onGoTo('privacy-policy')">Private Policy</span>
+      </div>
     </div>
   </modal-content>
 </modal>

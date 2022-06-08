@@ -370,6 +370,7 @@ a:hover {
     .authfy-login {
         height: 540px
     }
+
     .authfy-panel {
         padding: 0 20px
     }
@@ -385,9 +386,11 @@ a:hover {
     .authfy-panel-left {
         height: 100%
     }
+
     .remember-row .col-sm-6 {
         width: 100%
     }
+
     .authfy-login .forgotPwd {
         text-align: left;
         margin-top: 0
@@ -420,4 +423,15 @@ a:hover {
 
 .authfy-panel-left {
     overflow: auto;
+}
+
+.links-wrapper {
+    border-top: 1px silver solid;
+    padding-top: 5px;
+}
+
+.link {
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
 }

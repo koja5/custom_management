@@ -284,6 +284,9 @@
       "unsuccessCreateCustomerTitle": {
         "type": "string"
       },
+      "aboutUs": {
+        "type": "string"
+      },
       "unsuccessCreateCustomerText": {
         "type": "string"
       },
@@ -1898,6 +1901,12 @@
           }
         }
       },
+      "aboutUsIntroductionTitle": {
+        "type": "string"
+      },
+      "aboutUsIntroductionText": {
+        "type": "string"
+      },
       "eventCategoryPeriod": {
         "type": "array",
         "items": {
@@ -2191,7 +2200,9 @@
             {
               "key": "pleaseConfirm"
             },
-            {},
+            {
+              "key": "aboutUs"
+            },
             {},
             {}
           ]
@@ -6255,6 +6266,30 @@
                 }
               ]
             }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "About Us",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "aboutUsIntroductionTitle"
+            },
+            {
+              "key": "aboutUsIntroductionText",
+              "type": "textarea"
+            },
+            {},
+            {}
           ]
         }
       ]
