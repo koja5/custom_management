@@ -11,13 +11,12 @@ import { isNullOrUndefined as isNOU } from '@syncfusion/ej2-base';
   providers: [ToolbarService, LinkService, ImageService, HtmlEditorService, QuickToolbarService]
 })
 export class HelpCenterComponent implements OnInit {
+
     ngOnInit(): void {
-        this.rteObj = new RichTextEditorComponent;
-        this.rteObj.value = ''
     }
     
     @ViewChild('blogRTE')
-    public rteObj: any;
+    public rteObj: RichTextEditorComponent;
     
     @ViewChild('rteSubmit')
     public buttonEle: any;
