@@ -3897,9 +3897,7 @@ export class DynamicSchedulerComponent implements OnInit {
 
         therapies.push({
           title: (therapy.titleOnInvoice && therapy.titleOnInvoice.trim() !== "") ? therapy.titleOnInvoice : therapy.title,
-          date: shouldSetDate
-            ? therapy.date
-            : "",
+          date: shouldSetDate ? therapy.date : "",
           net_price: isNaNPrice
             ? this.language.noDataAvailable
             : this.language.euroSign +
@@ -4110,10 +4108,4 @@ export class DynamicSchedulerComponent implements OnInit {
     return docDefinition;
   }
   private dotSign = " • ";
-
-  private formatDateForInvoice(value) {
-    this.isDateSet = true;
-
-    this.dateService.formatDate(value);
-  }
 }

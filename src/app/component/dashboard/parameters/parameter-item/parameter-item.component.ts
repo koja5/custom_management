@@ -55,7 +55,8 @@ export class ParameterItemComponent implements OnInit {
   public editButton = [];
   public height: any;
   public language: any;
-  disabled: boolean = true;
+  public checkBoxDisabled = [];
+  public newRowCheckboxDisabled = true;
 
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
@@ -69,7 +70,7 @@ export class ParameterItemComponent implements OnInit {
     private service: ParameterItemService,
     private message: MessageService,
     private helpService: HelpService
-  ) {}
+  ) { }
 
   public ngOnInit(): void {
     this.language = this.helpService.getLanguage();
@@ -86,10 +87,15 @@ export class ParameterItemComponent implements OnInit {
     if (this.type === "Therapies") {
       this.service.getTherapy(superadmin).subscribe((data) => {
         this.therapyList = data;
+
+
       });
     }
 
     if (this.type === "Therapy") {
+
+      console.log('Therapy')
+
       this.service.getVATTex(superadmin).subscribe((data: []) => {
         this.vatTexList = data.sort(function (a, b) {
           return a["sequence"] - b["sequence"];
@@ -102,16 +108,20 @@ export class ParameterItemComponent implements OnInit {
       map((data) => {
         this.currentLoadData = data;
 
-        // data.forEach(elem => {
-        //   elem.printOnInvoice = elem.printOnInvoice ? true : false;
-        // })
+        if (this.type === "Therapy") {
+
+          data.forEach(element => {
+            this.checkBoxDisabled.push(true);
+          });
+
+        }
 
         return process(data, this.gridState);
       })
     );
 
     this.service.getData(this.type, superadmin);
-    console.log(this.view);
+    console.log('view', this.view);
 
     if (localStorage.getItem("theme") !== null) {
       this.theme = localStorage.getItem("theme");
@@ -138,6 +148,7 @@ export class ParameterItemComponent implements OnInit {
   public addHandler({ sender }) {
     this.closeEditor(sender);
     this.editedRowIndex = -1;
+
     if (this.type === "Doctors") {
       this.formGroup = new FormGroup({
         title: new FormControl(),
@@ -151,11 +162,14 @@ export class ParameterItemComponent implements OnInit {
         email: new FormControl(),
       });
     } else if (this.type === "Therapy") {
+
+      this.newRowCheckboxDisabled = false;
+
       this.formGroup = new FormGroup({
         id: new FormControl(),
         title: new FormControl(),
         titleOnInvoice: new FormControl(),
-        printOnInvoice: new FormControl(),
+        printOnInvoice: new FormControl(false),
         sequence: new FormControl(),
         unit: new FormControl(),
         description: new FormControl(),
@@ -180,7 +194,6 @@ export class ParameterItemComponent implements OnInit {
     this.closeEditor(sender);
     console.log(dataItem);
 
-    this.disabled = false;
 
     if (this.type === "Doctors") {
       this.formGroup = new FormGroup({
@@ -198,6 +211,11 @@ export class ParameterItemComponent implements OnInit {
       this.selectedDoctorType = dataItem.doctor_type;
       this.selectedGender = dataItem.gender;
     } else if (this.type === "Therapy") {
+
+
+      console.log('rowIndex', rowIndex);
+      this.checkBoxDisabled[rowIndex] = false;
+
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
         title: new FormControl(dataItem.title),
@@ -222,6 +240,10 @@ export class ParameterItemComponent implements OnInit {
 
     this.editedRowIndex = rowIndex;
     sender.editRow(rowIndex, this.formGroup);
+
+    // this.checkBoxDisabled = this.checkBoxDisabled.map(element => true);
+    // console.log(this.checkBoxDisabled);
+
     this.refreshData();
   }
 
@@ -230,25 +252,32 @@ export class ParameterItemComponent implements OnInit {
     this.vatTexList = this.firstVatTexList;
     this.closeEditor(sender, rowIndex);
     this.refreshData();
+
+    this.checkBoxDisabled = this.checkBoxDisabled.map(element => true);
+    console.log(this.checkBoxDisabled);
+
     this.changeTheme(this.theme);
   }
 
   setSelectedItem(dataItem): void {
-    console.log(dataItem);
     dataItem.printOnInvoice = !dataItem.printOnInvoice;
 
     this.formGroup.value.printOnInvoice = dataItem.printOnInvoice;
   }
 
   public saveHandler({ sender, rowIndex, formGroup, isNew }) {
-    this.disabled = true;
 
     console.log(formGroup);
 
     this.editedRowIndex = -1;
     const product = formGroup.value;
     console.log(product);
+
     if (this.type === "Therapy") {
+
+      this.checkBoxDisabled = this.checkBoxDisabled.map(element => true);
+      console.log(this.checkBoxDisabled);
+
       const sortedData = {
         data: orderBy(this.currentLoadData, this.sort),
         total: this.currentLoadData.length,
@@ -265,7 +294,7 @@ export class ParameterItemComponent implements OnInit {
       } else if (
         rowIndex !== -1 &&
         sortedData.data[rowIndex]["gross_price"] !==
-          formGroup.value.gross_price &&
+        formGroup.value.gross_price &&
         sortedData.data[rowIndex]["vat"] !== formGroup.value.vat
       ) {
         formGroup.value.net_price = (
@@ -307,6 +336,7 @@ export class ParameterItemComponent implements OnInit {
     this.view = this.service.pipe(
       map((data) => {
         this.currentLoadData = data;
+        this.newRowCheckboxDisabled = true;
         return process(data, this.gridState);
       })
     );
