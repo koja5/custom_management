@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
     private packLanguage: PackLanguageService,
     private storageService: StorageService,
     public http: HttpClient
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.initialization();
@@ -476,5 +476,9 @@ export class LoginComponent implements OnInit {
       this.loginForm = "active";
       this.loginInfo = this.language.successUserAccessDeviceName;
     });
+  }
+
+  public onGoTo(urlTogo: string): void {
+    this.router.navigateByUrl(urlTogo);
   }
 }

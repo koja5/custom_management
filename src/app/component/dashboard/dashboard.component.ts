@@ -23,6 +23,7 @@ declare var document: any;
 export class DashboardComponent implements OnInit {
   @ViewChild("settings") settings: Modal;
   @ViewChild("firstLogin") firstLogin: Modal;
+  @ViewChild("aboutUs") aboutUs: Modal;
   @ViewChild("templateLoading") templateLoading: Modal;
   public sidebar = "";
   public contentMargine;
@@ -68,7 +69,7 @@ export class DashboardComponent implements OnInit {
     private mongo: MongoService,
     private helpService: HelpService,
     private storageService: StorageService,
-    private holidayService: HolidayService
+    private holidayService: HolidayService,
   ) {
     this.helpService.setTitleForBrowserTab("ClinicNode");
   }
@@ -359,6 +360,10 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  public onAboutUsClick() {
+    this.aboutUs.open()
+  }
+
   toggleFullscreen(): void {
     const isInFullScreen =
       (document.fullscreenElement && document.fullscreenElement !== null) ||
@@ -532,38 +537,35 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  setResponsiveMenuSize()
-  {
+  setResponsiveMenuSize() {
     //mali prozor
-    if(window.innerWidth < 992)
-    {
+    if (window.innerWidth < 992) {
       //prozor je zatvoren
-      if(this.sidebar === "")
-      {
+      if (this.sidebar === "") {
         this.contentWidth = window.innerWidth - 20
         this.contentMargine = 10;
       }
-      else
-      {
+      else {
         this.contentWidth = window.innerWidth - 90
         this.contentMargine = 80;
       }
     }
     //veliki prozor
-    else
-    {
+    else {
       //prozor je otvoren
-      if(this.sidebar === "")
-      {
+      if (this.sidebar === "") {
         this.contentWidth = window.innerWidth - 40
         this.contentMargine = 20;
       }
-      else
-      {
+      else {
         this.contentWidth = window.innerWidth - 40
         this.contentMargine = 20;
       }
     }
+  }
+  
+  public onGoTo(urlTogo: string): void {
+    this.router.navigateByUrl(urlTogo);
   }
 
 }
