@@ -32,6 +32,7 @@ export class StoreService {
       .subscribe(val => callback(val));
   }
 
+
   getStoreAllowedOnline(id, callback) {
     return this.http.get('/api/getStoreAllowedOnline/' + id)
       .map(res => res)
@@ -40,6 +41,10 @@ export class StoreService {
 
   getStoreById(id) {
     return this.http.get('/api/getStoreById/' + id).toPromise();
+  }
+
+  getStoreList(ids) {
+    return this.http.get<any[]>('/api/getStoreList/' + ids).toPromise();
   }
 
   insertMultiData(data) {

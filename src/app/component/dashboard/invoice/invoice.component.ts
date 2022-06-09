@@ -39,6 +39,8 @@ export class InvoiceComponent implements OnInit {
 
   @ViewChild("filterToolbar") filterToolbar: ElementRef<HTMLElement>;
   @ViewChild("contentWrapper") contentElement: ElementRef<HTMLElement>;
+  invoiceStore = null;
+  allStores: any[];
 
 
   @HostListener("window:resize", ["$event"])
@@ -75,6 +77,8 @@ export class InvoiceComponent implements OnInit {
   public vatTaxList;
   public isPriceIncluded: boolean = true;
   public languageList;
+  public storeList;
+  public selectedStoreInfo;
   public invoiceLanguage;
   public invoicePrefix: string;
 
@@ -183,6 +187,12 @@ export class InvoiceComponent implements OnInit {
   valueChange(event) {
     this.invoiceLanguage = event.value;
     this.selectedInvoiceLanguage = event;
+  }
+
+  storeValueChange(event) {
+    this.invoiceStore = this.allStores.find(elem => elem.id === event.value);
+    console.log('this.invoiceStore ', this.invoiceStore);
+    this.selectedStoreInfo = event;
   }
 
   public getParameters(): void {
@@ -307,6 +317,27 @@ export class InvoiceComponent implements OnInit {
             this.store = data[0];
           });
 
+
+        const storeIds = this.currentLoadData.map(elem => elem.storeId);
+        const unique = (x, i, a) => a.indexOf(x) == i;
+        const uniqueStoreIds = storeIds.filter(unique);
+
+        console.log('unique ', uniqueStoreIds);
+
+        this.storeService.getStoreList(uniqueStoreIds).then((data) => {
+          this.allStores = data;
+          this.storeList = [];
+
+          data.forEach(elem => {
+            this.storeList.push({
+              'text': elem.storename,
+              'value': elem.id
+            })
+          });
+
+          console.log('storeList ', this.storeList);
+        });
+
         this.parameterItemService.getSuperadminProfile(this.superadmin).subscribe((data) => {
           this.superadminProfile = data[0];
 
@@ -372,7 +403,12 @@ export class InvoiceComponent implements OnInit {
   private setupPDF() {
     const therapyPricesData = this.getTherapyAndPricesData();
 
-    let docDefinition = this.pdfService.getPDFDefinition(this.superadminProfile, this.store, this.customerUser, therapyPricesData, this.isPriceIncluded, this.invoicePrefix, this.invoiceLanguage);
+    console.log('invoice store ', this.invoiceStore);
+    const store = (this.invoiceStore !== undefined && this.invoiceStore !== null)
+      ? this.invoiceStore
+      : this.store;
+
+    let docDefinition = this.pdfService.getPDFDefinition(this.superadminProfile, store, this.customerUser, therapyPricesData, this.isPriceIncluded, this.invoicePrefix, this.invoiceLanguage);
 
     return docDefinition;
   }
@@ -436,7 +472,7 @@ export class InvoiceComponent implements OnInit {
               selectedTherapies.length === 1 ||
               !this.isDateSet;
 
-            console.log(shouldSetDate + ' should set date');
+            // console.log(shouldSetDate + ' should set date');
 
             if (therapy.printOnInvoice) {
               therapies.push({

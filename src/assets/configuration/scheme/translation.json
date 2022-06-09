@@ -314,12 +314,6 @@
       "allowSendInformation": {
         "type": "string"
       },
-      "titleOnInvoice": {
-        "type": "string"
-      },
-      "printOnInvoice": {
-        "type": "string"
-      },
       "start": {
         "type": "string"
       },
@@ -335,7 +329,7 @@
       "telephone": {
         "type": "string"
       },
-      "selectStore": {
+      "selectInvoiceStore": {
         "type": "string"
       },
       "selectUsers": {
@@ -1609,6 +1603,9 @@
         "type": "string"
       },
       "errorChangeLanguageText": {
+        "type": "string"
+      },
+      "selectStore": {
         "type": "string"
       },
       "languages": {
@@ -6346,6 +6343,9 @@
             },
             {
               "key": "downloadWord"
+            },
+            {
+              "key": "selectInvoiceStore"
             }
           ]
         },

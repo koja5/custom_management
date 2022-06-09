@@ -16,7 +16,7 @@ export class DateService {
 
 
   public formatDate(value) {
-    console.log(value);
+    // console.log(value);
     let date: string;
 
     if (value.indexOf('/') != -1) {
@@ -27,13 +27,13 @@ export class DateService {
     } else if (value.indexOf('T') != -1) { // 2022-03-29T06:00:00.000Z
       date = value.split('T')[0];
 
-      console.log(date.split("-").reverse().join("-"));
+      // console.log(date.split("-").reverse().join("-"));
       date = date.split("-").reverse().join("-");
     } else {
       date = value.split("-").reverse().join("-");;
     }
 
-    console.log(date);
+    // console.log(date);
     return this.formatDateWithDot(date.trim());
   }
 
@@ -48,7 +48,7 @@ export class DateService {
       splitString = str.split("/");
     }
 
-    console.log(splitString);
+    // console.log(splitString);
 
     // Step 2. Use the reverse() method to reverse the new created array
     // var reverseArray = splitString.reverse();

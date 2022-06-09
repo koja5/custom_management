@@ -35,7 +35,7 @@ export class PDFService {
     const netPrices = therapyPricesData.netPrices.filter(num => !isNaN(parseFloat(num)));
     const brutoPrices = therapyPricesData.brutoPrices.filter(num => !isNaN(parseFloat(num)));
 
-    console.log(therapies);
+    // console.log(therapies);
 
     let vatPrices = brutoPrices.map(function (item, index) {
       // In this case item correspond to currentValue of array a, 
