@@ -25,9 +25,6 @@ export class DashboardComponent implements OnInit {
   @ViewChild("firstLogin") firstLogin: Modal;
   @ViewChild("templateLoading") templateLoading: Modal;
   public sidebar = "";
-  public contentMargine;
-  public contentWidth;
-  public contentPadding = "";
   public sidebarMobile = "";
   public profile = "";
   public type: number;
@@ -166,7 +163,6 @@ export class DashboardComponent implements OnInit {
     this.message.getNewLanguage().subscribe((mess) => {
       this.language = JSON.parse(this.helpService.getLocalStorage("language"));
     });
-    this.setResponsiveMenuSize();
   }
 
   getMainStoreName() {
@@ -182,8 +178,6 @@ export class DashboardComponent implements OnInit {
   @HostListener("window:resize", ["$event"])
   onResize(event) {
     this.height = this.helpService.getHeightForGrid();
-    this.setResponsiveMenuSize();
-    this.sidebarHeight = window.innerHeight - 60 + "px";
   }
 
   initializeCollapse() {
@@ -259,7 +253,7 @@ export class DashboardComponent implements OnInit {
     } else {
       this.sidebar = "";
     }
-    this.setResponsiveMenuSize();
+
     this.helpService.setLocalStorage("sidebar", this.sidebar);
   }
 
@@ -352,10 +346,10 @@ export class DashboardComponent implements OnInit {
   showHideSubMenu() {
     if (this.subMenuInd === "") {
       this.subMenuInd = "active open";
-      this.sidebarHeight = window.innerHeight - 60 + "px";
+      this.sidebarHeight = window.innerHeight - 50 + "px";
     } else {
       this.subMenuInd = "";
-      this.sidebarHeight = window.innerHeight - 60 + "px";
+      this.sidebarHeight = "auto";
     }
   }
 
