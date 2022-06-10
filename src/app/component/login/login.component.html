@@ -259,28 +259,17 @@
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="checkbox text-left">
-                        <input
-                          type="checkbox"
-                          [(ngModel)]="agreeValue"
-                          name="agreeValue"
-                        /><span class="label-text"
-                          >{{ language.clickAgreeText }}
-                          <a
-                            routerLink="/terms"
-                            target="_blank"
-                            class="signup-term-link"
-                            >{{ language.termOfUse }}</a
-                          >
-                          {{ language.and }}
-                          <a
-                            routerLink="/privacy-policy"
-                            target="_blank"
-                            class="signup-term-link"
-                            >{{ language.privacyPolicy }}</a
-                          ></span
-                        >
-                      </label>
+                      <p class="term-policy text-muted small">
+                        {{ language.agree }}
+                        <a routerLink="/privacy-policy" target="_blank">{{
+                          language.privacyPolicy
+                        }}</a>
+                        {{ language.and }}
+                        <a routerLink="/terms" target="_blank">{{
+                          language.termsOfService
+                        }}</a
+                        >.
+                      </p>
                     </div>
                     <div class="form-group">
                       <button
@@ -361,7 +350,7 @@
           <!-- ./authfy-login -->
         </div>
         <!-- ./authfy-panel-left -->
-        <div class="col-sm-5 col-md-7 col-lg-8 authfy-panel-right hidden-xs">
+        <div class="col-md-7 col-lg-8 authfy-panel-right hidden-xs hidden-sm">
           <div class="hero-heading">
             <div class="headline">
               <h3>{{ language.welcomeTitle }} ClinicNode</h3>

@@ -531,39 +531,4 @@ export class DashboardComponent implements OnInit {
       }
     }
   }
-
-  setResponsiveMenuSize()
-  {
-    //mali prozor
-    if(window.innerWidth < 992)
-    {
-      //prozor je zatvoren
-      if(this.sidebar === "")
-      {
-        this.contentWidth = window.innerWidth - 20
-        this.contentMargine = 10;
-      }
-      else
-      {
-        this.contentWidth = window.innerWidth - 90
-        this.contentMargine = 80;
-      }
-    }
-    //veliki prozor
-    else
-    {
-      //prozor je otvoren
-      if(this.sidebar === "")
-      {
-        this.contentWidth = window.innerWidth - 40
-        this.contentMargine = 20;
-      }
-      else
-      {
-        this.contentWidth = window.innerWidth - 40
-        this.contentMargine = 20;
-      }
-    }
-  }
-
 }

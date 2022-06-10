@@ -147,7 +147,6 @@
                         <ul
                           class="metismenu list-unstyled mm-show"
                           id="side-menu"
-                          style="position:absolute"
                         >
                           <li class="menu-title mt-2" data-key="t-components">
                             {{ language?.userTitleMenu }}
@@ -573,6 +572,159 @@
                                   {{ language?.reminderMenu }}
                                 </a>
                               </li>
+                              <li
+                                class="{{ selectedNodeModel['mail_reminder'] }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/mail-reminder"
+                                  (click)="returnActiveNode('mail_reminder')"
+                                  class="nav-link"
+                                  ><i class="fa fa-envelope"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.mailReminderMessage }}
+                                </a>
+                              </li>
+                              <li
+                                class="{{
+                                  selectedNodeModel['mail_approve_reservation']
+                                }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/mail-approve-reservation"
+                                  (click)="
+                                    returnActiveNode('mail_approve_reservation')
+                                  "
+                                  class="nav-link"
+                                  ><i class="fa fa-envelope"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.mailApproveReservation }}
+                                </a>
+                              </li>
+                              <li
+                                class="{{
+                                  selectedNodeModel['mail_deny_reservation']
+                                }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/mail-deny-reservation"
+                                  (click)="
+                                    returnActiveNode('mail_deny_reservation')
+                                  "
+                                  class="nav-link"
+                                  ><i class="fa fa-envelope"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.mailDenyReservation }}
+                                </a>
+                              </li>
+                              <li
+                                class="{{
+                                  selectedNodeModel['mail_confirm_arrival']
+                                }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/mail-confirm-arrival"
+                                  (click)="
+                                    returnActiveNode('mail_confirm_arrival')
+                                  "
+                                  class="nav-link"
+                                  ><i class="fa fa-envelope"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.mailConfirmArrival }}
+                                </a>
+                              </li>
+                              <li
+                                class="{{
+                                  selectedNodeModel[
+                                    'mail_patient_created_account'
+                                  ]
+                                }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/mail-patient-created-account"
+                                  (click)="
+                                    returnActiveNode(
+                                      'mail_patient_created_account'
+                                    )
+                                  "
+                                  class="nav-link"
+                                  ><i class="fa fa-envelope"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.mailPatientCreatedAccount }}
+                                </a>
+                              </li>
+                              <li
+                                class="{{
+                                  selectedNodeModel[
+                                    'mail_patient_form_registration'
+                                  ]
+                                }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/mail-patient-form-registration"
+                                  (click)="
+                                    returnActiveNode(
+                                      'mail_patient_form_registration'
+                                    )
+                                  "
+                                  class="nav-link"
+                                  ><i class="fa fa-envelope"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.mailPatientFormRegistration }}
+                                </a>
+                              </li>
+                              <li
+                                class="{{
+                                  selectedNodeModel['mail_massive_message']
+                                }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/mail-massive"
+                                  (click)="
+                                    returnActiveNode('mail_massive_message')
+                                  "
+                                  class="nav-link"
+                                  ><i class="fa fa-envelope"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.mailMassiveMessage }}
+                                </a>
+                              </li>
+                              <li
+                                class="{{ selectedNodeModel['sms_reminder'] }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/sms-reminder"
+                                  (click)="returnActiveNode('sms_reminder')"
+                                  class="nav-link"
+                                  ><i class="fa fa-comments"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.smsReminderMessage }}
+                                </a>
+                              </li>
+                              <li
+                                class="{{
+                                  selectedNodeModel['sms_massive_message']
+                                }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/sms-massive"
+                                  (click)="
+                                    returnActiveNode('sms_massive_message')
+                                  "
+                                  class="nav-link"
+                                  ><i class="fa fa-comments"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.smsMassiveMessage }}
+                                </a>
+                              </li>
 
                               <li
                                 class="{{ selectedNodeModel['add_holiday'] }}"
@@ -659,14 +811,22 @@
                               </li>
 
                               <li
-                                class="{{ selectedNodeModel['mail_reminder'] }}"
+                                class="{{
+                                  selectedNodeModel[
+                                    'sms_birthday_congratulation'
+                                  ]
+                                }}"
                                 *ngIf="type === userType.owner"
                               >
                                 <a
-                                  routerLink="/dashboard/home/mail-reminder"
-                                  (click)="returnActiveNode('mail_reminder')"
+                                  routerLink="/dashboard/home/sms-birthday-congratulation"
+                                  (click)="
+                                    returnActiveNode(
+                                      'sms_birthday_congratulation'
+                                    )
+                                  "
                                   class="nav-link"
-                                  ><i class="fa fa-envelope"></i>
+                                  ><i class="fa fa-comments"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.mailReminderMessage }}
                                 </a>
