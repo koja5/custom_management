@@ -25,8 +25,6 @@ import { QueryCellInfoEventArgs } from "@syncfusion/ej2-angular-grids";
 import { Tooltip } from "@syncfusion/ej2-popups";
 import { ClickEventArgs } from "@syncfusion/ej2-navigations";
 import { SystemLogsService } from "src/app/service/system-logs.service";
-import { L10n, setCulture } from '@syncfusion/ej2-base';
-
 
 @Component({
   selector: "app-dynamic-grid",
@@ -66,10 +64,9 @@ export class DynamicGridComponent implements OnInit {
     private service: DynamicService,
     private helpService: HelpService,
     private messageService: MessageService
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.setGridTranslation()
     this.initialization();
     this.checkMessageService();
     this.getConfiguration();
@@ -87,7 +84,7 @@ export class DynamicGridComponent implements OnInit {
     this.helpService.setDefaultBrowserTabTitle();
   }
 
-  ngAfterViewInit() { }
+  ngAfterViewInit() {}
 
   initialization() {
     this.service.getConfiguration(this.path, this.name).subscribe((data) => {
@@ -136,17 +133,6 @@ export class DynamicGridComponent implements OnInit {
     this.service.callApiPost(api, body).subscribe((data) => {
       this.grid.hideSpinner();
     });
-  }
-
-  private setGridTranslation(): void {
-    const translate = this.helpService.getLanguage();
-    setCulture('en-US')
-    L10n.load({
-      'en-US': {
-        grid: translate,
-        pager: translate
-      }
-    })
   }
 
   callApiGet(api, parameters) {
@@ -276,7 +262,7 @@ export class DynamicGridComponent implements OnInit {
         }
       });
     } else {
-      this.service.callApiGet(request.api, data).subscribe((data) => { });
+      this.service.callApiGet(request.api, data).subscribe((data) => {});
     }
   }
 
