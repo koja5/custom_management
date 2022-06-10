@@ -2200,6 +2200,23 @@
             {
               "key": "aboutUs"
             },
+            {
+              "key": "termsOfUse"
+            },
+            {
+              "key": "impressum"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "privatePolicy"
+            },
+            {},
             {},
             {}
           ]
