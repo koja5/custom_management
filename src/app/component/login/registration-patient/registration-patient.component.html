@@ -175,7 +175,16 @@
             </div>
           </div>
         </form>
+        <div class="row bottom-holder">
+          <div class="col-12 links-wrapper">
+            <span class="link" (click)="onGoTo('/terms')">{{language.termsOfUse}}</span>
+            <span class="link" (click)="onGoTo('/about-us')">{{language.aboutUs}}</span>
+            <span class="link" (click)="onGoTo('/impressum')">{{language.impressum}}</span>
+            <span class="link" (click)="onGoTo('privacy-policy')">{{language.privatePolicy}}</span>
+          </div>
+        </div>
       </div>
+     
     </div>
   </main>
 </body>

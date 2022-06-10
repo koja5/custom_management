@@ -116,14 +116,6 @@
                 </form>
               </div>
             </div>
-            <div class="row">
-              <div class="col-12 links-wrapper">
-                <span class="link" (click)="onGoTo('/terms')">Terms of Use</span>
-                <span class="link" (click)="onGoTo('/about-us')">About Us</span>
-                <span class="link" (click)="onGoTo('/impressum')">Impressum</span>
-                <span class="link" (click)="onGoTo('privacy-policy')">Private Policy</span>
-              </div>
-            </div>
           </div>
           <!-- ./panel-login -->
 
@@ -235,18 +227,18 @@
                 </form>
               </div>
             </div>
-            <div class="row">
-              <div class="col-12 links-wrapper text-center">
-                <span class="link" (click)="onGoTo('/terms')">Terms of Use</span>
-                <span class="link" (click)="onGoTo('/about-us')">About Us</span>
-                <span class="link" (click)="onGoTo('/impressum')">Impressum</span>
-                <span class="link" (click)="onGoTo('privacy-policy')">Private Policy</span>
-              </div>
-            </div>
           </div>
           <!-- ./panel-forgot -->
         </div>
         <!-- ./authfy-login -->
+        <div class="row bottom-holder">
+          <div class="col-12 links-wrapper">
+            <span class="link" (click)="onGoTo('/terms')">{{language.termsOfUse}}</span>
+            <span class="link" (click)="onGoTo('/about-us')">{{language.aboutUs}}</span>
+            <span class="link" (click)="onGoTo('/impressum')">{{language.impressum}}</span>
+            <span class="link" (click)="onGoTo('privacy-policy')">{{language.privatePolicy}}</span>
+          </div>
+        </div>
       </div>
       <!-- ./authfy-panel-left -->
       <div class="col-md-7 col-lg-8 authfy-panel-right hidden-xs hidden-sm">

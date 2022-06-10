@@ -3,7 +3,8 @@ h1 {
   font-weight: bold;
 }
 
-input, button {
+input,
+button {
   appearance: none;
   outline: none;
 }
@@ -12,29 +13,33 @@ input::-webkit-input-placeholder {
   color: transparent;
   user-select: none;
 }
+
 input::-moz-placeholder {
   color: transparent;
   user-select: none;
 }
+
 input:-moz-placeholder {
   color: transparent;
   user-select: none;
 }
+
 input:-ms-input-placeholder {
   color: transparent;
   user-select: none;
 }
+
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 100px #fff inset;
   -webkit-text-fill-color: inherit;
 }
 
 .brand-logo {
-    width: 250px;
+  width: 250px;
 }
 
 .cover-photo {
-    height: 100vh;
+  height: 100vh;
 }
 
 .input {
@@ -42,6 +47,7 @@ input:-webkit-autofill {
   width: 100%;
   transition: width 0.18s ease;
 }
+
 .input__container {
   display: flex;
   flex-direction: column;
@@ -49,12 +55,15 @@ input:-webkit-autofill {
   height: 40px;
   width: 100%;
 }
+
 .input__container.error {
   height: auto;
 }
+
 .input__container.error pre {
   padding: 8px 8px 0;
 }
+
 .input__label {
   position: absolute;
   padding: 0 8px;
@@ -66,6 +75,7 @@ input:-webkit-autofill {
   transition-timing-function: linear;
   transition-duration: 0.18s;
 }
+
 .input__field {
   background: transparent;
   border: 0px solid #e5e5e6;
@@ -74,17 +84,23 @@ input:-webkit-autofill {
   font-size: 16px;
   transition: border 0.28s ease-out;
 }
-.input__field:required + .input__label:after {
+
+.input__field:required+.input__label:after {
   content: "*";
   color: red;
 }
-.input__field:focus, .input__field:not(:placeholder-shown) {
+
+.input__field:focus,
+.input__field:not(:placeholder-shown) {
   border-color: #434176;
 }
-.input__field:focus + .input__label, .input__field:not(:placeholder-shown) + .input__label {
+
+.input__field:focus+.input__label,
+.input__field:not(:placeholder-shown)+.input__label {
   font-size: 14px;
   top: -16px;
 }
+
 .input:hover .input__field:placeholder-shown:not(:focus) {
   border-color: #918fc1;
 }
@@ -98,11 +114,13 @@ input:-webkit-autofill {
   opacity: 0;
   z-index: 1;
 }
+
 .input-checkbox__container {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
+
 .input-checkbox__label {
   padding: 0 16px;
   color: #3d3c48;
@@ -110,6 +128,7 @@ input:-webkit-autofill {
   font-size: 16px;
   line-height: 1.25;
 }
+
 .input-checkbox__square {
   display: flex;
   align-items: center;
@@ -123,7 +142,9 @@ input:-webkit-autofill {
   transition: border 0.28s ease-out, box-shadow 0.28s ease-out;
   z-index: 0;
 }
-.input-checkbox__square::before, .input-checkbox__square::after {
+
+.input-checkbox__square::before,
+.input-checkbox__square::after {
   content: "";
   display: inline-block;
   width: 2px;
@@ -131,27 +152,38 @@ input:-webkit-autofill {
   border-radius: 2px;
   transition: background 0.28s ease-out;
 }
+
 .input-checkbox__square::before {
   height: 4px;
   transform: rotate(-40deg) translate3d(-1.5px, 0px, 0);
 }
+
 .input-checkbox__square::after {
   height: 8px;
   transform: rotate(40deg);
 }
-.input-checkbox:hover .input-checkbox__square::before, .input-checkbox:hover .input-checkbox__square::after {
+
+.input-checkbox:hover .input-checkbox__square::before,
+.input-checkbox:hover .input-checkbox__square::after {
   background: #434176;
 }
-.input-checkbox__field:focus + .input-checkbox__square::before, .input-checkbox__field:focus + .input-checkbox__square::after, .input-checkbox__field:checked + .input-checkbox__square::before, .input-checkbox__field:checked + .input-checkbox__square::after {
+
+.input-checkbox__field:focus+.input-checkbox__square::before,
+.input-checkbox__field:focus+.input-checkbox__square::after,
+.input-checkbox__field:checked+.input-checkbox__square::before,
+.input-checkbox__field:checked+.input-checkbox__square::after {
   background: #434176;
 }
-.input-checkbox__field:hover + .input-checkbox__square {
+
+.input-checkbox__field:hover+.input-checkbox__square {
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.32);
 }
-.input-checkbox__field:focus + .input-checkbox__square {
+
+.input-checkbox__field:focus+.input-checkbox__square {
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.32);
 }
-.input-checkbox__field:checked + .input-checkbox__square {
+
+.input-checkbox__field:checked+.input-checkbox__square {
   border-color: #434176;
 }
 
@@ -163,9 +195,12 @@ input:-webkit-autofill {
   will-change: background, box-shadow;
   transition: background 0.28s ease-out, box-shadow 0.28s ease-out;
 }
-.btn--regular, .btn--line {
+
+.btn--regular,
+.btn--line {
   padding: 16px 56px;
 }
+
 .btn--disabled {
   opacity: 0.4;
   pointer-events: none;
@@ -175,18 +210,23 @@ input:-webkit-autofill {
   opacity: 0.7;
   pointer-events: none;
 }
+
 .component--primary .btn--regular {
   background-color: #434176;
   color: #FFF;
 }
+
 .component--primary .btn--regular:hover {
   background-color: #6361a8;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
-.component--primary .btn--regular:focus, .component--primary .btn--regular:active {
+
+.component--primary .btn--regular:focus,
+.component--primary .btn--regular:active {
   background-color: #34335c;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
+
 .component--primary .btn--regular:disabled {
   background-color: #5c5c5c;
 }
@@ -198,6 +238,7 @@ input:-webkit-autofill {
   text-decoration: underline;
   transition: color 0.28s ease-out;
 }
+
 .link:hover {
   color: #161627;
 }
@@ -207,27 +248,33 @@ input:-webkit-autofill {
   width: 100%;
   margin: 0 auto;
 }
+
 .form__row {
   margin-bottom: 40px;
 }
+
 .form__row--two {
   margin: 0 -16px 0px;
 }
+
 @media screen and (min-width: 500px) {
   .form__row--two {
     display: flex;
   }
 }
+
 .form__inline-input {
   padding: 0 16px;
   margin-bottom: 40px;
 }
+
 @media screen and (min-width: 500px) {
   .form__inline-input {
     width: 50%;
     flex: 1 0 auto;
   }
 }
+
 .form__button {
   text-align: center;
 }
@@ -235,20 +282,25 @@ input:-webkit-autofill {
 .sign-up {
   min-height: 100vh;
 }
+
 .sign-up__container {
   display: flex;
   flex-flow: row nowrap;
   height: 100%;
 }
-.sign-up__image, .sign-up__content {
+
+.sign-up__image,
+.sign-up__content {
   flex: 1;
 }
+
 .sign-up__image {
   display: none;
   background-image: linear-gradient(210deg, #242348, #5A55AA);
   position: relative;
   overflow: hidden;
 }
+
 .sign-up__image svg {
   width: 100%;
   height: 100%;
@@ -256,39 +308,48 @@ input:-webkit-autofill {
   top: 0;
   position: absolute;
 }
+
 @media screen and (min-width: 1000px) {
   .sign-up__image {
     display: block;
   }
 }
+
 .sign-up__content {
   display: flex;
   overflow: auto;
-  height: 100vh;
   flex-flow: column nowrap;
   align-items: center;
   padding: 10px 24px;
   background-color: #fafafa;
+  position: relative;
 }
+
 .sign-up__header {
   margin-bottom: 25px;
   text-align: center;
 }
+
 .sign-up__title {
   margin-bottom: 16px;
   color: #434176;
 }
+
 .sign-up__descr {
   font-size: 1.25rem;
   color: #2d385e;
 }
+
 .sign-up__form {
   width: 100%;
 }
-.sign-up__sign, .sign-up__terms {
+
+.sign-up__sign,
+.sign-up__terms {
   text-align: center;
   margin-bottom: 20px;
 }
+
 .sign-up__sign {
   margin-top: -8px;
 }
@@ -296,42 +357,88 @@ input:-webkit-autofill {
 .chart .a {
   fill: url(#a);
 }
+
 .chart .b {
   clip-path: url(#b);
 }
+
 .chart .c {
   opacity: 0.201;
 }
-.chart .d, .chart .g {
+
+.chart .d,
+.chart .g {
   opacity: 0.7;
 }
+
 .chart .d {
   fill: url(#c);
 }
-.chart .e, .chart .h, .chart .k {
+
+.chart .e,
+.chart .h,
+.chart .k {
   fill: none;
 }
+
 .chart .e {
   stroke: #a3a0fb;
 }
-.chart .e, .chart .f, .chart .h, .chart .i {
+
+.chart .e,
+.chart .f,
+.chart .h,
+.chart .i {
   stroke-width: 2px;
 }
-.chart .f, .chart .i {
+
+.chart .f,
+.chart .i {
   fill: #fff;
 }
+
 .chart .f {
   stroke: #a4a1fb;
 }
+
 .chart .g {
   fill: url(#e);
 }
+
 .chart .h {
   stroke: #54d8ff;
 }
+
 .chart .i {
   stroke: #55d8fe;
 }
+
 .chart .j {
   stroke: none;
+}
+
+.links-wrapper {
+  border-top: 1px silver solid;
+  padding-top: 5px;
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+
+}
+
+.link {
+  display: inline-block;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.link:hover {
+  color: blue !important;
+  cursor: pointer;
+}
+
+.bottom-holder {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
 }

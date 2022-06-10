@@ -53,6 +53,15 @@
       "welcomeText": {
         "type": "string"
       },
+      "termsOfUse": {
+        "type": "string"
+      },
+      "privatePolicy": {
+        "type": "string"
+      },
+      "impressum": {
+        "type": "string"
+      },
       "loginTitle": {
         "type": "string"
       },
@@ -2203,6 +2212,23 @@
             {
               "key": "aboutUs"
             },
+            {
+              "key": "termsOfUse"
+            },
+            {
+              "key": "impressum"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "privatePolicy"
+            },
+            {},
             {},
             {}
           ]

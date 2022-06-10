@@ -1029,3 +1029,29 @@ li.active a i {
 .store-name {
   padding-top: 20px;
 }
+
+
+.links-wrapper {
+  border-top: 1px silver solid;
+  padding-top: 5px;
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.link {
+  display: inline-block;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.link:hover {
+  color: blue !important;
+  cursor: pointer !important;
+}
+
+.bottom-holder {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+}
