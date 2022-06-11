@@ -53,6 +53,7 @@ export class InvoiceComponent implements OnInit {
   }
 
   private invoiceID: number;
+  private changedInvoiceID: number;
   private height: number;
   public currentLoadData: any[] = [];
   public customerLoading = false;
@@ -70,7 +71,7 @@ export class InvoiceComponent implements OnInit {
   public selectedItemIDs = [];
   public selectedTherapies: any;
   public store: StoreModel;
-  public superadmin: string;
+  public superadminID: string;
   public therapyValue: any;
   public type: UserType;
   public userType = UserType;
@@ -129,9 +130,9 @@ export class InvoiceComponent implements OnInit {
     private parameterItemService: ParameterItemService,
     private pdfService: PDFService,
     private dashboardService: DashboardService,
-    private invoiceService: InvoiceService,
     private loadingScreenService: LoadingScreenService,
-    private dateService: DateService
+    private dateService: DateService,
+    private invoiceService: InvoiceService
   ) { }
 
   ngOnInit() {
@@ -139,7 +140,6 @@ export class InvoiceComponent implements OnInit {
     this.initializationData();
 
     this.helpService.setDefaultBrowserTabTitle();
-    this.invoiceID = Math.ceil(Math.random() * 10000);
   }
 
   public initializationConfig(): void {
@@ -159,7 +159,17 @@ export class InvoiceComponent implements OnInit {
   public initializationData(): void {
     this.type = this.helpService.getType();
     this.loggedInUserId = this.helpService.getMe();
-    this.superadmin = this.helpService.getSuperadmin();
+
+    this.superadminID = this.helpService.getSuperadmin();
+    this.parameterItemService.getSuperadminProfile(this.superadminID).subscribe((data) => {
+
+      this.superadminProfile = data[0];
+      this.invoicePrefix = this.superadminProfile.invoicePrefix;
+      this.invoiceID = this.superadminProfile.invoiceID;
+      this.changedInvoiceID = this.superadminProfile.invoiceID;
+
+      console.log(data);
+    });
 
     this.getParameters();
 
@@ -177,11 +187,6 @@ export class InvoiceComponent implements OnInit {
       }
     );
 
-    this.invoiceService.getInvoicePrefix(this.superadmin).then(data => {
-      if (data && data.length) {
-        this.invoicePrefix = data[0].prefix;
-      }
-    });
   }
 
   valueChange(event) {
@@ -197,14 +202,14 @@ export class InvoiceComponent implements OnInit {
 
   public getParameters(): void {
     this.customerService
-      .getParameters("Therapy", this.superadmin)
+      .getParameters("Therapy", this.superadminID)
       .subscribe((data: []) => {
         this.therapyValue = data.sort(function (a, b) {
           return a["sequence"] - b["sequence"];
         });
       });
 
-    this.parameterItemService.getVATTex(this.superadmin).subscribe((data: []) => {
+    this.parameterItemService.getVATTex(this.superadminID).subscribe((data: []) => {
       this.vatTaxList = data;
     });
   }
@@ -214,7 +219,7 @@ export class InvoiceComponent implements OnInit {
       this.customerLoading = true;
 
       const searchFilter = {
-        superadmin: this.superadmin,
+        superadmin: this.superadminID,
         filter: event,
       };
 
@@ -337,12 +342,6 @@ export class InvoiceComponent implements OnInit {
 
           console.log('storeList ', this.storeList);
         });
-
-        this.parameterItemService.getSuperadminProfile(this.superadmin).subscribe((data) => {
-          this.superadminProfile = data[0];
-
-          console.log(data);
-        });
       }
 
       this.gridViewData = process(this.currentLoadData, this.state);
@@ -393,14 +392,33 @@ export class InvoiceComponent implements OnInit {
     pdfMake
       .createPdf(docDefinition)
       .download(this.customerUser["firstname"] + this.customerUser["lastname"]);
+
+    this.updateInvoiceID();
+
   }
 
   public printPDF(): void {
     const docDefinition = this.setupPDF();
     pdfMake.createPdf(docDefinition).print();
+
+  }
+
+
+  private updateInvoiceID(): void {
+    const data = {
+      superAdminId: this.superadminID,
+      id: this.changedInvoiceID
+    }
+    console.log("updateInvoiceID");
+    this.invoiceService.updateInvoiceID(data);
   }
 
   private setupPDF() {
+
+    if (this.invoiceID === this.changedInvoiceID) {
+      this.changedInvoiceID++;
+    }
+
     const therapyPricesData = this.getTherapyAndPricesData();
 
     console.log('invoice store ', this.invoiceStore);
@@ -408,7 +426,10 @@ export class InvoiceComponent implements OnInit {
       ? this.invoiceStore
       : this.store;
 
-    let docDefinition = this.pdfService.getPDFDefinition(this.superadminProfile, store, this.customerUser, therapyPricesData, this.isPriceIncluded, this.invoicePrefix, this.invoiceLanguage);
+    const invoicePrefixID = this.invoicePrefix + "-" + this.invoiceID;
+
+    let docDefinition = this.pdfService.getPDFDefinition(this.superadminProfile, store, this.customerUser, therapyPricesData, this.isPriceIncluded, invoicePrefixID, this.invoiceLanguage);
+    this.updateInvoiceID();
 
     return docDefinition;
   }
@@ -505,6 +526,9 @@ export class InvoiceComponent implements OnInit {
   public downloadWord(): void {
     const componentRef = this;
 
+    if (this.invoiceID === this.changedInvoiceID) {
+      this.changedInvoiceID++;
+    }
     const data = this.getTherapyAndPricesData();
 
     let vatValues = [];
@@ -549,6 +573,7 @@ export class InvoiceComponent implements OnInit {
         doc.setData({
           invoice_title: componentRef.invoiceLanguage.invoiceTitle,
           invoice_number: componentRef.invoiceLanguage.invoiceSubTitle,
+          invoice_prefix: componentRef.invoicePrefix,
           invoice_id: componentRef.invoiceID,
           invoice_generated_date: componentRef.currentDateFormatted,
           billing_from_title: componentRef.invoiceLanguage.invoiceBillingTitleFrom,
@@ -619,6 +644,7 @@ export class InvoiceComponent implements OnInit {
         saveAs(out, filename);
 
         componentRef.loadingScreenService.stopLoading();
+        componentRef.updateInvoiceID();
       }
     )
   }

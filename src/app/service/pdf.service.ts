@@ -28,7 +28,7 @@ export class PDFService {
     }
   }
 
-  getPDFDefinition(superadminProfile, store, customerUser, therapyPricesData, isPriceIncluded, invoicePrefix, selectedLanguage?) {
+  getPDFDefinition(superadminProfile, store, customerUser, therapyPricesData, isPriceIncluded, invoicePrefixID, selectedLanguage?) {
     const invoiceLanguage = selectedLanguage ? selectedLanguage : this.language;
 
     const therapies = therapyPricesData.therapies;
@@ -52,7 +52,7 @@ export class PDFService {
       header: {
         columns: [
           {
-            text: invoiceLanguage.invoiceSubTitle + " " + (invoicePrefix ? invoicePrefix + 0 : 0),
+            text: invoiceLanguage.invoiceSubTitle + " " + invoicePrefixID,
             style: "documentHeaderLeft",
             width: "*",
           },

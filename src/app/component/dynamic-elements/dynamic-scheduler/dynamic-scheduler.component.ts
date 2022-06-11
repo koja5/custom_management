@@ -1767,11 +1767,7 @@ export class DynamicSchedulerComponent implements OnInit {
     console.log(this.events);
     this.calendars = [];
     const superadmin = this.helpService.getSuperadmin();
-    this.invoiceService.getInvoicePrefix(superadmin).then(data => {
-      if (data && data.length) {
-        this.invoicePrefix = data[0].prefix;
-      }
-    });
+
     this.initializeEventCategory();
 
     if (!this.checkPreselectedStore()) {

@@ -1966,6 +1966,9 @@
       "invoiceItem": {
         "type": "string"
       },
+      "invoiceID": {
+        "type": "string"
+      },
       "invoiceNetPrice": {
         "type": "string"
       },
@@ -6283,6 +6286,9 @@
             },
             {
               "key": "invoiceNetPrice"
+            },
+            {
+              "key": "invoiceID"
             }
           ]
         },

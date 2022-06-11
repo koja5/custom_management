@@ -12,7 +12,7 @@ export class HelpService {
     private http: HttpClient,
     private titleService: Title,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   postApiRequest(method, parametar) {
     return this.http.post(method, parametar).map((res) => res);

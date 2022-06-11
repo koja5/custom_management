@@ -8378,49 +8378,18 @@ router.get("/getDataForMassiveInvoice/:customerId", function (req, res, next) {
   });
 });
 
-router.post("/createInvoicePrefix", (req, res, next) => {
-  try {
-    connection.getConnection(function (err, conn) {
-      if (err) {
-        console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: err,
-        });
-      } else {
-        conn.query(
-          "insert into invoice_prefix SET ?",
-          [req.body],
-          function (err, rows, fields) {
-            conn.release();
-            if (err) {
-              res.json(false);
-              logger.log("error", err.sql + ". " + err.sqlMessage);
-            } else {
-              res.json(rows.insertId);
-            }
-          }
-        );
-      }
-    });
-  } catch (ex) {
-    logger.log("error", err.sql + ". " + err.sqlMessage);
-    res.json(ex);
-  }
-});
-
-router.post("/updateInvoicePrefix", function (req, res, next) {
+router.post("/updateInvoiceID", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
     }
     test = {};
-    var superAdminId = req.body.superAdminId;
+    var id = req.body.id;
+    var superAdmin = req.body.superAdminId;
 
     conn.query(
-      "UPDATE invoice_prefix SET ? where superAdminId = '" + superAdminId + "'",
-      [req.body],
+      "UPDATE users_superadmin SET invoiceID = " + id + " where id = '" + superAdmin + "'",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -8430,31 +8399,6 @@ router.post("/updateInvoicePrefix", function (req, res, next) {
             test.success = false;
           }
           res.json(test);
-        } else {
-          res.json(err);
-          logger.log("error", err.sql + ". " + err.sqlMessage);
-        }
-      }
-    );
-  });
-});
-
-router.get("/getInvoicePrefix/:id", function (req, res, next) {
-  connection.getConnection(function (err, conn) {
-    if (err) {
-      logger.log("error", err.sql + ". " + err.sqlMessage);
-      res.json(err);
-    }
-    test = {};
-    var id = req.body.id;
-
-    conn.query(
-      "SELECT * from `invoice_prefix` where superAdminId = ?",
-      [req.params.id],
-      function (err, rows) {
-        conn.release();
-        if (!err) {
-          res.json(rows);
         } else {
           res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
