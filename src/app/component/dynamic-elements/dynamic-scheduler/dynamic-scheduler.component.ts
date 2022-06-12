@@ -696,24 +696,6 @@ export class DynamicSchedulerComponent implements OnInit {
     return this.intl.formatDate(date, { skeleton: "Ed" });
   }
 
-  public getDateHoliday(value): string {
-    const date = value.getDate();
-    const month = value.getMonth();
-    const year = value.getYear();
-    const holiday = this.holidays.find(
-      (elem) =>
-        value &&
-        date >= elem.StartTime.getDate() &&
-        month == elem.StartTime.getMonth() &&
-        year == elem.StartTime.getYear() &&
-        date <= elem.EndTime.getDate() &&
-        month == elem.EndTime.getMonth() &&
-        year == elem.EndTime.getYear()
-    );
-
-    return holiday ? holiday.Subject : '';
-  }
-
   public onWeekDayChange(args: ChangeEventArgs): void {
     this.scheduleObj.firstDayOfWeek = args.value as number;
     this.setCalendarSettingsToDatabase(
@@ -1683,9 +1665,9 @@ export class DynamicSchedulerComponent implements OnInit {
           // console.log(r);
           this.allEvents.push({
             Subject: r.Subject,
-            StartTime: new Date(r.StartTime),
-            EndTime: new Date(r.EndTime),
-            IsAllDay: true
+            StartTime: new Date(r.StartTime).setHours(Number(this.startWork)),
+            EndTime: new Date(r.EndTime).setHours(Number(this.startWork + 1)),
+            IsAllDay: false
           });
 
           this.holidays.push({
@@ -2831,24 +2813,13 @@ export class DynamicSchedulerComponent implements OnInit {
       date.element.style.backgroundColor = "#e9ecef";
       date.element.style.pointerEvents = "none";
 
-      // if (date.elementType !== "monthDay" && this.currentView === "Month") {
+      // if (date.elementType === "dateHeader" && this.currentView !== "Month") {
+      //   const dateSplitted = date.date.toString().split(" ");
 
-      //   const span = document.createElement("SPAN");
-      //   date.element.appendChild(span);
-      //   span.innerHTML = holiday.Subject;
-      //   span.style.overflow = 'hidden';
-      //   span.style.whiteSpace = 'nowrap';
-      //   span.style.textOverflow = 'ellipsis';
-
+      //   // date - day - holiday
+      //   date.element.firstChild.innerText =
+      //     dateSplitted[2] + " " + dateSplitted[0] + " - " + holiday.Subject;
       // }
-
-      if (date.elementType === "dateHeader" && this.currentView !== "Month") {
-        const dateSplitted = date.date.toString().split(" ");
-
-        // date - day - holiday
-        date.element.firstChild.innerText =
-          dateSplitted[2] + " " + dateSplitted[0] + " - " + holiday.Subject;
-      }
     }
 
     if (date.elementType === "resourceHeader") {
@@ -3825,9 +3796,7 @@ export class DynamicSchedulerComponent implements OnInit {
     );
   }
 
-
   private updateInvoiceID(): void {
-
     if (this.invoiceID !== this.changedInvoiceID) {
       const data = {
         superAdminId: this.superadminProfile.id,
@@ -3835,13 +3804,13 @@ export class DynamicSchedulerComponent implements OnInit {
       }
       console.log("updateInvoiceID");
 
-      this.invoiceService.updateInvoiceID(data);
-
+      this.invoiceService.updateInvoiceID(data).then(() => {
+        this.invoiceID = this.changedInvoiceID;
+      });
     }
   }
 
   public downloadPDF(): void {
-
     const docDefinition = this.setupPDF();
 
     // pass file name
@@ -3850,6 +3819,7 @@ export class DynamicSchedulerComponent implements OnInit {
       .download(this.customerUser["firstname"] + this.customerUser["lastname"]);
 
     this.updateInvoiceID();
+
   }
 
   public printPDF(): void {

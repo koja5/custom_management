@@ -59,4 +59,4 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     },
   ],
 })
-export class ParametersModule {}
+export class ParametersModule { }

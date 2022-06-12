@@ -3,6 +3,7 @@ import { HolidayModel } from './../models/holiday-model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HolidayTemplate } from '../models/holiday-template.model';
+import { query } from 'server/routes/logger';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +17,14 @@ export class HolidayService {
       .get<HolidayModel[]>("/api/getHolidays/" + superAdminId).map((res) => res);
   }
 
-  public getHolidaysByTemplate(superAdminId: string, templateId: number): Promise<HolidayModel[]> {
+  public getHolidaysByTemplate(templateId: number): Promise<HolidayModel[]> {
     return this.httpClient
-      .get<HolidayModel[]>("/api/getHolidaysByTemplate/" + superAdminId + "/" + templateId).map((res) => res).toPromise();
+      .get<HolidayModel[]>("/api/getHolidaysByTemplate/" + templateId).map((res) => res).toPromise();
+  }
+
+  public getHolidaysByTemplates(templateIds): Promise<HolidayModel[]> {
+    return this.httpClient
+      .get<HolidayModel[]>("/api/getHolidaysByTemplates/" + templateIds).toPromise();
   }
 
   public createHoliday(data, callback): void {
@@ -40,6 +46,20 @@ export class HolidayService {
       .subscribe(val => callback(val));
   }
 
+  public createStoreTemplateConnection(ids, storeId, callback): void {
+    let query = "";
+    ids.forEach(id => {
+      query += "(" + storeId + "," + id + "),"
+    });
+
+    const temp = query.slice(0, -1);
+    console.log(query.slice(0, -1));
+    this.httpClient
+      .post("/api/createStoreTemplateConnection", { query: temp })
+      .map(res => res)
+      .subscribe(val => callback(val));
+  }
+
   public updateHoliday(data, callback): void {
     this.httpClient
       .post("/api/updateHoliday", data)
@@ -48,7 +68,6 @@ export class HolidayService {
   }
 
   public deleteHoliday(id, callback): void {
-    console.log(id);
     this.httpClient
       .get("/api/deleteHoliday/" + id)
       .map(res => res)

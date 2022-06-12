@@ -87,6 +87,10 @@ export class DashboardService {
     return this.http.get("/api/getTemplateAccount");
   }
 
+  getTemplateAccountPromise() {
+    return this.http.get("/api/getTemplateAccount").toPromise();
+  }
+
   getTemplateAccountByUserId(id) {
     return this.http.get("/api/getTemplateAccountByUserId/" + id).toPromise();
   }
