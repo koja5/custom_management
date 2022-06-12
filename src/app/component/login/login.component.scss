@@ -285,8 +285,8 @@ a:hover {
   cursor: pointer;
 }
 
-.checkbox input[type="checkbox"] + .label-text:after,
-.checkbox input[type="checkbox"] + .label-text:before {
+.checkbox input[type="checkbox"]+.label-text:after,
+.checkbox input[type="checkbox"]+.label-text:before {
   font-size: 11px;
   display: inline-block;
   width: 17px;
@@ -298,7 +298,7 @@ a:hover {
   left: 0;
 }
 
-.checkbox input[type="checkbox"] + .label-text:before {
+.checkbox input[type="checkbox"]+.label-text:before {
   content: "";
   background-color: #fff;
   border: 1px solid #ced4da;
@@ -307,7 +307,7 @@ a:hover {
   transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
 }
 
-.checkbox input[type="checkbox"] + .label-text:after {
+.checkbox input[type="checkbox"]+.label-text:after {
   background-color: #4f77ff;
   color: #fff;
   border-radius: 2px;
@@ -315,13 +315,13 @@ a:hover {
   line-height: 1.4;
 }
 
-.checkbox input[type="checkbox"]:focus + .label-text:before {
+.checkbox input[type="checkbox"]:focus+.label-text:before {
   outline: dotted thin;
   outline: -webkit-focus-ring-color auto 5px;
   outline-offset: -2px;
 }
 
-.checkbox input[type="checkbox"]:checked + .label-text:after {
+.checkbox input[type="checkbox"]:checked+.label-text:after {
   font-family: FontAwesome;
   content: "\f00c";
 }
@@ -369,13 +369,13 @@ a:hover {
 }
 
 @media (min-width:320px) and (max-width:767px) {
-    .authfy-login {
-        height: 540px
-    }
+  .authfy-login {
+    height: 540px
+  }
 
-    .authfy-panel {
-        padding: 0 20px
-    }
+  .authfy-panel {
+    padding: 0 20px
+  }
 }
 
 @media screen and (min-width: 533px) and (max-width: 568px) {
@@ -385,18 +385,18 @@ a:hover {
 }
 
 @media (max-width:320px) {
-    .authfy-panel-left {
-        height: 100%
-    }
+  .authfy-panel-left {
+    height: 100%
+  }
 
-    .remember-row .col-sm-6 {
-        width: 100%
-    }
+  .remember-row .col-sm-6 {
+    width: 100%
+  }
 
-    .authfy-login .forgotPwd {
-        text-align: left;
-        margin-top: 0
-    }
+  .authfy-login .forgotPwd {
+    text-align: left;
+    margin-top: 0
+  }
 }
 
 .spinner.loading {
@@ -424,30 +424,39 @@ a:hover {
 }
 
 .authfy-panel-left {
-    overflow: auto;
+  overflow: auto;
 }
 
 .links-wrapper {
-    border-top: 1px silver solid;
-    padding-top: 5px;
-    display: flex;
-    justify-content: space-around;
-    text-align: center;
+  padding-top: 5px;
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
 }
 
 .link {
-    display: inline-block;
-    margin-left: 10px;
-    margin-right: 10px;
+  display: inline-block;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .link:hover {
-    color: blue !important;
-    cursor: pointer;
+  color: blue !important;
+  cursor: pointer;
 }
 
-.bottom-holder {
+@media (max-height: 747px) {
+  .bottom-holder {
+    margin: 0px;
+    width: 100%;
+  }
+}
+
+
+@media (min-height: 747px) {
+  .bottom-holder {
     position: absolute;
     bottom: 0px;
     width: 100%;
+  }
 }
