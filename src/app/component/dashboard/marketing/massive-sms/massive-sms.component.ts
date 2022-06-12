@@ -69,20 +69,31 @@ export class MassiveSmsComponent implements OnInit {
 
   sendSms(event) {
     this.dynamicService
-      .callApiPost("/api/sendMassiveSMS", this.changeData)
+      .callApiGet(
+        "/api/checkAvailableSmsCount",
+        this.helpService.getSuperadmin()
+      )
       .subscribe((data) => {
-        if (data) {
-          this.helpService.successToastr(
-            this.language.successExecutedActionTitle,
-            this.language.successExecutedActionText
-          );
+        if (data && data[0] && data[0]["count"] >= this.allRecipients.length) {
+          this.dynamicService
+            .callApiPost("/api/sendMassiveSMS", this.changeData)
+            .subscribe((data) => {
+              if (data) {
+                this.helpService.successToastr(
+                  this.language.successExecutedActionTitle,
+                  this.language.successExecutedActionText
+                );
+              } else {
+                this.helpService.errorToastr(
+                  this.language.errorExecutedActionTitle,
+                  this.language.errorExecutedActionText
+                );
+              }
+            });
+          this.recipients.close();
         } else {
-          this.helpService.errorToastr(
-            this.language.errorExecutedActionTitle,
-            this.language.errorExecutedActionText
-          );
+          this.helpService.warningToastr(this.language.needToBuySms, "");
         }
       });
-    this.recipients.close();
   }
 }

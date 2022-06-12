@@ -18,6 +18,7 @@ export class RegistrationPatientComponent implements OnInit {
   public errorMessage: any;
   public language: any;
   public codeStatus = CodeStatus;
+  public agreeValue = false;
 
   constructor(
     private service: CustomersService,
@@ -35,36 +36,41 @@ export class RegistrationPatientComponent implements OnInit {
   }
 
   submitForm(event) {
-    this.errorMessage = false;
-    this.data.storeId = this.id;
-    if (this.data.password === this.data.confirmPassword) {
-      this.service
-        .createCustomerFromPatientForm(this.data)
-        .subscribe((data) => {
-          if (data["success"]) {
-            this.router.navigate(["template/created-account-successed"]);
-            this.data.language = this.packLanguage.getLanguageForConfirmMail();
-            const registrationData = {
-              email: this.data.email,
-              password: this.data.password,
-            };
-            this.helpService.setLocalStorage(
-              "registrationData",
-              JSON.stringify(registrationData)
-            );
-            this.mailService
-              .sendCustomerVerificationMail(this.data)
-              .subscribe((data) => {
-                console.log(data);
-              });
-          } else {
-            if (data["info"] === this.codeStatus.AlreadyExists) {
-              this.errorMessage = this.language.accountExists;
+    if (this.agreeValue) {
+      this.errorMessage = false;
+      this.data.storeId = this.id;
+      if (this.data.password === this.data.confirmPassword) {
+        this.service
+          .createCustomerFromPatientForm(this.data)
+          .subscribe((data) => {
+            if (data["success"]) {
+              this.router.navigate(["template/created-account-successed"]);
+              this.data.language =
+                this.packLanguage.getLanguageForConfirmMail();
+              const registrationData = {
+                email: this.data.email,
+                password: this.data.password,
+              };
+              this.helpService.setLocalStorage(
+                "registrationData",
+                JSON.stringify(registrationData)
+              );
+              this.mailService
+                .sendCustomerVerificationMail(this.data)
+                .subscribe((data) => {
+                  console.log(data);
+                });
+            } else {
+              if (data["info"] === this.codeStatus.AlreadyExists) {
+                this.errorMessage = this.language.accountExists;
+              }
             }
-          }
-        });
+          });
+      } else {
+        this.errorMessage = this.language.passwordsIsNotEqual;
+      }
     } else {
-      this.errorMessage = this.language.passwordsIsNotEqual;
+      this.errorMessage = this.language.needToAgree;
     }
   }
 }

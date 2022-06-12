@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit {
   private superadmin: number;
   public userAccessId: number;
   public userAccessDevice: string;
+  public agreeValue = false;
 
   public data = {
     id: "",
@@ -60,7 +61,7 @@ export class LoginComponent implements OnInit {
     private packLanguage: PackLanguageService,
     private storageService: StorageService,
     public http: HttpClient
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.initialization();
@@ -306,23 +307,30 @@ export class LoginComponent implements OnInit {
       this.data.shortname &&
       this.data.password !== ""
     ) {
-      this.service.signUp(this.data, (val) => {
-        if (!val.success) {
-          this.errorInfo = val.info;
-        } else {
-          this.data["language"] = this.packLanguage.getLanguageForConfirmMail();
-          this.mailService.sendMail(this.data, function () {
-            console.log("Mail uspesno poslat");
-          });
-          this.signUpInfo = JSON.parse(localStorage.getItem("language"))[
-            "checkMailForActive"
-          ];
-          setTimeout(() => {
-            this.loginActive();
-          }, 3000);
-        }
-        // form.reset();
-      });
+      if (this.agreeValue) {
+        this.service.signUp(this.data, (val) => {
+          if (!val.success) {
+            this.errorInfo = val.info;
+          } else {
+            this.data["language"] =
+              this.packLanguage.getLanguageForConfirmMail();
+            this.mailService.sendMail(this.data, function () {
+              console.log("Mail uspesno poslat");
+            });
+            this.signUpInfo = JSON.parse(localStorage.getItem("language"))[
+              "checkMailForActive"
+            ];
+            setTimeout(() => {
+              this.loginActive();
+            }, 3000);
+          }
+          // form.reset();
+        });
+      } else {
+        this.errorInfo = JSON.parse(localStorage.getItem("language"))[
+          "needToAgree"
+        ];
+      }
     } else {
       this.errorInfo = JSON.parse(localStorage.getItem("language"))[
         "fillFields"
@@ -468,9 +476,5 @@ export class LoginComponent implements OnInit {
       this.loginForm = "active";
       this.loginInfo = this.language.successUserAccessDeviceName;
     });
-  }
-
-  public onGoTo(urlTogo: string): void {
-    this.router.navigateByUrl(urlTogo);
   }
 }

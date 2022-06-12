@@ -92,6 +92,11 @@ function sendHappyBirthdayViaSMS() {
                             signature += to.smsSignatureEmail + " \n";
                           }
                         }
+
+                        if (language?.smsSignaturePoweredBy) {
+                          signature += language?.smsSignaturePoweredBy + " \n";
+                        }
+
                         const fullMessage = message + "\n\n" + signature;
                         console.log(fullMessage);
                         sendSmsFromMail(phoneNumber, fullMessage);

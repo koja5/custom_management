@@ -13,7 +13,6 @@ const logger = require("./logger");
 const sendSmsFromMail = require("./ftpUploadSMS");
 const { delay } = require("rxjs-compat/operator/delay");
 const macAddress = require("os").networkInterfaces();
-const checkSMSCount = require("./shared-method/checkSMSCount");
 
 var link = process.env.link_api;
 /*
@@ -5259,40 +5258,8 @@ router.post("/sendSMS", function (req, res) {
                       time +
                       clinic +
                       signature;
-                    var content = "To: " + phoneNumber + "\r\n\r\n" + message;
-                    var fileName = "server/sms/" + phoneNumber + ".txt";
-                    conn.query(
-                      "select * from sms_count where superadmin = ?",
-                      [sms.superadmin],
-                      function (err, smsCount, fields) {
-                        console.log("PROSAO!!");
-                        if (smsCount.length > 0 && smsCount[0].count > 0) {
-                          console.log("PROSAO!!");
-                          sendSmsFromMail(phoneNumber, message);
-                          conn.query(
-                            "update sms_count set count = count - 1 where superadmin = ?",
-                            [sms.superadmin],
-                            function (err, smsCount, fields) {
-                              conn.release();
-                              if (smsCount) {
-                                res.send(true);
-                              } else {
-                                res.send(false);
-                              }
-                            }
-                          );
-                        } else {
-                          /*logger.log(
-                            "warning",
-                            "User with ID" + req.body.id + " need to buy SMS!"
-                          );*/
-                          res.send({
-                            info: false,
-                            message: "buy_sms",
-                          });
-                        }
-                      }
-                    );
+                    updateAvailableSMSCount(1, req.body.superadmin);
+                    sendSmsFromMail(phoneNumber, message);
                   } else if (smsMessage.length === 0) {
                     res.send({
                       info: false,
@@ -5317,6 +5284,65 @@ router.post("/sendSMS", function (req, res) {
   });
 });
 
+router.get("/checkAvailableSMSCount/:superadmin", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        res.json(err);
+      } else {
+        conn.query(
+          "select * from sms_count where superadmin = ?",
+          [req.params.superadmin],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(err);
+            } else {
+              res.json(rows);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+function updateAvailableSMSCount(usedSms, superadmin) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      return err;
+    }
+    conn.query(
+      "select * from sms_count where superadmin = ?",
+      [superadmin],
+      function (err, rows, fields) {
+        conn.release();
+        if (err) {
+          res.json(err);
+        } else if (rows.length > 0) {
+          const newCount = rows[0].count - usedSms;
+          conn.query(
+            "update sms_count set count = ? where superadmin = ?",
+            [newCount, superadmin],
+            function (err, rows) {
+              console.log(err);
+              if (!err) {
+                return true;
+              } else {
+                return false;
+              }
+            }
+          );
+        }
+      }
+    );
+  });
+}
+
 function checkAvailableCode(phone, codes) {
   for (let i = 0; i < codes.length; i++) {
     if (phone && phone.startsWith(codes[i].area_code)) {
@@ -5338,7 +5364,7 @@ function checkSMSCount(superadmin, needCount) {
       function (err, rows) {
         if (rows && rows.length > 0) {
           console.log(rows);
-          if (rows[0].count > needCount) {
+          if (rows[0].count >= needCount) {
             const updateCount = rows[0].count - needCount;
             conn.query(
               "update sms_count set count = ? where superadmin = ?",
@@ -5346,7 +5372,6 @@ function checkSMSCount(superadmin, needCount) {
               function (err, rows) {
                 console.log(err);
                 if (!err) {
-                  console.log("USAO SAM OVDE!");
                   return true;
                 } else {
                   return false;
@@ -5372,16 +5397,14 @@ router.post("/sendCustomSMS", function (req, res) {
       var message = req.body.message;
       var content = "To: " + phoneNumber + "\r\n\r\n" + message;
       var fileName = "server/sms/" + phoneNumber + ".txt";
-
-      console.log("USAO!!!");
       sendSmsFromMail(phoneNumber, message);
-      checkSMSCount(req.body.superadmin, 1);
+      updateAvailableSMSCount(1, req.body.superadmin);
       res.send(true);
     } else {
       res.send(false);
       logger.log(
         "warn",
-        `Number ${req.body.number} is not start with available area code!`
+        `Number ${req.body.number} is not start with available area code or clinic ${req.body.superadmin} doesn't have SMS!`
       );
     }
   });
@@ -5536,63 +5559,71 @@ router.post("/sendMassiveSMS", function (req, res) {
                   " and " +
                   question,
                 function (err, rows) {
-                  splitSenderToPartArray(rows, codes, req);
-                  // rows.forEach(async function (to, i, array) {
-                  //   count++;
-                  //   var phoneNumber = to.mobile ? to.mobile : to.telephone;
-                  //   if (
-                  //     checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
-                  //     req.body.message
-                  //   ) {
-                  //     var message =
-                  //       (to.smsSubject
-                  //         ? to.smsSubject
-                  //         : language.initialGreetingSMSReminder) +
-                  //       " " +
-                  //       to.shortname +
-                  //       ", \n \n" +
-                  //       req.body.message;
-                  //     var signature = "";
-                  //     if (to.signatureAvailable) {
-                  //       if (to.smsSignatureCompanyName) {
-                  //         signature += to.smsSignatureCompanyName + "\n";
-                  //       }
-                  //       if (to.smsSignatureAddress1) {
-                  //         signature += to.smsSignatureAddress1 + "\n";
-                  //       }
-                  //       if (to.smsSignatureAddress2) {
-                  //         signature += to.smsSignatureAddress2 + "\n";
-                  //       }
-                  //       if (to.smsSignatureAddress3) {
-                  //         signature += to.smsSignatureAddress3 + "\n";
-                  //       }
-                  //       if (to.smsSignatureTelephone) {
-                  //         signature += to.smsSignatureTelephone + " \n";
-                  //       }
-                  //       if (to.smsSignatureMobile) {
-                  //         signature += to.smsSignatureMobile + " \n";
-                  //       }
-                  //       if (to.smsSignatureEmail) {
-                  //         signature += to.smsSignatureEmail + " \n";
-                  //       }
-                  //     }
-                  //     var content =
-                  //       "To: " +
-                  //       phoneNumber +
-                  //       "\r\n\r\n" +
-                  //       message +
-                  //       "\n\n" +
-                  //       signature;
-                  //     const fullMessage = message + "\n\n" + signature;
-                  //     var fileName = "server/sms/" + phoneNumber + ".txt";
-                  //     sendSmsFromMail(phoneNumber, fullMessage);
-                  //   } else {
-                  //     logger.log(
-                  //       "warn",
-                  //       `Number ${phoneNumber} is not start with available area code!`
-                  //     );
-                  //   }
-                  // });
+                  // splitSenderToPartArray(rows, codes, req, language);
+                  globalCount = 0;
+                  count = 0;
+                  rows.forEach(async function (to, i, array) {
+                    var phoneNumber = to.mobile ? to.mobile : to.telephone;
+                    if (
+                      checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
+                      req.body.message
+                    ) {
+                      count++;
+                      var message =
+                        (to.smsSubject
+                          ? to.smsSubject
+                          : language.initialGreetingSMSReminder) +
+                        " " +
+                        to.shortname +
+                        ", \n \n" +
+                        req.body.message;
+                      var signature = "";
+                      if (to.signatureAvailable) {
+                        if (to.smsSignatureCompanyName) {
+                          signature += to.smsSignatureCompanyName + "\n";
+                        }
+                        if (to.smsSignatureAddress1) {
+                          signature += to.smsSignatureAddress1 + "\n";
+                        }
+                        if (to.smsSignatureAddress2) {
+                          signature += to.smsSignatureAddress2 + "\n";
+                        }
+                        if (to.smsSignatureAddress3) {
+                          signature += to.smsSignatureAddress3 + "\n";
+                        }
+                        if (to.smsSignatureTelephone) {
+                          signature += to.smsSignatureTelephone + " \n";
+                        }
+                        if (to.smsSignatureMobile) {
+                          signature += to.smsSignatureMobile + " \n";
+                        }
+                        if (to.smsSignatureEmail) {
+                          signature += to.smsSignatureEmail + " \n";
+                        }
+                      }
+
+                      if (language.smsSignaturePoweredBy) {
+                        signature += language.smsSignaturePoweredBy + " \n";
+                      }
+
+                      var content =
+                        "To: " +
+                        phoneNumber +
+                        "\r\n\r\n" +
+                        message +
+                        "\n\n" +
+                        signature;
+                      const fullMessage = message + "\n\n" + signature;
+                      var fileName = "server/sms/" + phoneNumber + ".txt";
+                      sendSmsFromMail(phoneNumber, fullMessage);
+                    } else {
+                      logger.log(
+                        "warn",
+                        `Number ${phoneNumber} is not start with available area code!`
+                      );
+                    }
+                  });
+                  updateAvailableSMSCount(count, req.body.superadmin);
                   res.send(true);
                 }
               );
@@ -5633,9 +5664,9 @@ function splitSenderArray(rows) {
   }, timeCount * 1000);
 }
 
-function splitSenderToPartArray(rows, codes, req) {
-  setTimeout(() => {
-    rows.forEach(async function (to, i, array) {
+function splitSenderToPartArray(rows, codes, req, language) {
+  rows.forEach(async function (to, i, array) {
+    setTimeout(() => {
       count++;
       var phoneNumber = to.mobile ? to.mobile : to.telephone;
       if (
@@ -5674,6 +5705,11 @@ function splitSenderToPartArray(rows, codes, req) {
             signature += to.smsSignatureEmail + " \n";
           }
         }
+
+        if (language?.smsSignaturePoweredBy) {
+          signature += language?.smsSignaturePoweredBy + " \n";
+        }
+
         var content =
           "To: " + phoneNumber + "\r\n\r\n" + message + "\n\n" + signature;
         const fullMessage = message + "\n\n" + signature;
@@ -5684,9 +5720,14 @@ function splitSenderToPartArray(rows, codes, req) {
           timeCount++;
           console.log("-----------------------------");
           count = 0;
-          splitSenderToPartArray(rows.splice(globalCount, count), codes, req);
+          splitSenderToPartArray(
+            rows.splice(globalCount, count),
+            codes,
+            req,
+            language
+          );
         }
-        // console.log(phoneNumber);
+        console.log(phoneNumber);
         sendSmsFromMail(phoneNumber, fullMessage);
       } else {
         logger.log(
@@ -6334,13 +6375,6 @@ router.post("/loadTemplateAccount", function (req, res, next) {
       req.body.account_id,
       req.body.id
     );
-    insertFromTemplate(conn, "vattax_list", req.body.account_id, req.body.id);
-    insertFromTemplate(
-      conn,
-      "work_time_colors",
-      req.body.account_id,
-      req.body.id
-    );
     insertFromTemplate(
       conn,
       "recommendation_list",
@@ -6354,20 +6388,93 @@ router.post("/loadTemplateAccount", function (req, res, next) {
       req.body.id
     );
     insertFromTemplate(conn, "social_list", req.body.account_id, req.body.id);
-    insertFromTemplate(conn, "doctors_list", req.body.account_id, req.body.id);
     insertFromTemplate(conn, "doctor_list", req.body.account_id, req.body.id);
-    insertFromTemplate(conn, "state_list", req.body.account_id, req.body.id);
+    insertFromTemplate(conn, "doctors_list", req.body.account_id, req.body.id);
+    insertFromTemplate(conn, "vattax_list", req.body.account_id, req.body.id);
     insertFromTemplate(conn, "cs_list", req.body.account_id, req.body.id);
+    insertFromTemplate(conn, "state_list", req.body.account_id, req.body.id);
     insertFromTemplate(
       conn,
       "event_category",
       req.body.account_id,
       req.body.id
     );
+    insertFromTemplate(
+      conn,
+      "work_time_colors",
+      req.body.account_id,
+      req.body.id
+    );
     // insertFromTemplate(conn, "tasks", req.body.account_id, req.body.id);
     //customer
-    getCustomersDemoData(conn, "customers", req.body.account_id, req.body.id);
     insertFromTemplate(conn, "reminder", req.body.account_id, req.body.id);
+    insertFromTemplate(
+      conn,
+      "mail_reminder_message",
+      req.body.account_id,
+      req.body.id
+    );
+    insertFromTemplate(
+      conn,
+      "mail_approve_reservation",
+      req.body.account_id,
+      req.body.id
+    );
+    insertFromTemplate(
+      conn,
+      "mail_deny_reservation",
+      req.body.account_id,
+      req.body.id
+    );
+    insertFromTemplate(
+      conn,
+      "mail_confirm_arrival",
+      req.body.account_id,
+      req.body.id
+    );
+    insertFromTemplate(
+      conn,
+      "mail_patient_form_registration",
+      req.body.account_id,
+      req.body.id
+    );
+    insertFromTemplate(
+      conn,
+      "mail_massive_message",
+      req.body.account_id,
+      req.body.id
+    );
+    insertFromTemplate(
+      conn,
+      "mail_patient_created_account",
+      req.body.account_id,
+      req.body.id
+    );
+    insertFromTemplate(
+      conn,
+      "mail_birthday_congratulation",
+      req.body.account_id,
+      req.body.id
+    );
+    insertFromTemplate(
+      conn,
+      "sms_birthday_congratulation",
+      req.body.account_id,
+      req.body.id
+    );
+    insertFromTemplate(
+      conn,
+      "sms_massive_message",
+      req.body.account_id,
+      req.body.id
+    );
+    insertFromTemplate(
+      conn,
+      "sms_reminder_message",
+      req.body.account_id,
+      req.body.id
+    );
+    getCustomersDemoData(conn, "customers", req.body.account_id, req.body.id);
     insertFromTemplate(conn, "vaucher", req.body.account_id, req.body.id);
     insertFromTemplateForUsers(conn, "users", req.body.account_id, req.body.id);
     // insertFromTemplate(conn, "store", req.body.account_id, req.body.id);

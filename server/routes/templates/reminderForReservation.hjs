@@ -169,6 +169,7 @@
               <br />
               {{signatureEmail}}
             </p>
+            <br />
           </div>
 
           <div

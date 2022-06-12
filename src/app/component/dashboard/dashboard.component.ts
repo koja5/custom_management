@@ -23,7 +23,6 @@ declare var document: any;
 export class DashboardComponent implements OnInit {
   @ViewChild("settings") settings: Modal;
   @ViewChild("firstLogin") firstLogin: Modal;
-  @ViewChild("aboutUs") aboutUs: Modal;
   @ViewChild("templateLoading") templateLoading: Modal;
   public sidebar = "";
   public sidebarMobile = "";
@@ -66,7 +65,7 @@ export class DashboardComponent implements OnInit {
     private mongo: MongoService,
     private helpService: HelpService,
     private storageService: StorageService,
-    private holidayService: HolidayService,
+    private holidayService: HolidayService
   ) {
     this.helpService.setTitleForBrowserTab("ClinicNode");
   }
@@ -354,10 +353,6 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  public onAboutUsClick() {
-    this.aboutUs.open()
-  }
-
   toggleFullscreen(): void {
     const isInFullScreen =
       (document.fullscreenElement && document.fullscreenElement !== null) ||
@@ -530,9 +525,4 @@ export class DashboardComponent implements OnInit {
       }
     }
   }
-
-  public onGoTo(urlTogo: string): void {
-    this.router.navigateByUrl(urlTogo);
-  }
-
 }
