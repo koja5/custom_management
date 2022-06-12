@@ -206,6 +206,12 @@
       "exportToPDF": {
         "type": "string"
       },
+      "exportAllToExcel": {
+        "type": "string"
+      },
+      "exportPageToPDF": {
+        "type": "string"
+      },
       "pagerPage": {
         "type": "string"
       },
@@ -4150,6 +4156,12 @@
             },
             {
               "key": "exportToPDF"
+            },
+            {
+              "key": "exportAllToExcel"
+            },
+            {
+              "key": "exportPageToPDF"
             },
             {
               "key": "uploadFromExcel"
