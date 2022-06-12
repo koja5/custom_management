@@ -6,10 +6,12 @@ import { Injectable } from '@angular/core';
 })
 export class InvoiceService {
 
-  constructor(public http: HttpClient) { }
+  constructor(public httpClient: HttpClient) { }
 
   public updateInvoiceID(data) {
-    return this.http.post("/api/updateInvoiceID", data);
+    return this.httpClient.post("/api/updateInvoiceID", data)
+      .map(res => res)
+      .subscribe();
   }
 
 }

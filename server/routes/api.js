@@ -8389,19 +8389,15 @@ router.post("/updateInvoiceID", function (req, res, next) {
     var superAdmin = req.body.superAdminId;
 
     conn.query(
-      "UPDATE users_superadmin SET invoiceID = " + id + " where id = '" + superAdmin + "'",
-      function (err, rows) {
+      "UPDATE users_superadmin SET invoiceID = '" + id + "' where id = '" + superAdmin + "'",
+      function (err, rows, fields) {
         conn.release();
-        if (!err) {
-          if (!err) {
-            test.success = true;
-          } else {
-            test.success = false;
-          }
-          res.json(test);
-        } else {
-          res.json(err);
+        if (err) {
           logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(false);
+          console.log(err);
+        } else {
+          res.json(true);
         }
       }
     );

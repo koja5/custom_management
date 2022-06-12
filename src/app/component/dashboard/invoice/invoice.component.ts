@@ -394,23 +394,27 @@ export class InvoiceComponent implements OnInit {
       .download(this.customerUser["firstname"] + this.customerUser["lastname"]);
 
     this.updateInvoiceID();
-
   }
 
   public printPDF(): void {
     const docDefinition = this.setupPDF();
     pdfMake.createPdf(docDefinition).print();
 
+    this.updateInvoiceID();
   }
 
-
   private updateInvoiceID(): void {
-    const data = {
-      superAdminId: this.superadminID,
-      id: this.changedInvoiceID
+
+    if (this.invoiceID !== this.changedInvoiceID) {
+      const data = {
+        superAdminId: this.superadminID,
+        id: this.changedInvoiceID
+      }
+      console.log("updateInvoiceID");
+
+      this.invoiceService.updateInvoiceID(data);
+
     }
-    console.log("updateInvoiceID");
-    this.invoiceService.updateInvoiceID(data);
   }
 
   private setupPDF() {
@@ -429,7 +433,6 @@ export class InvoiceComponent implements OnInit {
     const invoicePrefixID = this.invoicePrefix + "-" + this.invoiceID;
 
     let docDefinition = this.pdfService.getPDFDefinition(this.superadminProfile, store, this.customerUser, therapyPricesData, this.isPriceIncluded, invoicePrefixID, this.invoiceLanguage);
-    this.updateInvoiceID();
 
     return docDefinition;
   }
@@ -644,6 +647,7 @@ export class InvoiceComponent implements OnInit {
         saveAs(out, filename);
 
         componentRef.loadingScreenService.stopLoading();
+
         componentRef.updateInvoiceID();
       }
     )

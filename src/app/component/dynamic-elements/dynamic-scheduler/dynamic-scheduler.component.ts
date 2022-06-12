@@ -399,9 +399,10 @@ export class DynamicSchedulerComponent implements OnInit {
   eventChange = false;
   adminUser: any;
   public template: any;
-  invoicePrefix: any;
   superadminProfile: any;
   isDateSet: boolean = false;
+  invoiceID: any;
+  changedInvoiceID: any;
 
   public generateEvents(): Object[] {
     const eventData: Object[] = [];
@@ -3113,6 +3114,11 @@ export class DynamicSchedulerComponent implements OnInit {
 
     this.parameterItemService.getSuperadminProfile(superadmin).subscribe((data) => {
       this.superadminProfile = data[0];
+      this.invoiceID = this.superadminProfile.invoicePrefix + '-' + this.superadminProfile.invoiceID;
+
+      console.log('invoiceID', this.invoiceID);
+
+      this.changedInvoiceID = this.superadminProfile.invoiceID;
 
       console.log(data);
     });
@@ -3819,6 +3825,21 @@ export class DynamicSchedulerComponent implements OnInit {
     );
   }
 
+
+  private updateInvoiceID(): void {
+
+    if (this.invoiceID !== this.changedInvoiceID) {
+      const data = {
+        superAdminId: this.superadminProfile.id,
+        id: this.changedInvoiceID
+      }
+      console.log("updateInvoiceID");
+
+      this.invoiceService.updateInvoiceID(data);
+
+    }
+  }
+
   public downloadPDF(): void {
 
     const docDefinition = this.setupPDF();
@@ -3827,15 +3848,16 @@ export class DynamicSchedulerComponent implements OnInit {
     pdfMake
       .createPdf(docDefinition)
       .download(this.customerUser["firstname"] + this.customerUser["lastname"]);
+
+    this.updateInvoiceID();
   }
 
   public printPDF(): void {
 
-    console.log(this.store);
-
-
     const docDefinition = this.setupPDF();
     pdfMake.createPdf(docDefinition).print();
+
+    this.updateInvoiceID();
   }
 
   private setupPDF() {
@@ -3926,7 +3948,7 @@ export class DynamicSchedulerComponent implements OnInit {
       header: {
         columns: [
           {
-            text: this.language.invoiceSubTitle + " " + (this.invoicePrefix ? this.invoicePrefix + 0 : 0),
+            text: this.language.invoiceSubTitle + " " + this.invoiceID,
             style: "documentHeaderLeft",
             width: "*",
           },
