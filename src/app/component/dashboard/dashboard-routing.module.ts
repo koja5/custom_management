@@ -47,6 +47,7 @@ import { SmsMassiveComponent } from "./parameters/sms-massive/sms-massive.compon
 import { InvoiceComponent } from "./invoice/invoice.component";
 import { SmsBirthdayCongratulationComponent } from "./parameters/sms-birthday-congratulation/sms-birthday-congratulation.component";
 import { MailBirthdayCongratulationComponent } from "./parameters/mail-birthday-congratulation/mail-birthday-congratulation.component";
+import { HelpCenterComponent } from "./help-center/help-center.component"
 
 const routes: Routes = [
   {
@@ -58,6 +59,10 @@ const routes: Routes = [
     path: "home",
     component: DashboardComponent,
     children: [
+      {
+        path: "help-center",
+        component: HelpCenterComponent,
+      },
       { path: "", redirectTo: "task", pathMatch: "full" },
       /*{ path: "calendar", component: TaskComponent },*/
       { path: "task", component: DynamicSchedulerComponent },

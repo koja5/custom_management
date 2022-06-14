@@ -253,7 +253,6 @@ export class DashboardComponent implements OnInit {
     } else {
       this.sidebar = "";
     }
-
     this.helpService.setLocalStorage("sidebar", this.sidebar);
   }
 
@@ -525,4 +524,5 @@ export class DashboardComponent implements OnInit {
       }
     }
   }
+
 }
