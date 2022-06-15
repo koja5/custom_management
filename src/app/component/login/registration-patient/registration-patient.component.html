@@ -2,10 +2,7 @@
   <main class="sign-up">
     <div class="sign-up__container">
       <div class="sign-up__image">
-        <img
-          class="cover-photo"
-          src="../../../../assets/images/computer-1867758_1920-min.jpg"
-        />
+        <img class="cover-photo" src="../../../../assets/images/computer-1867758_1920-min.jpg" />
       </div>
       <div class="sign-up__content">
         <header class="sign-up__header">
@@ -13,40 +10,20 @@
           <h3 class="sign-up__descr">{{ language.signUpTitle }}</h3>
           <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
         </header>
-        <form
-          class="sign-up__form form"
-          #form="ngForm"
-          (ngSubmit)="submitForm($event)"
-        >
+        <form class="sign-up__form form" #form="ngForm" (ngSubmit)="submitForm($event)">
           <div class="form__row form__row--two">
             <div class="input form__inline-input">
               <div class="input__container">
-                <label for="first-name"
-                  >{{ language.firstname }}
-                  <span [title]="language.required" class="required"></span
-                ></label>
-                <input
-                  class="form-control"
-                  name="first-name"
-                  required
-                  type="text"
-                  [(ngModel)]="data.firstname"
-                />
+                <label for="first-name">{{ language.firstname }}
+                  <span [title]="language.required" class="required"></span></label>
+                <input class="form-control" name="first-name" required type="text" [(ngModel)]="data.firstname" />
               </div>
             </div>
             <div class="input form__inline-input">
               <div class="input__container">
-                <label for="last-name"
-                  >{{ language.lastname }}
-                  <span [title]="language.required" class="required"></span
-                ></label>
-                <input
-                  class="form-control"
-                  name="last-name"
-                  required
-                  type="text"
-                  [(ngModel)]="data.lastname"
-                />
+                <label for="last-name">{{ language.lastname }}
+                  <span [title]="language.required" class="required"></span></label>
+                <input class="form-control" name="last-name" required type="text" [(ngModel)]="data.lastname" />
               </div>
             </div>
           </div>
@@ -54,106 +31,54 @@
           <div class="form__row form__row--two">
             <div class="input form__inline-input">
               <div class="input__container">
-                <label for="username"
-                  >{{ language.gender }}
-                  <span [title]="language.required" class="required"></span
-                ></label>
-                <ejs-radiobutton
-                  label="{{ language.male }}"
-                  name="gender"
-                  id="male"
-                  value="male"
-                  checked="data.gender === 'male' ? checked : ''"
-                  [(ngModel)]="data.gender"
-                  required
-                ></ejs-radiobutton>
-                <ejs-radiobutton
-                  label="{{ language.female }}"
-                  name="gender"
-                  id="male"
-                  value="female"
-                  checked="data.gender === 'female' ? checked : ''"
-                  [(ngModel)]="data.gender"
-                  required
-                ></ejs-radiobutton>
+                <label for="username">{{ language.gender }}
+                  <span [title]="language.required" class="required"></span></label>
+                <ejs-radiobutton label="{{ language.male }}" name="gender" id="male" value="male"
+                  checked="data.gender === 'male' ? checked : ''" [(ngModel)]="data.gender" required></ejs-radiobutton>
+                <ejs-radiobutton label="{{ language.female }}" name="gender" id="male" value="female"
+                  checked="data.gender === 'female' ? checked : ''" [(ngModel)]="data.gender" required>
+                </ejs-radiobutton>
               </div>
             </div>
             <div class="input form__inline-input">
               <div class="input__container">
-                <label for="last-name"
-                  >{{ language.birthday }}
-                  <span [title]="language.required" class="required"></span
-                ></label>
-                <ejs-datepicker
-                  name="birthday"
-                  [(ngModel)]="data.birthday"
-                  required
-                ></ejs-datepicker>
+                <label for="last-name">{{ language.birthday }}
+                  <span [title]="language.required" class="required"></span></label>
+                <ejs-datepicker name="birthday" [(ngModel)]="data.birthday" required></ejs-datepicker>
               </div>
             </div>
           </div>
           <div class="form__row form__row--two">
             <div class="input form__inline-input">
               <div class="input__container">
-                <label for="email"
-                  >{{ language.email }}
-                  <span [title]="language.required" class="required"></span
-                ></label>
-                <input
-                  class="form-control"
-                  name="email"
-                  required
-                  type="text"
-                  [(ngModel)]="data.email"
-                />
+                <label for="email">{{ language.email }}
+                  <span [title]="language.required" class="required"></span></label>
+                <input class="form-control" name="email" required type="text" [(ngModel)]="data.email" />
               </div>
             </div>
             <div class="input form__inline-input">
               <div class="input__container">
-                <label for="username"
-                  >{{ language.mobile
-                  }}<span [title]="language.required" class="required"></span
-                ></label>
-                <input
-                  class="form-control"
-                  name="telephone"
-                  type="text"
-                  [(ngModel)]="data.telephone"
-                  required
-                />
+                <label for="username">{{ language.mobile
+                  }}<span [title]="language.required" class="required"></span></label>
+                <input class="form-control" name="telephone" type="text" [(ngModel)]="data.telephone" required />
               </div>
             </div>
           </div>
           <div class="form__row form__row--two">
             <div class="input form__inline-input">
               <div class="input__container">
-                <label for="password"
-                  >{{ language.password }}
-                  <span [title]="language.required" class="required"></span
-                ></label>
-                <input
-                  class="form-control"
-                  name="password"
-                  placeholder="Password"
-                  required
-                  type="password"
-                  [(ngModel)]="data.password"
-                />
+                <label for="password">{{ language.password }}
+                  <span [title]="language.required" class="required"></span></label>
+                <input class="form-control" name="password" placeholder="Password" required type="password"
+                  [(ngModel)]="data.password" />
               </div>
             </div>
             <div class="input form__inline-input">
               <div class="input__container">
-                <label for="confirm-password"
-                  >{{ language.confirmPassword }}
-                  <span [title]="language.required" class="required"></span
-                ></label>
-                <input
-                  class="form-control"
-                  name="confirm-password"
-                  required
-                  type="password"
-                  [(ngModel)]="data.confirmPassword"
-                />
+                <label for="confirm-password">{{ language.confirmPassword }}
+                  <span [title]="language.required" class="required"></span></label>
+                <input class="form-control" name="confirm-password" required type="password"
+                  [(ngModel)]="data.confirmPassword" />
               </div>
             </div>
           </div>
@@ -161,46 +86,34 @@
             <div class="input-checkbox">
               <div class="form-group signup-term">
                 <label class="checkbox text-left">
-                  <input
-                    type="checkbox"
-                    [(ngModel)]="agreeValue"
-                    name="agreeValue"
-                  /><span class="label-text"
-                    >{{ language.clickAgreeText }}
-                    <a
-                      routerLink="/terms"
-                      target="_blank"
-                      class="signup-term-link"
-                      >{{ language.termOfUse }}</a
-                    >
+                  <input type="checkbox" [(ngModel)]="agreeValue" name="agreeValue" /><span class="label-text">{{
+                    language.clickAgreeText }}
+                    <a routerLink="/terms" target="_blank" class="signup-term-link">{{ language.termOfUse }}</a>
                     {{ language.and }}
-                    <a
-                      routerLink="/privacy-policy"
-                      target="_blank"
-                      class="signup-term-link"
-                      >{{ language.privacyPolicy }}</a
-                    ></span
-                  >
+                    <a routerLink="/privacy-policy" target="_blank" class="signup-term-link">{{ language.privacyPolicy
+                      }}</a></span>
                 </label>
               </div>
             </div>
           </div>
           <div class="form__row">
             <div class="component component--primary form__button">
-              <button
-                type="submit"
-                class="btn btn--regular"
-                id="sign-up-button"
-                [disabled]="form.form.invalid"
-                [title]="
+              <button type="submit" class="btn btn--regular" id="sign-up-button" [disabled]="form.form.invalid" [title]="
                   form.form.invalid ? language.requiredSubmitMessage : ''
-                "
-              >
+                ">
                 {{ language.signUpWithEmail }}
               </button>
             </div>
           </div>
         </form>
+        <div class="row bottom-holder">
+          <div class="col-12 links-wrapper">
+            <span class="no-underline-link" (click)="onGoTo('/terms')">{{language.termOfUse}}</span>
+            <span class="no-underline-link" (click)="onGoTo('/about-us')">{{language.aboutUs}}</span>
+            <span class="no-underline-link" (click)="onGoTo('/impressum')">{{language.impressum}}</span>
+            <span class="no-underline-link" (click)="onGoTo('privacy-policy')">{{language.privatePolicy}}</span>
+          </div>
+        </div>
       </div>
     </div>
   </main>

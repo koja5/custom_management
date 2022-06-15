@@ -195,6 +195,10 @@ export class LoginComponent implements OnInit {
     );
   }
 
+  public onGoTo(urlTogo: string): void {
+    this.router.navigateByUrl(urlTogo);
+  }
+
   getTranslationByDemoCode(demoCode) {
     this.dashboardService
       .getTranslationByDemoAccount(demoCode)

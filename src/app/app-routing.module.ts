@@ -10,6 +10,7 @@ import { PatientFormSuccessComponent } from "./component/templates/patient-form-
 import { ImpressumComponent } from "./component/templates/impressum/impressum.component";
 import { PrivacyPolicyComponent } from "./component/templates/privacy-policy/privacy-policy.component";
 import { TermsComponent } from "./component/templates/terms/terms.component";
+import { AboutUsComponent } from "./component/templates/about-us/about-us.component";
 
 const routes: Routes = [
   { path: "", redirectTo: "", pathMatch: "full" },
@@ -35,6 +36,10 @@ const routes: Routes = [
   {
     path: "privacy-policy",
     component: PrivacyPolicyComponent,
+  },
+  {
+    path: "about-us",
+    component: AboutUsComponent,
   },
   {
     path: "terms",

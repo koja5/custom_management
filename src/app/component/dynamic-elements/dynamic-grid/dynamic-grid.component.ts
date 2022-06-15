@@ -25,6 +25,7 @@ import { QueryCellInfoEventArgs } from "@syncfusion/ej2-angular-grids";
 import { Tooltip } from "@syncfusion/ej2-popups";
 import { ClickEventArgs } from "@syncfusion/ej2-navigations";
 import { SystemLogsService } from "src/app/service/system-logs.service";
+import { L10n, setCulture } from '@syncfusion/ej2-base';
 
 @Component({
   selector: "app-dynamic-grid",
@@ -67,6 +68,7 @@ export class DynamicGridComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.setGridTranslation()
     this.initialization();
     this.checkMessageService();
     this.getConfiguration();
@@ -99,6 +101,17 @@ export class DynamicGridComponent implements OnInit {
 
   getConfiguration() {
     this.language = this.helpService.getLanguage();
+  }
+
+  private setGridTranslation(): void {
+    const translate = this.helpService.getLanguage();
+    setCulture('en-US')
+    L10n.load({
+      'en-US': {
+        grid: translate,
+        pager: translate
+      }
+    })
   }
 
   checkMessageService() {
