@@ -53,9 +53,6 @@
       "welcomeText": {
         "type": "string"
       },
-      "impressum": {
-        "type": "string"
-      },
       "loginTitle": {
         "type": "string"
       },
@@ -285,9 +282,6 @@
         "type": "string"
       },
       "unsuccessCreateCustomerTitle": {
-        "type": "string"
-      },
-      "aboutUs": {
         "type": "string"
       },
       "unsuccessCreateCustomerText": {
@@ -725,46 +719,7 @@
       "successSendFormToMail": {
         "type": "string"
       },
-      "Add": {
-        "type": "string"
-      },
-      "Edit": {
-        "type": "string"
-      },
-      "Delete": {
-        "type": "string"
-      },
-      "Cancel": {
-        "type": "string"
-      },
-      "Print": {
-        "type": "string"
-      },
-      "Search": {
-        "type": "string"
-      },
-      "SaveButton": {
-        "type": "string"
-      },
-      "AddFormTitle": {
-        "type": "string"
-      },
-      "GroupDropArea": {
-        "type": "string"
-      },
-      "EditOperationAlert": {
-        "type": "string"
-      },
-      "DeleteOperationAlert": {
-        "type": "string"
-      },
-      "OKButton": {
-        "type": "string"
-      },
       "errorSendFormToMail": {
-        "type": "string"
-      },
-      "EmptyRecord": {
         "type": "string"
       },
       "contactPatient": {
@@ -1324,12 +1279,6 @@
         "type": "string"
       },
       "subjectFormRegistration": {
-        "type": "string"
-      },
-      "currentPageInfo": {
-        "type": "string"
-      },
-      "totalItemsInfo": {
         "type": "string"
       },
       "introductoryMessageForPatientRegistrationForm": {
@@ -1904,12 +1853,6 @@
           }
         }
       },
-      "aboutUsIntroductionTitle": {
-        "type": "string"
-      },
-      "aboutUsIntroductionText": {
-        "type": "string"
-      },
       "eventCategoryPeriod": {
         "type": "array",
         "items": {
@@ -2196,25 +2139,6 @@
           "items": [
             {
               "key": "pleaseConfirm"
-            },
-            {
-              "key": "aboutUs"
-            },
-            {
-              "key": "termsOfUse"
-            },
-            {
-              "key": "impressum"
-            }
-          ]
-        },
-        {
-          "type": "div",
-          "display": "flex",
-          "flex-direction": "row",
-          "items": [
-            {
-              "key": "privatePolicy"
             },
             {},
             {},
@@ -3643,87 +3567,6 @@
               "key": "orderNumber"
             },
             {}
-          ]
-        }
-      ]
-    },
-    {
-      "type": "section",
-      "title": "Grids",
-      "expandable": true,
-      "expanded": false,
-      "items": [
-        {
-          "type": "div",
-          "display": "flex",
-          "flex-direction": "row",
-          "items": [
-            {
-              "key": "EditOperationAlert"
-            },
-            {
-              "key": "DeleteOperationAlert"
-            },
-            {
-              "key": "OKButton"
-            },
-            {
-              "key": "GroupDropArea"
-            }
-          ]
-        },
-        {
-          "type": "div",
-          "display": "flex",
-          "flex-direction": "row",
-          "items": [
-            {
-              "key": "Add"
-            },
-            {
-              "key": "Edit"
-            },
-            {
-              "key": "Delete"
-            },
-            {
-              "key": "Cancel"
-            }
-          ]
-        },
-        {
-          "type": "div",
-          "display": "flex",
-          "flex-direction": "row",
-          "items": [
-            {
-              "key": "Print"
-            },
-            {
-              "key": "Search"
-            },
-            {
-              "key": "AddFormTitle"
-            },
-            {
-              "key": "SaveButton"
-            }
-          ]
-        },
-        {
-          "type": "div",
-          "display": "flex",
-          "flex-direction": "row",
-          "items": [
-            {
-              "key": "EmptyRecord"
-            },
-            {
-              "key": "currentPageInfo"
-            },
-            {
-              "key": "totalItemsInfo"
-            }
           ]
         }
       ]
@@ -6286,30 +6129,6 @@
                 }
               ]
             }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "section",
-      "title": "About Us",
-      "expandable": true,
-      "expanded": false,
-      "items": [
-        {
-          "type": "div",
-          "display": "flex",
-          "flex-direction": "row",
-          "items": [
-            {
-              "key": "aboutUsIntroductionTitle"
-            },
-            {
-              "key": "aboutUsIntroductionText",
-              "type": "textarea"
-            },
-            {},
-            {}
           ]
         }
       ]

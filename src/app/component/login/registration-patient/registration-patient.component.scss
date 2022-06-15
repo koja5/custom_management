@@ -275,11 +275,11 @@ input:-webkit-autofill {
 .sign-up__content {
   display: flex;
   overflow: auto;
+  height: 100vh;
   flex-flow: column nowrap;
   align-items: center;
   padding: 10px 24px;
   background-color: #fafafa;
-  position: relative;
 }
 .sign-up__header {
   margin-bottom: 25px;
@@ -407,29 +407,4 @@ input:-webkit-autofill {
 
 .label-text {
   margin-left: 20px;
-}
-
-.links-wrapper {
-  padding-top: 5px;
-  display: flex;
-  justify-content: space-around;
-  text-align: center;
-
-}
-
-.no-underline-link {
-  display: inline-block;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-.no-underline-link:hover {
-  color: blue !important;
-  cursor: pointer;
-}
-
-.bottom-holder {
-  position: absolute;
-  bottom: 0px;
-  width: 100%;
 }

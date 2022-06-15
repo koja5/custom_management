@@ -529,7 +529,7 @@ body:not([data-sidebar-size="sm"]) #vertical-menu-btn {
 }
 
 .sidemenu-closed .vertical-menu {
-  position: fixed;
+  position: absolute;
   width: 70px !important;
   z-index: 5;
 }
@@ -1111,76 +1111,4 @@ li.active a, li.active a i {
 
 .store-name {
   padding-top: 20px;
-}
-
-.height100vh{
-  height: 100vh;
-}
-
-.srting-new-line {
-  white-space: pre-line;
-}
-
-/*Shrink content when sidebar is enabled*/
-@media only screen and (max-width: 992px) {
-  .content-sidebar-enabled {
-    width: calc(100% - 70px);
-    position: absolute;
-    right: 0px
-  }
-
-}
-
-.padding-5px {
-  padding: 5px !important;
-}
-
-.link {
-  display: inline-block;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-.link {
-  display: inline-block;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-.link-first {
-  display: inline-block;
-  margin-right: 10px;
-}
-
-.links-wrapper {
-  padding-top: 5px;
-}
-
-.sidebar-margin {
-  margin-left: 70px !important;
-}
-
-
-.links-wrapper {
-  padding-top: 5px;
-  display: flex;
-  justify-content: space-around;
-  text-align: center;
-}
-
-.link {
-  display: inline-block;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-.link:hover {
-  color: blue !important;
-  cursor: pointer !important;
-}
-
-.bottom-holder {
-  position: absolute;
-  bottom: 0px;
-  width: 100%;
 }

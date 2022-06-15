@@ -23,7 +23,6 @@ declare var document: any;
 export class DashboardComponent implements OnInit {
   @ViewChild("settings") settings: Modal;
   @ViewChild("firstLogin") firstLogin: Modal;
-  @ViewChild("aboutUs") aboutUs: Modal;
   @ViewChild("templateLoading") templateLoading: Modal;
   public sidebar = "";
   public sidebarMobile = "";
@@ -164,14 +163,6 @@ export class DashboardComponent implements OnInit {
     this.message.getNewLanguage().subscribe((mess) => {
       this.language = JSON.parse(this.helpService.getLocalStorage("language"));
     });
-  }
-
-  public onAboutUsClick() {
-    this.aboutUs.open()
-  }
-
-  public onGoTo(urlTogo: string): void {
-    this.router.navigateByUrl(urlTogo);
   }
 
   getMainStoreName() {
