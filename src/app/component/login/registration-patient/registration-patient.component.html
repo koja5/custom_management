@@ -9,7 +9,11 @@
       </div>
       <div class="sign-up__content">
         <header class="sign-up__header">
-          <img class="brand-logo" src="../../../assets/images/brand-logo.png" />
+          <a routerLink="../../../login"
+            ><img
+              class="brand-logo"
+              src="../../../assets/images/brand-logo.png"
+          /></a>
           <h3 class="sign-up__descr">{{ language.signUpTitle }}</h3>
           <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
         </header>

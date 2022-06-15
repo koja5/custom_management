@@ -62,6 +62,7 @@ export class ReservationsComponent implements OnInit {
         if (this.data.id === "approve") {
           const mail = {
             id: value,
+            superadmin: this.helpService.getSuperadmin(),
             email: this.data.data.email,
             language:
               this.packLanguage.getLanguageForInfoForApproveReservation(),
@@ -74,6 +75,7 @@ export class ReservationsComponent implements OnInit {
         } else if (this.data.id === "deny") {
           const mail = {
             id: value,
+            superadmin: this.helpService.getSuperadmin(),
             email: this.data.data.email,
             language: this.packLanguage.getLanguageForInfoForDenyReservation(),
           };
