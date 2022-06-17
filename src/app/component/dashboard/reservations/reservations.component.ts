@@ -51,11 +51,8 @@ export class ReservationsComponent implements OnInit {
     this.showDialog = false;
   }
 
-  callApiPost(api, data) {
-    const value = {
-      id: data,
-    };
-    this.service.callApiPost(api, value).subscribe((data) => {
+  callApiPost(api, value) {
+    this.service.callApiPost(api, { id: value }).subscribe((data) => {
       if (data) {
         this.helpService.successToastr(
           "",
@@ -64,7 +61,8 @@ export class ReservationsComponent implements OnInit {
         this.messageService.sendRefreshDynamicGrid();
         if (this.data.id === "approve") {
           const mail = {
-            id: data,
+            id: value,
+            superadmin: this.helpService.getSuperadmin(),
             email: this.data.data.email,
             language:
               this.packLanguage.getLanguageForInfoForApproveReservation(),
@@ -76,7 +74,8 @@ export class ReservationsComponent implements OnInit {
             });
         } else if (this.data.id === "deny") {
           const mail = {
-            id: data,
+            id: value,
+            superadmin: this.helpService.getSuperadmin(),
             email: this.data.data.email,
             language: this.packLanguage.getLanguageForInfoForDenyReservation(),
           };

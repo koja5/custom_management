@@ -669,8 +669,8 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
   );
   connection.getConnection(function (err, conn) {
     conn.query(
-      "select mr.*, s.* from tasks t join mail_approve_reservation mr on t.superadmin = mr.superadmin join store s on t.storeId = s.id where t.id = ?",
-      [req.body.id],
+      "select mr.* from mail_approve_reservation mr where mr.superadmin = ?",
+      [req.body.superadmin],
       function (err, mailMessage, fields) {
         if (err) {
           res.json(false);
@@ -776,8 +776,8 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
   var infoForDenyReservation = hogan.compile(infoForDenyReservationTemplate);
   connection.getConnection(function (err, conn) {
     conn.query(
-      "select mr.*, s.* from tasks t join mail_deny_reservation mr on t.superadmin = mr.superadmin join store s on t.storeId = s.id where t.id = ?",
-      [req.body.id],
+      "select md.* from mail_deny_reservation md where md.superadmin = ?",
+      [req.body.superadmin],
       function (err, mailMessage, fields) {
         if (err) {
           res.json(false);

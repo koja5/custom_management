@@ -216,11 +216,11 @@ var j = schedule.scheduleJob("03 01 * * *", function () {
   reminderViaSMS();
 });
 
-var j = schedule.scheduleJob("19 26 00 * * *", function () {
+var j = schedule.scheduleJob("22 00 * * *", function () {
   sendHappyBirthdayViaSMS();
 });
 
-var j = schedule.scheduleJob("59 50 13 * * *", function () {
+var j = schedule.scheduleJob("23 00 * * *", function () {
   sendHappyBirthdayViaEmail();
 });
 

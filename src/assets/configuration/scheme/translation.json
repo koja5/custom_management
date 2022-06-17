@@ -122,13 +122,13 @@
       "aggree": {
         "type": "string"
       },
+      "needToAgree": {
+        "type": "string"
+      },
       "privacyPolicy": {
         "type": "string"
       },
       "and": {
-        "type": "string"
-      },
-      "termsOfService": {
         "type": "string"
       },
       "signUpWithEmail": {
@@ -2106,12 +2106,6 @@
           "flex-direction": "row",
           "items": [
             {
-              "key": "clickAgreeText"
-            },
-            {
-              "key": "termOfUse"
-            },
-            {
               "key": "actionTitle"
             },
             {
@@ -2237,6 +2231,12 @@
               "key": "aggree"
             },
             {
+              "key": "clickAgreeText"
+            },
+            {
+              "key": "needToAgree"
+            },
+            {
               "key": "privacyPolicy"
             },
             {
@@ -2250,7 +2250,7 @@
           "flex-direction": "row",
           "items": [
             {
-              "key": "termsOfService"
+              "key": "termOfUse"
             },
             {
               "key": "signUpWithEmail"

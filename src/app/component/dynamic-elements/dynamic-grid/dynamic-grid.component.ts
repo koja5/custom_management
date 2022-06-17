@@ -120,7 +120,7 @@ export class DynamicGridComponent implements OnInit {
   callApi(data) {
     setTimeout(() => {
       this.grid.showSpinner();
-    }, 100);
+    }, 20);
 
     if (data.type === "POST") {
       this.callApiPost(data.api, data.body);

@@ -41,62 +41,107 @@ function sendHappyBirthdayViaSMS() {
         if (!error && response.statusCode === 200) {
           conn.query(
             // "SELECT distinct c.*, sb.* from customers c join sms_birthday_congratulation sb on c.storeId = sb.superadmin where DAY(c.birthday + interval 1 DAY) = DAY(CURRENT_DATE()) and MONTH(c.birthday) = MONTH(CURRENT_DATE())",
-            "SELECT distinct c.*, sb.* from customers c join sms_birthday_congratulation sb on c.storeId = sb.superadmin where DAY(c.birthday) = DAY(CURRENT_DATE()) and MONTH(c.birthday) = MONTH(CURRENT_DATE())",
+            "SELECT distinct c.*, sb.* from customers c join sms_birthday_congratulation sb on c.storeId = sb.superadmin where DAY(c.birthday  + interval 1 DAY) = DAY(CURRENT_DATE()) and MONTH(c.birthday) = MONTH(CURRENT_DATE())",
             function (err, rows, fields) {
               if (err) {
                 console.error("SQL error:", err);
               }
-              console.log(rows);
               if (rows.length > 0 && rows[0].congratulationBirthday === 1) {
-                request(
-                  link + "/getAvailableAreaCode",
-                  function (error, response, codes) {
-                    rows.forEach(function (to, i, array) {
-                      var phoneNumber = null;
-                      if (to.telephone) {
-                        phoneNumber = to.telephone;
-                      } else if (to.mobile) {
-                        phoneNumber = to.mobile;
-                      }
-                      if (checkAvailableCode(phoneNumber, JSON.parse(codes))) {
-                        var language = JSON.parse(body)["config"];
-                        var message =
-                          (to.initialGreeting
-                            ? to.initialGreeting
-                            : language.initialGreetingSMSReminder) +
-                          " " +
-                          to.shortname +
-                          ", \n \n" +
-                          to.smsSubject;
-                        var signature = "";
-                        if (to.signatureAvailable) {
-                          if (to.smsSignatureCompanyName) {
-                            signature += to.smsSignatureCompanyName + "\n";
-                          }
-                          if (to.smsSignatureAddress1) {
-                            signature += to.smsSignatureAddress1 + "\n";
-                          }
-                          if (to.smsSignatureAddress2) {
-                            signature += to.smsSignatureAddress2 + "\n";
-                          }
-                          if (to.smsSignatureAddress3) {
-                            signature += to.smsSignatureAddress3 + "\n";
-                          }
-                          if (to.smsSignatureTelephone) {
-                            signature += to.smsSignatureTelephone + " \n";
-                          }
-                          if (to.smsSignatureMobile) {
-                            signature += to.smsSignatureMobile + " \n";
-                          }
-                          if (to.smsSignatureEmail) {
-                            signature += to.smsSignatureEmail + " \n";
-                          }
+                conn.query(
+                  "SELECT distinct congratulationBirthday from mail_birthday_congratulation where superadmin = ?",
+                  [rows[0].superadmin],
+                  function (err, mailRows, fields) {
+                    if (
+                      mailRows.length === 0 ||
+                      (mailRows.length > 0 &&
+                        mailRows[0].congratulationBirthday === 0)
+                    ) {
+                      request(
+                        link + "/getAvailableAreaCode",
+                        function (error, response, codes) {
+                          rows.forEach(function (to, i, array) {
+                            if (to.congratulationBirthday === 1) {
+                              conn.query(
+                                "SELECT distinct congratulationBirthday from mail_birthday_congratulation where superadmin = ?",
+                                [to.superadmin],
+                                function (err, mailRows, fields) {
+                                  console.log(mailRows);
+                                  if (
+                                    mailRows.length === 0 ||
+                                    (mailRows.length > 0 &&
+                                      mailRows[0].congratulationBirthday === 0)
+                                  ) {
+                                    var phoneNumber = null;
+                                    if (to.telephone) {
+                                      phoneNumber = to.telephone;
+                                    } else if (to.mobile) {
+                                      phoneNumber = to.mobile;
+                                    }
+                                    if (
+                                      checkAvailableCode(
+                                        phoneNumber,
+                                        JSON.parse(codes)
+                                      )
+                                    ) {
+                                      var language = JSON.parse(body)["config"];
+                                      var message =
+                                        (to.initialGreeting
+                                          ? to.initialGreeting
+                                          : language.initialGreetingSMSReminder) +
+                                        " " +
+                                        to.shortname +
+                                        ", \n \n" +
+                                        to.smsSubject;
+                                      var signature = "";
+                                      if (to.signatureAvailable) {
+                                        if (to.smsSignatureCompanyName) {
+                                          signature +=
+                                            to.smsSignatureCompanyName + "\n";
+                                        }
+                                        if (to.smsSignatureAddress1) {
+                                          signature +=
+                                            to.smsSignatureAddress1 + "\n";
+                                        }
+                                        if (to.smsSignatureAddress2) {
+                                          signature +=
+                                            to.smsSignatureAddress2 + "\n";
+                                        }
+                                        if (to.smsSignatureAddress3) {
+                                          signature +=
+                                            to.smsSignatureAddress3 + "\n";
+                                        }
+                                        if (to.smsSignatureTelephone) {
+                                          signature +=
+                                            to.smsSignatureTelephone + " \n";
+                                        }
+                                        if (to.smsSignatureMobile) {
+                                          signature +=
+                                            to.smsSignatureMobile + " \n";
+                                        }
+                                        if (to.smsSignatureEmail) {
+                                          signature +=
+                                            to.smsSignatureEmail + " \n";
+                                        }
+                                      }
+
+                                      if (language?.smsSignaturePoweredBy) {
+                                        signature +=
+                                          language?.smsSignaturePoweredBy +
+                                          " \n";
+                                      }
+
+                                      const fullMessage =
+                                        message + "\n\n" + signature;
+                                      sendSmsFromMail(phoneNumber, fullMessage);
+                                    }
+                                  }
+                                }
+                              );
+                            }
+                          });
                         }
-                        const fullMessage = message + "\n\n" + signature;
-                        console.log(fullMessage);
-                        sendSmsFromMail(phoneNumber, fullMessage);
-                      }
-                    });
+                      );
+                    }
                   }
                 );
               }

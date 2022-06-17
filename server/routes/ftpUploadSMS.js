@@ -32,7 +32,6 @@ async function sendSMSFromMail(phoneNumber, message) {
     subject: phoneNumber,
     text: message,
   };
-  console.log(mailOptions);
   smtpTransport.sendMail(mailOptions, function (error, response) {
     console.log(response);
     if (error) {

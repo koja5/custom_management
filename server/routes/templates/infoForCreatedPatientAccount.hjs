@@ -86,6 +86,7 @@
               <br />
               {{signatureEmail}}
           </p>
+          <br />
         </div>
 
         <div class="content__footer mt-8 text-center text-grey-darker"
