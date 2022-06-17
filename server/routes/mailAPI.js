@@ -109,51 +109,109 @@ router.post("/send", function (req, res) {
 });
 
 router.post("/sendCustomerVerificationMail", function (req, res) {
-  var confirmTemplate = fs.readFileSync(
-    "./server/routes/templates/confirmMail.hjs",
-    "utf-8"
-  );
-  var compiledTemplate = hogan.compile(confirmTemplate);
-  var verificationLinkButton =
-    link + "customerVerificationMail/" + sha1(req.body.email);
+  connection.getConnection(function (err, conn) {
+    var confirmTemplate = fs.readFileSync(
+      "./server/routes/templates/infoForCreatedPatientAccountViaForm.hjs",
+      "utf-8"
+    );
+    var compiledTemplate = hogan.compile(confirmTemplate);
+    var verificationLinkButton =
+      link + "customerVerificationMail/" + sha1(req.body.email);
 
-  var mailOptions = {
-    from: '"ClinicNode" support@app-production.eu',
-    to: req.body.email,
-    subject: req.body.language?.subjectConfirmMail,
-    html: compiledTemplate.render({
-      firstName: req.body.shortname,
-      verificationLink: verificationLinkButton,
-      initialGreeting: req.body.language?.initialGreeting,
-      finalGreeting: req.body.language?.finalGreeting,
-      signature: req.body.language?.signature,
-      thanksForUsing: req.body.language?.thanksForUsing,
-      websiteLink: req.body.language?.websiteLink,
-      ifYouHaveQuestion: req.body.language?.ifYouHaveQuestion,
-      emailAddress: req.body.language?.emailAddress,
-      notReply: req.body.language?.notReply,
-      copyRight: req.body.language?.copyRight,
-      introductoryMessageForConfirmMail:
-        req.body.language?.introductoryMessageForConfirmMail,
-      confirmMailButtonText: req.body.language?.confirmMailButtonText,
-    }),
-  };
+    conn.query(
+      "SELECT m.*, u.* from mail_patient_created_account_via_form m join users_superadmin u on m.superadmin = u.id  where m.superadmin = ?",
+      [req.body.storeId],
+      function (err, mailMessage, fields) {
+        console.log(mailMessage);
+        var mail = {};
+        var signatureAvailable = false;
+        if (mailMessage.length > 0) {
+          mail = mailMessage[0];
+          if (mail.signatureAvailable) {
+            signatureAvailable = true;
+          }
+        }
+        var mailOptions = {
+          from: '"ClinicNode" support@app-production.eu',
+          to: req.body.email,
+          subject: mail.mailSubject
+            ? mail.mailSubject
+            : req.body.language?.subjectConfirmMail,
+          html: compiledTemplate.render({
+            firstName: req.body.firstname,
+            initialGreeting: mail.mailInitialGreeting
+              ? mail.mailInitialGreeting
+              : req.body.language?.initialGreeting,
+            finalGreeting: mail.mailFinalGreeting
+              ? mail.mailFinalGreeting
+              : req.body.language?.finalGreeting,
+            signature: !signatureAvailable
+              ? mail.mailSignature
+                ? mail.mailSignature
+                : req.body.language?.signature
+              : "",
+            thanksForUsing: mail.mailThanksForUsing
+              ? mail.mailThanksForUsing
+              : req.body.language?.thanksForUsing,
+            websiteLink: req.body.language?.websiteLink,
+            ifYouHaveQuestion: mail.mailIfYouHaveQuestion
+              ? mail.mailIfYouHaveQuestion
+              : req.body.language?.ifYouHaveQuestion,
+            emailAddress: req.body.language?.emailAddress,
+            notReply: mail.mailNotReply
+              ? mail.mailNotReply
+              : req.body.language?.notReply,
+            copyRight: mail.mailCopyRight
+              ? mail.mailCopyRight
+              : req.body.language?.copyRight,
+            introductoryMessageForConfirmMail: mail.mailMessage
+              ? mail.mailMessage
+              : req.body.language?.introductoryMessageForConfirmMail,
+            signatureAddress:
+              signatureAvailable &&
+              mail.signatureAddress &&
+              (mail.street || mail.zipcode)
+                ? mail.signatureAddress +
+                  "\n" +
+                  mail.street +
+                  "\n" +
+                  mail.zipcode
+                : "",
+            signatureTelephone:
+              signatureAvailable && mail.signatureTelephone && mail.telephone
+                ? mail.signatureTelephone + " " + mail.telephone
+                : "",
+            signatureMobile:
+              signatureAvailable && mail.signatureMobile && mail.mobile
+                ? mail.signatureMobile + " " + mail.mobile
+                : "",
+            signatureEmail:
+              signatureAvailable && mail.signatureEmail && mail.email
+                ? mail.signatureEmail + " " + mail.email
+                : "",
+          }),
+        };
 
-  smtpTransport.sendMail(mailOptions, function (error, response) {
-    console.log(response);
-    if (error) {
-      logger.log(
-        "error",
-        `Error to sent mail for VERIFICATION MAIL on EMAIL: ${req.body.email}. Error: ${error}`
-      );
-      res.end("error");
-    } else {
-      logger.log(
-        "info",
-        `Sent mail for VERIFICATION MAIL for USER: ${req.body.shortname} on EMAIL: ${req.body.email}`
-      );
-      res.end("sent");
-    }
+        console.log("PROSAO SAM!");
+
+        smtpTransport.sendMail(mailOptions, function (error, response) {
+          console.log(response);
+          if (error) {
+            logger.log(
+              "error",
+              `Error to sent mail for VERIFICATION MAIL on EMAIL: ${req.body.email}. Error: ${error}`
+            );
+            res.end("error");
+          } else {
+            logger.log(
+              "info",
+              `Sent mail for VERIFICATION MAIL for USER: ${req.body.shortname} on EMAIL: ${req.body.email}`
+            );
+            res.end("sent");
+          }
+        });
+      }
+    );
   });
 });
 
@@ -669,13 +727,14 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
   );
   connection.getConnection(function (err, conn) {
     conn.query(
-      "select mr.* from mail_approve_reservation mr where mr.superadmin = ?",
-      [req.body.superadmin],
+      "select mr.*, s.* from tasks t join mail_approve_reservation mr on t.superadmin = mr.superadmin join store s on t.storeId = s.id where t.id = ?",
+      [req.body.id],
       function (err, mailMessage, fields) {
         if (err) {
           res.json(false);
         }
         var mail = {};
+        console.log(mailMessage);
         var signatureAvailable = false;
         if (mailMessage.length > 0) {
           mail = mailMessage[0];
@@ -776,12 +835,13 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
   var infoForDenyReservation = hogan.compile(infoForDenyReservationTemplate);
   connection.getConnection(function (err, conn) {
     conn.query(
-      "select md.* from mail_deny_reservation md where md.superadmin = ?",
-      [req.body.superadmin],
+      "select mr.*, s.* from tasks t join mail_deny_reservation mr on t.superadmin = mr.superadmin join store s on t.storeId = s.id where t.id = ?",
+      [req.body.id],
       function (err, mailMessage, fields) {
         if (err) {
           res.json(false);
         }
+        console.log(mailMessage);
         var mail = {};
         var signatureAvailable = false;
         if (mailMessage.length > 0) {

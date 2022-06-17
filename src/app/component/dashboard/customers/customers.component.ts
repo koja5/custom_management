@@ -189,6 +189,7 @@ export class CustomersComponent implements OnInit {
         });
         this.data.password = val.password;
         this.data.language = this.packLanguage.getLanguageForCreatedPatientAccount();
+        this.data.superadmin = this.helpService.getSuperadmin();
         this.mailService
           .sendInfoToPatientForCreatedAccount(this.data)
           .subscribe((data) => {

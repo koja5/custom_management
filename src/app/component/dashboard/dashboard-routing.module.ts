@@ -47,6 +47,7 @@ import { SmsMassiveComponent } from "./parameters/sms-massive/sms-massive.compon
 import { InvoiceComponent } from "./invoice/invoice.component";
 import { SmsBirthdayCongratulationComponent } from "./parameters/sms-birthday-congratulation/sms-birthday-congratulation.component";
 import { MailBirthdayCongratulationComponent } from "./parameters/mail-birthday-congratulation/mail-birthday-congratulation.component";
+import { MailPatientCreatedAccountViaFormComponent } from "./parameters/mail-parameters/mail-patient-created-account-via-form/mail-patient-created-account-via-form.component";
 
 const routes: Routes = [
   {
@@ -182,6 +183,10 @@ const routes: Routes = [
       {
         path: "mail-patient-created-account",
         component: MailPatientCreatedAccountComponent,
+      },
+      {
+        path: "mail-patient-created-account-via-form",
+        component: MailPatientCreatedAccountViaFormComponent,
       },
       {
         path: "mail-patient-form-registration",

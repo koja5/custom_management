@@ -587,6 +587,9 @@
       "mailPatientCreatedAccount": {
         "type": "string"
       },
+      "mailPatientCreatedAccountViaForm": {
+        "type": "string"
+      },
       "mailPatientFormRegistration": {
         "type": "string"
       },
@@ -3051,6 +3054,9 @@
             },
             {
               "key": "mailConfirmArrival"
+            },
+            {
+              "key": "mailPatientCreatedAccount"
             }
           ]
         },
@@ -3060,7 +3066,7 @@
           "flex-direction": "row",
           "items": [
             {
-              "key": "mailPatientCreatedAccount"
+              "key": "mailPatientCreatedAccountViaForm"
             },
             {
               "key": "mailPatientFormRegistration"

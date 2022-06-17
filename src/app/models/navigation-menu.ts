@@ -37,6 +37,7 @@ export class NavigationMenuModel {
   mail_deny_reservation?: string;
   mail_confirm_arrival?: string;
   mail_patient_created_account?: string;
+  mail_patient_created_account_via_form?: string;
   mail_patient_form_registration?: string;
   mail_massive_message?: string;
   sms_reminder?: string;

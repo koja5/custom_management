@@ -18,4 +18,5 @@ export class CustomerModel {
     storeId?: string;
     isConfirm?: boolean;
     language?: any;
+    superadmin?: string;
 }
