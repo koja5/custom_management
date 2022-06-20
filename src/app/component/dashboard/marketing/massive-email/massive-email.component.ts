@@ -44,7 +44,8 @@ export class MassiveEmailComponent implements OnInit {
   submitEmitter(event) {
     this.changeData = event;
     this.changeData.superadmin = this.helpService.getSuperadmin();
-    this.changeData.mode = 'mail';
+    this.changeData.mode = "mail";
+    this.changeData.language = this.language;
     this.getFilteredRecipients();
     this.recipients.open();
   }
