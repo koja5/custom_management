@@ -23,6 +23,7 @@ import PizZip from "pizzip";
 import PizZipUtils from "pizzip/utils/index.js";
 import { DashboardService } from "src/app/service/dashboard.service";
 import { LoadingScreenService } from 'src/app/shared/loading-screen/loading-screen.service';
+import { DateService } from 'src/app/service/date.service';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -38,6 +39,8 @@ export class InvoiceComponent implements OnInit {
 
   @ViewChild("filterToolbar") filterToolbar: ElementRef<HTMLElement>;
   @ViewChild("contentWrapper") contentElement: ElementRef<HTMLElement>;
+  invoiceStore = null;
+  allStores: any[];
 
 
   @HostListener("window:resize", ["$event"])
@@ -50,6 +53,7 @@ export class InvoiceComponent implements OnInit {
   }
 
   private invoiceID: number;
+  private changedInvoiceID: number;
   private height: number;
   public currentLoadData: any[] = [];
   public customerLoading = false;
@@ -67,13 +71,15 @@ export class InvoiceComponent implements OnInit {
   public selectedItemIDs = [];
   public selectedTherapies: any;
   public store: StoreModel;
-  public superadmin: string;
+  public superadminID: string;
   public therapyValue: any;
   public type: UserType;
   public userType = UserType;
   public vatTaxList;
   public isPriceIncluded: boolean = true;
   public languageList;
+  public storeList;
+  public selectedStoreInfo;
   public invoiceLanguage;
   public invoicePrefix: string;
 
@@ -124,8 +130,9 @@ export class InvoiceComponent implements OnInit {
     private parameterItemService: ParameterItemService,
     private pdfService: PDFService,
     private dashboardService: DashboardService,
-    private invoiceService: InvoiceService,
-    private loadingScreenService: LoadingScreenService
+    private loadingScreenService: LoadingScreenService,
+    private dateService: DateService,
+    private invoiceService: InvoiceService
   ) { }
 
   ngOnInit() {
@@ -133,7 +140,6 @@ export class InvoiceComponent implements OnInit {
     this.initializationData();
 
     this.helpService.setDefaultBrowserTabTitle();
-    this.invoiceID = Math.ceil(Math.random() * 10000);
   }
 
   public initializationConfig(): void {
@@ -153,7 +159,17 @@ export class InvoiceComponent implements OnInit {
   public initializationData(): void {
     this.type = this.helpService.getType();
     this.loggedInUserId = this.helpService.getMe();
-    this.superadmin = this.helpService.getSuperadmin();
+
+    this.superadminID = this.helpService.getSuperadmin();
+    this.parameterItemService.getSuperadminProfile(this.superadminID).subscribe((data) => {
+
+      this.superadminProfile = data[0];
+      this.invoicePrefix = this.superadminProfile.invoicePrefix;
+      this.invoiceID = this.superadminProfile.invoiceID;
+      this.changedInvoiceID = this.superadminProfile.invoiceID;
+
+      console.log(data);
+    });
 
     this.getParameters();
 
@@ -171,12 +187,6 @@ export class InvoiceComponent implements OnInit {
       }
     );
 
-    this.invoiceService.getInvoicePrefix(this.superadmin).then(data => {
-      console.log(data);
-      if (data && data.length) {
-        this.invoicePrefix = data[0].prefix;
-      }
-    });
   }
 
   valueChange(event) {
@@ -184,16 +194,22 @@ export class InvoiceComponent implements OnInit {
     this.selectedInvoiceLanguage = event;
   }
 
+  storeValueChange(event) {
+    this.invoiceStore = this.allStores.find(elem => elem.id === event.value);
+    console.log('this.invoiceStore ', this.invoiceStore);
+    this.selectedStoreInfo = event;
+  }
+
   public getParameters(): void {
     this.customerService
-      .getParameters("Therapy", this.superadmin)
+      .getParameters("Therapy", this.superadminID)
       .subscribe((data: []) => {
         this.therapyValue = data.sort(function (a, b) {
           return a["sequence"] - b["sequence"];
         });
       });
 
-    this.parameterItemService.getVATTex(this.superadmin).subscribe((data: []) => {
+    this.parameterItemService.getVATTex(this.superadminID).subscribe((data: []) => {
       this.vatTaxList = data;
     });
   }
@@ -203,7 +219,7 @@ export class InvoiceComponent implements OnInit {
       this.customerLoading = true;
 
       const searchFilter = {
-        superadmin: this.superadmin,
+        superadmin: this.superadminID,
         filter: event,
       };
 
@@ -306,10 +322,25 @@ export class InvoiceComponent implements OnInit {
             this.store = data[0];
           });
 
-        this.parameterItemService.getSuperadminProfile(this.superadmin).subscribe((data) => {
-          this.superadminProfile = data[0];
 
-          console.log(data);
+        const storeIds = this.currentLoadData.map(elem => elem.storeId);
+        const unique = (x, i, a) => a.indexOf(x) == i;
+        const uniqueStoreIds = storeIds.filter(unique);
+
+        console.log('unique ', uniqueStoreIds);
+
+        this.storeService.getStoreList(uniqueStoreIds).then((data) => {
+          this.allStores = data;
+          this.storeList = [];
+
+          data.forEach(elem => {
+            this.storeList.push({
+              'text': elem.storename,
+              'value': elem.id
+            })
+          });
+
+          console.log('storeList ', this.storeList);
         });
       }
 
@@ -361,248 +392,47 @@ export class InvoiceComponent implements OnInit {
     pdfMake
       .createPdf(docDefinition)
       .download(this.customerUser["firstname"] + this.customerUser["lastname"]);
+
+    this.updateInvoiceID();
   }
 
   public printPDF(): void {
     const docDefinition = this.setupPDF();
     pdfMake.createPdf(docDefinition).print();
+
+    this.updateInvoiceID();
+  }
+
+  private updateInvoiceID(): void {
+
+    if (this.invoiceID !== this.changedInvoiceID) {
+      const data = {
+        superAdminId: this.superadminID,
+        id: this.changedInvoiceID
+      }
+      console.log("updateInvoiceID");
+
+      this.invoiceService.updateInvoiceID(data);
+
+    }
   }
 
   private setupPDF() {
-    const dotSign = " • ";
-    const data = this.getTherapyAndPricesData();
 
+    if (this.invoiceID === this.changedInvoiceID) {
+      this.changedInvoiceID++;
+    }
 
-    const therapies = data.therapies;
-    const netPrices = data.netPrices.filter(num => !isNaN(parseFloat(num)));
-    const brutoPrices = data.brutoPrices.filter(num => !isNaN(parseFloat(num)));
+    const therapyPricesData = this.getTherapyAndPricesData();
 
-    let vatValues = brutoPrices.map(function (item, index) {
-      // In this case item correspond to currentValue of array a, 
-      // using index to get value from array b
-      return item - netPrices[index];
-    });
+    console.log('invoice store ', this.invoiceStore);
+    const store = (this.invoiceStore !== undefined && this.invoiceStore !== null)
+      ? this.invoiceStore
+      : this.store;
 
-    const vat = vatValues.reduce((a, b) => a + b, 0).toFixed(2);
-    const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
-    const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
+    const invoicePrefixID = this.invoicePrefix + "-" + this.invoiceID;
 
-    let docDefinition = {
-      content: [
-        // Header
-        {
-          columns: [
-            [
-              {
-                text: this.invoiceLanguage.invoiceTitle,
-                style: "invoiceTitle",
-                width: "*",
-              },
-              {
-                stack: [
-                  {
-                    columns: [
-                      {
-                        text: this.invoiceLanguage.invoiceSubTitle,
-                        style: "invoiceSubTitle",
-                        width: "*",
-                      },
-                      {
-                        text: this.invoicePrefix ? this.invoicePrefix + this.invoiceID : this.invoiceID,
-                        style: "invoiceSubValue",
-                        width: 130,
-                      },
-                    ],
-                  },
-                  {
-                    columns: [
-                      {
-                        text: this.invoiceLanguage.dateTitle,
-                        style: "invoiceSubTitle",
-                        width: "*",
-                      },
-                      {
-                        text: this.currentDateFormatted,
-                        style: "invoiceSubValue",
-                        width: 130,
-                      },
-                    ],
-                  },
-
-                  {
-                    columns: [
-                      {
-                        text: "\n",
-                        style: "invoiceSubTitle",
-                        width: "*",
-                      },
-                      {
-                        text: "\n",
-                        style: "invoiceSubValue",
-                        width: "*",
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          ],
-        },
-        // Billing Headers
-        {
-          columns: [
-            {
-              text: this.invoiceLanguage.invoiceBillingTitleFrom + "\n \n",
-              style: "invoiceBillingTitleLeft",
-            },
-            {
-              text: this.invoiceLanguage.invoiceBillingTitleTo + "\n \n",
-              style: "invoiceBillingTitleRight",
-            },
-          ],
-        },
-        // Billing Details
-        {
-          columns: [
-            {
-              text: this.store.companyname ? this.store.companyname : this.store.storename,
-              style: "invoiceBillingDetailsLeft",
-            },
-            {
-              text: this.customerUser.lastname + this.customerUser.firstname,
-              style: "invoiceBillingDetailsRight",
-            },
-          ],
-        },
-        // Billing Address
-        {
-          columns: [
-            {
-              text: this.store.vatcode ?
-                this.store.street + "\n " + this.store.zipcode + " " + this.store.place + "\n" + this.invoiceLanguage.vat + " " + this.store.vatcode
-                : this.store.street + "\n " + this.store.zipcode + " " + this.store.place + "\n" + this.invoiceLanguage.vat + " " + this.superadminProfile.vatcode,
-              style: "invoiceBillingAddressLeft",
-            },
-            {
-              text:
-                this.customerUser["street"] +
-                "\n" +
-                this.customerUser["streetnumber"] +
-                " " +
-                this.customerUser["city"] +
-                "\n",
-              style: "invoiceBillingAddressRight",
-            },
-          ],
-        },
-        // Line breaks
-        "\n\n",
-        // Items
-        {
-          layout: {
-            // code from lightHorizontalLines:
-            hLineWidth: function (i, node) {
-              if (i === 0) {
-                return 0;
-              }
-              return i === node.table.headerRows ? 2 : 1;
-            },
-            vLineWidth: function () {
-              return 0;
-            },
-            hLineColor: function (i) {
-              return "black";
-            },
-            paddingLeft: function (i) {
-              return i === 0 ? 0 : 8;
-            },
-            paddingRight: function (i, node) {
-              return i === node.table.widths.length - 1 ? 0 : 8;
-            },
-            // // code for zebra style:
-            // fillColor: function (i) {
-            //   return i % 2 === 0 ? "#CCCCCC" : null;
-            // },
-          },
-          table: {
-            // headers are automatically repeated if the table spans over multiple pages
-            // you can declare how many rows should be treated as headers
-            headerRows: 1,
-            widths: ["*", "*", "auto", "auto", "auto"],
-
-            body: this.pdfService.createItemsTable(therapies, this.isPriceIncluded),
-          }, // table
-          //  layout: 'lightHorizontalLines'
-        },
-        // Line break
-        "\n",
-        // TOTAL
-        {
-          table: {
-            // headers are automatically repeated if the table spans over multiple pages
-            // you can declare how many rows should be treated as headers
-            headerRows: 0,
-            widths: ["63%", "auto", "auto", "auto"],
-
-            body: [
-              // Total
-              [
-                {
-                  text: "",
-                },
-                {
-                  text: this.isPriceIncluded ?
-                    (netPrices.length === 0 ? this.invoiceLanguage.noDataAvailable : (this.invoiceLanguage.euroSign + " " + subtotal)) : '',
-                  style: "itemsFooterSubValue",
-                },
-                {
-                  text: this.isPriceIncluded ?
-                    (netPrices.length === 0 ? this.invoiceLanguage.noDataAvailable : (this.invoiceLanguage.euroSign + " " + vat)) : '',
-                  style: "itemsFooterVATValue",
-                },
-                {
-                  text: this.isPriceIncluded ?
-                    (brutoPrices.length === 0 ? this.invoiceLanguage.noDataAvailable : (this.invoiceLanguage.euroSign + " " + total)) : '',
-                  style: "itemsFooterTotalValue",
-                },
-              ],
-            ],
-          },
-          layout: "lightHorizontalLines",
-        },
-        {
-          text: this.invoiceLanguage.notesTitle,
-          style: 'notesTextBold'
-        },
-        {
-          text: this.invoiceLanguage.notesText,
-          style: 'notesText'
-        },
-      ],
-      footer: {
-        columns: [
-          {
-            text:
-              (this.store.companyname ? this.store.companyname : this.store.storename) +
-              dotSign +
-              this.store.street +
-              dotSign +
-              this.store.zipcode +
-              " " +
-              this.store.place +
-              "\n" +
-              this.store.telephone +
-              dotSign +
-              this.store.email,
-            style: "documentFooter",
-          },
-        ],
-      },
-      styles: this.pdfService.getStyles(),
-      defaultStyle: {
-        columnGap: 20,
-      },
-    };
+    let docDefinition = this.pdfService.getPDFDefinition(this.superadminProfile, store, this.customerUser, therapyPricesData, this.isPriceIncluded, invoicePrefixID, this.invoiceLanguage);
 
     return docDefinition;
   }
@@ -661,20 +491,12 @@ export class InvoiceComponent implements OnInit {
 
             brutoPrices.push(parseFloat(therapy.gross_price));
 
-            // if (vatDefinition) {
-            //   bruto =
-            //     parseFloat(therapy.net_price) *
-            //     (1 + Number(vatDefinition.title) / 100);
-            // } else {
-            //   bruto = parseFloat(therapy.net_price) * (1 + 20 / 100);
-            // }
-            // brutoPrices.push(bruto);
-
             const shouldSetDate =
               (selectedTherapies.length > 1 && i == 0) ||
               selectedTherapies.length === 1 ||
               !this.isDateSet;
 
+            // console.log(shouldSetDate + ' should set date');
 
             if (therapy.printOnInvoice) {
               therapies.push({
@@ -685,13 +507,12 @@ export class InvoiceComponent implements OnInit {
                 gross_price: this.isPriceIncluded ? (isNaNBrutoPrice ? this.invoiceLanguage.noDataAvailable : this.invoiceLanguage.euroSign + ' ' + parseFloat(therapy.gross_price).toFixed(2)) : ''
               });
             }
-
-
           }
         }
       }
     });
 
+    console.log(therapies);
     return {
       therapies: therapies,
       netPrices: netPrices,
@@ -701,52 +522,16 @@ export class InvoiceComponent implements OnInit {
 
   private formatDate(value) {
     this.isDateSet = true;
-    let date: string;
 
-    if (value.indexOf('/') != -1) {
-      date = value.split('/')[0];
-
-    } else if (value.indexOf(' ') != -1) {
-      date = value.split(' ')[0];
-    } else if (value.indexOf('T') != -1) { // 2022-03-29T06:00:00.000Z
-      date = value.split('T')[0];
-
-      //console.log(date.split("-").reverse().join("-"));
-      date = date.split("-").reverse().join("-");
-    }
-
-    // console.log(date);
-    return this.reverseString(date.trim());
-  }
-
-  private reverseString(str) {
-    // Step 1. Use the split() method to return a new array
-    var splitString;
-    if (str.indexOf('.') != -1) {
-      splitString = str.split(".");
-    } else if (str.indexOf('-') != -1) {
-      splitString = str.split("-");
-    } else if (str.indexOf('/') != -1) {
-      splitString = str.split("/");
-    }
-
-    console.log(splitString);
-
-    // Step 2. Use the reverse() method to reverse the new created array
-    // var reverseArray = splitString.reverse();
-    // console.log(reverseArray)
-
-    // Step 3. Use the join() method to join all elements of the array into a string
-    var joinArray = splitString.join(".");
-    // console.log(joinArray)
-
-    //Step 4. Return the reversed string
-    return joinArray;
+    return this.dateService.formatDate(value);
   }
 
   public downloadWord(): void {
     const componentRef = this;
 
+    if (this.invoiceID === this.changedInvoiceID) {
+      this.changedInvoiceID++;
+    }
     const data = this.getTherapyAndPricesData();
 
     let vatValues = [];
@@ -764,15 +549,15 @@ export class InvoiceComponent implements OnInit {
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
-    const link =
-      window.location.protocol +
-      "//" +
-      window.location.hostname +
-      ":" +
-      window.location.port +
-      "/assets/Invoice_template.docx";
+    // const link =
+    //   window.location.protocol +
+    //   "//" +
+    //   window.location.hostname +
+    //   ":" +
+    //   window.location.port +
+    //   "/assets/Invoice_template.docx";
 
-    //const link = "http://127.0.0.1:8887/Invoice_template.docx";
+    const link = "http://127.0.0.1:8887/Invoice_template.docx";
     this.loadFile(link,
       function (error, content) {
         if (error) {
@@ -791,6 +576,7 @@ export class InvoiceComponent implements OnInit {
         doc.setData({
           invoice_title: componentRef.invoiceLanguage.invoiceTitle,
           invoice_number: componentRef.invoiceLanguage.invoiceSubTitle,
+          invoice_prefix: componentRef.invoicePrefix,
           invoice_id: componentRef.invoiceID,
           invoice_generated_date: componentRef.currentDateFormatted,
           billing_from_title: componentRef.invoiceLanguage.invoiceBillingTitleFrom,
@@ -861,6 +647,8 @@ export class InvoiceComponent implements OnInit {
         saveAs(out, filename);
 
         componentRef.loadingScreenService.stopLoading();
+
+        componentRef.updateInvoiceID();
       }
     )
   }
@@ -882,10 +670,6 @@ export class InvoiceComponent implements OnInit {
   }
 
   private get currentDateFormatted(): string {
-    // return new Date().toLocaleString().replace(/(.*)\D\d+/, "$1");
-
-    const date = new Date().toLocaleDateString('en-GB');
-
-    return this.reverseString(date);
+    return this.dateService.currentDateFormatted;
   }
 }

@@ -42,101 +42,104 @@ function sendHappyBirthdayViaEmail() {
         if (!error && response.statusCode === 200) {
           conn.query(
             /*"SELECT distinct c.*, mb.* from customers c join mail_birthday_congratulation mb on c.storeId = mb.superadmin where DAY(c.birthday + interval 1 DAY) = DAY(CURRENT_DATE()) and MONTH(c.birthday) = MONTH(CURRENT_DATE())",*/
-            "SELECT distinct c.*, mb.* from customers c join mail_birthday_congratulation mb on c.storeId = mb.superadmin where DAY(c.birthday) = DAY(CURRENT_DATE()) and MONTH(c.birthday) = MONTH(CURRENT_DATE())",
+            "SELECT distinct c.*, mb.* from customers c join mail_birthday_congratulation mb on c.storeId = mb.superadmin where DAY(c.birthday + interval 1 DAY) = DAY(CURRENT_DATE()) and MONTH(c.birthday) = MONTH(CURRENT_DATE())",
             function (err, rows) {
               if (err) {
                 logger.log("error", err);
                 res.json(false);
               }
               var language = JSON.parse(body)["config"];
-              console.log(rows);
               rows.forEach(function (to, i, array) {
-                var mail = {};
-                var signatureAvailable = false;
-                mail = to;
-                if (mail.signatureAvailable) {
-                  signatureAvailable = true;
-                }
-                console.log(to);
-                var mailOptions = {
-                  from: '"ClinicNode" support@app-production.eu',
-                  to: to.email,
-                  subject: to.mailSubject
-                    ? to.mailSubject
-                    : language?.mailSubject,
-                  html: mailRender.render({
-                    firstName: to.shortname,
-                    message: to.message,
-                    initialGreeting: to.mailInitialGreeting
-                      ? to.mailInitialGreeting
-                      : language?.initialGreeting,
-                    finalGreeting: to.mailFinalGreeting
-                      ? to.mailFinalGreeting
-                      : language?.finalGreeting,
-                    signature: !signatureAvailable
-                      ? signatureAvailable
-                      : language?.signature,
-                    thanksForUsing: to.mailThanksForUsing
-                      ? to.mailThanksForUsing
-                      : language?.thanksForUsing,
-                    websiteLink: language?.websiteLink,
-                    ifYouHaveQuestion: to.mailIfYouHaveQuestion
-                      ? to.mailIfYouHaveQuestion
-                      : language?.ifYouHaveQuestion,
-                    notReply: to.mailNotReply
-                      ? to.mailNotReply
-                      : language?.notReply,
-                    copyRight: to.mailCopyRight
-                      ? to.mailCopyRight
-                      : language?.copyRight,
-                    message: to.mailMessage ? to.mailMessage : "",
-                    signature: to.mailSignature ? to.mailSignature : "",
-                    signatureCompanyName:
-                      signatureAvailable && to.signatureCompanyName
-                        ? to.signatureCompanyName
-                        : "",
-                    signatureAddress1:
-                      signatureAvailable && to.signatureAddress1
-                        ? to.signatureAddress1
-                        : "",
-                    signatureAddress2:
-                      signatureAvailable && to.signatureAddress2
-                        ? to.signatureAddress2
-                        : "",
-                    signatureAddress3:
-                      signatureAvailable && to.signatureAddress3
-                        ? to.signatureAddress3
-                        : "",
-                    signatureTelephone:
-                      signatureAvailable && to.signatureTelephone
-                        ? to.signatureTelephone
-                        : "",
-                    signatureMobile:
-                      signatureAvailable && to.signatureMobile
-                        ? to.signatureMobile
-                        : "",
-                    signatureEmail:
-                      signatureAvailable && to.signatureEmail
-                        ? to.signatureEmail
-                        : "",
-                  }),
-                };
-                smtpTransport.sendMail(mailOptions, function (error, response) {
-                  if (error) {
-                    logger.log("error", error);
-                    response.send(false);
-                  } else {
-                    logger.log(
-                      "info",
-                      `Sent mail for marketing promotion on EMAIL: ${to.email}`
-                    );
-                    response.send(true);
+                if (to.congratulationBirthday) {
+                  var mail = {};
+                  var signatureAvailable = false;
+                  mail = to;
+                  if (mail.signatureAvailable) {
+                    signatureAvailable = true;
                   }
-                });
-                logger.log(
-                      "info",
-                      `Sent mail for marketing promotion on EMAIL: ${to.email}`
-                    );
+                  var mailOptions = {
+                    from: '"ClinicNode" support@app-production.eu',
+                    to: to.email,
+                    subject: to.mailSubject
+                      ? to.mailSubject
+                      : language?.mailSubject,
+                    html: mailRender.render({
+                      firstName: to.shortname,
+                      message: to.message,
+                      initialGreeting: to.mailInitialGreeting
+                        ? to.mailInitialGreeting
+                        : language?.initialGreeting,
+                      finalGreeting: to.mailFinalGreeting
+                        ? to.mailFinalGreeting
+                        : language?.finalGreeting,
+                      signature: !signatureAvailable
+                        ? signatureAvailable
+                        : language?.signature,
+                      thanksForUsing: to.mailThanksForUsing
+                        ? to.mailThanksForUsing
+                        : language?.thanksForUsing,
+                      websiteLink: language?.websiteLink,
+                      ifYouHaveQuestion: to.mailIfYouHaveQuestion
+                        ? to.mailIfYouHaveQuestion
+                        : language?.ifYouHaveQuestion,
+                      notReply: to.mailNotReply
+                        ? to.mailNotReply
+                        : language?.notReply,
+                      copyRight: to.mailCopyRight
+                        ? to.mailCopyRight
+                        : language?.copyRight,
+                      message: to.mailMessage ? to.mailMessage : "",
+                      signature: to.mailSignature ? to.mailSignature : "",
+                      signatureCompanyName:
+                        signatureAvailable && to.signatureCompanyName
+                          ? to.signatureCompanyName
+                          : "",
+                      signatureAddress1:
+                        signatureAvailable && to.signatureAddress1
+                          ? to.signatureAddress1
+                          : "",
+                      signatureAddress2:
+                        signatureAvailable && to.signatureAddress2
+                          ? to.signatureAddress2
+                          : "",
+                      signatureAddress3:
+                        signatureAvailable && to.signatureAddress3
+                          ? to.signatureAddress3
+                          : "",
+                      signatureTelephone:
+                        signatureAvailable && to.signatureTelephone
+                          ? to.signatureTelephone
+                          : "",
+                      signatureMobile:
+                        signatureAvailable && to.signatureMobile
+                          ? to.signatureMobile
+                          : "",
+                      signatureEmail:
+                        signatureAvailable && to.signatureEmail
+                          ? to.signatureEmail
+                          : "",
+                    }),
+                  };
+                  smtpTransport.sendMail(
+                    mailOptions,
+                    function (error, response) {
+                      if (error) {
+                        logger.log("error", error);
+                        response.send(false);
+                      } else {
+                        logger.log(
+                          "info",
+                          `Sent mail for marketing promotion on EMAIL: ${to.email}`
+                        );
+                        response.send(true);
+                      }
+                    }
+                  );
+                  logger.log(
+                    "info",
+                    `Sent mail for marketing promotion on EMAIL: ${to.email}`
+                  );
+                }
               });
             }
           );

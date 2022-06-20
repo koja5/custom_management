@@ -99,7 +99,6 @@ import {
   WorkWeekService,
 } from "@syncfusion/ej2-angular-schedule";
 import { InvoiceComponent } from './invoice/invoice.component';
-import { InvoicePrefixComponent } from './administrator/invoice-prefix/invoice-prefix.component';
 import { SmsBirthdayCongratulationComponent } from './parameters/sms-birthday-congratulation/sms-birthday-congratulation.component';
 import { MailBirthdayCongratulationComponent } from './parameters/mail-birthday-congratulation/mail-birthday-congratulation.component';
 
@@ -152,7 +151,6 @@ import { MailBirthdayCongratulationComponent } from './parameters/mail-birthday-
     SmsMassiveComponent,
     AddHolidayComponent,
     InvoiceComponent,
-    InvoicePrefixComponent,
     SmsBirthdayCongratulationComponent,
     MailBirthdayCongratulationComponent
   ],

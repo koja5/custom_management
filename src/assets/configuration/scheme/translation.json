@@ -206,6 +206,12 @@
       "exportToPDF": {
         "type": "string"
       },
+      "exportAllToExcel": {
+        "type": "string"
+      },
+      "exportPageToPDF": {
+        "type": "string"
+      },
       "pagerPage": {
         "type": "string"
       },
@@ -314,12 +320,6 @@
       "allowSendInformation": {
         "type": "string"
       },
-      "titleOnInvoice": {
-        "type": "string"
-      },
-      "printOnInvoice": {
-        "type": "string"
-      },
       "start": {
         "type": "string"
       },
@@ -335,7 +335,7 @@
       "telephone": {
         "type": "string"
       },
-      "selectStore": {
+      "selectInvoiceStore": {
         "type": "string"
       },
       "selectUsers": {
@@ -1611,6 +1611,9 @@
       "errorChangeLanguageText": {
         "type": "string"
       },
+      "selectStore": {
+        "type": "string"
+      },
       "languages": {
         "type": "array",
         "items": {
@@ -1967,6 +1970,9 @@
         "type": "string"
       },
       "invoiceItem": {
+        "type": "string"
+      },
+      "invoiceID": {
         "type": "string"
       },
       "invoiceNetPrice": {
@@ -4152,6 +4158,12 @@
               "key": "exportToPDF"
             },
             {
+              "key": "exportAllToExcel"
+            },
+            {
+              "key": "exportPageToPDF"
+            },
+            {
               "key": "uploadFromExcel"
             },
             {
@@ -6286,6 +6298,9 @@
             },
             {
               "key": "invoiceNetPrice"
+            },
+            {
+              "key": "invoiceID"
             }
           ]
         },
@@ -6346,6 +6361,9 @@
             },
             {
               "key": "downloadWord"
+            },
+            {
+              "key": "selectInvoiceStore"
             }
           ]
         },
