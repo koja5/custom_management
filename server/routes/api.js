@@ -7126,7 +7126,7 @@ router.post("/updateMailPatientCreatedAccount", (req, res, next) => {
 
 /* END MAIL PATIENT CREATED ACCOUNT */
 
-/* MAIL PATIENT CREATED ACCOUNT */
+/* MAIL PATIENT CREATED ACCOUNT VIA FORM */
 
 router.get(
   "/getMailPatientCreatedAccountViaForm/:superadmin",
@@ -7217,7 +7217,7 @@ router.post("/updateMailPatientCreatedAccountViaForm", (req, res, next) => {
   }
 });
 
-/* END MAIL PATIENT CREATED ACCOUNT */
+/* END MAIL PATIENT CREATED ACCOUNT  VIA FORM */
 
 /* MAIL PATIENT FORM REGISTRATION */
 
