@@ -129,6 +129,14 @@
                 [(ngModel)]="selectedInvoiceLanguage" (valueChange)="valueChange($event)">
               </kendo-dropdownlist>
             </div>
+
+            <div class="col-sm-12 mt-5">
+              <label class="k-checkbox-label"> {{ language.selectInvoiceStore }} </label>
+              <br>
+              <kendo-dropdownlist [data]="storeList" textField="text" valueField="value" [(ngModel)]="selectedStoreInfo"
+                (valueChange)="storeValueChange($event)">
+              </kendo-dropdownlist>
+            </div>
           </div>
         </div>
       </div>
@@ -178,7 +186,7 @@
 
           <kendo-grid-column field="complaint_title" title="{{ language.complaintMenu}}"></kendo-grid-column>
           <kendo-grid-column field="date" title="{{ language.date}}"></kendo-grid-column>
-          <kendo-grid-column field="store" title="{{ language.store}}"></kendo-grid-column>
+          <kendo-grid-column field="storename" title="{{ language.store}}"></kendo-grid-column>
           <kendo-grid-column title="{{ language.doctorColumnTitle}}">
             <ng-template kendoGridCellTemplate let-dataItem>
               <h4>{{ dataItem.firstname }} {{ dataItem.lastname}}</h4>

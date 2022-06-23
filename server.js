@@ -212,15 +212,15 @@ var j = schedule.scheduleJob("10 15 * * *", function () {
   reminderViaEmail();
 });
 
-var j = schedule.scheduleJob("03 01 * * *", function () {
+var j = schedule.scheduleJob("00 12 * * *", function () {
   reminderViaSMS();
 });
 
-var j = schedule.scheduleJob("22 00 * * *", function () {
+var j = schedule.scheduleJob("30 13 * * *", function () {
   sendHappyBirthdayViaSMS();
 });
 
-var j = schedule.scheduleJob("23 00 * * *", function () {
+var j = schedule.scheduleJob("35 10 * * *", function () {
   sendHappyBirthdayViaEmail();
 });
 

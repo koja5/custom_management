@@ -92,6 +92,20 @@
     "field": "incompanysince"
   },
   {
+    "type": "textbox",
+    "width": "col-md-4",
+    "name": "invoicePrefix",
+    "label": "invoicePrefix",
+    "field": "invoicePrefix"
+  },
+  {
+    "type": "textbox",
+    "width": "col-md-4",
+    "name": "invoiceID",
+    "label": "invoiceID",
+    "field": "invoiceID"
+  },
+  {
     "type": "button",
     "width": "col-md-12",
     "class": "e-control e-btn e-lib e-primary e-flat",

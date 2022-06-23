@@ -1,4 +1,3 @@
-import { InvoicePrefixComponent } from "./administrator/invoice-prefix/invoice-prefix.component";
 import { AddHolidayComponent } from "./administrator/add-holiday/add-holiday.component";
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
@@ -169,7 +168,6 @@ const routes: Routes = [
       { path: "reservations", component: ReservationsComponent },
       { path: "template-account", component: TemplateAccountComponent },
       { path: "add-holiday", component: AddHolidayComponent },
-      { path: "invoice-prefix", component: InvoicePrefixComponent },
       { path: "mail-reminder", component: MailReminderComponent },
       {
         path: "mail-approve-reservation",
@@ -238,4 +236,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DashboardRouting {}
+export class DashboardRouting { }

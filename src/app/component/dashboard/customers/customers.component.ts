@@ -8,7 +8,7 @@ import {
   GroupDescriptor,
   SortDescriptor,
 } from "@progress/kendo-data-query";
-import { UploadEvent, SelectEvent } from "@progress/kendo-angular-upload";
+import { UploadEvent } from "@progress/kendo-angular-upload";
 import {
   DataStateChangeEvent,
   PageChangeEvent,
@@ -18,9 +18,6 @@ import {
 import { MessageService } from "../../../service/message.service";
 import { CustomerModel } from "../../../models/customer-model";
 import Swal from "sweetalert2";
-// import * as GC from "@grapecity/spread-sheets";
-// import * as Excel from "@grapecity/spread-excelio";
-import { WindowModule } from "@progress/kendo-angular-dialog";
 import * as XLSX from "ts-xlsx";
 import { HelpService } from "src/app/service/help.service";
 import { MailService } from "src/app/service/mail.service";
@@ -35,6 +32,7 @@ const newLocal = "data";
 export class CustomersComponent implements OnInit {
   @ViewChild(DataBindingDirective) dataBinding: DataBindingDirective;
   @ViewChild('customer') customer: Modal;
+  @ViewChild('grid') grid;
   @ViewChild('patientFormRegistrationDialog') patientFormRegistrationDialog: Modal;
   public data = new CustomerModel();
   public unamePattern = "^[a-z0-9_-]{8,15}$";
@@ -62,6 +60,7 @@ export class CustomersComponent implements OnInit {
   public customerDialogOpened = false;
   public fileValue: any;
   public theme: string;
+  public allPages: boolean;
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
   }
@@ -318,6 +317,14 @@ export class CustomersComponent implements OnInit {
     fileReader.readAsArrayBuffer(args.target.files[0]);
   }
 
+  exportPDF(value: boolean): void {
+    this.allPages = value;
+
+    setTimeout(() => {
+      this.grid.saveAsPDF('Customers.pdf');
+    }, 0);
+  }
+
   xlsxToJson(data) {
     const rowCount = data.length;
     const objectArray = [];
@@ -541,7 +548,7 @@ export class CustomersComponent implements OnInit {
     this.patientFormRegistrationDialog.close();
     this.mailService.sendPatientFormRegistration(data).subscribe((data) => {
       console.log(data);
-      if(data) {
+      if (data) {
         this.helpService.successToastr(this.language.successSendFormToMail, "");
       } else {
         this.helpService.errorToastr(this.language.errorSendFormToMail, "");
