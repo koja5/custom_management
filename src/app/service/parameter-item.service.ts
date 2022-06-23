@@ -150,6 +150,18 @@ export class ParameterItemService extends BehaviorSubject<any[]> {
     return this.http.post("/api/updateMailPatientCreatedAccount", data);
   }
 
+  getMailPatientCreatedAccountViaForm(id: number) {
+    return this.http.get("/api/getMailPatientCreatedAccountViaForm/" + id);
+  }
+
+  createMailPatientCreatedAccountViaForm(data) {
+    return this.http.post("/api/createMailPatientCreatedAccountViaForm", data);
+  }
+
+  updateMailPatientCreatedAccountViaForm(data) {
+    return this.http.post("/api/updateMailPatientCreatedAccountViaForm", data);
+  }
+
   getMailPatientFormRegistration(id: number) {
     return this.http.get("/api/getMailPatientFormRegistration/" + id);
   }

@@ -745,6 +745,27 @@
                               <li
                                 class="{{
                                   selectedNodeModel[
+                                    'mail_patient_created_account_via_form'
+                                  ]
+                                }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/mail-patient-created-account-via-form"
+                                  (click)="
+                                    returnActiveNode(
+                                      'mail_patient_created_account_via_form'
+                                    )
+                                  "
+                                  class="nav-link"
+                                  ><i class="fa fa-envelope"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.mailPatientCreatedAccountViaForm }}
+                                </a>
+                              </li>
+                              <li
+                                class="{{
+                                  selectedNodeModel[
                                     'mail_patient_form_registration'
                                   ]
                                 }}"

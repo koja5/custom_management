@@ -52,6 +52,35 @@ export class ReservationsComponent implements OnInit {
   }
 
   callApiPost(api, value) {
+    const mail = {
+      id: value,
+      superadmin: this.helpService.getSuperadmin(),
+      email: this.data.data.email,
+      language: this.packLanguage.getLanguageForInfoForApproveReservation(),
+    };
+    if (this.data.id === "approve") {
+      this.mailService.sendInfoForApproveReservation(mail).subscribe((data) => {
+        if (data) {
+          this.deleteReservation(api, value);
+        }
+      });
+    } else if (this.data.id === "deny") {
+      const mail = {
+        id: value,
+        superadmin: this.helpService.getSuperadmin(),
+        email: this.data.data.email,
+        language: this.packLanguage.getLanguageForInfoForDenyReservation(),
+      };
+      this.mailService.sendInfoForDenyReservation(mail).subscribe((data) => {
+        console.log(data);
+        if (data) {
+          this.deleteReservation(api, value);
+        }
+      });
+    }
+  }
+
+  deleteReservation(api, value) {
     this.service.callApiPost(api, { id: value }).subscribe((data) => {
       if (data) {
         this.helpService.successToastr(
@@ -59,32 +88,6 @@ export class ReservationsComponent implements OnInit {
           this.language.reservationSuccessUpdateText
         );
         this.messageService.sendRefreshDynamicGrid();
-        if (this.data.id === "approve") {
-          const mail = {
-            id: value,
-            superadmin: this.helpService.getSuperadmin(),
-            email: this.data.data.email,
-            language:
-              this.packLanguage.getLanguageForInfoForApproveReservation(),
-          };
-          this.mailService
-            .sendInfoForApproveReservation(mail)
-            .subscribe((data) => {
-              console.log(data);
-            });
-        } else if (this.data.id === "deny") {
-          const mail = {
-            id: value,
-            superadmin: this.helpService.getSuperadmin(),
-            email: this.data.data.email,
-            language: this.packLanguage.getLanguageForInfoForDenyReservation(),
-          };
-          this.mailService
-            .sendInfoForDenyReservation(mail)
-            .subscribe((data) => {
-              console.log(data);
-            });
-        }
       } else {
         this.helpService.errorToastr(
           "",

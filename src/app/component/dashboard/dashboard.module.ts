@@ -101,6 +101,7 @@ import {
 import { InvoiceComponent } from './invoice/invoice.component';
 import { SmsBirthdayCongratulationComponent } from './parameters/sms-birthday-congratulation/sms-birthday-congratulation.component';
 import { MailBirthdayCongratulationComponent } from './parameters/mail-birthday-congratulation/mail-birthday-congratulation.component';
+import { MailPatientCreatedAccountViaFormComponent } from './parameters/mail-parameters/mail-patient-created-account-via-form/mail-patient-created-account-via-form.component';
 
 @NgModule({
   declarations: [
@@ -138,6 +139,7 @@ import { MailBirthdayCongratulationComponent } from './parameters/mail-birthday-
     MailConfirmArrivalComponent,
     MailPatientFormRegistrationComponent,
     MailPatientCreatedAccountComponent,
+    MailPatientCreatedAccountViaFormComponent,
     MailApproveReservationComponent,
     MailDenyReservationComponent,
     SmsReminderComponent,

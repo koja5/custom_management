@@ -6475,6 +6475,12 @@ router.post("/loadTemplateAccount", function (req, res, next) {
     );
     insertFromTemplate(
       conn,
+      "mail_patient_created_account_via_form",
+      req.body.account_id,
+      req.body.id
+    );
+    insertFromTemplate(
+      conn,
       "mail_birthday_congratulation",
       req.body.account_id,
       req.body.id
@@ -7142,6 +7148,99 @@ router.post("/updateMailPatientCreatedAccount", (req, res, next) => {
 });
 
 /* END MAIL PATIENT CREATED ACCOUNT */
+
+/* MAIL PATIENT CREATED ACCOUNT VIA FORM */
+
+router.get(
+  "/getMailPatientCreatedAccountViaForm/:superadmin",
+  function (req, res, next) {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      }
+      conn.query(
+        "SELECT * from mail_patient_created_account_via_form where superadmin = ?",
+        [req.params.superadmin],
+        function (err, rows) {
+          conn.release();
+          if (!err) {
+            res.json(rows);
+          } else {
+            logger.log("error", err.sql + ". " + err.sqlMessage);
+            res.json(err);
+          }
+        }
+      );
+    });
+  }
+);
+
+router.post("/createMailPatientCreatedAccountViaForm", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "insert into mail_patient_created_account_via_form SET ?",
+          [req.body],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/updateMailPatientCreatedAccountViaForm", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "update mail_patient_created_account_via_form SET ? where superadmin = ?",
+          [req.body, req.body.superadmin],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+/* END MAIL PATIENT CREATED ACCOUNT  VIA FORM */
 
 /* MAIL PATIENT FORM REGISTRATION */
 
