@@ -1,6 +1,12 @@
-import { InvoiceService } from './../../../service/invoice.service';
+import { InvoiceService } from "./../../../service/invoice.service";
 import { ParameterItemService } from "src/app/service/parameter-item.service";
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import { CustomerModel } from "src/app/models/customer-model";
 import { CustomersService } from "src/app/service/customers.service";
 import { DateRangeService } from "@progress/kendo-angular-dateinputs";
@@ -22,8 +28,8 @@ import pdfMake from "pdfmake/build/pdfmake";
 import PizZip from "pizzip";
 import PizZipUtils from "pizzip/utils/index.js";
 import { DashboardService } from "src/app/service/dashboard.service";
-import { LoadingScreenService } from 'src/app/shared/loading-screen/loading-screen.service';
-import { DateService } from 'src/app/service/date.service';
+import { LoadingScreenService } from "src/app/shared/loading-screen/loading-screen.service";
+import { DateService } from "src/app/service/date.service";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -41,7 +47,6 @@ export class InvoiceComponent implements OnInit {
   @ViewChild("contentWrapper") contentElement: ElementRef<HTMLElement>;
   invoiceStore = null;
   allStores: any[];
-
 
   @HostListener("window:resize", ["$event"])
   onResize(): void {
@@ -115,8 +120,10 @@ export class InvoiceComponent implements OnInit {
   }
 
   public get tableHeight(): number {
-
-    let height = 100 - (100 * this.filterToolbar.nativeElement.clientHeight) / this.contentElement.nativeElement.clientHeight;
+    let height =
+      100 -
+      (100 * this.filterToolbar.nativeElement.clientHeight) /
+        this.contentElement.nativeElement.clientHeight;
 
     return height;
   }
@@ -133,7 +140,7 @@ export class InvoiceComponent implements OnInit {
     private loadingScreenService: LoadingScreenService,
     private dateService: DateService,
     private invoiceService: InvoiceService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.initializationConfig();
@@ -161,32 +168,30 @@ export class InvoiceComponent implements OnInit {
     this.loggedInUserId = this.helpService.getMe();
 
     this.superadminID = this.helpService.getSuperadmin();
-    this.parameterItemService.getSuperadminProfile(this.superadminID).subscribe((data) => {
+    this.parameterItemService
+      .getSuperadminProfile(this.superadminID)
+      .subscribe((data) => {
+        this.superadminProfile = data[0];
+        this.invoicePrefix = this.superadminProfile.invoicePrefix;
+        this.invoiceID = this.superadminProfile.invoiceID;
+        this.changedInvoiceID = this.superadminProfile.invoiceID;
 
-      this.superadminProfile = data[0];
-      this.invoicePrefix = this.superadminProfile.invoicePrefix;
-      this.invoiceID = this.superadminProfile.invoiceID;
-      this.changedInvoiceID = this.superadminProfile.invoiceID;
-
-      console.log(data);
-    });
+        console.log(data);
+      });
 
     this.getParameters();
 
-    this.dashboardService.getTranslation().subscribe(
-      data => {
-        console.log(data);
-        this.languageList = [];
+    this.dashboardService.getTranslation().subscribe((data) => {
+      console.log(data);
+      this.languageList = [];
 
-        data.forEach(elem => {
-          this.languageList.push({
-            'text': elem.language,
-            'value': elem.config
-          })
+      data.forEach((elem) => {
+        this.languageList.push({
+          text: elem.language,
+          value: elem.config,
         });
-      }
-    );
-
+      });
+    });
   }
 
   valueChange(event) {
@@ -195,8 +200,8 @@ export class InvoiceComponent implements OnInit {
   }
 
   storeValueChange(event) {
-    this.invoiceStore = this.allStores.find(elem => elem.id === event.value);
-    console.log('this.invoiceStore ', this.invoiceStore);
+    this.invoiceStore = this.allStores.find((elem) => elem.id === event.value);
+    console.log("this.invoiceStore ", this.invoiceStore);
     this.selectedStoreInfo = event;
   }
 
@@ -209,9 +214,11 @@ export class InvoiceComponent implements OnInit {
         });
       });
 
-    this.parameterItemService.getVATTex(this.superadminID).subscribe((data: []) => {
-      this.vatTaxList = data;
-    });
+    this.parameterItemService
+      .getVATTex(this.superadminID)
+      .subscribe((data: []) => {
+        this.vatTaxList = data;
+      });
   }
 
   public searchCustomer(event): void {
@@ -285,7 +292,7 @@ export class InvoiceComponent implements OnInit {
     this.isAllChecked = false;
 
     this.taskService.getDataForMassiveInvoice(patientId).then((data) => {
-      console.log('getDataForMassiveInvoice : ', data);
+      console.log("getDataForMassiveInvoice : ", data);
       this.currentLoadData = [];
 
       if (this.range.start && this.range.end) {
@@ -322,25 +329,24 @@ export class InvoiceComponent implements OnInit {
             this.store = data[0];
           });
 
-
-        const storeIds = this.currentLoadData.map(elem => elem.storeId);
+        const storeIds = this.currentLoadData.map((elem) => elem.storeId);
         const unique = (x, i, a) => a.indexOf(x) == i;
         const uniqueStoreIds = storeIds.filter(unique);
 
-        console.log('unique ', uniqueStoreIds);
+        console.log("unique ", uniqueStoreIds);
 
         this.storeService.getStoreList(uniqueStoreIds).then((data) => {
           this.allStores = data;
           this.storeList = [];
 
-          data.forEach(elem => {
+          data.forEach((elem) => {
             this.storeList.push({
-              'text': elem.storename,
-              'value': elem.id
-            })
+              text: elem.storename,
+              value: elem.id,
+            });
           });
 
-          console.log('storeList ', this.storeList);
+          console.log("storeList ", this.storeList);
         });
       }
 
@@ -404,35 +410,41 @@ export class InvoiceComponent implements OnInit {
   }
 
   private updateInvoiceID(): void {
-
     if (this.invoiceID !== this.changedInvoiceID) {
       const data = {
         superAdminId: this.superadminID,
-        id: this.changedInvoiceID
-      }
+        id: this.changedInvoiceID,
+      };
       console.log("updateInvoiceID");
 
       this.invoiceService.updateInvoiceID(data);
-
     }
   }
 
   private setupPDF() {
-
     if (this.invoiceID === this.changedInvoiceID) {
       this.changedInvoiceID++;
     }
 
     const therapyPricesData = this.getTherapyAndPricesData();
 
-    console.log('invoice store ', this.invoiceStore);
-    const store = (this.invoiceStore !== undefined && this.invoiceStore !== null)
-      ? this.invoiceStore
-      : this.store;
+    console.log("invoice store ", this.invoiceStore);
+    const store =
+      this.invoiceStore !== undefined && this.invoiceStore !== null
+        ? this.invoiceStore
+        : this.store;
 
     const invoicePrefixID = this.invoicePrefix + "-" + this.invoiceID;
 
-    let docDefinition = this.pdfService.getPDFDefinition(this.superadminProfile, store, this.customerUser, therapyPricesData, this.isPriceIncluded, invoicePrefixID, this.invoiceLanguage);
+    let docDefinition = this.pdfService.getPDFDefinition(
+      this.superadminProfile,
+      store,
+      this.customerUser,
+      therapyPricesData,
+      this.isPriceIncluded,
+      invoicePrefixID,
+      this.invoiceLanguage
+    );
 
     return docDefinition;
   }
@@ -477,16 +489,15 @@ export class InvoiceComponent implements OnInit {
             const isNaNPrice = isNaN(parseFloat(therapy.net_price));
 
             if (isNaNPrice) {
-              console.log('Net price not a number: ', therapy.net_price);
+              console.log("Net price not a number: ", therapy.net_price);
             }
 
             netPrices.push(parseFloat(therapy.net_price));
 
-
             const isNaNBrutoPrice = isNaN(parseFloat(therapy.gross_price));
 
             if (isNaNBrutoPrice) {
-              console.log('Bruto price not a number: ', therapy.gross_price);
+              console.log("Bruto price not a number: ", therapy.gross_price);
             }
 
             brutoPrices.push(parseFloat(therapy.gross_price));
@@ -500,11 +511,30 @@ export class InvoiceComponent implements OnInit {
 
             if (therapy.printOnInvoice) {
               therapies.push({
-                title: (therapy.titleOnInvoice && therapy.titleOnInvoice.trim() !== "") ? therapy.titleOnInvoice : therapy.title,
-                date: shouldSetDate ? this.formatDate(therapy.date) : '',
-                net_price: this.isPriceIncluded ? (isNaNPrice ? this.invoiceLanguage.noDataAvailable : this.invoiceLanguage.euroSign + ' ' + parseFloat(therapy.net_price).toFixed(2)) : '',
-                vat: this.isPriceIncluded ? (vatDefinition ? vatDefinition.title : 20) : '',
-                gross_price: this.isPriceIncluded ? (isNaNBrutoPrice ? this.invoiceLanguage.noDataAvailable : this.invoiceLanguage.euroSign + ' ' + parseFloat(therapy.gross_price).toFixed(2)) : ''
+                title:
+                  therapy.titleOnInvoice && therapy.titleOnInvoice.trim() !== ""
+                    ? therapy.titleOnInvoice
+                    : therapy.title,
+                date: shouldSetDate ? this.formatDate(therapy.date) : "",
+                net_price: this.isPriceIncluded
+                  ? isNaNPrice
+                    ? this.invoiceLanguage.noDataAvailable
+                    : this.invoiceLanguage.euroSign +
+                      " " +
+                      parseFloat(therapy.net_price).toFixed(2)
+                  : "",
+                vat: this.isPriceIncluded
+                  ? vatDefinition
+                    ? vatDefinition.title
+                    : 20
+                  : "",
+                gross_price: this.isPriceIncluded
+                  ? isNaNBrutoPrice
+                    ? this.invoiceLanguage.noDataAvailable
+                    : this.invoiceLanguage.euroSign +
+                      " " +
+                      parseFloat(therapy.gross_price).toFixed(2)
+                  : "",
               });
             }
           }
@@ -536,11 +566,13 @@ export class InvoiceComponent implements OnInit {
 
     let vatValues = [];
     const therapies = data.therapies;
-    const netPrices = data.netPrices.filter(num => !isNaN(parseFloat(num)));
-    const brutoPrices = data.brutoPrices.filter(num => !isNaN(parseFloat(num)));
+    const netPrices = data.netPrices.filter((num) => !isNaN(parseFloat(num)));
+    const brutoPrices = data.brutoPrices.filter(
+      (num) => !isNaN(parseFloat(num))
+    );
 
     vatValues = brutoPrices.map(function (item, index) {
-      // In this case item correspond to currentValue of array a, 
+      // In this case item correspond to currentValue of array a,
       // using index to get value from array b
       return item - netPrices[index];
     });
@@ -549,108 +581,123 @@ export class InvoiceComponent implements OnInit {
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
-    // const link =
-    //   window.location.protocol +
-    //   "//" +
-    //   window.location.hostname +
-    //   ":" +
-    //   window.location.port +
-    //   "/assets/Invoice_template.docx";
+    const link =
+      window.location.protocol +
+      "//" +
+      window.location.hostname +
+      ":" +
+      window.location.port +
+      "/assets/Invoice_template.docx";
 
-    const link = "http://127.0.0.1:8887/Invoice_template.docx";
-    this.loadFile(link,
-      function (error, content) {
-        if (error) {
-          throw error;
-        }
-
-        const zip = new PizZip(content);
-        const doc = new Docxtemplater(zip, {
-          paragraphLoop: true,
-          linebreaks: true,
-          nullGetter: function () {
-            return "";
-          },
-        });
-
-        doc.setData({
-          invoice_title: componentRef.invoiceLanguage.invoiceTitle,
-          invoice_number: componentRef.invoiceLanguage.invoiceSubTitle,
-          invoice_prefix: componentRef.invoicePrefix,
-          invoice_id: componentRef.invoiceID,
-          invoice_generated_date: componentRef.currentDateFormatted,
-          billing_from_title: componentRef.invoiceLanguage.invoiceBillingTitleFrom,
-          billing_to_title: componentRef.invoiceLanguage.invoiceBillingTitleTo,
-          clinic_name: componentRef.store.companyname ? componentRef.store.companyname : componentRef.store.storename,
-          customer_lastname: componentRef.customerUser.lastname,
-          customer_firstname: componentRef.customerUser.firstname,
-          clinic_street: componentRef.store.street,
-          customer_street: componentRef.customerUser.street,
-          customer_streetnumber: componentRef.customerUser.streetnumber,
-          clinic_zipcode: componentRef.store.zipcode,
-          clinic_city: componentRef.store.place,
-          customer_city: componentRef.customerUser.city,
-          clinic_telephone: componentRef.store.telephone,
-          clinic_email: componentRef.store.email,
-          subtotal_title: componentRef.invoiceLanguage.invoiceSubtotal,
-          total_title: componentRef.invoiceLanguage.invoiceTotal,
-          products: therapies,
-          subtotal_price: componentRef.isPriceIncluded ?
-            (netPrices.length === 0 ? componentRef.invoiceLanguage.noDataAvailable : (componentRef.invoiceLanguage.euroSign + " " + subtotal)) : '',
-          total_price: componentRef.isPriceIncluded ?
-            (brutoPrices.length === 0 ? componentRef.invoiceLanguage.noDataAvailable : (componentRef.invoiceLanguage.euroSign + " " + total)) : '',
-          item_date: componentRef.invoiceLanguage.date,
-          item_title: componentRef.invoiceLanguage.invoiceItem,
-          netto_price_title: componentRef.isPriceIncluded ? componentRef.invoiceLanguage.invoiceNetPrice : '',
-          vat: componentRef.isPriceIncluded ? componentRef.invoiceLanguage.vat + " (%)" : '',
-          vat_title: componentRef.invoiceLanguage.vat,
-          vat_code: componentRef.store.vatcode ? componentRef.store.vatcode : componentRef.superadminProfile.vatcode,
-          vat_price: componentRef.isPriceIncluded ? vat : '',
-          gross_price_title: componentRef.isPriceIncluded ? componentRef.invoiceLanguage.invoiceGrossPrice : '',
-          date_title: componentRef.invoiceLanguage.dateTitle,
-          price_title: componentRef.invoiceLanguage.invoiceNetPrice,
-          // notes_title: componentRef.invoiceLanguage,
-          notes_text: componentRef.invoiceLanguage.notesText
-        });
-
-        try {
-          // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
-          doc.render();
-        } catch (error) {
-          // The error thrown here contains additional information when logged with JSON.stringify (it contains a properties object containing all suberrors).
-          this.replaceErrors();
-          // console.log(JSON.stringify({ error: error }, replaceErrors));
-
-          if (error.properties && error.properties.errors instanceof Array) {
-            const errorMessages = error.properties.errors
-              .map(function (error) {
-                return error.properties.explanation;
-              })
-              .join("\n");
-            console.log("errorMessages", errorMessages);
-            // errorMessages is a humanly readable message looking like this :
-            // 'The tag beginning with "foobar" is unopened'
-          }
-          throw error;
-        }
-        const out = doc.getZip().generate({
-          type: "blob",
-          mimeType:
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        });
-        // Output the document using Data-URI
-
-        const filename =
-          componentRef.customerUser.lastname +
-          componentRef.customerUser.firstname +
-          ".docx";
-        saveAs(out, filename);
-
-        componentRef.loadingScreenService.stopLoading();
-
-        componentRef.updateInvoiceID();
+    // const link = "http://127.0.0.1:8887/Invoice_template.docx";
+    this.loadFile(link, function (error, content) {
+      if (error) {
+        throw error;
       }
-    )
+
+      const zip = new PizZip(content);
+      const doc = new Docxtemplater(zip, {
+        paragraphLoop: true,
+        linebreaks: true,
+        nullGetter: function () {
+          return "";
+        },
+      });
+
+      doc.setData({
+        invoice_title: componentRef.invoiceLanguage.invoiceTitle,
+        invoice_number: componentRef.invoiceLanguage.invoiceSubTitle,
+        invoice_prefix: componentRef.invoicePrefix,
+        invoice_id: componentRef.invoiceID,
+        invoice_generated_date: componentRef.currentDateFormatted,
+        billing_from_title:
+          componentRef.invoiceLanguage.invoiceBillingTitleFrom,
+        billing_to_title: componentRef.invoiceLanguage.invoiceBillingTitleTo,
+        clinic_name: componentRef.store.companyname
+          ? componentRef.store.companyname
+          : componentRef.store.storename,
+        customer_lastname: componentRef.customerUser.lastname,
+        customer_firstname: componentRef.customerUser.firstname,
+        clinic_street: componentRef.store.street,
+        customer_street: componentRef.customerUser.street,
+        customer_streetnumber: componentRef.customerUser.streetnumber,
+        clinic_zipcode: componentRef.store.zipcode,
+        clinic_city: componentRef.store.place,
+        customer_city: componentRef.customerUser.city,
+        clinic_telephone: componentRef.store.telephone,
+        clinic_email: componentRef.store.email,
+        subtotal_title: componentRef.invoiceLanguage.invoiceSubtotal,
+        total_title: componentRef.invoiceLanguage.invoiceTotal,
+        products: therapies,
+        subtotal_price: componentRef.isPriceIncluded
+          ? netPrices.length === 0
+            ? componentRef.invoiceLanguage.noDataAvailable
+            : componentRef.invoiceLanguage.euroSign + " " + subtotal
+          : "",
+        total_price: componentRef.isPriceIncluded
+          ? brutoPrices.length === 0
+            ? componentRef.invoiceLanguage.noDataAvailable
+            : componentRef.invoiceLanguage.euroSign + " " + total
+          : "",
+        item_date: componentRef.invoiceLanguage.date,
+        item_title: componentRef.invoiceLanguage.invoiceItem,
+        netto_price_title: componentRef.isPriceIncluded
+          ? componentRef.invoiceLanguage.invoiceNetPrice
+          : "",
+        vat: componentRef.isPriceIncluded
+          ? componentRef.invoiceLanguage.vat + " (%)"
+          : "",
+        vat_title: componentRef.invoiceLanguage.vat,
+        vat_code: componentRef.store.vatcode
+          ? componentRef.store.vatcode
+          : componentRef.superadminProfile.vatcode,
+        vat_price: componentRef.isPriceIncluded ? vat : "",
+        gross_price_title: componentRef.isPriceIncluded
+          ? componentRef.invoiceLanguage.invoiceGrossPrice
+          : "",
+        date_title: componentRef.invoiceLanguage.dateTitle,
+        price_title: componentRef.invoiceLanguage.invoiceNetPrice,
+        // notes_title: componentRef.invoiceLanguage,
+        notes_text: componentRef.invoiceLanguage.notesText,
+      });
+
+      try {
+        // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
+        doc.render();
+      } catch (error) {
+        // The error thrown here contains additional information when logged with JSON.stringify (it contains a properties object containing all suberrors).
+        this.replaceErrors();
+        // console.log(JSON.stringify({ error: error }, replaceErrors));
+
+        if (error.properties && error.properties.errors instanceof Array) {
+          const errorMessages = error.properties.errors
+            .map(function (error) {
+              return error.properties.explanation;
+            })
+            .join("\n");
+          console.log("errorMessages", errorMessages);
+          // errorMessages is a humanly readable message looking like this :
+          // 'The tag beginning with "foobar" is unopened'
+        }
+        throw error;
+      }
+      const out = doc.getZip().generate({
+        type: "blob",
+        mimeType:
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      });
+      // Output the document using Data-URI
+
+      const filename =
+        componentRef.customerUser.lastname +
+        componentRef.customerUser.firstname +
+        ".docx";
+      saveAs(out, filename);
+
+      componentRef.loadingScreenService.stopLoading();
+
+      componentRef.updateInvoiceID();
+    });
   }
 
   replaceErrors(value) {

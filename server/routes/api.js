@@ -5251,7 +5251,7 @@ router.post("/sendSMS", function (req, res) {
                     }
 
                     if (language?.smsSignaturePoweredBy) {
-                      signature += language?.smsSignaturePoweredBy + " \n";
+                      signature += " \n" + language?.smsSignaturePoweredBy + " \n";
                     }
 
                     if (sms.smsDate) {
@@ -5283,6 +5283,7 @@ router.post("/sendSMS", function (req, res) {
                       signature;
                     updateAvailableSMSCount(1, req.body.superadmin);
                     sendSmsFromMail(phoneNumber, message);
+                    res.send(true);
                   } else if (smsMessage.length === 0) {
                     res.send({
                       info: false,
@@ -5626,7 +5627,7 @@ router.post("/sendMassiveSMS", function (req, res) {
                       }
 
                       if (language.smsSignaturePoweredBy) {
-                        signature += language.smsSignaturePoweredBy + " \n";
+                        signature += " \n" + language.smsSignaturePoweredBy + " \n";
                       }
 
                       var content =
@@ -5730,7 +5731,7 @@ function splitSenderToPartArray(rows, codes, req, language) {
         }
 
         if (language?.smsSignaturePoweredBy) {
-          signature += language?.smsSignaturePoweredBy + " \n";
+          signature += " \n" + language?.smsSignaturePoweredBy + " \n";
         }
 
         var content =
