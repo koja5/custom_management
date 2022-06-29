@@ -23,6 +23,9 @@ import { Modal } from "ngx-modal";
 })
 export class VaucherComponent implements OnInit {
   @ViewChild('vaucher') vaucher: Modal;
+  @ViewChild('grid') grid;
+
+  public allPages: boolean;
   public data = new VaucherModel();
   public unamePattern = "^[a-z0-9_-]{8,15}$";
   public emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$";
@@ -424,6 +427,14 @@ export class VaucherComponent implements OnInit {
       }, 50);
     };
     fileReader.readAsArrayBuffer(args.target.files[0]);
+  }
+
+  exportPDF(value: boolean): void {
+    this.allPages = value;
+
+    setTimeout(() => {
+      this.grid.saveAsPDF();
+    }, 0);
   }
 
   xlsxToJson(data) {

@@ -325,7 +325,7 @@ export class UsersComponent implements OnInit {
     this.allPages = value;
 
     setTimeout(() => {
-      this.grid.saveAsPDF('Customers.pdf');
+      this.grid.saveAsPDF();
     }, 0);
   }
 
