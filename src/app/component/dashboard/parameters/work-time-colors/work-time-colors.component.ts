@@ -21,6 +21,9 @@ import { HelpService } from "src/app/service/help.service";
 })
 export class WorkTimeColorsComponent implements OnInit {
   @ViewChild("workTimeColorsModal") workTimeColorsModal: Modal;
+  @ViewChild('grid') grid;
+
+  public allPages: boolean;
   public height: any;
   public state: State = {
     skip: 0,
@@ -59,7 +62,7 @@ export class WorkTimeColorsComponent implements OnInit {
     private serviceHelper: ServiceHelperService,
     private toastr: ToastrService,
     private helpService: HelpService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.height = this.helpService.getHeightForGrid();
@@ -240,6 +243,15 @@ export class WorkTimeColorsComponent implements OnInit {
       }, 50);
     };
     fileReader.readAsArrayBuffer(args.target.files[0]);*/
+  }
+
+
+  exportPDF(value: boolean): void {
+    this.allPages = value;
+
+    setTimeout(() => {
+      this.grid.saveAsPDF('Customers.pdf');
+    }, 0);
   }
 
   xlsxToJson(data) {

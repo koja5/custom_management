@@ -21,6 +21,10 @@ import { Modal } from "ngx-modal";
 })
 export class EventCategoryComponent implements OnInit {
   @ViewChild("eventCategoryModal") eventCategoryModal: Modal;
+  @ViewChild('grid') grid;
+
+  public allPages: boolean;
+
   public height: any;
   public state: State = {
     skip: 0,
@@ -229,6 +233,16 @@ export class EventCategoryComponent implements OnInit {
     };
     fileReader.readAsArrayBuffer(args.target.files[0]);*/
   }
+
+
+  exportPDF(value: boolean): void {
+    this.allPages = value;
+
+    setTimeout(() => {
+      this.grid.saveAsPDF('Customers.pdf');
+    }, 0);
+  }
+
 
   xlsxToJson(data) {
     const rowCount = data.length;
