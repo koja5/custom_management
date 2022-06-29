@@ -4,6 +4,7 @@
 
 <div *ngIf="!loading" style="height: 100%">
   <kendo-grid
+    #grid
     [data]="gridView"
     [style.height]="height"
     [resizable]="true"
@@ -68,10 +69,12 @@
                   (change)="onFileChange($event)"
                   [(ngModel)]="fileValue" /></label
             ></a>
-            <a kendoGridPDFCommand
-              ><span class="k-icon k-i-file-pdf"></span>
-              {{ language.exportToPDF }}</a
-            >
+            <a (click)="exportPDF(false)"><span class="k-icon k-i-file-pdf"></span>
+              {{ language.exportPageToPDF }}</a>
+            
+            <a (click)="exportPDF(true)"><span class="k-icon k-i-file-pdf"></span>
+              {{ language.exportToPDF }}</a>
+
             <a kendoGridExcelCommand
               ><span class="k-icon k-i-file-excel"></span>
               {{ language.exportToExcel }}</a
@@ -120,8 +123,9 @@
 
     <kendo-grid-pdf
       fileName="Users.pdf"
-      [allPages]="true"
+      [allPages]="allPages"
       paperSize="A4"
+      [scale]="0.8"
       [repeatHeaders]="true"
       [landscape]="true"
     >

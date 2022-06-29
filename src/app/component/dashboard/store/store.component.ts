@@ -30,6 +30,11 @@ export class StoreComponent implements OnInit {
   @ViewChild("storeEdit") storeEdit: Modal;
   @ViewChild("storeCreate") storeCreate: Modal;
   // public storeEdit = false;
+
+  @ViewChild('grid') grid;
+
+  public allPages: boolean;
+
   public data = new StoreModel();
   public currentLoadData: any;
   public gridData: any;
@@ -194,7 +199,7 @@ export class StoreComponent implements OnInit {
     this.storeEdit.close();
   }
 
-  deleteStore(store) {}
+  deleteStore(store) { }
 
   dataStateChange(state: DataStateChangeEvent): void {
     this.state = state;
@@ -332,6 +337,14 @@ export class StoreComponent implements OnInit {
       }, 50);
     };
     fileReader.readAsArrayBuffer(args.target.files[0]);
+  }
+
+  exportPDF(value: boolean): void {
+    this.allPages = value;
+
+    setTimeout(() => {
+      this.grid.saveAsPDF('Customers.pdf');
+    }, 0);
   }
 
   xlsxToJson(data) {
