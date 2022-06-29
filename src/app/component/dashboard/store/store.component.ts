@@ -9,6 +9,7 @@ import {
 } from "@progress/kendo-data-query";
 import {
   DataStateChangeEvent,
+  GridComponent,
   PageChangeEvent,
   RowArgs,
 } from "@progress/kendo-angular-grid";
@@ -19,6 +20,7 @@ import Swal from "sweetalert2";
 import * as XLSX from "ts-xlsx";
 import { MessageService } from "src/app/service/message.service";
 import { HelpService } from "src/app/service/help.service";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 
 @Component({
   selector: "app-store",
@@ -34,6 +36,7 @@ export class StoreComponent implements OnInit {
   @ViewChild('grid') grid;
 
   public allPages: boolean;
+  private _allData: ExcelExportData;
 
   public data = new StoreModel();
   public currentLoadData: any;
@@ -74,7 +77,7 @@ export class StoreComponent implements OnInit {
     public message: MessageService,
     private helpService: HelpService
   ) {
-    // this.excelIO = new Excel.IO();
+    this.allData = this.allData.bind(this);
   }
 
   ngOnInit() {
@@ -98,10 +101,15 @@ export class StoreComponent implements OnInit {
     this.service.getStore(this.idUser, (val) => {
       console.log(val);
       this.currentLoadData = val;
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, this.state).data,
+      }
+      this.gridView = process(val, this.state);
+
       this.gridData = {
         data: val,
       };
-      this.gridView = process(val, this.state);
+
       this.changeTheme(this.theme);
       this.loading = false;
       this.loadingGrid = false;
@@ -345,6 +353,37 @@ export class StoreComponent implements OnInit {
     setTimeout(() => {
       this.grid.saveAsPDF();
     }, 0);
+  }
+
+  exportToExcel(grid: GridComponent, allPages: boolean) {
+    this.setDataForExcelExport(allPages);
+
+    setTimeout(() => {
+      grid.saveAsExcel();
+    }, 0);
+  }
+
+  public setDataForExcelExport(allPages: boolean): void {
+    console.log('allPages ', allPages);
+
+    if (allPages) {
+      var myState: State = {
+        skip: 0,
+        take: this.gridData.total,
+      };
+
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, myState).data,
+      }
+    } else {
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, this.state).data,
+      }
+    }
+  }
+
+  public allData(): ExcelExportData {
+    return this._allData;
   }
 
   xlsxToJson(data) {

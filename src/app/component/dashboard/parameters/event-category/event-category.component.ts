@@ -242,7 +242,6 @@ export class EventCategoryComponent implements OnInit {
     fileReader.readAsArrayBuffer(args.target.files[0]);*/
   }
 
-
   exportPDF(value: boolean): void {
     this.allPages = value;
 
