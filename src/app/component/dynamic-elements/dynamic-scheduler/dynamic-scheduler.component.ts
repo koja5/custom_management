@@ -4017,8 +4017,8 @@ export class DynamicSchedulerComponent implements OnInit {
           columns: [
             {
               text: selectedStore.vatcode ?
-                selectedStore.street + "\n " + selectedStore.zipcode + " " + selectedStore.place + "\n" + this.language.vat + " " + selectedStore.vatcode
-                : selectedStore.street + "\n " + selectedStore.zipcode + " " + selectedStore.place + "\n" + this.language.vat + " " + this.superadminProfile.vatcode,
+                selectedStore.street + "\n " + selectedStore.zipcode + " " + selectedStore.place + "\n" + this.language.vatIdentificationNumber + " " + selectedStore.vatcode
+                : selectedStore.street + "\n " + selectedStore.zipcode + " " + selectedStore.place + "\n" + this.language.vatIdentificationNumber + " " + this.superadminProfile.vatcode,
               style: "invoiceBillingAddressLeft",
             },
             {

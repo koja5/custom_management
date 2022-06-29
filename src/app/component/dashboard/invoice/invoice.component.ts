@@ -646,10 +646,8 @@ export class InvoiceComponent implements OnInit {
         netto_price_title: componentRef.isPriceIncluded
           ? componentRef.invoiceLanguage.invoiceNetPrice
           : "",
-        vat: componentRef.isPriceIncluded
-          ? componentRef.invoiceLanguage.vat + " (%)"
-          : "",
-        vat_title: componentRef.invoiceLanguage.vat,
+        vat_percentage_title: componentRef.isPriceIncluded ? componentRef.invoiceLanguage.vatPercentageTitle : "",
+        vat_identification_number: componentRef.invoiceLanguage.vatIdentificationNumber,
         vat_code: componentRef.store.vatcode
           ? componentRef.store.vatcode
           : componentRef.superadminProfile.vatcode,

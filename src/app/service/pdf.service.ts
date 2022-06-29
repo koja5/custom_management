@@ -121,8 +121,8 @@ export class PDFService {
           columns: [
             {
               text: store.vatcode ?
-                store.street + "\n " + store.zipcode + " " + store.place + "\n" + invoiceLanguage.vat + " " + store.vatcode
-                : store.street + "\n " + store.zipcode + " " + store.place + "\n" + invoiceLanguage.vat + " " + superadminProfile.vatcode,
+                store.street + "\n " + store.zipcode + " " + store.place + "\n" + invoiceLanguage.vatIdentificationNumber + " " + store.vatcode
+                : store.street + "\n " + store.zipcode + " " + store.place + "\n" + invoiceLanguage.vatIdentificationNumber + " " + superadminProfile.vatcode,
               style: "invoiceBillingAddressLeft",
             },
             {
@@ -400,7 +400,7 @@ export class PDFService {
           style: ["itemsHeader", "center"],
         },
         {
-          text: isPriceIncluded ? this.language.vat + " (%)" : '',
+          text: isPriceIncluded ? this.language.vatPercentageTitle : '',
           style: ["itemsHeader", "center"],
         },
         {

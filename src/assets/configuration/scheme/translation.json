@@ -1037,6 +1037,12 @@
       "vat": {
         "type": "string"
       },
+      "vatPercentageTitle": {
+        "type": "string"
+      },
+      "vatIdentificationNumber": {
+        "type": "string"
+      },
       "grossPrice": {
         "type": "string"
       },
@@ -3620,10 +3626,13 @@
               "key": "netPrice"
             },
             {
-              "key": "vat"
+              "key": "grossPrice"
             },
             {
-              "key": "grossPrice"
+              "key": "vatPercentageTitle"
+            },
+            {
+              "key": "vatIdentificationNumber"
             }
           ]
         },
