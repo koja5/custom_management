@@ -1,9 +1,9 @@
 import {
   Component,
   OnInit,
-  ViewChild,
   HostListener,
   Input,
+  ViewChild,
 } from "@angular/core";
 import {
   process,
@@ -11,20 +11,15 @@ import {
   GroupDescriptor,
   SortDescriptor,
 } from "@progress/kendo-data-query";
-import { UploadEvent, SelectEvent } from "@progress/kendo-angular-upload";
+import { UploadEvent } from "@progress/kendo-angular-upload";
 import {
   DataStateChangeEvent,
   PageChangeEvent,
-  RowArgs,
-  DataBindingDirective,
 } from "@progress/kendo-angular-grid";
-import { WindowModule } from "@progress/kendo-angular-dialog";
 import * as XLSX from "ts-xlsx";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
-import { UserModel } from "src/app/models/user-model";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
-import * as sha1 from "sha1";
 import { CustomGridService } from "src/app/service/custom-grid.service";
 import { HelpService } from "src/app/service/help.service";
 
@@ -36,6 +31,9 @@ import { HelpService } from "src/app/service/help.service";
 export class CustomGridComponent implements OnInit {
   @Input() data: any;
   @Input() gridConfiguration: any;
+  @ViewChild('grid') grid;
+
+  public allPages: boolean;
 
   public currentLoadData: any;
   public height: any;
@@ -132,7 +130,7 @@ export class CustomGridComponent implements OnInit {
     console.log(e);
   }
 
-  action(event) {}
+  action(event) { }
 
   onFileChange(args) {
     this.customerDialogOpened = true;
@@ -159,6 +157,14 @@ export class CustomGridComponent implements OnInit {
       }, 50);
     };
     fileReader.readAsArrayBuffer(args.target.files[0]);
+  }
+
+  exportPDF(value: boolean): void {
+    this.allPages = value;
+
+    setTimeout(() => {
+      this.grid.saveAsPDF();
+    }, 0);
   }
 
   xlsxToJson(data) {

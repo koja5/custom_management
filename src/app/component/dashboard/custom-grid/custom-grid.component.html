@@ -1,8 +1,8 @@
 <div style="height: 100%" *ngIf="language !== undefined">
-  <kendo-grid [data]="gridView" [style.height]="height" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
+  <kendo-grid #grid [data]="gridView" [style.height]="height" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
     [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="pageable"
     (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey" [groupable]="true" [group]="state.group"
-    [pageSize]="pageSize" (groupChange)="groupChange($event)" (sortChange)="sortChange($event)">
+    (groupChange)="groupChange($event)" (sortChange)="sortChange($event)">
     <kendo-grid-messages pagerPage="{{language.pagerPage}}" pagerOf="{{language.pagerOf}}"
       pagerItems="{{language.pagerItems}}" pagerItemsPerPage="{{language.pagerItemsPerPage}}">
     </kendo-grid-messages>
@@ -34,7 +34,14 @@
                 style="padding: 12px; cursor: pointer;"><span class='k-icon k-i-file-excel'></span>
                 {{ language.uploadFromExcel }}<input type="file" name="files[]" multiple id="jsonFile" accept=".xlsx"
                   (change)="onFileChange($event)" [(ngModel)]="fileValue" /></label></a>
-            <a kendoGridPDFCommand><span class="k-icon k-i-file-pdf"></span> {{language.exportToPDF}}</a>
+            
+            <a (click)="exportPDF(false)"><span class="k-icon k-i-file-pdf"></span>
+                {{ language.exportPageToPDF }}
+            </a>
+            <a (click)="exportPDF(true)"><span class="k-icon k-i-file-pdf"></span>
+                {{ language.exportToPDF }}
+            </a>
+      
             <a kendoGridExcelCommand><span class="k-icon k-i-file-excel"></span> {{language.exportToExcel}}</a>
           </div>
         </div>
@@ -76,7 +83,7 @@
       </ng-template>
     </kendo-grid-column>
 
-    <kendo-grid-pdf fileName="data.pdf" [allPages]="true">
+    <kendo-grid-pdf fileName="data.pdf" [allPages]="allPages">
       <kendo-grid-pdf-margin top="1cm" left="1cm" right="1cm" bottom="1cm"></kendo-grid-pdf-margin>
     </kendo-grid-pdf>
     <!-- <kendo-grid-excel fileName="Customers.xlsx"></kendo-grid-excel> -->
