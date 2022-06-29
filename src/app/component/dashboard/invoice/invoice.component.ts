@@ -123,7 +123,7 @@ export class InvoiceComponent implements OnInit {
     let height =
       100 -
       (100 * this.filterToolbar.nativeElement.clientHeight) /
-        this.contentElement.nativeElement.clientHeight;
+      this.contentElement.nativeElement.clientHeight;
 
     return height;
   }
@@ -140,7 +140,7 @@ export class InvoiceComponent implements OnInit {
     private loadingScreenService: LoadingScreenService,
     private dateService: DateService,
     private invoiceService: InvoiceService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.initializationConfig();
@@ -520,8 +520,8 @@ export class InvoiceComponent implements OnInit {
                   ? isNaNPrice
                     ? this.invoiceLanguage.noDataAvailable
                     : this.invoiceLanguage.euroSign +
-                      " " +
-                      parseFloat(therapy.net_price).toFixed(2)
+                    " " +
+                    parseFloat(therapy.net_price).toFixed(2)
                   : "",
                 vat: this.isPriceIncluded
                   ? vatDefinition
@@ -532,8 +532,8 @@ export class InvoiceComponent implements OnInit {
                   ? isNaNBrutoPrice
                     ? this.invoiceLanguage.noDataAvailable
                     : this.invoiceLanguage.euroSign +
-                      " " +
-                      parseFloat(therapy.gross_price).toFixed(2)
+                    " " +
+                    parseFloat(therapy.gross_price).toFixed(2)
                   : "",
               });
             }
@@ -581,6 +581,7 @@ export class InvoiceComponent implements OnInit {
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
+    //THIS ONE SHOULD BE ACTIVE
     const link =
       window.location.protocol +
       "//" +
@@ -589,6 +590,7 @@ export class InvoiceComponent implements OnInit {
       window.location.port +
       "/assets/Invoice_template.docx";
 
+    // LOCAL PURPOSE TESTING
     // const link = "http://127.0.0.1:8887/Invoice_template.docx";
     this.loadFile(link, function (error, content) {
       if (error) {

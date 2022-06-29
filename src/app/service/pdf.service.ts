@@ -111,7 +111,7 @@ export class PDFService {
               style: "invoiceBillingDetailsLeft",
             },
             {
-              text: customerUser.lastname + customerUser.firstname,
+              text: customerUser.lastname.trim() + ' ' + customerUser.firstname.trim(),
               style: "invoiceBillingDetailsRight",
             },
           ],

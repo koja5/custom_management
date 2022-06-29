@@ -4007,7 +4007,7 @@ export class DynamicSchedulerComponent implements OnInit {
               style: "invoiceBillingDetailsLeft",
             },
             {
-              text: this.customerUser.lastname + this.customerUser.firstname,
+              text: this.customerUser.lastname.trim() + ' ' + this.customerUser.firstname.trim(),
               style: "invoiceBillingDetailsRight",
             },
           ],
