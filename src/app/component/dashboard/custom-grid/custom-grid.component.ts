@@ -14,6 +14,7 @@ import {
 import { UploadEvent } from "@progress/kendo-angular-upload";
 import {
   DataStateChangeEvent,
+  GridComponent,
   PageChangeEvent,
 } from "@progress/kendo-angular-grid";
 import * as XLSX from "ts-xlsx";
@@ -34,6 +35,7 @@ export class CustomGridComponent implements OnInit {
   @ViewChild('grid') grid;
 
   public allPages: boolean;
+  private _allData: ExcelExportData;
 
   public currentLoadData: any;
   public height: any;
@@ -61,7 +63,6 @@ export class CustomGridComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private toastr: ToastrService,
     private service: CustomGridService,
     private helpService: HelpService
   ) {
@@ -101,6 +102,12 @@ export class CustomGridComponent implements OnInit {
 
   initialize() {
     this.gridView = process(this.currentLoadData, this.state);
+    this._allData = <ExcelExportData>{
+      data: process(this.currentLoadData, this.state).data,
+    }
+    this.gridData = {
+      data: this.data
+    }
   }
 
   selectionChange(event) {
@@ -167,6 +174,36 @@ export class CustomGridComponent implements OnInit {
     }, 0);
   }
 
+  exportToExcel(grid: GridComponent, allPages: boolean) {
+    this.setDataForExcelExport(allPages);
+
+    setTimeout(() => {
+      grid.saveAsExcel();
+    }, 0);
+  }
+
+  public setDataForExcelExport(allPages: boolean): void {
+    console.log('allPages ', allPages);
+
+    if (allPages) {
+      var myState: State = {
+        skip: 0,
+        take: this.gridData.total,
+      };
+
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, myState).data,
+      }
+    } else {
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, this.state).data,
+      }
+    }
+  }
+
+  public allData(): ExcelExportData {
+    return this._allData;
+  }
   xlsxToJson(data) {
     const rowCount = data.length;
     const objectArray = [];
@@ -251,14 +288,6 @@ export class CustomGridComponent implements OnInit {
     this.method = method;
     this.index = index;
     this.dialogDelete = true;
-  }
-
-  public allData(): ExcelExportData {
-    const result: ExcelExportData = {
-      data: this.currentLoadData,
-    };
-
-    return result;
   }
 
   public dialogDeleteAction(answer) {

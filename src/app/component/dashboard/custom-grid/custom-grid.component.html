@@ -42,7 +42,13 @@
                 {{ language.exportToPDF }}
             </a>
       
-            <a kendoGridExcelCommand><span class="k-icon k-i-file-excel"></span> {{language.exportToExcel}}</a>
+            <a (click)="exportToExcel(grid, false)"><span class="k-icon k-i-file-excel"></span>
+              {{ language.exportToExcel }}
+            </a>
+  
+            <a (click)="exportToExcel(grid, true)"><span class="k-icon k-i-file-excel"></span>
+              {{ language.exportAllToExcel }}  
+            </a>
           </div>
         </div>
       </div>

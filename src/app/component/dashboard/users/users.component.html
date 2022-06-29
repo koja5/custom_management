@@ -75,10 +75,13 @@
             <a (click)="exportPDF(true)"><span class="k-icon k-i-file-pdf"></span>
               {{ language.exportToPDF }}</a>
 
-            <a kendoGridExcelCommand
-              ><span class="k-icon k-i-file-excel"></span>
-              {{ language.exportToExcel }}</a
-            >
+            <a (click)="exportToExcel(grid, false)"><span class="k-icon k-i-file-excel"></span>
+              {{ language.exportToExcel }}
+            </a>
+    
+            <a (click)="exportToExcel(grid, true)"><span class="k-icon k-i-file-excel"></span>
+              {{ language.exportAllToExcel }}  
+            </a>
           </div>
         </div>
       </div>
@@ -186,7 +189,7 @@
       </kendo-grid-column>
     </kendo-grid-pdf>
 
-    <kendo-grid-excel fileName="Users.xlsx"></kendo-grid-excel>
+    <kendo-grid-excel fileName="Users.xlsx" [fetchData]="allData"></kendo-grid-excel>
     <ng-template kendoGridNoRecordsTemplate>
       <div class="row no-results-element">
         <div class="text-center">
