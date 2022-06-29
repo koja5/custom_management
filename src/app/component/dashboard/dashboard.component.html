@@ -639,25 +639,6 @@
                               </li>
 
                               <li
-                                class="{{
-                                  selectedNodeModel['invoice_prefix']
-                                }}"
-                                *ngIf="
-                                  type === userType.owner ||
-                                  type === userType.admin
-                                "
-                              >
-                                <a
-                                  (click)="returnActiveNode('invoice_prefix')"
-                                  routerLink="/dashboard/home/invoice-prefix"
-                                  ><i class="fa fa-font"></i
-                                  ><span class="navigation-link">{{
-                                    language["invoicePrefixMenu"]
-                                  }}</span></a
-                                >
-                              </li>
-
-                              <li
                                 class="{{ selectedNodeModel['mail_reminder'] }}"
                                 *ngIf="type === userType.owner"
                               >

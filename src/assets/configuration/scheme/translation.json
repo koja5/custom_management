@@ -629,9 +629,6 @@
       "emailBirthdayCongratulation": {
         "type": "string"
       },
-      "invoicePrefixMenu": {
-        "type": "string"
-      },
       "reservations": {
         "type": "string"
       },
@@ -3124,9 +3121,6 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            {
-              "key": "invoicePrefixMenu"
-            },
             {
               "key": "addHoliday"
             },
