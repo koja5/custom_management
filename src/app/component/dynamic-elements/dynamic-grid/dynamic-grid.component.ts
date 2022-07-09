@@ -324,7 +324,10 @@ export class DynamicGridComponent implements OnInit {
   /* tooltip END */
 
   action(data, mode, item) {
-    this.index = Number(data.index);
+    this.index =
+      Number(data.index) +
+      (this.grid.pageSettings.currentPage - 1) *
+        this.grid.pageSettings.pageSize;
     const actions = {
       data: data,
       mode: mode,
