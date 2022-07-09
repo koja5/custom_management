@@ -4003,7 +4003,7 @@ export class DynamicSchedulerComponent implements OnInit {
         {
           columns: [
             {
-              text: selectedStore.companyname ? selectedStore.companyname : selectedStore.storename,
+              text: selectedStore.storename,
               style: "invoiceBillingDetailsLeft",
             },
             {
@@ -4102,7 +4102,7 @@ export class DynamicSchedulerComponent implements OnInit {
         columns: [
           {
             text:
-              (selectedStore.companyname ? selectedStore.companyname : selectedStore.storename) +
+              selectedStore.storename +
               this.dotSign +
               selectedStore.street +
               this.dotSign +

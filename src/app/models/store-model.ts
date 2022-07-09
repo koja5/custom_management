@@ -1,7 +1,6 @@
 export class StoreModel {
     id?: string;
     storename?: string;
-    companyname?: string;
     vatcode?: string;
     street?: string;
     zipcode?: string;

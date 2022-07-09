@@ -123,7 +123,7 @@ export class InvoiceComponent implements OnInit {
     let height =
       100 -
       (100 * this.filterToolbar.nativeElement.clientHeight) /
-        this.contentElement.nativeElement.clientHeight;
+      this.contentElement.nativeElement.clientHeight;
 
     return height;
   }
@@ -140,7 +140,7 @@ export class InvoiceComponent implements OnInit {
     private loadingScreenService: LoadingScreenService,
     private dateService: DateService,
     private invoiceService: InvoiceService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.initializationConfig();
@@ -520,8 +520,8 @@ export class InvoiceComponent implements OnInit {
                   ? isNaNPrice
                     ? this.invoiceLanguage.noDataAvailable
                     : this.invoiceLanguage.euroSign +
-                      " " +
-                      parseFloat(therapy.net_price).toFixed(2)
+                    " " +
+                    parseFloat(therapy.net_price).toFixed(2)
                   : "",
                 vat: this.isPriceIncluded
                   ? vatDefinition
@@ -532,8 +532,8 @@ export class InvoiceComponent implements OnInit {
                   ? isNaNBrutoPrice
                     ? this.invoiceLanguage.noDataAvailable
                     : this.invoiceLanguage.euroSign +
-                      " " +
-                      parseFloat(therapy.gross_price).toFixed(2)
+                    " " +
+                    parseFloat(therapy.gross_price).toFixed(2)
                   : "",
               });
             }
@@ -613,9 +613,7 @@ export class InvoiceComponent implements OnInit {
         billing_from_title:
           componentRef.invoiceLanguage.invoiceBillingTitleFrom,
         billing_to_title: componentRef.invoiceLanguage.invoiceBillingTitleTo,
-        clinic_name: componentRef.store.companyname
-          ? componentRef.store.companyname
-          : componentRef.store.storename,
+        clinic_name: componentRef.store.storename,
         customer_lastname: componentRef.customerUser.lastname,
         customer_firstname: componentRef.customerUser.firstname,
         clinic_street: componentRef.store.street,

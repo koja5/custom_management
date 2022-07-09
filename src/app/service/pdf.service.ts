@@ -107,7 +107,7 @@ export class PDFService {
         {
           columns: [
             {
-              text: store.companyname ? store.companyname : store.storename,
+              text: store.storename,
               style: "invoiceBillingDetailsLeft",
             },
             {
@@ -210,7 +210,7 @@ export class PDFService {
         columns: [
           {
             text:
-              (store.companyname ? store.companyname : store.storename) +
+              store.storename +
               this.dotSign +
               store.street +
               this.dotSign +
