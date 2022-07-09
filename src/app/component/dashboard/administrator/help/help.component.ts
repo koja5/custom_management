@@ -80,6 +80,17 @@ export class HelpComponent implements OnInit {
     });
   }
 
+  deleteHelpTopic(topic){
+    this.service.deleteFaqTopic(topic).then(result=>{
+      if (result) {
+        this.displaySuccessMessage(this.language.adminSuccessUpdateTitle, this.language.adminSuccessUpdateText);
+        this.loadTopics();
+      } else {
+        this.displayErrorMessage(this.language.adminErrorUpdateTitle, this.language.adminErrorUpdateText);
+      }
+    });
+  }
+
   private displaySuccessMessage(message: string, title: string): void {
     this.toastrService.success(message, title, { timeOut: 7000, positionClass: "toast-bottom-right" });
   }

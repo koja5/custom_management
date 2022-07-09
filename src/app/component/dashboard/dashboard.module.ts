@@ -5,7 +5,7 @@ import { CommonModule } from "@angular/common";
 import { MaterialDesignFrameworkModule } from "angular6-json-schema-form";
 import { TranslationComponent } from "./translation/translation.component";
 
-import { MatCardModule, MatExpansionModule, MatToolbarModule } from "@angular/material";
+import { MatCardModule, MatToolbarModule } from "@angular/material";
 import { CustomGridComponent } from "./custom-grid/custom-grid.component";
 import {
   GridModule,

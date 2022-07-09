@@ -2079,6 +2079,9 @@
       },
       "helpTopic":{
         "type": "string"
+      },
+      "addHelpTopic":{
+        "type": "string"
       }
     }
   },
@@ -6524,6 +6527,9 @@
             },
             {
               "key": "answer"
+            },
+            {
+              "key":"addHelpTopic"
             }
           ]
         }
