@@ -5,7 +5,7 @@ import { CommonModule } from "@angular/common";
 import { MaterialDesignFrameworkModule } from "angular6-json-schema-form";
 import { TranslationComponent } from "./translation/translation.component";
 
-import { MatCardModule, MatToolbarModule } from "@angular/material";
+import { MatCardModule, MatExpansionModule, MatToolbarModule } from "@angular/material";
 import { CustomGridComponent } from "./custom-grid/custom-grid.component";
 import {
   GridModule,
@@ -13,7 +13,7 @@ import {
   PDFModule,
 } from "@progress/kendo-angular-grid";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { InputsModule } from "@progress/kendo-angular-inputs";
+import { InputsModule, TextAreaModule } from "@progress/kendo-angular-inputs";
 import { DateInputsModule } from "@progress/kendo-angular-dateinputs";
 import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
 import { IntlModule } from "@progress/kendo-angular-intl";
@@ -64,6 +64,7 @@ import { MyTherapyComponent } from "./patient/my-therapy/my-therapy.component";
 import { MyDocumentComponent } from "./patient/my-document/my-document.component";
 import { SettingsModule } from "./settings/settings.module";
 import { DropDownListModule } from "@syncfusion/ej2-angular-dropdowns";
+import { DashboardLayoutModule } from '@syncfusion/ej2-angular-layouts';
 import { ReservationsComponent } from "./reservations/reservations.component";
 import { SharedEmailModule } from "../shared-module/shared-email-module";
 import { SharedSMSModule } from "../shared-module/shared-sms-module";
@@ -102,6 +103,10 @@ import { InvoiceComponent } from './invoice/invoice.component';
 import { SmsBirthdayCongratulationComponent } from './parameters/sms-birthday-congratulation/sms-birthday-congratulation.component';
 import { MailBirthdayCongratulationComponent } from './parameters/mail-birthday-congratulation/mail-birthday-congratulation.component';
 import { MailPatientCreatedAccountViaFormComponent } from './parameters/mail-parameters/mail-patient-created-account-via-form/mail-patient-created-account-via-form.component';
+import { HelpComponent } from './administrator/help/help.component';
+import { AddFaqComponent } from './administrator/help/add-faq/add-faq.component';
+import { TopicCardComponent } from './administrator/help/topic-card/topic-card.component';
+import { ListFaqComponent } from './administrator/help/list-faq/list-faq.component';
 
 @NgModule({
   declarations: [
@@ -154,7 +159,10 @@ import { MailPatientCreatedAccountViaFormComponent } from './parameters/mail-par
     AddHolidayComponent,
     InvoiceComponent,
     SmsBirthdayCongratulationComponent,
-    MailBirthdayCongratulationComponent
+    MailBirthdayCongratulationComponent,
+    HelpComponent,
+    TopicCardComponent,
+    ListFaqComponent
   ],
   imports: [
     CommonModule,
@@ -192,7 +200,9 @@ import { MailPatientCreatedAccountViaFormComponent } from './parameters/mail-par
     SharedEmailModule,
     SharedSMSModule,
     ScheduleModule,
-    ToolbarModule
+    ToolbarModule,
+    DashboardLayoutModule,
+    TextAreaModule
   ],
   providers: [
     {

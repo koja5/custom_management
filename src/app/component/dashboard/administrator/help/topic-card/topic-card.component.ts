@@ -1,0 +1,21 @@
+import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { HelpTopicModel } from 'src/app/models/help-topic-model';
+
+@Component({
+  selector: 'app-topic-card',
+  templateUrl: './topic-card.component.html',
+  styleUrls: ['./topic-card.component.scss']
+})
+export class TopicCardComponent implements OnInit {
+  @Input() topic: HelpTopicModel;
+  
+  constructor(private router: Router) { }
+
+  ngOnInit() {
+  }
+
+  public generateLink(link) {
+    this.router.navigate([link, this.topic.id]);
+  }
+}

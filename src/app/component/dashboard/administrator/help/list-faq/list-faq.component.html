@@ -1,0 +1,102 @@
+<div class="container">
+  <div class="row">
+    <div class="search">
+      <kendo-textbox-container floatingLabel="{{ language.search }}">
+        <input
+          kendoTextBox
+          (input)="onFilter($event.target.value)"
+        />
+      </kendo-textbox-container>
+    </div>
+    <div class="grid-button-operation-group">
+      <button
+        kendoButton
+        [icon]="'add'"
+        (click)="newUser()"
+        [primary]="true"
+        class="addButton"
+      >
+        {{ language.newQuestion }}
+      </button>
+    </div>  
+  </div>
+  <div class="row">
+    <kendo-panelbar> 
+      <kendo-panelbar-item [title]="item.question" *ngFor="let item of filterList"> 
+        <ng-template kendoPanelBarContent> 
+          <div class="item">
+            {{ item.answer}}
+          </div> 
+        </ng-template> 
+      </kendo-panelbar-item> 
+    </kendo-panelbar>
+  </div>  
+</div>
+
+<modal
+  #faqModal
+  (onClose)="closeFaqModal()"
+  modalClass="modal-md modal-dialog-centered no-footer"
+>
+  <modal-header>
+    <h4>{{ language.editTemplate }}</h4>
+  </modal-header>
+  <modal-content class="pb-0">
+    <form
+      (ngSubmit)="
+      faqModal.form.valid === true
+          ? operationMode === 'add'
+            ? createFaq()
+            : updateFaq()
+          : null
+      "
+      #faqModal="ngForm"
+    >
+      <div class="form-group">
+        <kendo-textbox-container floatingLabel="{{ language.question }}">
+          <input
+            kendoTextBox
+            required
+            type="text"
+            class="col-12"
+            [(ngModel)]="faq.question"
+            name="question"
+          />
+        </kendo-textbox-container>
+      </div>      
+
+      <div class="form-group">
+        <kendo-textarea
+          resizable="auto"
+          [(ngModel)]="faq.answer"
+          name="answer"
+          required
+          placeholder="{{ language.question }}"
+        ></kendo-textarea>      
+      </div>
+
+      <div class="form-group" style="text-align: center">
+        <button
+          *ngIf="operationMode === 'add'"
+          kendoButton
+          [primary]="true"
+          class="form-button"
+          [disabled]="faqModal.form.invalid"
+          type="submit"
+        >
+          {{ language.add }}
+        </button>
+        <button
+          *ngIf="operationMode === 'edit'"
+          kendoButton
+          [primary]="true"
+          class="form-button"
+          [disabled]="faqModal.form.invalid"
+          type="submit"
+        >
+          {{ language.edit }}
+        </button>
+      </div>
+    </form>
+  </modal-content>
+</modal>
