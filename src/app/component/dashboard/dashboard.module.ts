@@ -104,7 +104,6 @@ import { SmsBirthdayCongratulationComponent } from './parameters/sms-birthday-co
 import { MailBirthdayCongratulationComponent } from './parameters/mail-birthday-congratulation/mail-birthday-congratulation.component';
 import { MailPatientCreatedAccountViaFormComponent } from './parameters/mail-parameters/mail-patient-created-account-via-form/mail-patient-created-account-via-form.component';
 import { HelpComponent } from './administrator/help/help.component';
-import { AddFaqComponent } from './administrator/help/add-faq/add-faq.component';
 import { TopicCardComponent } from './administrator/help/topic-card/topic-card.component';
 import { ListFaqComponent } from './administrator/help/list-faq/list-faq.component';
 

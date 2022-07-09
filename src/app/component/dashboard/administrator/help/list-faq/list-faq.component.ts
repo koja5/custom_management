@@ -36,7 +36,7 @@ export class ListFaqComponent implements OnInit {
     }
 
     this.topicId = this.route.snapshot.params["id"];
-
+    this.faq.helpTopicId=this.topicId;
     this.loadFaqs();
   }
 
@@ -55,6 +55,7 @@ export class ListFaqComponent implements OnInit {
   addNewModal() {
     this.faqModal.open();
     this.faq = new FaqModel();
+    this.faq.helpTopicId=this.topicId;
     this.faq.question = "";
     this.faq.answer = "";
     this.operationMode = 'add';
@@ -67,14 +68,14 @@ export class ListFaqComponent implements OnInit {
     this.faqModal.open();
   }
 
-  closeHelpTopicModal(): void {
+  closeFaqModal(): void {
     this.faqModal.close();
   }
 
-  createHelpTopic(): void{
+  createFaq(): void{
     this.service.createFaq(this.faq).then(result=>{
       this.loadFaqs();
-      this.closeHelpTopicModal();
+      this.closeFaqModal();
       if (result) {
         this.displaySuccessMessage(this.language.adminSuccessCreateTitle, this.language.adminSuccessCreateText);
 
@@ -84,9 +85,9 @@ export class ListFaqComponent implements OnInit {
     });
   }
 
-  updateHelpTopic(){
+  updateFaq(){
     this.service.updateFaq(this.faq).then(result=>{
-      this.closeHelpTopicModal();
+      this.closeFaqModal();
       if (result) {
         this.displaySuccessMessage(this.language.adminSuccessUpdateTitle, this.language.adminSuccessUpdateText);
 
