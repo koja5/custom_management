@@ -6,6 +6,7 @@ import { FaqService } from 'src/app/service/faq.service';
 import { PanelBarExpandMode } from "@progress/kendo-angular-layout";
 import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { Modal } from 'ngx-modal';
+import { HelpService } from 'src/app/service/help.service';
 
 @Component({
   selector: 'app-list-faq',
@@ -23,18 +24,31 @@ export class ListFaqComponent implements OnInit {
 
   public faq = new FaqModel();
   public operationMode = 'add';
+  
+  private languageCode;
+  private superAdminId;
 
   overrideMessage: Partial<IndividualConfig> = { timeOut: 7000, positionClass: "toast-bottom-right" };
 
   constructor(private service: FaqService, 
     private route: ActivatedRoute,
-    private toastrService: ToastrService) { }
+    private toastrService: ToastrService,
+    private helpService: HelpService) { }
 
   ngOnInit() {
     if (localStorage.getItem("language") !== null) {
       this.language = JSON.parse(localStorage.getItem("language"));
     }
 
+    if (this.helpService.getLocalStorage("defaultLanguage")) {
+      console.log("GET LOCAL STORAGE TRUE")
+      this.languageCode = this.helpService.getLocalStorage("defaultLanguage");
+    } else {
+      this.languageCode = "US";
+    }    
+    
+    this.superAdminId = this.helpService.getSuperadmin();
+    
     this.topicId = this.route.snapshot.params["id"];
     this.faq.helpTopicId=this.topicId;
     this.loadFaqs();

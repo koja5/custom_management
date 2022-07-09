@@ -1,4 +1,6 @@
 export class HelpTopicModel{
    id: number;
-   name: string; 
+   name: string;
+   languageCode: string;
+   superAdminId: number; 
 }

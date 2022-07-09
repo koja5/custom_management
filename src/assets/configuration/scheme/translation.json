@@ -2055,6 +2055,30 @@
       },
       "showAtInvoice": {
         "type": "string"
+      },
+      "helpTitle":{
+        "type": "string"
+      },
+      "faqTitle":{
+        "type": "string"
+      },
+      "search":{
+        "type": "string"
+      },
+      "newFaq":{
+        "type": "string"
+      },
+      "editFaq":{
+        "type": "string"
+      },
+      "question":{
+        "type": "string"
+      },
+      "answer":{
+        "type": "string"
+      },
+      "helpTopic":{
+        "type": "string"
       }
     }
   },
@@ -6454,6 +6478,52 @@
             },
             {
               "key": "dateTitle"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Help",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "helpTitle"
+            },
+            {
+              "key": "faqTitle"
+            },
+            {
+              "key": "search"
+            },
+            {
+              "key":"helpTopic"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "newFaq"
+            },
+            {
+              "key": "editFaq"
+            },
+            {
+              "key": "question"
+            },
+            {
+              "key": "answer"
             }
           ]
         }
