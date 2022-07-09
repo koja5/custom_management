@@ -66,13 +66,11 @@
       </div>      
 
       <div class="form-group">
-        <kendo-textarea
-          resizable="auto"
-          [(ngModel)]="faq.answer"
-          name="answer"
-          required
-          placeholder="{{ language.question }}"
-        ></kendo-textarea>      
+        <label id="answer" class="form-label">{{language.answer}}</label>
+        <div class="input-group">
+          <textarea class="form-control" rows="4" [(ngModel)]="faq.answer" name="answer">
+          </textarea>
+        </div>    
       </div>
 
       <div class="form-group" style="text-align: center">
