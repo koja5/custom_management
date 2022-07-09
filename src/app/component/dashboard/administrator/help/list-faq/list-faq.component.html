@@ -23,10 +23,28 @@
   <div class="row">
     <kendo-panelbar> 
       <kendo-panelbar-item [title]="item.question" *ngFor="let item of filterList"> 
+        <ng-template kendoPanelBarItemTitle>
+          <button
+            kendoButton
+            [icon]="'edit'"
+            (click)="openEditFaqModal(item)"
+            [primary]="false"
+            class="editButton"
+          >
+          </button>
+          <button
+            kendoButton
+            [icon]="'delete'"
+            (click)="deleteQuestion(item)"
+            [primary]="false"
+            class="deleteButton"
+          >
+          </button>
+        </ng-template>
         <ng-template kendoPanelBarContent> 
           <div class="item">
             {{ item.answer}}
-          </div> 
+          </div>
         </ng-template> 
       </kendo-panelbar-item> 
     </kendo-panelbar>

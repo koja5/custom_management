@@ -76,7 +76,7 @@ export class ListFaqComponent implements OnInit {
     // this.data.language = "";
   }  
 
-  openEditTemplateModal(event): void {
+  openEditFaqModal(event): void {
     this.faq = event;
     this.operationMode = 'edit';
     this.faqModal.open();
@@ -117,5 +117,18 @@ export class ListFaqComponent implements OnInit {
 
   private displayErrorMessage(message: string, title: string): void {
     this.toastrService.error(message, title, this.overrideMessage);
+  }
+
+  deleteQuestion(event){
+    this.service.deleteFaq(event).then(result => {
+
+      if (result) {
+        this.displaySuccessMessage(this.language.adminSuccessDeleteTitle, this.language.adminSuccessDeleteText);
+        this.loadFaqs();
+      } else {
+        this.displaySuccessMessage(this.language.adminErrorDeleteTitle, this.language.adminErrorDeleteText);
+
+      }
+    });;
   }
 }
