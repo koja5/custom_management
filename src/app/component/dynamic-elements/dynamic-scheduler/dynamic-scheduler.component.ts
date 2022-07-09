@@ -1646,7 +1646,7 @@ export class DynamicSchedulerComponent implements OnInit {
 
   ngOnInit() {
     this.initializationConfig();
-    this.initializaionData();
+    this.initializationData();
     this.loadHolidays();
     this.helpService.setDefaultBrowserTabTitle();
     this.loadUser();
@@ -1761,7 +1761,7 @@ export class DynamicSchedulerComponent implements OnInit {
     }*/
   }
 
-  initializaionData() {
+  initializationData() {
     this.loading = true;
     this.type = this.helpService.getType();
     this.id = this.helpService.getMe();
@@ -3911,7 +3911,7 @@ export class DynamicSchedulerComponent implements OnInit {
           !this.isDateSet;
 
 
-        console.log(shouldSetDate + ' should set date');
+        // console.log(shouldSetDate + ' should set date');
 
         therapies.push({
           title: (therapy.titleOnInvoice && therapy.titleOnInvoice.trim() !== "") ? therapy.titleOnInvoice : therapy.title,
@@ -4003,7 +4003,7 @@ export class DynamicSchedulerComponent implements OnInit {
         {
           columns: [
             {
-              text: selectedStore.storename,
+              text: selectedStore.storename + '\n' + this.superadminProfile.shortname,
               style: "invoiceBillingDetailsLeft",
             },
             {
@@ -4102,7 +4102,7 @@ export class DynamicSchedulerComponent implements OnInit {
         columns: [
           {
             text:
-              selectedStore.storename +
+              selectedStore.storename + ' ' + this.superadminProfile.shortname +
               this.dotSign +
               selectedStore.street +
               this.dotSign +

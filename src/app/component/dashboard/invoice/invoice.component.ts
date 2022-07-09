@@ -613,7 +613,7 @@ export class InvoiceComponent implements OnInit {
         billing_from_title:
           componentRef.invoiceLanguage.invoiceBillingTitleFrom,
         billing_to_title: componentRef.invoiceLanguage.invoiceBillingTitleTo,
-        clinic_name: componentRef.store.storename,
+        clinic_name: componentRef.store.storename + '\n' + componentRef.superadminProfile.shortname,
         customer_lastname: componentRef.customerUser.lastname,
         customer_firstname: componentRef.customerUser.firstname,
         clinic_street: componentRef.store.street,
