@@ -13,7 +13,7 @@ import {
   PDFModule,
 } from "@progress/kendo-angular-grid";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { InputsModule, TextAreaModule } from "@progress/kendo-angular-inputs";
+import { InputsModule } from "@progress/kendo-angular-inputs";
 import { DateInputsModule } from "@progress/kendo-angular-dateinputs";
 import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
 import { IntlModule } from "@progress/kendo-angular-intl";
@@ -201,8 +201,7 @@ import { ListFaqComponent } from './administrator/help/list-faq/list-faq.compone
     SharedSMSModule,
     ScheduleModule,
     ToolbarModule,
-    DashboardLayoutModule,
-    TextAreaModule
+    DashboardLayoutModule
   ],
   providers: [
     {
