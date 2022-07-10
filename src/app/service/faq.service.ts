@@ -10,9 +10,9 @@ import { FaqModel } from '../models/faq-question-model';
 export class FaqService {
   constructor(public httpClient: HttpClient) { }
 
-  public getFaqTopics(): Observable<HelpTopicModel[]> {
+  public getFaqTopics(superAdminId): Observable<HelpTopicModel[]> {
     return this.httpClient
-      .get<HelpTopicModel[]>("/api/getFaqTopics/").map((res) => res);
+      .get<HelpTopicModel[]>("/api/getFaqTopics/"+superAdminId).map((res) => res);
   }
 
   public createFaqTopic(data) {

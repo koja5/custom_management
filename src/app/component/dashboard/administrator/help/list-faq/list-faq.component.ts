@@ -24,9 +24,11 @@ export class ListFaqComponent implements OnInit {
 
   public faq = new FaqModel();
   public operationMode = 'add';
-  
+
+  public userSuperAdmin=false;
   private languageCode;
   private superAdminId;
+  private userId;
 
   overrideMessage: Partial<IndividualConfig> = { timeOut: 7000, positionClass: "toast-bottom-right" };
 
@@ -48,7 +50,9 @@ export class ListFaqComponent implements OnInit {
     }    
     
     this.superAdminId = this.helpService.getSuperadmin();
-    
+    this.userId = this.helpService.getMe();
+
+    this.userSuperAdmin = this.superAdminId == this.userId;
     this.topicId = this.route.snapshot.params["id"];
     this.faq.helpTopicId=this.topicId;
     this.loadFaqs();
@@ -70,6 +74,7 @@ export class ListFaqComponent implements OnInit {
     this.faqModal.open();
     this.faq = new FaqModel();
     this.faq.helpTopicId=this.topicId;
+    this.faq.superAdminId=this.superAdminId;
     this.faq.question = "";
     this.faq.answer = "";
     this.operationMode = 'add';

@@ -8,7 +8,7 @@
         />
       </kendo-textbox-container>
     </div>
-    <div class="grid-button-operation-group">
+    <div class="grid-button-operation-group" *ngIf="userSuperAdmin">
       <button
         kendoButton
         [icon]="'add'"
@@ -20,10 +20,10 @@
       </button>
     </div>  
   </div>
-  <div class="row">
+  <div class="row" style="padding-top: 10px;">    
     <kendo-panelbar> 
-      <kendo-panelbar-item [title]="item.question" *ngFor="let item of filterList"> 
-        <ng-template kendoPanelBarItemTitle>
+      <kendo-panelbar-item [title]="item.question" *ngFor="let item of filterList"
+        <ng-template kendoPanelBarItemTitle *ngIf="userSuperAdmin">
           <button
             kendoButton
             [icon]="'edit'"
@@ -55,6 +55,7 @@
   #faqModal
   (onClose)="closeFaqModal()"
   modalClass="modal-md modal-dialog-centered no-footer"
+  *ngIf="userSuperAdmin"
 >
   <modal-header>
     <h4>{{ language.question }}</h4>

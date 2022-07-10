@@ -8675,14 +8675,15 @@ router.post("/updateFaqTopic", function (req, res, next) {
   });
 });
 
-router.get("/getFaqTopics", function (req, res, next) {
+router.get("/getFaqTopics/:superAdminId", function (req, res, next) {
+  var superAdminId = req.params.superAdminId;
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
     }
     conn.query(
-      "SELECT * FROM `help_topics`",
+      "SELECT * FROM `help_topics` where superAdminId = '" + superAdminId + "'",
       function (err, rows) {
         conn.release();
         if (!err) {

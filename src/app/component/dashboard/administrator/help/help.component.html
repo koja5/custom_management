@@ -4,7 +4,7 @@
 
 <div *ngIf="!loading && selectedUser === undefined" style="height: 100%">
   <div class="container">
-    <div class="row">      
+    <div class="row" *ngIf="userSuperAdmin">      
       <div class="grid-button-operation-group">
         <button kendoButton [icon]="'add'" class="addButton"
               (click)="addNewModal()">
@@ -24,6 +24,7 @@
   #helpTopicModal
   (onClose)="closeHelpTopicModal()"
   modalClass="modal-md modal-dialog-centered no-footer"
+  *ngIf="userSuperAdmin"
 >
   <modal-header>
     <h4>{{ language.helpTopic }}</h4>
