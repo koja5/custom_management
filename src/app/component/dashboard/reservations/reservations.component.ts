@@ -59,9 +59,9 @@ export class ReservationsComponent implements OnInit {
       language: this.packLanguage.getLanguageForInfoForApproveReservation(),
     };
     if (this.data.id === "approve") {
+      this.deleteReservation(api, value);
       this.mailService.sendInfoForApproveReservation(mail).subscribe((data) => {
         if (data) {
-          this.deleteReservation(api, value);
         }
       });
     } else if (this.data.id === "deny") {
@@ -71,10 +71,10 @@ export class ReservationsComponent implements OnInit {
         email: this.data.data.email,
         language: this.packLanguage.getLanguageForInfoForDenyReservation(),
       };
+      this.deleteReservation(api, value);
       this.mailService.sendInfoForDenyReservation(mail).subscribe((data) => {
         console.log(data);
         if (data) {
-          this.deleteReservation(api, value);
         }
       });
     }

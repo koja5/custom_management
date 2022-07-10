@@ -50,7 +50,12 @@
         [format]="item.format"
         [validationRules]="item.validation"
       >
-        <ng-template *ngIf="item?.type == 'documentPreview'" class="item?.position" #template let-data>
+        <ng-template
+          *ngIf="item?.type == 'documentPreview'"
+          class="item?.position"
+          #template
+          let-data
+        >
           <div>
             <button
               kendoButton
@@ -62,7 +67,12 @@
             </button>
           </div>
         </ng-template>
-        <ng-template *ngIf="item?.type == 'button'" class="item?.position" #template let-data>
+        <ng-template
+          *ngIf="item?.type == 'button'"
+          class="item?.position"
+          #template
+          let-data
+        >
           <button
             *ngIf="item?.mode === 'action'"
             kendoButton
