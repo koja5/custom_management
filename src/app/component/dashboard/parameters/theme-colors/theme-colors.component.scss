@@ -1,0 +1,10 @@
+.theme-colors-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}
+
+.theme-colors-container > * {
+  margin-right: 20px;
+}

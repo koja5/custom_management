@@ -2055,6 +2055,18 @@
       },
       "showAtInvoice": {
         "type": "string"
+      },
+      "changeThemeColor": {
+        "type": "string"
+      },
+      "themeColorsMenu": {
+        "type": "string"
+      },
+      "successThemeSaved": {
+        "type": "string"
+      },
+      "successThemeEdit": {
+        "type": "string"
       }
     }
   },
@@ -6454,6 +6466,40 @@
             },
             {
               "key": "dateTitle"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Theme colors",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "changeThemeColor"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "themeColorsMenu"
+            },
+            {
+              "key": "successThemeSaved"
+            },
+            {
+              "key": "successThemeEdit"
             }
           ]
         }
