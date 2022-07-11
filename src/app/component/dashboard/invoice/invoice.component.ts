@@ -581,6 +581,7 @@ export class InvoiceComponent implements OnInit {
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
+    //THIS ONE SHOULD BE ACTIVE
     const link =
       window.location.protocol +
       "//" +
@@ -589,6 +590,7 @@ export class InvoiceComponent implements OnInit {
       window.location.port +
       "/assets/Invoice_template.docx";
 
+    // LOCAL PURPOSE TESTING
     // const link = "http://127.0.0.1:8887/Invoice_template.docx";
     this.loadFile(link, function (error, content) {
       if (error) {
@@ -642,10 +644,8 @@ export class InvoiceComponent implements OnInit {
         netto_price_title: componentRef.isPriceIncluded
           ? componentRef.invoiceLanguage.invoiceNetPrice
           : "",
-        vat: componentRef.isPriceIncluded
-          ? componentRef.invoiceLanguage.vat + " (%)"
-          : "",
-        vat_title: componentRef.invoiceLanguage.vat,
+        vat_percentage_title: componentRef.isPriceIncluded ? componentRef.invoiceLanguage.vatPercentageTitle : "",
+        vat_identification_number: componentRef.invoiceLanguage.vatIdentificationNumber,
         vat_code: componentRef.store.vatcode
           ? componentRef.store.vatcode
           : componentRef.superadminProfile.vatcode,

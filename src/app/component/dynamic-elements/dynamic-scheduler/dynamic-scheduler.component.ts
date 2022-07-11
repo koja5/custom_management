@@ -1680,7 +1680,7 @@ export class DynamicSchedulerComponent implements OnInit {
       if (result && result.length > 0) {
         console.log("holidayss");
         result.forEach((r) => {
-          console.log(r);
+          // console.log(r);
           this.allEvents.push({
             Subject: r.Subject,
             StartTime: new Date(r.StartTime),
@@ -4007,7 +4007,7 @@ export class DynamicSchedulerComponent implements OnInit {
               style: "invoiceBillingDetailsLeft",
             },
             {
-              text: this.customerUser.lastname + this.customerUser.firstname,
+              text: this.customerUser.lastname.trim() + ' ' + this.customerUser.firstname.trim(),
               style: "invoiceBillingDetailsRight",
             },
           ],
@@ -4017,8 +4017,8 @@ export class DynamicSchedulerComponent implements OnInit {
           columns: [
             {
               text: selectedStore.vatcode ?
-                selectedStore.street + "\n " + selectedStore.zipcode + " " + selectedStore.place + "\n" + this.language.vat + " " + selectedStore.vatcode
-                : selectedStore.street + "\n " + selectedStore.zipcode + " " + selectedStore.place + "\n" + this.language.vat + " " + this.superadminProfile.vatcode,
+                selectedStore.street + "\n " + selectedStore.zipcode + " " + selectedStore.place + "\n" + this.language.vatIdentificationNumber + " " + selectedStore.vatcode
+                : selectedStore.street + "\n " + selectedStore.zipcode + " " + selectedStore.place + "\n" + this.language.vatIdentificationNumber + " " + this.superadminProfile.vatcode,
               style: "invoiceBillingAddressLeft",
             },
             {
@@ -4062,7 +4062,7 @@ export class DynamicSchedulerComponent implements OnInit {
             // headers are automatically repeated if the table spans over multiple pages
             // you can declare how many rows should be treated as headers
             headerRows: 1,
-            widths: ["*", "*", "auto", "auto", "auto"],
+            widths: ["20%", "20%", "20%", "20%", "20%"],
             body: this.pdfService.createItemsTable(therapies),
           }, // table
           //  layout: 'lightHorizontalLines'
@@ -4073,19 +4073,27 @@ export class DynamicSchedulerComponent implements OnInit {
         {
           columns: [
             {
+              text: '',
+              width: '20%'
+            },
+            {
+              text: '',
+              width: '20%'
+            },
+            {
               text: netPrices.length === 0 ? this.language.noDataAvailable : (this.language.euroSign + " " + subtotal),
               style: "itemsFooterSubValue",
-              width: 'auto',
+              width: '20%',
             },
             {
               text: netPrices.length === 0 ? this.language.noDataAvailable : (this.language.euroSign + " " + vat),
               style: "itemsFooterVATValue",
-              width: 'auto',
+              width: '20%',
             },
             {
               text: brutoPrices.length === 0 ? this.language.noDataAvailable : (this.language.euroSign + " " + total),
               style: "itemsFooterTotalValue",
-              width: 'auto',
+              width: '20%',
             },
           ],
         },

@@ -629,9 +629,6 @@
       "emailBirthdayCongratulation": {
         "type": "string"
       },
-      "invoicePrefixMenu": {
-        "type": "string"
-      },
       "reservations": {
         "type": "string"
       },
@@ -1032,6 +1029,12 @@
         "type": "string"
       },
       "vat": {
+        "type": "string"
+      },
+      "vatPercentageTitle": {
+        "type": "string"
+      },
+      "vatIdentificationNumber": {
         "type": "string"
       },
       "grossPrice": {
@@ -3116,9 +3119,6 @@
           "flex-direction": "row",
           "items": [
             {
-              "key": "invoicePrefixMenu"
-            },
-            {
               "key": "addHoliday"
             },
             {
@@ -3617,10 +3617,13 @@
               "key": "netPrice"
             },
             {
-              "key": "vat"
+              "key": "grossPrice"
             },
             {
-              "key": "grossPrice"
+              "key": "vatPercentageTitle"
+            },
+            {
+              "key": "vatIdentificationNumber"
             }
           ]
         },
