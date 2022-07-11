@@ -22,23 +22,21 @@
   </div>
   <div class="row" style="padding-top: 10px;">    
     <kendo-panelbar> 
-      <kendo-panelbar-item [title]="item.question" *ngFor="let item of filterList"
+      <kendo-panelbar-item [title]="item.question" *ngFor="let item of filterList">
         <ng-template kendoPanelBarItemTitle *ngIf="userSuperAdmin">
           <button
             kendoButton
             [icon]="'edit'"
             (click)="openEditFaqModal(item)"
             [primary]="false"
-            class="editButton"
-          >
+            class="editButton">
           </button>
           <button
             kendoButton
             [icon]="'delete'"
             (click)="deleteQuestion(item)"
             [primary]="false"
-            class="deleteButton"
-          >
+            class="deleteButton">
           </button>
         </ng-template>
         <ng-template kendoPanelBarContent> 
