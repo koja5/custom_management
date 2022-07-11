@@ -26,7 +26,6 @@ export class ListFaqComponent implements OnInit {
   public operationMode = 'add';
 
   public userSuperAdmin=false;
-  private languageCode;
   private superAdminId;
   private userId;
 
@@ -36,23 +35,16 @@ export class ListFaqComponent implements OnInit {
     private route: ActivatedRoute,
     private toastrService: ToastrService,
     private helpService: HelpService) { }
-
-  ngOnInit() {
+  
+  ngOnInit() {  
     if (localStorage.getItem("language") !== null) {
       this.language = JSON.parse(localStorage.getItem("language"));
-    }
-
-    if (this.helpService.getLocalStorage("defaultLanguage")) {
-      console.log("GET LOCAL STORAGE TRUE")
-      this.languageCode = this.helpService.getLocalStorage("defaultLanguage");
-    } else {
-      this.languageCode = "US";
-    }    
+    }   
     
     this.superAdminId = this.helpService.getSuperadmin();
     this.userId = this.helpService.getMe();
-
     this.userSuperAdmin = this.superAdminId == this.userId;
+
     this.topicId = this.route.snapshot.params["id"];
     this.faq.helpTopicId=this.topicId;
     this.loadFaqs();

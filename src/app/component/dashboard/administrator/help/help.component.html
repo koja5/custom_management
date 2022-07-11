@@ -4,19 +4,23 @@
 
 <div *ngIf="!loading && selectedUser === undefined" style="height: 100%">
   <div class="container">
-    <div class="row" *ngIf="userSuperAdmin">      
-      <div class="grid-button-operation-group">
-        <button kendoButton [icon]="'add'" class="addButton"
-              (click)="addNewModal()">
-              {{language.addHelpTopic}}
-        </button>         
-      </div>  
+    <div class="row" *ngIf="userSuperAdmin">  
+      <div class="float-right mt-5 pr-4">
+        <button
+          kendoButton
+          [icon]="'add'"
+          (click)="addNewModal()"
+          [primary]="true"
+          class="addButton">
+          {{language.addHelpTopic}}
+        </button>
+      </div>      
     </div>
     <div class="row">
       <ng-container *ngFor="let topic of topics">
         <app-topic-card [topic]="topic" (editEmmiter)="openEditTemplateModal($event)" (deleteEmmiter)="deleteHelpTopic($event)"></app-topic-card>            
       </ng-container>         
-    </div>
+    </div>      
   </div>
 </div>
 

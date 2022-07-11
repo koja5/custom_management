@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { HelpTopicModel } from 'src/app/models/help-topic-model';
+import { HelpService } from 'src/app/service/help.service';
 
 @Component({
   selector: 'app-topic-card',
@@ -12,9 +13,17 @@ export class TopicCardComponent implements OnInit {
   @Output() editEmmiter = new EventEmitter<any>();
   @Output() deleteEmmiter = new EventEmitter<any>();
 
-  constructor(private router: Router) { }
+  public userSuperAdmin=false;
+  private superAdminId;
+  private userId;
+
+  constructor(private router: Router,
+    private helpService: HelpService) { }
 
   ngOnInit() {
+    this.superAdminId = this.helpService.getSuperadmin();
+    this.userId = this.helpService.getMe();
+    this.userSuperAdmin = this.superAdminId == this.userId;
   }
 
   public generateLink(link) {
