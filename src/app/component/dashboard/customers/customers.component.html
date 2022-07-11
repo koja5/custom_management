@@ -3,10 +3,14 @@
 </div>
 
 <div *ngIf="!loading && selectedUser === undefined" style="height: 100%">
-  <kendo-grid #grid *ngIf="language !== undefined" [data]="gridView" [style.height]="height" [resizable]="true"
-    [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
-    [pageable]="pageable" (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey" [groupable]="true"
-    [group]="state.group" [pageSize]="pageSize" (groupChange)="groupChange($event)" (sortChange)="sortChange($event)">
+
+  <!-- <kendo-grid #hiddenGrid="kendoGrid" hidden="true" [data]="allDataForGrid"></kendo-grid> -->
+
+  <kendo-grid #grid="kendoGrid" *ngIf="language !== undefined" [data]="gridView" [style.height]="height"
+    [resizable]="true" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter"
+    [sortable]="true" [pageable]="pageable" (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey"
+    [groupable]="true" [group]="state.group" [pageSize]="pageSize" (groupChange)="groupChange($event)"
+    (sortChange)="sortChange($event)">
     <kendo-grid-messages pagerPage="{{ language.pagerPage }}" pagerOf="{{ language.pagerOf }}"
       pagerItems="{{ language.pagerItems }}" pagerItemsPerPage="{{ language.pagerItemsPerPage }}">
     </kendo-grid-messages>
@@ -34,8 +38,13 @@
               {{ language.exportPageToPDF }}</a>
             <a (click)="exportPDF(true)"><span class="k-icon k-i-file-pdf"></span>
               {{ language.exportToPDF }}</a>
-            <a kendoGridExcelCommand><span class="k-icon k-i-file-excel"></span>
+
+            <a (click)="exportToExcel(grid, false)"><span class="k-icon k-i-file-excel"></span>
               {{ language.exportToExcel }}</a>
+
+            <a (click)="exportToExcel(grid, true)"><span class="k-icon k-i-file-excel"></span>
+              ALL</a>
+
             <a (click)="openPatientFormRegistrationDialog()" style="text-transform: uppercase"><span
                 class="fa fa-list"></span> {{ language.patientForm }}</a>
           </div>
@@ -83,7 +92,10 @@
       <kendo-grid-column field="mobile" title="{{ language.mobile }}" width="120">
       </kendo-grid-column>
     </kendo-grid-pdf>
-    <kendo-grid-excel fileName="Customers.xlsx"></kendo-grid-excel>
+
+    <kendo-grid-excel fileName="Customers.xlsx" [fetchData]="allData"></kendo-grid-excel>
+    <!-- <kendo-grid-excel fileName="Customers.xlsx"></kendo-grid-excel> -->
+
     <ng-template kendoGridNoRecordsTemplate>
       <div class="row no-results-element">
         <div class="text-center">
