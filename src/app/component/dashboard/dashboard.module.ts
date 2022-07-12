@@ -64,7 +64,6 @@ import { MyTherapyComponent } from "./patient/my-therapy/my-therapy.component";
 import { MyDocumentComponent } from "./patient/my-document/my-document.component";
 import { SettingsModule } from "./settings/settings.module";
 import { DropDownListModule } from "@syncfusion/ej2-angular-dropdowns";
-import { DashboardLayoutModule } from '@syncfusion/ej2-angular-layouts';
 import { ReservationsComponent } from "./reservations/reservations.component";
 import { SharedEmailModule } from "../shared-module/shared-email-module";
 import { SharedSMSModule } from "../shared-module/shared-sms-module";
@@ -199,8 +198,7 @@ import { ListFaqComponent } from './administrator/help/list-faq/list-faq.compone
     SharedEmailModule,
     SharedSMSModule,
     ScheduleModule,
-    ToolbarModule,
-    DashboardLayoutModule
+    ToolbarModule
   ],
   providers: [
     {
