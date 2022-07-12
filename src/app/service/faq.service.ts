@@ -31,9 +31,9 @@ export class FaqService {
     return this.httpClient.post("/api/createFaq", data).toPromise();
   }
 
-  public getFaqsByTopic(topicId: number): Observable<FaqModel[]> {
+  public getFaqsByTopic(topicId: number, superAdminId: number): Observable<FaqModel[]> {
     return this.httpClient
-      .get<FaqModel[]>("/api/getFaqQuestions/" + topicId).map((res) => res);
+      .get<FaqModel[]>("/api/getFaqQuestions/" + topicId+"/"+superAdminId).map((res) => res);
   }
 
   public updateFaq(data) {

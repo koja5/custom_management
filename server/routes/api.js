@@ -8788,15 +8788,16 @@ router.post("/updateFaq", function (req, res, next) {
   });
 });
 
-router.get("/getFaqQuestions/:topicId", function (req, res, next) {
+router.get("/getFaqQuestions/:topicId/:superAdminId", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
     }
     var topicId = req.params.topicId;
+    var superAdminId = req.params.superAdminId;
     conn.query(
-      "SELECT * FROM `faq_list` where helpTopicId=" + topicId,
+      "SELECT * FROM `faq_list` where helpTopicId=" + topicId + " and superAdminId="+superAdminId,
       function (err, rows) {
         conn.release();
         if (!err) {

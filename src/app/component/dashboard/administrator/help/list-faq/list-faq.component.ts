@@ -51,7 +51,7 @@ export class ListFaqComponent implements OnInit {
   }
 
   public loadFaqs() {
-    this.service.getFaqsByTopic(this.topicId).subscribe(data => {
+    this.service.getFaqsByTopic(this.topicId, this.superAdminId).subscribe(data => {
       this.list = data;
       this.filterList = data;
     });
