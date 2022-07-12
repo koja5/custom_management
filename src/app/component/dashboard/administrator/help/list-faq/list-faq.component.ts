@@ -15,7 +15,7 @@ import { HelpService } from 'src/app/service/help.service';
 })
 export class ListFaqComponent implements OnInit {
   @ViewChild("faqModal") faqModal: Modal;
-
+  @ViewChild("panelbar") panelRef;
   topicId: number;
   public kendoPanelBarExpandMode = PanelBarExpandMode.Multiple;
   public list: FaqModel[];
@@ -25,56 +25,65 @@ export class ListFaqComponent implements OnInit {
   public faq = new FaqModel();
   public operationMode = 'add';
 
-  public userSuperAdmin=false;
+  public userSuperAdmin = false;
   private superAdminId;
   private userId;
 
   overrideMessage: Partial<IndividualConfig> = { timeOut: 7000, positionClass: "toast-bottom-right" };
 
-  constructor(private service: FaqService, 
+  constructor(private service: FaqService,
     private route: ActivatedRoute,
     private toastrService: ToastrService,
     private helpService: HelpService) { }
-  
-  ngOnInit() {  
+
+  ngOnInit() {
     if (localStorage.getItem("language") !== null) {
       this.language = JSON.parse(localStorage.getItem("language"));
-    }   
-    
+    }
+
     this.superAdminId = this.helpService.getSuperadmin();
     this.userId = this.helpService.getMe();
     this.userSuperAdmin = this.superAdminId == this.userId;
 
     this.topicId = this.route.snapshot.params["id"];
-    this.faq.helpTopicId=this.topicId;
+    this.faq.helpTopicId = this.topicId;
     this.loadFaqs();
   }
 
-  public loadFaqs(){
-    this.service.getFaqsByTopic(this.topicId).subscribe(data=>{
-      this.list = data; 
-      this.filterList=data;     
+  public loadFaqs() {
+    this.service.getFaqsByTopic(this.topicId).subscribe(data => {
+      this.list = data;
+      this.filterList = data;
     });
   }
 
   public onFilter(inputValue: string): void {
     inputValue = inputValue.toLowerCase();
-    this.filterList=this.list.filter(r=>r.question.toLowerCase().includes(inputValue) || r.answer.toLowerCase().includes(inputValue));
+    this.filterList = this.list.filter(r => r.question.toLowerCase().includes(inputValue) || r.answer.toLowerCase().includes(inputValue));
   }
 
   addNewModal() {
     this.faqModal.open();
     this.faq = new FaqModel();
-    this.faq.helpTopicId=this.topicId;
-    this.faq.superAdminId=this.superAdminId;
+    this.faq.helpTopicId = this.topicId;
+    this.faq.superAdminId = this.superAdminId;
     this.faq.question = "";
     this.faq.answer = "";
     this.operationMode = 'add';
-    // this.data.language = "";
-  }  
+  }
+ 
+  onIconEvent(value, event, iconEventType) {
+    //To stop expand/collaps panel
+    event.stopPropagation();
 
-  openEditFaqModal(event): void {
-    this.faq = event;
+    if(iconEventType==="edit")
+      this.openEditFaqModal(value) 
+    else if(iconEventType==="delete")
+      this.deleteQuestion(value);
+ }
+
+  openEditFaqModal(value): void {    
+    this.faq = value;
     this.operationMode = 'edit';
     this.faqModal.open();
   }
@@ -83,8 +92,8 @@ export class ListFaqComponent implements OnInit {
     this.faqModal.close();
   }
 
-  createFaq(): void{
-    this.service.createFaq(this.faq).then(result=>{
+  createFaq(): void {
+    this.service.createFaq(this.faq).then(result => {
       this.loadFaqs();
       this.closeFaqModal();
       if (result) {
@@ -96,8 +105,8 @@ export class ListFaqComponent implements OnInit {
     });
   }
 
-  updateFaq(){
-    this.service.updateFaq(this.faq).then(result=>{
+  updateFaq() {
+    this.service.updateFaq(this.faq).then(result => {
       this.closeFaqModal();
       if (result) {
         this.displaySuccessMessage(this.language.adminSuccessUpdateTitle, this.language.adminSuccessUpdateText);
@@ -116,8 +125,8 @@ export class ListFaqComponent implements OnInit {
     this.toastrService.error(message, title, this.overrideMessage);
   }
 
-  deleteQuestion(event){
-    this.service.deleteFaq(event).then(result => {
+  deleteQuestion(value) {
+    this.service.deleteFaq(value).then(result => {
 
       if (result) {
         this.displaySuccessMessage(this.language.adminSuccessDeleteTitle, this.language.adminSuccessDeleteText);
