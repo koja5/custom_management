@@ -8610,4 +8610,235 @@ router.post("/updateInvoiceID", function (req, res, next) {
   });
 });
 
+//end holiday-template
+
+//help -faq
+router.post("/createFaqTopic", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "insert into help_topics SET ?",
+          [req.body],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(false);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+            } else {
+              res.json(rows.insertId);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/updateFaqTopic", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    test = {};
+    var id = req.body.id;
+
+    conn.query(
+      "UPDATE help_topics SET ? where id = '" + id + "'",
+      [req.body],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            test.success = true;
+          } else {
+            test.success = false;
+          }
+          res.json(test);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
+router.get("/getFaqTopics/:superAdminId", function (req, res, next) {
+  var superAdminId = req.params.superAdminId;
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query(
+      "SELECT * FROM `help_topics` where superAdminId = '" + superAdminId + "'",
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
+router.post("/deleteFaqTopic", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    test = {};
+    var id = req.body.id;
+
+    conn.query(
+      "delete from help_topics where id = '" + id + "'",
+      [req.body],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            test.success = true;
+          } else {
+            test.success = false;
+          }
+          res.json(test);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
+router.post("/createFaq", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "insert into faq_list SET ?",
+          [req.body],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(false);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+            } else {
+              res.json(rows.insertId);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/updateFaq", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    test = {};
+    var id = req.body.id;
+
+    conn.query(
+      "UPDATE faq_list SET ? where id = '" + id + "'",
+      [req.body],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            test.success = true;
+          } else {
+            test.success = false;
+          }
+          res.json(test);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
+router.get("/getFaqQuestions/:topicId/:superAdminId", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    var topicId = req.params.topicId;
+    var superAdminId = req.params.superAdminId;
+    conn.query(
+      "SELECT * FROM `faq_list` where helpTopicId=" + topicId + " and superAdminId="+superAdminId,
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
+router.post("/deleteFaq", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    test = {};
+    var id = req.body.id;
+
+    conn.query(
+      "delete from faq_list where id = '" + id + "'",
+      [req.body],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            test.success = true;
+          } else {
+            test.success = false;
+          }
+          res.json(test);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
+//end help - faq
 module.exports = router;
