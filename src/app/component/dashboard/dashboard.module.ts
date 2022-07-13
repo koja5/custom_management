@@ -42,6 +42,7 @@ import { CustomersComponent } from "./customers/customers.component";
 import { WorkTimeColorsComponent } from "./parameters/work-time-colors/work-time-colors.component";
 import { UserDetailsComponent } from "./users/user-details/user-details.component";
 import { TaskComponent } from "./task/task.component";
+import { ThemeColorsComponent } from "./parameters/theme-colors/theme-colors.component"
 import { EventCategoryComponent } from "./parameters/event-category/event-category.component";
 import { EditTranslationComponent } from "./translation/edit-translation/edit-translation.component";
 import { UploadModule } from "@progress/kendo-angular-upload";
@@ -102,6 +103,7 @@ import { InvoiceComponent } from './invoice/invoice.component';
 import { SmsBirthdayCongratulationComponent } from './parameters/sms-birthday-congratulation/sms-birthday-congratulation.component';
 import { MailBirthdayCongratulationComponent } from './parameters/mail-birthday-congratulation/mail-birthday-congratulation.component';
 import { MailPatientCreatedAccountViaFormComponent } from './parameters/mail-parameters/mail-patient-created-account-via-form/mail-patient-created-account-via-form.component';
+import { ColorPickerModule } from '@syncfusion/ej2-angular-inputs';
 import { HelpComponent } from './administrator/help/help.component';
 import { TopicCardComponent } from './administrator/help/topic-card/topic-card.component';
 import { ListFaqComponent } from './administrator/help/list-faq/list-faq.component';
@@ -123,6 +125,7 @@ import { ListFaqComponent } from './administrator/help/list-faq/list-faq.compone
     StatisticComponent,
     VaucherComponent,
     EventCategoryComponent,
+    ThemeColorsComponent,
     EventCategoryStatisticComponent,
     WorkTimeColorsComponent,
     TranslationComponent,
@@ -198,7 +201,8 @@ import { ListFaqComponent } from './administrator/help/list-faq/list-faq.compone
     SharedEmailModule,
     SharedSMSModule,
     ScheduleModule,
-    ToolbarModule
+    ToolbarModule,
+    ColorPickerModule
   ],
   providers: [
     {

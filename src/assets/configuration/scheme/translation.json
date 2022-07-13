@@ -2056,31 +2056,43 @@
       "showAtInvoice": {
         "type": "string"
       },
-      "helpTitle":{
+      "changeThemeColor": {
         "type": "string"
       },
-      "faqTitle":{
+      "themeColorsMenu": {
         "type": "string"
       },
-      "search":{
+      "successThemeSaved": {
         "type": "string"
       },
-      "newFaq":{
+      "successThemeEdit": {
         "type": "string"
       },
-      "editFaq":{
+      "helpTitle": {
         "type": "string"
       },
-      "question":{
+      "faqTitle": {
         "type": "string"
       },
-      "answer":{
+      "search": {
         "type": "string"
       },
-      "helpTopic":{
+      "newFaq": {
         "type": "string"
       },
-      "addHelpTopic":{
+      "editFaq": {
+        "type": "string"
+      },
+      "question": {
+        "type": "string"
+      },
+      "answer": {
+        "type": "string"
+      },
+      "helpTopic": {
+        "type": "string"
+      },
+      "addHelpTopic": {
         "type": "string"
       }
     }
@@ -6504,7 +6516,7 @@
               "key": "search"
             },
             {
-              "key":"helpTopic"
+              "key": "helpTopic"
             }
           ]
         },
@@ -6526,7 +6538,41 @@
               "key": "answer"
             },
             {
-              "key":"addHelpTopic"
+              "key": "addHelpTopic"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Theme colors",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "changeThemeColor"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "themeColorsMenu"
+            },
+            {
+              "key": "successThemeSaved"
+            },
+            {
+              "key": "successThemeEdit"
             }
           ]
         }

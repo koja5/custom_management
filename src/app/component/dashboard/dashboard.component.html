@@ -368,6 +368,7 @@
                             "
                             class="{{ activeGroup[2] }}"
                           >
+                            <!-- Application Parameters -->
                             <a (click)="collapse(2)" class="has-arrow"
                               ><i class="fa fa fa-file-text"></i
                               ><span class="navigation-link">{{
@@ -511,6 +512,21 @@
                                   {{ language?.stateMenu }}
                                 </a>
                               </li>
+                              
+                              <!-- Application theme -->
+                              <li class="{{ selectedNodeModel['application_theme'] }}">
+                                <a
+                                  routerLink="/dashboard/home/theme-colors"
+                                  (click)="returnActiveNode('application_theme')"
+                                  class="nav-link"
+                                  ><i
+                                    class="fa fa-paint-brush"
+                                  ></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.themeColorsMenu }}
+                                </a>
+                              </li>
+                              <!-- Application theme -->
 
                               <li
                                 class="{{

@@ -8841,4 +8841,96 @@ router.post("/deleteFaq", function (req, res, next) {
 });
 
 //end help - faq
+
+// start theme_colors
+
+router.get("/getThemeColors/:id", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    var id = req.params.id;
+    conn.query(
+      "select * from theme_configuration where superadmin = ?",
+      [id],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
+router.post("/createThemeColors", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+
+    response = null;
+    var data = {
+      color: req.body.color,
+      superadmin: req.body.superadmin,
+    };
+
+    conn.query(
+      "insert into theme_configuration SET ?",
+      data,
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            response = true;
+          } else {
+            response.success = false;
+          }
+          res.json(response);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
+router.post("/updateThemeColors", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+
+    var response = null;
+    var data = {
+      color: req.body.color,
+      superadmin: req.body.superadmin,
+    };
+
+    conn.query(
+      "update theme_configuration set ? where id = '" + req.body.id + "'",
+      data,
+      function (err, rows, fields) {
+        conn.release();
+        if (err) {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        } else {
+          response = true;
+          res.json(response);
+        }
+      }
+    );
+  });
+});
+
+// end theme_colors
+
 module.exports = router;

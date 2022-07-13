@@ -13326,6 +13326,7 @@ tr.group:hover {
   --sidebar-font-color: #4680ff;
   --logo-color: #222c3c;
   --header-color: #091467;
+  --theme-color: #091467;
 }
 
 /*
@@ -17380,7 +17381,7 @@ kendo-grid-filter-cell-operators {
 }
 
 .btn-grid {
-  background-color: #091467;
+  background-color: var(--theme-color) !important;
   color: white;
   font-size: 17px;
   border: none;
@@ -17468,7 +17469,7 @@ kendo-grid-filter-cell-operators {
 }
 
 .addButton {
-  background: #091467 !important;
+  background: var(--theme-color) !important;
   margin-left: 12px;
   height: auto !important;
   /*border-bottom: 1px solid #7883FC*/
@@ -18005,7 +18006,7 @@ kendo-window {
 }
 
 perfect-scrollbar > .ps {
-  background: #091467 !important;
+  background: var(--theme-color) !important;
 }
 
 /* terms */
