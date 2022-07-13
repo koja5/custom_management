@@ -107,11 +107,11 @@ export class PDFService {
         {
           columns: [
             {
-              text: store.companyname ? store.companyname : store.storename,
+              text: store.storename + '\n' + superadminProfile.shortname,
               style: "invoiceBillingDetailsLeft",
             },
             {
-              text: customerUser.lastname + customerUser.firstname,
+              text: customerUser.lastname.trim() + ' ' + customerUser.firstname.trim(),
               style: "invoiceBillingDetailsRight",
             },
           ],
@@ -121,8 +121,8 @@ export class PDFService {
           columns: [
             {
               text: store.vatcode ?
-                store.street + "\n " + store.zipcode + " " + store.place + "\n" + invoiceLanguage.vat + " " + store.vatcode
-                : store.street + "\n " + store.zipcode + " " + store.place + "\n" + invoiceLanguage.vat + " " + superadminProfile.vatcode,
+                store.street + "\n " + store.zipcode + " " + store.place + "\n" + invoiceLanguage.vatIdentificationNumber + " " + store.vatcode
+                : store.street + "\n " + store.zipcode + " " + store.place + "\n" + invoiceLanguage.vatIdentificationNumber + " " + superadminProfile.vatcode,
               style: "invoiceBillingAddressLeft",
             },
             {
@@ -166,7 +166,7 @@ export class PDFService {
             // headers are automatically repeated if the table spans over multiple pages
             // you can declare how many rows should be treated as headers
             headerRows: 1,
-            widths: ["*", "*", "auto", "auto", "auto"],
+            widths: ["20%", "20%", "20%", "20%", "20%"],
 
             body: this.createItemsTable(therapies, isPriceIncluded),
           }, // table
@@ -178,22 +178,30 @@ export class PDFService {
         {
           columns: [
             {
+              text: '',
+              width: '20%'
+            },
+            {
+              text: '',
+              width: '20%'
+            },
+            {
               text: isPriceIncluded ?
                 (netPrices.length === 0 ? invoiceLanguage.noDataAvailable : (invoiceLanguage.euroSign + " " + subtotal)) : '',
               style: "itemsFooterSubValue",
-              width: 'auto',
+              width: '20%',
             },
             {
               text: isPriceIncluded ?
                 (vatPrices.length === 0 ? invoiceLanguage.noDataAvailable : (invoiceLanguage.euroSign + " " + vat)) : '',
               style: "itemsFooterVATValue",
-              width: 'auto',
+              width: '20%',
             },
             {
               text: isPriceIncluded ?
                 (brutoPrices.length === 0 ? invoiceLanguage.noDataAvailable : (invoiceLanguage.euroSign + " " + total)) : '',
               style: "itemsFooterTotalValue",
-              width: 'auto',
+              width: '20%',
             },
           ],
         },
@@ -210,7 +218,7 @@ export class PDFService {
         columns: [
           {
             text:
-              (store.companyname ? store.companyname : store.storename) +
+              store.storename + ' ' + superadminProfile.shortname +
               this.dotSign +
               store.street +
               this.dotSign +
@@ -324,7 +332,7 @@ export class PDFService {
       },
       itemGrossPrice: {
         margin: [0, 5, 0, 5],
-        alignment: "right",
+        alignment: "center",
       },
       itemTotal: {
         margin: [0, 5, 0, 5],
@@ -340,10 +348,10 @@ export class PDFService {
         alignment: "right",
       },
       itemsFooterSubValue: {
-        margin: [300, 5, 0, 5],
+        margin: [0, 5, 0, 5],
         bold: true,
         fontSize: 13,
-        alignment: "right",
+        alignment: "center",
       },
       itemsFooterTotalTitle: {
         margin: [0, 5, 0, 5],
@@ -356,13 +364,13 @@ export class PDFService {
         margin: [0, 5, 0, 5],
         bold: true,
         fontSize: 13,
-        alignment: "right",
+        alignment: "center",
       },
       itemsFooterTotalValue: {
         margin: [0, 5, 0, 5],
         bold: true,
         fontSize: 13,
-        alignment: "right",
+        alignment: "center",
       },
       notesTitle: {
         fontSize: 14,
@@ -400,7 +408,7 @@ export class PDFService {
           style: ["itemsHeader", "center"],
         },
         {
-          text: isPriceIncluded ? this.language.vat + " (%)" : '',
+          text: isPriceIncluded ? this.language.vatPercentageTitle : '',
           style: ["itemsHeader", "center"],
         },
         {

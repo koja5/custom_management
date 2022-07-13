@@ -272,6 +272,7 @@ tr.k-grid-norecords:hover {
 		33. SCROLL TO TOP 
 		34. FOOTER 	
 		35. MODALS 
+    36. KENDO-PANELBAR
  */
 
 /***********************************************************************
@@ -18035,4 +18036,28 @@ perfect-scrollbar > .ps {
   padding: 5.5px !important;
 }
 
+/***********************************************************************
+
+						[36. KENDO-PANELBAR ]
+						
+***********************************************************************/
+
+.k-panelbar > .k-item > .k-link, .k-panelbar > .k-panelbar-header > .k-link{
+  color: black !important;
+}
+
+.k-panelbar > .k-item > .k-link.k-state-selected:hover, .k-panelbar > .k-item > .k-link.k-state-selected.k-state-hover, .k-panelbar > .k-panelbar-header > .k-link.k-state-selected:hover, .k-panelbar > .k-panelbar-header > .k-link.k-state-selected.k-state-hover{
+  background: #091467 !important;
+  color: white !important;
+}
+
+.k-panelbar > .k-item > .k-link:focus, .k-panelbar > .k-item > .k-link.k-state-focus, .k-panelbar > .k-item > .k-link.k-state-focused, .k-panelbar > .k-panelbar-header > .k-link:focus, .k-panelbar > .k-panelbar-header > .k-link.k-state-focus, .k-panelbar > .k-panelbar-header > .k-link.k-state-focused{
+  background: #091467 !important;
+  color: white !important;
+}
+
+.k-panelbar > .k-item > .k-link.k-state-selected, .k-panelbar > .k-panelbar-header > .k-link.k-state-selected{
+  background: #091467 !important;
+  color: white !important;
+}
 /* END terms */

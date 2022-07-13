@@ -16,13 +16,6 @@
   {
     "type": "textbox",
     "width": "col-md-4",
-    "name": "companyname",
-    "label": "companyName",
-    "field": "companyname"
-  },
-  {
-    "type": "textbox",
-    "width": "col-md-4",
     "name": "shortname",
     "label": "storename",
     "field": "shortname"
