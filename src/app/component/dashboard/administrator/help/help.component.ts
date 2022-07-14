@@ -23,6 +23,8 @@ export class HelpComponent implements OnInit {
 
   private superAdminId;
   private userId;
+  public loading: string;
+  public selectedUser: string;
 
   constructor(private service: FaqService,
     private toastrService: ToastrService,
