@@ -88,8 +88,6 @@
     </ng-template>
     <kendo-grid-column field="storename" title="Store name" width="120">
     </kendo-grid-column>
-    <kendo-grid-column field="companyname" title="Company name" width="120">
-    </kendo-grid-column>
     <kendo-grid-column field="vatcode" title="VAT code" width="120">
     </kendo-grid-column>
     <kendo-grid-column field="email" title="Email" width="200">
@@ -145,8 +143,6 @@
       </ng-template>
       <kendo-grid-column field="storename" title="Store name">
       </kendo-grid-column>
-      <kendo-grid-column field="companyname" title="Company name">
-      </kendo-grid-column>
       <kendo-grid-column field="vatcode" title="VAT code"> </kendo-grid-column>
       <kendo-grid-column field="email" title="Email"> </kendo-grid-column>
       <kendo-grid-column field="street" title="Street"> </kendo-grid-column>
@@ -198,17 +194,7 @@
           />
         </kendo-textbox-container>
       </div>
-      <div class="col-md-12 col-xs-12">
-        <kendo-textbox-container floatingLabel="{{ language.companyName }}">
-          <input
-            kendoTextBox
-            type="text"
-            class="col-xs-12"
-            name="companyname"
-            [(ngModel)]="data.companyname"
-          />
-        </kendo-textbox-container>
-      </div>
+      
       <div class="col-md-12 col-xs-12">
         <kendo-textbox-container floatingLabel="{{ language.vatcode }}">
           <input
@@ -417,18 +403,6 @@
             [(ngModel)]="data.storename"
             required
             #storename="ngModel"
-          />
-        </kendo-textbox-container>
-      </div>
-
-      <div class="col-md-12 col-xs-12">
-        <kendo-textbox-container floatingLabel="{{ language.companyName }}">
-          <input
-            kendoTextBox
-            type="text"
-            class="col-xs-12"
-            name="companyname"
-            [(ngModel)]="data.companyname"
           />
         </kendo-textbox-container>
       </div>
