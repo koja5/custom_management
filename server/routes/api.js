@@ -5997,7 +5997,7 @@ router.post("/getFilteredRecipients", function (req, res) {
           " where " +
           excludeQuery +
           checkAdditionalQuery +
-          " and c.active = 1 and c.storeId = " +
+          " and c.sendMassiveEmail = 1 and c.active = 1 and c.storeId = " +
           Number(req.body.superadmin) +
           " and (" +
           question +
@@ -9600,5 +9600,57 @@ router.get('/getClinicEmployees/:id', function (req, res) {
 });
 
 /* End Registered Clinics */
+
+/* UNSUBSCRIBE */
+
+router.post("/updateMassiveEmailForUser", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.send(err);
+    }
+    conn.query(
+      "update customers SET sendMassiveEmail = ? where email = ?",
+      [req.body.value, req.body.email],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            res.send(true);
+          } else {
+            res.send(false);
+          }
+        } else {
+          res.send(err);
+        }
+      }
+    );
+  });
+});
+
+router.post("/updateMassiveSMSForUser", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.send(err);
+    }
+    conn.query(
+      "update customers SET sendMassiveSMS = ? where email = ?",
+      [req.body.value, req.body.email],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            res.send(true);
+          } else {
+            res.send(false);
+          }
+        } else {
+          res.send(err);
+        }
+      }
+    );
+  });
+});
+
+/* END UNSUBSCRIBE */
 
 module.exports = router;

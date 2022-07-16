@@ -1,4 +1,4 @@
-import { ActivatedRoute, CanActivate, Router } from "@angular/router";
+import { CanActivate, Router } from "@angular/router";
 import { Injectable } from "@angular/core";
 import "rxjs/add/operator/map";
 import { CookieService } from "ng2-cookies";
@@ -9,9 +9,7 @@ export class LoginGuard implements CanActivate {
   constructor(
     public _router: Router,
     public cookie: CookieService,
-    public helpService: HelpService,
-    private activatedRoute: ActivatedRoute
-  ) {}
+    public helpService: HelpService) { }
 
   /* Kada se bude menjao loginGuard, cookie.check("üser") proverava samo da li postoji,
     a cookie.get("user") da koji je tip usera. Ukoliko ne postoji cookie.get("user") vraca prazan string*/

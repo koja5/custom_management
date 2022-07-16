@@ -44,6 +44,13 @@ const logToConsole = winston.createLogger({
   ],
 });
 
+// var connection = mysql.createPool({
+//   host: "116.203.85.82",
+//   user: "appprodu_appproduction",
+//   password: "CJr4eUqWg33tT97mxPFx",
+//   database: "appprodu_management",
+// });
+
 var connection = mysql.createPool({
   host: process.env.host,
   user: process.env.user,
@@ -61,6 +68,20 @@ var connection = mysql.createPool({
    },
 });*/
 
+// var smtpTransport = nodemailer.createTransport({
+//   host: "116.203.85.82",
+//   port: 25,
+//   secure: false,
+//   tls: {
+//     rejectUnauthorized: false,
+//   },
+//   auth: {
+//     user: "support@app-production.eu",
+//     pass: "])3!~0YFU)S]",
+//   },
+// });
+
+//local purpose
 var smtpTransport = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
@@ -73,7 +94,7 @@ var smtpTransport = nodemailer.createTransport({
   auth: {
     user: "clinicnode2022@gmail.com",  // real email address
     pass: "vfuvxgwdfrvestvd" // app password for clinicnode2022@gmail.com email
-  },
+  }
 });
 
 //slanje maila pri registraciji
@@ -1181,28 +1202,35 @@ router.post("/confirmUserViaMacAddress", function (req, res) {
 });
 
 router.post("/sendMassiveEMail", function (req, res) {
-  var sendMassiveTemplate = fs.readFileSync(
-    "./server/routes/templates/sendMassiveMails.hjs",
-    "utf-8"
-  );
-  var sendMassive = hogan.compile(sendMassiveTemplate);
-  var question = getSqlQuery(req.body);
-  var joinTable = getJoinTable(req.body);
+      var sendMassiveTemplate = fs.readFileSync(
+        "./server/routes/templates/sendMassiveMails.hjs",
+        "utf-8"
+      );
+      var sendMassive = hogan.compile(sendMassiveTemplate);
+      var question = getSqlQuery(req.body);
+      var joinTable = getJoinTable(req.body);
+    
+    console.log("select distinct c.email, c.shortname, mm.* from customers c join mail_massive_message mm on c.storeId = mm.superadmin join store s on c.storeId = s.superadmin " +
+    joinTable +
+    " where c.sendMassiveEmail = 1 and (c.email != '' and c.email IS NOT NULL)  and c.active = 1  and c.storeId = " +
+    Number(req.body.superadmin) +
+    " and " +
+      question);
 
-  if (req.body.message != "") {
-    connection.getConnection(function (err, conn) {
+    if (req.body.message != "") {
+            connection.getConnection(function (err, conn) {
       conn.query(
         "select distinct c.email, c.shortname, mm.* from customers c join mail_massive_message mm on c.storeId = mm.superadmin join store s on c.storeId = s.superadmin " +
           joinTable +
-          " where (c.email != '' and c.email IS NOT NULL) and c.active = 1 and c.storeId = " +
+          " where c.sendMassiveEmail = 1 and (c.email != '' and c.email IS NOT NULL) and c.active = 1 and c.storeId = " +
           Number(req.body.superadmin) +
           " and " +
           question,
         function (err, rows) {
           conn.release();
           if (err) {
-            logger.log("error", err);
-            res.json(false);
+            logger.log("error HERE", err);
+            res.json(err);
           }
           console.log(question);
           console.log(rows);
@@ -1215,7 +1243,7 @@ router.post("/sendMassiveEMail", function (req, res) {
             }
             console.log(to);
             var mailOptions = {
-              from: '"ClinicNode" support@app-production.eu',
+              from: '"Clinic Node" clinicnode2022@gmail.com',
               to: to.email,
               subject: req.body.subject ? req.body.subject : mail.mailSubject,
               html: sendMassive.render({
@@ -1276,11 +1304,16 @@ router.post("/sendMassiveEMail", function (req, res) {
                   signatureAvailable && mail.signatureEmail
                     ? mail.signatureEmail
                     : "",
+
+                unsubscribeMessage: req.body.language?.unsubscribeMessage,
+                unsubscribeHere: req.body.language?.unsubscribeHere,
+                unsubscribeLink: "http://localhost:4200/unsubscribe/" + to.email,
               }),
             };
             smtpTransport.sendMail(mailOptions, function (error, response) {
               if (error) {
-                logger.log("error", error);
+                //logger.log("error sendMail", error);
+              logToConsole.error(error);
               } else {
                 logger.log(
                   "info",
