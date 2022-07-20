@@ -73,7 +73,24 @@ export class CustomersComponent implements OnInit {
     previousNext: true,
   };
   public patientMail: string;
-
+  public hiddenColumns: string[] = [];
+  public restoreColumns(): void {
+    this.hiddenColumns = [];
+  }
+  public hideColumn(field: string): void {
+    this.hiddenColumns.push(field);
+    console.log(this.hiddenColumns.toString())
+    let gridStorage = localStorage.getItem('kendo-grid-options')
+    if(gridStorage) {
+      localStorage.removeItem('kendo-grid-options');
+      localStorage.setItem("kendo-grid-options",this.hiddenColumns.toString());
+    } else {
+      localStorage.setItem("kendo-grid-options",this.hiddenColumns.toString());
+    }
+  }
+  onEvent(event) {
+    event.preventDefault();
+  }
   constructor(
     private service: CustomersService,
     private storeService: StoreService,
@@ -89,6 +106,12 @@ export class CustomersComponent implements OnInit {
     this.height = this.helpService.getHeightForGrid();
     this.data.gender = "male";
     this.getCustomers();
+    let gridStorage = localStorage.getItem('kendo-grid-options');
+    if(gridStorage) {
+      let gridStorageArray = gridStorage.split(',');
+      console.log(gridStorageArray);
+      this.hiddenColumns = gridStorageArray;
+    }
 
     if (localStorage.getItem("language") !== null) {
       this.language = JSON.parse(localStorage.getItem("language"));

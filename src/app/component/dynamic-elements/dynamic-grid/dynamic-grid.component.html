@@ -1,23 +1,12 @@
+
+<button id='show' ej-button class='e-flat' (click)='show()' class="k-button hiddenBtn"> Columns Picker </button>
 <div #container>
-  <ejs-grid
-    #grid
-    *ngIf="config"
-    width="100%"
-    [height]="height"
-    [dataSource]="data"
-    [editSettings]="config.editSettings"
-    [toolbar]="config.toolbar"
-    [allowSorting]="config?.sorting?.enable"
-    [sortSettings]="config?.sorting?.initialSorting"
-    [allowGrouping]="config.grouping.enable"
-    [allowResizing]="config.allowResizing"
-    [allowPaging]="config.paging.enable"
-    [pageSettings]="config.paging.settings"
-    [allowFiltering]="config.filtering.enable"
-    (actionBegin)="actionBegin($event)"
-    (actionComplete)="actionComplete($event)"
-    (toolbarClick)="clickHandler($event)"
-  >
+  <ejs-grid #grid *ngIf="config" width="100%" [enablePersistence]='true' [height]="height" [dataSource]="data"
+    [editSettings]="config.editSettings" [toolbar]="config.toolbar" [allowSorting]="config?.sorting?.enable"
+    [sortSettings]="config?.sorting?.initialSorting" [allowGrouping]="config.grouping.enable"
+    [allowResizing]="config.allowResizing" [allowPaging]="config.paging.enable" [pageSettings]="config.paging.settings"
+    [allowFiltering]="config.filtering.enable" (actionBegin)="actionBegin($event)" [showColumnChooser]='true'
+    (actionComplete)="actionComplete($event)" (toolbarClick)="clickHandler($event)">
     <!-- <ng-template *ngIf="config.customToolbar" #toolbarTemplate let-data>
       <ejs-toolbar>
         <e-items>
@@ -34,51 +23,23 @@
         </e-items>
       </ejs-toolbar>
     </ng-template> -->
-
     <e-columns>
-      <e-column
-        *ngFor="let item of config.columns; let i = index"
-        [type]="item.type"
-        [field]="item.field"
-        [headerText]="language[item.title] ? language[item.title] : item.title"
-        [width]="item.width"
-        [class]="item?.class"
-        [textAlign]="item?.position"
-        [isPrimaryKey]="item.isPrimaryKey"
-        [editType]="item.editType ? item.editType : null"
-        [allowEditing]="item.allowEditing"
-        [format]="item.format"
-        [validationRules]="item.validation"
-      >
-        <ng-template
-          *ngIf="item?.type == 'documentPreview'"
-          class="item?.position"
-          #template
-          let-data
-        >
+      <e-column *ngFor="let item of config.columns; let i = index" [type]="item.type" [field]="item.field"
+        [headerText]="language[item.title] ? language[item.title] : item.title" [width]="item.width"
+        [class]="item?.class" [textAlign]="item?.position" [isPrimaryKey]="item.isPrimaryKey"
+        [editType]="item.editType ? item.editType : null" [allowEditing]="item.allowEditing" [format]="item.format"
+        [validationRules]="item.validation">
+        <ng-template *ngIf="item?.type == 'documentPreview'" class="item?.position" #template let-data>
           <div>
-            <button
-              kendoButton
-              [icon]="'k-icon k-i-preview'"
-              class="k-preview"
-              (click)="previewDocument(data.filename)"
-            >
+            <button kendoButton [icon]="'k-icon k-i-preview'" class="k-preview"
+              (click)="previewDocument(data.filename)">
               <span *ngIf="item.classIcon" class="item.classIcon"></span>
             </button>
           </div>
         </ng-template>
-        <ng-template
-          *ngIf="item?.type == 'button'"
-          class="item?.position"
-          #template
-          let-data
-        >
-          <button
-            *ngIf="item?.mode === 'action'"
-            kendoButton
-            [class]="item?.class"
-            (click)="action(data, item.mode, item)"
-          >
+        <ng-template *ngIf="item?.type == 'button'" class="item?.position" #template let-data>
+          <button *ngIf="item?.mode === 'action'" kendoButton [class]="item?.class"
+            (click)="action(data, item.mode, item)">
             <span *ngIf="item.classIcon" class="{{ item.classIcon }}"></span>
             {{ language[item?.label] ? language[item?.label] : item?.label }}
           </button>
@@ -122,11 +83,7 @@
                         <label class="e-float-text e-label-top" for="ShipAddress">Ship Address</label>
                     </div>
                 </div> -->
-          <app-dynamic-forms
-            [config]="config.configField"
-            (submit)="submitEmitter($event)"
-            #form="dynamicForm"
-          >
+          <app-dynamic-forms [config]="config.configField" (submit)="submitEmitter($event)" #form="dynamicForm">
           </app-dynamic-forms>
         </div>
       </div>

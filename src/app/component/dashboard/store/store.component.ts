@@ -63,6 +63,24 @@ export class StoreComponent implements OnInit {
     pageSizes: true,
     previousNext: true,
   };
+  public hiddenColumns: string[] = [];
+  public restoreColumns(): void {
+    this.hiddenColumns = [];
+  }
+  public hideColumn(field: string): void {
+    this.hiddenColumns.push(field);
+    console.log(this.hiddenColumns.toString());
+    let gridStorage = localStorage.getItem("kendo-grid-options");
+    if (gridStorage) {
+      localStorage.removeItem("kendo-grid-options");
+      localStorage.setItem("kendo-grid-options", this.hiddenColumns.toString());
+    } else {
+      localStorage.setItem("kendo-grid-options", this.hiddenColumns.toString());
+    }
+  }
+  onEvent(event) {
+    event.preventDefault();
+  }
 
   constructor(
     public service: StoreService,
@@ -75,6 +93,12 @@ export class StoreComponent implements OnInit {
   ngOnInit() {
     this.height = this.helpService.getHeightForGrid();
     this.idUser = localStorage.getItem("superadmin");
+    let gridStorage = localStorage.getItem("kendo-grid-options");
+    if (gridStorage) {
+      let gridStorageArray = gridStorage.split(",");
+      console.log(gridStorageArray);
+      this.hiddenColumns = gridStorageArray;
+    }
     if (localStorage.getItem("theme") !== null) {
       this.theme = localStorage.getItem("theme");
     }

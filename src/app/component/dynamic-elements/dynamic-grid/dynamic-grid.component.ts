@@ -21,15 +21,18 @@ import { GridComponent } from "@syncfusion/ej2-angular-grids";
 import { DialogComponent } from "@syncfusion/ej2-angular-popups";
 import { HelpService } from "src/app/service/help.service";
 import { MessageService } from "src/app/service/message.service";
-import { QueryCellInfoEventArgs } from "@syncfusion/ej2-angular-grids";
+import {
+  QueryCellInfoEventArgs,
+  ColumnChooserService,
+} from "@syncfusion/ej2-angular-grids";
 import { Tooltip } from "@syncfusion/ej2-popups";
 import { ClickEventArgs } from "@syncfusion/ej2-navigations";
-import { SystemLogsService } from "src/app/service/system-logs.service";
 
 @Component({
   selector: "app-dynamic-grid",
   templateUrl: "./dynamic-grid.component.html",
   styleUrls: ["./dynamic-grid.component.scss"],
+  providers: [ColumnChooserService],
 })
 export class DynamicGridComponent implements OnInit {
   @Input() path: string;
@@ -95,6 +98,9 @@ export class DynamicGridComponent implements OnInit {
         this.callApi(data["request"]);
       }
     });
+  }
+  show() {
+    this.grid.columnChooserModule.openColumnChooser(10, 10); // give X and Y axis
   }
 
   getConfiguration() {
@@ -166,8 +172,8 @@ export class DynamicGridComponent implements OnInit {
         args.cancel = true;
       }
     }*/
-    /*if (args.requestType === "beginEdit" || args.requestType === "add") { 
-        // set buttons here.... 
+    /*if (args.requestType === "beginEdit" || args.requestType === "add") {
+        // set buttons here....
         args.dialog.buttons = [ ];
       } */
   }
@@ -199,8 +205,8 @@ export class DynamicGridComponent implements OnInit {
         this.form.setDisabled("submit", true);
         this.form.setValue("storename", "Todd Motto");
       }, 100);*/
-    /*if (args.requestType === "beginEdit" || args.requestType === "add") { 
-        // set buttons here.... 
+    /*if (args.requestType === "beginEdit" || args.requestType === "add") {
+        // set buttons here....
         args.dialog.buttons = [ ];
       } */
   }

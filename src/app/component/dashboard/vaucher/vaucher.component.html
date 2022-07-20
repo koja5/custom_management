@@ -2,6 +2,10 @@
   <div class="spinner loading"></div>
 </div>
 
+<div class="example-config">
+  <button (click)="restoreColumns()" class="k-button hiddenBtn">Restore hidden columns</button>
+</div>
+
 <div *ngIf="!loading" style="height: 100%">
   <div *ngIf="selectedUser === undefined" style="height: 100%">
     <kendo-grid
@@ -84,51 +88,83 @@
           </div>
         </div>
       </ng-template>
-      <kendo-grid-column field="id" title="{{ language.id }}" width="70">
+
+      <kendo-grid-column field="id" title="{{ language.id }}" width="110" [hidden]="hiddenColumns.indexOf('id') > -1">
+        <ng-template kendoGridHeaderTemplate let-dataItem>
+          {{dataItem.field}}
+          <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+            X
+          </button>
+        </ng-template>
       </kendo-grid-column>
-      <kendo-grid-column field="date" title="{{ language.date }}" width="150">
+      <kendo-grid-column field="date" title="{{ language.date }}" width="150"
+        [hidden]="hiddenColumns.indexOf('date') > -1">
         <ng-template kendoGridCellTemplate let-dataItem>
           {{ dataItem.date | date: "dd.MM.yyyy" }}
         </ng-template>
+        <ng-template kendoGridHeaderTemplate let-dataItem>
+          {{dataItem.field}}
+          <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+            X
+          </button>
+        </ng-template>
       </kendo-grid-column>
-      <kendo-grid-column
-        field="amount"
-        title="{{ language.amount }}"
-        width="100"
-      >
+      <kendo-grid-column field="amount" title="{{ language.amount }}" width="100"
+        [hidden]="hiddenColumns.indexOf('amount') > -1">
+        <ng-template kendoGridHeaderTemplate let-dataItem>
+          {{dataItem.field}}
+          <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+            X
+          </button>
+        </ng-template>
       </kendo-grid-column>
-      <kendo-grid-column
-        field="date_redeemed"
-        title="{{ language.date_redeemed }}"
-        width="180"
-      >
+      <kendo-grid-column field="date_redeemed" title="{{ language.date_redeemed }}" width="180"
+        [hidden]="hiddenColumns.indexOf('date_redeemed') > -1">
         <ng-template kendoGridCellTemplate let-dataItem>
           {{ dataItem.date_redeemed | date: "dd.MM.yyyy" }}
         </ng-template>
+        <ng-template kendoGridHeaderTemplate let-dataItem>
+          {{dataItem.field}}
+          <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+            X
+          </button>
+        </ng-template>
       </kendo-grid-column>
-      <kendo-grid-column
-        field="customer_name"
-        title="{{ language.customerBuys }}"
-        width="180"
-      >
+      <kendo-grid-column field="customer_name" title="{{ language.customerBuys }}" width="180"
+        [hidden]="hiddenColumns.indexOf('customer_name') > -1">
+        <ng-template kendoGridHeaderTemplate let-dataItem>
+          {{dataItem.field}}
+          <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+            X
+          </button>
+        </ng-template>
       </kendo-grid-column>
-      <kendo-grid-column
-        field="customer_consumer_name"
-        title="{{ language.customerConsumer }}"
-        width="180"
-      >
+      <kendo-grid-column field="customer_consumer_name" title="{{ language.customerConsumer }}" width="180"
+        [hidden]="hiddenColumns.indexOf('customer_consumer_name') > -1">
+        <ng-template kendoGridHeaderTemplate let-dataItem>
+          {{dataItem.field}}
+          <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+            X
+          </button>
+        </ng-template>
       </kendo-grid-column>
-      <kendo-grid-column
-        field="user_name"
-        title="{{ language.user }}"
-        width="180"
-      >
+      <kendo-grid-column field="user_name" title="{{ language.user }}" width="180"
+        [hidden]="hiddenColumns.indexOf('user_name') > -1">
+        <ng-template kendoGridHeaderTemplate let-dataItem>
+          {{dataItem.field}}
+          <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+            X
+          </button>
+        </ng-template>
       </kendo-grid-column>
-      <kendo-grid-column
-        field="comment"
-        title="{{ language.comment }}"
-        width="200"
-      >
+      <kendo-grid-column field="comment" title="{{ language.comment }}" width="200"
+        [hidden]="hiddenColumns.indexOf('comment') > -1">
+        <ng-template kendoGridHeaderTemplate let-dataItem>
+          {{dataItem.field}}
+          <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+            X
+          </button>
+        </ng-template>
       </kendo-grid-column>
       <kendo-grid-column width="120">
         <ng-template kendoGridCellTemplate let-dataItem>

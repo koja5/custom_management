@@ -74,7 +74,6 @@ html, body {
 }
 
 .dropdown-content-grid a:hover {background-color: #ddd}
-
 .dropdown-grid:hover .dropdown-content-grid {
   display: block;
 }
@@ -86,4 +85,14 @@ html, body {
 .copyPatientForm {
   position: absolute;
   bottom: 10px;
+}
+
+.hide-b{
+  padding: 0 10px 0 10px;
+  margin-left: 15px;
+}
+
+.hiddenBtn{
+  background-color: #091467;
+  color: #fff;
 }

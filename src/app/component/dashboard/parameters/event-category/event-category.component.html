@@ -1,3 +1,6 @@
+<div class="example-config">
+  <button (click)="restoreColumns()" class="k-button hiddenBtn">Restore hidden columns</button>
+</div>
 <div style="height: 100%">
   <kendo-grid *ngIf="language !== undefined" [data]="gridView" [style.height]="height" [resizable]="true"
     [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
@@ -34,26 +37,66 @@
         </div>
       </div>
     </ng-template>
-    <kendo-grid-column field="category" title="{{ language.category }}">
+    <kendo-grid-column field="category" title="{{ language.category }}"
+      [hidden]="hiddenColumns.indexOf('category') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="sequence" title="{{ language.sequence }}">
+    <kendo-grid-column field="sequence" title="{{ language.sequence }}"
+      [hidden]="hiddenColumns.indexOf('sequence') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="color" title="{{ language.color }}">
+    <kendo-grid-column field="color" title="{{ language.color }}" [hidden]="hiddenColumns.indexOf('color') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
       <ng-template kendoGridCellTemplate let-dataItem>
         <div [style.background]="dataItem.color" class="colorEvent"></div>
       </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="allowSendInformation" title="{{ language.allowSendInformation }}">
+    <kendo-grid-column field="allowSendInformation" title="{{ language.allowSendInformation }}"
+      [hidden]="hiddenColumns.indexOf('allowSendInformation') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
     </kendo-grid-column>
-    <kendo-grid-checkbox-column field="showAtInvoice" title="{{ language.showAtInvoice }}" [width]="100">
+    <kendo-grid-column field="showAtInvoice" title="{{ language.showAtInvoice }}" [width]="100"
+      [hidden]="hiddenColumns.indexOf('showAtInvoice') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
       <ng-template kendoGridCellTemplate let-dataItem>
         <div class="text-center">
           <input type="checkbox" kendoCheckBox [disabled]="true" (click)=setSelectedItem(dataItem)
             [(ngModel)]="dataItem.showAtInvoice" />
         </div>
       </ng-template>
-    </kendo-grid-checkbox-column>
-    <kendo-grid-column field="comment" title="{{ language.comment }}">
+    </kendo-grid-column>
+    <kendo-grid-column field="comment" title="{{ language.comment }}" [hidden]="hiddenColumns.indexOf('comment') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
     </kendo-grid-column>
     <kendo-grid-column width="100">
       <ng-template kendoGridCellTemplate let-dataItem>
@@ -120,14 +163,8 @@
       <button kendoButton (click)="action('yes')" primary="true">Yes</button>
     </kendo-dialog-actions>
   </kendo-dialog>
-
-  <kendo-dialog
-    title="{{language.pleaseConfirm}}"
-    *ngIf="deleteModal"
-    (close)="deleteModal = false"
-    [minWidth]="250"
-    [width]="450"
-  >
+  <kendo-dialog title="{{language.pleaseConfirm}}" *ngIf="deleteModal" (close)="deleteModal = false" [minWidth]="250"
+    [width]="450">
     <div class="modal-body text-center">
       <img src="../../../../assets/images/sent.png" alt="" width="50" height="46" />
       <h3>{{language.areYouSure}}</h3>
@@ -137,7 +174,6 @@
       <button kendoButton (click)="action('yes')" primary="true">{{language.yes}}</button>
     </kendo-dialog-actions>
   </kendo-dialog>
-
   <modal #eventCategoryModal modalClass="modal-md">
     <modal-header>
       <h4>{{ getTranslate(operationMode) }}</h4>

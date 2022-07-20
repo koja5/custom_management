@@ -1,6 +1,9 @@
 <div *ngIf="loading" style="height: 90vh">
   <div class="spinner loading"></div>
 </div>
+<div class="example-config">
+  <button (click)="restoreColumns()" class="k-button hiddenBtn">Restore hidden columns</button>
+</div>
 
 <div *ngIf="!loading && selectedUser === undefined" style="height: 100%">
   <kendo-grid #grid *ngIf="language !== undefined" [data]="gridView" [style.height]="height" [resizable]="true"
@@ -42,24 +45,74 @@
         </div>
       </div>
     </ng-template>
-    <kendo-grid-column field="shortname" title="{{ language.username }}" width="120">
+
+    <kendo-grid-column field="shortname" title="{{ language.username }}" width="120"
+      [hidden]="hiddenColumns.indexOf('shortname') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="firstname" title="{{ language.firstname }}" width="120">
+    <kendo-grid-column field="firstname" title="{{ language.firstname }}" width="120"
+      [hidden]="hiddenColumns.indexOf('firstname') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="lastname" title="{{ language.lastname }}" width="120">
+    <kendo-grid-column field="lastname" title="{{ language.lastname }}" width="120"
+      [hidden]="hiddenColumns.indexOf('lastname') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="telephone" title="{{ language.telephone }}" width="120">
+    <kendo-grid-column field="telephone" title="{{ language.telephone }}" width="120"
+      [hidden]="hiddenColumns.indexOf('telephone') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="mobile" title="{{ language.mobile }}" width="120">
+    <kendo-grid-column field="mobile" title="{{ language.mobile }}" width="120"
+      [hidden]="hiddenColumns.indexOf('mobile') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="email" title="{{ language.email }}" width="150">
+    <kendo-grid-column field="email" title="{{ language.email }}" width="150"
+      [hidden]="hiddenColumns.indexOf('email') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column title="{{ language.preview }}" width="100">
+    <kendo-grid-column field="preview" title="{{ language.preview }}" width="110"
+      [hidden]="hiddenColumns.indexOf('preview') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
+
       <ng-template kendoGridCellTemplate let-dataItem>
         <button kendoButton [icon]="'k-icon k-i-preview'" class="k-preview" (click)="previewUser(dataItem)"></button>
       </ng-template>
     </kendo-grid-column>
-
     <kendo-grid-pdf fileName="Customers.pdf" [allPages]="allPages" paperSize="A4" [scale]="0.8" [repeatHeaders]="true">
       <kendo-grid-pdf-margin top="2cm" left="1cm" right="1cm" bottom="2cm"></kendo-grid-pdf-margin>
       <ng-template kendoGridPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">

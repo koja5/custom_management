@@ -1,9 +1,11 @@
+<div class="example-config">
+  <button (click)="restoreColumns()" class="k-button hiddenBtn">Restore hidden columns</button>
+</div>
 <div style="height: 100%">
   <kendo-grid *ngIf="language !== undefined" [data]="gridView" [style.height]="height" [resizable]="true"
     [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
-    [pageable]="pageable" (pageChange)="pageChange($event)" [groupable]="true"
-    [group]="state.group" [pageSize]="pageSize" (groupChange)="groupChange($event)" (sortChange)="sortChange($event)"
-    [loading]="loading">
+    [pageable]="pageable" (pageChange)="pageChange($event)" [groupable]="true" [group]="state.group"
+    [pageSize]="pageSize" (groupChange)="groupChange($event)" (sortChange)="sortChange($event)" [loading]="loading">
     <kendo-grid-messages pagerPage="{{language.pagerPage}}" pagerOf="{{language.pagerOf}}"
       pagerItems="{{language.pagerItems}}" pagerItemsPerPage="{{language.pagerItemsPerPage}}">
     </kendo-grid-messages>
@@ -14,7 +16,8 @@
         </kendo-textbox-container>
       </div>
       <div style="float: right; padding-right: 30px; padding-top: 14px;">
-        <button kendoButton [icon]="'add'" (click)="addNewModal()" [primary]="true" class="addButton">{{language.addNew}}</button>
+        <button kendoButton [icon]="'add'" (click)="addNewModal()" [primary]="true"
+          class="addButton">{{language.addNew}}</button>
         <div class="dropdown-grid">
           <button class="btn-grid" style="border-left:1px solid #2a3582">
             <i class="fa fa-caret-down"></i>
@@ -30,15 +33,33 @@
         </div>
       </div>
     </ng-template>
-    <kendo-grid-column field="color" title="{{language.color}}">
+    <kendo-grid-column field="color" title="{{language.color}}" [hidden]="hiddenColumns.indexOf('color') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
       <ng-template kendoGridCellTemplate let-dataItem>
         <div [style.background]="dataItem.color" class="colorEvent">
         </div>
       </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="sequence" title="{{language.sequence}}">
+    <kendo-grid-column field="sequence" title="{{language.sequence}}" [hidden]="hiddenColumns.indexOf('sequence') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="comment" title="{{language.comment}}">
+    <kendo-grid-column field="comment" title="{{language.comment}}" [hidden]="hiddenColumns.indexOf('comment') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>>
     </kendo-grid-column>
     <kendo-grid-column width="100">
       <ng-template kendoGridCellTemplate let-dataItem>
@@ -106,28 +127,28 @@
       <h4>{{getTranslate(operationMode)}}</h4>
     </modal-header>
     <modal-content>
-    <form
-      (ngSubmit)="WorkTimeColorsForm.form.valid === true ? (operationMode === 'add' ? createWorkTimeColors($event) : updateWorkTimeColors($event)) : null"
-      #WorkTimeColorsForm="ngForm">
-      <div class="col-md-12 col-xs-12">
-        <kendo-textbox-container floatingLabel="{{language.color}}({{language.required}})">
-          <kendo-colorpicker #picker [view]="'combo'" [format]="'hex'" [(ngModel)]="data.color" [(value)]="data.color"
-            name="color" required></kendo-colorpicker>
-        </kendo-textbox-container>
-      </div>
-      <div class="col-md-12 col-xs-12">
-        <kendo-textbox-container floatingLabel="{{language.sequence}}({{language.required}})">
-          <input kendoTextBox type="number" class="col-xs-12" [(ngModel)]="data.sequence" name="sequence" required>
-        </kendo-textbox-container>
-      </div>
-      <div class="form-group" style="text-align: center;">
-        <button *ngIf="operationMode === 'add'" kendoButton [primary]="true" class="form-button"
-          [disabled]="WorkTimeColorsForm.form.invalid" type="submit">{{language.add}}</button>
-        <button *ngIf="operationMode === 'edit'" kendoButton [primary]="true" class="form-button"
-          [disabled]="WorkTimeColorsForm.form.invalid" type="submit">{{language.edit}}</button>
-      </div>
-    </form>
-  </modal-content>
-  <modal-footer class="modal-footer-none"> </modal-footer>
+      <form
+        (ngSubmit)="WorkTimeColorsForm.form.valid === true ? (operationMode === 'add' ? createWorkTimeColors($event) : updateWorkTimeColors($event)) : null"
+        #WorkTimeColorsForm="ngForm">
+        <div class="col-md-12 col-xs-12">
+          <kendo-textbox-container floatingLabel="{{language.color}}({{language.required}})">
+            <kendo-colorpicker #picker [view]="'combo'" [format]="'hex'" [(ngModel)]="data.color" [(value)]="data.color"
+              name="color" required></kendo-colorpicker>
+          </kendo-textbox-container>
+        </div>
+        <div class="col-md-12 col-xs-12">
+          <kendo-textbox-container floatingLabel="{{language.sequence}}({{language.required}})">
+            <input kendoTextBox type="number" class="col-xs-12" [(ngModel)]="data.sequence" name="sequence" required>
+          </kendo-textbox-container>
+        </div>
+        <div class="form-group" style="text-align: center;">
+          <button *ngIf="operationMode === 'add'" kendoButton [primary]="true" class="form-button"
+            [disabled]="WorkTimeColorsForm.form.invalid" type="submit">{{language.add}}</button>
+          <button *ngIf="operationMode === 'edit'" kendoButton [primary]="true" class="form-button"
+            [disabled]="WorkTimeColorsForm.form.invalid" type="submit">{{language.edit}}</button>
+        </div>
+      </form>
+    </modal-content>
+    <modal-footer class="modal-footer-none"> </modal-footer>
   </modal>
 </div>

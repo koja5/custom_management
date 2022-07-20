@@ -53,13 +53,31 @@ export class EventCategoryComponent implements OnInit {
   public importExcel = false;
   public theme: any;
   public fileValue: any;
+  public hiddenColumns: string[] = [];
+  public restoreColumns(): void {
+    this.hiddenColumns = [];
+  }
+  public hideColumn(field: string): void {
+    this.hiddenColumns.push(field);
+    console.log(this.hiddenColumns.toString());
+    let gridStorage = localStorage.getItem("kendo-grid-options");
+    if (gridStorage) {
+      localStorage.removeItem("kendo-grid-options");
+      localStorage.setItem("kendo-grid-options", this.hiddenColumns.toString());
+    } else {
+      localStorage.setItem("kendo-grid-options", this.hiddenColumns.toString());
+    }
+  }
+  onEvent(event) {
+    event.preventDefault();
+  }
 
   constructor(
     private service: EventCategoryService,
     private serviceHelper: ServiceHelperService,
     private toastr: ToastrService,
     private helpService: HelpService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.height = this.helpService.getHeightForGrid();
@@ -67,6 +85,12 @@ export class EventCategoryComponent implements OnInit {
     this.language = JSON.parse(localStorage.getItem("language"));
 
     this.getEventCategory();
+    let gridStorage = localStorage.getItem("kendo-grid-options");
+    if (gridStorage) {
+      let gridStorageArray = gridStorage.split(",");
+      console.log(gridStorageArray);
+      this.hiddenColumns = gridStorageArray;
+    }
   }
 
   @HostListener("window:resize", ["$event"])

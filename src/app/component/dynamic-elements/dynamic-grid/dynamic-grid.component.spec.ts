@@ -1,16 +1,15 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { DynamicGridComponent } from './dynamic-grid.component';
+import { DynamicGridComponent } from "./dynamic-grid.component";
 
-describe('DynamicGridComponent', () => {
+describe("DynamicGridComponent", () => {
   let component: DynamicGridComponent;
   let fixture: ComponentFixture<DynamicGridComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DynamicGridComponent ]
-    })
-    .compileComponents();
+      declarations: [DynamicGridComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('DynamicGridComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

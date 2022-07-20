@@ -166,7 +166,7 @@
     "settings": "Settings",
     "logout": "Logout"
   },
-  "user": { 
+  "user": {
     "pagerPage": "Page",
     "pagerOf": "of",
     "pagerItems": "items",

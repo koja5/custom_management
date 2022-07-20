@@ -53,6 +53,24 @@ export class WorkTimeColorsComponent implements OnInit {
   public importExcel = false;
   public fileValue: any;
   public theme: string;
+  public hiddenColumns: string[] = [];
+  public restoreColumns(): void {
+    this.hiddenColumns = [];
+  }
+  public hideColumn(field: string): void {
+    this.hiddenColumns.push(field);
+    console.log(this.hiddenColumns.toString());
+    let gridStorage = localStorage.getItem("kendo-grid-options");
+    if (gridStorage) {
+      localStorage.removeItem("kendo-grid-options");
+      localStorage.setItem("kendo-grid-options", this.hiddenColumns.toString());
+    } else {
+      localStorage.setItem("kendo-grid-options", this.hiddenColumns.toString());
+    }
+  }
+  onEvent(event) {
+    event.preventDefault();
+  }
 
   constructor(
     private service: WorkTimeColorsService,
@@ -64,8 +82,13 @@ export class WorkTimeColorsComponent implements OnInit {
   ngOnInit() {
     this.height = this.helpService.getHeightForGrid();
     this.language = JSON.parse(localStorage.getItem("language"));
-
     this.getWorkTimeColors();
+    let gridStorage = localStorage.getItem("kendo-grid-options");
+    if (gridStorage) {
+      let gridStorageArray = gridStorage.split(",");
+      console.log(gridStorageArray);
+      this.hiddenColumns = gridStorageArray;
+    }
   }
 
   @HostListener("window:resize", ["$event"])

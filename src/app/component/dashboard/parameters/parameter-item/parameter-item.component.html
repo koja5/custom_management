@@ -1,13 +1,14 @@
 <div *ngIf="loading" style="height: 90vh">
   <div class="spinner loading"></div>
 </div>
-
 <div *ngIf="!loading" style="height: 100%">
   <!--<h2 style="text-align: center; padding: 1vh;">
     {{type}}
   </h2>-->
-
-  <kendo-grid *ngIf="type !== 'Doctors' && type !== 'Therapy' && type !== 'VATTax'" [data]="view | async"
+  <div class="example-config">
+    <button (click)="restoreColumns()" class="k-button hiddenBtn">Restore hidden columns</button>
+  </div>
+  <kendo-grid #grid *ngIf="type !== 'Doctors' && type !== 'Therapy' && type !== 'VATTax'" [data]="view | async"
     [style.height]="height" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
     [pageable]="true" [sortable]="true" [resizable]="true" (dataStateChange)="onStateChange($event)"
     (edit)="editHandler($event)" (cancel)="cancelHandler($event)" (save)="saveHandler($event)"
@@ -20,10 +21,22 @@
       </button>
     </ng-template>
     <kendo-grid-column field="id" title="{{ language.id }}" [hidden]="true"></kendo-grid-column>
-    <kendo-grid-column field="title" title="{{ language.title }}"></kendo-grid-column>
-
-    <kendo-grid-column field="sequence" title="{{ language.order }}"></kendo-grid-column>
-
+    <kendo-grid-column field="title" title="{{ language.title }}" [hidden]="hiddenColumns.indexOf('title') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="sequence" title="{{ language.order }}" [hidden]="hiddenColumns.indexOf('sequence') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
+    </kendo-grid-column>
     <kendo-grid-command-column title="{{ language.actionTitle }}" width="300">
       <ng-template kendoGridCellTemplate let-isNew="isNew">
         <button kendoGridEditCommand [primary]="true" (click)="changeTheme(theme)">
@@ -53,7 +66,6 @@
       </div>
     </ng-template>
   </kendo-grid>
-
   <kendo-grid *ngIf="type === 'VATTax'" [data]="view | async" [style.height]="height" [pageSize]="gridState.take"
     [skip]="gridState.skip" [sort]="gridState.sort" [pageable]="true" [sortable]="true" [resizable]="true"
     (dataStateChange)="onStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)"
@@ -66,8 +78,22 @@
       </button>
     </ng-template>
     <kendo-grid-column field="id" title="{{ language.id }}" [hidden]="true"></kendo-grid-column>
-    <kendo-grid-column field="title" title="{{ language.title }}"></kendo-grid-column>
-    <kendo-grid-column field="sequence" title="{{ language.order }}"></kendo-grid-column>
+    <kendo-grid-column field="title" title="{{ language.title }}" [hidden]="hiddenColumns.indexOf('title') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="sequence" title="{{ language.order }}" [hidden]="hiddenColumns.indexOf('sequence') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
+    </kendo-grid-column>
     <kendo-grid-command-column title="{{ language.actionTitle }}" width="300">
       <ng-template kendoGridCellTemplate let-isNew="isNew">
         <button kendoGridEditCommand [primary]="true" (click)="changeTheme(theme)">
@@ -97,7 +123,6 @@
       </div>
     </ng-template>
   </kendo-grid>
-
   <kendo-grid *ngIf="type === 'Therapy'" [data]="view | async" [style.height]="height" [pageSize]="gridState.take"
     [skip]="gridState.skip" [sort]="gridState.sort" [pageable]="true" [sortable]="true" [resizable]="true"
     (dataStateChange)="onStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)"
@@ -110,32 +135,106 @@
       </button>
     </ng-template>
     <kendo-grid-column field="id" title="{{ language.id }}" [hidden]="true"></kendo-grid-column>
-    <kendo-grid-column field="title" title="{{ language.title }}" width="150"></kendo-grid-column>
-    <kendo-grid-column field="titleOnInvoice" title="{{ language.titleOnInvoice }}" width="150"></kendo-grid-column>
-    <kendo-grid-column field="sequence" title="{{ language.order }}" width="120"></kendo-grid-column>
-
-    <kendo-grid-checkbox-column field="printOnInvoice" title="{{ language.printOnInvoice }}" [width]="100">
+    <kendo-grid-column field="title" title="{{ language.title }}" width="150"
+      [hidden]="hiddenColumns.indexOf('title') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="titleOnInvoice" title="{{ language.titleOnInvoice }}" width="150"
+      [hidden]="hiddenColumns.indexOf('titleOnInvoice') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="sequence" title="{{ language.order }}" width="120"
+      [hidden]="hiddenColumns.indexOf('sequence') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-checkbox-column field="printOnInvoice" title="{{ language.printOnInvoice }}" [width]="100"
+      [hidden]="hiddenColumns.indexOf('printOnInvoice') > -1">
       <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
         <div class="text-center">
           <input type="checkbox" kendoCheckBox [disabled]="checkBoxDisabled[rowIndex] || !newRowCheckboxDisabled"
             (click)="setSelectedItem(dataItem)" [(ngModel)]="dataItem.printOnInvoice" />
         </div>
       </ng-template>
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
     </kendo-grid-checkbox-column>
-
-    <kendo-grid-column field="unit" title="{{ language.unit }}" width="120"></kendo-grid-column>
-    <kendo-grid-column field="description" title="{{ language.description }}" width="150"></kendo-grid-column>
-    <kendo-grid-column field="art_nr" title="{{ language.artNr }}" width="120"></kendo-grid-column>
-    <kendo-grid-column field="net_price" title="{{ language.netPrice }}" width="120"></kendo-grid-column>
-    <kendo-grid-column field="vat" title="{{ language.vat }}" width="180">
+    <kendo-grid-column field="description" title="{{ language.description }}" width="150"
+      [hidden]="hiddenColumns.indexOf('description') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="art_nr" title="{{ language.artNr }}" width="120"
+      [hidden]="hiddenColumns.indexOf('art_nr') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="net_price" title="{{ language.netPrice }}" width="120"
+      [hidden]="hiddenColumns.indexOf('net_price') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="vat" title="{{ language.vat }}" width="180" [hidden]="hiddenColumns.indexOf('vat') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
       <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex" *ngIf="vatTexList !== undefined">
         <kendo-combobox [data]="vatTexList" [textField]="'title'" [valueField]="'id'"
           (valueChange)="selectionVAT($event, rowIndex)" [disabled]="editedRowIndex != rowIndex"
           [(ngModel)]="dataItem.vat" [valuePrimitive]="true" name="vat"></kendo-combobox>
       </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="gross_price" title="{{ language.grossPrice }}" width="120"></kendo-grid-column>
-    <kendo-grid-column field="category" title="{{ language.category }}" width="120"></kendo-grid-column>
+    <kendo-grid-column field="gross_price" title="{{ language.grossPrice }}" width="120"
+      [hidden]="hiddenColumns.indexOf('gross_price') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="category" title="{{ language.category }}" width="120"
+      [hidden]="hiddenColumns.indexOf('category') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
+    </kendo-grid-column>
     <kendo-grid-command-column title="{{ language.actionTitle }}" width="300">
       <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem>
         <button kendoGridEditCommand [primary]="true" (click)="changeTheme(theme)">
@@ -197,23 +296,110 @@
       </button>
     </ng-template>
     <kendo-grid-column field="id" title="ID" [hidden]="true"></kendo-grid-column>
-    <kendo-grid-column field="title" title="{{ language.title }}" width="150"></kendo-grid-column>
-    <kendo-grid-column field="firstname" title="{{ language.firstname }}" width="150"></kendo-grid-column>
-    <kendo-grid-column field="lastname" title="{{ language.lastname }}" width="150"></kendo-grid-column>
-    <kendo-grid-column field="gender" title="{{ language.gender }}" width="180">
+    <kendo-grid-column field="title" title="{{ language.title }}" width="150"
+      [hidden]="hiddenColumns.indexOf('title') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column field="firstname" title="{{ language.firstname }}" width="150"
+      [hidden]="hiddenColumns.indexOf('firstname') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="lastname" title="{{ language.lastname }}" width="150"
+      [hidden]="hiddenColumns.indexOf('lastname') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="gender" title="{{ language.gender }}" width="180"
+      [hidden]="hiddenColumns.indexOf('gender') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
       <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
         <kendo-combobox [data]="genderList" [(ngModel)]="dataItem.gender" [disabled]="editedRowIndex != rowIndex"
           (selectionChange)="selectionGender($event)">
         </kendo-combobox>
       </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="street" title="{{ language.street }}" width="150"></kendo-grid-column>
-    <kendo-grid-column field="web_address" title="{{ language.webAddress }}" width="150"></kendo-grid-column>
-    <kendo-grid-column field="zip_code" title="{{ language.zipCode }}" width="120"></kendo-grid-column>
-    <kendo-grid-column field="city" title="{{ language.city }}" width="120"></kendo-grid-column>
-    <kendo-grid-column field="telephone" title="{{ language.telephone }}" width="150"></kendo-grid-column>
-    <kendo-grid-column field="email" title="{{ language.email }}" width="150"></kendo-grid-column>
-    <kendo-grid-column field="doctor_type" title="{{ language.doctorType }}" width="180">
+    <kendo-grid-column field="street" title="{{ language.street }}" width="150"
+      [hidden]="hiddenColumns.indexOf('street') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="web_address" title="{{ language.webAddress }}" width="150"
+      [hidden]="hiddenColumns.indexOf('web_address') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="zip_code" title="{{ language.zipCode }}" width="120"
+      [hidden]="hiddenColumns.indexOf('zip_code') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="city" title="{{ language.city }}" width="120"
+      [hidden]="hiddenColumns.indexOf('city') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="telephone" title="{{ language.telephone }}" width="150"
+      [hidden]="hiddenColumns.indexOf('telephone') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="email" title="{{ language.email }}" width="150"
+      [hidden]="hiddenColumns.indexOf('email') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column field="doctor_type" title="{{ language.doctorType }}" width="180"
+      [hidden]="hiddenColumns.indexOf('doctor_type') > -1">
+      <ng-template kendoGridHeaderTemplate let-dataItem>
+        {{dataItem.field}}
+        <button (click)="onEvent($event); hideColumn(dataItem.field)" class="k-button k-primary hide-b">
+          X
+        </button>
+      </ng-template>
       <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex" *ngIf="doctorTypeList !== undefined">
         <kendo-combobox [data]="doctorTypeList" [textField]="'title'" [valueField]="'id'"
           (selectionChange)="selectionDoctorType($event)" [(ngModel)]="dataItem.doctor_type"

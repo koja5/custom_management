@@ -60,7 +60,24 @@ export class CustomGridComponent implements OnInit {
   public method: any;
   public index: number;
   public dialogDelete = false;
-
+  public hiddenColumns: string[] = [];
+  public restoreColumns(): void {
+    this.hiddenColumns = [];
+  }
+  public hideColumn(field: string): void {
+    this.hiddenColumns.push(field);
+    console.log(this.hiddenColumns.toString())
+    let gridStorage = localStorage.getItem('kendo-grid-options')
+    if(gridStorage) {
+      localStorage.removeItem('kendo-grid-options');
+      localStorage.setItem("kendo-grid-options",this.hiddenColumns.toString());
+    } else {
+      localStorage.setItem("kendo-grid-options",this.hiddenColumns.toString());
+    }
+  }
+  onEvent(event) {
+    event.preventDefault();
+  }
   constructor(
     private router: Router,
     private toastr: ToastrService,

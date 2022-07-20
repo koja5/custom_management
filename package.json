@@ -28,6 +28,7 @@
     "@angular/router": "~7.2.0",
     "@grapecity/spread-excelio": "^11.1.0",
     "@grapecity/spread-sheets": "^11.1.0",
+    "@lucasheight/kendo-grid-state": "^1.0.3",
     "@progress/kendo-angular-buttons": "^4.4.2",
     "@progress/kendo-angular-common": "^1.1.0",
     "@progress/kendo-angular-dateinputs": "^3.7.3",
