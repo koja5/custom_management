@@ -12,7 +12,7 @@ export class HelpService {
     private http: HttpClient,
     private titleService: Title,
     private toastr: ToastrService
-  ) { }
+  ) {}
 
   postApiRequest(method, parametar) {
     return this.http.post(method, parametar).map((res) => res);
@@ -236,5 +236,50 @@ export class HelpService {
       }
     }
     return data;
+  }
+
+  setLanguageForLanding(value: any) {
+    localStorage.setItem(
+      "language-landing",
+      typeof value === "string" ? value : JSON.stringify(value)
+    );
+  }
+
+  getLanguageForLanding() {
+    if (localStorage.getItem("language-landing")) {
+      return JSON.parse(
+        localStorage.getItem("language-landing")
+          ? localStorage.getItem("language-landing")
+          : "{}"
+      );
+    } else {
+      return null;
+    }
+  }
+
+  setSelectionLanguage(value: string) {
+    localStorage.setItem("selectionLanguage", value);
+  }
+
+  getSelectionLangauge() {
+    if (localStorage.getItem("selectionLanguage")) {
+      return localStorage.getItem("selectionLanguage");
+    } else {
+      return null;
+    }
+  }
+
+  getAllLangs() {
+    return this.http.get(
+      "../../assets/configuration/languages/choose-lang.json"
+    );
+  }
+
+  public checkMobileDevice() {
+    if (window.innerWidth < 992) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
