@@ -592,6 +592,7 @@ export class InvoiceComponent implements OnInit {
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
+
     //THIS ONE SHOULD BE ACTIVE
     const link =
       window.location.protocol +
@@ -617,6 +618,11 @@ export class InvoiceComponent implements OnInit {
         },
       });
 
+      const store =
+        componentRef.invoiceStore !== undefined && componentRef.invoiceStore !== null
+          ? componentRef.invoiceStore
+          : componentRef.store;
+
       doc.setData({
         invoice_title: componentRef.invoiceLanguage.invoiceTitle,
         invoice_number: componentRef.invoiceLanguage.invoiceSubTitle,
@@ -626,17 +632,17 @@ export class InvoiceComponent implements OnInit {
         billing_from_title:
           componentRef.invoiceLanguage.invoiceBillingTitleFrom,
         billing_to_title: componentRef.invoiceLanguage.invoiceBillingTitleTo,
-        clinic_name: componentRef.store.storename + '\n' + componentRef.superadminProfile.shortname,
+        clinic_name: store.storename + '\n' + componentRef.superadminProfile.shortname,
         customer_lastname: componentRef.customerUser.lastname,
         customer_firstname: componentRef.customerUser.firstname,
-        clinic_street: componentRef.store.street,
+        clinic_street: store.street,
         customer_street: componentRef.customerUser.street,
         customer_streetnumber: componentRef.customerUser.streetnumber,
-        clinic_zipcode: componentRef.store.zipcode,
-        clinic_city: componentRef.store.place,
+        clinic_zipcode: store.zipcode,
+        clinic_city: store.place,
         customer_city: componentRef.customerUser.city,
-        clinic_telephone: componentRef.store.telephone,
-        clinic_email: componentRef.store.email,
+        clinic_telephone: store.telephone,
+        clinic_email: store.email,
         subtotal_title: componentRef.invoiceLanguage.invoiceSubtotal,
         total_title: componentRef.invoiceLanguage.invoiceTotal,
         products: therapies,
@@ -657,8 +663,8 @@ export class InvoiceComponent implements OnInit {
           : "",
         vat_percentage_title: componentRef.isPriceIncluded ? componentRef.invoiceLanguage.vatPercentageTitle : "",
         vat_identification_number: componentRef.invoiceLanguage.vatIdentificationNumber,
-        vat_code: componentRef.store.vatcode
-          ? componentRef.store.vatcode
+        vat_code: store.vatcode
+          ? store.vatcode
           : componentRef.superadminProfile.vatcode,
         vat_price: componentRef.isPriceIncluded ? vat : "",
         gross_price_title: componentRef.isPriceIncluded
