@@ -282,4 +282,28 @@ export class HelpService {
       return false;
     }
   }
+
+  setSelectionLanguageCode(value: string) {
+    localStorage.setItem("selectionLanguageCode", value);
+  }
+
+  getSelectionLangaugeCode() {
+    if (localStorage.getItem("selectionLanguageCode")) {
+      return localStorage.getItem("selectionLanguageCode");
+    }
+    return null;
+  }
+
+  getNameOfFlag() {
+    const selectionLanguage = this.getSelectionLangaugeCode();
+    this.getAllLangs().subscribe((langs: any) => {
+      for (let i = 0; i < langs.length; i++) {
+        for (let j = 0; j < langs[i].similarCode.length; j++) {
+          if (langs[i].similarCode[j] === selectionLanguage) {
+            return langs[i].name;
+          }
+        }
+      }
+    });
+  }
 }

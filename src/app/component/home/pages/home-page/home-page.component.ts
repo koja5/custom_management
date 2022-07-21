@@ -10,6 +10,8 @@ import { LoginService } from "src/app/service/login.service";
 export class HomePageComponent implements OnInit {
   public isMobile = false;
   public language: any;
+  public selectionLanguage: any = "serbia";
+  public chooseLang: any;
 
   constructor(
     private helpService: HelpService,
@@ -18,7 +20,14 @@ export class HomePageComponent implements OnInit {
 
   ngOnInit(): void {
     this.isMobile = this.helpService.checkMobileDevice();
-    this.initializationLanguage();
+    this.helpService.getAllLangs().subscribe((data) => {
+      this.chooseLang = data;
+      this.initializationLanguage();
+      this.selectionLanguage = this.helpService.getNameOfFlag();
+      if (!this.selectionLanguage) {
+        this.selectionLanguage = this.helpService.getSelectionLangaugeCode();
+      }
+    });
   }
 
   @HostListener("window:resize", ["$event"])
@@ -31,20 +40,21 @@ export class HomePageComponent implements OnInit {
   }
 
   initializationLanguage() {
-    this.loginService.checkCountryLocation().subscribe(
-      (data: any) => {
-        if (data.countryCode !== this.helpService.getSelectionLangauge()) {
-          this.helpService.getAllLangs().subscribe((langs) => {
-            this.setLanguageByLocation(data.countryCode, langs);
-          });
-        } else {
-          this.language = this.helpService.getLanguageForLanding();
+    if (this.helpService.getSelectionLangaugeCode()) {
+      this.setLanguageByLocation(
+        this.helpService.getSelectionLangaugeCode(),
+        this.chooseLang
+      );
+    } else {
+      this.loginService.checkCountryLocation().subscribe(
+        (data: any) => {
+          this.setLanguageByLocation(data.countryCode, this.chooseLang);
+        },
+        (error: any) => {
+          this.getLanguageByCode("english", "EN");
         }
-      },
-      (error: any) => {
-        this.getLanguageByCode("english", "EN");
-      }
-    );
+      );
+    }
   }
 
   setLanguageByLocation(code: any, langs: any) {
