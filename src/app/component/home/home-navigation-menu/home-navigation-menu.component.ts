@@ -71,11 +71,23 @@ export class HomeNavigationMenuComponent implements OnInit {
 
   changeLanguage(code: string, name: string) {
     this.selectionLanguage = name;
-    this.helpService.setSelectionLanguage(code);
+    this.helpService.setSelectionLanguageCode(code);
+    this.helpService.setSelectionLanguage(name);
     this.loginService.getLanguageForLanding(name).subscribe((language) => {
       this.language = language;
       this.helpService.setLanguageForLanding(language);
       this.sendEventForChangeLanguage.emit(name);
     });
+
+    this.loginService
+      .getTranslationByCountryCode(code)
+      .subscribe((language) => {
+        if (language !== null) {
+          this.helpService.setLocalStorage(
+            "language",
+            JSON.stringify(language["config"])
+          );
+        }
+      });
   }
 }
