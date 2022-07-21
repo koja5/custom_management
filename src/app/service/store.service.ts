@@ -38,6 +38,10 @@ export class StoreService {
       .subscribe(val => callback(val));
   }
 
+  getStoreById(id) {
+    return this.http.get('/api/getStoreById/' + id).toPromise();
+  }
+
   insertMultiData(data) {
     return this.http.post('/api/insertFromExcel', data)
       .map(res => res);

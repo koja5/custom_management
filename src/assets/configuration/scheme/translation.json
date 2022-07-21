@@ -2,348 +2,1097 @@
   "schema": {
     "type": "object",
     "properties": {
-      "yes": { "type": "string" },
-      "no": { "type": "string" },
-      "close": { "type": "string" },
-      "deleteDialogTitleAreYouSure": { "type": "string" },
-      "successExecutedActionTitle": { "type": "string" },
-      "successExecutedActionText": { "type": "string" },
-      "errorExecutedActionTitle": { "type": "string" },
-      "errorExecutedActionText": { "type": "string" },
-      "actionTitle": { "type": "string" },
-      "areYouSure": { "type": "string" },
-      "clickAgreeText": { "type": "string" },
-      "termOfUse": { "type": "string" },
-      "subject": { "type": "string" },
-      "message": { "type": "string" },
-      "welcomeTitle": { "type": "string" },
-      "welcomeText": { "type": "string" },
-      "loginTitle": { "type": "string" },
-      "haventAccount": { "type": "string" },
-      "signUp": { "type": "string" },
-      "or": { "type": "string" },
-      "email": { "type": "string" },
-      "password": { "type": "string" },
-      "requiredSubmitMessage": { "type": "string" },
-      "accountExists": { "type": "string" },
-      "createAccountSuccessedText1": { "type": "string" },
-      "createAccountSuccessedText2": { "type": "string" },
-      "createAccountSuccessedText3": { "type": "string" },
-      "userAccessFormTitle": { "type": "string" },
-      "userAccessDevice": { "type": "string" },
-      "createUserAccessDevice": { "type": "string" },
-      "successUserAccessDeviceName": { "type": "string" },
-      "needToSuperadminApproveAccess": { "type": "string" },
-      "confirmPassword": { "type": "string" },
-      "rememberMe": { "type": "string" },
-      "forgotPassword": { "type": "string" },
-      "loginWithEmail": { "type": "string" },
-      "signUpTitle": { "type": "string" },
-      "fullName": { "type": "string" },
-      "aggree": { "type": "string" },
-      "privacyPolicy": { "type": "string" },
-      "and": { "type": "string" },
-      "termsOfService": { "type": "string" },
-      "signUpWithEmail": { "type": "string" },
-      "alreadyHaveAnAccount": { "type": "string" },
-      "recoveryTitle": { "type": "string" },
-      "recoveryText": { "type": "string" },
-      "recoveryYourPassword": { "type": "string" },
-      "recoveryButton": { "type": "string" },
-      "sendForgotMail": { "type": "string" },
-      "notCorrectPass": { "type": "string" },
-      "passwordsIsNotEqual": { "type": "string" },
-      "checkMailForActive": { "type": "string" },
-      "fillFields": { "type": "string" },
-      "id": { "type": "string" },
-      "date": { "type": "string" },
-      "amount": { "type": "string" },
-      "date_redeemed": { "type": "string" },
-      "customerBuys": { "type": "string" },
-      "customerConsumer": { "type": "string" },
-      "newVaucher": { "type": "string" },
-      "addVaucher": { "type": "string" },
-      "updateVaucher": { "type": "string" },
-      "uploadFromExcel": { "type": "string" },
-      "patient": { "type": "string" },
-      "exportToExcel": { "type": "string" },
-      "exportToPDF": { "type": "string" },
-      "pagerPage": { "type": "string" },
-      "pagerOf": { "type": "string" },
-      "pagerItems": { "type": "string" },
-      "user": { "type": "string" },
-      "required": { "type": "string" },
-      "searchAllColumn": { "type": "string" },
-      "today": { "type": "string" },
-      "allDay": { "type": "string" },
-      "month": { "type": "string" },
-      "day": { "type": "string" },
-      "week": { "type": "string" },
-      "workWeek": { "type": "string" },
-      "multiDay": { "type": "string" },
-      "timeline": { "type": "string" },
-      "agenda": { "type": "string" },
-      "noTaskForUser": { "type": "string" },
-      "tasksForUser": { "type": "string" },
-      "successUpdateTitle": { "type": "string" },
-      "successUpdateText": { "type": "string" },
-      "unsuccessUpdateTitle": { "type": "string" },
-      "unsuccessUpdateText": { "type": "string" },
-      "successDeleteTitle": { "type": "string" },
-      "successDeleteText": { "type": "string" },
-      "successCreateCustomerTitle": { "type": "string" },
-      "successCreateCustomerText": { "type": "string" },
-      "unsuccessCreateCustomerTitle": { "type": "string" },
-      "unsuccessCreateCustomerText": { "type": "string" },
-      "monday": { "type": "string" },
-      "tuesday": { "type": "string" },
-      "wednesday": { "type": "string" },
-      "thursday": { "type": "string" },
-      "friday": { "type": "string" },
-      "selectStoreIndicatorTitle": { "type": "string" },
-      "selectStoreIndicatorText": { "type": "string" },
-      "color": { "type": "string" },
-      "allowSendInformation": { "type": "string" },
-      "start": { "type": "string" },
-      "startTime": { "type": "string" },
-      "end": { "type": "string" },
-      "endTime": { "type": "string" },
-      "telephone": { "type": "string" },
-      "selectStore": { "type": "string" },
-      "selectUsers": { "type": "string" },
-      "mobile": { "type": "string" },
-      "attention": { "type": "string" },
-      "physicalComplaint": { "type": "string" },
-      "gender": { "type": "string" },
-      "street": { "type": "string" },
-      "streetnumber": { "type": "string" },
-      "city": { "type": "string" },
-      "username": { "type": "string" },
-      "firstname": { "type": "string" },
-      "lastname": { "type": "string" },
-      "birthday": { "type": "string" },
-      "female": { "type": "string" },
-      "male": { "type": "string" },
-      "createNewCustomer": { "type": "string" },
-      "eventCategory": { "type": "string" },
-      "notConfirmed": { "type": "string" },
-      "confirmed": { "type": "string" },
-      "successTitle": { "type": "string" },
-      "successTextConfirmArrival": { "type": "string" },
-      "confirmMessage": { "type": "string" },
-      "hideToolbarTitle": { "type": "string" },
-      "showToolbarTitle": { "type": "string" },
-      "filterToolbar": { "type": "string" },
-      "refreshEventToolbar": { "type": "string" },
-      "settingsToolbar": { "type": "string" },
-      "copyLinkToTheOnlineClinicReservation": { "type": "string" },
-      "successCopiedLinkForClinicReservation": { "type": "string" },
-      "reserved": { "type": "string" },
-      "additionalSendOptions": { "type": "string" },
-      "calendar": { "type": "string" },
-      "customer": { "type": "string" },
-      "users": { "type": "string" },
-      "store": { "type": "string" },
-      "parameters": { "type": "string" },
-      "vaucher": { "type": "string" },
-      "translation": { "type": "string" },
-      "todo": { "type": "string" },
-      "myComplaint": { "type": "string" },
-      "myTherapy": { "type": "string" },
-      "myDocument": { "type": "string" },
-      "myCalendar": { "type": "string" },
-      "systemLogErrors": { "type": "string" },
-      "systemLogInfo": { "type": "string" },
-      "systemLogWarn": { "type": "string" },
-      "complaintMenu": { "type": "string" },
-      "therapyMenu": { "type": "string" },
-      "treatmentMenu": { "type": "string" },
-      "recommendationMenu": { "type": "string" },
-      "relationshipMenu": { "type": "string" },
-      "socialMenu": { "type": "string" },
-      "doctorMenu": { "type": "string" },
-      "doctorsMenu": { "type": "string" },
-      "vatTaxMenu": { "type": "string" },
-      "csMenu": { "type": "string" },
-      "stateMenu": { "type": "string" },
-      "eventCategoryMenu": { "type": "string" },
-      "eventCategoryStatistic": { "type": "string" },
-      "workTimeColorsMenu": { "type": "string" },
-      "areaCode": { "type": "string" },
-      "systemSettingsTitleMenu": { "type": "string" },
-      "systemSettingsTitle": { "type": "string" },
-      "applicationSettingsTitleMenu": { "type": "string" },
-      "systemLogsTitle": { "type": "string" },
-      "userTitleMenu": { "type": "string" },
-      "patientTitleMenu": { "type": "string" },
-      "applicationParametersSettingsTitle": { "type": "string" },
-      "templateAccount": { "type": "string" },
-      "mailReminderMessage": { "type": "string" },
-      "mailApproveReservation": { "type": "string" },
-      "mailDenyReservation": { "type": "string" },
-      "mailConfirmArrival": { "type": "string" },
-      "mailPatientCreatedAccount": { "type": "string" },
-      "mailPatientFormRegistration": { "type": "string" },
-      "smsReminderMessage": { "type": "string" },
-      "changeSuperadminProfile": { "type": "string" },
-      "userAccess": { "type": "string" },
-      "smsCount": { "type": "string" },
-      "massiveSms": { "type": "string" },
-      "massiveEmail": { "type": "string" },
-      "reservations": { "type": "string" },
-      "pagerItemsPerPage": { "type": "string" },
-      "addNew": { "type": "string" },
-      "add": { "type": "string" },
-      "update": { "type": "string" },
-      "edit": { "type": "string" },
-      "discardChanges": { "type": "string" },
-      "noRecordYet": { "type": "string" },
-      "cancel": { "type": "string" },
-      "remove": { "type": "string" },
-      "category": { "type": "string" },
-      "webAddress": { "type": "string" },
-      "shortname": { "type": "string" },
-      "sequence": { "type": "string" },
-      "comment": { "type": "string" },
-      "successTextAdd": { "type": "string" },
-      "successTextEdit": { "type": "string" },
-      "errorTitle": { "type": "string" },
-      "errorTextAdd": { "type": "string" },
-      "errorTextEdit": { "type": "string" },
-      "successTextDelete": { "type": "string" },
-      "confirmMessageText": { "type": "string" },
-      "createNewCustomerDialog": { "type": "string" },
-      "customerInformationDialog": { "type": "string" },
-      "patientForm": { "type": "string" },
-      "sendPatientFormOnMail": { "type": "string" },
-      "sendPatientFormButton": { "type": "string" },
-      "copyLinkToFormButton": { "type": "string" },
-      "successCopiedFormLink": { "type": "string" },
-      "successSendFormToMail": { "type": "string" },
-      "errorSendFormToMail": { "type": "string" },
-      "contactPatient": { "type": "string" },
-      "mobileEdit": { "type": "string" },
-      "telephoneEdit": { "type": "string" },
-      "createData": { "type": "string" },
-      "language": { "type": "string" },
-      "active": { "type": "string" },
-      "inactive": { "type": "string" },
-      "profile": { "type": "string" },
-      "settings": { "type": "string" },
-      "logout": { "type": "string" },
-      "backToGrid": { "type": "string" },
-      "successUpdateTextProfile": { "type": "string" },
-      "successUpdateTextData": { "type": "string" },
-      "successAddDataTitle": { "type": "string" },
-      "successAddDataText": { "type": "string" },
-      "workTime": { "type": "string" },
-      "addComplaint": { "type": "string" },
-      "updateComplaint": { "type": "string" },
-      "addTherapy": { "type": "string" },
-      "updateTherapy": { "type": "string" },
-      "choiceComplaint": { "type": "string" },
-      "choiceTherapy": { "type": "string" },
-      "choicePreviousTherapy": { "type": "string" },
-      "choiceState": { "type": "string" },
-      "updateCustomer": { "type": "string" },
-      "uploadDocument": { "type": "string" },
-      "baseOne": { "type": "string" },
-      "baseTwo": { "type": "string" },
-      "physicalIllness": { "type": "string" },
-      "recommendation": { "type": "string" },
-      "relationship": { "type": "string" },
-      "social": { "type": "string" },
-      "doctor": { "type": "string" },
-      "doctorType": { "type": "string" },
-      "firstDate": { "type": "string" },
-      "additionalField": { "type": "string" },
-      "addData": { "type": "string" },
-      "editData": { "type": "string" },
-      "size": { "type": "string" },
-      "weight": { "type": "string" },
-      "phone": { "type": "string" },
-      "mobilePhone": { "type": "string" },
-      "inCompanySince": { "type": "string" },
-      "childs": { "type": "string" },
-      "notes": { "type": "string" },
-      "profession": { "type": "string" },
-      "useful": { "type": "string" },
-      "internalOrgans": { "type": "string" },
-      "operations": { "type": "string" },
-      "previousFindidngs": { "type": "string" },
-      "medicament": { "type": "string" },
-      "allergies": { "type": "string" },
-      "skinSensitivity": { "type": "string" },
-      "pregnancy": { "type": "string" },
-      "baseDataOne": { "type": "string" },
-      "baseDataTwo": { "type": "string" },
-      "createNewUser": { "type": "string" },
-      "updateUser": { "type": "string" },
-      "zipCode": { "type": "string" },
-      "place": { "type": "string" },
-      "sincecompany": { "type": "string" },
-      "userType": { "type": "string" },
-      "storeLocation": { "type": "string" },
-      "cs": { "type": "string" },
-      "em": { "type": "string" },
-      "complaintValue": { "type": "string" },
-      "therapyValue": { "type": "string" },
-      "treatmentValue": { "type": "string" },
-      "documentValue": { "type": "string" },
-      "stateValue": { "type": "string" },
-      "newUser": { "type": "string" },
-      "newCustomer": { "type": "string" },
-      "baseDate": { "type": "string" },
-      "aboutMe": { "type": "string" },
-      "company": { "type": "string" },
-      "noInformation": { "type": "string" },
-      "delete": { "type": "string" },
-      "print": { "type": "string" },
-      "storename": { "type": "string" },
-      "download": { "type": "string" },
-      "updateDocument": { "type": "string" },
-      "description": { "type": "string" },
-      "totalTherapy": { "type": "string" },
-      "averagePerMonth": { "type": "string" },
-      "therapyForLastMonth": { "type": "string" },
-      "therapyForLastWeek": { "type": "string" },
-      "updateSettings": { "type": "string" },
-      "permissions": { "type": "string" },
-      "noSetTimeForUserNote": { "type": "string" },
-      "previous": { "type": "string" },
-      "next": { "type": "string" },
-      "validFromDate": { "type": "string" },
-      "allowedOnlineReservationForUser": { "type": "string" },
-      "createTime": { "type": "string" },
-      "setWorkTime": { "type": "string" },
-      "updateWorkTime": { "type": "string" },
-      "title": { "type": "string" },
-      "order": { "type": "string" },
-      "unit": { "type": "string" },
-      "artNr": { "type": "string" },
-      "netPrice": { "type": "string" },
-      "vat": { "type": "string" },
-      "grossPrice": { "type": "string" },
-      "aliasName": { "type": "string" },
-      "exist": { "type": "string" },
-      "notAdded": { "type": "string" },
-      "error": { "type": "string" },
-      "successful": { "type": "string" },
-      "profileMobile": { "type": "string" },
-      "createNewStore": { "type": "string" },
-      "createStore": { "type": "string" },
-      "updateStore": { "type": "string" },
-      "timeDuration": { "type": "string" },
-      "timeTherapy": { "type": "string" },
-      "startWork": { "type": "string" },
-      "endWork": { "type": "string" },
-      "newStore": { "type": "string" },
+      "yes": {
+        "type": "string"
+      },
+      "no": {
+        "type": "string"
+      },
+      "close": {
+        "type": "string"
+      },
+      "deleteDialogTitleAreYouSure": {
+        "type": "string"
+      },
+      "successExecutedActionTitle": {
+        "type": "string"
+      },
+      "successExecutedActionText": {
+        "type": "string"
+      },
+      "errorExecutedActionTitle": {
+        "type": "string"
+      },
+      "errorExecutedActionText": {
+        "type": "string"
+      },
+      "actionTitle": {
+        "type": "string"
+      },
+      "areYouSure": {
+        "type": "string"
+      },
+      "save": {
+        "type": "string"
+      },
+      "clickAgreeText": {
+        "type": "string"
+      },
+      "termOfUse": {
+        "type": "string"
+      },
+      "subject": {
+        "type": "string"
+      },
+      "message": {
+        "type": "string"
+      },
+      "welcomeTitle": {
+        "type": "string"
+      },
+      "welcomeText": {
+        "type": "string"
+      },
+      "loginTitle": {
+        "type": "string"
+      },
+      "haventAccount": {
+        "type": "string"
+      },
+      "signUp": {
+        "type": "string"
+      },
+      "or": {
+        "type": "string"
+      },
+      "email": {
+        "type": "string"
+      },
+      "password": {
+        "type": "string"
+      },
+      "requiredSubmitMessage": {
+        "type": "string"
+      },
+      "accountExists": {
+        "type": "string"
+      },
+      "createAccountSuccessedText1": {
+        "type": "string"
+      },
+      "createAccountSuccessedText2": {
+        "type": "string"
+      },
+      "createAccountSuccessedText3": {
+        "type": "string"
+      },
+      "userAccessFormTitle": {
+        "type": "string"
+      },
+      "userAccessDevice": {
+        "type": "string"
+      },
+      "createUserAccessDevice": {
+        "type": "string"
+      },
+      "successUserAccessDeviceName": {
+        "type": "string"
+      },
+      "needToSuperadminApproveAccess": {
+        "type": "string"
+      },
+      "confirmPassword": {
+        "type": "string"
+      },
+      "rememberMe": {
+        "type": "string"
+      },
+      "forgotPassword": {
+        "type": "string"
+      },
+      "loginWithEmail": {
+        "type": "string"
+      },
+      "signUpTitle": {
+        "type": "string"
+      },
+      "fullName": {
+        "type": "string"
+      },
+      "aggree": {
+        "type": "string"
+      },
+      "needToAgree": {
+        "type": "string"
+      },
+      "privacyPolicy": {
+        "type": "string"
+      },
+      "and": {
+        "type": "string"
+      },
+      "signUpWithEmail": {
+        "type": "string"
+      },
+      "alreadyHaveAnAccount": {
+        "type": "string"
+      },
+      "recoveryTitle": {
+        "type": "string"
+      },
+      "recoveryText": {
+        "type": "string"
+      },
+      "recoveryYourPassword": {
+        "type": "string"
+      },
+      "recoveryButton": {
+        "type": "string"
+      },
+      "sendForgotMail": {
+        "type": "string"
+      },
+      "notCorrectPass": {
+        "type": "string"
+      },
+      "passwordsIsNotEqual": {
+        "type": "string"
+      },
+      "checkMailForActive": {
+        "type": "string"
+      },
+      "fillFields": {
+        "type": "string"
+      },
+      "id": {
+        "type": "string"
+      },
+      "date": {
+        "type": "string"
+      },
+      "time": {
+        "type": "string"
+      },
+      "amount": {
+        "type": "string"
+      },
+      "date_redeemed": {
+        "type": "string"
+      },
+      "customerBuys": {
+        "type": "string"
+      },
+      "customerConsumer": {
+        "type": "string"
+      },
+      "newVaucher": {
+        "type": "string"
+      },
+      "addVaucher": {
+        "type": "string"
+      },
+      "updateVaucher": {
+        "type": "string"
+      },
+      "uploadFromExcel": {
+        "type": "string"
+      },
+      "patient": {
+        "type": "string"
+      },
+      "exportToExcel": {
+        "type": "string"
+      },
+      "exportToPDF": {
+        "type": "string"
+      },
+      "pagerPage": {
+        "type": "string"
+      },
+      "pagerOf": {
+        "type": "string"
+      },
+      "pagerItems": {
+        "type": "string"
+      },
+      "user": {
+        "type": "string"
+      },
+      "required": {
+        "type": "string"
+      },
+      "searchAllColumn": {
+        "type": "string"
+      },
+      "today": {
+        "type": "string"
+      },
+      "allDay": {
+        "type": "string"
+      },
+      "month": {
+        "type": "string"
+      },
+      "day": {
+        "type": "string"
+      },
+      "week": {
+        "type": "string"
+      },
+      "workWeek": {
+        "type": "string"
+      },
+      "multiDay": {
+        "type": "string"
+      },
+      "timeline": {
+        "type": "string"
+      },
+      "agenda": {
+        "type": "string"
+      },
+      "noTaskForUser": {
+        "type": "string"
+      },
+      "tasksForUser": {
+        "type": "string"
+      },
+      "successUpdateTitle": {
+        "type": "string"
+      },
+      "successUpdateText": {
+        "type": "string"
+      },
+      "unsuccessUpdateTitle": {
+        "type": "string"
+      },
+      "unsuccessUpdateText": {
+        "type": "string"
+      },
+      "successDeleteTitle": {
+        "type": "string"
+      },
+      "successDeleteText": {
+        "type": "string"
+      },
+      "successCreateCustomerTitle": {
+        "type": "string"
+      },
+      "successCreateCustomerText": {
+        "type": "string"
+      },
+      "unsuccessCreateCustomerTitle": {
+        "type": "string"
+      },
+      "unsuccessCreateCustomerText": {
+        "type": "string"
+      },
+      "monday": {
+        "type": "string"
+      },
+      "tuesday": {
+        "type": "string"
+      },
+      "wednesday": {
+        "type": "string"
+      },
+      "thursday": {
+        "type": "string"
+      },
+      "friday": {
+        "type": "string"
+      },
+      "selectStoreIndicatorTitle": {
+        "type": "string"
+      },
+      "selectStoreIndicatorText": {
+        "type": "string"
+      },
+      "color": {
+        "type": "string"
+      },
+      "allowSendInformation": {
+        "type": "string"
+      },
+      "titleOnInvoice": {
+        "type": "string"
+      },
+      "printOnInvoice": {
+        "type": "string"
+      },
+      "start": {
+        "type": "string"
+      },
+      "startTime": {
+        "type": "string"
+      },
+      "end": {
+        "type": "string"
+      },
+      "endTime": {
+        "type": "string"
+      },
+      "telephone": {
+        "type": "string"
+      },
+      "selectStore": {
+        "type": "string"
+      },
+      "selectUsers": {
+        "type": "string"
+      },
+      "mobile": {
+        "type": "string"
+      },
+      "attention": {
+        "type": "string"
+      },
+      "physicalComplaint": {
+        "type": "string"
+      },
+      "gender": {
+        "type": "string"
+      },
+      "street": {
+        "type": "string"
+      },
+      "streetnumber": {
+        "type": "string"
+      },
+      "city": {
+        "type": "string"
+      },
+      "username": {
+        "type": "string"
+      },
+      "firstname": {
+        "type": "string"
+      },
+      "lastname": {
+        "type": "string"
+      },
+      "birthday": {
+        "type": "string"
+      },
+      "female": {
+        "type": "string"
+      },
+      "male": {
+        "type": "string"
+      },
+      "createNewCustomer": {
+        "type": "string"
+      },
+      "eventCategory": {
+        "type": "string"
+      },
+      "notConfirmed": {
+        "type": "string"
+      },
+      "confirmed": {
+        "type": "string"
+      },
+      "successTitle": {
+        "type": "string"
+      },
+      "successTextConfirmArrival": {
+        "type": "string"
+      },
+      "confirmMessage": {
+        "type": "string"
+      },
+      "hideToolbarTitle": {
+        "type": "string"
+      },
+      "showToolbarTitle": {
+        "type": "string"
+      },
+      "filterToolbar": {
+        "type": "string"
+      },
+      "filterTooltip": {
+        "type": "string"
+      },
+      "call": {
+        "type": "string"
+      },
+      "firstDayOfWeek": {
+        "type": "string"
+      },
+      "dayStartHour": {
+        "type": "string"
+      },
+      "dayEndHour": {
+        "type": "string"
+      },
+      "slotDuration": {
+        "type": "string"
+      },
+      "slotInterval": {
+        "type": "string"
+      },
+      "confirmRequestFromClient": {
+        "type": "string"
+      },
+      "confirmEventMove": {
+        "type": "string"
+      },
+      "refreshEventToolbar": {
+        "type": "string"
+      },
+      "settingsToolbar": {
+        "type": "string"
+      },
+      "copyLinkToTheOnlineClinicReservation": {
+        "type": "string"
+      },
+      "successCopiedLinkForClinicReservation": {
+        "type": "string"
+      },
+      "generateInvoice": {
+        "type": "string"
+      },
+      "reserved": {
+        "type": "string"
+      },
+      "additionalSendOptions": {
+        "type": "string"
+      },
+      "calendar": {
+        "type": "string"
+      },
+      "customer": {
+        "type": "string"
+      },
+      "users": {
+        "type": "string"
+      },
+      "store": {
+        "type": "string"
+      },
+      "parameters": {
+        "type": "string"
+      },
+      "vaucher": {
+        "type": "string"
+      },
+      "translation": {
+        "type": "string"
+      },
+      "todo": {
+        "type": "string"
+      },
+      "myComplaint": {
+        "type": "string"
+      },
+      "myTherapy": {
+        "type": "string"
+      },
+      "myDocument": {
+        "type": "string"
+      },
+      "myCalendar": {
+        "type": "string"
+      },
+      "systemLogErrors": {
+        "type": "string"
+      },
+      "systemLogInfo": {
+        "type": "string"
+      },
+      "systemLogWarn": {
+        "type": "string"
+      },
+      "complaintMenu": {
+        "type": "string"
+      },
+      "therapyMenu": {
+        "type": "string"
+      },
+      "treatmentMenu": {
+        "type": "string"
+      },
+      "recommendationMenu": {
+        "type": "string"
+      },
+      "relationshipMenu": {
+        "type": "string"
+      },
+      "socialMenu": {
+        "type": "string"
+      },
+      "doctorMenu": {
+        "type": "string"
+      },
+      "doctorsMenu": {
+        "type": "string"
+      },
+      "vatTaxMenu": {
+        "type": "string"
+      },
+      "csMenu": {
+        "type": "string"
+      },
+      "stateMenu": {
+        "type": "string"
+      },
+      "eventCategoryMenu": {
+        "type": "string"
+      },
+      "eventCategoryStatistic": {
+        "type": "string"
+      },
+      "workTimeColorsMenu": {
+        "type": "string"
+      },
+      "areaCode": {
+        "type": "string"
+      },
+      "systemSettingsTitleMenu": {
+        "type": "string"
+      },
+      "systemSettingsTitle": {
+        "type": "string"
+      },
+      "applicationSettingsTitleMenu": {
+        "type": "string"
+      },
+      "systemLogsTitle": {
+        "type": "string"
+      },
+      "userTitleMenu": {
+        "type": "string"
+      },
+      "patientTitleMenu": {
+        "type": "string"
+      },
+      "applicationParametersSettingsTitle": {
+        "type": "string"
+      },
+      "templateAccount": {
+        "type": "string"
+      },
+      "mailReminderMessage": {
+        "type": "string"
+      },
+      "mailApproveReservation": {
+        "type": "string"
+      },
+      "mailDenyReservation": {
+        "type": "string"
+      },
+      "mailConfirmArrival": {
+        "type": "string"
+      },
+      "mailPatientCreatedAccount": {
+        "type": "string"
+      },
+      "mailPatientCreatedAccountViaForm": {
+        "type": "string"
+      },
+      "mailPatientFormRegistration": {
+        "type": "string"
+      },
+      "mailMassiveMessage": {
+        "type": "string"
+      },
+      "smsReminderMessage": {
+        "type": "string"
+      },
+      "smsMassiveMessage": {
+        "type": "string"
+      },
+      "changeSuperadminProfile": {
+        "type": "string"
+      },
+      "userAccess": {
+        "type": "string"
+      },
+      "smsCount": {
+        "type": "string"
+      },
+      "marketing": {
+        "type": "string"
+      },
+      "massiveSms": {
+        "type": "string"
+      },
+      "massiveEmail": {
+        "type": "string"
+      },
+      "addHoliday": {
+        "type": "string"
+      },
+      "smsBirthdayCongratulation": {
+        "type": "string"
+      },
+      "emailBirthdayCongratulation": {
+        "type": "string"
+      },
+      "invoicePrefixMenu": {
+        "type": "string"
+      },
+      "reservations": {
+        "type": "string"
+      },
+      "pagerItemsPerPage": {
+        "type": "string"
+      },
+      "addNew": {
+        "type": "string"
+      },
+      "add": {
+        "type": "string"
+      },
+      "update": {
+        "type": "string"
+      },
+      "edit": {
+        "type": "string"
+      },
+      "discardChanges": {
+        "type": "string"
+      },
+      "noRecordYet": {
+        "type": "string"
+      },
+      "cancel": {
+        "type": "string"
+      },
+      "remove": {
+        "type": "string"
+      },
+      "category": {
+        "type": "string"
+      },
+      "webAddress": {
+        "type": "string"
+      },
+      "shortname": {
+        "type": "string"
+      },
+      "sequence": {
+        "type": "string"
+      },
+      "comment": {
+        "type": "string"
+      },
+      "successTextAdd": {
+        "type": "string"
+      },
+      "successTextEdit": {
+        "type": "string"
+      },
+      "errorTitle": {
+        "type": "string"
+      },
+      "errorTextAdd": {
+        "type": "string"
+      },
+      "errorTextEdit": {
+        "type": "string"
+      },
+      "successTextDelete": {
+        "type": "string"
+      },
+      "confirmMessageText": {
+        "type": "string"
+      },
+      "createNewCustomerDialog": {
+        "type": "string"
+      },
+      "customerInformationDialog": {
+        "type": "string"
+      },
+      "patientForm": {
+        "type": "string"
+      },
+      "sendPatientFormOnMail": {
+        "type": "string"
+      },
+      "sendPatientFormButton": {
+        "type": "string"
+      },
+      "copyLinkToFormButton": {
+        "type": "string"
+      },
+      "successCopiedFormLink": {
+        "type": "string"
+      },
+      "successSendFormToMail": {
+        "type": "string"
+      },
+      "errorSendFormToMail": {
+        "type": "string"
+      },
+      "contactPatient": {
+        "type": "string"
+      },
+      "mobileEdit": {
+        "type": "string"
+      },
+      "telephoneEdit": {
+        "type": "string"
+      },
+      "createData": {
+        "type": "string"
+      },
+      "language": {
+        "type": "string"
+      },
+      "active": {
+        "type": "string"
+      },
+      "inactive": {
+        "type": "string"
+      },
+      "profile": {
+        "type": "string"
+      },
+      "settings": {
+        "type": "string"
+      },
+      "logout": {
+        "type": "string"
+      },
+      "invoice": {
+        "type": "string"
+      },
+      "backToGrid": {
+        "type": "string"
+      },
+      "successUpdateTextProfile": {
+        "type": "string"
+      },
+      "successUpdateTextData": {
+        "type": "string"
+      },
+      "successAddDataTitle": {
+        "type": "string"
+      },
+      "successAddDataText": {
+        "type": "string"
+      },
+      "workTime": {
+        "type": "string"
+      },
+      "addComplaint": {
+        "type": "string"
+      },
+      "updateComplaint": {
+        "type": "string"
+      },
+      "addTherapy": {
+        "type": "string"
+      },
+      "updateTherapy": {
+        "type": "string"
+      },
+      "choiceComplaint": {
+        "type": "string"
+      },
+      "choiceTherapy": {
+        "type": "string"
+      },
+      "choicePreviousTherapy": {
+        "type": "string"
+      },
+      "choiceState": {
+        "type": "string"
+      },
+      "updateCustomer": {
+        "type": "string"
+      },
+      "uploadDocument": {
+        "type": "string"
+      },
+      "baseOne": {
+        "type": "string"
+      },
+      "baseTwo": {
+        "type": "string"
+      },
+      "physicalIllness": {
+        "type": "string"
+      },
+      "recommendation": {
+        "type": "string"
+      },
+      "relationship": {
+        "type": "string"
+      },
+      "social": {
+        "type": "string"
+      },
+      "doctor": {
+        "type": "string"
+      },
+      "doctorType": {
+        "type": "string"
+      },
+      "firstDate": {
+        "type": "string"
+      },
+      "additionalField": {
+        "type": "string"
+      },
+      "addData": {
+        "type": "string"
+      },
+      "editData": {
+        "type": "string"
+      },
+      "size": {
+        "type": "string"
+      },
+      "weight": {
+        "type": "string"
+      },
+      "phone": {
+        "type": "string"
+      },
+      "mobilePhone": {
+        "type": "string"
+      },
+      "inCompanySince": {
+        "type": "string"
+      },
+      "childs": {
+        "type": "string"
+      },
+      "notes": {
+        "type": "string"
+      },
+      "profession": {
+        "type": "string"
+      },
+      "useful": {
+        "type": "string"
+      },
+      "internalOrgans": {
+        "type": "string"
+      },
+      "operations": {
+        "type": "string"
+      },
+      "previousFindidngs": {
+        "type": "string"
+      },
+      "medicament": {
+        "type": "string"
+      },
+      "allergies": {
+        "type": "string"
+      },
+      "skinSensitivity": {
+        "type": "string"
+      },
+      "pregnancy": {
+        "type": "string"
+      },
+      "baseDataOne": {
+        "type": "string"
+      },
+      "baseDataTwo": {
+        "type": "string"
+      },
+      "createNewUser": {
+        "type": "string"
+      },
+      "updateUser": {
+        "type": "string"
+      },
+      "zipCode": {
+        "type": "string"
+      },
+      "place": {
+        "type": "string"
+      },
+      "sincecompany": {
+        "type": "string"
+      },
+      "userType": {
+        "type": "string"
+      },
+      "storeLocation": {
+        "type": "string"
+      },
+      "cs": {
+        "type": "string"
+      },
+      "em": {
+        "type": "string"
+      },
+      "complaintValue": {
+        "type": "string"
+      },
+      "therapyValue": {
+        "type": "string"
+      },
+      "treatmentValue": {
+        "type": "string"
+      },
+      "documentValue": {
+        "type": "string"
+      },
+      "stateValue": {
+        "type": "string"
+      },
+      "newUser": {
+        "type": "string"
+      },
+      "newCustomer": {
+        "type": "string"
+      },
+      "baseDate": {
+        "type": "string"
+      },
+      "aboutMe": {
+        "type": "string"
+      },
+      "company": {
+        "type": "string"
+      },
+      "companyName": {
+        "type": "string"
+      },
+      "noInformation": {
+        "type": "string"
+      },
+      "delete": {
+        "type": "string"
+      },
+      "print": {
+        "type": "string"
+      },
+      "storename": {
+        "type": "string"
+      },
+      "download": {
+        "type": "string"
+      },
+      "updateDocument": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "totalTherapy": {
+        "type": "string"
+      },
+      "averagePerMonth": {
+        "type": "string"
+      },
+      "therapyForLastMonth": {
+        "type": "string"
+      },
+      "therapyForLastWeek": {
+        "type": "string"
+      },
+      "updateSettings": {
+        "type": "string"
+      },
+      "permissions": {
+        "type": "string"
+      },
+      "noSetTimeForUserNote": {
+        "type": "string"
+      },
+      "previous": {
+        "type": "string"
+      },
+      "next": {
+        "type": "string"
+      },
+      "validFromDate": {
+        "type": "string"
+      },
+      "allowedOnlineReservationForUser": {
+        "type": "string"
+      },
+      "createTime": {
+        "type": "string"
+      },
+      "setWorkTime": {
+        "type": "string"
+      },
+      "updateWorkTime": {
+        "type": "string"
+      },
+      "title": {
+        "type": "string"
+      },
+      "order": {
+        "type": "string"
+      },
+      "unit": {
+        "type": "string"
+      },
+      "artNr": {
+        "type": "string"
+      },
+      "netPrice": {
+        "type": "string"
+      },
+      "vat": {
+        "type": "string"
+      },
+      "grossPrice": {
+        "type": "string"
+      },
+      "aliasName": {
+        "type": "string"
+      },
+      "orderNumber": {
+        "type": "string"
+      },
+      "exist": {
+        "type": "string"
+      },
+      "notAdded": {
+        "type": "string"
+      },
+      "error": {
+        "type": "string"
+      },
+      "successful": {
+        "type": "string"
+      },
+      "profileMobile": {
+        "type": "string"
+      },
+      "createNewStore": {
+        "type": "string"
+      },
+      "createStore": {
+        "type": "string"
+      },
+      "updateStore": {
+        "type": "string"
+      },
+      "timeDuration": {
+        "type": "string"
+      },
+      "timeTherapy": {
+        "type": "string"
+      },
+      "startWork": {
+        "type": "string"
+      },
+      "endWork": {
+        "type": "string"
+      },
+      "newStore": {
+        "type": "string"
+      },
       "complaint": {
         "type": "array",
         "items": {
           "type": "object",
           "properties": {
-            "text": { "type": "string" }
+            "text": {
+              "type": "string"
+            }
           }
         }
       },
@@ -352,7 +1101,9 @@
         "items": {
           "type": "object",
           "properties": {
-            "text": { "type": "string" }
+            "text": {
+              "type": "string"
+            }
           }
         }
       },
@@ -361,29 +1112,68 @@
         "items": {
           "type": "object",
           "properties": {
-            "text": { "type": "string" }
+            "text": {
+              "type": "string"
+            }
           }
         }
       },
-      "adminSuccessCreateTitle": { "type": "string" },
-      "adminSuccessCreateText": { "type": "string" },
-      "adminErrorCreateTitle": { "type": "string" },
-      "adminErrorCreateText": { "type": "string" },
-      "adminSuccessUpdateTitle": { "type": "string" },
-      "adminSuccessUpdateText": { "type": "string" },
-      "adminErrorUpdateTitle": { "type": "string" },
-      "adminErrorUpdateText": { "type": "string" },
-      "owner": { "type": "string" },
-      "manager": { "type": "string" },
-      "nurse": { "type": "string" },
-      "administrator": { "type": "string" },
-      "count": { "type": "string" },
+      "adminSuccessCreateTitle": {
+        "type": "string"
+      },
+      "adminSuccessCreateText": {
+        "type": "string"
+      },
+      "adminErrorCreateTitle": {
+        "type": "string"
+      },
+      "adminErrorCreateText": {
+        "type": "string"
+      },
+      "adminSuccessUpdateTitle": {
+        "type": "string"
+      },
+      "adminSuccessUpdateText": {
+        "type": "string"
+      },
+      "adminErrorUpdateTitle": {
+        "type": "string"
+      },
+      "adminErrorUpdateText": {
+        "type": "string"
+      },
+      "owner": {
+        "type": "string"
+      },
+      "manager": {
+        "type": "string"
+      },
+      "nurse": {
+        "type": "string"
+      },
+      "administrator": {
+        "type": "string"
+      },
+      "count": {
+        "type": "string"
+      },
+      "needToBuySms": {
+        "type": "string"
+      },
+      "needToConfigurationParams": {
+        "type": "string"
+      },
+      "countOfRecipientsForSms": {
+        "type": "string"
+      },
       "priority": {
         "type": "array",
         "items": {
           "type": "object",
           "properties": {
-            "text": { "type": "string" }
+            "text": {
+              "type": "string"
+            }
           }
         }
       },
@@ -392,200 +1182,581 @@
         "items": {
           "type": "object",
           "properties": {
-            "text": { "type": "string" }
+            "text": {
+              "type": "string"
+            }
           }
         }
       },
-      "initialGreeting": { "type": "string" },
-      "finalGreeting": { "type": "string" },
-      "signature": { "type": "string" },
-      "thanksForUsing": { "type": "string" },
-      "websiteLink": { "type": "string" },
-      "ifYouHaveQuestion": { "type": "string" },
-      "emailAddress": { "type": "string" },
-      "notReply": { "type": "string" },
-      "copyRight": { "type": "string" },
-      "subjectConfirmArrival": { "type": "string" },
-      "introductoryMessageForConfirmArrival": { "type": "string" },
-      "dateMessage": { "type": "string" },
-      "timeMessage": { "type": "string" },
-      "therapyMessage": { "type": "string" },
-      "doctorMessage": { "type": "string" },
-      "finalMessageForConfirmArrival": { "type": "string" },
-      "confirmArrivalButtonText": { "type": "string" },
-      "subjectConfirmMail": { "type": "string" },
-      "introductoryMessageForConfirmMail": { "type": "string" },
-      "confirmMailButtonText": { "type": "string" },
-      "subjectForgotMail": { "type": "string" },
-      "introductoryMessageForForgotMail": { "type": "string" },
-      "forgotMailButtonText": { "type": "string" },
-      "subjectCreatedPatientForm": { "type": "string" },
-      "introductoryMessageForCreatedPatientAccount": { "type": "string" },
-      "linkForLogin": { "type": "string" },
-      "emailForLogin": { "type": "string" },
-      "passwordForLogin": { "type": "string" },
-      "subjectFormRegistration": { "type": "string" },
-      "introductoryMessageForPatientRegistrationForm": { "type": "string" },
-      "openForm": { "type": "string" },
-      "settingsBackToHome": { "type": "string" },
-      "settingsAccountNavigation": { "type": "string" },
-      "settingsAccount": { "type": "string" },
-      "settingsChangePassword": { "type": "string" },
-      "settingsChangeLanguage": { "type": "string" },
-      "settingsPermissionNavigation": { "type": "string" },
-      "perimissionForPatientNavigationMenu": { "type": "string" },
-      "accountBasicInformationTitle": { "type": "string" },
-      "accountConfirmDialogTitle": { "type": "string" },
-      "accountConfirmDialogQuestion": { "type": "string" },
-      "accountSuccessUpdatedAccountTitle": { "type": "string" },
-      "accountSuccessUpdatedAccountText": { "type": "string" },
-      "accountErrorUpdatedAccountTitle": { "type": "string" },
-      "accountErrorUpdatedAccountText": { "type": "string" },
-      "changePasswordTitle": { "type": "string" },
-      "changePasswordConfirmDialogTitle": { "type": "string" },
-      "changePasswordConfirmDialogQuestion": { "type": "string" },
-      "changePasswordOldPassword": { "type": "string" },
-      "changePasswordNewPassword": { "type": "string" },
-      "changePasswordRepeteNewPassword": { "type": "string" },
-      "changePasswordButton": { "type": "string" },
-      "changePasswordSuccessUpdatedPasswordTitle": { "type": "string" },
-      "changePasswordSuccessUpdatedPasswordText": { "type": "string" },
-      "changePasswordErrorUpdatedPasswordTitle": { "type": "string" },
-      "changePasswordErrorUpdatedPasswordText": { "type": "string" },
-      "changePasswordErrorNotEqualCurrentTitle": { "type": "string" },
-      "changePasswordErrorNotEqualCurrentText": { "type": "string" },
-      "changePasswordErrorRequiredInputTitle": { "type": "string" },
-      "changePasswordErrorRequiredInputText": { "type": "string" },
-      "changePasswordErrorNotEqualTitle": { "type": "string" },
-      "changePasswordErrorNotEqualText": { "type": "string" },
-      "permissionPatientMenuTitle": { "type": "string" },
-      "permissionPatientMenuConfirmDialogTitle": { "type": "string" },
-      "permissionPatientMenuConfirmDialogQuestion": { "type": "string" },
-      "changePermissionPatientMenuButton": { "type": "string" },
-      "permissionPatientMenuSuccessUpdateTitle": { "type": "string" },
-      "permissionPatientMenuSuccessUpdateText": { "type": "string" },
-      "permissionPatientMenuErrorUpdateTitle": { "type": "string" },
-      "permissionPatientMenuErrorUpdateText": { "type": "string" },
-      "reservationTitle": { "type": "string" },
-      "reservationConfirmDialogTitle": { "type": "string" },
-      "reservationDialogQuestion": { "type": "string" },
-      "reservationApprove": { "type": "string" },
-      "reservationDeny": { "type": "string" },
-      "reservationSuccessUpdateTitle": { "type": "string" },
-      "reservationSuccessUpdateText": { "type": "string" },
-      "reservationErrorUpdateTitle": { "type": "string" },
-      "reservationErrorUpdateText": { "type": "string" },
-      "subjectApproveReservation": { "type": "string" },
-      "introductoryMessageForApproveReservation": { "type": "string" },
-      "subjectDenyReservation": { "type": "string" },
-      "introductoryMessageForDenyReservation": { "type": "string" },
-      "subjectForReminderReservation": { "type": "string" },
-      "introductoryMessageForReminderReservation": { "type": "string" },
-      "initialGreetingSMSReminder": { "type": "string" },
-      "introductoryMessageForSMSReminderReservation": { "type": "string" },
-      "reservationTooltip": { "type": "string" },
-      "approvedReservationTooltip": { "type": "string" },
-      "fileUploadTitle": { "type": "string" },
-      "uploadFileButton": { "type": "string" },
-      "queueLength": { "type": "string" },
-      "documentId": { "type": "string" },
-      "documentName": { "type": "string" },
-      "documentSize": { "type": "string" },
-      "documentDescription": { "type": "string" },
-      "documentDate": { "type": "string" },
-      "documentProgress": { "type": "string" },
-      "documentStatus": { "type": "string" },
-      "documentActions": { "type": "string" },
-      "uploadFile": { "type": "string" },
-      "cancelFile": { "type": "string" },
-      "removeFile": { "type": "string" },
-      "queueProgress": { "type": "string" },
-      "uploadAll": { "type": "string" },
-      "cancelAll": { "type": "string" },
-      "removeAll": { "type": "string" },
-      "closeFileUploader": { "type": "string" },
-      "previewDocument": { "type": "string" },
-      "sendSMSTo": { "type": "string" },
-      "sendSMS": { "type": "string" },
-      "inputSMSMessage": { "type": "string" },
-      "sendSMSTitle": { "type": "string" },
-      "successSendSMSMessageTitle": { "type": "string" },
-      "successSendSMSMessageText": { "type": "string" },
-      "errorSendSMSMessageTitle": { "type": "string" },
-      "errorSendSMSMessageText": { "type": "string" },
-      "needToBuySms": { "type": "string" },
-      "sendEmailTo": { "type": "string" },
-      "sendEmail": { "type": "string" },
-      "inputEmailMessage": { "type": "string" },
-      "emailSubject": { "type": "string" },
-      "sendEmailTitle": { "type": "string" },
-      "successSendEmailMessageText": { "type": "string" },
-      "errorSendEmailMessageText": { "type": "string" },
-      "reminderMenu": { "type": "string" },
-      "reminderHeaderTitle": { "type": "string" },
-      "reminderConfirmDialogTitle": { "type": "string" },
-      "reminderDialogQuestion": { "type": "string" },
-      "sendReminderViaEMail": { "type": "string" },
-      "sendReminderViaSMS": { "type": "string" },
-      "changeReminderSettingsButton": { "type": "string" },
-      "successChangeReminderSettingsText": { "type": "string" },
-      "errorChangeReminderSettingsText": { "type": "string" },
-      "saveLanguage": { "type": "string" },
-      "labelTitle": { "type": "string" },
-      "successChangeLanguageText": { "type": "string" },
-      "errorChangeLanguageText": { "type": "string" },
+      "initialGreeting": {
+        "type": "string"
+      },
+      "finalGreeting": {
+        "type": "string"
+      },
+      "signature": {
+        "type": "string"
+      },
+      "thanksForUsing": {
+        "type": "string"
+      },
+      "websiteLink": {
+        "type": "string"
+      },
+      "ifYouHaveQuestion": {
+        "type": "string"
+      },
+      "emailAddress": {
+        "type": "string"
+      },
+      "notReply": {
+        "type": "string"
+      },
+      "copyRight": {
+        "type": "string"
+      },
+      "signatureStreet": {
+        "type": "string"
+      },
+      "signatureZipCode": {
+        "type": "string"
+      },
+      "signaturePhone": {
+        "type": "string"
+      },
+      "subjectConfirmArrival": {
+        "type": "string"
+      },
+      "introductoryMessageForConfirmArrival": {
+        "type": "string"
+      },
+      "dateMessage": {
+        "type": "string"
+      },
+      "timeMessage": {
+        "type": "string"
+      },
+      "therapyMessage": {
+        "type": "string"
+      },
+      "doctorMessage": {
+        "type": "string"
+      },
+      "finalMessageForConfirmArrival": {
+        "type": "string"
+      },
+      "confirmArrivalButtonText": {
+        "type": "string"
+      },
+      "subjectConfirmMail": {
+        "type": "string"
+      },
+      "introductoryMessageForConfirmMail": {
+        "type": "string"
+      },
+      "confirmMailButtonText": {
+        "type": "string"
+      },
+      "subjectForgotMail": {
+        "type": "string"
+      },
+      "introductoryMessageForForgotMail": {
+        "type": "string"
+      },
+      "forgotMailButtonText": {
+        "type": "string"
+      },
+      "subjectCreatedPatientForm": {
+        "type": "string"
+      },
+      "introductoryMessageForCreatedPatientAccount": {
+        "type": "string"
+      },
+      "linkForLogin": {
+        "type": "string"
+      },
+      "emailForLogin": {
+        "type": "string"
+      },
+      "passwordForLogin": {
+        "type": "string"
+      },
+      "subjectFormRegistration": {
+        "type": "string"
+      },
+      "introductoryMessageForPatientRegistrationForm": {
+        "type": "string"
+      },
+      "openForm": {
+        "type": "string"
+      },
+      "settingsBackToHome": {
+        "type": "string"
+      },
+      "settingsAccountNavigation": {
+        "type": "string"
+      },
+      "settingsAccount": {
+        "type": "string"
+      },
+      "settingsChangePassword": {
+        "type": "string"
+      },
+      "settingsChangeLanguage": {
+        "type": "string"
+      },
+      "settingsPermissionNavigation": {
+        "type": "string"
+      },
+      "perimissionForPatientNavigationMenu": {
+        "type": "string"
+      },
+      "accountBasicInformationTitle": {
+        "type": "string"
+      },
+      "accountConfirmDialogTitle": {
+        "type": "string"
+      },
+      "accountConfirmDialogQuestion": {
+        "type": "string"
+      },
+      "invoiceConfirmDialogQuestion": {
+        "type": "string"
+      },
+      "accountSuccessUpdatedAccountTitle": {
+        "type": "string"
+      },
+      "accountSuccessUpdatedAccountText": {
+        "type": "string"
+      },
+      "accountErrorUpdatedAccountTitle": {
+        "type": "string"
+      },
+      "accountErrorUpdatedAccountText": {
+        "type": "string"
+      },
+      "changePasswordTitle": {
+        "type": "string"
+      },
+      "changePasswordConfirmDialogTitle": {
+        "type": "string"
+      },
+      "changePasswordConfirmDialogQuestion": {
+        "type": "string"
+      },
+      "changePasswordOldPassword": {
+        "type": "string"
+      },
+      "changePasswordNewPassword": {
+        "type": "string"
+      },
+      "changePasswordRepeteNewPassword": {
+        "type": "string"
+      },
+      "changePasswordButton": {
+        "type": "string"
+      },
+      "changePasswordSuccessUpdatedPasswordTitle": {
+        "type": "string"
+      },
+      "changePasswordSuccessUpdatedPasswordText": {
+        "type": "string"
+      },
+      "changePasswordErrorUpdatedPasswordTitle": {
+        "type": "string"
+      },
+      "changePasswordErrorUpdatedPasswordText": {
+        "type": "string"
+      },
+      "changePasswordErrorNotEqualCurrentTitle": {
+        "type": "string"
+      },
+      "changePasswordErrorNotEqualCurrentText": {
+        "type": "string"
+      },
+      "changePasswordErrorRequiredInputTitle": {
+        "type": "string"
+      },
+      "changePasswordErrorRequiredInputText": {
+        "type": "string"
+      },
+      "changePasswordErrorNotEqualTitle": {
+        "type": "string"
+      },
+      "changePasswordErrorNotEqualText": {
+        "type": "string"
+      },
+      "permissionPatientMenuTitle": {
+        "type": "string"
+      },
+      "permissionPatientMenuConfirmDialogTitle": {
+        "type": "string"
+      },
+      "permissionPatientMenuConfirmDialogQuestion": {
+        "type": "string"
+      },
+      "changePermissionPatientMenuButton": {
+        "type": "string"
+      },
+      "permissionPatientMenuSuccessUpdateTitle": {
+        "type": "string"
+      },
+      "permissionPatientMenuSuccessUpdateText": {
+        "type": "string"
+      },
+      "permissionPatientMenuErrorUpdateTitle": {
+        "type": "string"
+      },
+      "permissionPatientMenuErrorUpdateText": {
+        "type": "string"
+      },
+      "reservationTitle": {
+        "type": "string"
+      },
+      "reservationConfirmDialogTitle": {
+        "type": "string"
+      },
+      "reservationDialogQuestion": {
+        "type": "string"
+      },
+      "reservationApprove": {
+        "type": "string"
+      },
+      "reservationDeny": {
+        "type": "string"
+      },
+      "reservationSuccessUpdateTitle": {
+        "type": "string"
+      },
+      "reservationSuccessUpdateText": {
+        "type": "string"
+      },
+      "reservationErrorUpdateTitle": {
+        "type": "string"
+      },
+      "reservationErrorUpdateText": {
+        "type": "string"
+      },
+      "subjectApproveReservation": {
+        "type": "string"
+      },
+      "introductoryMessageForApproveReservation": {
+        "type": "string"
+      },
+      "subjectDenyReservation": {
+        "type": "string"
+      },
+      "introductoryMessageForDenyReservation": {
+        "type": "string"
+      },
+      "subjectForReminderReservation": {
+        "type": "string"
+      },
+      "introductoryMessageForReminderReservation": {
+        "type": "string"
+      },
+      "initialGreetingSMSReminder": {
+        "type": "string"
+      },
+      "introductoryMessageForSMSReminderReservation": {
+        "type": "string"
+      },
+      "reservationTooltip": {
+        "type": "string"
+      },
+      "approvedReservationTooltip": {
+        "type": "string"
+      },
+      "fileUploadTitle": {
+        "type": "string"
+      },
+      "uploadFileButton": {
+        "type": "string"
+      },
+      "queueLength": {
+        "type": "string"
+      },
+      "documentId": {
+        "type": "string"
+      },
+      "documentName": {
+        "type": "string"
+      },
+      "documentSize": {
+        "type": "string"
+      },
+      "documentDescription": {
+        "type": "string"
+      },
+      "documentDate": {
+        "type": "string"
+      },
+      "documentProgress": {
+        "type": "string"
+      },
+      "documentStatus": {
+        "type": "string"
+      },
+      "documentActions": {
+        "type": "string"
+      },
+      "uploadFile": {
+        "type": "string"
+      },
+      "cancelFile": {
+        "type": "string"
+      },
+      "removeFile": {
+        "type": "string"
+      },
+      "queueProgress": {
+        "type": "string"
+      },
+      "uploadAll": {
+        "type": "string"
+      },
+      "cancelAll": {
+        "type": "string"
+      },
+      "removeAll": {
+        "type": "string"
+      },
+      "closeFileUploader": {
+        "type": "string"
+      },
+      "previewDocument": {
+        "type": "string"
+      },
+      "sendSMSTo": {
+        "type": "string"
+      },
+      "sendSMS": {
+        "type": "string"
+      },
+      "inputSMSMessage": {
+        "type": "string"
+      },
+      "sendSMSTitle": {
+        "type": "string"
+      },
+      "successSendSMSMessageTitle": {
+        "type": "string"
+      },
+      "successSendSMSMessageText": {
+        "type": "string"
+      },
+      "errorSendSMSMessageTitle": {
+        "type": "string"
+      },
+      "errorSendSMSMessageText": {
+        "type": "string"
+      },
+      "sendEmailTo": {
+        "type": "string"
+      },
+      "sendEmail": {
+        "type": "string"
+      },
+      "inputEmailMessage": {
+        "type": "string"
+      },
+      "emailSubject": {
+        "type": "string"
+      },
+      "sendEmailTitle": {
+        "type": "string"
+      },
+      "successSendEmailMessageText": {
+        "type": "string"
+      },
+      "errorSendEmailMessageText": {
+        "type": "string"
+      },
+      "countOfRecipientsForEmail": {
+        "type": "string"
+      },
+      "reminderMenu": {
+        "type": "string"
+      },
+      "reminderHeaderTitle": {
+        "type": "string"
+      },
+      "reminderConfirmDialogTitle": {
+        "type": "string"
+      },
+      "reminderDialogQuestion": {
+        "type": "string"
+      },
+      "sendReminderViaEMail": {
+        "type": "string"
+      },
+      "sendReminderViaSMS": {
+        "type": "string"
+      },
+      "changeReminderSettingsButton": {
+        "type": "string"
+      },
+      "successChangeReminderSettingsText": {
+        "type": "string"
+      },
+      "errorChangeReminderSettingsText": {
+        "type": "string"
+      },
+      "saveLanguage": {
+        "type": "string"
+      },
+      "labelTitle": {
+        "type": "string"
+      },
+      "successChangeLanguageText": {
+        "type": "string"
+      },
+      "errorChangeLanguageText": {
+        "type": "string"
+      },
       "languages": {
         "type": "array",
         "items": {
           "type": "object",
           "properties": {
-            "countryCode": { "type": "string" },
-            "language": { "type": "string" }
+            "countryCode": {
+              "type": "string"
+            },
+            "language": {
+              "type": "string"
+            }
           }
         }
       },
-      "loadDemoAccountTitle": { "type": "string" },
-      "loadDemoAccountHeader": { "type": "string" },
-      "loadDemoAccountText": { "type": "string" },
-      "loadDemoAccountChooise": { "type": "string" },
-      "loadDemoAccountNoThanks": { "type": "string" },
-      "loadDemoAccountButton": { "type": "string" },
-      "loadingDemoTitle": { "type": "string" },
-      "loadingDemoHeader": { "type": "string" },
-      "loadingDemoText": { "type": "string" },
-      "mailSubject": { "type": "string" },
-      "mailInitialGreeting": { "type": "string" },
-      "mailMessage": { "type": "string" },
-      "mailDate": { "type": "string" },
-      "mailTime": { "type": "string" },
-      "mailClinic": { "type": "string" },
-      "mailTherapy": { "type": "string" },
-      "mailDoctor": { "type": "string" },
-      "mailFinalGreeting": { "type": "string" },
-      "mailSignature": { "type": "string" },
-      "mailThanksForUsing": { "type": "string" },
-      "mailIfYouHaveQuestion": { "type": "string" },
-      "mailNotReply": { "type": "string" },
-      "mailCopyRight": { "type": "string" },
-      "signatureAvailable": { "type": "string" },
-      "signatureAddress": { "type": "string" },
-      "signatureTelephone": { "type": "string" },
-      "signatureMobile": { "type": "string" },
-      "signatureEmail": { "type": "string" },
-      "smsSubject": { "type": "string" },
-      "smsMessage": { "type": "string" },
-      "smsDate": { "type": "string" },
-      "smsTime": { "type": "string" },
-      "smsClinic": { "type": "string" },
-      "smsSignatureAddress": { "type": "string" },
-      "smsSignatureTelephone": { "type": "string" },
-      "smsSignatureMobile": { "type": "string" },
-      "smsSignatureEmail": { "type": "string" },
-      "sequenceOfCount": { "type": "string" },
-      "nameOfCount": { "type": "string" },
-      "shortnameOfCount": { "type": "string" },
-      "categoryOfCount": { "type": "string" },
-      "displayOfCount": { "type": "string" },
+      "loadDemoAccountTitle": {
+        "type": "string"
+      },
+      "loadDemoAccountHeader": {
+        "type": "string"
+      },
+      "loadDemoAccountText": {
+        "type": "string"
+      },
+      "loadDemoAccountChooise": {
+        "type": "string"
+      },
+      "loadDemoAccountNoThanks": {
+        "type": "string"
+      },
+      "loadDemoAccountButton": {
+        "type": "string"
+      },
+      "loadingDemoTitle": {
+        "type": "string"
+      },
+      "loadingDemoHeader": {
+        "type": "string"
+      },
+      "loadingDemoText": {
+        "type": "string"
+      },
+      "mailSubject": {
+        "type": "string"
+      },
+      "mailInitialGreeting": {
+        "type": "string"
+      },
+      "mailMessage": {
+        "type": "string"
+      },
+      "mailDate": {
+        "type": "string"
+      },
+      "mailTime": {
+        "type": "string"
+      },
+      "mailClinic": {
+        "type": "string"
+      },
+      "mailTherapy": {
+        "type": "string"
+      },
+      "mailDoctor": {
+        "type": "string"
+      },
+      "mailFinalGreeting": {
+        "type": "string"
+      },
+      "mailSignature": {
+        "type": "string"
+      },
+      "mailThanksForUsing": {
+        "type": "string"
+      },
+      "mailIfYouHaveQuestion": {
+        "type": "string"
+      },
+      "mailNotReply": {
+        "type": "string"
+      },
+      "mailCopyRight": {
+        "type": "string"
+      },
+      "signatureAvailable": {
+        "type": "string"
+      },
+      "signatureAddress": {
+        "type": "string"
+      },
+      "signatureTelephone": {
+        "type": "string"
+      },
+      "signatureMobile": {
+        "type": "string"
+      },
+      "signatureEmail": {
+        "type": "string"
+      },
+      "smsSubject": {
+        "type": "string"
+      },
+      "smsMessage": {
+        "type": "string"
+      },
+      "smsDate": {
+        "type": "string"
+      },
+      "smsTime": {
+        "type": "string"
+      },
+      "smsClinic": {
+        "type": "string"
+      },
+      "smsSignatureAddress": {
+        "type": "string"
+      },
+      "smsSignatureTelephone": {
+        "type": "string"
+      },
+      "smsSignatureMobile": {
+        "type": "string"
+      },
+      "smsSignatureEmail": {
+        "type": "string"
+      },
+      "smsSignaturePoweredBy": {
+        "type": "string"
+      },
+      "sequenceOfCount": {
+        "type": "string"
+      },
+      "nameOfCount": {
+        "type": "string"
+      },
+      "shortnameOfCount": {
+        "type": "string"
+      },
+      "categoryOfCount": {
+        "type": "string"
+      },
+      "displayOfCount": {
+        "type": "string"
+      },
       "termsHeaderTitleBrand": {
         "type": "string"
       },
@@ -699,10 +1870,186 @@
           }
         }
       },
-      "confirmArrivalThankYou": { "type": "string" },
-      "confirmArrivalText1": { "type": "string" },
-      "confirmArrivalText2": { "type": "string" },
-      "confirmArrivalGoToHome": { "type": "string" }
+      "confirmArrivalThankYou": {
+        "type": "string"
+      },
+      "confirmArrivalText1": {
+        "type": "string"
+      },
+      "confirmArrivalText2": {
+        "type": "string"
+      },
+      "confirmArrivalGoToHome": {
+        "type": "string"
+      },
+      "massiveSmsTitle": {
+        "type": "string"
+      },
+      "massiveEmailTitle": {
+        "type": "string"
+      },
+      "birthdayFrom": {
+        "type": "string"
+      },
+      "birthdayTo": {
+        "type": "string"
+      },
+      "sendMassiveSms": {
+        "type": "string"
+      },
+      "sendMassiveEmail": {
+        "type": "string"
+      },
+      "smsSignaturePoweredByMassive": {
+        "type": "string"
+      },
+      "congratulationBirthday": {
+        "type": "string"
+      },
+      "signatureCompanyName": {
+        "type": "string"
+      },
+      "signatureAddress1": {
+        "type": "string"
+      },
+      "signatureAddress2": {
+        "type": "string"
+      },
+      "signatureAddress3": {
+        "type": "string"
+      },
+      "chooseTemplate": {
+        "type": "string"
+      },
+      "templatesTitle": {
+        "type": "string"
+      },
+      "holidaysTitle": {
+        "type": "string"
+      },
+      "dateTitle": {
+        "type": "string"
+      },
+      "adminSuccessDeleteTitle": {
+        "type": "string"
+      },
+      "adminSuccessDeleteText": {
+        "type": "string"
+      },
+      "adminErrorDeleteTitle": {
+        "type": "string"
+      },
+      "adminErrorDeleteText": {
+        "type": "string"
+      },
+      "invoiceTitle": {
+        "type": "string"
+      },
+      "invoiceSubTitle": {
+        "type": "string"
+      },
+      "invoiceBillingTitleFrom": {
+        "type": "string"
+      },
+      "invoiceBillingTitleTo": {
+        "type": "string"
+      },
+      "invoiceAddress": {
+        "type": "string"
+      },
+      "invoiceSubtotal": {
+        "type": "string"
+      },
+      "invoiceTax": {
+        "type": "string"
+      },
+      "invoiceTotal": {
+        "type": "string"
+      },
+      "invoiceYourName": {
+        "type": "string"
+      },
+      "invoiceItem": {
+        "type": "string"
+      },
+      "invoiceNetPrice": {
+        "type": "string"
+      },
+      "invoiceGrossPrice": {
+        "type": "string"
+      },
+      "generatePDFTooltip": {
+        "type": "string"
+      },
+      "printPDFTooltip": {
+        "type": "string"
+      },
+      "downloadWordTooltip": {
+        "type": "string"
+      },
+      "downloadWord": {
+        "type": "string"
+      },
+      "noDataAvailable": {
+        "type": "string"
+      },
+      "startDateLabel": {
+        "type": "string"
+      },
+      "endDateLabel": {
+        "type": "string"
+      },
+      "emptyGridMessage": {
+        "type": "string"
+      },
+      "loading": {
+        "type": "string"
+      },
+      "pleaseConfirm": {
+        "type": "string"
+      },
+      "clickHere": {
+        "type": "string"
+      },
+      "notesTitle": {
+        "type": "string"
+      },
+      "notesText": {
+        "type": "string"
+      },
+      "notesDate": {
+        "type": "string"
+      },
+      "euroSign": {
+        "type": "string"
+      },
+      "doctorColumnTitle": {
+        "type": "string"
+      },
+      "invoicePrefix": {
+        "type": "string"
+      },
+      "invoicePrefixTitle": {
+        "type": "string"
+      },
+      "printBruttoNettoPrice": {
+        "type": "string"
+      },
+      "titleOnInvoice": {
+        "type": "string"
+      },
+      "printOnInvoice": {
+        "type": "string"
+      },
+      "additionalInvoiceOptionsTitle": {
+        "type": "string"
+      },
+      "selectInvoiceLanguage": {
+        "type": "string"
+      },
+      "showAtInvoice": {
+        "type": "string"
+      }
     }
   },
   "layout": [
@@ -717,10 +2064,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "yes" },
-            { "key": "no" },
-            { "key": "deleteDialogTitleAreYouSure" },
-            { "key": "close" }
+            {
+              "key": "yes"
+            },
+            {
+              "key": "no"
+            },
+            {
+              "key": "deleteDialogTitleAreYouSure"
+            },
+            {
+              "key": "close"
+            }
           ]
         },
         {
@@ -728,10 +2083,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "successExecutedActionTitle" },
-            { "key": "successExecutedActionText" },
-            { "key": "errorExecutedActionTitle" },
-            { "key": "errorExecutedActionText" }
+            {
+              "key": "successExecutedActionTitle"
+            },
+            {
+              "key": "successExecutedActionText"
+            },
+            {
+              "key": "errorExecutedActionTitle"
+            },
+            {
+              "key": "errorExecutedActionText"
+            }
           ]
         },
         {
@@ -739,10 +2102,50 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "clickAgreeText" },
-            { "key": "termOfUse" },
-            { "key": "actionTitle" },
-            { "key": "areYouSure" }
+            {
+              "key": "actionTitle"
+            },
+            {
+              "key": "areYouSure"
+            },
+            {
+              "key": "save"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "subject"
+            },
+            {
+              "key": "message"
+            },
+            {
+              "key": "clickHere"
+            },
+            {
+              "key": "emptyGridMessage"
+            },
+            {
+              "key": "loading"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "pleaseConfirm"
+            },
+            {},
+            {},
+            {}
           ]
         }
       ]
@@ -758,10 +2161,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "welcomeTitle" },
-            { "key": "welcomeText" },
-            { "key": "loginTitle" },
-            { "key": "haventAccount" }
+            {
+              "key": "welcomeTitle"
+            },
+            {
+              "key": "welcomeText"
+            },
+            {
+              "key": "loginTitle"
+            },
+            {
+              "key": "haventAccount"
+            }
           ]
         },
         {
@@ -769,11 +2180,21 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "signUp" },
-            { "key": "or" },
-            { "key": "email" },
-            { "key": "password" },
-            { "key": "confirmPassword" }
+            {
+              "key": "signUp"
+            },
+            {
+              "key": "or"
+            },
+            {
+              "key": "email"
+            },
+            {
+              "key": "password"
+            },
+            {
+              "key": "confirmPassword"
+            }
           ]
         },
         {
@@ -781,10 +2202,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "rememberMe" },
-            { "key": "forgotPassword" },
-            { "key": "loginWithEmail" },
-            { "key": "signUpTitle" }
+            {
+              "key": "rememberMe"
+            },
+            {
+              "key": "forgotPassword"
+            },
+            {
+              "key": "loginWithEmail"
+            },
+            {
+              "key": "signUpTitle"
+            }
           ]
         },
         {
@@ -792,10 +2221,24 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "fullName" },
-            { "key": "aggree" },
-            { "key": "privacyPolicy" },
-            { "key": "and" }
+            {
+              "key": "fullName"
+            },
+            {
+              "key": "aggree"
+            },
+            {
+              "key": "clickAgreeText"
+            },
+            {
+              "key": "needToAgree"
+            },
+            {
+              "key": "privacyPolicy"
+            },
+            {
+              "key": "and"
+            }
           ]
         },
         {
@@ -803,10 +2246,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "termsOfService" },
-            { "key": "signUpWithEmail" },
-            { "key": "alreadyHaveAnAccount" },
-            { "key": "recoveryTitle" }
+            {
+              "key": "termOfUse"
+            },
+            {
+              "key": "signUpWithEmail"
+            },
+            {
+              "key": "alreadyHaveAnAccount"
+            },
+            {
+              "key": "recoveryTitle"
+            }
           ]
         },
         {
@@ -814,10 +2265,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "recoveryText" },
-            { "key": "recoveryYourPassword" },
-            { "key": "recoveryButton" },
-            { "key": "sendForgotMail" }
+            {
+              "key": "recoveryText"
+            },
+            {
+              "key": "recoveryYourPassword"
+            },
+            {
+              "key": "recoveryButton"
+            },
+            {
+              "key": "sendForgotMail"
+            }
           ]
         },
         {
@@ -825,11 +2284,21 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "notCorrectPass" },
-            { "key": "passwordsIsNotEqual" },
-            { "key": "checkMailForActive" },
-            { "key": "fillFields" },
-            { "key": "requiredSubmitMessage" }
+            {
+              "key": "notCorrectPass"
+            },
+            {
+              "key": "passwordsIsNotEqual"
+            },
+            {
+              "key": "checkMailForActive"
+            },
+            {
+              "key": "fillFields"
+            },
+            {
+              "key": "requiredSubmitMessage"
+            }
           ]
         },
         {
@@ -837,10 +2306,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "accountExists" },
-            { "key": "createAccountSuccessedText1" },
-            { "key": "createAccountSuccessedText2" },
-            { "key": "createAccountSuccessedText3" }
+            {
+              "key": "accountExists"
+            },
+            {
+              "key": "createAccountSuccessedText1"
+            },
+            {
+              "key": "createAccountSuccessedText2"
+            },
+            {
+              "key": "createAccountSuccessedText3"
+            }
           ]
         },
         {
@@ -848,17 +2325,32 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "userAccessFormTitle" },
-            { "key": "userAccessDevice" },
-            { "key": "createUserAccessDevice" },
-            { "key": "successUserAccessDeviceName" }
+            {
+              "key": "userAccessFormTitle"
+            },
+            {
+              "key": "userAccessDevice"
+            },
+            {
+              "key": "createUserAccessDevice"
+            },
+            {
+              "key": "successUserAccessDeviceName"
+            }
           ]
         },
         {
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "needToSuperadminApproveAccess" }, {}, {}, {}]
+          "items": [
+            {
+              "key": "needToSuperadminApproveAccess"
+            },
+            {},
+            {},
+            {}
+          ]
         }
       ]
     },
@@ -873,10 +2365,21 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "id" },
-            { "key": "date" },
-            { "key": "amount" },
-            { "key": "date_redeemed" }
+            {
+              "key": "id"
+            },
+            {
+              "key": "date"
+            },
+            {
+              "key": "time"
+            },
+            {
+              "key": "amount"
+            },
+            {
+              "key": "date_redeemed"
+            }
           ]
         },
         {
@@ -884,10 +2387,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "customerBuys" },
-            { "key": "customerConsumer" },
-            { "key": "comment" },
-            { "key": "newVaucher" }
+            {
+              "key": "customerBuys"
+            },
+            {
+              "key": "customerConsumer"
+            },
+            {
+              "key": "comment"
+            },
+            {
+              "key": "newVaucher"
+            }
           ]
         },
         {
@@ -895,10 +2406,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "addVaucher" },
-            { "key": "updateVaucher" },
-            { "key": "uploadFromExcel" },
-            { "key": "exportToExcel" }
+            {
+              "key": "addVaucher"
+            },
+            {
+              "key": "updateVaucher"
+            },
+            {
+              "key": "uploadFromExcel"
+            },
+            {
+              "key": "exportToExcel"
+            }
           ]
         },
         {
@@ -906,10 +2425,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "exportToPDF" },
-            { "key": "pagerPage" },
-            { "key": "pagerOf" },
-            { "key": "pagerItems" }
+            {
+              "key": "exportToPDF"
+            },
+            {
+              "key": "pagerPage"
+            },
+            {
+              "key": "pagerOf"
+            },
+            {
+              "key": "pagerItems"
+            }
           ]
         },
         {
@@ -917,9 +2444,15 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "user" },
-            { "key": "required" },
-            { "key": "searchAllColumn" }
+            {
+              "key": "user"
+            },
+            {
+              "key": "required"
+            },
+            {
+              "key": "searchAllColumn"
+            }
           ]
         }
       ]
@@ -935,10 +2468,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "today" },
-            { "key": "allDay" },
-            { "key": "month" },
-            { "key": "day" }
+            {
+              "key": "today"
+            },
+            {
+              "key": "allDay"
+            },
+            {
+              "key": "month"
+            },
+            {
+              "key": "day"
+            }
           ]
         },
         {
@@ -946,10 +2487,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "week" },
-            { "key": "workWeek" },
-            { "key": "multiDay" },
-            { "key": "timeline" }
+            {
+              "key": "week"
+            },
+            {
+              "key": "workWeek"
+            },
+            {
+              "key": "multiDay"
+            },
+            {
+              "key": "timeline"
+            }
           ]
         },
         {
@@ -957,10 +2506,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "agenda" },
-            { "key": "noTaskForUser" },
-            { "key": "tasksForUser" },
-            { "key": "successUpdateTitle" }
+            {
+              "key": "agenda"
+            },
+            {
+              "key": "noTaskForUser"
+            },
+            {
+              "key": "tasksForUser"
+            },
+            {
+              "key": "successUpdateTitle"
+            }
           ]
         },
         {
@@ -968,10 +2525,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "successUpdateText" },
-            { "key": "unsuccessUpdateTitle" },
-            { "key": "unsuccessUpdateText" },
-            { "key": "successDeleteTitle" }
+            {
+              "key": "successUpdateText"
+            },
+            {
+              "key": "unsuccessUpdateTitle"
+            },
+            {
+              "key": "unsuccessUpdateText"
+            },
+            {
+              "key": "successDeleteTitle"
+            }
           ]
         },
         {
@@ -979,9 +2544,15 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "successDeleteText" },
-            { "key": "successCreateCustomerTitle" },
-            { "key": "successCreateCustomerText" }
+            {
+              "key": "successDeleteText"
+            },
+            {
+              "key": "successCreateCustomerTitle"
+            },
+            {
+              "key": "successCreateCustomerText"
+            }
           ]
         },
         {
@@ -989,8 +2560,12 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "unsuccessCreateCustomerTitle" },
-            { "key": "unsuccessCreateCustomerText" },
+            {
+              "key": "unsuccessCreateCustomerTitle"
+            },
+            {
+              "key": "unsuccessCreateCustomerText"
+            },
             {}
           ]
         },
@@ -999,10 +2574,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "monday" },
-            { "key": "tuesday" },
-            { "key": "wednesday" },
-            { "key": "thursday" }
+            {
+              "key": "monday"
+            },
+            {
+              "key": "tuesday"
+            },
+            {
+              "key": "wednesday"
+            },
+            {
+              "key": "thursday"
+            }
           ]
         },
         {
@@ -1010,10 +2593,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "friday" },
-            { "key": "selectStoreIndicatorTitle" },
-            { "key": "selectStoreIndicatorText" },
-            { "key": "color" }
+            {
+              "key": "friday"
+            },
+            {
+              "key": "selectStoreIndicatorTitle"
+            },
+            {
+              "key": "selectStoreIndicatorText"
+            },
+            {
+              "key": "color"
+            }
           ]
         },
         {
@@ -1021,10 +2612,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "start" },
-            { "key": "startTime" },
-            { "key": "end" },
-            { "key": "endTime" }
+            {
+              "key": "start"
+            },
+            {
+              "key": "startTime"
+            },
+            {
+              "key": "end"
+            },
+            {
+              "key": "endTime"
+            }
           ]
         },
         {
@@ -1032,10 +2631,12 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "telephone" },
-            { "key": "selectStore" },
-            { "key": "selectUsers" },
-            { "key": "mobile" }
+            {
+              "key": "startDateLabel"
+            },
+            {
+              "key": "endDateLabel"
+            }
           ]
         },
         {
@@ -1043,10 +2644,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "required" },
-            { "key": "attention" },
-            { "key": "physicalComplaint" },
-            { "key": "email" }
+            {
+              "key": "telephone"
+            },
+            {
+              "key": "selectStore"
+            },
+            {
+              "key": "selectUsers"
+            },
+            {
+              "key": "mobile"
+            }
           ]
         },
         {
@@ -1054,10 +2663,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "gender" },
-            { "key": "street" },
-            { "key": "streetnumber" },
-            { "key": "city" }
+            {
+              "key": "required"
+            },
+            {
+              "key": "attention"
+            },
+            {
+              "key": "physicalComplaint"
+            },
+            {
+              "key": "email"
+            }
           ]
         },
         {
@@ -1065,10 +2682,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "username" },
-            { "key": "firstname" },
-            { "key": "lastname" },
-            { "key": "birthday" }
+            {
+              "key": "gender"
+            },
+            {
+              "key": "street"
+            },
+            {
+              "key": "streetnumber"
+            },
+            {
+              "key": "city"
+            }
           ]
         },
         {
@@ -1076,10 +2701,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "female" },
-            { "key": "male" },
-            { "key": "createNewCustomer" },
-            { "key": "eventCategory" }
+            {
+              "key": "username"
+            },
+            {
+              "key": "firstname"
+            },
+            {
+              "key": "lastname"
+            },
+            {
+              "key": "birthday"
+            }
           ]
         },
         {
@@ -1087,10 +2720,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "notConfirmed" },
-            { "key": "confirmed" },
-            { "key": "successTitle" },
-            { "key": "successTextConfirmArrival" }
+            {
+              "key": "female"
+            },
+            {
+              "key": "male"
+            },
+            {
+              "key": "createNewCustomer"
+            },
+            {
+              "key": "eventCategory"
+            }
           ]
         },
         {
@@ -1098,10 +2739,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "confirmMessage" },
-            { "key": "hideToolbarTitle" },
-            { "key": "showToolbarTitle" },
-            { "key": "filterToolbar" }
+            {
+              "key": "notConfirmed"
+            },
+            {
+              "key": "confirmed"
+            },
+            {
+              "key": "successTitle"
+            },
+            {
+              "key": "successTextConfirmArrival"
+            }
           ]
         },
         {
@@ -1109,10 +2758,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "refreshEventToolbar" },
-            { "key": "settingsToolbar" },
-            { "key": "reserved" },
-            { "key": "additionalSendOptions" }
+            {
+              "key": "confirmMessage"
+            },
+            {
+              "key": "hideToolbarTitle"
+            },
+            {
+              "key": "showToolbarTitle"
+            },
+            {
+              "key": "filterToolbar"
+            }
           ]
         },
         {
@@ -1120,8 +2777,76 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "copyLinkToTheOnlineClinicReservation" },
-            { "key": "successCopiedLinkForClinicReservation" },
+            {
+              "key": "refreshEventToolbar"
+            },
+            {
+              "key": "settingsToolbar"
+            },
+            {
+              "key": "reserved"
+            },
+            {
+              "key": "additionalSendOptions"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "copyLinkToTheOnlineClinicReservation"
+            },
+            {
+              "key": "successCopiedLinkForClinicReservation"
+            },
+            {
+              "key": "generateInvoice"
+            },
+            {
+              "key": "filterTooltip"
+            },
+            {
+              "key": "call"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "firstDayOfWeek"
+            },
+            {
+              "key": "dayStartHour"
+            },
+            {
+              "key": "dayEndHour"
+            },
+            {
+              "key": "slotDuration"
+            },
+            {
+              "key": "slotInterval"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "confirmRequestFromClient"
+            },
+            {
+              "key": "confirmEventMove"
+            },
+            {},
             {}
           ]
         }
@@ -1138,10 +2863,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "calendar" },
-            { "key": "customer" },
-            { "key": "users" },
-            { "key": "store" }
+            {
+              "key": "calendar"
+            },
+            {
+              "key": "customer"
+            },
+            {
+              "key": "users"
+            },
+            {
+              "key": "store"
+            }
           ]
         },
         {
@@ -1149,10 +2882,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "parameters" },
-            { "key": "vaucher" },
-            { "key": "translation" },
-            { "key": "todo" }
+            {
+              "key": "parameters"
+            },
+            {
+              "key": "vaucher"
+            },
+            {
+              "key": "translation"
+            },
+            {
+              "key": "todo"
+            }
           ]
         },
         {
@@ -1160,10 +2901,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "myComplaint" },
-            { "key": "myTherapy" },
-            { "key": "myDocument" },
-            { "key": "reservations" }
+            {
+              "key": "myComplaint"
+            },
+            {
+              "key": "myTherapy"
+            },
+            {
+              "key": "myDocument"
+            },
+            {
+              "key": "reservations"
+            }
           ]
         },
         {
@@ -1171,11 +2920,21 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "myCalendar" },
-            { "key": "systemLogErrors" },
-            { "key": "systemLogInfo" },
-            { "key": "systemLogWarn" },
-            { "key": "complaintMenu" }
+            {
+              "key": "myCalendar"
+            },
+            {
+              "key": "systemLogErrors"
+            },
+            {
+              "key": "systemLogInfo"
+            },
+            {
+              "key": "systemLogWarn"
+            },
+            {
+              "key": "complaintMenu"
+            }
           ]
         },
         {
@@ -1183,10 +2942,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "therapyMenu" },
-            { "key": "treatmentMenu" },
-            { "key": "recommendationMenu" },
-            { "key": "relationshipMenu" }
+            {
+              "key": "therapyMenu"
+            },
+            {
+              "key": "treatmentMenu"
+            },
+            {
+              "key": "recommendationMenu"
+            },
+            {
+              "key": "relationshipMenu"
+            }
           ]
         },
         {
@@ -1194,10 +2961,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "socialMenu" },
-            { "key": "doctorMenu" },
-            { "key": "doctorsMenu" },
-            { "key": "vatTaxMenu" }
+            {
+              "key": "socialMenu"
+            },
+            {
+              "key": "doctorMenu"
+            },
+            {
+              "key": "doctorsMenu"
+            },
+            {
+              "key": "vatTaxMenu"
+            }
           ]
         },
         {
@@ -1205,11 +2980,21 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "csMenu" },
-            { "key": "stateMenu" },
-            { "key": "eventCategoryMenu" },
-            { "key": "eventCategoryStatistic" },
-            { "key": "workTimeColorsMenu" }
+            {
+              "key": "csMenu"
+            },
+            {
+              "key": "stateMenu"
+            },
+            {
+              "key": "eventCategoryMenu"
+            },
+            {
+              "key": "eventCategoryStatistic"
+            },
+            {
+              "key": "workTimeColorsMenu"
+            }
           ]
         },
         {
@@ -1217,11 +3002,21 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "areaCode" },
-            { "key": "systemSettingsTitleMenu" },
-            { "key": "systemSettingsTitle" },
-            { "key": "applicationSettingsTitleMenu" },
-            { "key": "systemLogsTitle" }
+            {
+              "key": "areaCode"
+            },
+            {
+              "key": "systemSettingsTitleMenu"
+            },
+            {
+              "key": "systemSettingsTitle"
+            },
+            {
+              "key": "applicationSettingsTitleMenu"
+            },
+            {
+              "key": "systemLogsTitle"
+            }
           ]
         },
         {
@@ -1229,10 +3024,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "userTitleMenu" },
-            { "key": "patientTitleMenu" },
-            { "key": "applicationParametersSettingsTitle" },
-            { "key": "templateAccount" }
+            {
+              "key": "userTitleMenu"
+            },
+            {
+              "key": "patientTitleMenu"
+            },
+            {
+              "key": "applicationParametersSettingsTitle"
+            },
+            {
+              "key": "templateAccount"
+            }
           ]
         },
         {
@@ -1240,10 +3043,21 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "mailReminderMessage" },
-            { "key": "mailApproveReservation" },
-            { "key": "mailDenyReservation" },
-            { "key": "mailConfirmArrival" }
+            {
+              "key": "mailReminderMessage"
+            },
+            {
+              "key": "mailApproveReservation"
+            },
+            {
+              "key": "mailDenyReservation"
+            },
+            {
+              "key": "mailConfirmArrival"
+            },
+            {
+              "key": "mailPatientCreatedAccount"
+            }
           ]
         },
         {
@@ -1251,10 +3065,24 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "mailPatientCreatedAccount" },
-            { "key": "mailPatientFormRegistration" },
-            { "key": "smsReminderMessage" },
-            { "key": "changeSuperadminProfile" }
+            {
+              "key": "mailPatientCreatedAccountViaForm"
+            },
+            {
+              "key": "mailPatientFormRegistration"
+            },
+            {
+              "key": "mailMassiveMessage"
+            },
+            {
+              "key": "smsReminderMessage"
+            },
+            {
+              "key": "smsMassiveMessage"
+            },
+            {
+              "key": "changeSuperadminProfile"
+            }
           ]
         },
         {
@@ -1262,10 +3090,40 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "userAccess" },
-            { "key": "smsCount" },
-            { "key": "massiveSms" },
-            { "key": "massiveEmail" }
+            {
+              "key": "userAccess"
+            },
+            {
+              "key": "smsCount"
+            },
+            {
+              "key": "marketing"
+            },
+            {
+              "key": "massiveSms"
+            },
+            {
+              "key": "massiveEmail"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "invoicePrefixMenu"
+            },
+            {
+              "key": "addHoliday"
+            },
+            {
+              "key": "smsBirthdayCongratulation"
+            },
+            {
+              "key": "emailBirthdayCongratulation"
+            }
           ]
         }
       ]
@@ -1281,10 +3139,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "pagerPage" },
-            { "key": "pagerOf" },
-            { "key": "pagerItems" },
-            { "key": "pagerItemsPerPage" }
+            {
+              "key": "pagerPage"
+            },
+            {
+              "key": "pagerOf"
+            },
+            {
+              "key": "pagerItems"
+            },
+            {
+              "key": "pagerItemsPerPage"
+            }
           ]
         },
         {
@@ -1292,10 +3158,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "exportToExcel" },
-            { "key": "exportToPDF" },
-            { "key": "username" },
-            { "key": "firstname" }
+            {
+              "key": "exportToExcel"
+            },
+            {
+              "key": "exportToPDF"
+            },
+            {
+              "key": "username"
+            },
+            {
+              "key": "firstname"
+            }
           ]
         },
         {
@@ -1303,10 +3177,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "lastname" },
-            { "key": "birthday" },
-            { "key": "telephone" },
-            { "key": "email" }
+            {
+              "key": "lastname"
+            },
+            {
+              "key": "birthday"
+            },
+            {
+              "key": "telephone"
+            },
+            {
+              "key": "email"
+            }
           ]
         },
         {
@@ -1314,10 +3196,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "gender" },
-            { "key": "street" },
-            { "key": "streetnumber" },
-            { "key": "city" }
+            {
+              "key": "gender"
+            },
+            {
+              "key": "street"
+            },
+            {
+              "key": "streetnumber"
+            },
+            {
+              "key": "city"
+            }
           ]
         },
         {
@@ -1325,10 +3215,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "mobile" },
-            { "key": "newUser" },
-            { "key": "newCustomer" },
-            { "key": "female" }
+            {
+              "key": "mobile"
+            },
+            {
+              "key": "newUser"
+            },
+            {
+              "key": "newCustomer"
+            },
+            {
+              "key": "female"
+            }
           ]
         },
         {
@@ -1336,10 +3234,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "male" },
-            { "key": "createNewCustomer" },
-            { "key": "uploadFromExcel" },
-            { "key": "searchAllColumn" }
+            {
+              "key": "male"
+            },
+            {
+              "key": "createNewCustomer"
+            },
+            {
+              "key": "uploadFromExcel"
+            },
+            {
+              "key": "searchAllColumn"
+            }
           ]
         },
         {
@@ -1347,10 +3253,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "required" },
-            { "key": "attention" },
-            { "key": "physicalComplaint" },
-            { "key": "addNew" }
+            {
+              "key": "required"
+            },
+            {
+              "key": "attention"
+            },
+            {
+              "key": "physicalComplaint"
+            },
+            {
+              "key": "addNew"
+            }
           ]
         },
         {
@@ -1358,13 +3272,27 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "add" },
-            { "key": "update" },
-            { "key": "edit" },
-            { "key": "discardChanges" },
-            { "key": "cancel" },
-            { "key": "category" },
-            { "key": "sequence" }
+            {
+              "key": "add"
+            },
+            {
+              "key": "update"
+            },
+            {
+              "key": "edit"
+            },
+            {
+              "key": "discardChanges"
+            },
+            {
+              "key": "cancel"
+            },
+            {
+              "key": "category"
+            },
+            {
+              "key": "sequence"
+            }
           ]
         },
         {
@@ -1372,11 +3300,21 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "remove" },
-            { "key": "color" },
-            { "key": "comment" },
-            { "key": "successTitle" },
-            { "key": "successTextAdd" }
+            {
+              "key": "remove"
+            },
+            {
+              "key": "color"
+            },
+            {
+              "key": "comment"
+            },
+            {
+              "key": "successTitle"
+            },
+            {
+              "key": "successTextAdd"
+            }
           ]
         },
         {
@@ -1384,10 +3322,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "successTextEdit" },
-            { "key": "errorTitle" },
-            { "key": "errorTextAdd" },
-            { "key": "errorTextEdit" }
+            {
+              "key": "successTextEdit"
+            },
+            {
+              "key": "errorTitle"
+            },
+            {
+              "key": "errorTextAdd"
+            },
+            {
+              "key": "errorTextEdit"
+            }
           ]
         },
         {
@@ -1395,10 +3341,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "successTextDelete" },
-            { "key": "confirmMessageText" },
-            { "key": "createData" },
-            { "key": "language" }
+            {
+              "key": "successTextDelete"
+            },
+            {
+              "key": "confirmMessageText"
+            },
+            {
+              "key": "createData"
+            },
+            {
+              "key": "language"
+            }
           ]
         },
         {
@@ -1406,9 +3360,15 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "active" },
-            { "key": "inactive" },
-            { "key": "noRecordYet" }
+            {
+              "key": "active"
+            },
+            {
+              "key": "inactive"
+            },
+            {
+              "key": "noRecordYet"
+            }
           ]
         }
       ]
@@ -1424,9 +3384,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "profile" },
-            { "key": "settings" },
-            { "key": "logout" }
+            {
+              "key": "profile"
+            },
+            {
+              "key": "settings"
+            },
+            {
+              "key": "logout"
+            },
+            {
+              "key": "invoice"
+            }
           ]
         }
       ]
@@ -1442,10 +3411,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "pagerPage" },
-            { "key": "pagerOf" },
-            { "key": "pagerItems" },
-            { "key": "pagerItemsPerPage" }
+            {
+              "key": "pagerPage"
+            },
+            {
+              "key": "pagerOf"
+            },
+            {
+              "key": "pagerItems"
+            },
+            {
+              "key": "pagerItemsPerPage"
+            }
           ]
         },
         {
@@ -1453,10 +3430,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "backToGrid" },
-            { "key": "successUpdateTitle" },
-            { "key": "successUpdateText" },
-            { "key": "successUpdateTextProfile" }
+            {
+              "key": "backToGrid"
+            },
+            {
+              "key": "successUpdateTitle"
+            },
+            {
+              "key": "successUpdateText"
+            },
+            {
+              "key": "successUpdateTextProfile"
+            }
           ]
         },
         {
@@ -1464,10 +3449,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "successUpdateTextData" },
-            { "key": "successAddDataTitle" },
-            { "key": "successAddDataText" },
-            { "key": "profile" }
+            {
+              "key": "successUpdateTextData"
+            },
+            {
+              "key": "successAddDataTitle"
+            },
+            {
+              "key": "successAddDataText"
+            },
+            {
+              "key": "profile"
+            }
           ]
         },
         {
@@ -1475,10 +3468,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "workTime" },
-            { "key": "monday" },
-            { "key": "tuesday" },
-            { "key": "wednesday" }
+            {
+              "key": "workTime"
+            },
+            {
+              "key": "monday"
+            },
+            {
+              "key": "tuesday"
+            },
+            {
+              "key": "wednesday"
+            }
           ]
         },
         {
@@ -1486,10 +3487,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "thursday" },
-            { "key": "friday" },
-            { "key": "therapyForLastWeek" },
-            { "key": "updateSettings" }
+            {
+              "key": "thursday"
+            },
+            {
+              "key": "friday"
+            },
+            {
+              "key": "therapyForLastWeek"
+            },
+            {
+              "key": "updateSettings"
+            }
           ]
         },
         {
@@ -1497,10 +3506,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "description" },
-            { "key": "totalTherapy" },
-            { "key": "averagePerMonth" },
-            { "key": "therapyForLastMonth" }
+            {
+              "key": "description"
+            },
+            {
+              "key": "totalTherapy"
+            },
+            {
+              "key": "averagePerMonth"
+            },
+            {
+              "key": "therapyForLastMonth"
+            }
           ]
         },
         {
@@ -1508,10 +3525,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "permissions" },
-            { "key": "noSetTimeForUserNote" },
-            { "key": "previous" },
-            { "key": "next" }
+            {
+              "key": "permissions"
+            },
+            {
+              "key": "noSetTimeForUserNote"
+            },
+            {
+              "key": "previous"
+            },
+            {
+              "key": "next"
+            }
           ]
         },
         {
@@ -1519,17 +3544,36 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "validFromDate" },
-            { "key": "allowedOnlineReservationForUser" },
-            { "key": "createTime" },
-            { "key": "setWorkTime" }
+            {
+              "key": "validFromDate"
+            },
+            {
+              "key": "allowedOnlineReservationForUser"
+            },
+            {
+              "key": "createTime"
+            },
+            {
+              "key": "setWorkTime"
+            }
           ]
         },
         {
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "updateWorkTime" }, { "key": "aliasName" }, {}, {}]
+          "items": [
+            {
+              "key": "updateWorkTime"
+            },
+            {
+              "key": "aliasName"
+            },
+            {
+              "key": "orderNumber"
+            },
+            {}
+          ]
         }
       ]
     },
@@ -1544,10 +3588,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "title" },
-            { "key": "order" },
-            { "key": "unit" },
-            { "key": "description" }
+            {
+              "key": "title"
+            },
+            {
+              "key": "order"
+            },
+            {
+              "key": "unit"
+            },
+            {
+              "key": "description"
+            }
           ]
         },
         {
@@ -1555,10 +3607,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "artNr" },
-            { "key": "netPrice" },
-            { "key": "vat" },
-            { "key": "grossPrice" }
+            {
+              "key": "artNr"
+            },
+            {
+              "key": "netPrice"
+            },
+            {
+              "key": "vat"
+            },
+            {
+              "key": "grossPrice"
+            }
           ]
         },
         {
@@ -1566,10 +3626,33 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "category" },
-            { "key": "webAddress" },
-            { "key": "shortname" },
-            { "key": "allowSendInformation" }
+            {
+              "key": "category"
+            },
+            {
+              "key": "webAddress"
+            },
+            {
+              "key": "shortname"
+            },
+            {
+              "key": "allowSendInformation"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "titleOnInvoice"
+            },
+            {
+              "key": "printOnInvoice"
+            },
+            {},
+            {}
           ]
         }
       ]
@@ -1585,10 +3668,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "pagerPage" },
-            { "key": "pagerOf" },
-            { "key": "pagerItems" },
-            { "key": "pagerItemsPerPage" }
+            {
+              "key": "pagerPage"
+            },
+            {
+              "key": "pagerOf"
+            },
+            {
+              "key": "pagerItems"
+            },
+            {
+              "key": "pagerItemsPerPage"
+            }
           ]
         },
         {
@@ -1596,10 +3687,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "exist" },
-            { "key": "notAdded" },
-            { "key": "error" },
-            { "key": "successful" }
+            {
+              "key": "exist"
+            },
+            {
+              "key": "notAdded"
+            },
+            {
+              "key": "error"
+            },
+            {
+              "key": "successful"
+            }
           ]
         },
         {
@@ -1607,10 +3706,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "createNewStore" },
-            { "key": "createStore" },
-            { "key": "updateStore" },
-            { "key": "telephone" }
+            {
+              "key": "createNewStore"
+            },
+            {
+              "key": "createStore"
+            },
+            {
+              "key": "updateStore"
+            },
+            {
+              "key": "telephone"
+            }
           ]
         },
         {
@@ -1618,10 +3725,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "email" },
-            { "key": "gender" },
-            { "key": "street" },
-            { "key": "streetnumber" }
+            {
+              "key": "email"
+            },
+            {
+              "key": "gender"
+            },
+            {
+              "key": "street"
+            },
+            {
+              "key": "streetnumber"
+            }
           ]
         },
         {
@@ -1629,10 +3744,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "city" },
-            { "key": "mobile" },
-            { "key": "storename" },
-            { "key": "zipCode" }
+            {
+              "key": "city"
+            },
+            {
+              "key": "mobile"
+            },
+            {
+              "key": "storename"
+            },
+            {
+              "key": "zipCode"
+            }
           ]
         },
         {
@@ -1640,10 +3763,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "place" },
-            { "key": "comment" },
-            { "key": "timeDuration" },
-            { "key": "timeTherapy" }
+            {
+              "key": "place"
+            },
+            {
+              "key": "comment"
+            },
+            {
+              "key": "timeDuration"
+            },
+            {
+              "key": "timeTherapy"
+            }
           ]
         },
         {
@@ -1651,10 +3782,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "startWork" },
-            { "key": "endWork" },
-            { "key": "newStore" },
-            { "key": "exportToExcel" }
+            {
+              "key": "startWork"
+            },
+            {
+              "key": "endWork"
+            },
+            {
+              "key": "newStore"
+            },
+            {
+              "key": "exportToExcel"
+            }
           ]
         },
         {
@@ -1662,10 +3801,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "exportToPDF" },
-            { "key": "uploadFromExcel" },
-            { "key": "required" },
-            { "key": "searchAllColumn" }
+            {
+              "key": "exportToPDF"
+            },
+            {
+              "key": "uploadFromExcel"
+            },
+            {
+              "key": "required"
+            },
+            {
+              "key": "searchAllColumn"
+            }
           ]
         }
       ]
@@ -1681,10 +3828,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "addTherapy" },
-            { "key": "updateTherapy" },
-            { "key": "choiceComplaint" },
-            { "key": "choiceTherapy" }
+            {
+              "key": "addTherapy"
+            },
+            {
+              "key": "updateTherapy"
+            },
+            {
+              "key": "choiceComplaint"
+            },
+            {
+              "key": "choiceTherapy"
+            }
           ]
         },
         {
@@ -1692,10 +3847,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "choicePreviousTherapy" },
-            { "key": "choiceState" },
-            { "key": "updateCustomer" },
-            { "key": "uploadDocument" }
+            {
+              "key": "choicePreviousTherapy"
+            },
+            {
+              "key": "choiceState"
+            },
+            {
+              "key": "updateCustomer"
+            },
+            {
+              "key": "uploadDocument"
+            }
           ]
         },
         {
@@ -1703,10 +3866,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "baseOne" },
-            { "key": "baseTwo" },
-            { "key": "physicalIllness" },
-            { "key": "recommendation" }
+            {
+              "key": "baseOne"
+            },
+            {
+              "key": "baseTwo"
+            },
+            {
+              "key": "physicalIllness"
+            },
+            {
+              "key": "recommendation"
+            }
           ]
         },
         {
@@ -1714,10 +3885,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "relationship" },
-            { "key": "social" },
-            { "key": "doctor" },
-            { "key": "doctorType" }
+            {
+              "key": "relationship"
+            },
+            {
+              "key": "social"
+            },
+            {
+              "key": "doctor"
+            },
+            {
+              "key": "doctorType"
+            }
           ]
         },
         {
@@ -1725,10 +3904,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "firstDate" },
-            { "key": "additionalField" },
-            { "key": "addData" },
-            { "key": "editData" }
+            {
+              "key": "firstDate"
+            },
+            {
+              "key": "additionalField"
+            },
+            {
+              "key": "addData"
+            },
+            {
+              "key": "editData"
+            }
           ]
         },
         {
@@ -1736,10 +3923,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "size" },
-            { "key": "weight" },
-            { "key": "phone" },
-            { "key": "mobilePhone" }
+            {
+              "key": "size"
+            },
+            {
+              "key": "weight"
+            },
+            {
+              "key": "phone"
+            },
+            {
+              "key": "mobilePhone"
+            }
           ]
         },
         {
@@ -1747,10 +3942,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "birthday" },
-            { "key": "inCompanySince" },
-            { "key": "childs" },
-            { "key": "notes" }
+            {
+              "key": "birthday"
+            },
+            {
+              "key": "inCompanySince"
+            },
+            {
+              "key": "childs"
+            },
+            {
+              "key": "notes"
+            }
           ]
         },
         {
@@ -1758,10 +3961,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "profession" },
-            { "key": "useful" },
-            { "key": "internalOrgans" },
-            { "key": "operations" }
+            {
+              "key": "profession"
+            },
+            {
+              "key": "useful"
+            },
+            {
+              "key": "internalOrgans"
+            },
+            {
+              "key": "operations"
+            }
           ]
         },
         {
@@ -1769,10 +3980,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "previousFindidngs" },
-            { "key": "medicament" },
-            { "key": "allergies" },
-            { "key": "skinSensitivity" }
+            {
+              "key": "previousFindidngs"
+            },
+            {
+              "key": "medicament"
+            },
+            {
+              "key": "allergies"
+            },
+            {
+              "key": "skinSensitivity"
+            }
           ]
         },
         {
@@ -1780,10 +3999,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "pregnancy" },
-            { "key": "female" },
-            { "key": "male" },
-            { "key": "baseDataOne" }
+            {
+              "key": "pregnancy"
+            },
+            {
+              "key": "female"
+            },
+            {
+              "key": "male"
+            },
+            {
+              "key": "baseDataOne"
+            }
           ]
         },
         {
@@ -1791,10 +4018,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "baseDataTwo" },
-            { "key": "username" },
-            { "key": "firstname" },
-            { "key": "lastname" }
+            {
+              "key": "baseDataTwo"
+            },
+            {
+              "key": "username"
+            },
+            {
+              "key": "firstname"
+            },
+            {
+              "key": "lastname"
+            }
           ]
         },
         {
@@ -1802,10 +4037,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "telephone" },
-            { "key": "email" },
-            { "key": "gender" },
-            { "key": "street" }
+            {
+              "key": "telephone"
+            },
+            {
+              "key": "email"
+            },
+            {
+              "key": "gender"
+            },
+            {
+              "key": "street"
+            }
           ]
         },
         {
@@ -1813,10 +4056,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "streetnumber" },
-            { "key": "city" },
-            { "key": "mobile" },
-            { "key": "createNewUser" }
+            {
+              "key": "streetnumber"
+            },
+            {
+              "key": "city"
+            },
+            {
+              "key": "mobile"
+            },
+            {
+              "key": "createNewUser"
+            }
           ]
         },
         {
@@ -1824,10 +4075,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "updateUser" },
-            { "key": "password" },
-            { "key": "zipCode" },
-            { "key": "place" }
+            {
+              "key": "updateUser"
+            },
+            {
+              "key": "password"
+            },
+            {
+              "key": "zipCode"
+            },
+            {
+              "key": "place"
+            }
           ]
         },
         {
@@ -1835,10 +4094,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "sincecompany" },
-            { "key": "userType" },
-            { "key": "storeLocation" },
-            { "key": "cs" }
+            {
+              "key": "sincecompany"
+            },
+            {
+              "key": "userType"
+            },
+            {
+              "key": "storeLocation"
+            },
+            {
+              "key": "cs"
+            }
           ]
         },
         {
@@ -1846,10 +4113,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "em" },
-            { "key": "complaintValue" },
-            { "key": "therapyValue" },
-            { "key": "treatmentValue" }
+            {
+              "key": "em"
+            },
+            {
+              "key": "complaintValue"
+            },
+            {
+              "key": "therapyValue"
+            },
+            {
+              "key": "treatmentValue"
+            }
           ]
         },
         {
@@ -1857,10 +4132,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "documentValue" },
-            { "key": "comment" },
-            { "key": "stateValue" },
-            { "key": "newUser" }
+            {
+              "key": "documentValue"
+            },
+            {
+              "key": "comment"
+            },
+            {
+              "key": "stateValue"
+            },
+            {
+              "key": "newUser"
+            }
           ]
         },
         {
@@ -1868,10 +4151,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "exportToExcel" },
-            { "key": "exportToPDF" },
-            { "key": "uploadFromExcel" },
-            { "key": "patient" }
+            {
+              "key": "exportToExcel"
+            },
+            {
+              "key": "exportToPDF"
+            },
+            {
+              "key": "uploadFromExcel"
+            },
+            {
+              "key": "patient"
+            }
           ]
         },
         {
@@ -1879,10 +4170,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "newCustomer" },
-            { "key": "baseDate" },
-            { "key": "attention" },
-            { "key": "physicalComplaint" }
+            {
+              "key": "newCustomer"
+            },
+            {
+              "key": "baseDate"
+            },
+            {
+              "key": "attention"
+            },
+            {
+              "key": "physicalComplaint"
+            }
           ]
         },
         {
@@ -1890,10 +4189,21 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "aboutMe" },
-            { "key": "company" },
-            { "key": "noInformation" },
-            { "key": "fullName" }
+            {
+              "key": "aboutMe"
+            },
+            {
+              "key": "company"
+            },
+            {
+              "key": "companyName"
+            },
+            {
+              "key": "noInformation"
+            },
+            {
+              "key": "fullName"
+            }
           ]
         },
         {
@@ -1901,10 +4211,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "edit" },
-            { "key": "delete" },
-            { "key": "print" },
-            { "key": "required" }
+            {
+              "key": "edit"
+            },
+            {
+              "key": "delete"
+            },
+            {
+              "key": "print"
+            },
+            {
+              "key": "required"
+            }
           ]
         },
         {
@@ -1912,10 +4230,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "searchAllColumn" },
-            { "key": "storename" },
-            { "key": "download" },
-            { "key": "updateDocument" }
+            {
+              "key": "searchAllColumn"
+            },
+            {
+              "key": "storename"
+            },
+            {
+              "key": "download"
+            },
+            {
+              "key": "updateDocument"
+            }
           ]
         },
         {
@@ -1923,10 +4249,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "addComplaint" },
-            { "key": "updateComplaint" },
-            { "key": "settings" },
-            { "key": "confirmMessageText" }
+            {
+              "key": "addComplaint"
+            },
+            {
+              "key": "updateComplaint"
+            },
+            {
+              "key": "settings"
+            },
+            {
+              "key": "confirmMessageText"
+            }
           ]
         },
         {
@@ -1934,10 +4268,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "createNewCustomerDialog" },
-            { "key": "customerInformationDialog" },
-            { "key": "patientForm" },
-            { "key": "sendPatientFormOnMail" }
+            {
+              "key": "createNewCustomerDialog"
+            },
+            {
+              "key": "customerInformationDialog"
+            },
+            {
+              "key": "patientForm"
+            },
+            {
+              "key": "sendPatientFormOnMail"
+            }
           ]
         },
         {
@@ -1945,10 +4287,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "sendPatientFormButton" },
-            { "key": "copyLinkToFormButton" },
-            { "key": "successCopiedFormLink" },
-            { "key": "successSendFormToMail" }
+            {
+              "key": "sendPatientFormButton"
+            },
+            {
+              "key": "copyLinkToFormButton"
+            },
+            {
+              "key": "successCopiedFormLink"
+            },
+            {
+              "key": "successSendFormToMail"
+            }
           ]
         },
         {
@@ -1956,10 +4306,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "errorSendFormToMail" },
-            { "key": "contactPatient" },
-            { "key": "mobileEdit" },
-            { "key": "telephoneEdit" }
+            {
+              "key": "errorSendFormToMail"
+            },
+            {
+              "key": "contactPatient"
+            },
+            {
+              "key": "mobileEdit"
+            },
+            {
+              "key": "telephoneEdit"
+            }
           ]
         }
       ]
@@ -2071,10 +4429,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "adminSuccessCreateTitle" },
-            { "key": "adminSuccessCreateText" },
-            { "key": "adminErrorCreateTitle" },
-            { "key": "adminErrorCreateText" }
+            {
+              "key": "adminSuccessCreateTitle"
+            },
+            {
+              "key": "adminSuccessCreateText"
+            },
+            {
+              "key": "adminErrorCreateTitle"
+            },
+            {
+              "key": "adminErrorCreateText"
+            }
           ]
         },
         {
@@ -2082,10 +4448,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "adminSuccessUpdateTitle" },
-            { "key": "adminSuccessUpdateText" },
-            { "key": "adminErrorUpdateTitle" },
-            { "key": "adminErrorUpdateText" }
+            {
+              "key": "adminSuccessUpdateTitle"
+            },
+            {
+              "key": "adminSuccessUpdateText"
+            },
+            {
+              "key": "adminErrorUpdateTitle"
+            },
+            {
+              "key": "adminErrorUpdateText"
+            }
           ]
         },
         {
@@ -2093,10 +4467,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "owner" },
-            { "key": "manager" },
-            { "key": "doctor" },
-            { "key": "nurse" }
+            {
+              "key": "adminSuccessDeleteTitle"
+            },
+            {
+              "key": "adminSuccessDeleteText"
+            },
+            {
+              "key": "adminErrorDeleteTitle"
+            },
+            {
+              "key": "adminErrorDeleteText"
+            }
           ]
         },
         {
@@ -2104,10 +4486,34 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "patient" },
-            { "key": "administrator" },
-            { "key": "count" },
-            {}
+            {
+              "key": "owner"
+            },
+            {
+              "key": "manager"
+            },
+            {
+              "key": "doctor"
+            },
+            {
+              "key": "nurse"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "patient"
+            },
+            {
+              "key": "administrator"
+            },
+            {
+              "key": "count"
+            }
           ]
         }
       ]
@@ -2187,10 +4593,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "initialGreeting" },
-            { "key": "finalGreeting" },
-            { "key": "signature" },
-            { "key": "thanksForUsing" }
+            {
+              "key": "initialGreeting"
+            },
+            {
+              "key": "finalGreeting"
+            },
+            {
+              "key": "signature"
+            },
+            {
+              "key": "thanksForUsing"
+            }
           ]
         },
         {
@@ -2198,16 +4612,48 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "websiteLink" },
-            { "key": "ifYouHaveQuestion" },
-            { "key": "emailAddress" }
+            {
+              "key": "websiteLink"
+            },
+            {
+              "key": "ifYouHaveQuestion"
+            },
+            {
+              "key": "emailAddress"
+            }
           ]
         },
         {
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "notReply" }, { "key": "copyRight" }]
+          "items": [
+            {
+              "key": "notReply"
+            },
+            {
+              "key": "copyRight"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "signatureStreet"
+            },
+            {
+              "key": "signatureZipCode"
+            },
+            {
+              "key": "signaturePhone"
+            },
+            {
+              "key": "signatureEmail"
+            }
+          ]
         }
       ]
     },
@@ -2221,7 +4667,11 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "subjectConfirmArrival" }]
+          "items": [
+            {
+              "key": "subjectConfirmArrival"
+            }
+          ]
         },
         {
           "type": "div",
@@ -2239,10 +4689,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "dateMessage" },
-            { "key": "timeMessage" },
-            { "key": "therapyMessage" },
-            { "key": "doctorMessage" }
+            {
+              "key": "dateMessage"
+            },
+            {
+              "key": "timeMessage"
+            },
+            {
+              "key": "therapyMessage"
+            },
+            {
+              "key": "doctorMessage"
+            }
           ]
         },
         {
@@ -2260,7 +4718,11 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "confirmArrivalButtonText" }]
+          "items": [
+            {
+              "key": "confirmArrivalButtonText"
+            }
+          ]
         }
       ]
     },
@@ -2274,7 +4736,11 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "subjectConfirmMail" }]
+          "items": [
+            {
+              "key": "subjectConfirmMail"
+            }
+          ]
         },
         {
           "type": "div",
@@ -2291,7 +4757,11 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "confirmMailButtonText" }]
+          "items": [
+            {
+              "key": "confirmMailButtonText"
+            }
+          ]
         }
       ]
     },
@@ -2305,7 +4775,11 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "subjectForgotMail" }]
+          "items": [
+            {
+              "key": "subjectForgotMail"
+            }
+          ]
         },
         {
           "type": "div",
@@ -2322,7 +4796,11 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "forgotMailButtonText" }]
+          "items": [
+            {
+              "key": "forgotMailButtonText"
+            }
+          ]
         }
       ]
     },
@@ -2336,7 +4814,11 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "subjectCreatedPatientForm" }]
+          "items": [
+            {
+              "key": "subjectCreatedPatientForm"
+            }
+          ]
         },
         {
           "type": "div",
@@ -2354,9 +4836,15 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "linkForLogin" },
-            { "key": "emailForLogin" },
-            { "key": "passwordForLogin" }
+            {
+              "key": "linkForLogin"
+            },
+            {
+              "key": "emailForLogin"
+            },
+            {
+              "key": "passwordForLogin"
+            }
           ]
         }
       ]
@@ -2371,7 +4859,11 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "subjectFormRegistration" }]
+          "items": [
+            {
+              "key": "subjectFormRegistration"
+            }
+          ]
         },
         {
           "type": "div",
@@ -2388,7 +4880,11 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "openForm" }]
+          "items": [
+            {
+              "key": "openForm"
+            }
+          ]
         }
       ]
     },
@@ -2402,7 +4898,11 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "subjectApproveReservation" }]
+          "items": [
+            {
+              "key": "subjectApproveReservation"
+            }
+          ]
         },
         {
           "type": "div",
@@ -2427,7 +4927,11 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "subjectDenyReservation" }]
+          "items": [
+            {
+              "key": "subjectDenyReservation"
+            }
+          ]
         },
         {
           "type": "div",
@@ -2452,7 +4956,11 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "subjectForReminderReservation" }]
+          "items": [
+            {
+              "key": "subjectForReminderReservation"
+            }
+          ]
         },
         {
           "type": "div",
@@ -2477,7 +4985,11 @@
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "initialGreetingSMSReminder" }]
+          "items": [
+            {
+              "key": "initialGreetingSMSReminder"
+            }
+          ]
         },
         {
           "type": "div",
@@ -2503,11 +5015,21 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "settingsBackToHome" },
-            { "key": "settingsAccountNavigation" },
-            { "key": "settingsAccount" },
-            { "key": "settingsChangePassword" },
-            { "key": "settingsPermissionNavigation" }
+            {
+              "key": "settingsBackToHome"
+            },
+            {
+              "key": "settingsAccountNavigation"
+            },
+            {
+              "key": "settingsAccount"
+            },
+            {
+              "key": "settingsChangePassword"
+            },
+            {
+              "key": "settingsPermissionNavigation"
+            }
           ]
         },
         {
@@ -2515,8 +5037,12 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "perimissionForPatientNavigationMenu" },
-            { "key": "settingsChangeLanguage" },
+            {
+              "key": "perimissionForPatientNavigationMenu"
+            },
+            {
+              "key": "settingsChangeLanguage"
+            },
             {},
             {}
           ]
@@ -2534,9 +5060,15 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "accountBasicInformationTitle" },
-            { "key": "accountConfirmDialogTitle" },
-            { "key": "accountConfirmDialogQuestion" }
+            {
+              "key": "accountBasicInformationTitle"
+            },
+            {
+              "key": "accountConfirmDialogTitle"
+            },
+            {
+              "key": "accountConfirmDialogQuestion"
+            }
           ]
         },
         {
@@ -2544,8 +5076,12 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "accountSuccessUpdatedAccountTitle" },
-            { "key": "accountSuccessUpdatedAccountText" }
+            {
+              "key": "accountSuccessUpdatedAccountTitle"
+            },
+            {
+              "key": "accountSuccessUpdatedAccountText"
+            }
           ]
         },
         {
@@ -2553,8 +5089,12 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "accountErrorUpdatedAccountTitle" },
-            { "key": "accountErrorUpdatedAccountText" }
+            {
+              "key": "accountErrorUpdatedAccountTitle"
+            },
+            {
+              "key": "accountErrorUpdatedAccountText"
+            }
           ]
         }
       ]
@@ -2570,9 +5110,15 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "changePasswordTitle" },
-            { "key": "changePasswordConfirmDialogTitle" },
-            { "key": "changePasswordConfirmDialogQuestion" }
+            {
+              "key": "changePasswordTitle"
+            },
+            {
+              "key": "changePasswordConfirmDialogTitle"
+            },
+            {
+              "key": "changePasswordConfirmDialogQuestion"
+            }
           ]
         },
         {
@@ -2580,10 +5126,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "changePasswordOldPassword" },
-            { "key": "changePasswordNewPassword" },
-            { "key": "changePasswordRepeteNewPassword" },
-            { "key": "changePasswordButton" }
+            {
+              "key": "changePasswordOldPassword"
+            },
+            {
+              "key": "changePasswordNewPassword"
+            },
+            {
+              "key": "changePasswordRepeteNewPassword"
+            },
+            {
+              "key": "changePasswordButton"
+            }
           ]
         },
         {
@@ -2591,8 +5145,12 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "changePasswordSuccessUpdatedPasswordTitle" },
-            { "key": "changePasswordSuccessUpdatedPasswordText" }
+            {
+              "key": "changePasswordSuccessUpdatedPasswordTitle"
+            },
+            {
+              "key": "changePasswordSuccessUpdatedPasswordText"
+            }
           ]
         },
         {
@@ -2600,8 +5158,12 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "changePasswordErrorUpdatedPasswordTitle" },
-            { "key": "changePasswordErrorUpdatedPasswordText" }
+            {
+              "key": "changePasswordErrorUpdatedPasswordTitle"
+            },
+            {
+              "key": "changePasswordErrorUpdatedPasswordText"
+            }
           ]
         },
         {
@@ -2609,8 +5171,12 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "changePasswordErrorNotEqualCurrentTitle" },
-            { "key": "changePasswordErrorNotEqualCurrentText" }
+            {
+              "key": "changePasswordErrorNotEqualCurrentTitle"
+            },
+            {
+              "key": "changePasswordErrorNotEqualCurrentText"
+            }
           ]
         },
         {
@@ -2618,8 +5184,12 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "changePasswordErrorRequiredInputTitle" },
-            { "key": "changePasswordErrorRequiredInputText" }
+            {
+              "key": "changePasswordErrorRequiredInputTitle"
+            },
+            {
+              "key": "changePasswordErrorRequiredInputText"
+            }
           ]
         },
         {
@@ -2627,8 +5197,12 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "changePasswordErrorNotEqualTitle" },
-            { "key": "changePasswordErrorNotEqualText" }
+            {
+              "key": "changePasswordErrorNotEqualTitle"
+            },
+            {
+              "key": "changePasswordErrorNotEqualText"
+            }
           ]
         }
       ]
@@ -2644,10 +5218,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "saveLanguage" },
-            { "key": "labelTitle" },
-            { "key": "successChangeLanguageText" },
-            { "key": "errorChangeLanguageText" }
+            {
+              "key": "saveLanguage"
+            },
+            {
+              "key": "labelTitle"
+            },
+            {
+              "key": "successChangeLanguageText"
+            },
+            {
+              "key": "errorChangeLanguageText"
+            }
           ]
         },
         {
@@ -2691,10 +5273,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "permissionPatientMenuTitle" },
-            { "key": "permissionPatientMenuConfirmDialogTitle" },
-            { "key": "permissionPatientMenuConfirmDialogQuestion" },
-            { "key": "changePermissionPatientMenuButton" }
+            {
+              "key": "permissionPatientMenuTitle"
+            },
+            {
+              "key": "permissionPatientMenuConfirmDialogTitle"
+            },
+            {
+              "key": "permissionPatientMenuConfirmDialogQuestion"
+            },
+            {
+              "key": "changePermissionPatientMenuButton"
+            }
           ]
         },
         {
@@ -2702,8 +5292,12 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "permissionPatientMenuSuccessUpdateTitle" },
-            { "key": "permissionPatientMenuSuccessUpdateText" }
+            {
+              "key": "permissionPatientMenuSuccessUpdateTitle"
+            },
+            {
+              "key": "permissionPatientMenuSuccessUpdateText"
+            }
           ]
         },
         {
@@ -2711,8 +5305,12 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "permissionPatientMenuErrorUpdateTitle" },
-            { "key": "permissionPatientMenuErrorUpdateText" }
+            {
+              "key": "permissionPatientMenuErrorUpdateTitle"
+            },
+            {
+              "key": "permissionPatientMenuErrorUpdateText"
+            }
           ]
         }
       ]
@@ -2728,11 +5326,21 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "reservationTitle" },
-            { "key": "reservationConfirmDialogTitle" },
-            { "key": "reservationDialogQuestion" },
-            { "key": "reservationApprove" },
-            { "key": "reservationDeny" }
+            {
+              "key": "reservationTitle"
+            },
+            {
+              "key": "reservationConfirmDialogTitle"
+            },
+            {
+              "key": "reservationDialogQuestion"
+            },
+            {
+              "key": "reservationApprove"
+            },
+            {
+              "key": "reservationDeny"
+            }
           ]
         },
         {
@@ -2740,8 +5348,12 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "reservationSuccessUpdateTitle" },
-            { "key": "reservationSuccessUpdateText" }
+            {
+              "key": "reservationSuccessUpdateTitle"
+            },
+            {
+              "key": "reservationSuccessUpdateText"
+            }
           ]
         },
         {
@@ -2749,8 +5361,12 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "reservationErrorUpdateTitle" },
-            { "key": "reservationErrorUpdateText" }
+            {
+              "key": "reservationErrorUpdateTitle"
+            },
+            {
+              "key": "reservationErrorUpdateText"
+            }
           ]
         },
         {
@@ -2758,8 +5374,12 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "reservationTooltip" },
-            { "key": "approvedReservationTooltip" },
+            {
+              "key": "reservationTooltip"
+            },
+            {
+              "key": "approvedReservationTooltip"
+            },
             {},
             {}
           ]
@@ -2777,12 +5397,24 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "fileUploadTitle" },
-            { "key": "uploadFileButton" },
-            { "key": "queueLength" },
-            { "key": "documentId" },
-            { "key": "documentName" },
-            { "key": "documentSize" }
+            {
+              "key": "fileUploadTitle"
+            },
+            {
+              "key": "uploadFileButton"
+            },
+            {
+              "key": "queueLength"
+            },
+            {
+              "key": "documentId"
+            },
+            {
+              "key": "documentName"
+            },
+            {
+              "key": "documentSize"
+            }
           ]
         },
         {
@@ -2790,11 +5422,21 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "documentDescription" },
-            { "key": "documentDate" },
-            { "key": "documentProgress" },
-            { "key": "documentStatus" },
-            { "key": "documentActions" }
+            {
+              "key": "documentDescription"
+            },
+            {
+              "key": "documentDate"
+            },
+            {
+              "key": "documentProgress"
+            },
+            {
+              "key": "documentStatus"
+            },
+            {
+              "key": "documentActions"
+            }
           ]
         },
         {
@@ -2802,10 +5444,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "uploadFile" },
-            { "key": "cancelFile" },
-            { "key": "removeFile" },
-            { "key": "queueProgress" }
+            {
+              "key": "uploadFile"
+            },
+            {
+              "key": "cancelFile"
+            },
+            {
+              "key": "removeFile"
+            },
+            {
+              "key": "queueProgress"
+            }
           ]
         },
         {
@@ -2813,11 +5463,21 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "uploadAll" },
-            { "key": "cancelAll" },
-            { "key": "removeAll" },
-            { "key": "closeFileUploader" },
-            { "key": "previewDocument" }
+            {
+              "key": "uploadAll"
+            },
+            {
+              "key": "cancelAll"
+            },
+            {
+              "key": "removeAll"
+            },
+            {
+              "key": "closeFileUploader"
+            },
+            {
+              "key": "previewDocument"
+            }
           ]
         }
       ]
@@ -2833,10 +5493,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "sendSMSTitle" },
-            { "key": "sendSMSTo" },
-            { "key": "sendSMS" },
-            { "key": "inputSMSMessage" }
+            {
+              "key": "sendSMSTitle"
+            },
+            {
+              "key": "sendSMSTo"
+            },
+            {
+              "key": "sendSMS"
+            },
+            {
+              "key": "inputSMSMessage"
+            }
           ]
         },
         {
@@ -2844,9 +5512,31 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "successSendSMSMessageText" },
-            { "key": "errorSendSMSMessageText" },
-            { "key": "needToBuySms" }
+            {
+              "key": "successSendSMSMessageText"
+            },
+            {
+              "key": "errorSendSMSMessageText"
+            },
+            {
+              "key": "needToBuySms"
+            },
+            {
+              "key": "countOfRecipientsForSms"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "needToConfigurationParams"
+            },
+            {},
+            {},
+            {}
           ]
         }
       ]
@@ -2862,11 +5552,21 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "sendEmailTitle" },
-            { "key": "sendEmailTo" },
-            { "key": "sendEmail" },
-            { "key": "inputEmailMessage" },
-            { "key": "emailSubject" }
+            {
+              "key": "sendEmailTitle"
+            },
+            {
+              "key": "sendEmailTo"
+            },
+            {
+              "key": "sendEmail"
+            },
+            {
+              "key": "inputEmailMessage"
+            },
+            {
+              "key": "emailSubject"
+            }
           ]
         },
         {
@@ -2874,8 +5574,15 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "successSendEmailMessageText" },
-            { "key": "errorSendEmailMessageText" }
+            {
+              "key": "successSendEmailMessageText"
+            },
+            {
+              "key": "errorSendEmailMessageText"
+            },
+            {
+              "key": "countOfRecipientsForEmail"
+            }
           ]
         }
       ]
@@ -2891,10 +5598,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "reminderMenu" },
-            { "key": "reminderHeaderTitle" },
-            { "key": "reminderConfirmDialogTitle" },
-            { "key": "reminderDialogQuestion" }
+            {
+              "key": "reminderMenu"
+            },
+            {
+              "key": "reminderHeaderTitle"
+            },
+            {
+              "key": "reminderConfirmDialogTitle"
+            },
+            {
+              "key": "reminderDialogQuestion"
+            }
           ]
         },
         {
@@ -2902,9 +5617,15 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "sendReminderViaEMail" },
-            { "key": "sendReminderViaSMS" },
-            { "key": "changeReminderSettingsButton" }
+            {
+              "key": "sendReminderViaEMail"
+            },
+            {
+              "key": "sendReminderViaSMS"
+            },
+            {
+              "key": "changeReminderSettingsButton"
+            }
           ]
         },
         {
@@ -2912,8 +5633,12 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "successChangeReminderSettingsText" },
-            { "key": "errorChangeReminderSettingsText" }
+            {
+              "key": "successChangeReminderSettingsText"
+            },
+            {
+              "key": "errorChangeReminderSettingsText"
+            }
           ]
         }
       ]
@@ -2929,10 +5654,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "loadDemoAccountTitle" },
-            { "key": "loadDemoAccountHeader" },
-            { "key": "loadDemoAccountText" },
-            { "key": "loadDemoAccountChooise" }
+            {
+              "key": "loadDemoAccountTitle"
+            },
+            {
+              "key": "loadDemoAccountHeader"
+            },
+            {
+              "key": "loadDemoAccountText"
+            },
+            {
+              "key": "loadDemoAccountChooise"
+            }
           ]
         },
         {
@@ -2940,17 +5673,29 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "loadDemoAccountNoThanks" },
-            { "key": "loadDemoAccountButton" },
-            { "key": "loadingDemoTitle" },
-            { "key": "loadingDemoHeader" }
+            {
+              "key": "loadDemoAccountNoThanks"
+            },
+            {
+              "key": "loadDemoAccountButton"
+            },
+            {
+              "key": "loadingDemoTitle"
+            },
+            {
+              "key": "loadingDemoHeader"
+            }
           ]
         },
         {
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "loadingDemoText" }]
+          "items": [
+            {
+              "key": "loadingDemoText"
+            }
+          ]
         }
       ]
     },
@@ -2965,11 +5710,21 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "mailSubject" },
-            { "key": "mailInitialGreeting" },
-            { "key": "mailMessage" },
-            { "key": "mailDate" },
-            { "key": "mailTime" }
+            {
+              "key": "mailSubject"
+            },
+            {
+              "key": "mailInitialGreeting"
+            },
+            {
+              "key": "mailMessage"
+            },
+            {
+              "key": "mailDate"
+            },
+            {
+              "key": "mailTime"
+            }
           ]
         },
         {
@@ -2977,10 +5732,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "mailClinic" },
-            { "key": "mailTherapy" },
-            { "key": "mailDoctor" },
-            { "key": "mailFinalGreeting" }
+            {
+              "key": "mailClinic"
+            },
+            {
+              "key": "mailTherapy"
+            },
+            {
+              "key": "mailDoctor"
+            },
+            {
+              "key": "mailFinalGreeting"
+            }
           ]
         },
         {
@@ -2988,10 +5751,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "mailSignature" },
-            { "key": "mailThanksForUsing" },
-            { "key": "mailIfYouHaveQuestion" },
-            { "key": "mailNotReply" }
+            {
+              "key": "mailSignature"
+            },
+            {
+              "key": "mailThanksForUsing"
+            },
+            {
+              "key": "mailIfYouHaveQuestion"
+            },
+            {
+              "key": "mailNotReply"
+            }
           ]
         },
         {
@@ -2999,10 +5770,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "mailCopyRight" },
-            { "key": "signatureAvailable" },
-            { "key": "signatureAddress" },
-            { "key": "signatureTelephone" }
+            {
+              "key": "mailCopyRight"
+            },
+            {
+              "key": "signatureAvailable"
+            },
+            {
+              "key": "signatureAddress"
+            },
+            {
+              "key": "signatureTelephone"
+            }
           ]
         },
         {
@@ -3010,8 +5789,12 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "signatureMobile" },
-            { "key": "signatureEmail" },
+            {
+              "key": "signatureMobile"
+            },
+            {
+              "key": "signatureEmail"
+            },
             {},
             {}
           ]
@@ -3029,10 +5812,18 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "smsSubject" },
-            { "key": "smsMessage" },
-            { "key": "smsDate" },
-            { "key": "smsTime" }
+            {
+              "key": "smsSubject"
+            },
+            {
+              "key": "smsMessage"
+            },
+            {
+              "key": "smsDate"
+            },
+            {
+              "key": "smsTime"
+            }
           ]
         },
         {
@@ -3040,17 +5831,34 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "smsClinic" },
-            { "key": "smsSignatureAddress" },
-            { "key": "smsSignatureTelephone" },
-            { "key": "smsSignatureMobile" }
+            {
+              "key": "smsClinic"
+            },
+            {
+              "key": "smsSignatureAddress"
+            },
+            {
+              "key": "smsSignatureTelephone"
+            },
+            {
+              "key": "smsSignatureMobile"
+            }
           ]
         },
         {
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "smsSignatureEmail" }, {}, {}, {}]
+          "items": [
+            {
+              "key": "smsSignatureEmail"
+            },
+            {
+              "key": "smsSignaturePoweredBy"
+            },
+            {},
+            {}
+          ]
         }
       ]
     },
@@ -3065,17 +5873,32 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "sequenceOfCount" },
-            { "key": "nameOfCount" },
-            { "key": "shortnameOfCount" },
-            { "key": "categoryOfCount" }
+            {
+              "key": "sequenceOfCount"
+            },
+            {
+              "key": "nameOfCount"
+            },
+            {
+              "key": "shortnameOfCount"
+            },
+            {
+              "key": "categoryOfCount"
+            }
           ]
         },
         {
           "type": "div",
           "display": "flex",
           "flex-direction": "row",
-          "items": [{ "key": "displayOfCount" }, {}, {}, {}]
+          "items": [
+            {
+              "key": "displayOfCount"
+            },
+            {},
+            {},
+            {}
+          ]
         }
       ]
     },
@@ -3347,10 +6170,273 @@
           "display": "flex",
           "flex-direction": "row",
           "items": [
-            { "key": "confirmArrivalThankYou" },
-            { "key": "confirmArrivalText1" },
-            { "key": "confirmArrivalText2" },
-            { "key": "confirmArrivalGoToHome" }
+            {
+              "key": "confirmArrivalThankYou"
+            },
+            {
+              "key": "confirmArrivalText1"
+            },
+            {
+              "key": "confirmArrivalText2"
+            },
+            {
+              "key": "confirmArrivalGoToHome"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Marketing",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "massiveSmsTitle"
+            },
+            {
+              "key": "massiveEmailTitle"
+            },
+            {
+              "key": "birthdayFrom"
+            },
+            {
+              "key": "birthdayTo"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "sendMassiveSms"
+            },
+            {
+              "key": "sendMassiveEmail"
+            },
+            {
+              "key": "smsSignaturePoweredByMassive"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "congratulationBirthday"
+            },
+            {
+              "key": "signatureCompanyName"
+            },
+            {
+              "key": "signatureAddress1"
+            },
+            {
+              "key": "signatureAddress2"
+            },
+            {
+              "key": "signatureAddress3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "PDF/Word",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "invoiceTitle"
+            },
+            {
+              "key": "invoiceSubTitle"
+            },
+            {
+              "key": "invoiceBillingTitleFrom"
+            },
+            {
+              "key": "invoiceBillingTitleTo"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "invoiceAddress"
+            },
+            {
+              "key": "invoiceYourName"
+            },
+            {
+              "key": "invoiceItem"
+            },
+            {
+              "key": "invoiceNetPrice"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "invoiceGrossPrice"
+            },
+            {
+              "key": "invoiceSubtotal"
+            },
+            {
+              "key": "invoiceTax"
+            },
+            {
+              "key": "invoiceTotal"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "notesTitle"
+            },
+            {
+              "key": "notesText"
+            },
+            {
+              "key": "notesDate"
+            },
+            {
+              "key": "euroSign"
+            },
+            {
+              "key": "printBruttoNettoPrice"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "generatePDFTooltip"
+            },
+            {
+              "key": "printPDFTooltip"
+            },
+            {
+              "key": "downloadWordTooltip"
+            },
+            {
+              "key": "downloadWord"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "noDataAvailable"
+            },
+            {
+              "key": "doctorColumnTitle"
+            },
+            {
+              "key": "invoicePrefix"
+            },
+            {
+              "key": "invoicePrefixTitle"
+            },
+            {
+              "key": "invoiceConfirmDialogQuestion"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "titleOnInvoice"
+            },
+            {
+              "key": "printOnInvoice"
+            },
+            {
+              "key": "additionalInvoiceOptionsTitle"
+            },
+            {
+              "key": "selectInvoiceLanguage"
+            },
+            {
+              "key": "showAtInvoice"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Holidays",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "holidaysTitle"
+            },
+            {
+              "key": "templatesTitle"
+            },
+            {
+              "key": "addHoliday"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "title"
+            },
+            {
+              "key": "chooseTemplate"
+            },
+            {
+              "key": "dateTitle"
+            }
           ]
         }
       ]

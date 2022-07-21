@@ -56,7 +56,7 @@ export class HolidayService {
   }
 
   public deleteHolidayTemplate(id) {
-    return this.httpClient
-      .get("/api/deleteHolidayTemplate/" + id).toPromise();
+    return this.httpClient.get("/api/deleteHolidayTemplate/" + id).toPromise();
   }
+
 }

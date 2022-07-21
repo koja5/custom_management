@@ -29,7 +29,7 @@ export class DynamicSendEmailComponent implements OnInit {
   }
 
   receiveConfirm(event) {
-    if(event) {
+    if (event) {
       this.onClick();
     }
     this.showDialog = false;
@@ -51,16 +51,23 @@ export class DynamicSendEmailComponent implements OnInit {
       taskId: this.data.taskId,
       language: this.packLanguage.getLanguageForSendReminderViaEmail(),
       id: this.data.id,
-      countryCode: this.data.countryCode
+      countryCode: this.data.countryCode,
     };
     this.service
       .sendReminderViaEmailManual(this.emailFormModel)
       .subscribe((data) => {
         if (data) {
-          this.helpService.successToastr(
-            "",
-            this.language.successSendEmailMessageText
-          );
+          if (data["message"] === "need_config") {
+            this.helpService.warningToastr(
+              "",
+              this.language.needToConfigurationParams
+            );
+          } else {
+            this.helpService.successToastr(
+              "",
+              this.language.successSendEmailMessageText
+            );
+          }
         } else {
           this.helpService.errorToastr(
             "",

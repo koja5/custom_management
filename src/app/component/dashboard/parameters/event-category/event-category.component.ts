@@ -1,10 +1,15 @@
 import { Component, HostListener, OnInit, ViewChild } from "@angular/core";
-import { process, State, GroupDescriptor, SortDescriptor } from "@progress/kendo-data-query";
-import { EventCategoryService } from '../../../../service/event-category.service';
-import { EventCategoryModel } from 'src/app/models/event-category-model';
-import { ServiceHelperService } from 'src/app/service/service-helper.service';
+import {
+  process,
+  State,
+  GroupDescriptor,
+  SortDescriptor,
+} from "@progress/kendo-data-query";
+import { EventCategoryService } from "../../../../service/event-category.service";
+import { EventCategoryModel } from "src/app/models/event-category-model";
+import { ServiceHelperService } from "src/app/service/service-helper.service";
 import { ToastrService } from "ngx-toastr";
-import { GradientSettings } from '@progress/kendo-angular-inputs';
+import { GradientSettings } from "@progress/kendo-angular-inputs";
 import { HelpService } from "src/app/service/help.service";
 import { PageChangeEvent } from "@progress/kendo-angular-grid";
 import { Modal } from "ngx-modal";
@@ -12,7 +17,7 @@ import { Modal } from "ngx-modal";
 @Component({
   selector: "app-event-category",
   templateUrl: "./event-category.component.html",
-  styleUrls: ["./event-category.component.scss"]
+  styleUrls: ["./event-category.component.scss"],
 })
 export class EventCategoryComponent implements OnInit {
   @ViewChild("eventCategoryModal") eventCategoryModal: Modal;
@@ -24,15 +29,15 @@ export class EventCategoryComponent implements OnInit {
     sort: [
       {
         field: "sequence",
-        dir: "asc"
-      }
-    ]
+        dir: "asc",
+      },
+    ],
   };
   public searchFilter: any;
   public pageSize = 5;
   public pageable = {
     pageSizes: true,
-    previousNext: true
+    previousNext: true,
   };
   public currentLoadData: any;
   public data = new EventCategoryModel();
@@ -40,16 +45,21 @@ export class EventCategoryComponent implements OnInit {
   public gridView: any;
   public language: any;
   public deleteModal = false;
-  public operationMode = 'add';
+  public operationMode = "add";
   public loading = true;
   public settings: GradientSettings = {
-    opacity: false
-  }
+    opacity: false,
+  };
   public importExcel = false;
   public theme: any;
   public fileValue: any;
 
-  constructor(private service: EventCategoryService, private serviceHelper: ServiceHelperService, private toastr: ToastrService, private helpService: HelpService) { }
+  constructor(
+    private service: EventCategoryService,
+    private serviceHelper: ServiceHelperService,
+    private toastr: ToastrService,
+    private helpService: HelpService
+  ) { }
 
   ngOnInit() {
     this.height = this.helpService.getHeightForGrid();
@@ -65,13 +75,13 @@ export class EventCategoryComponent implements OnInit {
   }
 
   getEventCategory() {
-    this.service.getEventCategory(localStorage.getItem("superadmin")).subscribe(
-      (data: []) => {
+    this.service
+      .getEventCategory(localStorage.getItem("superadmin"))
+      .subscribe((data: []) => {
         this.currentLoadData = data;
         this.gridView = process(data, this.state);
         this.loading = false;
-      }
-    )
+      });
   }
 
   public onFilter(inputValue: string): void {
@@ -84,20 +94,20 @@ export class EventCategoryComponent implements OnInit {
           {
             field: "category",
             operator: "contains",
-            value: inputValue
+            value: inputValue,
           },
           {
             field: "sequence",
             operator: "contains",
-            value: inputValue
+            value: inputValue,
           },
           {
             field: "comment",
             operator: "contains",
-            value: inputValue
-          }
-        ]
-      }
+            value: inputValue,
+          },
+        ],
+      },
     });
     this.gridView = process(this.gridData.data, this.state);
   }
@@ -122,8 +132,8 @@ export class EventCategoryComponent implements OnInit {
   addNewModal() {
     this.eventCategoryModal.open();
     this.data = new EventCategoryModel();
-    this.operationMode = 'add';
-    this.data.color = 'rgb(102, 115, 252)';
+    this.operationMode = "add";
+    this.data.color = "rgb(102, 115, 252)";
   }
 
   getTranslate(operationMode) {
@@ -132,65 +142,39 @@ export class EventCategoryComponent implements OnInit {
 
   createEventCategory(event) {
     this.data.superadmin = localStorage.getItem("superadmin");
-    this.service.createEventCategory(this.data).subscribe(
-      data => {
-        if (data) {
-          this.getEventCategory();
-          this.eventCategoryModal.close();
-          /*Swal.fire({
-            title: "Successfull!",
-            text: "New complaint is successfull added!",
-            timer: 3000,
-            type: "success"
-          });*/
-          this.toastr.success(
-            "Successfull!",
-            "New complaint is successfull added!",
-            { timeOut: 7000, positionClass: "toast-bottom-right" }
-          );
-        } else {
-          this.toastr.error(
-            "Error!",
-            "New complaint is not added!",
-            { timeOut: 7000, positionClass: "toast-bottom-right" }
-          );
-        }
+    this.service.createEventCategory(this.data).subscribe((data) => {
+      if (data) {
+        this.getEventCategory();
+        this.eventCategoryModal.close();
+        this.helpService.successToastr(
+          "",
+          this.language.successExecutedActionText
+        );
+      } else {
+        this.helpService.errorToastr("", this.language.errorExecutedActionText);
       }
-    )
+    });
   }
 
   editEventCategory(event) {
     this.data = event;
-    this.operationMode = 'edit';
+    this.operationMode = "edit";
     this.eventCategoryModal.open();
   }
 
   updateEventCategory(event) {
-    this.service.updateEventCategory(this.data).subscribe(
-      data => {
-        if (data) {
-          this.getEventCategory();
-          this.eventCategoryModal.close();
-          /*Swal.fire({
-            title: "Successfull!",
-            text: "New complaint is successfull added!",
-            timer: 3000,
-            type: "success"
-          });*/
-          this.toastr.success(
-            "Successfull!",
-            "New complaint is successfull added!",
-            { timeOut: 7000, positionClass: "toast-bottom-right" }
-          );
-        } else {
-          this.toastr.error(
-            "Error!",
-            "New complaint is not added!",
-            { timeOut: 7000, positionClass: "toast-bottom-right" }
-          );
-        }
+    this.service.updateEventCategory(this.data).subscribe((data) => {
+      if (data) {
+        this.getEventCategory();
+        this.eventCategoryModal.close();
+        this.helpService.successToastr(
+          "",
+          this.language.successExecutedActionText
+        );
+      } else {
+        this.helpService.errorToastr("", this.language.errorExecutedActionText);
       }
-    )
+    });
   }
 
   deleteEventCategory(id) {
@@ -202,14 +186,13 @@ export class EventCategoryComponent implements OnInit {
     console.log(event);
     if (event === "yes") {
       console.log(this.data);
-      this.service.deleteEventCategory(this.data.id).subscribe(data => {
+      this.service.deleteEventCategory(this.data.id).subscribe((data) => {
         console.log(data);
         if (data) {
           this.state.skip = 0;
-          this.toastr.success(
-            "Successfull!",
-            "Deleted item successfull!",
-            { timeOut: 7000, positionClass: "toast-bottom-right" }
+          this.helpService.successToastr(
+            "",
+            this.language.successExecutedActionText
           );
           this.getEventCategory();
         }
@@ -221,7 +204,6 @@ export class EventCategoryComponent implements OnInit {
   }
 
   onFileChange(args) {
-
     /*this.customerDialogOpened = true;
     let fileReader = new FileReader();
     fileReader.onload = e => {
@@ -267,7 +249,7 @@ export class EventCategoryComponent implements OnInit {
     const allData = {
       table: "customers",
       columns: columns,
-      data: dataArray
+      data: dataArray,
     };
     return allData;
   }

@@ -1,4 +1,5 @@
-import { AddHolidayComponent } from './administrator/add-holiday/add-holiday.component';
+import { InvoicePrefixComponent } from "./administrator/invoice-prefix/invoice-prefix.component";
+import { AddHolidayComponent } from "./administrator/add-holiday/add-holiday.component";
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { DashboardComponent } from "./dashboard.component";
@@ -39,8 +40,14 @@ import { PermissionPatientMenuComponent } from "./settings/permission-patient-me
 import { EventCategoryStatisticComponent } from "./parameters/event-category-statistic/event-category-statistic.component";
 import { UserAccessComponent } from "./parameters/user-access/user-access.component";
 import { SmsCountComponent } from "./administrator/sms-count/sms-count.component";
-import { MassiveSmsComponent } from "./administrator/massive-sms/massive-sms.component";
-import { MassiveEmailComponent } from "./administrator/massive-email/massive-email.component";
+import { MassiveSmsComponent } from "./marketing/massive-sms/massive-sms.component";
+import { MassiveEmailComponent } from "./marketing/massive-email/massive-email.component";
+import { MailMassiveEmailComponent } from "./parameters/mail-parameters/mail-massive-email/mail-massive-email.component";
+import { SmsMassiveComponent } from "./parameters/sms-massive/sms-massive.component";
+import { InvoiceComponent } from "./invoice/invoice.component";
+import { SmsBirthdayCongratulationComponent } from "./parameters/sms-birthday-congratulation/sms-birthday-congratulation.component";
+import { MailBirthdayCongratulationComponent } from "./parameters/mail-birthday-congratulation/mail-birthday-congratulation.component";
+import { MailPatientCreatedAccountViaFormComponent } from "./parameters/mail-parameters/mail-patient-created-account-via-form/mail-patient-created-account-via-form.component";
 
 const routes: Routes = [
   {
@@ -64,6 +71,7 @@ const routes: Routes = [
       { path: "store", component: StoreComponent },
       { path: "profile", component: ProfileComponent },
       { path: "customers", component: CustomersComponent },
+      { path: "invoice", component: InvoiceComponent },
       {
         path: "parameters",
         component: ParametersComponent,
@@ -161,6 +169,7 @@ const routes: Routes = [
       { path: "reservations", component: ReservationsComponent },
       { path: "template-account", component: TemplateAccountComponent },
       { path: "add-holiday", component: AddHolidayComponent },
+      { path: "invoice-prefix", component: InvoicePrefixComponent },
       { path: "mail-reminder", component: MailReminderComponent },
       {
         path: "mail-approve-reservation",
@@ -176,10 +185,19 @@ const routes: Routes = [
         component: MailPatientCreatedAccountComponent,
       },
       {
+        path: "mail-patient-created-account-via-form",
+        component: MailPatientCreatedAccountViaFormComponent,
+      },
+      {
         path: "mail-patient-form-registration",
         component: MailPatientFormRegistrationComponent,
       },
+      {
+        path: "mail-massive",
+        component: MailMassiveEmailComponent,
+      },
       { path: "sms-reminder", component: SmsReminderComponent },
+      { path: "sms-massive", component: SmsMassiveComponent },
       {
         path: "change-superadmin-profile",
         component: ChangeSuperadminProfileComponent,
@@ -204,6 +222,14 @@ const routes: Routes = [
         path: "massive-email",
         component: MassiveEmailComponent,
       },
+      {
+        path: "sms-birthday-congratulation",
+        component: SmsBirthdayCongratulationComponent,
+      },
+      {
+        path: "mail-birthday-congratulation",
+        component: MailBirthdayCongratulationComponent,
+      },
     ],
   },
 ];
@@ -212,4 +238,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DashboardRouting { }
+export class DashboardRouting {}

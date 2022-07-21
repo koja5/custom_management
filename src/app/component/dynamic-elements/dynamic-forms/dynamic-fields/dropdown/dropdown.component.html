@@ -1,6 +1,9 @@
 <div class="form-group" [ngClass]="config.width">
-  <label for="{{ config.name }}">  {{language[config.label] ? language[config.label] : config.label}}</label>
-  <div *ngIf="data"
+  <label for="{{ config.name }}">
+    {{ language[config.label] ? language[config.label] : config.label }}</label
+  >
+  <div
+    *ngIf="data"
     class="e-float-input e-control-wrapper"
     [formGroup]="group"
     [ngClass]="{
@@ -17,6 +20,7 @@
       [allowFiltering]="config.fieldConfig.filter"
       [ignoreAccent]="config.fieldConfig.ignoreAccent"
       [filterBarPlaceholder]="config.fieldConfig.filterPlaceholder"
+      [showClearButton]="true"
       (filtering)="onFiltering($event)"
       [formControlName]="config.name"
     ></ejs-dropdownlist>

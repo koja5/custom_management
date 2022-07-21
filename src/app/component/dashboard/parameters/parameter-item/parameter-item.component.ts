@@ -7,7 +7,7 @@ import { map } from "rxjs/operators";
 import { ParameterItemService } from "../../../../service/parameter-item.service";
 import {
   DataStateChangeEvent,
-  PageChangeEvent
+  PageChangeEvent,
 } from "@progress/kendo-angular-grid";
 import { SortDescriptor, orderBy } from "@progress/kendo-data-query";
 import { MessageService } from "src/app/service/message.service";
@@ -16,7 +16,7 @@ import { HelpService } from "src/app/service/help.service";
 @Component({
   selector: "app-parameter-item",
   templateUrl: "./parameter-item.component.html",
-  styleUrls: ["./parameter-item.component.scss"]
+  styleUrls: ["./parameter-item.component.scss"],
 })
 export class ParameterItemComponent implements OnInit {
   @Input() type: string;
@@ -25,17 +25,17 @@ export class ParameterItemComponent implements OnInit {
     sort: [
       {
         field: "sequence",
-        dir: "asc"
-      }
+        dir: "asc",
+      },
     ],
     skip: 0,
-    take: 10
+    take: 10,
   };
   public sort: SortDescriptor[] = [
     {
       field: "sequence",
-      dir: "asc"
-    }
+      dir: "asc",
+    },
   ];
   public formGroup: FormGroup;
   public loading = false;
@@ -44,6 +44,7 @@ export class ParameterItemComponent implements OnInit {
   public selectedGender: string;
   public selectedDoctorType: string;
   public selectedVAT: string;
+  public selectedVATEvent: number;
   public editedRowIndex: number;
   public currentLoadData: any;
   public therapyList: any;
@@ -55,6 +56,7 @@ export class ParameterItemComponent implements OnInit {
   public editButton = [];
   public height: any;
   public language: any;
+  disabled: boolean = true;
 
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
@@ -74,33 +76,37 @@ export class ParameterItemComponent implements OnInit {
     this.language = this.helpService.getLanguage();
     this.height = this.helpService.getHeightForGrid();
     this.editedRowIndex = -1;
-    const superadmin = localStorage.getItem('superadmin');
+    const superadmin = localStorage.getItem("superadmin");
     // this.editButton[41]=true;
     if (this.type === "Doctors") {
-      this.service.getDoctorType(superadmin).subscribe(data => {
+      this.service.getDoctorType(superadmin).subscribe((data) => {
         this.doctorTypeList = data;
       });
     }
 
     if (this.type === "Therapies") {
-      this.service.getTherapy(superadmin).subscribe(data => {
+      this.service.getTherapy(superadmin).subscribe((data) => {
         this.therapyList = data;
       });
     }
 
     if (this.type === "Therapy") {
       this.service.getVATTex(superadmin).subscribe((data: []) => {
-        this.vatTexList = data.sort(function(a, b) {
+        this.vatTexList = data.sort(function (a, b) {
           return a["sequence"] - b["sequence"];
         });
-        this.firstVatTexList= this.vatTexList;
+        this.firstVatTexList = this.vatTexList;
       });
-     
     }
 
     this.view = this.service.pipe(
-      map(data => {
+      map((data) => {
         this.currentLoadData = data;
+
+        // data.forEach(elem => {
+        //   elem.printOnInvoice = elem.printOnInvoice ? true : false;
+        // })
+
         return process(data, this.gridState);
       })
     );
@@ -112,7 +118,7 @@ export class ParameterItemComponent implements OnInit {
       this.theme = localStorage.getItem("theme");
     }
 
-    this.message.getTheme().subscribe(mess => {
+    this.message.getTheme().subscribe((mess) => {
       this.changeTheme(mess);
       this.theme = mess;
     });
@@ -143,25 +149,27 @@ export class ParameterItemComponent implements OnInit {
         zip_code: new FormControl(),
         city: new FormControl(),
         telephone: new FormControl(),
-        email: new FormControl()
+        email: new FormControl(),
       });
     } else if (this.type === "Therapy") {
       this.formGroup = new FormGroup({
         id: new FormControl(),
         title: new FormControl(),
+        titleOnInvoice: new FormControl(),
+        printOnInvoice: new FormControl(),
         sequence: new FormControl(),
         unit: new FormControl(),
         description: new FormControl(),
         art_nr: new FormControl(),
         net_price: new FormControl(),
         gross_price: new FormControl(),
-        category: new FormControl()
+        category: new FormControl(),
       });
     } else {
       this.formGroup = new FormGroup({
         title: new FormControl(),
         sequence: new FormControl(),
-        superadmin: new FormControl()
+        superadmin: new FormControl(),
       });
     }
 
@@ -172,6 +180,8 @@ export class ParameterItemComponent implements OnInit {
   public editHandler({ sender, rowIndex, dataItem }) {
     this.closeEditor(sender);
     console.log(dataItem);
+
+    this.disabled = false;
 
     if (this.type === "Doctors") {
       this.formGroup = new FormGroup({
@@ -184,7 +194,7 @@ export class ParameterItemComponent implements OnInit {
         zip_code: new FormControl(dataItem.zip_code),
         city: new FormControl(dataItem.city),
         telephone: new FormControl(dataItem.telephone),
-        email: new FormControl(dataItem.email)
+        email: new FormControl(dataItem.email),
       });
       this.selectedDoctorType = dataItem.doctor_type;
       this.selectedGender = dataItem.gender;
@@ -192,16 +202,17 @@ export class ParameterItemComponent implements OnInit {
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
         title: new FormControl(dataItem.title),
+        titleOnInvoice: new FormControl(dataItem.titleOnInvoice),
+        printOnInvoice: new FormControl(dataItem.printOnInvoice),
         sequence: new FormControl(dataItem.sequence),
         unit: new FormControl(dataItem.unit),
         description: new FormControl(dataItem.description),
         art_nr: new FormControl(dataItem.art_nr),
         net_price: new FormControl(dataItem.net_price),
         gross_price: new FormControl(dataItem.gross_price),
-        category: new FormControl(dataItem.category)
+        category: new FormControl(dataItem.category),
       });
       this.selectedVAT = dataItem.vat;
-      
     } else {
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
@@ -215,7 +226,6 @@ export class ParameterItemComponent implements OnInit {
     this.refreshData();
   }
 
-
   public cancelHandler({ sender, rowIndex }) {
     this.editedRowIndex = -1;
     this.vatTexList = this.firstVatTexList;
@@ -224,37 +234,57 @@ export class ParameterItemComponent implements OnInit {
     this.changeTheme(this.theme);
   }
 
+  setSelectedItem(dataItem): void {
+    console.log(dataItem);
+    dataItem.printOnInvoice = !dataItem.printOnInvoice;
+
+    this.formGroup.value.printOnInvoice = dataItem.printOnInvoice;
+  }
+
   public saveHandler({ sender, rowIndex, formGroup, isNew }) {
-    console.log(formGroup);
+    this.disabled = true;
     this.editedRowIndex = -1;
     const product = formGroup.value;
-    console.log(product);
-    if (this.type === "Therapy") {
+    if (this.type === "Therapy" && !this.selectedVATEvent) {
       const sortedData = {
         data: orderBy(this.currentLoadData, this.sort),
-        total: this.currentLoadData.length
+        total: this.currentLoadData.length,
       };
       if (
-        rowIndex !== -1 && sortedData.data[rowIndex]["net_price"] !== formGroup.value.net_price && sortedData.data[rowIndex]['vat'] !== formGroup.value.vat
+        rowIndex !== -1 &&
+        sortedData.data[rowIndex]["net_price"] !== formGroup.value.net_price &&
+        sortedData.data[rowIndex]["vat"] !== formGroup.value.vat
       ) {
         formGroup.value.gross_price = (
           Number(formGroup.value.net_price) *
-          (1 + this.getTaxValue(sortedData.data[rowIndex]["vat"]) / 100)).toFixed(2);
+          (1 + this.getTaxValue(sortedData.data[rowIndex]["vat"]) / 100)
+        ).toFixed(2);
       } else if (
-        rowIndex !== -1 && sortedData.data[rowIndex]["gross_price"] !== formGroup.value.gross_price && sortedData.data[rowIndex]['vat'] !== formGroup.value.vat
+        rowIndex !== -1 &&
+        sortedData.data[rowIndex]["gross_price"] !==
+          formGroup.value.gross_price &&
+        sortedData.data[rowIndex]["vat"] !== formGroup.value.vat
       ) {
         formGroup.value.net_price = (
           Number(formGroup.value.gross_price) /
-          (1 + this.getTaxValue(sortedData.data[rowIndex]["vat"]) / 100)).toFixed(2);
+          (1 + this.getTaxValue(sortedData.data[rowIndex]["vat"]) / 100)
+        ).toFixed(2);
       }
     }
     product.gender = this.selectedGender;
     product.doctor_type = this.selectedDoctorType;
     product.therapy_id = this.selectedTherapy;
     product.vat = this.selectedVAT;
-    product.superadmin = localStorage.getItem('superadmin');
+    product.superadmin = localStorage.getItem("superadmin");
 
-    this.service.addData(product, isNew, this.type, localStorage.getItem('superadmin'));
+    this.selectedVATEvent = null;
+
+    this.service.addData(
+      product,
+      isNew,
+      this.type,
+      localStorage.getItem("superadmin")
+    );
 
     sender.closeRow(rowIndex);
     this.refreshData();
@@ -262,19 +292,23 @@ export class ParameterItemComponent implements OnInit {
 
   public removeHandler({ dataItem }) {
     console.log(dataItem);
-    this.service.deleteData(dataItem.id, this.type, localStorage.getItem('superadmin'));
+    this.service.deleteData(
+      dataItem.id,
+      this.type,
+      localStorage.getItem("superadmin")
+    );
     this.refreshData();
   }
 
   refreshData() {
     this.view = this.service.pipe(
-      map(data => {
+      map((data) => {
         this.currentLoadData = data;
         return process(data, this.gridState);
       })
     );
 
-    this.service.getData(this.type, localStorage.getItem('superadmin'));
+    this.service.getData(this.type, localStorage.getItem("superadmin"));
   }
 
   private closeEditor(grid, rowIndex = this.editedRowIndex) {
@@ -298,21 +332,30 @@ export class ParameterItemComponent implements OnInit {
   }
 
   selectionVAT(event, rowIndex) {
-    console.log(this.view);
-    /*const allData = process(this.currentLoadData, this.gridState);
-    this.view.source['data'] = allData.data;
-    this.view.source['data'].length = allData.total;*/
-    if (event !== undefined) {
+    this.selectedVAT = event;
+    this.selectedVATEvent = event;
+    if (this.gridState.sort[0].dir === "asc") {
+      this.view["source"]["value"].sort((a, b) => {
+        return a.sequence - b.sequence;
+      });
+    } else if (this.gridState.sort[0].dir === "desc") {
+      this.view["source"]["value"].sort((a, b) => {
+        return b.sequence - a.sequence;
+      });
+    }
+    const realIndex = rowIndex - 2;
+    if (event !== undefined && rowIndex !== -1) {
       this.selectedVAT = event;
       if (
         this.formGroup !== undefined &&
         this.formGroup.value.net_price !== "" &&
         this.formGroup.value.net_price !== undefined &&
-        this.formGroup.value.net_price !== null
+        this.formGroup.value.net_price !== null &&
+        (this.view["source"]["value"][rowIndex]["gross_price"] ===
+          this.formGroup.value.gross_price ||
+          !this.formGroup.value.gross_price)
       ) {
         const procent = 1 + this.getTaxValue(event) / 100;
-        // this.formGroup.value.gross_price = Number(this.formGroup.value.net_price) * procent;
-        // this.setViewValue(this.formGroup.value.id, this.formGroup.value.gross_price, 'gross_price');
         this.formGroup.controls["gross_price"].setValue(
           Number(this.formGroup.value.net_price) * procent
         );
@@ -320,7 +363,10 @@ export class ParameterItemComponent implements OnInit {
         this.formGroup !== undefined &&
         this.formGroup.value.gross_price !== "" &&
         this.formGroup.value.gross_price !== undefined &&
-        this.formGroup.value.gross_price !== null
+        this.formGroup.value.gross_price !== null &&
+        (this.view["source"]["value"][rowIndex]["net_price"] ===
+          this.formGroup.value.net_price ||
+          !this.formGroup.value.net_price)
       ) {
         const procent = 1 - this.getTaxValue(event) / 100;
         this.formGroup.controls["net_price"].setValue(
@@ -329,7 +375,11 @@ export class ParameterItemComponent implements OnInit {
       }
       this.formGroup.value.vat = event;
     } else {
-      this.selectedVAT = "-1";
+      this.selectedVAT = event;
+      const procent = 1 + this.getTaxValue(event) / 100;
+      this.formGroup.controls["gross_price"].setValue(
+        Number(this.formGroup.value.net_price) * procent
+      );
     }
   }
 
@@ -363,7 +413,7 @@ export class ParameterItemComponent implements OnInit {
 
   loadProducts(): void {
     this.view = this.service.pipe(
-      map(data => {
+      map((data) => {
         return process(this.currentLoadData, this.gridState);
       })
     );
@@ -372,7 +422,7 @@ export class ParameterItemComponent implements OnInit {
   dataStateChange(state: DataStateChangeEvent): void {
     this.gridState = state;
     this.view = this.service.pipe(
-      map(data => process(this.currentLoadData, this.gridState))
+      map((data) => process(this.currentLoadData, this.gridState))
     );
   }
 
@@ -465,7 +515,7 @@ export class ParameterItemComponent implements OnInit {
         }
       }
     }, 150);
-    }
+  }
 
   NetPriceChange(event) {
     console.log(event);
@@ -475,9 +525,8 @@ export class ParameterItemComponent implements OnInit {
     console.log(event);
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener("window:resize", ["$event"])
   onResize(event) {
     this.height = this.helpService.getHeightForGrid();
   }
 }
-

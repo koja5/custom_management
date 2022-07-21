@@ -12,7 +12,6 @@ const logger = require("./logger");
 var link = process.env.link_api;
 var linkClient = process.env.link_client;
 var loginLink = process.env.link_client_login;
-
 const monthNames = [
   "January",
   "February",
@@ -29,22 +28,32 @@ const monthNames = [
 ];
 
 var connection = mysql.createPool({
-  host: process.env.host,
-  user: process.env.user,
-  password: process.env.password,
-  database: process.env.database,
+  host: "116.203.85.82",
+  user: "appprodu_appproduction",
+  password: "CJr4eUqWg33tT97mxPFx",
+  database: "appprodu_management",
 });
 
+/*var smtpTransport = nodemailer.createTransport({
+  host: "116.203.85.82",
+  secure: false,
+   port: 587,
+   auth: {
+      user: "support@app-production.eu",
+      pass: "Iva#$2019#$",
+   },
+});*/
+
 var smtpTransport = nodemailer.createTransport({
-  host: process.env.smtp_host,
-  port: process.env.smtp_port,
-  secure: process.env.smtp_secure,
+  host: "116.203.85.82",
+  port: 25,
+  secure: false,
   tls: {
-    rejectUnauthorized: process.env.smtp_rejectUnauthorized,
+    rejectUnauthorized: false,
   },
   auth: {
-    user: process.env.smtp_user,
-    pass: process.env.smtp_pass,
+    user: "support@app-production.eu",
+    pass: "])3!~0YFU)S]",
   },
 });
 
@@ -100,51 +109,109 @@ router.post("/send", function (req, res) {
 });
 
 router.post("/sendCustomerVerificationMail", function (req, res) {
-  var confirmTemplate = fs.readFileSync(
-    "./server/routes/templates/confirmMail.hjs",
-    "utf-8"
-  );
-  var compiledTemplate = hogan.compile(confirmTemplate);
-  var verificationLinkButton =
-    link + "customerVerificationMail/" + sha1(req.body.email);
+  connection.getConnection(function (err, conn) {
+    var confirmTemplate = fs.readFileSync(
+      "./server/routes/templates/infoForCreatedPatientAccountViaForm.hjs",
+      "utf-8"
+    );
+    var compiledTemplate = hogan.compile(confirmTemplate);
+    var verificationLinkButton =
+      link + "customerVerificationMail/" + sha1(req.body.email);
 
-  var mailOptions = {
-    from: '"ClinicNode" support@app-production.eu',
-    to: req.body.email,
-    subject: req.body.language?.subjectConfirmMail,
-    html: compiledTemplate.render({
-      firstName: req.body.shortname,
-      verificationLink: verificationLinkButton,
-      initialGreeting: req.body.language?.initialGreeting,
-      finalGreeting: req.body.language?.finalGreeting,
-      signature: req.body.language?.signature,
-      thanksForUsing: req.body.language?.thanksForUsing,
-      websiteLink: req.body.language?.websiteLink,
-      ifYouHaveQuestion: req.body.language?.ifYouHaveQuestion,
-      emailAddress: req.body.language?.emailAddress,
-      notReply: req.body.language?.notReply,
-      copyRight: req.body.language?.copyRight,
-      introductoryMessageForConfirmMail:
-        req.body.language?.introductoryMessageForConfirmMail,
-      confirmMailButtonText: req.body.language?.confirmMailButtonText,
-    }),
-  };
+    conn.query(
+      "SELECT m.*, u.* from mail_patient_created_account_via_form m join users_superadmin u on m.superadmin = u.id  where m.superadmin = ?",
+      [req.body.storeId],
+      function (err, mailMessage, fields) {
+        console.log(mailMessage);
+        var mail = {};
+        var signatureAvailable = false;
+        if (mailMessage.length > 0) {
+          mail = mailMessage[0];
+          if (mail.signatureAvailable) {
+            signatureAvailable = true;
+          }
+        }
+        var mailOptions = {
+          from: '"ClinicNode" support@app-production.eu',
+          to: req.body.email,
+          subject: mail.mailSubject
+            ? mail.mailSubject
+            : req.body.language?.subjectConfirmMail,
+          html: compiledTemplate.render({
+            firstName: req.body.firstname,
+            initialGreeting: mail.mailInitialGreeting
+              ? mail.mailInitialGreeting
+              : req.body.language?.initialGreeting,
+            finalGreeting: mail.mailFinalGreeting
+              ? mail.mailFinalGreeting
+              : req.body.language?.finalGreeting,
+            signature: !signatureAvailable
+              ? mail.mailSignature
+                ? mail.mailSignature
+                : req.body.language?.signature
+              : "",
+            thanksForUsing: mail.mailThanksForUsing
+              ? mail.mailThanksForUsing
+              : req.body.language?.thanksForUsing,
+            websiteLink: req.body.language?.websiteLink,
+            ifYouHaveQuestion: mail.mailIfYouHaveQuestion
+              ? mail.mailIfYouHaveQuestion
+              : req.body.language?.ifYouHaveQuestion,
+            emailAddress: req.body.language?.emailAddress,
+            notReply: mail.mailNotReply
+              ? mail.mailNotReply
+              : req.body.language?.notReply,
+            copyRight: mail.mailCopyRight
+              ? mail.mailCopyRight
+              : req.body.language?.copyRight,
+            introductoryMessageForConfirmMail: mail.mailMessage
+              ? mail.mailMessage
+              : req.body.language?.introductoryMessageForConfirmMail,
+            signatureAddress:
+              signatureAvailable &&
+              mail.signatureAddress &&
+              (mail.street || mail.zipcode)
+                ? mail.signatureAddress +
+                  "\n" +
+                  mail.street +
+                  "\n" +
+                  mail.zipcode
+                : "",
+            signatureTelephone:
+              signatureAvailable && mail.signatureTelephone && mail.telephone
+                ? mail.signatureTelephone + " " + mail.telephone
+                : "",
+            signatureMobile:
+              signatureAvailable && mail.signatureMobile && mail.mobile
+                ? mail.signatureMobile + " " + mail.mobile
+                : "",
+            signatureEmail:
+              signatureAvailable && mail.signatureEmail && mail.email
+                ? mail.signatureEmail + " " + mail.email
+                : "",
+          }),
+        };
 
-  smtpTransport.sendMail(mailOptions, function (error, response) {
-    console.log(response);
-    if (error) {
-      logger.log(
-        "error",
-        `Error to sent mail for VERIFICATION MAIL on EMAIL: ${req.body.email}. Error: ${error}`
-      );
-      res.end("error");
-    } else {
-      logger.log(
-        "info",
-        `Sent mail for VERIFICATION MAIL for USER: ${req.body.shortname} on EMAIL: ${req.body.email}`
-      );
-      res.end("sent");
-    }
+        console.log("PROSAO SAM!");
+
+        smtpTransport.sendMail(mailOptions, function (error, response) {
+          console.log(response);
+          if (error) {
+            logger.log(
+              "error",
+              `Error to sent mail for VERIFICATION MAIL on EMAIL: ${req.body.email}. Error: ${error}`
+            );
+            res.end("error");
+          } else {
+            logger.log(
+              "info",
+              `Sent mail for VERIFICATION MAIL for USER: ${req.body.shortname} on EMAIL: ${req.body.email}`
+            );
+            res.end("sent");
+          }
+        });
+      }
+    );
   });
 });
 
@@ -490,21 +557,29 @@ router.post("/sendPatientFormRegistration", function (req, res) {
               : req.body.language
                   ?.introductoryMessageForPatientRegistrationForm,
             openForm: req.body.language?.openForm,
-            signatureStreet:
-              signatureAvailable && mail.signatureStreet
-                ? mail.signatureStreet
+            signatureAddress:
+              signatureAvailable &&
+              mail.signatureAddress &&
+              (mail.street || mail.zipcode || mail.store_place)
+                ? mail.signatureAddress +
+                  "\n" +
+                  mail.street +
+                  "\n" +
+                  mail.zipcode +
+                  " " +
+                  mail.store_place
                 : "",
-            signatureZipCode:
-              signatureAvailable && mail.signatureZipCode
-                ? mail.signatureZipCode
+            signatureTelephone:
+              signatureAvailable && mail.signatureTelephone && mail.telephone
+                ? mail.signatureTelephone + " " + mail.telephone
                 : "",
-            signaturePhone:
-              signatureAvailable && mail.signaturePhone
-                ? mail.signaturePhone
+            signatureMobile:
+              signatureAvailable && mail.signatureMobile && mail.mobile
+                ? mail.signatureMobile + " " + mail.mobile
                 : "",
             signatureEmail:
-              signatureAvailable && mail.signatureEmail
-                ? mail.signatureEmail
+              signatureAvailable && mail.signatureEmail && mail.email
+                ? mail.signatureEmail + " " + mail.email
                 : "",
           }),
         };
@@ -559,7 +634,7 @@ router.post("/sendInfoToPatientForCreatedAccount", function (req, res) {
             ? mail.mailSubject
             : req.body.language?.subjectCreatedPatientForm,
           html: infoForCreatedAccount.render({
-            firstname: req.body.firstname,
+            firstName: req.body.firstname,
             email: req.body.email,
             password: req.body.password,
             loginLink: loginLink,
@@ -594,21 +669,29 @@ router.post("/sendInfoToPatientForCreatedAccount", function (req, res) {
             linkForLogin: req.body.language?.linkForLogin,
             emailForLogin: req.body.language?.emailForLogin,
             passwordForLogin: req.body.language?.passwordForLogin,
-            signatureStreet:
-              signatureAvailable && mail.signatureStreet
-                ? mail.signatureStreet
+            signatureAddress:
+              signatureAvailable &&
+              mail.signatureAddress &&
+              (mail.street || mail.zipcode || mail.store_place)
+                ? mail.signatureAddress +
+                  "\n" +
+                  mail.street +
+                  "\n" +
+                  mail.zipcode +
+                  " " +
+                  mail.store_place
                 : "",
-            signatureZipCode:
-              signatureAvailable && mail.signatureZipCode
-                ? mail.signatureZipCode
+            signatureTelephone:
+              signatureAvailable && mail.signatureTelephone && mail.telephone
+                ? mail.signatureTelephone + " " + mail.telephone
                 : "",
-            signaturePhone:
-              signatureAvailable && mail.signaturePhone
-                ? mail.signaturePhone
+            signatureMobile:
+              signatureAvailable && mail.signatureMobile && mail.mobile
+                ? mail.signatureMobile + " " + mail.mobile
                 : "",
             signatureEmail:
-              signatureAvailable && mail.signatureEmail
-                ? mail.signatureEmail
+              signatureAvailable && mail.signatureEmail && mail.email
+                ? mail.signatureEmail + " " + mail.email
                 : "",
           }),
         };
@@ -644,13 +727,14 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
   );
   connection.getConnection(function (err, conn) {
     conn.query(
-      "select mr.* from customers c join mail_approve_reservation mr on c.storeId = mr.superadmin where c.id = ?",
+      "select mr.*, s.* from tasks t join mail_approve_reservation mr on t.superadmin = mr.superadmin join store s on t.storeId = s.id where t.id = ?",
       [req.body.id],
       function (err, mailMessage, fields) {
         if (err) {
           res.json(false);
         }
         var mail = {};
+        console.log(mailMessage);
         var signatureAvailable = false;
         if (mailMessage.length > 0) {
           mail = mailMessage[0];
@@ -665,7 +749,7 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
             ? mail.mailSubject
             : req.body.language?.subjectApproveReservation,
           html: infoForApproveReservation.render({
-            firstname: req.body.firstname,
+            firstName: req.body.firstname,
             email: req.body.email,
             password: req.body.password,
             loginLink: loginLink,
@@ -697,21 +781,29 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
             introductoryMessageForApproveReservation: mail.mailMessage
               ? mail.mailMessage
               : req.body.language?.introductoryMessageForApproveReservation,
-            signatureStreet:
-              signatureAvailable && mail.signatureStreet
-                ? mail.signatureStreet
+            signatureAddress:
+              signatureAvailable &&
+              mail.signatureAddress &&
+              (mail.street || mail.zipcode || mail.store_place)
+                ? mail.signatureAddress +
+                  "\n" +
+                  mail.street +
+                  "\n" +
+                  mail.zipcode +
+                  " " +
+                  mail.store_place
                 : "",
-            signatureZipCode:
-              signatureAvailable && mail.signatureZipCode
-                ? mail.signatureZipCode
+            signatureTelephone:
+              signatureAvailable && mail.signatureTelephone && mail.telephone
+                ? mail.signatureTelephone + " " + mail.telephone
                 : "",
-            signaturePhone:
-              signatureAvailable && mail.signaturePhone
-                ? mail.signaturePhone
+            signatureMobile:
+              signatureAvailable && mail.signatureMobile && mail.mobile
+                ? mail.signatureMobile + " " + mail.mobile
                 : "",
             signatureEmail:
-              signatureAvailable && mail.signatureEmail
-                ? mail.signatureEmail
+              signatureAvailable && mail.signatureEmail && mail.email
+                ? mail.signatureEmail + " " + mail.email
                 : "",
           }),
         };
@@ -743,12 +835,13 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
   var infoForDenyReservation = hogan.compile(infoForDenyReservationTemplate);
   connection.getConnection(function (err, conn) {
     conn.query(
-      "select mr.* from customers c join mail_deny_reservation mr on c.storeId = mr.superadmin where c.id = ?",
+      "select mr.*, s.* from tasks t join mail_deny_reservation mr on t.superadmin = mr.superadmin join store s on t.storeId = s.id where t.id = ?",
       [req.body.id],
       function (err, mailMessage, fields) {
         if (err) {
           res.json(false);
         }
+        console.log(mailMessage);
         var mail = {};
         var signatureAvailable = false;
         if (mailMessage.length > 0) {
@@ -764,7 +857,7 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
             ? mail.mailSubject
             : req.body.language?.subjectDenyReservation,
           html: infoForDenyReservation.render({
-            firstname: req.body.firstname,
+            firstName: req.body.firstname,
             email: req.body.email,
             password: req.body.password,
             loginLink: loginLink,
@@ -796,21 +889,29 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
             introductoryMessageForDenyReservation: mail.mailMessage
               ? mail.mailMessage
               : req.body.language?.introductoryMessageForDenyReservation,
-            signatureStreet:
-              signatureAvailable && mail.signatureStreet
-                ? mail.signatureStreet
+            signatureAddress:
+              signatureAvailable &&
+              mail.signatureAddress &&
+              (mail.street || mail.zipcode || mail.store_place)
+                ? mail.signatureAddress +
+                  "\n" +
+                  mail.street +
+                  "\n" +
+                  mail.zipcode +
+                  " " +
+                  mail.store_place
                 : "",
-            signatureZipCode:
-              signatureAvailable && mail.signatureZipCode
-                ? mail.signatureZipCode
+            signatureTelephone:
+              signatureAvailable && mail.signatureTelephone && mail.telephone
+                ? mail.signatureTelephone + " " + mail.telephone
                 : "",
-            signaturePhone:
-              signatureAvailable && mail.signaturePhone
-                ? mail.signaturePhone
+            signatureMobile:
+              signatureAvailable && mail.signatureMobile && mail.mobile
+                ? mail.signatureMobile + " " + mail.mobile
                 : "",
             signatureEmail:
-              signatureAvailable && mail.signatureEmail
-                ? mail.signatureEmail
+              signatureAvailable && mail.signatureEmail && mail.email
+                ? mail.signatureEmail + " " + mail.email
                 : "",
           }),
         };
@@ -1029,6 +1130,349 @@ router.post("/confirmUserViaMacAddress", function (req, res) {
       initialGreeting: "Hallo",
       introductoryMessage:
         "Wir möchten Sie darüber informieren, dass wir versuchen, uns mit den untenstehenden Informationen anzumelden. Bitte greifen Sie auf das Dashboard zu und gewähren Sie Zugriff!",
+      nameMessage: "Name",
+      macAddressMessage: "MAC-Adresse",
+      datumMessage: "Registrierungsdatum",
+      name: req.body.firstname + " " + req.body.lastname,
+      macAddress: req.body.mac_address,
+      date: day + "." + month + "." + year + " - " + hours + ":" + minutes,
+      month: month,
+      day: day,
+    }),
+  };
+
+  smtpTransport.sendMail(mailOptions, function (error, response) {
+    if (error) {
+      logger.log(
+        "info",
+        `Error to sent reminder via email on EMAIL: ${req.body.email}. Error: ${error}`
+      );
+      res.send(false);
+    } else {
+      logger.log("info", `Sent reminder via email on EMAIL: ${req.body.email}`);
+      res.send(true);
+    }
+  });
+});
+
+router.post("/sendMassiveEMail", function (req, res) {
+  var sendMassiveTemplate = fs.readFileSync(
+    "./server/routes/templates/sendMassiveMails.hjs",
+    "utf-8"
+  );
+  var sendMassive = hogan.compile(sendMassiveTemplate);
+  var question = getSqlQuery(req.body);
+  var joinTable = getJoinTable(req.body);
+
+  if (req.body.message != "") {
+    connection.getConnection(function (err, conn) {
+      conn.query(
+        "select distinct c.email, c.shortname, mm.* from customers c join mail_massive_message mm on c.storeId = mm.superadmin join store s on c.storeId = s.superadmin " +
+          joinTable +
+          " where (c.email != '' and c.email IS NOT NULL) and c.storeId = " +
+          Number(req.body.superadmin) +
+          " and " +
+          question,
+        function (err, rows) {
+          if (err) {
+            logger.log("error", err);
+            res.json(false);
+          }
+          console.log(question);
+          console.log(rows);
+          rows.forEach(function (to, i, array) {
+            var mail = {};
+            var signatureAvailable = false;
+            mail = to;
+            if (mail.signatureAvailable) {
+              signatureAvailable = true;
+            }
+            console.log(to);
+            var mailOptions = {
+              from: '"ClinicNode" support@app-production.eu',
+              to: to.email,
+              subject: req.body.subject ? req.body.subject : mail.mailSubject,
+              html: sendMassive.render({
+                firstName: to.shortname,
+                message: req.body.message,
+                initialGreeting: mail.mailInitialGreeting
+                  ? mail.mailInitialGreeting
+                  : req.body.language?.initialGreeting,
+                finalGreeting: mail.mailFinalGreeting
+                  ? mail.mailFinalGreeting
+                  : req.body.language?.finalGreeting,
+                signature: !signatureAvailable
+                  ? mail.mailSignature
+                  : req.body.language?.signature,
+                thanksForUsing: mail.mailThanksForUsing
+                  ? mail.mailThanksForUsing
+                  : req.body.language?.thanksForUsing,
+                websiteLink: req.body.language?.websiteLink,
+                ifYouHaveQuestion: mail.mailIfYouHaveQuestion
+                  ? mail.mailIfYouHaveQuestion
+                  : req.body.language?.ifYouHaveQuestion,
+                emailAddress: req.body.language?.emailAddress,
+                notReply: mail.mailNotReply
+                  ? mail.mailNotReply
+                  : req.body.language?.notReply,
+                copyRight: mail.mailCopyRight
+                  ? mail.mailCopyRight
+                  : req.body.language?.copyRight,
+                introductoryMessageForDenyReservation: mail.mailMessage
+                  ? mail.mailMessage
+                  : req.body.language?.introductoryMessageForDenyReservation,
+                signature: mail.mailSignature ? mail.mailSignature : "",
+                signatureCompanyName:
+                  signatureAvailable && mail.signatureCompanyName
+                    ? mail.signatureCompanyName
+                    : "",
+                signatureAddress1:
+                  signatureAvailable && mail.signatureAddress1
+                    ? mail.signatureAddress1
+                    : "",
+                signatureAddress2:
+                  signatureAvailable && mail.signatureAddress2
+                    ? mail.signatureAddress2
+                    : "",
+                signatureAddress3:
+                  signatureAvailable && mail.signatureAddress3
+                    ? mail.signatureAddress3
+                    : "",
+                signatureTelephone:
+                  signatureAvailable && mail.signatureTelephone
+                    ? mail.signatureTelephone
+                    : "",
+                signatureMobile:
+                  signatureAvailable && mail.signatureMobile
+                    ? mail.signatureMobile
+                    : "",
+                signatureEmail:
+                  signatureAvailable && mail.signatureEmail
+                    ? mail.signatureEmail
+                    : "",
+              }),
+            };
+            smtpTransport.sendMail(mailOptions, function (error, response) {
+              if (error) {
+                logger.log("error", error);
+              } else {
+                logger.log(
+                  "info",
+                  `Sent mail for marketing promotion on EMAIL: ${to.email}`
+                );
+              }
+            });
+          });
+          res.send(true);
+        }
+      );
+    });
+  } else {
+    logger.log(
+      "error",
+      `Client don't input message for send massive mails: ${req.body.email}`
+    );
+    res.send(false);
+  }
+});
+
+function getSqlQuery(body) {
+  var question = "";
+  if (question) {
+    question += " and ";
+  }
+  if (body.place) {
+    question = "c.city = '" + body.place + "'";
+  }
+  if (body.male && body.female) {
+    var male = "'male'";
+    var female = "'female'";
+    if (question) {
+      question += " and (c.gender = " + male;
+      question += " or c.gender = " + female + ")";
+    } else {
+      question += "(c.gender = " + male;
+      question += " or c.gender = " + female + ")";
+    }
+  } else {
+    if (body.male) {
+      if (question) {
+        question += " and c.gender = 'male'";
+      } else {
+        question += "c.gender = 'male'";
+      }
+    } else if (body.female) {
+      if (question) {
+        question += " and c.gender = 'female'";
+      } else {
+        question += "c.gender = 'female'";
+      }
+    }
+  }
+
+  if (body.birthdayFrom) {
+    if (question) {
+      question += " and c.birthday >= '" + body.birthdayFrom + "'";
+    } else {
+      question += "c.birthday >= '" + body.birthdayFrom + "'";
+    }
+  }
+  if (body.birthdayTo) {
+    if (question) {
+      question += " and c.birthday <= '" + body.birthdayTo + "'";
+    } else {
+      question += "c.birthday <= '" + body.birthdayTo + "'";
+    }
+  }
+
+  if (body.category) {
+    if (question) {
+      question += " and t.colorTask = " + body.category;
+    } else {
+      question += " t.colorTask = " + body.category;
+    }
+  }
+
+  if (body.start) {
+    if (question) {
+      question += " and t.start >= '" + body.start + "'";
+    } else {
+      question += " t.start >= '" + body.start + "'";
+    }
+  }
+
+  if (body.end) {
+    if (question) {
+      question += " and t.end <= '" + body.end + "'";
+    } else {
+      question += " t.end <= '" + body.end + "'";
+    }
+  }
+
+  if (body.creator_id) {
+    if (question) {
+      question += " and t.creator_id = " + body.creator_id;
+    } else {
+      question += " t.creator_id = " + body.creator_id;
+    }
+  }
+
+  if (body.store) {
+    if (question) {
+      question += " and t.storeId = " + body.store;
+    } else {
+      question += " t.storeId = " + body.store;
+    }
+  }
+
+  if (body.recommendation) {
+    if (question) {
+      question += " and bo.recommendation = " + body.recommendation;
+    } else {
+      question += " bo.recommendation = " + body.recommendation;
+    }
+  }
+
+  if (body.relationship) {
+    if (question) {
+      question += " and bo.relationship = " + body.relationship;
+    } else {
+      question += " bo.relationship = " + body.relationship;
+    }
+  }
+
+  if (body.social) {
+    if (question) {
+      question += " and bo.social = " + body.social;
+    } else {
+      question += " bo.social = " + body.social;
+    }
+  }
+
+  if (body.doctor) {
+    if (question) {
+      question += " and bo.doctor = " + body.doctor;
+    } else {
+      question += " bo.doctor = " + body.doctor;
+    }
+  }
+
+  if (body.profession) {
+    if (question) {
+      question += " and bt.profession = " + body.profession;
+    } else {
+      question += " bt.profession = " + body.profession;
+    }
+  }
+
+  if (body.childs) {
+    if (question) {
+      question += " and bt.childs = " + body.childs;
+    } else {
+      question += " bt.childs = " + body.childs;
+    }
+  }
+
+  return question;
+}
+
+function getJoinTable(body) {
+  let joinTable = "";
+  if (
+    body.category ||
+    body.start ||
+    body.end ||
+    body.creator_id ||
+    body.store
+  ) {
+    joinTable += "join tasks t on c.id = t.customer_id";
+  }
+
+  if (body.recommendation || body.relationship || body.social || body.doctor) {
+    joinTable += "join base_one bo on c.id = bo.customer_id";
+  }
+
+  if (body.profession || body.childs) {
+    joinTable = "join base_two bt on c.id = bt.customer_id";
+  }
+
+  return joinTable;
+}
+
+router.post("/infoAboutConfirmDenyAccessDevice", function (req, res) {
+  var template = fs.readFileSync(
+    "./server/routes/templates/infoAboutUserAccess.hjs",
+    "utf-8"
+  );
+  var compiledTemplate = hogan.compile(template);
+  console.log(req.body);
+  var convertToDate = new Date(req.body.date);
+  var hours = convertToDate.getHours();
+  var minutes = convertToDate.getMinutes();
+  var date =
+    convertToDate.getDate() +
+    "." +
+    (convertToDate.getMonth() + 1) +
+    "." +
+    convertToDate.getFullYear();
+  var day = convertToDate.getDate();
+  var month = monthNames[convertToDate.getMonth()];
+  var year = convertToDate.getFullYear();
+  var start =
+    (hours < 10 ? "0" + hours : hours) +
+    ":" +
+    (hours < 10 ? "0" + hours : hours);
+
+  var mailOptions = {
+    from: '"ClinicNode" support@app-production.eu',
+    to: req.body.email,
+    subject:
+      (req.body.access ? "Aktiviert" : "Erloschen") + " ist dein Profil!",
+    html: compiledTemplate.render({
+      initialGreeting: "Hallo",
+      introductoryMessage:
+        "Wir informieren Sie, dass Ihr Profil " +
+        (req.body.access ? "Aktiviert" : "Erloschen"),
       nameMessage: "Name",
       macAddressMessage: "MAC-Adresse",
       datumMessage: "Registrierungsdatum",

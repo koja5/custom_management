@@ -34,6 +34,7 @@
         display: none;
       }
     }
+    p, pre { font-size: 12px; font-family: Arial, Helvetica, sans-serif; }
   </style>
 </head>
 
@@ -51,7 +52,7 @@
         <div class="content__header text-center tracking-wide border-b"
           style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;border-bottom-width: 1px;text-align: center;letter-spacing: .05em;">
           <div class="text-red text-sm font-bold h-24"
-            style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;font-weight: 700;height: 6rem;color: #e3342f;font-size: .875rem;">
+            style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;font-weight: 700;height: 6rem;color: #e3342f;font-size: 12px; font-family: Arial, Helvetica, sans-serif;">
             <img src="http://app-production.eu:8080/assets/images/brand-logo.png"
               style="width: 280px;box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;max-width: 100%;height: auto;">
           </div>
@@ -60,7 +61,7 @@
         <div class="content__body py-8 border-b"
           style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;border-bottom-width: 1px;padding-top: 2rem;padding-bottom: 2rem;">
           <p style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;">
-            {{initialGreeting}} {{firstname}}, <br>
+            {{initialGreeting}} {{firstName}}, <br>
           <p style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
             {{introductoryMessageForCreatedPatientAccount}}</p>
             <br>
@@ -72,26 +73,27 @@
                       style="font-size: 15px; font-weight: bold;">{{password}}</span></p>
           <br>
           <p class="text-sm"
-            style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;font-size: .875rem;">
+            style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;font-size: 12px; font-family: Arial, Helvetica, sans-serif;">
             {{finalGreeting}},<br
               style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
             {{signature}}
               <br />
-              {{signatureStreet}}
+             {{signatureAddress}}
               <br />
-              {{signatureZipCode}}
+              {{signatureTelephone}}
               <br />
-              {{signaturePhone}}
+              {{signatureMobile}}
               <br />
               {{signatureEmail}}
           </p>
+          <br />
         </div>
 
         <div class="content__footer mt-8 text-center text-grey-darker"
           style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin-top: 2rem;text-align: center;color: #606f7b;">
-          <h3 class="text-base sm:text-lg mb-4"
-            style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;margin-bottom: 1rem;font-size: 1.125rem;">
-            {{thanksForUsing}}</h3>
+          <p class="text-base sm:text-lg mb-4"
+            style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;margin-bottom: 1rem;">
+            {{thanksForUsing}}</p>
           <p style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;">
             {{websiteLink}}</p>
         </div>
@@ -99,7 +101,7 @@
       </div>
 
       <div class="mail__meta text-center text-sm text-grey-darker mt-8"
-        style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin-top: 2rem;text-align: center;color: #606f7b;font-size: .875rem;">
+        style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin-top: 2rem;text-align: center;color: #606f7b;font-size: 12px; font-family: Arial, Helvetica, sans-serif;">
 
         <div class="meta__social flex justify-center my-4"
           style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;display: flex;justify-content: center;margin-top: 1rem;margin-bottom: 1rem;">

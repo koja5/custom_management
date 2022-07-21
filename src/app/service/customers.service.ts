@@ -6,7 +6,7 @@ import { callbackify } from "util";
   providedIn: "root",
 })
 export class CustomersService {
-  constructor(public http: HttpClient) {}
+  constructor(public http: HttpClient) { }
 
   createCustomer(data, callback) {
     console.log("Pozivam funkciju signup!");

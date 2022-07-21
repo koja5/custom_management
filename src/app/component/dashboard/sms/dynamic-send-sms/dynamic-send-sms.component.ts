@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { SmsFormModel } from "src/app/models/sms-form-model";
+import { DynamicService } from "src/app/service/dynamic.service";
 import { HelpService } from "src/app/service/help.service";
 import { SendSmsService } from "src/app/service/send-sms.service";
 
@@ -18,7 +19,8 @@ export class DynamicSendSmsComponent implements OnInit {
 
   constructor(
     private service: SendSmsService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private dynamicService: DynamicService
   ) {}
 
   ngOnInit() {
@@ -26,19 +28,39 @@ export class DynamicSendSmsComponent implements OnInit {
   }
 
   onClick(event) {
-    this.service.sendSMSMessage(this.data).subscribe((data) => {
-      if (data) {
-        if (data["message"] === "buy_sms") {
-          this.helpService.warningToastr("", this.language.needToBuySms);
+    this.dynamicService
+      .callApiGet(
+        "/api/checkAvailableSmsCount",
+        this.helpService.getSuperadmin()
+      )
+      .subscribe((data) => {
+        if (data && data[0] && data[0].count > 0) {
+          this.data['superadmin'] = this.helpService.getSuperadmin();
+          this.service.sendSMSMessage(this.data).subscribe((data) => {
+            if (data) {
+              if (data["message"] === "buy_sms") {
+                this.helpService.warningToastr("", this.language.needToBuySms);
+              } else if (data["message"] === "need_config") {
+                this.helpService.warningToastr(
+                  "",
+                  this.language.needToConfigurationParams
+                );
+              } else {
+                this.helpService.successToastr(
+                  "",
+                  this.language.successSendSMSMessageText
+                );
+              }
+            } else {
+              this.helpService.errorToastr(
+                "",
+                this.language.errorSendSMSMessageText
+              );
+            }
+          });
         } else {
-          this.helpService.successToastr(
-            "",
-            this.language.successSendSMSMessageText
-          );
+          this.helpService.warningToastr(this.language.needToBuySms, "");
         }
-      } else {
-        this.helpService.errorToastr("", this.language.errorSendSMSMessageText);
-      }
-    });
+      });
   }
 }

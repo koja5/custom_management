@@ -24,6 +24,10 @@
       style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"
     />
 
+    <style>
+      p, pre { font-size: 12px; font-family: Arial, Helvetica, sans-serif; }
+    </style>
+
   </head>
 
   <body
@@ -51,7 +55,7 @@
           >
             <div
               class="text-red text-sm font-bold h-24"
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;font-weight: 700;height: 6rem;color: #e3342f;font-size: .875rem;"
+              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;font-weight: 700;height: 6rem;color: #e3342f;font-size: 12px; font-family: Arial, Helvetica, sans-serif;"
             >
               <img
                 src="http://app-production.eu:8080/assets/images/brand-logo.png"
@@ -67,7 +71,8 @@
             <p
               style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;"
             >
-              {{initialGreeting}}</p>,
+              {{initialGreeting}}
+              {{firstName}},</p>
             <br />
             <br />
             <p
@@ -77,32 +82,33 @@
 
             <p
               class="text-sm"
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;font-size: .875rem;"
+              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;font-size: 12px; font-family: Arial, Helvetica, sans-serif;"
             >
               {{finalGreeting}},<br
                 style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"
               />
               {{signature}}
               <br />
-              {{signatureStreet}}
+              {{signatureAddress}}
               <br />
-              {{signatureZipCode}}
+              {{signatureTelephone}}
               <br />
-              {{signaturePhone}}
+              {{signatureMobile}}
               <br />
               {{signatureEmail}}
             </p>
+            <br />
           </div>
 
           <div
             class="content__footer mt-8 text-center text-grey-darker"
             style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin-top: 2rem;text-align: center;color: #606f7b;"
           >
-            <h3
+            <p
               class="text-base sm:text-lg mb-4"
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;margin-bottom: 1rem;font-size: 1.125rem;"
+              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;margin-bottom: 1rem;"
             >
-              {{thanksForUsing}}</h3>
+              {{thanksForUsing}}</p>
             <p
               style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;"
             >
@@ -113,7 +119,7 @@
 
         <div
           class="mail__meta text-center text-sm text-grey-darker mt-8"
-          style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin-top: 2rem;text-align: center;color: #606f7b;font-size: .875rem;"
+          style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin-top: 2rem;text-align: center;color: #606f7b;font-size: 12px; font-family: Arial, Helvetica, sans-serif;"
         >
 
           <div
@@ -126,7 +132,7 @@
               style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;background-color: #22292f;border-radius: 9999px;display: flex;align-items: center;justify-content: center;height: 2rem;margin-right: 1rem;color: #fff;text-decoration: none;width: 2rem;"
             ><i
                 class="fab fa-facebook-f"
-                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;-moz-osx-font-smoothing: grayscale;-webkit-font-smoothing: antialiased;display: inline-block;font-style: normal;font-variant: normal;text-rendering: auto;line-height: 1;font-family: Font Awesome\\\ 5 Brands;"
+                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;-moz-osx-font-smoothing: grayscale;-webkit-font-smoothing: antialiased;display: inline-block;font-style: normal;font-variant: normal;text-rendering: auto;line-height: 1;font-family: Font Awesome\\\\\ 5 Brands;"
               ></i></a>
             <a
               href="#"
@@ -134,7 +140,7 @@
               style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;background-color: #22292f;border-radius: 9999px;display: flex;align-items: center;justify-content: center;height: 2rem;margin-right: 1rem;color: #fff;text-decoration: none;width: 2rem;"
             ><i
                 class="fab fa-instagram"
-                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;-moz-osx-font-smoothing: grayscale;-webkit-font-smoothing: antialiased;display: inline-block;font-style: normal;font-variant: normal;text-rendering: auto;line-height: 1;font-family: Font Awesome\\\ 5 Brands;"
+                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;-moz-osx-font-smoothing: grayscale;-webkit-font-smoothing: antialiased;display: inline-block;font-style: normal;font-variant: normal;text-rendering: auto;line-height: 1;font-family: Font Awesome\\\\\ 5 Brands;"
               ></i></a>
             <a
               href="#"
@@ -142,7 +148,7 @@
               style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;background-color: #22292f;border-radius: 9999px;display: flex;align-items: center;justify-content: center;height: 2rem;color: #fff;text-decoration: none;width: 2rem;"
             ><i
                 class="fab fa-twitter"
-                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;-moz-osx-font-smoothing: grayscale;-webkit-font-smoothing: antialiased;display: inline-block;font-style: normal;font-variant: normal;text-rendering: auto;line-height: 1;font-family: Font Awesome\\\ 5 Brands;"
+                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;-moz-osx-font-smoothing: grayscale;-webkit-font-smoothing: antialiased;display: inline-block;font-style: normal;font-variant: normal;text-rendering: auto;line-height: 1;font-family: Font Awesome\\\\\ 5 Brands;"
               ></i></a>
           </div>
 

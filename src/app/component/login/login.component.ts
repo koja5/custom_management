@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit {
   private superadmin: number;
   public userAccessId: number;
   public userAccessDevice: string;
+  public agreeValue = false;
 
   public data = {
     id: "",
@@ -60,7 +61,7 @@ export class LoginComponent implements OnInit {
     private packLanguage: PackLanguageService,
     private storageService: StorageService,
     public http: HttpClient
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.initialization();
@@ -82,6 +83,13 @@ export class LoginComponent implements OnInit {
       this.language = JSON.parse(this.helpService.getLocalStorage("language"));
     } else {
       this.checkCountryLocation();
+    }
+    if (this.helpService.getLocalStorage("registrationData")) {
+      const registrationData = JSON.parse(
+        this.helpService.getLocalStorage("registrationData")
+      );
+      this.data.email = registrationData["email"];
+      this.data.password = registrationData["password"];
     }
     this.helpService.setDefaultBrowserTabTitle();
     this.initializeIpAddress();
@@ -255,17 +263,19 @@ export class LoginComponent implements OnInit {
           } else {
             this.cookie.set("user", type);
             this.helpService.setLocalStorage("type", type);
-            console.log('TYPEEE: ', type);
             this.helpService.setLocalStorage("idUser", id);
             this.helpService.setLocalStorage("indicatorUser", id);
             this.helpService.setLocalStorage("storeId-" + id, storeId);
             this.helpService.setLocalStorage("superadmin", superadmin);
             this.superadmin = superadmin;
             if (last_login === null) {
-              console.log('last login NULL');
+              console.log("last login NULL");
               this.helpService.setSessionStorage("first_login", true);
             }
             this.getConfigurationFromDatabase(id);
+            if (this.helpService.getLocalStorage("registrationData")) {
+              this.helpService.clearLocalStorage("registrationData");
+            }
           }
         } else {
           if (info === "deny_access") {
@@ -297,23 +307,30 @@ export class LoginComponent implements OnInit {
       this.data.shortname &&
       this.data.password !== ""
     ) {
-      this.service.signUp(this.data, (val) => {
-        if (!val.success) {
-          this.errorInfo = val.info;
-        } else {
-          this.data["language"] = this.packLanguage.getLanguageForConfirmMail();
-          this.mailService.sendMail(this.data, function () {
-            console.log("Mail uspesno poslat");
-          });
-          this.signUpInfo = JSON.parse(localStorage.getItem("language"))[
-            "checkMailForActive"
-          ];
-          setTimeout(() => {
-            this.loginActive();
-          }, 3000);
-        }
-        // form.reset();
-      });
+      if (this.agreeValue) {
+        this.service.signUp(this.data, (val) => {
+          if (!val.success) {
+            this.errorInfo = val.info;
+          } else {
+            this.data["language"] =
+              this.packLanguage.getLanguageForConfirmMail();
+            this.mailService.sendMail(this.data, function () {
+              console.log("Mail uspesno poslat");
+            });
+            this.signUpInfo = JSON.parse(localStorage.getItem("language"))[
+              "checkMailForActive"
+            ];
+            setTimeout(() => {
+              this.loginActive();
+            }, 3000);
+          }
+          // form.reset();
+        });
+      } else {
+        this.errorInfo = JSON.parse(localStorage.getItem("language"))[
+          "needToAgree"
+        ];
+      }
     } else {
       this.errorInfo = JSON.parse(localStorage.getItem("language"))[
         "fillFields"

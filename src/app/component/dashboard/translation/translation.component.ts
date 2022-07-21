@@ -13,7 +13,7 @@ export class TranslationComponent implements OnInit {
   public height: any;
   public language: any;
 
-  constructor(private service: DashboardService, private helpService: HelpService) {}
+  constructor(private dashboardService: DashboardService, private helpService: HelpService) { }
 
   ngOnInit() {
     this.height = this.helpService.getHeightForGrid();
@@ -23,11 +23,11 @@ export class TranslationComponent implements OnInit {
   }
 
   initialization() {
-    this.service.getGridConfiguration('translation').subscribe(data => {
+    this.dashboardService.getGridConfiguration('translation').subscribe(data => {
       this.gridConfiguration = data;
     });
 
-    this.service.getTranslation().subscribe(
+    this.dashboardService.getTranslation().subscribe(
       data => {
         console.log(data);
         this.data = data;

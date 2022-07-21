@@ -1,3 +1,4 @@
+import { ToolbarModule } from '@syncfusion/ej2-angular-navigations';
 import { NgModule } from "@angular/core";
 import { DashboardRouting } from "./dashboard-routing.module";
 import { CommonModule } from "@angular/common";
@@ -41,10 +42,8 @@ import { CustomersComponent } from "./customers/customers.component";
 import { WorkTimeColorsComponent } from "./parameters/work-time-colors/work-time-colors.component";
 import { UserDetailsComponent } from "./users/user-details/user-details.component";
 import { TaskComponent } from "./task/task.component";
-import { SettingsComponent } from "./settings/settings.component";
 import { EventCategoryComponent } from "./parameters/event-category/event-category.component";
 import { EditTranslationComponent } from "./translation/edit-translation/edit-translation.component";
-import { BaseDateComponent } from "./task/base-date/base-date.component";
 import { UploadModule } from "@progress/kendo-angular-upload";
 import { FileUploadModule } from "ng2-file-upload";
 import {
@@ -66,7 +65,6 @@ import { MyDocumentComponent } from "./patient/my-document/my-document.component
 import { SettingsModule } from "./settings/settings.module";
 import { DropDownListModule } from "@syncfusion/ej2-angular-dropdowns";
 import { ReservationsComponent } from "./reservations/reservations.component";
-import { DynamicSendSmsComponent } from "./sms/dynamic-send-sms/dynamic-send-sms.component";
 import { SharedEmailModule } from "../shared-module/shared-email-module";
 import { SharedSMSModule } from "../shared-module/shared-sms-module";
 import { SystemErrorComponent } from "./administrator/system-logs/system-error/system-error.component";
@@ -85,11 +83,26 @@ import { ChangeSuperadminProfileComponent } from "./parameters/change-superadmin
 import { PermissionPatientMenuComponent } from "./settings/permission-patient-menu/permission-patient-menu.component";
 import { EventCategoryStatisticComponent } from "./parameters/event-category-statistic/event-category-statistic.component";
 import { UserAccessComponent } from "./parameters/user-access/user-access.component";
-import { SmsCountComponent } from './administrator/sms-count/sms-count.component';
-import { MassiveEmailComponent } from "./administrator/massive-email/massive-email.component";
-import { MassiveSmsComponent } from './administrator/massive-sms/massive-sms.component';
-import { AddHolidayComponent } from './administrator/add-holiday/add-holiday.component';
-import { AgendaService, DayService, MonthAgendaService, MonthService, ScheduleModule, WeekService, WorkWeekService } from "@syncfusion/ej2-angular-schedule";
+import { SmsCountComponent } from "./administrator/sms-count/sms-count.component";
+import { MassiveEmailComponent } from "./marketing/massive-email/massive-email.component";
+import { MassiveSmsComponent } from "./marketing/massive-sms/massive-sms.component";
+import { MailMassiveEmailComponent } from "./parameters/mail-parameters/mail-massive-email/mail-massive-email.component";
+import { SmsMassiveComponent } from "./parameters/sms-massive/sms-massive.component";
+import { AddHolidayComponent } from "./administrator/add-holiday/add-holiday.component";
+import {
+  AgendaService,
+  DayService,
+  MonthAgendaService,
+  MonthService,
+  ScheduleModule,
+  WeekService,
+  WorkWeekService,
+} from "@syncfusion/ej2-angular-schedule";
+import { InvoiceComponent } from './invoice/invoice.component';
+import { InvoicePrefixComponent } from './administrator/invoice-prefix/invoice-prefix.component';
+import { SmsBirthdayCongratulationComponent } from './parameters/sms-birthday-congratulation/sms-birthday-congratulation.component';
+import { MailBirthdayCongratulationComponent } from './parameters/mail-birthday-congratulation/mail-birthday-congratulation.component';
+import { MailPatientCreatedAccountViaFormComponent } from './parameters/mail-parameters/mail-patient-created-account-via-form/mail-patient-created-account-via-form.component';
 
 @NgModule({
   declarations: [
@@ -127,6 +140,7 @@ import { AgendaService, DayService, MonthAgendaService, MonthService, ScheduleMo
     MailConfirmArrivalComponent,
     MailPatientFormRegistrationComponent,
     MailPatientCreatedAccountComponent,
+    MailPatientCreatedAccountViaFormComponent,
     MailApproveReservationComponent,
     MailDenyReservationComponent,
     SmsReminderComponent,
@@ -136,7 +150,13 @@ import { AgendaService, DayService, MonthAgendaService, MonthService, ScheduleMo
     SmsCountComponent,
     MassiveEmailComponent,
     MassiveSmsComponent,
+    MailMassiveEmailComponent,
+    SmsMassiveComponent,
     AddHolidayComponent,
+    InvoiceComponent,
+    InvoicePrefixComponent,
+    SmsBirthdayCongratulationComponent,
+    MailBirthdayCongratulationComponent
   ],
   imports: [
     CommonModule,
@@ -173,7 +193,8 @@ import { AgendaService, DayService, MonthAgendaService, MonthService, ScheduleMo
     DropDownListModule,
     SharedEmailModule,
     SharedSMSModule,
-    ScheduleModule
+    ScheduleModule,
+    ToolbarModule
   ],
   providers: [
     {
@@ -185,7 +206,7 @@ import { AgendaService, DayService, MonthAgendaService, MonthService, ScheduleMo
     WorkWeekService,
     MonthService,
     AgendaService,
-    MonthAgendaService
-  ]
+    MonthAgendaService,
+  ],
 })
 export class DashboardModule { }

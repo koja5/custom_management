@@ -12,7 +12,7 @@
     <i class="fa fa-arrow-left"></i> &nbsp; {{ language.backToGrid }}
   </button>
 
-  <div style="float: right; padding-right: 44px; padding-top: 7px">
+  <div style="text-align: end; padding-right: 44px; padding-top: 7px">
     <button
       kendoButton
       [icon]="'edit'"
@@ -109,13 +109,7 @@
                         </div>
                         <div class="col-auto">
                           <div
-                            class="
-                              icon icon-shape
-                              bg-gradient-red
-                              text-white
-                              rounded-circle
-                              shadow
-                            "
+                            class="icon icon-shape bg-gradient-red text-white rounded-circle shadow"
                           >
                             <i class="fa fa-pie-chart"></i>
                           </div>
@@ -143,13 +137,7 @@
                         </div>
                         <div class="col-auto">
                           <div
-                            class="
-                              icon icon-shape
-                              bg-gradient-orange
-                              text-white
-                              rounded-circle
-                              shadow
-                            "
+                            class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow"
                           >
                             <i class="fa fa-line-chart"></i>
                           </div>
@@ -177,13 +165,7 @@
                         </div>
                         <div class="col-auto">
                           <div
-                            class="
-                              icon icon-shape
-                              bg-gradient-green
-                              text-white
-                              rounded-circle
-                              shadow
-                            "
+                            class="icon icon-shape bg-gradient-green text-white rounded-circle shadow"
                           >
                             <i class="fa fa-calendar"></i>
                           </div>
@@ -211,13 +193,7 @@
                         </div>
                         <div class="col-auto">
                           <div
-                            class="
-                              icon icon-shape
-                              bg-gradient-info
-                              text-white
-                              rounded-circle
-                              shadow
-                            "
+                            class="icon icon-shape bg-gradient-info text-white rounded-circle shadow"
                           >
                             <i class="fa fa-area-chart"></i>
                           </div>
@@ -660,10 +636,7 @@
 
                               <kendo-datepicker
                                 [format]="'dd.MM.yyyy'"
-                                *ngIf="
-                                  data.birthday !== undefined &&
-                                  data.birthday !== ''
-                                "
+                                *ngIf="data.birthday"
                                 [(ngModel)]="data.birthday"
                                 name="birthday"
                                 class="noPadding"
@@ -697,26 +670,32 @@
                           </kendo-colorpalette>
                         </div>
                       </div>
-                      <div class="col-sm-6" style="padding-top: 2vh">
+                      <div
+                        class="col-sm-6"
+                        *ngIf="!noSetWorkTime"
+                        style="padding-top: 2vh"
+                      >
                         <button
-                          kendoButton
-                          [icon]="'k-icon k-i-undo'"
-                          class="col-sm-5 {{ previousInd }}"
+                          class="btn btn-warning mr-3 {{ previousInd }}"
                           (click)="previousWorkTime()"
                         >
+                          <i class="fa fa-arrow-left"></i>
                           {{ language.previous }}
                         </button>
                         <button
-                          kendoButton
-                          [icon]="'k-icon k-i-redo'"
-                          class="col-sm-5 {{ nextInd }}"
+                          class="btn btn-warning {{ nextInd }}"
                           (click)="nextWorkTime()"
                         >
+                          <i class="fa fa-arrow-right"></i>
                           {{ language.next }}
                         </button>
                       </div>
                     </div>
                     <div class="form-group row">
+                      <h4 class="col-sm-12">
+                        {{ language.orderNumber }}:
+                        {{ allWorkTime.length - index }}
+                      </h4>
                       <label class="col-md-2 col-sm-12 col-form-label">{{
                         language.validFromDate
                       }}</label>
@@ -875,7 +854,7 @@
     </div>
 
     <kendo-dialog
-      title="Please confirm"
+      title="{{ language.pleaseConfirm }}"
       *ngIf="dialogOpened"
       (close)="close('dialog')"
       [minWidth]="250"
@@ -893,6 +872,35 @@
       <kendo-dialog-actions>
         <button kendoButton (click)="action('no')">{{ language.no }}</button>
         <button kendoButton (click)="action('yes')" primary="true">
+          {{ language.yes }}
+        </button>
+      </kendo-dialog-actions>
+    </kendo-dialog>
+
+    <kendo-dialog
+      title="{{ language.pleaseConfirm }}"
+      *ngIf="modalDeletedWorkTimeConfirm"
+      (close)="modalDeletedWorkTimeConfirm = false; user.open()"
+      [minWidth]="250"
+      [width]="450"
+    >
+      <div class="modal-body text-center">
+        <img
+          src="../../../../../assets/images/sent.png"
+          alt=""
+          width="50"
+          height="46"
+        />
+        <h3>{{ language.deleteDialogTitleAreYouSure }}</h3>
+      </div>
+      <kendo-dialog-actions>
+        <button
+          kendoButton
+          (click)="modalDeletedWorkTimeConfirm = false; user.open()"
+        >
+          {{ language.no }}
+        </button>
+        <button kendoButton (click)="deleteWorkTime('yes')" primary="true">
           {{ language.yes }}
         </button>
       </kendo-dialog-actions>
@@ -1161,26 +1169,31 @@
                     </kendo-colorpalette>
                   </div>
                 </div>
-                <div class="col-sm-6" style="padding-top: 2vh">
+                <div
+                  *ngIf="!noSetWorkTime"
+                  class="col-sm-6"
+                  style="padding-top: 2vh"
+                >
                   <button
-                    kendoButton
-                    [icon]="'k-icon k-i-undo'"
-                    class="col-sm-5 {{ previousInd }}"
+                    class="btn btn-warning mr-3 {{ previousInd }}"
                     (click)="previousWorkTime()"
                   >
+                    <i class="fa fa-arrow-left"></i>
                     {{ language.previous }}
                   </button>
                   <button
-                    kendoButton
-                    [icon]="'k-icon k-i-redo'"
-                    class="col-sm-5 {{ nextInd }}"
+                    class="btn btn-warning {{ nextInd }}"
                     (click)="nextWorkTime()"
                   >
+                    <i class="fa fa-arrow-right"></i>
                     {{ language.next }}
                   </button>
                 </div>
               </div>
               <div class="form-group row">
+                <h4 class="col-sm-12">
+                  {{ language.orderNumber }}: {{ allWorkTime.length - index }}
+                </h4>
                 <label class="col-md-2 col-sm-12 col-form-label">{{
                   language.validFromDate
                 }}</label>
@@ -1205,7 +1218,7 @@
                     class="col-md-1 col-xs-4 btn-delete"
                     kendoButton
                     [icon]="'k-icon k-i-delete'"
-                    (click)="deleteWorkTime(workTime)"
+                    (click)="modalDeletedWorkTimeConfirm = true; user.close()"
                   ></button>
                 </div>
               </div>

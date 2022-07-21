@@ -27,7 +27,7 @@ export class DashboardService {
   }*/
 
   getTranslation() {
-    return this.http.get("/api/getTranslation").map((res) => res);
+    return this.http.get<any[]>("/api/getTranslation").map((res) => res);
   }
 
   getTranslationByDemoAccount(demoCode: string) {
@@ -89,6 +89,26 @@ export class DashboardService {
 
   getTemplateAccountByUserId(id) {
     return this.http.get("/api/getTemplateAccountByUserId/" + id).toPromise();
+  }
+
+  createTemplate(data) {
+    return this.http.post("/api/createTemplate", data).toPromise();
+  }
+
+  updateTemplate(data) {
+    return this.http.post("/api/updateTemplate", data).toPromise();
+  }
+
+  deleteTemplate(data) {
+    return this.http.post("/api/deleteTemplate/", data).toPromise();
+  }
+
+  public deleteHolidayTemplateByTemplateId(data) {
+    return this.http.post("/api/deleteHolidayTemplateByTemplateId", data).toPromise();
+  }
+
+  public deleteUserTemplate(data) {
+    return this.http.post("/api/deleteUserTemplate", data).toPromise();
   }
 
   loadTemplateAccount(data) {

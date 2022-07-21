@@ -189,6 +189,7 @@ export class CustomersComponent implements OnInit {
         });
         this.data.password = val.password;
         this.data.language = this.packLanguage.getLanguageForCreatedPatientAccount();
+        this.data.superadmin = this.helpService.getSuperadmin();
         this.mailService
           .sendInfoToPatientForCreatedAccount(this.data)
           .subscribe((data) => {
@@ -460,6 +461,26 @@ export class CustomersComponent implements OnInit {
             value: inputValue,
           },
           {
+            field: "gender",
+            operator: "contains",
+            value: inputValue,
+          },
+          {
+            field: "street",
+            operator: "contains",
+            value: inputValue,
+          },
+          {
+            field: "streetnumber",
+            operator: "contains",
+            value: inputValue,
+          },
+          {
+            field: "city",
+            operator: "contains",
+            value: inputValue,
+          },
+          {
             field: "telephone",
             operator: "contains",
             value: inputValue,
@@ -471,6 +492,16 @@ export class CustomersComponent implements OnInit {
           },
           {
             field: "email",
+            operator: "contains",
+            value: inputValue,
+          },
+          {
+            field: "attention",
+            operator: "contains",
+            value: inputValue,
+          },
+          {
+            field: "physicalComplaint",
             operator: "contains",
             value: inputValue,
           },

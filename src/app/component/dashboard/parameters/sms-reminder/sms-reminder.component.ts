@@ -12,8 +12,8 @@ import { ParameterItemService } from "src/app/service/parameter-item.service";
 })
 export class SmsReminderComponent implements OnInit {
   @ViewChild(DynamicFormsComponent) form: DynamicFormsComponent;
-  public path = "";
-  public file = "mail-reminder";
+  public path = "parameters";
+  public file = "sms-reminder";
   public mailReminderData = new SmsReminderModel();
   public loading = true;
   public type: number;
@@ -39,7 +39,7 @@ export class SmsReminderComponent implements OnInit {
     this.id = this.helpService.getMe();
 
     this.dynamicService
-      .getConfiguration("parameters", "sms-reminder")
+      .getConfiguration(this.path, this.file)
       .subscribe((config) => {
         this.configField = config;
         this.getData(this.id);
@@ -58,7 +58,10 @@ export class SmsReminderComponent implements OnInit {
 
   packValue(data) {
     for (let i = 0; i < this.configField.length; i++) {
-      this.configField[i].value = this.helpService.convertValue(data[0][this.configField[i].field], this.configField[i].type);
+      this.configField[i].value = this.helpService.convertValue(
+        data[0][this.configField[i].field],
+        this.configField[i].type
+      );
     }
   }
 

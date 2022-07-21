@@ -83,6 +83,10 @@
     </ng-template>
     <kendo-grid-column field="storename" title="Store name" width="120">
     </kendo-grid-column>
+    <kendo-grid-column field="companyname" title="Company name" width="120">
+    </kendo-grid-column>
+    <kendo-grid-column field="vatcode" title="VAT code" width="120">
+    </kendo-grid-column>
     <kendo-grid-column field="email" title="Email" width="200">
     </kendo-grid-column>
     <kendo-grid-column field="street" title="Street" width="150">
@@ -135,6 +139,9 @@
       </ng-template>
       <kendo-grid-column field="storename" title="Store name">
       </kendo-grid-column>
+      <kendo-grid-column field="companyname" title="Company name">
+      </kendo-grid-column>
+      <kendo-grid-column field="vatcode" title="VAT code"> </kendo-grid-column>
       <kendo-grid-column field="email" title="Email"> </kendo-grid-column>
       <kendo-grid-column field="street" title="Street"> </kendo-grid-column>
       <kendo-grid-column field="place" title="Place"> </kendo-grid-column>
@@ -165,208 +172,9 @@
   </modal-header>
   <modal-content>
     <form
-    name="loginForm"
-    class="loginForm"
-    (ngSubmit)="createStore(store)"
-    #storeForm="ngForm"
-  >
-    <div class="col-md-12 col-xs-12">
-      <kendo-textbox-container
-        floatingLabel="{{ language.storename }}({{ language.required }})"
-      >
-        <input
-          kendoTextBox
-          type="text"
-          class="col-xs-12"
-          name="storename"
-          [(ngModel)]="data.storename"
-          required
-          #storename="ngModel"
-        />
-      </kendo-textbox-container>
-    </div>
-    <div class="col-md-12 col-xs-12">
-      <kendo-textbox-container floatingLabel="{{ language.street }}">
-        <input
-          kendoTextBox
-          type="text"
-          class="col-xs-12"
-          name="street"
-          [(ngModel)]="data.street"
-        />
-      </kendo-textbox-container>
-    </div>
-    <div class="form-group">
-      <div class="col-md-6 col-xs-12">
-        <kendo-textbox-container floatingLabel="{{ language.zipCode }}">
-          <input
-            kendoTextBox
-            type="text"
-            class="col-xs-12"
-            name="zipcode"
-            [(ngModel)]="data.zipcode"
-          />
-        </kendo-textbox-container>
-      </div>
-      <div class="col-md-6 col-xs-12">
-        <kendo-textbox-container floatingLabel="{{ language.place }}">
-          <input
-            kendoTextBox
-            type="text"
-            class="col-xs-12"
-            name="place"
-            [(ngModel)]="data.place"
-          />
-        </kendo-textbox-container>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-md-6 col-xs-12">
-        <kendo-textbox-container floatingLabel="{{ language.telephone }}">
-          <input
-            kendoTextBox
-            type="text"
-            class="col-xs-12"
-            name="telephone"
-            [(ngModel)]="data.telephone"
-          />
-        </kendo-textbox-container>
-      </div>
-      <div class="col-md-6 col-xs-12">
-        <kendo-textbox-container floatingLabel="{{ language.mobile }}">
-          <input
-            kendoTextBox
-            type="text"
-            class="col-xs-12"
-            name="mobile"
-            [(ngModel)]="data.mobile"
-          />
-        </kendo-textbox-container>
-      </div>
-      <div class="col-md-12 col-xs-12">
-        <kendo-textbox-container
-          floatingLabel="{{ language.email }}({{ language.required }})"
-        >
-          <input
-            kendoTextBox
-            type="email"
-            class="col-xs-12"
-            name="email"
-            [(ngModel)]="data.email"
-            required
-            #email="ngModel"
-          />
-        </kendo-textbox-container>
-      </div>
-    </div>
-    <div class="col-md-12 col-xs-12">
-      <kendo-textbox-container floatingLabel="{{ language.comment }}">
-        <input
-          kendoTextBox
-          type="text"
-          class="col-xs-12"
-          name="comment"
-          [(ngModel)]="data.comment"
-        />
-      </kendo-textbox-container>
-    </div>
-    <div class="form-group">
-      <div class="col-md-6 col-xs-12">
-        <kendo-textbox-container
-          floatingLabel="{{ language.timeDuration }}({{ language.required }})"
-        >
-          <input
-            kendoTextBox
-            type="text"
-            class="col-xs-12"
-            name="time_duraiton"
-            [(ngModel)]="data.time_duration"
-            required
-            #time_duration="ngModel"
-          />
-        </kendo-textbox-container>
-      </div>
-      <div class="col-md-6 col-xs-12">
-        <kendo-textbox-container
-          floatingLabel="{{ language.timeTherapy }}({{ language.required }})"
-        >
-          <input
-            kendoTextBox
-            type="text"
-            class="col-xs-12"
-            name="time_therapy"
-            [(ngModel)]="data.time_therapy"
-            required
-            #time_therapy="ngModel"
-        /></kendo-textbox-container>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-md-6 col-xs-12">
-        <kendo-textbox-container
-          floatingLabel="{{ language.startWork }}({{ language.required }})"
-        >
-          <kendo-timepicker
-            class="col-xs-12"
-            [(ngModel)]="start_work"
-            name="start_work"
-            required
-          ></kendo-timepicker>
-        </kendo-textbox-container>
-      </div>
-      <div class="col-md-6 col-xs-12">
-        <kendo-textbox-container
-          floatingLabel="{{ language.endWork }}({{ language.required }})"
-        >
-          <kendo-timepicker
-            class="col-xs-12"
-            [(ngModel)]="end_work"
-            name="end_work"
-            required
-          ></kendo-timepicker>
-        </kendo-textbox-container>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-md-12 col-xs-12">
-        <label
-          class="k-form-field"
-          style="text-align: center; padding-top: 30px"
-        >
-          {{ language.allowedOnlineReservationForUser }}
-          <kendo-switch
-            [(ngModel)]="data.allowed_online"
-            name="allowed_online"
-          ></kendo-switch>
-        </label>
-      </div>
-    </div>
-
-    <div class="form-group" style="text-align: center">
-      <button
-        kendoButton
-        [primary]="true"
-        [disabled]="storeForm.form.invalid"
-        class="form-button"
-        type="submit"
-      >
-        {{ language.createStore }}
-      </button>
-    </div>
-  </form>
-  </modal-content>
-  <modal-footer class="modal-footer-none"> </modal-footer>
-</modal>
-
-<modal #storeEdit modalClass="modal-md">
-  <modal-header>
-    <h4>{{language.updateStore}}</h4>
-  </modal-header>
-  <modal-content>
-    <form
       name="loginForm"
       class="loginForm"
-      (ngSubmit)="updateStore(store)"
+      (ngSubmit)="createStore(store)"
       #storeForm="ngForm"
     >
       <div class="col-md-12 col-xs-12">
@@ -381,6 +189,28 @@
             [(ngModel)]="data.storename"
             required
             #storename="ngModel"
+          />
+        </kendo-textbox-container>
+      </div>
+      <div class="col-md-12 col-xs-12">
+        <kendo-textbox-container floatingLabel="{{ language.companyName }}">
+          <input
+            kendoTextBox
+            type="text"
+            class="col-xs-12"
+            name="companyname"
+            [(ngModel)]="data.companyname"
+          />
+        </kendo-textbox-container>
+      </div>
+      <div class="col-md-12 col-xs-12">
+        <kendo-textbox-container floatingLabel="{{ language.vatcode }}">
+          <input
+            kendoTextBox
+            type="text"
+            class="col-xs-12"
+            name="vatcode"
+            [(ngModel)]="data.vatcode"
           />
         </kendo-textbox-container>
       </div>
@@ -497,7 +327,233 @@
               [(ngModel)]="data.time_therapy"
               required
               #time_therapy="ngModel"
-          /></kendo-textbox-container>
+            />
+          </kendo-textbox-container>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-6 col-xs-12">
+          <kendo-textbox-container
+            floatingLabel="{{ language.startWork }}({{ language.required }})"
+          >
+            <kendo-timepicker
+              class="col-xs-12"
+              [(ngModel)]="start_work"
+              name="start_work"
+              required
+            ></kendo-timepicker>
+          </kendo-textbox-container>
+        </div>
+        <div class="col-md-6 col-xs-12">
+          <kendo-textbox-container
+            floatingLabel="{{ language.endWork }}({{ language.required }})"
+          >
+            <kendo-timepicker
+              class="col-xs-12"
+              [(ngModel)]="end_work"
+              name="end_work"
+              required
+            ></kendo-timepicker>
+          </kendo-textbox-container>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-12 col-xs-12">
+          <label
+            class="k-form-field"
+            style="text-align: center; padding-top: 30px"
+          >
+            {{ language.allowedOnlineReservationForUser }}
+            <kendo-switch
+              [(ngModel)]="data.allowed_online"
+              name="allowed_online"
+            ></kendo-switch>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group" style="text-align: center">
+        <button
+          kendoButton
+          [primary]="true"
+          [disabled]="storeForm.form.invalid"
+          class="form-button"
+          type="submit"
+        >
+          {{ language.createStore }}
+        </button>
+      </div>
+    </form>
+  </modal-content>
+  <modal-footer class="modal-footer-none"> </modal-footer>
+</modal>
+
+<modal #storeEdit modalClass="modal-md">
+  <modal-header>
+    <h4>{{ language.updateStore }}</h4>
+  </modal-header>
+  <modal-content>
+    <form
+      name="loginForm"
+      class="loginForm"
+      (ngSubmit)="updateStore(store)"
+      #storeForm="ngForm"
+    >
+      <div class="col-md-12 col-xs-12">
+        <kendo-textbox-container
+          floatingLabel="{{ language.storename }}({{ language.required }})"
+        >
+          <input
+            kendoTextBox
+            type="text"
+            class="col-xs-12"
+            name="storename"
+            [(ngModel)]="data.storename"
+            required
+            #storename="ngModel"
+          />
+        </kendo-textbox-container>
+      </div>
+
+      <div class="col-md-12 col-xs-12">
+        <kendo-textbox-container floatingLabel="{{ language.companyName }}">
+          <input
+            kendoTextBox
+            type="text"
+            class="col-xs-12"
+            name="companyname"
+            [(ngModel)]="data.companyname"
+          />
+        </kendo-textbox-container>
+      </div>
+
+      <div class="col-md-12 col-xs-12">
+        <kendo-textbox-container floatingLabel="{{ language.vatcode }}">
+          <input
+            kendoTextBox
+            type="text"
+            class="col-xs-12"
+            name="vatcode"
+            [(ngModel)]="data.vatcode"
+          />
+        </kendo-textbox-container>
+      </div>
+
+      <div class="col-md-12 col-xs-12">
+        <kendo-textbox-container floatingLabel="{{ language.street }}">
+          <input
+            kendoTextBox
+            type="text"
+            class="col-xs-12"
+            name="street"
+            [(ngModel)]="data.street"
+          />
+        </kendo-textbox-container>
+      </div>
+      <div class="form-group">
+        <div class="col-md-6 col-xs-12">
+          <kendo-textbox-container floatingLabel="{{ language.zipCode }}">
+            <input
+              kendoTextBox
+              type="text"
+              class="col-xs-12"
+              name="zipcode"
+              [(ngModel)]="data.zipcode"
+            />
+          </kendo-textbox-container>
+        </div>
+        <div class="col-md-6 col-xs-12">
+          <kendo-textbox-container floatingLabel="{{ language.place }}">
+            <input
+              kendoTextBox
+              type="text"
+              class="col-xs-12"
+              name="place"
+              [(ngModel)]="data.place"
+            />
+          </kendo-textbox-container>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-6 col-xs-12">
+          <kendo-textbox-container floatingLabel="{{ language.telephone }}">
+            <input
+              kendoTextBox
+              type="text"
+              class="col-xs-12"
+              name="telephone"
+              [(ngModel)]="data.telephone"
+            />
+          </kendo-textbox-container>
+        </div>
+        <div class="col-md-6 col-xs-12">
+          <kendo-textbox-container floatingLabel="{{ language.mobile }}">
+            <input
+              kendoTextBox
+              type="text"
+              class="col-xs-12"
+              name="mobile"
+              [(ngModel)]="data.mobile"
+            />
+          </kendo-textbox-container>
+        </div>
+        <div class="col-md-12 col-xs-12">
+          <kendo-textbox-container
+            floatingLabel="{{ language.email }}({{ language.required }})"
+          >
+            <input
+              kendoTextBox
+              type="email"
+              class="col-xs-12"
+              name="email"
+              [(ngModel)]="data.email"
+              required
+              #email="ngModel"
+            />
+          </kendo-textbox-container>
+        </div>
+      </div>
+      <div class="col-md-12 col-xs-12">
+        <kendo-textbox-container floatingLabel="{{ language.comment }}">
+          <input
+            kendoTextBox
+            type="text"
+            class="col-xs-12"
+            name="comment"
+            [(ngModel)]="data.comment"
+          />
+        </kendo-textbox-container>
+      </div>
+      <div class="form-group">
+        <div class="col-md-6 col-xs-12">
+          <kendo-textbox-container
+            floatingLabel="{{ language.timeDuration }}({{ language.required }})"
+          >
+            <input
+              kendoTextBox
+              type="text"
+              class="col-xs-12"
+              name="time_duraiton"
+              [(ngModel)]="data.time_duration"
+              required
+              #time_duration="ngModel"
+            />
+          </kendo-textbox-container>
+        </div>
+        <div class="col-md-6 col-xs-12">
+          <kendo-textbox-container
+            floatingLabel="{{ language.timeTherapy }}({{ language.required }})"
+          >
+            <input
+              kendoTextBox
+              type="text"
+              class="col-xs-12"
+              name="time_therapy"
+              [(ngModel)]="data.time_therapy"
+              required
+              #time_therapy="ngModel"
+            />
+          </kendo-textbox-container>
         </div>
       </div>
       <div class="form-group">
@@ -558,7 +614,7 @@
 </modal>
 
 <kendo-dialog
-  title="Please confirm"
+  title="{{ language.pleaseConfirm }}"
   *ngIf="dialogOpened"
   (close)="close('dialog')"
   [minWidth]="250"
@@ -571,26 +627,30 @@
       width="50"
       height="46"
     />
-    <h3>Are you sure you want to continue?</h3>
+    <h3>{{ language.areYouSure }}</h3>
   </div>
   <kendo-dialog-actions>
-    <button kendoButton (click)="action('no')">No</button>
-    <button kendoButton (click)="action('yes')" primary="true">Yes</button>
+    <button kendoButton (click)="action('no')">{{ language.no }}</button>
+    <button kendoButton (click)="action('yes')" primary="true">
+      {{ language.yes }}
+    </button>
   </kendo-dialog-actions>
 </kendo-dialog>
 
 <kendo-dialog
-  title="Please confirm"
+  title="{{ language.pleaseConfirm }}"
   *ngIf="excelOpened"
   (close)="close('excel')"
   [minWidth]="250"
   [width]="450"
 >
   <p style="margin: 30px; text-align: center">
-    Are you sure you want to import data from excel?
+    {{ langauge.areYouSure }}
   </p>
   <kendo-dialog-actions>
-    <button kendoButton (click)="excelAction('no')">No</button>
-    <button kendoButton (click)="excelAction('yes')" primary="true">Yes</button>
+    <button kendoButton (click)="excelAction('no')">{{ language.no }}</button>
+    <button kendoButton (click)="excelAction('yes')" primary="true">
+      {{ language.yes }}
+    </button>
   </kendo-dialog-actions>
 </kendo-dialog>

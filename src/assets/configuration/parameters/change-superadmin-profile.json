@@ -16,6 +16,27 @@
   {
     "type": "textbox",
     "width": "col-md-4",
+    "name": "companyname",
+    "label": "companyName",
+    "field": "companyname"
+  },
+  {
+    "type": "textbox",
+    "width": "col-md-4",
+    "name": "shortname",
+    "label": "storename",
+    "field": "shortname"
+  },
+  {
+    "type": "textbox",
+    "width": "col-md-4",
+    "name": "vatcode",
+    "label": "vatcode",
+    "field": "vatcode"
+  },
+  {
+    "type": "textbox",
+    "width": "col-md-4",
     "name": "street",
     "label": "street",
     "field": "street"

@@ -728,8 +728,8 @@
 }
 
 .eventName {
-  font-weight: bold; 
-  padding: 0px; 
+  font-weight: bold;
+  padding: 0px;
   color: black;
   font-size: 13px !important;
   margin: 0px;
@@ -787,7 +787,7 @@
 }
 
 .show-hide-toolbar {
-  cursor: pointer; 
+  cursor: pointer;
   display: inline;
 }
 
@@ -798,10 +798,10 @@
 
 .online-icon-reservation {
   position: absolute;
-    bottom: 8px;
-    font-size: 13px;
-    color: #000;
-    left: 9px;
+  bottom: 4px;
+  font-size: 13px;
+  color: #000;
+  left: 16px;
 }
 
 .reserved-title {
@@ -819,4 +819,22 @@
 
 .check-option {
   font-weight: bold;
+}
+
+.template-wrap,
+.subject {
+  background: rgb(233, 236, 239);
+  width: 100%;
+  height: 100%;
+  border: 0px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: black;
+}
+
+.date-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

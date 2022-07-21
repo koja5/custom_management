@@ -150,6 +150,18 @@ export class ParameterItemService extends BehaviorSubject<any[]> {
     return this.http.post("/api/updateMailPatientCreatedAccount", data);
   }
 
+  getMailPatientCreatedAccountViaForm(id: number) {
+    return this.http.get("/api/getMailPatientCreatedAccountViaForm/" + id);
+  }
+
+  createMailPatientCreatedAccountViaForm(data) {
+    return this.http.post("/api/createMailPatientCreatedAccountViaForm", data);
+  }
+
+  updateMailPatientCreatedAccountViaForm(data) {
+    return this.http.post("/api/updateMailPatientCreatedAccountViaForm", data);
+  }
+
   getMailPatientFormRegistration(id: number) {
     return this.http.get("/api/getMailPatientFormRegistration/" + id);
   }
@@ -174,11 +186,59 @@ export class ParameterItemService extends BehaviorSubject<any[]> {
     return this.http.post("/api/updateSmsReminderMessage", data);
   }
 
+  getSmsMassiveMessage(id: number) {
+    return this.http.get("/api/getSmsMassiveMessage/" + id);
+  }
+
+  createSmsMassiveMessage(data) {
+    return this.http.post("/api/createSmsMassiveMessage", data);
+  }
+
+  updateSmsMassiveMessage(data) {
+    return this.http.post("/api/updateSmsMassiveMessage", data);
+  }
+
+  getMailMassive(id: number) {
+    return this.http.get("/api/getMailMassive/" + id);
+  }
+
+  createMailMassive(data) {
+    return this.http.post("/api/createMailMassive", data);
+  }
+
+  updateMailMassive(data) {
+    return this.http.post("/api/updateMailMassive", data);
+  }
+
   getSuperadminProfile(id) {
     return this.http.get("/api/getSuperadmin/" + id);
   }
 
   updateSuperadminProfile(data) {
     return this.http.post("/api/updateSuperadmin", data);
+  }
+
+  getSmsBirthdayCongratulation(id: number) {
+    return this.http.get("/api/getSmsBirthdayCongratulation/" + id);
+  }
+
+  createSmsBirthdayCongratulation(data) {
+    return this.http.post("/api/createSmsBirthdayCongratulation", data);
+  }
+
+  updateSmsBirthdayCongratulation(data) {
+    return this.http.post("/api/updateSmsBirthdayCongratulation", data);
+  }
+
+  getMailBirthdayCongratulation(id: number) {
+    return this.http.get("/api/getMailBirthdayCongratulation/" + id);
+  }
+
+  createMailBirthdayCongratulation(data) {
+    return this.http.post("/api/createMailBirthdayCongratulation", data);
+  }
+
+  updateMailBirthdayCongratulation(data) {
+    return this.http.post("/api/updateMailBirthdayCongratulation", data);
   }
 }
