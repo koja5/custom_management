@@ -386,6 +386,9 @@
       "eventCategory": {
         "type": "string"
       },
+      "periodForEvent": {
+        "type": "string"
+      },
       "notConfirmed": {
         "type": "string"
       },
@@ -6202,6 +6205,9 @@
             },
             {
               "key": "eventCategoryPeriod[].text"
+            },
+            {
+              "key": "periodForEvent"
             }
           ]
         }
