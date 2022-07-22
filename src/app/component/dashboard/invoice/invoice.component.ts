@@ -1,3 +1,4 @@
+import { filter } from 'rxjs/operators/filter';
 import { InvoiceService } from "./../../../service/invoice.service";
 import { ParameterItemService } from "src/app/service/parameter-item.service";
 import {
@@ -49,6 +50,7 @@ export class InvoiceComponent implements OnInit {
   invoiceStore = null;
   allStores: any[];
   gridData: any;
+  allInvoiceData: any[];
 
   @HostListener("window:resize", ["$event"])
   onResize(): void {
@@ -204,9 +206,14 @@ export class InvoiceComponent implements OnInit {
   }
 
   storeValueChange(event) {
-    this.invoiceStore = this.allStores.find((elem) => elem.id === event.value);
+    this.invoiceStore = this.allStores.find((elem) => elem.id === event);
     console.log("this.invoiceStore ", this.invoiceStore);
     this.selectedStoreInfo = event;
+
+    const data = this.invoiceStore ? this.allInvoiceData.filter(elem => elem.storeId === this.invoiceStore.id) : this.allInvoiceData;
+    this.currentLoadData = data;
+
+    this.gridViewData = process(this.currentLoadData, this.state);
   }
 
   public getParameters(): void {
@@ -298,6 +305,7 @@ export class InvoiceComponent implements OnInit {
     this.taskService.getDataForMassiveInvoice(patientId).then((data) => {
       console.log("getDataForMassiveInvoice : ", data);
       this.currentLoadData = [];
+      this.allInvoiceData = [];
 
       if (this.range.start && this.range.end) {
         data.forEach((element) => {
@@ -316,6 +324,7 @@ export class InvoiceComponent implements OnInit {
             element.end.getTime() <= endDate
           ) {
             this.currentLoadData.push(element);
+            this.allInvoiceData.push(element);
           }
         });
       } else {
@@ -323,6 +332,7 @@ export class InvoiceComponent implements OnInit {
           elem.checked = false;
         });
         this.currentLoadData = data;
+        this.allInvoiceData = data;
       }
 
       if (this.currentLoadData.length > 0) {
@@ -626,7 +636,7 @@ export class InvoiceComponent implements OnInit {
         billing_from_title:
           componentRef.invoiceLanguage.invoiceBillingTitleFrom,
         billing_to_title: componentRef.invoiceLanguage.invoiceBillingTitleTo,
-        clinic_name: componentRef.store.storename + '\n' + componentRef.superadminProfile.shortname,
+        clinic_name: componentRef.superadminProfile.shortname,
         customer_lastname: componentRef.customerUser.lastname,
         customer_firstname: componentRef.customerUser.firstname,
         clinic_street: componentRef.store.street,
