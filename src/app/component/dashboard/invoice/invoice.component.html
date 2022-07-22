@@ -109,6 +109,15 @@
                 </label>
                 <kendo-daterange-popup [anchor]="anchor" #popup></kendo-daterange-popup>
               </kendo-daterange>
+
+
+              <div class="row mt-4">
+                <div class="col-sm-4">
+                  <div class="btn btn-primary" [ngClass]="{'disabled': noDataSelected}" (click)="filter()">
+                    {{language.filterToolbar }}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -133,25 +142,18 @@
             <div class="col-sm-12 mt-5">
               <label class="k-checkbox-label"> {{ language.selectInvoiceStore }} </label>
               <br>
-              <kendo-dropdownlist [data]="storeList" textField="text" valueField="value" [(ngModel)]="selectedStoreInfo"
-                (valueChange)="storeValueChange($event)">
-              </kendo-dropdownlist>
+              <kendo-combobox [data]="storeList" textField="text" valueField="value" [valuePrimitive]="true"
+                [(ngModel)]="selectedStoreInfo" (valueChange)="storeValueChange($event)">
+              </kendo-combobox>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="row mt-4">
-        <div class="col-sm-4">
-          <div class="btn btn-primary" [ngClass]="{'disabled': noDataSelected}" (click)="filter()">
-            {{language.filterToolbar }}
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
-  <div class="grid w-100" style="height: 100%">
+  <div class="grid w-100" style="height: 100%; padding-top:1%;">
     <div class="left-panel" style="height: 100%">
       <div class="control-section" style="height: 100%">
         <kendo-grid #grid [style.height.%]="tableHeight"
