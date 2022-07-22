@@ -92,4 +92,10 @@ export class LoginService {
   updateUserAccessDevice(data) {
     return this.http.post("/api/updateUserAccessDevice", data);
   }
+
+  getLanguageForLanding(language: string) {
+    return this.http.get(
+      "../../assets/configuration/languages/landing/" + language + ".json"
+    );
+  }
 }
