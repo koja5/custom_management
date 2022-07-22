@@ -1,0 +1,84 @@
+<div *ngIf="loading" style="height: 90vh">
+    <div class="spinner loading"></div>
+</div>
+
+<div *ngIf="!loading && selectedUser === undefined" style="height: 100%">
+  <div class="container">
+    <div class="row" *ngIf="userSuperAdmin">  
+      <div class="float-right mt-5 pr-4">
+        <button
+          kendoButton
+          [icon]="'add'"
+          (click)="addNewModal()"
+          [primary]="true"
+          class="addButton">
+          {{language.addHelpTopic}}
+        </button>
+      </div>      
+    </div>
+    <div class="row">
+      <ng-container *ngFor="let topic of topics">
+        <app-topic-card [topic]="topic" (editEmmiter)="openEditTemplateModal($event)" (deleteEmmiter)="deleteHelpTopic($event)"></app-topic-card>            
+      </ng-container>         
+    </div>      
+  </div>
+</div>
+
+<modal
+  #helpTopicModal
+  (onClose)="closeHelpTopicModal()"
+  modalClass="modal-md modal-dialog-centered no-footer"
+  *ngIf="userSuperAdmin"
+>
+  <modal-header>
+    <h4>{{ language.helpTopic }}</h4>
+  </modal-header>
+  <modal-content class="pb-0">
+    <form
+      (ngSubmit)="
+      helpTopicModal.form.valid === true
+          ? operationMode === 'add'
+            ? createHelpTopic()
+            : updateHelpTopic()
+          : null
+      "
+      #helpTopicModal="ngForm"
+    >
+      <div class="form-group">
+        <kendo-textbox-container floatingLabel="{{ language.title }}">
+          <input
+            kendoTextBox
+            required
+            type="text"
+            class="col-12"
+            [(ngModel)]="topic.name"
+            name="name"
+          />
+        </kendo-textbox-container>
+      </div>      
+
+      <div class="form-group" style="text-align: center">
+        <button
+          *ngIf="operationMode === 'add'"
+          kendoButton
+          [primary]="true"
+          class="form-button"
+          [disabled]="helpTopicModal.form.invalid"
+          type="submit"
+        >
+          {{ language.add }}
+        </button>
+        <button
+          *ngIf="operationMode === 'edit'"
+          kendoButton
+          [primary]="true"
+          class="form-button"
+          [disabled]="helpTopicModal.form.invalid"
+          type="submit"
+        >
+          {{ language.edit }}
+        </button>
+      </div>
+    </form>
+  </modal-content>
+</modal>

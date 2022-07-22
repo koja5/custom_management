@@ -1,0 +1,23 @@
+<div *ngIf="loading" style="height: 90vh">
+  <div class="spinner loading"></div>
+</div>
+
+<div
+  *ngIf="!loading"
+  class="content-wrapper w-100"
+  style="height: 100%; overflow: hidden"
+>
+  <div class="theme-colors-container">
+    <span> {{ language?.changeThemeColor }} </span>
+    <input
+      ejs-colorpicker
+      type="color"
+      id="colorpicker"
+      [value]="colorValue"
+      (change)="change($event)"
+    />
+    <button kendoButton [primary]="true" type="button" (click)="saveTheme()">
+      Save
+    </button>
+  </div>
+</div>

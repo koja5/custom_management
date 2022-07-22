@@ -11,7 +11,7 @@ import { CustomerModel } from "src/app/models/customer-model";
 import { CustomersService } from "src/app/service/customers.service";
 import { DateRangeService } from "@progress/kendo-angular-dateinputs";
 import { FormGroup } from "@angular/forms";
-import { GridDataResult, PageChangeEvent } from "@progress/kendo-angular-grid";
+import { GridComponent, GridDataResult, PageChangeEvent } from "@progress/kendo-angular-grid";
 import { HelpService } from "src/app/service/help.service";
 import { MessageService } from "src/app/service/message.service";
 import { PDFService } from "./../../../service/pdf.service";
@@ -30,6 +30,7 @@ import PizZipUtils from "pizzip/utils/index.js";
 import { DashboardService } from "src/app/service/dashboard.service";
 import { LoadingScreenService } from "src/app/shared/loading-screen/loading-screen.service";
 import { DateService } from "src/app/service/date.service";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -47,6 +48,7 @@ export class InvoiceComponent implements OnInit {
   @ViewChild("contentWrapper") contentElement: ElementRef<HTMLElement>;
   invoiceStore = null;
   allStores: any[];
+  gridData: any;
 
   @HostListener("window:resize", ["$event"])
   onResize(): void {
@@ -123,7 +125,7 @@ export class InvoiceComponent implements OnInit {
     let height =
       100 -
       (100 * this.filterToolbar.nativeElement.clientHeight) /
-        this.contentElement.nativeElement.clientHeight;
+      this.contentElement.nativeElement.clientHeight;
 
     return height;
   }
@@ -140,7 +142,9 @@ export class InvoiceComponent implements OnInit {
     private loadingScreenService: LoadingScreenService,
     private dateService: DateService,
     private invoiceService: InvoiceService
-  ) {}
+  ) {
+    this.allData = this.allData.bind(this);
+  }
 
   ngOnInit() {
     this.initializationConfig();
@@ -351,6 +355,13 @@ export class InvoiceComponent implements OnInit {
       }
 
       this.gridViewData = process(this.currentLoadData, this.state);
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, this.state).data,
+      }
+      this.gridData = {
+        data: this.currentLoadData,
+      };
+
       this.loading = false;
     });
   }
@@ -520,8 +531,8 @@ export class InvoiceComponent implements OnInit {
                   ? isNaNPrice
                     ? this.invoiceLanguage.noDataAvailable
                     : this.invoiceLanguage.euroSign +
-                      " " +
-                      parseFloat(therapy.net_price).toFixed(2)
+                    " " +
+                    parseFloat(therapy.net_price).toFixed(2)
                   : "",
                 vat: this.isPriceIncluded
                   ? vatDefinition
@@ -532,8 +543,8 @@ export class InvoiceComponent implements OnInit {
                   ? isNaNBrutoPrice
                     ? this.invoiceLanguage.noDataAvailable
                     : this.invoiceLanguage.euroSign +
-                      " " +
-                      parseFloat(therapy.gross_price).toFixed(2)
+                    " " +
+                    parseFloat(therapy.gross_price).toFixed(2)
                   : "",
               });
             }
@@ -581,6 +592,8 @@ export class InvoiceComponent implements OnInit {
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
+
+    //THIS ONE SHOULD BE ACTIVE
     const link =
       window.location.protocol +
       "//" +
@@ -589,6 +602,7 @@ export class InvoiceComponent implements OnInit {
       window.location.port +
       "/assets/Invoice_template.docx";
 
+    // LOCAL PURPOSE TESTING
     // const link = "http://127.0.0.1:8887/Invoice_template.docx";
     this.loadFile(link, function (error, content) {
       if (error) {
@@ -604,6 +618,11 @@ export class InvoiceComponent implements OnInit {
         },
       });
 
+      const store =
+        componentRef.invoiceStore !== undefined && componentRef.invoiceStore !== null
+          ? componentRef.invoiceStore
+          : componentRef.store;
+
       doc.setData({
         invoice_title: componentRef.invoiceLanguage.invoiceTitle,
         invoice_number: componentRef.invoiceLanguage.invoiceSubTitle,
@@ -613,19 +632,17 @@ export class InvoiceComponent implements OnInit {
         billing_from_title:
           componentRef.invoiceLanguage.invoiceBillingTitleFrom,
         billing_to_title: componentRef.invoiceLanguage.invoiceBillingTitleTo,
-        clinic_name: componentRef.store.companyname
-          ? componentRef.store.companyname
-          : componentRef.store.storename,
+        clinic_name: store.storename + '\n' + componentRef.superadminProfile.shortname,
         customer_lastname: componentRef.customerUser.lastname,
         customer_firstname: componentRef.customerUser.firstname,
-        clinic_street: componentRef.store.street,
+        clinic_street: store.street,
         customer_street: componentRef.customerUser.street,
         customer_streetnumber: componentRef.customerUser.streetnumber,
-        clinic_zipcode: componentRef.store.zipcode,
-        clinic_city: componentRef.store.place,
+        clinic_zipcode: store.zipcode,
+        clinic_city: store.place,
         customer_city: componentRef.customerUser.city,
-        clinic_telephone: componentRef.store.telephone,
-        clinic_email: componentRef.store.email,
+        clinic_telephone: store.telephone,
+        clinic_email: store.email,
         subtotal_title: componentRef.invoiceLanguage.invoiceSubtotal,
         total_title: componentRef.invoiceLanguage.invoiceTotal,
         products: therapies,
@@ -644,12 +661,10 @@ export class InvoiceComponent implements OnInit {
         netto_price_title: componentRef.isPriceIncluded
           ? componentRef.invoiceLanguage.invoiceNetPrice
           : "",
-        vat: componentRef.isPriceIncluded
-          ? componentRef.invoiceLanguage.vat + " (%)"
-          : "",
-        vat_title: componentRef.invoiceLanguage.vat,
-        vat_code: componentRef.store.vatcode
-          ? componentRef.store.vatcode
+        vat_percentage_title: componentRef.isPriceIncluded ? componentRef.invoiceLanguage.vatPercentageTitle : "",
+        vat_identification_number: componentRef.invoiceLanguage.vatIdentificationNumber,
+        vat_code: store.vatcode
+          ? store.vatcode
           : componentRef.superadminProfile.vatcode,
         vat_price: componentRef.isPriceIncluded ? vat : "",
         gross_price_title: componentRef.isPriceIncluded
@@ -719,4 +734,48 @@ export class InvoiceComponent implements OnInit {
   private get currentDateFormatted(): string {
     return this.dateService.currentDateFormatted;
   }
+
+
+  exportPDF(value: boolean): void {
+    this.allPages = value;
+
+    setTimeout(() => {
+      this.grid.saveAsPDF();
+    }, 0);
+  }
+
+  exportToExcel(grid: GridComponent, allPages: boolean) {
+    this.setDataForExcelExport(allPages);
+
+    setTimeout(() => {
+      grid.saveAsExcel();
+    }, 0);
+  }
+
+  public setDataForExcelExport(allPages: boolean): void {
+    console.log('allPages ', allPages);
+
+    if (allPages) {
+      var myState: State = {
+        skip: 0,
+        take: this.gridData.total,
+      };
+
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, myState).data,
+      }
+    } else {
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, this.state).data,
+      }
+    }
+  }
+
+  public allData(): ExcelExportData {
+    return this._allData;
+  }
+
+  private _allData: ExcelExportData;
+  @ViewChild('grid') grid;
+  public allPages: boolean;
 }

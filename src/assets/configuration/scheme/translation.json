@@ -386,6 +386,9 @@
       "eventCategory": {
         "type": "string"
       },
+      "periodForEvent": {
+        "type": "string"
+      },
       "notConfirmed": {
         "type": "string"
       },
@@ -627,9 +630,6 @@
         "type": "string"
       },
       "emailBirthdayCongratulation": {
-        "type": "string"
-      },
-      "invoicePrefixMenu": {
         "type": "string"
       },
       "reservations": {
@@ -953,9 +953,6 @@
       "company": {
         "type": "string"
       },
-      "companyName": {
-        "type": "string"
-      },
       "noInformation": {
         "type": "string"
       },
@@ -1035,6 +1032,12 @@
         "type": "string"
       },
       "vat": {
+        "type": "string"
+      },
+      "vatPercentageTitle": {
+        "type": "string"
+      },
+      "vatIdentificationNumber": {
         "type": "string"
       },
       "grossPrice": {
@@ -2054,6 +2057,45 @@
         "type": "string"
       },
       "showAtInvoice": {
+        "type": "string"
+      },
+      "changeThemeColor": {
+        "type": "string"
+      },
+      "themeColorsMenu": {
+        "type": "string"
+      },
+      "successThemeSaved": {
+        "type": "string"
+      },
+      "successThemeEdit": {
+        "type": "string"
+      },
+      "helpTitle": {
+        "type": "string"
+      },
+      "faqTitle": {
+        "type": "string"
+      },
+      "search": {
+        "type": "string"
+      },
+      "newFaq": {
+        "type": "string"
+      },
+      "editFaq": {
+        "type": "string"
+      },
+      "question": {
+        "type": "string"
+      },
+      "answer": {
+        "type": "string"
+      },
+      "helpTopic": {
+        "type": "string"
+      },
+      "addHelpTopic": {
         "type": "string"
       }
     }
@@ -3119,9 +3161,6 @@
           "flex-direction": "row",
           "items": [
             {
-              "key": "invoicePrefixMenu"
-            },
-            {
               "key": "addHoliday"
             },
             {
@@ -3620,10 +3659,13 @@
               "key": "netPrice"
             },
             {
-              "key": "vat"
+              "key": "grossPrice"
             },
             {
-              "key": "grossPrice"
+              "key": "vatPercentageTitle"
+            },
+            {
+              "key": "vatIdentificationNumber"
             }
           ]
         },
@@ -4206,9 +4248,6 @@
             },
             {
               "key": "company"
-            },
-            {
-              "key": "companyName"
             },
             {
               "key": "noInformation"
@@ -6166,6 +6205,9 @@
             },
             {
               "key": "eventCategoryPeriod[].text"
+            },
+            {
+              "key": "periodForEvent"
             }
           ]
         }
@@ -6454,6 +6496,89 @@
             },
             {
               "key": "dateTitle"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Help",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "helpTitle"
+            },
+            {
+              "key": "faqTitle"
+            },
+            {
+              "key": "search"
+            },
+            {
+              "key": "helpTopic"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "newFaq"
+            },
+            {
+              "key": "editFaq"
+            },
+            {
+              "key": "question"
+            },
+            {
+              "key": "answer"
+            },
+            {
+              "key": "addHelpTopic"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Theme colors",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "changeThemeColor"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "themeColorsMenu"
+            },
+            {
+              "key": "successThemeSaved"
+            },
+            {
+              "key": "successThemeEdit"
             }
           ]
         }

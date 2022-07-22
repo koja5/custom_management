@@ -10,6 +10,7 @@ import {
   RowArgs,
   DataStateChangeEvent,
   PageChangeEvent,
+  GridComponent,
 } from "@progress/kendo-angular-grid";
 import { VaucherService } from "src/app/service/vaucher.service";
 import Swal from "sweetalert2";
@@ -20,6 +21,7 @@ import { CustomersService } from "src/app/service/customers.service";
 import { UsersService } from "src/app/service/users.service";
 import { HelpService } from "src/app/service/help.service";
 import { Modal } from "ngx-modal";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 
 @Component({
   selector: "app-vaucher",
@@ -28,6 +30,11 @@ import { Modal } from "ngx-modal";
 })
 export class VaucherComponent implements OnInit {
   @ViewChild("vaucher") vaucher: Modal;
+  @ViewChild("grid") grid;
+
+  public allPages: boolean;
+  private _allData: ExcelExportData;
+
   public data = new VaucherModel();
   public unamePattern = "^[a-z0-9_-]{8,15}$";
   public emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$";
@@ -102,7 +109,9 @@ export class VaucherComponent implements OnInit {
     private message: MessageService,
     private userService: UsersService,
     private helpService: HelpService
-  ) {}
+  ) {
+    this.allData = this.allData.bind(this);
+  }
 
   ngOnInit() {
     this.height = this.helpService.getHeightForGrid();
@@ -150,6 +159,9 @@ export class VaucherComponent implements OnInit {
           });
           this.gridData = {
             data: data,
+          };
+          this._allData = <ExcelExportData>{
+            data: process(this.currentLoadData, this.state).data,
           };
           this.gridView = process(data, this.state);
           this["loadingGridVaucher"] = false;
@@ -450,6 +462,45 @@ export class VaucherComponent implements OnInit {
       }, 50);
     };
     fileReader.readAsArrayBuffer(args.target.files[0]);
+  }
+
+  exportPDF(value: boolean): void {
+    this.allPages = value;
+
+    setTimeout(() => {
+      this.grid.saveAsPDF();
+    }, 0);
+  }
+
+  exportToExcel(grid: GridComponent, allPages: boolean) {
+    this.setDataForExcelExport(allPages);
+
+    setTimeout(() => {
+      grid.saveAsExcel();
+    }, 0);
+  }
+
+  public setDataForExcelExport(allPages: boolean): void {
+    console.log("allPages ", allPages);
+
+    if (allPages) {
+      var myState: State = {
+        skip: 0,
+        take: this.gridData.total,
+      };
+
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, myState).data,
+      };
+    } else {
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, this.state).data,
+      };
+    }
+  }
+
+  public allData(): ExcelExportData {
+    return this._allData;
   }
 
   xlsxToJson(data) {

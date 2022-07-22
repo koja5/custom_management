@@ -8,11 +8,11 @@ import {
 import { EventCategoryService } from "../../../../service/event-category.service";
 import { EventCategoryModel } from "src/app/models/event-category-model";
 import { ServiceHelperService } from "src/app/service/service-helper.service";
-import { ToastrService } from "ngx-toastr";
 import { GradientSettings } from "@progress/kendo-angular-inputs";
 import { HelpService } from "src/app/service/help.service";
-import { PageChangeEvent } from "@progress/kendo-angular-grid";
+import { GridComponent, PageChangeEvent } from "@progress/kendo-angular-grid";
 import { Modal } from "ngx-modal";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 
 @Component({
   selector: "app-event-category",
@@ -21,6 +21,11 @@ import { Modal } from "ngx-modal";
 })
 export class EventCategoryComponent implements OnInit {
   @ViewChild("eventCategoryModal") eventCategoryModal: Modal;
+  @ViewChild("grid") grid;
+
+  public allPages: boolean;
+  private _allData: ExcelExportData;
+
   public height: any;
   public state: State = {
     skip: 0,
@@ -75,9 +80,10 @@ export class EventCategoryComponent implements OnInit {
   constructor(
     private service: EventCategoryService,
     private serviceHelper: ServiceHelperService,
-    private toastr: ToastrService,
     private helpService: HelpService
-  ) {}
+  ) {
+    this.allData = this.allData.bind(this);
+  }
 
   ngOnInit() {
     this.height = this.helpService.getHeightForGrid();
@@ -103,7 +109,13 @@ export class EventCategoryComponent implements OnInit {
       .getEventCategory(localStorage.getItem("superadmin"))
       .subscribe((data: []) => {
         this.currentLoadData = data;
+        this._allData = <ExcelExportData>{
+          data: process(this.currentLoadData, this.state).data,
+        };
         this.gridView = process(data, this.state);
+        this.gridData = {
+          data: data,
+        };
         this.loading = false;
       });
   }
@@ -252,6 +264,45 @@ export class EventCategoryComponent implements OnInit {
       }, 50);
     };
     fileReader.readAsArrayBuffer(args.target.files[0]);*/
+  }
+
+  exportPDF(value: boolean): void {
+    this.allPages = value;
+
+    setTimeout(() => {
+      this.grid.saveAsPDF();
+    }, 0);
+  }
+
+  exportToExcel(grid: GridComponent, allPages: boolean) {
+    this.setDataForExcelExport(allPages);
+
+    setTimeout(() => {
+      grid.saveAsExcel();
+    }, 0);
+  }
+
+  public setDataForExcelExport(allPages: boolean): void {
+    console.log("allPages ", allPages);
+
+    if (allPages) {
+      var myState: State = {
+        skip: 0,
+        take: this.gridData.total,
+      };
+
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, myState).data,
+      };
+    } else {
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, this.state).data,
+      };
+    }
+  }
+
+  public allData(): ExcelExportData {
+    return this._allData;
   }
 
   xlsxToJson(data) {

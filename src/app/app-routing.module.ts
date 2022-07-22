@@ -12,7 +12,10 @@ import { PrivacyPolicyComponent } from "./component/templates/privacy-policy/pri
 import { TermsComponent } from "./component/templates/terms/terms.component";
 
 const routes: Routes = [
-  { path: "", redirectTo: "", pathMatch: "full" },
+  {
+    path: "",
+    loadChildren: "./component/home/routing-module/home.module#HomedModule",
+  },
   {
     path: "login",
     canActivate: [LoggedGuard],
@@ -44,11 +47,15 @@ const routes: Routes = [
     path: "**",
     pathMatch: "full",
     component: NotFoundComponent,
-  }
+  },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes, {
+      scrollPositionRestoration: "enabled", // Add options right here
+    }),
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

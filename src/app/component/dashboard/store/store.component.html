@@ -5,7 +5,7 @@
   <button (click)="restoreColumns()" class="k-button hiddenBtn">Restore hidden columns</button>
 </div>
 <div *ngIf="!loading" style="height: 100%">
-  <kendo-grid
+  <kendo-grid #grid
   [data]="gridView"
   [style.height]="height"
   [resizable]="true"
@@ -71,14 +71,19 @@
                   (change)="onFileChange($event)"
                   [(ngModel)]="fileValue" /></label
             ></a>
-            <a kendoGridPDFCommand
-              ><span class="k-icon k-i-file-pdf"></span>
-              {{ language.exportToPDF }}</a
-            >
-            <a kendoGridExcelCommand
-              ><span class="k-icon k-i-file-excel"></span>
-              {{ language.exportToExcel }}</a
-            >
+            <a (click)="exportPDF(false)"><span class="k-icon k-i-file-pdf"></span>
+              {{ language.exportPageToPDF }}</a>
+            <a (click)="exportPDF(true)"><span class="k-icon k-i-file-pdf"></span>
+              {{ language.exportToPDF }}</a>
+
+            <a (click)="exportToExcel(grid, false)"><span class="k-icon k-i-file-excel"></span>
+              {{ language.exportToExcel }}
+            </a>
+
+            <a (click)="exportToExcel(grid, true)"><span class="k-icon k-i-file-excel"></span>
+              {{ language.exportAllToExcel }}
+            </a>
+
           </div>
         </div>
       </div>
@@ -152,9 +157,26 @@
         <button kendoButton [icon]="'k-icon k-i-delete'" (click)="open('dialog', dataItem.id)"></button>
       </ng-template>
     </kendo-grid-column>
-    <kendo-grid-pdf fileName="Location.pdf" [allPages]="true" paperSize="A4" [repeatHeaders]="true" [landscape]="true">
-      <kendo-grid-pdf-margin top="2cm" left="1cm" right="1cm" bottom="2cm"></kendo-grid-pdf-margin>
-      <ng-template kendoGridPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
+
+    <kendo-grid-pdf
+      fileName="Location.pdf"
+      [allPages]="allPages"
+      paperSize="A4"
+      [scale]="0.8"
+      [repeatHeaders]="true"
+      [landscape]="true"
+    >
+      <kendo-grid-pdf-margin
+        top="2cm"
+        left="1cm"
+        right="1cm"
+        bottom="2cm"
+      ></kendo-grid-pdf-margin>
+      <ng-template
+        kendoGridPDFTemplate
+        let-pageNum="pageNum"
+        let-totalPages="totalPages"
+      >
         <div class="page-template">
           <div class="header">
             <div>Page {{ pageNum }} of {{ totalPages }}</div>
@@ -162,8 +184,6 @@
         </div>
       </ng-template>
       <kendo-grid-column field="storename" title="Store name">
-      </kendo-grid-column>
-      <kendo-grid-column field="companyname" title="Company name">
       </kendo-grid-column>
       <kendo-grid-column field="vatcode" title="VAT code"> </kendo-grid-column>
       <kendo-grid-column field="email" title="Email"> </kendo-grid-column>
@@ -173,7 +193,7 @@
       </kendo-grid-column>
     </kendo-grid-pdf>
 
-    <kendo-grid-excel fileName="Location.xlsx"></kendo-grid-excel>
+    <kendo-grid-excel fileName="Location.xlsx" [fetchData]="allData"></kendo-grid-excel>
 
     <ng-template kendoGridNoRecordsTemplate>
       <div class="row no-results-element">

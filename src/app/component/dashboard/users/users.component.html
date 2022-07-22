@@ -8,22 +8,23 @@
 
 <div *ngIf="!loading" style="height: 100%">
   <kendo-grid
-  [data]="gridView"
-  [style.height]="height"
-  [resizable]="true"
-  [sortable]="true"
-  [pageSize]="state.take"
-  [skip]="state.skip"
-  [sort]="state.sort"
-  [filter]="state.filter"
-  [pageable]="pageable"
-  (pageChange)="pageChange($event)"
-  (sortChange)="sortChange($event)"
-  [kendoGridSelectBy]="mySelectionKey"
-  [groupable]="true"
-  [group]="state.group"
-  [pageSize]="pageSize"
-  (groupChange)="groupChange($event)"
+    #grid
+    [data]="gridView"
+    [style.height]="height"
+    [resizable]="true"
+    [sortable]="true"
+    [pageSize]="state.take"
+    [skip]="state.skip"
+    [sort]="state.sort"
+    [filter]="state.filter"
+    [pageable]="pageable"
+    (pageChange)="pageChange($event)"
+    (sortChange)="sortChange($event)"
+    [kendoGridSelectBy]="mySelectionKey"
+    [groupable]="true"
+    [group]="state.group"
+    [pageSize]="pageSize"
+    (groupChange)="groupChange($event)"
   >
     <kendo-grid-messages
       pagerPage="{{ language.pagerPage }}"
@@ -72,14 +73,19 @@
                   (change)="onFileChange($event)"
                   [(ngModel)]="fileValue" /></label
             ></a>
-            <a kendoGridPDFCommand
-              ><span class="k-icon k-i-file-pdf"></span>
-              {{ language.exportToPDF }}</a
-            >
-            <a kendoGridExcelCommand
-              ><span class="k-icon k-i-file-excel"></span>
-              {{ language.exportToExcel }}</a
-            >
+            <a (click)="exportPDF(false)"><span class="k-icon k-i-file-pdf"></span>
+              {{ language.exportPageToPDF }}</a>
+
+            <a (click)="exportPDF(true)"><span class="k-icon k-i-file-pdf"></span>
+              {{ language.exportToPDF }}</a>
+
+            <a (click)="exportToExcel(grid, false)"><span class="k-icon k-i-file-excel"></span>
+              {{ language.exportToExcel }}
+            </a>
+
+            <a (click)="exportToExcel(grid, true)"><span class="k-icon k-i-file-excel"></span>
+              {{ language.exportAllToExcel }}
+            </a>
           </div>
         </div>
       </div>
@@ -154,8 +160,9 @@
 
     <kendo-grid-pdf
       fileName="Users.pdf"
-      [allPages]="true"
+      [allPages]="allPages"
       paperSize="A4"
+      [scale]="0.8"
       [repeatHeaders]="true"
       [landscape]="true"
     >
@@ -216,7 +223,7 @@
       </kendo-grid-column>
     </kendo-grid-pdf>
 
-    <kendo-grid-excel fileName="Users.xlsx"></kendo-grid-excel>
+    <kendo-grid-excel fileName="Users.xlsx" [fetchData]="allData"></kendo-grid-excel>
     <ng-template kendoGridNoRecordsTemplate>
       <div class="row no-results-element">
         <div class="text-center">

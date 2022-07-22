@@ -154,9 +154,35 @@
   <div class="grid w-100" style="height: 100%">
     <div class="left-panel" style="height: 100%">
       <div class="control-section" style="height: 100%">
-        <kendo-grid [style.height.%]="tableHeight" [selectable]="{enabled: true, checkboxOnly: true, mode: 'multiple'}"
-          [data]="gridViewData" [pageSize]="pageSize" [skip]="state.skip" [pageable]="true"
-          (pageChange)="pageChange($event)" [filter]="state.filter" [loading]="loading">
+        <kendo-grid #grid [style.height.%]="tableHeight"
+          [selectable]="{enabled: true, checkboxOnly: true, mode: 'multiple'}" [data]="gridViewData"
+          [pageSize]="pageSize" [skip]="state.skip" [pageable]="true" (pageChange)="pageChange($event)"
+          [filter]="state.filter" [loading]="loading">
+
+          <ng-template kendoGridToolbarTemplate>
+            <div style="float: right; padding-right: 30px;">
+
+              <div class="dropdown-grid">
+                <button class="btn-grid" style="border-left: 1px solid #2a3582">
+                  <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content-grid">
+                  <a (click)="exportPDF(false)"><span class="k-icon k-i-file-pdf"></span>
+                    {{ language.exportPageToPDF }}</a>
+                  <a (click)="exportPDF(true)"><span class="k-icon k-i-file-pdf"></span>
+                    {{ language.exportToPDF }}</a>
+
+                  <a (click)="exportToExcel(grid, false)"><span class="k-icon k-i-file-excel"></span>
+                    {{ language.exportToExcel }}
+                  </a>
+
+                  <a (click)="exportToExcel(grid, true)"><span class="k-icon k-i-file-excel"></span>
+                    {{ language.exportAllToExcel }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </ng-template>
 
           <ng-template kendoGridNoRecordsTemplate>
             <div class="row mx-auto" style="margin-top:20%" *ngIf="!loading">
@@ -197,6 +223,35 @@
 
           <kendo-grid-column field="therapies_title" title="{{ language.therapyMenu}}"></kendo-grid-column>
           <kendo-grid-column field="event_category" title="{{ language.eventCategory}}"></kendo-grid-column>
+
+          <kendo-grid-pdf fileName="Invoices.pdf" [allPages]="allPages" paperSize="A4" [scale]="0.8"
+            [repeatHeaders]="true" [landscape]="true">
+            <kendo-grid-pdf-margin top="2cm" left="1cm" right="1cm" bottom="2cm"></kendo-grid-pdf-margin>
+            <ng-template kendoGridPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
+              <div class="page-template">
+                <div class="header">
+                  <div>Page {{ pageNum }} of {{ totalPages }}</div>
+                </div>
+              </div>
+            </ng-template>
+            <kendo-grid-column field="complaint_title" title="{{ language.complaintMenu}}"></kendo-grid-column>
+            <kendo-grid-column field="date" title="{{ language.date}}"></kendo-grid-column>
+            <kendo-grid-column field="storename" title="{{ language.store}}"></kendo-grid-column>
+            <kendo-grid-column title="{{ language.doctorColumnTitle}}">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                <h4>{{ dataItem.firstname }} {{ dataItem.lastname}}</h4>
+                <h6>{{ dataItem.email }}</h6>
+                <p>{{ dataItem.telephone }}</p>
+              </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column field="therapies_title" title="{{ language.therapyMenu}}"></kendo-grid-column>
+            <kendo-grid-column field="event_category" title="{{ language.eventCategory}}"></kendo-grid-column>
+
+          </kendo-grid-pdf>
+
+          <kendo-grid-excel fileName="Invoices.xlsx" [fetchData]="allData"></kendo-grid-excel>
+
         </kendo-grid>
       </div>
     </div>

@@ -86,13 +86,13 @@ body[data-layout="horizontal"][data-layout-size="boxed"] .footer {
 }
 
 .navbar-header .dropdown .show.header-item {
-  background-color: #f8f9fa;
+  background-color: var(--theme-color);;
 }
 
 .navbar-brand-box {
   padding: 0 1.5rem;
   width: 235px;
-  background: #091467;
+  background: var(--theme-color);
   border-right: 1px solid #e9e9ef;
   -webkit-box-shadow: 0 2px 2px #fbfaff;
   box-shadow: 0 2px 2px #fbfaff;
