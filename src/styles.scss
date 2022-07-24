@@ -7693,8 +7693,8 @@ table.valign-middle tbody tr td {
 }
 
 .btn-info {
-  background-color: #3ac9d6 !important;
-  border: 1px solid #3ac9d6 !important;
+  background-color: var(--theme-color) !important;
+  border: 1px solid var(--theme-color) !important;
   color: #fff !important;
 }
 
@@ -7707,9 +7707,10 @@ table.valign-middle tbody tr td {
 .btn-info:focus,
 .btn-info:hover,
 .open > .dropdown-toggle.btn-info {
-  background-color: #2abfcc !important;
-  border: 1px solid #2abfcc !important;
+  background-color: var(--theme-color) !important;
+  border: 1px solid var(--theme-color) !important;
   color: #fff !important;
+  filter: brightness(90%);
 }
 
 .btn-warning {
@@ -9733,7 +9734,7 @@ th > .rt-radio.rt-radio-single {
 .customtab.nav-tabs .nav-link:hover,
 .customtab.nav-tabs .nav-link.active:focus {
   border-bottom: 0px solid #36c6d3;
-  background-color: rgb(102, 115, 252) !important;
+  background-color: var(--theme-color) !important;
   box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.2),
     0 13px 24px -11px rgb(102, 115, 252);
   color: #fff;
@@ -9797,7 +9798,7 @@ nav-tabs > li {
 .nav-tabs > li a.active,
 .nav-tabs > li a.active:focus,
 .nav-tabs > li a.active:hover {
-  color: #555;
+  color: red;
   cursor: default;
   background-color: #fff;
   border-bottom-color: transparent;
@@ -17462,6 +17463,8 @@ kendo-grid-filter-cell-operators {
   margin: auto;
 }
 
+//theme color for buttons
+
 .addButton {
   background: var(--theme-color) !important;
   margin-left: 12px;
@@ -17472,6 +17475,35 @@ kendo-grid-filter-cell-operators {
 .k-button {
   width: auto !important;
 }
+
+.k-button-primary, .k-button.k-primary {
+  border-color: var(--theme-color);
+  color: #ffffff;
+  background-color: var(--theme-color);
+}
+
+.e-btn.e-flat.e-primary,
+.e-css.e-btn.e-flat.e-primary,
+.e-btn.e-flat.e-primary:active, .e-btn.e-flat.e-primary.e-active,
+.e-css.e-btn.e-flat.e-primary:active,
+.e-css.e-btn.e-flat.e-primary.e-active {
+  border-color: var(--theme-color) !important;
+  color: #ffffff;
+  background-color: var(--theme-color) !important;
+}
+
+.e-btn.e-flat.e-primary:hover {
+  border-color: var(--theme-color) !important;
+  color: #ffffff;
+  background-color: var(--theme-color) !important;
+  filter: brightness(90%);
+}
+
+.mat-button, .mat-raised-button{
+  background-color: var(--theme-color) !important;
+} 
+
+//theme color for buttons END
 
 .k-textbox-container,
 .k-floating-label-container {
