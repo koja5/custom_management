@@ -7,8 +7,11 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class HomeFooterComponent implements OnInit {
   @Input() color?: string;
+  public year: number;
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.year = new Date().getFullYear();
+  }
 }
