@@ -7,6 +7,7 @@ import { PanelBarExpandMode } from "@progress/kendo-angular-layout";
 import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { Modal } from 'ngx-modal';
 import { HelpService } from 'src/app/service/help.service';
+import { HelpTopicModel } from 'src/app/models/help-topic-model';
 
 @Component({
   selector: 'app-list-faq',
@@ -21,6 +22,7 @@ export class ListFaqComponent implements OnInit {
   public list: FaqModel[];
   public filterList: FaqModel[];
   public language: any;
+  public faqTopic: HelpTopicModel;
 
   public faq = new FaqModel();
   public operationMode = 'add';
@@ -46,6 +48,13 @@ export class ListFaqComponent implements OnInit {
     this.userSuperAdmin = this.superAdminId == this.userId;
 
     this.topicId = this.route.snapshot.params["id"];
+    this.service.getFaqTopic(this.topicId,this.superAdminId).subscribe(data => {
+      if (data && data["length"] > 0) {
+        this.faqTopic = data[0];
+        console.log(data[0]);
+        console.log(this.faqTopic);
+      }      
+    });
     this.faq.helpTopicId = this.topicId;
     this.loadFaqs();
   }

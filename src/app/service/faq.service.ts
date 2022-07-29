@@ -15,6 +15,11 @@ export class FaqService {
       .get<HelpTopicModel[]>("/api/getFaqTopics/"+superAdminId).map((res) => res);
   }
 
+  public getFaqTopic(topicId, superAdminId): Observable<HelpTopicModel>{
+    return this.httpClient
+    .get<HelpTopicModel>("/api/getFaqTopic/"+topicId+"/"+superAdminId).map((res) => res);
+  }
+
   public createFaqTopic(data) {
     return this.httpClient.post("/api/createFaqTopic", data).toPromise();
   }

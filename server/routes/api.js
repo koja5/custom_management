@@ -8696,6 +8696,29 @@ router.get("/getFaqTopics/:superAdminId", function (req, res, next) {
   });
 });
 
+router.get("/getFaqTopic/:topicId/:superAdminId", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    var topicId = req.params.topicId;
+    var superAdminId = req.params.superAdminId;
+    conn.query(
+      "SELECT * FROM `help_topics` where id=" + topicId + " and superAdminId="+superAdminId,
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
 router.post("/deleteFaqTopic", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {

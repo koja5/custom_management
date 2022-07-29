@@ -3,4 +3,5 @@ export class HelpTopicModel{
    name: string;
    languageCode: string;
    superAdminId: number; 
+   iconCss:string;
 }

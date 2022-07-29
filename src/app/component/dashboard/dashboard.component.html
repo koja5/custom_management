@@ -55,6 +55,11 @@
         <div class="d-flex navbar-right">
           <ul class="nav navbar-nav pull-right">
             <!-- start manage user dropdown -->
+            <li>
+              <a class="menu-help" routerLink="/dashboard/home/help">
+                <i class="fa fa-question-circle"></i> Help
+              </a>
+            </li>
             <li class="dropdown dropdown-user" *ngIf="user !== undefined">
               <a
                 (click)="showHideProfile()"
@@ -99,12 +104,7 @@
                   >
                     <i class="fa fa-cog"></i> {{ language["settings"] }}
                   </a>
-                </li>
-                <li>
-                  <a routerLink="/dashboard/home/help" (click)="showHideProfile()">
-                    <i class="fa fa-question-circle"></i> Help
-                  </a>
-                </li>
+                </li>               
                 <li class="divider"></li>
                 <li>
                   <a href="lock_screen.html" (click)="showHideProfile()">
