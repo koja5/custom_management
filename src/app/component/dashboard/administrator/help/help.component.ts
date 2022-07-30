@@ -1,8 +1,7 @@
-import { Component, ViewEncapsulation, Inject, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { HelpTopicModel } from 'src/app/models/help-topic-model';
 import { FaqService } from 'src/app/service/faq.service';
 import { Modal } from 'ngx-modal';
-import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { HelpService } from 'src/app/service/help.service';
 
 @Component({
@@ -19,7 +18,6 @@ export class HelpComponent implements OnInit {
 
   public operationMode = 'add';
   public userSuperAdmin = false;
-  overrideMessage: Partial<IndividualConfig> = { timeOut: 7000, positionClass: "toast-bottom-right" };
 
   private superAdminId;
   private userId;
@@ -27,7 +25,6 @@ export class HelpComponent implements OnInit {
   public selectedUser: string;
 
   constructor(private service: FaqService,
-    private toastrService: ToastrService,
     private helpService: HelpService) {}
 
   ngOnInit() {  
@@ -72,10 +69,9 @@ export class HelpComponent implements OnInit {
       this.loadTopics();
       this.closeHelpTopicModal();
       if (result) {
-        this.displaySuccessMessage(this.language.adminSuccessCreateTitle, this.language.adminSuccessCreateText);
-
+        this.helpService.successToastr(this.language.adminSuccessCreateTitle, this.language.adminSuccessCreateText);
       } else {
-        this.displayErrorMessage(this.language.adminErrorCreateTitle, this.language.adminErrorCreateText);
+        this.helpService.errorToastr(this.language.adminErrorCreateTitle, this.language.adminErrorCreateText)
       }
     });
   }
@@ -84,10 +80,9 @@ export class HelpComponent implements OnInit {
     this.service.updateFaqTopic(this.topic).then(result=>{
       this.closeHelpTopicModal();
       if (result) {
-        this.displaySuccessMessage(this.language.adminSuccessUpdateTitle, this.language.adminSuccessUpdateText);
-
+        this.helpService.successToastr(this.language.adminSuccessUpdateTitle, this.language.adminSuccessUpdateText);
       } else {
-        this.displayErrorMessage(this.language.adminErrorUpdateTitle, this.language.adminErrorUpdateText);
+        this.helpService.errorToastr(this.language.adminErrorUpdateTitle, this.language.adminErrorUpdateText);
       }
     });
   }
@@ -95,19 +90,11 @@ export class HelpComponent implements OnInit {
   deleteHelpTopic(topic){
     this.service.deleteFaqTopic(topic).then(result=>{
       if (result) {
-        this.displaySuccessMessage(this.language.adminSuccessUpdateTitle, this.language.adminSuccessUpdateText);
+        this.helpService.successToastr(this.language.adminSuccessUpdateTitle, this.language.adminSuccessUpdateText);
         this.loadTopics();
       } else {
-        this.displayErrorMessage(this.language.adminErrorUpdateTitle, this.language.adminErrorUpdateText);
+        this.helpService.errorToastr(this.language.adminErrorUpdateTitle, this.language.adminErrorUpdateText);
       }
     });
-  }
-
-  private displaySuccessMessage(message: string, title: string): void {
-    this.toastrService.success(message, title, { timeOut: 7000, positionClass: "toast-bottom-right" });
-  }
-
-  private displayErrorMessage(message: string, title: string): void {
-    this.toastrService.error(message, title, this.overrideMessage);
   }
 }

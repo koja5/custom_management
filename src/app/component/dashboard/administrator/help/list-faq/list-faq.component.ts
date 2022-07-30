@@ -4,7 +4,6 @@ import { FaqModel } from 'src/app/models/faq-question-model';
 import { FaqService } from 'src/app/service/faq.service';
 
 import { PanelBarExpandMode } from "@progress/kendo-angular-layout";
-import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { Modal } from 'ngx-modal';
 import { HelpService } from 'src/app/service/help.service';
 import { HelpTopicModel } from 'src/app/models/help-topic-model';
@@ -19,8 +18,8 @@ export class ListFaqComponent implements OnInit {
   @ViewChild("panelbar") panelRef;
   topicId: number;
   public kendoPanelBarExpandMode = PanelBarExpandMode.Multiple;
-  public list: FaqModel[];
-  public filterList: FaqModel[];
+  public list: FaqModel[]=[];
+  public filterList: FaqModel[]=[];
   public language: any;
   public faqTopic: HelpTopicModel;
 
@@ -31,11 +30,8 @@ export class ListFaqComponent implements OnInit {
   private superAdminId;
   private userId;
 
-  overrideMessage: Partial<IndividualConfig> = { timeOut: 7000, positionClass: "toast-bottom-right" };
-
   constructor(private service: FaqService,
     private route: ActivatedRoute,
-    private toastrService: ToastrService,
     private helpService: HelpService) { }
 
   ngOnInit() {
@@ -106,10 +102,9 @@ export class ListFaqComponent implements OnInit {
       this.loadFaqs();
       this.closeFaqModal();
       if (result) {
-        this.displaySuccessMessage(this.language.adminSuccessCreateTitle, this.language.adminSuccessCreateText);
-
+        this.helpService.successToastr(this.language.adminSuccessCreateTitle, this.language.adminSuccessCreateText);
       } else {
-        this.displayErrorMessage(this.language.adminErrorCreateTitle, this.language.adminErrorCreateText);
+        this.helpService.errorToastr(this.language.adminErrorCreateTitle, this.language.adminErrorCreateText);
       }
     });
   }
@@ -118,31 +113,21 @@ export class ListFaqComponent implements OnInit {
     this.service.updateFaq(this.faq).then(result => {
       this.closeFaqModal();
       if (result) {
-        this.displaySuccessMessage(this.language.adminSuccessUpdateTitle, this.language.adminSuccessUpdateText);
-
+        this.helpService.successToastr(this.language.adminSuccessUpdateTitle, this.language.adminSuccessUpdateText);
       } else {
-        this.displayErrorMessage(this.language.adminErrorUpdateTitle, this.language.adminErrorUpdateText);
+        this.helpService.errorToastr(this.language.adminErrorUpdateTitle, this.language.adminErrorUpdateText);
       }
     });
-  }
-
-  private displaySuccessMessage(message: string, title: string): void {
-    this.toastrService.success(message, title, { timeOut: 7000, positionClass: "toast-bottom-right" });
-  }
-
-  private displayErrorMessage(message: string, title: string): void {
-    this.toastrService.error(message, title, this.overrideMessage);
   }
 
   deleteQuestion(value) {
     this.service.deleteFaq(value).then(result => {
 
       if (result) {
-        this.displaySuccessMessage(this.language.adminSuccessDeleteTitle, this.language.adminSuccessDeleteText);
+        this.helpService.successToastr(this.language.adminSuccessDeleteTitle, this.language.adminSuccessDeleteText);
         this.loadFaqs();
       } else {
-        this.displaySuccessMessage(this.language.adminErrorDeleteTitle, this.language.adminErrorDeleteText);
-
+        this.helpService.errorToastr(this.language.adminErrorDeleteTitle, this.language.adminErrorDeleteText);
       }
     });;
   }
