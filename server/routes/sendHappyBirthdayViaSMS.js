@@ -72,9 +72,7 @@ function sendHappyBirthdayViaSMS() {
                                       mailRows[0].congratulationBirthday === 0)
                                   ) {
                                     var phoneNumber = null;
-                                    if (to.telephone) {
-                                      phoneNumber = to.telephone;
-                                    } else if (to.mobile) {
+                                    if (to.mobile) {
                                       phoneNumber = to.mobile;
                                     }
                                     if (

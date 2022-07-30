@@ -3,7 +3,8 @@
 </div>
 
 <div *ngIf="!loading" style="height: 100%">
-  <kendo-grid #grid
+  <kendo-grid
+    #grid
     [data]="gridView"
     [style.height]="height"
     [resizable]="true"
@@ -69,36 +70,47 @@
                   (change)="onFileChange($event)"
                   [(ngModel)]="fileValue" /></label
             ></a>
-            <a (click)="exportPDF(false)"><span class="k-icon k-i-file-pdf"></span>
-              {{ language.exportPageToPDF }}</a>
-            <a (click)="exportPDF(true)"><span class="k-icon k-i-file-pdf"></span>
-              {{ language.exportToPDF }}</a>
+            <a (click)="exportPDF(false)"
+              ><span class="k-icon k-i-file-pdf"></span>
+              {{ language.exportPageToPDF }}</a
+            >
+            <a (click)="exportPDF(true)"
+              ><span class="k-icon k-i-file-pdf"></span>
+              {{ language.exportToPDF }}</a
+            >
 
-            <a (click)="exportToExcel(grid, false)"><span class="k-icon k-i-file-excel"></span>
+            <a (click)="exportToExcel(grid, false)"
+              ><span class="k-icon k-i-file-excel"></span>
               {{ language.exportToExcel }}
             </a>
-  
-            <a (click)="exportToExcel(grid, true)"><span class="k-icon k-i-file-excel"></span>
-              {{ language.exportAllToExcel }}  
-            </a>
 
+            <a (click)="exportToExcel(grid, true)"
+              ><span class="k-icon k-i-file-excel"></span>
+              {{ language.exportAllToExcel }}
+            </a>
           </div>
         </div>
       </div>
     </ng-template>
-    <kendo-grid-column field="storename" title="Store name" width="120">
+    <kendo-grid-column
+      field="storename"
+      title="{{ language.storename }}"
+      width="120"
+    >
     </kendo-grid-column>
-    <kendo-grid-column field="companyname" title="Company name" width="120">
+    <kendo-grid-column field="vatcode" title="{{ language.vat }}" width="120">
     </kendo-grid-column>
-    <kendo-grid-column field="vatcode" title="VAT code" width="120">
+    <kendo-grid-column field="email" title="{{ language.email }}" width="200">
     </kendo-grid-column>
-    <kendo-grid-column field="email" title="Email" width="200">
+    <kendo-grid-column field="street" title="{{ language.street }}" width="150">
     </kendo-grid-column>
-    <kendo-grid-column field="street" title="Street" width="150">
+    <kendo-grid-column field="place" title="{{ language.place }}" width="150">
     </kendo-grid-column>
-    <kendo-grid-column field="place" title="Place" width="150">
-    </kendo-grid-column>
-    <kendo-grid-column field="telephone" title="Telephone" width="150">
+    <kendo-grid-column
+      field="telephone"
+      title="{{ language.telephone }}"
+      width="150"
+    >
     </kendo-grid-column>
     <kendo-grid-column width="80">
       <ng-template kendoGridCellTemplate let-dataItem>
@@ -143,19 +155,24 @@
           </div>
         </div>
       </ng-template>
-      <kendo-grid-column field="storename" title="Store name">
+      <kendo-grid-column field="storename" title="{{ language.storename }}">
       </kendo-grid-column>
-      <kendo-grid-column field="companyname" title="Company name">
+      <kendo-grid-column field="vatcode" title="{{ language.vat }}">
       </kendo-grid-column>
-      <kendo-grid-column field="vatcode" title="VAT code"> </kendo-grid-column>
-      <kendo-grid-column field="email" title="Email"> </kendo-grid-column>
-      <kendo-grid-column field="street" title="Street"> </kendo-grid-column>
-      <kendo-grid-column field="place" title="Place"> </kendo-grid-column>
-      <kendo-grid-column field="telephone" title="Telephone">
+      <kendo-grid-column field="email" title="{{ language.email }}">
+      </kendo-grid-column>
+      <kendo-grid-column field="street" title="{{ language.street }}">
+      </kendo-grid-column>
+      <kendo-grid-column field="place" title="{{ language.place }}">
+      </kendo-grid-column>
+      <kendo-grid-column field="telephone" title="{{ language.telephone }}">
       </kendo-grid-column>
     </kendo-grid-pdf>
 
-    <kendo-grid-excel fileName="Location.xlsx" [fetchData]="allData"></kendo-grid-excel>
+    <kendo-grid-excel
+      fileName="Location.xlsx"
+      [fetchData]="allData"
+    ></kendo-grid-excel>
 
     <ng-template kendoGridNoRecordsTemplate>
       <div class="row no-results-element">
@@ -199,18 +216,7 @@
         </kendo-textbox-container>
       </div>
       <div class="col-md-12 col-xs-12">
-        <kendo-textbox-container floatingLabel="{{ language.companyName }}">
-          <input
-            kendoTextBox
-            type="text"
-            class="col-xs-12"
-            name="companyname"
-            [(ngModel)]="data.companyname"
-          />
-        </kendo-textbox-container>
-      </div>
-      <div class="col-md-12 col-xs-12">
-        <kendo-textbox-container floatingLabel="{{ language.vatcode }}">
+        <kendo-textbox-container floatingLabel="{{ language.vat }}">
           <input
             kendoTextBox
             type="text"
@@ -422,19 +428,7 @@
       </div>
 
       <div class="col-md-12 col-xs-12">
-        <kendo-textbox-container floatingLabel="{{ language.companyName }}">
-          <input
-            kendoTextBox
-            type="text"
-            class="col-xs-12"
-            name="companyname"
-            [(ngModel)]="data.companyname"
-          />
-        </kendo-textbox-container>
-      </div>
-
-      <div class="col-md-12 col-xs-12">
-        <kendo-textbox-container floatingLabel="{{ language.vatcode }}">
+        <kendo-textbox-container floatingLabel="{{ language.vat }}">
           <input
             kendoTextBox
             type="text"
@@ -589,7 +583,7 @@
         </div>
       </div>
       <div class="form-group">
-        <div class="col-md-12 col-xs-12">
+        <div class="col-md-12 col-xs-12 text-center">
           <label
             class="k-form-field"
             style="text-align: center; padding-top: 30px"

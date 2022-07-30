@@ -959,7 +959,6 @@ router.post("/updateStore", function (req, res, next) {
       time_therapy: req.body.time_therapy,
       superadmin: req.body.superadmin,
       allowed_online: req.body.allowed_online,
-      companyname: req.body.companyname,
       vatcode: req.body.vatcode,
     };
 
@@ -5160,9 +5159,7 @@ router.post("/sendSMS", function (req, res) {
   }
   request(link + "getAvailableAreaCode", function (error, response, codes) {
     var phoneNumber = null;
-    if (req.body.telephone) {
-      phoneNumber = req.body.telephone;
-    } else if (req.body.mobile) {
+    if (req.body.mobile) {
       phoneNumber = req.body.mobile;
     }
     if (checkAvailableCode(phoneNumber, JSON.parse(codes))) {
@@ -5209,8 +5206,6 @@ router.post("/sendSMS", function (req, res) {
                   var dateMessage = "";
                   var time = "";
                   var clinic = "";
-                  console.log(err);
-                  console.log(smsMessage);
                   if (smsMessage.length > 0) {
                     sms = smsMessage[0];
                     if (sms.signatureAvailable) {
@@ -5586,7 +5581,7 @@ router.post("/sendMassiveSMS", function (req, res) {
                   globalCount = 0;
                   count = 0;
                   rows.forEach(async function (to, i, array) {
-                    var phoneNumber = to.mobile ? to.mobile : to.telephone;
+                    var phoneNumber = to.mobile ? to.mobile : null;
                     if (
                       checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
                       req.body.message
@@ -5692,7 +5687,7 @@ function splitSenderToPartArray(rows, codes, req, language) {
   rows.forEach(async function (to, i, array) {
     setTimeout(() => {
       count++;
-      var phoneNumber = to.mobile ? to.mobile : to.telephone;
+      var phoneNumber = to.mobile ? to.mobile : null;
       if (
         checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
         req.body.message
@@ -5963,8 +5958,6 @@ router.post("/getFilteredRecipients", function (req, res) {
           ")",
         function (err, rows) {
           conn.release();
-          console.log(err);
-          console.log(rows);
           if (err) return err;
           res.json(rows);
         }
