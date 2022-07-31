@@ -8297,7 +8297,7 @@ router.get(
       var userId = req.params.userId;
       var templateId = req.params.templateId;
       conn.query(
-        "SELECT h.id, h.Subject, h.StartTime, h.EndTime, h.templateId FROM `holidays` h join `holiday_template_connection` ht on h.id = ht.holidayId ",
+        "SELECT h.id, h.Subject, h.StartTime, h.EndTime FROM `holidays` h join `holiday_template_connection` ht on h.id = ht.holidayId ",
         function (err, rows) {
           conn.release();
           if (!err) {
@@ -8319,10 +8319,9 @@ router.get("/getHolidaysByTemplates/:templateIds",
         logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
       }
-      var userId = req.params.userId;
       var templateIds = req.params.templateIds;
       conn.query(
-        "SELECT h.id, h.Subject, h.StartTime, h.EndTime, h.templateId FROM `holidays` h join `holiday_template_connection` ht on h.id = ht.holidayId " +
+        "SELECT h.id, h.Subject, h.StartTime, h.EndTime FROM `holidays` h join `holiday_template_connection` ht on h.id = ht.holidayId " +
         " and ht.templateId in (" + templateIds + ")",
         function (err, rows) {
           conn.release();
@@ -8458,6 +8457,39 @@ router.post("/createStoreTemplateConnection", (req, res, next) => {
     res.json(ex);
   }
 });
+
+router.get("/getStoreTemplateConnection/:storeId", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        const temp = req.params.storeId; 
+        conn.query(
+          "select * from store_holidayTemplate where storeId = " + temp,
+          function (err, results, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(results);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
 
 router.post("/createUserTemplate", (req, res, next) => {
   try {

@@ -4,8 +4,6 @@
 
 <div *ngIf="!loading && selectedUser === undefined" style="height: 100%">
 
-  <!-- <kendo-grid #hiddenGrid="kendoGrid" hidden="true" [data]="allDataForGrid"></kendo-grid> -->
-
   <kendo-grid #grid="kendoGrid" *ngIf="language !== undefined" [data]="gridView" [style.height]="height"
     [resizable]="true" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter"
     [sortable]="true" [pageable]="pageable" (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey"
@@ -97,7 +95,6 @@
     </kendo-grid-pdf>
 
     <kendo-grid-excel fileName="Customers.xlsx" [fetchData]="allData"></kendo-grid-excel>
-    <!-- <kendo-grid-excel fileName="Customers.xlsx"></kendo-grid-excel> -->
 
     <ng-template kendoGridNoRecordsTemplate>
       <div class="row no-results-element">

@@ -46,6 +46,7 @@ export class HolidayService {
       .subscribe(val => callback(val));
   }
 
+
   public createStoreTemplateConnection(ids, storeId, callback): void {
     let query = "";
     ids.forEach(id => {
@@ -58,6 +59,10 @@ export class HolidayService {
       .post("/api/createStoreTemplateConnection", { query: temp })
       .map(res => res)
       .subscribe(val => callback(val));
+  }
+
+  public getStoreTemplateConnection(storeId) {
+    return this.httpClient.get<any[]>("/api/getStoreTemplateConnection/" + storeId).toPromise();
   }
 
   public updateHoliday(data, callback): void {

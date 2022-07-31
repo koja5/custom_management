@@ -1,6 +1,6 @@
 import { StorageService } from './../../../../service/storage.service';
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { ScheduleComponent, EventSettingsModel } from '@syncfusion/ej2-angular-schedule';
+import { ScheduleComponent, EventSettingsModel, CellClickEventArgs } from '@syncfusion/ej2-angular-schedule';
 import { UserType } from 'src/app/component/enum/user-type';
 import { HolidayModel } from 'src/app/models/holiday-model';
 import { DashboardService } from 'src/app/service/dashboard.service';
@@ -9,6 +9,7 @@ import { HelpService } from 'src/app/service/help.service';
 import { HolidayService } from 'src/app/service/holiday.service';
 import { MessageService } from 'src/app/service/message.service';
 import { UsersService } from 'src/app/service/users.service';
+import { Modal } from 'ngx-modal';
 
 @Component({
   selector: 'app-choose-holiday',
@@ -17,6 +18,11 @@ import { UsersService } from 'src/app/service/users.service';
 })
 export class ChooseHolidayComponent implements OnInit {
   @ViewChild('scheduleObj') public scheduleObj: ScheduleComponent;
+  @ViewChild("addVacationModal") addVacationModal: Modal;
+  public newHoliday: HolidayModel;
+  public addNewHoliday: boolean;
+  public deleteModal = false;
+
   public eventSettings: EventSettingsModel = {
     dataSource: [],
     fields: {
@@ -55,6 +61,7 @@ export class ChooseHolidayComponent implements OnInit {
     this.initializationConfig();
     this.id = this.helpService.getMe();
     this.storeId = this.storageService.getSelectedStore(this.id);
+    this.newHoliday = new HolidayModel();
 
     this.usersService.getUserWithIdPromise(this.id).then(data => {
       console.log(data);
@@ -116,13 +123,24 @@ export class ChooseHolidayComponent implements OnInit {
         }, 10);
       });
     }
+
+  }
+
+  onCellClick(args: CellClickEventArgs): void {
+    this.selectedCell = args.element;
+
+    this.addNewHoliday = true;
+    this.newHoliday = new HolidayModel();
+    this.newHoliday.Subject = '';
+    this.newHoliday.StartTime = args.startTime;
+    this.newHoliday.EndTime = args.endTime;
+    this.addVacationModal.open();
   }
 
   onRenderCell(event) {
     this.holidays.forEach(holiday => {
       if (event.elementType == "monthCells" && event.date >= holiday.StartTime.getTime() && event.date <= holiday.EndTime.getTime()) {
         event.element.style.backgroundColor = "#e9ecef";
-        event.element.style.pointerEvents = "none";
       }
     });
   }
@@ -146,12 +164,29 @@ export class ChooseHolidayComponent implements OnInit {
 
   addHolidaysForClinic(): void {
     const ids = this.selectedTemplates.map(elem => elem.id);
-
-    console.log('addHolidaysForClinic ', ids);
-
     this.holidayService.createStoreTemplateConnection(ids, this.storeId, (result) => {
-
       console.log(result);
     });
   }
+
+  addClinicHoliday(): void {
+    console.log('addClinicHoliday')
+  }
+
+  updateClinicHoliday(): void {
+    console.log('updateClinicHoliday')
+  }
+
+
+  deleteClinicHoliday(): void {
+    console.log('deleteClinicHoliday')
+  }
+
+  closeAddVacationModal(): void {
+    this.addVacationModal.close();
+
+    //to remove cell focus
+    this.selectedCell.classList.remove("e-selected-cell");
+  }
+
 }

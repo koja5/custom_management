@@ -1629,9 +1629,10 @@ export class DynamicSchedulerComponent implements OnInit {
   ngOnInit() {
     this.initializationConfig();
     this.initializationData();
-    this.loadHolidays();
+
     this.helpService.setDefaultBrowserTabTitle();
     this.loadUser();
+    this.loadHolidays();
   }
 
   @HostListener("window:resize", ["$event"])
@@ -1653,36 +1654,37 @@ export class DynamicSchedulerComponent implements OnInit {
     });
   }
 
-  public loadHolidays(): void {
-    const superAdminId = this.helpService.getSuperadmin();
+  // load holidays defined by clinic and holidays defined by selected clinic template (if there is some)
+  public loadHolidays() {
+    this.holidayService.getStoreTemplateConnection(this.selectedStoreId).then((ids) => {
 
-    console.log("superAdminId", superAdminId);
-    this.holidayService.getHolidays(superAdminId).subscribe((result) => {
-      console.log("holidays", result);
-      if (result && result.length > 0) {
-        console.log("holidayss");
-        result.forEach((r) => {
-          // console.log(r);
-          this.allEvents.push({
-            Subject: r.Subject,
-            StartTime: new Date(r.StartTime).setHours(Number(this.startWork)),
-            EndTime: new Date(r.EndTime).setHours(Number(this.startWork + 1)),
-            IsAllDay: false
-          });
+      if (ids.length) {
+        this.holidayService.getHolidaysByTemplates(ids.map(elem => elem.templateId)).then((result) => {
+          if (result && result.length > 0) {
+            result.forEach((r) => {
+              this.allEvents.push({
+                Subject: r.Subject,
+                StartTime: new Date(r.StartTime).setHours(Number(this.startWork)),
+                EndTime: new Date(r.EndTime).setHours(Number(this.startWork + 1)),
+                IsAllDay: false
+              });
 
-          this.holidays.push({
-            Subject: r.Subject,
-            StartTime: new Date(r.StartTime),
-            EndTime: new Date(r.EndTime),
-            IsAllDay: true
-          });
+              this.holidays.push({
+                Subject: r.Subject,
+                StartTime: new Date(r.StartTime),
+                EndTime: new Date(r.EndTime),
+                IsAllDay: true
+              });
+            });
+
+            this.eventSettings.dataSource = this.allEvents;
+          } else {
+            console.log("no holidayss");
+          }
         });
-
-        this.eventSettings.dataSource = this.allEvents;
-      } else {
-        console.log("no holidayss");
       }
     });
+
   }
 
   checkPreselectedStore() {
