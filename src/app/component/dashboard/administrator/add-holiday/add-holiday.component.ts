@@ -365,7 +365,7 @@ export class AddHolidayComponent implements OnInit {
   }
 
   private displaySuccessMessage(message: string, title: string): void {
-    this.toastrService.success(message, title, { timeOut: 7000, positionClass: "toast-bottom-right" });
+    this.toastrService.success(message, title, this.overrideMessage);
   }
 
   private displayErrorMessage(message: string, title: string): void {
@@ -380,7 +380,6 @@ export class AddHolidayComponent implements OnInit {
   }
 
   updateHoliday(): void {
-
     this.holidayService.updateHoliday(this.newHoliday, (val) => {
       if (val) {
         this.displaySuccessMessage(this.language.adminSuccessUpdateTitle, this.language.adminSuccessUpdateText);
@@ -396,43 +395,23 @@ export class AddHolidayComponent implements OnInit {
   }
 
   deleteHoliday(): void {
-    if (this.isOwner) {
-      this.holidayService.deleteHoliday(this.newHoliday.id, (val) => {
-        if (val) {
+    this.holidayService.deleteHoliday(this.newHoliday.id, (val) => {
+      if (val) {
 
-          this.displaySuccessMessage(this.language.adminSuccessDeleteTitle, this.language.adminSuccessDeleteText);
+        this.displaySuccessMessage(this.language.adminSuccessDeleteTitle, this.language.adminSuccessDeleteText);
 
-          //DELETE FROM ARRAY
-          this.holidays = this.holidays.filter(h => h.id !== this.newHoliday.id);
-          this.eventSettings.dataSource = this.holidays;
+        //DELETE FROM ARRAY
+        this.holidays = this.holidays.filter(h => h.id !== this.newHoliday.id);
+        this.eventSettings.dataSource = this.holidays;
 
-          this.closeAddVacationModal();
+        this.closeAddVacationModal();
 
-          this.scheduleObj.refreshEvents();
-          this.scheduleObj.refresh();
-          this.scheduleObj.refresh();
-        } else {
-          this.displayErrorMessage(this.language.adminErrorDeleteTitle, this.language.adminErrorDeleteText);
-        }
-      });
-    }
-    else {
-      this.holidayService.deleteHoliday(this.newHoliday.id, (val) => {
-        if (val) {
-          this.displaySuccessMessage(this.language.adminSuccessCreateTitle, this.language.adminSuccessCreateText);
-
-          //DELETE FROM ARRAY
-          this.holidays = this.holidays.filter(h => h.id !== this.newHoliday.id);
-          this.eventSettings.dataSource = this.holidays;
-
-          this.closeAddVacationModal();
-          this.scheduleObj.refreshEvents();
-          this.scheduleObj.refresh();
-        } else {
-          this.displayErrorMessage(this.language.adminErrorDeleteTitle, this.language.adminErrorDeleteText);
-        }
-      });
-    }
+        this.scheduleObj.refreshEvents();
+        this.scheduleObj.refresh();
+      } else {
+        this.displayErrorMessage(this.language.adminErrorDeleteTitle, this.language.adminErrorDeleteText);
+      }
+    });
   }
 
   setMinEndTime(event): void {

@@ -505,7 +505,7 @@
                                   {{ language?.mailMassiveMessage }}
                                 </a>
                               </li>
-
+                              <!-- *ngIf="type === userType.admin" -->
                               <li class="{{ selectedNodeModel['choose_holiday'] }}">
                                 <a (click)="returnActiveNode('choose_holiday')"
                                   routerLink="/dashboard/home/choose-holiday">

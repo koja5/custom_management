@@ -8306,6 +8306,31 @@ router.get("/getHolidaysByTemplates/:templateIds",
   }
 );
 
+router.get("/getHolidaysForClinic/:clinicId",
+  function (req, res, next) {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      }
+      var clinicId = req.params.clinicId;
+      conn.query(
+        "SELECT * FROM `holidays` h where h.clinicId =" + clinicId,
+        function (err, rows) {
+          conn.release();
+          if (!err) {
+            res.json(rows);
+          } else {
+            res.json(err);
+            logger.log("error", err.sql + ". " + err.sqlMessage);
+          }
+        }
+      );
+    });
+  }
+);
+
+
 //end holidays
 
 router.get("/getTemplateByUserId/:userId", function (req, res, next) {

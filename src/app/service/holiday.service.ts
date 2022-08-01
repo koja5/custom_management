@@ -26,6 +26,11 @@ export class HolidayService {
       .get<HolidayModel[]>("/api/getHolidaysByTemplates/" + templateIds).toPromise();
   }
 
+  public getHolidaysForClinic(clinicId): Promise<HolidayModel[]> {
+    return this.httpClient
+      .get<HolidayModel[]>("/api/getHolidaysForClinic/" + clinicId).toPromise();
+  }
+
   public createHoliday(data, callback): void {
     this.httpClient
       .post("/api/createHoliday", data)
