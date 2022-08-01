@@ -346,8 +346,6 @@ export class AddHolidayComponent implements OnInit {
     this.newHoliday.templateId = this.selectedTemplate.id;
 
     this.holidayService.createHoliday(this.newHoliday, (insertedId) => {
-      console.log(insertedId);
-
       if (insertedId) {
 
         this.displaySuccessMessage(this.language.adminSuccessCreateTitle, this.language.adminSuccessCreateText);
@@ -399,25 +397,23 @@ export class AddHolidayComponent implements OnInit {
 
   deleteHoliday(): void {
     if (this.isOwner) {
-      this.holidayService.deleteHolidayTemplate(this.newHoliday.id).then(() => {
-        this.holidayService.deleteHoliday(this.newHoliday.id, (val) => {
-          if (val) {
+      this.holidayService.deleteHoliday(this.newHoliday.id, (val) => {
+        if (val) {
 
-            this.displaySuccessMessage(this.language.adminSuccessDeleteTitle, this.language.adminSuccessDeleteText);
+          this.displaySuccessMessage(this.language.adminSuccessDeleteTitle, this.language.adminSuccessDeleteText);
 
-            //DELETE FROM ARRAY
-            this.holidays = this.holidays.filter(h => h.id !== this.newHoliday.id);
-            this.eventSettings.dataSource = this.holidays;
+          //DELETE FROM ARRAY
+          this.holidays = this.holidays.filter(h => h.id !== this.newHoliday.id);
+          this.eventSettings.dataSource = this.holidays;
 
-            this.closeAddVacationModal();
+          this.closeAddVacationModal();
 
-            this.scheduleObj.refreshEvents();
-            this.scheduleObj.refresh();
-            this.scheduleObj.refresh();
-          } else {
-            this.displayErrorMessage(this.language.adminErrorDeleteTitle, this.language.adminErrorDeleteText);
-          }
-        });
+          this.scheduleObj.refreshEvents();
+          this.scheduleObj.refresh();
+          this.scheduleObj.refresh();
+        } else {
+          this.displayErrorMessage(this.language.adminErrorDeleteTitle, this.language.adminErrorDeleteText);
+        }
       });
     }
     else {

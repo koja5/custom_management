@@ -3,7 +3,6 @@ import { HolidayModel } from './../models/holiday-model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HolidayTemplate } from '../models/holiday-template.model';
-import { query } from 'server/routes/logger';
 
 @Injectable({
   providedIn: 'root'
@@ -39,14 +38,6 @@ export class HolidayService {
       .get<HolidayTemplate>("/api/getTemplateByUserId/" + userId).toPromise();
   }
 
-  public createHolidayTemplateConnection(data, callback): void {
-    this.httpClient
-      .post("/api/createHolidayTemplate", data)
-      .map(res => res)
-      .subscribe(val => callback(val));
-  }
-
-
   public createStoreTemplateConnection(ids, storeId, callback): void {
     let query = "";
     ids.forEach(id => {
@@ -78,9 +69,4 @@ export class HolidayService {
       .map(res => res)
       .subscribe(val => callback(val));
   }
-
-  public deleteHolidayTemplate(id) {
-    return this.httpClient.get("/api/deleteHolidayTemplate/" + id).toPromise();
-  }
-
 }
