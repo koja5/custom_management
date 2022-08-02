@@ -64,7 +64,6 @@ export class UserDetailsComponent implements OnInit {
   ngOnInit() {
     this.id = this.route.snapshot.params["id"];
     this.service.getUserWithId(this.id, (val) => {
-      console.log(val);
       this.data = val[0];
       this.modelData();
       if (
@@ -136,7 +135,6 @@ export class UserDetailsComponent implements OnInit {
 
   onInitData() {
     this.service.getCountAllTasksForUser(this.id).subscribe((data) => {
-      console.log(data);
       if (data["length"] !== 0) {
         this.totalSum = data[0].total;
       } else {
