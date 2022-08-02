@@ -632,6 +632,21 @@
       "emailBirthdayCongratulation": {
         "type": "string"
       },
+      "headerMenuGeneralData": {
+        "type": "string"
+      },
+      "headerMenuPersonalization": {
+        "type": "string"
+      },
+      "headerMenuPermits": {
+        "type": "string"
+      },
+      "headerMenuMailTemplateSettings": {
+        "type": "string"
+      },
+      "headerMenuSMSTemplateSettings": {
+        "type": "string"
+      },
       "reservations": {
         "type": "string"
       },
@@ -2017,6 +2032,15 @@
       "pleaseConfirm": {
         "type": "string"
       },
+      "from": {
+        "type": "string"
+      },
+      "to": {
+        "type": "string"
+      },
+      "across": {
+        "type": "string"
+      },
       "clickHere": {
         "type": "string"
       },
@@ -2191,9 +2215,15 @@
             {
               "key": "pleaseConfirm"
             },
-            {},
-            {},
-            {}
+            {
+              "key": "from"
+            },
+            {
+              "key": "to"
+            },
+            {
+              "key": "across"
+            }
           ]
         }
       ]
@@ -3168,6 +3198,28 @@
             },
             {
               "key": "emailBirthdayCongratulation"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "headerMenuGeneralData"
+            },
+            {
+              "key": "headerMenuPersonalization"
+            },
+            {
+              "key": "headerMenuPermits"
+            },
+            {
+              "key": "headerMenuMailTemplateSettings"
+            },
+            {
+              "key": "headerMenuSMSTemplateSettings"
             }
           ]
         }

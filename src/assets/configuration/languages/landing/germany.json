@@ -164,5 +164,8 @@
     "forgotYouHaveAccount": "Haben Sie ein Konto und kennen das Passwort?",
     "footerImpressum": "Impressum",
     "footerPrivacyPolicy": "Datenschutzerklärung",
-    "footerTerms": "Bedingungen"
+    "footerTerms": "Bedingungen",
+    "from": "Aus",
+    "to": "Zu",
+    "across": "Über"
 }

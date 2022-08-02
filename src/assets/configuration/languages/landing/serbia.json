@@ -164,5 +164,8 @@
     "forgotYouHaveAccount": "Imate nalog i znate lozinku?",
     "footerImpressum": "Impressum",
     "footerPrivacyPolicy": "Politika privatnosti",
-    "footerTerms": "Uslovi"
+    "footerTerms": "Uslovi",
+    "from": "Od",
+    "to": "Do",
+    "across": "Preko"
 }

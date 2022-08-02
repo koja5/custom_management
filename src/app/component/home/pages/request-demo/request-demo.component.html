@@ -108,12 +108,22 @@
                           language.requestSectionFormChooiceNumberOfChildrens
                         }}
                       </option>
-                      <option value="0-50">Od 0 do 50</option>
-                      <option value="51-100">Od 51 do 100</option>
-                      <option value="101-250">Od 101 do 250</option>
-                      <option value="251-350">Od 251 do 350</option>
-                      <option value="351-500">Od 351 do 500</option>
-                      <option value="500-~">Preko 500</option>
+                      <option value="0-50">
+                        {{ language.from }} 0 {{ language.to }} 50
+                      </option>
+                      <option value="51-100">
+                        {{ language.from }} 51 {{ language.to }} 100
+                      </option>
+                      <option value="101-250">
+                        {{ language.from }} 101 {{ language.to }} 250
+                      </option>
+                      <option value="251-350">
+                        {{ language.from }} 251 {{ language.to }} 350
+                      </option>
+                      <option value="351-500">
+                        {{ language.from }} 351 {{ language.to }} 500
+                      </option>
+                      <option value="500-~">{{ language.across }} 500</option>
                     </select>
                   </div>
                 </div>
