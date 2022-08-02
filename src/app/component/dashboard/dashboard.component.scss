@@ -86,7 +86,7 @@ body[data-layout="horizontal"][data-layout-size="boxed"] .footer {
 }
 
 .navbar-header .dropdown .show.header-item {
-  background-color: var(--theme-color);;
+  background-color: var(--theme-color);
 }
 
 .navbar-brand-box {
@@ -1089,11 +1089,13 @@ body[data-sidebar-size="sm"] .vertical-menu #sidebar-menu > ul ul {
   display: none;
 }
 
-li.active a, li.active a i {
+li.active a,
+li.active a i {
   color: #01a9e9;
 }
 
-.trophy, .replication {
+.trophy,
+.replication {
   text-align: center;
 }
 
@@ -1111,4 +1113,10 @@ li.active a, li.active a i {
 
 .store-name {
   padding-top: 20px;
+}
+
+.header-item-node {
+  color: #8f96ad;
+  font-weight: bolder;
+  font-size: 12px;
 }

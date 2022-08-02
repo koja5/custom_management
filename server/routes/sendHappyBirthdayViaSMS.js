@@ -65,16 +65,13 @@ function sendHappyBirthdayViaSMS() {
                                 "SELECT distinct congratulationBirthday from mail_birthday_congratulation where superadmin = ?",
                                 [to.superadmin],
                                 function (err, mailRows, fields) {
-                                  console.log(mailRows);
                                   if (
                                     mailRows.length === 0 ||
                                     (mailRows.length > 0 &&
                                       mailRows[0].congratulationBirthday === 0)
                                   ) {
                                     var phoneNumber = null;
-                                    if (to.telephone) {
-                                      phoneNumber = to.telephone;
-                                    } else if (to.mobile) {
+                                    if (to.mobile) {
                                       phoneNumber = to.mobile;
                                     }
                                     if (
@@ -135,6 +132,7 @@ function sendHappyBirthdayViaSMS() {
                                       sendSmsFromMail(phoneNumber, fullMessage);
                                     }
                                   }
+                                  conn.release();
                                 }
                               );
                             }
@@ -142,9 +140,11 @@ function sendHappyBirthdayViaSMS() {
                         }
                       );
                     }
+                    conn.release();
                   }
                 );
               }
+              conn.release();
             }
           );
         }
