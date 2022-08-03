@@ -109,7 +109,6 @@ export class UserDetailsComponent implements OnInit {
         const colors = data.sort(function (a, b) {
           return a["sequence"] - b["sequence"];
         });
-        console.log(data);
         for (let i = 0; i < colors["length"]; i++) {
           this.palette.push(colors[i]["color"]);
         }
@@ -203,6 +202,7 @@ export class UserDetailsComponent implements OnInit {
   }
 
   updateUser() {
+    console.log('jopica ', this.data);
     this.service.updateUser(this.data).subscribe((data) => {
       if (data) {
         Swal.fire({

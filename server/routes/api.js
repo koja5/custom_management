@@ -1710,6 +1710,7 @@ router.post("/updateUser", function (req, res, next) {
       superadmin: req.body.superadmin,
       active: req.body.active,
       allowed_online: req.body.allowed_online,
+      gender: req.body.gender,
     };
 
     conn.query(
