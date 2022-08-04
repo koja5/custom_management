@@ -68,8 +68,8 @@ export class CustomersComponent implements OnInit {
   gridForExport: GridComponent;
   private _allData;
   allDataForGrid: DataResult;
-  showDialog = false;
-  isInputChanged = false;
+  showDialog: boolean = false;
+  isInputChanged: boolean = false;
 
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
@@ -152,13 +152,15 @@ export class CustomersComponent implements OnInit {
     });
   }
 
-  inputChange() {
+  inputChange(): void {
     this.isInputChanged = true;
   }
 
   closeModal(): void {
     if(this.isInputChanged) {
       this.showDialog = true;
+    }else {
+      this.customer.close()
     }
   }
 
@@ -171,7 +173,6 @@ export class CustomersComponent implements OnInit {
 
   newUser() {
     this.storeService.getStore(localStorage.getItem("idUser"), (val) => {
-      console.log(val);
       this.storeLocation = val;
     });
     this.initializeParams();
