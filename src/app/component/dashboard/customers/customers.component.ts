@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
+import { Component, OnInit, ViewChild, HostListener, ElementRef } from "@angular/core";
 import { Modal } from "ngx-modal";
 import { CustomersService } from "../../../service/customers.service";
 import { StoreService } from "../../../service/store.service";
@@ -69,7 +69,6 @@ export class CustomersComponent implements OnInit {
   private _allData;
   allDataForGrid: DataResult;
   showDialog: boolean = false;
-  isInputChanged: boolean = false;
 
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
@@ -90,7 +89,8 @@ export class CustomersComponent implements OnInit {
     private message: MessageService,
     private helpService: HelpService,
     private mailService: MailService,
-    private packLanguage: PackLanguageService
+    private packLanguage: PackLanguageService,
+    private eRef: ElementRef,
   ) {
     // this.excelIO = new Excel.IO();
     this.allData = this.allData.bind(this);
@@ -98,7 +98,6 @@ export class CustomersComponent implements OnInit {
 
 
   ngOnInit() {
-    this.isInputChanged = false;
     this.height = this.helpService.getHeightForGrid();
     this.data.gender = "male";
     this.getCustomers();
@@ -152,23 +151,19 @@ export class CustomersComponent implements OnInit {
     });
   }
 
-  inputChange(): void {
-    this.isInputChanged = true;
-  }
-
-  closeModal(): void {
-    if(this.isInputChanged) {
-      this.showDialog = true;
-    }else {
-      this.customer.close()
-    }
-  }
-
   receiveConfirm(event: boolean): void {
     if(event) {
       this.customer.close();
     }
       this.showDialog = false;
+  }
+
+  confirmClose() {
+    this.showDialog = true;
+  }
+
+  keyDown(): void {
+    this.showDialog = true
   }
 
   newUser() {
@@ -177,6 +172,8 @@ export class CustomersComponent implements OnInit {
     });
     this.initializeParams();
     this.changeTheme(this.theme);
+    this.customer.closeOnEscape = false;
+    this.customer.closeOnOutsideClick = false;
     this.customer.hideCloseButton = true;
     this.customer.open();
   }
@@ -243,7 +240,6 @@ export class CustomersComponent implements OnInit {
   }
 
   onChange(event) {
-    this.isInputChanged = true;
     this.data.birthday = event;
   }
 

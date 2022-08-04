@@ -121,13 +121,10 @@
   </kendo-dialog>
 </div>
 
-<modal #customer modalClass="modal-lg">
+<modal #customer modalClass="modal-lg" (keydown.esc)="keyDown()">
   <modal-header>
     <h4>{{ language.createNewCustomer }}</h4>
-    <button type="button" (click)="closeModal()" class="close" data-dismiss="modal"
-            [attr.aria-label]="cancelButtonLabel || 'Close'" >
-            <span aria-hidden="true">&times;</span>
-    </button>
+    <button type="button" class="close" data-dismiss="modal" [attr.aria-label]="cancelButtonLabel || 'Close'" (click)="confirmClose()"><span aria-hidden="true">&times;</span></button>
   </modal-header>
   <modal-content>
     <app-dynamic-confirm-dialog [showDialog]="showDialog" [title]="language?.changesWontBeSavedTitle"
@@ -151,7 +148,7 @@
             <div class="col-sm-6" style="margin-bottom: 3vh">
               <div class="row mgbt-xs-0">
                 <kendo-textbox-container floatingLabel="{{ language.attention }}">
-                  <textarea kendoTextArea [(ngModel)]="data.attention" (change)="inputChange()" [autoSize]="true" name="attention"
+                  <textarea kendoTextArea [(ngModel)]="data.attention" [autoSize]="true" name="attention"
                     style="width: 95%"></textarea>
                 </kendo-textbox-container>
               </div>
@@ -159,7 +156,7 @@
             <div class="col-sm-6" style="margin-bottom: 3vh">
               <div class="row mgbt-xs-0">
                 <kendo-textbox-container floatingLabel="{{ language.physicalComplaint }}">
-                  <textarea kendoTextArea [(ngModel)]="data.physicalComplaint" (change)="inputChange()" [autoSize]="true"
+                  <textarea kendoTextArea [(ngModel)]="data.physicalComplaint" [autoSize]="true"
                     name="physicalComplaint" style="width: 95%"></textarea>
                 </kendo-textbox-container>
               </div>
@@ -168,13 +165,13 @@
               <kendo-textbox-container floatingLabel="{{ language.firstname }}({{
                   language.required
                 }})">
-                <input kendoTextBox [(ngModel)]="data.firstname" (change)="inputChange()" name="firstname" class="noPadding" required
+                <input kendoTextBox [(ngModel)]="data.firstname" name="firstname" class="noPadding" required
                   #firstname="ngModel" />
               </kendo-textbox-container>
             </div>
             <div>
               <kendo-textbox-container floatingLabel="{{ language.lastname }}({{ language.required }})">
-                <input kendoTextBox [(ngModel)]="data.lastname" (change)="inputChange()" name="lastname" class="noPadding" required
+                <input kendoTextBox [(ngModel)]="data.lastname" name="lastname" class="noPadding" required
                   #lastname="ngModel" />
               </kendo-textbox-container>
             </div>
@@ -185,11 +182,11 @@
                 </p>
                 <label class="k-radio-label col-md-6 col-xs-12" for="female">
                   <input type="radio" name="gender" id="female" class="k-radio"
-                    checked="data.gender === 'female' ? checked : ''" [(ngModel)]="data.gender" (change)="inputChange()" [value]="'female'" />
+                    checked="data.gender === 'female' ? checked : ''" [(ngModel)]="data.gender" [value]="'female'" />
                   {{ language.female }}</label>
                 <label class="k-radio-label col-md-6 col-xs-12" for="male">
                   <input type="radio" name="gender" id="male" class="k-radio"
-                    checked="data.gender === 'male' ? checked : ''" [(ngModel)]="data.gender" (change)="inputChange()" [value]="'male'" />
+                    checked="data.gender === 'male' ? checked : ''" [(ngModel)]="data.gender" [value]="'male'" />
                   {{ language.male }}</label>
               </div>
               <div class="birthday-container col-md-6 col-xs-12">
@@ -206,38 +203,38 @@
       <div class="form-group m-0">
         <div class="email col-md-4 col-xs-12">
           <kendo-textbox-container floatingLabel="{{ language.telephone }}">
-            <input kendoTextBox type="text" class="col-xs-12" name="telephone" [(ngModel)]="data.telephone" (change)="inputChange()"
+            <input kendoTextBox type="text" class="col-xs-12" name="telephone" [(ngModel)]="data.telephone"
               telephone.value="" />
           </kendo-textbox-container>
         </div>
         <div class="email col-md-4 col-xs-12">
           <kendo-textbox-container floatingLabel="{{ language.mobile }}">
-            <input kendoTextBox type="text" class="col-xs-12" name="mobile" [(ngModel)]="data.mobile" (change)="inputChange()" mobile.value="" />
+            <input kendoTextBox type="text" class="col-xs-12" name="mobile" [(ngModel)]="data.mobile" mobile.value="" />
           </kendo-textbox-container>
         </div>
         <div class="email col-md-4 col-xs-12">
           <kendo-textbox-container floatingLabel="{{ language.email }}">
-            <input kendoTextBox type="email" class="col-xs-12" name="email" [(ngModel)]="data.email" (change)="inputChange()"
+            <input kendoTextBox type="email" class="col-xs-12" name="email" [(ngModel)]="data.email"
               [pattern]="emailPattern" #email="ngModel" #email="ngModel" />
           </kendo-textbox-container>
         </div>
         <div class="email col-md-4 col-xs-12">
           <kendo-textbox-container floatingLabel="{{ language.street }}">
-            <input kendoTextBox type="text" class="col-xs-12" [(ngModel)]="data.street" (change)="inputChange()" name="street" />
+            <input kendoTextBox type="text" class="col-xs-12" [(ngModel)]="data.street" name="street" />
           </kendo-textbox-container>
         </div>
         <div class="email col-md-4 col-xs-12">
           <kendo-textbox-container floatingLabel="{{ language.streetnumber }}">
-            <input kendoTextBox type="text" class="col-xs-12" [(ngModel)]="data.streetnumber" (change)="inputChange()" name="streetnumber" />
+            <input kendoTextBox type="text" class="col-xs-12" [(ngModel)]="data.streetnumber" name="streetnumber" />
           </kendo-textbox-container>
         </div>
         <div class="email col-md-4 col-xs-12">
           <kendo-textbox-container floatingLabel="{{ language.city }}">
-            <input kendoTextBox type="text" class="col-xs-12" [(ngModel)]="data.city" (change)="inputChange()" name="city" />
+            <input kendoTextBox type="text" class="col-xs-12" [(ngModel)]="data.city" name="city" />
           </kendo-textbox-container>
         </div>
         <div class="email col-md-12 col-xs-12" style="padding-top: 20px; font-weight: bold">
-          <input type="checkbox" kendoCheckBox [(ngModel)]="data.isConfirm" (change)="inputChange()" name="isConfirm" style="margin: 0px" />
+          <input type="checkbox" kendoCheckBox [(ngModel)]="data.isConfirm" name="isConfirm" style="margin: 0px" />
           <span style="font-size: 12px">
             {{ language.confirmMessageText }}</span>
         </div>
