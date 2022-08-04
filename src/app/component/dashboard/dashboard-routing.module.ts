@@ -50,6 +50,7 @@ import { MailPatientCreatedAccountViaFormComponent } from "./parameters/mail-par
 import { ThemeColorsComponent } from "./parameters/theme-colors/theme-colors.component";
 import { HelpComponent } from "./administrator/help/help.component";
 import { ListFaqComponent } from "./administrator/help/list-faq/list-faq.component";
+import { AdminGuard } from "src/app/service/login-guard/adminGuard";
 
 const routes: Routes = [
   {

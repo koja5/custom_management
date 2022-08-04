@@ -68,6 +68,8 @@ export class CustomersComponent implements OnInit {
   gridForExport: GridComponent;
   private _allData;
   allDataForGrid: DataResult;
+  showDialog = false;
+  isInputChanged = false;
 
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
@@ -96,6 +98,7 @@ export class CustomersComponent implements OnInit {
 
 
   ngOnInit() {
+    this.isInputChanged = false;
     this.height = this.helpService.getHeightForGrid();
     this.data.gender = "male";
     this.getCustomers();
@@ -149,6 +152,23 @@ export class CustomersComponent implements OnInit {
     });
   }
 
+  inputChange() {
+    this.isInputChanged = true;
+  }
+
+  closeModal(): void {
+    if(this.isInputChanged) {
+      this.showDialog = true;
+    }
+  }
+
+  receiveConfirm(event: boolean): void {
+    if(event) {
+      this.customer.close();
+    }
+      this.showDialog = false;
+  }
+
   newUser() {
     this.storeService.getStore(localStorage.getItem("idUser"), (val) => {
       console.log(val);
@@ -156,6 +176,7 @@ export class CustomersComponent implements OnInit {
     });
     this.initializeParams();
     this.changeTheme(this.theme);
+    this.customer.hideCloseButton = true;
     this.customer.open();
   }
 
@@ -221,6 +242,7 @@ export class CustomersComponent implements OnInit {
   }
 
   onChange(event) {
+    this.isInputChanged = true;
     this.data.birthday = event;
   }
 
