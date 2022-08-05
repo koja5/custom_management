@@ -197,6 +197,12 @@
       "uploadFromExcel": {
         "type": "string"
       },
+      "selectClinicHolidays": {
+        "type": "string"
+      },
+      "editHoliday": {
+        "type": "string"
+      },
       "patient": {
         "type": "string"
       },
@@ -603,6 +609,9 @@
         "type": "string"
       },
       "smsMassiveMessage": {
+        "type": "string"
+      },
+      "chooseHoliday": {
         "type": "string"
       },
       "changeSuperadminProfile": {
@@ -3157,6 +3166,9 @@
             },
             {
               "key": "smsMassiveMessage"
+            },
+            {
+              "key": "chooseHoliday"
             },
             {
               "key": "changeSuperadminProfile"
@@ -6532,6 +6544,12 @@
             },
             {
               "key": "addHoliday"
+            },
+            {
+              "key": "editHoliday"
+            },
+            {
+              "key": "selectClinicHolidays"
             }
           ]
         },

@@ -1,3 +1,4 @@
+import { ChooseHolidayComponent } from './parameters/choose-holiday/choose-holiday.component';
 import { ToolbarModule } from '@syncfusion/ej2-angular-navigations';
 import { NgModule } from "@angular/core";
 import { DashboardRouting } from "./dashboard-routing.module";
@@ -158,6 +159,7 @@ import { ListFaqComponent } from './administrator/help/list-faq/list-faq.compone
     MailMassiveEmailComponent,
     SmsMassiveComponent,
     AddHolidayComponent,
+    ChooseHolidayComponent,
     InvoiceComponent,
     SmsBirthdayCongratulationComponent,
     MailBirthdayCongratulationComponent,

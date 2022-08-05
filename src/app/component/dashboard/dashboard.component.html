@@ -566,18 +566,7 @@
                                   {{ language?.workTimeColorsMenu }}
                                 </a>
                               </li>
-                              <li
-                                class="{{ selectedNodeModel['add_holiday'] }}"
-                              >
-                                <a
-                                  (click)="returnActiveNode('add_holiday')"
-                                  routerLink="/dashboard/home/add-holiday"
-                                  ><i class="fa fa-calendar-plus-o"></i
-                                  ><span class="navigation-link">{{
-                                    language["addHoliday"]
-                                  }}</span></a
-                                >
-                              </li>
+                              
                               <li
                                 class="{{
                                   selectedNodeModel['change_superadmin_profile']
@@ -822,7 +811,13 @@
                                   {{ language?.mailMassiveMessage }}
                                 </a>
                               </li>
-
+                              <li *ngIf="type === userType.admin" class="{{ selectedNodeModel['define_holidays'] }}">
+                                <a (click)="returnActiveNode('define_holidays')"
+                                  routerLink="/dashboard/home/define-holidays">
+                                  <i class="fa fa-calendar-plus-o"></i>
+                                  <span class="navigation-link"> {{ language["chooseHoliday"] }}</span>
+                                </a>
+                              </li>
                               <li
                                 class="{{
                                   selectedNodeModel[
@@ -986,6 +981,13 @@
                                     language["smsCount"]
                                   }}</span></a
                                 >
+                              </li>
+
+                              <li class="{{ selectedNodeModel['add_holiday'] }}">
+                                <a (click)="returnActiveNode('add_holiday')" routerLink="/dashboard/home/add-holiday"><i
+                                    class="fa fa-calendar-plus-o"></i><span class="navigation-link">{{
+                                    language["addHoliday"]
+                                    }}</span></a>
                               </li>
                             </ul>
                           </li>

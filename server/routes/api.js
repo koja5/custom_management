@@ -12,6 +12,7 @@ var request = require("request");
 const logger = require("./logger");
 const sendSmsFromMail = require("./ftpUploadSMS");
 const { delay } = require("rxjs-compat/operator/delay");
+const { concat } = require("rxjs-compat/operator/concat");
 const macAddress = require("os").networkInterfaces();
 
 var link = process.env.link_api;
@@ -6301,7 +6302,6 @@ router.post("/updateTemplateAccount", function (req, res, next) {
 });
 
 router.get("/getTemplateAccount", function (req, res, next) {
-  var reqObj = req.params.id;
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
@@ -8229,35 +8229,6 @@ router.get("/deleteHoliday/:id", (req, res, next) => {
   }
 });
 
-router.get("/deleteHolidayTemplate/:id", (req, res, next) => {
-  try {
-    var reqObj = req.params.id;
-
-    connection.getConnection(function (err, conn) {
-      if (err) {
-        logger.log("error", err.sql + ". " + err.sqlMessage);
-        res.json(err);
-      } else {
-        conn.query(
-          "delete from holiday_template where holidayId = '" + reqObj + "';",
-          function (err, rows, fields) {
-            conn.release();
-            if (err) {
-              res.json(err);
-              logger.log("error", err.sql + ". " + err.sqlMessage);
-            } else {
-              res.json(true);
-            }
-          }
-        );
-      }
-    });
-  } catch (ex) {
-    logger.log("error", err.sql + ". " + err.sqlMessage);
-    res.json(ex);
-  }
-});
-
 router.get("/getHolidays/:userId", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
@@ -8281,21 +8252,16 @@ router.get("/getHolidays/:userId", function (req, res, next) {
 });
 
 router.get(
-  "/getHolidaysByTemplate/:userId/:templateId",
+  "/getHolidaysByTemplate/:templateId",
   function (req, res, next) {
     connection.getConnection(function (err, conn) {
       if (err) {
         logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
       }
-      var userId = req.params.userId;
       var templateId = req.params.templateId;
       conn.query(
-        "SELECT h.id, h.Subject, h.StartTime, h.EndTime, h.category, h.userId FROM `holidays` h join `holiday_template` ht on h.id = ht.holidayId join `user_template` ut on ht.templateId=ut.templateId where ut.userId='" +
-          userId +
-          "' and ut.templateId = '" +
-          templateId +
-          "'",
+        "SELECT * FROM `holidays` h where h.templateId = " + templateId,
         function (err, rows) {
           conn.release();
           if (!err) {
@@ -8309,6 +8275,55 @@ router.get(
     });
   }
 );
+
+router.get("/getHolidaysByTemplates/:templateIds",
+  function (req, res, next) {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      }
+      var templateIds = req.params.templateIds;
+      conn.query(
+        "SELECT * FROM `holidays` h where h.templateId in (" + templateIds + ")",
+        function (err, rows) {
+          conn.release();
+          if (!err) {
+            res.json(rows);
+          } else {
+            res.json(err);
+            logger.log("error", err.sql + ". " + err.sqlMessage);
+          }
+        }
+      );
+    });
+  }
+);
+
+router.get("/getHolidaysForClinic/:clinicId",
+  function (req, res, next) {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      }
+      var clinicId = req.params.clinicId;
+      conn.query(
+        "SELECT * FROM `holidays` h where h.clinicId =" + clinicId,
+        function (err, rows) {
+          conn.release();
+          if (!err) {
+            res.json(rows);
+          } else {
+            res.json(err);
+            logger.log("error", err.sql + ". " + err.sqlMessage);
+          }
+        }
+      );
+    });
+  }
+);
+
 
 //end holidays
 
@@ -8334,9 +8349,9 @@ router.get("/getTemplateByUserId/:userId", function (req, res, next) {
   });
 });
 
-//holiday-template
+//store-template
 
-router.post("/createHolidayTemplate", (req, res, next) => {
+router.post("/createStoreTemplateConnection", (req, res, next) => {
   try {
     connection.getConnection(function (err, conn) {
       if (err) {
@@ -8346,9 +8361,10 @@ router.post("/createHolidayTemplate", (req, res, next) => {
           status: err,
         });
       } else {
+        console.log(req.body);
+        const temp=req.body.query;
         conn.query(
-          "insert into holiday_template SET ?",
-          [req.body],
+          "insert into store_holidayTemplate (storeId , templateId) values " + temp,
           function (err, results, fields) {
             conn.release();
             if (err) {
@@ -8368,22 +8384,28 @@ router.post("/createHolidayTemplate", (req, res, next) => {
   }
 });
 
-router.post("/deleteHolidayTemplateByTemplateId", (req, res, next) => {
-  try {
-    var id = req.body.id;
 
+router.post("/deleteStoreTemplateConnection", (req, res, next) => {
+  try {
     connection.getConnection(function (err, conn) {
       if (err) {
-        logger.log("error", err.sql + ". " + err.sqlMessage);
-        res.json(err);
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
       } else {
+        console.log(req.body);
+        const temp=req.body.query;
+        const storeId=req.body.storeId;
         conn.query(
-          "delete from holiday_template where templateId = '" + id + "';",
-          function (err, rows, fields) {
+          "DELETE FROM store_holidayTemplate where storeId =  " + storeId + " and templateId in " + temp,
+          function (err, results, fields) {
             conn.release();
             if (err) {
-              res.json(err);
               logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
             } else {
               res.json(true);
             }
@@ -8396,6 +8418,39 @@ router.post("/deleteHolidayTemplateByTemplateId", (req, res, next) => {
     res.json(ex);
   }
 });
+
+router.get("/getStoreTemplateConnection/:storeId", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        const temp = req.params.storeId; 
+        conn.query(
+          "select * from store_holidayTemplate where storeId = " + temp,
+          function (err, results, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(results);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
 
 router.post("/createUserTemplate", (req, res, next) => {
   try {
