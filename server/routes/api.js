@@ -8390,6 +8390,41 @@ router.post("/createStoreTemplateConnection", (req, res, next) => {
   }
 });
 
+
+router.post("/deleteStoreTemplateConnection", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        console.log(req.body);
+        const temp=req.body.query;
+        const storeId=req.body.storeId;
+        conn.query(
+          "DELETE FROM store_holidayTemplate where storeId =  " + storeId + " and templateId in " + temp,
+          function (err, results, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
 router.get("/getStoreTemplateConnection/:storeId", (req, res, next) => {
   try {
     connection.getConnection(function (err, conn) {

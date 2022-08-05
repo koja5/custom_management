@@ -211,8 +211,7 @@ export class AddHolidayComponent implements OnInit {
               this.displaySuccessMessage(this.language.adminSuccessDeleteTitle, this.language.adminSuccessDeleteText);
               this.loadTemplates();
             } else {
-              this.displaySuccessMessage(this.language.adminErrorDeleteTitle, this.language.adminErrorDeleteText);
-
+              this.displayErrorMessage(this.language.adminErrorDeleteTitle, this.language.adminErrorDeleteText);
             }
 
             this.deleteModal = false;

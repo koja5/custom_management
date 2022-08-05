@@ -1656,10 +1656,37 @@ export class DynamicSchedulerComponent implements OnInit {
 
   // load holidays defined by clinic and holidays defined by selected clinic template (if there is some)
   public loadHolidays() {
+
+    this.holidayService.getHolidaysForClinic(this.selectedStoreId).then(result => {
+      console.log(result);
+      if (result && result.length > 0) {
+        result.forEach(r => {
+          // console.log('R: ', r);
+          this.allEvents.push({
+            Subject: r.Subject,
+            StartTime: new Date(r.StartTime).setHours(Number(this.startWork)),
+            EndTime: new Date(r.EndTime).setHours(Number(this.startWork + 1)),
+            IsAllDay: false
+          });
+
+          this.holidays.push({
+            Subject: r.Subject,
+            StartTime: new Date(r.StartTime),
+            EndTime: new Date(r.EndTime),
+            IsAllDay: true
+          });
+        });
+
+      }
+    });
+
+    // load holidays defined by clinic and holidays defined by selected clinic template (if there is some)
+
     this.holidayService.getStoreTemplateConnection(this.selectedStoreId).then((ids) => {
+      const templateIds = ids.map(elem => elem.templateId);
 
       if (ids.length) {
-        this.holidayService.getHolidaysByTemplates(ids.map(elem => elem.templateId)).then((result) => {
+        this.holidayService.getHolidaysByTemplates(templateIds).then((result) => {
           if (result && result.length > 0) {
             result.forEach((r) => {
               this.allEvents.push({
@@ -1677,14 +1704,15 @@ export class DynamicSchedulerComponent implements OnInit {
               });
             });
 
-            this.eventSettings.dataSource = this.allEvents;
+            this.scheduleObj.eventSettings.dataSource = this.allEvents;
+            this.scheduleObj.refresh();
+            this.scheduleObj.refreshEvents();
           } else {
             console.log("no holidayss");
           }
         });
       }
     });
-
   }
 
   checkPreselectedStore() {

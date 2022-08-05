@@ -57,6 +57,23 @@ export class HolidayService {
       .subscribe(val => callback(val));
   }
 
+  public deleteStoreTemplateConnection(ids, storeId, callback): void {
+    let query = "";
+    ids.forEach(id => {
+      query += id + ","
+    });
+
+    const temp = "(" + query.slice(0, -1) + ")";
+
+    console.log(temp);
+
+    this.httpClient
+      .post("/api/deleteStoreTemplateConnection", { query: temp, storeId: storeId })
+      .map(res => res)
+      .subscribe(val => callback(val));
+  }
+
+
   public getStoreTemplateConnection(storeId) {
     return this.httpClient.get<any[]>("/api/getStoreTemplateConnection/" + storeId).toPromise();
   }

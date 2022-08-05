@@ -1,12 +1,13 @@
-<div class="content-wrapper" [style.height]="height">
+<div class="content-wrapper h-auto">
   <div class="row mx-0 mb-3">
-    <div class="col-sm-3">
+    <div class="col-sm-6">
       <label class="k-checkbox-label"> {{ language.selectClinicHolidays }} </label>
       <br>
       <kendo-multiselect [data]="templateList" [valueField]="'id'" [textField]="'name'" [(ngModel)]="selectedTemplates"
         name="template" (valueChange)="onTemplateChange()">
       </kendo-multiselect>
-      <button class="mt-4" kendoButton [primary]="false" type="button" (click)="addHolidaysForClinic()">
+      <button class="mt-4" kendoButton [primary]="false" [disabled]="isSaveDisabled" type="button"
+        (click)="addHolidaysForClinic()">
         {{ language.save }}
       </button>
     </div>

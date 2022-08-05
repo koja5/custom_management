@@ -1,4 +1,3 @@
-import { filter } from 'rxjs/operators/filter';
 import { StorageService } from './../../../../service/storage.service';
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ScheduleComponent, EventSettingsModel, CellClickEventArgs } from '@syncfusion/ej2-angular-schedule';
@@ -52,8 +51,7 @@ export class ChooseHolidayComponent implements OnInit {
   height: string;
   id: number;
   private overrideMessage: Partial<IndividualConfig> = { timeOut: 7000, positionClass: "toast-bottom-right" };
-  storeTemplates: any[];
-
+  public storeTemplates: number[] = [];
 
   constructor(
     public messageService: MessageService,
@@ -72,65 +70,62 @@ export class ChooseHolidayComponent implements OnInit {
     this.newHoliday = new HolidayModel();
 
     this.usersService.getUserWithIdPromise(this.id).then(data => {
-      console.log(data);
       this.user = data;
     });
 
     this.loadTemplates();
     this.loadHolidaysForClinic();
 
-    this.height = this.dynamicService.getHolidayCalendarHeight();
+    this.height = this.dynamicService.getDefineHolidayHeight();
   }
-
 
   @HostListener("window:resize", ["$event"])
   onResize(event) {
-    this.height = this.dynamicService.getHolidayCalendarHeight();
+    this.height = this.dynamicService.getDefineHolidayHeight();
   }
 
   public loadHolidaysForClinic(): void {
+    this.holidays = [];
     this.holidayService.getHolidaysForClinic(this.storeId).then(result => {
       console.log(result);
       if (result && result.length > 0) {
         result.forEach(r => {
           // console.log('R: ', r);
-          this.clinicHolidays.push(
-            <HolidayModel>{
-              id: r.id,
-              Subject: r.Subject,
-              StartTime: new Date(r.StartTime),
-              EndTime: new Date(r.EndTime),
-            }
-          )
-        });
+          const holidayModel = <HolidayModel>{
+            id: r.id,
+            Subject: r.Subject,
+            StartTime: new Date(r.StartTime),
+            EndTime: new Date(r.EndTime),
+          };
 
-        this.holidays.concat(this.clinicHolidays);
+          this.clinicHolidays.push(holidayModel);
+          this.holidays.push(holidayModel);
+        });
       }
     });
 
     // load holidays defined by clinic and holidays defined by selected clinic template (if there is some)
 
     this.holidayService.getStoreTemplateConnection(this.storeId).then((ids) => {
-
       this.storeTemplates = ids.map(elem => elem.templateId);
+      this.selectedTemplates = this.templateList ? this.templateList.filter(x => this.storeTemplates.includes(x.id)) : [];
 
       if (ids.length) {
         this.holidayService.getHolidaysByTemplates(this.storeTemplates).then((result) => {
           if (result && result.length > 0) {
             result.forEach((r) => {
-              this.templateHolidays.push(<HolidayModel>{
+              const holidayModel = <HolidayModel>{
                 id: r.id,
                 Subject: r.Subject,
                 StartTime: new Date(r.StartTime),
                 EndTime: new Date(r.EndTime),
-              });
+              };
+
+              this.templateHolidays.push(holidayModel);
+              this.holidays.push(holidayModel);
             });
 
-
-            this.holidays.concat(this.templateHolidays);
-
             this.scheduleObj.eventSettings.dataSource = this.holidays;
-            this.scheduleObj.refresh();
             this.scheduleObj.refreshEvents();
           } else {
             console.log("no holidayss");
@@ -138,6 +133,25 @@ export class ChooseHolidayComponent implements OnInit {
         });
       }
     });
+  }
+
+  get isSaveDisabled(): boolean {
+    if (!this.storeTemplates || !this.selectedTemplates) {
+      return false;
+    }
+    return this.areEqual(this.storeTemplates, this.selectedTemplates.map(elem => elem.id));
+  }
+
+  public areEqual(array1, array2) {
+    if (array1.length === array2.length) {
+      return array1.every(element => {
+        if (array2.includes(element)) {
+          return true;
+        }
+        return false;
+      });
+    }
+    return false;
   }
 
   public loadHolidaysByTemplate(): void {
@@ -154,7 +168,6 @@ export class ChooseHolidayComponent implements OnInit {
       this.holidays.concat(this.clinicHolidays);
 
       this.scheduleObj.eventSettings.dataSource = this.holidays;
-      this.scheduleObj.refresh();
       this.scheduleObj.refreshEvents();
       return;
     }
@@ -178,7 +191,6 @@ export class ChooseHolidayComponent implements OnInit {
       this.holidays.concat(this.clinicHolidays);
 
       this.scheduleObj.eventSettings.dataSource = this.holidays;
-      this.scheduleObj.refresh();
       this.scheduleObj.refreshEvents();
     });
   }
@@ -222,7 +234,8 @@ export class ChooseHolidayComponent implements OnInit {
   }
 
   onRenderCell(event) {
-    this.templateHolidays.forEach(holiday => {
+    this.holidays.forEach(holiday => {
+      debugger
       if (event.elementType == "monthCells" && event.date >= holiday.StartTime.getTime() && event.date <= holiday.EndTime.getTime()) {
         event.element.style.backgroundColor = "#e9ecef";
       }
@@ -230,8 +243,6 @@ export class ChooseHolidayComponent implements OnInit {
   }
 
   onTemplateChange(): void {
-    console.log('valueChange', this.selectedTemplates);
-    this.scheduleObj.refresh();
     this.scheduleObj.refreshEvents();
 
     if (this.selectedTemplates && this.selectedTemplates.length > 0) {
@@ -241,22 +252,43 @@ export class ChooseHolidayComponent implements OnInit {
       this.templateHolidays = [];
       this.eventSettings.dataSource = [];
       this.scheduleObj.eventSettings.dataSource = [];
-      this.scheduleObj.refreshEvents();
       this.scheduleObj.refresh();
+      this.scheduleObj.refreshEvents();
     }
   }
 
+  // connect clinic with holiday template
+  // if those templates are already connected save button is disabled
+  // ako selectedTemplates sadrzi idjeve koji nisu u storeTemplates to su novi idjevi, njih dodajemo
+  // ako selectedTemplates ne sadrzi neki ili sve idjeve koji su u storeTemplates njih brisemo
   addHolidaysForClinic(): void {
     const ids = this.selectedTemplates.map(elem => elem.id);
-    this.holidayService.createStoreTemplateConnection(ids, this.storeId, (result) => {
-      console.log(result);
-      if (result) {
-        this.displaySuccessMessage(this.language.adminSuccessCreateTitle, this.language.adminSuccessCreateText);
+    const idsForAdding = ids.filter(x => !this.storeTemplates.includes(x));
 
-      } else {
-        this.displayErrorMessage(this.language.adminErrorCreateTitle, this.language.adminErrorCreateText);
-      }
-    });
+    if (idsForAdding.length) {
+      this.holidayService.createStoreTemplateConnection(idsForAdding, this.storeId, (result) => {
+        console.log(result);
+        if (result) {
+          this.displaySuccessMessage(this.language.adminSuccessCreateTitle, this.language.adminSuccessCreateText);
+        } else {
+          this.displayErrorMessage(this.language.adminErrorCreateTitle, this.language.adminErrorCreateText);
+        }
+      });
+
+    }
+
+    // for removing
+    const idsForRemoving = this.storeTemplates.filter(x => !ids.includes(x));
+    if (idsForRemoving.length) {
+      this.holidayService.deleteStoreTemplateConnection(idsForRemoving, this.storeId, (result) => {
+        console.log(result);
+        if (result) {
+          this.displaySuccessMessage(this.language.adminSuccessDeleteTitle, this.language.adminSuccessDeleteText);
+        } else {
+          this.displayErrorMessage(this.language.adminErrorDeleteTitle, this.language.adminErrorDeleteText);
+        }
+      });
+    }
   }
 
   addClinicHoliday(): void {
@@ -316,8 +348,6 @@ export class ChooseHolidayComponent implements OnInit {
         this.closeAddVacationModal();
 
         this.scheduleObj.refreshEvents();
-        this.scheduleObj.refresh();
-        this.scheduleObj.refresh();
       } else {
         this.displayErrorMessage(this.language.adminErrorDeleteTitle, this.language.adminErrorDeleteText);
       }

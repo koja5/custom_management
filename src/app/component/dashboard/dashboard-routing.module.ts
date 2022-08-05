@@ -176,7 +176,7 @@ const routes: Routes = [
       { path: "reservations", component: ReservationsComponent },
       { path: "template-account", component: TemplateAccountComponent },
       { path: "add-holiday", component: AddHolidayComponent },
-      { path: "choose-holiday", component: ChooseHolidayComponent },
+      { path: "define-holidays", component: ChooseHolidayComponent },
       { path: "mail-reminder", component: MailReminderComponent },
       {
         path: "mail-approve-reservation",
