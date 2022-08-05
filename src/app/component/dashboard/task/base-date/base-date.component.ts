@@ -89,6 +89,8 @@ export class BaseDateComponent implements OnInit {
   public loadingGridComplaint = false;
   public loadingGridTherapy = false;
   public loadingGridDocument = false;
+  isFormDirty: boolean = false;
+  showDialog: boolean = false;
   public sort: SortDescriptor[] = [
     {
       field: "date",
@@ -248,6 +250,20 @@ export class BaseDateComponent implements OnInit {
     return arrayData;
   }
 
+  customerOpen() {
+    this.customer.closeOnEscape = false;
+    this.customer.closeOnOutsideClick = false;
+    this.customer.hideCloseButton = true;
+    this.customer.open()
+  }
+
+  settingsWindowOpen(){
+    this.settingsWindow.closeOnEscape = false;
+    this.settingsWindow.closeOnOutsideClick = false;
+    this.settingsWindow.hideCloseButton = true;
+    this.settingsWindow.open()
+  }
+
   getTherapy() {
     this["loadingGridTherapy"] = true;
     this.service.getTherapyForCustomer(this.data.id).subscribe((data: []) => {
@@ -341,8 +357,34 @@ export class BaseDateComponent implements OnInit {
     this.dialogComplaintOpened = false;
   }
 
+  receiveConfirm(event: boolean): void {
+    if(event) {
+      this.customer.close();
+      this.isFormDirty = false;
+    }
+      this.showDialog = false;
+  }
+
+  confirmClose() {
+    console.log(this.isFormDirty, 'pa pravi jopa')
+    if(this.isFormDirty) {
+      this.showDialog = true;
+    }else {
+      this.customer.close()
+      this.showDialog = false;
+      this.isFormDirty = false
+    }
+  }
+
+  isDirty(): any {
+    this.isFormDirty = true;
+  }
+
   editCustomer() {
     this.date.birthday = new Date(this.date.birthday);
+    this.customer.closeOnEscape = false;
+    this.customer.closeOnOutsideClick = false;
+    this.customer.hideCloseButton = true;
     this.customer.open();
   }
 
@@ -1202,6 +1244,9 @@ export class BaseDateComponent implements OnInit {
   }
 
   editDocuments(item) {
+    this.document_edit.closeOnEscape = false;
+    this.document_edit.closeOnOutsideClick = false;
+    this.document_edit.hideCloseButton = true;
     this.document_edit.open();
     this.documentItem = item;
     if (

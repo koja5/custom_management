@@ -69,6 +69,7 @@ export class CustomersComponent implements OnInit {
   private _allData;
   allDataForGrid: DataResult;
   showDialog: boolean = false;
+  isFormDirty: boolean = false;
 
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
@@ -154,16 +155,23 @@ export class CustomersComponent implements OnInit {
   receiveConfirm(event: boolean): void {
     if(event) {
       this.customer.close();
+      this.isFormDirty = false;
     }
       this.showDialog = false;
   }
 
   confirmClose() {
-    this.showDialog = true;
+    if(this.isFormDirty) {
+      this.showDialog = true;
+    }else {
+      this.customer.close()
+      this.showDialog = false;
+      this.isFormDirty = false
+    }
   }
 
-  keyDown(): void {
-    this.showDialog = true
+  isDirty(): any {
+    this.isFormDirty = true;
   }
 
   newUser() {
