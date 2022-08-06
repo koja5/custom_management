@@ -392,7 +392,7 @@ export class UserDetailsComponent implements OnInit {
       this.showDialog = false;
   }
 
-  confirmClose() {
+  confirmClose(): void {
     this.user.modalRoot.nativeElement.focus();
     if(this.isFormDirty) {
       this.showDialog = true;
@@ -403,7 +403,7 @@ export class UserDetailsComponent implements OnInit {
     }
   }
 
-  isDirty(): any {
+  isDirty(): void {
     this.isFormDirty = true;
   }
 

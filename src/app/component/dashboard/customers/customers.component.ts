@@ -160,7 +160,7 @@ export class CustomersComponent implements OnInit {
       this.showDialog = false;
   }
 
-  confirmClose() {
+  confirmClose(): void {
     this.customer.modalRoot.nativeElement.focus();
     if(this.isFormDirty) {
       this.showDialog = true;
@@ -171,7 +171,7 @@ export class CustomersComponent implements OnInit {
     }
   }
 
-  isDirty(): any {
+  isDirty(): void {
     this.isFormDirty = true;
   }
 

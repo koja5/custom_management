@@ -158,7 +158,7 @@ export class VaucherComponent implements OnInit {
       this.showDialog = false;
   }
 
-  confirmClose() {
+  confirmClose(): void {
     this.vaucher.modalRoot.nativeElement.focus();
     if(this.isFormDirty) {
       this.showDialog = true;
@@ -169,7 +169,7 @@ export class VaucherComponent implements OnInit {
     }
   }
 
-  isDirty(): any {
+  isDirty(): void {
     this.isFormDirty = true;
   }
 

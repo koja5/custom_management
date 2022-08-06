@@ -140,7 +140,7 @@ export class WorkTimeColorsComponent implements OnInit {
       this.showDialog = false;
   }
 
-  confirmClose() {
+  confirmClose(): void {
     this.workTimeColorsModal.modalRoot.nativeElement.focus();
     if(this.isFormDirty) {
       this.showDialog = true;
@@ -151,7 +151,7 @@ export class WorkTimeColorsComponent implements OnInit {
     }
   }
 
-  isDirty(): any {
+  isDirty(): void {
     this.isFormDirty = true;
   }
 

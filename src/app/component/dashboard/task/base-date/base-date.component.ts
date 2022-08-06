@@ -365,7 +365,7 @@ export class BaseDateComponent implements OnInit {
       this.showDialog = false;
   }
 
-  confirmClose(modal: Modal) {
+  confirmClose(modal: Modal): void {
     modal.modalRoot.nativeElement.focus();
     if(this.isFormDirty) {
       this.showDialog = true;
@@ -376,7 +376,7 @@ export class BaseDateComponent implements OnInit {
     }
   }
 
-  isDirty(): any {
+  isDirty(): void {
     this.isFormDirty = true;
   }
 

@@ -155,7 +155,7 @@ export class EventCategoryComponent implements OnInit {
       this.showDialog = false;
   }
 
-  confirmClose() {
+  confirmClose(): void {
     this.eventCategoryModal.modalRoot.nativeElement.focus();
     if(this.isFormDirty) {
       this.showDialog = true;
@@ -166,7 +166,7 @@ export class EventCategoryComponent implements OnInit {
     }
   }
 
-  isDirty(): any {
+  isDirty(): void {
     this.isFormDirty = true;
   }
 
