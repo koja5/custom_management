@@ -357,20 +357,20 @@ export class BaseDateComponent implements OnInit {
     this.dialogComplaintOpened = false;
   }
 
-  receiveConfirm(event: boolean): void {
+  receiveConfirm(event: boolean, modal: any): void {
     if(event) {
-      this.customer.close();
+      modal.close();
       this.isFormDirty = false;
     }
       this.showDialog = false;
   }
 
-  confirmClose() {
-    console.log(this.isFormDirty, 'pa pravi jopa')
+  confirmClose(modal: any) {
+    modal.modalRoot.nativeElement.focus();
     if(this.isFormDirty) {
       this.showDialog = true;
     }else {
-      this.customer.close()
+      modal.close();
       this.showDialog = false;
       this.isFormDirty = false
     }
@@ -483,6 +483,9 @@ export class BaseDateComponent implements OnInit {
       .subscribe((data) => {
         this.complaintValue = data;
       });
+    this.complaint.closeOnEscape = false;
+    this.complaint.closeOnOutsideClick = false;
+    this.complaint.hideCloseButton = true;
     this.complaint.open();
   }
 
@@ -1134,6 +1137,13 @@ export class BaseDateComponent implements OnInit {
     }
     this.operationMode = "edit";
     this.complaint.open();
+  }
+
+  uploadOpen() {
+    this.upload.closeOnEscape = false;
+    this.upload.closeOnOutsideClick = false;
+    this.upload.hideCloseButton = true;
+    this.upload.open();
   }
 
   closeUploadModal() {

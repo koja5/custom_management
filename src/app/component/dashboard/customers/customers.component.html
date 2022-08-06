@@ -129,7 +129,10 @@
     </button>
   </modal-header>
   <modal-content>
-  <kendo-dialog *ngIf="showDialog" title="language?.changesWontBeSavedTitle" [minWidth]="250" [width]="450">
+    <app-dynamic-confirm-dialog [showDialog]="showDialog" [title]="language?.changesWontBeSavedTitle"
+    [question]="language?.changesWontBeSaved" (sendEmitter)="receiveConfirm($event)">
+  </app-dynamic-confirm-dialog>
+  <!-- <kendo-dialog *ngIf="showDialog" title="language?.changesWontBeSavedTitle" [minWidth]="250" [width]="450">
     <p style="margin: 30px; text-align: center">
       {{ language?.changesWontBeSaved }}
     </p>
@@ -137,7 +140,7 @@
       <button kendoButton (click)="receiveConfirm(false)">No</button>
       <button kendoButton (click)="receiveConfirm(true)" primary="true">Yes</button>
     </kendo-dialog-actions>
-  </kendo-dialog>
+  </kendo-dialog> -->
     <form name="loginForm" class="loginForm" (ngSubmit)="createCustomer(customer)" #customerForm="ngForm" (change)="isDirty()">
       <div class="form-group m-0">
         <div class="panel-body p-0">

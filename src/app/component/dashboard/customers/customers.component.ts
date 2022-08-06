@@ -161,6 +161,7 @@ export class CustomersComponent implements OnInit {
   }
 
   confirmClose() {
+    this.customer.modalRoot.nativeElement.focus();
     if(this.isFormDirty) {
       this.showDialog = true;
     }else {
@@ -184,6 +185,7 @@ export class CustomersComponent implements OnInit {
     this.customer.closeOnOutsideClick = false;
     this.customer.hideCloseButton = true;
     this.customer.open();
+    
   }
 
   initializeParams() {
