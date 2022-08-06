@@ -71,6 +71,8 @@ export class StoreComponent implements OnInit {
     pageSizes: true,
     previousNext: true,
   };
+  showDialog: boolean = false;
+  isFormDirty: boolean = false;
 
   constructor(
     public service: StoreService,
@@ -116,9 +118,35 @@ export class StoreComponent implements OnInit {
     });
   }
 
+  receiveConfirm(event: boolean, modal: any): void {
+    if(event) {
+      modal.close();
+      this.isFormDirty = false;
+    }
+      this.showDialog = false;
+  }
+
+  confirmClose(modal: any) {
+    modal.modalRoot.nativeElement.focus();
+    if(this.isFormDirty) {
+      this.showDialog = true;
+    }else {
+      modal.close()
+      this.showDialog = false;
+      this.isFormDirty = false
+    }
+  }
+
+  isDirty(): any {
+    this.isFormDirty = true;
+  }
+
   newStore() {
     this.initialParams();
     this.changeTheme(this.theme);
+    this.storeCreate.closeOnEscape = false;
+    this.storeCreate.closeOnOutsideClick = false;
+    this.storeCreate.hideCloseButton = true;
     this.storeCreate.open();
   }
 
@@ -237,6 +265,9 @@ export class StoreComponent implements OnInit {
     this.data = store;
     this.start_work = new Date(this.data.start_work);
     this.end_work = new Date(this.data.end_work);
+    this.storeEdit.closeOnEscape = false;
+    this.storeEdit.closeOnOutsideClick = false;
+    this.storeEdit.hideCloseButton = true;
     this.storeEdit.open();
     this.changeTheme(this.theme);
   }
