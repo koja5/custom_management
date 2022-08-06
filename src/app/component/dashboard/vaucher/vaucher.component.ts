@@ -79,6 +79,8 @@ export class VaucherComponent implements OnInit {
     pageSizes: true,
     previousNext: true
   };
+  showDialog: boolean = false;
+  isFormDirty: boolean = false;
 
   constructor(
     private service: VaucherService,
@@ -148,11 +150,38 @@ export class VaucherComponent implements OnInit {
       });
   }
 
+  receiveConfirm(event: boolean): void {
+    if(event) {
+      this.vaucher.close();
+      this.isFormDirty = false;
+    }
+      this.showDialog = false;
+  }
+
+  confirmClose() {
+    this.vaucher.modalRoot.nativeElement.focus();
+    if(this.isFormDirty) {
+      this.showDialog = true;
+    }else {
+      this.vaucher.close()
+      this.showDialog = false;
+      this.isFormDirty = false
+    }
+  }
+
+  isDirty(): any {
+    this.isFormDirty = true;
+  }
+
+
   newVaucher() {
     this.operationMode = "add";
     this.initializeParams();
     this.getNextVaucherId();
     this.changeTheme(this.theme);
+    this.vaucher.closeOnEscape = false;
+    this.vaucher.closeOnOutsideClick = false;
+    this.vaucher.hideCloseButton = true;
     this.vaucher.open();
   }
 
