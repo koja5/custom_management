@@ -906,11 +906,17 @@
       </kendo-dialog-actions>
     </kendo-dialog>
 
-    <modal #user modalClass="modal-lg">
+    <modal #user modalClass="modal-lg" (keydown.esc)="confirmClose()">
       <modal-header>
         <h4>{{ getTranslate(currentTab) }}</h4>
+        <button type="button" class="close" data-dismiss="modal" [attr.aria-label]="cancelButtonLabel || 'Close'" (click)="confirmClose()">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </modal-header>
       <modal-content>
+        <app-dynamic-confirm-dialog [showDialog]="showDialog" [title]="language?.changesWontBeSavedTitle"
+          [question]="language?.changesWontBeSaved" (sendEmitter)="receiveConfirm($event)">
+        </app-dynamic-confirm-dialog>
         <div class="tabs widget">
           <ul class="nav nav-tabs widget">
             <li [ngClass]="currentTab === 'profile' ? 'active' : ''">
@@ -931,6 +937,7 @@
                 name="loginForm"
                 class="loginForm"
                 (ngSubmit)="updateUser(user)"
+                (change)="isDirty()"
               >
                 <div class="form-group">
                   <div class="email col-md-4 col-xs-12">
@@ -1242,6 +1249,7 @@
                     ? setWorkTimeForUser(workTime)
                     : updateWorkTimeForUser(workTime)
                 "
+                (change)="isDirty()"
               >
                 <div
                   class="form-group row"
@@ -1378,6 +1386,7 @@
                 }}</span>
                 <kendo-switch
                   [(ngModel)]="data.allowed_online"
+                  (click)="isDirty()"
                   name="allowed_online"
                 ></kendo-switch>
               </label>

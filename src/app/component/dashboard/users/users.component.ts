@@ -93,6 +93,8 @@ export class UsersComponent implements OnInit {
     pageSizes: true,
     previousNext: true,
   };
+  showDialog: boolean = false;
+  isFormDirty: boolean = false;
 
   constructor(
     private service: UsersService,
@@ -137,6 +139,29 @@ export class UsersComponent implements OnInit {
     });
   }
 
+  receiveConfirm(event: boolean): void {
+    if(event) {
+      this.user.close();
+      this.isFormDirty = false;
+    }
+      this.showDialog = false;
+  }
+
+  confirmClose() {
+    this.user.modalRoot.nativeElement.focus();
+    if(this.isFormDirty) {
+      this.showDialog = true;
+    }else {
+      this.user.close()
+      this.showDialog = false;
+      this.isFormDirty = false
+    }
+  }
+
+  isDirty(): any {
+    this.isFormDirty = true;
+  }
+
   newUser() {
     this.initializeParams();
     this.storeService.getStore(localStorage.getItem("superadmin"), (val) => {
@@ -144,6 +169,9 @@ export class UsersComponent implements OnInit {
       this.storeLocation = val;
     });
     this.changeTheme(this.theme);
+    this.user.closeOnEscape = false;
+    this.user.closeOnOutsideClick = false;
+    this.user.hideCloseButton = true;
     this.user.open();
   }
 

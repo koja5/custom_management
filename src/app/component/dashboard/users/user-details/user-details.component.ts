@@ -48,6 +48,8 @@ export class UserDetailsComponent implements OnInit {
   public statisticLastWeek: any;
   public configField: any;
   public userTypeEnum = UserType;
+  showDialog: boolean = false;
+  isFormDirty: boolean = false;
 
   constructor(
     public route: ActivatedRoute,
@@ -382,8 +384,34 @@ export class UserDetailsComponent implements OnInit {
     this.location.back();
   }
 
+  receiveConfirm(event: boolean): void {
+    if(event) {
+      this.user.close();
+      this.isFormDirty = false;
+    }
+      this.showDialog = false;
+  }
+
+  confirmClose() {
+    this.user.modalRoot.nativeElement.focus();
+    if(this.isFormDirty) {
+      this.showDialog = true;
+    }else {
+      this.user.close()
+      this.showDialog = false;
+      this.isFormDirty = false
+    }
+  }
+
+  isDirty(): any {
+    this.isFormDirty = true;
+  }
+
   editOptions() {
     this.workTimeData();
+    this.user.closeOnEscape = false;
+    this.user.closeOnOutsideClick = false;
+    this.user.hideCloseButton = true;
     this.user.open();
     this.changeTheme(this.theme);
   }
