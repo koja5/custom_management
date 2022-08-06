@@ -357,7 +357,7 @@ export class BaseDateComponent implements OnInit {
     this.dialogComplaintOpened = false;
   }
 
-  receiveConfirm(event: boolean, modal: any): void {
+  receiveConfirm(event: boolean, modal: Modal): void {
     if(event) {
       modal.close();
       this.isFormDirty = false;
@@ -365,7 +365,7 @@ export class BaseDateComponent implements OnInit {
       this.showDialog = false;
   }
 
-  confirmClose(modal: any) {
+  confirmClose(modal: Modal) {
     modal.modalRoot.nativeElement.focus();
     if(this.isFormDirty) {
       this.showDialog = true;

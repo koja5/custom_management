@@ -69,8 +69,14 @@ export class WorkTimeColorsComponent implements OnInit {
     this.allData = this.allData.bind(this);
 
   }
+  showDialog: boolean = false;
+  isFormDirty: boolean = false;
 
   ngOnInit() {
+    this.workTimeColorsModal.closeOnEscape = false;
+    this.workTimeColorsModal.closeOnOutsideClick = false;
+    this.workTimeColorsModal.hideCloseButton = true;
+
     this.height = this.helpService.getHeightForGrid();
     this.language = JSON.parse(localStorage.getItem("language"));
 
@@ -124,6 +130,29 @@ export class WorkTimeColorsComponent implements OnInit {
   public sortChange(sort: SortDescriptor[]): void {
     this.state.sort = sort;
     this.gridView = process(this.currentLoadData, this.state);
+  }
+
+  receiveConfirm(event: boolean): void {
+    if(event) {
+      this.workTimeColorsModal.close();
+      this.isFormDirty = false;
+    }
+      this.showDialog = false;
+  }
+
+  confirmClose() {
+    this.workTimeColorsModal.modalRoot.nativeElement.focus();
+    if(this.isFormDirty) {
+      this.showDialog = true;
+    }else {
+      this.workTimeColorsModal.close()
+      this.showDialog = false;
+      this.isFormDirty = false
+    }
+  }
+
+  isDirty(): any {
+    this.isFormDirty = true;
   }
 
   addNewModal() {

@@ -66,8 +66,14 @@ export class EventCategoryComponent implements OnInit {
   ) {
     this.allData = this.allData.bind(this);
   }
+  showDialog: boolean = false;
+  isFormDirty: boolean = false;
 
   ngOnInit() {
+    this.eventCategoryModal.closeOnEscape = false;
+    this.eventCategoryModal.closeOnOutsideClick = false;
+    this.eventCategoryModal.hideCloseButton = true;
+
     this.height = this.helpService.getHeightForGrid();
 
     this.language = JSON.parse(localStorage.getItem("language"));
@@ -139,6 +145,29 @@ export class EventCategoryComponent implements OnInit {
   public sortChange(sort: SortDescriptor[]): void {
     this.state.sort = sort;
     this.gridView = process(this.currentLoadData, this.state);
+  }
+
+  receiveConfirm(event: boolean): void {
+    if(event) {
+      this.eventCategoryModal.close();
+      this.isFormDirty = false;
+    }
+      this.showDialog = false;
+  }
+
+  confirmClose() {
+    this.eventCategoryModal.modalRoot.nativeElement.focus();
+    if(this.isFormDirty) {
+      this.showDialog = true;
+    }else {
+      this.eventCategoryModal.close()
+      this.showDialog = false;
+      this.isFormDirty = false
+    }
+  }
+
+  isDirty(): any {
+    this.isFormDirty = true;
   }
 
   addNewModal() {
