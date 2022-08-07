@@ -696,24 +696,6 @@ export class DynamicSchedulerComponent implements OnInit {
     return this.intl.formatDate(date, { skeleton: "Ed" });
   }
 
-  public getDateHoliday(value): string {
-    const date = value.getDate();
-    const month = value.getMonth();
-    const year = value.getYear();
-    const holiday = this.holidays.find(
-      (elem) =>
-        value &&
-        date >= elem.StartTime.getDate() &&
-        month == elem.StartTime.getMonth() &&
-        year == elem.StartTime.getYear() &&
-        date <= elem.EndTime.getDate() &&
-        month == elem.EndTime.getMonth() &&
-        year == elem.EndTime.getYear()
-    );
-
-    return holiday ? holiday.Subject : '';
-  }
-
   public onWeekDayChange(args: ChangeEventArgs): void {
     this.scheduleObj.firstDayOfWeek = args.value as number;
     this.setCalendarSettingsToDatabase(
@@ -1647,9 +1629,10 @@ export class DynamicSchedulerComponent implements OnInit {
   ngOnInit() {
     this.initializationConfig();
     this.initializationData();
-    this.loadHolidays();
+
     this.helpService.setDefaultBrowserTabTitle();
     this.loadUser();
+    this.loadHolidays();
   }
 
   @HostListener("window:resize", ["$event"])
@@ -1671,21 +1654,19 @@ export class DynamicSchedulerComponent implements OnInit {
     });
   }
 
-  public loadHolidays(): void {
-    const superAdminId = this.helpService.getSuperadmin();
+  // load holidays defined by clinic and holidays defined by selected clinic template (if there is some)
+  public loadHolidays() {
 
-    console.log("superAdminId", superAdminId);
-    this.holidayService.getHolidays(superAdminId).subscribe((result) => {
-      console.log("holidays", result);
+    this.holidayService.getHolidaysForClinic(this.selectedStoreId).then(result => {
+      console.log(result);
       if (result && result.length > 0) {
-        console.log("holidayss");
-        result.forEach((r) => {
-          // console.log(r);
+        result.forEach(r => {
+          // console.log('R: ', r);
           this.allEvents.push({
             Subject: r.Subject,
-            StartTime: new Date(r.StartTime),
-            EndTime: new Date(r.EndTime),
-            IsAllDay: true
+            StartTime: new Date(r.StartTime).setHours(Number(this.startWork)),
+            EndTime: new Date(r.EndTime).setHours(Number(this.startWork + 1)),
+            IsAllDay: false
           });
 
           this.holidays.push({
@@ -1696,9 +1677,40 @@ export class DynamicSchedulerComponent implements OnInit {
           });
         });
 
-        this.eventSettings.dataSource = this.allEvents;
-      } else {
-        console.log("no holidayss");
+      }
+    });
+
+    // load holidays defined by clinic and holidays defined by selected clinic template (if there is some)
+
+    this.holidayService.getStoreTemplateConnection(this.selectedStoreId).then((ids) => {
+      const templateIds = ids.map(elem => elem.templateId);
+
+      if (ids.length) {
+        this.holidayService.getHolidaysByTemplates(templateIds).then((result) => {
+          if (result && result.length > 0) {
+            result.forEach((r) => {
+              this.allEvents.push({
+                Subject: r.Subject,
+                StartTime: new Date(r.StartTime).setHours(Number(this.startWork)),
+                EndTime: new Date(r.EndTime).setHours(Number(this.startWork + 1)),
+                IsAllDay: false
+              });
+
+              this.holidays.push({
+                Subject: r.Subject,
+                StartTime: new Date(r.StartTime),
+                EndTime: new Date(r.EndTime),
+                IsAllDay: true
+              });
+            });
+
+            this.scheduleObj.eventSettings.dataSource = this.allEvents;
+            this.scheduleObj.refresh();
+            this.scheduleObj.refreshEvents();
+          } else {
+            console.log("no holidayss");
+          }
+        });
       }
     });
   }
@@ -2831,24 +2843,13 @@ export class DynamicSchedulerComponent implements OnInit {
       date.element.style.backgroundColor = "#e9ecef";
       date.element.style.pointerEvents = "none";
 
-      // if (date.elementType !== "monthDay" && this.currentView === "Month") {
+      // if (date.elementType === "dateHeader" && this.currentView !== "Month") {
+      //   const dateSplitted = date.date.toString().split(" ");
 
-      //   const span = document.createElement("SPAN");
-      //   date.element.appendChild(span);
-      //   span.innerHTML = holiday.Subject;
-      //   span.style.overflow = 'hidden';
-      //   span.style.whiteSpace = 'nowrap';
-      //   span.style.textOverflow = 'ellipsis';
-
+      //   // date - day - holiday
+      //   date.element.firstChild.innerText =
+      //     dateSplitted[2] + " " + dateSplitted[0] + " - " + holiday.Subject;
       // }
-
-      if (date.elementType === "dateHeader" && this.currentView !== "Month") {
-        const dateSplitted = date.date.toString().split(" ");
-
-        // date - day - holiday
-        date.element.firstChild.innerText =
-          dateSplitted[2] + " " + dateSplitted[0] + " - " + holiday.Subject;
-      }
     }
 
     if (date.elementType === "resourceHeader") {
@@ -3825,9 +3826,7 @@ export class DynamicSchedulerComponent implements OnInit {
     );
   }
 
-
   private updateInvoiceID(): void {
-
     if (this.invoiceID !== this.changedInvoiceID) {
       const data = {
         superAdminId: this.superadminProfile.id,
@@ -3835,13 +3834,13 @@ export class DynamicSchedulerComponent implements OnInit {
       }
       console.log("updateInvoiceID");
 
-      this.invoiceService.updateInvoiceID(data);
-
+      this.invoiceService.updateInvoiceID(data).then(() => {
+        this.invoiceID = this.changedInvoiceID;
+      });
     }
   }
 
   public downloadPDF(): void {
-
     const docDefinition = this.setupPDF();
 
     // pass file name
@@ -3850,6 +3849,7 @@ export class DynamicSchedulerComponent implements OnInit {
       .download(this.customerUser["firstname"] + this.customerUser["lastname"]);
 
     this.updateInvoiceID();
+
   }
 
   public printPDF(): void {

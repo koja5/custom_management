@@ -21,4 +21,7 @@ export class DynamicSchedulerService {
     return window.innerHeight - 149 + 'px';
   }
 
+  getDefineHolidayHeight() {
+    return window.innerHeight - 185 + 'px';
+  }
 }
