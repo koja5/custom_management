@@ -25,6 +25,7 @@ import { QueryCellInfoEventArgs } from "@syncfusion/ej2-angular-grids";
 import { Tooltip } from "@syncfusion/ej2-popups";
 import { ClickEventArgs } from "@syncfusion/ej2-navigations";
 import { SystemLogsService } from "src/app/service/system-logs.service";
+import { PaginationService } from "src/app/service/pagination.service";
 
 @Component({
   selector: "app-dynamic-grid",
@@ -59,14 +60,17 @@ export class DynamicGridComponent implements OnInit {
   public index: number;
   public height: number;
   public language: any;
+  savePage: any = {};
 
   constructor(
     private service: DynamicService,
     private helpService: HelpService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private paginationService: PaginationService
   ) {}
 
   ngOnInit() {
+    this.savePage = this.paginationService.getLocalStorage('pageSize');
     this.initialization();
     this.checkMessageService();
     this.getConfiguration();
@@ -89,6 +93,10 @@ export class DynamicGridComponent implements OnInit {
   initialization() {
     this.service.getConfiguration(this.path, this.name).subscribe((data) => {
       this.config = data;
+      this.config.paging.settings.pageSize = 1;
+      if(this.savePage['home/reservations']) {
+        this.config.paging.settings.currentPage = this.savePage['home/reservations'];
+      }
       if (data["localData"]) {
         this.getLocalData(data["localData"]);
       } else {
@@ -155,7 +163,11 @@ export class DynamicGridComponent implements OnInit {
     return parameters;
   }
 
-  actionBegin(args: SaveEventArgs): void {
+  actionBegin(args: any): void {
+    if(args.currentPage) {
+      this.savePage['home/reservations'] = args.currentPage;
+      this.paginationService.setLocalStorage('pageSize', this.savePage);
+    }
     /*if (args.requestType === "beginEdit" || args.requestType === "add") {
       this.orderData = Object.assign({}, args.rowData);
     }

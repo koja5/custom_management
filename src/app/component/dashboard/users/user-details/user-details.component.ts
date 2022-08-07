@@ -204,7 +204,6 @@ export class UserDetailsComponent implements OnInit {
   }
 
   updateUser() {
-    console.log('jopica ', this.data);
     this.service.updateUser(this.data).subscribe((data) => {
       if (data) {
         Swal.fire({
