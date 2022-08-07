@@ -1,0 +1,174 @@
+<div class="main-wrapper">
+  <app-home-navigation-menu
+    [color]="'navbar-dark'"
+    [language]="language"
+    (sendEventForChangeLanguage)="sendEventForChangeLanguage($event)"
+  ></app-home-navigation-menu>
+
+  <!--register section start-->
+  <section
+    class="sign-up-in-section bg-dark pt-5"
+    style="
+      background: url('./assets/home/page-header-bg.svg') no-repeat bottom right;
+    "
+  >
+    <div class="container">
+      <div class="row align-items-center justify-content-between">
+        <div class="col-xl-5 col-lg-5 col-md-12 order-1 order-lg-0">
+          <div class="testimonial-tab-slider-wrap mt-5">
+            <h1 class="fw-bold text-white display-5">
+              {{ language.requestSectionTitle }}
+            </h1>
+            <p>
+              {{ language.requestSectionText1 }}
+            </p>
+            <div
+              class="tab-content testimonial-tab-content text-white-80"
+              id="pills-tabContent"
+            >
+              <div id="testimonial-tab-1" role="tabpanel">
+                <blockquote class="blockquote">
+                  <em>{{ language.requestSectionText2 }}</em>
+                </blockquote>
+
+                <blockquote class="blockquote">
+                  <em>{{ language.requestSectionText3 }}</em>
+                </blockquote>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-5 col-lg-7 col-md-12 order-0 order-lg-1">
+          <div
+            class="register-wrap p-5 bg-white shadow rounded-custom mt-5 mt-lg-0 mt-xl-0"
+          >
+            <h5 class="fw-medium">
+              {{ language.requestSectionFormTitle }}
+            </h5>
+
+            <form action="#" class="mt-4 register-form">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="input-group mb-3">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="{{ language.requestSectionFormName }}"
+                      name="name"
+                      [(ngModel)]="data.name"
+                    />
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="input-group mb-3">
+                    <input
+                      type="email"
+                      class="form-control"
+                      placeholder="{{ language.requestSectionFormEmail }}"
+                      name="email"
+                      [(ngModel)]="data.email"
+                    />
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="input-group mb-3">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="{{ language.requestSectionFormPhone }}"
+                      name="phone"
+                      [(ngModel)]="data.phone"
+                    />
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="input-group mb-3">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="{{
+                        language.requestSectionFormNameOfKindergarden
+                      }}"
+                      name="nameOfKindergarden"
+                      [(ngModel)]="data.nameOfKindergarden"
+                    />
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="input-group mb-3">
+                    <select
+                      class="form-control"
+                      name="countOfChildrens"
+                      id="countOfChildrens"
+                      [(ngModel)]="data.countOfChildrens"
+                      required=""
+                    >
+                      <option value="undefined" selected="" disabled="">
+                        {{
+                          language.requestSectionFormChooiceNumberOfChildrens
+                        }}
+                      </option>
+                      <option value="0-50">
+                        {{ language.from }} 0 {{ language.to }} 50
+                      </option>
+                      <option value="51-100">
+                        {{ language.from }} 51 {{ language.to }} 100
+                      </option>
+                      <option value="101-250">
+                        {{ language.from }} 101 {{ language.to }} 250
+                      </option>
+                      <option value="251-350">
+                        {{ language.from }} 251 {{ language.to }} 350
+                      </option>
+                      <option value="351-500">
+                        {{ language.from }} 351 {{ language.to }} 500
+                      </option>
+                      <option value="500-~">{{ language.across }} 500</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-xs-12">
+                  <div class="input-group mb-3">
+                    <textarea
+                      class="form-control"
+                      placeholder="{{ language.requestSectionFormMessage }}"
+                      style="height: 120px"
+                      name="notes"
+                      [(ngModel)]="data.notes"
+                    ></textarea>
+                  </div>
+                </div>
+                <div class="col-xs-12 text-center">
+                  <button
+                    (click)="sendReqestForDemoAccount()"
+                    class="btn btn-primary mt-4 d-block w-100"
+                  >
+                    {{ language.requestSectionFormSendRequestButton }}
+                  </button>
+                </div>
+              </div>
+            </form>
+            <div class="mt-3 text-center">
+              <p *ngIf="required" class="text-danger">
+                {{ language.needToFillAllField }}
+              </p>
+              <p *ngIf="success" class="text-success">
+                {{ language.successSendRequest }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--register section end-->
+
+  <!--footer section start-->
+  <footer class="footer-section">
+    <!--footer bottom start-->
+
+    <app-home-footer [color]="'dark'" [language]="language"></app-home-footer>
+    <!--footer bottom end-->
+  </footer>
+  <!--footer section end-->
+</div>

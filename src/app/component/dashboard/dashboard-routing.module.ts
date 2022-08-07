@@ -1,4 +1,3 @@
-import { InvoicePrefixComponent } from "./administrator/invoice-prefix/invoice-prefix.component";
 import { AddHolidayComponent } from "./administrator/add-holiday/add-holiday.component";
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
@@ -48,6 +47,9 @@ import { InvoiceComponent } from "./invoice/invoice.component";
 import { SmsBirthdayCongratulationComponent } from "./parameters/sms-birthday-congratulation/sms-birthday-congratulation.component";
 import { MailBirthdayCongratulationComponent } from "./parameters/mail-birthday-congratulation/mail-birthday-congratulation.component";
 import { MailPatientCreatedAccountViaFormComponent } from "./parameters/mail-parameters/mail-patient-created-account-via-form/mail-patient-created-account-via-form.component";
+import { ThemeColorsComponent } from "./parameters/theme-colors/theme-colors.component";
+import { HelpComponent } from "./administrator/help/help.component";
+import { ListFaqComponent } from "./administrator/help/list-faq/list-faq.component";
 
 const routes: Routes = [
   {
@@ -106,6 +108,10 @@ const routes: Routes = [
       { path: "vat_tax", component: ParametersComponent },
       { path: "CS", component: ParametersComponent },
       { path: "state", component: ParametersComponent },
+      {
+        path: "theme-colors",
+        component: ThemeColorsComponent,
+      },
       {
         path: "event-category",
         component: EventCategoryComponent,
@@ -169,7 +175,6 @@ const routes: Routes = [
       { path: "reservations", component: ReservationsComponent },
       { path: "template-account", component: TemplateAccountComponent },
       { path: "add-holiday", component: AddHolidayComponent },
-      { path: "invoice-prefix", component: InvoicePrefixComponent },
       { path: "mail-reminder", component: MailReminderComponent },
       {
         path: "mail-approve-reservation",
@@ -230,6 +235,13 @@ const routes: Routes = [
         path: "mail-birthday-congratulation",
         component: MailBirthdayCongratulationComponent,
       },
+      {
+        path: "help",
+        children: [
+          { path: "", component: HelpComponent, pathMatch: "full" },
+          { path: "faq/:id", component: ListFaqComponent }
+        ],
+      }
     ],
   },
 ];
@@ -238,4 +250,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DashboardRouting {}
+export class DashboardRouting { }

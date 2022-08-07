@@ -5,13 +5,12 @@ import { StoreService } from "../../../service/store.service";
 import { process, State, GroupDescriptor } from "@progress/kendo-data-query";
 import {
   DataStateChangeEvent,
+  GridComponent,
   PageChangeEvent,
   RowArgs,
 } from "@progress/kendo-angular-grid";
-import { FormGroup, FormControl } from "@angular/forms";
-import { SortDescriptor, orderBy } from "@progress/kendo-data-query";
-import { UrlTree, Router, UrlSegment, UrlSegmentGroup } from "@angular/router";
-import { throttleTime } from "rxjs/operators";
+import { SortDescriptor } from "@progress/kendo-data-query";
+import { UrlTree, Router } from "@angular/router";
 import { UserModel } from "../../../models/user-model";
 import Swal from "sweetalert2";
 // import * as GC from '@grapecity/spread-sheets';
@@ -19,6 +18,7 @@ import Swal from "sweetalert2";
 import * as XLSX from "ts-xlsx";
 import { MessageService } from "src/app/service/message.service";
 import { HelpService } from "src/app/service/help.service";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 
 @Component({
   selector: "app-users",
@@ -27,6 +27,11 @@ import { HelpService } from "src/app/service/help.service";
 })
 export class UsersComponent implements OnInit {
   @ViewChild("user") user: Modal;
+  @ViewChild('grid') grid;
+
+  public allPages: boolean;
+  private _allData: ExcelExportData;
+
   public data = new UserModel();
   public userType = ["Employee", "Manager", "Admin", "Read only scheduler"];
   public gridData: any;
@@ -97,6 +102,7 @@ export class UsersComponent implements OnInit {
     private helpService: HelpService
   ) {
     // this.excelIO = new Excel.IO();
+    this.allData = this.allData.bind(this);
   }
 
   ngOnInit() {
@@ -123,6 +129,9 @@ export class UsersComponent implements OnInit {
         data: val,
       };
       this.gridView = process(val, this.state);
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, this.state).data,
+      }
       this.changeTheme(this.theme);
       this.loading = false;
     });
@@ -317,6 +326,45 @@ export class UsersComponent implements OnInit {
       }, 50);
     };
     fileReader.readAsArrayBuffer(args.target.files[0]);
+  }
+
+  exportPDF(value: boolean): void {
+    this.allPages = value;
+
+    setTimeout(() => {
+      this.grid.saveAsPDF();
+    }, 0);
+  }
+
+  exportToExcel(grid: GridComponent, allPages: boolean) {
+    this.setDataForExcelExport(allPages);
+
+    setTimeout(() => {
+      grid.saveAsExcel();
+    }, 0);
+  }
+
+  public setDataForExcelExport(allPages: boolean): void {
+    console.log('allPages ', allPages);
+
+    if (allPages) {
+      var myState: State = {
+        skip: 0,
+        take: this.gridData.total,
+      };
+
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, myState).data,
+      }
+    } else {
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, this.state).data,
+      }
+    }
+  }
+
+  public allData(): ExcelExportData {
+    return this._allData;
   }
 
   xlsxToJson(data) {

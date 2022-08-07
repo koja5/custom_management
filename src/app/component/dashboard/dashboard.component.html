@@ -101,8 +101,11 @@
                   </a>
                 </li>
                 <li>
-                  <a href="#" (click)="showHideProfile()">
-                    <i class="icon-directions"></i> Help
+                  <a
+                    routerLink="/dashboard/home/help"
+                    (click)="showHideProfile()"
+                  >
+                    <i class="fa fa-question-circle"></i> Help
                   </a>
                 </li>
                 <li class="divider"></li>
@@ -368,6 +371,7 @@
                             "
                             class="{{ activeGroup[2] }}"
                           >
+                            <!-- Application Parameters -->
                             <a (click)="collapse(2)" class="has-arrow"
                               ><i class="fa fa fa-file-text"></i
                               ><span class="navigation-link">{{
@@ -383,6 +387,11 @@
                                 showHideCollapse[2]
                               }}"
                             >
+                              <li class="pl-4 pt-2 pb-2">
+                                <span class="header-item-node">{{
+                                  language.headerMenuGeneralData
+                                }}</span>
+                              </li>
                               <li class="{{ selectedNodeModel['complaint'] }}">
                                 <a
                                   routerLink="/dashboard/home/complaint"
@@ -511,7 +520,6 @@
                                   {{ language?.stateMenu }}
                                 </a>
                               </li>
-
                               <li
                                 class="{{
                                   selectedNodeModel['event_category']
@@ -558,21 +566,6 @@
                                   {{ language?.workTimeColorsMenu }}
                                 </a>
                               </li>
-
-                              <li
-                                class="{{ selectedNodeModel['reminder'] }}"
-                                *ngIf="type === userType.owner"
-                              >
-                                <a
-                                  routerLink="/dashboard/home/reminders"
-                                  (click)="returnActiveNode('reminder')"
-                                  class="nav-link"
-                                  ><i class="fa fa-bell"></i>
-                                  <span class="navigation-link"></span>
-                                  {{ language?.reminderMenu }}
-                                </a>
-                              </li>
-
                               <li
                                 class="{{ selectedNodeModel['add_holiday'] }}"
                               >
@@ -585,7 +578,6 @@
                                   }}</span></a
                                 >
                               </li>
-
                               <li
                                 class="{{
                                   selectedNodeModel['change_superadmin_profile']
@@ -605,6 +597,48 @@
                                   {{ language?.changeSuperadminProfile }}
                                 </a>
                               </li>
+                              <li class="pl-4 pt-2 pb-2">
+                                <span class="header-item-node">{{
+                                  language.headerMenuPersonalization
+                                }}</span>
+                              </li>
+                              <!-- Application theme -->
+                              <li
+                                class="{{
+                                  selectedNodeModel['application_theme']
+                                }}"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/theme-colors"
+                                  (click)="
+                                    returnActiveNode('application_theme')
+                                  "
+                                  class="nav-link"
+                                  ><i class="fa fa-paint-brush"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.themeColorsMenu }}
+                                </a>
+                              </li>
+                              <!-- Application theme -->
+                              <li class="pl-4 pt-2 pb-2">
+                                <span class="header-item-node">{{
+                                  language.headerMenuPermits
+                                }}</span>
+                              </li>
+                              <li
+                                class="{{ selectedNodeModel['reminder'] }}"
+                                *ngIf="type === userType.owner"
+                              >
+                                <a
+                                  routerLink="/dashboard/home/reminders"
+                                  (click)="returnActiveNode('reminder')"
+                                  class="nav-link"
+                                  ><i class="fa fa-bell"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.reminderMenu }}
+                                </a>
+                              </li>
+
                               <li
                                 class="{{
                                   selectedNodeModel['permission_patient_menu']
@@ -637,26 +671,11 @@
                                   {{ language?.userAccess }}
                                 </a>
                               </li>
-
-                              <li
-                                class="{{
-                                  selectedNodeModel['invoice_prefix']
-                                }}"
-                                *ngIf="
-                                  type === userType.owner ||
-                                  type === userType.admin
-                                "
-                              >
-                                <a
-                                  (click)="returnActiveNode('invoice_prefix')"
-                                  routerLink="/dashboard/home/invoice-prefix"
-                                  ><i class="fa fa-font"></i
-                                  ><span class="navigation-link">{{
-                                    language["invoicePrefixMenu"]
-                                  }}</span></a
-                                >
+                              <li class="pl-4 pt-2 pb-2">
+                                <span class="header-item-node">{{
+                                  language.headerMenuMailTemplateSettings
+                                }}</span>
                               </li>
-
                               <li
                                 class="{{ selectedNodeModel['mail_reminder'] }}"
                                 *ngIf="type === userType.owner"
@@ -760,7 +779,9 @@
                                   class="nav-link"
                                   ><i class="fa fa-envelope"></i>
                                   <span class="navigation-link"></span>
-                                  {{ language?.mailPatientCreatedAccountViaForm }}
+                                  {{
+                                    language?.mailPatientCreatedAccountViaForm
+                                  }}
                                 </a>
                               </li>
                               <li
@@ -822,6 +843,11 @@
                                   <span class="navigation-link"></span>
                                   {{ language?.emailBirthdayCongratulation }}
                                 </a>
+                              </li>
+                              <li class="pl-4 pt-2 pb-2">
+                                <span class="header-item-node">{{
+                                  language.headerMenuSMSTemplateSettings
+                                }}</span>
                               </li>
                               <li
                                 class="{{ selectedNodeModel['sms_reminder'] }}"

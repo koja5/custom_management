@@ -1,4 +1,4 @@
-import { HolidayService } from 'src/app/service/holiday.service';
+import { HolidayService } from "src/app/service/holiday.service";
 import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
 import { CookieService } from "ng2-cookies";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -13,6 +13,7 @@ import { HelpService } from "src/app/service/help.service";
 import { UserType } from "../enum/user-type";
 import { StorageService } from "src/app/service/storage.service";
 import { AccountLanguage } from "src/app/models/account-language";
+import { ThemeColorsService } from "src/app/service/theme-color.service";
 declare var document: any;
 
 @Component({
@@ -53,6 +54,7 @@ export class DashboardComponent implements OnInit {
   };
   public templateAccountValue: any;
   public allTranslationsByCountryCode: any;
+  public themeColors: any
 
   constructor(
     private router: Router,
@@ -65,7 +67,8 @@ export class DashboardComponent implements OnInit {
     private mongo: MongoService,
     private helpService: HelpService,
     private storageService: StorageService,
-    private holidayService: HolidayService
+    private holidayService: HolidayService,
+    private themeColorsService: ThemeColorsService
   ) {
     this.helpService.setTitleForBrowserTab("ClinicNode");
   }
@@ -101,6 +104,19 @@ export class DashboardComponent implements OnInit {
       });
     } else {
       this.allThemes = this.helpService.getLocalStorage("allThemes");
+    }
+
+    if (this.helpService.getLocalStorage("themeColors") !== undefined) {
+      this.themeColorsService
+        .getThemeColors(localStorage.getItem("superadmin"))
+        .subscribe((data: any[]) => {
+          this.themeColors = data[0];
+          this.helpService.setLocalStorage("themeColors", JSON.stringify(data));
+          this.themeColorsService.setThemeColors(this.themeColors);
+        });
+    } else {
+      this.themeColors = this.helpService.getLocalStorage("allThemes");
+      this.themeColorsService.setThemeColors(this.themeColors);
     }
 
     if (this.helpService.getLocalStorage("allLanguage") === null) {
@@ -165,9 +181,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  getMainStoreName() {
-
-  }
+  getMainStoreName() {}
 
   checkDefaultLink() {
     if (this.helpService.getSessionStorage("defaultLink")) {
@@ -289,9 +303,11 @@ export class DashboardComponent implements OnInit {
     this.cookie.deleteAll("/");
     sessionStorage.clear();
     localStorage.removeItem("idUser");
+    localStorage.removeItem("themeColors");
     this.cookie.deleteAll("/dashboard/home");
     setTimeout(() => {
       this.router.navigate(["login"]);
+      this.themeColorsService.resetThemeColors();
     }, 50);
   }
 
@@ -437,16 +453,17 @@ export class DashboardComponent implements OnInit {
 
     const data = {
       id: this.helpService.getMe(),
-      account_id: this.templateAccount.find(t => t.id === this.templateAccountValue).account_id,
+      account_id: this.templateAccount.find(
+        (t) => t.id === this.templateAccountValue
+      ).account_id,
     };
 
     const relation = {
       userId: this.helpService.getMe(),
-      templateId: this.templateAccountValue
-    }
+      templateId: this.templateAccountValue,
+    };
 
     console.log(relation);
-
 
     const selectedDemoAccountName = this.getDemoAccountNameById();
     const languageForSelectedAccount = this.getLanguageForSelectedAccount(
@@ -471,33 +488,36 @@ export class DashboardComponent implements OnInit {
 
           const superAdminId = this.helpService.getSuperadmin();
 
-          this.dashboardService.createUserTemplateRelation(relation).then((data) => {
-            console.log(data);
+          this.dashboardService
+            .createUserTemplateRelation(relation)
+            .then((data) => {
+              console.log(data);
 
-            this.holidayService.getHolidaysByTemplate(superAdminId, relation.templateId).then(result => {
-              console.log(result);
-              if (result && result.length > 0) {
-                result.forEach(r => {
+              this.holidayService
+                .getHolidaysByTemplate(superAdminId, relation.templateId)
+                .then((result) => {
+                  console.log(result);
+                  if (result && result.length > 0) {
+                    result.forEach((r) => {
+                      const newHoliday = {
+                        Subject: r.Subject,
+                        StartTime: new Date(r.StartTime),
+                        EndTime: new Date(r.EndTime),
+                        category: r.category,
+                        userId: superAdminId,
+                      };
 
-                  const newHoliday = {
-                    Subject: r.Subject,
-                    StartTime: new Date(r.StartTime),
-                    EndTime: new Date(r.EndTime),
-                    category: r.category,
-                    userId: superAdminId
+                      this.holidayService.createHoliday(
+                        newHoliday,
+                        (insertedId) => {
+                          console.log("DODATO!!!");
+                        }
+                      );
+                    });
                   }
-
-                  this.holidayService.createHoliday(newHoliday, (insertedId) => {
-                    console.log('DODATO!!!');
-                  });
-
                 });
-              }
             });
-          });
         });
-
-
     }
     this.dashboardService.loadTemplateAccount(data).subscribe((response) => {
       if (response) {

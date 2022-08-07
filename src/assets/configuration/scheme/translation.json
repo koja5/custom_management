@@ -206,6 +206,12 @@
       "exportToPDF": {
         "type": "string"
       },
+      "exportAllToExcel": {
+        "type": "string"
+      },
+      "exportPageToPDF": {
+        "type": "string"
+      },
       "pagerPage": {
         "type": "string"
       },
@@ -314,12 +320,6 @@
       "allowSendInformation": {
         "type": "string"
       },
-      "titleOnInvoice": {
-        "type": "string"
-      },
-      "printOnInvoice": {
-        "type": "string"
-      },
       "start": {
         "type": "string"
       },
@@ -335,7 +335,7 @@
       "telephone": {
         "type": "string"
       },
-      "selectStore": {
+      "selectInvoiceStore": {
         "type": "string"
       },
       "selectUsers": {
@@ -384,6 +384,9 @@
         "type": "string"
       },
       "eventCategory": {
+        "type": "string"
+      },
+      "periodForEvent": {
         "type": "string"
       },
       "notConfirmed": {
@@ -629,7 +632,19 @@
       "emailBirthdayCongratulation": {
         "type": "string"
       },
-      "invoicePrefixMenu": {
+      "headerMenuGeneralData": {
+        "type": "string"
+      },
+      "headerMenuPersonalization": {
+        "type": "string"
+      },
+      "headerMenuPermits": {
+        "type": "string"
+      },
+      "headerMenuMailTemplateSettings": {
+        "type": "string"
+      },
+      "headerMenuSMSTemplateSettings": {
         "type": "string"
       },
       "reservations": {
@@ -953,9 +968,6 @@
       "company": {
         "type": "string"
       },
-      "companyName": {
-        "type": "string"
-      },
       "noInformation": {
         "type": "string"
       },
@@ -1035,6 +1047,12 @@
         "type": "string"
       },
       "vat": {
+        "type": "string"
+      },
+      "vatPercentageTitle": {
+        "type": "string"
+      },
+      "vatIdentificationNumber": {
         "type": "string"
       },
       "grossPrice": {
@@ -1614,6 +1632,9 @@
       "errorChangeLanguageText": {
         "type": "string"
       },
+      "selectStore": {
+        "type": "string"
+      },
       "languages": {
         "type": "array",
         "items": {
@@ -1972,6 +1993,9 @@
       "invoiceItem": {
         "type": "string"
       },
+      "invoiceID": {
+        "type": "string"
+      },
       "invoiceNetPrice": {
         "type": "string"
       },
@@ -2006,6 +2030,15 @@
         "type": "string"
       },
       "pleaseConfirm": {
+        "type": "string"
+      },
+      "from": {
+        "type": "string"
+      },
+      "to": {
+        "type": "string"
+      },
+      "across": {
         "type": "string"
       },
       "clickHere": {
@@ -2048,6 +2081,45 @@
         "type": "string"
       },
       "showAtInvoice": {
+        "type": "string"
+      },
+      "changeThemeColor": {
+        "type": "string"
+      },
+      "themeColorsMenu": {
+        "type": "string"
+      },
+      "successThemeSaved": {
+        "type": "string"
+      },
+      "successThemeEdit": {
+        "type": "string"
+      },
+      "helpTitle": {
+        "type": "string"
+      },
+      "faqTitle": {
+        "type": "string"
+      },
+      "search": {
+        "type": "string"
+      },
+      "newFaq": {
+        "type": "string"
+      },
+      "editFaq": {
+        "type": "string"
+      },
+      "question": {
+        "type": "string"
+      },
+      "answer": {
+        "type": "string"
+      },
+      "helpTopic": {
+        "type": "string"
+      },
+      "addHelpTopic": {
         "type": "string"
       }
     }
@@ -2143,9 +2215,15 @@
             {
               "key": "pleaseConfirm"
             },
-            {},
-            {},
-            {}
+            {
+              "key": "from"
+            },
+            {
+              "key": "to"
+            },
+            {
+              "key": "across"
+            }
           ]
         }
       ]
@@ -3113,9 +3191,6 @@
           "flex-direction": "row",
           "items": [
             {
-              "key": "invoicePrefixMenu"
-            },
-            {
               "key": "addHoliday"
             },
             {
@@ -3123,6 +3198,28 @@
             },
             {
               "key": "emailBirthdayCongratulation"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "headerMenuGeneralData"
+            },
+            {
+              "key": "headerMenuPersonalization"
+            },
+            {
+              "key": "headerMenuPermits"
+            },
+            {
+              "key": "headerMenuMailTemplateSettings"
+            },
+            {
+              "key": "headerMenuSMSTemplateSettings"
             }
           ]
         }
@@ -3614,10 +3711,13 @@
               "key": "netPrice"
             },
             {
-              "key": "vat"
+              "key": "grossPrice"
             },
             {
-              "key": "grossPrice"
+              "key": "vatPercentageTitle"
+            },
+            {
+              "key": "vatIdentificationNumber"
             }
           ]
         },
@@ -4158,6 +4258,12 @@
               "key": "exportToPDF"
             },
             {
+              "key": "exportAllToExcel"
+            },
+            {
+              "key": "exportPageToPDF"
+            },
+            {
               "key": "uploadFromExcel"
             },
             {
@@ -4194,9 +4300,6 @@
             },
             {
               "key": "company"
-            },
-            {
-              "key": "companyName"
             },
             {
               "key": "noInformation"
@@ -6154,6 +6257,9 @@
             },
             {
               "key": "eventCategoryPeriod[].text"
+            },
+            {
+              "key": "periodForEvent"
             }
           ]
         }
@@ -6292,6 +6398,9 @@
             },
             {
               "key": "invoiceNetPrice"
+            },
+            {
+              "key": "invoiceID"
             }
           ]
         },
@@ -6352,6 +6461,9 @@
             },
             {
               "key": "downloadWord"
+            },
+            {
+              "key": "selectInvoiceStore"
             }
           ]
         },
@@ -6436,6 +6548,89 @@
             },
             {
               "key": "dateTitle"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Help",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "helpTitle"
+            },
+            {
+              "key": "faqTitle"
+            },
+            {
+              "key": "search"
+            },
+            {
+              "key": "helpTopic"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "newFaq"
+            },
+            {
+              "key": "editFaq"
+            },
+            {
+              "key": "question"
+            },
+            {
+              "key": "answer"
+            },
+            {
+              "key": "addHelpTopic"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "Theme colors",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "changeThemeColor"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "themeColorsMenu"
+            },
+            {
+              "key": "successThemeSaved"
+            },
+            {
+              "key": "successThemeEdit"
             }
           ]
         }

@@ -788,7 +788,6 @@ router.post("/createStore", function (req, res, next) {
     test = {};
     var podaci = {
       storename: req.body.storename,
-      companyname: req.body.companyname,
       vatcode: req.body.vatcode,
       street: req.body.street,
       zipcode: req.body.zipcode,
@@ -872,6 +871,28 @@ router.get("/getStore/:id", function (req, res, next) {
   });
 });
 
+router.get("/getStoreList/:ids", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    var ids = req.params.ids;
+    conn.query(
+      "SELECT * from store where id in (" + ids + ")",
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
 router.get("/getStoreById/:id", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
@@ -938,7 +959,6 @@ router.post("/updateStore", function (req, res, next) {
       time_therapy: req.body.time_therapy,
       superadmin: req.body.superadmin,
       allowed_online: req.body.allowed_online,
-      companyname: req.body.companyname,
       vatcode: req.body.vatcode,
     };
 
@@ -5139,9 +5159,7 @@ router.post("/sendSMS", function (req, res) {
   }
   request(link + "getAvailableAreaCode", function (error, response, codes) {
     var phoneNumber = null;
-    if (req.body.telephone) {
-      phoneNumber = req.body.telephone;
-    } else if (req.body.mobile) {
+    if (req.body.mobile) {
       phoneNumber = req.body.mobile;
     }
     if (checkAvailableCode(phoneNumber, JSON.parse(codes))) {
@@ -5188,8 +5206,6 @@ router.post("/sendSMS", function (req, res) {
                   var dateMessage = "";
                   var time = "";
                   var clinic = "";
-                  console.log(err);
-                  console.log(smsMessage);
                   if (smsMessage.length > 0) {
                     sms = smsMessage[0];
                     if (sms.signatureAvailable) {
@@ -5228,7 +5244,8 @@ router.post("/sendSMS", function (req, res) {
                     }
 
                     if (language?.smsSignaturePoweredBy) {
-                      signature += language?.smsSignaturePoweredBy + " \n";
+                      signature +=
+                        " \n" + language?.smsSignaturePoweredBy + " \n";
                     }
 
                     if (sms.smsDate) {
@@ -5260,6 +5277,7 @@ router.post("/sendSMS", function (req, res) {
                       signature;
                     updateAvailableSMSCount(1, req.body.superadmin);
                     sendSmsFromMail(phoneNumber, message);
+                    res.send(true);
                   } else if (smsMessage.length === 0) {
                     res.send({
                       info: false,
@@ -5563,7 +5581,7 @@ router.post("/sendMassiveSMS", function (req, res) {
                   globalCount = 0;
                   count = 0;
                   rows.forEach(async function (to, i, array) {
-                    var phoneNumber = to.mobile ? to.mobile : to.telephone;
+                    var phoneNumber = to.mobile ? to.mobile : null;
                     if (
                       checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
                       req.body.message
@@ -5603,7 +5621,8 @@ router.post("/sendMassiveSMS", function (req, res) {
                       }
 
                       if (language.smsSignaturePoweredBy) {
-                        signature += language.smsSignaturePoweredBy + " \n";
+                        signature +=
+                          " \n" + language.smsSignaturePoweredBy + " \n";
                       }
 
                       var content =
@@ -5668,7 +5687,7 @@ function splitSenderToPartArray(rows, codes, req, language) {
   rows.forEach(async function (to, i, array) {
     setTimeout(() => {
       count++;
-      var phoneNumber = to.mobile ? to.mobile : to.telephone;
+      var phoneNumber = to.mobile ? to.mobile : null;
       if (
         checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
         req.body.message
@@ -5707,7 +5726,7 @@ function splitSenderToPartArray(rows, codes, req, language) {
         }
 
         if (language?.smsSignaturePoweredBy) {
-          signature += language?.smsSignaturePoweredBy + " \n";
+          signature += " \n" + language?.smsSignaturePoweredBy + " \n";
         }
 
         var content =
@@ -5939,8 +5958,6 @@ router.post("/getFilteredRecipients", function (req, res) {
           ")",
         function (err, rows) {
           conn.release();
-          console.log(err);
-          console.log(rows);
           if (err) return err;
           res.json(rows);
         }
@@ -8542,7 +8559,7 @@ router.get("/getDataForMassiveInvoice/:customerId", function (req, res, next) {
     var customerId = req.params.customerId;
 
     conn.query(
-      "select t.id as taskId, t.*, tp.*, u.*, e.id as eventId, e.category as event_category from tasks t join therapy tp on t.therapy_id = tp.id join users u on u.id = t.creator_id join event_category e on t.colorTask = e.id where t.customer_id =" +
+      "select t.id as taskId, t.*, tp.*, u.*, st.storename as storename, e.id as eventId, e.category as event_category from tasks t join therapy tp on t.therapy_id = tp.id join users u on u.id = t.creator_id join store st on st.id = t.storeId join event_category e on t.colorTask = e.id where t.customer_id =" +
         customerId,
       function (err, rows) {
         conn.release();
@@ -8561,7 +8578,40 @@ router.get("/getDataForMassiveInvoice/:customerId", function (req, res, next) {
   });
 });
 
-router.post("/createInvoicePrefix", (req, res, next) => {
+router.post("/updateInvoiceID", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    test = {};
+    var id = req.body.id;
+    var superAdmin = req.body.superAdminId;
+
+    conn.query(
+      "UPDATE users_superadmin SET invoiceID = '" +
+        id +
+        "' where id = '" +
+        superAdmin +
+        "'",
+      function (err, rows, fields) {
+        conn.release();
+        if (err) {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(false);
+          console.log(err);
+        } else {
+          res.json(true);
+        }
+      }
+    );
+  });
+});
+
+//end holiday-template
+
+//help -faq
+router.post("/createFaqTopic", (req, res, next) => {
   try {
     connection.getConnection(function (err, conn) {
       if (err) {
@@ -8572,7 +8622,7 @@ router.post("/createInvoicePrefix", (req, res, next) => {
         });
       } else {
         conn.query(
-          "insert into invoice_prefix SET ?",
+          "insert into help_topics SET ?",
           [req.body],
           function (err, rows, fields) {
             conn.release();
@@ -8592,17 +8642,17 @@ router.post("/createInvoicePrefix", (req, res, next) => {
   }
 });
 
-router.post("/updateInvoicePrefix", function (req, res, next) {
+router.post("/updateFaqTopic", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
     }
     test = {};
-    var superAdminId = req.body.superAdminId;
+    var id = req.body.id;
 
     conn.query(
-      "UPDATE invoice_prefix SET ? where superAdminId = '" + superAdminId + "'",
+      "UPDATE help_topics SET ? where id = '" + id + "'",
       [req.body],
       function (err, rows) {
         conn.release();
@@ -8622,18 +8672,15 @@ router.post("/updateInvoicePrefix", function (req, res, next) {
   });
 });
 
-router.get("/getInvoicePrefix/:id", function (req, res, next) {
+router.get("/getFaqTopics/:superAdminId", function (req, res, next) {
+  var superAdminId = req.params.superAdminId;
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
     }
-    test = {};
-    var id = req.body.id;
-
     conn.query(
-      "SELECT * from `invoice_prefix` where superAdminId = ?",
-      [req.params.id],
+      "SELECT * FROM `help_topics` where superAdminId = '" + superAdminId + "'",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -8646,5 +8693,331 @@ router.get("/getInvoicePrefix/:id", function (req, res, next) {
     );
   });
 });
+
+router.post("/deleteFaqTopic", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    test = {};
+    var id = req.body.id;
+
+    conn.query(
+      "delete from help_topics where id = '" + id + "'",
+      [req.body],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            test.success = true;
+          } else {
+            test.success = false;
+          }
+          res.json(test);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
+router.post("/createFaq", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "insert into faq_list SET ?",
+          [req.body],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(false);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+            } else {
+              res.json(rows.insertId);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/updateFaq", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    test = {};
+    var id = req.body.id;
+
+    conn.query(
+      "UPDATE faq_list SET ? where id = '" + id + "'",
+      [req.body],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            test.success = true;
+          } else {
+            test.success = false;
+          }
+          res.json(test);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
+router.get(
+  "/getFaqQuestions/:topicId/:superAdminId",
+  function (req, res, next) {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      }
+      var topicId = req.params.topicId;
+      var superAdminId = req.params.superAdminId;
+      conn.query(
+        "SELECT * FROM `faq_list` where helpTopicId=" +
+          topicId +
+          " and superAdminId=" +
+          superAdminId,
+        function (err, rows) {
+          conn.release();
+          if (!err) {
+            res.json(rows);
+          } else {
+            res.json(err);
+            logger.log("error", err.sql + ". " + err.sqlMessage);
+          }
+        }
+      );
+    });
+  }
+);
+
+router.post("/deleteFaq", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    test = {};
+    var id = req.body.id;
+
+    conn.query(
+      "delete from faq_list where id = '" + id + "'",
+      [req.body],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            test.success = true;
+          } else {
+            test.success = false;
+          }
+          res.json(test);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
+//end help - faq
+
+// start theme_colors
+
+router.get("/getThemeColors/:id", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    var id = req.params.id;
+    conn.query(
+      "select * from theme_configuration where superadmin = ?",
+      [id],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
+router.post("/createThemeColors", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+
+    response = null;
+    var data = {
+      color: req.body.color,
+      superadmin: req.body.superadmin,
+    };
+
+    conn.query(
+      "insert into theme_configuration SET ?",
+      data,
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            response = true;
+          } else {
+            response.success = false;
+          }
+          res.json(response);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
+router.post("/updateThemeColors", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+
+    var response = null;
+    var data = {
+      color: req.body.color,
+      superadmin: req.body.superadmin,
+    };
+
+    conn.query(
+      "update theme_configuration set ? where id = '" + req.body.id + "'",
+      data,
+      function (err, rows, fields) {
+        conn.release();
+        if (err) {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        } else {
+          response = true;
+          res.json(response);
+        }
+      }
+    );
+  });
+});
+
+// end theme_colors
+
+/* LANDING PAGES */
+
+router.post("/sendRequestForDemoAccount", function (req, res, next) {
+  var body = JSON.parse(
+    fs.readFileSync("./server/routes/dynamic-mail-server/config.json", "utf-8")
+  );
+
+  body.request_for_demo_account.fields["email"] = req.body.email;
+
+  var options = {
+    url: process.env.link_api + "mail-server/sendMail",
+    method: "POST",
+    body: body.request_for_demo_account,
+    json: true,
+  };
+  request(options, function (error, response, body) {
+    if (!error) {
+      res.json(true);
+    } else {
+      res.json(false);
+    }
+  });
+});
+
+router.post("/sendReqestForDemoAccountFull", function (req, res, next) {
+  var body = JSON.parse(
+    fs.readFileSync("./server/routes/dynamic-mail-server/config.json", "utf-8")
+  );
+
+  body.request_for_demo_account_full.fields["name"] = req.body.name;
+  body.request_for_demo_account_full.fields["email"] = req.body.email;
+  body.request_for_demo_account_full.fields["phone"] = req.body.phone;
+  body.request_for_demo_account_full.fields["nameOfKindergarden"] =
+    req.body.nameOfKindergarden;
+  body.request_for_demo_account_full.fields["countOfChildrens"] =
+    req.body.countOfChildrens;
+  body.request_for_demo_account_full.fields["notes"] = req.body.notes;
+
+  var options = {
+    url: process.env.link_api + "mail-server/sendMail",
+    method: "POST",
+    body: body.request_for_demo_account_full,
+    json: true,
+  };
+  request(options, function (error, response, body) {
+    if (!error) {
+      res.json(true);
+    } else {
+      res.json(false);
+    }
+  });
+  // this is not good, try to make handler for return correct value
+  res.json(true);
+});
+
+router.post("/sendFromContactForm", function (req, res, next) {
+  var body = JSON.parse(
+    fs.readFileSync("./server/routes/dynamic-mail-server/config.json", "utf-8")
+  );
+
+  body.send_from_contact_form.fields["firstname"] = req.body.firstname;
+  body.send_from_contact_form.fields["lastname"] = req.body.lastname;
+  body.send_from_contact_form.fields["phone"] = req.body.phone;
+  body.send_from_contact_form.fields["email"] = req.body.email;
+  body.send_from_contact_form.fields["message"] = req.body.message;
+
+  var options = {
+    url: process.env.link_api + "mail-server/sendMail",
+    method: "POST",
+    body: body.send_from_contact_form,
+    json: true,
+  };
+  request(options, function (error, response, body) {
+    if (!error) {
+      res.json(true);
+    } else {
+      res.json(false);
+    }
+  });
+});
+
+/* END LANDING PAGES */
 
 module.exports = router;

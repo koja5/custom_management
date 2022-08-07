@@ -37,16 +37,17 @@
 
     <!-- Preloader End -->
 
-    <div class="container-fluid" *ngIf="!loading && language !== undefined">
+    <div class="container-fluid" *ngIf="language !== undefined">
       <div class="row" style="height: 100vh">
         <div class="col-xs-12 col-sm-7 col-md-5 col-lg-4 authfy-panel-left">
           <!-- brand-logo start -->
           <div class="brand-logo text-center">
-            <img
-              src="../../../assets/images/brand-logo.png"
-              width="250"
-              alt="brand-logo"
-            />
+            <a (click)="backToLanding()"
+              ><img
+                src="../../../assets/images/brand-logo.png"
+                width="250"
+                alt="brand-logo"
+            /></a>
           </div>
           <!-- ./brand-logo -->
           <!-- authfy-login start -->

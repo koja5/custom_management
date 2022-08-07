@@ -67,20 +67,19 @@ export class LoginComponent implements OnInit {
     this.initialization();
     // ovde treba da se napravi da se ocita lokacija korisnika i na osnovu toga povuce odgovarajuci jezik
     // kada se korisnik loguje, povlaci se ona konfiguracija koju je on sacuvao...
-    if (localStorage.getItem("language") !== null) {
-      this.language = JSON.parse(localStorage.getItem("language"));
-    } else {
-      /*this.dashboardService.getTranslation("english").subscribe(data => {
-        console.log(data);
-        this.helpService.setLocalStorage("language", JSON.stringify(data));
-        this.language = data["login"];
-      });*/
-    }
   }
 
   initialization() {
-    if (this.helpService.getLocalStorage("countryCode")) {
-      this.language = JSON.parse(this.helpService.getLocalStorage("language"));
+    if (
+      this.helpService.getSelectionLangaugeCode() &&
+      this.helpService.getLanguage()
+    ) {
+      this.language = this.helpService.getLanguage();
+    } else if (
+      this.helpService.getLocalStorage("countryCode") &&
+      this.helpService.getLanguage()
+    ) {
+      this.language = this.helpService.getLanguage();
     } else {
       this.checkCountryLocation();
     }
@@ -476,5 +475,9 @@ export class LoginComponent implements OnInit {
       this.loginForm = "active";
       this.loginInfo = this.language.successUserAccessDeviceName;
     });
+  }
+
+  backToLanding() {
+    this.router.navigate(["./"]);
   }
 }

@@ -122,7 +122,7 @@ router.post("/sendCustomerVerificationMail", function (req, res) {
       "SELECT m.*, u.* from mail_patient_created_account_via_form m join users_superadmin u on m.superadmin = u.id  where m.superadmin = ?",
       [req.body.storeId],
       function (err, mailMessage, fields) {
-        console.log(mailMessage);
+        conn.release();
         var mail = {};
         var signatureAvailable = false;
         if (mailMessage.length > 0) {
@@ -191,9 +191,6 @@ router.post("/sendCustomerVerificationMail", function (req, res) {
                 : "",
           }),
         };
-
-        console.log("PROSAO SAM!");
-
         smtpTransport.sendMail(mailOptions, function (error, response) {
           console.log(response);
           if (error) {
@@ -350,6 +347,7 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
             "select * from mail_confirm_arrival where superadmin = ?",
             [to.storeId],
             function (err, mailMessage, fields) {
+              conn.release();
               if (err) {
                 console.error("SQL error:", err);
               }
@@ -387,8 +385,6 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
                 (endHours < 10 ? "0" + endHours : endHours) +
                 ":" +
                 (endMinutes < 10 ? "0" + endMinutes : endMinutes);
-              console.log(mail);
-              console.log(to);
               var mailOptions = {
                 from: '"ClinicNode" support@app-production.eu',
                 subject: mail.mailSubject
@@ -508,6 +504,7 @@ router.post("/sendPatientFormRegistration", function (req, res) {
       "select mr.* from customers c join mail_patient_form_registration mr on c.storeId = mr.superadmin where c.email = ?",
       [req.body.email],
       function (err, mailMessage, fields) {
+        conn.release();
         if (err) {
           res.json(false);
         }
@@ -616,6 +613,7 @@ router.post("/sendInfoToPatientForCreatedAccount", function (req, res) {
       "select mr.* from customers c join mail_patient_created_account mr on c.storeId = mr.superadmin where c.id = ?",
       [req.body.id],
       function (err, mailMessage, fields) {
+        conn.release();
         if (err) {
           res.json(false);
         }
@@ -730,6 +728,7 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
       "select mr.*, s.* from tasks t join mail_approve_reservation mr on t.superadmin = mr.superadmin join store s on t.storeId = s.id where t.id = ?",
       [req.body.id],
       function (err, mailMessage, fields) {
+        conn.release();
         if (err) {
           res.json(false);
         }
@@ -838,6 +837,7 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
       "select mr.*, s.* from tasks t join mail_deny_reservation mr on t.superadmin = mr.superadmin join store s on t.storeId = s.id where t.id = ?",
       [req.body.id],
       function (err, mailMessage, fields) {
+        conn.release();
         if (err) {
           res.json(false);
         }
@@ -994,6 +994,7 @@ router.post("/sendReminderViaEmailManual", function (req, res) {
       "select mr.*, s.*, s.place as store_place from customers c join mail_reminder_message mr on c.storeId = mr.superadmin join store s on c.storeId = s.superadmin join tasks t on s.id = t.storeId join event_category e on t.colorTask = e.id where c.id = ? and s.id = ? and t.id = ? and e.allowSendInformation = 1",
       [req.body.id, req.body.storeId, req.body.taskId],
       function (err, mailMessage, fields) {
+        conn.release();
         if (err) {
           res.json(false);
         }
@@ -1174,6 +1175,7 @@ router.post("/sendMassiveEMail", function (req, res) {
           " and " +
           question,
         function (err, rows) {
+          conn.release();
           if (err) {
             logger.log("error", err);
             res.json(false);

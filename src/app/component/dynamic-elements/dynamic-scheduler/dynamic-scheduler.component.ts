@@ -1,4 +1,3 @@
-import { Subject } from 'rxjs/Subject';
 import { EventCategoryService } from "./../../../service/event-category.service";
 import { UsersService } from "./../../../service/users.service";
 import { StoreService } from "./../../../service/store.service";
@@ -101,6 +100,8 @@ import { ActivatedRoute } from "@angular/router";
 import { HolidayService } from "src/app/service/holiday.service";
 import { PDFService } from "src/app/service/pdf.service";
 import { ParameterItemService } from "src/app/service/parameter-item.service";
+import { DateService } from 'src/app/service/date.service';
+import { InvoiceService } from 'src/app/service/invoice.service';
 declare var moment: any;
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
@@ -398,6 +399,10 @@ export class DynamicSchedulerComponent implements OnInit {
   eventChange = false;
   adminUser: any;
   public template: any;
+  superadminProfile: any;
+  isDateSet: boolean = false;
+  invoiceID: any;
+  changedInvoiceID: any;
 
   public generateEvents(): Object[] {
     const eventData: Object[] = [];
@@ -1135,12 +1140,12 @@ export class DynamicSchedulerComponent implements OnInit {
     const checkCustomerId = this.customerUser.id
       ? this.customerUser
       : {
-          id: args.data.customer_id
-            ? args.data.customer_id
-            : args.data.user.id
+        id: args.data.customer_id
+          ? args.data.customer_id
+          : args.data.user.id
             ? args.data.user.id
             : null,
-        };
+      };
     formValue.user = checkCustomerId;
     formValue.customer_id = checkCustomerId.id;
     formValue.therapy_id = args.data.therapy_id;
@@ -1336,7 +1341,7 @@ export class DynamicSchedulerComponent implements OnInit {
         );
         timeDurationInd =
           Number(informationAboutStore.time_therapy) !==
-          Number(this.timeDuration)
+            Number(this.timeDuration)
             ? 1
             : 0;
         timeDuration = Number(informationAboutStore.time_therapy);
@@ -1354,7 +1359,7 @@ export class DynamicSchedulerComponent implements OnInit {
         } else {
           timeDurationInd =
             Number(informationAboutStore.time_therapy) !==
-            Number(this.timeDuration)
+              Number(this.timeDuration)
               ? 1
               : 0;
           timeDuration = Number(informationAboutStore.time_therapy);
@@ -1413,7 +1418,7 @@ export class DynamicSchedulerComponent implements OnInit {
     this.selectedTarget = closest(
       targetElement,
       ".e-appointment,.e-work-cells," +
-        ".e-vertical-view .e-date-header-wrap .e-all-day-cells,.e-vertical-view .e-date-header-wrap .e-header-cells"
+      ".e-vertical-view .e-date-header-wrap .e-all-day-cells,.e-vertical-view .e-date-header-wrap .e-header-cells"
     );
     if (isNullOrUndefined(this.selectedTarget)) {
       args.cancel = true;
@@ -1633,12 +1638,15 @@ export class DynamicSchedulerComponent implements OnInit {
     private activatedRouter: ActivatedRoute,
     private holidayService: HolidayService,
     private pdfService: PDFService,
-    private parameterItemService: ParameterItemService
-  ) {}
+    private parameterItemService: ParameterItemService,
+    private dateService: DateService,
+    private invoiceService: InvoiceService,
+
+  ) { }
 
   ngOnInit() {
     this.initializationConfig();
-    this.initializaionData();
+    this.initializationData();
     this.loadHolidays();
     this.helpService.setDefaultBrowserTabTitle();
     this.loadUser();
@@ -1672,7 +1680,7 @@ export class DynamicSchedulerComponent implements OnInit {
       if (result && result.length > 0) {
         console.log("holidayss");
         result.forEach((r) => {
-          console.log(r);
+          // console.log(r);
           this.allEvents.push({
             Subject: r.Subject,
             StartTime: new Date(r.StartTime),
@@ -1753,7 +1761,7 @@ export class DynamicSchedulerComponent implements OnInit {
     }*/
   }
 
-  initializaionData() {
+  initializationData() {
     this.loading = true;
     this.type = this.helpService.getType();
     this.id = this.helpService.getMe();
@@ -2449,7 +2457,7 @@ export class DynamicSchedulerComponent implements OnInit {
       value: this.value,
     };
 
-    this.mongo.setUsersFor(item).subscribe((data) => {});
+    this.mongo.setUsersFor(item).subscribe((data) => { });
   }
 
   getTaskForSelectedUsers(value) {
@@ -2556,7 +2564,7 @@ export class DynamicSchedulerComponent implements OnInit {
           for (let j = 0; j < eventStatistic.length; j++) {
             if (
               this.sharedCalendarResources[i].id ===
-                eventStatistic[j].creator_id &&
+              eventStatistic[j].creator_id &&
               userId === eventStatistic[j].creator_id
             ) {
               for (let k = 0; k < listOfCategorie.length; k++) {
@@ -2914,9 +2922,9 @@ export class DynamicSchedulerComponent implements OnInit {
               new Date(workItem.change) <= date.date &&
               (i + 1 <= this.calendars[0].workTime[date.groupIndex].length - 1
                 ? date.date <
-                  new Date(
-                    this.calendars[0].workTime[date.groupIndex][i + 1].change
-                  )
+                new Date(
+                  this.calendars[0].workTime[date.groupIndex][i + 1].change
+                )
                 : true) &&
               date.date.getDay() - 1 < 5 &&
               date.date.getDay() !== 0
@@ -2925,15 +2933,15 @@ export class DynamicSchedulerComponent implements OnInit {
                 (workItem.times[date.date.getDay() - 1].start <=
                   date.date.getHours() &&
                   workItem.times[date.date.getDay() - 1].end >
-                    date.date.getHours()) ||
+                  date.date.getHours()) ||
                 (workItem.times[date.date.getDay() - 1].start2 <=
                   date.date.getHours() &&
                   workItem.times[date.date.getDay() - 1].end2 >
-                    date.date.getHours()) ||
+                  date.date.getHours()) ||
                 (workItem.times[date.date.getDay() - 1].start3 <=
                   date.date.getHours() &&
                   workItem.times[date.date.getDay() - 1].end3 >
-                    date.date.getHours())
+                  date.date.getHours())
               ) {
                 date.element.style.background = workItem.color;
                 if (this.type === this.userType.readOnlyScheduler) {
@@ -3102,6 +3110,17 @@ export class DynamicSchedulerComponent implements OnInit {
     this.parameterItemService.getVATTex(superadmin).subscribe((data: []) => {
       this.vatTaxList = data;
       // console.log(data);
+    });
+
+    this.parameterItemService.getSuperadminProfile(superadmin).subscribe((data) => {
+      this.superadminProfile = data[0];
+      this.invoiceID = this.superadminProfile.invoicePrefix + '-' + this.superadminProfile.invoiceID;
+
+      console.log('invoiceID', this.invoiceID);
+
+      this.changedInvoiceID = this.superadminProfile.invoiceID;
+
+      console.log(data);
     });
   }
 
@@ -3797,8 +3816,8 @@ export class DynamicSchedulerComponent implements OnInit {
   copyLinkToTheClinic() {
     this.helpService.copyToClipboard(
       this.helpService.getFullHostName() +
-        "/dashboard/home/task/" +
-        this.selectedStoreId
+      "/dashboard/home/task/" +
+      this.selectedStoreId
     );
     this.helpService.successToastr(
       this.language.successCopiedLinkForClinicReservation,
@@ -3806,25 +3825,44 @@ export class DynamicSchedulerComponent implements OnInit {
     );
   }
 
+
+  private updateInvoiceID(): void {
+
+    if (this.invoiceID !== this.changedInvoiceID) {
+      const data = {
+        superAdminId: this.superadminProfile.id,
+        id: this.changedInvoiceID
+      }
+      console.log("updateInvoiceID");
+
+      this.invoiceService.updateInvoiceID(data);
+
+    }
+  }
+
   public downloadPDF(): void {
-    console.log(this.selectedTherapies);
+
     const docDefinition = this.setupPDF();
 
     // pass file name
     pdfMake
       .createPdf(docDefinition)
       .download(this.customerUser["firstname"] + this.customerUser["lastname"]);
+
+    this.updateInvoiceID();
   }
 
   public printPDF(): void {
-    console.log(this.selectedTherapies);
 
     const docDefinition = this.setupPDF();
     pdfMake.createPdf(docDefinition).print();
+
+    this.updateInvoiceID();
   }
 
   private setupPDF() {
-    const dotSign = " • ";
+
+    const selectedStore = this.store.filter(s => s.id = this.selectedStoreId)[0];
 
     const therapies = [];
     const netPrices = [];
@@ -3832,53 +3870,57 @@ export class DynamicSchedulerComponent implements OnInit {
     let bruto = 0;
     for (let i = 0; i < this.selectedTherapies.length; i++) {
       const id = this.selectedTherapies[i];
-      const temp = this.therapyValue.find((therapy) => therapy.id == id);
+      const therapy = this.therapyValue.find((therapy) => therapy.id == id);
 
-      if (temp) {
+      if (therapy) {
         const vatDefinition = this.vatTaxList.find(
-          (elem) => elem.id === temp.vat
+          (elem) => elem.id === therapy.vat
         );
         // console.log(vatDefinition);
 
-        temp.date = this.formatDateForPDF(this.eventTime.start);
+        therapy.date = this.dateService.formatDate(new Date(this.eventTime.start).toLocaleDateString("en-CA").toString());
 
-        console.log("temp.date", temp.date);
+        console.log("temp.date", therapy.date);
 
-        const isNaNPrice = isNaN(parseFloat(temp.net_price));
+        const isNaNPrice = isNaN(parseFloat(therapy.net_price));
 
         if (isNaNPrice) {
-          console.log("Not a number: ", temp.net_price);
+          console.log("Not a number: ", therapy.net_price);
         }
 
         isNaNPrice
           ? netPrices.push(-1)
-          : netPrices.push(parseFloat(temp.net_price));
+          : netPrices.push(parseFloat(therapy.net_price));
 
         if (!isNaNPrice) {
           if (vatDefinition) {
             bruto =
-              parseFloat(temp.net_price) *
+              parseFloat(therapy.net_price) *
               (1 + Number(vatDefinition.title) / 100);
           } else {
-            bruto = parseFloat(temp.net_price) * (1 + 20 / 100);
+            bruto = parseFloat(therapy.net_price) * (1 + 20 / 100);
           }
           brutoPrices.push(bruto);
         } else {
           brutoPrices.push(-1);
         }
+
+        const shouldSetDate =
+          (this.selectedTherapies.length > 1 && i == 0) ||
+          this.selectedTherapies.length === 1 ||
+          !this.isDateSet;
+
+
+        // console.log(shouldSetDate + ' should set date');
+
         therapies.push({
-          title: temp.title,
-          description: temp.description ? temp.description : "",
-          date:
-            (this.selectedTherapies.length > 1 && i == 0) ||
-            this.selectedTherapies.length === 1
-              ? temp.date
-              : "",
+          title: (therapy.titleOnInvoice && therapy.titleOnInvoice.trim() !== "") ? therapy.titleOnInvoice : therapy.title,
+          date: shouldSetDate ? therapy.date : "",
           net_price: isNaNPrice
             ? this.language.noDataAvailable
             : this.language.euroSign +
-              " " +
-              parseFloat(temp.net_price).toFixed(2),
+            " " +
+            parseFloat(therapy.net_price).toFixed(2),
           vat: vatDefinition ? vatDefinition.title : 20,
           gross_price: isNaNPrice
             ? this.language.noDataAvailable
@@ -3893,72 +3935,51 @@ export class DynamicSchedulerComponent implements OnInit {
     const filteredBrutoPrices = brutoPrices.filter(
       (num) => !isNaN(parseFloat(num))
     );
-
+    let vatValues = brutoPrices.map(function (item, index) {
+      // In this case item correspond to currentValue of array a, 
+      // using index to get value from array b
+      return item - netPrices[index];
+    });
+    const vat = vatValues.reduce((a, b) => a + b, 0).toFixed(2);
     const subtotal = filteredNetPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = filteredBrutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
     let docDefinition = {
+      header: {
+        columns: [
+          {
+            text: this.language.invoiceSubTitle + " " + this.invoiceID,
+            style: "documentHeaderLeft",
+            width: "*",
+          },
+          {
+            text: this.language.dateTitle + " " + this.dateService.currentDateFormatted,
+            style: "documentHeaderRight",
+            width: "*",
+          },
+        ],
+      },
       content: [
         // Header
         {
           columns: [
-            // {
-            //   image: 'data:image/png;base64,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',
-            //   width: 150
-            // },
-
             [
               {
-                text: this.language.invoiceTitle,
+                text: "\n" + this.language.invoiceTitle,
                 style: "invoiceTitle",
                 width: "*",
               },
               {
-                stack: [
+                columns: [
                   {
-                    columns: [
-                      {
-                        text: this.language.invoiceSubTitle,
-                        style: "invoiceSubTitle",
-                        width: "*",
-                      },
-                      {
-                        text: this.complaintData["id"],
-                        style: "invoiceSubValue",
-                        width: 130,
-                      },
-                    ],
+                    text: "\n",
+                    style: "invoiceSubTitle",
+                    width: "*",
                   },
                   {
-                    columns: [
-                      {
-                        text: this.language.dateTitle,
-                        style: "invoiceSubTitle",
-                        width: "*",
-                      },
-                      {
-                        text: new Date(
-                          this.complaintData["date"]
-                        ).toLocaleString(),
-                        style: "invoiceSubValue",
-                        width: 130,
-                      },
-                    ],
-                  },
-
-                  {
-                    columns: [
-                      {
-                        text: "\n",
-                        style: "invoiceSubTitle",
-                        width: "*",
-                      },
-                      {
-                        text: "\n",
-                        style: "invoiceSubValue",
-                        width: "*",
-                      },
-                    ],
+                    text: "\n",
+                    style: "invoiceSubValue",
+                    width: "*",
                   },
                 ],
               },
@@ -3982,11 +4003,11 @@ export class DynamicSchedulerComponent implements OnInit {
         {
           columns: [
             {
-              text: this.adminUser.clinicName,
+              text: selectedStore.storename + '\n' + this.superadminProfile.shortname,
               style: "invoiceBillingDetailsLeft",
             },
             {
-              text: this.customerUser.lastname + this.customerUser.firstname,
+              text: this.customerUser.lastname.trim() + ' ' + this.customerUser.firstname.trim(),
               style: "invoiceBillingDetailsRight",
             },
           ],
@@ -3995,21 +4016,17 @@ export class DynamicSchedulerComponent implements OnInit {
         {
           columns: [
             {
-              text:
-                this.adminUser.street +
-                "\n " +
-                this.adminUser.zipcode +
-                " " +
-                this.adminUser.place,
-
+              text: selectedStore.vatcode ?
+                selectedStore.street + "\n " + selectedStore.zipcode + " " + selectedStore.place + "\n" + this.language.vatIdentificationNumber + " " + selectedStore.vatcode
+                : selectedStore.street + "\n " + selectedStore.zipcode + " " + selectedStore.place + "\n" + this.language.vatIdentificationNumber + " " + this.superadminProfile.vatcode,
               style: "invoiceBillingAddressLeft",
             },
             {
               text:
                 this.customerUser["street"] +
-                " " +
-                this.customerUser["streetnumber"] +
                 "\n" +
+                this.customerUser["streetnumber"] +
+                " " +
                 this.customerUser["city"] +
                 "\n",
               style: "invoiceBillingAddressRight",
@@ -4040,16 +4057,12 @@ export class DynamicSchedulerComponent implements OnInit {
             paddingRight: function (i, node) {
               return i === node.table.widths.length - 1 ? 0 : 8;
             },
-            // // code for zebra style:
-            // fillColor: function (i) {
-            //   return i % 2 === 0 ? "#CCCCCC" : null;
-            // },
           },
           table: {
             // headers are automatically repeated if the table spans over multiple pages
             // you can declare how many rows should be treated as headers
             headerRows: 1,
-            widths: ["*", "*", "auto", "auto", "auto"],
+            widths: ["20%", "20%", "20%", "20%", "20%"],
             body: this.pdfService.createItemsTable(therapies),
           }, // table
           //  layout: 'lightHorizontalLines'
@@ -4058,76 +4071,56 @@ export class DynamicSchedulerComponent implements OnInit {
         "\n",
         // TOTAL
         {
-          table: {
-            // headers are automatically repeated if the table spans over multiple pages
-            // you can declare how many rows should be treated as headers
-            headerRows: 0,
-            widths: ["*", 80],
-
-            body: [
-              // Total
-              [
-                {
-                  text: this.language.invoiceSubtotal,
-                  style: "itemsFooterSubTitle",
-                },
-                {
-                  text:
-                    filteredNetPrices.length === 0
-                      ? this.language.noDataAvailable
-                      : this.language.euroSign + " " + subtotal,
-                  style: "itemsFooterSubValue",
-                },
-              ],
-              [
-                {
-                  text: this.language.invoiceTotal,
-                  style: "itemsFooterTotalTitle",
-                },
-                {
-                  text:
-                    filteredBrutoPrices.length === 0
-                      ? this.language.noDataAvailable
-                      : this.language.euroSign + " " + total,
-                  style: "itemsFooterTotalValue",
-                },
-              ],
-            ],
-          },
-          layout: "lightHorizontalLines",
+          columns: [
+            {
+              text: '',
+              width: '20%'
+            },
+            {
+              text: '',
+              width: '20%'
+            },
+            {
+              text: netPrices.length === 0 ? this.language.noDataAvailable : (this.language.euroSign + " " + subtotal),
+              style: "itemsFooterSubValue",
+              width: '20%',
+            },
+            {
+              text: netPrices.length === 0 ? this.language.noDataAvailable : (this.language.euroSign + " " + vat),
+              style: "itemsFooterVATValue",
+              width: '20%',
+            },
+            {
+              text: brutoPrices.length === 0 ? this.language.noDataAvailable : (this.language.euroSign + " " + total),
+              style: "itemsFooterTotalValue",
+              width: '20%',
+            },
+          ],
         },
-        // {
-        //   text: this.language.notesTitle,
-        //   style: 'notesTitle'
-        // },
-        // {
-        //   text: this.language.notesText,
-        //   style: 'notesTextBold'
-        // },
-        // {
-        //   text: "\n \n",
-        //   style: 'notesText'
-        // },
-        // {
-        //   text: this.language.notesDate + new Date().toLocaleDateString() + ", " + this.store.storename,
-        //   style: 'notesTextBold'
-        // }
+        {
+          text: this.language.notesTitle,
+          style: 'notesTextBold'
+        },
+        {
+          text: this.language.notesText,
+          style: 'notesText'
+        },
       ],
       footer: {
         columns: [
           {
             text:
-              this.adminUser.clinicName +
-              dotSign +
-              this.adminUser.street +
-              dotSign +
-              this.adminUser.zipcode +
+              selectedStore.storename + ' ' + this.superadminProfile.shortname +
+              this.dotSign +
+              selectedStore.street +
+              this.dotSign +
+              selectedStore.zipcode +
               " " +
-              this.adminUser.place +
+              selectedStore.place +
               "\n" +
-              this.adminUser.telephone +
-              dotSign +
-              this.adminUser.email,
+              selectedStore.telephone +
+              this.dotSign +
+              selectedStore.email,
             style: "documentFooter",
           },
         ],
@@ -4140,11 +4133,5 @@ export class DynamicSchedulerComponent implements OnInit {
 
     return docDefinition;
   }
-
-  private formatDateForPDF(value) {
-    if (!value) {
-      return;
-    }
-    return new Date(value).toLocaleDateString("en-CA");
-  }
+  private dotSign = " • ";
 }

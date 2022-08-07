@@ -7,24 +7,23 @@ import {
   State,
   GroupDescriptor,
   SortDescriptor,
+  DataResult,
 } from "@progress/kendo-data-query";
-import { UploadEvent, SelectEvent } from "@progress/kendo-angular-upload";
+import { UploadEvent } from "@progress/kendo-angular-upload";
 import {
-  DataStateChangeEvent,
   PageChangeEvent,
   RowArgs,
   DataBindingDirective,
+  GridComponent,
 } from "@progress/kendo-angular-grid";
 import { MessageService } from "../../../service/message.service";
 import { CustomerModel } from "../../../models/customer-model";
 import Swal from "sweetalert2";
-// import * as GC from "@grapecity/spread-sheets";
-// import * as Excel from "@grapecity/spread-excelio";
-import { WindowModule } from "@progress/kendo-angular-dialog";
 import * as XLSX from "ts-xlsx";
 import { HelpService } from "src/app/service/help.service";
 import { MailService } from "src/app/service/mail.service";
 import { PackLanguageService } from "src/app/service/pack-language.service";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 
 const newLocal = "data";
 @Component({
@@ -35,6 +34,7 @@ const newLocal = "data";
 export class CustomersComponent implements OnInit {
   @ViewChild(DataBindingDirective) dataBinding: DataBindingDirective;
   @ViewChild('customer') customer: Modal;
+  @ViewChild('grid') grid;
   @ViewChild('patientFormRegistrationDialog') patientFormRegistrationDialog: Modal;
   public data = new CustomerModel();
   public unamePattern = "^[a-z0-9_-]{8,15}$";
@@ -62,6 +62,13 @@ export class CustomersComponent implements OnInit {
   public customerDialogOpened = false;
   public fileValue: any;
   public theme: string;
+  public allPages: boolean;
+  _excelData: any;
+
+  gridForExport: GridComponent;
+  private _allData;
+  allDataForGrid: DataResult;
+
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
   }
@@ -84,7 +91,9 @@ export class CustomersComponent implements OnInit {
     private packLanguage: PackLanguageService
   ) {
     // this.excelIO = new Excel.IO();
+    this.allData = this.allData.bind(this);
   }
+
 
   ngOnInit() {
     this.height = this.helpService.getHeightForGrid();
@@ -121,14 +130,19 @@ export class CustomersComponent implements OnInit {
       console.log(val);
       if (val !== null) {
         this.currentLoadData = val;
+        this._allData = <ExcelExportData>{
+          data: process(this.currentLoadData, this.state).data,
+        }
         this.gridData = {
           data: val,
         };
         this.gridView = process(val, this.state);
+        this.allDataForGrid = process(val, { skip: 0, take: val.length });
         this.loading = false;
       } else {
         this.gridData[newLocal] = [];
         this.gridView = this.gridData;
+        this.allDataForGrid = this.gridData;
         this.loading = false;
       }
       this.changeTheme(this.theme);
@@ -218,14 +232,14 @@ export class CustomersComponent implements OnInit {
     console.log(event);
   }
 
-  public dataStateChange(state: DataStateChangeEvent): void {
-    this.state = state;
-    this.gridView = process(this.currentLoadData, this.state);
-    if (this.state.filter !== null && this.state.filter.filters.length === 0) {
-      this.gridView.total = this.currentLoadData.length;
-    }
-    this.changeTheme(this.theme);
-  }
+  // public dataStateChange(state: DataStateChangeEvent): void {
+  //   this.state = state;
+  //   this.gridView = process(this.currentLoadData, this.state);
+  //   if (this.state.filter !== null && this.state.filter.filters.length === 0) {
+  //     this.gridView.total = this.currentLoadData.length;
+  //   }
+  //   this.changeTheme(this.theme);
+  // }
 
   pageChange(event: PageChangeEvent): void {
     this.state.skip = event.skip;
@@ -316,6 +330,60 @@ export class CustomersComponent implements OnInit {
       }, 50);
     };
     fileReader.readAsArrayBuffer(args.target.files[0]);
+  }
+
+  exportPDF(value: boolean): void {
+    this.allPages = value;
+
+    setTimeout(() => {
+      this.grid.saveAsPDF();
+    }, 0);
+  }
+
+  exportToExcel(grid: GridComponent, allPages: boolean) {
+    this.exportToExcelData(grid, allPages);
+
+    setTimeout(() => {
+      grid.saveAsExcel();
+    }, 0);
+  }
+
+  public exportToExcelData(grid: GridComponent, allPages: boolean): void {
+    console.log('allPages ', allPages);
+
+    if (allPages) {
+      var myState: State = {
+        skip: 0,
+        take: this.gridData.total,
+      };
+
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, myState).data,
+      }
+
+
+    } else {
+
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, this.state).data,
+      }
+    }
+
+  }
+
+  public allData(): ExcelExportData {
+    // var myState: State = this.state;
+    // myState.skip = 0;
+    // myState.take = this.gridData.total;
+    // const result: ExcelExportData = {
+    //   data: process(this.currentLoadData, this.state).data
+    // };
+
+    // console.log(result);
+
+    // return result;
+
+    return this._allData;
   }
 
   xlsxToJson(data) {
@@ -541,7 +609,7 @@ export class CustomersComponent implements OnInit {
     this.patientFormRegistrationDialog.close();
     this.mailService.sendPatientFormRegistration(data).subscribe((data) => {
       console.log(data);
-      if(data) {
+      if (data) {
         this.helpService.successToastr(this.language.successSendFormToMail, "");
       } else {
         this.helpService.errorToastr(this.language.errorSendFormToMail, "");
