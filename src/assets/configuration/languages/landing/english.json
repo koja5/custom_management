@@ -167,5 +167,108 @@
     "footerTerms": "Terms",
     "from": "From",
     "to": "To",
-    "across": "Across"
+    "across": "Across",
+    "getStarted": "GET STARTED",
+    "requestDemoDropdownNumbers": [
+        "0 - 5",
+        "6 - 10",
+        "11 - 20",
+        "21 - 50",
+        "51 - 100",
+        "101 - 500",
+        "Across 500"
+    ],
+    "priceTable": {
+        "header": [
+            {
+                "nameOfPackageTitle": "Free",
+                "nameOfPackageText": "Starter plan",
+                "price": "FREE"
+            },
+            {
+                "nameOfPackageTitle": "Personal",
+                "nameOfPackageText": "Longer data retention",
+                "price": "9/mo"
+            },
+            {
+                "nameOfPackageTitle": "Pro",
+                "nameOfPackageText": "Our complete solution",
+                "price": "39/mo"
+            }
+        ],
+        "functions": [
+            {
+                "name": "Sites",
+                "descriptionPerPackages": [
+                    "exists",
+                    "not-exists",
+                    "180 Days"
+                ]
+            },
+            {
+                "name": "Data Retention",
+                "descriptionPerPackages": [
+                    "30 Days",
+                    "90 Days",
+                    "180 Days"
+                ]
+            },
+            {
+                "name": "Chart Annotations",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Uptime Monitoring",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Weekly Reports",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "not-exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Security Audit",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "On-Demand Audit",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "not-exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Priority Support",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Easy Billing + No Contracts",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            }
+        ]
+    }
 }

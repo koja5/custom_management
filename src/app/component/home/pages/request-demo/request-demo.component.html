@@ -108,7 +108,13 @@
                           language.requestSectionFormChooiceNumberOfChildrens
                         }}
                       </option>
-                      <option value="0-50">
+                      <option
+                        *ngFor="let item of language.requestDemoDropdownNumbers"
+                        value="{{ item }}"
+                      >
+                        {{ item }}
+                      </option>
+                      <!-- <option value="0-50">
                         {{ language.from }} 0 {{ language.to }} 50
                       </option>
                       <option value="51-100">
@@ -123,7 +129,7 @@
                       <option value="351-500">
                         {{ language.from }} 351 {{ language.to }} 500
                       </option>
-                      <option value="500-~">{{ language.across }} 500</option>
+                      <option value="500-~">{{ language.across }} 500</option> -->
                     </select>
                   </div>
                 </div>
