@@ -131,6 +131,10 @@ export class CustomersComponent implements OnInit {
     this.helpService.setTitleForBrowserTab(this.language.customer);
 
     this.savePage = this.paginationService.getLocalStorage('pageSize');
+    if(this.savePage && this.savePage['home/customers']) {
+      this.state.skip = this.savePage['home/customers'];
+      this.state.take = this.savePage['home/customersTake'];
+    }
   }
 
   getCustomers() {
@@ -276,15 +280,13 @@ export class CustomersComponent implements OnInit {
   // }
 
   pageChange(event: PageChangeEvent): void {
-    if(!this.savePage) {
-      this.savePage = {'home/customers': 0};
-    }
     this.state.skip = event.skip;
     this.state.take = event.take;
     this.pageSize = event.take;
     this.loadProducts();
-    
+
     this.savePage['home/customers'] = event.skip;
+    this.savePage['home/customersTake'] = event.take;
     this.paginationService.setLocalStorage('pageSize', this.savePage);
   }
 

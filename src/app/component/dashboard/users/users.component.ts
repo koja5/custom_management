@@ -124,7 +124,11 @@ export class UsersComponent implements OnInit {
       this.changeTheme(mess);
       this.theme = mess;
     });
-    this.savePage = this.paginationService.getLocalStorage('pageSize')
+    this.savePage = this.paginationService.getLocalStorage('pageSize');
+    if(this.savePage && this.savePage['home/users']) {
+      this.state.skip = this.savePage['home/users'];
+      this.state.take = this.savePage['home/usersTake'];
+    }
   }
 
   getUser() {
@@ -255,16 +259,13 @@ export class UsersComponent implements OnInit {
   }
 
   pageChange(event: PageChangeEvent): void {
-    if(!this.savePage) {
-      this.savePage = {
-        'home/users': 0,
-      };
-    }
     this.state.skip = event.skip;
     this.state.take = event.take;
     this.pageSize = event.take;
     this.loadProducts();
+
     this.savePage['home/users'] = event.skip;
+    this.savePage['home/usersTake'] = event.take;
     this.paginationService.setLocalStorage('pageSize', this.savePage);
   }
 

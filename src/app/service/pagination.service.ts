@@ -9,6 +9,9 @@ export class PaginationService {
 
   getLocalStorage(key) {
     const valueToJSON = JSON.parse(localStorage.getItem(key));
+    if(valueToJSON === null) {
+      return {};
+    }
     return valueToJSON;
   }
 

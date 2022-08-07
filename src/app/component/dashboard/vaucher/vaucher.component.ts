@@ -17,6 +17,7 @@ import { UsersService } from "src/app/service/users.service";
 import { HelpService } from "src/app/service/help.service";
 import { Modal } from "ngx-modal";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { PaginationService } from "src/app/service/pagination.service";
 
 @Component({
   selector: "app-vaucher",
@@ -81,13 +82,15 @@ export class VaucherComponent implements OnInit {
   };
   showDialog: boolean = false;
   isFormDirty: boolean = false;
+  savePage: any = {};
 
   constructor(
     private service: VaucherService,
     private customer: CustomersService,
     private message: MessageService,
     private userService: UsersService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private paginationService: PaginationService,
   ) {
     this.allData = this.allData.bind(this);
 
@@ -119,6 +122,12 @@ export class VaucherComponent implements OnInit {
       this.changeTheme(mess);
       this.theme = mess;
     });
+
+    this.savePage = this.paginationService.getLocalStorage('pageSize');
+    if(this.savePage && this.savePage['home/vaucher']) {
+      this.state.skip = this.savePage['home/vaucher'];
+      this.state.take = this.savePage['home/vaucherTake'];
+    }
   }
 
   getVauchers() {
@@ -382,6 +391,10 @@ export class VaucherComponent implements OnInit {
     this.state.take = event.take;
     this.pageSize = event.take;
     this.loadProducts();
+
+    this.savePage['home/vaucher'] = event.skip;
+    this.savePage['home/vaucherTake'] = event.take;
+    this.paginationService.setLocalStorage('pageSize', this.savePage);
   }
 
   loadProducts(): void {
