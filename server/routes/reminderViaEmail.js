@@ -69,10 +69,10 @@ function reminderViaEmail() {
           conn.query(
             "SELECT c.email, c.shortname, s.storename, t.start, t.end, us.firstname, us.lastname, th.therapies_title, mr.*, e.allowSendInformation FROM reminder r join tasks t on r.superadmin = t.superadmin join customers c on t.customer_id = c.id join store s on t.storeId = s.id join users us on t.creator_id = us.id join therapy th on t.therapy_id = th.id join mail_reminder_message mr on r.superadmin = mr.superadmin join event_category e on t.colorTask = e.id where c.reminderViaEmail = 1 and r.email = 1 and CAST(t.start AS DATE) = CAST((NOW() + interval 2 DAY) as DATE) and e.allowSendInformation = 1",
             function (err, rows, fields) {
+              conn.release();
               if (err) {
                 logger.log("error", err);
               }
-              console.log(rows);
               rows.forEach(function (to, i, array) {
                 if (to.email !== null) {
                   var convertToDateStart = new Date(to.start);
@@ -198,7 +198,6 @@ function reminderViaEmail() {
                   );
                 }
               });
-              conn.release();
             }
           );
         }
