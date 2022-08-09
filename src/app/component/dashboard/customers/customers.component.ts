@@ -25,7 +25,6 @@ import { MailService } from "src/app/service/mail.service";
 import { PackLanguageService } from "src/app/service/pack-language.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { StorageService } from "src/app/service/storage.service";
-import { PaginationService } from "src/app/service/pagination.service";
 
 const newLocal = "data";
 @Component({
@@ -94,7 +93,6 @@ export class CustomersComponent implements OnInit {
     private helpService: HelpService,
     private mailService: MailService,
     private packLanguage: PackLanguageService,
-    private paginationService: PaginationService
   ) {
     // this.excelIO = new Excel.IO();
     this.allData = this.allData.bind(this);
@@ -130,11 +128,12 @@ export class CustomersComponent implements OnInit {
     });
     this.helpService.setTitleForBrowserTab(this.language.customer);
 
-    this.savePage = this.paginationService.getLocalStorage('pageSize');
+    this.savePage = this.helpService.getGridPageSize();
     if(this.savePage && this.savePage['home/customers']) {
       this.state.skip = this.savePage['home/customers'];
       this.state.take = this.savePage['home/customersTake'];
     }
+    console.log(this.savePage, 'jopaaa');
   }
 
   getCustomers() {
@@ -287,7 +286,7 @@ export class CustomersComponent implements OnInit {
 
     this.savePage['home/customers'] = event.skip;
     this.savePage['home/customersTake'] = event.take;
-    this.paginationService.setLocalStorage('pageSize', this.savePage);
+    this.helpService.setGridPageSize(this.savePage);
   }
 
   loadProducts(): void {

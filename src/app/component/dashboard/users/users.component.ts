@@ -19,7 +19,6 @@ import * as XLSX from "ts-xlsx";
 import { MessageService } from "src/app/service/message.service";
 import { HelpService } from "src/app/service/help.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
-import { PaginationService } from "src/app/service/pagination.service";
 
 @Component({
   selector: "app-users",
@@ -103,7 +102,6 @@ export class UsersComponent implements OnInit {
     private router: Router,
     private message: MessageService,
     private helpService: HelpService,
-    private paginationService: PaginationService,
   ) {
     // this.excelIO = new Excel.IO();
     this.allData = this.allData.bind(this);
@@ -124,7 +122,7 @@ export class UsersComponent implements OnInit {
       this.changeTheme(mess);
       this.theme = mess;
     });
-    this.savePage = this.paginationService.getLocalStorage('pageSize');
+    this.savePage = this.helpService.getGridPageSize();
     if(this.savePage && this.savePage['home/users']) {
       this.state.skip = this.savePage['home/users'];
       this.state.take = this.savePage['home/usersTake'];
@@ -266,7 +264,7 @@ export class UsersComponent implements OnInit {
 
     this.savePage['home/users'] = event.skip;
     this.savePage['home/usersTake'] = event.take;
-    this.paginationService.setLocalStorage('pageSize', this.savePage);
+    this.helpService.setGridPageSize(this.savePage);
   }
 
   loadProducts(): void {

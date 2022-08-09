@@ -12,8 +12,6 @@ import {
 import { SortDescriptor, orderBy } from "@progress/kendo-data-query";
 import { MessageService } from "src/app/service/message.service";
 import { HelpService } from "src/app/service/help.service";
-import { PaginationService } from "src/app/service/pagination.service";
-import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-parameter-item",
@@ -74,7 +72,6 @@ export class ParameterItemComponent implements OnInit {
     private service: ParameterItemService,
     private message: MessageService,
     private helpService: HelpService,
-    private paginationService: PaginationService,
   ) { }
 
   public ngOnInit(): void {
@@ -142,7 +139,7 @@ export class ParameterItemComponent implements OnInit {
     }, 350);
     // this.view = this.service.getData(this.type);
 
-    this.savePage = this.paginationService.getLocalStorage('pageSize');
+    this.savePage = this.helpService.getGridPageSize();
     if(this.savePage && this.savePage[`home/${this.type}`]) {
       this.gridState.skip = this.savePage[`home/${this.type}`];
     }
@@ -449,7 +446,7 @@ export class ParameterItemComponent implements OnInit {
     this.loadProducts();
 
     this.savePage[`home/${this.type}`] = event.skip;
-    this.paginationService.setLocalStorage('pageSize', this.savePage);
+    this.helpService.setGridPageSize(this.savePage);
   }
 
   sortChange(sort: SortDescriptor[]): void {
