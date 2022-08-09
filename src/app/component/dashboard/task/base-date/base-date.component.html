@@ -1566,8 +1566,8 @@
             {{ language?.changesWontBeSaved }}
           </p>
           <kendo-dialog-actions>
-            <button kendoButton (click)="receiveConfirm(false, upload)">No</button>
-            <button kendoButton (click)="receiveConfirm(true, upload)" primary="true">Yes</button>
+            <button kendoButton (click)="receiveConfirm(false, upload)">{{language.no}}</button>
+            <button kendoButton (click)="receiveConfirm(true, upload)" primary="true">{{language.yes}}</button>
           </kendo-dialog-actions>
         </kendo-dialog>
         <div>
@@ -1750,8 +1750,8 @@
             {{ language?.changesWontBeSaved }}
           </p>
           <kendo-dialog-actions>
-            <button kendoButton (click)="receiveConfirm(false, complaint)">No</button>
-            <button kendoButton (click)="receiveConfirm(true, complaint)" primary="true">Yes</button>
+            <button kendoButton (click)="receiveConfirm(false, complaint)">{{language.no}}</button>
+            <button kendoButton (click)="receiveConfirm(true, complaint)" primary="true">{{language.yes}}</button>
           </kendo-dialog-actions>
         </kendo-dialog>
         <p style="margin: 30px; text-align: center">
@@ -2020,8 +2020,8 @@
             {{ language?.changesWontBeSaved }}
           </p>
           <kendo-dialog-actions>
-            <button kendoButton (click)="receiveConfirm(false, customer)">No</button>
-            <button kendoButton (click)="receiveConfirm(true, customer)" primary="true">Yes</button>
+            <button kendoButton (click)="receiveConfirm(false, customer)">{{language.no}}</button>
+            <button kendoButton (click)="receiveConfirm(true, customer)" primary="true">{{language.yes}}</button>
           </kendo-dialog-actions>
         </kendo-dialog>
         <div class="tabs widget">
