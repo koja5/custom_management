@@ -133,7 +133,6 @@ export class CustomersComponent implements OnInit {
       this.state.skip = this.savePage['home/customers'];
       this.state.take = this.savePage['home/customersTake'];
     }
-    console.log(this.savePage, 'jopaaa');
   }
 
   getCustomers() {

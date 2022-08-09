@@ -12,6 +12,7 @@ import {
 import { SortDescriptor, orderBy } from "@progress/kendo-data-query";
 import { MessageService } from "src/app/service/message.service";
 import { HelpService } from "src/app/service/help.service";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-parameter-item",

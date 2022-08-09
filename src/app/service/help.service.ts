@@ -14,18 +14,19 @@ export class HelpService {
     private toastr: ToastrService
   ) {}
 
+
   getGridPageSize() {
     const valueToJSON = JSON.parse(localStorage.getItem('pageSize'));
     if(valueToJSON === null) {
       return {};
-    };
+    }
     return valueToJSON;
-  };
+  }
 
   setGridPageSize(pageSize: any) {
     localStorage.setItem('pageSize', JSON.stringify(pageSize))
   }
- 
+
   postApiRequest(method, parametar) {
     return this.http.post(method, parametar).map((res) => res);
   }
