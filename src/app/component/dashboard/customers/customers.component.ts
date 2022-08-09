@@ -25,6 +25,7 @@ import { MailService } from "src/app/service/mail.service";
 import { PackLanguageService } from "src/app/service/pack-language.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { StorageService } from "src/app/service/storage.service";
+import { Router } from "@angular/router";
 
 const newLocal = "data";
 @Component({
@@ -85,6 +86,7 @@ export class CustomersComponent implements OnInit {
   };
   public patientMail: string;
   savePage: any = {};
+  currentUrl: string;
 
   constructor(
     private service: CustomersService,
@@ -93,6 +95,7 @@ export class CustomersComponent implements OnInit {
     private helpService: HelpService,
     private mailService: MailService,
     private packLanguage: PackLanguageService,
+    private router: Router
   ) {
     // this.excelIO = new Excel.IO();
     this.allData = this.allData.bind(this);
@@ -128,10 +131,12 @@ export class CustomersComponent implements OnInit {
     });
     this.helpService.setTitleForBrowserTab(this.language.customer);
 
+    this.currentUrl = this.router.url;
+
     this.savePage = this.helpService.getGridPageSize();
-    if(this.savePage && this.savePage['home/customers']) {
-      this.state.skip = this.savePage['home/customers'];
-      this.state.take = this.savePage['home/customersTake'];
+    if(this.savePage && this.savePage[this.currentUrl]) {
+      this.state.skip = this.savePage[this.currentUrl];
+      this.state.take = this.savePage[this.currentUrl + 'Take'];
     }
   }
 
@@ -283,8 +288,8 @@ export class CustomersComponent implements OnInit {
     this.pageSize = event.take;
     this.loadProducts();
 
-    this.savePage['home/customers'] = event.skip;
-    this.savePage['home/customersTake'] = event.take;
+    this.savePage[this.currentUrl] = event.skip;
+    this.savePage[this.currentUrl + 'Take'] = event.take;
     this.helpService.setGridPageSize(this.savePage);
   }
 

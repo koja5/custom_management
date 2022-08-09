@@ -17,6 +17,7 @@ import { UsersService } from "src/app/service/users.service";
 import { HelpService } from "src/app/service/help.service";
 import { Modal } from "ngx-modal";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-vaucher",
@@ -82,6 +83,7 @@ export class VaucherComponent implements OnInit {
   showDialog: boolean = false;
   isFormDirty: boolean = false;
   savePage: any = {};
+  currentUrl: string;
 
   constructor(
     private service: VaucherService,
@@ -89,6 +91,7 @@ export class VaucherComponent implements OnInit {
     private message: MessageService,
     private userService: UsersService,
     private helpService: HelpService,
+    private router: Router
   ) {
     this.allData = this.allData.bind(this);
 
@@ -121,10 +124,12 @@ export class VaucherComponent implements OnInit {
       this.theme = mess;
     });
 
+    this.currentUrl = this.router.url;
+
     this.savePage = this.helpService.getGridPageSize();
-    if(this.savePage && this.savePage['home/vaucher']) {
-      this.state.skip = this.savePage['home/vaucher'];
-      this.state.take = this.savePage['home/vaucherTake'];
+    if(this.savePage && this.savePage[this.currentUrl]) {
+      this.state.skip = this.savePage[this.currentUrl];
+      this.state.take = this.savePage[this.currentUrl + 'Take'];
     }
   }
 
@@ -390,8 +395,8 @@ export class VaucherComponent implements OnInit {
     this.pageSize = event.take;
     this.loadProducts();
 
-    this.savePage['home/vaucher'] = event.skip;
-    this.savePage['home/vaucherTake'] = event.take;
+    this.savePage[this.currentUrl] = event.skip;
+    this.savePage[this.currentUrl + 'Take'] = event.take;
     this.helpService.setGridPageSize(this.savePage);
   }
 

@@ -21,6 +21,7 @@ import * as XLSX from "ts-xlsx";
 import { MessageService } from "src/app/service/message.service";
 import { HelpService } from "src/app/service/help.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-store",
@@ -74,11 +75,13 @@ export class StoreComponent implements OnInit {
   showDialog: boolean = false;
   isFormDirty: boolean = false;
   savePage: any = {};
+  currentUrl: string;
 
   constructor(
     public service: StoreService,
     public message: MessageService,
     private helpService: HelpService,
+    private router: Router
   ) {
     this.allData = this.allData.bind(this);
   }
@@ -98,10 +101,12 @@ export class StoreComponent implements OnInit {
       this.theme = mess;
     });
 
+    this.currentUrl = this.router.url;
+
     this.savePage = this.helpService.getGridPageSize();
-    if(this.savePage && this.savePage['home/store']) {
-      this.state.skip = this.savePage['home/store'];
-      this.state.take = this.savePage['home/storeTake'];
+    if(this.savePage && this.savePage[this.currentUrl]) {
+      this.state.skip = this.savePage[this.currentUrl];
+      this.state.take = this.savePage[this.currentUrl + 'Take'];
     }
   }
 
@@ -262,8 +267,8 @@ export class StoreComponent implements OnInit {
     this.pageSize = event.take;
     this.loadProducts();
 
-    this.savePage['home/store'] = event.skip;
-    this.savePage['home/storeTake'] = event.take;
+    this.savePage[this.currentUrl] = event.skip;
+    this.savePage[this.currentUrl + 'Take'] = event.take;
     this.helpService.setGridPageSize(this.savePage);
   }
 

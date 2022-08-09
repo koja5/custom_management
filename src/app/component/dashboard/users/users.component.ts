@@ -95,6 +95,8 @@ export class UsersComponent implements OnInit {
   };
   showDialog: boolean = false;
   isFormDirty: boolean = false;
+  currentUrl: string;
+  savePage: any = {};
 
   constructor(
     private service: UsersService,
@@ -106,7 +108,7 @@ export class UsersComponent implements OnInit {
     // this.excelIO = new Excel.IO();
     this.allData = this.allData.bind(this);
   }
-  savePage: any = {};
+  
 
   ngOnInit() {
     this.height = this.helpService.getHeightForGrid();
@@ -122,10 +124,12 @@ export class UsersComponent implements OnInit {
       this.changeTheme(mess);
       this.theme = mess;
     });
+    this.currentUrl = this.router.url;
+    
     this.savePage = this.helpService.getGridPageSize();
-    if(this.savePage && this.savePage['home/users']) {
-      this.state.skip = this.savePage['home/users'];
-      this.state.take = this.savePage['home/usersTake'];
+    if(this.savePage && this.savePage[this.currentUrl]) {
+      this.state.skip = this.savePage[this.currentUrl];
+      this.state.take = this.savePage[this.currentUrl + 'Take'];
     }
   }
 
@@ -262,8 +266,8 @@ export class UsersComponent implements OnInit {
     this.pageSize = event.take;
     this.loadProducts();
 
-    this.savePage['home/users'] = event.skip;
-    this.savePage['home/usersTake'] = event.take;
+    this.savePage[this.currentUrl] = event.skip;
+    this.savePage[this.currentUrl + 'Take'] = event.take;
     this.helpService.setGridPageSize(this.savePage);
   }
 

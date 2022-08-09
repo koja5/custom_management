@@ -12,7 +12,7 @@ import {
 import { SortDescriptor, orderBy } from "@progress/kendo-data-query";
 import { MessageService } from "src/app/service/message.service";
 import { HelpService } from "src/app/service/help.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: "app-parameter-item",
@@ -60,6 +60,7 @@ export class ParameterItemComponent implements OnInit {
   public checkBoxDisabled = [];
   public newRowCheckboxDisabled = true;
   savePage: any = {};
+  currentUrl: string;
 
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
@@ -73,6 +74,7 @@ export class ParameterItemComponent implements OnInit {
     private service: ParameterItemService,
     private message: MessageService,
     private helpService: HelpService,
+    private router: Router
   ) { }
 
   public ngOnInit(): void {
@@ -140,9 +142,12 @@ export class ParameterItemComponent implements OnInit {
     }, 350);
     // this.view = this.service.getData(this.type);
 
+    this.currentUrl = this.router.url;
+    console.log('test ', this.currentUrl);
+
     this.savePage = this.helpService.getGridPageSize();
-    if(this.savePage && this.savePage[`home/${this.type}`]) {
-      this.gridState.skip = this.savePage[`home/${this.type}`];
+    if(this.savePage && this.savePage[this.currentUrl]) {
+      this.gridState.skip = this.savePage[this.currentUrl];
     }
   }
 
@@ -446,7 +451,7 @@ export class ParameterItemComponent implements OnInit {
     this.gridState.skip = event.skip;
     this.loadProducts();
 
-    this.savePage[`home/${this.type}`] = event.skip;
+    this.savePage[this.currentUrl] = event.skip;
     this.helpService.setGridPageSize(this.savePage);
   }
 
