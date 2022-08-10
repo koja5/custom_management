@@ -1555,7 +1555,7 @@
     >
       <modal-header>
         <h2>{{ language.fileUploadTitle }}</h2>
-        <button type="button" class="close" data-dismiss="modal" [attr.aria-label]="cancelButtonLabel || 'Close'" (click)="confirmClose(upload)">
+        <button type="button" class="close" data-dismiss="modal" (click)="confirmClose(upload)">
           <span aria-hidden="true">&times;</span>
         </button>
       </modal-header>
@@ -1739,7 +1739,7 @@
     <modal #complaint modalClass="modal-lg" (keydown.esc)="confirmClose(complaint)">
       <modal-header>
         <h4>{{ getTranslate(operationMode) }}</h4>
-        <button type="button" class="close" data-dismiss="modal" [attr.aria-label]="cancelButtonLabel || 'Close'" (click)="confirmClose(complaint)">
+        <button type="button" class="close" data-dismiss="modal" (click)="confirmClose(complaint)">
           <span aria-hidden="true">&times;</span>
         </button>
       </modal-header>
@@ -2009,7 +2009,7 @@
     <modal #customer modalClass="modal-lg" (keydown.esc)="confirmClose(customer)">
       <modal-header>
         <h4>{{ getTranslate(currentTab) }}</h4>
-        <button type="button" class="close" data-dismiss="modal" [attr.aria-label]="cancelButtonLabel || 'Close'" (click)="confirmClose(customer)">
+        <button type="button" class="close" data-dismiss="modal" (click)="confirmClose(customer)">
           <span aria-hidden="true">&times;</span>
         </button>
       </modal-header>

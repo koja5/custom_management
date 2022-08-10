@@ -30,8 +30,8 @@ export class RequestDemoComponent implements OnInit {
       !this.data.name ||
       !this.data.email ||
       !this.data.phone ||
-      !this.data.nameOfKindergarden ||
-      !this.data.countOfChildrens
+      !this.data.nameOfCompany ||
+      !this.data.countOfEmployees
     ) {
       this.required = true;
     } else {

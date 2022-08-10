@@ -118,13 +118,13 @@
                         style="color:#455056; font-size:15px;line-height:24px; margin:0;"
                       >
                         Ime vrtica:
-                        {{nameOfKindergarden}}
+                        {{nameOfCompany}}
                       </p>
                       <p
                         style="color:#455056; font-size:15px;line-height:24px; margin:0;"
                       >
                         Broj dece u vrtiću:
-                        {{countOfChildrens}}
+                        {{countOfEmployees}}
                       </p>
                       <p
                         style="color:#455056; font-size:15px;line-height:24px; margin:0;"
