@@ -11,6 +11,7 @@ import { MessageService } from 'src/app/service/message.service';
 import { UsersService } from 'src/app/service/users.service';
 import { Modal } from 'ngx-modal';
 import { IndividualConfig, ToastrService } from 'ngx-toastr';
+import { DatePickerComponent } from '@progress/kendo-angular-dateinputs';
 
 @Component({
   selector: 'app-choose-holiday',
@@ -20,6 +21,10 @@ import { IndividualConfig, ToastrService } from 'ngx-toastr';
 export class ChooseHolidayComponent implements OnInit {
   @ViewChild('scheduleObj') public scheduleObj: ScheduleComponent;
   @ViewChild("addVacationModal") addVacationModal: Modal;
+
+  @ViewChild('endTime')
+  public endTimeDatePicker: DatePickerComponent;
+
   public newHoliday: HolidayModel;
   public addNewHoliday: boolean;
   public deleteModal = false;
@@ -367,6 +372,15 @@ export class ChooseHolidayComponent implements OnInit {
 
     //to remove cell focus
     this.selectedCell.classList.remove("e-selected-cell");
+  }
+
+
+  get holidayModalTitle(): string {
+    return this.addNewHoliday ? this.language.addHoliday : this.language.editHoliday;
+  }
+
+  setMinEndTime(event): void {
+    this.endTimeDatePicker.min = event;
   }
 
 }
