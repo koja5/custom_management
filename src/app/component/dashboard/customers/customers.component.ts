@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
+import { Component, OnInit, ViewChild, HostListener, ElementRef } from "@angular/core";
 import { Modal } from "ngx-modal";
 import { CustomersService } from "../../../service/customers.service";
 import { StoreService } from "../../../service/store.service";
@@ -24,6 +24,8 @@ import { HelpService } from "src/app/service/help.service";
 import { MailService } from "src/app/service/mail.service";
 import { PackLanguageService } from "src/app/service/pack-language.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { StorageService } from "src/app/service/storage.service";
+import { Router } from "@angular/router";
 
 const newLocal = "data";
 @Component({
@@ -68,6 +70,8 @@ export class CustomersComponent implements OnInit {
   gridForExport: GridComponent;
   private _allData;
   allDataForGrid: DataResult;
+  showDialog: boolean = false;
+  isFormDirty: boolean = false;
 
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
@@ -81,6 +85,8 @@ export class CustomersComponent implements OnInit {
     previousNext: true,
   };
   public patientMail: string;
+  savePage: any = {};
+  currentUrl: string;
 
   constructor(
     private service: CustomersService,
@@ -88,7 +94,8 @@ export class CustomersComponent implements OnInit {
     private message: MessageService,
     private helpService: HelpService,
     private mailService: MailService,
-    private packLanguage: PackLanguageService
+    private packLanguage: PackLanguageService,
+    private router: Router
   ) {
     // this.excelIO = new Excel.IO();
     this.allData = this.allData.bind(this);
@@ -123,6 +130,14 @@ export class CustomersComponent implements OnInit {
       this.theme = mess;
     });
     this.helpService.setTitleForBrowserTab(this.language.customer);
+
+    this.currentUrl = this.router.url;
+
+    this.savePage = this.helpService.getGridPageSize();
+    if(this.savePage && this.savePage[this.currentUrl]) {
+      this.state.skip = this.savePage[this.currentUrl];
+      this.state.take = this.savePage[this.currentUrl + 'Take'];
+    }
   }
 
   getCustomers() {
@@ -149,14 +164,40 @@ export class CustomersComponent implements OnInit {
     });
   }
 
+  receiveConfirm(event: boolean): void {
+    if(event) {
+      this.customer.close();
+      this.isFormDirty = false;
+    }
+      this.showDialog = false;
+  }
+
+  confirmClose(): void {
+    this.customer.modalRoot.nativeElement.focus();
+    if(this.isFormDirty) {
+      this.showDialog = true;
+    }else {
+      this.customer.close()
+      this.showDialog = false;
+      this.isFormDirty = false
+    }
+  }
+
+  isDirty(): void {
+    this.isFormDirty = true;
+  }
+
   newUser() {
     this.storeService.getStore(localStorage.getItem("idUser"), (val) => {
-      console.log(val);
       this.storeLocation = val;
     });
     this.initializeParams();
     this.changeTheme(this.theme);
+    this.customer.closeOnEscape = false;
+    this.customer.closeOnOutsideClick = false;
+    this.customer.hideCloseButton = true;
     this.customer.open();
+    
   }
 
   initializeParams() {
@@ -246,6 +287,10 @@ export class CustomersComponent implements OnInit {
     this.state.take = event.take;
     this.pageSize = event.take;
     this.loadProducts();
+
+    this.savePage[this.currentUrl] = event.skip;
+    this.savePage[this.currentUrl + 'Take'] = event.take;
+    this.helpService.setGridPageSize(this.savePage);
   }
 
   loadProducts(): void {

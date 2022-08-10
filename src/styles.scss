@@ -5378,6 +5378,9 @@ textarea.form-control-textarea {
 
 .modal .modal-header .close {
   margin-top: 0 !important;
+  position: absolute;
+  right: 20px;
+  top: 24px;
 }
 
 .modal .modal-dialog {
