@@ -48,6 +48,8 @@ export class UserDetailsComponent implements OnInit {
   public statisticLastWeek: any;
   public configField: any;
   public userTypeEnum = UserType;
+  showDialog: boolean = false;
+  isFormDirty: boolean = false;
 
   constructor(
     public route: ActivatedRoute,
@@ -64,7 +66,6 @@ export class UserDetailsComponent implements OnInit {
   ngOnInit() {
     this.id = this.route.snapshot.params["id"];
     this.service.getUserWithId(this.id, (val) => {
-      console.log(val);
       this.data = val[0];
       this.modelData();
       if (
@@ -110,7 +111,6 @@ export class UserDetailsComponent implements OnInit {
         const colors = data.sort(function (a, b) {
           return a["sequence"] - b["sequence"];
         });
-        console.log(data);
         for (let i = 0; i < colors["length"]; i++) {
           this.palette.push(colors[i]["color"]);
         }
@@ -136,7 +136,6 @@ export class UserDetailsComponent implements OnInit {
 
   onInitData() {
     this.service.getCountAllTasksForUser(this.id).subscribe((data) => {
-      console.log(data);
       if (data["length"] !== 0) {
         this.totalSum = data[0].total;
       } else {
@@ -384,8 +383,34 @@ export class UserDetailsComponent implements OnInit {
     this.location.back();
   }
 
+  receiveConfirm(event: boolean): void {
+    if(event) {
+      this.user.close();
+      this.isFormDirty = false;
+    }
+      this.showDialog = false;
+  }
+
+  confirmClose(): void {
+    this.user.modalRoot.nativeElement.focus();
+    if(this.isFormDirty) {
+      this.showDialog = true;
+    }else {
+      this.user.close()
+      this.showDialog = false;
+      this.isFormDirty = false
+    }
+  }
+
+  isDirty(): void {
+    this.isFormDirty = true;
+  }
+
   editOptions() {
     this.workTimeData();
+    this.user.closeOnEscape = false;
+    this.user.closeOnOutsideClick = false;
+    this.user.hideCloseButton = true;
     this.user.open();
     this.changeTheme(this.theme);
   }

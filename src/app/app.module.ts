@@ -55,6 +55,7 @@ import { ImpressumComponent } from "./component/templates/impressum/impressum.co
 import { SharedComponentsModule } from "./shared/shared-components.module";
 import { HomedModule } from "./component/home/routing-module/home.module";
 import { RouterModule } from "@angular/router";
+import { StorageService } from "./service/storage.service";
 
 @NgModule({
   declarations: [

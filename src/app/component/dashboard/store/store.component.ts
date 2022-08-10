@@ -21,6 +21,7 @@ import * as XLSX from "ts-xlsx";
 import { MessageService } from "src/app/service/message.service";
 import { HelpService } from "src/app/service/help.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-store",
@@ -71,11 +72,16 @@ export class StoreComponent implements OnInit {
     pageSizes: true,
     previousNext: true,
   };
+  showDialog: boolean = false;
+  isFormDirty: boolean = false;
+  savePage: any = {};
+  currentUrl: string;
 
   constructor(
     public service: StoreService,
     public message: MessageService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private router: Router
   ) {
     this.allData = this.allData.bind(this);
   }
@@ -94,6 +100,14 @@ export class StoreComponent implements OnInit {
       this.changeTheme(mess);
       this.theme = mess;
     });
+
+    this.currentUrl = this.router.url;
+
+    this.savePage = this.helpService.getGridPageSize();
+    if(this.savePage && this.savePage[this.currentUrl]) {
+      this.state.skip = this.savePage[this.currentUrl];
+      this.state.take = this.savePage[this.currentUrl + 'Take'];
+    }
   }
 
   getStore() {
@@ -116,9 +130,35 @@ export class StoreComponent implements OnInit {
     });
   }
 
+  receiveConfirm(event: boolean, modal: Modal): void {
+    if(event) {
+      modal.close();
+      this.isFormDirty = false;
+    }
+      this.showDialog = false;
+  }
+
+  confirmClose(modal: Modal): void {
+    modal.modalRoot.nativeElement.focus();
+    if(this.isFormDirty) {
+      this.showDialog = true;
+    }else {
+      modal.close()
+      this.showDialog = false;
+      this.isFormDirty = false
+    }
+  }
+
+  isDirty(): void {
+    this.isFormDirty = true;
+  }
+
   newStore() {
     this.initialParams();
     this.changeTheme(this.theme);
+    this.storeCreate.closeOnEscape = false;
+    this.storeCreate.closeOnOutsideClick = false;
+    this.storeCreate.hideCloseButton = true;
     this.storeCreate.open();
   }
 
@@ -226,6 +266,10 @@ export class StoreComponent implements OnInit {
     this.state.take = event.take;
     this.pageSize = event.take;
     this.loadProducts();
+
+    this.savePage[this.currentUrl] = event.skip;
+    this.savePage[this.currentUrl + 'Take'] = event.take;
+    this.helpService.setGridPageSize(this.savePage);
   }
 
   loadProducts(): void {
@@ -237,6 +281,9 @@ export class StoreComponent implements OnInit {
     this.data = store;
     this.start_work = new Date(this.data.start_work);
     this.end_work = new Date(this.data.end_work);
+    this.storeEdit.closeOnEscape = false;
+    this.storeEdit.closeOnOutsideClick = false;
+    this.storeEdit.hideCloseButton = true;
     this.storeEdit.open();
     this.changeTheme(this.theme);
   }

@@ -147,18 +147,26 @@
     </kendo-dialog-actions>
   </kendo-dialog>
 
-  <modal #eventCategoryModal modalClass="modal-md">
+  <modal #eventCategoryModal modalClass="modal-md" (keydown.esc)="confirmClose()">
     <modal-header>
       <h4>{{ getTranslate(operationMode) }}</h4>
+      <button type="button" class="close" data-dismiss="modal" [attr.aria-label]="cancelButtonLabel || 'Close'" (click)="confirmClose()">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </modal-header>
     <modal-content>
+      <app-dynamic-confirm-dialog [showDialog]="showDialog" [title]="language?.changesWontBeSavedTitle"
+        [question]="language?.changesWontBeSaved" (sendEmitter)="receiveConfirm($event)">
+      </app-dynamic-confirm-dialog>
       <form (ngSubmit)="
           eventCategoryForm.form.valid === true
             ? operationMode === 'add'
               ? createEventCategory($event)
               : updateEventCategory($event)
             : null
-        " #eventCategoryForm="ngForm">
+        " #eventCategoryForm="ngForm"
+          (change)="isDirty()"
+          >
         <div class="col-md-12 col-xs-12">
           <kendo-textbox-container floatingLabel="{{ language.category }}({{ language.required }})">
             <input kendoTextBox type="text" class="col-xs-12" [(ngModel)]="data.category" name="category" required />

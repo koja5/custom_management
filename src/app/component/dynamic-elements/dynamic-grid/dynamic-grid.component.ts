@@ -25,6 +25,7 @@ import { QueryCellInfoEventArgs } from "@syncfusion/ej2-angular-grids";
 import { Tooltip } from "@syncfusion/ej2-popups";
 import { ClickEventArgs } from "@syncfusion/ej2-navigations";
 import { SystemLogsService } from "src/app/service/system-logs.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-dynamic-grid",
@@ -59,14 +60,18 @@ export class DynamicGridComponent implements OnInit {
   public index: number;
   public height: number;
   public language: any;
+  savePage: any = {};
+  currentUrl: string;
 
   constructor(
     private service: DynamicService,
     private helpService: HelpService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private router: Router
   ) {}
 
   ngOnInit() {
+    this.savePage = this.helpService.getGridPageSize();
     this.initialization();
     this.checkMessageService();
     this.getConfiguration();
@@ -82,6 +87,8 @@ export class DynamicGridComponent implements OnInit {
       this.helpService.getHeightForGrid();
     this.height = this.helpService.getHeightForGridWithoutPx();
     this.helpService.setDefaultBrowserTabTitle();
+
+    this.currentUrl = this.router.url;
   }
 
   ngAfterViewInit() {}
@@ -89,6 +96,9 @@ export class DynamicGridComponent implements OnInit {
   initialization() {
     this.service.getConfiguration(this.path, this.name).subscribe((data) => {
       this.config = data;
+      if(this.savePage[this.currentUrl]) {
+        this.config.paging.settings.currentPage = this.savePage[this.currentUrl];
+      }
       if (data["localData"]) {
         this.getLocalData(data["localData"]);
       } else {
@@ -155,7 +165,11 @@ export class DynamicGridComponent implements OnInit {
     return parameters;
   }
 
-  actionBegin(args: SaveEventArgs): void {
+  actionBegin(args: any): void {
+    if(args.currentPage) {
+      this.savePage[this.currentUrl] = args.currentPage;
+      this.helpService.setGridPageSize(this.savePage);
+    }
     /*if (args.requestType === "beginEdit" || args.requestType === "add") {
       this.orderData = Object.assign({}, args.rowData);
     }

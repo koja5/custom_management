@@ -2130,6 +2130,12 @@
       },
       "addHelpTopic": {
         "type": "string"
+      },
+      "changesWontBeSavedTitle": {
+        "type": "string"
+      },
+      "changesWontBeSaved": {
+        "type": "string"
       }
     }
   },
@@ -2191,6 +2197,12 @@
             },
             {
               "key": "save"
+            },
+            {
+              "key": "changesWontBeSavedTitle"
+            },
+            {
+              "key": "changesWontBeSaved"
             }
           ]
         },
