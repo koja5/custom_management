@@ -194,7 +194,6 @@ function reminderViaSMS() {
                             signature;
                           const fullMessage = message + "\r\n" + signature;
                           var fileName = "server/sms/" + phoneNumber + ".txt";
-                          console.log(content);
                           sendSmsFromMail(phoneNumber, fullMessage);
                         }
                       }
@@ -202,6 +201,7 @@ function reminderViaSMS() {
                   }
                 );
               }
+              conn.release();
             }
           );
         }

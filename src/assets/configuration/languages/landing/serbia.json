@@ -161,5 +161,11 @@
     "successfulySendMailForForgotPassword": "Uspešno ste poslali zahtev za obnovu lozinke. Proverite Vaš email!",
     "forgotEnterEmail": "Unesite email adresu",
     "forgotRenewPAssword": "Obnovite vašu lozinku",
-    "forgotYouHaveAccount": "Imate nalog i znate lozinku?"
+    "forgotYouHaveAccount": "Imate nalog i znate lozinku?",
+    "footerImpressum": "Impressum",
+    "footerPrivacyPolicy": "Politika privatnosti",
+    "footerTerms": "Uslovi",
+    "from": "Od",
+    "to": "Do",
+    "across": "Preko"
 }

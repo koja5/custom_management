@@ -70,9 +70,15 @@ export class LoginComponent implements OnInit {
   }
 
   initialization() {
-    if (this.helpService.getSelectionLangaugeCode()) {
+    if (
+      this.helpService.getSelectionLangaugeCode() &&
+      this.helpService.getLanguage()
+    ) {
       this.language = this.helpService.getLanguage();
-    } else if (this.helpService.getLocalStorage("countryCode")) {
+    } else if (
+      this.helpService.getLocalStorage("countryCode") &&
+      this.helpService.getLanguage()
+    ) {
       this.language = this.helpService.getLanguage();
     } else {
       this.checkCountryLocation();
@@ -469,5 +475,9 @@ export class LoginComponent implements OnInit {
       this.loginForm = "active";
       this.loginInfo = this.language.successUserAccessDeviceName;
     });
+  }
+
+  backToLanding() {
+    this.router.navigate(["./"]);
   }
 }

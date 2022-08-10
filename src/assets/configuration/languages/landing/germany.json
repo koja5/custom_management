@@ -161,5 +161,11 @@
     "successfulySendMailForForgotPassword": "Sie haben erfolgreich eine Anfrage zum Zurücksetzen des Passworts gesendet. Überprüfen Sie Ihren Posteingang!",
     "forgotEnterEmail": "Gib eine E-mail Adresse ein",
     "forgotRenewPAssword": "Stellen Sie Ihr Passwort wieder her",
-    "forgotYouHaveAccount": "Haben Sie ein Konto und kennen das Passwort?"
+    "forgotYouHaveAccount": "Haben Sie ein Konto und kennen das Passwort?",
+    "footerImpressum": "Impressum",
+    "footerPrivacyPolicy": "Datenschutzerklärung",
+    "footerTerms": "Bedingungen",
+    "from": "Aus",
+    "to": "Zu",
+    "across": "Über"
 }

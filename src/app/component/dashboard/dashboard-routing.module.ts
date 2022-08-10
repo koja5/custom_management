@@ -50,7 +50,11 @@ import { MailPatientCreatedAccountViaFormComponent } from "./parameters/mail-par
 import { ThemeColorsComponent } from "./parameters/theme-colors/theme-colors.component";
 import { HelpComponent } from "./administrator/help/help.component";
 import { ListFaqComponent } from "./administrator/help/list-faq/list-faq.component";
+
 import { AdminGuard } from "src/app/service/login-guard/adminGuard";
+
+import { ChooseHolidayComponent } from "./parameters/choose-holiday/choose-holiday.component";
+
 
 const routes: Routes = [
   {
@@ -176,6 +180,7 @@ const routes: Routes = [
       { path: "reservations", component: ReservationsComponent },
       { path: "template-account", component: TemplateAccountComponent },
       { path: "add-holiday", component: AddHolidayComponent },
+      { path: "define-holidays", component: ChooseHolidayComponent },
       { path: "mail-reminder", component: MailReminderComponent },
       {
         path: "mail-approve-reservation",

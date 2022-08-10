@@ -181,7 +181,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  getMainStoreName() {}
+  getMainStoreName() { }
 
   checkDefaultLink() {
     if (this.helpService.getSessionStorage("defaultLink")) {
@@ -494,7 +494,7 @@ export class DashboardComponent implements OnInit {
               console.log(data);
 
               this.holidayService
-                .getHolidaysByTemplate(superAdminId, relation.templateId)
+                .getHolidaysByTemplate(relation.templateId)
                 .then((result) => {
                   console.log(result);
                   if (result && result.length > 0) {
@@ -503,8 +503,6 @@ export class DashboardComponent implements OnInit {
                         Subject: r.Subject,
                         StartTime: new Date(r.StartTime),
                         EndTime: new Date(r.EndTime),
-                        category: r.category,
-                        userId: superAdminId,
                       };
 
                       this.holidayService.createHoliday(

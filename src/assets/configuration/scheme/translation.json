@@ -197,6 +197,12 @@
       "uploadFromExcel": {
         "type": "string"
       },
+      "selectClinicHolidays": {
+        "type": "string"
+      },
+      "editHoliday": {
+        "type": "string"
+      },
       "patient": {
         "type": "string"
       },
@@ -605,6 +611,9 @@
       "smsMassiveMessage": {
         "type": "string"
       },
+      "chooseHoliday": {
+        "type": "string"
+      },
       "changeSuperadminProfile": {
         "type": "string"
       },
@@ -630,6 +639,21 @@
         "type": "string"
       },
       "emailBirthdayCongratulation": {
+        "type": "string"
+      },
+      "headerMenuGeneralData": {
+        "type": "string"
+      },
+      "headerMenuPersonalization": {
+        "type": "string"
+      },
+      "headerMenuPermits": {
+        "type": "string"
+      },
+      "headerMenuMailTemplateSettings": {
+        "type": "string"
+      },
+      "headerMenuSMSTemplateSettings": {
         "type": "string"
       },
       "reservations": {
@@ -2017,6 +2041,15 @@
       "pleaseConfirm": {
         "type": "string"
       },
+      "from": {
+        "type": "string"
+      },
+      "to": {
+        "type": "string"
+      },
+      "across": {
+        "type": "string"
+      },
       "clickHere": {
         "type": "string"
       },
@@ -2203,9 +2236,15 @@
             {
               "key": "pleaseConfirm"
             },
-            {},
-            {},
-            {}
+            {
+              "key": "from"
+            },
+            {
+              "key": "to"
+            },
+            {
+              "key": "across"
+            }
           ]
         }
       ]
@@ -3141,6 +3180,9 @@
               "key": "smsMassiveMessage"
             },
             {
+              "key": "chooseHoliday"
+            },
+            {
               "key": "changeSuperadminProfile"
             }
           ]
@@ -3180,6 +3222,28 @@
             },
             {
               "key": "emailBirthdayCongratulation"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "headerMenuGeneralData"
+            },
+            {
+              "key": "headerMenuPersonalization"
+            },
+            {
+              "key": "headerMenuPermits"
+            },
+            {
+              "key": "headerMenuMailTemplateSettings"
+            },
+            {
+              "key": "headerMenuSMSTemplateSettings"
             }
           ]
         }
@@ -6492,6 +6556,12 @@
             },
             {
               "key": "addHoliday"
+            },
+            {
+              "key": "editHoliday"
+            },
+            {
+              "key": "selectClinicHolidays"
             }
           ]
         },

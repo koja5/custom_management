@@ -161,5 +161,11 @@
     "successfulySendMailForForgotPassword": "You have successfully submitted a password reset request. Check your email!",
     "forgotEnterEmail": "Enter an email address",
     "forgotRenewPAssword": "Recover your password",
-    "forgotYouHaveAccount": "Do you have an account and know the password?"
+    "forgotYouHaveAccount": "Do you have an account and know the password?",
+    "footerImpressum": "Impressum",
+    "footerPrivacyPolicy": "Privacy Policy",
+    "footerTerms": "Terms",
+    "from": "From",
+    "to": "To",
+    "across": "Across"
 }
