@@ -365,6 +365,9 @@
       "streetnumber": {
         "type": "string"
       },
+      "vatcode": {
+        "type": "string"
+      },
       "city": {
         "type": "string"
       },
@@ -3860,6 +3863,9 @@
             },
             {
               "key": "streetnumber"
+            },
+            {
+              "key": "vatcode"
             }
           ]
         },
