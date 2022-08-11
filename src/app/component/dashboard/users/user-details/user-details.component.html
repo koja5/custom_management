@@ -908,13 +908,22 @@
     <modal #user modalClass="modal-lg" (keydown.esc)="confirmClose()">
       <modal-header>
         <h4>{{ getTranslate(currentTab) }}</h4>
-        <button type="button" class="close" data-dismiss="modal" (click)="confirmClose()">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          (click)="confirmClose()"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
       </modal-header>
       <modal-content>
-        <app-dynamic-confirm-dialog [showDialog]="showDialog" [title]="language?.changesWontBeSavedTitle"
-          [question]="language?.changesWontBeSaved" (sendEmitter)="receiveConfirm($event)">
+        <app-dynamic-confirm-dialog
+          [showDialog]="showDialog"
+          [title]="language?.changesWontBeSavedTitle"
+          [question]="language?.changesWontBeSaved"
+          (sendEmitter)="receiveConfirm($event)"
+        >
         </app-dynamic-confirm-dialog>
         <div class="tabs widget">
           <ul class="nav nav-tabs widget">
@@ -1029,7 +1038,6 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  
                   <div class="email col-md-6 col-xs-12">
                     <p>{{ language.place }}</p>
                     <input
@@ -1056,7 +1064,6 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  
                   <div class="email col-md-6 col-xs-12">
                     <p>{{ language.mobile }}</p>
                     <input
@@ -1110,10 +1117,25 @@
                   <div class="email col-md-6 col-xs-12">
                     <p>{{ language.gender }}</p>
                     <div class="gender__container">
-                      <input type="radio" id="male" name="gender" value="male" class="gender__radio" [(ngModel)]="data.gender">
-                      <label for="male"> {{ language.male }} </label><br>
-                      <input type="radio" id="female" name="gender" value="female" class="gender__radio" [(ngModel)]="data.gender">
-                      <label for="female">{{ language.female }}</label><br>
+                      <input
+                        type="radio"
+                        id="male"
+                        name="gender"
+                        value="male"
+                        class="gender__radio"
+                        [(ngModel)]="data.gender"
+                      />
+                      <label for="male"> {{ language.male }} </label><br />
+                      <input
+                        type="radio"
+                        id="female"
+                        name="gender"
+                        value="female"
+                        class="gender__radio"
+                        [(ngModel)]="data.gender"
+                      />
+                      <label for="female">{{ language.female }}</label
+                      ><br />
                     </div>
                   </div>
                   <div class="email col-md-6 col-xs-12">
@@ -1145,9 +1167,7 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label
-                    class="k-form-field col-md-12 label__active"
-                  >
+                  <label class="k-form-field col-md-12 label__active">
                     {{ language.active }} &nbsp;
                     <kendo-switch
                       [(ngModel)]="data.active"

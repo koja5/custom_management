@@ -189,17 +189,30 @@
   </kendo-grid>
 </div>
 
-<modal #storeCreate modalClass="modal-md" (keydown.esc)="confirmClose(storeCreate)">
+<modal
+  #storeCreate
+  modalClass="modal-md"
+  (keydown.esc)="confirmClose(storeCreate)"
+>
   <modal-header>
     <h4>{{ language.createNewStore }}</h4>
-    <button type="button" class="close" data-dismiss="modal" (click)="confirmClose(storeCreate)">
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      (click)="confirmClose(storeCreate)"
+    >
       <span aria-hidden="true">&times;</span>
     </button>
   </modal-header>
   <modal-content>
-    <app-dynamic-confirm-dialog [showDialog]="showDialog" [title]="language?.changesWontBeSavedTitle"
-    [question]="language?.changesWontBeSaved" (sendEmitter)="receiveConfirm($event, storeCreate)">
-  </app-dynamic-confirm-dialog>
+    <app-dynamic-confirm-dialog
+      [showDialog]="showDialog"
+      [title]="language?.changesWontBeSavedTitle"
+      [question]="language?.changesWontBeSaved"
+      (sendEmitter)="receiveConfirm($event, storeCreate)"
+    >
+    </app-dynamic-confirm-dialog>
     <form
       name="loginForm"
       class="loginForm"
@@ -410,14 +423,23 @@
 <modal #storeEdit modalClass="modal-md" (keydown.esc)="confirmClose(storeEdit)">
   <modal-header>
     <h4>{{ language.updateStore }}</h4>
-    <button type="button" class="close" data-dismiss="modal" (click)="confirmClose(storeEdit)">
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      (click)="confirmClose(storeEdit)"
+    >
       <span aria-hidden="true">&times;</span>
     </button>
   </modal-header>
   <modal-content>
-    <app-dynamic-confirm-dialog [showDialog]="showDialog" [title]="language?.changesWontBeSavedTitle"
-    [question]="language?.changesWontBeSaved" (sendEmitter)="receiveConfirm($event, storeEdit)">
-  </app-dynamic-confirm-dialog>
+    <app-dynamic-confirm-dialog
+      [showDialog]="showDialog"
+      [title]="language?.changesWontBeSavedTitle"
+      [question]="language?.changesWontBeSaved"
+      (sendEmitter)="receiveConfirm($event, storeEdit)"
+    >
+    </app-dynamic-confirm-dialog>
     <form
       name="loginForm"
       class="loginForm"

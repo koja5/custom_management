@@ -73,17 +73,23 @@
                     (change)="onFileChange($event)"
                     [(ngModel)]="fileValue" /></label
               ></a>
-              <a (click)="exportPDF(false)"><span class="k-icon k-i-file-pdf"></span>
-                {{ language.exportPageToPDF }}</a>
-              <a (click)="exportPDF(true)"><span class="k-icon k-i-file-pdf"></span>
-                {{ language.exportToPDF }}</a>
-                <a (click)="exportToExcel(grid, false)"><span class="k-icon k-i-file-excel"></span>
-                  {{ language.exportToExcel }}
-                </a>
-      
-                <a (click)="exportToExcel(grid, true)"><span class="k-icon k-i-file-excel"></span>
-                  {{ language.exportAllToExcel }}  
-                </a>
+              <a (click)="exportPDF(false)"
+                ><span class="k-icon k-i-file-pdf"></span>
+                {{ language.exportPageToPDF }}</a
+              >
+              <a (click)="exportPDF(true)"
+                ><span class="k-icon k-i-file-pdf"></span>
+                {{ language.exportToPDF }}</a
+              >
+              <a (click)="exportToExcel(grid, false)"
+                ><span class="k-icon k-i-file-excel"></span>
+                {{ language.exportToExcel }}
+              </a>
+
+              <a (click)="exportToExcel(grid, true)"
+                ><span class="k-icon k-i-file-excel"></span>
+                {{ language.exportAllToExcel }}
+              </a>
             </div>
           </div>
         </div>
@@ -203,7 +209,10 @@
         <kendo-grid-column field="comment" title="{{ language.comment }}">
         </kendo-grid-column>
       </kendo-grid-pdf>
-      <kendo-grid-excel fileName="Vauchers.xlsx" [fetchData]="allData"></kendo-grid-excel>
+      <kendo-grid-excel
+        fileName="Vauchers.xlsx"
+        [fetchData]="allData"
+      ></kendo-grid-excel>
       <ng-template kendoGridNoRecordsTemplate>
         <div class="row no-results-element">
           <div class="text-center">
@@ -267,13 +276,22 @@
 <modal #vaucher modalClass="modal-md" (keydown.esc)="confirmClose()">
   <modal-header>
     <h4>{{ getTranslate(operationMode) }}</h4>
-    <button type="button" class="close" data-dismiss="modal" (click)="confirmClose()">
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      (click)="confirmClose()"
+    >
       <span aria-hidden="true">&times;</span>
     </button>
   </modal-header>
   <modal-content>
-    <app-dynamic-confirm-dialog [showDialog]="showDialog" [title]="language?.changesWontBeSavedTitle"
-    [question]="language?.changesWontBeSaved" (sendEmitter)="receiveConfirm($event)">
+    <app-dynamic-confirm-dialog
+      [showDialog]="showDialog"
+      [title]="language?.changesWontBeSavedTitle"
+      [question]="language?.changesWontBeSaved"
+      (sendEmitter)="receiveConfirm($event)"
+    >
     </app-dynamic-confirm-dialog>
     <form
       name="loginForm"
