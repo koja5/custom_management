@@ -150,7 +150,7 @@
   <modal #eventCategoryModal modalClass="modal-md" (keydown.esc)="confirmClose()">
     <modal-header>
       <h4>{{ getTranslate(operationMode) }}</h4>
-      <button type="button" class="custom-close" data-dismiss="modal" [attr.aria-label]="cancelButtonLabel || 'Close'" (click)="confirmClose()">
+      <button type="button" class="custom-close close" data-dismiss="modal" [attr.aria-label]="cancelButtonLabel || 'Close'" (click)="confirmClose()">
         <span aria-hidden="true">&times;</span>
       </button>
     </modal-header>
