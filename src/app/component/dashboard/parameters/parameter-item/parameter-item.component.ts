@@ -146,7 +146,7 @@ export class ParameterItemComponent implements OnInit {
     console.log('test ', this.currentUrl);
 
     this.savePage = this.helpService.getGridPageSize();
-    if(this.savePage && this.savePage[this.currentUrl]) {
+    if(this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
       this.gridState.skip = this.savePage[this.currentUrl];
     }
   }
