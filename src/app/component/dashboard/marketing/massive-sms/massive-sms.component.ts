@@ -42,16 +42,11 @@ export class MassiveSmsComponent implements OnInit {
   }
 
   submitEmitter(event) {
-
-    console.log(event);
-
     this.allRecipients = null;
     this.changeData = event;
     this.changeData.superadmin = this.helpService.getSuperadmin();
     this.changeData.countryCode =
       this.helpService.getLocalStorage("countryCode");
-
-    this.changeData.language = null;
 
     this.getFilteredRecipients();
     this.recipients.open();

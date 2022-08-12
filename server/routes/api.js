@@ -5907,13 +5907,13 @@ function getSqlQuery(body) {
 
 function getJoinTable(body) {
   let joinTable = "";
-  if ((
+  if (
     body.category ||
     body.start ||
     body.end ||
     body.creator_id ||
     body.store
-  )) {
+  ) {
     joinTable += "join tasks t on c.id = t.customer_id";
   }
 
