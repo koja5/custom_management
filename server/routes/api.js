@@ -5951,19 +5951,7 @@ router.post("/getFilteredRecipients", function (req, res) {
       {
         excludeQuery = 'c.id not in (select t.customer_id from tasks t where t.start > now()) and'; 
       }
-
-      console.log("select distinct c.* from customers c join " +
-      table +
-      " sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin " +
-      joinTable +
-      " where " + excludeQuery + 
-      checkAdditionalQuery +
-      " and c.storeId = " +
-      Number(req.body.superadmin) +
-      " and (" +
-      question +
-      ")" );
-
+      
       conn.query(
         "select distinct c.* from customers c join " +
         table +
