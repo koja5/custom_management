@@ -54,6 +54,7 @@ import { ListFaqComponent } from "./administrator/help/list-faq/list-faq.compone
 import { AdminGuard } from "src/app/service/login-guard/adminGuard";
 
 import { ChooseHolidayComponent } from "./parameters/choose-holiday/choose-holiday.component";
+import { FormGuard } from "src/app/service/form-guard/formGuard";
 
 
 const routes: Routes = [
@@ -92,27 +93,34 @@ const routes: Routes = [
       },
       {
         path: "complaint",
+        canDeactivate: [FormGuard],
         component: ParametersComponent,
       },
-      { path: "therapy", component: ParametersComponent },
+      { path: "therapy",
+        canDeactivate: [FormGuard],
+        component: ParametersComponent
+      },
       {
         path: "treatment",
+        canDeactivate: [FormGuard],
         component: ParametersComponent,
       },
       {
         path: "recommendation",
+        canDeactivate: [FormGuard],
         component: ParametersComponent,
       },
       {
         path: "relationship",
+        canDeactivate: [FormGuard],
         component: ParametersComponent,
       },
-      { path: "social", component: ParametersComponent },
-      { path: "doctor", component: ParametersComponent },
-      { path: "doctors", component: ParametersComponent },
-      { path: "vat_tax", component: ParametersComponent },
-      { path: "CS", component: ParametersComponent },
-      { path: "state", component: ParametersComponent },
+      { path: "social", canDeactivate: [FormGuard], component: ParametersComponent },
+      { path: "doctor", canDeactivate: [FormGuard], component: ParametersComponent },
+      { path: "doctors", canDeactivate: [FormGuard], component: ParametersComponent },
+      { path: "vat_tax", canDeactivate: [FormGuard], component: ParametersComponent },
+      { path: "CS", canDeactivate: [FormGuard], component: ParametersComponent },
+      { path: "state", canDeactivate: [FormGuard], component: ParametersComponent },
       {
         path: "theme-colors",
         component: ThemeColorsComponent,
