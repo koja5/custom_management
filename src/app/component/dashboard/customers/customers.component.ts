@@ -134,7 +134,7 @@ export class CustomersComponent implements OnInit {
     this.currentUrl = this.router.url;
 
     this.savePage = this.helpService.getGridPageSize();
-    if(this.savePage && this.savePage[this.currentUrl]) {
+    if(this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
       this.state.skip = this.savePage[this.currentUrl];
       this.state.take = this.savePage[this.currentUrl + 'Take'];
     }
