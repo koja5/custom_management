@@ -30,7 +30,7 @@ import { FormGuardData } from "src/app/models/formGuard-data";
   styleUrls: ["./parameter-item.component.scss"],
 })
 export class ParameterItemComponent implements OnInit, OnDestroy {
-  @Output() isFormDirty = new EventEmitter<boolean>();
+  @Output() isDataSaved = new EventEmitter<boolean>();
   @Input() type: string;
   public view: Observable<GridDataResult>;
   public gridState: State = {
@@ -72,6 +72,7 @@ export class ParameterItemComponent implements OnInit, OnDestroy {
   public newRowCheckboxDisabled = true;
   savePage: any = {};
   currentUrl: string;
+  isFormDirty: boolean = false;
   showDialog = false;
 
   private mySelectionKey(context: RowArgs): string {
@@ -159,8 +160,8 @@ export class ParameterItemComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {}
 
-  checkIsFormDirty(): void {
-    this.isFormDirty.emit(true);
+  checkIsDataSaved() {
+    this.isDataSaved.emit(true);
   }
 
   public onStateChange(state: State) {
@@ -266,7 +267,7 @@ export class ParameterItemComponent implements OnInit, OnDestroy {
   }
 
   public cancelHandler({ sender, rowIndex }) {
-    this.isFormDirty.emit(false);
+    this.isDataSaved.emit(false);
     this.editedRowIndex = -1;
     this.vatTexList = this.firstVatTexList;
     this.closeEditor(sender, rowIndex);
@@ -284,7 +285,7 @@ export class ParameterItemComponent implements OnInit, OnDestroy {
   }
 
   public saveHandler({ sender, rowIndex, formGroup, isNew }) {
-    this.isFormDirty.emit(false);
+    this.isDataSaved.emit(false);
     this.editedRowIndex = -1;
     const product = formGroup.value;
 

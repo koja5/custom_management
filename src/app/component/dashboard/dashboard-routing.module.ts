@@ -93,6 +93,7 @@ const routes: Routes = [
       {
         path: "complaint",
         canDeactivate: [FormGuard],
+
         component: ParametersComponent,
       },
       {
@@ -100,6 +101,7 @@ const routes: Routes = [
         canDeactivate: [FormGuard],
         component: ParametersComponent,
       },
+
       {
         path: "treatment",
         canDeactivate: [FormGuard],
@@ -145,6 +147,7 @@ const routes: Routes = [
         canDeactivate: [FormGuard],
         component: ParametersComponent,
       },
+
       {
         path: "theme-colors",
         canDeactivate: [FormGuard],

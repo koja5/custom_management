@@ -27,7 +27,7 @@ export class ParametersComponent implements OnInit, FormGuardData {
     this.currentTab = tab;
   }
 
-  getIsFormDirty(event: boolean): void {
+  getIsDataSaved(event: boolean): void {
     this.isFormDirty = event;
   }
 

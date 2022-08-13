@@ -28,7 +28,7 @@
     (pageChange)="pageChange($event)"
     (sortChange)="sortChange($event)"
     [kendoGridSelectBy]="mySelectionKey"
-    (change)="checkIsFormDirty()"
+    (change)="checkIsDataSaved()"
   >
     <ng-template kendoGridToolbarTemplate>
       <button class="uploadFromExcel-{{ theme }}" kendoGridAddCommand>
@@ -110,7 +110,7 @@
     (pageChange)="pageChange($event)"
     (sortChange)="sortChange($event)"
     [kendoGridSelectBy]="mySelectionKey"
-    (change)="checkIsFormDirty()"
+    (change)="checkIsDataSaved()"
   >
     <ng-template kendoGridToolbarTemplate>
       <button class="uploadFromExcel-{{ theme }}" kendoGridAddCommand>
@@ -190,7 +190,7 @@
     (pageChange)="pageChange($event)"
     (sortChange)="sortChange($event)"
     [kendoGridSelectBy]="mySelectionKey"
-    (change)="checkIsFormDirty()"
+    (change)="checkIsDataSaved()"
   >
     <ng-template kendoGridToolbarTemplate>
       <button class="uploadFromExcel-{{ theme }}" kendoGridAddCommand>
@@ -365,7 +365,7 @@
     (sortChange)="sortChange($event)"
     [loading]="loading"
     [kendoGridSelectBy]="mySelectionKey"
-    (change)="checkIsFormDirty()"
+    (change)="checkIsDataSaved()"
   >
     <ng-template kendoGridToolbarTemplate>
       <button class="uploadFromExcel-{{ theme }}" kendoGridAddCommand>
