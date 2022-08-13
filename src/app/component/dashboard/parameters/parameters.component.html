@@ -28,59 +28,99 @@
 
     </li>
   </ul>-->
+  <app-dynamic-confirm-dialog
+    [showDialog]="showDialog"
+    [title]="language?.changesWontBeSavedTitle"
+    [question]="language?.changesWontBeSaved"
+    (sendEmitter)="receiveConfirm($event)"
+  >
+  </app-dynamic-confirm-dialog>
   <div class="tab-content" *ngIf="currentTab === 'complaint'">
     <div id="profile-tab" class="tab-pane active">
-      <app-parameter-item [type]="'Complaint'"></app-parameter-item>
+      <app-parameter-item
+        [type]="'Complaint'"
+        (isFormDirty)="getIsFormDirty($event)"
+      ></app-parameter-item>
     </div>
   </div>
   <div class="tab-content" *ngIf="currentTab === 'therapy'">
     <div id="profile-tab" class="tab-pane active">
-      <app-parameter-item [type]="'Therapy'"></app-parameter-item>
+      <app-parameter-item
+        [type]="'Therapy'"
+        (isFormDirty)="getIsFormDirty($event)"
+      ></app-parameter-item>
     </div>
   </div>
   <div class="tab-content" *ngIf="currentTab === 'treatment'">
     <div id="profile-tab" class="tab-pane active">
-      <app-parameter-item [type]="'Treatment'"></app-parameter-item>
+      <app-parameter-item
+        [type]="'Treatment'"
+        (isFormDirty)="getIsFormDirty($event)"
+      ></app-parameter-item>
     </div>
   </div>
   <div class="tab-content" *ngIf="currentTab === 'recommendation'">
     <div id="profile-tab" class="tab-pane active">
-      <app-parameter-item [type]="'Recommendation'"></app-parameter-item>
+      <app-parameter-item
+        [type]="'Recommendation'"
+        (isFormDirty)="getIsFormDirty($event)"
+      ></app-parameter-item>
     </div>
   </div>
   <div class="tab-content" *ngIf="currentTab === 'relationship'">
     <div id="profile-tab" class="tab-pane active">
-      <app-parameter-item [type]="'Relationship'"></app-parameter-item>
+      <app-parameter-item
+        [type]="'Relationship'"
+        (isFormDirty)="getIsFormDirty($event)"
+      ></app-parameter-item>
     </div>
   </div>
   <div class="tab-content" *ngIf="currentTab === 'social'">
     <div id="profile-tab" class="tab-pane active">
-      <app-parameter-item [type]="'Social'"></app-parameter-item>
+      <app-parameter-item
+        [type]="'Social'"
+        (isFormDirty)="getIsFormDirty($event)"
+      ></app-parameter-item>
     </div>
   </div>
   <div class="tab-content" *ngIf="currentTab === 'doctor'">
     <div id="profile-tab" class="tab-pane active">
-      <app-parameter-item [type]="'Doctor'"></app-parameter-item>
+      <app-parameter-item
+        [type]="'Doctor'"
+        (isFormDirty)="getIsFormDirty($event)"
+      ></app-parameter-item>
     </div>
   </div>
   <div class="tab-content" *ngIf="currentTab === 'doctors'">
     <div id="profile-tab" class="tab-pane active">
-      <app-parameter-item [type]="'Doctors'"></app-parameter-item>
+      <app-parameter-item
+        [type]="'Doctors'"
+        (isFormDirty)="getIsFormDirty($event)"
+      ></app-parameter-item>
     </div>
   </div>
   <div class="tab-content" *ngIf="currentTab === 'vat_tax'">
     <div id="profile-tab" class="tab-pane active">
-      <app-parameter-item [type]="'VATTax'"></app-parameter-item>
+      <app-parameter-item
+        [type]="'VATTax'"
+        (isFormDirty)="getIsFormDirty($event)"
+      ></app-parameter-item>
     </div>
   </div>
   <div class="tab-content" *ngIf="currentTab === 'CS'">
     <div id="profile-tab" class="tab-pane active">
-      <app-parameter-item [type]="'CS'"></app-parameter-item>
+      <app-parameter-item
+        [type]="'CS'"
+        (isFormDirty)="getIsFormDirty($event)"
+      ></app-parameter-item>
     </div>
   </div>
   <div class="tab-content" *ngIf="currentTab === 'state'">
     <div id="profile-tab" class="tab-pane active">
-      <app-parameter-item [type]="'state'"></app-parameter-item>
+      <app-parameter-item
+        [type]="'state'"
+        (isFormDirty)="getIsFormDirty($event)"
+      ></app-parameter-item>
     </div>
   </div>
 </div>

@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
+import { Subject } from "rxjs";
+import { AnonymousSubject } from "rxjs-compat";
 import { DynamicFormsComponent } from "src/app/component/dynamic-elements/dynamic-forms/dynamic-forms.component";
+import { FormGuardData } from "src/app/models/formGuard-data";
 import { DynamicService } from "src/app/service/dynamic.service";
 import { HelpService } from "src/app/service/help.service";
 import { RemindersService } from "src/app/service/reminders.service";
@@ -9,7 +12,7 @@ import { RemindersService } from "src/app/service/reminders.service";
   templateUrl: "./reminders.component.html",
   styleUrls: ["./reminders.component.scss"],
 })
-export class RemindersComponent implements OnInit {
+export class RemindersComponent implements OnInit, FormGuardData {
   @ViewChild(DynamicFormsComponent) form: DynamicFormsComponent;
   public configField: any;
   public language: any;
@@ -18,6 +21,9 @@ export class RemindersComponent implements OnInit {
   public data: any;
   public changeData: any;
   public showDialog = false;
+  isFormDirty: boolean = false;
+  isDataSaved$: Subject<boolean> = new Subject<boolean>();
+  showDialogExit: boolean = false;
 
   constructor(
     private service: RemindersService,
@@ -29,6 +35,29 @@ export class RemindersComponent implements OnInit {
     this.language = this.helpService.getLanguage();
     this.superadmin = this.helpService.getSuperadmin();
     this.initialization();
+  }
+
+  getValue(event: any): void {
+    if (
+      this.configField[0].value == event.email &&
+      this.configField[1].value == event.sms
+    ) {
+      this.isFormDirty = false;
+    } else {
+      this.isFormDirty = true;
+    }
+  }
+
+  receiveConfirmExit(event: boolean): void {
+    if (event) {
+      this.isFormDirty = false;
+    }
+    this.showDialogExit = false;
+    this.isDataSaved$.next(event);
+  }
+
+  openConfirmModal(): void {
+    this.showDialogExit = true;
   }
 
   initialization() {
@@ -62,7 +91,7 @@ export class RemindersComponent implements OnInit {
   }
 
   submitEmitter(event) {
-    console.log(event);
+    this.isFormDirty = false;
     this.changeData = event;
     this.showDialog = true;
   }
@@ -71,7 +100,6 @@ export class RemindersComponent implements OnInit {
     if (event) {
       this.changeData.superadmin = this.superadmin;
       this.service.setReminderSettings(this.changeData).subscribe((data) => {
-        console.log(data);
         if (data) {
           this.helpService.successToastr(
             "",
@@ -84,6 +112,7 @@ export class RemindersComponent implements OnInit {
           );
         }
       });
+      this.isFormDirty = false;
     }
     this.showDialog = false;
   }

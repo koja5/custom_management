@@ -1,4 +1,21 @@
-<form [formGroup]="form" (submit)="handleSubmit($event)">
-  <ng-container *ngFor="let field of config;" dynamicField [config]="field" [group]="form">
+<form
+  [formGroup]="form"
+  (submit)="handleSubmit($event)"
+  (change)="getIsFormDirty()"
+  (click)="sendValue()"
+>
+  <ng-container
+    *ngFor="let field of config"
+    dynamicField
+    [config]="field"
+    [group]="form"
+  >
   </ng-container>
 </form>
+<app-dynamic-confirm-dialog
+  [showDialog]="showDialogExit"
+  [title]="language?.changesWontBeSavedTitle"
+  [question]="language?.changesWontBeSaved"
+  (sendEmitter)="receiveConfirmExit($event)"
+>
+</app-dynamic-confirm-dialog>

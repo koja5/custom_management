@@ -8,6 +8,10 @@
     [config]="configField"
     (submit)="submitEmitter($event)"
     #form="dynamicForm"
+    [showDialogExit]="showDialogExit"
+    (isDataSaved)="isDataSavedChange($event)"
+    (isFormDirtyChange)="changeFormDirty($event)"
+    (showDialogExitChange)="changeShowDialogExit($event)"
   >
   </app-dynamic-forms>
   <app-dynamic-confirm-dialog

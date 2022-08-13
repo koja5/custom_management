@@ -1,4 +1,13 @@
-import { Component, OnInit, Input, Inject, HostListener } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  Inject,
+  HostListener,
+  Output,
+  EventEmitter,
+  OnDestroy,
+} from "@angular/core";
 import { State, process } from "@progress/kendo-data-query";
 import { FormGroup, FormControl } from "@angular/forms";
 import { Observable } from "rxjs";
@@ -13,13 +22,15 @@ import { SortDescriptor, orderBy } from "@progress/kendo-data-query";
 import { MessageService } from "src/app/service/message.service";
 import { HelpService } from "src/app/service/help.service";
 import { ActivatedRoute, Router } from "@angular/router";
+import { FormGuardData } from "src/app/models/formGuard-data";
 
 @Component({
   selector: "app-parameter-item",
   templateUrl: "./parameter-item.component.html",
   styleUrls: ["./parameter-item.component.scss"],
 })
-export class ParameterItemComponent implements OnInit {
+export class ParameterItemComponent implements OnInit, OnDestroy {
+  @Output() isFormDirty = new EventEmitter<boolean>();
   @Input() type: string;
   public view: Observable<GridDataResult>;
   public gridState: State = {
@@ -61,6 +72,7 @@ export class ParameterItemComponent implements OnInit {
   public newRowCheckboxDisabled = true;
   savePage: any = {};
   currentUrl: string;
+  showDialog = false;
 
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
@@ -75,7 +87,7 @@ export class ParameterItemComponent implements OnInit {
     private message: MessageService,
     private helpService: HelpService,
     private router: Router
-  ) { }
+  ) {}
 
   public ngOnInit(): void {
     this.language = this.helpService.getLanguage();
@@ -92,14 +104,11 @@ export class ParameterItemComponent implements OnInit {
     if (this.type === "Therapies") {
       this.service.getTherapy(superadmin).subscribe((data) => {
         this.therapyList = data;
-
-
       });
     }
 
     if (this.type === "Therapy") {
-
-      console.log('Therapy')
+      console.log("Therapy");
 
       this.service.getVATTex(superadmin).subscribe((data: []) => {
         this.vatTexList = data.sort(function (a, b) {
@@ -114,11 +123,9 @@ export class ParameterItemComponent implements OnInit {
         this.currentLoadData = data;
 
         if (this.type === "Therapy") {
-
-          data.forEach(element => {
+          data.forEach((element) => {
             this.checkBoxDisabled.push(true);
           });
-
         }
 
         return process(data, this.gridState);
@@ -126,7 +133,7 @@ export class ParameterItemComponent implements OnInit {
     );
 
     this.service.getData(this.type, superadmin);
-    console.log('view', this.view);
+    console.log("view", this.view);
 
     if (localStorage.getItem("theme") !== null) {
       this.theme = localStorage.getItem("theme");
@@ -143,17 +150,21 @@ export class ParameterItemComponent implements OnInit {
     // this.view = this.service.getData(this.type);
 
     this.currentUrl = this.router.url;
-    console.log('test ', this.currentUrl);
 
     this.savePage = this.helpService.getGridPageSize();
-    if(this.savePage && this.savePage[this.currentUrl]) {
+    if (this.savePage && this.savePage[this.currentUrl]) {
       this.gridState.skip = this.savePage[this.currentUrl];
     }
   }
 
+  ngOnDestroy() {}
+
+  checkIsFormDirty(): void {
+    this.isFormDirty.emit(true);
+  }
+
   public onStateChange(state: State) {
     this.gridState = state;
-    console.log(state);
 
     // this.editService.read();
   }
@@ -175,7 +186,6 @@ export class ParameterItemComponent implements OnInit {
         email: new FormControl(),
       });
     } else if (this.type === "Therapy") {
-
       this.newRowCheckboxDisabled = false;
 
       this.formGroup = new FormGroup({
@@ -205,8 +215,6 @@ export class ParameterItemComponent implements OnInit {
 
   public editHandler({ sender, rowIndex, dataItem }) {
     this.closeEditor(sender);
-    console.log(dataItem);
-
 
     if (this.type === "Doctors") {
       this.formGroup = new FormGroup({
@@ -224,9 +232,6 @@ export class ParameterItemComponent implements OnInit {
       this.selectedDoctorType = dataItem.doctor_type;
       this.selectedGender = dataItem.gender;
     } else if (this.type === "Therapy") {
-
-
-      console.log('rowIndex', rowIndex);
       this.checkBoxDisabled[rowIndex] = false;
 
       this.formGroup = new FormGroup({
@@ -261,13 +266,13 @@ export class ParameterItemComponent implements OnInit {
   }
 
   public cancelHandler({ sender, rowIndex }) {
+    this.isFormDirty.emit(false);
     this.editedRowIndex = -1;
     this.vatTexList = this.firstVatTexList;
     this.closeEditor(sender, rowIndex);
     this.refreshData();
 
-    this.checkBoxDisabled = this.checkBoxDisabled.map(element => true);
-    console.log(this.checkBoxDisabled);
+    this.checkBoxDisabled = this.checkBoxDisabled.map((element) => true);
 
     this.changeTheme(this.theme);
   }
@@ -279,17 +284,12 @@ export class ParameterItemComponent implements OnInit {
   }
 
   public saveHandler({ sender, rowIndex, formGroup, isNew }) {
-
-    console.log(formGroup);
-
+    this.isFormDirty.emit(false);
     this.editedRowIndex = -1;
     const product = formGroup.value;
-    console.log(product);
 
-      if (this.type === "Therapy" && !this.selectedVATEvent) {
-
-      this.checkBoxDisabled = this.checkBoxDisabled.map(element => true);
-      console.log(this.checkBoxDisabled);
+    if (this.type === "Therapy" && !this.selectedVATEvent) {
+      this.checkBoxDisabled = this.checkBoxDisabled.map((element) => true);
 
       const sortedData = {
         data: orderBy(this.currentLoadData, this.sort),
@@ -307,7 +307,7 @@ export class ParameterItemComponent implements OnInit {
       } else if (
         rowIndex !== -1 &&
         sortedData.data[rowIndex]["gross_price"] !==
-        formGroup.value.gross_price &&
+          formGroup.value.gross_price &&
         sortedData.data[rowIndex]["vat"] !== formGroup.value.vat
       ) {
         formGroup.value.net_price = (
@@ -336,7 +336,6 @@ export class ParameterItemComponent implements OnInit {
   }
 
   public removeHandler({ dataItem }) {
-    console.log(dataItem);
     this.service.deleteData(
       dataItem.id,
       this.type,
@@ -364,7 +363,6 @@ export class ParameterItemComponent implements OnInit {
   }
 
   selectionGender(event) {
-    console.log(event);
     this.selectedGender = event;
   }
 
@@ -373,7 +371,6 @@ export class ParameterItemComponent implements OnInit {
   }
 
   selectionTherapy(event) {
-    console.log(event);
     this.selectedTherapy = event.id;
   }
 
@@ -483,13 +480,11 @@ export class ParameterItemComponent implements OnInit {
     setTimeout(() => {
       if (localStorage.getItem("allThemes") !== undefined) {
         const allThemes = JSON.parse(localStorage.getItem("allThemes"));
-        console.log(allThemes);
         let items = document.querySelectorAll(".k-dialog-titlebar");
         for (let i = 0; i < items.length; i++) {
           const clas = items[i].classList;
           for (let j = 0; j < allThemes.length; j++) {
             const themeName = allThemes[j]["name"];
-            console.log(clas);
             clas.remove("k-dialog-titlebar-" + themeName);
             clas.add("k-dialog-titlebar-" + theme);
           }
