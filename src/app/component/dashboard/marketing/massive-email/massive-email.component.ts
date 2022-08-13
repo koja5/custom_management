@@ -24,7 +24,7 @@ export class MassiveEmailComponent implements OnInit {
   constructor(
     private helpService: HelpService,
     private dynamicService: DynamicService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.language = this.helpService.getLanguage();
