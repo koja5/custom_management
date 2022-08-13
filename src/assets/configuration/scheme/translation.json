@@ -2139,6 +2139,9 @@
       },
       "changesWontBeSaved": {
         "type": "string"
+      },
+      "excludeCustomersWithEvents": {
+        "type": "string"
       }
     }
   },
@@ -6360,6 +6363,9 @@
             },
             {
               "key": "smsSignaturePoweredByMassive"
+            },
+            {
+              "key": "excludeCustomersWithEvents"
             }
           ]
         },
