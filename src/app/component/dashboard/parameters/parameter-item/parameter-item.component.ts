@@ -267,6 +267,7 @@ export class ParameterItemComponent implements OnInit, OnDestroy {
   }
 
   public cancelHandler({ sender, rowIndex }) {
+    this.isDataSaved.emit(false);
     this.editedRowIndex = -1;
     this.vatTexList = this.firstVatTexList;
     this.closeEditor(sender, rowIndex);
@@ -284,6 +285,7 @@ export class ParameterItemComponent implements OnInit, OnDestroy {
   }
 
   public saveHandler({ sender, rowIndex, formGroup, isNew }) {
+    this.isDataSaved.emit(false);
     this.editedRowIndex = -1;
     const product = formGroup.value;
 

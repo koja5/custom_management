@@ -27,11 +27,11 @@ export class ParametersComponent implements OnInit, FormGuardData {
     this.currentTab = tab;
   }
 
-  getIsDataSaved(event) {
+  getIsDataSaved(event: boolean): void {
     this.isFormDirty = event;
   }
 
-  receiveConfirm(event: boolean) {
+  receiveConfirm(event: boolean): void {
     if (event) {
       this.isFormDirty = false;
     }
@@ -39,7 +39,7 @@ export class ParametersComponent implements OnInit, FormGuardData {
     this.isDataSaved$.next(event);
   }
 
-  openConfirmModal() {
+  openConfirmModal(): void {
     this.showDialog = true;
   }
 }
