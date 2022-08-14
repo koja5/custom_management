@@ -14,17 +14,16 @@ export class HelpService {
     private toastr: ToastrService
   ) {}
 
-
   getGridPageSize() {
-    const valueToJSON = JSON.parse(localStorage.getItem('pageSize'));
-    if(valueToJSON === null) {
+    const valueToJSON = JSON.parse(localStorage.getItem("pageSize"));
+    if (valueToJSON === null) {
       return {};
     }
     return valueToJSON;
   }
 
   setGridPageSize(pageSize: any) {
-    localStorage.setItem('pageSize', JSON.stringify(pageSize))
+    localStorage.setItem("pageSize", JSON.stringify(pageSize));
   }
 
   postApiRequest(method, parametar) {
@@ -274,7 +273,7 @@ export class HelpService {
     localStorage.setItem("selectionLanguage", value);
   }
 
-  getSelectionLangauge() {
+  getSelectionLanguage() {
     if (localStorage.getItem("selectionLanguage")) {
       return localStorage.getItem("selectionLanguage");
     } else {
@@ -300,7 +299,7 @@ export class HelpService {
     localStorage.setItem("selectionLanguageCode", value);
   }
 
-  getSelectionLangaugeCode() {
+  getSelectionLanguageCode() {
     if (localStorage.getItem("selectionLanguageCode")) {
       return localStorage.getItem("selectionLanguageCode");
     }
@@ -308,7 +307,7 @@ export class HelpService {
   }
 
   getNameOfFlag() {
-    const selectionLanguage = this.getSelectionLangaugeCode();
+    const selectionLanguage = this.getSelectionLanguageCode();
     this.getAllLangs().subscribe((langs: any) => {
       for (let i = 0; i < langs.length; i++) {
         for (let j = 0; j < langs[i].similarCode.length; j++) {
@@ -318,5 +317,15 @@ export class HelpService {
         }
       }
     });
+  }
+
+  getLanguageFromFolder(folder: string, language: string) {
+    return this.http.get(
+      "../assets/configuration/languages/landing/pages/" +
+        folder +
+        "/" +
+        language +
+        ".json"
+    );
   }
 }

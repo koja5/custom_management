@@ -33,7 +33,7 @@ export class HomeNavigationMenuComponent implements OnInit {
   ngOnInit(): void {
     this.helpService.getAllLangs().subscribe((data) => {
       this.chooseLang = data;
-      const selectionLanguage = this.helpService.getSelectionLangauge();
+      const selectionLanguage = this.helpService.getSelectionLanguage();
       this.getNameOfFlag(data, selectionLanguage);
       if (!this.selectionLanguage) {
         this.selectionLanguage = selectionLanguage;

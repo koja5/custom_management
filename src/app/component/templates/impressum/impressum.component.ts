@@ -20,9 +20,9 @@ export class ImpressumComponent implements OnInit {
     } else {
       this.service
         .getTranslationByCountryCode(
-          this.helpService.getSelectionLangaugeCode()
-            ? this.helpService.getSelectionLangaugeCode()
-            : this.helpService.getSelectionLangauge()
+          this.helpService.getSelectionLanguageCode()
+            ? this.helpService.getSelectionLanguageCode()
+            : this.helpService.getSelectionLanguage()
         )
         .subscribe((language) => {
           if (language !== null) {

@@ -1,31 +1,29 @@
-<div class="bg-white py-5" *ngIf="language !== undefined">
-  <div class="container">
-     <div class="row">
-        <div class="col-md-12">
-           <div id="intro" class="mb-4">
-              <!-- Title -->
-              <div class="border-bottom pb-5 mb-5">
-                 <h1 class="text-primary font-weight-light"><span
-                       class="font-weight-bold">{{language.impressumHeaderTitleBrand}}</span> {{language.impressumHeaderTitle}}</h1>
-                <p class="mb-0">{{language.impressumLastModificationDate}}: {{language.impressumLastModificationDateValue}}</p>
-              </div>
-              <!-- End Title -->
-              <!-- Title -->
-              <div class="mb-3">
-                 <h1 class="h5">{{language.impressumIntroductionTitle}}</h1>
-              </div>
-              <!-- End Title -->
-              <p>{{language.impressumIntroductionText}}</p>
-           </div>
-           <div id="services" class="mb-4" *ngFor="let item of language.impressumItems">
-              <!-- Title -->
-              <div class="mb-3">
-                 <h3 class="h5">{{item.title}}</h3>
-              </div>
-              <!-- End Title -->
-              <p>{{item.text}}</p>
-           </div>
-        </div>
-     </div>
-  </div>
-</div>
+<!-- <div class="bg-white py-5" *ngIf="language !== undefined">
+   <div class="container">
+      <div class="row">
+         <div class="col-md-12">
+            <div id="intro" class="mb-4">
+               <div class="border-bottom pb-5 mb-5">
+                  <h1 class="text-primary font-weight-light"><span
+                        class="font-weight-bold">{{language.impressumHeaderTitleBrand}}</span>
+                     {{language.impressumHeaderTitle}}</h1>
+                  <p class="mb-0">{{language.impressumLastModificationDate}}:
+                     {{language.impressumLastModificationDateValue}}</p>
+               </div>
+               <div class="mb-3">
+                  <h1 class="h5">{{language.impressumIntroductionTitle}}</h1>
+               </div>
+               <p>{{language.impressumIntroductionText}}</p>
+            </div>
+            <div id="services" class="mb-4" *ngFor="let item of language.impressumItems">
+               <div class="mb-3">
+                  <h3 class="h5">{{item.title}}</h3>
+               </div>
+               <p>{{item.text}}</p>
+            </div>
+         </div>
+      </div>
+   </div>
+</div> -->
+
+<app-dynamic-text-form [type]="'impressum'"></app-dynamic-text-form>
