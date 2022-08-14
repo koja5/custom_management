@@ -1,49 +1,19 @@
 <div style="height: 100%">
-  <kendo-grid
-    #grid
-    *ngIf="language !== undefined"
-    [data]="gridView"
-    [style.height]="height"
-    [resizable]="true"
-    [pageSize]="state.take"
-    [skip]="state.skip"
-    [sort]="state.sort"
-    [filter]="state.filter"
-    [sortable]="true"
-    [pageable]="pageable"
-    (pageChange)="pageChange($event)"
-    [groupable]="true"
-    [group]="state.group"
-    [pageSize]="pageSize"
-    (groupChange)="groupChange($event)"
-    (sortChange)="sortChange($event)"
-    [loading]="loading"
-  >
-    <kendo-grid-messages
-      pagerPage="{{ language.pagerPage }}"
-      pagerOf="{{ language.pagerOf }}"
-      pagerItems="{{ language.pagerItems }}"
-      pagerItemsPerPage="{{ language.pagerItemsPerPage }}"
-    >
+  <kendo-grid #grid *ngIf="language !== undefined" [data]="gridView" [style.height]="height" [resizable]="true"
+    [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
+    [pageable]="pageable" (pageChange)="pageChange($event)" [groupable]="true" [group]="state.group"
+    [pageSize]="pageSize" (groupChange)="groupChange($event)" (sortChange)="sortChange($event)" [loading]="loading">
+    <kendo-grid-messages pagerPage="{{ language.pagerPage }}" pagerOf="{{ language.pagerOf }}"
+      pagerItems="{{ language.pagerItems }}" pagerItemsPerPage="{{ language.pagerItemsPerPage }}">
     </kendo-grid-messages>
     <ng-template kendoGridToolbarTemplate>
       <div class="search">
         <kendo-textbox-container floatingLabel="{{ language.searchAllColumn }}">
-          <input
-            kendoTextBox
-            (input)="onFilter($event.target.value)"
-            [(ngModel)]="searchFilter"
-          />
+          <input kendoTextBox (input)="onFilter($event.target.value)" [(ngModel)]="searchFilter" />
         </kendo-textbox-container>
       </div>
       <div style="float: right; padding-right: 30px; padding-top: 14px">
-        <button
-          kendoButton
-          [icon]="'add'"
-          (click)="addNewModal()"
-          [primary]="true"
-          class="addButton"
-        >
+        <button kendoButton [icon]="'add'" (click)="addNewModal()" [primary]="true" class="addButton">
           {{ language.addNew }}
         </button>
         <div class="dropdown-grid">
@@ -51,38 +21,22 @@
             <i class="fa fa-caret-down"></i>
           </button>
           <div class="dropdown-content-grid">
-            <a style="padding: 0px"
-              ><label
-                class="uploadFromExcel-{{ theme }}"
-                style="padding: 12px; cursor: pointer"
-                ><span class="k-icon k-i-file-excel"></span>
+            <a style="padding: 0px"><label class="uploadFromExcel-{{ theme }}"
+                style="padding: 12px; cursor: pointer"><span class="k-icon k-i-file-excel"></span>
                 {{ language.uploadFromExcel
-                }}<input
-                  type="file"
-                  name="files[]"
-                  multiple
-                  id="jsonFile"
-                  accept=".xlsx"
-                  (change)="onFileChange($event)"
-                  [(ngModel)]="fileValue" /></label
-            ></a>
+                }}<input type="file" name="files[]" multiple id="jsonFile" accept=".xlsx"
+                  (change)="onFileChange($event)" [(ngModel)]="fileValue" /></label></a>
 
-            <a (click)="exportPDF(false)"
-              ><span class="k-icon k-i-file-pdf"></span>
-              {{ language.exportPageToPDF }}</a
-            >
-            <a (click)="exportPDF(true)"
-              ><span class="k-icon k-i-file-pdf"></span>
-              {{ language.exportToPDF }}</a
-            >
+            <a (click)="exportPDF(false)"><span class="k-icon k-i-file-pdf"></span>
+              {{ language.exportPageToPDF }}</a>
+            <a (click)="exportPDF(true)"><span class="k-icon k-i-file-pdf"></span>
+              {{ language.exportToPDF }}</a>
 
-            <a (click)="exportToExcel(grid, false)"
-              ><span class="k-icon k-i-file-excel"></span>
+            <a (click)="exportToExcel(grid, false)"><span class="k-icon k-i-file-excel"></span>
               {{ language.exportToExcel }}
             </a>
 
-            <a (click)="exportToExcel(grid, true)"
-              ><span class="k-icon k-i-file-excel"></span>
+            <a (click)="exportToExcel(grid, true)"><span class="k-icon k-i-file-excel"></span>
               {{ language.exportAllToExcel }}
             </a>
           </div>
@@ -98,25 +52,13 @@
         <div [style.background]="dataItem.color" class="colorEvent"></div>
       </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column
-      field="allowSendInformation"
-      title="{{ language.allowSendInformation }}"
-    >
+    <kendo-grid-column field="allowSendInformation" title="{{ language.allowSendInformation }}">
     </kendo-grid-column>
-    <kendo-grid-checkbox-column
-      field="showAtInvoice"
-      title="{{ language.showAtInvoice }}"
-      [width]="100"
-    >
+    <kendo-grid-checkbox-column field="showAtInvoice" title="{{ language.showAtInvoice }}" [width]="100">
       <ng-template kendoGridCellTemplate let-dataItem>
         <div class="text-center">
-          <input
-            type="checkbox"
-            kendoCheckBox
-            [disabled]="true"
-            (click)="setSelectedItem(dataItem)"
-            [(ngModel)]="dataItem.showAtInvoice"
-          />
+          <input type="checkbox" kendoCheckBox [disabled]="true" (click)="setSelectedItem(dataItem)"
+            [(ngModel)]="dataItem.showAtInvoice" />
         </div>
       </ng-template>
     </kendo-grid-checkbox-column>
@@ -124,41 +66,19 @@
     </kendo-grid-column>
     <kendo-grid-column width="100">
       <ng-template kendoGridCellTemplate let-dataItem>
-        <button
-          kendoButton
-          [icon]="'k-icon k-i-edit'"
-          (click)="editEventCategory(dataItem)"
-        ></button>
+        <button kendoButton [icon]="'k-icon k-i-edit'" (click)="editEventCategory(dataItem)"></button>
       </ng-template>
     </kendo-grid-column>
     <kendo-grid-column width="100">
       <ng-template kendoGridCellTemplate let-dataItem>
-        <button
-          kendoButton
-          [icon]="'k-icon k-i-delete'"
-          (click)="deleteEventCategory(dataItem.id)"
-        ></button>
+        <button kendoButton [icon]="'k-icon k-i-delete'" (click)="deleteEventCategory(dataItem.id)"></button>
       </ng-template>
     </kendo-grid-column>
 
-    <kendo-grid-pdf
-      fileName="EventCategory.pdf"
-      [allPages]="allPages"
-      paperSize="A4"
-      [scale]="0.8"
-      [repeatHeaders]="true"
-    >
-      <kendo-grid-pdf-margin
-        top="2cm"
-        left="1cm"
-        right="1cm"
-        bottom="2cm"
-      ></kendo-grid-pdf-margin>
-      <ng-template
-        kendoGridPDFTemplate
-        let-pageNum="pageNum"
-        let-totalPages="totalPages"
-      >
+    <kendo-grid-pdf fileName="EventCategory.pdf" [allPages]="allPages" paperSize="A4" [scale]="0.8"
+      [repeatHeaders]="true">
+      <kendo-grid-pdf-margin top="2cm" left="1cm" right="1cm" bottom="2cm"></kendo-grid-pdf-margin>
+      <ng-template kendoGridPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
         <div class="page-template">
           <div class="header">
             <div>
@@ -177,33 +97,19 @@
           <div [style.background]="dataItem.color" class="colorEvent"></div>
         </ng-template>
       </kendo-grid-column>
-      <kendo-grid-column
-        field="allowSendInformation"
-        title="{{ language.allowSendInformation }}"
-      >
+      <kendo-grid-column field="allowSendInformation" title="{{ language.allowSendInformation }}">
       </kendo-grid-column>
-      <kendo-grid-checkbox-column
-        field="showAtInvoice"
-        title="{{ language.showAtInvoice }}"
-        [width]="100"
-      >
+      <kendo-grid-checkbox-column field="showAtInvoice" title="{{ language.showAtInvoice }}" [width]="100">
         <ng-template kendoGridCellTemplate let-dataItem>
           <div class="text-center">
-            <input
-              type="checkbox"
-              kendoCheckBox
-              [(ngModel)]="dataItem.showAtInvoice"
-            />
+            <input type="checkbox" kendoCheckBox [(ngModel)]="dataItem.showAtInvoice" />
           </div>
         </ng-template>
       </kendo-grid-checkbox-column>
       <kendo-grid-column field="comment" title="{{ language.comment }}">
       </kendo-grid-column>
     </kendo-grid-pdf>
-    <kendo-grid-excel
-      fileName="EventCategory.xlsx"
-      [fetchData]="allData"
-    ></kendo-grid-excel>
+    <kendo-grid-excel fileName="EventCategory.xlsx" [fetchData]="allData"></kendo-grid-excel>
     <ng-template kendoGridNoRecordsTemplate>
       <div class="row no-results-element">
         <div class="text-center">
@@ -218,13 +124,8 @@
     </ng-template>
   </kendo-grid>
 
-  <kendo-dialog
-    title="{{ language.pleaseConfirm }}"
-    *ngIf="importExcel"
-    (close)="importExcel = false"
-    [minWidth]="250"
-    [width]="450"
-  >
+  <kendo-dialog title="{{ language.pleaseConfirm }}" *ngIf="importExcel" (close)="importExcel = false" [minWidth]="250"
+    [width]="450">
     <p style="margin: 30px; text-align: center">
       Are you sure you want to import data from excel?
     </p>
@@ -234,20 +135,10 @@
     </kendo-dialog-actions>
   </kendo-dialog>
 
-  <kendo-dialog
-    title="{{ language.pleaseConfirm }}"
-    *ngIf="deleteModal"
-    (close)="deleteModal = false"
-    [minWidth]="250"
-    [width]="450"
-  >
+  <kendo-dialog title="{{ language.pleaseConfirm }}" *ngIf="deleteModal" (close)="deleteModal = false" [minWidth]="250"
+    [width]="450">
     <div class="modal-body text-center">
-      <img
-        src="../../../../assets/images/sent.png"
-        alt=""
-        width="50"
-        height="46"
-      />
+      <img src="../../../../assets/images/sent.png" alt="" width="50" height="46" />
       <h3>{{ language.areYouSure }}</h3>
     </div>
     <kendo-dialog-actions>
@@ -258,135 +149,63 @@
     </kendo-dialog-actions>
   </kendo-dialog>
 
-  <modal
-    #eventCategoryModal
-    modalClass="modal-md"
-    (keydown.esc)="confirmClose()"
-  >
+  <modal #eventCategoryModal modalClass="modal-md" (keydown.esc)="confirmClose()">
     <modal-header>
       <h4>{{ getTranslate(operationMode) }}</h4>
-      <button
-        type="button"
-        class="close"
-        data-dismiss="modal"
-        (click)="confirmClose()"
-      >
+      <button type="button" class="custom-close close" data-dismiss="modal" (click)="confirmClose()">
         <span aria-hidden="true">&times;</span>
       </button>
     </modal-header>
     <modal-content>
-      <app-dynamic-confirm-dialog
-        [showDialog]="showDialog"
-        [title]="language?.changesWontBeSavedTitle"
-        [question]="language?.changesWontBeSaved"
-        (sendEmitter)="receiveConfirm($event)"
-      >
+      <app-dynamic-confirm-dialog [showDialog]="showDialog" [title]="language?.changesWontBeSavedTitle"
+        [question]="language?.changesWontBeSaved" (sendEmitter)="receiveConfirm($event)">
       </app-dynamic-confirm-dialog>
-      <form
-        (ngSubmit)="
+      <form (ngSubmit)="
           eventCategoryForm.form.valid === true
             ? operationMode === 'add'
               ? createEventCategory($event)
               : updateEventCategory($event)
             : null
-        "
-        #eventCategoryForm="ngForm"
-        (change)="isDirty()"
-      >
+        " #eventCategoryForm="ngForm" (change)="isDirty()">
         <div class="col-md-12 col-xs-12">
-          <kendo-textbox-container
-            floatingLabel="{{ language.category }}({{ language.required }})"
-          >
-            <input
-              kendoTextBox
-              type="text"
-              class="col-xs-12"
-              [(ngModel)]="data.category"
-              name="category"
-              required
-            />
+          <kendo-textbox-container floatingLabel="{{ language.category }}({{ language.required }})">
+            <input kendoTextBox type="text" class="col-xs-12" [(ngModel)]="data.category" name="category" required />
           </kendo-textbox-container>
         </div>
         <div class="col-md-12 col-xs-12">
-          <kendo-textbox-container
-            floatingLabel="{{ language.sequence }}({{ language.required }})"
-          >
-            <input
-              kendoTextBox
-              type="number"
-              class="col-xs-12"
-              [(ngModel)]="data.sequence"
-              name="sequence"
-              required
-            />
+          <kendo-textbox-container floatingLabel="{{ language.sequence }}({{ language.required }})">
+            <input kendoTextBox type="number" class="col-xs-12" [(ngModel)]="data.sequence" name="sequence" required />
           </kendo-textbox-container>
         </div>
         <div class="col-md-12 col-xs-12">
-          <kendo-textbox-container
-            floatingLabel="{{ language.color }}({{ language.required }})"
-          >
-            <kendo-colorpicker
-              #picker
-              [view]="'combo'"
-              [format]="'hex'"
-              [(ngModel)]="data.color"
-              [(value)]="data.color"
-              name="color"
-              required
-            ></kendo-colorpicker>
+          <kendo-textbox-container floatingLabel="{{ language.color }}({{ language.required }})">
+            <kendo-colorpicker #picker [view]="'combo'" [format]="'hex'" [(ngModel)]="data.color" [(value)]="data.color"
+              name="color" required></kendo-colorpicker>
           </kendo-textbox-container>
         </div>
         <div class="col-md-12 col-xs-12 p-4">
-          <input
-            kendoCheckBox
-            type="checkbox"
-            [(ngModel)]="data.allowSendInformation"
-            name="allowSendInformation"
-          />
+          <input kendoCheckBox type="checkbox" [(ngModel)]="data.allowSendInformation" name="allowSendInformation" />
 
           <label class="k-checkbox-label">{{
             language.allowSendInformation
-          }}</label>
+            }}</label>
         </div>
         <div class="col-md-12 col-xs-12 p-4">
-          <input
-            kendoCheckBox
-            type="checkbox"
-            [(ngModel)]="data.showAtInvoice"
-            name="showAtInvoice"
-          />
+          <input kendoCheckBox type="checkbox" [(ngModel)]="data.showAtInvoice" name="showAtInvoice" />
           <label class="k-checkbox-label">{{ language.showAtInvoice }}</label>
         </div>
         <div class="col-md-12 col-xs-12" style="padding-top: 10px">
           <kendo-textbox-container floatingLabel="{{ language.comment }}">
-            <textarea
-              kendoTextArea
-              type="text"
-              class="col-xs-12"
-              [(ngModel)]="data.comment"
-              name="comment"
-            ></textarea>
+            <textarea kendoTextArea type="text" class="col-xs-12" [(ngModel)]="data.comment" name="comment"></textarea>
           </kendo-textbox-container>
         </div>
         <div class="form-group" style="text-align: center">
-          <button
-            *ngIf="operationMode === 'add'"
-            kendoButton
-            [primary]="true"
-            class="form-button"
-            [disabled]="eventCategoryForm.form.invalid"
-            type="submit"
-          >
+          <button *ngIf="operationMode === 'add'" kendoButton [primary]="true" class="form-button"
+            [disabled]="eventCategoryForm.form.invalid" type="submit">
             {{ language.add }}
           </button>
-          <button
-            *ngIf="operationMode === 'edit'"
-            kendoButton
-            [primary]="true"
-            class="form-button"
-            [disabled]="eventCategoryForm.form.invalid"
-            type="submit"
-          >
+          <button *ngIf="operationMode === 'edit'" kendoButton [primary]="true" class="form-button"
+            [disabled]="eventCategoryForm.form.invalid" type="submit">
             {{ language.edit }}
           </button>
         </div>

@@ -24,7 +24,7 @@ export class MassiveSmsComponent implements OnInit {
   constructor(
     private helpService: HelpService,
     private dynamicService: DynamicService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.language = this.helpService.getLanguage();
@@ -47,6 +47,7 @@ export class MassiveSmsComponent implements OnInit {
     this.changeData.superadmin = this.helpService.getSuperadmin();
     this.changeData.countryCode =
       this.helpService.getLocalStorage("countryCode");
+
     this.getFilteredRecipients();
     this.recipients.open();
   }

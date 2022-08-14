@@ -5946,18 +5946,24 @@ router.post("/getFilteredRecipients", function (req, res) {
         table = "sms_massive_message";
       }
 
+      var excludeQuery='';
+      if(req.body.excludeCustomersWithEvents)
+      {
+        excludeQuery = 'c.id not in (select t.customer_id from tasks t where t.start > now()) and'; 
+      }
+      
       conn.query(
         "select distinct c.* from customers c join " +
-          table +
-          " sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin " +
-          joinTable +
-          " where " +
-          checkAdditionalQuery +
-          " and c.storeId = " +
-          Number(req.body.superadmin) +
-          " and (" +
-          question +
-          ")",
+        table +
+        " sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin " +
+        joinTable +
+        " where " + excludeQuery  +
+        checkAdditionalQuery +
+        " and c.storeId = " +
+        Number(req.body.superadmin) +
+        " and (" +
+        question +
+        ")",
         function (err, rows) {
           conn.release();
           if (err) return err;
