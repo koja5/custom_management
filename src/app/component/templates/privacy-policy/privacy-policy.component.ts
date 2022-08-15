@@ -9,7 +9,6 @@ import { LoginService } from "src/app/service/login.service";
 })
 export class PrivacyPolicyComponent implements OnInit {
   public language: any;
-
   constructor(
     private helpService: HelpService,
     private service: LoginService

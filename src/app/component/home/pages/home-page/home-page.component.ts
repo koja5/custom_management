@@ -71,7 +71,7 @@ export class HomePageComponent implements OnInit {
   getLanguageByCode(language: string, code: string) {
     this.loginService.getLanguageForLanding(language).subscribe((data) => {
       this.helpService.setLanguageForLanding(data);
-      this.helpService.setSelectionLanguage(code);
+      this.helpService.setSelectionLanguageCode(code);
       this.language = this.helpService.getLanguageForLanding();
     });
   }

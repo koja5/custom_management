@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 import { HelpService } from "src/app/service/help.service";
 
 @Component({
@@ -36,7 +37,7 @@ export class PriceComponent implements OnInit {
   ];
   public selectedPackage = 0;
 
-  constructor(private helpService: HelpService) {}
+  constructor(private helpService: HelpService, private router: Router) {}
 
   ngOnInit(): void {
     this.language = this.helpService.getLanguageForLanding();
@@ -50,5 +51,7 @@ export class PriceComponent implements OnInit {
     this.language = this.helpService.getLanguageForLanding();
   }
 
-  getStarted(name, price) {}
+  getStarted(name, price) {
+    this.router.navigate(["/request-demo"]);
+  }
 }

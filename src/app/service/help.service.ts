@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Title } from "@angular/platform-browser";
 import "rxjs/add/operator/map";
 import { ToastrService } from "ngx-toastr";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -278,6 +279,23 @@ export class HelpService {
       return localStorage.getItem("selectionLanguage");
     } else {
       return null;
+    }
+  }
+
+  getRealLanguageName(): Observable<any> {
+    if (this.getSelectionLanguage()) {
+      return <any>this.getSelectionLanguage();
+    } else {
+      const selectedLanguageCode = this.getSelectionLanguageCode();
+      this.getAllLangs().subscribe((data: any) => {
+        for (let i = 0; i < data.length; i++) {
+          for (let j = 0; j < data[i].similarCode.length; j++) {
+            if (data[i].similarCode[j] === selectedLanguageCode) {
+              return data[i].name;
+            }
+          }
+        }
+      });
     }
   }
 

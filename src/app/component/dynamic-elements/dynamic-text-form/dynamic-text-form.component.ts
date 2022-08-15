@@ -9,12 +9,29 @@ import { HelpService } from "src/app/service/help.service";
 export class DynamicTextFormComponent implements OnInit {
   @Input() type!: string;
   public language: any;
+  public landingLanguage: any;
 
   constructor(private helpService: HelpService) {}
 
   ngOnInit(): void {
-    const selectionLanguage = this.helpService.getSelectionLanguage();
-    this.initializeLanguage(selectionLanguage);
+    if (this.helpService.getSelectionLanguage()) {
+      this.initializeLanguage(this.helpService.getSelectionLanguage());
+    } else {
+      const selectedLanguageCode = this.helpService.getSelectionLanguageCode();
+      this.helpService.getAllLangs().subscribe((data: any) => {
+        for (let i = 0; i < data.length; i++) {
+          for (let j = 0; j < data[i].similarCode.length; j++) {
+            if (data[i].similarCode[j] === selectedLanguageCode) {
+              this.initializeLanguage(data[i].name);
+              break;
+            }
+          }
+        }
+      });
+    }
+    this.helpService.getRealLanguageName().subscribe((selectionLanguage) => {
+      this.initializeLanguage(selectionLanguage);
+    });
   }
 
   initializeLanguage(selectionLanguage: any) {
@@ -23,9 +40,15 @@ export class DynamicTextFormComponent implements OnInit {
       .subscribe((data) => {
         this.language = data;
       });
+    this.landingLanguage = this.helpService.getLanguageForLanding();
   }
 
   changeLanguage(event: string) {
     this.initializeLanguage(event);
+  }
+
+  sendEventForChangeLanguage(event: any) {
+    const selectionLanguage = this.helpService.getSelectionLanguage();
+    this.initializeLanguage(selectionLanguage);
   }
 }
