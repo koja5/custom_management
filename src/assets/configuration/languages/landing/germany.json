@@ -272,5 +272,9 @@
                 ]
             }
         ]
-    }
+    },
+    "notFoundTitle": "Seite nicht gefunden!",
+    "notFoundText": "Die gesuchte Seite existiert nicht.",
+    "notFoundBackButton": "Der Rücken",
+    "notFoundCopyRight": "Copyright © 2022 ClinicNode. Alle Rechte vorbehalten."
 }

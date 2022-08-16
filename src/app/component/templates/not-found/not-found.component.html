@@ -6,13 +6,10 @@
         <div>
           <img src="../../../../assets/images/404.gif" style="width: 270px" />
         </div>
-        <h1 class="blueText">Page not found!</h1>
-        <p class="blueText">The page you are looking for doesn't exist.</p>
-        <p class="blueText">
-          Go back, or head over to clinicnode.com to choose a new direction.
-        </p>
-        <button class="go-home">
-          <a routerLink="./"> GO TO CLINICNODE</a>
+        <h1 class="blueText">{{language.notFoundTitle}}</h1>
+        <p class="blueText">{{language.notFoundText}}</p>
+        <button class="go-home" (click)="backButton()">
+          {{language.notFoundBackButton}}
         </button>
       </div>
     </div>
@@ -20,6 +17,6 @@
 
   <div class="footer">
     <img src="./assets/images/brand-logo.png" />
-    <p>Copyright © 2020 ClinicNode. All rights reserved.</p>
+    <p>{{language.notFoundCopyRight}}</p>
   </div>
 </body>

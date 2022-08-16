@@ -272,5 +272,9 @@
                 ]
             }
         ]
-    }
+    },
+    "notFoundTitle": "Stranica nije pronadjena!",
+    "notFoundText": "Stranica koju trazite nije pronadjena ili uopste ne postoji!",
+    "notFoundBackButton": "Vrati se nazad",
+    "notFoundCopyRight": "Autorska prava © 2020 ClinicNode. Sva prava zadrzana."
 }

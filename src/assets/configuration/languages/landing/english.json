@@ -272,5 +272,9 @@
                 ]
             }
         ]
-    }
+    },
+    "notFoundTitle": "Page not found!",
+    "notFoundText": "The page you are looking for does not exist.",
+    "notFoundBackButton": "Back",
+    "notFoundCopyRight": "Copyright © 2020 ClinicNode. All rights reserved."
 }
