@@ -380,6 +380,14 @@
                                   {{ language?.changeSuperadminProfile }}
                                 </a>
                               </li>
+                              <li *ngIf="type === userType.admin || type === userType.admin || user.id === 4"
+                                class="{{ selectedNodeModel['define_holidays'] }}">
+                                <a (click)="returnActiveNode('define_holidays')"
+                                  routerLink="/dashboard/home/define-holidays">
+                                  <i class="fa fa-calendar-plus-o"></i>
+                                  <span class="navigation-link"> {{ language["chooseHoliday"] }}</span>
+                                </a>
+                              </li>
                               <li class="pl-4 pt-2 pb-2">
                                 <span class="header-item-node">{{
                                   language.headerMenuPersonalization
@@ -524,14 +532,6 @@
                                   " class="nav-link"><i class="fa fa-envelope"></i>
                                   <span class="navigation-link"></span>
                                   {{ language?.mailMassiveMessage }}
-                                </a>
-                              </li>
-                              <li *ngIf="type === userType.admin || type === userType.admin || user.id === 4"
-                                class="{{ selectedNodeModel['define_holidays'] }}">
-                                <a (click)="returnActiveNode('define_holidays')"
-                                  routerLink="/dashboard/home/define-holidays">
-                                  <i class="fa fa-calendar-plus-o"></i>
-                                  <span class="navigation-link"> {{ language["chooseHoliday"] }}</span>
                                 </a>
                               </li>
                               <li class="{{
