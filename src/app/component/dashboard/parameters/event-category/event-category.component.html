@@ -35,9 +35,9 @@
             <a (click)="exportToExcel(grid, false)"><span class="k-icon k-i-file-excel"></span>
               {{ language.exportToExcel }}
             </a>
-  
+
             <a (click)="exportToExcel(grid, true)"><span class="k-icon k-i-file-excel"></span>
-              {{ language.exportAllToExcel }}  
+              {{ language.exportAllToExcel }}
             </a>
           </div>
         </div>
@@ -57,7 +57,7 @@
     <kendo-grid-checkbox-column field="showAtInvoice" title="{{ language.showAtInvoice }}" [width]="100">
       <ng-template kendoGridCellTemplate let-dataItem>
         <div class="text-center">
-          <input type="checkbox" kendoCheckBox [disabled]="true" (click)=setSelectedItem(dataItem)
+          <input type="checkbox" kendoCheckBox [disabled]="true" (click)="setSelectedItem(dataItem)"
             [(ngModel)]="dataItem.showAtInvoice" />
         </div>
       </ng-template>
@@ -117,14 +117,14 @@
         </div>
         <div class="text-center m-t-md">
           <p class="m-b-none">
-            {{language.noRecordYet}}
+            {{ language.noRecordYet }}
           </p>
         </div>
       </div>
     </ng-template>
   </kendo-grid>
 
-  <kendo-dialog title="{{language.pleaseConfirm}}" *ngIf="importExcel" (close)="importExcel = false" [minWidth]="250"
+  <kendo-dialog title="{{ language.pleaseConfirm }}" *ngIf="importExcel" (close)="importExcel = false" [minWidth]="250"
     [width]="450">
     <p style="margin: 30px; text-align: center">
       Are you sure you want to import data from excel?
@@ -135,15 +135,17 @@
     </kendo-dialog-actions>
   </kendo-dialog>
 
-  <kendo-dialog title="{{language.pleaseConfirm}}" *ngIf="deleteModal" (close)="deleteModal = false" [minWidth]="250"
+  <kendo-dialog title="{{ language.pleaseConfirm }}" *ngIf="deleteModal" (close)="deleteModal = false" [minWidth]="250"
     [width]="450">
     <div class="modal-body text-center">
       <img src="../../../../assets/images/sent.png" alt="" width="50" height="46" />
-      <h3>{{language.areYouSure}}</h3>
+      <h3>{{ language.areYouSure }}</h3>
     </div>
     <kendo-dialog-actions>
-      <button kendoButton (click)="action('no')">{{language.no}}</button>
-      <button kendoButton (click)="action('yes')" primary="true">{{language.yes}}</button>
+      <button kendoButton (click)="action('no')">{{ language.no }}</button>
+      <button kendoButton (click)="action('yes')" primary="true">
+        {{ language.yes }}
+      </button>
     </kendo-dialog-actions>
   </kendo-dialog>
 
@@ -164,9 +166,7 @@
               ? createEventCategory($event)
               : updateEventCategory($event)
             : null
-        " #eventCategoryForm="ngForm"
-          (change)="isDirty()"
-          >
+        " #eventCategoryForm="ngForm" (change)="isDirty()">
         <div class="col-md-12 col-xs-12">
           <kendo-textbox-container floatingLabel="{{ language.category }}({{ language.required }})">
             <input kendoTextBox type="text" class="col-xs-12" [(ngModel)]="data.category" name="category" required />

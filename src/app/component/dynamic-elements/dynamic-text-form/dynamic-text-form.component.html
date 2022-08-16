@@ -1,0 +1,19 @@
+<div class="main-wrapper">
+  <app-home-navigation-menu [language]="landingLanguage"
+    (sendEventForChangeLanguage)="sendEventForChangeLanguage($event)">
+  </app-home-navigation-menu>
+
+  <section *ngIf="language">
+    <div class="card mt-0 mb-0">
+      <h2 class="primary-heading">{{ language.title }}</h2>
+      <p class="paragraph" *ngFor="let item of language.text">
+        {{ item }}
+      </p>
+    </div>
+  </section>
+
+  <footer class="footer-section">
+    <app-footer-section></app-footer-section>
+    <app-home-footer [language]="landingLanguage"></app-home-footer>
+  </footer>
+</div>

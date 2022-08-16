@@ -9031,10 +9031,10 @@ router.post("/sendReqestForDemoAccountFull", function (req, res, next) {
   body.request_for_demo_account_full.fields["name"] = req.body.name;
   body.request_for_demo_account_full.fields["email"] = req.body.email;
   body.request_for_demo_account_full.fields["phone"] = req.body.phone;
-  body.request_for_demo_account_full.fields["nameOfKindergarden"] =
-    req.body.nameOfKindergarden;
-  body.request_for_demo_account_full.fields["countOfChildrens"] =
-    req.body.countOfChildrens;
+  body.request_for_demo_account_full.fields["nameOfCompany"] =
+    req.body.nameOfCompany;
+  body.request_for_demo_account_full.fields["countOfEmployees"] =
+    req.body.countOfEmployees;
   body.request_for_demo_account_full.fields["notes"] = req.body.notes;
 
   var options = {

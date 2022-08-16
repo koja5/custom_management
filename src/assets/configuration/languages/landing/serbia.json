@@ -133,6 +133,8 @@
     "contactSectionFormMessage": "Poruka",
     "contactSectionFormMessagePlaceholder": "Kako možete da Vam pomognemo?",
     "contactSectionFormSendButton": "Pošalji upit",
+    "needToInputRequiredFields": "Sva obavezna polja moraju biti popunjena!",
+    "successfullySendMessageRequest": "Uspešno ste poslali poruku!",
     "requestSectionTitle": "Digitalizujte Vaš vrtić!",
     "requestSectionText1": "Savremene tehnologije su tu da nam olakšaju svakodnevni rad i povećaju efikasnost!",
     "requestSectionText2": "Uvođenjem KidsNode-a imaćete kompletan pregled svih segmenata vrtića na jednom mestu, čime će Vaše poslovanje postati mnogo efikasnije, a sama organizacija i planiranje aktivnosti kako Vas, tako i Vaših zaposlenih jednostavnija!",
@@ -141,7 +143,7 @@
     "requestSectionFormName": "Ime(*)",
     "requestSectionFormEmail": "Email(*)",
     "requestSectionFormPhone": "Telefon(*)",
-    "requestSectionFormNameOfKindergarden": "Ime vrtića(*)",
+    "requestSectionFormnameOfCompany": "Ime vrtića(*)",
     "requestSectionFormChooiceNumberOfChildrens": "Odaberite broj dece(*)",
     "requestSectionFormMessage": "Recite nam nešto više o vama(opciono)",
     "requestSectionFormSendRequestButton": "Pošalji zahtev",
@@ -167,5 +169,112 @@
     "footerTerms": "Uslovi",
     "from": "Od",
     "to": "Do",
-    "across": "Preko"
+    "across": "Preko",
+    "getStarted": "IZABERI PAKET",
+    "requestDemoDropdownNumbers": [
+        "0 - 5",
+        "6 - 10",
+        "11 - 20",
+        "21 - 50",
+        "51 - 100",
+        "101 - 500",
+        "Preko 500"
+    ],
+    "priceTable": {
+        "header": [
+            {
+                "nameOfPackageTitle": "Free",
+                "nameOfPackageText": "Starter plan",
+                "price": "FREE"
+            },
+            {
+                "nameOfPackageTitle": "Personal",
+                "nameOfPackageText": "Longer data retention",
+                "price": "9/mo"
+            },
+            {
+                "nameOfPackageTitle": "Pro",
+                "nameOfPackageText": "Our complete solution",
+                "price": "39/mo"
+            }
+        ],
+        "functions": [
+            {
+                "name": "Sites",
+                "descriptionPerPackages": [
+                    "exists",
+                    "not-exists",
+                    "180 Days"
+                ]
+            },
+            {
+                "name": "Data Retention",
+                "descriptionPerPackages": [
+                    "30 Days",
+                    "90 Days",
+                    "180 Days"
+                ]
+            },
+            {
+                "name": "Chart Annotations",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Uptime Monitoring",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Weekly Reports",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "not-exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Security Audit",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "On-Demand Audit",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "not-exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Priority Support",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Easy Billing + No Contracts",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            }
+        ]
+    },
+    "notFoundTitle": "Stranica nije pronadjena!",
+    "notFoundText": "Stranica koju trazite nije pronadjena ili uopste ne postoji!",
+    "notFoundBackButton": "Vrati se nazad",
+    "notFoundCopyRight": "Autorska prava © 2020 ClinicNode. Sva prava zadrzana."
 }

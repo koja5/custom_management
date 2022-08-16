@@ -1,8 +1,11 @@
 export class ReqeustDemoAccount {
+  firstname!: string;
+  lastname!: string;
   name!: string;
   email!: string;
   phone!: string;
-  nameOfKindergarden!: string;
-  countOfChildrens!: string;
+  nameOfCompany!: string;
+  countOfEmployees!: string;
   notes!: string;
+  message!: string;
 }

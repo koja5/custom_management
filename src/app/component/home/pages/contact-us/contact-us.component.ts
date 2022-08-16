@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { ReqeustDemoAccount } from "src/app/models/request-demo-account";
 import { DynamicService } from "src/app/service/dynamic.service";
 import { HelpService } from "src/app/service/help.service";
 
@@ -8,13 +9,7 @@ import { HelpService } from "src/app/service/help.service";
   styleUrls: ["./contact-us.component.scss"],
 })
 export class ContactUsComponent implements OnInit {
-  public form = {
-    firstname: "",
-    lastname: "",
-    phone: "",
-    email: "",
-    message: "",
-  };
+  public form = new ReqeustDemoAccount();
   public status = -1;
   public language: any;
 
@@ -40,7 +35,12 @@ export class ContactUsComponent implements OnInit {
       this.callApi
         .callApiPost("/api/sendFromContactForm", this.form)
         .subscribe((data) => {
-          this.status = 1;
+          if (data) {
+            this.status = 1;
+            this.form = new ReqeustDemoAccount();
+          } else {
+            this.status = 0;
+          }
         });
     }
   }
