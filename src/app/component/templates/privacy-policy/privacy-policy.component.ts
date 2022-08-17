@@ -9,7 +9,6 @@ import { LoginService } from "src/app/service/login.service";
 })
 export class PrivacyPolicyComponent implements OnInit {
   public language: any;
-
   constructor(
     private helpService: HelpService,
     private service: LoginService
@@ -21,9 +20,9 @@ export class PrivacyPolicyComponent implements OnInit {
     } else {
       this.service
         .getTranslationByCountryCode(
-          this.helpService.getSelectionLangaugeCode()
-            ? this.helpService.getSelectionLangaugeCode()
-            : this.helpService.getSelectionLangauge()
+          this.helpService.getSelectionLanguageCode()
+            ? this.helpService.getSelectionLanguageCode()
+            : this.helpService.getSelectionLanguage()
         )
         .subscribe((language) => {
           if (language !== null) {

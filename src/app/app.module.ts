@@ -56,7 +56,7 @@ import { SharedComponentsModule } from "./shared/shared-components.module";
 import { HomedModule } from "./component/home/routing-module/home.module";
 import { RouterModule } from "@angular/router";
 import { StorageService } from "./service/storage.service";
-import { FormGuard } from "./service/form-guard/formGuard";
+import { DynamicTextFormComponent } from "./component/dynamic-elements/dynamic-text-form/dynamic-text-form.component";
 
 @NgModule({
   declarations: [
@@ -67,7 +67,7 @@ import { FormGuard } from "./service/form-guard/formGuard";
     PatientFormSuccessComponent,
     PrivacyPolicyComponent,
     TermsComponent,
-    ImpressumComponent,
+    ImpressumComponent
   ],
   imports: [
     CommonModule,
@@ -93,7 +93,6 @@ import { FormGuard } from "./service/form-guard/formGuard";
     CookieService,
     TaskService,
     LoggedGuard,
-    FormGuard,
     DashboardGuard,
     LoginGuard,
     MessageService,

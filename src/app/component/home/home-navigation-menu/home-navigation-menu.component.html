@@ -1,34 +1,15 @@
 <!--header start-->
 <header class="main-header w-100" *ngIf="language && selectionLanguage">
-  <nav
-    class="navbar navbar-expand-xl {{
+  <nav class="navbar navbar-expand-xl {{
       color ? color : 'navbar-light'
-    }} sticky-header {{ navigationScroll }}"
-  >
-    <div
-      class="container d-flex align-items-center justify-content-lg-between position-relative"
-    >
-      <a
-        routerLink="/"
-        class="navbar-brand d-flex align-items-center mb-md-0 text-decoration-none"
-      >
-        <img
-          src="./assets/images/brand-logo.png"
-          alt="logo"
-          class="img-fluid logo-white"
-        />
-        <img
-          src="./assets/images/brand-logo.png"
-          alt="logo"
-          class="img-fluid logo-color"
-        />
+    }} sticky-header {{ navigationScroll }}">
+    <div class="container d-flex align-items-center justify-content-lg-between position-relative">
+      <a routerLink="/" class="navbar-brand d-flex align-items-center mb-md-0 text-decoration-none">
+        <img src="./assets/images/brand-logo.png" alt="logo" class="img-fluid logo-white" />
+        <img src="./assets/images/brand-logo.png" alt="logo" class="img-fluid logo-color" />
       </a>
 
-      <a
-        class="navbar-toggler position-absolute right-0 border-0"
-        role="button"
-        (click)="canvasNavigationMobile()"
-      >
+      <a class="navbar-toggler position-absolute right-0 border-0" role="button" (click)="canvasNavigationMobile()">
         <span class="fa fa-bars"></span>
       </a>
 
@@ -42,18 +23,18 @@
           <li>
             <a class="nav-link" routerLink="/features">{{
               language.navigationMenuFeature
-            }}</a>
+              }}</a>
           </li>
           <li>
             <a class="nav-link" routerLink="/prices">{{
               language.navigationMenuPrice
-            }}</a>
+              }}</a>
           </li>
           <!-- <li><a class="nav-link" routerLink="/about-us">O nama</a></li> -->
           <li>
             <a class="nav-link" routerLink="/contact-us">{{
               language.navigationMenuContact
-            }}</a>
+              }}</a>
           </li>
         </ul>
       </div>
@@ -61,67 +42,36 @@
       <div class="sl-nav">
         <ul>
           <li>
-            <img
-              *ngIf="selectionLanguage"
-              class="flag"
-              src="../../../../assets/icons/flags/{{ selectionLanguage }}.png"
-            />
+            <img *ngIf="selectionLanguage" class="flag"
+              src="../../../../assets/icons/flags/{{ selectionLanguage }}.png" />
             &nbsp;
             <i class="fa fa-angle-down" aria-hidden="true"></i>
             <div class="triangle"></div>
             <ul *ngIf="chooseLang">
-              <li
-                *ngFor="let item of chooseLang"
-                (click)="changeLanguage(item.code, item.name)"
-              >
-                <img
-                  class="flag"
-                  src="../../../../assets/icons/flags/{{ item.flag }}"
-                />
-                <span
-                  class="{{ selectionLanguage == item.code ? 'active' : '' }}"
-                  >{{ language[item.name] }}</span
-                >
+              <li *ngFor="let item of chooseLang" (click)="changeLanguage(item.code, item.name)">
+                <img class="flag" src="../../../../assets/icons/flags/{{ item.flag }}" />
+                <span class="{{ selectionLanguage == item.code ? 'active' : '' }}">{{ language[item.name] }}</span>
               </li>
             </ul>
           </li>
         </ul>
       </div>
 
-      <div
-        class="action-btns text-end mr-5 me-lg-0 d-none d-md-block d-lg-block"
-      >
-        <a
-          routerLink="../login"
-          class="btn btn-link text-decoration-none mr-2"
-          >{{ language.navigationMenuSignIn }}</a
-        >
+      <div class="action-btns text-end mr-5 me-lg-0 d-none d-md-block d-lg-block">
+        <a routerLink="../login" class="btn btn-link text-decoration-none mr-2">{{ language.navigationMenuSignIn }}</a>
         <a routerLink="../request-demo" class="btn btn-primary">{{
           language.navigationMenuSignUp
-        }}</a>
+          }}</a>
       </div>
 
       <!--offcanvas menu start-->
       <div class="offcanvas offcanvas-end {{ navigationMobile }}" tabindex="-1">
         <div class="offcanvas-header d-flex align-items-center mt-4">
-          <a
-            routerLink="/"
-            class="d-flex align-items-center mb-md-0 text-decoration-none"
-          >
-            <img
-              src="./assets/home/logo-color.png"
-              alt="logo"
-              class="img-fluid ps-2"
-              style="width: 150px"
-            />
+          <a routerLink="/" class="d-flex align-items-center mb-md-0 text-decoration-none">
+            <img src="./assets/images/brand-logo.png" alt="logo" class="img-fluid ps-2" style="width: 150px" />
           </a>
-          <button
-            type="button"
-            class="close-btn text-danger"
-            data-bs-dismiss="offcanvas"
-            aria-label="Close"
-            (click)="canvasNavigationMobile()"
-          >
+          <button type="button" class="close-btn text-danger" data-bs-dismiss="offcanvas" aria-label="Close"
+            (click)="canvasNavigationMobile()">
             <i class="fa fa-times"></i>
           </button>
         </div>
@@ -134,28 +84,23 @@
             </li>
             <li>
               <a class="nav-link" routerLink="/features">
-                {{ language.navigationMenuFeature }}</a
-              >
+                {{ language.navigationMenuFeature }}</a>
             </li>
             <li>
               <a class="nav-link" routerLink="/prices">
-                {{ language.navigationMenuPrice }}</a
-              >
+                {{ language.navigationMenuPrice }}</a>
             </li>
             <!-- <li><a class="nav-link" routerLink="/about-us">O nama</a></li> -->
             <li>
               <a class="nav-link" routerLink="/contact-us">
-                {{ language.navigationMenuContact }}</a
-              >
+                {{ language.navigationMenuContact }}</a>
             </li>
           </ul>
           <div class="action-btns mt-4 ps-3 text-center">
             <a routerLink="../login" class="btn btn-outline-primary mr-2">
-              {{ language.navigationMenuSignIn }}</a
-            >
+              {{ language.navigationMenuSignIn }}</a>
             <a routerLink="../request-demo" class="btn btn-primary">
-              {{ language.navigationMenuSignUp }}</a
-            >
+              {{ language.navigationMenuSignUp }}</a>
           </div>
         </div>
       </div>

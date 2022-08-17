@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit {
 
   initialization() {
     if (
-      this.helpService.getSelectionLangaugeCode() &&
+      this.helpService.getSelectionLanguageCode() &&
       this.helpService.getLanguage()
     ) {
       this.language = this.helpService.getLanguage();

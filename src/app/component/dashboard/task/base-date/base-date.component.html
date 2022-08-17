@@ -1555,18 +1555,36 @@
     >
       <modal-header>
         <h2>{{ language.fileUploadTitle }}</h2>
-        <button type="button" class="close" data-dismiss="modal"  (click)="confirmClose(upload)">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          (click)="confirmClose(upload)"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
       </modal-header>
       <modal-content>
-        <kendo-dialog *ngIf="showDialog" title="{{ language?.changesWontBeSavedTitle }}" [minWidth]="250" [width]="450">
+        <kendo-dialog
+          *ngIf="showDialog"
+          title="{{ language?.changesWontBeSavedTitle }}"
+          [minWidth]="250"
+          [width]="450"
+        >
           <p style="margin: 30px; text-align: center">
             {{ language?.changesWontBeSaved }}
           </p>
           <kendo-dialog-actions>
-            <button kendoButton (click)="receiveConfirm(false, upload)">{{language.no}}</button>
-            <button kendoButton (click)="receiveConfirm(true, upload)" primary="true">{{language.yes}}</button>
+            <button kendoButton (click)="receiveConfirm(false, upload)">
+              {{ language.no }}
+            </button>
+            <button
+              kendoButton
+              (click)="receiveConfirm(true, upload)"
+              primary="true"
+            >
+              {{ language.yes }}
+            </button>
           </kendo-dialog-actions>
         </kendo-dialog>
         <div>
@@ -1736,21 +1754,43 @@
       </modal-footer>
     </modal>
 
-    <modal #complaint modalClass="modal-lg" (keydown.esc)="confirmClose(complaint)">
+    <modal
+      #complaint
+      modalClass="modal-lg"
+      (keydown.esc)="confirmClose(complaint)"
+    >
       <modal-header>
         <h4>{{ getTranslate(operationMode) }}</h4>
-        <button type="button" class="close" data-dismiss="modal"  (click)="confirmClose(complaint)">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          (click)="confirmClose(complaint)"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
       </modal-header>
       <modal-content>
-        <kendo-dialog *ngIf="showDialog" title="{{ language?.changesWontBeSavedTitle }}" [minWidth]="250" [width]="450">
+        <kendo-dialog
+          *ngIf="showDialog"
+          title="{{ language?.changesWontBeSavedTitle }}"
+          [minWidth]="250"
+          [width]="450"
+        >
           <p style="margin: 30px; text-align: center">
             {{ language?.changesWontBeSaved }}
           </p>
           <kendo-dialog-actions>
-            <button kendoButton (click)="receiveConfirm(false, complaint)">{{language.no}}</button>
-            <button kendoButton (click)="receiveConfirm(true, complaint)" primary="true">{{language.yes}}</button>
+            <button kendoButton (click)="receiveConfirm(false, complaint)">
+              {{ language.no }}
+            </button>
+            <button
+              kendoButton
+              (click)="receiveConfirm(true, complaint)"
+              primary="true"
+            >
+              {{ language.yes }}
+            </button>
           </kendo-dialog-actions>
         </kendo-dialog>
         <p style="margin: 30px; text-align: center">
@@ -2006,21 +2046,43 @@
       <modal-footer class="modal-footer-none"> </modal-footer>
     </modal>
 
-    <modal #customer modalClass="modal-lg" (keydown.esc)="confirmClose(customer)">
+    <modal
+      #customer
+      modalClass="modal-lg"
+      (keydown.esc)="confirmClose(customer)"
+    >
       <modal-header>
         <h4>{{ getTranslate(currentTab) }}</h4>
-        <button type="button" class="close" data-dismiss="modal"  (click)="confirmClose(customer)">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          (click)="confirmClose(customer)"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
       </modal-header>
       <modal-content>
-        <kendo-dialog *ngIf="showDialog" title="{{ language?.changesWontBeSavedTitle }}" [minWidth]="250" [width]="450">
+        <kendo-dialog
+          *ngIf="showDialog"
+          title="{{ language?.changesWontBeSavedTitle }}"
+          [minWidth]="250"
+          [width]="450"
+        >
           <p style="margin: 30px; text-align: center">
             {{ language?.changesWontBeSaved }}
           </p>
           <kendo-dialog-actions>
-            <button kendoButton (click)="receiveConfirm(false, customer)">{{language.no}}</button>
-            <button kendoButton (click)="receiveConfirm(true, customer)" primary="true">{{language.yes}}</button>
+            <button kendoButton (click)="receiveConfirm(false, customer)">
+              {{ language.no }}
+            </button>
+            <button
+              kendoButton
+              (click)="receiveConfirm(true, customer)"
+              primary="true"
+            >
+              {{ language.yes }}
+            </button>
           </kendo-dialog-actions>
         </kendo-dialog>
         <div class="tabs widget">

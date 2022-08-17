@@ -133,6 +133,8 @@
     "contactSectionFormMessage": "Message",
     "contactSectionFormMessagePlaceholder": "How can we help you?",
     "contactSectionFormSendButton": "Send an inquiry",
+    "needToInputRequiredFields": "All mandatory fields must be filled!",
+    "successfullySendMessageRequest": "You have successfully sent your message!",
     "requestSectionTitle": "Digitize your kindergarten!",
     "requestSectionText1": "Modern technologies are there to make our daily work easier and increase efficiency!",
     "requestSectionText2": "With the introduction of KidsNode, you will have a complete overview of all segments of kindergarten in one place, which will make your business much more efficient, and the organization and planning of activities for you and your employees easier!",
@@ -141,7 +143,7 @@
     "requestSectionFormName": "Name(*)",
     "requestSectionFormEmail": "E-mail(*)",
     "requestSectionFormPhone": "Phone(*)",
-    "requestSectionFormNameOfKindergarden": "Kindergarten name(*)",
+    "requestSectionFormnameOfCompany": "Kindergarten name(*)",
     "requestSectionFormChooiceNumberOfChildrens": "Choose the number of children(*)",
     "requestSectionFormMessage": "Tell us more about you (optional)",
     "requestSectionFormSendRequestButton": "Send request",
@@ -167,5 +169,112 @@
     "footerTerms": "Terms",
     "from": "From",
     "to": "To",
-    "across": "Across"
+    "across": "Across",
+    "getStarted": "GET STARTED",
+    "requestDemoDropdownNumbers": [
+        "0 - 5",
+        "6 - 10",
+        "11 - 20",
+        "21 - 50",
+        "51 - 100",
+        "101 - 500",
+        "Across 500"
+    ],
+    "priceTable": {
+        "header": [
+            {
+                "nameOfPackageTitle": "Free",
+                "nameOfPackageText": "Starter plan",
+                "price": "FREE"
+            },
+            {
+                "nameOfPackageTitle": "Personal",
+                "nameOfPackageText": "Longer data retention",
+                "price": "9/mo"
+            },
+            {
+                "nameOfPackageTitle": "Pro",
+                "nameOfPackageText": "Our complete solution",
+                "price": "39/mo"
+            }
+        ],
+        "functions": [
+            {
+                "name": "Sites",
+                "descriptionPerPackages": [
+                    "exists",
+                    "not-exists",
+                    "180 Days"
+                ]
+            },
+            {
+                "name": "Data Retention",
+                "descriptionPerPackages": [
+                    "30 Days",
+                    "90 Days",
+                    "180 Days"
+                ]
+            },
+            {
+                "name": "Chart Annotations",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Uptime Monitoring",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Weekly Reports",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "not-exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Security Audit",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "On-Demand Audit",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "not-exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Priority Support",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Easy Billing + No Contracts",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            }
+        ]
+    },
+    "notFoundTitle": "Page not found!",
+    "notFoundText": "The page you are looking for does not exist.",
+    "notFoundBackButton": "Back",
+    "notFoundCopyRight": "Copyright © 2020 ClinicNode. All rights reserved."
 }

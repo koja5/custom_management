@@ -79,7 +79,7 @@ export class UploadInterceptor implements OnInit {
     this.loginService.checkCountryLocation().subscribe(
       (data: any) => {
         if (
-          data.location.country.code !== this.helpService.getSelectionLangauge()
+          data.location.country.code !== this.helpService.getSelectionLanguage()
         ) {
           this.helpService.getAllLangs().subscribe((langs) => {
             this.setLanguageByLocation(data.location.country, langs);

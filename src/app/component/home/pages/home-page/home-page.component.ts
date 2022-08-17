@@ -25,7 +25,7 @@ export class HomePageComponent implements OnInit {
       this.initializationLanguage();
       this.selectionLanguage = this.helpService.getNameOfFlag();
       if (!this.selectionLanguage) {
-        this.selectionLanguage = this.helpService.getSelectionLangaugeCode();
+        this.selectionLanguage = this.helpService.getSelectionLanguageCode();
       }
     });
   }
@@ -40,9 +40,9 @@ export class HomePageComponent implements OnInit {
   }
 
   initializationLanguage() {
-    if (this.helpService.getSelectionLangaugeCode()) {
+    if (this.helpService.getSelectionLanguageCode()) {
       this.setLanguageByLocation(
-        this.helpService.getSelectionLangaugeCode(),
+        this.helpService.getSelectionLanguageCode(),
         this.chooseLang
       );
     } else {
@@ -71,7 +71,7 @@ export class HomePageComponent implements OnInit {
   getLanguageByCode(language: string, code: string) {
     this.loginService.getLanguageForLanding(language).subscribe((data) => {
       this.helpService.setLanguageForLanding(data);
-      this.helpService.setSelectionLanguage(code);
+      this.helpService.setSelectionLanguageCode(code);
       this.language = this.helpService.getLanguageForLanding();
     });
   }

@@ -21,6 +21,13 @@
     "field": "female"
   },
   {
+    "type": "checkbox",
+    "width": "col-md-12",
+    "name": "excludeCustomersWithEvents",
+    "label": "excludeCustomersWithEvents",
+    "field": "excludeCustomersWithEvents"
+  },
+  {
     "type": "datepicker",
     "width": "col-md-6",
     "format": "dd.MM.yyyy",
