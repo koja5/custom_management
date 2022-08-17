@@ -13,6 +13,7 @@ import { HelpService } from "src/app/service/help.service";
   styleUrls: ["./profile.component.scss"]
 })
 export class ProfileComponent implements OnInit {
+  @ViewChild('chooseImage') chooseImage: Modal;
   public user = false;
   public data: any;
   public companyData: any;
@@ -59,6 +60,10 @@ export class ProfileComponent implements OnInit {
         this.companyData = [];
       }
     });
+  }
+
+  updateImage() {
+    this.chooseImage.open();
   }
 
   changeTab(value: string) {

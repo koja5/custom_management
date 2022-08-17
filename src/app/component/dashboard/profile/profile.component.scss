@@ -92,3 +92,23 @@ input[type="email"]:disabled {
     border: 1px solid #fe0000;
     color: #fe0000;
 }
+
+.profile-userpic {
+    position: relative;
+}
+
+.editButtonImage {
+    position: absolute;
+    bottom: 0;
+    border-radius: 50px;
+    background-color: gray;
+    opacity: 0.3;
+
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.chooseImageInput {
+    display: block !important;
+}
