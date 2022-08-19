@@ -100,8 +100,8 @@ import { ActivatedRoute } from "@angular/router";
 import { HolidayService } from "src/app/service/holiday.service";
 import { PDFService } from "src/app/service/pdf.service";
 import { ParameterItemService } from "src/app/service/parameter-item.service";
-import { DateService } from 'src/app/service/date.service';
-import { InvoiceService } from 'src/app/service/invoice.service';
+import { DateService } from "src/app/service/date.service";
+import { InvoiceService } from "src/app/service/invoice.service";
 declare var moment: any;
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
@@ -692,7 +692,6 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   public getDateHeaderText(date): string {
-
     return this.intl.formatDate(date, { skeleton: "Ed" });
   }
 
@@ -1122,12 +1121,12 @@ export class DynamicSchedulerComponent implements OnInit {
     const checkCustomerId = this.customerUser.id
       ? this.customerUser
       : {
-        id: args.data.customer_id
-          ? args.data.customer_id
-          : args.data.user.id
+          id: args.data.customer_id
+            ? args.data.customer_id
+            : args.data.user.id
             ? args.data.user.id
             : null,
-      };
+        };
     formValue.user = checkCustomerId;
     formValue.customer_id = checkCustomerId.id;
     formValue.therapy_id = args.data.therapy_id;
@@ -1323,7 +1322,7 @@ export class DynamicSchedulerComponent implements OnInit {
         );
         timeDurationInd =
           Number(informationAboutStore.time_therapy) !==
-            Number(this.timeDuration)
+          Number(this.timeDuration)
             ? 1
             : 0;
         timeDuration = Number(informationAboutStore.time_therapy);
@@ -1341,7 +1340,7 @@ export class DynamicSchedulerComponent implements OnInit {
         } else {
           timeDurationInd =
             Number(informationAboutStore.time_therapy) !==
-              Number(this.timeDuration)
+            Number(this.timeDuration)
               ? 1
               : 0;
           timeDuration = Number(informationAboutStore.time_therapy);
@@ -1400,7 +1399,7 @@ export class DynamicSchedulerComponent implements OnInit {
     this.selectedTarget = closest(
       targetElement,
       ".e-appointment,.e-work-cells," +
-      ".e-vertical-view .e-date-header-wrap .e-all-day-cells,.e-vertical-view .e-date-header-wrap .e-header-cells"
+        ".e-vertical-view .e-date-header-wrap .e-all-day-cells,.e-vertical-view .e-date-header-wrap .e-header-cells"
     );
     if (isNullOrUndefined(this.selectedTarget)) {
       args.cancel = true;
@@ -1622,9 +1621,8 @@ export class DynamicSchedulerComponent implements OnInit {
     private pdfService: PDFService,
     private parameterItemService: ParameterItemService,
     private dateService: DateService,
-    private invoiceService: InvoiceService,
-
-  ) { }
+    private invoiceService: InvoiceService
+  ) {}
 
   ngOnInit() {
     this.initializationConfig();
@@ -1656,63 +1654,71 @@ export class DynamicSchedulerComponent implements OnInit {
 
   // load holidays defined by clinic and holidays defined by selected clinic template (if there is some)
   public loadHolidays() {
+    this.holidayService
+      .getHolidaysForClinic(this.selectedStoreId)
+      .then((result) => {
+        console.log(result);
+        if (result && result.length > 0) {
+          result.forEach((r) => {
+            // console.log('R: ', r);
+            this.allEvents.push({
+              Subject: r.Subject,
+              StartTime: new Date(r.StartTime).setHours(Number(this.startWork)),
+              EndTime: new Date(r.EndTime).setHours(Number(this.startWork + 1)),
+              IsAllDay: false,
+            });
 
-    this.holidayService.getHolidaysForClinic(this.selectedStoreId).then(result => {
-      console.log(result);
-      if (result && result.length > 0) {
-        result.forEach(r => {
-          // console.log('R: ', r);
-          this.allEvents.push({
-            Subject: r.Subject,
-            StartTime: new Date(r.StartTime).setHours(Number(this.startWork)),
-            EndTime: new Date(r.EndTime).setHours(Number(this.startWork + 1)),
-            IsAllDay: false
+            this.holidays.push({
+              Subject: r.Subject,
+              StartTime: new Date(r.StartTime),
+              EndTime: new Date(r.EndTime),
+              IsAllDay: true,
+            });
           });
-
-          this.holidays.push({
-            Subject: r.Subject,
-            StartTime: new Date(r.StartTime),
-            EndTime: new Date(r.EndTime),
-            IsAllDay: true
-          });
-        });
-
-      }
-    });
+        }
+      });
 
     // load holidays defined by clinic and holidays defined by selected clinic template (if there is some)
 
-    this.holidayService.getStoreTemplateConnection(this.selectedStoreId).then((ids) => {
-      const templateIds = ids.map(elem => elem.templateId);
+    this.holidayService
+      .getStoreTemplateConnection(this.selectedStoreId)
+      .then((ids) => {
+        const templateIds = ids.map((elem) => elem.templateId);
 
-      if (ids.length) {
-        this.holidayService.getHolidaysByTemplates(templateIds).then((result) => {
-          if (result && result.length > 0) {
-            result.forEach((r) => {
-              this.allEvents.push({
-                Subject: r.Subject,
-                StartTime: new Date(r.StartTime).setHours(Number(this.startWork)),
-                EndTime: new Date(r.EndTime).setHours(Number(this.startWork + 1)),
-                IsAllDay: false
-              });
+        if (ids.length) {
+          this.holidayService
+            .getHolidaysByTemplates(templateIds)
+            .then((result) => {
+              if (result && result.length > 0) {
+                result.forEach((r) => {
+                  this.allEvents.push({
+                    Subject: r.Subject,
+                    StartTime: new Date(r.StartTime).setHours(
+                      Number(this.startWork)
+                    ),
+                    EndTime: new Date(r.EndTime).setHours(
+                      Number(this.startWork + 1)
+                    ),
+                    IsAllDay: false,
+                  });
 
-              this.holidays.push({
-                Subject: r.Subject,
-                StartTime: new Date(r.StartTime),
-                EndTime: new Date(r.EndTime),
-                IsAllDay: true
-              });
+                  this.holidays.push({
+                    Subject: r.Subject,
+                    StartTime: new Date(r.StartTime),
+                    EndTime: new Date(r.EndTime),
+                    IsAllDay: true,
+                  });
+                });
+
+                this.scheduleObj.eventSettings.dataSource = this.allEvents;
+                this.scheduleObj.refresh();
+                this.scheduleObj.refreshEvents();
+              } else {
+                console.log("no holidayss");
+              }
             });
-
-            this.scheduleObj.eventSettings.dataSource = this.allEvents;
-            this.scheduleObj.refresh();
-            this.scheduleObj.refreshEvents();
-          } else {
-            console.log("no holidayss");
-          }
-        });
-      }
-    });
+        }
+      });
   }
 
   checkPreselectedStore() {
@@ -2469,7 +2475,7 @@ export class DynamicSchedulerComponent implements OnInit {
       value: this.value,
     };
 
-    this.mongo.setUsersFor(item).subscribe((data) => { });
+    this.mongo.setUsersFor(item).subscribe((data) => {});
   }
 
   getTaskForSelectedUsers(value) {
@@ -2576,7 +2582,7 @@ export class DynamicSchedulerComponent implements OnInit {
           for (let j = 0; j < eventStatistic.length; j++) {
             if (
               this.sharedCalendarResources[i].id ===
-              eventStatistic[j].creator_id &&
+                eventStatistic[j].creator_id &&
               userId === eventStatistic[j].creator_id
             ) {
               for (let k = 0; k < listOfCategorie.length; k++) {
@@ -2839,18 +2845,22 @@ export class DynamicSchedulerComponent implements OnInit {
         date.date.getYear() == holiday.EndTime.getYear()
     );
 
-    if (holiday) {
-      date.element.style.backgroundColor = "#e9ecef";
-      date.element.style.pointerEvents = "none";
+    // Marijana
+    // if (holiday) {
+    //   date.element.style.backgroundColor = "#e9ecef";
+    //   date.element.style.pointerEvents = "none";
 
-      // if (date.elementType === "dateHeader" && this.currentView !== "Month") {
-      //   const dateSplitted = date.date.toString().split(" ");
+    //deo je bio pod komentarom
 
-      //   // date - day - holiday
-      //   date.element.firstChild.innerText =
-      //     dateSplitted[2] + " " + dateSplitted[0] + " - " + holiday.Subject;
-      // }
-    }
+    // if (date.elementType === "dateHeader" && this.currentView !== "Month") {
+    //   const dateSplitted = date.date.toString().split(" ");
+
+    //   // date - day - holiday
+    //   date.element.firstChild.innerText =
+    //     dateSplitted[2] + " " + dateSplitted[0] + " - " + holiday.Subject;
+    // }
+    //deo je bio pod komentarom
+    // }
 
     if (date.elementType === "resourceHeader") {
       if (date.groupIndex < this.calendars.length - 1) {
@@ -2923,9 +2933,9 @@ export class DynamicSchedulerComponent implements OnInit {
               new Date(workItem.change) <= date.date &&
               (i + 1 <= this.calendars[0].workTime[date.groupIndex].length - 1
                 ? date.date <
-                new Date(
-                  this.calendars[0].workTime[date.groupIndex][i + 1].change
-                )
+                  new Date(
+                    this.calendars[0].workTime[date.groupIndex][i + 1].change
+                  )
                 : true) &&
               date.date.getDay() - 1 < 5 &&
               date.date.getDay() !== 0
@@ -2934,15 +2944,15 @@ export class DynamicSchedulerComponent implements OnInit {
                 (workItem.times[date.date.getDay() - 1].start <=
                   date.date.getHours() &&
                   workItem.times[date.date.getDay() - 1].end >
-                  date.date.getHours()) ||
+                    date.date.getHours()) ||
                 (workItem.times[date.date.getDay() - 1].start2 <=
                   date.date.getHours() &&
                   workItem.times[date.date.getDay() - 1].end2 >
-                  date.date.getHours()) ||
+                    date.date.getHours()) ||
                 (workItem.times[date.date.getDay() - 1].start3 <=
                   date.date.getHours() &&
                   workItem.times[date.date.getDay() - 1].end3 >
-                  date.date.getHours())
+                    date.date.getHours())
               ) {
                 date.element.style.background = workItem.color;
                 if (this.type === this.userType.readOnlyScheduler) {
@@ -3113,16 +3123,21 @@ export class DynamicSchedulerComponent implements OnInit {
       // console.log(data);
     });
 
-    this.parameterItemService.getSuperadminProfile(superadmin).subscribe((data) => {
-      this.superadminProfile = data[0];
-      this.invoiceID = this.superadminProfile.invoicePrefix + '-' + this.superadminProfile.invoiceID;
+    this.parameterItemService
+      .getSuperadminProfile(superadmin)
+      .subscribe((data) => {
+        this.superadminProfile = data[0];
+        this.invoiceID =
+          this.superadminProfile.invoicePrefix +
+          "-" +
+          this.superadminProfile.invoiceID;
 
-      console.log('invoiceID', this.invoiceID);
+        console.log("invoiceID", this.invoiceID);
 
-      this.changedInvoiceID = this.superadminProfile.invoiceID;
+        this.changedInvoiceID = this.superadminProfile.invoiceID;
 
-      console.log(data);
-    });
+        console.log(data);
+      });
   }
 
   pickToModel(data: any, titleValue) {
@@ -3591,7 +3606,11 @@ export class DynamicSchedulerComponent implements OnInit {
     console.log(args);
     console.log(window.innerWidth);
 
-    if (window.innerWidth > 992 || this.eventMoveConfirm || args.requestType !== "eventChange") {
+    if (
+      window.innerWidth > 992 ||
+      this.eventMoveConfirm ||
+      args.requestType !== "eventChange"
+    ) {
       if (!args) {
         args = this.mobileEventChange;
       }
@@ -3817,8 +3836,8 @@ export class DynamicSchedulerComponent implements OnInit {
   copyLinkToTheClinic() {
     this.helpService.copyToClipboard(
       this.helpService.getFullHostName() +
-      "/dashboard/home/task/" +
-      this.selectedStoreId
+        "/dashboard/home/task/" +
+        this.selectedStoreId
     );
     this.helpService.successToastr(
       this.language.successCopiedLinkForClinicReservation,
@@ -3830,8 +3849,8 @@ export class DynamicSchedulerComponent implements OnInit {
     if (this.invoiceID !== this.changedInvoiceID) {
       const data = {
         superAdminId: this.superadminProfile.id,
-        id: this.changedInvoiceID
-      }
+        id: this.changedInvoiceID,
+      };
       console.log("updateInvoiceID");
 
       this.invoiceService.updateInvoiceID(data).then(() => {
@@ -3849,11 +3868,9 @@ export class DynamicSchedulerComponent implements OnInit {
       .download(this.customerUser["firstname"] + this.customerUser["lastname"]);
 
     this.updateInvoiceID();
-
   }
 
   public printPDF(): void {
-
     const docDefinition = this.setupPDF();
     pdfMake.createPdf(docDefinition).print();
 
@@ -3861,8 +3878,9 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   private setupPDF() {
-
-    const selectedStore = this.store.filter(s => s.id = this.selectedStoreId)[0];
+    const selectedStore = this.store.filter(
+      (s) => (s.id = this.selectedStoreId)
+    )[0];
 
     const therapies = [];
     const netPrices = [];
@@ -3878,7 +3896,9 @@ export class DynamicSchedulerComponent implements OnInit {
         );
         // console.log(vatDefinition);
 
-        therapy.date = this.dateService.formatDate(new Date(this.eventTime.start).toLocaleDateString("en-CA").toString());
+        therapy.date = this.dateService.formatDate(
+          new Date(this.eventTime.start).toLocaleDateString("en-CA").toString()
+        );
 
         console.log("temp.date", therapy.date);
 
@@ -3910,17 +3930,19 @@ export class DynamicSchedulerComponent implements OnInit {
           this.selectedTherapies.length === 1 ||
           !this.isDateSet;
 
-
         // console.log(shouldSetDate + ' should set date');
 
         therapies.push({
-          title: (therapy.titleOnInvoice && therapy.titleOnInvoice.trim() !== "") ? therapy.titleOnInvoice : therapy.title,
+          title:
+            therapy.titleOnInvoice && therapy.titleOnInvoice.trim() !== ""
+              ? therapy.titleOnInvoice
+              : therapy.title,
           date: shouldSetDate ? therapy.date : "",
           net_price: isNaNPrice
             ? this.language.noDataAvailable
             : this.language.euroSign +
-            " " +
-            parseFloat(therapy.net_price).toFixed(2),
+              " " +
+              parseFloat(therapy.net_price).toFixed(2),
           vat: vatDefinition ? vatDefinition.title : 20,
           gross_price: isNaNPrice
             ? this.language.noDataAvailable
@@ -3936,7 +3958,7 @@ export class DynamicSchedulerComponent implements OnInit {
       (num) => !isNaN(parseFloat(num))
     );
     let vatValues = brutoPrices.map(function (item, index) {
-      // In this case item correspond to currentValue of array a, 
+      // In this case item correspond to currentValue of array a,
       // using index to get value from array b
       return item - netPrices[index];
     });
@@ -3953,7 +3975,10 @@ export class DynamicSchedulerComponent implements OnInit {
             width: "*",
           },
           {
-            text: this.language.dateTitle + " " + this.dateService.currentDateFormatted,
+            text:
+              this.language.dateTitle +
+              " " +
+              this.dateService.currentDateFormatted,
             style: "documentHeaderRight",
             width: "*",
           },
@@ -4003,11 +4028,17 @@ export class DynamicSchedulerComponent implements OnInit {
         {
           columns: [
             {
-              text: selectedStore.storename + '\n' + this.superadminProfile.shortname,
+              text:
+                selectedStore.storename +
+                "\n" +
+                this.superadminProfile.shortname,
               style: "invoiceBillingDetailsLeft",
             },
             {
-              text: this.customerUser.lastname.trim() + ' ' + this.customerUser.firstname.trim(),
+              text:
+                this.customerUser.lastname.trim() +
+                " " +
+                this.customerUser.firstname.trim(),
               style: "invoiceBillingDetailsRight",
             },
           ],
@@ -4016,9 +4047,25 @@ export class DynamicSchedulerComponent implements OnInit {
         {
           columns: [
             {
-              text: selectedStore.vatcode ?
-                selectedStore.street + "\n " + selectedStore.zipcode + " " + selectedStore.place + "\n" + this.language.vatIdentificationNumber + " " + selectedStore.vatcode
-                : selectedStore.street + "\n " + selectedStore.zipcode + " " + selectedStore.place + "\n" + this.language.vatIdentificationNumber + " " + this.superadminProfile.vatcode,
+              text: selectedStore.vatcode
+                ? selectedStore.street +
+                  "\n " +
+                  selectedStore.zipcode +
+                  " " +
+                  selectedStore.place +
+                  "\n" +
+                  this.language.vatIdentificationNumber +
+                  " " +
+                  selectedStore.vatcode
+                : selectedStore.street +
+                  "\n " +
+                  selectedStore.zipcode +
+                  " " +
+                  selectedStore.place +
+                  "\n" +
+                  this.language.vatIdentificationNumber +
+                  " " +
+                  this.superadminProfile.vatcode,
               style: "invoiceBillingAddressLeft",
             },
             {
@@ -4073,44 +4120,55 @@ export class DynamicSchedulerComponent implements OnInit {
         {
           columns: [
             {
-              text: '',
-              width: '20%'
+              text: "",
+              width: "20%",
             },
             {
-              text: '',
-              width: '20%'
+              text: "",
+              width: "20%",
             },
             {
-              text: netPrices.length === 0 ? this.language.noDataAvailable : (this.language.euroSign + " " + subtotal),
+              text:
+                netPrices.length === 0
+                  ? this.language.noDataAvailable
+                  : this.language.euroSign + " " + subtotal,
               style: "itemsFooterSubValue",
-              width: '20%',
+              width: "20%",
             },
             {
-              text: netPrices.length === 0 ? this.language.noDataAvailable : (this.language.euroSign + " " + vat),
+              text:
+                netPrices.length === 0
+                  ? this.language.noDataAvailable
+                  : this.language.euroSign + " " + vat,
               style: "itemsFooterVATValue",
-              width: '20%',
+              width: "20%",
             },
             {
-              text: brutoPrices.length === 0 ? this.language.noDataAvailable : (this.language.euroSign + " " + total),
+              text:
+                brutoPrices.length === 0
+                  ? this.language.noDataAvailable
+                  : this.language.euroSign + " " + total,
               style: "itemsFooterTotalValue",
-              width: '20%',
+              width: "20%",
             },
           ],
         },
         {
           text: this.language.notesTitle,
-          style: 'notesTextBold'
+          style: "notesTextBold",
         },
         {
           text: this.language.notesText,
-          style: 'notesText'
+          style: "notesText",
         },
       ],
       footer: {
         columns: [
           {
             text:
-              selectedStore.storename + ' ' + this.superadminProfile.shortname +
+              selectedStore.storename +
+              " " +
+              this.superadminProfile.shortname +
               this.dotSign +
               selectedStore.street +
               this.dotSign +
