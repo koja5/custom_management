@@ -14,6 +14,33 @@ const sendSmsFromMail = require("./ftpUploadSMS");
 const { delay } = require("rxjs-compat/operator/delay");
 const { concat } = require("rxjs-compat/operator/concat");
 const macAddress = require("os").networkInterfaces();
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      // cb(null, '../../src/assets/user-profile-images')
+      cb(null, 'src/assets/user-profile-images')
+    },
+
+    filename: (req, file, cb) => {
+      cb(null, Date.now() + path.extname(file.originalname))
+    }
+})
+
+const upload = multer({ storage: storage })
+
+router.post("/uploadProfileImage", upload.single('updateImageInput'), (req, res) => {
+  if (!req.file) {
+    return res.send({
+      success: false
+    });
+
+  } else {
+    return res.send({
+      success: true
+    })
+  }
+})
 
 var link = process.env.link_api;
 /*

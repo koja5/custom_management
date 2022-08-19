@@ -6,6 +6,7 @@ import { MessageService } from "../../../service/message.service";
 import { UploadEvent, RemoveEvent } from "@progress/kendo-angular-upload";
 import Swal from "sweetalert2";
 import { HelpService } from "src/app/service/help.service";
+import { AccountService } from "src/app/service/account.service";
 
 @Component({
   selector: "app-profile",
@@ -23,12 +24,14 @@ export class ProfileComponent implements OnInit {
   public uploadRemoveUrl: string;
   public language: any;
   public id: number;
+  updateImageInput: any;
 
   constructor(
     public service: UsersService,
     public sanitizer: DomSanitizer,
     public message: MessageService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private accountService: AccountService
   ) {}
 
   ngOnInit() {
@@ -61,6 +64,27 @@ export class ProfileComponent implements OnInit {
       }
     });
   }
+
+  fileChoosen(event: any) {
+    if(event.target.value) {
+      this.updateImageInput = <File>event.target.files[0];
+    }
+    
+  }
+
+  submitPhoto() {
+    let form = new FormData()
+    form.append("updateImageInput", this.updateImageInput);
+    console.log(this.updateImageInput);
+    this.accountService.updateProfileImage(form).subscribe();
+  }
+
+  // updateImageSubmit() {
+  //   let form = new FormData()
+  //   form.append("imeSlike", this.image);
+  //   console.log(this.image);
+  //   this.accountService.test(form).subscribe();
+  // }
 
   updateImage() {
     this.chooseImage.open();
