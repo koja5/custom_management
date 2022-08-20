@@ -32,6 +32,7 @@ import { DashboardService } from "src/app/service/dashboard.service";
 import { LoadingScreenService } from "src/app/shared/loading-screen/loading-screen.service";
 import { DateService } from "src/app/service/date.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { Router } from '@angular/router';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -91,7 +92,8 @@ export class InvoiceComponent implements OnInit {
   public selectedStoreInfo;
   public invoiceLanguage;
   public invoicePrefix: string;
-
+  currentUrl: string;
+  savePage = {};
   public pageSize = 10;
   public state: State = {
     skip: 0,
@@ -143,16 +145,24 @@ export class InvoiceComponent implements OnInit {
     private dashboardService: DashboardService,
     private loadingScreenService: LoadingScreenService,
     private dateService: DateService,
-    private invoiceService: InvoiceService
+    private invoiceService: InvoiceService,
+    private router: Router
   ) {
     this.allData = this.allData.bind(this);
   }
 
   ngOnInit() {
+    this.currentUrl = this.router.url;
     this.initializationConfig();
     this.initializationData();
 
     this.helpService.setDefaultBrowserTabTitle();
+
+    this.savePage = this.helpService.getGridPageSize();
+    if(this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
+      this.state.skip = this.savePage[this.currentUrl];
+      this.state.take = this.savePage[this.currentUrl + 'Take'];
+    }
   }
 
   public initializationConfig(): void {
@@ -385,6 +395,10 @@ export class InvoiceComponent implements OnInit {
     this.state.take = event.take;
     this.pageSize = event.take;
     this.gridViewData = process(this.currentLoadData, this.state);
+
+    this.savePage[this.currentUrl] = event.skip;
+    this.savePage[this.currentUrl + 'Take'] = event.take;
+    this.helpService.setGridPageSize(this.savePage);
   }
 
   public sortChange(sort: SortDescriptor[]): void {
