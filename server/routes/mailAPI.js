@@ -334,7 +334,7 @@ router.post("/sendConfirmArrivalAgain", function (req, res) {
     }
 
     conn.query(
-      "SELECT c.shortname, c.email as customer_email, s.*, t.start, t.end, u.lastname, u.firstname, th.therapies_title, c.storeId from customers c join tasks t on c.id = t.customer_id join therapy th on t.therapy_id = th.id join store s on t.storeId = s.id  join users u on t.creator_id = u.id join event_category e on t.colorTask = e.id where c.id = ? and t.id = ? and e.allowSendInformation = 1",
+      "SELECT c.shortname, c.email as customer_email, s.*, t.start, t.end, u.lastname, u.firstname, th.therapies_title, c.storeId from customers c join tasks t on c.id = t.customer_id join therapy th on t.therapy_id = th.id join store s on t.storeId = s.id  join users u on t.creator_id = u.id join event_category e on t.colorTask = e.id where c.id = ? and t.id = ? and e.allowSendInformation = 1 and c.active = 1",
       [req.body.customer_id, req.body.id],
       function (err, rows, fields) {
         if (err) {
@@ -501,7 +501,7 @@ router.post("/sendPatientFormRegistration", function (req, res) {
   var patientRegistrationForm = hogan.compile(patientRegistrationFormTemplate);
   connection.getConnection(function (err, conn) {
     conn.query(
-      "select mr.* from customers c join mail_patient_form_registration mr on c.storeId = mr.superadmin where c.email = ?",
+      "select mr.* from customers c join mail_patient_form_registration mr on c.storeId = mr.superadmin where c.email = ? and c.active = 1",
       [req.body.email],
       function (err, mailMessage, fields) {
         conn.release();
@@ -991,7 +991,7 @@ router.post("/sendReminderViaEmailManual", function (req, res) {
 
   connection.getConnection(function (err, conn) {
     conn.query(
-      "select mr.*, s.*, s.place as store_place from customers c join mail_reminder_message mr on c.storeId = mr.superadmin join store s on c.storeId = s.superadmin join tasks t on s.id = t.storeId join event_category e on t.colorTask = e.id where c.id = ? and s.id = ? and t.id = ? and e.allowSendInformation = 1",
+      "select mr.*, s.*, s.place as store_place from customers c join mail_reminder_message mr on c.storeId = mr.superadmin join store s on c.storeId = s.superadmin join tasks t on s.id = t.storeId join event_category e on t.colorTask = e.id where c.id = ? and s.id = ? and t.id = ? and e.allowSendInformation = 1 and c.active = 1",
       [req.body.id, req.body.storeId, req.body.taskId],
       function (err, mailMessage, fields) {
         conn.release();
@@ -1170,7 +1170,7 @@ router.post("/sendMassiveEMail", function (req, res) {
       conn.query(
         "select distinct c.email, c.shortname, mm.* from customers c join mail_massive_message mm on c.storeId = mm.superadmin join store s on c.storeId = s.superadmin " +
           joinTable +
-          " where (c.email != '' and c.email IS NOT NULL) and c.storeId = " +
+          " where (c.email != '' and c.email IS NOT NULL) and c.active = 1 and c.storeId = " +
           Number(req.body.superadmin) +
           " and " +
           question,

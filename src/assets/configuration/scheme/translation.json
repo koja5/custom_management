@@ -3699,7 +3699,9 @@
             {
               "key": "orderNumber"
             },
-            {}
+            {
+              "key": "createNewUser"
+            }
           ]
         }
       ]
@@ -4197,9 +4199,6 @@
             },
             {
               "key": "mobile"
-            },
-            {
-              "key": "createNewUser"
             }
           ]
         },

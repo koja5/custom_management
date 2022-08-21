@@ -380,7 +380,7 @@
                                   {{ language?.changeSuperadminProfile }}
                                 </a>
                               </li>
-                              <li *ngIf="type === userType.admin || type === userType.admin || user.id === 4"
+                              <li *ngIf="type === userType.admin || type === userType.admin || (user && user.id === 4)"
                                 class="{{ selectedNodeModel['define_holidays'] }}">
                                 <a (click)="returnActiveNode('define_holidays')"
                                   routerLink="/dashboard/home/define-holidays">
