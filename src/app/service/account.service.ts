@@ -16,8 +16,19 @@ export class AccountService {
     return this.http.get('/api/getUserWithId/' + id);
   }
 
-  updateProfileImage(img) {
-    return this.http.post('api/uploadProfileImage', img);
+  updateProfileImage(img, user) {
+    return this.http.post(`api/uploadProfileImage/${user.id}/${user.type}`, img);
+  }
+
+  getImage(body: any) {
+    if (!body.path) {
+      body = {
+        path: body,
+      };
+    }
+    return this.http.post('api/getImage', body, {
+      responseType: 'blob',
+    });
   }
 
   getCustomerWithId(id)  {

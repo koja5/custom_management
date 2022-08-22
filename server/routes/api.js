@@ -15,10 +15,10 @@ const { delay } = require("rxjs-compat/operator/delay");
 const { concat } = require("rxjs-compat/operator/concat");
 const macAddress = require("os").networkInterfaces();
 const multer = require('multer');
+const { Blob } = require("buffer");
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      // cb(null, '../../src/assets/user-profile-images')
       cb(null, 'src/assets/user-profile-images')
     },
 
@@ -29,18 +29,12 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
-router.post("/uploadProfileImage", upload.single('updateImageInput'), (req, res) => {
-  if (!req.file) {
-    return res.send({
-      success: false
-    });
-
-  } else {
-    return res.send({
-      success: true
-    })
-  }
-})
+function readImageFile(file) {
+  // read binary data from a file:
+  const bitmap = fs.readFileSync(file);
+  const buf = new Buffer.from(bitmap);
+  return buf;
+}
 
 var link = process.env.link_api;
 /*
@@ -57,6 +51,33 @@ var connection = mysql.createPool({
   password: process.env.password,
   database: process.env.database,
 });
+router.post("/uploadProfileImage/:id/:userType", upload.single('updateImageInput'), (req, res) => {
+  if (!req.file) {
+    return res.send({
+      success: false
+    });
+  } 
+
+  const data = readImageFile('src/assets/user-profile-images/' + req.file.filename);
+  const id = req.params.id;
+  const userType = req.params.userType
+
+
+  if(userType == 0 || userType == 1) {
+    connection.query("UPDATE users_superadmin SET img = ? WHERE id = ?", [data, id], function(err, res) {
+      if (err) throw err;
+    })
+  } else {
+    connection.query("UPDATE users SET img = ? WHERE id = ?", [data, id], function(err, res) {
+      if (err) throw err;
+    })
+  }
+
+  
+  return res.send({
+        success: true
+      });
+})
 
 /*var connection = mysql.createPool({
   host: 'localhost',
