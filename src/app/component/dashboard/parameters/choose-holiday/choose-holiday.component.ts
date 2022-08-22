@@ -28,6 +28,8 @@ export class ChooseHolidayComponent implements OnInit {
   public newHoliday: HolidayModel;
   public addNewHoliday: boolean;
   public deleteModal = false;
+  showDialog: boolean = false;
+  isFormDirty: boolean = false;
 
   public eventSettings: EventSettingsModel = {
     dataSource: [],
@@ -82,6 +84,29 @@ export class ChooseHolidayComponent implements OnInit {
     this.loadHolidaysForClinic();
 
     this.height = this.dynamicService.getDefineHolidayHeight();
+  }
+
+  receiveConfirm(event: boolean): void {
+    if(event) {
+      this.addVacationModal.close();
+      this.isFormDirty = false;
+    }
+      this.showDialog = false;
+  }
+
+  confirmClose(): void {
+    this.addVacationModal.modalRoot.nativeElement.focus();
+    if(this.isFormDirty) {
+      this.showDialog = true;
+    }else {
+      this.addVacationModal.close()
+      this.showDialog = false;
+      this.isFormDirty = false
+    }
+  }
+
+  isDirty(): void {
+    this.isFormDirty = true;
   }
 
   @HostListener("window:resize", ["$event"])
@@ -235,6 +260,7 @@ export class ChooseHolidayComponent implements OnInit {
       this.newHoliday.StartTime = args.startTime;
       this.newHoliday.EndTime = args.endTime;
     }
+    this.addVacationModal.hideCloseButton = true;
     this.addVacationModal.open();
   }
 

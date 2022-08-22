@@ -235,7 +235,7 @@ const routes: Routes = [
       },
       {
         path: "mail-confirm-arrival",
-        // canDeactivate: [FormGuard],
+        canDeactivate: [FormGuard],
         component: MailConfirmArrivalComponent,
       },
       {
@@ -301,7 +301,7 @@ const routes: Routes = [
       },
       {
         path: "mail-birthday-congratulation",
-        // canDeactivate: [FormGuard],
+        canDeactivate: [FormGuard],
         component: MailBirthdayCongratulationComponent,
       },
       {

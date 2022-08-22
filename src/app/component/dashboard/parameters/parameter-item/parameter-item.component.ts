@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject, HostListener } from "@angular/core";
+import { Component, OnInit, Input, Inject, HostListener, Output, EventEmitter } from "@angular/core";
 import { State, process } from "@progress/kendo-data-query";
 import { FormGroup, FormControl } from "@angular/forms";
 import { Observable } from "rxjs";
@@ -20,6 +20,7 @@ import { ActivatedRoute, Router } from "@angular/router";
   styleUrls: ["./parameter-item.component.scss"],
 })
 export class ParameterItemComponent implements OnInit {
+  @Output() isDataSaved = new EventEmitter<boolean>();
   @Input() type: string;
   public view: Observable<GridDataResult>;
   public gridState: State = {
@@ -61,6 +62,8 @@ export class ParameterItemComponent implements OnInit {
   public newRowCheckboxDisabled = true;
   savePage: any = {};
   currentUrl: string;
+  isFormDirty: boolean = false;
+  showDialog = false;
 
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
@@ -143,12 +146,15 @@ export class ParameterItemComponent implements OnInit {
     // this.view = this.service.getData(this.type);
 
     this.currentUrl = this.router.url;
-    console.log('test ', this.currentUrl);
 
     this.savePage = this.helpService.getGridPageSize();
     if(this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
       this.gridState.skip = this.savePage[this.currentUrl];
     }
+  }
+
+  checkIsDataSaved() {
+    this.isDataSaved.emit(true);
   }
 
   public onStateChange(state: State) {
@@ -280,7 +286,7 @@ export class ParameterItemComponent implements OnInit {
 
   public saveHandler({ sender, rowIndex, formGroup, isNew }) {
 
-    console.log(formGroup);
+    this.isDataSaved.emit(false);
 
     this.editedRowIndex = -1;
     const product = formGroup.value;
