@@ -13,21 +13,29 @@
     </div>
   </div>
 
-  <div [style.height]="height">
-    <ejs-schedule #scheduleObj width="100%" height="100%" currentView="Month" cssClass="custom-class"
-      [eventSettings]="eventSettings" [allowDragAndDrop]="false" (renderCell)="onRenderCell($event)"
-      (cellClick)="onCellClick($event)">
-      <e-views>
-        <e-view option="Month">
-          <ng-template #eventSettingsTemplate let-data>
-            <div class="template-wrap w-100 h-100">
-              <div class="subject">{{ data.Subject }}</div>
-            </div>
-          </ng-template>
-        </e-view>
-      </e-views>
-    </ejs-schedule>
-  </div>
+  <table class="table table-responsive">
+    <thead>
+      <tr>
+        <th>{{ language.title }}</th>
+        <th>{{ language.date }}</th>
+        <th>{{ language.edit }}</th>
+        <th>{{ language.delete }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let holiday of holidayList">
+        <td>{{holiday.Subject}}</td>
+        <td>{{holiday.StartTime}}</td>
+        <td>
+          <button kendoButton [icon]="'k-icon k-i-edit'" (click)="openEditHolidayModal(holiday)"></button>
+        </td>
+
+        <td>
+          <button kendoButton [icon]="'k-icon k-i-delete'" (click)="deleteHoliday(holiday.id)"></button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 

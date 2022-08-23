@@ -38,11 +38,6 @@ export class HolidayService {
       .subscribe(val => callback(val));
   }
 
-  public getTemplateByUserId(userId: string) {
-    return this.httpClient
-      .get<HolidayTemplate>("/api/getTemplateByUserId/" + userId).toPromise();
-  }
-
   public createStoreTemplateConnection(ids, storeId, callback): void {
     let query = "";
     ids.forEach(id => {
@@ -90,5 +85,29 @@ export class HolidayService {
       .get("/api/deleteHoliday/" + id)
       .map(res => res)
       .subscribe(val => callback(val));
+  }
+
+  getHolidayTemplates(): Observable<HolidayTemplate[]> {
+    return this.httpClient.get<HolidayTemplate[]>("/api/getHolidayTemplates");
+  }
+
+  getHolidayTemplatesPromise(): Promise<HolidayTemplate[]> {
+    return this.getHolidayTemplates().toPromise();
+  }
+
+  createHolidayTemplate(data) {
+    return this.httpClient.post("/api/createHolidayTemplate", data).toPromise();
+  }
+
+  updateHolidayTemplate(data) {
+    return this.httpClient.post("/api/updateHolidayTemplate", data).toPromise();
+  }
+
+  deleteHolidayTemplate(data) {
+    return this.httpClient.post("/api/deleteHolidayTemplate/", data).toPromise();
+  }
+
+  deleteHolidaysByTemplateId(data) {
+    return this.httpClient.post("/api/deleteHolidaysByTemplateId/", data).toPromise();
   }
 }

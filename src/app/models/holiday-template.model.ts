@@ -1,5 +1,5 @@
 export class HolidayTemplate {
     id: number;
-    templateId: number;
-    holidayId: number;
+    name: string;
+    description: string;
 }

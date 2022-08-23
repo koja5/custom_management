@@ -2870,22 +2870,9 @@ export class DynamicSchedulerComponent implements OnInit {
         date.date.getYear() == holiday.EndTime.getYear()
     );
 
-    // Marijana
-    // if (holiday) {
-    //   date.element.style.backgroundColor = "#e9ecef";
-    //   date.element.style.pointerEvents = "none";
-
-    //deo je bio pod komentarom
-
-    // if (date.elementType === "dateHeader" && this.currentView !== "Month") {
-    //   const dateSplitted = date.date.toString().split(" ");
-
-    //   // date - day - holiday
-    //   date.element.firstChild.innerText =
-    //     dateSplitted[2] + " " + dateSplitted[0] + " - " + holiday.Subject;
-    // }
-    //deo je bio pod komentarom
-    // }
+    if (holiday) {
+      date.element.style.backgroundColor = "#e9ecef";
+    }
 
     if (date.elementType === "resourceHeader") {
       if (date.groupIndex < this.calendars.length - 1) {

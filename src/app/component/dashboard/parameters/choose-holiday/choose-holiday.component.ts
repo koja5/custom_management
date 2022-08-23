@@ -59,6 +59,7 @@ export class ChooseHolidayComponent implements OnInit {
   id: number;
   private overrideMessage: Partial<IndividualConfig> = { timeOut: 7000, positionClass: "toast-bottom-right" };
   public storeTemplates: number[] = [];
+  holidayList: HolidayModel[];
 
   constructor(
     public messageService: MessageService,
@@ -205,6 +206,9 @@ export class ChooseHolidayComponent implements OnInit {
     this.holidayService.getHolidaysByTemplates(newIds).then(result => {
       console.log(result);
       if (result && result.length > 0) {
+
+        this.holidayList = result;
+
         result.forEach(r => {
           // console.log('R: ', r);
           this.templateHolidays.push(
