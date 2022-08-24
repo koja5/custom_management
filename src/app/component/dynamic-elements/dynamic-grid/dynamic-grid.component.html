@@ -125,9 +125,18 @@
           <app-dynamic-forms
             [config]="config.configField"
             (submit)="submitEmitter($event)"
+            (isFormDirtyChange)="setDirtyForm($event)"
             #form="dynamicForm"
           >
           </app-dynamic-forms>
+
+          <app-dynamic-confirm-dialog
+            [showDialog]="showDialog"
+            [title]="language?.changesWontBeSavedTitle"
+            [question]="language?.changesWontBeSaved"
+            (sendEmitter)="receiveConfirm($event)"
+          >
+          </app-dynamic-confirm-dialog>
         </div>
       </div>
     </ng-template>
