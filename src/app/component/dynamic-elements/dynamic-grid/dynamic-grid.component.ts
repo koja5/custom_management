@@ -169,7 +169,6 @@ export class DynamicGridComponent implements OnInit {
   }
 
   actionBegin(args: any): void {
-    console.log('test action begin', args.requestType);
     if(args.currentPage) {
       this.savePage[this.currentUrl] = args.currentPage;
       this.helpService.setGridPageSize(this.savePage);
@@ -203,7 +202,6 @@ export class DynamicGridComponent implements OnInit {
   }
 
   actionComplete(args: DialogEditEventArgs): void {
-    console.log('test ', args.requestType);
     if (args.requestType === "beginEdit" || args.requestType === "add") {
       args.dialog.showCloseIcon = false;
       this.currentDialog = args.dialog;
