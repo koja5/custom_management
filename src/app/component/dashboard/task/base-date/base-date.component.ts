@@ -409,6 +409,7 @@ export class BaseDateComponent implements OnInit {
         });
       }
     });
+    this.isFormDirty = false;
   }
 
   onChange(event) {
@@ -626,6 +627,7 @@ export class BaseDateComponent implements OnInit {
         }
       });
     }
+    this.isFormDirty = false;
   }
 
   getTodayDate() {
@@ -705,6 +707,7 @@ export class BaseDateComponent implements OnInit {
       this.selectedComplaint = [];
       this.selectedTherapies = [];
     });
+    this.isFormDirty = false;
   }
 
   addTherapy(therapy) {
@@ -760,6 +763,7 @@ export class BaseDateComponent implements OnInit {
       this.selectedComplaint = [];
       this.selectedTherapies = [];
     });
+    this.isFormDirty = false;
   }
 
   updateTherapy(event) {
@@ -812,6 +816,7 @@ export class BaseDateComponent implements OnInit {
       this.selectedTherapies = [];
       this.selectedTreatment = [];
     });
+    this.isFormDirty = false;
   }
 
   editTherapy(event) {
@@ -1032,11 +1037,9 @@ export class BaseDateComponent implements OnInit {
         this.customer.close();
       }
     });
-    console.log(this.baseDataOne);
   }
 
   updateBaseDataOne() {
-    console.log(this.baseDataOne);
     let recommendation = "";
     // tslint:disable-next-line: prefer-for-of
     if (this.selectedRecommendation) {
@@ -1058,6 +1061,7 @@ export class BaseDateComponent implements OnInit {
         this.customer.close();
       }
     });
+    this.isFormDirty = false;
   }
 
   addBaseDataTwo() {
@@ -1091,6 +1095,7 @@ export class BaseDateComponent implements OnInit {
         this.customer.close();
       }
     });
+    this.isFormDirty = false;
   }
 
   addPhysicalIllness(physical) {
@@ -1106,6 +1111,7 @@ export class BaseDateComponent implements OnInit {
         this.customer.close();
       }
     });
+    this.isFormDirty = false;
   }
 
   updatePhysicalIllness(physical) {
@@ -1123,6 +1129,7 @@ export class BaseDateComponent implements OnInit {
           this.customer.close();
         }
       });
+      this.isFormDirty = false;
   }
 
   editMode() {
