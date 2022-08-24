@@ -169,6 +169,7 @@ export class DynamicGridComponent implements OnInit {
   }
 
   actionBegin(args: any): void {
+    console.log('test action begin', args.requestType);
     if(args.currentPage) {
       this.savePage[this.currentUrl] = args.currentPage;
       this.helpService.setGridPageSize(this.savePage);
@@ -191,7 +192,6 @@ export class DynamicGridComponent implements OnInit {
 
   setDirtyForm(event: boolean): void {
     this.isFormDirty = event;
-    this.showDialog = true;
   }
 
   receiveConfirm(event: boolean) {
@@ -203,6 +203,7 @@ export class DynamicGridComponent implements OnInit {
   }
 
   actionComplete(args: DialogEditEventArgs): void {
+    console.log('test ', args.requestType);
     if (args.requestType === "beginEdit" || args.requestType === "add") {
       args.dialog.showCloseIcon = false;
       this.currentDialog = args.dialog;
@@ -289,6 +290,7 @@ export class DynamicGridComponent implements OnInit {
 
     this.operations.dialog.close();
     this.initialization();
+    this.isFormDirty = false;
   }
 
   deleteData(event) {

@@ -62,8 +62,8 @@ export class ParameterItemComponent implements OnInit {
   public newRowCheckboxDisabled = true;
   savePage: any = {};
   currentUrl: string;
-  isFormDirty: boolean = false;
-  showDialog = false;
+  // isFormDirty: boolean = false;
+  // showDialog = false;
 
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
@@ -273,9 +273,9 @@ export class ParameterItemComponent implements OnInit {
     this.refreshData();
 
     this.checkBoxDisabled = this.checkBoxDisabled.map(element => true);
-    console.log(this.checkBoxDisabled);
 
     this.changeTheme(this.theme);
+    this.isDataSaved.emit(false);
   }
 
   setSelectedItem(dataItem): void {
