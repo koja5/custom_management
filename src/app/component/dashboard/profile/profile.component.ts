@@ -11,10 +11,10 @@ import { AccountService } from "src/app/service/account.service";
 @Component({
   selector: "app-profile",
   templateUrl: "./profile.component.html",
-  styleUrls: ["./profile.component.scss"]
+  styleUrls: ["./profile.component.scss"],
 })
 export class ProfileComponent implements OnInit {
-  @ViewChild('chooseImage') chooseImage: Modal;
+  @ViewChild("chooseImage") chooseImage: Modal;
   public user = false;
   public data: any;
   public companyData: any;
@@ -43,7 +43,7 @@ export class ProfileComponent implements OnInit {
     this.language = this.helpService.getLanguage();
     this.helpService.setTitleForBrowserTab(this.language.profile);
 
-    this.service.getMe(localStorage.getItem("idUser"), val => {
+    this.service.getMe(localStorage.getItem("idUser"), (val) => {
       this.data = val[0];
 
       if (val[0].img && val[0].img.data.length !== 0) {
@@ -60,8 +60,7 @@ export class ProfileComponent implements OnInit {
       }
     });
 
-    this.service.getCompany(this.helpService.getSuperadmin(), val => {
-      console.log(val);
+    this.service.getCompany(this.helpService.getSuperadmin(), (val) => {
       if (val.length !== 0) {
         this.companyData = val[0];
       } else {
@@ -71,7 +70,7 @@ export class ProfileComponent implements OnInit {
   }
 
   fileChoosen(event: any) {
-    if(event.target.value) {
+    if (event.target.value) {
       this.updateImageInput = <File>event.target.files[0];
     }
   }
@@ -80,7 +79,20 @@ export class ProfileComponent implements OnInit {
     let form = new FormData();
 
     form.append("updateImageInput", this.updateImageInput);
-    this.accountService.updateProfileImage(form, this.data).subscribe();
+    this.accountService.updateProfileImage(form, this.data).subscribe(
+      (data) => {
+        this.helpService.successToastr(
+          this.language.accountSuccessUpdatedAccountTitle,
+          this.language.accountSuccessUpdatedAccountText
+        );
+      },
+      (error) => {
+        this.helpService.errorToastr(
+          this.language.accountErrorUpdatedAccountTitle,
+          this.language.accountErrorUpdatedAccountText
+        );
+      }
+    );
     this.chooseImage.close();
     this.getMyProfile();
   }
@@ -94,13 +106,13 @@ export class ProfileComponent implements OnInit {
   }
 
   updateUser(event) {
-    this.service.updateUser(this.data).subscribe(data => {
+    this.service.updateUser(this.data).subscribe((data) => {
       if (data) {
         Swal.fire({
           title: this.language.successUpdateTitle,
           text: this.language.successUpdateTextProfile,
           timer: 3000,
-          type: "success"
+          type: "success",
         });
         this.user = false;
       }

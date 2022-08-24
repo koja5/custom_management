@@ -27,7 +27,7 @@ const storage = multer.diskStorage({
     }
 })
 
-const upload = multer({ storage: storage })
+const upload = multer({ storage: storage, limits: { fileSize: 65536 } });
 
 function readImageFile(file) {
   // read binary data from a file:
@@ -60,16 +60,27 @@ router.post("/uploadProfileImage/:id/:userType", upload.single('updateImageInput
 
   const data = readImageFile('src/assets/user-profile-images/' + req.file.filename);
   const id = req.params.id;
-  const userType = req.params.userType
-
+  const userType = req.params.userType;
 
   if(userType == 0 || userType == 1) {
     connection.query("UPDATE users_superadmin SET img = ? WHERE id = ?", [data, id], function(err, res) {
       if (err) throw err;
     })
-  } else {
+  } else if (userType == 2 || userType == 3 || userType == 5 || userType == 6) {
     connection.query("UPDATE users SET img = ? WHERE id = ?", [data, id], function(err, res) {
-      if (err) throw err;
+      if (err) {
+        return res.status(400).send({
+          message: 'This is an error!'
+       });
+      }
+    })
+  } else {
+    connection.query("UPDATE customers SET img = ? WHERE id = ?", [data, id], function(err, res) {
+      if (err) {
+        return res.status(400).send({
+          message: 'This is an error!'
+       });
+      }
     })
   }
 

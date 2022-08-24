@@ -17,6 +17,9 @@ export class AccountService {
   }
 
   updateProfileImage(img, user) {
+    if(!user.type) {
+      user.type = 4;
+    }
     return this.http.post(`api/uploadProfileImage/${user.id}/${user.type}`, img);
   }
 
