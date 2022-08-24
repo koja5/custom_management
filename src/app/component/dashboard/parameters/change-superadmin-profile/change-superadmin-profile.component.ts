@@ -73,7 +73,6 @@ export class ChangeSuperadminProfileComponent implements OnInit, FormGuardData {
       }
       this.loading = false;
     });
-    console.log('test ', this.configField)
   }
 
   submitEmitter(event) {

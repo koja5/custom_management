@@ -208,15 +208,11 @@ export class DynamicGridComponent implements OnInit {
       this.currentDialog = args.dialog;
 
       const elWrapper = document.createElement('div');
-
+    
       const elHeader = document.createElement('div');
       elHeader.setAttribute('id', 'dialog-header-text');
       elHeader.textContent = "Details of " + args.primaryKeyValue[0];
 
-
-    //   <button type="button" class="custom-close close" data-dismiss="modal" (click)="confirmClose()">
-    //   <span aria-hidden="true">&times;</span>
-    // </button>
       const elCloseButton = document.createElement('button');
       elCloseButton.setAttribute('id', 'close-button-id');
       elCloseButton.setAttribute('class', 'close');
