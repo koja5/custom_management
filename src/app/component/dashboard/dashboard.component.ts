@@ -407,10 +407,10 @@ export class DashboardComponent implements OnInit {
       return this.language.owner;
     } else if (type === this.userType.admin) {
       return this.language.admin;
-    } else if (type === this.userType.doctor) {
-      return this.language.doctor;
-    } else if (type === this.userType.nurse) {
-      return this.language.nurse;
+    } else if (type === this.userType.manager) {
+      return this.language.manager;
+    } else if (type === this.userType.employee) {
+      return this.language.employee;
     } else if (type === this.userType.patient) {
       return this.language.patient;
     } else if (type === this.userType.administrator) {

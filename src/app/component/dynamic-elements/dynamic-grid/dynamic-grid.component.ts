@@ -96,8 +96,9 @@ export class DynamicGridComponent implements OnInit {
   initialization() {
     this.service.getConfiguration(this.path, this.name).subscribe((data) => {
       this.config = data;
-      if(this.savePage[this.currentUrl]) {
-        this.config.paging.settings.currentPage = this.savePage[this.currentUrl];
+      if (this.savePage[this.currentUrl]) {
+        this.config.paging.settings.currentPage =
+          this.savePage[this.currentUrl];
       }
       if (data["localData"]) {
         this.getLocalData(data["localData"]);
@@ -166,7 +167,7 @@ export class DynamicGridComponent implements OnInit {
   }
 
   actionBegin(args: any): void {
-    if(args.currentPage) {
+    if (args.currentPage) {
       this.savePage[this.currentUrl] = args.currentPage;
       this.helpService.setGridPageSize(this.savePage);
     }

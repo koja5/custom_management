@@ -471,7 +471,7 @@
                       </div>
                     </div>
                     <div class="form-group row">
-                      <h4 class="col-sm-12">
+                      <h4 class="col-sm-12" *ngIf="allWorkTime">
                         {{ language.orderNumber }}:
                         {{ allWorkTime.length - index }}
                       </h4>
@@ -761,7 +761,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <h4 class="col-sm-12">
+                <h4 class="col-sm-12" *ngIf="allWorkTime">
                   {{ language.orderNumber }}: {{ allWorkTime.length - index }}
                 </h4>
                 <label class="col-md-2 col-sm-12 col-form-label">{{

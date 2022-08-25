@@ -380,7 +380,7 @@
                                   {{ language?.changeSuperadminProfile }}
                                 </a>
                               </li>
-                              <li *ngIf="type === userType.admin || type === userType.admin || user.id === 4"
+                              <li *ngIf="type === userType.admin || (user && user.id === 4)"
                                 class="{{ selectedNodeModel['define_holidays'] }}">
                                 <a (click)="returnActiveNode('define_holidays')"
                                   routerLink="/dashboard/home/define-holidays">
@@ -410,7 +410,7 @@
                                   language.headerMenuPermits
                                   }}</span>
                               </li>
-                              <li class="{{ selectedNodeModel['reminder'] }}" *ngIf="type === userType.owner">
+                              <li class="{{ selectedNodeModel['reminder'] }}">
                                 <a routerLink="/dashboard/home/reminders" (click)="returnActiveNode('reminder')"
                                   class="nav-link"><i class="fa fa-bell"></i>
                                   <span class="navigation-link"></span>
@@ -420,7 +420,7 @@
 
                               <li class="{{
                                   selectedNodeModel['permission_patient_menu']
-                                }}" *ngIf="type === userType.owner">
+                                }}">
                                 <a routerLink="/dashboard/home/permission-patient-menu" (click)="
                                     returnActiveNode('permission_patient_menu')
                                   " class="nav-link"><i class="fa fa-cogs"></i>
@@ -430,7 +430,7 @@
                                   }}
                                 </a>
                               </li>
-                              <li class="{{ selectedNodeModel['user_access'] }}" *ngIf="type === userType.owner">
+                              <li class="{{ selectedNodeModel['user_access'] }}">
                                 <a routerLink="/dashboard/home/user-access" (click)="returnActiveNode('user_access')"
                                   class="nav-link"><i class="fa fa-universal-access"></i>
                                   <span class="navigation-link"></span>
@@ -442,7 +442,7 @@
                                   language.headerMenuMailTemplateSettings
                                   }}</span>
                               </li>
-                              <li class="{{ selectedNodeModel['mail_reminder'] }}" *ngIf="type === userType.owner">
+                              <li class="{{ selectedNodeModel['mail_reminder'] }}">
                                 <a routerLink="/dashboard/home/mail-reminder"
                                   (click)="returnActiveNode('mail_reminder')" class="nav-link"><i
                                     class="fa fa-envelope"></i>
@@ -452,7 +452,7 @@
                               </li>
                               <li class="{{
                                   selectedNodeModel['mail_approve_reservation']
-                                }}" *ngIf="type === userType.owner">
+                                }}">
                                 <a routerLink="/dashboard/home/mail-approve-reservation" (click)="
                                     returnActiveNode('mail_approve_reservation')
                                   " class="nav-link"><i class="fa fa-envelope"></i>
@@ -462,7 +462,7 @@
                               </li>
                               <li class="{{
                                   selectedNodeModel['mail_deny_reservation']
-                                }}" *ngIf="type === userType.owner">
+                                }}">
                                 <a routerLink="/dashboard/home/mail-deny-reservation" (click)="
                                     returnActiveNode('mail_deny_reservation')
                                   " class="nav-link"><i class="fa fa-envelope"></i>
@@ -472,7 +472,7 @@
                               </li>
                               <li class="{{
                                   selectedNodeModel['mail_confirm_arrival']
-                                }}" *ngIf="type === userType.owner">
+                                }}">
                                 <a routerLink="/dashboard/home/mail-confirm-arrival" (click)="
                                     returnActiveNode('mail_confirm_arrival')
                                   " class="nav-link"><i class="fa fa-envelope"></i>
@@ -484,7 +484,7 @@
                                   selectedNodeModel[
                                     'mail_patient_created_account'
                                   ]
-                                }}" *ngIf="type === userType.owner">
+                                }}">
                                 <a routerLink="/dashboard/home/mail-patient-created-account" (click)="
                                     returnActiveNode(
                                       'mail_patient_created_account'
@@ -498,7 +498,7 @@
                                   selectedNodeModel[
                                     'mail_patient_created_account_via_form'
                                   ]
-                                }}" *ngIf="type === userType.owner">
+                                }}">
                                 <a routerLink="/dashboard/home/mail-patient-created-account-via-form" (click)="
                                     returnActiveNode(
                                       'mail_patient_created_account_via_form'
@@ -514,7 +514,7 @@
                                   selectedNodeModel[
                                     'mail_patient_form_registration'
                                   ]
-                                }}" *ngIf="type === userType.owner">
+                                }}">
                                 <a routerLink="/dashboard/home/mail-patient-form-registration" (click)="
                                     returnActiveNode(
                                       'mail_patient_form_registration'
@@ -526,7 +526,7 @@
                               </li>
                               <li class="{{
                                   selectedNodeModel['mail_massive_message']
-                                }}" *ngIf="type === userType.owner">
+                                }}">
                                 <a routerLink="/dashboard/home/mail-massive" (click)="
                                     returnActiveNode('mail_massive_message')
                                   " class="nav-link"><i class="fa fa-envelope"></i>
@@ -538,7 +538,7 @@
                                   selectedNodeModel[
                                     'email_birthday_congratulation'
                                   ]
-                                }}" *ngIf="type === userType.owner">
+                                }}">
                                 <a routerLink="/dashboard/home/mail-birthday-congratulation" (click)="
                                     returnActiveNode(
                                       'email_birthday_congratulation'
@@ -553,7 +553,7 @@
                                   language.headerMenuSMSTemplateSettings
                                   }}</span>
                               </li>
-                              <li class="{{ selectedNodeModel['sms_reminder'] }}" *ngIf="type === userType.owner">
+                              <li class="{{ selectedNodeModel['sms_reminder'] }}">
                                 <a routerLink="/dashboard/home/sms-reminder" (click)="returnActiveNode('sms_reminder')"
                                   class="nav-link"><i class="fa fa-comments"></i>
                                   <span class="navigation-link"></span>
@@ -562,7 +562,7 @@
                               </li>
                               <li class="{{
                                   selectedNodeModel['sms_massive_message']
-                                }}" *ngIf="type === userType.owner">
+                                }}">
                                 <a routerLink="/dashboard/home/sms-massive" (click)="
                                     returnActiveNode('sms_massive_message')
                                   " class="nav-link"><i class="fa fa-comments"></i>
@@ -575,7 +575,7 @@
                                   selectedNodeModel[
                                     'sms_birthday_congratulation'
                                   ]
-                                }}" *ngIf="type === userType.owner">
+                                }}">
                                 <a routerLink="/dashboard/home/sms-birthday-congratulation" (click)="
                                     returnActiveNode(
                                       'sms_birthday_congratulation'

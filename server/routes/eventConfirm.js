@@ -115,7 +115,7 @@ function confirm() {
       function (error, response, body) {
         if (!error && response.statusCode === 200) {
           conn.query(
-            "SELECT c.email, c.shortname, s.storename, t.id, t.start, t.end, th.therapies_title, us.lastname, us.firstname FROM tasks t join customers c on t.customer_id = c.id join therapy th on t.therapy_id = th.id join store s on t.storeId = s.id join users us on t.creator_id = us.id where DATEDIFF(t.start, NOW()) = 2 and t.confirm = 0 order by t.start desc",
+            "SELECT c.email, c.shortname, s.storename, t.id, t.start, t.end, th.therapies_title, us.lastname, us.firstname FROM tasks t join customers c on t.customer_id = c.id join therapy th on t.therapy_id = th.id join store s on t.storeId = s.id join users us on t.creator_id = us.id where DATEDIFF(t.start, NOW()) = 2 and t.confirm = 0 and c.active = 1 order by t.start desc",
             function (err, rows, fields) {
               if (err) {
                 console.error("SQL error:", err);
