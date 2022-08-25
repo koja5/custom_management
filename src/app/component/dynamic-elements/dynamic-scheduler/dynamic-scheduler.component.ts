@@ -1847,7 +1847,10 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   initializeStore() {
-    if (this.helpService.getType() === this.userType.patient) {
+    if (this.helpService.getType() === this.userType.employee) {
+      this.setEmployeeStore();
+      this.filterToolbarInd = false;
+    } else if (this.helpService.getType() === this.userType.patient) {
       this.storeService.getStoreAllowedOnline(
         this.helpService.getSuperadmin(),
         (val) => {
@@ -1862,6 +1865,25 @@ export class DynamicSchedulerComponent implements OnInit {
         this.setTimesForStore();
       });
     }
+  }
+
+  setEmployeeStore() {
+    this.storeService.getStore(this.helpService.getSuperadmin(), (data) => {
+      for (let i = 0; i < data.length; i++) {
+        this.service.getUsersInCompany(data[i].id, (users: []) => {
+          this.usersInCompany = users;
+          for (let j = 0; j < users.length; j++) {
+            if (users[j]["id"] === this.helpService.getMe()) {
+              this.selectedStoreId = data[i].id;
+              this.value.push(users[j]);
+              this.sharedCalendarResources = this.value;
+              this.handleValue(this.value);
+              this.setTimesForStore();
+            }
+          }
+        });
+      }
+    });
   }
 
   checkPreselectedForAllowedOnlineStore() {

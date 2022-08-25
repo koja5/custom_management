@@ -400,10 +400,10 @@ router.post("/login", (req, res, next) => {
             }
             console.log(rows);
             if (rows.length >= 1 && rows[0].active === 1) {
-              /*logger.log(
+              logger.log(
                 "info",
                 `User ${req.body.email} is SUCCESS login on a system like a USER!`
-              );*/
+              );
               conn.query(
                 "SELECT * FROM user_access where mac_address = ?",
                 [req.body.ipAddress],
@@ -511,7 +511,7 @@ router.post("/login", (req, res, next) => {
                       [reqObj.email, sha1(reqObj.password)],
                       function (err, rows, fields) {
                         if (err) {
-                          // logger.log("error", err.sql + ". " + err.sqlMessage);
+                          logger.log("error", err.sql + ". " + err.sqlMessage);
                           res.json(err);
                         }
 

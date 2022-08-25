@@ -34,8 +34,8 @@ export class LanguageComponent implements OnInit {
   }
 
   checkDefaultLanguage() {
-    if (this.helpService.getLocalStorage("defaultLanguage")) {
-      this.value = this.helpService.getLocalStorage("defaultLanguage");
+    if (this.helpService.getLocalStorage("accountLanguage")) {
+      this.value = this.helpService.getLocalStorage("accountLanguage");
     } else {
       this.value = "US";
     }
@@ -43,7 +43,6 @@ export class LanguageComponent implements OnInit {
 
   getAllLanguages() {
     this.loading = true;
-    console.log(this.helpService.getLocalStorage("demoAccountLanguage"));
     this.dynamicService
       .callApiGet(
         "/api/getAllTranslationsByDemoAccount",

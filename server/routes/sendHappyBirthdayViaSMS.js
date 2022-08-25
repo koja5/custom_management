@@ -65,6 +65,7 @@ function sendHappyBirthdayViaSMS() {
                                 "SELECT distinct congratulationBirthday from mail_birthday_congratulation where superadmin = ?",
                                 [to.superadmin],
                                 function (err, mailRows, fields) {
+                                  conn.release();
                                   if (
                                     mailRows.length === 0 ||
                                     (mailRows.length > 0 &&
@@ -132,19 +133,20 @@ function sendHappyBirthdayViaSMS() {
                                       sendSmsFromMail(phoneNumber, fullMessage);
                                     }
                                   }
-                                  conn.release();
                                 }
                               );
+                            } else {
+                              conn.release();
                             }
                           });
                         }
                       );
+                    } else {
+                      conn.release();
                     }
-                    conn.release();
                   }
                 );
               }
-              conn.release();
             }
           );
         }

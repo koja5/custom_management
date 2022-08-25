@@ -54,8 +54,8 @@ export class ChangePasswordComponent implements OnInit {
       });
     } else if (
       type === this.userType.admin ||
-      type === this.userType.doctor ||
-      type === this.userType.nurse
+      type === this.userType.manager ||
+      type === this.userType.employee
     ) {
       this.service.getUser(id).subscribe((data) => {
         if (data && data["length"] > 0) {
@@ -143,8 +143,8 @@ export class ChangePasswordComponent implements OnInit {
         });
     } else if (
       this.type === this.userType.admin ||
-      this.type === this.userType.doctor ||
-      this.type === this.userType.nurse
+      this.type === this.userType.manager ||
+      this.type === this.userType.employee
     ) {
       this.service.updatePasswordForUser(this.changeData).subscribe((data) => {
         this.checkValidResponse(data);
