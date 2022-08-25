@@ -1847,10 +1847,7 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   initializeStore() {
-    if (this.helpService.getType() === this.userType.employee) {
-      this.setEmployeeStore();
-      this.filterToolbarInd = false;
-    } else if (this.helpService.getType() === this.userType.patient) {
+   if (this.helpService.getType() === this.userType.patient) {
       this.storeService.getStoreAllowedOnline(
         this.helpService.getSuperadmin(),
         (val) => {
@@ -1868,7 +1865,10 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   setEmployeeStore() {
+    this.sharedCalendarResources = [];
+    this.value = [];
     this.storeService.getStore(this.helpService.getSuperadmin(), (data) => {
+      this.store = data;
       for (let i = 0; i < data.length; i++) {
         this.service.getUsersInCompany(data[i].id, (users: []) => {
           this.usersInCompany = users;
@@ -2178,6 +2178,9 @@ export class DynamicSchedulerComponent implements OnInit {
           }
         }
       );
+    } else if (this.helpService.getType() === this.userType.employee) {
+      this.setEmployeeStore();
+      this.filterToolbarInd = false;
     } else {
       this.storeService.getStore(this.helpService.getSuperadmin(), (val) => {
         this.store = val;

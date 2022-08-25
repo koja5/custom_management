@@ -131,6 +131,10 @@ export class LoginComponent implements OnInit {
             "language",
             JSON.stringify(this.language)
           );
+          this.helpService.setLocalStorage(
+            "accountLanguage",
+            language["countryCode"]
+          );
           this.router.navigate(["/dashboard/home/task"]);
         } else {
           this.service.getDefaultLanguage().subscribe(
@@ -141,6 +145,7 @@ export class LoginComponent implements OnInit {
                   "language",
                   JSON.stringify(this.language)
                 );
+                this.helpService.setLocalStorage("accountLanguage", "US");
                 this.router.navigate(["/dashboard/home/task"]);
               } else {
                 this.router.navigate(["/maintence"]);
@@ -207,6 +212,10 @@ export class LoginComponent implements OnInit {
         this.helpService.setLocalStorage(
           "language",
           JSON.stringify(this.language)
+        );
+        this.helpService.setLocalStorage(
+          "accountLanguage",
+          language["countryCode"]
         );
         this.helpService.setLocalStorage("countryCode", language["demoCode"]);
         this.helpService.setLocalStorage(

@@ -100,7 +100,7 @@ export class LanguageComponent implements OnInit {
     if (this.selectedLanguage) {
       this.loading = true;
       this.helpService.setLocalStorage(
-        "defaultLanguage",
+        "accountLanguage",
         this.selectedLanguage.countryCode
       );
       this.helpService.setLocalStorage(
