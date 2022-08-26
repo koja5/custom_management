@@ -19,7 +19,7 @@ const { Blob } = require("buffer");
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, 'src/assets/user-profile-images')
+      cb(null, 'server/routes/uploads/user-profile-images')
     },
 
     filename: (req, file, cb) => {
@@ -58,7 +58,7 @@ router.post("/uploadProfileImage/:id/:userType", upload.single('updateImageInput
     });
   } 
 
-  const data = readImageFile('src/assets/user-profile-images/' + req.file.filename);
+  const data = readImageFile('server/routes/uploads/user-profile-images/' + req.file.filename);
   const id = req.params.id;
   const userType = req.params.userType;
 
