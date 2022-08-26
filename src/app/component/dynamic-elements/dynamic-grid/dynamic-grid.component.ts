@@ -203,14 +203,25 @@ export class DynamicGridComponent implements OnInit {
 
   actionComplete(args: DialogEditEventArgs): void {
     if (args.requestType === "beginEdit" || args.requestType === "add") {
+      
+      args.dialog.buttons = [];
       args.dialog.showCloseIcon = false;
+      // args.dialog.closeOnEscape = false;
       this.currentDialog = args.dialog;
 
+      setTimeout(() => {
+        this.setValue(this.config.configField, args.rowData);
+      }, 50);
+      
       const elWrapper = document.createElement('div');
     
       const elHeader = document.createElement('div');
       elHeader.setAttribute('id', 'dialog-header-text');
-      elHeader.textContent = "Details of " + args.primaryKeyValue[0];
+      if(args.requestType === "beginEdit") {
+        elHeader.textContent = "Details of " + args.primaryKeyValue[0];
+      }else {
+        elHeader.textContent = "Add new record";
+      };
 
       const elCloseButton = document.createElement('button');
       elCloseButton.setAttribute('id', 'close-button-id');
@@ -239,11 +250,7 @@ export class DynamicGridComponent implements OnInit {
           this.isFormDirty = false;
         }
       })
-
-      args.dialog.buttons = [];
-      setTimeout(() => {
-        this.setValue(this.config.configField, args.rowData);
-      }, 50);
+      console.log(args.dialog.header);
     }
 
     if (args.requestType === "delete") {
