@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="zxx">
-  <head>
+
+<head>
     <!-- Basic Page Needs
   ================================================== -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -17,11 +18,7 @@
     <title>Authfy : Login-02</title>
 
     <!-- Favicon -->
-    <link
-      rel="shortcut icon"
-      type="image/icon"
-      href="images/favicon-16x16.png"
-    />
+    <link rel="shortcut icon" type="image/icon" href="images/favicon-16x16.png" />
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -29,40 +26,31 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-  </head>
+</head>
 
-  <body>
+<body>
     <!-- Start Preloader -->
     <div class="spinner loading" *ngIf="loading"></div>
 
     <!-- Preloader End -->
 
     <div class="container-fluid" *ngIf="language !== undefined">
-      <div class="row" style="height: 100vh">
-        <div class="col-xs-12 col-sm-7 col-md-5 col-lg-4 authfy-panel-left">
-          <!-- brand-logo start -->
-          <div class="brand-logo text-center">
-            <a (click)="backToLanding()"
-              ><img
-                src="../../../assets/images/brand-logo.png"
-                width="250"
-                alt="brand-logo"
-            /></a>
-          </div>
-          <!-- ./brand-logo -->
-          <!-- authfy-login start -->
-          <div class="authfy-login">
-            <!-- panel-login start -->
-            <div class="authfy-panel panel-login text-center {{ loginForm }}">
-              <div class="authfy-heading">
-                <h3 class="auth-title">{{ language.loginTitle }}</h3>
-                <p>
-                  {{ language.haventAccount }}
-                  <a
-                    class="lnk-toggler"
-                    data-panel=".panel-signup"
-                    (click)="signUpActive()"
-                    >{{ language.signUp }}</a
+        <div class="row" style="height: 100vh">
+            <div class="col-xs-12 col-sm-6 col-md-5 col-lg-4 authfy-panel-left">
+                <!-- brand-logo start -->
+                <div class="brand-logo text-center">
+                    <a (click)="backToLanding()"><img src="../../../assets/images/brand-logo.png" width="250" alt="brand-logo" /></a>
+                </div>
+                <!-- ./brand-logo -->
+                <!-- authfy-login start -->
+                <div class="authfy-login">
+                    <!-- panel-login start -->
+                    <div class="authfy-panel panel-login text-center {{ loginForm }}">
+                        <div class="authfy-heading">
+                            <h3 class="auth-title">{{ language.loginTitle }}</h3>
+                            <p>
+                                {{ language.haventAccount }}
+                                <a class="lnk-toggler" data-panel=".panel-signup" (click)="signUpActive()">{{ language.signUp }}</a
                   >
                 </p>
               </div>
@@ -72,76 +60,49 @@
                   <a href="#" class="btn btn-lg btn-block btn-facebook">
                     <i class="fa fa-facebook"></i>
                   </a>
-                </div>
-                <div class="col-xs-4 col-sm-4">
-                  <a href="#" class="btn btn-lg btn-block btn-twitter">
-                    <i class="fa fa-twitter"></i>
-                  </a>
-                </div>
-                <div class="col-xs-4 col-sm-4">
-                  <a href="#" class="btn btn-lg btn-block btn-google">
-                    <i class="fa fa-google-plus"></i>
-                  </a>
-                </div>
-              </div>
-              <!-- ./social-buttons -->
-              <div class="row loginOr">
-                <div class="col-xs-12 col-sm-12">
-                  <span class="spanOr">{{ language.or }}</span>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-xs-12 col-sm-12">
-                  <p style="color: red">{{ loginInfo }}</p>
-                  <form
-                    name="loginForm"
-                    class="loginForm"
-                    (ngSubmit)="login(login)"
-                  >
-                    <div class="form-group">
-                      <input
-                        type="email"
-                        class="form-control email"
-                        name="username"
-                        placeholder="{{ language.email }}"
-                        [(ngModel)]="data.email"
-                        email.value=""
-                        #email="ngModel"
-                      />
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            <a href="#" class="btn btn-lg btn-block btn-twitter">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+                        </div>
+                        <div class="col-xs-4 col-sm-4">
+                            <a href="#" class="btn btn-lg btn-block btn-google">
+                                <i class="fa fa-google-plus"></i>
+                            </a>
+                        </div>
                     </div>
-                    <div class="form-group">
-                      <div class="pwdMask">
-                        <input
-                          type="{{ hideShow }}"
-                          class="form-control password"
-                          name="password"
-                          placeholder="{{ language.password }}"
-                          [(ngModel)]="data.password"
-                          password.value=""
-                          #password="ngModel"
-                        />
-                        <span
-                          class="fa {{ hideShowEye }} pwd-toggle"
-                          (click)="hideShowPassword()"
-                        ></span>
-                      </div>
+                    <!-- ./social-buttons -->
+                    <div class="row loginOr">
+                        <div class="col-xs-12 col-sm-12">
+                            <span class="spanOr">{{ language.or }}</span>
+                        </div>
                     </div>
-                    <div class="row remember-row">
-                      <div class="col-xs-6 col-sm-6">
-                        <!-- <label class="checkbox text-left">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            <p style="color: red">{{ loginInfo }}</p>
+                            <form name="loginForm" class="loginForm" (ngSubmit)="login(login)">
+                                <div class="form-group">
+                                    <input type="email" class="form-control email" name="username" placeholder="{{ language.email }}" [(ngModel)]="data.email" email.value="" #email="ngModel" />
+                                </div>
+                                <div class="form-group">
+                                    <div class="pwdMask">
+                                        <input type="{{ hideShow }}" class="form-control password" name="password" placeholder="{{ language.password }}" [(ngModel)]="data.password" password.value="" #password="ngModel" />
+                                        <span class="fa {{ hideShowEye }} pwd-toggle" (click)="hideShowPassword()"></span>
+                                    </div>
+                                </div>
+                                <div class="row remember-row">
+                                    <div class="col-xs-6 col-sm-6">
+                                        <!-- <label class="checkbox text-left">
                           <input type="checkbox" value="remember-me" /><span
                             class="label-text"
                             >{{ language.rememberMe }}</span
                           >
                         </label> -->
-                      </div>
-                      <div class="col-xs-6 col-sm-6">
-                        <p class="forgotPwd">
-                          <a
-                            class="lnk-toggler"
-                            data-panel=".panel-forgot"
-                            (click)="recoveryActive()"
-                            >{{ language.forgotPassword }}</a
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6">
+                                        <p class="forgotPwd">
+                                            <a class="lnk-toggler" data-panel=".panel-forgot" (click)="recoveryActive()">{{ language.forgotPassword }}</a
                           >
                         </p>
                       </div>
@@ -362,7 +323,7 @@
           <!-- ./authfy-login -->
         </div>
         <!-- ./authfy-panel-left -->
-        <div class="col-md-7 col-lg-8 authfy-panel-right hidden-xs hidden-sm">
+        <div class="col-md-7 col-lg-8 authfy-panel-right hidden-xs col-sm-6">
           <div class="hero-heading">
             <div class="headline">
               <h3>{{ language.welcomeTitle }} ClinicNode</h3>
