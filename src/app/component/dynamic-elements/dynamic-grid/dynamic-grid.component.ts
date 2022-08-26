@@ -206,7 +206,7 @@ export class DynamicGridComponent implements OnInit {
       
       args.dialog.buttons = [];
       args.dialog.showCloseIcon = false;
-      // args.dialog.closeOnEscape = false;
+      args.dialog.closeOnEscape = false;
       this.currentDialog = args.dialog;
 
       setTimeout(() => {
