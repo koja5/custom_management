@@ -91,6 +91,8 @@ export class BaseDateComponent implements OnInit {
   public loadingGridDocument = false;
   isFormDirty: boolean = false;
   showDialog: boolean = false;
+  showDialogChangeTab: boolean = false;
+  changeTabName: string;
   public sort: SortDescriptor[] = [
     {
       field: "date",
@@ -407,6 +409,7 @@ export class BaseDateComponent implements OnInit {
         });
       }
     });
+    this.isFormDirty = false;
   }
 
   onChange(event) {
@@ -624,6 +627,7 @@ export class BaseDateComponent implements OnInit {
         }
       });
     }
+    this.isFormDirty = false;
   }
 
   getTodayDate() {
@@ -703,6 +707,7 @@ export class BaseDateComponent implements OnInit {
       this.selectedComplaint = [];
       this.selectedTherapies = [];
     });
+    this.isFormDirty = false;
   }
 
   addTherapy(therapy) {
@@ -758,6 +763,7 @@ export class BaseDateComponent implements OnInit {
       this.selectedComplaint = [];
       this.selectedTherapies = [];
     });
+    this.isFormDirty = false;
   }
 
   updateTherapy(event) {
@@ -810,6 +816,7 @@ export class BaseDateComponent implements OnInit {
       this.selectedTherapies = [];
       this.selectedTreatment = [];
     });
+    this.isFormDirty = false;
   }
 
   editTherapy(event) {
@@ -861,44 +868,59 @@ export class BaseDateComponent implements OnInit {
     this.complaintData.em = "";
   }
 
+  receiveConfirmChangeTab(flag: boolean) {
+    if(flag) {
+      this.isFormDirty = false;
+      this.changeTab(this.changeTabName)
+    }else {
+      this.showDialogChangeTab = false;
+    }
+  }
+
   changeTab(tab) {
-    this.currentTab = tab;
-    // this.baseData = null;
-    if (tab === "base_one") {
-      this.initializeBaseOneData();
-    } else if (tab === "base_two") {
-      this.service.getBaseDataTwo(this.data.id).subscribe((data) => {
-        console.log(data);
-        if (data["length"] !== 0) {
-          this.baseDataTwo = data[0];
-          this.baseDataTwo.birthday = new Date(this.baseDataTwo.birthday);
-          this.operationMode = "edit";
-        } else {
-          if (
-            this.isEmptyObject(this.baseDataTwo) ||
-            this.baseDataTwo === undefined
-          ) {
-            this.baseDataTwo = new BaseTwoModel();
+    this.changeTabName = tab;
+    if(this.isFormDirty) {
+      this.showDialogChangeTab = true;
+    }else {
+      this.currentTab = tab;
+      // this.baseData = null;
+      if (tab === "base_one") {
+        this.initializeBaseOneData();
+      } else if (tab === "base_two") {
+        this.service.getBaseDataTwo(this.data.id).subscribe((data) => {
+          if (data["length"] !== 0) {
+            this.baseDataTwo = data[0];
+            this.baseDataTwo.birthday = new Date(this.baseDataTwo.birthday);
+            this.operationMode = "edit";
+          } else {
+            if (
+              this.isEmptyObject(this.baseDataTwo) ||
+              this.baseDataTwo === undefined
+            ) {
+              this.baseDataTwo = new BaseTwoModel();
+            }
+            this.operationMode = "add";
+            console.log(this.baseDataTwo);
           }
-          this.operationMode = "add";
-          console.log(this.baseDataTwo);
-        }
-      });
-    } else if (tab === "physical_illness") {
-      this.service.getPhysicallIllness(this.data.id).subscribe((data) => {
-        if (data["length"] !== 0) {
-          this.physicalIllness = data[0];
-          this.operationMode = "edit";
-        } else {
-          if (
-            this.isEmptyObject(this.physicalIllness) ||
-            this.physicalIllness === undefined
-          ) {
-            this.physicalIllness = new PhysicalModel();
+        });
+      } else if (tab === "physical_illness") {
+        this.service.getPhysicallIllness(this.data.id).subscribe((data) => {
+          if (data["length"] !== 0) {
+            this.physicalIllness = data[0];
+            this.operationMode = "edit";
+          } else {
+            if (
+              this.isEmptyObject(this.physicalIllness) ||
+              this.physicalIllness === undefined
+            ) {
+              this.physicalIllness = new PhysicalModel();
+            }
+            this.operationMode = "add";
           }
-          this.operationMode = "add";
-        }
-      });
+        });
+      }
+      this.showDialogChangeTab = false;
+      this.isFormDirty = false;
     }
   }
 
@@ -1015,11 +1037,9 @@ export class BaseDateComponent implements OnInit {
         this.customer.close();
       }
     });
-    console.log(this.baseDataOne);
   }
 
   updateBaseDataOne() {
-    console.log(this.baseDataOne);
     let recommendation = "";
     // tslint:disable-next-line: prefer-for-of
     if (this.selectedRecommendation) {
@@ -1041,6 +1061,7 @@ export class BaseDateComponent implements OnInit {
         this.customer.close();
       }
     });
+    this.isFormDirty = false;
   }
 
   addBaseDataTwo() {
@@ -1074,6 +1095,7 @@ export class BaseDateComponent implements OnInit {
         this.customer.close();
       }
     });
+    this.isFormDirty = false;
   }
 
   addPhysicalIllness(physical) {
@@ -1089,6 +1111,7 @@ export class BaseDateComponent implements OnInit {
         this.customer.close();
       }
     });
+    this.isFormDirty = false;
   }
 
   updatePhysicalIllness(physical) {
@@ -1106,6 +1129,7 @@ export class BaseDateComponent implements OnInit {
           this.customer.close();
         }
       });
+      this.isFormDirty = false;
   }
 
   editMode() {

@@ -57,6 +57,7 @@ import { HomedModule } from "./component/home/routing-module/home.module";
 import { RouterModule } from "@angular/router";
 import { StorageService } from "./service/storage.service";
 import { DynamicTextFormComponent } from "./component/dynamic-elements/dynamic-text-form/dynamic-text-form.component";
+import { FormGuard } from "./service/form-guard/formGuard";
 
 @NgModule({
   declarations: [
@@ -93,6 +94,7 @@ import { DynamicTextFormComponent } from "./component/dynamic-elements/dynamic-t
     CookieService,
     TaskService,
     LoggedGuard,
+    FormGuard,
     DashboardGuard,
     LoginGuard,
     MessageService,

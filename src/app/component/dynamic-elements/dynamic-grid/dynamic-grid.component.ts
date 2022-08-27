@@ -39,6 +39,7 @@ export class DynamicGridComponent implements OnInit {
   @ViewChild(DynamicFormsComponent) form: DynamicFormsComponent;
   @ViewChild("orderForm") public orderForm: FormGroup;
   @ViewChild("editSettingsTemplate") editSettingsTemplate: DialogComponent;
+  public targetElement: HTMLElement;
   @ViewChild("grid") public grid: GridComponent;
   @ViewChild("container") public container: ElementRef;
 
@@ -62,6 +63,9 @@ export class DynamicGridComponent implements OnInit {
   public language: any;
   savePage: any = {};
   currentUrl: string;
+  isFormDirty = false;
+  showDialog = false;
+  currentDialog: any;
 
   constructor(
     private service: DynamicService,
@@ -79,7 +83,6 @@ export class DynamicGridComponent implements OnInit {
       allowEditing: true,
       allowAdding: true,
       allowDeleting: true,
-      showDeleteConfirmDialog: true,
       mode: "Dialog",
     };
     this.toolbar = ["Add", "Edit", "Delete"];
@@ -187,20 +190,77 @@ export class DynamicGridComponent implements OnInit {
       } */
   }
 
+  setDirtyForm(event: boolean): void {
+    this.isFormDirty = event;
+  }
+
+  receiveConfirm(event: boolean) {
+    if(event) {
+      this.isFormDirty = false;
+      this.currentDialog.close();
+    }
+    this.showDialog = false;
+  }
+
   actionComplete(args: DialogEditEventArgs): void {
     if (args.requestType === "beginEdit" || args.requestType === "add") {
+      
       args.dialog.buttons = [];
+      args.dialog.showCloseIcon = false;
+      args.dialog.closeOnEscape = false;
+      this.currentDialog = args.dialog;
+
       setTimeout(() => {
         this.setValue(this.config.configField, args.rowData);
       }, 50);
+      
+      const elWrapper = document.createElement('div');
+    
+      const elHeader = document.createElement('div');
+      elHeader.setAttribute('id', 'dialog-header-text');
+      if(args.requestType === "beginEdit") {
+        elHeader.textContent = "Details of " + args.primaryKeyValue[0];
+      }else {
+        elHeader.textContent = "Add new record";
+      };
+
+      const elCloseButton = document.createElement('button');
+      elCloseButton.setAttribute('id', 'close-button-id');
+      elCloseButton.setAttribute('class', 'close');
+
+      const elCloseButtonSpan = document.createElement('span');
+      elCloseButtonSpan.setAttribute('aria-hidden', 'true');
+      elCloseButtonSpan.style.fontSize = '25px';
+      elCloseButtonSpan.innerHTML = '&times;';
+      
+      elCloseButton.appendChild(elCloseButtonSpan);
+      elCloseButton.style.position = 'absolute';
+      elCloseButton.style.right = '20px';
+      elCloseButton.style.top = '11px';
+
+      elWrapper.appendChild(elHeader);
+      elWrapper.appendChild(elCloseButton);
+
+      args.dialog.header = elWrapper;
+
+      elCloseButtonSpan.addEventListener('click', () => {
+        if(this.isFormDirty) {
+          this.showDialog = true;
+        }else {
+          args.dialog.close();
+          this.isFormDirty = false;
+        }
+      })
+      console.log(args.dialog.header);
     }
 
     if (args.requestType === "delete") {
       this.deleteData(args["data"][0]);
     }
-
+    
     this.typeOfModification = args.requestType;
     this.operations = args;
+  
     /*
       setTimeout(() => {
         let previousValid = this.form.valid;
@@ -236,6 +296,7 @@ export class DynamicGridComponent implements OnInit {
 
     this.operations.dialog.close();
     this.initialization();
+    this.isFormDirty = false;
   }
 
   deleteData(event) {
@@ -298,9 +359,7 @@ export class DynamicGridComponent implements OnInit {
 
   previewDocument(filename: string) {
     this.helpService.getPdfFile(filename).subscribe((data) => {
-      console.log(data);
       let file = new Blob([data], { type: "application/pdf" });
-      console.log(file);
       var fileURL = URL.createObjectURL(file);
       window.open(fileURL);
     });

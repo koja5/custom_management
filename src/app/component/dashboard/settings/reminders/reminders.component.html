@@ -7,6 +7,7 @@
     *ngIf="configField"
     [config]="configField"
     (submit)="submitEmitter($event)"
+    (emitValue)="getValue($event)"
     #form="dynamicForm"
   >
   </app-dynamic-forms>
@@ -16,4 +17,12 @@
     [question]="language?.reminderDialogQuestion"
     (sendEmitter)="receiveConfirm($event)"
   ></app-dynamic-confirm-dialog>
+
+  <app-dynamic-confirm-dialog
+    [showDialog]="showDialogExit"
+    [title]="language?.changesWontBeSavedTitle"
+    [question]="language?.changesWontBeSaved"
+    (sendEmitter)="receiveConfirmExit($event)"
+  >
+  </app-dynamic-confirm-dialog>
 </div>

@@ -14,6 +14,27 @@ const sendSmsFromMail = require("./ftpUploadSMS");
 const { delay } = require("rxjs-compat/operator/delay");
 const { concat } = require("rxjs-compat/operator/concat");
 const macAddress = require("os").networkInterfaces();
+const multer = require('multer');
+const { Blob } = require("buffer");
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'server/routes/uploads/user-profile-images')
+    },
+
+    filename: (req, file, cb) => {
+      cb(null, Date.now() + path.extname(file.originalname))
+    }
+})
+
+const upload = multer({ storage: storage, limits: { fileSize: 65536 } });
+
+function readImageFile(file) {
+  // read binary data from a file:
+  const bitmap = fs.readFileSync(file);
+  const buf = new Buffer.from(bitmap);
+  return buf;
+}
 
 var link = process.env.link_api;
 /*
@@ -30,6 +51,44 @@ var connection = mysql.createPool({
   password: process.env.password,
   database: process.env.database,
 });
+router.post("/uploadProfileImage/:id/:userType", upload.single('updateImageInput'), (req, res) => {
+  if (!req.file) {
+    return res.send({
+      success: false
+    });
+  } 
+
+  const data = readImageFile('server/routes/uploads/user-profile-images/' + req.file.filename);
+  const id = req.params.id;
+  const userType = req.params.userType;
+
+  if(userType == 0 || userType == 1) {
+    connection.query("UPDATE users_superadmin SET img = ? WHERE id = ?", [data, id], function(err, res) {
+      if (err) throw err;
+    })
+  } else if (userType == 2 || userType == 3 || userType == 5 || userType == 6) {
+    connection.query("UPDATE users SET img = ? WHERE id = ?", [data, id], function(err, res) {
+      if (err) {
+        return res.status(400).send({
+          message: 'This is an error!'
+       });
+      }
+    })
+  } else {
+    connection.query("UPDATE customers SET img = ? WHERE id = ?", [data, id], function(err, res) {
+      if (err) {
+        return res.status(400).send({
+          message: 'This is an error!'
+       });
+      }
+    })
+  }
+
+  
+  return res.send({
+        success: true
+      });
+})
 
 /*var connection = mysql.createPool({
   host: 'localhost',

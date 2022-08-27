@@ -131,6 +131,9 @@ export class VaucherComponent implements OnInit {
       this.state.skip = this.savePage[this.currentUrl];
       this.state.take = this.savePage[this.currentUrl + 'Take'];
     }
+    this.vaucher.closeOnEscape = false;
+    this.vaucher.closeOnOutsideClick = false;
+    this.vaucher.hideCloseButton = true;
   }
 
   getVauchers() {
@@ -191,9 +194,6 @@ export class VaucherComponent implements OnInit {
     this.initializeParams();
     this.getNextVaucherId();
     this.changeTheme(this.theme);
-    this.vaucher.closeOnEscape = false;
-    this.vaucher.closeOnOutsideClick = false;
-    this.vaucher.hideCloseButton = true;
     this.vaucher.open();
   }
 

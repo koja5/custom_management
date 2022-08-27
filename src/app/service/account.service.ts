@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,24 @@ export class AccountService {
 
   getUser(id) {
     return this.http.get('/api/getUserWithId/' + id);
+  }
+
+  updateProfileImage(img, user) {
+    if(user.type == undefined) {
+      user.type = 4;
+    }
+    return this.http.post(`api/uploadProfileImage/${user.id}/${user.type}`, img);
+  }
+
+  getImage(body: any) {
+    if (!body.path) {
+      body = {
+        path: body,
+      };
+    }
+    return this.http.post('api/getImage', body, {
+      responseType: 'blob',
+    });
   }
 
   getCustomerWithId(id)  {

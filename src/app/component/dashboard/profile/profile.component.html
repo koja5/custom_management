@@ -6,14 +6,24 @@
         <div class="card-body no-padding height-9">
           <div class="row">
             <div class="profile-userpic">
-              <img [src]="imagePath" class="img-responsive" alt=""> </div>
+              <img [src]="imagePath" class="img-responsive" alt="" />
+              <button kendoButton [icon]="'edit'" class="edit-button-icon" (click)="updateImage()"></button>
+            </div>
           </div>
           <div class="profile-usertitle">
             <div class="profile-usertitle-name">
-              <span class="username username-hide-on-mobile" *ngIf="data.lastname !== '' && data.firstname !== ''">
-                {{data.lastname}} {{data.firstname}} </span>
-              <span class="username username-hide-on-mobile" *ngIf="data.lastname === '' || data.firstname === ''">
-                {{data.shortname}} </span>
+              <span
+                class="username username-hide-on-mobile"
+                *ngIf="data.lastname !== '' && data.firstname !== ''"
+              >
+                {{ data.lastname }} {{ data.firstname }}
+              </span>
+              <span
+                class="username username-hide-on-mobile"
+                *ngIf="data.lastname === '' || data.firstname === ''"
+              >
+                {{ data.shortname }}
+              </span>
             </div>
             <div class="profile-usertitle-job">
               <span *ngIf="data.type === 0">Superadmin</span>
@@ -24,19 +34,31 @@
           </div>
           <ul class="list-group list-group-unbordered">
             <li class="list-group-item">
-              <b>{{language['firstname']}}</b> 
-              <span class="pull-right a-color" *ngIf="data.firstname === ''">{{language['noInformation']}}</span>
-              <span class="pull-right a-color" *ngIf="data.firstname !== ''">{{data.firstname}}</span>
+              <b>{{ language["firstname"] }}</b>
+              <span class="pull-right a-color" *ngIf="data.firstname === ''">{{
+                language["noInformation"]
+              }}</span>
+              <span class="pull-right a-color" *ngIf="data.firstname !== ''">{{
+                data.firstname
+              }}</span>
             </li>
             <li class="list-group-item">
-              <b>{{language['lastname']}}</b> 
-              <span class="pull-right a-color" *ngIf="data.lastname === ''">{{language['noInformation']}}</span>
-              <span class="pull-right a-color" *ngIf="data.lastname !== ''">{{data.lastname}}</span>
+              <b>{{ language["lastname"] }}</b>
+              <span class="pull-right a-color" *ngIf="data.lastname === ''">{{
+                language["noInformation"]
+              }}</span>
+              <span class="pull-right a-color" *ngIf="data.lastname !== ''">{{
+                data.lastname
+              }}</span>
             </li>
             <li class="list-group-item">
-              <b>{{language['email']}}</b> 
-              <span class="pull-right a-color" *ngIf="data.email === ''">{{language['noInformation']}}</span>
-              <span class="pull-right a-color" *ngIf="data.email !== ''">{{data.email}}</span>
+              <b>{{ language["email"] }}</b>
+              <span class="pull-right a-color" *ngIf="data.email === ''">{{
+                language["noInformation"]
+              }}</span>
+              <span class="pull-right a-color" *ngIf="data.email !== ''">{{
+                data.email
+              }}</span>
             </li>
           </ul>
           <!-- END SIDEBAR USER TITLE -->
@@ -50,30 +72,42 @@
       </div>
       <div class="card">
         <div class="card-head card-topline-aqua">
-          <header>{{language['aboutMe']}}</header>
+          <header>{{ language["aboutMe"] }}</header>
         </div>
         <div class="card-body no-padding height-9">
           <div class="profile-desc">
-            <span *ngIf="data.description === undefined || data.description === ''">
-              {{language['noInformation']}}
+            <span
+              *ngIf="data.description === undefined || data.description === ''"
+            >
+              {{ language["noInformation"] }}
             </span>
-            <span *ngIf="data.description !== undefined && data.description !== ''">
-              {{data.description}}
+            <span
+              *ngIf="data.description !== undefined && data.description !== ''"
+            >
+              {{ data.description }}
             </span>
           </div>
           <ul class="list-group list-group-unbordered">
             <li class="list-group-item">
-              <b>{{language['birthday']}} </b>
+              <b>{{ language["birthday"] }} </b>
               <div class="profile-desc-item pull-right">
-                <span *ngIf="data.birthday === ''"> {{language['noInformation']}} </span>
-                <span *ngIf="data.birthday !== ''"> {{data.birthday | date: 'dd.MM.yyyy'}} </span>
+                <span *ngIf="data.birthday === ''">
+                  {{ language["noInformation"] }}
+                </span>
+                <span *ngIf="data.birthday !== ''">
+                  {{ data.birthday | date: "dd.MM.yyyy" }}
+                </span>
               </div>
             </li>
             <li class="list-group-item">
-              <b>{{language['sincecompany']}} </b>
+              <b>{{ language["sincecompany"] }} </b>
               <div class="profile-desc-item pull-right">
-                <span *ngIf="data.incompanysince === ''"> {{language['noInformation']}} </span>
-                <span *ngIf="data.incompanysince !== ''"> {{data.incompanysince}} </span>
+                <span *ngIf="data.incompanysince === ''">
+                  {{ language["noInformation"] }}
+                </span>
+                <span *ngIf="data.incompanysince !== ''">
+                  {{ data.incompanysince }}
+                </span>
               </div>
             </li>
           </ul>
@@ -81,14 +115,16 @@
       </div>
       <div class="card">
         <div class="card-head card-topline-aqua">
-          <header>{{language['place']}}</header>
+          <header>{{ language["place"] }}</header>
         </div>
         <div class="card-body no-padding height-9">
           <div class="row text-center m-t-10">
             <div class="col-md-12">
-              <p *ngIf="data.street === ''">{{language['noInformation']}}</p>
-              <p *ngIf="data.street !== ''">{{data.street}}
-                <br> {{data.place}}, {{data.zipcode}}</p>
+              <p *ngIf="data.street === ''">{{ language["noInformation"] }}</p>
+              <p *ngIf="data.street !== ''">
+                {{ data.street }} <br />
+                {{ data.place }}, {{ data.zipcode }}
+              </p>
             </div>
           </div>
         </div>
@@ -151,8 +187,22 @@
             <!-- Nav tabs -->
             <div class="p-rl-20">
               <ul class="nav customtab nav-tabs" role="tablist">
-                <li class="nav-item"><a (click)="changeTab('profile')" class="nav-link" [ngClass]="currentTab === 'profile' ? 'active' : ''">{{language['aboutMe']}}</a></li>
-                <li class="nav-item"><a (click)="changeTab('company')" class="nav-link" [ngClass]="currentTab === 'company' ? 'active' : ''">{{language['company']}}</a></li>
+                <li class="nav-item">
+                  <a
+                    (click)="changeTab('profile')"
+                    class="nav-link"
+                    [ngClass]="currentTab === 'profile' ? 'active' : ''"
+                    >{{ language["aboutMe"] }}</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    (click)="changeTab('company')"
+                    class="nav-link"
+                    [ngClass]="currentTab === 'company' ? 'active' : ''"
+                    >{{ language["company"] }}</a
+                  >
+                </li>
               </ul>
             </div>
             <!-- Tab panes -->
@@ -160,52 +210,60 @@
               <div class="tab-pane active fontawesome-demo" id="tab1">
                 <div id="biography">
                   <div class="row">
-                    <div class="col-md-3 col-xs-6 b-r"> <strong> {{language['fullName']}} </strong>
-                      <br>
+                    <div class="col-md-3 col-xs-6 b-r">
+                      <strong> {{ language["fullName"] }} </strong>
+                      <br />
                       <p class="text-muted">
-                        <span *ngIf="data.firstname === '' || data.lastname === ''">
-                          {{language['noInformation']}}
+                        <span
+                          *ngIf="data.firstname === '' || data.lastname === ''"
+                        >
+                          {{ language["noInformation"] }}
                         </span>
-                        <span *ngIf="data.firstname !== '' && data.lastname !== ''">
-                          {{data.lastname}} {{data.firstname}}
+                        <span
+                          *ngIf="data.firstname !== '' && data.lastname !== ''"
+                        >
+                          {{ data.lastname }} {{ data.firstname }}
                         </span>
                       </p>
                     </div>
-                    <div class="col-md-3 col-xs-6 b-r"> <strong>{{language['mobile']}}</strong>
-                      <br>
+                    <div class="col-md-3 col-xs-6 b-r">
+                      <strong>{{ language["mobile"] }}</strong>
+                      <br />
                       <p class="text-muted">
                         <span *ngIf="data.mobile === ''">
-                          {{language['noInformation']}}
+                          {{ language["noInformation"] }}
                         </span>
                         <span *ngIf="data.mobile !== ''">
-                          {{data.mobile}}
+                          {{ data.mobile }}
                         </span>
                       </p>
                     </div>
-                    <div class="col-md-3 col-xs-6 b-r"> <strong>{{language['email']}}</strong>
-                      <br>
+                    <div class="col-md-3 col-xs-6 b-r">
+                      <strong>{{ language["email"] }}</strong>
+                      <br />
                       <p class="text-muted">
                         <span *ngIf="data.email === ''">
-                          {{language['noInformation']}}
+                          {{ language["noInformation"] }}
                         </span>
                         <span *ngIf="data.email !== ''">
-                          {{data.email}}
+                          {{ data.email }}
                         </span>
                       </p>
                     </div>
-                    <div class="col-md-3 col-xs-6"> <strong>{{language['place']}}</strong>
-                      <br>
+                    <div class="col-md-3 col-xs-6">
+                      <strong>{{ language["place"] }}</strong>
+                      <br />
                       <p class="text-muted">
                         <span *ngIf="data.place === ''">
-                          {{language['noInformation']}}
+                          {{ language["noInformation"] }}
                         </span>
                         <span *ngIf="data.place !== ''">
-                          {{data.place}}
+                          {{ data.place }}
                         </span>
                       </p>
                     </div>
                   </div>
-                  <hr>
+                  <hr />
                   <p class="m-t-30">No description available!</p>
                 </div>
               </div>
@@ -215,8 +273,11 @@
                     <div class="full-width p-rl-20">
                       <div class="panel">
                         <form>
-                          <textarea class="form-control p-text-area" rows="4"
-                            placeholder="Whats in your mind today?"></textarea>
+                          <textarea
+                            class="form-control p-text-area"
+                            rows="4"
+                            placeholder="Whats in your mind today?"
+                          ></textarea>
                         </form>
                         <footer class="panel-footer">
                           <button class="btn btn-post pull-right">Post</button>
@@ -228,7 +289,9 @@
                               <a href="#"><i class="fa fa-camera"></i></a>
                             </li>
                             <li>
-                              <a href="#"><i class="fa  fa-location-arrow"></i></a>
+                              <a href="#"
+                                ><i class="fa fa-location-arrow"></i
+                              ></a>
                             </li>
                             <li>
                               <a href="#"><i class="fa fa-meh-o"></i></a>
@@ -242,62 +305,131 @@
               </div>
             </div>
 
-            
             <div class="tab-content" *ngIf="currentTab === 'company'">
               <div class="tab-pane active fontawesome-demo" id="tab1">
                 <div id="biography">
                   <div class="row">
-                    <div class="col-md-3 col-xs-6 b-r"> <strong>{{language['storename']}}</strong>
-                      <br>
+                    <div class="col-md-3 col-xs-6 b-r">
+                      <strong>{{ language["storename"] }}</strong>
+                      <br />
                       <p class="text-muted">
-                        <span *ngIf="companyData === undefined || companyData.length === 0 || companyData.storename === ''">{{language['noInformation']}}</span>
-                        <span *ngIf="companyData.storename !== ''">{{companyData.shortname}}</span>
+                        <span
+                          *ngIf="
+                            companyData === undefined ||
+                            companyData.length === 0 ||
+                            companyData.storename === ''
+                          "
+                          >{{ language["noInformation"] }}</span
+                        >
+                        <span *ngIf="companyData.storename !== ''">{{
+                          companyData.shortname
+                        }}</span>
                       </p>
                     </div>
-                    <div class="col-md-3 col-xs-6 b-r"> <strong>{{language['street']}}</strong>
-                      <br>
+                    <div class="col-md-3 col-xs-6 b-r">
+                      <strong>{{ language["street"] }}</strong>
+                      <br />
                       <p class="text-muted">
-                        <span *ngIf="companyData === undefined || companyData.length === 0 || companyData.street === ''">{{language['noInformation']}}</span>
-                        <span *ngIf="companyData.street !== ''">{{companyData.street}}</span>
+                        <span
+                          *ngIf="
+                            companyData === undefined ||
+                            companyData.length === 0 ||
+                            companyData.street === ''
+                          "
+                          >{{ language["noInformation"] }}</span
+                        >
+                        <span *ngIf="companyData.street !== ''">{{
+                          companyData.street
+                        }}</span>
                       </p>
                     </div>
-                    <div class="col-md-3 col-xs-6 b-r"> <strong>{{language['zipCode']}}</strong>
-                      <br>
+                    <div class="col-md-3 col-xs-6 b-r">
+                      <strong>{{ language["zipCode"] }}</strong>
+                      <br />
                       <p class="text-muted">
-                        <span *ngIf="companyData === undefined || companyData.length === 0 || companyData.zipcode === ''">{{language['noInformation']}}</span>
-                        <span *ngIf="companyData.zipcode !== ''">{{companyData.zipcode}}</span>
+                        <span
+                          *ngIf="
+                            companyData === undefined ||
+                            companyData.length === 0 ||
+                            companyData.zipcode === ''
+                          "
+                          >{{ language["noInformation"] }}</span
+                        >
+                        <span *ngIf="companyData.zipcode !== ''">{{
+                          companyData.zipcode
+                        }}</span>
                       </p>
                     </div>
-                    <div class="col-md-3 col-xs-6 b-r"> <strong>{{language['place']}}</strong>
-                      <br>
+                    <div class="col-md-3 col-xs-6 b-r">
+                      <strong>{{ language["place"] }}</strong>
+                      <br />
                       <p class="text-muted">
-                        <span *ngIf="companyData === undefined || companyData.length === 0 || companyData.place === ''">{{language['noInformation']}}</span>
-                        <span *ngIf="companyData.place !== ''">{{companyData.place}}</span>
+                        <span
+                          *ngIf="
+                            companyData === undefined ||
+                            companyData.length === 0 ||
+                            companyData.place === ''
+                          "
+                          >{{ language["noInformation"] }}</span
+                        >
+                        <span *ngIf="companyData.place !== ''">{{
+                          companyData.place
+                        }}</span>
                       </p>
                     </div>
-                    <div class="col-md-3 col-xs-6 b-r"> <strong>{{language['email']}}</strong>
-                      <br>
+                    <div class="col-md-3 col-xs-6 b-r">
+                      <strong>{{ language["email"] }}</strong>
+                      <br />
                       <p class="text-muted">
-                        <span *ngIf="companyData === undefined || companyData.length === 0 || companyData.email === ''">{{language['noInformation']}}</span>
-                        <span *ngIf="companyData.email !== ''">{{companyData.email}}</span>
+                        <span
+                          *ngIf="
+                            companyData === undefined ||
+                            companyData.length === 0 ||
+                            companyData.email === ''
+                          "
+                          >{{ language["noInformation"] }}</span
+                        >
+                        <span *ngIf="companyData.email !== ''">{{
+                          companyData.email
+                        }}</span>
                       </p>
                     </div>
-                    <div class="col-md-3 col-xs-6 b-r"> <strong>{{language['telephone']}}</strong>
-                      <br>
+                    <div class="col-md-3 col-xs-6 b-r">
+                      <strong>{{ language["telephone"] }}</strong>
+                      <br />
                       <p class="text-muted">
-                        <span *ngIf="companyData === undefined || companyData.length === 0 || companyData.telephone === ''">{{language['noInformation']}}</span>
-                        <span *ngIf="companyData.telephone !== ''">{{companyData.telephone}}</span>
+                        <span
+                          *ngIf="
+                            companyData === undefined ||
+                            companyData.length === 0 ||
+                            companyData.telephone === ''
+                          "
+                          >{{ language["noInformation"] }}</span
+                        >
+                        <span *ngIf="companyData.telephone !== ''">{{
+                          companyData.telephone
+                        }}</span>
                       </p>
                     </div>
-                    <div class="col-md-3 col-xs-6 b-r"> <strong>{{language['mobile']}}</strong>
-                      <br>
+                    <div class="col-md-3 col-xs-6 b-r">
+                      <strong>{{ language["mobile"] }}</strong>
+                      <br />
                       <p class="text-muted">
-                        <span *ngIf="companyData === undefined || companyData.length === 0 || companyData.mobile === ''">{{language['noInformation']}}</span>
-                        <span *ngIf="companyData.mobile !== ''">{{companyData.mobile}}</span>
+                        <span
+                          *ngIf="
+                            companyData === undefined ||
+                            companyData.length === 0 ||
+                            companyData.mobile === ''
+                          "
+                          >{{ language["noInformation"] }}</span
+                        >
+                        <span *ngIf="companyData.mobile !== ''">{{
+                          companyData.mobile
+                        }}</span>
                       </p>
                     </div>
                   </div>
-                  <hr>
+                  <hr />
                   <!--<p class="m-t-30">Completed my graduation in Gynaecologist
                     Medicine from the well known and renowned
                     institution of India – SARDAR PATEL MEDICAL COLLEGE, BARODA
@@ -398,8 +530,11 @@
                     <div class="full-width p-rl-20">
                       <div class="panel">
                         <form>
-                          <textarea class="form-control p-text-area" rows="4"
-                            placeholder="Whats in your mind today?"></textarea>
+                          <textarea
+                            class="form-control p-text-area"
+                            rows="4"
+                            placeholder="Whats in your mind today?"
+                          ></textarea>
                         </form>
                         <footer class="panel-footer">
                           <button class="btn btn-post pull-right">Post</button>
@@ -411,7 +546,9 @@
                               <a href="#"><i class="fa fa-camera"></i></a>
                             </li>
                             <li>
-                              <a href="#"><i class="fa  fa-location-arrow"></i></a>
+                              <a href="#"
+                                ><i class="fa fa-location-arrow"></i
+                              ></a>
                             </li>
                             <li>
                               <a href="#"><i class="fa fa-meh-o"></i></a>
@@ -430,4 +567,16 @@
     </div>
     <!-- END PROFILE CONTENT -->
   </div>
+  <!--UPDATE PROFILE IMAGE-->
+  <modal #chooseImage modalClass="modal-lg">
+    <modal-header>
+      <h4>Choose Image</h4>
+    </modal-header>
+    <modal-content>
+      <form name="updateImageForm" (ngSubmit)="submitPhoto()">
+        <input type="file" name="updateImageInput" class="choose-image-input" (input)="fileChoosen($event)"/>
+        <button class="update-image-submit-btn" type="submit">Submit</button>
+      </form>
+    </modal-content>
+  </modal>
 </div>

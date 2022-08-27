@@ -31,12 +31,18 @@
 </div>
 
 
-<modal #addVacationModal (onClose)="closeAddVacationModal()" modalClass="modal-md modal-dialog-centered no-footer">
+<modal #addVacationModal (onClose)="closeAddVacationModal()" modalClass="modal-md modal-dialog-centered no-footer" (keydown.esc)="confirmClose()">
   <modal-header>
     <h4> {{ holidayModalTitle }}</h4>
+    <button type="button" class="custom-close close" data-dismiss="modal" (click)="confirmClose()">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </modal-header>
   <modal-content class="pb-0">
-    <form name="addHolidayForm" class="addHolidayForm" (ngSubmit)="addClinicHoliday()" #addHolidayForm="ngForm">
+    <app-dynamic-confirm-dialog [showDialog]="showDialog" [title]="language?.changesWontBeSavedTitle"
+      [question]="language?.changesWontBeSaved" (sendEmitter)="receiveConfirm($event)">
+    </app-dynamic-confirm-dialog>
+    <form name="addHolidayForm" class="addHolidayForm" (change)="isDirty()" (ngSubmit)="addClinicHoliday()" #addHolidayForm="ngForm">
       <div class="form-group">
         <kendo-textbox-container floatingLabel="{{ language.title }}">
           <input kendoTextBox required type="text" class="col-12" pattern="[a-zA-Z0-9 ]+"

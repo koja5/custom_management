@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { ColorPickerEventArgs } from "@syncfusion/ej2-angular-inputs";
 import { ToastrService } from "ngx-toastr";
+import { Subject } from "rxjs";
+import { FormGuardData } from "src/app/models/formGuard-data";
 import { HelpService } from "src/app/service/help.service";
 import { ServiceHelperService } from "src/app/service/service-helper.service";
 import { ThemeColorsService } from "src/app/service/theme-color.service";
@@ -16,11 +18,14 @@ interface Theme {
   templateUrl: "./theme-colors.component.html",
   styleUrls: ["./theme-colors.component.scss"],
 })
-export class ThemeColorsComponent implements OnInit {
+export class ThemeColorsComponent implements OnInit, FormGuardData {
   colorValue: string;
   themeData: any;
   language: any;
   loading = true;
+  isFormDirty: boolean = false;
+  isDataSaved$: Subject<boolean> = new Subject<boolean>();
+  showDialog: boolean = false;
 
   constructor(
     private themeColorsService: ThemeColorsService,
@@ -35,8 +40,21 @@ export class ThemeColorsComponent implements OnInit {
     this.getThemeColor();
   }
 
+  receiveConfirm(event: boolean): void {
+    if (event) {
+      this.isFormDirty = false;
+    }
+    this.showDialog = false;
+    this.isDataSaved$.next(event);
+  }
+
+  openConfirmModal(): void {
+    this.showDialog = true;
+  }
+
   // function to handle the ColorPicker change event
   change(args: ColorPickerEventArgs): void {
+    this.isFormDirty = true;
     this.colorValue = args.currentValue.hex;
     this.themeData = {
       ...this.themeData,
@@ -47,6 +65,7 @@ export class ThemeColorsComponent implements OnInit {
   }
 
   saveTheme() {
+    this.isFormDirty = false;
     if (this.themeData.id) {
       this.updateThemeColors();
     } else {

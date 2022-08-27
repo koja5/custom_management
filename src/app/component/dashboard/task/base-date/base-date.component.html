@@ -1250,6 +1250,15 @@
                 }}</a>
             </li>
           </ul>
+          <kendo-dialog *ngIf="showDialogChangeTab" title="{{ language?.changesWontBeSavedTitle }}" [minWidth]="250" [width]="450">
+          <p style="margin: 30px; text-align: center">
+            {{ language?.changesWontBeSaved }}
+          </p>
+          <kendo-dialog-actions>
+            <button kendoButton (click)="receiveConfirmChangeTab(false)">{{language.no}}</button>
+            <button kendoButton (click)="receiveConfirmChangeTab(true)" primary="true">{{language.yes}}</button>
+          </kendo-dialog-actions>
+        </kendo-dialog>
           <!--PROFILE-->
           <div class="tab-content" *ngIf="currentTab === 'profile'">
             <div id="profile-tab" class="tab-pane active">

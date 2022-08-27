@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
+import { Subject } from "rxjs";
 import { DynamicFormsComponent } from "src/app/component/dynamic-elements/dynamic-forms/dynamic-forms.component";
+import { FormGuardData } from "src/app/models/formGuard-data";
 import { SmsReminderModel } from "src/app/models/sms-reminder-model";
 import { DynamicService } from "src/app/service/dynamic.service";
 import { HelpService } from "src/app/service/help.service";
@@ -10,7 +12,7 @@ import { ParameterItemService } from "src/app/service/parameter-item.service";
   templateUrl: "./sms-reminder.component.html",
   styleUrls: ["./sms-reminder.component.scss"],
 })
-export class SmsReminderComponent implements OnInit {
+export class SmsReminderComponent implements OnInit, FormGuardData {
   @ViewChild(DynamicFormsComponent) form: DynamicFormsComponent;
   public path = "parameters";
   public file = "sms-reminder";
@@ -23,6 +25,9 @@ export class SmsReminderComponent implements OnInit {
   public showDialog = false;
   public configField: any;
   public language: any;
+  isFormDirty: boolean = false;
+  isDataSaved$: Subject<boolean> = new Subject<boolean>();
+  showDialogExit: boolean = false;
 
   constructor(
     private service: ParameterItemService,
@@ -33,6 +38,22 @@ export class SmsReminderComponent implements OnInit {
   ngOnInit() {
     this.language = this.helpService.getLanguage();
     this.initialization();
+  }
+
+  isDataSavedChange(event: boolean) {
+    this.isDataSaved$.next(event);
+  }
+
+  openConfirmModal(): void {
+    this.showDialogExit = true;
+  }
+
+  changeFormDirty(event) {
+    this.isFormDirty = event
+  }
+
+  changeShowDialogExit(event) {
+    this.showDialogExit = event;
   }
 
   initialization() {
@@ -107,6 +128,7 @@ export class SmsReminderComponent implements OnInit {
             }
           });
       }
+      this.isFormDirty = false;
     }
     this.showDialog = false;
   }

@@ -28,59 +28,99 @@
 
     </li>
   </ul>-->
+  <app-dynamic-confirm-dialog
+    [showDialog]="showDialog"
+    [title]="language?.changesWontBeSavedTitle"
+    [question]="language?.changesWontBeSaved"
+    (sendEmitter)="receiveConfirm($event)"
+  >
+  </app-dynamic-confirm-dialog>
   <div class="tab-content" *ngIf="currentTab === 'complaint'">
     <div id="profile-tab" class="tab-pane active">
-      <app-parameter-item [type]="'Complaint'"></app-parameter-item>
+      <app-parameter-item
+        [type]="'Complaint'"
+        (isDataSaved)="getIsDataSaved($event)"
+      ></app-parameter-item>
     </div>
   </div>
   <div class="tab-content" *ngIf="currentTab === 'therapy'">
     <div id="profile-tab" class="tab-pane active">
-      <app-parameter-item [type]="'Therapy'"></app-parameter-item>
+      <app-parameter-item
+        [type]="'Therapy'"
+        (isDataSaved)="getIsDataSaved($event)"
+      ></app-parameter-item>
     </div>
   </div>
   <div class="tab-content" *ngIf="currentTab === 'treatment'">
     <div id="profile-tab" class="tab-pane active">
-      <app-parameter-item [type]="'Treatment'"></app-parameter-item>
+      <app-parameter-item
+        [type]="'Treatment'"
+        (isDataSaved)="getIsDataSaved($event)"
+      ></app-parameter-item>
     </div>
   </div>
   <div class="tab-content" *ngIf="currentTab === 'recommendation'">
     <div id="profile-tab" class="tab-pane active">
-      <app-parameter-item [type]="'Recommendation'"></app-parameter-item>
+      <app-parameter-item
+        [type]="'Recommendation'"
+        (isDataSaved)="getIsDataSaved($event)"
+      ></app-parameter-item>
     </div>
   </div>
   <div class="tab-content" *ngIf="currentTab === 'relationship'">
     <div id="profile-tab" class="tab-pane active">
-      <app-parameter-item [type]="'Relationship'"></app-parameter-item>
+      <app-parameter-item
+        [type]="'Relationship'"
+        (isDataSaved)="getIsDataSaved($event)"
+      ></app-parameter-item>
     </div>
   </div>
   <div class="tab-content" *ngIf="currentTab === 'social'">
     <div id="profile-tab" class="tab-pane active">
-      <app-parameter-item [type]="'Social'"></app-parameter-item>
+      <app-parameter-item
+        [type]="'Social'"
+        (isDataSaved)="getIsDataSaved($event)"
+      ></app-parameter-item>
     </div>
   </div>
   <div class="tab-content" *ngIf="currentTab === 'doctor'">
     <div id="profile-tab" class="tab-pane active">
-      <app-parameter-item [type]="'Doctor'"></app-parameter-item>
+      <app-parameter-item
+        [type]="'Doctor'"
+        (isDataSaved)="getIsDataSaved($event)"
+      ></app-parameter-item>
     </div>
   </div>
   <div class="tab-content" *ngIf="currentTab === 'doctors'">
     <div id="profile-tab" class="tab-pane active">
-      <app-parameter-item [type]="'Doctors'"></app-parameter-item>
+      <app-parameter-item
+        [type]="'Doctors'"
+        (isDataSaved)="getIsDataSaved($event)"
+      ></app-parameter-item>
     </div>
   </div>
   <div class="tab-content" *ngIf="currentTab === 'vat_tax'">
     <div id="profile-tab" class="tab-pane active">
-      <app-parameter-item [type]="'VATTax'"></app-parameter-item>
+      <app-parameter-item
+        [type]="'VATTax'"
+        (isDataSaved)="getIsDataSaved($event)"
+      ></app-parameter-item>
     </div>
   </div>
   <div class="tab-content" *ngIf="currentTab === 'CS'">
     <div id="profile-tab" class="tab-pane active">
-      <app-parameter-item [type]="'CS'"></app-parameter-item>
+      <app-parameter-item
+        [type]="'CS'"
+        (isDataSaved)="getIsDataSaved($event)"
+      ></app-parameter-item>
     </div>
   </div>
   <div class="tab-content" *ngIf="currentTab === 'state'">
     <div id="profile-tab" class="tab-pane active">
-      <app-parameter-item [type]="'state'"></app-parameter-item>
+      <app-parameter-item
+        [type]="'state'"
+        (isDataSaved)="getIsDataSaved($event)"
+      ></app-parameter-item>
     </div>
   </div>
 </div>
