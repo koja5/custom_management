@@ -7,20 +7,25 @@
         [(ngModel)]="selectedTemplates" name="template" (valueChange)="onTemplateChange()">
       </kendo-multiselect>
       <button class="mt-4" kendoButton [primary]="false" [disabled]="isSaveDisabled" type="button"
-        (click)="addHolidaysForClinic()">
+        (click)="addHolidayTemplatesForClinic()">
         {{ language.save }}
       </button>
     </div>
   </div>
-  <div class="float-left pt-3">
-    <button kendoButton [icon]="'add'" (click)="openAddNewHolidayModal()" [primary]="true" class="addButton">
-      {{ language.addNew }}
-    </button>
-  </div>
-  <hr />
+
   <table class="table table-responsive">
     <thead>
-      <tr> Your defined holidays</tr>
+      <tr>
+        <td>
+          <h4> Your defined holidays</h4>
+        </td>
+        <td>
+          <button type="button" (click)="openAddNewHolidayModal()" class="btn btn-primary btn-sm">
+            {{ language.addNew }}
+          </button>
+        </td>
+
+      </tr>
       <tr>
         <th>{{ language.title }}</th>
         <th>{{ language.date }}</th>
@@ -45,7 +50,7 @@
 
   <table class="table table-responsive w-50">
     <thead>
-      <tr> Selected holidays (if you want to change it, remove/add in selection)</tr>
+      <tr> Predifened holidays (change it in selection)</tr>
       <tr>
         <th>{{ language.title }}</th>
         <th>{{ language.date }}</th>

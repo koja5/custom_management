@@ -211,7 +211,6 @@ export class AddHolidayComponent implements OnInit {
           this.language.adminSuccessCreateText
         );
         this.holidayList.push(this.currentHoliday);
-
       } else {
         this.displayErrorMessage(
           this.language.adminErrorCreateTitle,
@@ -261,7 +260,7 @@ export class AddHolidayComponent implements OnInit {
           this.language.adminErrorDeleteText
         );
       }
-      this.closeHolidayModal();
+      this.closeDeleteHolidayDialog();
     });
   }
 
