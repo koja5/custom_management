@@ -8,7 +8,6 @@ import { MessageService } from "src/app/service/message.service";
 import { IndividualConfig, ToastrService } from "ngx-toastr";
 import { HelpService } from "src/app/service/help.service";
 import { DatePickerComponent } from "@progress/kendo-angular-dateinputs";
-import { UserType } from "src/app/component/enum/user-type";
 import {
   GroupDescriptor,
   SortDescriptor,
@@ -32,8 +31,8 @@ export class AddHolidayComponent implements OnInit {
 
   public language: any;
   public addNewHoliday: boolean = true;
-  public deleteModal = false;
-  public userType = UserType;
+  public deleteModal: boolean = false;
+  public deleteHolidayModal: boolean = false;
   public currentHoliday: HolidayModel = new HolidayModel();
   public holidayTemplateList: HolidayTemplate[];
   public currentTab = TabType.Holidays;
@@ -70,8 +69,9 @@ export class AddHolidayComponent implements OnInit {
 
   public user: UserModel;
   private deleteHolidayTemplateId: number;
-  height: string;
+  public height: string;
   public holidayList: HolidayModel[] = [];
+  deleteHolidayId: number;
 
   @HostListener("window:resize", ["$event"])
   onResize() {
@@ -248,8 +248,8 @@ export class AddHolidayComponent implements OnInit {
     });
   }
 
-  public deleteHoliday(id: number): void {
-    this.holidayService.deleteHoliday(id, (val) => {
+  public deleteHoliday(): void {
+    this.holidayService.deleteHoliday(this.deleteHolidayId, (val) => {
       if (val) {
         this.displaySuccessMessage(this.language.adminSuccessDeleteTitle, this.language.adminSuccessDeleteText);
 
@@ -321,6 +321,11 @@ export class AddHolidayComponent implements OnInit {
     });
   }
 
+  public openDeleteHolidayDialog(event: number): void {
+    this.deleteHolidayModal = true;
+    this.deleteHolidayId = event;
+  }
+
   public openDeleteHolidayTemplateDialog(event: number): void {
     this.deleteModal = true;
     this.deleteHolidayTemplateId = event;
@@ -367,6 +372,11 @@ export class AddHolidayComponent implements OnInit {
   public closeDeleteDialog(): void {
     this.deleteModal = false;
     this.deleteHolidayTemplateId = null;
+  }
+
+  public closeDeleteHolidayDialog(): void {
+    this.deleteHolidayModal = false;
+    this.deleteHolidayId = null;
   }
 
   public closeTemplateModal(): void {
