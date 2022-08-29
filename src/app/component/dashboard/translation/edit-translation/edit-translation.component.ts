@@ -10,11 +10,13 @@ import { DashboardService } from 'src/app/service/dashboard.service';
   styleUrls: ["./edit-translation.component.scss"]
 })
 export class EditTranslationComponent implements OnInit {
-  public schema: any;
+  public schema: any = 1;
   public data = new TranslationModel();
   public id: any;
   public loading = true;
   public language: any;
+  schemaData: any;
+  toExpand: boolean = false;
 
   constructor(
     private service: DashboardService,
@@ -26,21 +28,36 @@ export class EditTranslationComponent implements OnInit {
   ngOnInit() {
     this.id = this.route.snapshot.params.id;
     this.language = JSON.parse(localStorage.getItem("language"));
+    this.service.getGridConfigurationScheme("translation").subscribe(data => {
+      this.schemaData = data;
+    });
     this.initialization();
   }
 
   initialization() {
-    this.service.getGridConfigurationScheme("translation").subscribe(data => {
-      this.schema = data;
-      this.loading = false;
-    });
-
+    if(this.toExpand) {
+      this.schemaData.layout.map((el: any, index: number, arr) => {
+        el.expanded = true;
+      })
+      this.schema = this.schemaData;
+    }else {
+      this.service.getGridConfigurationScheme("translation").subscribe(data => {
+        this.schema = data;
+        this.loading = false;
+      });
+    }
+    
     if (this.id !== "create") {
       this.service.getTranslationWithId(this.id).subscribe(data => {
         this.data = data;
         this.loading = false;
       });
     }
+  }
+
+  expandAll(): void {
+    this.toExpand = !this.toExpand
+    this.initialization();
   }
 
   saveConfiguration(event) {
