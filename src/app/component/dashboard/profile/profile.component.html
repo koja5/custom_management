@@ -570,12 +570,16 @@
   <!--UPDATE PROFILE IMAGE-->
   <modal #chooseImage modalClass="modal-lg">
     <modal-header>
-      <h4>Choose Image</h4>
+      <h4>{{ language.chooseImage }}</h4>
     </modal-header>
     <modal-content>
       <form name="updateImageForm" (ngSubmit)="submitPhoto()">
-        <input type="file" name="updateImageInput" class="choose-image-input" (input)="fileChoosen($event)"/>
-        <button class="update-image-submit-btn" type="submit">Submit</button>
+        <input id="file-upload" type="file" name="updateImageInput" class="choose-image-input" (input)="fileChoosen($event)"/>
+        <label for="file-upload" class="custom-file-upload">
+          {{ language.chooseFile }}
+        </label>
+          <span class="choose-image-label">{{ language.chooseImage }}</span>
+        <button class="update-image-submit-btn" type="submit">{{ language.submitImage }}</button>
       </form>
     </modal-content>
   </modal>
