@@ -41,7 +41,7 @@ function sendHappyBirthdayViaSMS() {
         if (!error && response.statusCode === 200) {
           conn.query(
             // "SELECT distinct c.*, sb.* from customers c join sms_birthday_congratulation sb on c.storeId = sb.superadmin where DAY(c.birthday + interval 1 DAY) = DAY(CURRENT_DATE()) and MONTH(c.birthday) = MONTH(CURRENT_DATE())",
-            "SELECT distinct c.*, sb.* from customers c join sms_birthday_congratulation sb on c.storeId = sb.superadmin where DAY(c.birthday  + interval 1 DAY) = DAY(CURRENT_DATE()) and MONTH(c.birthday) = MONTH(CURRENT_DATE())",
+            "SELECT distinct c.*, sb.* from customers c join sms_birthday_congratulation sb on c.storeId = sb.superadmin where DAY(c.birthday  + interval 1 DAY) = DAY(CURRENT_DATE()) and MONTH(c.birthday) = MONTH(CURRENT_DATE()) and c.active = 1",
             function (err, rows, fields) {
               if (err) {
                 console.error("SQL error:", err);
@@ -65,6 +65,7 @@ function sendHappyBirthdayViaSMS() {
                                 "SELECT distinct congratulationBirthday from mail_birthday_congratulation where superadmin = ?",
                                 [to.superadmin],
                                 function (err, mailRows, fields) {
+                                  conn.release();
                                   if (
                                     mailRows.length === 0 ||
                                     (mailRows.length > 0 &&
@@ -132,19 +133,20 @@ function sendHappyBirthdayViaSMS() {
                                       sendSmsFromMail(phoneNumber, fullMessage);
                                     }
                                   }
-                                  conn.release();
                                 }
                               );
+                            } else {
+                              conn.release();
                             }
                           });
                         }
                       );
+                    } else {
+                      conn.release();
                     }
-                    conn.release();
                   }
                 );
               }
-              conn.release();
             }
           );
         }

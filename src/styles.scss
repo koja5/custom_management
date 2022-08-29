@@ -17563,7 +17563,7 @@ kendo-window {
 .k-colorpalette .k-item.k-state-selected:hover,
 .k-colorpalette .k-item.k-state-focused,
 .k-colorpalette .k-item:focus {
-  box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.3), inset 0 0 0 1px white !important;
+  box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.3), inset 0 0 0 1px #000 !important;
 }
 
 /* Padding and Margin */

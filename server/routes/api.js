@@ -459,10 +459,10 @@ router.post("/login", (req, res, next) => {
             }
             console.log(rows);
             if (rows.length >= 1 && rows[0].active === 1) {
-              /*logger.log(
+              logger.log(
                 "info",
                 `User ${req.body.email} is SUCCESS login on a system like a USER!`
-              );*/
+              );
               conn.query(
                 "SELECT * FROM user_access where mac_address = ?",
                 [req.body.ipAddress],
@@ -566,11 +566,11 @@ router.post("/login", (req, res, next) => {
                     );
                   } else {
                     conn.query(
-                      "SELECT * FROM customers WHERE email=? AND password=?",
+                      "SELECT * FROM customers WHERE email=? AND password=? and active = 1",
                       [reqObj.email, sha1(reqObj.password)],
                       function (err, rows, fields) {
                         if (err) {
-                          // logger.log("error", err.sql + ". " + err.sqlMessage);
+                          logger.log("error", err.sql + ". " + err.sqlMessage);
                           res.json(err);
                         }
 
@@ -791,7 +791,7 @@ router.get("/getMe/:id", function (req, res, next) {
                   res.json(rows);
                 } else {
                   conn.query(
-                    "SELECT c.*, us.shortname as 'clinicName' from customers c join users_superadmin us on c.storeId = us.id where c.id = ?",
+                    "SELECT c.*, us.shortname as 'clinicName' from customers c join users_superadmin us on c.storeId = us.id where c.id = ? and c.active = 1",
                     [id],
                     function (err, rows) {
                       conn.release();
@@ -1434,7 +1434,7 @@ router.post("/searchCustomer", function (req, res, next) {
     var filter = req.body.filter;
 
     conn.query(
-      "SELECT * from customers where storeId = ? and shortname like '%" +
+      "SELECT * from customers where storeId = ? and active = 1 and shortname like '%" +
         filter +
         "%'",
       [superadmin],
@@ -2390,11 +2390,11 @@ router.get("/getWorkandTaskForUser/:id", function (req, res, next) {
       function (err, work) {
         if (!err) {
           conn.query(
-            "select t.*, e.color, c.mobile from tasks t join event_category e on t.colorTask = e.id join customers c on t.customer_id = c.id where creator_id = ?",
+            "select t.*, e.color, c.mobile from tasks t join event_category e on t.colorTask = e.id join customers c on t.customer_id = c.id where t.creator_id = ? and c.active = 1",
             [id],
             function (err, events) {
               conn.query(
-                "select COUNT(t.id) as 'statistic', e.category, e.id, t.creator_id from tasks t join event_category e on t.colorTask = e.id where creator_id = ? GROUP BY e.id",
+                "select COUNT(t.id) as 'statistic', e.category, e.id, t.creator_id from tasks t join event_category e on t.colorTask = e.id where t.creator_id = ? GROUP BY e.id",
                 [id],
                 function (err, eventStatistic) {
                   conn.release();
@@ -5140,7 +5140,7 @@ router.get("/getReservations/:id", function (req, res, next) {
       res.json(err);
     }
     conn.query(
-      "select t.*, e.color, c.firstname, c.lastname, c.mobile, c.email, c.birthday, u.shortname from tasks t join event_category e on t.colorTask = e.id join customers c on t.customer_id = c.id join users u on t.creator_id = u.id where t.online = 1 and t.superadmin = ?",
+      "select t.*, e.color, c.firstname, c.lastname, c.mobile, c.email, c.birthday, u.shortname from tasks t join event_category e on t.colorTask = e.id join customers c on t.customer_id = c.id join users u on t.creator_id = u.id where t.online = 1 and t.superadmin = ? and c.active = 1",
       [id],
       function (err, rows) {
         conn.release();
@@ -5259,7 +5259,7 @@ router.post("/sendSMS", function (req, res) {
               res.json(err);
             } else {
               conn.query(
-                "select distinct c.telephone, c.mobile, c.shortname, s.storename, s.street, s.zipcode, s.place, s.telephone as storeTelephone, s.mobile as storeMobile, s.email, sr.*, e.allowSendInformation from customers c join sms_reminder_message sr on c.storeId = sr.superadmin join store s on c.storeId = s.superadmin join tasks t on s.id = t.storeId join event_category e on t.colorTask = e.id where c.id = ? and s.id = ? and t.id = ? and e.allowSendInformation = 1",
+                "select distinct c.telephone, c.mobile, c.shortname, s.storename, s.street, s.zipcode, s.place, s.telephone as storeTelephone, s.mobile as storeMobile, s.email, sr.*, e.allowSendInformation from customers c join sms_reminder_message sr on c.storeId = sr.superadmin join store s on c.storeId = s.superadmin join tasks t on s.id = t.storeId join event_category e on t.colorTask = e.id where c.id = ? and s.id = ? and t.id = ? and e.allowSendInformation = 1 and c.active = 1",
                 [req.body.id, req.body.storeId, req.body.taskId],
                 function (err, smsMessage, fields) {
                   var sms = {};
@@ -5633,7 +5633,7 @@ router.post("/sendMassiveSMS", function (req, res) {
               conn.query(
                 "select distinct c.telephone, c.mobile, c.shortname, sm.* from customers c join sms_massive_message sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin " +
                   joinTable +
-                  " where ((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL)) and c.storeId = " +
+                  " where ((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL)) and c.active = 1 and c.storeId = " +
                   Number(req.body.superadmin) +
                   " and " +
                   question,
@@ -6005,24 +6005,25 @@ router.post("/getFilteredRecipients", function (req, res) {
         table = "sms_massive_message";
       }
 
-      var excludeQuery='';
-      if(req.body.excludeCustomersWithEvents)
-      {
-        excludeQuery = 'c.id not in (select t.customer_id from tasks t where t.start > now()) and'; 
+      var excludeQuery = "";
+      if (req.body.excludeCustomersWithEvents) {
+        excludeQuery =
+          "c.id not in (select t.customer_id from tasks t where t.start > now()) and";
       }
-      
+
       conn.query(
         "select distinct c.* from customers c join " +
-        table +
-        " sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin " +
-        joinTable +
-        " where " + excludeQuery  +
-        checkAdditionalQuery +
-        " and c.storeId = " +
-        Number(req.body.superadmin) +
-        " and (" +
-        question +
-        ")",
+          table +
+          " sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin " +
+          joinTable +
+          " where " +
+          excludeQuery +
+          checkAdditionalQuery +
+          " and c.active = 1 and c.storeId = " +
+          Number(req.body.superadmin) +
+          " and (" +
+          question +
+          ")",
         function (err, rows) {
           conn.release();
           if (err) return err;
@@ -8317,79 +8318,71 @@ router.get("/getHolidays/:userId", function (req, res, next) {
   });
 });
 
-router.get(
-  "/getHolidaysByTemplate/:templateId",
-  function (req, res, next) {
-    connection.getConnection(function (err, conn) {
-      if (err) {
-        logger.log("error", err.sql + ". " + err.sqlMessage);
-        res.json(err);
-      }
-      var templateId = req.params.templateId;
-      conn.query(
-        "SELECT * FROM `holidays` h where h.templateId = " + templateId,
-        function (err, rows) {
-          conn.release();
-          if (!err) {
-            res.json(rows);
-          } else {
-            res.json(err);
-            logger.log("error", err.sql + ". " + err.sqlMessage);
-          }
+router.get("/getHolidaysByTemplate/:templateId", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    var templateId = req.params.templateId;
+    conn.query(
+      "SELECT * FROM `holidays` h where h.templateId = " + templateId,
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
-      );
-    });
-  }
-);
-
-router.get("/getHolidaysByTemplates/:templateIds",
-  function (req, res, next) {
-    connection.getConnection(function (err, conn) {
-      if (err) {
-        logger.log("error", err.sql + ". " + err.sqlMessage);
-        res.json(err);
       }
-      var templateIds = req.params.templateIds;
-      conn.query(
-        "SELECT * FROM `holidays` h where h.templateId in (" + templateIds + ")",
-        function (err, rows) {
-          conn.release();
-          if (!err) {
-            res.json(rows);
-          } else {
-            res.json(err);
-            logger.log("error", err.sql + ". " + err.sqlMessage);
-          }
-        }
-      );
-    });
-  }
-);
+    );
+  });
+});
 
-router.get("/getHolidaysForClinic/:clinicId",
-  function (req, res, next) {
-    connection.getConnection(function (err, conn) {
-      if (err) {
-        logger.log("error", err.sql + ". " + err.sqlMessage);
-        res.json(err);
+router.get("/getHolidaysByTemplates/:templateIds", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    var templateIds = req.params.templateIds;
+    conn.query(
+      "SELECT * FROM `holidays` h where h.templateId in (" + templateIds + ")",
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
       }
-      var clinicId = req.params.clinicId;
-      conn.query(
-        "SELECT * FROM `holidays` h where h.clinicId =" + clinicId,
-        function (err, rows) {
-          conn.release();
-          if (!err) {
-            res.json(rows);
-          } else {
-            res.json(err);
-            logger.log("error", err.sql + ". " + err.sqlMessage);
-          }
-        }
-      );
-    });
-  }
-);
+    );
+  });
+});
 
+router.get("/getHolidaysForClinic/:clinicId", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    var clinicId = req.params.clinicId;
+    conn.query(
+      "SELECT * FROM `holidays` h where h.clinicId =" + clinicId,
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
 
 //end holidays
 
@@ -8428,9 +8421,10 @@ router.post("/createStoreTemplateConnection", (req, res, next) => {
         });
       } else {
         console.log(req.body);
-        const temp=req.body.query;
+        const temp = req.body.query;
         conn.query(
-          "insert into store_holidayTemplate (storeId , templateId) values " + temp,
+          "insert into store_holidayTemplate (storeId , templateId) values " +
+            temp,
           function (err, results, fields) {
             conn.release();
             if (err) {
@@ -8450,7 +8444,6 @@ router.post("/createStoreTemplateConnection", (req, res, next) => {
   }
 });
 
-
 router.post("/deleteStoreTemplateConnection", (req, res, next) => {
   try {
     connection.getConnection(function (err, conn) {
@@ -8462,10 +8455,13 @@ router.post("/deleteStoreTemplateConnection", (req, res, next) => {
         });
       } else {
         console.log(req.body);
-        const temp=req.body.query;
-        const storeId=req.body.storeId;
+        const temp = req.body.query;
+        const storeId = req.body.storeId;
         conn.query(
-          "DELETE FROM store_holidayTemplate where storeId =  " + storeId + " and templateId in " + temp,
+          "DELETE FROM store_holidayTemplate where storeId =  " +
+            storeId +
+            " and templateId in " +
+            temp,
           function (err, results, fields) {
             conn.release();
             if (err) {
@@ -8495,7 +8491,7 @@ router.get("/getStoreTemplateConnection/:storeId", (req, res, next) => {
           status: err,
         });
       } else {
-        const temp = req.params.storeId; 
+        const temp = req.params.storeId;
         conn.query(
           "select * from store_holidayTemplate where storeId = " + temp,
           function (err, results, fields) {
@@ -8516,7 +8512,6 @@ router.get("/getStoreTemplateConnection/:storeId", (req, res, next) => {
     res.json(ex);
   }
 });
-
 
 router.post("/createUserTemplate", (req, res, next) => {
   try {
