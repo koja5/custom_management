@@ -9,6 +9,7 @@ import {
 } from "@angular/core";
 import { FormGroup, Validators } from "@angular/forms";
 import {
+  DataStateChangeEventArgs,
   DialogEditEventArgs,
   EditSettingsModel,
   SaveEventArgs,
@@ -71,7 +72,8 @@ export class DynamicGridComponent implements OnInit {
     private service: DynamicService,
     private helpService: HelpService,
     private messageService: MessageService,
-    private router: Router
+    private router: Router,
+    private elem: ElementRef
   ) {}
 
   ngOnInit() {
@@ -97,10 +99,16 @@ export class DynamicGridComponent implements OnInit {
   ngAfterViewInit() {}
 
   initialization() {
-    this.service.getConfiguration(this.path, this.name).subscribe((data) => {
+    this.service.getConfiguration(this.path, this.name).subscribe((data: any) => {
       this.config = data;
+      this.config.paging.settings.pageSizes = [5, 10, 20];
+      this.config.paging.settings.pageSize = 10;
+      
       if(this.savePage[this.currentUrl]) {
         this.config.paging.settings.currentPage = this.savePage[this.currentUrl];
+      }
+      if(this.savePage[this.currentUrl + 'Take']) {
+        this.config.paging.settings.pageSize = this.savePage[this.currentUrl + 'Take'];
       }
       if (data["localData"]) {
         this.getLocalData(data["localData"]);
@@ -170,9 +178,13 @@ export class DynamicGridComponent implements OnInit {
 
   actionBegin(args: any): void {
     if(args.currentPage) {
+      let elements = this.elem.nativeElement.querySelectorAll('.e-dropdownlist');
+
       this.savePage[this.currentUrl] = args.currentPage;
+      this.savePage[this.currentUrl + 'Take'] = elements[0].value;
       this.helpService.setGridPageSize(this.savePage);
     }
+    
     /*if (args.requestType === "beginEdit" || args.requestType === "add") {
       this.orderData = Object.assign({}, args.rowData);
     }
@@ -250,7 +262,6 @@ export class DynamicGridComponent implements OnInit {
           this.isFormDirty = false;
         }
       })
-      console.log(args.dialog.header);
     }
 
     if (args.requestType === "delete") {

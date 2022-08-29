@@ -20,7 +20,7 @@ import { ActivatedRoute, Router } from "@angular/router";
   styleUrls: ["./parameter-item.component.scss"],
 })
 export class ParameterItemComponent implements OnInit {
-  @Output() isDataSaved = new EventEmitter<boolean>();
+  @Output() checkIsFormChanged = new EventEmitter<boolean>();
   @Input() type: string;
   public view: Observable<GridDataResult>;
   public gridState: State = {
@@ -150,11 +150,16 @@ export class ParameterItemComponent implements OnInit {
     this.savePage = this.helpService.getGridPageSize();
     if(this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
       this.gridState.skip = this.savePage[this.currentUrl];
+      this.gridState.take = this.savePage[this.currentUrl + 'Take'];
     }
   }
 
   checkIsDataSaved() {
-    this.isDataSaved.emit(true);
+    if(this.editedRowIndex > -1) {
+      this.checkIsFormChanged.emit(true);
+    }else {
+      this.checkIsFormChanged.emit(false);
+    }
   }
 
   public onStateChange(state: State) {
@@ -275,7 +280,7 @@ export class ParameterItemComponent implements OnInit {
     this.checkBoxDisabled = this.checkBoxDisabled.map(element => true);
 
     this.changeTheme(this.theme);
-    this.isDataSaved.emit(false);
+    this.checkIsFormChanged.emit(false);
   }
 
   setSelectedItem(dataItem): void {
@@ -286,7 +291,7 @@ export class ParameterItemComponent implements OnInit {
 
   public saveHandler({ sender, rowIndex, formGroup, isNew }) {
 
-    this.isDataSaved.emit(false);
+    this.checkIsFormChanged.emit(false);
 
     this.editedRowIndex = -1;
     const product = formGroup.value;
@@ -455,9 +460,11 @@ export class ParameterItemComponent implements OnInit {
 
   pageChange(event: PageChangeEvent): void {
     this.gridState.skip = event.skip;
+    this.gridState.take = event.take;
     this.loadProducts();
 
     this.savePage[this.currentUrl] = event.skip;
+    this.savePage[this.currentUrl + 'Take'] = event.take;
     this.helpService.setGridPageSize(this.savePage);
   }
 

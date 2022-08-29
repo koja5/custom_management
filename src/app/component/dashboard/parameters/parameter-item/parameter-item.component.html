@@ -13,7 +13,9 @@
     [pageSize]="gridState.take"
     [skip]="gridState.skip"
     [sort]="gridState.sort"
-    [pageable]="true"
+    [pageable]="{
+      pageSizes: true
+      }"
     [sortable]="true"
     [resizable]="true"
     (dataStateChange)="onStateChange($event)"
@@ -95,7 +97,9 @@
     [pageSize]="gridState.take"
     [skip]="gridState.skip"
     [sort]="gridState.sort"
-    [pageable]="true"
+    [pageable]="{
+      pageSizes: true
+      }"
     [sortable]="true"
     [resizable]="true"
     (dataStateChange)="onStateChange($event)"
@@ -175,7 +179,9 @@
     [pageSize]="gridState.take"
     [skip]="gridState.skip"
     [sort]="gridState.sort"
-    [pageable]="true"
+    [pageable]="{
+      pageSizes: true
+      }"
     [sortable]="true"
     [resizable]="true"
     (dataStateChange)="onStateChange($event)"
@@ -349,7 +355,9 @@
     [pageSize]="gridState.take"
     [skip]="gridState.skip"
     [sort]="gridState.sort"
-    [pageable]="true"
+    [pageable]="{
+      pageSizes: true
+      }"
     [sortable]="true"
     [resizable]="true"
     (dataStateChange)="onStateChange($event)"
