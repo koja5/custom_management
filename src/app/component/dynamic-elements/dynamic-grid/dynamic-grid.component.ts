@@ -99,28 +99,28 @@ export class DynamicGridComponent implements OnInit {
   ngAfterViewInit() {}
 
   initialization() {
-    this.service.getConfiguration(this.path, this.name).subscribe((data: any) => {
-      this.config = data;
-// <<<<<<< HEAD
-//       this.config.paging.settings.pageSizes = [5, 10, 20];
-//       this.config.paging.settings.pageSize = 10;
-      
-//       if(this.savePage[this.currentUrl]) {
-//         this.config.paging.settings.currentPage = this.savePage[this.currentUrl];
-// =======
-      if (this.savePage[this.currentUrl]) {
-        this.config.paging.settings.currentPage =
-          this.savePage[this.currentUrl];
-      }
-      if(this.savePage[this.currentUrl + 'Take']) {
-        this.config.paging.settings.pageSize = this.savePage[this.currentUrl + 'Take'];
-      }
-      if (data["localData"]) {
-        this.getLocalData(data["localData"]);
-      } else {
-        this.callApi(data["request"]);
-      }
-    });
+    this.service
+      .getConfiguration(this.path, this.name)
+      .subscribe((data: any) => {
+        this.config = data;
+
+        this.config.paging.settings.pageSizes = [5, 10, 20];
+        this.config.paging.settings.pageSize = 10;
+
+        if (this.savePage[this.currentUrl]) {
+          this.config.paging.settings.currentPage =
+            this.savePage[this.currentUrl];
+        }
+        if (this.savePage[this.currentUrl + "Take"]) {
+          this.config.paging.settings.pageSize =
+            this.savePage[this.currentUrl + "Take"];
+        }
+        if (data["localData"]) {
+          this.getLocalData(data["localData"]);
+        } else {
+          this.callApi(data["request"]);
+        }
+      });
   }
 
   getConfiguration() {
@@ -182,13 +182,14 @@ export class DynamicGridComponent implements OnInit {
   }
 
   actionBegin(args: any): void {
-    if(args.currentPage) {
-      let elements = this.elem.nativeElement.querySelectorAll('.e-dropdownlist');
+    if (args.currentPage) {
+      let elements =
+        this.elem.nativeElement.querySelectorAll(".e-dropdownlist");
       this.savePage[this.currentUrl] = args.currentPage;
-      this.savePage[this.currentUrl + 'Take'] = elements[0].value;
+      this.savePage[this.currentUrl + "Take"] = elements[0].value;
       this.helpService.setGridPageSize(this.savePage);
     }
-    
+
     /*if (args.requestType === "beginEdit" || args.requestType === "add") {
       this.orderData = Object.assign({}, args.rowData);
     }
@@ -210,7 +211,7 @@ export class DynamicGridComponent implements OnInit {
   }
 
   receiveConfirm(event: boolean) {
-    if(event) {
+    if (event) {
       this.isFormDirty = false;
       this.currentDialog.close();
     }
@@ -219,7 +220,6 @@ export class DynamicGridComponent implements OnInit {
 
   actionComplete(args: DialogEditEventArgs): void {
     if (args.requestType === "beginEdit" || args.requestType === "add") {
-      
       args.dialog.buttons = [];
       args.dialog.showCloseIcon = false;
       args.dialog.closeOnEscape = false;
@@ -228,53 +228,53 @@ export class DynamicGridComponent implements OnInit {
       setTimeout(() => {
         this.setValue(this.config.configField, args.rowData);
       }, 50);
-      
-      const elWrapper = document.createElement('div');
-    
-      const elHeader = document.createElement('div');
-      elHeader.setAttribute('id', 'dialog-header-text');
-      if(args.requestType === "beginEdit") {
+
+      const elWrapper = document.createElement("div");
+
+      const elHeader = document.createElement("div");
+      elHeader.setAttribute("id", "dialog-header-text");
+      if (args.requestType === "beginEdit") {
         elHeader.textContent = "Details of " + args.primaryKeyValue[0];
-      }else {
+      } else {
         elHeader.textContent = "Add new record";
-      };
+      }
 
-      const elCloseButton = document.createElement('button');
-      elCloseButton.setAttribute('id', 'close-button-id');
-      elCloseButton.setAttribute('class', 'close');
+      const elCloseButton = document.createElement("button");
+      elCloseButton.setAttribute("id", "close-button-id");
+      elCloseButton.setAttribute("class", "close");
 
-      const elCloseButtonSpan = document.createElement('span');
-      elCloseButtonSpan.setAttribute('aria-hidden', 'true');
-      elCloseButtonSpan.style.fontSize = '25px';
-      elCloseButtonSpan.innerHTML = '&times;';
-      
+      const elCloseButtonSpan = document.createElement("span");
+      elCloseButtonSpan.setAttribute("aria-hidden", "true");
+      elCloseButtonSpan.style.fontSize = "25px";
+      elCloseButtonSpan.innerHTML = "&times;";
+
       elCloseButton.appendChild(elCloseButtonSpan);
-      elCloseButton.style.position = 'absolute';
-      elCloseButton.style.right = '20px';
-      elCloseButton.style.top = '11px';
+      elCloseButton.style.position = "absolute";
+      elCloseButton.style.right = "20px";
+      elCloseButton.style.top = "11px";
 
       elWrapper.appendChild(elHeader);
       elWrapper.appendChild(elCloseButton);
 
       args.dialog.header = elWrapper;
 
-      elCloseButtonSpan.addEventListener('click', () => {
-        if(this.isFormDirty) {
+      elCloseButtonSpan.addEventListener("click", () => {
+        if (this.isFormDirty) {
           this.showDialog = true;
-        }else {
+        } else {
           args.dialog.close();
           this.isFormDirty = false;
         }
-      })
+      });
     }
 
     if (args.requestType === "delete") {
       this.deleteData(args["data"][0]);
     }
-    
+
     this.typeOfModification = args.requestType;
     this.operations = args;
-  
+
     /*
       setTimeout(() => {
         let previousValid = this.form.valid;

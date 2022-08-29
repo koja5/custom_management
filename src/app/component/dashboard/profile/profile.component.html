@@ -7,7 +7,12 @@
           <div class="row">
             <div class="profile-userpic">
               <img [src]="imagePath" class="img-responsive" alt="" />
-              <button kendoButton [icon]="'edit'" class="edit-button-icon" (click)="updateImage()"></button>
+              <button
+                kendoButton
+                [icon]="'edit'"
+                class="edit-button-icon"
+                (click)="updateImage()"
+              ></button>
             </div>
           </div>
           <div class="profile-usertitle">
@@ -574,12 +579,21 @@
     </modal-header>
     <modal-content>
       <form name="updateImageForm" (ngSubmit)="submitPhoto()">
-        <input id="file-upload" type="file" name="updateImageInput" class="choose-image-input" (input)="fileChoosen($event)"/>
+        <input
+          id="file-upload"
+          type="file"
+          name="updateImageInput"
+          class="choose-image-input"
+          (input)="fileChoosen($event)"
+        />
         <label for="file-upload" class="custom-file-upload">
           {{ language.chooseFile }}
         </label>
-          <span class="choose-image-label">{{ language.chooseImage }}</span>
-        <button class="update-image-submit-btn" type="submit">{{ language.submitImage }}</button>
+        <span *ngIf="!isFileChoosen" class="choose-image-label">{{ language.chooseImage }}</span>
+        <span *ngIf="isFileChoosen" class="choose-image-label">{{ fileName }}</span>
+        <button class="update-image-submit-btn" type="submit">
+          {{ language.submitImage }}
+        </button>
       </form>
     </modal-content>
   </modal>
