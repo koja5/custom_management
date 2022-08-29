@@ -591,6 +591,7 @@
         </label>
         <span *ngIf="!isFileChoosen" class="choose-image-label">{{ language.chooseImage }}</span>
         <span *ngIf="isFileChoosen" class="choose-image-label">{{ fileName }}</span>
+        <div><span>{{ language.maximumImageSize }}</span></div>
         <button class="update-image-submit-btn" type="submit">
           {{ language.submitImage }}
         </button>

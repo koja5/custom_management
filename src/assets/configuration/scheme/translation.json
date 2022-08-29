@@ -2151,6 +2151,9 @@
       },
       "submitImage": {
         "type": "string"
+      },
+      "maximumImageSize": {
+        "type": "string"
       }
     }
   },
@@ -5221,6 +5224,9 @@
             },
             {
               "key": "submitImage"
+            },
+            {
+              "key": "maximumImageSize"
             }
           ]
         },
