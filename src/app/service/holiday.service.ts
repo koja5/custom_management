@@ -38,7 +38,7 @@ export class HolidayService {
       .subscribe(val => callback(val));
   }
 
-  public createStoreTemplateConnection(ids, storeId, callback): void {
+  public createStoreTemplateConnection(ids, storeId, callback) {
     let query = "";
     ids.forEach(id => {
       query += "(" + storeId + "," + id + "),"
@@ -46,13 +46,13 @@ export class HolidayService {
 
     const temp = query.slice(0, -1);
     console.log(query.slice(0, -1));
-    this.httpClient
+    return this.httpClient
       .post("/api/createStoreTemplateConnection", { query: temp })
       .map(res => res)
       .subscribe(val => callback(val));
   }
 
-  public deleteStoreTemplateConnection(ids, storeId, callback): void {
+  public deleteStoreTemplateConnection(ids, storeId, callback) {
     let query = "";
     ids.forEach(id => {
       query += id + ","
@@ -62,7 +62,7 @@ export class HolidayService {
 
     console.log(temp);
 
-    this.httpClient
+    return this.httpClient
       .post("/api/deleteStoreTemplateConnection", { query: temp, storeId: storeId })
       .map(res => res)
       .subscribe(val => callback(val));
@@ -73,15 +73,15 @@ export class HolidayService {
     return this.httpClient.get<any[]>("/api/getStoreTemplateConnection/" + storeId).toPromise();
   }
 
-  public updateHoliday(data, callback): void {
-    this.httpClient
+  public updateHoliday(data, callback) {
+    return this.httpClient
       .post("/api/updateHoliday", data)
       .map(res => res)
       .subscribe(val => callback(val));
   }
 
-  public deleteHoliday(id, callback): void {
-    this.httpClient
+  public deleteHoliday(id, callback) {
+    return this.httpClient
       .get("/api/deleteHoliday/" + id)
       .map(res => res)
       .subscribe(val => callback(val));
