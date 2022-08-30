@@ -200,6 +200,15 @@
       "selectClinicHolidays": {
         "type": "string"
       },
+      "selectHolidayTemplate": {
+        "type": "string"
+      },
+      "clinicDefinedHolidaysTitle": {
+        "type": "string"
+      },
+      "predifinedHolidayTitle": {
+        "type": "string"
+      },
       "editHoliday": {
         "type": "string"
       },
@@ -6597,6 +6606,9 @@
             },
             {
               "key": "selectClinicHolidays"
+            },
+            {
+              "key": "selectHolidayTemplate"
             }
           ]
         },
@@ -6613,6 +6625,12 @@
             },
             {
               "key": "dateTitle"
+            },
+            {
+              "key": "clinicDefinedHolidaysTitle"
+            },
+            {
+              "key": "predifinedHolidayTitle"
             }
           ]
         }
