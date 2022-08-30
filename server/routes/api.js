@@ -51,44 +51,6 @@ var connection = mysql.createPool({
   password: process.env.password,
   database: process.env.database,
 });
-router.post("/uploadProfileImage/:id/:userType", upload.single('updateImageInput'), (req, res) => {
-  if (!req.file) {
-    return res.send({
-      success: false
-    });
-  } 
-
-  const data = readImageFile('server/routes/uploads/user-profile-images/' + req.file.filename);
-  const id = req.params.id;
-  const userType = req.params.userType;
-
-  if(userType == 0 || userType == 1) {
-    connection.query("UPDATE users_superadmin SET img = ? WHERE id = ?", [data, id], function(err, res) {
-      if (err) throw err;
-    })
-  } else if (userType == 2 || userType == 3 || userType == 5 || userType == 6) {
-    connection.query("UPDATE users SET img = ? WHERE id = ?", [data, id], function(err, res) {
-      if (err) {
-        return res.status(400).send({
-          message: 'This is an error!'
-       });
-      }
-    })
-  } else {
-    connection.query("UPDATE customers SET img = ? WHERE id = ?", [data, id], function(err, res) {
-      if (err) {
-        return res.status(400).send({
-          message: 'This is an error!'
-       });
-      }
-    })
-  }
-
-  
-  return res.send({
-        success: true
-      });
-})
 
 /*var connection = mysql.createPool({
   host: 'localhost',
@@ -9280,5 +9242,48 @@ router.post("/deleteHolidayTemplate", (req, res, next) => {
 });
 
 /* END HOLIDAY TEMPLATE */
+
+/* UPLOAD PROFILE IMAGE */
+
+router.post("/uploadProfileImage/:id/:userType", upload.single('updateImageInput'), (req, res) => {
+  if (!req.file) {
+    return res.send({
+      success: false
+    });
+  } 
+
+  const data = readImageFile('server/routes/uploads/user-profile-images/' + req.file.filename);
+  const id = req.params.id;
+  const userType = req.params.userType;
+
+  if(userType == 0 || userType == 1) {
+    connection.query("UPDATE users_superadmin SET img = ? WHERE id = ?", [data, id], function(err, res) {
+      if (err) throw err;
+    })
+  } else if (userType == 2 || userType == 3 || userType == 5 || userType == 6) {
+    connection.query("UPDATE users SET img = ? WHERE id = ?", [data, id], function(err, res) {
+      if (err) {
+        return res.status(400).send({
+          message: 'This is an error!'
+       });
+      }
+    })
+  } else {
+    connection.query("UPDATE customers SET img = ? WHERE id = ?", [data, id], function(err, res) {
+      if (err) {
+        return res.status(400).send({
+          message: 'This is an error!'
+       });
+      }
+    })
+  }
+
+  
+  return res.send({
+        success: true
+      });
+})
+
+/* END UPLOAD PROFILE IMAGE */
 
 module.exports = router;
