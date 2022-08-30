@@ -83,7 +83,14 @@ export class ChooseHolidayComponent implements OnInit {
   }
 
   public loadHolidaysForClinic(): void {
-    this.holidays = [];
+
+    if (!this.storeId) {
+      return;
+    }
+
+    this.clinicHolidays = [];
+    this.templateHolidays = [];
+
     this.holidayService.getHolidaysForClinic(this.storeId).then(result => {
       console.log(result);
       if (result && result.length > 0) {
