@@ -3,6 +3,8 @@ import { TranslationModel } from "src/app/models/translation-model";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { DashboardService } from 'src/app/service/dashboard.service';
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 @Component({
   selector: "app-edit",
@@ -10,12 +12,11 @@ import { DashboardService } from 'src/app/service/dashboard.service';
   styleUrls: ["./edit-translation.component.scss"]
 })
 export class EditTranslationComponent implements OnInit {
-  public schema: any = 1;
+  public schema: any;
   public data = new TranslationModel();
   public id: any;
   public loading = true;
   public language: any;
-  schemaData: any;
   toExpand: boolean = false;
 
   constructor(
@@ -28,20 +29,22 @@ export class EditTranslationComponent implements OnInit {
   ngOnInit() {
     this.id = this.route.snapshot.params.id;
     this.language = JSON.parse(localStorage.getItem("language"));
-    this.service.getGridConfigurationScheme("translation").subscribe(data => {
-      this.schemaData = data;
-    });
     this.initialization();
   }
 
   initialization() {
+    
     if(this.toExpand) {
-      this.schemaData.layout.map((el: any, index: number, arr) => {
-        el.expanded = true;
-      })
-      this.schema = this.schemaData;
+      this.service.getGridConfigurationScheme("translation").subscribe((data: any) => {
+        data.layout.map((el: any) => {
+          el.expanded = true;
+        })
+        this.schema = data;
+        this.loading = false;
+      });
+  
     }else {
-      this.service.getGridConfigurationScheme("translation").subscribe(data => {
+      this.service.getGridConfigurationScheme("translation").subscribe((data: any) => {
         this.schema = data;
         this.loading = false;
       });
