@@ -13,7 +13,14 @@
     </div>
   </div>
 
-  <table class="table table-responsive">
+  <div class="row m-auto ml-3" *ngIf="!clinicHolidays.length">
+    <h4> {{ language.noDataAvailable }}</h4>
+    <button type="button" (click)="openAddNewHolidayModal()" class="btn btn-primary btn-sm">
+      {{ language.addNew }}
+    </button>
+  </div>
+
+  <table class="table table-responsive" *ngIf="clinicHolidays.length">
     <thead>
       <tr>
         <td>
@@ -48,7 +55,14 @@
     </tbody>
   </table>
 
-  <table class="table table-responsive w-50">
+  <hr>
+
+  <div class="row m-auto ml-3" *ngIf="!templateHolidays.length">
+    <h4> {{ language.noDataAvailable }}</h4>
+    <h4> {{ language.select }}</h4>
+  </div>
+
+  <table class="table table-responsive w-50" *ngIf="templateHolidays.length">
     <thead>
       <tr> {{ language.predifinedHolidayTitle }} </tr>
       <tr>
