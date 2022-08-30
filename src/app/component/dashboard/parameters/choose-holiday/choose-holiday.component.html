@@ -17,7 +17,7 @@
     <thead>
       <tr>
         <td>
-          <h4> Your defined holidays</h4>
+          <h4> {{ language.clinicDefinedHolidaysTitle }}</h4>
         </td>
         <td>
           <button type="button" (click)="openAddNewHolidayModal()" class="btn btn-primary btn-sm">
@@ -50,7 +50,7 @@
 
   <table class="table table-responsive w-50">
     <thead>
-      <tr> Predifened holidays (change it in selection)</tr>
+      <tr> {{ language.predifinedHolidayTitle }} </tr>
       <tr>
         <th>{{ language.title }}</th>
         <th>{{ language.date }}</th>
