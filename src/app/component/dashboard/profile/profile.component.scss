@@ -110,11 +110,12 @@ input[type="email"]:disabled {
 }
 
 .choose-image-input {
-    display: block !important;
-    margin-bottom: 50px;
+    // display: block !important;
+    // margin-bottom: 50px;
+    display: none;
 }
 
-.choose-image-input::file-selector-button {
+.custom-file-upload {
     border: 2px solid #2399D5;
     color: #2399D5;
     border-radius: 5px;
@@ -129,11 +130,12 @@ input[type="email"]:disabled {
 }
 
 .update-image-submit-btn {
+    display: block;
+    margin-top: 25px;
     border-radius: 20px;
     border: 2px solid #2399D5;
     background-color: unset;
-    padding-right: 15px;
-    padding-left: 15px;
+    padding: 5px 10px 5px 10px;
     color: #2399D5;
 
     &:hover {

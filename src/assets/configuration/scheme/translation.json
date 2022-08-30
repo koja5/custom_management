@@ -2142,6 +2142,18 @@
       },
       "excludeCustomersWithEvents": {
         "type": "string"
+      },
+      "chooseImage": {
+        "type": "string"
+      },
+      "chooseFile": {
+        "type": "string"
+      },
+      "submitImage": {
+        "type": "string"
+      },
+      "maximumImageSize": {
+        "type": "string"
       }
     }
   },
@@ -5203,6 +5215,18 @@
             },
             {
               "key": "accountConfirmDialogQuestion"
+            },
+            {
+              "key": "chooseImage"
+            },
+            {
+              "key": "chooseFile"
+            },
+            {
+              "key": "submitImage"
+            },
+            {
+              "key": "maximumImageSize"
             }
           ]
         },

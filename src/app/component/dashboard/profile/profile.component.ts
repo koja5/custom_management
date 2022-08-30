@@ -25,6 +25,8 @@ export class ProfileComponent implements OnInit {
   public language: any;
   public id: number;
   updateImageInput: any;
+  isFileChoosen: boolean = false;
+  fileName: string = '';
 
   constructor(
     public service: UsersService,
@@ -70,8 +72,12 @@ export class ProfileComponent implements OnInit {
   }
 
   fileChoosen(event: any) {
+    this.fileName = event.target.value.substring(event.target.value.indexOf('h') + 2);
     if (event.target.value) {
+      this.isFileChoosen = true;
       this.updateImageInput = <File>event.target.files[0];
+    }else {
+      this.isFileChoosen = false;
     }
   }
 
