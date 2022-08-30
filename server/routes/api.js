@@ -6277,6 +6277,7 @@ router.post("/createTemplateAccount", function (req, res, next) {
                 id: req.body.id,
                 name: req.body.name,
                 account_id: req.body.account_id,
+                holiday_template: req.body.holiday_template,
                 language: req.body.language,
                 email: rows[0].email,
               };
@@ -6320,10 +6321,8 @@ router.post("/updateTemplateAccount", function (req, res, next) {
     }
 
     conn.query(
-      "select * from users_superadmin where id = ? and password = '" +
-        sha1(req.body.password) +
-        "'",
-      [req.body.account_id],
+      "select * from users_superadmin where id = " +
+       req.body.account_id + " and password = '" + req.body.password + "'",
       function (err, rows) {
         if (!err) {
           if (!err) {
@@ -6333,6 +6332,7 @@ router.post("/updateTemplateAccount", function (req, res, next) {
                 id: req.body.id,
                 name: req.body.name,
                 account_id: req.body.account_id,
+                holiday_template: req.body.holiday_template,
                 email: rows[0].email,
                 language: req.body.language,
               };
@@ -6357,7 +6357,7 @@ router.post("/updateTemplateAccount", function (req, res, next) {
               res.json(false);
             }
           } else {
-            res.json(false);
+            res.json(err);
           }
         } else {
           logger.log("error", err.sql + ". " + err.sqlMessage);
@@ -6368,13 +6368,14 @@ router.post("/updateTemplateAccount", function (req, res, next) {
   });
 });
 
+
 router.get("/getTemplateAccount", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
     }
-    conn.query("SELECT * from template_account", function (err, rows) {
+    conn.query("SELECT ta.*, us.password from template_account ta join users_superadmin us on ta.account_id = us.id", function (err, rows) {
       conn.release();
       if (!err) {
         res.json(rows);
