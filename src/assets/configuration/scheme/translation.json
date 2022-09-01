@@ -2154,6 +2154,15 @@
       },
       "maximumImageSize": {
         "type": "string"
+      },
+      "sendPasswordRecoverySuccess": {
+        "type": "string"
+      },
+      "sendPasswordRecoveryError": {
+        "type": "string"
+      },
+      "sendPasswordRecovery": {
+        "type": "string"
       }
     }
   },
@@ -2221,6 +2230,22 @@
             },
             {
               "key": "changesWontBeSaved"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "sendPasswordRecovery"
+            },
+            {
+              "key": "sendPasswordRecoverySuccess"
+            },
+            {
+              "key": "sendPasswordRecoveryError"
             }
           ]
         },

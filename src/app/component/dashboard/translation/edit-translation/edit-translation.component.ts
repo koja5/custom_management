@@ -31,7 +31,7 @@ export class EditTranslationComponent implements OnInit {
     this.language = JSON.parse(localStorage.getItem("language"));
     this.initialization();
   }
-
+  
   initialization() {
     
     if(this.toExpand) {

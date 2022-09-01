@@ -8,6 +8,7 @@ var fs = require("fs");
 const mysql = require("mysql");
 var url = require("url");
 const logger = require("./logger");
+const winston = require("winston");
 
 var link = process.env.link_api;
 var linkClient = process.env.link_client;
@@ -27,11 +28,27 @@ const monthNames = [
   "December",
 ];
 
+const logFormatter = winston.format.printf((info) => {
+  let { timestamp, level, stack, message } = info;
+  message = stack || message;
+  return `${timestamp} ${level}: ${message}`;
+});
+
+const logToConsole = winston.createLogger({
+  level: 'info',
+  format: winston.format.errors({ stack: true }),
+  transports: [
+    new winston.transports.Console({
+      format: winston.format.combine(winston.format.colorize(), winston.format.simple(), winston.format.timestamp(), logFormatter),
+    }),
+  ],
+});
+
 var connection = mysql.createPool({
-  host: "116.203.85.82",
-  user: "appprodu_appproduction",
-  password: "CJr4eUqWg33tT97mxPFx",
-  database: "appprodu_management",
+  host: process.env.host,
+  user: process.env.user,
+  password: process.env.password,
+  database: process.env.database,
 });
 
 /*var smtpTransport = nodemailer.createTransport({
@@ -45,15 +62,17 @@ var connection = mysql.createPool({
 });*/
 
 var smtpTransport = nodemailer.createTransport({
-  host: "116.203.85.82",
-  port: 25,
-  secure: false,
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
   tls: {
     rejectUnauthorized: false,
   },
+  debug: true,
+  ssl: true, 
   auth: {
-    user: "support@app-production.eu",
-    pass: "])3!~0YFU)S]",
+    user: "clinicnode2022@gmail.com",  // real email address
+    pass: "vfuvxgwdfrvestvd" // app password for clinicnode2022@gmail.com email
   },
 });
 
@@ -85,8 +104,11 @@ router.post("/send", function (req, res) {
       notReply: req.body.language?.notReply,
       copyRight: req.body.language?.copyRight,
       introductoryMessageForConfirmMail:
-        req.body.language?.introductoryMessageForConfirmMail,
+      req.body.language?.introductoryMessageForConfirmMail,
       confirmMailButtonText: req.body.language?.confirmMailButtonText,
+      unsubscribeMessage: req.body.language?.unsubscribeMessage,
+      unsubscribeHere: req.body.language?.unsubscribeHere,
+      unsubscribeLink: req.body.unsubscribeLink,
     }),
   };
 
@@ -263,6 +285,8 @@ router.post("/forgotmail", function (req, res) {
       verificationLink: verificationLinkButton,
       initialGreeting: req.body.language?.initialGreeting,
       finalGreeting: req.body.language?.finalGreeting,
+      initialGreeting: req.body.language?.initialGreeting,
+      finalGreeting: req.body.language?.finalGreeting,
       signature: req.body.language?.signature,
       thanksForUsing: req.body.language?.thanksForUsing,
       websiteLink: req.body.language?.websiteLink,
@@ -271,7 +295,7 @@ router.post("/forgotmail", function (req, res) {
       notReply: req.body.language?.notReply,
       copyRight: req.body.language?.copyRight,
       introductoryMessageForForgotMail:
-        req.body.language?.introductoryMessageForForgotMail,
+      req.body.language?.introductoryMessageForForgotMail,
       forgotMailButtonText: req.body.language?.forgotMailButtonText,
     }),
   };

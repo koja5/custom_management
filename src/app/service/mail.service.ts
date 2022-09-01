@@ -23,9 +23,10 @@ export class MailService {
 
   public sendForgetMail(data) {
     const headers = new HttpHeaders();
-    headers.append("Content-Type", "application/json");
+    headers.append("Content-Type", "application/json",);
+
     return this.http
-      .post("/api/forgotmail", data, { headers: headers })
+      .post("/api/forgotmail", data, { headers: headers, responseType: 'text' })
       .map((res) => res);
   }
 
