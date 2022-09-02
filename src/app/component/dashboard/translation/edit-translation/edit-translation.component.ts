@@ -3,8 +3,6 @@ import { TranslationModel } from "src/app/models/translation-model";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { DashboardService } from "src/app/service/dashboard.service";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
 
 @Component({
   selector: "app-edit",
@@ -31,58 +29,54 @@ export class EditTranslationComponent implements OnInit {
     this.initialization();
   }
 
-  camelize(str) {
-    return str
-      .replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
-        return index === 0 ? word.toLowerCase() : word.toUpperCase();
-      })
-      .replace(/\s+/g, "");
-  }
-
-  searchSchema(event: any) {
-    let layout: any;
-    let layoutItems: any = [];
-    let items = {};
-    let inputValue = event;
+  searchSchema(event: any): void {
     let flag: boolean = false;
-    layout = this.schema.layout;
+    let indexToExpand = [];
 
-    layout.map((el: any) => {
-      layoutItems.push(el.items);
-    });
+    if (event.length > 0) {
+      let layout: any = this.schema.layout;
+      let layoutItems: any = [];
+      let items = {};
+      let inputValue = event;
 
-    layoutItems.map((el: any, index: number) => {
-      let currentLayoutItem = [];
-      el.map((currentEl: any) => {
-        currentLayoutItem.push(currentEl.items);
+      layout.map((el: any) => {
+        layoutItems.push(el.items);
       });
-      items[index] = currentLayoutItem;
-    });
 
-    Object.keys(items).forEach((key, index) => {
-      items[key].map((currentEl: any) => {
-        currentEl.map((currentItems: any) => {
-          if (
-            currentItems["key"] == this.camelize(inputValue) ||
-            currentItems["key"] == inputValue
-          ) {
-            this.initialization(index);
-            flag = true;
-          }
+      layoutItems.map((el: any, index: number) => {
+        let currentLayoutItem = [];
+        el.map((currentEl: any) => {
+          currentLayoutItem.push(currentEl.items);
+        });
+        items[index] = currentLayoutItem;
+      });
+
+      Object.keys(items).forEach((key, index) => {
+        items[key].map((currentEl: any) => {
+          currentEl.map((currentItems: any) => {
+            if (currentItems.key && currentItems.key.includes(inputValue)) {
+              indexToExpand.push(index);
+              flag = true;
+            }
+          });
         });
       });
-    });
-    if (!flag) {
+    }
+    if (flag) {
+      this.initialization(indexToExpand);
+    } else {
       this.initialization();
     }
   }
 
-  initialization(indexToExpand?: number) {
-    if (indexToExpand > -1) {
+  initialization(indexToExpand?: Array<number>) {
+    if (indexToExpand && indexToExpand.length > 0) {
       this.service
         .getGridConfigurationScheme("translation")
         .subscribe((data: any) => {
-          data.layout[indexToExpand].expanded = true;
+          indexToExpand.map((el) => {
+            data.layout[el].expanded = true;
+          });
           this.schema = data;
           this.loading = false;
         });
