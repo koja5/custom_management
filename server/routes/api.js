@@ -36,6 +36,18 @@ function readImageFile(file) {
   return buf;
 }
 
+function deleteImage(currentImage) {
+  if(currentImage) {
+    fs.unlink('server/routes/uploads/user-profile-images/' + currentImage, (err) => {
+      if (err) {
+        console.error(err)
+        return
+      }
+      //file removed
+    })
+  }
+}
+
 var link = process.env.link_api;
 /*
 var connection = mysql.createPool({
@@ -51,40 +63,76 @@ var connection = mysql.createPool({
   password: process.env.password,
   database: process.env.database,
 });
+
 router.post("/uploadProfileImage/:id/:userType", upload.single('updateImageInput'), (req, res) => {
   if (!req.file) {
     return res.send({
       success: false
     });
   } 
-
   const data = readImageFile('server/routes/uploads/user-profile-images/' + req.file.filename);
+  let imageName = req.file.filename;
+  let currentImage;
   const id = req.params.id;
   const userType = req.params.userType;
 
   if(userType == 0 || userType == 1) {
+    connection.query("SELECT * FROM users_superadmin WHERE id = ?", id, function (err, result) {
+      if(result[0].imgName) {
+        currentImage = result[0].imgName;
+      }
+    });
+
     connection.query("UPDATE users_superadmin SET img = ? WHERE id = ?", [data, id], function(err, res) {
+        if (err) {
+          throw err;
+        }else {
+          deleteImage(currentImage);
+        } 
+    })
+
+    connection.query("UPDATE users_superadmin SET imgName = ? WHERE id = ?", [imageName, id], function(err, res) {
       if (err) throw err;
     })
+
   } else if (userType == 2 || userType == 3 || userType == 5 || userType == 6) {
-    connection.query("UPDATE users SET img = ? WHERE id = ?", [data, id], function(err, res) {
-      if (err) {
-        return res.status(400).send({
-          message: 'This is an error!'
-       });
+    connection.query("SELECT * FROM users WHERE id = ?", id, function (err, result) {
+      if(result[0].imgName) {
+        currentImage = result[0].imgName;
       }
+    });
+
+    connection.query("UPDATE users SET img = ? WHERE id = ?", [data, id], function(err, res) {
+        if (err) {
+          throw err;
+        }else {
+          deleteImage(currentImage);
+        } 
+    })
+
+    connection.query("UPDATE users SET imgName = ? WHERE id = ?", [imageName, id], function(err, res) {
+      if (err) throw err;
     })
   } else {
-    connection.query("UPDATE customers SET img = ? WHERE id = ?", [data, id], function(err, res) {
-      if (err) {
-        return res.status(400).send({
-          message: 'This is an error!'
-       });
+    connection.query("SELECT * FROM customers WHERE id = ?", id, function (err, result) {
+      if(result[0].imgName) {
+        currentImage = result[0].imgName;
       }
+    });
+
+    connection.query("UPDATE customers SET img = ? WHERE id = ?", [data, id], function(err, res) {
+        if (err) {
+          throw err;
+        }else {
+          deleteImage(currentImage);
+        } 
+    })
+    
+    connection.query("UPDATE customers SET imgName = ? WHERE id = ?", [imageName, id], function(err, res) {
+      if (err) throw err;
     })
   }
 
-  
   return res.send({
         success: true
       });
