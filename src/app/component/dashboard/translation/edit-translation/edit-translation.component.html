@@ -68,6 +68,7 @@
       [data]="data.config"
       (onSubmit)="saveConfiguration($event)"
       framework="material-design"
+      (onChanges)="formChanged($event)"
     >
     </json-schema-form>
   </mat-card>

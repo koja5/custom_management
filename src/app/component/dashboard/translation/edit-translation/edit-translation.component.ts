@@ -26,11 +26,27 @@ export class EditTranslationComponent implements OnInit {
   ngOnInit() {
     this.id = this.route.snapshot.params.id;
     this.language = JSON.parse(localStorage.getItem("language"));
+    this.getData();
     this.initialization();
   }
 
+  isEmpty(obj) {
+    for(var prop in obj) {
+      if(Object.prototype.hasOwnProperty.call(obj, prop)) {
+        return false;
+      }
+    }
+    return JSON.stringify(obj) === JSON.stringify({});
+  }
+
+  formChanged(event) {
+    let flag = this.isEmpty(event)
+    if(!flag) {
+      this.data.config = event;
+    } 
+  }
+
   searchSchema(event: any): void {
-    let flag: boolean = false;
     let indexToExpand = [];
 
     if (event.length > 0) {
@@ -56,15 +72,12 @@ export class EditTranslationComponent implements OnInit {
           currentEl.map((currentItems: any) => {
             if (currentItems.key && currentItems.key.includes(inputValue)) {
               indexToExpand.push(index);
-              flag = true;
             }
           });
         });
       });
-    }
-    if (flag) {
       this.initialization(indexToExpand);
-    } else {
+    }else {
       this.initialization();
     }
   }
@@ -88,7 +101,9 @@ export class EditTranslationComponent implements OnInit {
           this.loading = false;
         });
     }
+  }
 
+  getData() {
     if (this.id !== "create") {
       this.service.getTranslationWithId(this.id).subscribe((data) => {
         this.data = data;
