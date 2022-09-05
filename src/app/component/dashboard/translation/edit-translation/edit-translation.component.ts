@@ -46,6 +46,12 @@ export class EditTranslationComponent implements OnInit {
     } 
   }
 
+  camelize(str) {
+    return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {
+      return index === 0 ? word.toLowerCase() : word.toUpperCase();
+    }).replace(/\s+/g, '');
+  }
+
   searchSchema(event: any): void {
     let indexToExpand = [];
 
@@ -53,7 +59,8 @@ export class EditTranslationComponent implements OnInit {
       let layout: any = this.schema.layout;
       let layoutItems: any = [];
       let items = {};
-      let inputValue = event;
+      let inputValue = event.replace(/\s/g, '').toLowerCase();
+      let inputValueCamelCase = this.camelize(event)
 
       layout.map((el: any) => {
         layoutItems.push(el.items);
@@ -70,7 +77,7 @@ export class EditTranslationComponent implements OnInit {
       Object.keys(items).forEach((key, index) => {
         items[key].map((currentEl: any) => {
           currentEl.map((currentItems: any) => {
-            if (currentItems.key && currentItems.key.includes(inputValue)) {
+            if (currentItems.key && currentItems.key.toLowerCase().includes(inputValue)) {
               indexToExpand.push(index);
             }
           });
