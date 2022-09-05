@@ -493,27 +493,13 @@ export class DashboardComponent implements OnInit {
             .then((data) => {
               console.log(data);
 
-              this.holidayService
-                .getHolidaysByTemplate(relation.templateId)
-                .then((result) => {
-                  console.log(result);
-                  if (result && result.length > 0) {
-                    result.forEach((r) => {
-                      const newHoliday = {
-                        Subject: r.Subject,
-                        StartTime: new Date(r.StartTime),
-                        EndTime: new Date(r.EndTime),
-                      };
+              const holidayTemplateId = this.templateAccount.find((t) => t.id === this.templateAccountValue).holiday_template;
+              const userId = this.helpService.getMe();
+              const storeId = this.storageService.getSelectedStore(userId);
 
-                      this.holidayService.createHoliday(
-                        newHoliday,
-                        (insertedId) => {
-                          console.log("DODATO!!!");
-                        }
-                      );
-                    });
-                  }
-                });
+              this.holidayService.createStoreTemplateConnection([holidayTemplateId], storeId, () => {
+                console.log('uspesno!');
+              });
             });
         });
     }
