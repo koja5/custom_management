@@ -46,12 +46,6 @@ export class EditTranslationComponent implements OnInit {
     } 
   }
 
-  camelize(str) {
-    return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {
-      return index === 0 ? word.toLowerCase() : word.toUpperCase();
-    }).replace(/\s+/g, '');
-  }
-
   searchSchema(event: any): void {
     let indexToExpand = [];
 
@@ -60,7 +54,6 @@ export class EditTranslationComponent implements OnInit {
       let layoutItems: any = [];
       let items = {};
       let inputValue = event.replace(/\s/g, '').toLowerCase();
-      let inputValueCamelCase = this.camelize(event)
 
       layout.map((el: any) => {
         layoutItems.push(el.items);
