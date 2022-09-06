@@ -33,6 +33,7 @@ export class BaseDateComponent implements OnInit {
   @Input() data;
   @Input() date;
   @Input() doctor;
+  @Input() imagePath;
   @ViewChild("complaint") complaint: Modal;
   @ViewChild("therapy") therapy: Modal;
   @ViewChild("customer") customer: Modal;
@@ -290,7 +291,6 @@ export class BaseDateComponent implements OnInit {
   }
 
   formatingData(data) {
-    console.log(data);
     const datePipe = new DatePipe("en-US");
     for (let i = 0; i < data["length"]; i++) {
       data[i].date = datePipe.transform(data[i].date, "dd/MM/yyyy");
@@ -508,7 +508,6 @@ export class BaseDateComponent implements OnInit {
     this.service
       .getParameters("Therapy", localStorage.getItem("superadmin"))
       .subscribe((data) => {
-        console.log(data);
         this.therapyValue = data;
       });
     this.service
@@ -566,6 +565,7 @@ export class BaseDateComponent implements OnInit {
 
     if (localStorage.getItem("username") === null) {
       this.usersService.getMe(localStorage.getItem("idUser"), (val) => {
+
         console.log(val);
         localStorage.setItem("username", val[0]["shortname"]);
         this.complaintData.employee_name = val[0]["shortname"];
