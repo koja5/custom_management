@@ -107,7 +107,8 @@ import { MailPatientCreatedAccountViaFormComponent } from './parameters/mail-par
 import { ColorPickerModule } from '@syncfusion/ej2-angular-inputs';
 import { HelpComponent } from './administrator/help/help.component';
 import { TopicCardComponent } from './administrator/help/topic-card/topic-card.component';
-import { ListFaqComponent } from './administrator/help/list-faq/list-faq.component';
+import { ListFaqComponent } from "./administrator/help/list-faq/list-faq.component";
+import { MatFormFieldModule, MatInputModule } from "@angular/material";
 
 @NgModule({
   declarations: [
@@ -165,7 +166,7 @@ import { ListFaqComponent } from './administrator/help/list-faq/list-faq.compone
     MailBirthdayCongratulationComponent,
     HelpComponent,
     TopicCardComponent,
-    ListFaqComponent
+    ListFaqComponent,
   ],
   imports: [
     CommonModule,
@@ -204,7 +205,9 @@ import { ListFaqComponent } from './administrator/help/list-faq/list-faq.compone
     SharedSMSModule,
     ScheduleModule,
     ToolbarModule,
-    ColorPickerModule
+    ColorPickerModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   providers: [
     {
@@ -219,4 +222,4 @@ import { ListFaqComponent } from './administrator/help/list-faq/list-faq.compone
     MonthAgendaService,
   ],
 })
-export class DashboardModule { }
+export class DashboardModule {}

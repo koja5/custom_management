@@ -177,15 +177,18 @@
               <kendo-textbox-container floatingLabel="{{ language.firstname }}({{
                   language.required
                 }})">
-                <input kendoTextBox [(ngModel)]="data.firstname" name="firstname" class="noPadding" required
+                <input id="firstname" kendoTextBox [(ngModel)]="data.firstname" name="firstname" class="noPadding" required
                   #firstname="ngModel" />
+                  
               </kendo-textbox-container>
+              <mat-error *ngIf="checkIfInputValid('firstname')">This field is required.</mat-error>
             </div>
             <div>
               <kendo-textbox-container floatingLabel="{{ language.lastname }}({{ language.required }})">
-                <input kendoTextBox [(ngModel)]="data.lastname" name="lastname" class="noPadding" required
+                <input id="lastname" kendoTextBox [(ngModel)]="data.lastname" name="lastname" class="noPadding" required
                   #lastname="ngModel" />
               </kendo-textbox-container>
+              <mat-error *ngIf="checkIfInputValid('lastname')">This field is required.</mat-error>
             </div>
             <div class="form-group col-md-12 col-xs-12">
               <div class="col-md-6 col-xs-12" style="padding-top: 5px">

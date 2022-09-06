@@ -19,6 +19,7 @@ import * as XLSX from "ts-xlsx";
 import { MessageService } from "src/app/service/message.service";
 import { HelpService } from "src/app/service/help.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { checkIfInputValid } from "../../../shared/utils";
 
 @Component({
   selector: "app-users",
@@ -97,6 +98,7 @@ export class UsersComponent implements OnInit {
   isFormDirty: boolean = false;
   currentUrl: string;
   savePage: any = {};
+  checkIfInputValid = checkIfInputValid;
 
   constructor(
     private service: UsersService,

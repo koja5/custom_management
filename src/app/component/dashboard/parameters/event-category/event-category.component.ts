@@ -14,6 +14,7 @@ import { GridComponent, PageChangeEvent } from "@progress/kendo-angular-grid";
 import { Modal } from "ngx-modal";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { Router } from "@angular/router";
+import { checkIfInputValid } from "../../../../shared/utils";
 
 @Component({
   selector: "app-event-category",
@@ -59,6 +60,7 @@ export class EventCategoryComponent implements OnInit {
   public importExcel = false;
   public theme: any;
   public fileValue: any;
+  checkIfInputValid = checkIfInputValid;
 
   constructor(
     private service: EventCategoryService,

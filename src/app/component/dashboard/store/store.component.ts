@@ -22,6 +22,7 @@ import { MessageService } from "src/app/service/message.service";
 import { HelpService } from "src/app/service/help.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { Router } from "@angular/router";
+import { checkIfInputValid } from "../../../shared/utils";
 
 @Component({
   selector: "app-store",
@@ -76,6 +77,7 @@ export class StoreComponent implements OnInit {
   isFormDirty: boolean = false;
   savePage: any = {};
   currentUrl: string;
+  checkIfInputValid = checkIfInputValid;
 
   constructor(
     public service: StoreService,

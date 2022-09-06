@@ -315,6 +315,7 @@
           floatingLabel="{{ language.username }}({{ language.required }})"
         >
           <input
+            id="username"
             kendoTextBox
             type="text"
             class="col-xs-12"
@@ -324,6 +325,7 @@
             required
           />
         </kendo-textbox-container>
+        <mat-error *ngIf="checkIfInputValid('username')">This field is required.</mat-error>
       </div>
       <div class="col-md-4 col-xs-12 b-r">
         <kendo-textbox-container floatingLabel="{{ language.aliasName }}">
@@ -342,6 +344,7 @@
           floatingLabel="{{ language.password }}({{ language.required }})"
         >
           <input
+            id="password"
             kendoTextBox
             type="{{ hideShow }}"
             class="col-xs-12 password"
@@ -351,6 +354,7 @@
             required
           />
         </kendo-textbox-container>
+        <mat-error *ngIf="checkIfInputValid('password')">This field is required.</mat-error>
       </div>
       <div class="col-md-6 col-xs-12 b-r">
         <kendo-textbox-container floatingLabel="{{ language.firstname }}">
@@ -441,6 +445,7 @@
           floatingLabel="{{ language.email }}({{ language.required }})"
         >
           <input
+            id="email"
             kendoTextBox
             type="email"
             class="col-xs-12"
@@ -450,6 +455,7 @@
             required
           />
         </kendo-textbox-container>
+        <mat-error *ngIf="checkIfInputValid('email')">This field is required.</mat-error>
       </div>
       <div class="col-md-6 col-xs-12 b-r">
         <kendo-textbox-container floatingLabel="{{ language.birthday }}">
@@ -479,6 +485,7 @@
           floatingLabel="{{ language.userType }}({{ language.required }})"
         >
           <kendo-combobox
+            id="userType"
             [data]="userType"
             (selectionChange)="selectionChange($event)"
             [(ngModel)]="selectedUserType"
@@ -488,6 +495,7 @@
           >
           </kendo-combobox>
         </kendo-textbox-container>
+        <mat-error *ngIf="checkIfInputValid('userType')">This field is required.</mat-error>
       </div>
       <label class="k-form-field col-md-6 mt-5" style="text-align: center">
         {{ language.active }} &nbsp;
@@ -498,6 +506,7 @@
           floatingLabel="{{ language.storeLocation }}({{ language.required }})"
         >
           <kendo-combobox
+            id="storeLocation"
             [data]="storeLocation"
             [textField]="'storename'"
             [valueField]="'id'"
@@ -509,6 +518,7 @@
           >
           </kendo-combobox>
         </kendo-textbox-container>
+        <mat-error *ngIf="checkIfInputValid('storeLocation')">This field is required.</mat-error>
       </div>
 
       <!-- ./remember-row -->

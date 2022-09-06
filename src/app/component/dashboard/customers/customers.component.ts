@@ -26,6 +26,7 @@ import { PackLanguageService } from "src/app/service/pack-language.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { StorageService } from "src/app/service/storage.service";
 import { Router } from "@angular/router";
+import { checkIfInputValid } from "../../../shared/utils";
 
 const newLocal = "data";
 @Component({
@@ -72,6 +73,7 @@ export class CustomersComponent implements OnInit {
   allDataForGrid: DataResult;
   showDialog: boolean = false;
   isFormDirty: boolean = false;
+  checkIfInputValid = checkIfInputValid;
 
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);

@@ -18,6 +18,7 @@ import { HelpService } from "src/app/service/help.service";
 import { Modal } from "ngx-modal";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { Router } from "@angular/router";
+import { checkIfInputValid } from "../../../shared/utils";
 
 @Component({
   selector: "app-vaucher",
@@ -84,6 +85,7 @@ export class VaucherComponent implements OnInit {
   isFormDirty: boolean = false;
   savePage: any = {};
   currentUrl: string;
+  checkIfInputValid = checkIfInputValid;
 
   constructor(
     private service: VaucherService,
