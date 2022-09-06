@@ -21,6 +21,10 @@ import {
   process,
   State,
 } from "@progress/kendo-data-query";
+import { MailService } from "src/app/service/mail.service";
+import { PackLanguageService } from "src/app/service/pack-language.service";
+import { LoginService } from "src/app/service/login.service";
+import { HelpService } from "src/app/service/help.service";
 
 @Component({
   selector: "app-base-date",
@@ -94,6 +98,7 @@ export class BaseDateComponent implements OnInit {
   showDialog: boolean = false;
   showDialogChangeTab: boolean = false;
   changeTabName: string;
+  public emailValid = true;
   public sort: SortDescriptor[] = [
     {
       field: "date",
@@ -132,7 +137,11 @@ export class BaseDateComponent implements OnInit {
     public userUservice: UsersService,
     public message: MessageService,
     public usersService: UsersService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private mailService: MailService,
+    private loginService: LoginService,
+    private packLanguage: PackLanguageService,
+    private helpService: HelpService,
   ) {}
 
   ngOnInit() {
@@ -189,6 +198,35 @@ export class BaseDateComponent implements OnInit {
     });
 
     this.convertStringToDate();
+  }
+
+  sendRecoveryLink() {
+    const thisObject = this;
+    thisObject.data["language"] = this.packLanguage.getLanguageForForgotMail();
+    if (this.data.email !== "") {
+      this.loginService.forgotPassword(this.data, function (exist, notVerified) {
+        setTimeout(() => {
+          if (exist) {
+            thisObject.mailService
+              .sendForgetMail(thisObject.data)
+              .subscribe(
+                (data) => {
+                  thisObject.helpService.successToastr(
+                    thisObject.language.sendPasswordRecovery,
+                    thisObject.language.sendPasswordRecoverySucess
+                  );
+                },
+                (error) => {
+                  thisObject.helpService.errorToastr(
+                    thisObject.language.sendPasswordRecovery,
+                    thisObject.language.sendPasswordRecoveryError
+                  );
+                }
+              );
+          }
+        }, 100);
+      });
+    }
   }
 
   convertStringToDate() {
@@ -257,14 +295,14 @@ export class BaseDateComponent implements OnInit {
     this.customer.closeOnEscape = false;
     this.customer.closeOnOutsideClick = false;
     this.customer.hideCloseButton = true;
-    this.customer.open()
+    this.customer.open();
   }
 
-  settingsWindowOpen(){
+  settingsWindowOpen() {
     this.settingsWindow.closeOnEscape = false;
     this.settingsWindow.closeOnOutsideClick = false;
     this.settingsWindow.hideCloseButton = true;
-    this.settingsWindow.open()
+    this.settingsWindow.open();
   }
 
   getTherapy() {
@@ -360,21 +398,21 @@ export class BaseDateComponent implements OnInit {
   }
 
   receiveConfirm(event: boolean, modal: Modal): void {
-    if(event) {
+    if (event) {
       modal.close();
       this.isFormDirty = false;
     }
-      this.showDialog = false;
+    this.showDialog = false;
   }
 
   confirmClose(modal: Modal): void {
     modal.modalRoot.nativeElement.focus();
-    if(this.isFormDirty) {
+    if (this.isFormDirty) {
       this.showDialog = true;
-    }else {
+    } else {
       modal.close();
       this.showDialog = false;
-      this.isFormDirty = false
+      this.isFormDirty = false;
     }
   }
 
@@ -869,19 +907,19 @@ export class BaseDateComponent implements OnInit {
   }
 
   receiveConfirmChangeTab(flag: boolean) {
-    if(flag) {
+    if (flag) {
       this.isFormDirty = false;
-      this.changeTab(this.changeTabName)
-    }else {
+      this.changeTab(this.changeTabName);
+    } else {
       this.showDialogChangeTab = false;
     }
   }
 
   changeTab(tab) {
     this.changeTabName = tab;
-    if(this.isFormDirty) {
+    if (this.isFormDirty) {
       this.showDialogChangeTab = true;
-    }else {
+    } else {
       this.currentTab = tab;
       // this.baseData = null;
       if (tab === "base_one") {
@@ -1129,7 +1167,7 @@ export class BaseDateComponent implements OnInit {
           this.customer.close();
         }
       });
-      this.isFormDirty = false;
+    this.isFormDirty = false;
   }
 
   editMode() {

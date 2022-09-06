@@ -11,6 +11,10 @@ import { MessageService } from "src/app/service/message.service";
 import { WorkTimeColorsService } from "src/app/service/work-time-colors.service";
 import { DynamicService } from "src/app/service/dynamic.service";
 import { UserType } from "src/app/component/enum/user-type";
+import { MailService } from "src/app/service/mail.service";
+import { LoginService } from "src/app/service/login.service";
+import { HelpService } from "src/app/service/help.service";
+import { PackLanguageService } from "src/app/service/pack-language.service";
 
 @Component({
   selector: "app-user-details",
@@ -60,7 +64,11 @@ export class UserDetailsComponent implements OnInit {
     public taskService: TaskService,
     public message: MessageService,
     public workTimeColorService: WorkTimeColorsService,
-    private dynamicService: DynamicService
+    private dynamicService: DynamicService,
+    private mailService: MailService,
+    private loginService: LoginService,
+    private packLanguage: PackLanguageService,
+    private helpService: HelpService,
   ) {}
 
   ngOnInit() {
@@ -132,6 +140,35 @@ export class UserDetailsComponent implements OnInit {
     });
 
     this.onInitData();
+  }
+
+  sendRecoveryLink() {
+    const thisObject = this;
+    thisObject.data["language"] = this.packLanguage.getLanguageForForgotMail();
+    if (this.data.email !== "") {
+      this.loginService.forgotPassword(this.data, function (exist, notVerified) {
+        setTimeout(() => {
+          if (exist) {
+            thisObject.mailService
+              .sendForgetMail(thisObject.data)
+              .subscribe(
+                (data) => {
+                  thisObject.helpService.successToastr(
+                    thisObject.language.sendPasswordRecovery,
+                    thisObject.language.sendPasswordRecoverySucess
+                  );
+                },
+                (error) => {
+                  thisObject.helpService.errorToastr(
+                    thisObject.language.sendPasswordRecovery,
+                    thisObject.language.sendPasswordRecoveryError
+                  );
+                }
+              );
+          }
+        }, 100);
+      });
+    }
   }
 
   onInitData() {
