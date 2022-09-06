@@ -38,3 +38,23 @@
         }
     }
 }
+
+.form-search__button {
+    background-color: var(--theme-color);
+    color: white;
+
+    &:hover {
+        opacity: 0.9;
+    }
+}
+
+.button_back {
+    background-color: var(--theme-color);
+    color: white;
+    padding-left: 1em;
+    padding-right: 1em;
+
+    &:hover {
+        opacity: 0.9;
+    }
+}
