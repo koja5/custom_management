@@ -31,8 +31,8 @@ export class EditTranslationComponent implements OnInit {
   }
 
   isEmpty(obj) {
-    for(var prop in obj) {
-      if(Object.prototype.hasOwnProperty.call(obj, prop)) {
+    for (var prop in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, prop)) {
         return false;
       }
     }
@@ -40,10 +40,10 @@ export class EditTranslationComponent implements OnInit {
   }
 
   formChanged(event) {
-    let flag = this.isEmpty(event)
-    if(!flag) {
+    let flag = this.isEmpty(event);
+    if (!flag) {
       this.data.config = event;
-    } 
+    }
   }
 
   searchSchema(event: any): void {
@@ -53,7 +53,27 @@ export class EditTranslationComponent implements OnInit {
       let layout: any = this.schema.layout;
       let layoutItems: any = [];
       let items = {};
-      let inputValue = event.replace(/\s/g, '').toLowerCase();
+      let inputValue = event.replace(/\s/g, "").toLowerCase();
+      let itemConfig: any = {};
+      let dataConfig = Object.assign({}, this.data.config);
+
+      Object.keys(dataConfig).forEach((key: any, index: number) => {
+        if (Array.isArray(dataConfig[key])) {
+          dataConfig[key].map((arrayEl: any) => {
+            if(arrayEl.text) {
+              arrayEl.text = arrayEl.text.replace(/\s/g, "").toLowerCase();
+              if (arrayEl.text.includes(inputValue)) {
+                itemConfig[index] = key.toLowerCase();
+              }
+            }
+          })
+        } else {
+          dataConfig[key] = dataConfig[key].replace(/\s/g, "").toLowerCase();
+          if (dataConfig[key].includes(inputValue)) {
+            itemConfig[index] = key.toLowerCase();
+          }
+        }
+      });
 
       layout.map((el: any) => {
         layoutItems.push(el.items);
@@ -67,17 +87,32 @@ export class EditTranslationComponent implements OnInit {
         items[index] = currentLayoutItem;
       });
 
-      Object.keys(items).forEach((key, index) => {
-        items[key].map((currentEl: any) => {
-          currentEl.map((currentItems: any) => {
-            if (currentItems.key && currentItems.key.toLowerCase().includes(inputValue)) {
-              indexToExpand.push(index);
-            }
+      Object.keys(itemConfig).forEach((configKey: any) => {
+        Object.keys(items).forEach((key, index) => {
+          items[key].map((currentEl: any) => {
+            currentEl.map((currentItems: any) => {
+              if (
+                currentItems.key &&
+                currentItems.key.toLowerCase().includes(itemConfig[configKey])
+              ) {
+                indexToExpand.push(index);
+              }
+            });
           });
         });
       });
+
+      // Object.keys(items).forEach((key, index) => {
+      //   items[key].map((currentEl: any) => {
+      //     currentEl.map((currentItems: any) => {
+      //       if (currentItems.key && currentItems.key.toLowerCase().includes(inputValue)) {
+      //         indexToExpand.push(index);
+      //       }
+      //     });
+      //   });
+      // });
       this.initialization(indexToExpand);
-    }else {
+    } else {
       this.initialization();
     }
   }
