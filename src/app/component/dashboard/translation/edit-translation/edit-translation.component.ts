@@ -41,8 +41,17 @@ export class EditTranslationComponent implements OnInit {
 
   formChanged(event) {
     let flag = this.isEmpty(event);
+
     if (!flag) {
-      this.data.config = event;
+      Object.keys(this.data.config).forEach(key => {
+        if (Array.isArray(this.data.config[key])) {
+
+        }else {
+          if(this.data.config[key] && this.data.config[key] != event[key]) {
+            this.data.config[key] = event[key];
+          }
+        }
+      })
     }
   }
 
@@ -67,7 +76,7 @@ export class EditTranslationComponent implements OnInit {
               }
             }
           })
-        } else {
+        } else if(dataConfig[key]) {
           dataConfig[key] = dataConfig[key].replace(/\s/g, "").toLowerCase();
           if (dataConfig[key].includes(inputValue)) {
             itemConfig[index] = key.toLowerCase();
@@ -101,16 +110,6 @@ export class EditTranslationComponent implements OnInit {
           });
         });
       });
-
-      // Object.keys(items).forEach((key, index) => {
-      //   items[key].map((currentEl: any) => {
-      //     currentEl.map((currentItems: any) => {
-      //       if (currentItems.key && currentItems.key.toLowerCase().includes(inputValue)) {
-      //         indexToExpand.push(index);
-      //       }
-      //     });
-      //   });
-      // });
       this.initialization(indexToExpand);
     } else {
       this.initialization();
