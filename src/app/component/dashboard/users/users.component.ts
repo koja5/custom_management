@@ -93,17 +93,22 @@ export class UsersComponent implements OnInit {
     pageSizes: true,
     previousNext: true,
   };
+  showDialog: boolean = false;
+  isFormDirty: boolean = false;
+  currentUrl: string;
+  savePage: any = {};
 
   constructor(
     private service: UsersService,
     private storeService: StoreService,
     private router: Router,
     private message: MessageService,
-    private helpService: HelpService
+    private helpService: HelpService,
   ) {
     // this.excelIO = new Excel.IO();
     this.allData = this.allData.bind(this);
   }
+  
 
   ngOnInit() {
     this.height = this.helpService.getHeightForGrid();
@@ -119,6 +124,13 @@ export class UsersComponent implements OnInit {
       this.changeTheme(mess);
       this.theme = mess;
     });
+    this.currentUrl = this.router.url;
+    
+    this.savePage = this.helpService.getGridPageSize();
+    if(this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
+      this.state.skip = this.savePage[this.currentUrl];
+      this.state.take = this.savePage[this.currentUrl + 'Take'];
+    }
   }
 
   getUser() {
@@ -137,6 +149,29 @@ export class UsersComponent implements OnInit {
     });
   }
 
+  receiveConfirm(event: boolean): void {
+    if(event) {
+      this.user.close();
+      this.isFormDirty = false;
+    }
+      this.showDialog = false;
+  }
+
+  confirmClose(): void {
+    this.user.modalRoot.nativeElement.focus();
+    if(this.isFormDirty) {
+      this.showDialog = true;
+    }else {
+      this.user.close()
+      this.showDialog = false;
+      this.isFormDirty = false
+    }
+  }
+
+  isDirty(): void {
+    this.isFormDirty = true;
+  }
+
   newUser() {
     this.initializeParams();
     this.storeService.getStore(localStorage.getItem("superadmin"), (val) => {
@@ -144,6 +179,9 @@ export class UsersComponent implements OnInit {
       this.storeLocation = val;
     });
     this.changeTheme(this.theme);
+    this.user.closeOnEscape = false;
+    this.user.closeOnOutsideClick = false;
+    this.user.hideCloseButton = true;
     this.user.open();
   }
 
@@ -227,6 +265,10 @@ export class UsersComponent implements OnInit {
     this.state.take = event.take;
     this.pageSize = event.take;
     this.loadProducts();
+
+    this.savePage[this.currentUrl] = event.skip;
+    this.savePage[this.currentUrl + 'Take'] = event.take;
+    this.helpService.setGridPageSize(this.savePage);
   }
 
   loadProducts(): void {

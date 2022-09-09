@@ -1,0 +1,32 @@
+{
+    "request_for_demo_account": {
+        "template": "request_for_demo_account.hjs",
+        "email": "kidsnode@gmail.com",
+        "subject": "Novi zahtev za kreiranje naloga",
+        "fields": {
+            "title": "Novi zahtev za kreiranje naloga",
+            "text": "Dobili ste zahtev za kreiranje naloga za mail koji se nalazi u nastavku!",
+            "greeting": "Poštovani"
+        }
+    },
+    "request_for_demo_account_full": {
+        "template": "request_for_demo_account_full.hjs",
+        "email": "kidsnode@gmail.com",
+        "subject": "Novi zahtev za kreiranje naloga",
+        "fields": {
+            "title": "Novi zahtev za kreiranje naloga",
+            "text": "Dobili ste zahtev za kreiranje naloga za mail koji se nalazi u nastavku!",
+            "greeting": "Poštovani"
+        }
+    },
+    "send_from_contact_form": {
+        "template": "send_from_contact_form.hjs",
+        "email": "kidsnode@gmail.com",
+        "subject": "Upit putem kontakt forme",
+        "fields": {
+            "title": "Upit putem kontakt forme",
+            "text": "Dobili ste upit putem kontakt forme. Podaci o korisniku i poruka se nalaze u nastavku!",
+            "greeting": "Poštovani"
+        }
+    }
+}

@@ -11,6 +11,10 @@ import { MessageService } from "src/app/service/message.service";
 import { WorkTimeColorsService } from "src/app/service/work-time-colors.service";
 import { DynamicService } from "src/app/service/dynamic.service";
 import { UserType } from "src/app/component/enum/user-type";
+import { MailService } from "src/app/service/mail.service";
+import { LoginService } from "src/app/service/login.service";
+import { HelpService } from "src/app/service/help.service";
+import { PackLanguageService } from "src/app/service/pack-language.service";
 
 @Component({
   selector: "app-user-details",
@@ -48,6 +52,8 @@ export class UserDetailsComponent implements OnInit {
   public statisticLastWeek: any;
   public configField: any;
   public userTypeEnum = UserType;
+  showDialog: boolean = false;
+  isFormDirty: boolean = false;
 
   constructor(
     public route: ActivatedRoute,
@@ -58,13 +64,16 @@ export class UserDetailsComponent implements OnInit {
     public taskService: TaskService,
     public message: MessageService,
     public workTimeColorService: WorkTimeColorsService,
-    private dynamicService: DynamicService
+    private dynamicService: DynamicService,
+    private mailService: MailService,
+    private loginService: LoginService,
+    private packLanguage: PackLanguageService,
+    private helpService: HelpService,
   ) {}
 
   ngOnInit() {
     this.id = this.route.snapshot.params["id"];
     this.service.getUserWithId(this.id, (val) => {
-      console.log(val);
       this.data = val[0];
       this.modelData();
       if (
@@ -110,7 +119,6 @@ export class UserDetailsComponent implements OnInit {
         const colors = data.sort(function (a, b) {
           return a["sequence"] - b["sequence"];
         });
-        console.log(data);
         for (let i = 0; i < colors["length"]; i++) {
           this.palette.push(colors[i]["color"]);
         }
@@ -134,9 +142,37 @@ export class UserDetailsComponent implements OnInit {
     this.onInitData();
   }
 
+  sendRecoveryLink() {
+    const thisObject = this;
+    thisObject.data["language"] = this.packLanguage.getLanguageForForgotMail();
+    if (this.data.email !== "") {
+      this.loginService.forgotPassword(this.data, function (exist, notVerified) {
+        setTimeout(() => {
+          if (exist) {
+            thisObject.mailService
+              .sendForgetMail(thisObject.data)
+              .subscribe(
+                (data) => {
+                  thisObject.helpService.successToastr(
+                    thisObject.language.sendPasswordRecovery,
+                    thisObject.language.sendPasswordRecoverySucess
+                  );
+                },
+                (error) => {
+                  thisObject.helpService.errorToastr(
+                    thisObject.language.sendPasswordRecovery,
+                    thisObject.language.sendPasswordRecoveryError
+                  );
+                }
+              );
+          }
+        }, 100);
+      });
+    }
+  }
+
   onInitData() {
     this.service.getCountAllTasksForUser(this.id).subscribe((data) => {
-      console.log(data);
       if (data["length"] !== 0) {
         this.totalSum = data[0].total;
       } else {
@@ -384,8 +420,34 @@ export class UserDetailsComponent implements OnInit {
     this.location.back();
   }
 
+  receiveConfirm(event: boolean): void {
+    if(event) {
+      this.user.close();
+      this.isFormDirty = false;
+    }
+      this.showDialog = false;
+  }
+
+  confirmClose(): void {
+    this.user.modalRoot.nativeElement.focus();
+    if(this.isFormDirty) {
+      this.showDialog = true;
+    }else {
+      this.user.close()
+      this.showDialog = false;
+      this.isFormDirty = false
+    }
+  }
+
+  isDirty(): void {
+    this.isFormDirty = true;
+  }
+
   editOptions() {
     this.workTimeData();
+    this.user.closeOnEscape = false;
+    this.user.closeOnOutsideClick = false;
+    this.user.hideCloseButton = true;
     this.user.open();
     this.changeTheme(this.theme);
   }

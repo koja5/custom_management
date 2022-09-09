@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject, HostListener } from "@angular/core";
+import { Component, OnInit, Input, Inject, HostListener, Output, EventEmitter } from "@angular/core";
 import { State, process } from "@progress/kendo-data-query";
 import { FormGroup, FormControl } from "@angular/forms";
 import { Observable } from "rxjs";
@@ -12,6 +12,7 @@ import {
 import { SortDescriptor, orderBy } from "@progress/kendo-data-query";
 import { MessageService } from "src/app/service/message.service";
 import { HelpService } from "src/app/service/help.service";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: "app-parameter-item",
@@ -19,6 +20,7 @@ import { HelpService } from "src/app/service/help.service";
   styleUrls: ["./parameter-item.component.scss"],
 })
 export class ParameterItemComponent implements OnInit {
+  @Output() checkIsFormChanged = new EventEmitter<boolean>();
   @Input() type: string;
   public view: Observable<GridDataResult>;
   public gridState: State = {
@@ -58,6 +60,10 @@ export class ParameterItemComponent implements OnInit {
   public language: any;
   public checkBoxDisabled = [];
   public newRowCheckboxDisabled = true;
+  savePage: any = {};
+  currentUrl: string;
+  // isFormDirty: boolean = false;
+  // showDialog = false;
 
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
@@ -70,7 +76,8 @@ export class ParameterItemComponent implements OnInit {
   constructor(
     private service: ParameterItemService,
     private message: MessageService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private router: Router
   ) { }
 
   public ngOnInit(): void {
@@ -137,6 +144,22 @@ export class ParameterItemComponent implements OnInit {
       this.changeTheme(this.theme);
     }, 350);
     // this.view = this.service.getData(this.type);
+
+    this.currentUrl = this.router.url;
+
+    this.savePage = this.helpService.getGridPageSize();
+    if(this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
+      this.gridState.skip = this.savePage[this.currentUrl];
+      this.gridState.take = this.savePage[this.currentUrl + 'Take'];
+    }
+  }
+
+  checkIsDataSaved() {
+    if(this.editedRowIndex > -1) {
+      this.checkIsFormChanged.emit(true);
+    }else {
+      this.checkIsFormChanged.emit(false);
+    }
   }
 
   public onStateChange(state: State) {
@@ -255,9 +278,9 @@ export class ParameterItemComponent implements OnInit {
     this.refreshData();
 
     this.checkBoxDisabled = this.checkBoxDisabled.map(element => true);
-    console.log(this.checkBoxDisabled);
 
     this.changeTheme(this.theme);
+    this.checkIsFormChanged.emit(false);
   }
 
   setSelectedItem(dataItem): void {
@@ -268,7 +291,7 @@ export class ParameterItemComponent implements OnInit {
 
   public saveHandler({ sender, rowIndex, formGroup, isNew }) {
 
-    console.log(formGroup);
+    this.checkIsFormChanged.emit(false);
 
     this.editedRowIndex = -1;
     const product = formGroup.value;
@@ -437,7 +460,12 @@ export class ParameterItemComponent implements OnInit {
 
   pageChange(event: PageChangeEvent): void {
     this.gridState.skip = event.skip;
+    this.gridState.take = event.take;
     this.loadProducts();
+
+    this.savePage[this.currentUrl] = event.skip;
+    this.savePage[this.currentUrl + 'Take'] = event.take;
+    this.helpService.setGridPageSize(this.savePage);
   }
 
   sortChange(sort: SortDescriptor[]): void {

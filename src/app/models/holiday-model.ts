@@ -3,14 +3,15 @@ export class HolidayModel {
     Subject: string;
     StartTime: Date;
     EndTime: Date;
-    category: string;
-    userId: string;
+    templateId: number;
+    clinicId: number;
 
-    constructor(superAdminId: string) {
+    constructor() {
         this.Subject = '';
-        this.category = 'holiday';
         this.StartTime = new Date();
         this.EndTime = new Date();
-        this.userId = superAdminId;
+        this.templateId = undefined;
+        this.clinicId = undefined;
+
     }
 }

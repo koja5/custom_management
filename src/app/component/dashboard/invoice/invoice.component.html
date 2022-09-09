@@ -12,7 +12,7 @@
                     <span class="fa fa-search"></span>
                   </div>
                 </div>
-                <div class="text-child" style="font-size: 14px">
+                <div class="text-child">
                   {{ language.filterToolbar }}
                 </div>
               </div>
@@ -28,7 +28,7 @@
                     <span class="fa fa-file-pdf-o"></span>
                   </div>
                 </div>
-                <div class="text-child" style="font-size: 14px">
+                <div class="text-child">
                   {{ language.exportToPDF }}
                 </div>
               </div>
@@ -44,7 +44,7 @@
                     <span class="fa fa-print"></span>
                   </div>
                 </div>
-                <div class="text-child" style="font-size: 14px">
+                <div class="text-child">
                   {{ language.print }}
                 </div>
               </div>
@@ -59,7 +59,7 @@
                     <span class="fa fa-file-word-o"></span>
                   </div>
                 </div>
-                <div class="text-child" style="font-size: 14px">
+                <div class="text-child">
                   {{ language.downloadWord }}
                 </div>
               </div>
@@ -109,6 +109,15 @@
                 </label>
                 <kendo-daterange-popup [anchor]="anchor" #popup></kendo-daterange-popup>
               </kendo-daterange>
+
+
+              <div class="row mt-4">
+                <div class="col-sm-4">
+                  <div class="btn btn-primary" [ngClass]="{'disabled': noDataSelected}" (click)="filter()">
+                    {{language.filterToolbar }}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -133,25 +142,18 @@
             <div class="col-sm-12 mt-5">
               <label class="k-checkbox-label"> {{ language.selectInvoiceStore }} </label>
               <br>
-              <kendo-dropdownlist [data]="storeList" textField="text" valueField="value" [(ngModel)]="selectedStoreInfo"
-                (valueChange)="storeValueChange($event)">
-              </kendo-dropdownlist>
+              <kendo-combobox [data]="storeList" textField="text" valueField="value" [valuePrimitive]="true"
+                [(ngModel)]="selectedStoreInfo" (valueChange)="storeValueChange($event)">
+              </kendo-combobox>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="row mt-4">
-        <div class="col-sm-4">
-          <div class="btn btn-primary" [ngClass]="{'disabled': noDataSelected}" (click)="filter()">
-            {{language.filterToolbar }}
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
-  <div class="grid w-100" style="height: 100%">
+  <div class="grid w-100" style="height: 100%; padding-top:1%;">
     <div class="left-panel" style="height: 100%">
       <div class="control-section" style="height: 100%">
         <kendo-grid #grid [style.height.%]="tableHeight"
@@ -160,7 +162,7 @@
           [filter]="state.filter" [loading]="loading">
 
           <ng-template kendoGridToolbarTemplate>
-            <div style="float: right; padding-right: 30px; padding-top: 14px">
+            <div style="float: right; padding-right: 30px;">
 
               <div class="dropdown-grid">
                 <button class="btn-grid" style="border-left: 1px solid #2a3582">

@@ -107,7 +107,7 @@ export class PDFService {
         {
           columns: [
             {
-              text: store.storename + '\n' + superadminProfile.shortname,
+              text: superadminProfile.shortname,
               style: "invoiceBillingDetailsLeft",
             },
             {

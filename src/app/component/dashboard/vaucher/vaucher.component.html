@@ -4,53 +4,21 @@
 
 <div *ngIf="!loading" style="height: 100%">
   <div *ngIf="selectedUser === undefined" style="height: 100%">
-    <kendo-grid
-      #grid
-      *ngIf="language !== undefined"
-      [data]="gridView"
-      [style.height]="height"
-      [resizable]="true"
-      [pageSize]="state.take"
-      [skip]="state.skip"
-      [sort]="state.sort"
-      [filter]="state.filter"
-      [sortable]="true"
-      [pageable]="pageable"
-      (pageChange)="pageChange($event)"
-      [kendoGridSelectBy]="mySelectionKey"
-      [groupable]="true"
-      [group]="state.group"
-      [pageSize]="pageSize"
-      (groupChange)="groupChange($event)"
-      (sortChange)="sortChange($event)"
-    >
-      <kendo-grid-messages
-        pagerPage="{{ language.pagerPage }}"
-        pagerOf="{{ language.pagerOf }}"
-        pagerItems="{{ language.pagerItems }}"
-        pagerItemsPerPage="{{ language.pagerItemsPerPage }}"
-      >
+    <kendo-grid #grid *ngIf="language !== undefined" [data]="gridView" [style.height]="height" [resizable]="true"
+      [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
+      [pageable]="pageable" (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey" [groupable]="true"
+      [group]="state.group" [pageSize]="pageSize" (groupChange)="groupChange($event)" (sortChange)="sortChange($event)">
+      <kendo-grid-messages pagerPage="{{ language.pagerPage }}" pagerOf="{{ language.pagerOf }}"
+        pagerItems="{{ language.pagerItems }}" pagerItemsPerPage="{{ language.pagerItemsPerPage }}">
       </kendo-grid-messages>
       <ng-template kendoGridToolbarTemplate>
         <div class="search">
-          <kendo-textbox-container
-            floatingLabel="{{ language.searchAllColumn }}"
-          >
-            <input
-              kendoTextBox
-              (input)="onFilter($event.target.value)"
-              [(ngModel)]="searchFilter"
-            />
+          <kendo-textbox-container floatingLabel="{{ language.searchAllColumn }}">
+            <input kendoTextBox (input)="onFilter($event.target.value)" [(ngModel)]="searchFilter" />
           </kendo-textbox-container>
         </div>
         <div class="grid-button-operation-group">
-          <button
-            kendoButton
-            [icon]="'add'"
-            (click)="newVaucher()"
-            [primary]="true"
-            class="addButton"
-          >
+          <button kendoButton [icon]="'add'" (click)="newVaucher()" [primary]="true" class="addButton">
             {{ language.newVaucher }}
           </button>
           <div class="dropdown-grid">
@@ -58,32 +26,22 @@
               <i class="fa fa-caret-down"></i>
             </button>
             <div class="dropdown-content-grid">
-              <a style="padding: 0px"
-                ><label
-                  class="uploadFromExcel-{{ theme }}"
-                  style="padding: 12px; cursor: pointer"
-                  ><span class="k-icon k-i-file-excel"></span>
+              <a style="padding: 0px"><label class="uploadFromExcel-{{ theme }}"
+                  style="padding: 12px; cursor: pointer"><span class="k-icon k-i-file-excel"></span>
                   {{ language.uploadFromExcel
-                  }}<input
-                    type="file"
-                    name="files[]"
-                    multiple
-                    id="jsonFile"
-                    accept=".xlsx"
-                    (change)="onFileChange($event)"
-                    [(ngModel)]="fileValue" /></label
-              ></a>
+                  }}<input type="file" name="files[]" multiple id="jsonFile" accept=".xlsx"
+                    (change)="onFileChange($event)" [(ngModel)]="fileValue" /></label></a>
               <a (click)="exportPDF(false)"><span class="k-icon k-i-file-pdf"></span>
                 {{ language.exportPageToPDF }}</a>
               <a (click)="exportPDF(true)"><span class="k-icon k-i-file-pdf"></span>
                 {{ language.exportToPDF }}</a>
-                <a (click)="exportToExcel(grid, false)"><span class="k-icon k-i-file-excel"></span>
-                  {{ language.exportToExcel }}
-                </a>
-      
-                <a (click)="exportToExcel(grid, true)"><span class="k-icon k-i-file-excel"></span>
-                  {{ language.exportAllToExcel }}  
-                </a>
+              <a (click)="exportToExcel(grid, false)"><span class="k-icon k-i-file-excel"></span>
+                {{ language.exportToExcel }}
+              </a>
+
+              <a (click)="exportToExcel(grid, true)"><span class="k-icon k-i-file-excel"></span>
+                {{ language.exportAllToExcel }}
+              </a>
             </div>
           </div>
         </div>
@@ -95,82 +53,35 @@
           {{ dataItem.date | date: "dd.MM.yyyy" }}
         </ng-template>
       </kendo-grid-column>
-      <kendo-grid-column
-        field="amount"
-        title="{{ language.amount }}"
-        width="100"
-      >
+      <kendo-grid-column field="amount" title="{{ language.amount }}" width="100">
       </kendo-grid-column>
-      <kendo-grid-column
-        field="date_redeemed"
-        title="{{ language.date_redeemed }}"
-        width="180"
-      >
+      <kendo-grid-column field="date_redeemed" title="{{ language.date_redeemed }}" width="180">
         <ng-template kendoGridCellTemplate let-dataItem>
           {{ dataItem.date_redeemed | date: "dd.MM.yyyy" }}
         </ng-template>
       </kendo-grid-column>
-      <kendo-grid-column
-        field="customer_name"
-        title="{{ language.customerBuys }}"
-        width="180"
-      >
+      <kendo-grid-column field="customer_name" title="{{ language.customerBuys }}" width="180">
       </kendo-grid-column>
-      <kendo-grid-column
-        field="customer_consumer_name"
-        title="{{ language.customerConsumer }}"
-        width="180"
-      >
+      <kendo-grid-column field="customer_consumer_name" title="{{ language.customerConsumer }}" width="180">
       </kendo-grid-column>
-      <kendo-grid-column
-        field="user_name"
-        title="{{ language.user }}"
-        width="180"
-      >
+      <kendo-grid-column field="user_name" title="{{ language.user }}" width="180">
       </kendo-grid-column>
-      <kendo-grid-column
-        field="comment"
-        title="{{ language.comment }}"
-        width="200"
-      >
+      <kendo-grid-column field="comment" title="{{ language.comment }}" width="200">
       </kendo-grid-column>
       <kendo-grid-column width="120">
         <ng-template kendoGridCellTemplate let-dataItem>
-          <button
-            kendoButton
-            [icon]="'k-icon k-i-edit'"
-            (click)="editForm(dataItem)"
-          ></button>
+          <button kendoButton [icon]="'k-icon k-i-edit'" (click)="editForm(dataItem)"></button>
         </ng-template>
       </kendo-grid-column>
       <kendo-grid-column width="120">
         <ng-template kendoGridCellTemplate let-dataItem>
-          <button
-            kendoButton
-            [icon]="'k-icon k-i-delete'"
-            (click)="open('dialog', dataItem.id)"
-          ></button>
+          <button kendoButton [icon]="'k-icon k-i-delete'" (click)="open('dialog', dataItem.id)"></button>
         </ng-template>
       </kendo-grid-column>
 
-      <kendo-grid-pdf
-        fileName="Vauchers.pdf"
-        [allPages]="allPages"
-        paperSize="A4"
-        [scale]="0.8"
-        [repeatHeaders]="true"
-      >
-        <kendo-grid-pdf-margin
-          top="2cm"
-          left="1cm"
-          right="1cm"
-          bottom="2cm"
-        ></kendo-grid-pdf-margin>
-        <ng-template
-          kendoGridPDFTemplate
-          let-pageNum="pageNum"
-          let-totalPages="totalPages"
-        >
+      <kendo-grid-pdf fileName="Vauchers.pdf" [allPages]="allPages" paperSize="A4" [scale]="0.8" [repeatHeaders]="true">
+        <kendo-grid-pdf-margin top="2cm" left="1cm" right="1cm" bottom="2cm"></kendo-grid-pdf-margin>
+        <ng-template kendoGridPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
           <div class="page-template">
             <div class="header">
               <div>
@@ -186,17 +97,11 @@
         </kendo-grid-column>
         <kendo-grid-column field="amount" title="{{ language.amount }}">
         </kendo-grid-column>
-        <kendo-grid-column
-          field="date_redeemed"
-          title="{{ language.date_redeemed }}"
-        >
+        <kendo-grid-column field="date_redeemed" title="{{ language.date_redeemed }}">
         </kendo-grid-column>
         <kendo-grid-column field="customer" title="{{ language.customerBuys }}">
         </kendo-grid-column>
-        <kendo-grid-column
-          field="customer_consumer"
-          title="{{ language.customerConsumer }}"
-        >
+        <kendo-grid-column field="customer_consumer" title="{{ language.customerConsumer }}">
         </kendo-grid-column>
         <kendo-grid-column field="user" title="{{ language.user }}">
         </kendo-grid-column>
@@ -219,13 +124,8 @@
     </kendo-grid>
   </div>
 
-  <kendo-dialog
-    title="{{ language.pleaseConfirm }}"
-    *ngIf="vaucherDialogOpened"
-    (close)="vaucherDialogOpened = false"
-    [minWidth]="250"
-    [width]="450"
-  >
+  <kendo-dialog title="{{ language.pleaseConfirm }}" *ngIf="vaucherDialogOpened" (close)="vaucherDialogOpened = false"
+    [minWidth]="250" [width]="450">
     <p style="margin: 30px; text-align: center">
       {{ language.areYouSure }}
     </p>
@@ -237,20 +137,10 @@
     </kendo-dialog-actions>
   </kendo-dialog>
 
-  <kendo-dialog
-    title="{{ language.pleaseConfirm }}"
-    *ngIf="dialog"
-    (close)="dialog = false"
-    [minWidth]="250"
-    [width]="450"
-  >
+  <kendo-dialog title="{{ language.pleaseConfirm }}" *ngIf="dialog" (close)="dialog = false" [minWidth]="250"
+    [width]="450">
     <div class="modal-body text-center">
-      <img
-        src="../../../../assets/images/sent.png"
-        alt=""
-        width="50"
-        height="46"
-      />
+      <img src="../../../../assets/images/sent.png" alt="" width="50" height="46" />
       <h3>{{ language.areYouSure }}</h3>
     </div>
     <kendo-dialog-actions>
@@ -264,153 +154,83 @@
   </kendo-dialog>
 </div>
 
-<modal #vaucher modalClass="modal-md">
+<modal #vaucher modalClass="modal-md" (keydown.esc)="confirmClose()">
   <modal-header>
     <h4>{{ getTranslate(operationMode) }}</h4>
+    <button type="button" class="custom-close close" data-dismiss="modal" (click)="confirmClose()">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </modal-header>
   <modal-content>
-    <form
-      name="loginForm"
-      class="loginForm"
-      (ngSubmit)="
+    <app-dynamic-confirm-dialog [showDialog]="showDialog" [title]="language?.changesWontBeSavedTitle"
+      [question]="language?.changesWontBeSaved" (sendEmitter)="receiveConfirm($event)">
+    </app-dynamic-confirm-dialog>
+    <form name="loginForm" class="loginForm" (ngSubmit)="
         operationMode === 'add' ? createVaucher(vaucher) : editVaucher(vaucher)
-      "
-      #voucher="ngForm"
-    >
+      " #voucher="ngForm" (change)="isDirty()">
       <div class="col-md-12 col-xs-12">
         <kendo-textbox-container floatingLabel="{{ language.id }}">
-          <input
-            kendoTextBox
-            class="col-xs-12"
-            name="id"
-            [(ngModel)]="data.id"
-            id.id=""
-            [disabled]="true"
-          />
+          <input kendoTextBox class="col-xs-12" name="id" [(ngModel)]="data.id" id.id="" [disabled]="true" />
         </kendo-textbox-container>
       </div>
       <div class="col-md-12 col-xs-12">
-        <kendo-textbox-container
-          floatingLabel="{{ language.date }}({{ language.required }})"
-        >
-          <kendo-datepicker
-            [format]="'dd.MM.yyyy'"
-            class="email col-md-12 col-xs-12 noPadding"
-            name="Date"
-            [(ngModel)]="dateConst"
-            dateConst.value=""
-            required
-          >
+        <kendo-textbox-container floatingLabel="{{ language.date }}({{ language.required }})">
+          <kendo-datepicker [format]="'dd.MM.yyyy'" class="email col-md-12 col-xs-12 noPadding" name="Date"
+            [(ngModel)]="dateConst" dateConst.value="" required>
           </kendo-datepicker>
         </kendo-textbox-container>
       </div>
       <div class="col-md-12 col-xs-12">
-        <kendo-textbox-container
-          floatingLabel="{{ language.amount }}({{ language.required }})"
-        >
-          <kendo-numerictextbox
-            class="email col-md-12 col-xs-12 noPadding"
-            name="Amount"
-            [(ngModel)]="data.amount"
-            amount.value=""
-            required
-          >
+        <kendo-textbox-container floatingLabel="{{ language.amount }}({{ language.required }})">
+          <kendo-numerictextbox class="email col-md-12 col-xs-12 noPadding" name="Amount" [(ngModel)]="data.amount"
+            amount.value="" required>
           </kendo-numerictextbox>
         </kendo-textbox-container>
       </div>
       <div class="col-md-12 col-xs-12">
         <kendo-textbox-container floatingLabel="{{ language.date_redeemed }}">
-          <kendo-datepicker
-            [format]="'dd.MM.yyyy'"
-            class="email col-md-12 col-xs-12 noPadding"
-            name="Date redeemed"
-            [(ngModel)]="dateredeemedConst"
-            dateredeemedConst.value=""
-          >
+          <kendo-datepicker [format]="'dd.MM.yyyy'" class="email col-md-12 col-xs-12 noPadding" name="Date redeemed"
+            [(ngModel)]="dateredeemedConst" dateredeemedConst.value="">
           </kendo-datepicker>
         </kendo-textbox-container>
       </div>
       <div class="col-md-12 col-xs-12">
         <kendo-textbox-container floatingLabel="{{ language.customerBuys }}">
-          <kendo-combobox
-            class="email col-md-12 col-xs-12 noPadding"
-            [data]="customerBuysUsers"
-            [textField]="'shortname'"
-            [valueField]="'id'"
-            [(ngModel)]="customerUserBuys"
-            name="customer"
-            [filterable]="true"
-            (filterChange)="searchCustomerBuys($event)"
-            [loading]="customerBuysLoading"
-          >
+          <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="customerBuysUsers"
+            [textField]="'shortname'" [valueField]="'id'" [(ngModel)]="customerUserBuys" name="customer"
+            [filterable]="true" (filterChange)="searchCustomerBuys($event)" [loading]="customerBuysLoading">
           </kendo-combobox>
         </kendo-textbox-container>
       </div>
       <div class="col-md-12 col-xs-12">
-        <kendo-textbox-container
-          floatingLabel="{{ language.customerConsumer }}"
-        >
-          <kendo-combobox
-            class="email col-md-12 col-xs-12 noPadding"
-            [data]="customerConsumersUsers"
-            [textField]="'shortname'"
-            [valueField]="'id'"
-            [(ngModel)]="customerUserConsumer"
-            name="customer_consumer"
-            [filterable]="true"
-            (filterChange)="searchCustomerConsumers($event)"
-            [loading]="customerConsumersLoading"
-          >
+        <kendo-textbox-container floatingLabel="{{ language.customerConsumer }}">
+          <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="customerConsumersUsers"
+            [textField]="'shortname'" [valueField]="'id'" [(ngModel)]="customerUserConsumer" name="customer_consumer"
+            [filterable]="true" (filterChange)="searchCustomerConsumers($event)" [loading]="customerConsumersLoading">
           </kendo-combobox>
         </kendo-textbox-container>
       </div>
       <div class="col-md-12 col-xs-12">
-        <kendo-textbox-container
-          floatingLabel="{{ language.user }}({{ language.required }})"
-        >
-          <kendo-combobox
-            class="email col-md-12 col-xs-12 noPadding"
-            [data]="users"
-            [textField]="'shortname'"
-            [valueField]="'id'"
-            [(ngModel)]="user"
-            name="user"
-            [disabled]="operationMode === 'add' ? false : true"
-            required
-          >
+        <kendo-textbox-container floatingLabel="{{ language.user }}({{ language.required }})">
+          <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="users" [textField]="'shortname'"
+            [valueField]="'id'" [(ngModel)]="user" name="user" [disabled]="operationMode === 'add' ? false : true"
+            required>
           </kendo-combobox>
         </kendo-textbox-container>
       </div>
       <div class="col-md-12 col-xs-12" style="padding-top: 15px">
         <kendo-textbox-container floatingLabel="{{ language.comment }}">
-          <textarea
-            kendoTextArea
-            name="comment"
-            [(ngModel)]="data.comment"
-            comment.value=""
-            [autoSize]="true"
-          ></textarea>
+          <textarea kendoTextArea name="comment" [(ngModel)]="data.comment" comment.value=""
+            [autoSize]="true"></textarea>
         </kendo-textbox-container>
       </div>
       <div class="form-group" style="text-align: center">
-        <button
-          *ngIf="operationMode === 'add'"
-          kendoButton
-          [primary]="true"
-          class="form-button"
-          type="submit"
-          [disabled]="voucher.form.invalid"
-        >
+        <button *ngIf="operationMode === 'add'" kendoButton [primary]="true" class="form-button" type="submit"
+          [disabled]="voucher.form.invalid">
           {{ language.addVaucher }}
         </button>
-        <button
-          *ngIf="operationMode === 'edit'"
-          kendoButton
-          [primary]="true"
-          class="form-button"
-          type="submit"
-          [disabled]="voucher.form.invalid"
-        >
+        <button *ngIf="operationMode === 'edit'" kendoButton [primary]="true" class="form-button" type="submit"
+          [disabled]="voucher.form.invalid">
           {{ language.updateVaucher }}
         </button>
       </div>

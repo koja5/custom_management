@@ -7,7 +7,11 @@ registerLocaleData(localeDE);
 
 import { AppRoutingModule } from "./app-routing.module";
 import { HttpModule } from "@angular/http";
-import { HttpClientModule, HttpClientJsonpModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import {
+  HttpClientModule,
+  HttpClientJsonpModule,
+  HTTP_INTERCEPTORS,
+} from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
@@ -41,14 +45,19 @@ import { NotFoundComponent } from "./component/templates/not-found/not-found.com
 
 import { DashboardModule } from "./component/dashboard/dashboard.module";
 import { ConfirmArrivalComponent } from "./component/templates/confirm-arrival/confirm-arrival.component";
-import { SharedModule } from './shared.module';
-import { DymanicElementsModule } from './component/dynamic-elements/dymanic-elements.module';
-import { DynamicMessageComponent } from './component/templates/dynamic-message/dynamic-message.component';
-import { PatientFormSuccessComponent } from './component/templates/patient-form-success/patient-form-success.component';
+import { SharedModule } from "./shared.module";
+import { DymanicElementsModule } from "./component/dynamic-elements/dymanic-elements.module";
+import { DynamicMessageComponent } from "./component/templates/dynamic-message/dynamic-message.component";
+import { PatientFormSuccessComponent } from "./component/templates/patient-form-success/patient-form-success.component";
 import { PrivacyPolicyComponent } from "./component/templates/privacy-policy/privacy-policy.component";
 import { TermsComponent } from "./component/templates/terms/terms.component";
 import { ImpressumComponent } from "./component/templates/impressum/impressum.component";
 import { SharedComponentsModule } from "./shared/shared-components.module";
+import { HomedModule } from "./component/home/routing-module/home.module";
+import { RouterModule } from "@angular/router";
+import { StorageService } from "./service/storage.service";
+import { DynamicTextFormComponent } from "./component/dynamic-elements/dynamic-text-form/dynamic-text-form.component";
+import { FormGuard } from "./service/form-guard/formGuard";
 
 @NgModule({
   declarations: [
@@ -76,17 +85,20 @@ import { SharedComponentsModule } from "./shared/shared-components.module";
     LayoutModule,
     SharedModule,
     DymanicElementsModule,
-    SharedComponentsModule
+    SharedComponentsModule,
+    HomedModule,
+    RouterModule,
   ],
   providers: [
     MailService,
     CookieService,
     TaskService,
     LoggedGuard,
+    FormGuard,
     DashboardGuard,
     LoginGuard,
     MessageService,
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

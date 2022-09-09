@@ -3,9 +3,6 @@
 </div>
 
 <div *ngIf="!loading && selectedUser === undefined" style="height: 100%">
-
-  <!-- <kendo-grid #hiddenGrid="kendoGrid" hidden="true" [data]="allDataForGrid"></kendo-grid> -->
-
   <kendo-grid #grid="kendoGrid" *ngIf="language !== undefined" [data]="gridView" [style.height]="height"
     [resizable]="true" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter"
     [sortable]="true" [pageable]="pageable" (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey"
@@ -43,7 +40,8 @@
               {{ language.exportToExcel }}</a>
 
             <a (click)="exportToExcel(grid, true)"><span class="k-icon k-i-file-excel"></span>
-              ALL</a>
+              {{ language.exportAllToExcel }}
+            </a>
 
             <a (click)="openPatientFormRegistrationDialog()" style="text-transform: uppercase"><span
                 class="fa fa-list"></span> {{ language.patientForm }}</a>
@@ -69,7 +67,8 @@
       </ng-template>
     </kendo-grid-column>
 
-    <kendo-grid-pdf fileName="Customers.pdf" [allPages]="allPages" paperSize="A4" [scale]="0.8" [repeatHeaders]="true">
+    <kendo-grid-pdf fileName="Customers.pdf" [allPages]="allPages" paperSize="A4" [landscape]="true" [scale]="0.8"
+      [repeatHeaders]="true">
       <kendo-grid-pdf-margin top="2cm" left="1cm" right="1cm" bottom="2cm"></kendo-grid-pdf-margin>
       <ng-template kendoGridPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
         <div class="page-template">
@@ -91,10 +90,11 @@
       </kendo-grid-column>
       <kendo-grid-column field="mobile" title="{{ language.mobile }}" width="120">
       </kendo-grid-column>
+      <kendo-grid-column field="email" title="{{ language.email }}" width="150">
+      </kendo-grid-column>
     </kendo-grid-pdf>
 
     <kendo-grid-excel fileName="Customers.xlsx" [fetchData]="allData"></kendo-grid-excel>
-    <!-- <kendo-grid-excel fileName="Customers.xlsx"></kendo-grid-excel> -->
 
     <ng-template kendoGridNoRecordsTemplate>
       <div class="row no-results-element">
@@ -121,12 +121,28 @@
   </kendo-dialog>
 </div>
 
-<modal #customer modalClass="modal-lg">
+<modal #customer modalClass="modal-lg" (keydown.esc)="confirmClose()">
   <modal-header>
     <h4>{{ language.createNewCustomer }}</h4>
+    <button type="button" class="custom-close close" data-dismiss="modal" (click)="confirmClose()">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </modal-header>
   <modal-content>
-    <form name="loginForm" class="loginForm" (ngSubmit)="createCustomer(customer)" #customerForm="ngForm">
+    <app-dynamic-confirm-dialog [showDialog]="showDialog" [title]="language?.changesWontBeSavedTitle"
+      [question]="language?.changesWontBeSaved" (sendEmitter)="receiveConfirm($event)">
+    </app-dynamic-confirm-dialog>
+    <!-- <kendo-dialog *ngIf="showDialog" title="language?.changesWontBeSavedTitle" [minWidth]="250" [width]="450">
+    <p style="margin: 30px; text-align: center">
+      {{ language?.changesWontBeSaved }}
+    </p>
+    <kendo-dialog-actions>
+      <button kendoButton (click)="receiveConfirm(false)">No</button>
+      <button kendoButton (click)="receiveConfirm(true)" primary="true">Yes</button>
+    </kendo-dialog-actions>
+  </kendo-dialog> -->
+    <form name="loginForm" class="loginForm" (ngSubmit)="createCustomer(customer)" #customerForm="ngForm"
+      (change)="isDirty()">
       <div class="form-group m-0">
         <div class="panel-body p-0">
           <div class="text-center vd_info-parent col-md-4 col-xs-12">
@@ -229,7 +245,7 @@
             <input kendoTextBox type="text" class="col-xs-12" [(ngModel)]="data.city" name="city" />
           </kendo-textbox-container>
         </div>
-        <div class="email col-md-12 col-xs-12" style="padding-top: 20px; font-weight: bold">
+        <div class="email col-md-12 col-xs-12 text-center mt-4" style="font-weight: bold">
           <input type="checkbox" kendoCheckBox [(ngModel)]="data.isConfirm" name="isConfirm" style="margin: 0px" />
           <span style="font-size: 12px">
             {{ language.confirmMessageText }}</span>
@@ -269,4 +285,4 @@
 <!--<kendo-upload [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [autoUpload]="false">
 
 </kendo-upload>-->
-<app-base-date *ngIf="selectedUser !== undefined" [data]="selectedUser" [type]="'details'"></app-base-date>
+<app-base-date *ngIf="selectedUser !== undefined" [data]="selectedUser" [imagePath]="imagePath" [type]="'details'"></app-base-date>

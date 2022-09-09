@@ -28,6 +28,7 @@ var reminderViaEmail = require("./server/routes/reminderViaEmail");
 var reminderViaSMS = require("./server/routes/reminderViaSMS");
 var sendHappyBirthdayViaSMS = require("./server/routes/sendHappyBirthdayViaSMS");
 var sendHappyBirthdayViaEmail = require("./server/routes/sendHappyBirthdayViaEmail");
+const mailServer = require("./server/routes/dynamic-mail-server/mail-server");
 
 app.use(compression());
 
@@ -167,6 +168,7 @@ app.use("/api", api);
 app.use("/api", mail);
 app.use("/api", mongo);
 api.use("/api", sms);
+app.use("/api/mail-server", mailServer);
 
 // Catch all other routes and return the index file
 app.get("*", (req, res) => {

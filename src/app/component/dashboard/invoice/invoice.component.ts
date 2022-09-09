@@ -1,3 +1,4 @@
+import { filter } from 'rxjs/operators/filter';
 import { InvoiceService } from "./../../../service/invoice.service";
 import { ParameterItemService } from "src/app/service/parameter-item.service";
 import {
@@ -31,6 +32,7 @@ import { DashboardService } from "src/app/service/dashboard.service";
 import { LoadingScreenService } from "src/app/shared/loading-screen/loading-screen.service";
 import { DateService } from "src/app/service/date.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { Router } from '@angular/router';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -49,6 +51,7 @@ export class InvoiceComponent implements OnInit {
   invoiceStore = null;
   allStores: any[];
   gridData: any;
+  allInvoiceData: any[];
 
   @HostListener("window:resize", ["$event"])
   onResize(): void {
@@ -89,7 +92,8 @@ export class InvoiceComponent implements OnInit {
   public selectedStoreInfo;
   public invoiceLanguage;
   public invoicePrefix: string;
-
+  currentUrl: string;
+  savePage = {};
   public pageSize = 10;
   public state: State = {
     skip: 0,
@@ -141,16 +145,24 @@ export class InvoiceComponent implements OnInit {
     private dashboardService: DashboardService,
     private loadingScreenService: LoadingScreenService,
     private dateService: DateService,
-    private invoiceService: InvoiceService
+    private invoiceService: InvoiceService,
+    private router: Router
   ) {
     this.allData = this.allData.bind(this);
   }
 
   ngOnInit() {
+    this.currentUrl = this.router.url;
     this.initializationConfig();
     this.initializationData();
 
     this.helpService.setDefaultBrowserTabTitle();
+
+    this.savePage = this.helpService.getGridPageSize();
+    if(this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
+      this.state.skip = this.savePage[this.currentUrl];
+      this.state.take = this.savePage[this.currentUrl + 'Take'];
+    }
   }
 
   public initializationConfig(): void {
@@ -204,9 +216,14 @@ export class InvoiceComponent implements OnInit {
   }
 
   storeValueChange(event) {
-    this.invoiceStore = this.allStores.find((elem) => elem.id === event.value);
+    this.invoiceStore = this.allStores.find((elem) => elem.id === event);
     console.log("this.invoiceStore ", this.invoiceStore);
     this.selectedStoreInfo = event;
+
+    const data = this.invoiceStore ? this.allInvoiceData.filter(elem => elem.storeId === this.invoiceStore.id) : this.allInvoiceData;
+    this.currentLoadData = data;
+
+    this.gridViewData = process(this.currentLoadData, this.state);
   }
 
   public getParameters(): void {
@@ -298,6 +315,7 @@ export class InvoiceComponent implements OnInit {
     this.taskService.getDataForMassiveInvoice(patientId).then((data) => {
       console.log("getDataForMassiveInvoice : ", data);
       this.currentLoadData = [];
+      this.allInvoiceData = [];
 
       if (this.range.start && this.range.end) {
         data.forEach((element) => {
@@ -316,6 +334,7 @@ export class InvoiceComponent implements OnInit {
             element.end.getTime() <= endDate
           ) {
             this.currentLoadData.push(element);
+            this.allInvoiceData.push(element);
           }
         });
       } else {
@@ -323,6 +342,7 @@ export class InvoiceComponent implements OnInit {
           elem.checked = false;
         });
         this.currentLoadData = data;
+        this.allInvoiceData = data;
       }
 
       if (this.currentLoadData.length > 0) {
@@ -375,6 +395,10 @@ export class InvoiceComponent implements OnInit {
     this.state.take = event.take;
     this.pageSize = event.take;
     this.gridViewData = process(this.currentLoadData, this.state);
+
+    this.savePage[this.currentUrl] = event.skip;
+    this.savePage[this.currentUrl + 'Take'] = event.take;
+    this.helpService.setGridPageSize(this.savePage);
   }
 
   public sortChange(sort: SortDescriptor[]): void {
@@ -592,6 +616,7 @@ export class InvoiceComponent implements OnInit {
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
+
     //THIS ONE SHOULD BE ACTIVE
     const link =
       window.location.protocol +
@@ -617,6 +642,11 @@ export class InvoiceComponent implements OnInit {
         },
       });
 
+      const store =
+        componentRef.invoiceStore !== undefined && componentRef.invoiceStore !== null
+          ? componentRef.invoiceStore
+          : componentRef.store;
+
       doc.setData({
         invoice_title: componentRef.invoiceLanguage.invoiceTitle,
         invoice_number: componentRef.invoiceLanguage.invoiceSubTitle,
@@ -626,17 +656,17 @@ export class InvoiceComponent implements OnInit {
         billing_from_title:
           componentRef.invoiceLanguage.invoiceBillingTitleFrom,
         billing_to_title: componentRef.invoiceLanguage.invoiceBillingTitleTo,
-        clinic_name: componentRef.store.storename + '\n' + componentRef.superadminProfile.shortname,
+        clinic_name: componentRef.superadminProfile.shortname,
         customer_lastname: componentRef.customerUser.lastname,
         customer_firstname: componentRef.customerUser.firstname,
-        clinic_street: componentRef.store.street,
+        clinic_street: store.street,
         customer_street: componentRef.customerUser.street,
         customer_streetnumber: componentRef.customerUser.streetnumber,
-        clinic_zipcode: componentRef.store.zipcode,
-        clinic_city: componentRef.store.place,
+        clinic_zipcode: store.zipcode,
+        clinic_city: store.place,
         customer_city: componentRef.customerUser.city,
-        clinic_telephone: componentRef.store.telephone,
-        clinic_email: componentRef.store.email,
+        clinic_telephone: store.telephone,
+        clinic_email: store.email,
         subtotal_title: componentRef.invoiceLanguage.invoiceSubtotal,
         total_title: componentRef.invoiceLanguage.invoiceTotal,
         products: therapies,
@@ -657,8 +687,8 @@ export class InvoiceComponent implements OnInit {
           : "",
         vat_percentage_title: componentRef.isPriceIncluded ? componentRef.invoiceLanguage.vatPercentageTitle : "",
         vat_identification_number: componentRef.invoiceLanguage.vatIdentificationNumber,
-        vat_code: componentRef.store.vatcode
-          ? componentRef.store.vatcode
+        vat_code: store.vatcode
+          ? store.vatcode
           : componentRef.superadminProfile.vatcode,
         vat_price: componentRef.isPriceIncluded ? vat : "",
         gross_price_title: componentRef.isPriceIncluded

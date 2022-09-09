@@ -1,62 +1,50 @@
-import { UsersService } from './../../../../service/users.service';
-import { DashboardService } from 'src/app/service/dashboard.service';
-import { HolidayService } from '../../../../service/holiday.service';
-import { HolidayModel } from '../../../../models/holiday-model';
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { MonthService, ScheduleComponent, EventSettingsModel, CellClickEventArgs, PopupOpenEventArgs } from '@syncfusion/ej2-angular-schedule';
-import { Modal } from 'ngx-modal';
-import { MessageService } from 'src/app/service/message.service';
-import { IndividualConfig, ToastrService } from 'ngx-toastr';
-import { HelpService } from 'src/app/service/help.service';
-import { DatePickerComponent } from '@progress/kendo-angular-dateinputs';
-import { UserType } from 'src/app/component/enum/user-type';
-import { GroupDescriptor, SortDescriptor, State, process } from '@progress/kendo-data-query';
-import { PageChangeEvent } from '@progress/kendo-angular-grid';
-import { Template } from 'src/app/models/template-model';
-import { DynamicSchedulerService } from 'src/app/service/dynamic-scheduler.service';
-import { TabType } from 'src/app/component/enum/tab-type';
+import { HolidayTemplate } from './../../../../models/holiday-template.model';
+import { UsersService } from "./../../../../service/users.service";
+import { HolidayService } from "../../../../service/holiday.service";
+import { HolidayModel } from "../../../../models/holiday-model";
+import { Component, HostListener, OnInit, ViewChild } from "@angular/core";
+import { Modal } from "ngx-modal";
+import { MessageService } from "src/app/service/message.service";
+import { IndividualConfig, ToastrService } from "ngx-toastr";
+import { HelpService } from "src/app/service/help.service";
+import { DatePickerComponent } from "@progress/kendo-angular-dateinputs";
+import {
+  GroupDescriptor,
+  SortDescriptor,
+  State,
+  process,
+} from "@progress/kendo-data-query";
+import { PageChangeEvent } from "@progress/kendo-angular-grid";
+import { DynamicSchedulerService } from "src/app/service/dynamic-scheduler.service";
+import { TabType } from "src/app/component/enum/tab-type";
+import { DateService } from "src/app/service/date.service";
+import { UserModel } from 'src/app/models/user-model';
 
 @Component({
-  selector: 'app-add-holiday',
-  providers: [MonthService],
-  templateUrl: './add-holiday.component.html',
-  styleUrls: ['./add-holiday.component.scss']
+  selector: "app-add-holiday",
+  templateUrl: "./add-holiday.component.html",
+  styleUrls: ["./add-holiday.component.scss"],
 })
 export class AddHolidayComponent implements OnInit {
-  @ViewChild('scheduleObj') public scheduleObj: ScheduleComponent;
-  public eventSettings: EventSettingsModel = {
-    dataSource: [],
-    fields: {
-      id: 'Id',
-      subject: { name: 'Subject', title: 'Event Name' },
-      startTime: { name: 'StartTime', title: 'Start Duration' },
-      endTime: { name: 'EndTime', title: 'End Duration' },
-    }
-  };
-
-  @ViewChild('endTime')
+  @ViewChild("endTime")
   public endTimeDatePicker: DatePickerComponent;
 
   public language: any;
-  public selectedCell: any;
-  public addNewHoliday: boolean;
-  public deleteModal = false;
-  public userType = UserType;
-  public type: number;
-  public holidays: HolidayModel[] = [];
-  public newHoliday: HolidayModel;
-  public templateList;
-  public isOwner: boolean;
+  public addNewHoliday: boolean = true;
+  public deleteModal: boolean = false;
+  public deleteHolidayModal: boolean = false;
+  public currentHoliday: HolidayModel = new HolidayModel();
+  public holidayTemplateList: HolidayTemplate[];
   public currentTab = TabType.Holidays;
   public tabType = TabType;
-  public operationMode = 'add';
+  public addTemplate: boolean;
 
-  public gridTemplateData: any;
+  public holidayTemplatesGridData: any;
   public pageSize = 5;
 
   public pageable = {
     pageSizes: true,
-    previousNext: true
+    previousNext: true,
   };
   public state: State = {
     skip: 0,
@@ -65,230 +53,66 @@ export class AddHolidayComponent implements OnInit {
     sort: [
       {
         field: "sequence",
-        dir: "asc"
-      }
-    ]
+        dir: "asc",
+      },
+    ],
   };
-  private superAdminId: string;
 
-  @ViewChild("addVacationModal") addVacationModal: Modal;
-  @ViewChild("selectTemplateModal") selectTemplateModal: Modal;
+  @ViewChild("holidayModal") holidayModal: Modal;
   @ViewChild("templateModal") templateModal: Modal;
-  selectedTemplate = null;
-  overrideMessage: Partial<IndividualConfig> = { timeOut: 7000, positionClass: "toast-bottom-right" };
-  public data = new Template();
+  public selectedHolidayTemplate: HolidayTemplate;
+  private overrideMessage: Partial<IndividualConfig> = {
+    timeOut: 7000,
+    positionClass: "toast-bottom-right",
+  };
+  public currentTemplate = new HolidayTemplate();
 
-  public user;
-  deleteTemplateId: any;
-  height: string;
+  public user: UserModel;
+  private deleteHolidayTemplateId: number;
+  public height: string;
+  public holidayList: HolidayModel[] = [];
+  deleteHolidayId: number;
 
-  constructor(public messageService: MessageService,
+  @HostListener("window:resize", ["$event"])
+  onResize() {
+    this.height = this.dynamicService.getHolidayCalendarHeight();
+  }
+
+  get holidayModalTitle(): string {
+    return this.addNewHoliday
+      ? this.language.addHoliday
+      : this.language.editHoliday;
+  }
+
+  get templateModalTitle(): string {
+    return this.addTemplate
+      ? this.language.addTemplate
+      : this.language.editTemplate;
+  }
+
+  constructor(
+    public messageService: MessageService,
     private holidayService: HolidayService,
     private helpService: HelpService,
-    private dashboardService: DashboardService,
     private usersService: UsersService,
     private dynamicService: DynamicSchedulerService,
-    private toastrService: ToastrService) { }
+    private dateService: DateService,
+    private toastrService: ToastrService
+  ) { }
 
   ngOnInit() {
     this.initializationConfig();
-    this.type = Number(this.helpService.getLocalStorage("type"));
-    this.superAdminId = this.helpService.getSuperadmin();
-    this.newHoliday = new HolidayModel(this.superAdminId);
-    this.isOwner = this.helpService.getType() === UserType.owner;
-
-    this.usersService.getUserWithIdPromise(this.helpService.getMe()).then(data => {
-      console.log(data);
-      this.user = data;
-    });
-
-    this.loadTemplates();
-
-    this.height = this.dynamicService.getHolidayCalendarHeight();
-  }
-
-
-  @HostListener("window:resize", ["$event"])
-  onResize(event) {
-    this.height = this.dynamicService.getHolidayCalendarHeight();
-  }
-
-  public loadHolidaysForUser(): void {
-    //reset
-    this.holidays = [];
-
-    this.holidayService.getHolidays(this.superAdminId).subscribe(result => {
-      console.log(result);
-      if (result && result.length > 0) {
-        result.forEach(r => {
-          console.log('HOLIDAY', r);
-          this.holidays.push(
-            <HolidayModel>{
-              id: r.id,
-              Subject: r.Subject,
-              StartTime: new Date(r.StartTime),
-              EndTime: new Date(r.EndTime),
-              category: r.category,
-              userId: r.userId
-            }
-          )
-        });
-        console.log(result);
-      }
-      this.scheduleObj.eventSettings.dataSource = this.holidays;
-      this.scheduleObj.refresh();
-      this.scheduleObj.refreshEvents();
-
-
-    });
-  }
-
-  public loadHolidaysByTemplate(): void {
-    //reset
-    this.holidays = [];
-
-    this.holidayService.getHolidaysByTemplate(this.superAdminId, this.selectedTemplate.id).then(result => {
-      console.log(result);
-      if (result && result.length > 0) {
-        result.forEach(r => {
-          // console.log('R: ', r);
-          this.holidays.push(
-            <HolidayModel>{
-              id: r.id,
-              Subject: r.Subject,
-              StartTime: new Date(r.StartTime),
-              EndTime: new Date(r.EndTime),
-              category: r.category,
-              userId: r.userId
-            }
-          )
-        });
-      }
-      this.scheduleObj.eventSettings.dataSource = this.holidays;
-      this.scheduleObj.refresh();
-      this.scheduleObj.refreshEvents();
-    });
-  }
-
-  addNewModal() {
-    this.templateModal.open();
-    this.data = new Template();
-    this.data.account_id = this.helpService.getMe();
-    this.data.language = "";
-    this.data.description = "";
-    this.data.email = this.user.email ? this.user.email : '';
-    this.operationMode = 'add';
-  }
-
-  openEditTemplateModal(event): void {
-    this.data = event;
-    this.operationMode = 'edit';
-    this.templateModal.open();
-  }
-
-  createTemplate(): void {
-    this.dashboardService.createTemplate(this.data).then(insertedId => {
-      if (insertedId) {
-        const relation = {
-          userId: this.helpService.getMe(),
-          templateId: insertedId
-        }
-
-        this.dashboardService.createUserTemplateRelation(relation).then(result => {
-          if (result) {
-            this.displaySuccessMessage(this.language.adminSuccessCreateTitle, this.language.adminSuccessCreateText);
-            this.loadTemplates();
-
-            this.closeTemplateModal();
-          } else {
-            this.displayErrorMessage(this.language.adminErrorCreateTitle, this.language.adminErrorCreateText);
-          }
-        });
-      } else {
-        this.displayErrorMessage(this.language.adminErrorCreateTitle, this.language.adminErrorCreateText);
-      }
-    });
-  }
-
-  updateTemplate(): void {
-    console.log('updateTemplate');
-
-    this.dashboardService.updateTemplate(this.data).then(result => {
-      console.log(result);
-      this.closeTemplateModal();
-      if (result) {
-        this.displaySuccessMessage(this.language.adminSuccessUpdateTitle, this.language.adminSuccessUpdateText);
-
-      } else {
-        this.displayErrorMessage(this.language.adminErrorUpdateTitle, this.language.adminErrorUpdateText);
-      }
-    });
-  }
-
-  deleteTemplate(event): void {
-    this.deleteModal = true;
-    this.deleteTemplateId = event;
-  }
-
-  action(event) {
-
-    if (event === "yes") {
-      const data = this.templateList.find(elem => elem.id === this.deleteTemplateId);
-
-      this.dashboardService.deleteHolidayTemplateByTemplateId(data).then(result => {
-        this.dashboardService.deleteUserTemplate(data).then(result => {
-          this.dashboardService.deleteTemplate(data).then(result => {
-
-            if (result) {
-              this.displaySuccessMessage(this.language.adminSuccessDeleteTitle, this.language.adminSuccessDeleteText);
-              this.loadTemplates();
-            } else {
-              this.displaySuccessMessage(this.language.adminErrorDeleteTitle, this.language.adminErrorDeleteText);
-
-            }
-
-            this.deleteModal = false;
-          });
-        });
+    this.usersService.getUserWithIdPromise(this.helpService.getMe())
+      .then((data) => {
+        this.user = data;
       });
-    } else {
-      this.deleteModal = false;
-      this.deleteTemplateId = null;
-    }
+
+    this.loadHolidayTemplates();
+
+    this.height = this.dynamicService.getHolidayCalendarHeight();
   }
 
-
-  closeTemplateModal(): void {
-    this.templateModal.close();
-  }
-
-  pageChange(event: PageChangeEvent): void {
-    this.state.skip = event.skip;
-    this.state.take = event.take;
-    this.pageSize = event.take;
-    this.gridTemplateData = process(this.templateList, this.state);
-  }
-
-
-  public sortChange(sort: SortDescriptor[]): void {
-    this.state.sort = sort;
-    this.gridTemplateData = process(this.templateList, this.state);
-  }
-
-
-  public groupChange(groups: GroupDescriptor[]): void {
-    this.state.group = groups;
-    this.gridTemplateData = process(this.templateList, this.state);
-  }
-
-  public async loadTemplates() {
-    const data = await this.dashboardService.getTemplateAccountByUserId(this.superAdminId);
-    // console.log('templates:', data);
-    this.templateList = data;
-    this.gridTemplateData = process(this.templateList, this.state);
-  }
-
-  initializationConfig() {
+  private initializationConfig(): void {
     if (localStorage.getItem("language") !== undefined) {
       this.language = JSON.parse(localStorage.getItem("language"));
     } else {
@@ -302,226 +126,293 @@ export class AddHolidayComponent implements OnInit {
     }
   }
 
-  changeTab(value: TabType) {
+  public loadHolidayTemplates() {
+    this.holidayService.getHolidayTemplatesPromise().then((result) => {
+      this.holidayTemplateList = result;
+      this.holidayTemplatesGridData = process(this.holidayTemplateList, this.state);
+    });
+  }
 
+  public changeTab(value: TabType): void {
     if (this.currentTab === value) {
       return;
     }
 
-    if (this.currentTab == TabType.Holidays) {
-      this.selectedTemplate = null;
-      this.holidays = [];
-      this.eventSettings.dataSource = [];
-      this.scheduleObj.eventSettings.dataSource = [];
-      this.scheduleObj.refreshEvents();
-      this.scheduleObj.refresh();
-    }
+    this.selectedHolidayTemplate = null;
+    this.holidayList = [];
 
     this.currentTab = value;
   }
 
-  onRenderCell(event) {
-    this.holidays.forEach(holiday => {
-      if (event.elementType == "monthCells" && event.date >= holiday.StartTime.getTime() && event.date <= holiday.EndTime.getTime()) {
-        event.element.style.backgroundColor = "#e9ecef";
-        event.element.style.pointerEvents = "none";
-      }
-    });
-  }
-
-  onPopupOpen(args: PopupOpenEventArgs): void {
-    if (args.type === 'Editor' || args.type === 'QuickInfo') {
-      args.cancel = true;
-    }
-  }
-
-  onCellClick(args: CellClickEventArgs): void {
-
-    //console.log(args);
-    if (this.selectedTemplate == undefined) {
-      this.selectedCell = args.element;
-      this.displaySelectTemplateMessage();
-
-      console.log(this.selectedCell);
+  public onHolidayTemplateChange(): void {
+    if (this.selectedHolidayTemplate) {
+      this.loadHolidaysByTemplate();
+      this.currentHoliday.templateId = this.selectedHolidayTemplate.id;
     } else {
+      //reset
+      this.holidayList = [];
+      this.selectedHolidayTemplate = null;
+    }
+  }
 
-      this.selectedCell = args.element;
-      this.endTimeDatePicker.min = args.startTime;
+  public loadHolidaysByTemplate(): void {
+    //reset
+    this.holidayList = [];
 
-      const holiday = this.holidays.find(x => args.startTime >= x.StartTime && args.startTime <= x.EndTime);
-      // must use startTime from args
-      if (holiday) {
-        console.log('holiday ', holiday);
-        this.newHoliday = holiday;
+    this.holidayService
+      .getHolidaysByTemplate(this.selectedHolidayTemplate.id)
+      .then((result) => {
+        if (result && result.length > 0) {
 
+          result.forEach(elem => {
+            elem.StartTime = new Date(elem.StartTime);
+            elem.EndTime = new Date(elem.EndTime);
+          })
 
-        this.addNewHoliday = false;
-      } else {
-        this.addNewHoliday = true;
-        this.newHoliday = new HolidayModel(this.superAdminId);
-        this.newHoliday.Subject = '';
-        this.newHoliday.StartTime = args.startTime;
-        this.newHoliday.EndTime = args.endTime;
-      }
-      this.addVacationModal.open();
+          this.holidayList = result;
+        }
+      });
+  }
+
+  public getFormattedDate(holiday: HolidayModel): string {
+    const d1 = this.dateService.formatDate(holiday.StartTime.toISOString());
+    const d2 = this.dateService.formatDate(holiday.EndTime.toISOString());
+    return d1 == d2 ? d1 : d1 + " - " + d2;
+  }
+
+  public openAddNewHolidayModal(): void {
+    if (!this.selectedHolidayTemplate) {
+      this.displaySelectTemplateMessage();
+      return;
     }
 
+    this.addNewHoliday = true;
+
+    this.currentHoliday = new HolidayModel();
+    this.currentHoliday.templateId = this.selectedHolidayTemplate.id;
+
+    this.holidayModal.open();
   }
 
-  closeAddVacationModal(): void {
-    this.addVacationModal.close();
-
-    //to remove cell focus
-    this.selectedCell.classList.remove("e-selected-cell");
+  public setMinEndTime(event): void {
+    this.endTimeDatePicker.min = event;
+    this.currentHoliday.EndTime = event;
   }
 
-  addHoliday(): void {
+  public addHoliday(): void {
+    this.currentHoliday.templateId = this.selectedHolidayTemplate.id;
+    this.currentHoliday.StartTime = new Date(this.currentHoliday.StartTime.toISOString());
+    this.currentHoliday.EndTime = new Date(this.currentHoliday.EndTime.toISOString());
 
-    this.holidayService.createHoliday(this.newHoliday, (insertedId) => {
-      console.log(insertedId);
-
+    this.holidayService.createHoliday(this.currentHoliday, (insertedId) => {
       if (insertedId) {
-
-        this.newHoliday.id = insertedId;
-
-        if (this.isOwner) {
-          const relation = {
-            holidayId: insertedId,
-            templateId: this.selectedTemplate.id
-          }
-
-          console.log(relation);
-          this.holidayService.createHolidayTemplateConnection(relation, (result) => {
-
-            if (result) {
-              this.displaySuccessMessage(this.language.adminSuccessCreateTitle, this.language.adminSuccessCreateText);
-
-              this.holidays.push(this.newHoliday);
-              this.eventSettings.dataSource = this.holidays;
-
-              this.closeAddVacationModal();
-              this.scheduleObj.refresh();
-              this.scheduleObj.refreshEvents();
-            }
-            else {
-              this.displayErrorMessage(this.language.adminErrorCreateTitle, this.language.adminErrorCreateText);
-            }
-          });
-        } else {
-          this.displaySuccessMessage(this.language.adminSuccessCreateTitle, this.language.adminSuccessCreateText);
-
-          this.holidays.push(this.newHoliday);
-          this.eventSettings.dataSource = this.holidays;
-
-          this.closeAddVacationModal();
-          this.scheduleObj.refreshEvents();
-          this.scheduleObj.refresh();
-        }
+        this.displaySuccessMessage(
+          this.language.adminSuccessCreateTitle,
+          this.language.adminSuccessCreateText
+        );
+        this.holidayList.push(this.currentHoliday);
+      } else {
+        this.displayErrorMessage(
+          this.language.adminErrorCreateTitle,
+          this.language.adminErrorCreateText
+        );
       }
-      else {
-        this.displayErrorMessage(this.language.adminErrorCreateTitle, this.language.adminErrorCreateText);
-      }
+      this.closeHolidayModal();
     });
+  }
 
+  public openEditHolidayModal(holiday: HolidayModel): void {
+    this.currentHoliday = holiday;
+    this.currentHoliday.StartTime = new Date(holiday.StartTime);
+    this.currentHoliday.EndTime = new Date(holiday.EndTime);
+
+    this.addNewHoliday = false;
+    this.holidayModal.open();
+  }
+
+  public updateHoliday(): void {
+    this.holidayService.updateHoliday(this.currentHoliday, (val) => {
+      if (val) {
+        this.displaySuccessMessage(
+          this.language.adminSuccessUpdateTitle,
+          this.language.adminSuccessUpdateText
+        );
+      } else {
+        this.displayErrorMessage(
+          this.language.adminErrorUpdateTitle,
+          this.language.adminErrorUpdateText
+        );
+      }
+      this.closeHolidayModal();
+    });
+  }
+
+  public deleteHoliday(): void {
+    this.holidayService.deleteHoliday(this.deleteHolidayId, (val) => {
+      if (val) {
+        this.displaySuccessMessage(this.language.adminSuccessDeleteTitle, this.language.adminSuccessDeleteText);
+
+        //DELETE FROM ARRAY
+        this.holidayList = this.holidayList.filter(h => h.id !== this.currentHoliday.id);
+      } else {
+        this.displayErrorMessage(
+          this.language.adminErrorDeleteTitle,
+          this.language.adminErrorDeleteText
+        );
+      }
+      this.closeDeleteHolidayDialog();
+    });
+  }
+
+  public closeHolidayModal(): void {
+    this.holidayModal.close();
+  }
+
+  public openAddNewHolidayTemplateModal(): void {
+    this.currentTemplate = new HolidayTemplate();
+    this.currentTemplate.name = "";
+    this.currentTemplate.description = "";
+    this.addTemplate = true;
+
+    this.templateModal.open();
+  }
+
+  public createTemplate(): void {
+    this.holidayService.createHolidayTemplate(this.currentTemplate).then((insertedId) => {
+      if (insertedId) {
+        this.displaySuccessMessage(
+          this.language.adminSuccessCreateTitle,
+          this.language.adminSuccessCreateText
+        );
+
+        this.loadHolidayTemplates();
+      } else {
+        this.displayErrorMessage(
+          this.language.adminErrorCreateTitle,
+          this.language.adminErrorCreateText
+        );
+      }
+      this.closeTemplateModal();
+    });
+  }
+
+  public openEditHolidayTemplateModal(event: HolidayTemplate): void {
+    this.currentTemplate = event;
+    this.addTemplate = false;
+    this.templateModal.open();
+  }
+
+  public updateTemplate(): void {
+    this.holidayService.updateHolidayTemplate(this.currentTemplate).then((result) => {
+      this.closeTemplateModal();
+      if (result) {
+        this.displaySuccessMessage(
+          this.language.adminSuccessUpdateTitle,
+          this.language.adminSuccessUpdateText
+        );
+      } else {
+        this.displayErrorMessage(
+          this.language.adminErrorUpdateTitle,
+          this.language.adminErrorUpdateText
+        );
+      }
+      this.closeTemplateModal();
+    });
+  }
+
+  public openDeleteHolidayDialog(event: number): void {
+    this.deleteHolidayModal = true;
+    this.deleteHolidayId = event;
+  }
+
+  public openDeleteHolidayTemplateDialog(event: number): void {
+    this.deleteModal = true;
+    this.deleteHolidayTemplateId = event;
+  }
+
+  public deleteHolidayTemplate(): void {
+    const holidayTemplate = this.holidayTemplateList.find(
+      (elem) => elem.id === this.deleteHolidayTemplateId
+    );
+
+    this.holidayService.deleteHolidaysByTemplateId(holidayTemplate).then((result) => {
+      if (result) {
+        this.holidayService.deleteHolidayTemplate(holidayTemplate).then((result) => {
+          if (result) {
+            this.displaySuccessMessage(
+              this.language.adminSuccessDeleteTitle,
+              this.language.adminSuccessDeleteText
+            );
+
+            this.holidayTemplateList = this.holidayTemplateList.filter(elem => elem.id !== this.deleteHolidayTemplateId);
+
+            this.holidayTemplatesGridData = process(this.holidayTemplateList, this.state);
+
+            this.deleteHolidayTemplateId = null;
+
+          } else {
+            this.displayErrorMessage(
+              this.language.adminErrorDeleteTitle,
+              this.language.adminErrorDeleteText
+            );
+          }
+        });
+
+      } else {
+        this.displayErrorMessage(
+          this.language.adminErrorDeleteTitle,
+          this.language.adminErrorDeleteText
+        );
+      }
+      this.closeDeleteDialog();
+    })
+  }
+
+  public closeDeleteDialog(): void {
+    this.deleteModal = false;
+    this.deleteHolidayTemplateId = null;
+  }
+
+  public closeDeleteHolidayDialog(): void {
+    this.deleteHolidayModal = false;
+    this.deleteHolidayId = null;
+  }
+
+  public closeTemplateModal(): void {
+    this.templateModal.close();
+  }
+
+  public pageChange(event: PageChangeEvent): void {
+    this.state.skip = event.skip;
+    this.state.take = event.take;
+    this.pageSize = event.take;
+    this.holidayTemplatesGridData = process(this.holidayTemplateList, this.state);
+  }
+
+  public sortChange(sort: SortDescriptor[]): void {
+    this.state.sort = sort;
+    this.holidayTemplatesGridData = process(this.holidayTemplateList, this.state);
+  }
+
+  public groupChange(groups: GroupDescriptor[]): void {
+    this.state.group = groups;
+    this.holidayTemplatesGridData = process(this.holidayTemplateList, this.state);
+  }
+
+  private displaySelectTemplateMessage(): void {
+    this.toastrService.warning(
+      this.language.chooseTemplate,
+      null,
+      this.overrideMessage
+    );
   }
 
   private displaySuccessMessage(message: string, title: string): void {
-    this.toastrService.success(message, title, { timeOut: 7000, positionClass: "toast-bottom-right" });
+    this.toastrService.success(message, title, this.overrideMessage);
   }
 
   private displayErrorMessage(message: string, title: string): void {
     this.toastrService.error(message, title, this.overrideMessage);
   }
 
-  public displaySelectTemplateMessage(): void {
-    this.toastrService.warning(this.language.chooseTemplate, null, this.overrideMessage);
-    this.selectedCell.classList.remove("e-selected-cell");
-
-    this.scheduleObj.refresh();
-  }
-
-  updateHoliday(): void {
-
-    this.holidayService.updateHoliday(this.newHoliday, (val) => {
-      console.log(val);
-      if (val) {
-
-        this.displaySuccessMessage(this.language.adminSuccessUpdateTitle, this.language.adminSuccessUpdateText);
-
-        this.eventSettings.dataSource = this.holidays;
-
-        this.closeAddVacationModal();
-        this.scheduleObj.refresh();
-        this.scheduleObj.refreshEvents();
-      } else {
-        this.displayErrorMessage(this.language.adminErrorUpdateTitle, this.language.adminErrorUpdateText);
-      }
-    });
-  }
-
-  deleteHoliday(): void {
-    if (this.isOwner) {
-      this.holidayService.deleteHolidayTemplate(this.newHoliday.id).then(() => {
-        this.holidayService.deleteHoliday(this.newHoliday.id, (val) => {
-          if (val) {
-
-            this.displaySuccessMessage(this.language.adminSuccessDeleteTitle, this.language.adminSuccessDeleteText);
-
-            //DELETE FROM ARRAY
-            this.holidays = this.holidays.filter(h => h.id !== this.newHoliday.id);
-            this.eventSettings.dataSource = this.holidays;
-
-            this.closeAddVacationModal();
-            this.scheduleObj.refresh();
-            this.scheduleObj.refresh();
-            this.scheduleObj.refreshEvents();
-          } else {
-            this.displayErrorMessage(this.language.adminErrorDeleteTitle, this.language.adminErrorDeleteText);
-          }
-        });
-      });
-    }
-    else {
-      this.holidayService.deleteHoliday(this.newHoliday.id, (val) => {
-        if (val) {
-          this.displaySuccessMessage(this.language.adminSuccessCreateTitle, this.language.adminSuccessCreateText);
-
-          //DELETE FROM ARRAY
-          this.holidays = this.holidays.filter(h => h.id !== this.newHoliday.id);
-          this.eventSettings.dataSource = this.holidays;
-
-          this.closeAddVacationModal();
-          this.scheduleObj.refreshEvents();
-          this.scheduleObj.refresh();
-        } else {
-          this.displayErrorMessage(this.language.adminErrorDeleteTitle, this.language.adminErrorDeleteText);
-        }
-      });
-    }
-  }
-
-  setMinEndTime(event): void {
-    this.endTimeDatePicker.min = event;
-  }
-
-  onTemplateChange(): void {
-    console.log('valueChange', this.selectedTemplate);
-    this.scheduleObj.refresh();
-    this.scheduleObj.refreshEvents();
-
-    if (this.selectedTemplate) {
-      if (this.isOwner) {
-        this.loadHolidaysByTemplate();
-      } else {
-        this.loadHolidaysForUser();
-      }
-    } else {
-      //reset
-      this.holidays = [];
-      this.eventSettings.dataSource = [];
-      this.scheduleObj.eventSettings.dataSource = [];
-      this.scheduleObj.refreshEvents();
-      this.scheduleObj.refresh();
-    }
-  }
 }

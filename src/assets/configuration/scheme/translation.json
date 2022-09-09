@@ -197,6 +197,21 @@
       "uploadFromExcel": {
         "type": "string"
       },
+      "selectClinicHolidays": {
+        "type": "string"
+      },
+      "selectHolidayTemplate": {
+        "type": "string"
+      },
+      "clinicDefinedHolidaysTitle": {
+        "type": "string"
+      },
+      "predifinedHolidayTitle": {
+        "type": "string"
+      },
+      "editHoliday": {
+        "type": "string"
+      },
       "patient": {
         "type": "string"
       },
@@ -359,6 +374,9 @@
       "streetnumber": {
         "type": "string"
       },
+      "vatcode": {
+        "type": "string"
+      },
       "city": {
         "type": "string"
       },
@@ -384,6 +402,9 @@
         "type": "string"
       },
       "eventCategory": {
+        "type": "string"
+      },
+      "periodForEvent": {
         "type": "string"
       },
       "notConfirmed": {
@@ -602,6 +623,9 @@
       "smsMassiveMessage": {
         "type": "string"
       },
+      "chooseHoliday": {
+        "type": "string"
+      },
       "changeSuperadminProfile": {
         "type": "string"
       },
@@ -627,6 +651,21 @@
         "type": "string"
       },
       "emailBirthdayCongratulation": {
+        "type": "string"
+      },
+      "headerMenuGeneralData": {
+        "type": "string"
+      },
+      "headerMenuPersonalization": {
+        "type": "string"
+      },
+      "headerMenuPermits": {
+        "type": "string"
+      },
+      "headerMenuMailTemplateSettings": {
+        "type": "string"
+      },
+      "headerMenuSMSTemplateSettings": {
         "type": "string"
       },
       "reservations": {
@@ -2014,6 +2053,15 @@
       "pleaseConfirm": {
         "type": "string"
       },
+      "from": {
+        "type": "string"
+      },
+      "to": {
+        "type": "string"
+      },
+      "across": {
+        "type": "string"
+      },
       "clickHere": {
         "type": "string"
       },
@@ -2094,6 +2142,36 @@
       },
       "addHelpTopic": {
         "type": "string"
+      },
+      "changesWontBeSavedTitle": {
+        "type": "string"
+      },
+      "changesWontBeSaved": {
+        "type": "string"
+      },
+      "excludeCustomersWithEvents": {
+        "type": "string"
+      },
+      "chooseImage": {
+        "type": "string"
+      },
+      "chooseFile": {
+        "type": "string"
+      },
+      "submitImage": {
+        "type": "string"
+      },
+      "maximumImageSize": {
+        "type": "string"
+      },
+      "sendPasswordRecoverySuccess": {
+        "type": "string"
+      },
+      "sendPasswordRecoveryError": {
+        "type": "string"
+      },
+      "sendPasswordRecovery": {
+        "type": "string"
       }
     }
   },
@@ -2155,6 +2233,28 @@
             },
             {
               "key": "save"
+            },
+            {
+              "key": "changesWontBeSavedTitle"
+            },
+            {
+              "key": "changesWontBeSaved"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "sendPasswordRecovery"
+            },
+            {
+              "key": "sendPasswordRecoverySuccess"
+            },
+            {
+              "key": "sendPasswordRecoveryError"
             }
           ]
         },
@@ -2188,9 +2288,15 @@
             {
               "key": "pleaseConfirm"
             },
-            {},
-            {},
-            {}
+            {
+              "key": "from"
+            },
+            {
+              "key": "to"
+            },
+            {
+              "key": "across"
+            }
           ]
         }
       ]
@@ -3126,6 +3232,9 @@
               "key": "smsMassiveMessage"
             },
             {
+              "key": "chooseHoliday"
+            },
+            {
               "key": "changeSuperadminProfile"
             }
           ]
@@ -3165,6 +3274,28 @@
             },
             {
               "key": "emailBirthdayCongratulation"
+            }
+          ]
+        },
+        {
+          "type": "div",
+          "display": "flex",
+          "flex-direction": "row",
+          "items": [
+            {
+              "key": "headerMenuGeneralData"
+            },
+            {
+              "key": "headerMenuPersonalization"
+            },
+            {
+              "key": "headerMenuPermits"
+            },
+            {
+              "key": "headerMenuMailTemplateSettings"
+            },
+            {
+              "key": "headerMenuSMSTemplateSettings"
             }
           ]
         }
@@ -3614,7 +3745,9 @@
             {
               "key": "orderNumber"
             },
-            {}
+            {
+              "key": "createNewUser"
+            }
           ]
         }
       ]
@@ -3781,6 +3914,9 @@
             },
             {
               "key": "streetnumber"
+            },
+            {
+              "key": "vatcode"
             }
           ]
         },
@@ -4109,9 +4245,6 @@
             },
             {
               "key": "mobile"
-            },
-            {
-              "key": "createNewUser"
             }
           ]
         },
@@ -5116,6 +5249,18 @@
             },
             {
               "key": "accountConfirmDialogQuestion"
+            },
+            {
+              "key": "chooseImage"
+            },
+            {
+              "key": "chooseFile"
+            },
+            {
+              "key": "submitImage"
+            },
+            {
+              "key": "maximumImageSize"
             }
           ]
         },
@@ -6202,6 +6347,9 @@
             },
             {
               "key": "eventCategoryPeriod[].text"
+            },
+            {
+              "key": "periodForEvent"
             }
           ]
         }
@@ -6272,6 +6420,9 @@
             },
             {
               "key": "smsSignaturePoweredByMassive"
+            },
+            {
+              "key": "excludeCustomersWithEvents"
             }
           ]
         },
@@ -6474,6 +6625,15 @@
             },
             {
               "key": "addHoliday"
+            },
+            {
+              "key": "editHoliday"
+            },
+            {
+              "key": "selectClinicHolidays"
+            },
+            {
+              "key": "selectHolidayTemplate"
             }
           ]
         },
@@ -6490,6 +6650,12 @@
             },
             {
               "key": "dateTitle"
+            },
+            {
+              "key": "clinicDefinedHolidaysTitle"
+            },
+            {
+              "key": "predifinedHolidayTitle"
             }
           ]
         }

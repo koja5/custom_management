@@ -9,6 +9,7 @@ import {
 } from "@angular/core";
 import { FormGroup, Validators } from "@angular/forms";
 import {
+  DataStateChangeEventArgs,
   DialogEditEventArgs,
   EditSettingsModel,
   SaveEventArgs,
@@ -25,6 +26,7 @@ import { QueryCellInfoEventArgs } from "@syncfusion/ej2-angular-grids";
 import { Tooltip } from "@syncfusion/ej2-popups";
 import { ClickEventArgs } from "@syncfusion/ej2-navigations";
 import { SystemLogsService } from "src/app/service/system-logs.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-dynamic-grid",
@@ -38,6 +40,7 @@ export class DynamicGridComponent implements OnInit {
   @ViewChild(DynamicFormsComponent) form: DynamicFormsComponent;
   @ViewChild("orderForm") public orderForm: FormGroup;
   @ViewChild("editSettingsTemplate") editSettingsTemplate: DialogComponent;
+  public targetElement: HTMLElement;
   @ViewChild("grid") public grid: GridComponent;
   @ViewChild("container") public container: ElementRef;
 
@@ -59,14 +62,22 @@ export class DynamicGridComponent implements OnInit {
   public index: number;
   public height: number;
   public language: any;
+  savePage: any = {};
+  currentUrl: string;
+  isFormDirty = false;
+  showDialog = false;
+  currentDialog: any;
 
   constructor(
     private service: DynamicService,
     private helpService: HelpService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private router: Router,
+    private elem: ElementRef
   ) {}
 
   ngOnInit() {
+    this.savePage = this.helpService.getGridPageSize();
     this.initialization();
     this.checkMessageService();
     this.getConfiguration();
@@ -74,7 +85,6 @@ export class DynamicGridComponent implements OnInit {
       allowEditing: true,
       allowAdding: true,
       allowDeleting: true,
-      showDeleteConfirmDialog: true,
       mode: "Dialog",
     };
     this.toolbar = ["Add", "Edit", "Delete"];
@@ -82,19 +92,35 @@ export class DynamicGridComponent implements OnInit {
       this.helpService.getHeightForGrid();
     this.height = this.helpService.getHeightForGridWithoutPx();
     this.helpService.setDefaultBrowserTabTitle();
+
+    this.currentUrl = this.router.url;
   }
 
   ngAfterViewInit() {}
 
   initialization() {
-    this.service.getConfiguration(this.path, this.name).subscribe((data) => {
-      this.config = data;
-      if (data["localData"]) {
-        this.getLocalData(data["localData"]);
-      } else {
-        this.callApi(data["request"]);
-      }
-    });
+    this.service
+      .getConfiguration(this.path, this.name)
+      .subscribe((data: any) => {
+        this.config = data;
+
+        this.config.paging.settings.pageSizes = [5, 10, 20];
+        this.config.paging.settings.pageSize = 10;
+
+        if (this.savePage[this.currentUrl]) {
+          this.config.paging.settings.currentPage =
+            this.savePage[this.currentUrl];
+        }
+        if (this.savePage[this.currentUrl + "Take"]) {
+          this.config.paging.settings.pageSize =
+            this.savePage[this.currentUrl + "Take"];
+        }
+        if (data["localData"]) {
+          this.getLocalData(data["localData"]);
+        } else {
+          this.callApi(data["request"]);
+        }
+      });
   }
 
   getConfiguration() {
@@ -155,7 +181,15 @@ export class DynamicGridComponent implements OnInit {
     return parameters;
   }
 
-  actionBegin(args: SaveEventArgs): void {
+  actionBegin(args: any): void {
+    if (args.currentPage) {
+      let elements =
+        this.elem.nativeElement.querySelectorAll(".e-dropdownlist");
+      this.savePage[this.currentUrl] = args.currentPage;
+      this.savePage[this.currentUrl + "Take"] = elements[0].value;
+      this.helpService.setGridPageSize(this.savePage);
+    }
+
     /*if (args.requestType === "beginEdit" || args.requestType === "add") {
       this.orderData = Object.assign({}, args.rowData);
     }
@@ -172,12 +206,66 @@ export class DynamicGridComponent implements OnInit {
       } */
   }
 
+  setDirtyForm(event: boolean): void {
+    this.isFormDirty = event;
+  }
+
+  receiveConfirm(event: boolean) {
+    if (event) {
+      this.isFormDirty = false;
+      this.currentDialog.close();
+    }
+    this.showDialog = false;
+  }
+
   actionComplete(args: DialogEditEventArgs): void {
     if (args.requestType === "beginEdit" || args.requestType === "add") {
       args.dialog.buttons = [];
+      args.dialog.showCloseIcon = false;
+      args.dialog.closeOnEscape = false;
+      this.currentDialog = args.dialog;
+
       setTimeout(() => {
         this.setValue(this.config.configField, args.rowData);
       }, 50);
+
+      const elWrapper = document.createElement("div");
+
+      const elHeader = document.createElement("div");
+      elHeader.setAttribute("id", "dialog-header-text");
+      if (args.requestType === "beginEdit") {
+        elHeader.textContent = "Details of " + args.primaryKeyValue[0];
+      } else {
+        elHeader.textContent = "Add new record";
+      }
+
+      const elCloseButton = document.createElement("button");
+      elCloseButton.setAttribute("id", "close-button-id");
+      elCloseButton.setAttribute("class", "close");
+
+      const elCloseButtonSpan = document.createElement("span");
+      elCloseButtonSpan.setAttribute("aria-hidden", "true");
+      elCloseButtonSpan.style.fontSize = "25px";
+      elCloseButtonSpan.innerHTML = "&times;";
+
+      elCloseButton.appendChild(elCloseButtonSpan);
+      elCloseButton.style.position = "absolute";
+      elCloseButton.style.right = "20px";
+      elCloseButton.style.top = "11px";
+
+      elWrapper.appendChild(elHeader);
+      elWrapper.appendChild(elCloseButton);
+
+      args.dialog.header = elWrapper;
+
+      elCloseButtonSpan.addEventListener("click", () => {
+        if (this.isFormDirty) {
+          this.showDialog = true;
+        } else {
+          args.dialog.close();
+          this.isFormDirty = false;
+        }
+      });
     }
 
     if (args.requestType === "delete") {
@@ -186,6 +274,7 @@ export class DynamicGridComponent implements OnInit {
 
     this.typeOfModification = args.requestType;
     this.operations = args;
+
     /*
       setTimeout(() => {
         let previousValid = this.form.valid;
@@ -221,6 +310,7 @@ export class DynamicGridComponent implements OnInit {
 
     this.operations.dialog.close();
     this.initialization();
+    this.isFormDirty = false;
   }
 
   deleteData(event) {
@@ -283,9 +373,7 @@ export class DynamicGridComponent implements OnInit {
 
   previewDocument(filename: string) {
     this.helpService.getPdfFile(filename).subscribe((data) => {
-      console.log(data);
       let file = new Blob([data], { type: "application/pdf" });
-      console.log(file);
       var fileURL = URL.createObjectURL(file);
       window.open(fileURL);
     });

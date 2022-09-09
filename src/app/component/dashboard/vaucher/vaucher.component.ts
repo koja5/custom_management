@@ -17,6 +17,7 @@ import { UsersService } from "src/app/service/users.service";
 import { HelpService } from "src/app/service/help.service";
 import { Modal } from "ngx-modal";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-vaucher",
@@ -79,13 +80,18 @@ export class VaucherComponent implements OnInit {
     pageSizes: true,
     previousNext: true
   };
+  showDialog: boolean = false;
+  isFormDirty: boolean = false;
+  savePage: any = {};
+  currentUrl: string;
 
   constructor(
     private service: VaucherService,
     private customer: CustomersService,
     private message: MessageService,
     private userService: UsersService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private router: Router
   ) {
     this.allData = this.allData.bind(this);
 
@@ -117,6 +123,17 @@ export class VaucherComponent implements OnInit {
       this.changeTheme(mess);
       this.theme = mess;
     });
+
+    this.currentUrl = this.router.url;
+
+    this.savePage = this.helpService.getGridPageSize();
+    if(this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
+      this.state.skip = this.savePage[this.currentUrl];
+      this.state.take = this.savePage[this.currentUrl + 'Take'];
+    }
+    this.vaucher.closeOnEscape = false;
+    this.vaucher.closeOnOutsideClick = false;
+    this.vaucher.hideCloseButton = true;
   }
 
   getVauchers() {
@@ -147,6 +164,30 @@ export class VaucherComponent implements OnInit {
         this.changeTheme(this.theme);
       });
   }
+
+  receiveConfirm(event: boolean): void {
+    if(event) {
+      this.vaucher.close();
+      this.isFormDirty = false;
+    }
+      this.showDialog = false;
+  }
+
+  confirmClose(): void {
+    this.vaucher.modalRoot.nativeElement.focus();
+    if(this.isFormDirty) {
+      this.showDialog = true;
+    }else {
+      this.vaucher.close()
+      this.showDialog = false;
+      this.isFormDirty = false
+    }
+  }
+
+  isDirty(): void {
+    this.isFormDirty = true;
+  }
+
 
   newVaucher() {
     this.operationMode = "add";
@@ -353,6 +394,10 @@ export class VaucherComponent implements OnInit {
     this.state.take = event.take;
     this.pageSize = event.take;
     this.loadProducts();
+
+    this.savePage[this.currentUrl] = event.skip;
+    this.savePage[this.currentUrl + 'Take'] = event.take;
+    this.helpService.setGridPageSize(this.savePage);
   }
 
   loadProducts(): void {

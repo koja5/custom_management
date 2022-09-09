@@ -21,6 +21,10 @@ import {
   process,
   State,
 } from "@progress/kendo-data-query";
+import { MailService } from "src/app/service/mail.service";
+import { PackLanguageService } from "src/app/service/pack-language.service";
+import { LoginService } from "src/app/service/login.service";
+import { HelpService } from "src/app/service/help.service";
 
 @Component({
   selector: "app-base-date",
@@ -33,6 +37,7 @@ export class BaseDateComponent implements OnInit {
   @Input() data;
   @Input() date;
   @Input() doctor;
+  @Input() imagePath;
   @ViewChild("complaint") complaint: Modal;
   @ViewChild("therapy") therapy: Modal;
   @ViewChild("customer") customer: Modal;
@@ -89,6 +94,11 @@ export class BaseDateComponent implements OnInit {
   public loadingGridComplaint = false;
   public loadingGridTherapy = false;
   public loadingGridDocument = false;
+  isFormDirty: boolean = false;
+  showDialog: boolean = false;
+  showDialogChangeTab: boolean = false;
+  changeTabName: string;
+  public emailValid = true;
   public sort: SortDescriptor[] = [
     {
       field: "date",
@@ -127,7 +137,11 @@ export class BaseDateComponent implements OnInit {
     public userUservice: UsersService,
     public message: MessageService,
     public usersService: UsersService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private mailService: MailService,
+    private loginService: LoginService,
+    private packLanguage: PackLanguageService,
+    private helpService: HelpService,
   ) {}
 
   ngOnInit() {
@@ -184,6 +198,35 @@ export class BaseDateComponent implements OnInit {
     });
 
     this.convertStringToDate();
+  }
+
+  sendRecoveryLink() {
+    const thisObject = this;
+    thisObject.data["language"] = this.packLanguage.getLanguageForForgotMail();
+    if (this.data.email !== "") {
+      this.loginService.forgotPassword(this.data, function (exist, notVerified) {
+        setTimeout(() => {
+          if (exist) {
+            thisObject.mailService
+              .sendForgetMail(thisObject.data)
+              .subscribe(
+                (data) => {
+                  thisObject.helpService.successToastr(
+                    thisObject.language.sendPasswordRecovery,
+                    thisObject.language.sendPasswordRecoverySucess
+                  );
+                },
+                (error) => {
+                  thisObject.helpService.errorToastr(
+                    thisObject.language.sendPasswordRecovery,
+                    thisObject.language.sendPasswordRecoveryError
+                  );
+                }
+              );
+          }
+        }, 100);
+      });
+    }
   }
 
   convertStringToDate() {
@@ -248,6 +291,20 @@ export class BaseDateComponent implements OnInit {
     return arrayData;
   }
 
+  customerOpen() {
+    this.customer.closeOnEscape = false;
+    this.customer.closeOnOutsideClick = false;
+    this.customer.hideCloseButton = true;
+    this.customer.open();
+  }
+
+  settingsWindowOpen() {
+    this.settingsWindow.closeOnEscape = false;
+    this.settingsWindow.closeOnOutsideClick = false;
+    this.settingsWindow.hideCloseButton = true;
+    this.settingsWindow.open();
+  }
+
   getTherapy() {
     this["loadingGridTherapy"] = true;
     this.service.getTherapyForCustomer(this.data.id).subscribe((data: []) => {
@@ -272,7 +329,6 @@ export class BaseDateComponent implements OnInit {
   }
 
   formatingData(data) {
-    console.log(data);
     const datePipe = new DatePipe("en-US");
     for (let i = 0; i < data["length"]; i++) {
       data[i].date = datePipe.transform(data[i].date, "dd/MM/yyyy");
@@ -341,8 +397,34 @@ export class BaseDateComponent implements OnInit {
     this.dialogComplaintOpened = false;
   }
 
+  receiveConfirm(event: boolean, modal: Modal): void {
+    if (event) {
+      modal.close();
+      this.isFormDirty = false;
+    }
+    this.showDialog = false;
+  }
+
+  confirmClose(modal: Modal): void {
+    modal.modalRoot.nativeElement.focus();
+    if (this.isFormDirty) {
+      this.showDialog = true;
+    } else {
+      modal.close();
+      this.showDialog = false;
+      this.isFormDirty = false;
+    }
+  }
+
+  isDirty(): void {
+    this.isFormDirty = true;
+  }
+
   editCustomer() {
     this.date.birthday = new Date(this.date.birthday);
+    this.customer.closeOnEscape = false;
+    this.customer.closeOnOutsideClick = false;
+    this.customer.hideCloseButton = true;
     this.customer.open();
   }
 
@@ -365,6 +447,7 @@ export class BaseDateComponent implements OnInit {
         });
       }
     });
+    this.isFormDirty = false;
   }
 
   onChange(event) {
@@ -441,6 +524,9 @@ export class BaseDateComponent implements OnInit {
       .subscribe((data) => {
         this.complaintValue = data;
       });
+    this.complaint.closeOnEscape = false;
+    this.complaint.closeOnOutsideClick = false;
+    this.complaint.hideCloseButton = true;
     this.complaint.open();
   }
 
@@ -460,7 +546,6 @@ export class BaseDateComponent implements OnInit {
     this.service
       .getParameters("Therapy", localStorage.getItem("superadmin"))
       .subscribe((data) => {
-        console.log(data);
         this.therapyValue = data;
       });
     this.service
@@ -518,6 +603,7 @@ export class BaseDateComponent implements OnInit {
 
     if (localStorage.getItem("username") === null) {
       this.usersService.getMe(localStorage.getItem("idUser"), (val) => {
+
         console.log(val);
         localStorage.setItem("username", val[0]["shortname"]);
         this.complaintData.employee_name = val[0]["shortname"];
@@ -579,6 +665,7 @@ export class BaseDateComponent implements OnInit {
         }
       });
     }
+    this.isFormDirty = false;
   }
 
   getTodayDate() {
@@ -658,6 +745,7 @@ export class BaseDateComponent implements OnInit {
       this.selectedComplaint = [];
       this.selectedTherapies = [];
     });
+    this.isFormDirty = false;
   }
 
   addTherapy(therapy) {
@@ -713,6 +801,7 @@ export class BaseDateComponent implements OnInit {
       this.selectedComplaint = [];
       this.selectedTherapies = [];
     });
+    this.isFormDirty = false;
   }
 
   updateTherapy(event) {
@@ -765,6 +854,7 @@ export class BaseDateComponent implements OnInit {
       this.selectedTherapies = [];
       this.selectedTreatment = [];
     });
+    this.isFormDirty = false;
   }
 
   editTherapy(event) {
@@ -816,44 +906,59 @@ export class BaseDateComponent implements OnInit {
     this.complaintData.em = "";
   }
 
+  receiveConfirmChangeTab(flag: boolean) {
+    if (flag) {
+      this.isFormDirty = false;
+      this.changeTab(this.changeTabName);
+    } else {
+      this.showDialogChangeTab = false;
+    }
+  }
+
   changeTab(tab) {
-    this.currentTab = tab;
-    // this.baseData = null;
-    if (tab === "base_one") {
-      this.initializeBaseOneData();
-    } else if (tab === "base_two") {
-      this.service.getBaseDataTwo(this.data.id).subscribe((data) => {
-        console.log(data);
-        if (data["length"] !== 0) {
-          this.baseDataTwo = data[0];
-          this.baseDataTwo.birthday = new Date(this.baseDataTwo.birthday);
-          this.operationMode = "edit";
-        } else {
-          if (
-            this.isEmptyObject(this.baseDataTwo) ||
-            this.baseDataTwo === undefined
-          ) {
-            this.baseDataTwo = new BaseTwoModel();
+    this.changeTabName = tab;
+    if (this.isFormDirty) {
+      this.showDialogChangeTab = true;
+    } else {
+      this.currentTab = tab;
+      // this.baseData = null;
+      if (tab === "base_one") {
+        this.initializeBaseOneData();
+      } else if (tab === "base_two") {
+        this.service.getBaseDataTwo(this.data.id).subscribe((data) => {
+          if (data["length"] !== 0) {
+            this.baseDataTwo = data[0];
+            this.baseDataTwo.birthday = new Date(this.baseDataTwo.birthday);
+            this.operationMode = "edit";
+          } else {
+            if (
+              this.isEmptyObject(this.baseDataTwo) ||
+              this.baseDataTwo === undefined
+            ) {
+              this.baseDataTwo = new BaseTwoModel();
+            }
+            this.operationMode = "add";
+            console.log(this.baseDataTwo);
           }
-          this.operationMode = "add";
-          console.log(this.baseDataTwo);
-        }
-      });
-    } else if (tab === "physical_illness") {
-      this.service.getPhysicallIllness(this.data.id).subscribe((data) => {
-        if (data["length"] !== 0) {
-          this.physicalIllness = data[0];
-          this.operationMode = "edit";
-        } else {
-          if (
-            this.isEmptyObject(this.physicalIllness) ||
-            this.physicalIllness === undefined
-          ) {
-            this.physicalIllness = new PhysicalModel();
+        });
+      } else if (tab === "physical_illness") {
+        this.service.getPhysicallIllness(this.data.id).subscribe((data) => {
+          if (data["length"] !== 0) {
+            this.physicalIllness = data[0];
+            this.operationMode = "edit";
+          } else {
+            if (
+              this.isEmptyObject(this.physicalIllness) ||
+              this.physicalIllness === undefined
+            ) {
+              this.physicalIllness = new PhysicalModel();
+            }
+            this.operationMode = "add";
           }
-          this.operationMode = "add";
-        }
-      });
+        });
+      }
+      this.showDialogChangeTab = false;
+      this.isFormDirty = false;
     }
   }
 
@@ -970,11 +1075,9 @@ export class BaseDateComponent implements OnInit {
         this.customer.close();
       }
     });
-    console.log(this.baseDataOne);
   }
 
   updateBaseDataOne() {
-    console.log(this.baseDataOne);
     let recommendation = "";
     // tslint:disable-next-line: prefer-for-of
     if (this.selectedRecommendation) {
@@ -996,6 +1099,7 @@ export class BaseDateComponent implements OnInit {
         this.customer.close();
       }
     });
+    this.isFormDirty = false;
   }
 
   addBaseDataTwo() {
@@ -1029,6 +1133,7 @@ export class BaseDateComponent implements OnInit {
         this.customer.close();
       }
     });
+    this.isFormDirty = false;
   }
 
   addPhysicalIllness(physical) {
@@ -1044,6 +1149,7 @@ export class BaseDateComponent implements OnInit {
         this.customer.close();
       }
     });
+    this.isFormDirty = false;
   }
 
   updatePhysicalIllness(physical) {
@@ -1061,6 +1167,7 @@ export class BaseDateComponent implements OnInit {
           this.customer.close();
         }
       });
+    this.isFormDirty = false;
   }
 
   editMode() {
@@ -1092,6 +1199,13 @@ export class BaseDateComponent implements OnInit {
     }
     this.operationMode = "edit";
     this.complaint.open();
+  }
+
+  uploadOpen() {
+    this.upload.closeOnEscape = false;
+    this.upload.closeOnOutsideClick = false;
+    this.upload.hideCloseButton = true;
+    this.upload.open();
   }
 
   closeUploadModal() {
@@ -1202,6 +1316,9 @@ export class BaseDateComponent implements OnInit {
   }
 
   editDocuments(item) {
+    this.document_edit.closeOnEscape = false;
+    this.document_edit.closeOnOutsideClick = false;
+    this.document_edit.hideCloseButton = true;
     this.document_edit.open();
     this.documentItem = item;
     if (

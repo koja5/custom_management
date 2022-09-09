@@ -2,6 +2,26 @@ span.h {
   padding: 1%;
 }
 
+.label__active {
+  text-align: right;
+  padding: 30px 40px 0 0;
+}
+
+.gender__radio {
+  -webkit-appearance: radio;
+  margin-right: 5px;
+}
+
+.custom-close {
+  position: absolute;
+  right: 20px;
+  top: 24px;
+}
+
+.store_location {
+  position: static;
+}
+
 .workTime {
   padding-top: 4%;
 }

@@ -13,6 +13,7 @@ import { HelpService } from "src/app/service/help.service";
 import { GridComponent, PageChangeEvent } from "@progress/kendo-angular-grid";
 import { Modal } from "ngx-modal";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-event-category",
@@ -62,17 +63,34 @@ export class EventCategoryComponent implements OnInit {
   constructor(
     private service: EventCategoryService,
     private serviceHelper: ServiceHelperService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private router: Router
   ) {
     this.allData = this.allData.bind(this);
   }
+  showDialog: boolean = false;
+  isFormDirty: boolean = false;
+  currentUrl: string;
+  savePage = {};
 
   ngOnInit() {
+    this.eventCategoryModal.closeOnEscape = false;
+    this.eventCategoryModal.closeOnOutsideClick = false;
+    this.eventCategoryModal.hideCloseButton = true;
+
     this.height = this.helpService.getHeightForGrid();
 
     this.language = JSON.parse(localStorage.getItem("language"));
 
     this.getEventCategory();
+
+    this.currentUrl = this.router.url;
+
+    this.savePage = this.helpService.getGridPageSize();
+    if(this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
+      this.state.skip = this.savePage[this.currentUrl];
+      this.state.take = this.savePage[this.currentUrl + 'Take'];
+    }
   }
 
   @HostListener("window:resize", ["$event"])
@@ -134,11 +152,38 @@ export class EventCategoryComponent implements OnInit {
     this.state.take = event.take;
     this.pageSize = event.take;
     this.gridView = process(this.currentLoadData, this.state);
+
+    this.savePage[this.currentUrl] = event.skip;
+    this.savePage[this.currentUrl + 'Take'] = event.take;
+    this.helpService.setGridPageSize(this.savePage);
   }
 
   public sortChange(sort: SortDescriptor[]): void {
     this.state.sort = sort;
     this.gridView = process(this.currentLoadData, this.state);
+  }
+
+  receiveConfirm(event: boolean): void {
+    if(event) {
+      this.eventCategoryModal.close();
+      this.isFormDirty = false;
+    }
+      this.showDialog = false;
+  }
+
+  confirmClose(): void {
+    this.eventCategoryModal.modalRoot.nativeElement.focus();
+    if(this.isFormDirty) {
+      this.showDialog = true;
+    }else {
+      this.eventCategoryModal.close()
+      this.showDialog = false;
+      this.isFormDirty = false
+    }
+  }
+
+  isDirty(): void {
+    this.isFormDirty = true;
   }
 
   addNewModal() {

@@ -9,9 +9,7 @@ export class InvoiceService {
   constructor(public httpClient: HttpClient) { }
 
   public updateInvoiceID(data) {
-    return this.httpClient.post("/api/updateInvoiceID", data)
-      .map(res => res)
-      .subscribe();
+    return this.httpClient.post("/api/updateInvoiceID", data).toPromise();
   }
 
 }

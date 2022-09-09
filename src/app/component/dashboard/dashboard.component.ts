@@ -181,7 +181,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  getMainStoreName() {}
+  getMainStoreName() { }
 
   checkDefaultLink() {
     if (this.helpService.getSessionStorage("defaultLink")) {
@@ -407,10 +407,10 @@ export class DashboardComponent implements OnInit {
       return this.language.owner;
     } else if (type === this.userType.admin) {
       return this.language.admin;
-    } else if (type === this.userType.doctor) {
-      return this.language.doctor;
-    } else if (type === this.userType.nurse) {
-      return this.language.nurse;
+    } else if (type === this.userType.manager) {
+      return this.language.manager;
+    } else if (type === this.userType.employee) {
+      return this.language.employee;
     } else if (type === this.userType.patient) {
       return this.language.patient;
     } else if (type === this.userType.administrator) {
@@ -493,29 +493,13 @@ export class DashboardComponent implements OnInit {
             .then((data) => {
               console.log(data);
 
-              this.holidayService
-                .getHolidaysByTemplate(superAdminId, relation.templateId)
-                .then((result) => {
-                  console.log(result);
-                  if (result && result.length > 0) {
-                    result.forEach((r) => {
-                      const newHoliday = {
-                        Subject: r.Subject,
-                        StartTime: new Date(r.StartTime),
-                        EndTime: new Date(r.EndTime),
-                        category: r.category,
-                        userId: superAdminId,
-                      };
+              const holidayTemplateId = this.templateAccount.find((t) => t.id === this.templateAccountValue).holiday_template;
+              const userId = this.helpService.getMe();
+              const storeId = this.storageService.getSelectedStore(userId);
 
-                      this.holidayService.createHoliday(
-                        newHoliday,
-                        (insertedId) => {
-                          console.log("DODATO!!!");
-                        }
-                      );
-                    });
-                  }
-                });
+              this.holidayService.createStoreTemplateConnection([holidayTemplateId], storeId, () => {
+                console.log('uspesno!');
+              });
             });
         });
     }

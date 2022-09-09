@@ -1,4 +1,6 @@
 import { Component, OnInit } from "@angular/core";
+import { Subject } from "rxjs";
+import { FormGuardData } from "src/app/models/formGuard-data";
 import { DynamicService } from "src/app/service/dynamic.service";
 import { HelpService } from "src/app/service/help.service";
 import { ParameterItemService } from "src/app/service/parameter-item.service";
@@ -8,7 +10,7 @@ import { ParameterItemService } from "src/app/service/parameter-item.service";
   templateUrl: "./change-superadmin-profile.component.html",
   styleUrls: ["./change-superadmin-profile.component.scss"],
 })
-export class ChangeSuperadminProfileComponent implements OnInit {
+export class ChangeSuperadminProfileComponent implements OnInit, FormGuardData {
   public path = "parameters";
   public file = "change-superadmin-profile";
   public loading = true;
@@ -19,6 +21,10 @@ export class ChangeSuperadminProfileComponent implements OnInit {
   public showDialog = false;
   public configField: any;
   public language: any;
+  isFormDirty: boolean = false;
+  isDataSaved$: Subject<boolean> = new Subject<boolean>();
+  showDialogExit: boolean = false;
+
 
   constructor(
     private service: ParameterItemService,
@@ -29,6 +35,22 @@ export class ChangeSuperadminProfileComponent implements OnInit {
   ngOnInit() {
     this.language = this.helpService.getLanguage();
     this.initialization();
+  }
+
+  isDataSavedChange(event: boolean) {
+    this.isDataSaved$.next(event);
+  }
+
+  openConfirmModal(): void {
+    this.showDialogExit = true;
+  }
+
+  changeFormDirty(event) {
+    this.isFormDirty = event
+  }
+
+  changeShowDialogExit(event) {
+    this.showDialogExit = event;
   }
 
   initialization() {
@@ -56,6 +78,7 @@ export class ChangeSuperadminProfileComponent implements OnInit {
   submitEmitter(event) {
     this.changeData = event;
     this.showDialog = true;
+    this.isFormDirty = false;
   }
 
   receiveConfirm(event) {
@@ -74,6 +97,7 @@ export class ChangeSuperadminProfileComponent implements OnInit {
           );
         }
       });
+      this.isFormDirty = false;
     }
 
     this.showDialog = false;

@@ -2,6 +2,14 @@
   <div class="spinner loading"></div>
 </div>
 
+<app-dynamic-confirm-dialog
+  [showDialog]="showDialog"
+  [title]="language?.changesWontBeSavedTitle"
+  [question]="language?.changesWontBeSaved"
+  (sendEmitter)="receiveConfirm($event)"
+>
+</app-dynamic-confirm-dialog>
+
 <div
   *ngIf="!loading"
   class="content-wrapper w-100"

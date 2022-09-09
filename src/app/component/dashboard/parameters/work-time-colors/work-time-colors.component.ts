@@ -14,6 +14,7 @@ import { Modal } from "ngx-modal";
 import { GridComponent, PageChangeEvent } from "@progress/kendo-angular-grid";
 import { HelpService } from "src/app/service/help.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-event-category",
@@ -64,18 +65,35 @@ export class WorkTimeColorsComponent implements OnInit {
     private service: WorkTimeColorsService,
     private serviceHelper: ServiceHelperService,
     private toastr: ToastrService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private router: Router
   ) {
     this.allData = this.allData.bind(this);
 
   }
+  showDialog: boolean = false;
+  isFormDirty: boolean = false;
+  currentUrl: string;
+  savePage = {};
 
   ngOnInit() {
+    this.currentUrl = this.router.url;
+    this.workTimeColorsModal.closeOnEscape = false;
+    this.workTimeColorsModal.closeOnOutsideClick = false;
+    this.workTimeColorsModal.hideCloseButton = true;
+
     this.height = this.helpService.getHeightForGrid();
     this.language = JSON.parse(localStorage.getItem("language"));
 
     this.getWorkTimeColors();
+
+    this.savePage = this.helpService.getGridPageSize();
+    if(this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
+      this.state.skip = this.savePage[this.currentUrl];
+      this.state.take = this.savePage[this.currentUrl + 'Take'];
+    }
   }
+  
 
   @HostListener("window:resize", ["$event"])
   onResize(event) {
@@ -126,6 +144,29 @@ export class WorkTimeColorsComponent implements OnInit {
     this.gridView = process(this.currentLoadData, this.state);
   }
 
+  receiveConfirm(event: boolean): void {
+    if(event) {
+      this.workTimeColorsModal.close();
+      this.isFormDirty = false;
+    }
+      this.showDialog = false;
+  }
+
+  confirmClose(): void {
+    this.workTimeColorsModal.modalRoot.nativeElement.focus();
+    if(this.isFormDirty) {
+      this.showDialog = true;
+    }else {
+      this.workTimeColorsModal.close()
+      this.showDialog = false;
+      this.isFormDirty = false
+    }
+  }
+
+  isDirty(): void {
+    this.isFormDirty = true;
+  }
+
   addNewModal() {
     this.workTimeColorsModal.open();
     this.data = new WorkTimeModel();
@@ -138,6 +179,10 @@ export class WorkTimeColorsComponent implements OnInit {
     this.state.take = event.take;
     this.pageSize = event.take;
     this.gridView = process(this.currentLoadData, this.state);
+
+    this.savePage[this.currentUrl] = event.skip;
+    this.savePage[this.currentUrl + 'Take'] = event.take;
+    this.helpService.setGridPageSize(this.savePage);
   }
 
   getTranslate(operationMode) {

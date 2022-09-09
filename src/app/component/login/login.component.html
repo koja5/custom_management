@@ -39,14 +39,15 @@
 
     <div class="container-fluid" *ngIf="language !== undefined">
       <div class="row" style="height: 100vh">
-        <div class="col-xs-12 col-sm-7 col-md-5 col-lg-4 authfy-panel-left">
+        <div class="col-xs-12 col-sm-6 col-md-5 col-lg-4 authfy-panel-left">
           <!-- brand-logo start -->
           <div class="brand-logo text-center">
-            <img
-              src="../../../assets/images/brand-logo.png"
-              width="250"
-              alt="brand-logo"
-            />
+            <a (click)="backToLanding()"
+              ><img
+                src="../../../assets/images/brand-logo.png"
+                width="250"
+                alt="brand-logo"
+            /></a>
           </div>
           <!-- ./brand-logo -->
           <!-- authfy-login start -->
@@ -361,7 +362,7 @@
           <!-- ./authfy-login -->
         </div>
         <!-- ./authfy-panel-left -->
-        <div class="col-md-7 col-lg-8 authfy-panel-right hidden-xs hidden-sm">
+        <div class="col-md-7 col-lg-8 authfy-panel-right hidden-xs col-sm-6">
           <div class="hero-heading">
             <div class="headline">
               <h3>{{ language.welcomeTitle }} ClinicNode</h3>

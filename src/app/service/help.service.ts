@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Title } from "@angular/platform-browser";
 import "rxjs/add/operator/map";
 import { ToastrService } from "ngx-toastr";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -12,7 +13,19 @@ export class HelpService {
     private http: HttpClient,
     private titleService: Title,
     private toastr: ToastrService
-  ) { }
+  ) {}
+
+  getGridPageSize() {
+    const valueToJSON = JSON.parse(localStorage.getItem("pageSize"));
+    if (valueToJSON === null) {
+      return {};
+    }
+    return valueToJSON;
+  }
+
+  setGridPageSize(pageSize: any) {
+    localStorage.setItem("pageSize", JSON.stringify(pageSize));
+  }
 
   postApiRequest(method, parametar) {
     return this.http.post(method, parametar).map((res) => res);
@@ -236,5 +249,101 @@ export class HelpService {
       }
     }
     return data;
+  }
+
+  setLanguageForLanding(value: any) {
+    localStorage.setItem(
+      "language-landing",
+      typeof value === "string" ? value : JSON.stringify(value)
+    );
+  }
+
+  getLanguageForLanding() {
+    if (localStorage.getItem("language-landing")) {
+      return JSON.parse(
+        localStorage.getItem("language-landing")
+          ? localStorage.getItem("language-landing")
+          : "{}"
+      );
+    } else {
+      return null;
+    }
+  }
+
+  setSelectionLanguage(value: string) {
+    localStorage.setItem("selectionLanguage", value);
+  }
+
+  getSelectionLanguage() {
+    if (localStorage.getItem("selectionLanguage")) {
+      return localStorage.getItem("selectionLanguage");
+    } else {
+      return null;
+    }
+  }
+
+  getRealLanguageName(): Observable<any> {
+    if (this.getSelectionLanguage()) {
+      return <any>this.getSelectionLanguage();
+    } else {
+      const selectedLanguageCode = this.getSelectionLanguageCode();
+      this.getAllLangs().subscribe((data: any) => {
+        for (let i = 0; i < data.length; i++) {
+          for (let j = 0; j < data[i].similarCode.length; j++) {
+            if (data[i].similarCode[j] === selectedLanguageCode) {
+              return data[i].name;
+            }
+          }
+        }
+      });
+    }
+  }
+
+  getAllLangs() {
+    return this.http.get(
+      "../../assets/configuration/languages/choose-lang.json"
+    );
+  }
+
+  public checkMobileDevice() {
+    if (window.innerWidth < 992) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  setSelectionLanguageCode(value: string) {
+    localStorage.setItem("selectionLanguageCode", value);
+  }
+
+  getSelectionLanguageCode() {
+    if (localStorage.getItem("selectionLanguageCode")) {
+      return localStorage.getItem("selectionLanguageCode");
+    }
+    return null;
+  }
+
+  getNameOfFlag() {
+    const selectionLanguage = this.getSelectionLanguageCode();
+    this.getAllLangs().subscribe((langs: any) => {
+      for (let i = 0; i < langs.length; i++) {
+        for (let j = 0; j < langs[i].similarCode.length; j++) {
+          if (langs[i].similarCode[j] === selectionLanguage) {
+            return langs[i].name;
+          }
+        }
+      }
+    });
+  }
+
+  getLanguageFromFolder(folder: string, language: string) {
+    return this.http.get(
+      "../assets/configuration/languages/landing/pages/" +
+        folder +
+        "/" +
+        language +
+        ".json"
+    );
   }
 }
