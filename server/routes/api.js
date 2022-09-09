@@ -9021,10 +9021,10 @@ router.get("/getFaqQuestions/:topicId/:superAdminId", function (req, res, next) 
           res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
         }
-      );
-    });
-  }
-);
+      }
+    );
+  });
+});
 
 router.post("/deleteFaq", function (req, res, next) {
   connection.getConnection(function (err, conn) {
