@@ -5,19 +5,44 @@
 <div *ngIf="!loading && selectedUser === undefined" style="height: 100%">
   <div class="container">
     <div class="row" *ngIf="userSuperAdmin">  
-      <div class="float-right mt-5 pr-4">
-        <button
-          kendoButton
-          [icon]="'add'"
-          (click)="addNewModal()"
-          [primary]="true"
-          class="addButton">
-          {{language.addHelpTopic}}
-        </button>
+      <div class="float-left mt-4 col-sm-12 col-md-3 col-lg-3">
+        <div>
+          <label for="language">{{language?.labelTitle}}</label>
+          <ejs-dropdownlist
+            [dataSource]="data"
+            [(value)]="countryCodeValue"
+            [fields]="fields"
+            [popupHeight]="height"
+            (select)="changeLanguageEvent($event)"
+          ></ejs-dropdownlist>
+        </div>
+      </div>
+      <div class="float-right mt-5 pr-4 col-sm-12 col-md-6 col-lg-6">
+        <div class="grid-button-operation-group">
+          <button
+            kendoButton
+            [icon]="'add'"
+            (click)="addNewModal()"
+            [primary]="true"
+            class="addButton">
+            {{language.addHelpTopic}}
+          </button>
+          <div class="dropdown-grid">
+            <button class="btn-grid" style="border-left: 1px solid #2a3582">
+              <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content-grid">
+              <ng-container *ngFor="let language of languages">
+                <a (click)="addNewModal(language.language)"><span class="fa fa-language"></span>
+                  {{ language.language }}</a>
+              </ng-container>               
+            </div>
+          </div>
+        </div>
       </div>      
     </div>
     <div class="row">
-      <ng-container *ngFor="let topic of topics">
+      <ng-container class="col" *ngFor="let topic of topics">
         <app-topic-card [topic]="topic" (editEmmiter)="openEditTemplateModal($event)" (deleteEmmiter)="deleteHelpTopic($event)"></app-topic-card>            
       </ng-container>         
     </div>      

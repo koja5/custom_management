@@ -1,3 +1,7 @@
 .float-right{
     float: right;
 }
+
+.col{
+    display: table-cell; /* Make elements inside the container behave like table cells */
+}

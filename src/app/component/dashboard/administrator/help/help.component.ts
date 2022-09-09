@@ -3,6 +3,8 @@ import { HelpTopicModel } from 'src/app/models/help-topic-model';
 import { FaqService } from 'src/app/service/faq.service';
 import { Modal } from 'ngx-modal';
 import { HelpService } from 'src/app/service/help.service';
+import { MessageService } from 'src/app/service/message.service';
+import { DynamicService } from 'src/app/service/dynamic.service';
 
 @Component({
   selector: 'app-help',
@@ -13,6 +15,7 @@ export class HelpComponent implements OnInit {
   @ViewChild("helpTopicModal") helpTopicModal: Modal;
 
   public language: any;
+  public languages: [];
   public topics: HelpTopicModel[] = [];
   public topic = new HelpTopicModel();
 
@@ -21,11 +24,22 @@ export class HelpComponent implements OnInit {
 
   private superAdminId;
   private userId;
-  public loading: string;
+  public loading: boolean;
   public selectedUser: string;
 
+  public data: any;
+  public fields: Object = {
+    text: "language",
+    value: "countryCode"
+  };
+  public height: string = "400px";
+  public countryCodeValue: any;
+  public selectedLanguage: any;
+
   constructor(private service: FaqService,
-    private helpService: HelpService) {}
+    private helpService: HelpService,
+    private messageService: MessageService,
+    private dynamicService: DynamicService) {}
 
   ngOnInit() {  
     if (localStorage.getItem("language") !== null) {
@@ -36,11 +50,51 @@ export class HelpComponent implements OnInit {
     this.userId=this.helpService.getMe();
     
     this.userSuperAdmin = this.superAdminId==this.userId;
+    this.initializationConfig();
+  }
+
+  changeLanguageEvent(event: any) {
+    this.countryCodeValue = event.itemData.countryCode;
     this.loadTopics();
   }
 
+  getAllLanguages() {
+    this.loading = true;
+    this.dynamicService
+      .callApiGet(
+        "/api/getAllTranslationsByDemoAccount",
+        this.helpService.getLocalStorage("demoAccountLanguage")
+      )
+      .subscribe((data) => {
+        console.log(data);
+        this.data = data;
+        this.translateTextValue();
+      });
+  }
+
+  translateTextValue() {
+    const languageConfig = JSON.parse(
+      this.helpService.getLocalStorage("language")
+    );
+    if (languageConfig) {
+      for (let i = 0; i < this.data.length; i++) {
+        for (let j = 0; j < languageConfig["languages"].length; j++) {
+          if (
+            this.data[i].countryCode ===
+            languageConfig["languages"][j].countryCode
+          ) {
+            this.data[i].language = languageConfig["languages"][j].language;
+            break;
+          }
+        }
+      }
+    }
+
+    this.loading = false;
+  }
+
   loadTopics(){
-    this.service.getFaqTopics(this.superAdminId).subscribe((data)=>{
+    this.service.getFaqTopics(this.superAdminId,this.countryCodeValue).subscribe((data)=>{
       this.topics=data
     });
   }
@@ -50,8 +104,8 @@ export class HelpComponent implements OnInit {
     this.topic = new HelpTopicModel();
     this.topic.name = "";
     this.topic.superAdminId=this.superAdminId;
+    this.topic.countryCode=this.countryCodeValue;
     this.operationMode = 'add';
-    // this.data.language = "";
   }  
 
   openEditTemplateModal(event): void {
@@ -97,4 +151,19 @@ export class HelpComponent implements OnInit {
       }
     });
   }
+
+  initializationConfig() {
+    this.getAllLanguages();
+    this.checkDefaultLanguage();
+    this.loadTopics();
+  }
+
+  checkDefaultLanguage() {
+    
+      if (this.helpService.getLocalStorage("defaultLanguage")) {
+        this.countryCodeValue = this.helpService.getLocalStorage("defaultLanguage");
+      } else {
+        this.countryCodeValue = "US";
+      }  
+    }  
 }

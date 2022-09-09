@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FaqModel } from 'src/app/models/faq-question-model';
 import { FaqService } from 'src/app/service/faq.service';
@@ -7,6 +7,7 @@ import { PanelBarExpandMode } from "@progress/kendo-angular-layout";
 import { Modal } from 'ngx-modal';
 import { HelpService } from 'src/app/service/help.service';
 import { HelpTopicModel } from 'src/app/models/help-topic-model';
+import { MessageService } from 'src/app/service/message.service';
 
 @Component({
   selector: 'app-list-faq',
@@ -16,6 +17,8 @@ import { HelpTopicModel } from 'src/app/models/help-topic-model';
 export class ListFaqComponent implements OnInit {
   @ViewChild("faqModal") faqModal: Modal;
   @ViewChild("panelbar") panelRef;
+  @Input() countryCodeValue: string;
+
   topicId: number;
   public kendoPanelBarExpandMode = PanelBarExpandMode.Multiple;
   public list: FaqModel[]=[];
@@ -32,7 +35,8 @@ export class ListFaqComponent implements OnInit {
 
   constructor(private service: FaqService,
     private route: ActivatedRoute,
-    private helpService: HelpService) { }
+    private helpService: HelpService,
+    private messageService: MessageService) { }
 
   ngOnInit() {
     if (localStorage.getItem("language") !== null) {
@@ -45,18 +49,19 @@ export class ListFaqComponent implements OnInit {
 
     this.topicId = this.route.snapshot.params["id"];
     this.service.getFaqTopic(this.topicId,this.superAdminId).subscribe(data => {
+      console.log(data);
       if (data && data["length"] > 0) {
         this.faqTopic = data[0];
-        console.log(data[0]);
-        console.log(this.faqTopic);
       }      
     });
     this.faq.helpTopicId = this.topicId;
     this.loadFaqs();
+    this.initializationConfig();
   }
 
   public loadFaqs() {
     this.service.getFaqsByTopic(this.topicId, this.superAdminId).subscribe(data => {
+      console.log(data);
       this.list = data;
       this.filterList = data;
     });
@@ -130,5 +135,18 @@ export class ListFaqComponent implements OnInit {
         this.helpService.errorToastr(this.language.adminErrorDeleteTitle, this.language.adminErrorDeleteText);
       }
     });;
+  }
+
+  public initializationConfig(): void {
+    if (localStorage.getItem("language") !== undefined) {
+      this.language = JSON.parse(localStorage.getItem("language"));
+    } else {
+      this.messageService.getLanguage().subscribe(() => {
+        this.language = undefined;
+        setTimeout(() => {
+          this.language = JSON.parse(localStorage.getItem("language"));
+        }, 10);
+      });
+    }
   }
 }
