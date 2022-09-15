@@ -83,6 +83,22 @@
             {{ language[item?.label] ? language[item?.label] : item?.label }}
           </button>
         </ng-template>
+        <ng-template
+          *ngIf="item?.type == 'detailsButton'"
+          class="item?.position"
+          #template
+          let-data
+        >
+          <button
+            *ngIf="item?.mode === 'showDetails'"
+            kendoButton
+            [class]="item?.class"
+            (click)="openClinicDetail(data.id)"
+          >
+            <span *ngIf="item.classIcon" class="{{ item.classIcon }}"></span>
+            Details
+          </button>
+        </ng-template>
       </e-column>
     </e-columns>
     <ng-template #editSettingsTemplate let-data>

@@ -7,6 +7,18 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class AccountService {
 
   constructor(private http: HttpClient) { }
+  
+  getClinicEmployees(id: number) {
+    return this.http.get(`api/getClinicEmployees/${id}`);
+  }
+
+  getClinicCustomers(id: number) {
+    return this.http.get(`api/getClinicCustomers/${id}`);
+  }
+
+  updateRegisteredClinic(body) {
+    return this.http.post("api/updateRegisteredClinic", body);
+  }
 
   getSuperadmin(id) {
     return this.http.get('/api/getSuperadmin/' + id);

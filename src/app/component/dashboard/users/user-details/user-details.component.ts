@@ -258,6 +258,7 @@ export class UserDetailsComponent implements OnInit {
             configFieldCopy
           );
         }, 100);
+        this.isFormDirty = false;
       }
     });
   }

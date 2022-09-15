@@ -9372,4 +9372,208 @@ router.post("/uploadProfileImage/:id/:userType", upload.single('updateImageInput
 
 /* END UPLOAD PROFILE IMAGE */
 
+/* Registered Clinics */
+
+router.get('/getRegisteredClinics', function (req, res) {
+
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query("SELECT * from users_superadmin", function (err, rows) {
+      conn.release();
+      if (!err) {
+        res.json(rows);
+      } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      }
+    });
+  });
+});
+
+// router.get('/getSuperadminDetails/:id', function (req, res) {
+
+//   const id = req.params.id;
+
+//   connection.getConnection(function (err, conn) {
+//     if (err) {
+//       logger.log("error", err.sql + ". " + err.sqlMessage);
+//       res.json(err);
+//     }
+//     conn.query("SELECT * from users_superadmin WHERE id=?", id, function (err, rows) {
+//       conn.release();
+//       if (!err) {
+//         res.json(rows);
+//       } else {
+//         logger.log("error", err.sql + ". " + err.sqlMessage);
+//         res.json(err);
+//       }
+//     });
+//   });
+// });
+
+router.post("/createClinic", function (req, res, next) {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      }
+      response = {};
+      const data = {
+        id: req.body.id,
+        password: req.body.password,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        shortname: req.body.shortname,
+        street: req.body.street,
+        zipcode: req.body.zipcode,
+        place: req.body.place,
+        email: req.body.email,
+        telephone: req.body.telephone,
+        mobile: req.body.mobile,
+        birthday: req.body.birthday,
+        incompanysince: req.body.incompanysince,
+        type: 0,
+        active: req.body.active,
+        companyname: req.body.companyname,
+      };
+      
+      conn.query(
+        "insert users_superadmin SET ?",
+        data,
+        function (err, rows) {
+          conn.release();
+          if (!err) {
+            if (!err) {
+              response.id = rows.id;
+              response.success = true;
+            } else {
+              response.success = false;
+            }
+            res.json(response);
+          } else {
+            logger.log("error", err.sql + ". " + err.sqlMessage);
+            res.json(err);
+          }
+        }
+      );
+    });
+});
+
+router.post("/updateRegisteredClinic", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+
+    conn.query(
+      "select * from users_superadmin where id = " +
+       req.body.id + " and password = '" + req.body.password + "'",
+      function (err, rows) {
+        if (!err) {
+          if (!err) {
+            if (rows.length > 0) {
+              const data = {
+                id: req.body.id,
+                password: req.body.password,
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
+                shortname: req.body.shortname,
+                street: req.body.street,
+                zipcode: req.body.zipcode,
+                place: req.body.place,
+                email: req.body.email,
+                telephone: req.body.telephone,
+                mobile: req.body.mobile,
+                birthday: req.body.birthday,
+                incompanysince: req.body.incompanysince,
+                type: 0,
+                active: req.body.active,
+                companyname: req.body.companyname,
+              };
+              conn.query(
+                "update users_superadmin SET ? where id = ?",
+                [data, data.id],
+                function (err, rows) {
+                  conn.release();
+                  if (!err) {
+                    if (!err) {
+                      res.json(true);
+                    } else {
+                      res.json(false);
+                    }
+                  } else {
+                    logger.log("error", err.sql + ". " + err.sqlMessage);
+                    res.json(err);
+                  }
+                }
+              );
+            } else {
+              res.json(false);
+            }
+          } else {
+            res.json(err);
+          }
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
+      }
+    );
+  });
+});
+
+router.post("/deleteRegisteredClinic", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "delete from users_superadmin where id = '" + req.body.id + "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(false);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.get('/getClinicEmployees/:id', function (req, res) {
+  const id = req.params.id;
+
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json(err);
+    }
+    conn.query("SELECT * FROM users WHERE users.superadmin = ?", id, function (err, result) {
+      if (err) {
+        console.log(err);
+        res.json(err);
+      }else {
+        res.json(result);
+      }
+    });
+  });
+});
+
+/* End Registered Clinics */
+
 module.exports = router;

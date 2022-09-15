@@ -113,6 +113,8 @@ export class CustomersComponent implements OnInit {
   ngOnInit() {
     this.height = this.helpService.getHeightForGrid();
     this.data.gender = "male";
+    this.data['type'] = 4;
+
     this.getCustomers();
 
     if (localStorage.getItem("language") !== null) {
@@ -150,7 +152,7 @@ export class CustomersComponent implements OnInit {
       this.state.take = this.savePage[this.currentUrl + "Take"];
     }
   }
-
+  
   getCustomers() {
     this.service.getCustomers(localStorage.getItem("superadmin"), (val) => {
       console.log(val);
@@ -309,7 +311,6 @@ export class CustomersComponent implements OnInit {
   }
 
   previewUser(selectedUser) {
-    console.log(selectedUser);
     if (selectedUser.img && selectedUser.img.data.length !== 0) {
       const TYPED_ARRAY = new Uint8Array(selectedUser.img.data);
       const STRING_CHAR = String.fromCharCode.apply(null, TYPED_ARRAY);
@@ -319,13 +320,11 @@ export class CustomersComponent implements OnInit {
         "data:image/png;base64," + base64String
       );
       this.imagePath = path;
-      console.log("path ", path);
     } else {
       this.imagePath =
         selectedUser.gender == "male"
           ? "../../../../../assets/images/users/male-patient.png"
           : "../../../../../assets/images/users/female-patient.png";
-      console.log("else ", this.imagePath);
     }
     this.selectedUser = selectedUser;
   }

@@ -27,6 +27,7 @@ import { Tooltip } from "@syncfusion/ej2-popups";
 import { ClickEventArgs } from "@syncfusion/ej2-navigations";
 import { SystemLogsService } from "src/app/service/system-logs.service";
 import { Router } from "@angular/router";
+import { AccountService } from "src/app/service/account.service";
 
 @Component({
   selector: "app-dynamic-grid",
@@ -72,6 +73,7 @@ export class DynamicGridComponent implements OnInit {
     private service: DynamicService,
     private helpService: HelpService,
     private messageService: MessageService,
+    private accountService: AccountService,
     private router: Router,
     private elem: ElementRef
   ) {}
@@ -423,6 +425,10 @@ export class DynamicGridComponent implements OnInit {
       id: item.id ? item.id : null,
     };
     this.actionEmitter.emit(actions);
+  }
+
+  openClinicDetail(id: number) {
+    this.router.navigateByUrl('/dashboard/home/registered-clinic-detail/' + id);
   }
 
   clickHandler(args: ClickEventArgs): void {

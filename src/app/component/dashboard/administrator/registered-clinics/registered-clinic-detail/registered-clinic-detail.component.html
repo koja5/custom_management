@@ -1,0 +1,627 @@
+<div *ngIf="loading" style="height: 90vh">
+  <div class="spinner loading"></div>
+</div>
+
+<div *ngIf="!loading">
+  <button kendoButton [primary]="true" style="margin: 1vh" (click)="backToGrid()">
+    <i class="fa fa-arrow-left"></i> &nbsp; {{ language.backToGrid }}
+  </button>
+
+  <div style="text-align: end; padding-right: 44px; padding-top: 7px">
+    <button kendoButton [icon]="'edit'" (click)="editOptions()" [primary]="true">
+      {{ language.edit }}
+    </button>
+    <div class="dropdown-grid">
+      <button class="btn-grid" style="border-left: 1px solid #2a3582">
+        <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-content-grid">
+        <a (click)="open('dialog')"><span class="k-icon k-i-delete"></span> {{ language.delete }}</a>
+        <a (click)="printUser()"><span class="k-icon k-i-print"></span> {{ language.print }}</a>
+        <a (click)="sendRecoveryLink()">{{ language.sendPasswordRecovery }}</a>
+      </div>
+    </div>
+  </div>
+<div class="row">
+  <div class="col-md-12">
+    <!-- BEGIN PROFILE SIDEBAR -->
+    <div class="profile-sidebar">
+      <div class="card card-topline-aqua card-container">
+        <div class="card-body no-padding height-9">
+          <div class="row">
+            <div class="profile-userpic">
+              <img
+                alt="example image"
+                style="width: 190px"
+                [src]="imagePath"
+                class="rounded-circle"
+              />
+            </div>
+            <div style="text-align: center">
+              <h2 class="font-semibold mgbt-xs-5" style="text-align: center">
+                {{ data?.firstname }} {{ data?.lastname }}
+              </h2>
+              <h4>
+                {{ language.owner }}
+              </h4>
+            </div>
+            <div class="mgtp-20" style="text-align: center">
+              <span *ngIf="data?.active" class="label label-success">{{
+                language.active
+              }}</span>
+              <span *ngIf="!data?.active" class="label label-danger">{{
+                language.inactive
+              }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- BEGIN PROFILE CONTENT -->
+    <div class="profile-content">
+      <div class="row">
+        <div class="card card-container">
+          <div class="card-topline-aqua">
+            <header></header>
+          </div>
+          <div>
+            <div class="tabs widget" style="margin-bottom: 30px">
+              <div class="col-md-5 col-sm-12 status-widget">
+                <div class="card card-stats">
+                  <!-- Card body -->
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col">
+                        <h5 class="card-title text-uppercase text-muted mb-0">
+                          Ukupno zaposlenih
+                        </h5>
+                        <span class="h2 font-weight-bold mb-0">{{
+                          numberOfEmployees
+                        }}</span>
+                      </div>
+                      <div class="col-auto">
+                        <div
+                          class="icon icon-shape bg-gradient-red text-white rounded-circle shadow"
+                        >
+                          <i class="fa fa-pie-chart"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <p class="mt-3 mb-0 text-sm">
+                      <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                      <span class="text-nowrap">Since last month</span>
+                    </p> -->
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-5 col-sm-12 status-widget">
+                <div class="card card-stats">
+                  <!-- Card body -->
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col">
+                        <h5 class="card-title text-uppercase text-muted mb-0">
+                          {{ language.averagePerMonth }}
+                        </h5>
+                        <span class="h2 font-weight-bold mb-0">{{
+                          statisticMonthAverage
+                        }}</span>
+                      </div>
+                      <div class="col-auto">
+                        <div
+                          class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow"
+                        >
+                          <i class="fa fa-line-chart"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <p class="mt-3 mb-0 text-sm">
+                      <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                      <span class="text-nowrap">Since last month</span>
+                    </p> -->
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-5 col-sm-12 status-widget">
+                <div class="card card-stats">
+                  <!-- Card body -->
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col">
+                        <h5 class="card-title text-uppercase text-muted mb-0">
+                          {{ language.therapyForLastMonth }}
+                        </h5>
+                        <span class="h2 font-weight-bold mb-0">{{
+                          statisticMonthLast
+                        }}</span>
+                      </div>
+                      <div class="col-auto">
+                        <div
+                          class="icon icon-shape bg-gradient-green text-white rounded-circle shadow"
+                        >
+                          <i class="fa fa-calendar"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <p class="mt-3 mb-0 text-sm">
+                      <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                      <span class="text-nowrap">Since last month</span>
+                    </p> -->
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-5 col-sm-12 status-widget">
+                <div class="card card-stats">
+                  <!-- Card body -->
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col">
+                        <h5 class="card-title text-uppercase text-muted mb-0">
+                          {{ language.therapyForLastWeek }}
+                        </h5>
+                        <span class="h2 font-weight-bold mb-0">{{
+                          statisticLastWeek
+                        }}</span>
+                      </div>
+                      <div class="col-auto">
+                        <div
+                          class="icon icon-shape bg-gradient-info text-white rounded-circle shadow"
+                        >
+                          <i class="fa fa-area-chart"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <p class="mt-3 mb-0 text-sm">
+                      <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                      <span class="text-nowrap">Since last month</span>
+                    </p> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- END PROFILE CONTENT -->
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="white-box">
+    <div class="tabs widget">
+      <ul class="nav nav-tabs widget">
+        <li [ngClass]="currentTab === 'profile' ? 'active' : ''">
+          <a>{{ language.profile }}</a>
+        </li>
+      </ul>
+      <br />
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <div class="tab-pane active fontawesome-demo" id="tab1">
+          <div id="biography">
+            <div class="row" *ngIf="data === undefined">
+              <div class="lds-ellipsis">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            </div>
+            <div class="row" *ngIf="data !== undefined">
+              <div class="col-md-3 col-xs-6 b-r">
+                <br />
+                <p class="text-muted">
+                  <kendo-textbox-container floatingLabel="{{ language.firstname }}">
+                    <input kendoTextBox *ngIf="
+                        data.firstname === '' ||
+                        data.firstname === null ||
+                        data.firstname === undefined
+                      " [(ngModel)]="language['noInformation']" name="firstname" class="noPadding"
+                      readonly="true" />
+                    <input kendoTextBox *ngIf="
+                        data.firstname !== null &&
+                        data.firstname !== undefined &&
+                        data.firstname !== ''
+                      " [(ngModel)]="data.firstname" name="firstname" class="noPadding" readonly="true" />
+                  </kendo-textbox-container>
+                </p>
+              </div>
+              <div class="col-md-3 col-xs-6 b-r">
+                <br />
+                <p class="text-muted">
+                  <kendo-textbox-container floatingLabel="{{ language.lastname }}">
+                    <input kendoTextBox *ngIf="
+                        data.lastname === '' ||
+                        data.lastname === null ||
+                        data.telephone === undefined
+                      " [(ngModel)]="language['noInformation']" name="lastname" class="noPadding"
+                      readonly="true" />
+                    <input kendoTextBox *ngIf="
+                        data.lastname !== null &&
+                        data.lastname !== undefined &&
+                        data.lastname !== ''
+                      " [(ngModel)]="data.lastname" name="lastname" class="noPadding" readonly="true" />
+                  </kendo-textbox-container>
+                </p>
+              </div>
+              <!-- <div class="col-md-3 col-xs-6 b-r">
+                <br />
+                <p class="text-muted">
+                  <kendo-textbox-container floatingLabel="{{ language.gender }}">
+                    <input kendoTextBox *ngIf="
+                        data.gender === '' ||
+                        data.gender === null ||
+                        data.gender === undefined
+                      " [(ngModel)]="language['noInformation']" name="gender" class="noPadding"
+                      readonly="true" />
+                    <input kendoTextBox *ngIf="
+                        data.gender !== null &&
+                        data.gender !== undefined &&
+                        data.gender !== ''
+                      " [(ngModel)]="data.gender" name="gender" class="noPadding" readonly="true" />
+                  </kendo-textbox-container>
+                </p>
+              </div> -->
+              <div class="col-md-3 col-xs-6 b-r">
+                <br />
+                <p class="text-muted">
+                  <kendo-textbox-container floatingLabel="{{ language.shortname }}">
+                    <input kendoTextBox *ngIf="
+                        data.shortname === '' ||
+                        data.shortname === null ||
+                        data.shortname === undefined
+                      " [(ngModel)]="language['noInformation']" name="shortname" class="noPadding"
+                      readonly="true" />
+                    <input kendoTextBox *ngIf="
+                        data.shortname !== null &&
+                        data.shortname !== undefined &&
+                        data.shortname !== ''
+                      " [(ngModel)]="data.shortname" name="shortname" class="noPadding" readonly="true" />
+                  </kendo-textbox-container>
+                </p>
+              </div>
+              <div class="col-md-3 col-xs-6 b-r">
+                <br />
+                <p class="text-muted">
+                  <kendo-textbox-container floatingLabel="{{ language.email }}">
+                    <input kendoTextBox *ngIf="
+                        data.email === '' ||
+                        data.email === null ||
+                        data.email === undefined
+                      " [(ngModel)]="language['noInformation']" name="email" class="noPadding"
+                      readonly="true" />
+                    <input kendoTextBox *ngIf="
+                        data.email !== null &&
+                        data.email !== undefined &&
+                        data.email !== ''
+                      " [(ngModel)]="data.email" name="email" class="noPadding" readonly="true" />
+                  </kendo-textbox-container>
+                </p>
+              </div>
+              <div class="col-md-3 col-xs-6 b-r">
+                <br />
+                <p class="text-muted">
+                  <kendo-textbox-container floatingLabel="{{ language.street }}">
+                    <input kendoTextBox *ngIf="
+                        data.street === '' ||
+                        data.street === null ||
+                        data.street === undefined
+                      " [(ngModel)]="language['noInformation']" name="street" class="noPadding"
+                      readonly="true" />
+                    <input kendoTextBox *ngIf="
+                        data.street !== null &&
+                        data.street !== undefined &&
+                        data.street !== ''
+                      " [(ngModel)]="data.street" name="street" class="noPadding" readonly="true" />
+                  </kendo-textbox-container>
+                </p>
+              </div>
+              <!-- <div class="col-md-3 col-xs-6 b-r">
+                <br />
+                <p class="text-muted">
+                  <kendo-textbox-container floatingLabel="{{ language.streetnumber }}">
+                    <input kendoTextBox *ngIf="
+                        data.streetnumber === '' ||
+                        data.streetnumber === null ||
+                        data.streetnumber === undefined
+                      " [(ngModel)]="language['noInformation']" name="streetnumber" class="noPadding"
+                      readonly="true" />
+                    <input kendoTextBox *ngIf="
+                        data.city !== null &&
+                        data.city !== undefined &&
+                        data.city !== ''
+                      " [(ngModel)]="data.streetnumber" name="streetnumber" class="noPadding"
+                      readonly="true" />
+                  </kendo-textbox-container>
+                </p>
+              </div> -->
+              <div class="col-md-3 col-xs-6 b-r">
+                <br />
+                <p class="text-muted">
+                  <kendo-textbox-container floatingLabel="{{ language.zipcode }}">
+                    <input kendoTextBox *ngIf="
+                        data.zipcode === '' ||
+                        data.zipcode === null ||
+                        data.zipcode === undefined
+                      " [(ngModel)]="language['noInformation']" name="zipcode" class="noPadding"
+                      readonly="true" />
+                    <input kendoTextBox *ngIf="
+                        data.zipcode !== null &&
+                        data.zipcode !== undefined &&
+                        data.zipcode !== ''
+                      " [(ngModel)]="data.zipcode" name="zipcode" class="noPadding" readonly="true" />
+                  </kendo-textbox-container>
+                </p>
+              </div>
+              <div class="col-md-3 col-xs-6 b-r">
+                <br />
+                <p class="text-muted">
+                  <kendo-textbox-container floatingLabel="{{ language.city }}">
+                    <input kendoTextBox *ngIf="
+                        data.place === '' ||
+                        data.place === null ||
+                        data.place === undefined
+                      " [(ngModel)]="language['noInformation']" name="place" class="noPadding"
+                      readonly="true" />
+                    <input kendoTextBox *ngIf="
+                        data.place !== null &&
+                        data.place !== undefined &&
+                        data.place !== ''
+                      " [(ngModel)]="data.place" name="place" class="noPadding" readonly="true" />
+                  </kendo-textbox-container>
+                </p>
+              </div>
+              <div class="col-md-3 col-xs-6 b-r">
+                <br />
+                <p class="text-muted">
+                  <kendo-textbox-container floatingLabel="{{ language.mobile }}">
+                    <input kendoTextBox *ngIf="
+                        data.mobile === '' ||
+                        data.mobile === null ||
+                        data.mobile === undefined
+                      " [(ngModel)]="language['noInformation']" name="mobile" class="noPadding"
+                      readonly="true" />
+                    <input kendoTextBox *ngIf="
+                        data.mobile !== null &&
+                        data.mobile !== undefined &&
+                        data.mobile !== ''
+                      " [(ngModel)]="data.mobile" name="mobile" class="noPadding" readonly="true" />
+                  </kendo-textbox-container>
+                </p>
+              </div>
+              <div class="col-md-3 col-xs-6 b-r">
+                <br />
+                <p class="text-muted">
+                  <kendo-textbox-container floatingLabel="{{ language.telephone }}">
+                    <input kendoTextBox *ngIf="
+                        data.telephone === '' ||
+                        data.telephone === null ||
+                        data.telephone === undefined
+                      " [(ngModel)]="language['noInformation']" name="telephone" class="noPadding"
+                      readonly="true" />
+                    <input kendoTextBox *ngIf="
+                        data.telephone !== null &&
+                        data.telephone !== undefined &&
+                        data.telephone !== ''
+                      " [(ngModel)]="data.telephone" name="telephone" class="noPadding" readonly="true" />
+                  </kendo-textbox-container>
+                </p>
+              </div>
+              <!-- <div class="col-md-3 col-xs-6 b-r">
+                <br />
+                <p class="text-muted">
+                  <kendo-textbox-container floatingLabel="{{ language.birthday }}">
+                    <input kendoTextBox *ngIf="
+                        data.birthday === '' ||
+                        data.birthday === null ||
+                        data.birthday === undefined
+                      " [(ngModel)]="language['noInformation']" name="birthday" class="noPadding"
+                      readonly="true" />
+                    <input kendoTextBox *ngIf="
+                        data.birthday !== null &&
+                        data.birthday !== undefined &&
+                        data.birthday !== ''
+                      " [(ngModel)]="data.birthday" name="birthday" class="noPadding" readonly="true" />
+                  </kendo-textbox-container>
+                </p>
+              </div> -->
+              <div class="col-md-3 col-xs-6 b-r">
+                <br />
+                <p class="text-muted">
+                  <kendo-textbox-container floatingLabel="{{ language.birthday }}">
+                    <input kendoTextBox *ngIf="
+                        data.birthday === '' ||
+                        data.birthday === null ||
+                        data.birthday === undefined
+                      " [(ngModel)]="language['noInformation']" name="birthday" class="noPadding"
+                      readonly="true" />
+
+                    <kendo-datepicker [format]="'dd.MM.yyyy'" *ngIf="data.birthday"
+                      [(ngModel)]="data.birthday" name="birthday" class="noPadding" readonly="true">
+                    </kendo-datepicker>
+                  </kendo-textbox-container>
+                </p>
+              </div>
+              <div class="col-md-3 col-xs-6 b-r">
+                <br />
+                <p class="text-muted">
+                  <kendo-textbox-container floatingLabel="company name">
+                    <input kendoTextBox *ngIf="
+                        data.incompanysince === '' ||
+                        data.incompanysince === null ||
+                        data.incompanysince === undefined
+                      " [(ngModel)]="language['noInformation']" name="incompanysince" class="noPadding"
+                      readonly="true" />
+
+                    <kendo-datepicker [format]="'dd.MM.yyyy'" *ngIf="data.incompanysince"
+                      [(ngModel)]="data.incompanysince" name="incompanysince" class="noPadding" readonly="true">
+                    </kendo-datepicker>
+                  </kendo-textbox-container>
+                </p>
+              </div>
+              <div class="col-md-3 col-xs-6 b-r">
+                <br />
+                <p class="text-muted">
+                  <kendo-textbox-container floatingLabel="{{ language.companyname }}">
+                    <input kendoTextBox *ngIf="
+                        data.companyname === '' ||
+                        data.companyname === null ||
+                        data.companyname === undefined
+                      " [(ngModel)]="language['noInformation']" name="companyname" class="noPadding"
+                      readonly="true" />
+                    <input kendoTextBox *ngIf="
+                        data.companyname !== null &&
+                        data.companyname !== undefined &&
+                        data.companyname !== ''
+                      " [(ngModel)]="data.companyname" name="companyname" class="noPadding" readonly="true" />
+                  </kendo-textbox-container>
+                </p>
+              </div>
+            </div>
+            <hr />
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+
+<modal #clinic modalClass="modal-lg" (keydown.esc)="confirmClose()">
+  <modal-header>
+    <h4>{{ language.profile }}</h4>
+    <button type="button" class="custom-close close" data-dismiss="modal" (click)="confirmClose()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </modal-header>
+  <modal-content>
+    <app-dynamic-confirm-dialog [showDialog]="showDialog" [title]="language?.changesWontBeSavedTitle"
+      [question]="language?.changesWontBeSaved" (sendEmitter)="receiveConfirm($event)">
+    </app-dynamic-confirm-dialog>
+    <div class="tabs widget">
+      <!-- <ul class="nav nav-tabs widget">
+        <li [ngClass]="currentTab === 'profile' ? 'active' : ''">
+          <a (click)="changeTab('profile')">{{ language.profile }}</a>
+        </li>
+        <li [ngClass]="currentTab === 'workTime' ? 'active' : ''">
+          <a (click)="changeTab('workTime')">{{ language.workTime }}</a>
+        </li>
+        <li [ngClass]="currentTab === 'permissions' ? 'active' : ''">
+          <a (click)="changeTab('permissions')">{{
+            language.permissions
+            }}</a>
+        </li>
+      </ul> -->
+      <div class="tab-content">
+        <div id="profile-tab" class="tab-pane active">
+          <form name="loginForm" class="loginForm" (ngSubmit)="updateClinic(user)" (change)="isDirty()">
+            <div class="form-group">
+              <div class="email col-md-6 col-xs-12">
+                <p>{{ language.username }}</p>
+                <input kendoTextBox type="text" class="col-xs-12" name="shortname"
+                  placeholder="{{ language.username }}" [(ngModel)]="data.shortname" shortname.value="" />
+              </div>
+              <div class="email col-md-6 col-xs-12">
+                <p>{{ language.password }}</p>
+                <input kendoTextBox type="password" class="col-xs-12 password" name="password"
+                  placeholder="{{ language.password }}" [(ngModel)]="data.password" password.value="" />
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="email col-md-6 col-xs-12">
+                <p>{{ language.firstname }}</p>
+                <input kendoTextBox type="text" class="col-xs-12" name="firstname"
+                  placeholder="{{ language.firstname }}" [(ngModel)]="data.firstname" firstname.value="" />
+              </div>
+              <div class="email col-md-6 col-xs-12">
+                <p>{{ language.lastname }}</p>
+                <input kendoTextBox type="text" class="col-xs-12" name="lastname"
+                  placeholder="{{ language.lastname }}" [(ngModel)]="data.lastname" lastname.value="" />
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="email col-md-6 col-xs-12">
+                <p>{{ language.street }}</p>
+                <input kendoTextBox type="text" class="col-xs-12" name="street" placeholder="{{ language.street }}"
+                  [(ngModel)]="data.street" street.value="" />
+              </div>
+              <div class="email col-md-6 col-xs-12">
+                <p>{{ language.zipCode }}</p>
+                <input kendoTextBox type="text" class="col-xs-12" name="zipcode"
+                  placeholder="{{ language.zipCode }}" [(ngModel)]="data.zipcode" zipcode.value="" />
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="email col-md-6 col-xs-12">
+                <p>{{ language.place }}</p>
+                <input kendoTextBox type="text" class="col-xs-12" name="place" placeholder="{{ language.place }}"
+                  [(ngModel)]="data.place" place.value="" />
+              </div>
+              <div class="email col-md-6 col-xs-12">
+                <p>{{ language.telephone }}</p>
+                <input kendoTextBox type="text" class="col-xs-12" name="telephone"
+                  placeholder="{{ language.telephone }}" [(ngModel)]="data.telephone" telephone.value="" />
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="email col-md-6 col-xs-12">
+                <p>{{ language.mobile }}</p>
+                <input kendoTextBox type="text" class="col-xs-12" name="mobile" placeholder="{{ language.mobile }}"
+                  [(ngModel)]="data.mobile" mobile.value="" />
+              </div>
+              <div class="email col-md-6 col-xs-12">
+                <p>{{ language.email }}</p>
+                <input kendoTextBox type="email" class="col-xs-12" name="email" placeholder="{{ language.email }}"
+                  [(ngModel)]="data.email" email.value="" />
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="email col-md-6 col-xs-12">
+                <p>{{ language.birthday }}</p>
+                <kendo-datepicker [format]="'dd.MM.yyyy'" class="col-xs-12 noPadding" name="birthday"
+                  placeholder="{{ language.birthday }}" [(ngModel)]="data.birthday" birthday.value="">
+                </kendo-datepicker>
+              </div>
+              <div class="email col-md-6 col-xs-12">
+                <p>{{ language.sincecompany }}</p>
+                <kendo-datepicker [format]="'dd.MM.yyyy'" class="col-xs-12 noPadding" name="sincecompany"
+                  placeholder="{{ language.sincecompany }}" [(ngModel)]="data.incompanysince"
+                  incompanysince.value=""></kendo-datepicker>
+              </div>
+            </div>
+            <!-- <div class="form-group">
+              <div class="email col-md-6 col-xs-12">
+                <p>{{ language.gender }}</p>
+                <div class="gender__container">
+                  <input type="radio" id="male" name="gender" value="male" class="gender__radio"
+                    [(ngModel)]="data.gender" />
+                  <label for="male"> {{ language.male }} </label><br />
+                  <input type="radio" id="female" name="gender" value="female" class="gender__radio"
+                    [(ngModel)]="data.gender" />
+                  <label for="female">{{ language.female }}</label><br />
+                </div>
+              </div>
+              <div class="email col-md-6 col-xs-12">
+                <p>{{ language.userType }}</p>
+                <kendo-combobox [data]="userType" (selectionChange)="selectionUserType($event)"
+                  class="col-xs-12 noPadding" [(ngModel)]="selectedValue" name="type">
+                </kendo-combobox>
+              </div>
+            </div> -->
+            <div class="form-group">
+              <label class="k-form-field col-md-12 label__active">
+                {{ language.active }} &nbsp;
+                <kendo-switch [(ngModel)]="data.active" name="active"></kendo-switch>
+              </label>
+            </div>
+
+            <div class="form-group" style="text-align: center">
+              <button kendoButton [primary]="true" type="submit" class="updateButton">
+                {{ language.update }} superadmin
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </modal-content>
+  <modal-footer class="modal-footer-none"> </modal-footer>
+</modal>
