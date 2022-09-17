@@ -90,13 +90,11 @@
           let-data
         >
           <button
-            *ngIf="item?.mode === 'showDetails'"
-            kendoButton
-            [class]="item?.class"
+            class="detailsButton-button"
             (click)="openClinicDetail(data.id)"
           >
             <span *ngIf="item.classIcon" class="{{ item.classIcon }}"></span>
-            Details
+            Details 
           </button>
         </ng-template>
       </e-column>

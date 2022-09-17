@@ -168,6 +168,7 @@ span.h {
   .edit-button-icon {
     position: absolute;
     bottom: 3px;
+    left: 125px;
     border-radius: 50px;
     background-color: var(--theme-color);
     color: white;
@@ -176,4 +177,41 @@ span.h {
     &:hover {
         opacity: 1;
     }
+  }
+  
+  .choose-image-input {
+    display: none;
+  }
+  
+  .custom-file-upload {
+    border: 2px solid #2399D5;
+    color: #2399D5;
+    border-radius: 5px;
+    padding: 5px 25px 5px 25px;
+    margin-right: 20px;
+    background-color: unset;
+  
+    &:hover {
+        color: white;
+        background-color: #2399D5;
+    }
+  }
+  
+  .update-image-submit-btn {
+    display: block;
+    margin-top: 25px;
+    border-radius: 20px;
+    border: 2px solid #2399D5;
+    background-color: unset;
+    padding: 5px 10px 5px 10px;
+    color: #2399D5;
+  
+    &:hover {
+        color: white;
+        background-color: #2399D5;
+    }
+  }
+  
+  .profile-userpic {
+    position: relative;
   }

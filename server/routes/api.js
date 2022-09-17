@@ -16,6 +16,7 @@ const { concat } = require("rxjs-compat/operator/concat");
 const macAddress = require("os").networkInterfaces();
 const multer = require('multer');
 const { Blob } = require("buffer");
+const mailAPI = require("./mailAPI");
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -9393,27 +9394,6 @@ router.get('/getRegisteredClinics', function (req, res) {
   });
 });
 
-// router.get('/getSuperadminDetails/:id', function (req, res) {
-
-//   const id = req.params.id;
-
-//   connection.getConnection(function (err, conn) {
-//     if (err) {
-//       logger.log("error", err.sql + ". " + err.sqlMessage);
-//       res.json(err);
-//     }
-//     conn.query("SELECT * from users_superadmin WHERE id=?", id, function (err, rows) {
-//       conn.release();
-//       if (!err) {
-//         res.json(rows);
-//       } else {
-//         logger.log("error", err.sql + ". " + err.sqlMessage);
-//         res.json(err);
-//       }
-//     });
-//   });
-// });
-
 router.post("/createClinic", function (req, res, next) {
     connection.getConnection(function (err, conn) {
       if (err) {
@@ -9447,6 +9427,7 @@ router.post("/createClinic", function (req, res, next) {
           conn.release();
           if (!err) {
             if (!err) {
+              mailAPI.sendMailAdminInfo(data);
               response.id = rows.id;
               response.success = true;
             } else {

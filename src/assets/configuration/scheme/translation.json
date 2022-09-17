@@ -500,6 +500,9 @@
       "translation": {
         "type": "string"
       },
+      "manageClinics": {
+        "type": "string"
+      },
       "todo": {
         "type": "string"
       },
@@ -1191,6 +1194,9 @@
         "type": "string"
       },
       "administrator": {
+        "type": "string"
+      },
+      "numberOfEmployees": {
         "type": "string"
       },
       "count": {
@@ -3043,6 +3049,9 @@
               "key": "translation"
             },
             {
+              "key": "manageClinics"
+            },
+            {
               "key": "todo"
             }
           ]
@@ -4691,6 +4700,9 @@
             },
             {
               "key": "administrator"
+            },
+            {
+              "key": "numberOfEmployees"
             },
             {
               "key": "count"

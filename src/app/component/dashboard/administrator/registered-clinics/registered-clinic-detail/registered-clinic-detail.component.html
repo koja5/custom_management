@@ -36,6 +36,12 @@
                 [src]="imagePath"
                 class="rounded-circle"
               />
+              <button
+                kendoButton
+                [icon]="'edit'"
+                class="edit-button-icon"
+                (click)="updateImage()"
+              ></button>
             </div>
             <div style="text-align: center">
               <h2 class="font-semibold mgbt-xs-5" style="text-align: center">
@@ -73,19 +79,19 @@
                     <div class="row">
                       <div class="col">
                         <h5 class="card-title text-uppercase text-muted mb-0">
-                          Ukupno zaposlenih
+                          {{ language.numberOfEmployees }}
                         </h5>
                         <span class="h2 font-weight-bold mb-0">{{
                           numberOfEmployees
                         }}</span>
                       </div>
-                      <div class="col-auto">
+                      <!-- <div class="col-auto">
                         <div
                           class="icon icon-shape bg-gradient-red text-white rounded-circle shadow"
                         >
                           <i class="fa fa-pie-chart"></i>
                         </div>
-                      </div>
+                      </div> -->
                     </div>
                     <!-- <p class="mt-3 mb-0 text-sm">
                       <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
@@ -94,9 +100,8 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-5 col-sm-12 status-widget">
+              <!-- <div class="col-md-5 col-sm-12 status-widget">
                 <div class="card card-stats">
-                  <!-- Card body -->
                   <div class="card-body">
                     <div class="row">
                       <div class="col">
@@ -115,16 +120,12 @@
                         </div>
                       </div>
                     </div>
-                    <!-- <p class="mt-3 mb-0 text-sm">
-                      <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                      <span class="text-nowrap">Since last month</span>
-                    </p> -->
                   </div>
                 </div>
-              </div>
-              <div class="col-md-5 col-sm-12 status-widget">
+              </div> -->
+              <!-- <div class="col-md-5 col-sm-12 status-widget">
                 <div class="card card-stats">
-                  <!-- Card body -->
+   
                   <div class="card-body">
                     <div class="row">
                       <div class="col">
@@ -143,16 +144,13 @@
                         </div>
                       </div>
                     </div>
-                    <!-- <p class="mt-3 mb-0 text-sm">
-                      <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                      <span class="text-nowrap">Since last month</span>
-                    </p> -->
+                   
                   </div>
                 </div>
-              </div>
-              <div class="col-md-5 col-sm-12 status-widget">
+              </div> -->
+              <!-- <div class="col-md-5 col-sm-12 status-widget">
                 <div class="card card-stats">
-                  <!-- Card body -->
+                 
                   <div class="card-body">
                     <div class="row">
                       <div class="col">
@@ -171,13 +169,10 @@
                         </div>
                       </div>
                     </div>
-                    <!-- <p class="mt-3 mb-0 text-sm">
-                      <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                      <span class="text-nowrap">Since last month</span>
-                    </p> -->
+                   
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -624,4 +619,30 @@
     </div>
   </modal-content>
   <modal-footer class="modal-footer-none"> </modal-footer>
+</modal>
+
+<modal #chooseImage modalClass="modal-lg">
+  <modal-header>
+    <h4>{{ language.chooseImage }}</h4>
+  </modal-header>
+  <modal-content>
+    <form name="updateImageForm" (ngSubmit)="submitPhoto()">
+      <input
+        id="file-upload"
+        type="file"
+        name="updateImageInput"
+        class="choose-image-input"
+        (input)="fileChoosen($event)"
+      />
+      <label for="file-upload" class="custom-file-upload">
+        {{ language.chooseFile }}
+      </label>
+      <span *ngIf="!isFileChoosen" class="choose-image-label">{{ language.chooseImage }}</span>
+      <span *ngIf="isFileChoosen" class="choose-image-label">{{ fileName }}</span>
+      <div><span>{{ language.maximumImageSize }}</span></div>
+      <button class="update-image-submit-btn" type="submit">
+        {{ language.submitImage }}
+      </button>
+    </form>
+  </modal-content>
 </modal>

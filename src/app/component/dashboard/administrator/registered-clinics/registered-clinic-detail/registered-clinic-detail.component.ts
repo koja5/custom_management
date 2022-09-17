@@ -15,6 +15,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 export class RegisteredClinicDetailComponent implements OnInit {
 
   @ViewChild("clinic") clinic: Modal;
+  @ViewChild("chooseImage") chooseImage: Modal;
 
   data: any;
   clinicId: number;
@@ -25,6 +26,9 @@ export class RegisteredClinicDetailComponent implements OnInit {
   showDialog: boolean = false;
   isFormDirty: boolean = false;
   imagePath: any;
+  updateImageInput: any;
+  isFileChoosen: boolean = false;
+  fileName: string = '';
 
   constructor(
     public accountService: AccountService,
@@ -48,15 +52,6 @@ export class RegisteredClinicDetailComponent implements OnInit {
   modelData() {
     this.data.birthday = new Date(this.data.birthday);
     this.data.incompanysince = new Date(this.data.incompanysince);
-    // if (this.data.type === 1) {
-    //   this.selectedValue = "Admin";
-    // } else if (this.data.type === 2) {
-    //   this.selectedValue = "Manager";
-    // } else if (this.data.type === 6) {
-    //   this.selectedValue = "Read only scheduler";
-    // } else {
-    //   this.selectedValue = "Employee";
-    // }
     this.loading = false;
   }
 
@@ -134,5 +129,43 @@ export class RegisteredClinicDetailComponent implements OnInit {
 
   backToGrid() {
     this.location.back();
+  }
+
+  updateImage() {
+    this.chooseImage.open();
+  }
+
+  submitPhoto() {
+    let form = new FormData();
+
+    form.append("updateImageInput", this.updateImageInput);
+    this.accountService.updateProfileImage(form, this.data).subscribe(
+      (data) => {
+        this.helpService.successToastr(
+          this.language.accountSuccessUpdatedAccountTitle,
+          this.language.accountSuccessUpdatedAccountText
+        );
+      },
+      (error) => {
+        this.helpService.errorToastr(
+          this.language.accountErrorUpdatedAccountTitle,
+          this.language.accountErrorUpdatedAccountText
+        );
+      }
+    );
+    this.chooseImage.close();
+    setTimeout(() => {
+      this.getSuperAdmin();
+    }, 0);
+  }
+
+  fileChoosen(event: any) {
+    this.fileName = event.target.value.substring(event.target.value.indexOf('h') + 2);
+    if (event.target.value) {
+      this.isFileChoosen = true;
+      this.updateImageInput = <File>event.target.files[0];
+    }else {
+      this.isFileChoosen = false;
+    }
   }
 }
