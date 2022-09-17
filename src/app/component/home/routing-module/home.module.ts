@@ -19,6 +19,9 @@ import { ContactUsComponent } from "../pages/contact-us/contact-us.component";
 import { FeaturesComponent } from "../pages/features/features.component";
 import { FeatureSectionComponent } from "../sections/feature-section/feature-section.component";
 import { HomeComponent } from "../home/home.component";
+import { DymanicElementsModule } from "../../dynamic-elements/dymanic-elements.module";
+import { DynamicPaymentFormComponent } from "../../dynamic-elements/dynamic-payment-form/dynamic-payment-form.component";
+import { ModalModule } from "ngx-modal";
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
 };
@@ -38,6 +41,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     FeaturesComponent,
     FeatureSectionComponent,
     HomeComponent,
+    DynamicPaymentFormComponent
   ],
   exports: [
     HomePageComponent,
@@ -53,8 +57,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     FeaturesComponent,
     FeatureSectionComponent,
     HomeComponent,
+    DynamicPaymentFormComponent
   ],
-  imports: [CommonModule, FormsModule, HomedRouting],
+  imports: [CommonModule, FormsModule, HomedRouting, ModalModule],
   providers: [
     {
       provide: PERFECT_SCROLLBAR_CONFIG,

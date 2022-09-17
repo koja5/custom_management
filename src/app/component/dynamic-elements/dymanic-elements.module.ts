@@ -83,13 +83,13 @@ import { HomedModule } from "../home/routing-module/home.module";
     DynamicFormsComponent,
     DynamicSchedulerComponent,
     DynamicConfirmDialogComponent,
-    DynamicTextFormComponent,
+    DynamicTextFormComponent
   ],
   exports: [
     DynamicGridComponent,
     DynamicFormsComponent,
     DynamicConfirmDialogComponent,
-    DynamicTextFormComponent,
+    DynamicTextFormComponent
   ],
   imports: [
     CommonModule,

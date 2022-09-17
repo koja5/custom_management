@@ -18,6 +18,10 @@ const routes: Routes = [
     component: RequestDemoComponent,
   },
   {
+    path: 'request-demo/:package',
+    component: RequestDemoComponent,
+  },
+  {
     path: 'prices',
     component: PriceComponent,
   },

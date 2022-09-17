@@ -190,12 +190,12 @@
             {
                 "nameOfPackageTitle": "Personal",
                 "nameOfPackageText": "Longer data retention",
-                "price": "9/mo"
+                "price": "9"
             },
             {
                 "nameOfPackageTitle": "Pro",
                 "nameOfPackageText": "Our complete solution",
-                "price": "39/mo"
+                "price": "39"
             }
         ],
         "functions": [

@@ -55,9 +55,8 @@ import { ImpressumComponent } from "./component/templates/impressum/impressum.co
 import { SharedComponentsModule } from "./shared/shared-components.module";
 import { HomedModule } from "./component/home/routing-module/home.module";
 import { RouterModule } from "@angular/router";
-import { StorageService } from "./service/storage.service";
-import { DynamicTextFormComponent } from "./component/dynamic-elements/dynamic-text-form/dynamic-text-form.component";
 import { FormGuard } from "./service/form-guard/formGuard";
+import { NgxStripeModule } from "ngx-stripe";
 
 @NgModule({
   declarations: [
@@ -86,8 +85,8 @@ import { FormGuard } from "./service/form-guard/formGuard";
     SharedModule,
     DymanicElementsModule,
     SharedComponentsModule,
-    HomedModule,
     RouterModule,
+    NgxStripeModule.forRoot('pk_test_51LhYhHL4uVudLiXA5WwSojoMtx6m0rOM7fufOkPllausovqA0BhBJ0Id0ROuRb336IVLZMjshamhIIOlT1hFOAAS00zH00KnIN')
   ],
   providers: [
     MailService,
