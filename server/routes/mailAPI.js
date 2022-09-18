@@ -1544,63 +1544,62 @@ router.sendMailAdminInfo = (data) => {
         var mailOptions = {
           from: '"ClinicNode" support@app-production.eu',
           to: data.email,
-          subject: mail.mailSubject
-            ? mail.mailSubject
-            : data.language?.subjectConfirmMail,
+          subject: "Superadmin login credentials",
           html: compiledTemplate.render({
             firstName: data.firstname,
             lastName: data.lastname,
-
-            initialGreeting: mail.mailInitialGreeting
-              ? mail.mailInitialGreeting
-              : data.language?.initialGreeting,
-            finalGreeting: mail.mailFinalGreeting
-              ? mail.mailFinalGreeting
-              : data.language?.finalGreeting,
-            signature: !signatureAvailable
-              ? mail.mailSignature
-                ? mail.mailSignature
-                : data.language?.signature
-              : "",
-            thanksForUsing: mail.mailThanksForUsing
-              ? mail.mailThanksForUsing
-              : data.language?.thanksForUsing,
-            websiteLink: data.language?.websiteLink,
-            ifYouHaveQuestion: mail.mailIfYouHaveQuestion
-              ? mail.mailIfYouHaveQuestion
-              : data.language?.ifYouHaveQuestion,
-            emailAddress: data.language?.emailAddress,
-            notReply: mail.mailNotReply
-              ? mail.mailNotReply
-              : data.language?.notReply,
-            copyRight: mail.mailCopyRight
-              ? mail.mailCopyRight
-              : data.language?.copyRight,
-            introductoryMessageForConfirmMail: mail.mailMessage
-              ? mail.mailMessage
-              : data.language?.introductoryMessageForConfirmMail,
-            signatureAddress:
-              signatureAvailable &&
-              mail.signatureAddress &&
-              (mail.street || mail.zipcode)
-                ? mail.signatureAddress +
-                  "\n" +
-                  mail.street +
-                  "\n" +
-                  mail.zipcode
-                : "",
-            signatureTelephone:
-              signatureAvailable && mail.signatureTelephone && mail.telephone
-                ? mail.signatureTelephone + " " + mail.telephone
-                : "",
-            signatureMobile:
-              signatureAvailable && mail.signatureMobile && mail.mobile
-                ? mail.signatureMobile + " " + mail.mobile
-                : "",
-            signatureEmail:
-              signatureAvailable && mail.signatureEmail && mail.email
-                ? mail.signatureEmail + " " + mail.email
-                : "",
+            email: data.email,
+            password: data.password,
+            // initialGreeting: mail.mailInitialGreeting
+            //   ? mail.mailInitialGreeting
+            //   : data.language?.initialGreeting,
+            // finalGreeting: mail.mailFinalGreeting
+            //   ? mail.mailFinalGreeting
+            //   : data.language?.finalGreeting,
+            // signature: !signatureAvailable
+            //   ? mail.mailSignature
+            //     ? mail.mailSignature
+            //     : data.language?.signature
+            //   : "",
+            // thanksForUsing: mail.mailThanksForUsing
+            //   ? mail.mailThanksForUsing
+            //   : data.language?.thanksForUsing,
+            // websiteLink: data.language?.websiteLink,
+            // ifYouHaveQuestion: mail.mailIfYouHaveQuestion
+            //   ? mail.mailIfYouHaveQuestion
+            //   : data.language?.ifYouHaveQuestion,
+            // emailAddress: data.language?.emailAddress,
+            // notReply: mail.mailNotReply
+            //   ? mail.mailNotReply
+            //   : data.language?.notReply,
+            // copyRight: mail.mailCopyRight
+            //   ? mail.mailCopyRight
+            //   : data.language?.copyRight,
+            // introductoryMessageForConfirmMail: mail.mailMessage
+            //   ? mail.mailMessage
+            //   : data.language?.introductoryMessageForConfirmMail,
+            // signatureAddress:
+            //   signatureAvailable &&
+            //   mail.signatureAddress &&
+            //   (mail.street || mail.zipcode)
+            //     ? mail.signatureAddress +
+            //       "\n" +
+            //       mail.street +
+            //       "\n" +
+            //       mail.zipcode
+            //     : "",
+            // signatureTelephone:
+            //   signatureAvailable && mail.signatureTelephone && mail.telephone
+            //     ? mail.signatureTelephone + " " + mail.telephone
+            //     : "",
+            // signatureMobile:
+            //   signatureAvailable && mail.signatureMobile && mail.mobile
+            //     ? mail.signatureMobile + " " + mail.mobile
+            //     : "",
+            // signatureEmail:
+            //   signatureAvailable && mail.signatureEmail && mail.email
+            //     ? mail.signatureEmail + " " + mail.email
+            //     : "",
           }),
         };
         smtpTransport.sendMail(mailOptions, function (error, response) {

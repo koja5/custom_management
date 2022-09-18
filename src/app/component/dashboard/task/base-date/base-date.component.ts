@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from "@angular/core";
-import { RouterModule, Routes, Router, ActivatedRoute } from "@angular/router";
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter, SimpleChanges, OnChanges } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import { CustomersService } from "../../../../service/customers.service";
 import { MessageService } from "../../../../service/message.service";
 import { Modal } from "ngx-modal";
@@ -141,7 +141,6 @@ export class BaseDateComponent implements OnInit {
     public router: ActivatedRoute,
     public service: CustomersService,
     public taskService: TaskService,
-    public userUservice: UsersService,
     public message: MessageService,
     public usersService: UsersService,
     private accountService: AccountService,
@@ -893,7 +892,7 @@ export class BaseDateComponent implements OnInit {
       this.selectedTreatment = Number(event.therapies_previous);
     }
     if (event.em !== undefined && event.em !== null) {
-      this.userUservice.getUserWithId(event.em, (val) => {
+      this.usersService.getUserWithId(event.em, (val) => {
         this.selectedUser = val[0];
         this.loadingTherapy = false;
       });

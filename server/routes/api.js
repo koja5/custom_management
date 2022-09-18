@@ -79,7 +79,7 @@ router.post("/uploadProfileImage/:id/:userType", upload.single('updateImageInput
 
   if(userType == 0 || userType == 1) {
     connection.query("SELECT * FROM users_superadmin WHERE id = ?", id, function (err, result) {
-      if(result[0].imgName) {
+      if( result[0] && result[0].imgName) {
         currentImage = result[0].imgName;
       }
     });
@@ -98,7 +98,7 @@ router.post("/uploadProfileImage/:id/:userType", upload.single('updateImageInput
 
   } else if (userType == 2 || userType == 3 || userType == 5 || userType == 6) {
     connection.query("SELECT * FROM users WHERE id = ?", id, function (err, result) {
-      if(result[0].imgName) {
+      if(result[0] && result[0].imgName) {
         currentImage = result[0].imgName;
       }
     });
@@ -116,7 +116,7 @@ router.post("/uploadProfileImage/:id/:userType", upload.single('updateImageInput
     })
   } else {
     connection.query("SELECT * FROM customers WHERE id = ?", id, function (err, result) {
-      if(result[0].imgName) {
+      if(result[0] && result[0].imgName) {
         currentImage = result[0].imgName;
       }
     });
@@ -9427,9 +9427,10 @@ router.post("/createClinic", function (req, res, next) {
           conn.release();
           if (!err) {
             if (!err) {
-              mailAPI.sendMailAdminInfo(data);
               response.id = rows.id;
               response.success = true;
+              
+              mailAPI.sendMailAdminInfo(data);
             } else {
               response.success = false;
             }

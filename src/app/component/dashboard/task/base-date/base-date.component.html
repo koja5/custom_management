@@ -34,7 +34,7 @@
               <div class="profile-userpic">
                 <img [src]="imagePath" class="img-responsive" alt="" />
                 <button
-                *ngIf="currentUser.type == 0 || currentUser.type == 1"
+                *ngIf="currentUser?.type == 0 || currentUser?.type == 1"
                 kendoButton
                 [icon]="'edit'"
                 class="edit-button-icon"
