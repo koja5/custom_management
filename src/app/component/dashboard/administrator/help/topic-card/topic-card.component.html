@@ -3,10 +3,15 @@
       <!-- Card body -->
       <div class="card-body mt-2 mb-2">
         <div class="row" style="cursor: pointer;" (click)="generateLink('/dashboard/home/help/faq')">
-          <div class="col-auto" style="float: none; margin: 0 auto;">
-            <h5 class="card-title center text-uppercase text-muted mb-0">
+          <div class="col-auto center vertical-center">
+            <i [ngClass]="getIconClass(topic.iconCss)" style="font-size: 7rem; margin-top: 15px;"></i>
+          </div>        
+        </div>
+        <div class="row" style="cursor: pointer;" (click)="generateLink('/dashboard/home/help/faq')">
+          <div class="col-auto center">
+            <h4 class="card-title  text-uppercase text-muted mb-0 mt-4">
               {{ topic.name }}
-            </h5>
+            </h4>
           </div>        
         </div>    
         <div class="row" *ngIf="userSuperAdmin">

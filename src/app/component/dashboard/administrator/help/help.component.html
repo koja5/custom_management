@@ -17,8 +17,8 @@
           ></ejs-dropdownlist>
         </div>
       </div>
-      <div class="float-right mt-5 pr-4 col-sm-12 col-md-6 col-lg-6">
-        <div class="grid-button-operation-group">
+      <div class="col-sm-12 col-md-9 col-lg-9">
+        <div class="float-right mt-5 pr-4">
           <button
             kendoButton
             [icon]="'add'"
@@ -26,20 +26,9 @@
             [primary]="true"
             class="addButton">
             {{language.addHelpTopic}}
-          </button>
-          <div class="dropdown-grid">
-            <button class="btn-grid" style="border-left: 1px solid #2a3582">
-              <i class="fa fa-caret-down"></i>
-            </button>
-            <div class="dropdown-content-grid">
-              <ng-container *ngFor="let language of languages">
-                <a (click)="addNewModal(language.language)"><span class="fa fa-language"></span>
-                  {{ language.language }}</a>
-              </ng-container>               
-            </div>
-          </div>
-        </div>
-      </div>      
+          </button>          
+        </div>      
+      </div>
     </div>
     <div class="row">
       <ng-container class="col" *ngFor="let topic of topics">
@@ -48,7 +37,28 @@
     </div>      
   </div>
 </div>
-
+<modal
+  #iconListModal
+    (onClose)="closeIconListModal()"
+    modalClass="modal-md modal-dialog-centered no-footer"
+    *ngIf="userSuperAdmin">
+    <modal-header>
+      <h4>{{ language.chooseIcon }}</h4>
+    </modal-header>
+    <modal-content class="pb-0">
+      <div class="mt-5">
+        <div class="row">
+           <div class="col-sm-2" *ngFor="let icon of icons">
+               <div class="card p-3 mb-4">
+                 <a href="javascript:void(0);" (click)="choosenIcon(icon)">
+                   <i id="{{icon}}" [ngClass]="getIconClass(icon)"></i>
+                 </a>
+              </div>
+           </div>
+        </div>        
+     </div>
+    </modal-content>
+</modal>
 <modal
   #helpTopicModal
   (onClose)="closeHelpTopicModal()"
@@ -69,6 +79,12 @@
       "
       #helpTopicModal="ngForm"
     >
+      <div class="form-group">
+        <p>{{language.icon}}</p>
+        <a href="javascript:void(0);" (click)="chooseIcon()">
+          <i [ngClass]="getIconClass(topic.iconCss)"></i>          
+        </a>
+      </div>
       <div class="form-group">
         <kendo-textbox-container floatingLabel="{{ language.title }}">
           <input
