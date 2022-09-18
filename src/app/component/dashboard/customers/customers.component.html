@@ -285,4 +285,4 @@
 <!--<kendo-upload [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [autoUpload]="false">
 
 </kendo-upload>-->
-<app-base-date *ngIf="selectedUser !== undefined" [data]="selectedUser" [imagePath]="imagePath" [type]="'details'"></app-base-date>
+<app-base-date *ngIf="selectedUser !== undefined" [data]="selectedUser" [imagePath]="imagePath" [type]="'details'" (emitImage)="emitImage($event)"></app-base-date>

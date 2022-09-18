@@ -40,6 +40,7 @@ export class BaseDateComponent implements OnInit {
   @Input() doctor;
   @Input() imagePath;
   @Output() reload: EventEmitter<any> = new EventEmitter<any>();
+  @Output() emitImage: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild("complaint") complaint: Modal;
   @ViewChild("therapy") therapy: Modal;
   @ViewChild("customer") customer: Modal;
@@ -1375,6 +1376,7 @@ export class BaseDateComponent implements OnInit {
           this.language.accountSuccessUpdatedAccountTitle,
           this.language.accountSuccessUpdatedAccountText
         );
+        this.emitImage.emit(this.data);
       },
       (error) => {
         this.helpService.errorToastr(

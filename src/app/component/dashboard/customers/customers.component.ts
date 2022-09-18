@@ -684,4 +684,18 @@ export class CustomersComponent implements OnInit {
       }
     });
   }
+
+  emitImage(event) {
+    this.getCustomers()
+    console.log('bef ', this.selectedUser)
+    setTimeout(() => {
+      this.currentLoadData.forEach((el: any) => {
+        if(el.id == event.id) {
+          this.selectedUser.img = el.img;
+        }
+      })
+      this.previewUser(this.selectedUser);
+    }, 1000);
+    console.log('aft ', this.selectedUser)
+  }
 }
