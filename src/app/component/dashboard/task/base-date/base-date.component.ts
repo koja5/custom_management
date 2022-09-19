@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, Output, EventEmitter, SimpleChanges, OnChanges } from "@angular/core";
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { CustomersService } from "../../../../service/customers.service";
 import { MessageService } from "../../../../service/message.service";

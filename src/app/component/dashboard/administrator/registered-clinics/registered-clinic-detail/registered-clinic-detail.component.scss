@@ -104,7 +104,6 @@ span.h {
   // }
   
   .col {
-    max-width: 100%;
     flex-basis: 0;
     flex-grow: 1;
     float: left;
@@ -167,8 +166,8 @@ span.h {
 
   .edit-button-icon {
     position: absolute;
-    bottom: 3px;
-    left: 125px;
+    bottom: 12px;
+    left: 160px;
     border-radius: 50px;
     background-color: var(--theme-color);
     color: white;
