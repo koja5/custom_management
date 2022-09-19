@@ -155,7 +155,6 @@ export class CustomersComponent implements OnInit {
   
   getCustomers() {
     this.service.getCustomers(localStorage.getItem("superadmin"), (val) => {
-      console.log(val);
       if (val !== null) {
         this.currentLoadData = val;
         this._allData = <ExcelExportData>{
@@ -232,7 +231,6 @@ export class CustomersComponent implements OnInit {
   }
 
   createCustomer(form) {
-    console.log(this.data);
     this.data.storeId = localStorage.getItem("superadmin");
     this.service.createCustomer(this.data, (val) => {
       if (val.success) {
@@ -334,7 +332,6 @@ export class CustomersComponent implements OnInit {
   }
 
   action(event) {
-    console.log(event);
     if (event === "yes") {
       this.customerDialogOpened = false;
       setTimeout(() => {
@@ -687,7 +684,6 @@ export class CustomersComponent implements OnInit {
 
   emitImage(event) {
     this.getCustomers()
-    console.log('bef ', this.selectedUser)
     setTimeout(() => {
       this.currentLoadData.forEach((el: any) => {
         if(el.id == event.id) {
@@ -696,6 +692,5 @@ export class CustomersComponent implements OnInit {
       })
       this.previewUser(this.selectedUser);
     }, 1000);
-    console.log('aft ', this.selectedUser)
   }
 }

@@ -386,11 +386,8 @@ export class BaseDateComponent implements OnInit {
   }
 
   action(event) {
-    console.log(event);
     if (event === "yes") {
-      console.log(this.data);
       this.service.deleteCustomer(this.data.id, (val) => {
-        console.log(val);
         this.message.sendDeleteCustomer();
         this.dialogOpened = false;
       });
@@ -400,11 +397,8 @@ export class BaseDateComponent implements OnInit {
   }
 
   deleteComplaint(event) {
-    console.log(event);
     if (event === "yes") {
-      console.log(this.data);
       this.service.deleteComplaint(this.selectedForDelete).subscribe((data) => {
-        console.log(data);
         if (data) {
           this.getComplaint();
         }
@@ -447,7 +441,6 @@ export class BaseDateComponent implements OnInit {
   updateCustomer(customer) {
     this.data.shortname = this.data.lastname + " " + this.data.firstname;
     this.service.updateCustomer(this.data, (val) => {
-      console.log(val);
       if (val.success) {
         this.customer.close();
         Swal.fire({
@@ -458,7 +451,6 @@ export class BaseDateComponent implements OnInit {
           timer: 3000,
           type: "success",
           onClose: () => {
-            console.log("done!");
           },
         });
       }
