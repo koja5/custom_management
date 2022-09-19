@@ -65,80 +65,6 @@ var connection = mysql.createPool({
   database: process.env.database,
 });
 
-router.post("/uploadProfileImage/:id/:userType", upload.single('updateImageInput'), (req, res) => {
-  if (!req.file) {
-    return res.send({
-      success: false
-    });
-  } 
-  const data = readImageFile('server/routes/uploads/user-profile-images/' + req.file.filename);
-  let imageName = req.file.filename;
-  let currentImage;
-  const id = req.params.id;
-  const userType = req.params.userType;
-
-  if(userType == 0 || userType == 1) {
-    connection.query("SELECT * FROM users_superadmin WHERE id = ?", id, function (err, result) {
-      if( result[0] && result[0].imgName) {
-        currentImage = result[0].imgName;
-      }
-    });
-
-    connection.query("UPDATE users_superadmin SET img = ? WHERE id = ?", [data, id], function(err, res) {
-        if (err) {
-          throw err;
-        }else {
-          deleteImage(currentImage);
-        } 
-    })
-
-    connection.query("UPDATE users_superadmin SET imgName = ? WHERE id = ?", [imageName, id], function(err, res) {
-      if (err) throw err;
-    })
-
-  } else if (userType == 2 || userType == 3 || userType == 5 || userType == 6) {
-    connection.query("SELECT * FROM users WHERE id = ?", id, function (err, result) {
-      if(result[0] && result[0].imgName) {
-        currentImage = result[0].imgName;
-      }
-    });
-
-    connection.query("UPDATE users SET img = ? WHERE id = ?", [data, id], function(err, res) {
-        if (err) {
-          throw err;
-        }else {
-          deleteImage(currentImage);
-        } 
-    })
-
-    connection.query("UPDATE users SET imgName = ? WHERE id = ?", [imageName, id], function(err, res) {
-      if (err) throw err;
-    })
-  } else {
-    connection.query("SELECT * FROM customers WHERE id = ?", id, function (err, result) {
-      if(result[0] && result[0].imgName) {
-        currentImage = result[0].imgName;
-      }
-    });
-
-    connection.query("UPDATE customers SET img = ? WHERE id = ?", [data, id], function(err, res) {
-        if (err) {
-          throw err;
-        }else {
-          deleteImage(currentImage);
-        } 
-    })
-    
-    connection.query("UPDATE customers SET imgName = ? WHERE id = ?", [imageName, id], function(err, res) {
-      if (err) throw err;
-    })
-  }
-
-  return res.send({
-        success: true
-      });
-})
-
 /*var connection = mysql.createPool({
   host: 'localhost',
   user: 'root',
@@ -9330,6 +9256,46 @@ router.post("/deleteHolidayTemplate", (req, res, next) => {
 
 /* END HOLIDAY TEMPLATE */
 
+/* UPLOAD PROFILE IMAGE FOR EMPLOYEES*/
+
+router.post("/uploadeEmployeeProfileImage/:id", upload.single('updateImageInput'), (req, res) => {
+  if (!req.file) {
+    return res.send({
+      success: false
+    });
+  } 
+  const data = readImageFile('server/routes/uploads/user-profile-images/' + req.file.filename);
+  let imageName = req.file.filename;
+  let currentImage;
+  const id = req.params.id;
+
+  connection.query("SELECT * FROM users WHERE id = ?", id, function (err, result) {
+    if(result[0] && result[0].imgName) {
+      currentImage = result[0].imgName;
+    }
+  });
+
+  connection.query("UPDATE users SET img = ? WHERE id = ?", [data, id], function(err, res) {
+      if (err) {
+        throw err;
+      }else {
+        deleteImage(currentImage);
+      } 
+  })
+
+  connection.query("UPDATE users SET imgName = ? WHERE id = ?", [imageName, id], function(err, res) {
+    if (err) throw err;
+  })
+  
+
+  return res.send({
+        success: true
+      });
+})
+
+
+/* END UPLOAD PROFILE IMAGE FOR EMPLOYEES */
+
 /* UPLOAD PROFILE IMAGE */
 
 router.post("/uploadProfileImage/:id/:userType", upload.single('updateImageInput'), (req, res) => {
@@ -9338,39 +9304,73 @@ router.post("/uploadProfileImage/:id/:userType", upload.single('updateImageInput
       success: false
     });
   } 
-
   const data = readImageFile('server/routes/uploads/user-profile-images/' + req.file.filename);
+  let imageName = req.file.filename;
+  let currentImage;
   const id = req.params.id;
   const userType = req.params.userType;
 
   if(userType == 0 || userType == 1) {
+    connection.query("SELECT * FROM users_superadmin WHERE id = ?", id, function (err, result) {
+      if( result[0] && result[0].imgName) {
+        currentImage = result[0].imgName;
+      }
+    });
+
     connection.query("UPDATE users_superadmin SET img = ? WHERE id = ?", [data, id], function(err, res) {
+        if (err) {
+          throw err;
+        }else {
+          deleteImage(currentImage);
+        } 
+    })
+
+    connection.query("UPDATE users_superadmin SET imgName = ? WHERE id = ?", [imageName, id], function(err, res) {
       if (err) throw err;
     })
+
   } else if (userType == 2 || userType == 3 || userType == 5 || userType == 6) {
-    connection.query("UPDATE users SET img = ? WHERE id = ?", [data, id], function(err, res) {
-      if (err) {
-        return res.status(400).send({
-          message: 'This is an error!'
-       });
+    connection.query("SELECT * FROM users WHERE id = ?", id, function (err, result) {
+      if(result[0] && result[0].imgName) {
+        currentImage = result[0].imgName;
       }
+    });
+
+    connection.query("UPDATE users SET img = ? WHERE id = ?", [data, id], function(err, res) {
+        if (err) {
+          throw err;
+        }else {
+          deleteImage(currentImage);
+        } 
+    })
+
+    connection.query("UPDATE users SET imgName = ? WHERE id = ?", [imageName, id], function(err, res) {
+      if (err) throw err;
     })
   } else {
-    connection.query("UPDATE customers SET img = ? WHERE id = ?", [data, id], function(err, res) {
-      if (err) {
-        return res.status(400).send({
-          message: 'This is an error!'
-       });
+    connection.query("SELECT * FROM customers WHERE id = ?", id, function (err, result) {
+      if(result[0] && result[0].imgName) {
+        currentImage = result[0].imgName;
       }
+    });
+
+    connection.query("UPDATE customers SET img = ? WHERE id = ?", [data, id], function(err, res) {
+        if (err) {
+          throw err;
+        }else {
+          deleteImage(currentImage);
+        } 
+    })
+    
+    connection.query("UPDATE customers SET imgName = ? WHERE id = ?", [imageName, id], function(err, res) {
+      if (err) throw err;
     })
   }
 
-  
   return res.send({
         success: true
       });
 })
-
 /* END UPLOAD PROFILE IMAGE */
 
 /* Registered Clinics */

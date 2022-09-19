@@ -594,7 +594,7 @@ export class UserDetailsComponent implements OnInit {
     let form = new FormData();
 
     form.append("updateImageInput", this.updateImageInput);
-    this.accountService.updateProfileImage(form, this.data).subscribe(
+    this.accountService.updateEmployeeProfileImage(form, this.data).subscribe(
       (data) => {
         this.helpService.successToastr(
           this.language.accountSuccessUpdatedAccountTitle,

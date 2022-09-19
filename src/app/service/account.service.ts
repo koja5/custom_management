@@ -35,6 +35,10 @@ export class AccountService {
     return this.http.post(`api/uploadProfileImage/${user.id}/${user.type}`, img);
   }
 
+  updateEmployeeProfileImage(img, user) {
+    return this.http.post(`api/uploadeEmployeeProfileImage/${user.id}`, img);
+  }
+
   getImage(body: any) {
     if (!body.path) {
       body = {
