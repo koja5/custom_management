@@ -2,7 +2,17 @@
   <div class="spinner loading"></div>
 </div>
 
-<div *ngIf="!loading" style="height: 100%">
+<div *ngIf="!loading" style="height: 100%" class="position-relative">
+
+  <div class="position-absolute columns-dropdown">
+    <app-column-chooser 
+        [columns]="columns" 
+        [isKendoGrid]="true" 
+        (outputHiddenColumns)="onOutputHiddenColumns($event)" 
+        [type]="'Store'"></app-column-chooser>
+  </div>
+
+
   <kendo-grid #grid [data]="gridView" [style.height]="height" [resizable]="true" [pageSize]="state.take"
     [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="pageable"
     (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey" [loading]="loadingGrid" [groupable]="true"
@@ -24,7 +34,7 @@
           <button class="btn-grid" style="border-left: 1px solid #2a3582">
             <i class="fa fa-caret-down"></i>
           </button>
-          <div class="dropdown-content-grid">
+          <div class="dropdown-content-grid" style="z-index: 99;">
             <a style="padding: 0px"><label class="uploadFromExcel-{{ theme }}"
                 style="padding: 12px; cursor: pointer"><span class="k-icon k-i-file-excel"></span>
                 {{ language.uploadFromExcel
@@ -46,17 +56,17 @@
         </div>
       </div>
     </ng-template>
-    <kendo-grid-column field="storename" title="{{ language.storename }}" width="120">
+    <kendo-grid-column field="storename" title="{{ language.storename }}" width="120" *ngIf="!isHidden('Store name')">
     </kendo-grid-column>
-    <kendo-grid-column field="vatcode" title="{{ language.vat }}" width="120">
+    <kendo-grid-column field="vatcode" title="{{ language.vat }}" width="120" *ngIf="!isHidden('Vat')">
     </kendo-grid-column>
-    <kendo-grid-column field="email" title="{{ language.email }}" width="200">
+    <kendo-grid-column field="email" title="{{ language.email }}" width="200" *ngIf="!isHidden('Email address')">
     </kendo-grid-column>
-    <kendo-grid-column field="street" title="{{ language.street }}" width="150">
+    <kendo-grid-column field="street" title="{{ language.street }}" width="150" *ngIf="!isHidden('Street')">
     </kendo-grid-column>
-    <kendo-grid-column field="place" title="{{ language.place }}" width="150">
+    <kendo-grid-column field="place" title="{{ language.place }}" width="150" *ngIf="!isHidden('Place')">
     </kendo-grid-column>
-    <kendo-grid-column field="telephone" title="{{ language.telephone }}" width="150">
+    <kendo-grid-column field="telephone" title="{{ language.telephone }}" width="150" *ngIf="!isHidden('Telephone')">
     </kendo-grid-column>
     <kendo-grid-column width="80">
       <ng-template kendoGridCellTemplate let-dataItem>
