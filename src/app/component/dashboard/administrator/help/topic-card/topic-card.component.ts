@@ -37,4 +37,8 @@ export class TopicCardComponent implements OnInit {
   public deleteHelpTopic(){
     this.deleteEmmiter.emit(this.topic);
   }
+
+  public getIconClass(icon){
+    return "fa "+icon;
+  }
 }
