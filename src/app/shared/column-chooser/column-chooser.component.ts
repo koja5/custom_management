@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-column-chooser',
@@ -9,10 +9,15 @@ export class ColumnChooserComponent implements OnInit {
   @Input() columns: string[];
   @Input() isKendoGrid: boolean;
   @Input() type: string;
+  @Input() isApplicationParameters = false;
   @Output() outputHiddenColumns = new EventEmitter<string[]>();
 
   hiddenColumns: string[] = [];
   showColumnPicker = false;
+
+  @HostListener('document:click', ['$event']) onDocumentClick(event) {
+    this.showColumnPicker = false;
+  }
 
   constructor() { }
 

@@ -65,6 +65,12 @@ export class ParameterItemComponent implements OnInit {
   // isFormDirty: boolean = false;
   // showDialog = false;
 
+  public showColumnPicker = false;
+  public columnsComplaint: string[] = ["Title", "Order"];
+  public columnsDoctors: string[] = ["Title", "Firstname", "Lastname", "Gender", "Street", "Web address", "Zip code", "City", "Telephone", "Email address", "Doctor type"];
+  public columnsTherapy: string[] = ["Title", "Title on Invoice", "Order", "Print on Invoice", "Unit", "Description", "Art. nr.", "Net Price", "Vat", "Gross Price", "Category"];
+  public hiddenColumns: string[] = [];
+
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
   }
@@ -590,5 +596,13 @@ export class ParameterItemComponent implements OnInit {
   @HostListener("window:resize", ["$event"])
   onResize(event) {
     this.height = this.helpService.getHeightForGrid();
+  }
+
+  public isHidden(columnName: string): boolean {
+    return this.hiddenColumns.indexOf(columnName) > -1;
+  }
+
+  public onOutputHiddenColumns(columns) {
+    this.hiddenColumns = columns;
   }
 }
