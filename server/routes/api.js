@@ -9400,10 +9400,24 @@ router.post("/createClinic", function (req, res, next) {
         logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
       }
+
+      var createPassword;
+
+      if(!req.body.password) {
+        var password = passwordGenerate.generate({
+          length: 10,
+          numbers: true,
+        });
+        createPassword = sha1(password);
+      }else {
+        createPassword = req.body.password;
+      }
+      
+
       response = {};
       const data = {
         id: req.body.id,
-        password: req.body.password,
+        password: createPassword,
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         shortname: req.body.shortname,
@@ -9451,16 +9465,27 @@ router.post("/updateRegisteredClinic", function (req, res, next) {
       res.json(err);
     }
 
+    var createPassword;
+
+      if(!req.body.password) {
+        var password = passwordGenerate.generate({
+          length: 10,
+          numbers: true,
+        });
+        createPassword = sha1(password);
+      }else {
+        createPassword = req.body.password;
+      }
+
     conn.query(
-      "select * from users_superadmin where id = " +
-       req.body.id + " and password = '" + req.body.password + "'",
+      "select * from users_superadmin where id = ?", req.body.id,
       function (err, rows) {
         if (!err) {
           if (!err) {
             if (rows.length > 0) {
               const data = {
                 id: req.body.id,
-                password: req.body.password,
+                password: createPassword,
                 firstname: req.body.firstname,
                 lastname: req.body.lastname,
                 shortname: req.body.shortname,
@@ -9494,7 +9519,7 @@ router.post("/updateRegisteredClinic", function (req, res, next) {
                 }
               );
             } else {
-              res.json(false);
+              res.json(err);
             }
           } else {
             res.json(err);

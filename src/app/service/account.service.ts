@@ -20,6 +20,10 @@ export class AccountService {
     return this.http.post("api/updateRegisteredClinic", body);
   }
 
+  deleteRegisteredClinic(data) {
+    return this.http.post("api/deleteRegisteredClinic", data);
+  }
+
   getSuperadmin(id) {
     return this.http.get('/api/getSuperadmin/' + id);
   }

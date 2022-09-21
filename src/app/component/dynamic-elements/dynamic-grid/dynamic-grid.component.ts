@@ -435,10 +435,10 @@ export class DynamicGridComponent implements OnInit {
     const target: HTMLElement = (
       args.originalEvent.target as HTMLElement
     ).closest("button"); // find clicked button
-    if (target.id === "collapse") {
+    if (target && target.id === "collapse") {
       // collapse all expanded grouped row
       this.grid.groupModule.collapseAll();
-    } else if (target.id === "refresh") {
+    } else if (target && target.id === "refresh") {
       this.refreshGrid();
     } else if (args.item["properties"]["prefixIcon"] === "e-pdfexport") {
       this.grid.pdfExport();

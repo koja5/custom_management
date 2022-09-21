@@ -3,7 +3,7 @@ span.h {
   }
   
   .label__active {
-    text-align: right;
+    text-align: center;
     padding: 30px 40px 0 0;
   }
   
@@ -16,6 +16,7 @@ span.h {
     position: absolute;
     right: 20px;
     top: 24px;
+    font-size: 24px;
   }
   
   .store_location {
@@ -72,6 +73,8 @@ span.h {
     box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
     font-weight: 500;
     transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    position: initial;
+    display: initial;
   }
   
   .font-weight-bold {
@@ -155,19 +158,20 @@ span.h {
   }
   
   @media (min-width: 768px) {
-    .card-container {
+    .card-container,.card-profile-content {
       height: 310px;
     }
   }
 
   .card-container {
     display: flex;
+    justify-content: center;
   }
 
   .edit-button-icon {
     position: absolute;
-    bottom: 12px;
-    left: 160px;
+    bottom: 135px;
+    right: 130px;
     border-radius: 50px;
     background-color: var(--theme-color);
     color: white;
@@ -210,7 +214,29 @@ span.h {
         background-color: #2399D5;
     }
   }
-  
-  .profile-userpic {
+
+  .col-md-12 {
     position: relative;
+  }
+
+  .card-body {
+    position: initial;
+  }
+
+  .card-col {
+    text-align: right;
+  }
+
+  .numberOfEmployees {
+    margin-right: 10px !important;
+    margin-top: 5px !important;
+  }
+
+  .card-title {
+    margin-bottom: 5px;
+  }
+
+  .edit-button-container {
+    display: flex;
+    justify-content: flex-end;
   }

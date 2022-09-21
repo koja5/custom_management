@@ -6,6 +6,10 @@ import { Location } from "@angular/common";
 import { Modal } from "ngx-modal";
 import Swal from "sweetalert2";
 import { DomSanitizer } from "@angular/platform-browser";
+import { UsersService } from 'src/app/service/users.service';
+import { PackLanguageService } from 'src/app/service/pack-language.service';
+import { LoginService } from 'src/app/service/login.service';
+import { MailService } from 'src/app/service/mail.service';
 
 @Component({
   selector: 'app-registered-clinic-detail',
@@ -29,6 +33,7 @@ export class RegisteredClinicDetailComponent implements OnInit {
   updateImageInput: any;
   isFileChoosen: boolean = false;
   fileName: string = '';
+  dialogOpened: boolean = false;
 
   constructor(
     public accountService: AccountService,
@@ -36,6 +41,9 @@ export class RegisteredClinicDetailComponent implements OnInit {
     public router: ActivatedRoute,
     public location: Location,
     public sanitizer: DomSanitizer,
+    private packLanguage: PackLanguageService,
+    private loginService: LoginService,
+    private mailService: MailService,
   ) { }
 
   ngOnInit() {
@@ -67,9 +75,10 @@ export class RegisteredClinicDetailComponent implements OnInit {
         );
       
         this.imagePath = path;
+        console.log('blob image ', this.imagePath);
       } else {
           this.imagePath = "../../../../../assets/images/users/defaultUser.png";
-          console.log('? imagepathg ', this.imagePath);
+          console.log('default image ', this.imagePath);
       }
     });
   }
@@ -131,6 +140,28 @@ export class RegisteredClinicDetailComponent implements OnInit {
     this.location.back();
   }
 
+  action(event) {
+    if (event === "yes") {
+      this.accountService.deleteRegisteredClinic(this.data).subscribe((data) => {
+        if (data) {
+          Swal.fire({
+            title: "Successfull!",
+            text: "Successful delete user!",
+            timer: 3000,
+            type: "success",
+          });
+          this.location.back();
+        }
+      });
+    } else {
+      this.dialogOpened = false;
+    }
+  }
+
+  printUser() {
+    window.print();
+  }
+
   updateImage() {
     this.chooseImage.open();
   }
@@ -168,4 +199,42 @@ export class RegisteredClinicDetailComponent implements OnInit {
       this.isFileChoosen = false;
     }
   }
+
+  close(component) {
+    this[component + "Opened"] = false;
+  }
+
+  open(component, id) {
+    this[component + "Opened"] = true;
+  }
+
+  sendRecoveryLink() {
+    const thisObject = this;
+    thisObject.data["language"] = this.packLanguage.getLanguageForForgotMail();
+    if (this.data.email !== "") {
+      this.loginService.forgotPassword(this.data, function (exist, notVerified) {
+        setTimeout(() => {
+          if (exist) {
+            thisObject.mailService
+              .sendForgetMail(thisObject.data)
+              .subscribe(
+                (data) => {
+                  thisObject.helpService.successToastr(
+                    thisObject.language.sendPasswordRecovery,
+                    thisObject.language.sendPasswordRecoverySucess
+                  );
+                },
+                (error) => {
+                  thisObject.helpService.errorToastr(
+                    thisObject.language.sendPasswordRecovery,
+                    thisObject.language.sendPasswordRecoveryError
+                  );
+                }
+              );
+          }
+        }, 100);
+      });
+    }
+  }
+
 }

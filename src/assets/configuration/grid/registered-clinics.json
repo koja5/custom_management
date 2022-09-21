@@ -287,14 +287,6 @@
       {
         "type": "textbox",
         "width": "col-md-12",
-        "name": "active",
-        "label": "Active",
-        "field": "active",
-        "required": false
-      },
-      {
-        "type": "textbox",
-        "width": "col-md-12",
         "name": "companyname",
         "label": "Company Name",
         "field": "companyname",
@@ -302,12 +294,21 @@
       },
       {
         "type": "textbox",
+        "class": "editPassword",
         "subtype": "password",
         "width": "col-md-12",
         "name": "password",
         "label": "Password",
         "field": "password",
-        "required": true
+        "required": false
+      },
+      {
+        "type": "checkbox",
+        "width": "col-md-12",
+        "name": "active",
+        "label": "Active",
+        "field": "active",
+        "required": false
       },
       {
         "type": "button",
