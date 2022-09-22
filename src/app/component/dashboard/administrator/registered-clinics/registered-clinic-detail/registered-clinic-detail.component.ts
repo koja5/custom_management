@@ -75,10 +75,8 @@ export class RegisteredClinicDetailComponent implements OnInit {
         );
       
         this.imagePath = path;
-        console.log('blob image ', this.imagePath);
       } else {
           this.imagePath = "../../../../../assets/images/users/defaultUser.png";
-          console.log('default image ', this.imagePath);
       }
     });
   }

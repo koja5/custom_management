@@ -170,8 +170,8 @@ span.h {
 
   .edit-button-icon {
     position: absolute;
-    bottom: 135px;
-    right: 130px;
+    bottom: 0px;
+    right: 125px;
     border-radius: 50px;
     background-color: var(--theme-color);
     color: white;
@@ -221,6 +221,7 @@ span.h {
 
   .card-body {
     position: initial;
+    width: 100%;
   }
 
   .card-col {
@@ -239,4 +240,8 @@ span.h {
   .edit-button-container {
     display: flex;
     justify-content: flex-end;
+  }
+
+  .profile-userpic {
+    position: relative;
   }
