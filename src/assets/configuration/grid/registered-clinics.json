@@ -190,7 +190,7 @@
     "configField": [
       {
         "type": "textbox",
-        "width": "col-md-12",
+        "width": "col-md-6",
         "name": "id",
         "label": "ID",
         "field": "id",
@@ -198,7 +198,7 @@
       },
       {
         "type": "textbox",
-        "width": "col-md-12",
+        "width": "col-md-6",
         "name": "firstname",
         "label": "First name",
         "field": "firstname",
@@ -206,7 +206,7 @@
       },
       {
         "type": "textbox",
-        "width": "col-md-12",
+        "width": "col-md-6",
         "name": "lastname",
         "label": "Last name",
         "field": "lastname",
@@ -214,7 +214,7 @@
       },
       {
         "type": "textbox",
-        "width": "col-md-12",
+        "width": "col-md-6",
         "name": "shortname",
         "label": "Shortname",
         "field": "shortname",
@@ -222,7 +222,7 @@
       },
       {
         "type": "textbox",
-        "width": "col-md-12",
+        "width": "col-md-6",
         "name": "street",
         "label": "Street",
         "field": "street",
@@ -230,7 +230,7 @@
       },
       {
         "type": "textbox",
-        "width": "col-md-12",
+        "width": "col-md-6",
         "name": "zipcode",
         "label": "Zipcode",
         "field": "zipcode",
@@ -238,7 +238,7 @@
       },
       {
         "type": "textbox",
-        "width": "col-md-12",
+        "width": "col-md-6",
         "name": "place",
         "label": "City",
         "field": "place",
@@ -246,7 +246,7 @@
       },
       {
         "type": "textbox",
-        "width": "col-md-12",
+        "width": "col-md-6",
         "name": "email",
         "label": "Email",
         "field": "email",
@@ -254,7 +254,7 @@
       },
       {
         "type": "textbox",
-        "width": "col-md-12",
+        "width": "col-md-6",
         "name": "telephone",
         "label": "Telephone",
         "field": "telephone",
@@ -262,7 +262,7 @@
       },
       {
         "type": "textbox",
-        "width": "col-md-12",
+        "width": "col-md-6",
         "name": "mobile",
         "label": "Mobile",
         "field": "mobile",
@@ -270,7 +270,7 @@
       },
       {
         "type": "datepicker",
-        "width": "col-md-12",
+        "width": "col-md-6",
         "name": "birthday",
         "label": "Birthday",
         "field": "birthday",
@@ -278,7 +278,7 @@
       },
       {
         "type": "datepicker",
-        "width": "col-md-12",
+        "width": "col-md-6",
         "name": "incompanysince",
         "label": "In Company Since",
         "field": "incompanysince",
@@ -286,7 +286,7 @@
       },
       {
         "type": "textbox",
-        "width": "col-md-12",
+        "width": "col-md-6",
         "name": "companyname",
         "label": "Company Name",
         "field": "companyname",
@@ -296,7 +296,7 @@
         "type": "textbox",
         "class": "editPassword",
         "subtype": "password",
-        "width": "col-md-12",
+        "width": "col-md-6",
         "name": "password",
         "label": "Password",
         "field": "password",
@@ -313,7 +313,7 @@
       {
         "type": "button",
         "width": "col-md-12",
-        "class": "e-control e-btn e-lib e-primary e-flat",
+        "class": "e-control e-btn e-lib e-primary e-flat pl-5 pr-5 pt-2 pb-2 mr-3",
         "name": "submit",
         "label": "Save",
         "field": "submit",
