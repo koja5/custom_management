@@ -55,6 +55,11 @@
         <div class="d-flex navbar-right">
           <ul class="nav navbar-nav pull-right">
             <!-- start manage user dropdown -->
+            <li>
+              <a class="menu-help" routerLink="/dashboard/home/help">
+                <i class="fa fa-question-circle"></i> Help
+              </a>
+            </li>
             <li class="dropdown dropdown-user" *ngIf="user !== undefined">
               <a
                 (click)="showHideProfile()"

@@ -2178,6 +2178,12 @@
       },
       "sendPasswordRecovery": {
         "type": "string"
+      },
+      "icon": {
+        "type": "string"
+      },
+      "chooseIcon":{
+        "type": "string"        
       }
     }
   },
@@ -6695,6 +6701,12 @@
             },
             {
               "key": "helpTopic"
+            },
+            {
+              "key": "icon"
+            },
+            {
+              "key":"chooseIcon"
             }
           ]
         },
