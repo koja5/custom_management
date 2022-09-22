@@ -2172,6 +2172,12 @@
       },
       "sendPasswordRecovery": {
         "type": "string"
+      },
+      "columnName": {
+        "type": "string"
+      },
+      "columnHeader": {
+        "type": "string"
       }
     }
   },
@@ -3541,6 +3547,12 @@
             },
             {
               "key": "noRecordYet"
+            },
+            {
+              "key": "columnName"
+            },
+            {
+              "key": "columnHeader"
             }
           ]
         }

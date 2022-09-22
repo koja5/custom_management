@@ -14,6 +14,7 @@ export class ColumnChooserComponent implements OnInit {
 
   hiddenColumns: string[] = [];
   showColumnPicker = false;
+  public language: any;
 
   @HostListener('document:click', ['$event']) onDocumentClick(event) {
     this.showColumnPicker = false;
@@ -22,6 +23,7 @@ export class ColumnChooserComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.language = JSON.parse(localStorage.getItem("language"));
     this.getHiddenColumns();
     this.outputHiddenColumns.emit(this.hiddenColumns);
   }
