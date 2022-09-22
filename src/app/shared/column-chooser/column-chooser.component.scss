@@ -1,0 +1,43 @@
+.columns-dropdown-kendo {
+  z-index: 10;
+  top: 2rem;
+}
+
+.columns-dropdown-sf {
+  z-index: 10;
+  right: 255px !important;
+  top: 0 !important;
+}
+
+.column-chooser-button {
+  height: 30px;
+  color: black;
+  border: none;
+  outline: 0;
+  &:hover {
+    background-color: darken(#f0f0f0, 5%);
+  }
+}
+
+.column-chooser-dropdown-container {
+  width: 200px;
+  height: 250px;
+  overflow-y: auto;
+  background-color: #fff;
+  right: 0;
+  top: 85px;
+  z-index: 10;
+  box-shadow: 2px 10px 10px #d6d4d4 !important;
+}
+
+.column-chooser-header {
+  height: 55px;
+  position: absolute;
+  top: 30px;
+  width: 200px;
+  background-color: #fff;
+  right: 0;
+  z-index: 10;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 10px #d6d4d4, 0 -1px 10px #d6d4d4 !important;
+}
