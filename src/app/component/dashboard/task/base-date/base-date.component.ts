@@ -8,7 +8,6 @@ import { saveAs } from "file-saver";
 import Swal from "sweetalert2";
 import { ComplaintTherapyModel } from "../../../../models/complaint-therapy-model";
 import { UsersService } from "../../../../service/users.service";
-import { formatDate } from "@telerik/kendo-intl";
 import { DatePipe } from "@angular/common";
 import { BaseOneModel } from "../../../../models/base-one-model";
 import { BaseTwoModel } from "src/app/models/base-two-model";
@@ -17,7 +16,6 @@ import { TaskService } from "src/app/service/task.service";
 import { ToastrService } from "ngx-toastr";
 import {
   SortDescriptor,
-  orderBy,
   process,
   State,
 } from "@progress/kendo-data-query";
@@ -26,6 +24,8 @@ import { PackLanguageService } from "src/app/service/pack-language.service";
 import { LoginService } from "src/app/service/login.service";
 import { HelpService } from "src/app/service/help.service";
 import { AccountService } from "src/app/service/account.service";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { GridComponent } from "@progress/kendo-angular-grid";
 
 @Component({
   selector: "app-base-date",
@@ -137,6 +137,7 @@ export class BaseDateComponent implements OnInit {
       },
     ],
   };
+  private _allComplaintData: ExcelExportData;
 
   constructor(
     public router: ActivatedRoute,
@@ -290,6 +291,9 @@ export class BaseDateComponent implements OnInit {
     this.service.getComplaintForCustomer(this.data.id).subscribe((data: []) => {
       this.gridComplaint = process(data, this.stateComplaint);
       this.gridComplaintData = data;
+      this._allComplaintData = <ExcelExportData>{
+        data: process(this.gridComplaintData, this.stateComplaint).data,
+      }
       this["loadingGridComplaint"] = false;
       this.loading = false;
     });
@@ -1317,7 +1321,7 @@ export class BaseDateComponent implements OnInit {
     }, 50);
   }
 
-  filterDoctor(event) {}
+  filterDoctor(event) { }
 
   printCustomer() {
     window.print();
@@ -1402,4 +1406,23 @@ export class BaseDateComponent implements OnInit {
     this[stateType].sort = sort;
     this[viewData] = process(this[allData], this[stateType]);
   }
+
+  public allPages: boolean;
+
+  @ViewChild('complaintGrid') complaintGrid;
+  @ViewChild('therapyGrid') therapyGrid;
+  @ViewChild('documentsGrid') documentsGrid;
+
+  exportComplaintPDF(): void {
+    this.complaintGrid.saveAsPDF();
+  }
+
+  exportTherapyPDF(value: boolean): void {
+    this.therapyGrid.saveAsPDF();
+  }
+
+  exportDocumentsPDF(value: boolean): void {
+    this.documentsGrid.saveAsPDF();
+  }
+
 }
