@@ -10,9 +10,14 @@ import { FaqModel } from '../models/faq-question-model';
 export class FaqService {
   constructor(public httpClient: HttpClient) { }
 
-  public getFaqTopics(superAdminId): Observable<HelpTopicModel[]> {
+  public getFaqTopics(superAdminId,language): Observable<HelpTopicModel[]> {
     return this.httpClient
-      .get<HelpTopicModel[]>("/api/getFaqTopics/"+superAdminId).map((res) => res);
+      .get<HelpTopicModel[]>("/api/getFaqTopics/"+superAdminId+"/"+language).map((res) => res);
+  }
+
+  public getFaqTopic(topicId, superAdminId): Observable<HelpTopicModel>{
+    return this.httpClient
+    .get<HelpTopicModel>("/api/getFaqTopic/"+topicId+"/"+superAdminId).map((res) => res);
   }
 
   public createFaqTopic(data) {
@@ -31,9 +36,9 @@ export class FaqService {
     return this.httpClient.post("/api/createFaq", data).toPromise();
   }
 
-  public getFaqsByTopic(topicId: number, superAdminId: number): Observable<FaqModel[]> {
+  public getFaqsByTopic(topicId, superAdminId): Observable<FaqModel[]> {
     return this.httpClient
-      .get<FaqModel[]>("/api/getFaqQuestions/" + topicId+"/"+superAdminId).map((res) => res);
+    .get<FaqModel[]>("/api/getFaqQuestions/"+topicId+"/"+superAdminId).map((res) => res);
   }
 
   public updateFaq(data) {
