@@ -17,7 +17,6 @@ import { MessageService } from 'src/app/service/message.service';
 export class ListFaqComponent implements OnInit {
   @ViewChild("faqModal") faqModal: Modal;
   @ViewChild("panelbar") panelRef;
-  @Input() countryCodeValue: string;
 
   topicId: number;
   public kendoPanelBarExpandMode = PanelBarExpandMode.Multiple;
@@ -47,7 +46,6 @@ export class ListFaqComponent implements OnInit {
 
     this.topicId = this.route.snapshot.params["id"];
     this.service.getFaqTopic(this.topicId).subscribe(data => {
-      console.log(data);
       if (data && data["length"] > 0) {
         this.faqTopic = data[0];
       }      
@@ -59,7 +57,6 @@ export class ListFaqComponent implements OnInit {
 
   public loadFaqs() {
     this.service.getFaqsByTopic(this.topicId).subscribe(data => {
-      console.log(data);
       this.list = data;
       this.filterList = data;
     });
