@@ -311,14 +311,7 @@ export class CustomersComponent implements OnInit {
 
   previewUser(selectedUser) {
     if (selectedUser.img && selectedUser.img.data.length !== 0) {
-      const TYPED_ARRAY = new Uint8Array(selectedUser.img.data);
-      const STRING_CHAR = String.fromCharCode.apply(null, TYPED_ARRAY);
-
-      let base64String = window.btoa(STRING_CHAR);
-      let path = this.sanitizer.bypassSecurityTrustUrl(
-        "data:image/png;base64," + base64String
-      );
-      this.imagePath = path;
+      this.imagePath = this.helpService.setUserProfileImagePath(selectedUser);;
     } else {
       this.imagePath =
         selectedUser.gender == "male"

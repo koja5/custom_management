@@ -1383,6 +1383,21 @@
             "changePasswordTitle": {
                 "type": "string"
             },
+            "clinicsEditTitle": {
+                "type": "string"
+            },
+            "clinicSuccessUpdated": {
+                "type": "string"
+            },
+            "clinicErrorUpdated": {
+                "type": "string"
+            },
+            "clinicSuccessDeleted": {
+                "type": "string"
+            },
+            "clinicErrorDeleted": {
+                "type": "string"
+            },
             "changePasswordConfirmDialogTitle": {
                 "type": "string"
             },
@@ -5061,6 +5076,28 @@
                         },
                         {
                             "key": "accountSuccessUpdatedAccountText"
+                        }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "clinicsEditTitle"
+                        },
+                        {
+                            "key": "clinicSuccessUpdated"
+                        },
+                        {
+                            "key": "clinicErrorUpdated"
+                        },
+                        {
+                            "key": "clinicSuccessDeleted"
+                        },
+                        {
+                            "key": "clinicErrorDeleted"
                         }
                     ]
                 },

@@ -4,7 +4,6 @@ import { AccountService } from 'src/app/service/account.service';
 import { HelpService } from 'src/app/service/help.service';
 import { Location } from "@angular/common";
 import { Modal } from "ngx-modal";
-import Swal from "sweetalert2";
 import { DomSanitizer } from "@angular/platform-browser";
 import { UsersService } from 'src/app/service/users.service';
 import { PackLanguageService } from 'src/app/service/pack-language.service';
@@ -66,15 +65,9 @@ export class RegisteredClinicDetailComponent implements OnInit {
   getSuperAdmin() {
     this.accountService.getSuperadmin(this.clinicId).subscribe(res => {
       this.data = res[0];
+
       if (this.data.img && this.data.img.data.length !== 0) {
-        const TYPED_ARRAY = new Uint8Array(this.data.img.data);
-        const STRING_CHAR = String.fromCharCode.apply(null, TYPED_ARRAY);
-        let base64String = btoa(STRING_CHAR);
-        let path = this.sanitizer.bypassSecurityTrustUrl(
-          "data:image/png;base64," + base64String
-        );
-      
-        this.imagePath = path;
+        this.imagePath = this.helpService.setUserProfileImagePath(this.data);
       } else {
           this.imagePath = "../../../../../assets/images/users/defaultUser.png";
       }
@@ -122,14 +115,17 @@ export class RegisteredClinicDetailComponent implements OnInit {
   updateClinic() {
     this.accountService.updateRegisteredClinic(this.data).subscribe((data) => {
       if (data) {
-        Swal.fire({
-          title: "Successfull!",
-          text: "Successful update user!",
-          timer: 3000,
-          type: "success",
-        });
+        this.helpService.successToastr(
+          this.language.clinicsEditTitle,
+          this.language.clinicSuccessUpdated
+        );
         this.clinic.close();
         this.isFormDirty = false;
+      }else {
+        this.helpService.errorToastr(
+          this.language.clinicsEditTitle,
+          this.language.clinicErrorUpdated
+        );
       }
     });
   }
@@ -142,13 +138,16 @@ export class RegisteredClinicDetailComponent implements OnInit {
     if (event === "yes") {
       this.accountService.deleteRegisteredClinic(this.data).subscribe((data) => {
         if (data) {
-          Swal.fire({
-            title: "Successfull!",
-            text: "Successful delete user!",
-            timer: 3000,
-            type: "success",
-          });
+          this.helpService.successToastr(
+            this.language.clinicSuccessDeleted,
+            this.language.accountSuccessUpdatedAccountText
+          );
           this.location.back();
+        }else {
+          this.helpService.errorToastr(
+            this.language.clinicErrorDeleted,
+            this.language.accountErrorUpdatedAccountText
+          );
         }
       });
     } else {
@@ -185,7 +184,7 @@ export class RegisteredClinicDetailComponent implements OnInit {
     this.chooseImage.close();
     setTimeout(() => {
       this.getSuperAdmin();
-    }, 0);
+    }, 1000);
   }
 
   fileChoosen(event: any) {
