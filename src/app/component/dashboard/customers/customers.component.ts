@@ -30,7 +30,6 @@ import { HelpService } from "src/app/service/help.service";
 import { MailService } from "src/app/service/mail.service";
 import { PackLanguageService } from "src/app/service/pack-language.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
-import { StorageService } from "src/app/service/storage.service";
 import { Router } from "@angular/router";
 import { DomSanitizer } from "@angular/platform-browser";
 
@@ -96,6 +95,10 @@ export class CustomersComponent implements OnInit {
   savePage: any = {};
   currentUrl: string;
 
+  public showColumnPicker = false;
+  public columns: string[] = ["Username", "Firstname", "Lastname", "Telephone", "Mobile", "Email address"];
+  public hiddenColumns: string[] = [];
+
   constructor(
     private service: CustomersService,
     private storeService: StoreService,
@@ -142,10 +145,7 @@ export class CustomersComponent implements OnInit {
     this.currentUrl = this.router.url;
 
     this.savePage = this.helpService.getGridPageSize();
-    if (
-      (this.savePage && this.savePage[this.currentUrl]) ||
-      this.savePage[this.currentUrl + "Take"]
-    ) {
+    if (this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
       this.state.skip = this.savePage[this.currentUrl];
       this.state.take = this.savePage[this.currentUrl + "Take"];
     }
@@ -208,6 +208,7 @@ export class CustomersComponent implements OnInit {
     this.customer.closeOnOutsideClick = false;
     this.customer.hideCloseButton = true;
     this.customer.open();
+
   }
 
   initializeParams() {
@@ -441,17 +442,6 @@ export class CustomersComponent implements OnInit {
   }
 
   public allData(): ExcelExportData {
-    // var myState: State = this.state;
-    // myState.skip = 0;
-    // myState.take = this.gridData.total;
-    // const result: ExcelExportData = {
-    //   data: process(this.currentLoadData, this.state).data
-    // };
-
-    // console.log(result);
-
-    // return result;
-
     return this._allData;
   }
 
@@ -684,5 +674,13 @@ export class CustomersComponent implements OnInit {
         this.helpService.errorToastr(this.language.errorSendFormToMail, "");
       }
     });
+  }
+
+  public isHidden(columnName: string): boolean {
+    return this.hiddenColumns.indexOf(columnName) > -1;
+  }
+
+  public onOutputHiddenColumns(columns) {
+    this.hiddenColumns = columns;
   }
 }

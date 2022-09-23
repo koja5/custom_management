@@ -1,0 +1,21 @@
+<div class="position-relative" (click)="$event.stopPropagation()"
+      [ngClass]="isKendoGrid ? 'columns-dropdown-kendo' : 'columns-dropdown-sf'"
+      [ngStyle]="{'top': isApplicationParameters ? '-3.5rem' : '2rem', 'right': isApplicationParameters ? '1rem' : '0.5rem'}">
+  <button (click)="onShowColumnsPicker()" class="column-chooser-button d-flex align-items-center">
+      <i class="fa fa-caret-down pr-2"></i> {{ language.columnName }}
+  </button>
+  
+  <div *ngIf="showColumnPicker" class="column-chooser-header p-4 font-bold">{{ language.columnHeader }}</div>
+  <div *ngIf="showColumnPicker" 
+        class="w-100 d-flex flex-column justify-content-starts position-absolute column-chooser-dropdown-container">
+        <div *ngFor="let column of columns; let i = index">
+            <label class="k-checkbox-label p-3" for="{{ column }}">
+                <input type="checkbox" id="{{ column }}" kendoCheckBox class="m-0 mr-3"
+                        [disabled]="isDisabled(column)" 
+                        [checked]="!isHidden(column)" 
+                        (change)="hideColumn(column)" />
+                        {{ column }}
+            </label>
+        </div>
+  </div>
+</div>

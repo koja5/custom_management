@@ -100,7 +100,9 @@ export class ProfileComponent implements OnInit {
       }
     );
     this.chooseImage.close();
-    this.getMyProfile();
+    setTimeout(() => {
+      this.getMyProfile();
+    }, 0);
   }
 
   updateImage() {
