@@ -3,5 +3,4 @@ export class FaqModel{
     helpTopicId: number;
     question: string;
     answer: string;
-    superAdminId: number;
  }
