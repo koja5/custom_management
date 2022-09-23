@@ -77,6 +77,10 @@ export class StoreComponent implements OnInit {
   savePage: any = {};
   currentUrl: string;
 
+  public showColumnPicker = false;
+  public columns: string[] = ["Store name", "Vat", "Email address", "Street", "Place", "Telephone"];
+  public hiddenColumns: string[] = [];
+
   constructor(
     public service: StoreService,
     public message: MessageService,
@@ -596,5 +600,13 @@ export class StoreComponent implements OnInit {
   public sortChange(sort: SortDescriptor[]): void {
     this.state.sort = sort;
     this.gridView = process(this.gridData.data, this.state);
+  }
+
+  public isHidden(columnName: string): boolean {
+    return this.hiddenColumns.indexOf(columnName) > -1;
+  }
+
+  public onOutputHiddenColumns(columns) {
+    this.hiddenColumns = columns;
   }
 }

@@ -1,4 +1,13 @@
-<div #container>
+<div #container class="position-relative">
+
+  <div class="position-absolute columns-dropdown">
+    <app-column-chooser 
+        [columns]="columns" 
+        [isKendoGrid]="false" 
+        (outputHiddenColumns)="onOutputHiddenColumns($event)" 
+        [type]="'Reservations'"></app-column-chooser>
+  </div>
+
   <ejs-grid
     #grid
     *ngIf="config"

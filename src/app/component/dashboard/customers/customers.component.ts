@@ -95,6 +95,10 @@ export class CustomersComponent implements OnInit {
   savePage: any = {};
   currentUrl: string;
 
+  public showColumnPicker = false;
+  public columns: string[] = ["Username", "Firstname", "Lastname", "Telephone", "Mobile", "Email address"];
+  public hiddenColumns: string[] = [];
+
   constructor(
     private service: CustomersService,
     private storeService: StoreService,
@@ -678,5 +682,12 @@ export class CustomersComponent implements OnInit {
       })
       this.previewUser(this.selectedUser);
     }, 1000);
+  }
+  public isHidden(columnName: string): boolean {
+    return this.hiddenColumns.indexOf(columnName) > -1;
+  }
+
+  public onOutputHiddenColumns(columns) {
+    this.hiddenColumns = columns;
   }
 }

@@ -69,6 +69,10 @@ export class DynamicGridComponent implements OnInit {
   showDialog = false;
   currentDialog: any;
 
+  public showColumnPicker = false;
+  public columns: string[] = [];
+  public hiddenColumns: string[] = [];
+
   constructor(
     private service: DynamicService,
     private helpService: HelpService,
@@ -105,11 +109,15 @@ export class DynamicGridComponent implements OnInit {
       .getConfiguration(this.path, this.name)
       .subscribe((data: any) => {
         this.config = data;
-
+        this.config.columns.forEach(column => {
+          if (column.title.length > 0) {
+            this.columns.push(column.title);
+          }
+        });
         this.config.paging.settings.pageSizes = [5, 10, 20];
         this.config.paging.settings.pageSize = 10;
 
-        if (this.savePage[this.currentUrl]) {
+      if (this.savePage[this.currentUrl]) {
           this.config.paging.settings.currentPage =
             this.savePage[this.currentUrl];
         }
@@ -451,6 +459,15 @@ export class DynamicGridComponent implements OnInit {
 
   refreshGrid() {
     this.ngOnInit();
+  }
+
+  public isHidden(columnName: string): boolean {
+    return this.hiddenColumns.indexOf(columnName) > -1;
+  }
+
+  public onOutputHiddenColumns(columns) {
+    this.hiddenColumns = columns;
+    this.grid.hideColumns(this.hiddenColumns);
   }
 }
 
