@@ -28,6 +28,7 @@ import { ClickEventArgs } from "@syncfusion/ej2-navigations";
 import { SystemLogsService } from "src/app/service/system-logs.service";
 import { Router } from "@angular/router";
 import { AccountService } from "src/app/service/account.service";
+import { PackLanguageService } from "src/app/service/pack-language.service";
 
 @Component({
   selector: "app-dynamic-grid",
@@ -79,7 +80,8 @@ export class DynamicGridComponent implements OnInit {
     private messageService: MessageService,
     private accountService: AccountService,
     private router: Router,
-    private elem: ElementRef
+    private elem: ElementRef,
+    private packLanguage: PackLanguageService,
   ) {}
 
   ngOnInit() {
@@ -328,6 +330,8 @@ export class DynamicGridComponent implements OnInit {
   }
 
   callServerMethod(request, data) {
+    data["language"] = this.packLanguage.getLanguageForCreatedPatientAccount();
+    console.log("cal server method ", request, data);
     data = this.packAdditionalData(request.parameters, data);
     if (request.type === "POST") {
       this.service.callApiPost(request.api, data).subscribe((response) => {

@@ -14,6 +14,9 @@
             "deleteDialogTitleAreYouSure": {
                 "type": "string"
             },
+            "details": {
+                "type": "string"
+            },
             "successExecutedActionTitle": {
                 "type": "string"
             },
@@ -2228,6 +2231,9 @@
                         },
                         {
                             "key": "close"
+                        },
+                        {
+                            "key": "details"
                         }
                     ]
                 },

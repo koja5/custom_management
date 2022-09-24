@@ -9452,7 +9452,6 @@ router.post("/createClinic", function (req, res, next) {
         createPassword = req.body.password;
       }
       
-
       response = {};
       const data = {
         id: req.body.id,
@@ -9482,7 +9481,7 @@ router.post("/createClinic", function (req, res, next) {
             if (!err) {
               response.id = rows.id;
               response.success = true;
-              
+              data['language'] = req.body.language;
               mailAPI.sendMailAdminInfo(data);
             } else {
               response.success = false;
