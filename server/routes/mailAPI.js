@@ -1610,7 +1610,6 @@ router.sendMailAdminInfo = (data) => {
           }),
         };
         smtpTransport.sendMail(mailOptions, function (error, response) {
-          console.log(response);
           if (error) {
             logger.log(
               "error",
