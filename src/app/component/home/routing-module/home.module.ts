@@ -19,9 +19,11 @@ import { ContactUsComponent } from "../pages/contact-us/contact-us.component";
 import { FeaturesComponent } from "../pages/features/features.component";
 import { FeatureSectionComponent } from "../sections/feature-section/feature-section.component";
 import { HomeComponent } from "../home/home.component";
-import { DymanicElementsModule } from "../../dynamic-elements/dymanic-elements.module";
 import { DynamicPaymentFormComponent } from "../../dynamic-elements/dynamic-payment-form/dynamic-payment-form.component";
 import { ModalModule } from "ngx-modal";
+import { DialogModule } from "@progress/kendo-angular-dialog";
+import { ButtonModule } from "@progress/kendo-angular-buttons";
+import { PaymentSuccessComponent } from "../pages/request-demo/payment-success/payment-success.component";
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
 };
@@ -41,7 +43,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     FeaturesComponent,
     FeatureSectionComponent,
     HomeComponent,
-    DynamicPaymentFormComponent
+    DynamicPaymentFormComponent,
+    PaymentSuccessComponent
   ],
   exports: [
     HomePageComponent,
@@ -57,9 +60,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     FeaturesComponent,
     FeatureSectionComponent,
     HomeComponent,
-    DynamicPaymentFormComponent
+    DynamicPaymentFormComponent,
+    PaymentSuccessComponent
   ],
-  imports: [CommonModule, FormsModule, HomedRouting, ModalModule],
+  imports: [CommonModule, FormsModule, HomedRouting, ModalModule, DialogModule, ButtonModule],
   providers: [
     {
       provide: PERFECT_SCROLLBAR_CONFIG,

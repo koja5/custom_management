@@ -95,14 +95,15 @@
                 </div>
                 <div class="col-sm-12">
                   <div class="input-group mb-3">
-                    <select class="form-control" name="countOfEmployees" id="countOfEmployees"
-                      [(ngModel)]="data.package" required="">
+                    <select class="form-control" (change)="selectPackage($event.target.value)" name="package"
+                      id="package">
                       <option value="undefined" selected="" disabled="">
                         {{
-                        language.requestSectionFormChooiceNumberOfChildrens
+                        language.choosePackage
                         }}
                       </option>
-                      <option *ngFor="let item of language.priceTable.header" value="{{ item.price }}">
+                      <option *ngFor="let item of language.priceTable.header" value="{{ item.price }}"
+                        [selected]="item.nameOfPackageTitle === package ? true : false">
                         {{ item.nameOfPackageText }}
                       </option>
                     </select>
@@ -154,30 +155,55 @@
   <!--footer section end-->
 </div>
 
-<modal #paymentForm modalClass="modal-md top-margin loggerModal adminModal" [closeOnOutsideClick]="false">
+<modal #paymentForm modalClass="modal-lg top-margin loggerModal adminModal" [closeOnOutsideClick]="false">
   <modal-header>
-    <h3 *ngIf="language !== undefined">{{ language?.loadingDemoTitle }}</h3>
+    <h3 *ngIf="language !== undefined">{{ language?.lastPaymentStep }}</h3>
   </modal-header>
   <modal-content>
-    <h4 class="text-center">Izbor paketa:</h4>
-    <select class="form-control" (change)="selectPackage($event.target.value)" name="countOfEmployees"
-      id="countOfEmployees" [(ngModel)]="data.package" required="">
-      <option *ngFor="let item of language.priceTable.header" value="{{ item.price }}"
-        [selected]="item.nameOfPackageTitle === package ? true : false">
-        {{ item.nameOfPackageText }}
-      </option>
-    </select>
+    <div class="row">
+      <div class="col-xs-12 col-md-6 border-right text-center">
+        <img src="./assets/icons/package.png" class="image-width">
+        <h4 class="m-4">{{language.choosePackage}}</h4>
+        <select class="form-control" (change)="selectPackage($event.target.value)" name="payment" id="payment">
+          <option value="undefined" selected="" disabled="">
+            {{
+            language.choosePackage
+            }}
+          </option>
+          <option *ngFor="let item of language.priceTable.header" value="{{ item.price }}"
+            [selected]="item.nameOfPackageTitle === package ? true : false">
+            {{ item.nameOfPackageText }}
+          </option>
+        </select>
 
-    <p *ngIf="data.package" class="selected-price">Cena izabranog paketa je {{data.package}} E</p>
-
-    <h4 class="text-center">Podaci o kartici</h4>
-    <div class="form-group">
-      <div id="card-element" class="field"></div>
-    </div>
-    <div class="col-xs-12 text-right">
-      <button (click)="sendReqestForDemoAccount()" class="btn btn-primary mt-4 d-block w-100">
-        {{ language.requestSectionFormSendRequestButton }}
-      </button>
+        <p *ngIf="data.package" class="selected-price">{{language.priceOfPackage}} {{data.package}} E</p>
+      </div>
+      <div class="col-xs-12 col-md-6 text-center">
+        <img src="./assets/icons/payment.png" class="image-width">
+        <h4 class="m-4">{{language.cardDetails}}</h4>
+        <div class="form-group">
+          <div id="card-element" class="field"></div>
+        </div>
+        <div class="col-xs-12 text-right">
+          <button [disabled]="!package" (click)="showDialog = true;"
+            class="btn btn-primary mt-4 d-block w-100">
+            {{ language.requestSectionFormSendRequestButton }}
+          </button>
+        </div>
+      </div>
     </div>
   </modal-content>
 </modal>
+
+<kendo-dialog [title]="language.lastPaymentStep" *ngIf="showDialog" (close)="showDialog = false" [minWidth]="250"
+  [width]="450">
+  <p style="margin: 30px; text-align: center">
+    {{language.paymentMessage}}
+  </p>
+  <kendo-dialog-actions>
+    <button kendoButton (click)="submitPayment(); showDialog = false" primary="true">
+      {{language.yes}}
+    </button>
+    <button kendoButton (click)="showDialog = false; paymentForm.open()">{{language.no}}</button>
+  </kendo-dialog-actions>
+</kendo-dialog>

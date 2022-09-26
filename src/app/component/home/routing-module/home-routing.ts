@@ -6,6 +6,7 @@ import { ContactUsComponent } from '../pages/contact-us/contact-us.component';
 import { FeaturesComponent } from '../pages/features/features.component';
 import { HomePageComponent } from '../pages/home-page/home-page.component';
 import { PriceComponent } from '../pages/price/price.component';
+import { PaymentSuccessComponent } from '../pages/request-demo/payment-success/payment-success.component';
 import { RequestDemoComponent } from '../pages/request-demo/request-demo.component';
 
 const routes: Routes = [
@@ -20,6 +21,10 @@ const routes: Routes = [
   {
     path: 'request-demo/:package',
     component: RequestDemoComponent,
+  },
+  {
+    path: 'payment-success',
+    component: PaymentSuccessComponent
   },
   {
     path: 'prices',

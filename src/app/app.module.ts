@@ -53,7 +53,6 @@ import { PrivacyPolicyComponent } from "./component/templates/privacy-policy/pri
 import { TermsComponent } from "./component/templates/terms/terms.component";
 import { ImpressumComponent } from "./component/templates/impressum/impressum.component";
 import { SharedComponentsModule } from "./shared/shared-components.module";
-import { HomedModule } from "./component/home/routing-module/home.module";
 import { RouterModule } from "@angular/router";
 import { FormGuard } from "./service/form-guard/formGuard";
 import { NgxStripeModule } from "ngx-stripe";

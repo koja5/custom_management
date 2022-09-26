@@ -276,5 +276,16 @@
     "notFoundTitle": "Stranica nije pronadjena!",
     "notFoundText": "Stranica koju trazite nije pronadjena ili uopste ne postoji!",
     "notFoundBackButton": "Vrati se nazad",
-    "notFoundCopyRight": "Autorska prava © 2020 ClinicNode. Sva prava zadrzana."
+    "notFoundCopyRight": "Autorska prava © 2020 ClinicNode. Sva prava zadrzana.",
+    "choosePackage": "Izbor paketa",
+    "priceOfPackage": "Cena izabranog paketa je: ",
+    "cardDetails": "Podaci o kartici",
+    "lastPaymentStep": "Poslednji korak",
+    "paymentMessage": "Potvrdite još jednom Vašu naruđbinu!",
+    "yes": "Da",
+    "no": "Ne",
+    "paymentSuccess": "Uspešno ste izvršili plaćanje!",
+    "paymentText": "Vaša uplata je evidentirana. Nakon što bude proknjižena, kontaktiraćemo Vas!",
+    "backToHome": "Vrati se na početnu",
+    "paymentError": "Desio se problem prilikom plaćanja"
 }

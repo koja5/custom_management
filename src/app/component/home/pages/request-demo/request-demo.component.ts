@@ -9,7 +9,7 @@ import {
   ElementsOptions,
   StripeService,
 } from "ngx-stripe";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: "app-request-demo",
@@ -33,38 +33,14 @@ export class RequestDemoComponent implements OnInit {
     private callApi: DynamicService,
     private helpService: HelpService,
     private stripeService: StripeService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.language = this.helpService.getLanguageForLanding();
     this.package = this.route.snapshot.paramMap.get("package");
     // this.initializePaymentCard();
-  }
-
-  sendReqestForDemoAccount() {
-    this.required = false;
-    this.success = false;
-    if (
-      !this.data.name ||
-      !this.data.email ||
-      !this.data.phone ||
-      !this.data.nameOfCompany ||
-      !this.data.countOfEmployees
-    ) {
-      this.required = true;
-    } else {
-      this.submitPayment();
-      // this.callApi
-      //   .callApiPost("/api/sendReqestForDemoAccountFull", this.data)
-      //   .subscribe((data) => {
-      //     if (data) {
-      //       this.success = true;
-      //       this.data = new ReqeustDemoAccount();
-      //     }
-      //   });
-      // this.submitPayment();
-    }
   }
 
   sendEventForChangeLanguage(event: any) {
@@ -99,53 +75,75 @@ export class RequestDemoComponent implements OnInit {
   submitPayment() {
     this.stripeService
       .createToken(this.card, { name: this.data.name })
-      .subscribe((result) => {
-        if (result.token) {
-          this.data["token"] = result.token;
-          this.callApi
-            .callApiPost("/api/payment/create-payment", this.data)
-            .subscribe((res) => {
-              if (res["success"]) {
-                alert("Uspesno!");
-              } else {
-                alert("Neuspesno!");
-              }
-            });
+      .subscribe(
+        (result) => {
+          if (result.token) {
+            this.data["token"] = result.token;
+            this.callApi
+              .callApiPost("/api/payment/create-payment", this.data)
+              .subscribe((res) => {
+                if (res["success"]) {
+                  this.router.navigate(["payment-success"]);
+                } else {
+                  this.helpService.errorToastr(this.language.paymentError, "");
+                }
+              });
+          }
+        },
+        (error) => {
+          this.helpService.errorToastr(this.language.paymentError, "");
         }
-      });
+      );
+  }
+
+  checkRequiredFields() {
+    this.required = false;
+    this.success = false;
+    if (
+      !this.data.name ||
+      !this.data.email ||
+      !this.data.phone ||
+      !this.data.nameOfCompany ||
+      !this.data.countOfEmployees
+    ) {
+      this.required = true;
+    }
+    return this.required;
   }
 
   openPaymentForm() {
-    this.paymentForm.open();
-    setTimeout(() => {
-      this.stripeService
-        .elements(this.elementsOptions)
-        .subscribe((elements) => {
-          this.elements = elements;
-          if (!this.card) {
-            this.card = this.elements.create("card", {
-              iconStyle: "solid",
-              style: {
-                base: {
-                  iconColor: "#666EE8",
-                  color: "#31325F",
-                  lineHeight: "40px",
-                  fontWeight: 300,
-                  fontFamily: '"Helverica Neue", Helvetica, sans-serif',
-                  fontSize: "18px",
-                  "::placeholder": {
-                    color: "#CFD7E8",
+    if (!this.checkRequiredFields()) {
+      this.paymentForm.open();
+      setTimeout(() => {
+        this.stripeService
+          .elements(this.elementsOptions)
+          .subscribe((elements) => {
+            this.elements = elements;
+            if (!this.card) {
+              this.card = this.elements.create("card", {
+                iconStyle: "solid",
+                style: {
+                  base: {
+                    iconColor: "#666EE8",
+                    color: "#31325F",
+                    lineHeight: "40px",
+                    fontWeight: 300,
+                    fontFamily: '"Helverica Neue", Helvetica, sans-serif',
+                    fontSize: "18px",
+                    "::placeholder": {
+                      color: "#CFD7E8",
+                    },
                   },
                 },
-              },
-            });
-            this.card.mount("#card-element");
-          }
-        });
-    }, 20);
+              });
+              this.card.mount("#card-element");
+            }
+          });
+      }, 20);
+    }
   }
 
   selectPackage(event) {
-    console.log(event);
+    this.data.package = event;
   }
 }
