@@ -161,16 +161,16 @@ export class HelpComponent implements OnInit {
     this.loadTopics();
   }
 
-  checkDefaultLanguage() {    
-    if(sessionStorage.getItem("sessionHelpLanguage")){
-      this.countryCodeValue=sessionStorage.getItem("sessionHelpLanguage");
+  checkDefaultLanguage() {        
+    if(this.helpService.getSessionStorage("sessionHelpLanguage") && this.userSuperAdmin){
+      this.countryCodeValue=this.helpService.getSessionStorage("sessionHelpLanguage");
     }else{
       if (this.helpService.getLocalStorage("accountLanguage")) {
         this.countryCodeValue = this.helpService.getLocalStorage("accountLanguage");
       } else {
         this.countryCodeValue = "US";
       }  
-      sessionStorage.setItem("sessionHelpLanguage",this.countryCodeValue);
+      this.helpService.setSessionStorage("sessionHelpLanguage",this.countryCodeValue);
     }
   }
   
