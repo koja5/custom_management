@@ -1524,4 +1524,110 @@ router.post("/infoAboutConfirmDenyAccessDevice", function (req, res) {
   });
 });
 
+router.sendMailAdminInfo = (data) => {
+  connection.getConnection(function (err, conn) {
+    var confirmTemplate = fs.readFileSync(
+      "./server/routes/templates/infoForCreatedSuperadmin.hjs",
+      "utf-8"
+    );
+    var infoForCreatedAccount = hogan.compile(confirmTemplate);
+    var verificationLinkButton =
+      link + "customerVerificationMail/" + sha1(data.email);
+
+    conn.query(
+      "SELECT * FROM users_superadmin WHERE users_superadmin = ?",
+      data.id,
+      function (err, mailMessage, fields) {
+        conn.release();
+        var mail = {};
+        var signatureAvailable = false;
+        var mailOptions = {
+          from: '"ClinicNode" support@app-production.eu',
+          to: data.email,
+          subject: mail.mailSubject
+            ? mail.mailSubject
+            : data.language?.subjectCreatedPatientForm,
+          html: infoForCreatedAccount.render({
+            firstName: data.firstname,
+            email: data.email,
+            password: data.password,
+            loginLink: loginLink,
+            initialGreeting: mail.mailInitialGreeting
+              ? mail.mailInitialGreeting
+              : data.language?.initialGreeting,
+            finalGreeting: mail.mailFinalGreeting
+              ? mail.mailFinalGreeting
+              : data.language?.finalGreeting,
+            signature: !signatureAvailable
+              ? mail.mailSignature
+                ? mail.mailSignature
+                : data.language?.signature
+              : "",
+            thanksForUsing: mail.mailThanksForUsing
+              ? mail.mailThanksForUsing
+              : data.language?.thanksForUsing,
+            websiteLink: data.language?.websiteLink,
+            ifYouHaveQuestion: mail.mailIfYouHaveQuestion
+              ? mail.mailIfYouHaveQuestion
+              : data.language?.ifYouHaveQuestion,
+            emailAddress: data.language?.emailAddress,
+            notReply: mail.mailNotReply
+              ? mail.mailNotReply
+              : data.language?.notReply,
+            copyRight: mail.mailCopyRight
+              ? mail.mailCopyRight
+              : data.language?.copyRight,
+            introductoryMessageForCreatedPatientAccount: mail.mailMessage
+              ? mail.mailMessage
+              : data.language?.introductoryMessageForCreatedPatientAccount,
+            linkForLogin: data.language?.linkForLogin,
+            emailForLogin: data.language?.emailForLogin,
+            passwordForLogin: data.language?.passwordForLogin,
+            signatureAddress:
+              signatureAvailable &&
+              mail.signatureAddress &&
+              (mail.street || mail.zipcode || mail.store_place)
+                ? mail.signatureAddress +
+                  "\n" +
+                  mail.street +
+                  "\n" +
+                  mail.zipcode +
+                  " " +
+                  mail.store_place
+                : "",
+            signatureTelephone:
+              signatureAvailable && mail.signatureTelephone && mail.telephone
+                ? mail.signatureTelephone + " " + mail.telephone
+                : "",
+            signatureMobile:
+              signatureAvailable && mail.signatureMobile && mail.mobile
+                ? mail.signatureMobile + " " + mail.mobile
+                : "",
+            signatureEmail:
+              signatureAvailable && mail.signatureEmail && mail.email
+                ? mail.signatureEmail + " " + mail.email
+                : "",
+          }),
+        };
+        smtpTransport.sendMail(mailOptions, function (error, response) {
+          console.log(response);
+          if (error) {
+            logger.log(
+              "error",
+              `Error to sent mail for VERIFICATION MAIL on EMAIL: ${data.email}. Error: ${error}`
+            );
+            res.end("error");
+          } else {
+            logger.log(
+              "info",
+              `Sent mail for VERIFICATION MAIL for USER: ${data.shortname} on EMAIL: ${data.email}`
+            );
+            res.end("sent");
+          }
+        });
+      }
+    );
+  });
+}
+
 module.exports = router;

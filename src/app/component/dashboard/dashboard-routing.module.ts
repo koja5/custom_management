@@ -55,6 +55,8 @@ import { AdminGuard } from "src/app/service/login-guard/adminGuard";
 
 import { ChooseHolidayComponent } from "./parameters/choose-holiday/choose-holiday.component";
 import { FormGuard } from "src/app/service/form-guard/formGuard";
+import { RegisteredClinicsComponent } from "./administrator/registered-clinics/registered-clinics.component";
+import { RegisteredClinicDetailComponent } from "./administrator/registered-clinics/registered-clinic-detail/registered-clinic-detail.component";
 
 const routes: Routes = [
   {
@@ -218,6 +220,8 @@ const routes: Routes = [
       { path: "template-account", component: TemplateAccountComponent },
       { path: "add-holiday", component: AddHolidayComponent },
       { path: "define-holidays", component: ChooseHolidayComponent },
+      { path: "registered-clinics", component: RegisteredClinicsComponent },
+      { path: "registered-clinic-detail/:id", component: RegisteredClinicDetailComponent },
       {
         path: "mail-reminder",
         canDeactivate: [FormGuard],

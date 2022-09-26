@@ -27,6 +27,8 @@ import { Tooltip } from "@syncfusion/ej2-popups";
 import { ClickEventArgs } from "@syncfusion/ej2-navigations";
 import { SystemLogsService } from "src/app/service/system-logs.service";
 import { Router } from "@angular/router";
+import { AccountService } from "src/app/service/account.service";
+import { PackLanguageService } from "src/app/service/pack-language.service";
 
 @Component({
   selector: "app-dynamic-grid",
@@ -76,8 +78,10 @@ export class DynamicGridComponent implements OnInit {
     private service: DynamicService,
     private helpService: HelpService,
     private messageService: MessageService,
+    private accountService: AccountService,
     private router: Router,
-    private elem: ElementRef
+    private elem: ElementRef,
+    private packLanguage: PackLanguageService,
   ) {}
 
   ngOnInit() {
@@ -326,6 +330,8 @@ export class DynamicGridComponent implements OnInit {
   }
 
   callServerMethod(request, data) {
+    data["language"] = this.packLanguage.getLanguageForCreatedPatientAccount();
+    console.log("cal server method ", request, data);
     data = this.packAdditionalData(request.parameters, data);
     if (request.type === "POST") {
       this.service.callApiPost(request.api, data).subscribe((response) => {
@@ -433,14 +439,18 @@ export class DynamicGridComponent implements OnInit {
     this.actionEmitter.emit(actions);
   }
 
+  openClinicDetail(id: number) {
+    this.router.navigateByUrl('/dashboard/home/registered-clinic-detail/' + id);
+  }
+
   clickHandler(args: ClickEventArgs): void {
     const target: HTMLElement = (
       args.originalEvent.target as HTMLElement
     ).closest("button"); // find clicked button
-    if (target.id === "collapse") {
+    if (target && target.id === "collapse") {
       // collapse all expanded grouped row
       this.grid.groupModule.collapseAll();
-    } else if (target.id === "refresh") {
+    } else if (target && target.id === "refresh") {
       this.refreshGrid();
     } else if (args.item["properties"]["prefixIcon"] === "e-pdfexport") {
       this.grid.pdfExport();

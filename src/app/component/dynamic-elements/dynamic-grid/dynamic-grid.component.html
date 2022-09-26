@@ -92,6 +92,20 @@
             {{ language[item?.label] ? language[item?.label] : item?.label }}
           </button>
         </ng-template>
+        <ng-template
+          *ngIf="item?.type == 'detailsButton'"
+          class="item?.position"
+          #template
+          let-data
+        >
+          <button
+            class="detailsButton-button"
+            (click)="openClinicDetail(data.id)"
+          >
+            <span *ngIf="item.classIcon" class="{{ item.classIcon }}"></span>
+            {{ language.details }}
+          </button>
+        </ng-template>
       </e-column>
     </e-columns>
     <ng-template #editSettingsTemplate let-data>

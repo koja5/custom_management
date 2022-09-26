@@ -14,6 +14,9 @@
             "deleteDialogTitleAreYouSure": {
                 "type": "string"
             },
+            "details": {
+                "type": "string"
+            },
             "successExecutedActionTitle": {
                 "type": "string"
             },
@@ -499,6 +502,9 @@
             },
             "translation": {
                 "type": "string"
+            },
+            "manageClinics": {
+              "type": "string"
             },
             "todo": {
                 "type": "string"
@@ -1193,6 +1199,9 @@
             "administrator": {
                 "type": "string"
             },
+            "numberOfEmployees": {
+              "type": "string"
+            },
             "count": {
                 "type": "string"
             },
@@ -1375,6 +1384,21 @@
                 "type": "string"
             },
             "changePasswordTitle": {
+                "type": "string"
+            },
+            "clinicsEditTitle": {
+                "type": "string"
+            },
+            "clinicSuccessUpdated": {
+                "type": "string"
+            },
+            "clinicErrorUpdated": {
+                "type": "string"
+            },
+            "clinicSuccessDeleted": {
+                "type": "string"
+            },
+            "clinicErrorDeleted": {
                 "type": "string"
             },
             "changePasswordConfirmDialogTitle": {
@@ -2207,6 +2231,9 @@
                         },
                         {
                             "key": "close"
+                        },
+                        {
+                            "key": "details"
                         }
                     ]
                 },
@@ -3141,6 +3168,9 @@
                         },
                         {
                             "key": "templateAccount"
+                        },
+                        {
+                          "key": "manageClinics"
                         }
                     ]
                 },
@@ -4553,6 +4583,9 @@
                         },
                         {
                             "key": "count"
+                        },
+                        {
+                          "key": "numberOfEmployees"
                         }
                     ]
                 }
@@ -5049,6 +5082,28 @@
                         },
                         {
                             "key": "accountSuccessUpdatedAccountText"
+                        }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "clinicsEditTitle"
+                        },
+                        {
+                            "key": "clinicSuccessUpdated"
+                        },
+                        {
+                            "key": "clinicErrorUpdated"
+                        },
+                        {
+                            "key": "clinicSuccessDeleted"
+                        },
+                        {
+                            "key": "clinicErrorDeleted"
                         }
                     ]
                 },

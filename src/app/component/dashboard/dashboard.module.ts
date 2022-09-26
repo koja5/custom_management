@@ -108,6 +108,8 @@ import { ColorPickerModule } from '@syncfusion/ej2-angular-inputs';
 import { HelpComponent } from './administrator/help/help.component';
 import { TopicCardComponent } from './administrator/help/topic-card/topic-card.component';
 import { ListFaqComponent } from './administrator/help/list-faq/list-faq.component';
+import { RegisteredClinicsComponent } from './administrator/registered-clinics/registered-clinics.component';
+import { RegisteredClinicDetailComponent } from './administrator/registered-clinics/registered-clinic-detail/registered-clinic-detail.component';
 import { SharedComponentsModule } from 'src/app/shared/shared-components.module';
 
 @NgModule({
@@ -166,7 +168,9 @@ import { SharedComponentsModule } from 'src/app/shared/shared-components.module'
     MailBirthdayCongratulationComponent,
     HelpComponent,
     TopicCardComponent,
-    ListFaqComponent
+    ListFaqComponent,
+    RegisteredClinicsComponent,
+    RegisteredClinicDetailComponent
   ],
   imports: [
     CommonModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from "@angular/core";
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { CustomersService } from "../../../../service/customers.service";
 import { MessageService } from "../../../../service/message.service";
@@ -23,6 +23,7 @@ import { MailService } from "src/app/service/mail.service";
 import { PackLanguageService } from "src/app/service/pack-language.service";
 import { LoginService } from "src/app/service/login.service";
 import { HelpService } from "src/app/service/help.service";
+import { AccountService } from "src/app/service/account.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { GridComponent } from "@progress/kendo-angular-grid";
 
@@ -38,12 +39,19 @@ export class BaseDateComponent implements OnInit {
   @Input() date;
   @Input() doctor;
   @Input() imagePath;
+  @Output() reload: EventEmitter<any> = new EventEmitter<any>();
+  @Output() emitImage: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild("complaint") complaint: Modal;
   @ViewChild("therapy") therapy: Modal;
   @ViewChild("customer") customer: Modal;
   @ViewChild("document_edit") document_edit: Modal;
   @ViewChild("settingsWindow") settingsWindow: Modal;
+  @ViewChild("chooseImage") chooseImage: Modal;
 
+  isFileChoosen: boolean = false;
+  fileName: string = '';
+  updateImageInput: any;
+  currentUser: any;
   public maleImg = "../../../../../assets/images/users/male-patient.png";
   public femaleImg = "../../../../../assets/images/users/female-patient.png";
   public dialogOpened = false;
@@ -135,9 +143,9 @@ export class BaseDateComponent implements OnInit {
     public router: ActivatedRoute,
     public service: CustomersService,
     public taskService: TaskService,
-    public userUservice: UsersService,
     public message: MessageService,
     public usersService: UsersService,
+    private accountService: AccountService,
     private toastr: ToastrService,
     private mailService: MailService,
     private loginService: LoginService,
@@ -167,6 +175,8 @@ export class BaseDateComponent implements OnInit {
         });
       }*/,
     });
+
+    this.getCurrentUser();
 
     this.uploader.onBuildItemForm = (fileItem: FileItem, form: any) => {
       form.append("description", fileItem.file["description"]);
@@ -199,6 +209,12 @@ export class BaseDateComponent implements OnInit {
     });
 
     this.convertStringToDate();
+  }
+
+  getCurrentUser() {
+    this.usersService.getMe(localStorage.getItem("idUser"), (val) => {
+      this.currentUser = val[0];
+    });
   }
 
   sendRecoveryLink() {
@@ -374,11 +390,8 @@ export class BaseDateComponent implements OnInit {
   }
 
   action(event) {
-    console.log(event);
     if (event === "yes") {
-      console.log(this.data);
       this.service.deleteCustomer(this.data.id, (val) => {
-        console.log(val);
         this.message.sendDeleteCustomer();
         this.dialogOpened = false;
       });
@@ -388,11 +401,8 @@ export class BaseDateComponent implements OnInit {
   }
 
   deleteComplaint(event) {
-    console.log(event);
     if (event === "yes") {
-      console.log(this.data);
       this.service.deleteComplaint(this.selectedForDelete).subscribe((data) => {
-        console.log(data);
         if (data) {
           this.getComplaint();
         }
@@ -435,7 +445,6 @@ export class BaseDateComponent implements OnInit {
   updateCustomer(customer) {
     this.data.shortname = this.data.lastname + " " + this.data.firstname;
     this.service.updateCustomer(this.data, (val) => {
-      console.log(val);
       if (val.success) {
         this.customer.close();
         Swal.fire({
@@ -446,7 +455,6 @@ export class BaseDateComponent implements OnInit {
           timer: 3000,
           type: "success",
           onClose: () => {
-            console.log("done!");
           },
         });
       }
@@ -881,7 +889,7 @@ export class BaseDateComponent implements OnInit {
       this.selectedTreatment = Number(event.therapies_previous);
     }
     if (event.em !== undefined && event.em !== null) {
-      this.userUservice.getUserWithId(event.em, (val) => {
+      this.usersService.getUserWithId(event.em, (val) => {
         this.selectedUser = val[0];
         this.loadingTherapy = false;
       });
@@ -1348,6 +1356,45 @@ export class BaseDateComponent implements OnInit {
         });
       }
     });
+  }
+
+  updateImage() {
+    this.chooseImage.open();
+  }
+
+  submitPhoto() {
+    let form = new FormData();
+
+    form.append("updateImageInput", this.updateImageInput);
+    this.accountService.updateProfileImage(form, this.data).subscribe(
+      (data) => {
+        this.helpService.successToastr(
+          this.language.accountSuccessUpdatedAccountTitle,
+          this.language.accountSuccessUpdatedAccountText
+        );
+        this.emitImage.emit(this.data);
+      },
+      (error) => {
+        this.helpService.errorToastr(
+          this.language.accountErrorUpdatedAccountTitle,
+          this.language.accountErrorUpdatedAccountText
+        );
+      }
+    );
+    this.chooseImage.close();
+    setTimeout(() => {
+      this.getCurrentUser();
+    }, 0);
+  }
+
+  fileChoosen(event: any) {
+    this.fileName = event.target.value.substring(event.target.value.indexOf('h') + 2);
+    if (event.target.value) {
+      this.isFileChoosen = true;
+      this.updateImageInput = <File>event.target.files[0];
+    }else {
+      this.isFileChoosen = false;
+    }
   }
 
   public sortChange(
