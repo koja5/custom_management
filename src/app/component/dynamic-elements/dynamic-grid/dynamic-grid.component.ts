@@ -69,6 +69,7 @@ export class DynamicGridComponent implements OnInit {
   isFormDirty = false;
   showDialog = false;
   currentDialog: any;
+  test = 'test';
 
   public showColumnPicker = false;
   public columns: string[] = [];
@@ -78,7 +79,6 @@ export class DynamicGridComponent implements OnInit {
     private service: DynamicService,
     private helpService: HelpService,
     private messageService: MessageService,
-    private accountService: AccountService,
     private router: Router,
     private elem: ElementRef,
     private packLanguage: PackLanguageService,
@@ -86,9 +86,9 @@ export class DynamicGridComponent implements OnInit {
 
   ngOnInit() {
     this.savePage = this.helpService.getGridPageSize();
+    this.getConfiguration();
     this.initialization();
     this.checkMessageService();
-    this.getConfiguration();
     this.editSettings = {
       allowEditing: true,
       allowAdding: true,
@@ -104,7 +104,8 @@ export class DynamicGridComponent implements OnInit {
     this.currentUrl = this.router.url;
   }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() {
+  }
 
   initialization() {
     this.service
@@ -331,7 +332,7 @@ export class DynamicGridComponent implements OnInit {
 
   callServerMethod(request, data) {
     data["language"] = this.packLanguage.getLanguageForCreatedPatientAccount();
-    console.log("cal server method ", request, data);
+
     data = this.packAdditionalData(request.parameters, data);
     if (request.type === "POST") {
       this.service.callApiPost(request.api, data).subscribe((response) => {
@@ -364,9 +365,11 @@ export class DynamicGridComponent implements OnInit {
             );
           }
         }
+        this.refreshGrid();
       });
     } else {
       this.service.callApiGet(request.api, data).subscribe((data) => {});
+      this.refreshGrid();
     }
   }
 

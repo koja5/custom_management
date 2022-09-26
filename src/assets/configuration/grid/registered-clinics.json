@@ -182,9 +182,8 @@
         "type": "detailsButton",
         "title": "Details",
         "class": "e-control e-btn e-lib e-primary e-flat",
-        "name": "Show details",
-        "field": "details",
-        "mode": "showDetails"
+        "name": "show-details",
+        "field": "details"
       }
     ],
     "configField": [
