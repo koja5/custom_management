@@ -18083,7 +18083,7 @@ perfect-scrollbar > .ps {
 .k-panelbar > .k-item > .k-link.k-state-selected.k-state-hover,
 .k-panelbar > .k-panelbar-header > .k-link.k-state-selected:hover,
 .k-panelbar > .k-panelbar-header > .k-link.k-state-selected.k-state-hover {
-  background: #091467 !important;
+  background: var(--theme-color) !important;
   color: white !important;
 }
 
@@ -18093,13 +18093,13 @@ perfect-scrollbar > .ps {
 .k-panelbar > .k-panelbar-header > .k-link:focus,
 .k-panelbar > .k-panelbar-header > .k-link.k-state-focus,
 .k-panelbar > .k-panelbar-header > .k-link.k-state-focused {
-  background: #091467 !important;
+  background: var(--theme-color) !important;
   color: white !important;
 }
 
 .k-panelbar > .k-item > .k-link.k-state-selected,
 .k-panelbar > .k-panelbar-header > .k-link.k-state-selected {
-  background: #091467 !important;
+  background: var(--theme-color) !important;
   color: white !important;
 }
 /* END terms */
