@@ -15,6 +15,7 @@ import { MailService } from "src/app/service/mail.service";
 import { LoginService } from "src/app/service/login.service";
 import { HelpService } from "src/app/service/help.service";
 import { PackLanguageService } from "src/app/service/pack-language.service";
+import { AccountService } from "src/app/service/account.service";
 
 @Component({
   selector: "app-user-details",
@@ -23,6 +24,7 @@ import { PackLanguageService } from "src/app/service/pack-language.service";
 })
 export class UserDetailsComponent implements OnInit {
   @ViewChild("user") user: Modal;
+  @ViewChild("chooseImage") chooseImage: Modal;
   public id: string;
   public data: any;
   public imagePath: any;
@@ -54,6 +56,10 @@ export class UserDetailsComponent implements OnInit {
   public userTypeEnum = UserType;
   showDialog: boolean = false;
   isFormDirty: boolean = false;
+  updateImageInput: any;
+  isFileChoosen: boolean = false;
+  fileName: string = '';
+  currentUser: any;
 
   constructor(
     public route: ActivatedRoute,
@@ -69,37 +75,13 @@ export class UserDetailsComponent implements OnInit {
     private loginService: LoginService,
     private packLanguage: PackLanguageService,
     private helpService: HelpService,
+    private accountService: AccountService,
   ) {}
 
   ngOnInit() {
     this.id = this.route.snapshot.params["id"];
-    this.service.getUserWithId(this.id, (val) => {
-      this.data = val[0];
-      this.modelData();
-      if (
-        val[0].img !== null &&
-        val[0].img.data !== undefined &&
-        val[0].img.data.length !== 0
-      ) {
-        const TYPED_ARRAY = new Uint8Array(val[0].img.data);
-        const STRING_CHAR = String.fromCharCode.apply(null, TYPED_ARRAY);
-        let base64String = btoa(STRING_CHAR);
-        let path = this.sanitizer.bypassSecurityTrustUrl(
-          "data:image/png;base64," + base64String
-        );
-        console.log(path);
-        this.imagePath = path;
-      } else {
-        if (this.data.type === 1) {
-          this.imagePath = "../../../../assets/images/users/admin-user.png";
-        } else if (this.data.type === 2) {
-          this.imagePath = "../../../../assets/images/users/manager-user.png";
-        } else {
-          this.imagePath = "../../../../../assets/images/users/defaultUser.png";
-        }
-        console.log(this.imagePath);
-      }
-    });
+    this.getCurrentUser();
+    this.getUser();
 
     this.language = JSON.parse(localStorage.getItem("language"));
 
@@ -140,6 +122,43 @@ export class UserDetailsComponent implements OnInit {
     });
 
     this.onInitData();
+  }
+
+  getCurrentUser() {
+    this.service.getMe(localStorage.getItem("idUser"), (val) => {
+      this.currentUser = val[0];
+    });
+  }
+
+  getUser() {
+    this.service.getUserWithId(this.id, (val) => {
+      this.data = val[0];
+      console.log(this.data);
+      this.modelData();
+      if (
+        val[0].img !== null &&
+        val[0].img.data !== undefined &&
+        val[0].img.data.length !== 0
+      ) {
+        const TYPED_ARRAY = new Uint8Array(val[0].img.data);
+        const STRING_CHAR = String.fromCharCode.apply(null, TYPED_ARRAY);
+        let base64String = btoa(STRING_CHAR);
+        let path = this.sanitizer.bypassSecurityTrustUrl(
+          "data:image/png;base64," + base64String
+        );
+        console.log(path);
+        this.imagePath = path;
+      } else {
+        if (this.data.type === 1) {
+          this.imagePath = "../../../../assets/images/users/admin-user.png";
+        } else if (this.data.type === 2) {
+          this.imagePath = "../../../../assets/images/users/manager-user.png";
+        } else {
+          this.imagePath = "../../../../../assets/images/users/defaultUser.png";
+        }
+        console.log(this.imagePath);
+      }
+    });
   }
 
   sendRecoveryLink() {
@@ -258,6 +277,7 @@ export class UserDetailsComponent implements OnInit {
             configFieldCopy
           );
         }, 100);
+        this.isFormDirty = false;
       }
     });
   }
@@ -566,10 +586,47 @@ export class UserDetailsComponent implements OnInit {
     this[component + "Opened"] = true;
   }
 
+  updateImage() {
+    this.chooseImage.open();
+  }
+
+  submitPhoto() {
+    let form = new FormData();
+
+    form.append("updateImageInput", this.updateImageInput);
+    this.accountService.updateEmployeeProfileImage(form, this.data).subscribe(
+      (data) => {
+        this.helpService.successToastr(
+          this.language.accountSuccessUpdatedAccountTitle,
+          this.language.accountSuccessUpdatedAccountText
+        );
+      },
+      (error) => {
+        this.helpService.errorToastr(
+          this.language.accountErrorUpdatedAccountTitle,
+          this.language.accountErrorUpdatedAccountText
+        );
+      }
+    );
+    this.chooseImage.close();
+    setTimeout(() => {
+      this.getUser();
+    }, 0);
+  }
+
+  fileChoosen(event: any) {
+    this.fileName = event.target.value.substring(event.target.value.indexOf('h') + 2);
+    if (event.target.value) {
+      this.isFileChoosen = true;
+      this.updateImageInput = <File>event.target.files[0];
+    }else {
+      this.isFileChoosen = false;
+    }
+  }
+
   action(event) {
     console.log(event);
     if (event === "yes") {
-      console.log(this.data);
       this.service.deleteUser(this.id).subscribe((data) => {
         if (data) {
           Swal.fire({

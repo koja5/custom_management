@@ -73,6 +73,10 @@ export class EventCategoryComponent implements OnInit {
   currentUrl: string;
   savePage = {};
 
+  public showColumnPicker = false;
+  public columns: string[] = ["Category", "Sequence", "Color", "Allow sending information", "Show at Invoice", "Comment"];
+  public hiddenColumns: string[] = [];
+
   ngOnInit() {
     this.eventCategoryModal.closeOnEscape = false;
     this.eventCategoryModal.closeOnOutsideClick = false;
@@ -348,5 +352,13 @@ export class EventCategoryComponent implements OnInit {
       data: dataArray,
     };
     return allData;
+  }
+
+  public isHidden(columnName: string): boolean {
+    return this.hiddenColumns.indexOf(columnName) > -1;
+  }
+
+  public onOutputHiddenColumns(columns) {
+    this.hiddenColumns = columns;
   }
 }

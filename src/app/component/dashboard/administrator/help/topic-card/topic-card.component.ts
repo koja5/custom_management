@@ -14,16 +14,12 @@ export class TopicCardComponent implements OnInit {
   @Output() deleteEmmiter = new EventEmitter<any>();
 
   public userSuperAdmin=false;
-  private superAdminId;
-  private userId;
 
   constructor(private router: Router,
     private helpService: HelpService) { }
 
   ngOnInit() {
-    this.superAdminId = this.helpService.getSuperadmin();
-    this.userId = this.helpService.getMe();
-    this.userSuperAdmin = this.superAdminId == this.userId;
+    this.userSuperAdmin = this.helpService.getMe()==4 && this.helpService.getType()==0;
   }
 
   public generateLink(link) {
@@ -36,5 +32,9 @@ export class TopicCardComponent implements OnInit {
 
   public deleteHelpTopic(){
     this.deleteEmmiter.emit(this.topic);
+  }
+
+  public getIconClass(icon){
+    return "fa "+icon;
   }
 }

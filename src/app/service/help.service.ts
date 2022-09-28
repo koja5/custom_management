@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Title } from "@angular/platform-browser";
+import { DomSanitizer, Title } from "@angular/platform-browser";
 import "rxjs/add/operator/map";
 import { ToastrService } from "ngx-toastr";
 import { Observable } from "rxjs";
@@ -12,7 +12,8 @@ export class HelpService {
   constructor(
     private http: HttpClient,
     private titleService: Title,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private sanitizer: DomSanitizer,
   ) {}
 
   getGridPageSize() {
@@ -345,5 +346,16 @@ export class HelpService {
         language +
         ".json"
     );
+  }
+
+  setUserProfileImagePath(user: any) {
+      const TYPED_ARRAY = new Uint8Array(user.img.data);
+      const STRING_CHAR = String.fromCharCode.apply(null, TYPED_ARRAY);
+      let base64String = btoa(STRING_CHAR);
+      let path = this.sanitizer.bypassSecurityTrustUrl(
+        "data:image/png;base64," + base64String
+      );
+    
+      return path;
   }
 }

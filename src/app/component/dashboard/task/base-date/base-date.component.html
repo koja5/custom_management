@@ -32,7 +32,10 @@
           <div class="card-body no-padding height-9">
             <div class="row">
               <div class="profile-userpic">
-                <img [src]="imagePath ? imagePath : (data.gender === 'male' ? maleImg : femaleImg)" class="img-responsive" alt="" />
+                <img [src]="imagePath ? imagePath : (data.gender === 'male' ? maleImg : femaleImg)"
+                  class="img-responsive" alt="" />
+                <button *ngIf="currentUser?.type == 0 || currentUser?.type == 1" kendoButton [icon]="'edit'"
+                  class="edit-button-icon" (click)="updateImage()"></button>
               </div>
             </div>
             <div class="profile-usertitle">
@@ -138,7 +141,7 @@
                 <div class="tab-content" *ngIf="currentTab === 'profile'">
                   <div class="tab-pane active fontawesome-demo" id="tab1">
                     <div id="biography">
-                      <div class="row" *ngIf="data === undefined">
+                      <div class="row loading" *ngIf="data === undefined">
                         <div class="lds-ellipsis">
                           <div></div>
                           <div></div>
@@ -270,7 +273,7 @@
                 <div class="tab-content" *ngIf="currentTab === 'base_one'">
                   <div class="tab-pane active fontawesome-demo" id="tab1">
                     <div id="biography">
-                      <div class="row" *ngIf="baseDataOne === undefined" style="text-align: center">
+                      <div class="row loading" *ngIf="baseDataOne === undefined" style="text-align: center">
                         <div class="lds-ellipsis">
                           <div></div>
                           <div></div>
@@ -373,7 +376,7 @@
                 <div class="tab-content" *ngIf="currentTab === 'base_two'">
                   <div class="tab-pane active fontawesome-demo" id="tab1">
                     <div id="biography">
-                      <div class="row" *ngIf="baseDataTwo === undefined" style="text-align: center">
+                      <div class="row loading" *ngIf="baseDataTwo === undefined" style="text-align: center">
                         <div class="lds-ellipsis">
                           <div></div>
                           <div></div>
@@ -483,7 +486,7 @@
                 <div class="tab-content" *ngIf="currentTab === 'physical_illness'">
                   <div class="tab-pane active fontawesome-demo" id="tab1">
                     <div id="biography">
-                      <div class="row" *ngIf="
+                      <div class="row loading" *ngIf="
                           physicalIllness === undefined ||
                           physicalIllness === null
                         " style="text-align: center">
@@ -657,7 +660,7 @@
                 <div class="tab-content" *ngIf="currentTabGrid === 'complaint'">
                   <div class="tab-pane active fontawesome-demo" id="tab1">
                     <div id="biography">
-                      <div class="row" *ngIf="gridComplaint === undefined">
+                      <div class="row loading" *ngIf="gridComplaint === undefined">
                         <div class="lds-ellipsis">
                           <div></div>
                           <div></div>
@@ -665,13 +668,26 @@
                           <div></div>
                         </div>
                       </div>
-                      <div class="row-grid" *ngIf="gridComplaint !== undefined">
+                      <div class="row" *ngIf="gridComplaint !== undefined">
                         <button kendoButton [primary]="true" [icon]="'add'" style="width: auto; margin-bottom: 2vh"
                           (click)="openComplaintModal()">
                           {{ language.addComplaint }}
                         </button>
-                        <kendo-grid [data]="gridComplaint" [height]="390" [resizable]="true" [sortable]="true"
-                          [sort]="stateComplaint.sort" (sortChange)="
+
+                        <div class="grid-button">
+                          <div class="dropdown-grid">
+                            <button class="btn-grid" style="border-left: 1px solid #2a3582">
+                              <i class="fa fa-caret-down"></i>
+                            </button>
+                            <div class="dropdown-content-grid">
+                              <a (click)="exportComplaintPDF()"><span class="k-icon k-i-file-pdf"></span>
+                                {{ language.exportToPDF }}</a>
+
+                            </div>
+                          </div>
+                        </div>
+                        <kendo-grid #complaintGrid="kendoGrid" [data]="gridComplaint" [height]="390" [resizable]="true"
+                          [sortable]="true" [sort]="stateComplaint.sort" (sortChange)="
                             sortChange(
                               $event,
                               'stateComplaint',
@@ -679,6 +695,7 @@
                               'gridComplaintData'
                             )
                           " [loading]="loadingGridComplaint">
+
                           <kendo-grid-column field="date" title="{{ language.date }}" width="120">
                           </kendo-grid-column>
                           <kendo-grid-column field="complaint_title" title="{{ language.complaintValue }}" width="200">
@@ -702,6 +719,37 @@
                                 (click)="open('dialogComplaint', dataItem.id)"></button>
                             </ng-template>
                           </kendo-grid-column>
+
+                          <kendo-grid-pdf fileName="Complaints.pdf" [allPages]="allPages" paperSize="A4"
+                            [landscape]="true" [scale]="0.8" [repeatHeaders]="true">
+                            <kendo-grid-pdf-margin top="2cm" left="1cm" right="1cm" bottom="2cm">
+                            </kendo-grid-pdf-margin>
+                            <ng-template kendoGridPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
+                              <div class="page-template">
+                                <div class="header">
+                                  <div>
+                                    {{ language.pagerPage }} {{ pageNum }} {{ language.pagerOf }}
+                                    {{ totalPages }}
+                                  </div>
+                                </div>
+                              </div>
+                            </ng-template>
+
+                            <kendo-grid-column field="date" title="{{ language.date }}" width="120">
+                            </kendo-grid-column>
+                            <kendo-grid-column field="complaint_title" title="{{ language.complaintValue }}"
+                              width="160">
+                            </kendo-grid-column>
+                            <kendo-grid-column field="comment" title="{{ language.comment }}" width="150">
+                            </kendo-grid-column>
+                            <kendo-grid-column field="therapies_title" title="{{ language.therapyValue }}" width="120">
+                            </kendo-grid-column>
+                            <kendo-grid-column field="employee_name" title="{{ language.doctor }}" width="100">
+                            </kendo-grid-column>
+                            <kendo-grid-column field="cs" title="{{ language.cs }}" width="60">
+                            </kendo-grid-column>
+                          </kendo-grid-pdf>
+
                         </kendo-grid>
                       </div>
                     </div>
@@ -711,7 +759,7 @@
                 <div class="tab-content" *ngIf="currentTabGrid === 'therapy'">
                   <div class="tab-pane active fontawesome-demo" id="tab1">
                     <div id="biography">
-                      <div class="row" *ngIf="gridTherapy === undefined">
+                      <div class="row loading" *ngIf="gridTherapy === undefined">
                         <div class="lds-ellipsis">
                           <div></div>
                           <div></div>
@@ -719,6 +767,7 @@
                           <div></div>
                         </div>
                       </div>
+
                       <div class="row-grid" *ngIf="gridTherapy !== undefined">
                         <!-- <button
                           kendoButton
@@ -729,8 +778,23 @@
                         >
                           {{ language.addTherapy }}
                         </button> -->
-                        <kendo-grid [data]="gridTherapy" [height]="390" [resizable]="true" [sortable]="true"
-                          [sort]="stateTherapy.sort" (sortChange)="
+                        <div class="row w-100" style="padding: 0 15px; margin-bottom: 15px">
+                          <div class="grid-button">
+                            <div class="dropdown-grid">
+                              <button class="btn-grid" style="border-left: 1px solid #2a3582">
+                                <i class="fa fa-caret-down"></i>
+                              </button>
+                              <div class="dropdown-content-grid">
+
+                                <a (click)="exportTherapyPDF(true)"><span class="k-icon k-i-file-pdf"></span>
+                                  {{ language.exportToPDF }}</a>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <kendo-grid #therapyGrid="kendoGrid" [data]="gridTherapy" [height]="390" [resizable]="true"
+                          [sortable]="true" [sort]="stateTherapy.sort" (sortChange)="
                             sortChange(
                               $event,
                               'stateTherapy',
@@ -738,14 +802,12 @@
                               'gridTherapyData'
                             )
                           " [loading]="loadingGridTherapy">
+
                           <kendo-grid-column field="date" title="{{ language.date }}" width="140">
-                            <ng-template kendoGridCellTemplate let-dataItem>
-                              {{ dataItem.date | date: "dd.MM.yyyy" }}
-                            </ng-template>
                           </kendo-grid-column>
                           <kendo-grid-column field="time" title="{{ language.time }}" width="130">
                           </kendo-grid-column>
-                          <kendo-grid-column field="complaint_title" title="{{ language.complaintValue }}" width="150">
+                          <kendo-grid-column field="complaint_title" title="{{ language.complaintValue }}" width="130">
                           </kendo-grid-column>
                           <kendo-grid-column field="therapies_title" title="{{ language.therapyValue }}" width="120">
                           </kendo-grid-column>
@@ -762,17 +824,61 @@
                           </kendo-grid-column>
                           <kendo-grid-column field="em_title" title="{{ language.em }}" width="100">
                           </kendo-grid-column>
-                          <kendo-grid-column width="60">
+                          <kendo-grid-column width="40">
                             <ng-template kendoGridCellTemplate let-dataItem>
                               <button kendoButton [icon]="'k-icon k-i-edit'" (click)="editTherapy(dataItem)"></button>
                             </ng-template>
                           </kendo-grid-column>
-                          <kendo-grid-column width="60">
+                          <kendo-grid-column width="40">
                             <ng-template kendoGridCellTemplate let-dataItem>
                               <button kendoButton [icon]="'k-icon k-i-delete'"
                                 (click)="open('dialogTherapy', dataItem.id)"></button>
                             </ng-template>
                           </kendo-grid-column>
+
+                          <kendo-grid-pdf fileName="Therapy.pdf" [allPages]="allPages" paperSize="A4" [landscape]="true"
+                            [scale]="0.8" [repeatHeaders]="true">
+                            <kendo-grid-pdf-margin top="2cm" left="1cm" right="1cm" bottom="2cm">
+                            </kendo-grid-pdf-margin>
+                            <ng-template kendoGridPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
+                              <div class="page-template">
+                                <div class="header">
+                                  <div>
+                                    {{ language.pagerPage }} {{ pageNum }} {{ language.pagerOf }}
+                                    {{ totalPages }}
+                                  </div>
+                                </div>
+                              </div>
+                            </ng-template>
+
+                            <kendo-grid-column field="date" title="{{ language.date }}" width="140">
+                              <ng-template kendoGridCellTemplate let-dataItem>
+                                {{ dataItem.date | date: "dd.MM.yyyy" }}
+                              </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="time" title="{{ language.time }}" width="130">
+                            </kendo-grid-column>
+                            <kendo-grid-column field="complaint_title" title="{{ language.complaintValue }}"
+                              width="150">
+                            </kendo-grid-column>
+                            <kendo-grid-column field="therapies_title" title="{{ language.therapyValue }}" width="120">
+                            </kendo-grid-column>
+                            <kendo-grid-column field="therapies_previous_title" title="{{ language.treatmentValue }}"
+                              width="150">
+                            </kendo-grid-column>
+                            <kendo-grid-column field="category" title="{{ language.category }}" width="150">
+                            </kendo-grid-column>
+                            <kendo-grid-column field="comment" title="{{ language.comment }}" width="150">
+                            </kendo-grid-column>
+                            <kendo-grid-column field="cs_title" title="{{ language.cs }}" width="120">
+                            </kendo-grid-column>
+                            <kendo-grid-column field="state" title="{{ language.stateValue }}" width="120">
+                            </kendo-grid-column>
+                            <kendo-grid-column field="em_title" title="{{ language.em }}" width="100">
+                            </kendo-grid-column>
+
+                          </kendo-grid-pdf>
+
                         </kendo-grid>
                       </div>
                     </div>
@@ -782,7 +888,7 @@
                 <div class="tab-content" *ngIf="currentTabGrid === 'document'">
                   <div class="tab-pane active fontawesome-demo" id="tab1">
                     <div id="biography">
-                      <div class="row" *ngIf="documents === undefined">
+                      <div class="row loading" *ngIf="documents === undefined">
                         <div class="lds-ellipsis">
                           <div></div>
                           <div></div>
@@ -795,8 +901,22 @@
                           (click)="uploadOpen()">
                           {{ language.uploadDocument }}
                         </button>
-                        <kendo-grid [data]="documents" [height]="390" [resizable]="true" [sortable]="true"
-                          [sort]="stateDocument.sort" (sortChange)="
+
+                        <div class="grid-button">
+                          <div class="dropdown-grid">
+                            <button class="btn-grid" style="border-left: 1px solid #2a3582">
+                              <i class="fa fa-caret-down"></i>
+                            </button>
+                            <div class="dropdown-content-grid">
+                              <a (click)="exportDocumentsPDF(true)"><span class="k-icon k-i-file-pdf"></span>
+                                {{ language.exportToPDF }}</a>
+
+                            </div>
+                          </div>
+                        </div>
+
+                        <kendo-grid #documentsGrid="kendoGrid" [data]="documents" [height]="390" [resizable]="true"
+                          [sortable]="true" [sort]="stateDocument.sort" (sortChange)="
                             sortChange(
                               $event,
                               'stateDocument',
@@ -804,6 +924,7 @@
                               'documentsData'
                             )
                           " [loading]="loadingGridDocument">
+
                           <kendo-grid-column field="id" title="{{ language.documentId }}" width="100">
                           </kendo-grid-column>
                           <kendo-grid-column width="70">
@@ -852,6 +973,50 @@
                               </div>
                             </ng-template>
                           </kendo-grid-column>
+
+
+                          <kendo-grid-pdf fileName="Document.pdf" [allPages]="allPages" paperSize="A4"
+                            [landscape]="true" [scale]="0.8" [repeatHeaders]="true">
+                            <kendo-grid-pdf-margin top="2cm" left="1cm" right="1cm" bottom="2cm">
+                            </kendo-grid-pdf-margin>
+                            <ng-template kendoGridPDFTemplate let-pageNum="pageNum" let-totalPages="totalPages">
+                              <div class="page-template">
+                                <div class="header">
+                                  <div>
+                                    {{ language.pagerPage }} {{ pageNum }} {{ language.pagerOf }}
+                                    {{ totalPages }}
+                                  </div>
+                                </div>
+                              </div>
+                            </ng-template>
+
+                            <kendo-grid-column field="id" title="{{ language.documentId }}" width="100">
+                            </kendo-grid-column>
+                            <kendo-grid-column width="70">
+                              <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                                <span *ngIf="dataItem.type === 'application/pdf'" class="k-icon k-i-pdf"></span>
+                                <span *ngIf="
+                                    dataItem.type ===
+                                    'application/vnd.openxmlformats'
+                                  " class="k-icon k-i-file-word"></span>
+                                <span *ngIf="dataItem.type === 'image/png'" class="k-icon k-i-image"></span>
+                                <span *ngIf="dataItem.type === 'text/plain'" class="k-icon k-i-file-txt"></span>
+                              </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="name" title="{{ language.documentName }}" width="180">
+                            </kendo-grid-column>
+                            <kendo-grid-column field="size" title="{{ language.documentSize }}" width="120">
+                            </kendo-grid-column>
+                            <kendo-grid-column field="date" title="{{ language.documentDate }}" width="120">
+                              <ng-template kendoGridCellTemplate let-dataItem>
+                                {{ dataItem.date | date: "dd/MM/yyyy" }}
+                              </ng-template>
+                            </kendo-grid-column>
+                            <kendo-grid-column field="description" title="{{ language.documentDescription }}"
+                              width="150">
+                            </kendo-grid-column>
+
+                          </kendo-grid-pdf>
                         </kendo-grid>
                       </div>
                     </div>
@@ -1251,15 +1416,16 @@
                 }}</a>
             </li>
           </ul>
-          <kendo-dialog *ngIf="showDialogChangeTab" title="{{ language?.changesWontBeSavedTitle }}" [minWidth]="250" [width]="450">
-          <p style="margin: 30px; text-align: center">
-            {{ language?.changesWontBeSaved }}
-          </p>
-          <kendo-dialog-actions>
-            <button kendoButton (click)="receiveConfirmChangeTab(false)">{{language.no}}</button>
-            <button kendoButton (click)="receiveConfirmChangeTab(true)" primary="true">{{language.yes}}</button>
-          </kendo-dialog-actions>
-        </kendo-dialog>
+          <kendo-dialog *ngIf="showDialogChangeTab" title="{{ language?.changesWontBeSavedTitle }}" [minWidth]="250"
+            [width]="450">
+            <p style="margin: 30px; text-align: center">
+              {{ language?.changesWontBeSaved }}
+            </p>
+            <kendo-dialog-actions>
+              <button kendoButton (click)="receiveConfirmChangeTab(false)">{{language.no}}</button>
+              <button kendoButton (click)="receiveConfirmChangeTab(true)" primary="true">{{language.yes}}</button>
+            </kendo-dialog-actions>
+          </kendo-dialog>
           <!--PROFILE-->
           <div class="tab-content" *ngIf="currentTab === 'profile'">
             <div id="profile-tab" class="tab-pane active">
@@ -1707,4 +1873,26 @@
       <modal-footer class="modal-footer-none"> </modal-footer>
     </modal>
   </div>
+
+  <!--Update profile image modal-->
+  <modal #chooseImage modalClass="modal-lg">
+    <modal-header>
+      <h4>{{ language.chooseImage }}</h4>
+    </modal-header>
+    <modal-content>
+      <form name="updateImageForm" (ngSubmit)="submitPhoto()">
+        <input id="file-upload" type="file" name="updateImageInput" class="choose-image-input"
+          (input)="fileChoosen($event)" />
+        <label for="file-upload" class="custom-file-upload">
+          {{ language.chooseFile }}
+        </label>
+        <span *ngIf="!isFileChoosen" class="choose-image-label">{{ language.chooseImage }}</span>
+        <span *ngIf="isFileChoosen" class="choose-image-label">{{ fileName }}</span>
+        <div><span>{{ language.maximumImageSize }}</span></div>
+        <button class="update-image-submit-btn" type="submit">
+          {{ language.submitImage }}
+        </button>
+      </form>
+    </modal-content>
+  </modal>
 </div>

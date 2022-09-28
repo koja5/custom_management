@@ -2,7 +2,16 @@
   <div class="spinner loading"></div>
 </div>
 
-<div *ngIf="!loading && selectedUser === undefined" style="height: 100%">
+<div *ngIf="!loading && selectedUser === undefined" class="position-relative">
+
+    <div class="position-absolute columns-dropdown">
+        <app-column-chooser 
+            [columns]="columns" 
+            [isKendoGrid]="true" 
+            (outputHiddenColumns)="onOutputHiddenColumns($event)" 
+            [type]="'Customers'"></app-column-chooser>
+    </div>
+
   <kendo-grid #grid="kendoGrid" *ngIf="language !== undefined" [data]="gridView" [style.height]="height"
     [resizable]="true" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter"
     [sortable]="true" [pageable]="pageable" (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey"
@@ -22,10 +31,10 @@
           {{ language.newCustomer }}
         </button>
         <div class="dropdown-grid">
-          <button class="btn-grid" style="border-left: 1px solid #2a3582">
+          <button class="btn-grid" style="border-left: 1px solid #2a3582;">
             <i class="fa fa-caret-down"></i>
           </button>
-          <div class="dropdown-content-grid">
+          <div class="dropdown-content-grid" style="z-index: 99;">
             <a style="padding: 0px"><label class="uploadFromExcel-{{ theme }}"
                 style="padding: 12px; cursor: pointer"><span class="k-icon k-i-file-excel"></span>
                 {{ language.uploadFromExcel
@@ -49,17 +58,17 @@
         </div>
       </div>
     </ng-template>
-    <kendo-grid-column field="shortname" title="{{ language.username }}" width="120">
+    <kendo-grid-column field="shortname" title="{{ language.username }}" width="120" *ngIf="!isHidden('Username')">
     </kendo-grid-column>
-    <kendo-grid-column field="firstname" title="{{ language.firstname }}" width="120">
+    <kendo-grid-column field="firstname" title="{{ language.firstname }}" width="120" *ngIf="!isHidden('Firstname')">
     </kendo-grid-column>
-    <kendo-grid-column field="lastname" title="{{ language.lastname }}" width="120">
+    <kendo-grid-column field="lastname" title="{{ language.lastname }}" width="120" *ngIf="!isHidden('Lastname')">
     </kendo-grid-column>
-    <kendo-grid-column field="telephone" title="{{ language.telephone }}" width="120">
+    <kendo-grid-column field="telephone" title="{{ language.telephone }}" width="120" *ngIf="!isHidden('Telephone')">
     </kendo-grid-column>
-    <kendo-grid-column field="mobile" title="{{ language.mobile }}" width="120">
+    <kendo-grid-column field="mobile" title="{{ language.mobile }}" width="120" *ngIf="!isHidden('Mobile')">
     </kendo-grid-column>
-    <kendo-grid-column field="email" title="{{ language.email }}" width="150">
+    <kendo-grid-column field="email" title="{{ language.email }}" width="150" *ngIf="!isHidden('Email address')">
     </kendo-grid-column>
     <kendo-grid-column title="{{ language.preview }}" width="100">
       <ng-template kendoGridCellTemplate let-dataItem>
@@ -285,4 +294,4 @@
 <!--<kendo-upload [saveUrl]="uploadSaveUrl" [removeUrl]="uploadRemoveUrl" [autoUpload]="false">
 
 </kendo-upload>-->
-<app-base-date *ngIf="selectedUser !== undefined" [data]="selectedUser" [imagePath]="imagePath" [type]="'details'"></app-base-date>
+<app-base-date *ngIf="selectedUser !== undefined" [data]="selectedUser" [imagePath]="imagePath" [type]="'details'" (emitImage)="emitImage($event)"></app-base-date>

@@ -14,18 +14,19 @@ const sendSmsFromMail = require("./ftpUploadSMS");
 const { delay } = require("rxjs-compat/operator/delay");
 const { concat } = require("rxjs-compat/operator/concat");
 const macAddress = require("os").networkInterfaces();
-const multer = require('multer');
+const multer = require("multer");
 const { Blob } = require("buffer");
+const mailAPI = require("./mailAPI");
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, 'server/routes/uploads/user-profile-images')
-    },
+  destination: (req, file, cb) => {
+    cb(null, "server/routes/uploads/user-profile-images");
+  },
 
-    filename: (req, file, cb) => {
-      cb(null, Date.now() + path.extname(file.originalname))
-    }
-})
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
 
 const upload = multer({ storage: storage, limits: { fileSize: 65536 } });
 
@@ -37,14 +38,17 @@ function readImageFile(file) {
 }
 
 function deleteImage(currentImage) {
-  if(currentImage) {
-    fs.unlink('server/routes/uploads/user-profile-images/' + currentImage, (err) => {
-      if (err) {
-        console.error(err)
-        return
+  if (currentImage) {
+    fs.unlink(
+      "server/routes/uploads/user-profile-images/" + currentImage,
+      (err) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        //file removed
       }
-      //file removed
-    })
+    );
   }
 }
 
@@ -63,80 +67,6 @@ var connection = mysql.createPool({
   password: process.env.password,
   database: process.env.database,
 });
-
-router.post("/uploadProfileImage/:id/:userType", upload.single('updateImageInput'), (req, res) => {
-  if (!req.file) {
-    return res.send({
-      success: false
-    });
-  } 
-  const data = readImageFile('server/routes/uploads/user-profile-images/' + req.file.filename);
-  let imageName = req.file.filename;
-  let currentImage;
-  const id = req.params.id;
-  const userType = req.params.userType;
-
-  if(userType == 0 || userType == 1) {
-    connection.query("SELECT * FROM users_superadmin WHERE id = ?", id, function (err, result) {
-      if(result[0].imgName) {
-        currentImage = result[0].imgName;
-      }
-    });
-
-    connection.query("UPDATE users_superadmin SET img = ? WHERE id = ?", [data, id], function(err, res) {
-        if (err) {
-          throw err;
-        }else {
-          deleteImage(currentImage);
-        } 
-    })
-
-    connection.query("UPDATE users_superadmin SET imgName = ? WHERE id = ?", [imageName, id], function(err, res) {
-      if (err) throw err;
-    })
-
-  } else if (userType == 2 || userType == 3 || userType == 5 || userType == 6) {
-    connection.query("SELECT * FROM users WHERE id = ?", id, function (err, result) {
-      if(result[0].imgName) {
-        currentImage = result[0].imgName;
-      }
-    });
-
-    connection.query("UPDATE users SET img = ? WHERE id = ?", [data, id], function(err, res) {
-        if (err) {
-          throw err;
-        }else {
-          deleteImage(currentImage);
-        } 
-    })
-
-    connection.query("UPDATE users SET imgName = ? WHERE id = ?", [imageName, id], function(err, res) {
-      if (err) throw err;
-    })
-  } else {
-    connection.query("SELECT * FROM customers WHERE id = ?", id, function (err, result) {
-      if(result[0].imgName) {
-        currentImage = result[0].imgName;
-      }
-    });
-
-    connection.query("UPDATE customers SET img = ? WHERE id = ?", [data, id], function(err, res) {
-        if (err) {
-          throw err;
-        }else {
-          deleteImage(currentImage);
-        } 
-    })
-    
-    connection.query("UPDATE customers SET imgName = ? WHERE id = ?", [imageName, id], function(err, res) {
-      if (err) throw err;
-    })
-  }
-
-  return res.send({
-        success: true
-      });
-})
 
 /*var connection = mysql.createPool({
   host: 'localhost',
@@ -6370,7 +6300,10 @@ router.post("/updateTemplateAccount", function (req, res, next) {
 
     conn.query(
       "select * from users_superadmin where id = " +
-       req.body.account_id + " and password = '" + req.body.password + "'",
+        req.body.account_id +
+        " and password = '" +
+        req.body.password +
+        "'",
       function (err, rows) {
         if (!err) {
           if (!err) {
@@ -6416,22 +6349,24 @@ router.post("/updateTemplateAccount", function (req, res, next) {
   });
 });
 
-
 router.get("/getTemplateAccount", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
     }
-    conn.query("SELECT ta.*, us.password from template_account ta join users_superadmin us on ta.account_id = us.id", function (err, rows) {
-      conn.release();
-      if (!err) {
-        res.json(rows);
-      } else {
-        logger.log("error", err.sql + ". " + err.sqlMessage);
-        res.json(err);
+    conn.query(
+      "SELECT ta.*, us.password from template_account ta join users_superadmin us on ta.account_id = us.id",
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
       }
-    });
+    );
   });
 });
 
@@ -8345,7 +8280,6 @@ router.get("/deleteHoliday/:id", (req, res, next) => {
   }
 });
 
-
 router.post("/deleteHolidaysByTemplateId", (req, res, next) => {
   try {
     connection.getConnection(function (err, conn) {
@@ -8372,7 +8306,6 @@ router.post("/deleteHolidaysByTemplateId", (req, res, next) => {
     res.json(ex);
   }
 });
-
 
 router.get("/getHolidays/:userId", function (req, res, next) {
   connection.getConnection(function (err, conn) {
@@ -8866,15 +8799,37 @@ router.post("/updateFaqTopic", function (req, res, next) {
   });
 });
 
-router.get("/getFaqTopics/:superAdminId", function (req, res, next) {
-  var superAdminId = req.params.superAdminId;
+router.get("/getFaqTopics/:countryCode", function (req, res, next) {
+  var countryCode = req.params.countryCode;
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
     }
     conn.query(
-      "SELECT * FROM `help_topics` where superAdminId = '" + superAdminId + "'",
+      "SELECT * FROM `help_topics` WHERE `countryCode`='"+countryCode+"'",
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
+router.get("/getFaqTopic/:topicId", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    var topicId = req.params.topicId;
+    conn.query(
+      "SELECT * FROM `help_topics` WHERE id="+topicId,
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -8979,34 +8934,27 @@ router.post("/updateFaq", function (req, res, next) {
   });
 });
 
-router.get(
-  "/getFaqQuestions/:topicId/:superAdminId",
-  function (req, res, next) {
-    connection.getConnection(function (err, conn) {
-      if (err) {
-        logger.log("error", err.sql + ". " + err.sqlMessage);
-        res.json(err);
-      }
-      var topicId = req.params.topicId;
-      var superAdminId = req.params.superAdminId;
-      conn.query(
-        "SELECT * FROM `faq_list` where helpTopicId=" +
-          topicId +
-          " and superAdminId=" +
-          superAdminId,
-        function (err, rows) {
-          conn.release();
-          if (!err) {
-            res.json(rows);
-          } else {
-            res.json(err);
-            logger.log("error", err.sql + ". " + err.sqlMessage);
-          }
+router.get("/getFaqQuestions/:topicId", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    var topicId = req.params.topicId;
+    conn.query(
+      "SELECT * FROM `faq_list` WHERE `helpTopicId`="+topicId,
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
-      );
-    });
-  }
-);
+      }
+    );
+  });
+});
 
 router.post("/deleteFaq", function (req, res, next) {
   connection.getConnection(function (err, conn) {
@@ -9216,7 +9164,6 @@ router.post("/sendFromContactForm", function (req, res, next) {
 
 /* HOLIDAY TEMPLATE */
 
-
 router.get("/getHolidayTemplates", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
@@ -9234,7 +9181,6 @@ router.get("/getHolidayTemplates", function (req, res, next) {
     });
   });
 });
-
 
 router.post("/createHolidayTemplate", function (req, res, next) {
   connection.getConnection(function (err, conn) {
@@ -9329,6 +9275,46 @@ router.post("/deleteHolidayTemplate", (req, res, next) => {
 
 /* END HOLIDAY TEMPLATE */
 
+/* UPLOAD PROFILE IMAGE FOR EMPLOYEES*/
+
+router.post("/uploadeEmployeeProfileImage/:id", upload.single('updateImageInput'), (req, res) => {
+  if (!req.file) {
+    return res.send({
+      success: false
+    });
+  } 
+  const data = readImageFile('server/routes/uploads/user-profile-images/' + req.file.filename);
+  let imageName = req.file.filename;
+  let currentImage;
+  const id = req.params.id;
+
+  connection.query("SELECT * FROM users WHERE id = ?", id, function (err, result) {
+    if(result[0] && result[0].imgName) {
+      currentImage = result[0].imgName;
+    }
+  });
+
+  connection.query("UPDATE users SET img = ? WHERE id = ?", [data, id], function(err, res) {
+      if (err) {
+        throw err;
+      }else {
+        deleteImage(currentImage);
+      } 
+  })
+
+  connection.query("UPDATE users SET imgName = ? WHERE id = ?", [imageName, id], function(err, res) {
+    if (err) throw err;
+  })
+  
+
+  return res.send({
+        success: true
+      });
+})
+
+
+/* END UPLOAD PROFILE IMAGE FOR EMPLOYEES */
+
 /* UPLOAD PROFILE IMAGE */
 
 router.post("/uploadProfileImage/:id/:userType", upload.single('updateImageInput'), (req, res) => {
@@ -9337,39 +9323,282 @@ router.post("/uploadProfileImage/:id/:userType", upload.single('updateImageInput
       success: false
     });
   } 
-
   const data = readImageFile('server/routes/uploads/user-profile-images/' + req.file.filename);
+  let imageName = req.file.filename;
+  let currentImage;
   const id = req.params.id;
   const userType = req.params.userType;
 
   if(userType == 0 || userType == 1) {
+    connection.query("SELECT * FROM users_superadmin WHERE id = ?", id, function (err, result) {
+      if( result[0] && result[0].imgName) {
+        currentImage = result[0].imgName;
+      }
+    });
+
     connection.query("UPDATE users_superadmin SET img = ? WHERE id = ?", [data, id], function(err, res) {
+        if (err) {
+          throw err;
+        }else {
+          deleteImage(currentImage);
+        } 
+    })
+
+    connection.query("UPDATE users_superadmin SET imgName = ? WHERE id = ?", [imageName, id], function(err, res) {
       if (err) throw err;
     })
+
   } else if (userType == 2 || userType == 3 || userType == 5 || userType == 6) {
-    connection.query("UPDATE users SET img = ? WHERE id = ?", [data, id], function(err, res) {
-      if (err) {
-        return res.status(400).send({
-          message: 'This is an error!'
-       });
+    connection.query("SELECT * FROM users WHERE id = ?", id, function (err, result) {
+      if(result[0] && result[0].imgName) {
+        currentImage = result[0].imgName;
       }
+    });
+
+    connection.query("UPDATE users SET img = ? WHERE id = ?", [data, id], function(err, res) {
+        if (err) {
+          throw err;
+        }else {
+          deleteImage(currentImage);
+        } 
+    })
+
+    connection.query("UPDATE users SET imgName = ? WHERE id = ?", [imageName, id], function(err, res) {
+      if (err) throw err;
     })
   } else {
-    connection.query("UPDATE customers SET img = ? WHERE id = ?", [data, id], function(err, res) {
-      if (err) {
-        return res.status(400).send({
-          message: 'This is an error!'
-       });
+    connection.query("SELECT * FROM customers WHERE id = ?", id, function (err, result) {
+      if(result[0] && result[0].imgName) {
+        currentImage = result[0].imgName;
       }
+    });
+
+    connection.query("UPDATE customers SET img = ? WHERE id = ?", [data, id], function(err, res) {
+        if (err) {
+          throw err;
+        }else {
+          deleteImage(currentImage);
+        } 
+    })
+    
+    connection.query("UPDATE customers SET imgName = ? WHERE id = ?", [imageName, id], function(err, res) {
+      if (err) throw err;
     })
   }
 
-  
   return res.send({
         success: true
       });
 })
-
 /* END UPLOAD PROFILE IMAGE */
+
+/* Registered Clinics */
+
+router.get('/getRegisteredClinics', function (req, res) {
+
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query("SELECT * from users_superadmin", function (err, rows) {
+      conn.release();
+      if (!err) {
+        res.json(rows);
+      } else {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      }
+    });
+  });
+});
+
+router.post("/createClinic", function (req, res, next) {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
+      }
+
+      var createPassword;
+
+      if(!req.body.password) {
+        var password = passwordGenerate.generate({
+          length: 10,
+          numbers: true,
+        });
+        createPassword = sha1(password);
+      }else {
+        createPassword = req.body.password;
+      }
+      
+      response = {};
+      const data = {
+        id: req.body.id,
+        password: createPassword,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        shortname: req.body.shortname,
+        street: req.body.street,
+        zipcode: req.body.zipcode,
+        place: req.body.place,
+        email: req.body.email,
+        telephone: req.body.telephone,
+        mobile: req.body.mobile,
+        birthday: req.body.birthday,
+        incompanysince: req.body.incompanysince,
+        type: 0,
+        active: req.body.active,
+        companyname: req.body.companyname,
+      };
+      
+      conn.query(
+        "insert users_superadmin SET ?",
+        data,
+        function (err, rows) {
+          conn.release();
+          if (!err) {
+            if (!err) {
+              response.id = rows.id;
+              response.success = true;
+              data['language'] = req.body.language;
+              mailAPI.sendMailAdminInfo(data);
+            } else {
+              response.success = false;
+            }
+            res.json(response);
+          } else {
+            logger.log("error", err.sql + ". " + err.sqlMessage);
+            res.json(err);
+          }
+        }
+      );
+    });
+});
+
+router.post("/updateRegisteredClinic", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+
+    var createPassword;
+
+      if(!req.body.password) {
+        var password = passwordGenerate.generate({
+          length: 10,
+          numbers: true,
+        });
+        createPassword = sha1(password);
+      }else {
+        createPassword = req.body.password;
+      }
+
+    conn.query(
+      "select * from users_superadmin where id = ?", req.body.id,
+      function (err, rows) {
+        if (!err) {
+          if (!err) {
+            if (rows.length > 0) {
+              const data = {
+                id: req.body.id,
+                password: createPassword,
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
+                shortname: req.body.shortname,
+                street: req.body.street,
+                zipcode: req.body.zipcode,
+                place: req.body.place,
+                email: req.body.email,
+                telephone: req.body.telephone,
+                mobile: req.body.mobile,
+                birthday: req.body.birthday,
+                incompanysince: req.body.incompanysince,
+                type: 0,
+                active: req.body.active,
+                companyname: req.body.companyname,
+              };
+              conn.query(
+                "update users_superadmin SET ? where id = ?",
+                [data, data.id],
+                function (err, rows) {
+                  conn.release();
+                  if (!err) {
+                    if (!err) {
+                      res.json(true);
+                    } else {
+                      res.json(false);
+                    }
+                  } else {
+                    logger.log("error", err.sql + ". " + err.sqlMessage);
+                    res.json(err);
+                  }
+                }
+              );
+            } else {
+              res.json(err);
+            }
+          } else {
+            res.json(err);
+          }
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
+      }
+    );
+  });
+});
+
+router.post("/deleteRegisteredClinic", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "delete from users_superadmin where id = '" + req.body.id + "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(false);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.get('/getClinicEmployees/:id', function (req, res) {
+  const id = req.params.id;
+
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.json(err);
+    }
+    conn.query("SELECT * FROM users WHERE users.superadmin = ?", id, function (err, result) {
+      if (err) {
+        console.log(err);
+        res.json(err);
+      }else {
+        res.json(result);
+      }
+    });
+  });
+});
+
+/* End Registered Clinics */
 
 module.exports = router;

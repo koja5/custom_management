@@ -1,13 +1,16 @@
 <div class="container">
   <div class="row">
-    <div class="search">
+    <div class="col-sm-3 p-0 search mt-3">
       <kendo-textbox-container floatingLabel="{{ language.search }}">
         <input kendoTextBox (input)="onFilter($event.target.value)" />
       </kendo-textbox-container>
     </div>
-    <div class="float-right mt-5" *ngIf="userSuperAdmin">
-      <button kendoButton [icon]="'add'" (click)="addNewModal()" [primary]="true" class="addButton">
-        {{ language.newFaq }}
+    <div class="col-sm-6 p-0 text-center mt-5 text-uppercase font-weight-bold">
+      <label>{{ faqTopic?.name }}</label>
+    </div>
+    <div class="col-sm-3 p-0 mt-5 mr-4 float-right" *ngIf="userSuperAdmin">
+      <button kendoButton [icon]="'add'" (click)="addNewModal()" [primary]="true" class="addButton float-right">
+      {{ language.newFaq }}
       </button>
     </div>
   </div>
@@ -16,8 +19,8 @@
       <kendo-panelbar #panelbar>
         <kendo-panelbar-item [title]="item.question" *ngFor="let item of filterList">
           <ng-template kendoPanelBarItemTitle *ngIf="userSuperAdmin">
-            <button kendoButton (click)="openEditFaqModal(item, $event)" [primary]="false" class="p-2.5"><i class="fa fa-edit" (click)="onIconEvent(item, $event, 'edit')"></i></button>
-            <button kendoButton (click)="deleteQuestion(item, $event)" [primary]="false" class="p-2.5"><i class="fa fa-trash" (click)="onIconEvent(item, $event, 'delete')"></i></button>
+            <button kendoButton (click)="openEditFaqModal(item, $event)" [primary]="false" class="p-3"><i class="fa fa-edit" (click)="onIconEvent(item, $event, 'edit')"></i></button>
+            <button kendoButton (click)="deleteQuestion(item, $event)" [primary]="false" class="p-3"><i class="fa fa-trash" (click)="onIconEvent(item, $event, 'delete')"></i></button>
           </ng-template>
 
           <ng-template kendoPanelBarContent>

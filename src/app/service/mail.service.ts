@@ -49,6 +49,12 @@ export class MailService {
       .map((res) => res);
   }
 
+  public sendInfoToSuperadminForCreatedAccount(data) {
+    return this.http
+      .post("/api/sendInfoToSuperadminForCreatedAccount", data)
+      .map((res) => res);
+  }
+
   public sendInfoForApproveReservation(data) {
     return this.http
       .post("/api/sendInfoForApproveReservation", data)
