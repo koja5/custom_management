@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild, HostListener, ElementRef } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  HostListener,
+  ElementRef,
+} from "@angular/core";
 import { Modal } from "ngx-modal";
 import { CustomersService } from "../../../service/customers.service";
 import { StoreService } from "../../../service/store.service";
@@ -24,9 +30,9 @@ import { HelpService } from "src/app/service/help.service";
 import { MailService } from "src/app/service/mail.service";
 import { PackLanguageService } from "src/app/service/pack-language.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
-import { StorageService } from "src/app/service/storage.service";
 import { Router } from "@angular/router";
 import { checkIfInputValid } from "../../../shared/utils";
+import { DomSanitizer } from "@angular/platform-browser";
 
 const newLocal = "data";
 @Component({
@@ -36,9 +42,10 @@ const newLocal = "data";
 })
 export class CustomersComponent implements OnInit {
   @ViewChild(DataBindingDirective) dataBinding: DataBindingDirective;
-  @ViewChild('customer') customer: Modal;
-  @ViewChild('grid') grid;
-  @ViewChild('patientFormRegistrationDialog') patientFormRegistrationDialog: Modal;
+  @ViewChild("customer") customer: Modal;
+  @ViewChild("grid") grid;
+  @ViewChild("patientFormRegistrationDialog")
+  patientFormRegistrationDialog: Modal;
   public data = new CustomerModel();
   public unamePattern = "^[a-z0-9_-]{8,15}$";
   public emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$";
@@ -55,7 +62,7 @@ export class CustomersComponent implements OnInit {
   public storeLocation: any;
   public language: any;
   public selectedUser: any;
-  public imagePath = "defaultUser";
+  public imagePath: any = "defaultUser";
   public loading = true;
   // public uploadSaveUrl = 'http://localhost:3000/api/uploadImage'; // should represent an actual API endpoint
   public uploadSaveUrl = "http://116.203.85.82:8080/uploadImage";
@@ -90,6 +97,10 @@ export class CustomersComponent implements OnInit {
   savePage: any = {};
   currentUrl: string;
 
+  public showColumnPicker = false;
+  public columns: string[] = ["Username", "Firstname", "Lastname", "Telephone", "Mobile", "Email address"];
+  public hiddenColumns: string[] = [];
+
   constructor(
     private service: CustomersService,
     private storeService: StoreService,
@@ -97,16 +108,18 @@ export class CustomersComponent implements OnInit {
     private helpService: HelpService,
     private mailService: MailService,
     private packLanguage: PackLanguageService,
-    private router: Router
+    private router: Router,
+    public sanitizer: DomSanitizer
   ) {
     // this.excelIO = new Excel.IO();
     this.allData = this.allData.bind(this);
   }
 
-
   ngOnInit() {
     this.height = this.helpService.getHeightForGrid();
     this.data.gender = "male";
+    this.data['type'] = 4;
+
     this.getCustomers();
 
     if (localStorage.getItem("language") !== null) {
@@ -136,20 +149,19 @@ export class CustomersComponent implements OnInit {
     this.currentUrl = this.router.url;
 
     this.savePage = this.helpService.getGridPageSize();
-    if(this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
+    if (this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
       this.state.skip = this.savePage[this.currentUrl];
-      this.state.take = this.savePage[this.currentUrl + 'Take'];
+      this.state.take = this.savePage[this.currentUrl + "Take"];
     }
   }
-
+  
   getCustomers() {
     this.service.getCustomers(localStorage.getItem("superadmin"), (val) => {
-      console.log(val);
       if (val !== null) {
         this.currentLoadData = val;
         this._allData = <ExcelExportData>{
           data: process(this.currentLoadData, this.state).data,
-        }
+        };
         this.gridData = {
           data: val,
         };
@@ -167,21 +179,21 @@ export class CustomersComponent implements OnInit {
   }
 
   receiveConfirm(event: boolean): void {
-    if(event) {
+    if (event) {
       this.customer.close();
       this.isFormDirty = false;
     }
-      this.showDialog = false;
+    this.showDialog = false;
   }
 
   confirmClose(): void {
     this.customer.modalRoot.nativeElement.focus();
-    if(this.isFormDirty) {
+    if (this.isFormDirty) {
       this.showDialog = true;
-    }else {
-      this.customer.close()
+    } else {
+      this.customer.close();
       this.showDialog = false;
-      this.isFormDirty = false
+      this.isFormDirty = false;
     }
   }
 
@@ -199,7 +211,7 @@ export class CustomersComponent implements OnInit {
     this.customer.closeOnOutsideClick = false;
     this.customer.hideCloseButton = true;
     this.customer.open();
-    
+
   }
 
   initializeParams() {
@@ -217,12 +229,11 @@ export class CustomersComponent implements OnInit {
       attention: "",
       physicalComplaint: "",
       isConfirm: false,
-      language: null
+      language: null,
     };
   }
 
   createCustomer(form) {
-    console.log(this.data);
     this.data.storeId = localStorage.getItem("superadmin");
     this.service.createCustomer(this.data, (val) => {
       if (val.success) {
@@ -245,7 +256,8 @@ export class CustomersComponent implements OnInit {
           type: "success",
         });
         this.data.password = val.password;
-        this.data.language = this.packLanguage.getLanguageForCreatedPatientAccount();
+        this.data.language =
+          this.packLanguage.getLanguageForCreatedPatientAccount();
         this.data.superadmin = this.helpService.getSuperadmin();
         this.mailService
           .sendInfoToPatientForCreatedAccount(this.data)
@@ -291,7 +303,7 @@ export class CustomersComponent implements OnInit {
     this.loadProducts();
 
     this.savePage[this.currentUrl] = event.skip;
-    this.savePage[this.currentUrl + 'Take'] = event.take;
+    this.savePage[this.currentUrl + "Take"] = event.take;
     this.helpService.setGridPageSize(this.savePage);
   }
 
@@ -300,7 +312,14 @@ export class CustomersComponent implements OnInit {
   }
 
   previewUser(selectedUser) {
-    console.log(selectedUser);
+    if (selectedUser.img && selectedUser.img.data.length !== 0) {
+      this.imagePath = this.helpService.setUserProfileImagePath(selectedUser);;
+    } else {
+      this.imagePath =
+        selectedUser.gender == "male"
+          ? "../../../../../assets/images/users/male-patient.png"
+          : "../../../../../assets/images/users/female-patient.png";
+    }
     this.selectedUser = selectedUser;
   }
 
@@ -309,7 +328,6 @@ export class CustomersComponent implements OnInit {
   }
 
   action(event) {
-    console.log(event);
     if (event === "yes") {
       this.customerDialogOpened = false;
       setTimeout(() => {
@@ -396,7 +414,7 @@ export class CustomersComponent implements OnInit {
   }
 
   public exportToExcelData(grid: GridComponent, allPages: boolean): void {
-    console.log('allPages ', allPages);
+    console.log("allPages ", allPages);
 
     if (allPages) {
       var myState: State = {
@@ -406,30 +424,15 @@ export class CustomersComponent implements OnInit {
 
       this._allData = <ExcelExportData>{
         data: process(this.currentLoadData, myState).data,
-      }
-
-
+      };
     } else {
-
       this._allData = <ExcelExportData>{
         data: process(this.currentLoadData, this.state).data,
-      }
+      };
     }
-
   }
 
   public allData(): ExcelExportData {
-    // var myState: State = this.state;
-    // myState.skip = 0;
-    // myState.take = this.gridData.total;
-    // const result: ExcelExportData = {
-    //   data: process(this.currentLoadData, this.state).data
-    // };
-
-    // console.log(result);
-
-    // return result;
-
     return this._allData;
   }
 
@@ -651,7 +654,7 @@ export class CustomersComponent implements OnInit {
     const data = {
       email: this.patientMail,
       link: this.helpService.getLinkForPatientFormRegistration(),
-      language: this.packLanguage.getLanguageForPatientRegistrationForm()
+      language: this.packLanguage.getLanguageForPatientRegistrationForm(),
     };
     this.patientFormRegistrationDialog.close();
     this.mailService.sendPatientFormRegistration(data).subscribe((data) => {
@@ -662,5 +665,24 @@ export class CustomersComponent implements OnInit {
         this.helpService.errorToastr(this.language.errorSendFormToMail, "");
       }
     });
+  }
+
+  emitImage(event) {
+    this.getCustomers()
+    setTimeout(() => {
+      this.currentLoadData.forEach((el: any) => {
+        if(el.id == event.id) {
+          this.selectedUser.img = el.img;
+        }
+      })
+      this.previewUser(this.selectedUser);
+    }, 1000);
+  }
+  public isHidden(columnName: string): boolean {
+    return this.hiddenColumns.indexOf(columnName) > -1;
+  }
+
+  public onOutputHiddenColumns(columns) {
+    this.hiddenColumns = columns;
   }
 }

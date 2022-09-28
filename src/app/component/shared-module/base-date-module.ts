@@ -12,11 +12,15 @@ import { DropDownsModule } from "@progress/kendo-angular-dropdowns";
 import { IntlModule } from "@progress/kendo-angular-intl";
 import { DialogModule } from "@progress/kendo-angular-dialog";
 import { DialogsModule } from "@progress/kendo-angular-dialog";
-import { GridModule } from "@progress/kendo-angular-grid";
 import { ModalModule } from "ngx-modal";
 import { FileUploadModule } from "ng2-file-upload";
 import { SendSmsComponent } from "../dashboard/sms/send-sms/send-sms.component";
 import { SendEmailComponent } from "../dashboard/email/send-email/send-email.component";
+import {
+  GridModule,
+  ExcelModule,
+  PDFModule,
+} from "@progress/kendo-angular-grid";
 
 @NgModule({
   declarations: [BaseDateComponent, SendSmsComponent, SendEmailComponent],
@@ -35,8 +39,10 @@ import { SendEmailComponent } from "../dashboard/email/send-email/send-email.com
     GridModule,
     ModalModule,
     FileUploadModule,
+    ExcelModule,
+    PDFModule
   ],
   providers: [],
   bootstrap: [],
 })
-export class BaseDateSharedModule {}
+export class BaseDateSharedModule { }

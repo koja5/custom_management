@@ -1,71 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>ClinicNode - Management System</title>
-    <base href="/" />
 
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title>ClinicNode - Management System</title>
+  <base href="/" />
 
-    <style>
-      .spinner.loading {
-        padding: 15px;
-        position: relative;
-        text-align: center;
-        position: absolute;
-        top: 50%;
-        left: 50%;
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    .spinner.loading {
+      padding: 15px;
+      position: relative;
+      text-align: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+    }
+
+    .spinner.loading {
+      content: "";
+      position: absolute;
+      border-width: 8px;
+      border-style: solid;
+      border-color: #091467 #ccc #ccc;
+      border-radius: 100%;
+      animation: rotation 0.7s infinite linear;
+    }
+
+    @keyframes rotation {
+      from {
+        transform: rotate(0deg);
       }
 
-      .spinner.loading {
-        content: "";
-        position: absolute;
-        border-width: 8px;
-        border-style: solid;
-        border-color: #091467 #ccc #ccc;
-        border-radius: 100%;
-        animation: rotation 0.7s infinite linear;
+      to {
+        transform: rotate(359deg);
       }
+    }
+  </style>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-170652518-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
 
-      @keyframes rotation {
-        from {
-          transform: rotate(0deg);
-        }
+    gtag("config", "UA-170652518-1");
+  </script>
+  <script src="//code.tidio.co/uiuwcxuzp3q2oanylcotmc38zcvcmlle.js" async></script>
+</head>
 
-        to {
-          transform: rotate(359deg);
-        }
-      }
-    </style>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=UA-170652518-1"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-
-      gtag("config", "UA-170652518-1");
-    </script>
-    <script
-      src="//code.tidio.co/uiuwcxuzp3q2oanylcotmc38zcvcmlle.js"
-      async
-    ></script>
-  </head>
-
-  <body>
-    <app-root>
-      <!-- <div class="scrollbar">
+<body>
+  <app-root>
+    <!-- <div class="scrollbar">
         <div class="force-overflow"></div>
       </div>
 
       <div class="spinner loading"></div> -->
-    </app-root>
-  </body>
+  </app-root>
+
+</body>
+
 </html>

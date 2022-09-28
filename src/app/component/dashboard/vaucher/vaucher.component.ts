@@ -87,6 +87,10 @@ export class VaucherComponent implements OnInit {
   currentUrl: string;
   checkIfInputValid = checkIfInputValid;
 
+  public showColumnPicker = false;
+  public columns: string[] = ["ID", "Date", "Amount", "Date redeemed", "Customer buys", "Customer consumer", "User", "Comment"];
+  public hiddenColumns: string[] = [];
+
   constructor(
     private service: VaucherService,
     private customer: CustomersService,
@@ -755,5 +759,13 @@ export class VaucherComponent implements OnInit {
   public sortChange(sort: SortDescriptor[]): void {
     this.state.sort = sort;
     this.gridView = process(this.gridData.data, this.state);
+  }
+
+  public isHidden(columnName: string): boolean {
+    return this.hiddenColumns.indexOf(columnName) > -1;
+  }
+
+  public onOutputHiddenColumns(columns) {
+    this.hiddenColumns = columns;
   }
 }

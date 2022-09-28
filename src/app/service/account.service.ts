@@ -7,6 +7,22 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class AccountService {
 
   constructor(private http: HttpClient) { }
+  
+  getClinicEmployees(id: number) {
+    return this.http.get(`api/getClinicEmployees/${id}`);
+  }
+
+  getClinicCustomers(id: number) {
+    return this.http.get(`api/getClinicCustomers/${id}`);
+  }
+
+  updateRegisteredClinic(body) {
+    return this.http.post("api/updateRegisteredClinic", body);
+  }
+
+  deleteRegisteredClinic(data) {
+    return this.http.post("api/deleteRegisteredClinic", data);
+  }
 
   getSuperadmin(id) {
     return this.http.get('/api/getSuperadmin/' + id);
@@ -21,6 +37,10 @@ export class AccountService {
       user.type = 4;
     }
     return this.http.post(`api/uploadProfileImage/${user.id}/${user.type}`, img);
+  }
+
+  updateEmployeeProfileImage(img, user) {
+    return this.http.post(`api/uploadeEmployeeProfileImage/${user.id}`, img);
   }
 
   getImage(body: any) {

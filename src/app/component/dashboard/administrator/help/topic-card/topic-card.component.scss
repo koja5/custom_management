@@ -1,0 +1,13 @@
+.card{
+    border: 1px solid #a9acaa;
+    border-radius: 5px !important;
+    // max-height: 18rem;
+}
+
+.card-body{
+    padding-top: 24px !important;
+}
+
+.card:hover{
+    box-shadow: 0 1px 3px 0 rgb(48 48 48 / 30%), 0 4px 8px 3px rgb(48 48 48 / 15%) !important;
+}

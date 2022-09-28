@@ -3,7 +3,16 @@
 </div>
 
 <div *ngIf="!loading" style="height: 100%">
-  <div *ngIf="selectedUser === undefined" style="height: 100%">
+  <div *ngIf="selectedUser === undefined" style="height: 100%" class="position-relative">
+
+    <div class="position-absolute columns-dropdown">
+      <app-column-chooser 
+          [columns]="columns" 
+          [isKendoGrid]="true" 
+          (outputHiddenColumns)="onOutputHiddenColumns($event)" 
+          [type]="'Vaucher'"></app-column-chooser>
+    </div>
+
     <kendo-grid #grid *ngIf="language !== undefined" [data]="gridView" [style.height]="height" [resizable]="true"
       [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
       [pageable]="pageable" (pageChange)="pageChange($event)" [kendoGridSelectBy]="mySelectionKey" [groupable]="true"
@@ -25,7 +34,7 @@
             <button class="btn-grid" style="border-left: 1px solid #2a3582">
               <i class="fa fa-caret-down"></i>
             </button>
-            <div class="dropdown-content-grid">
+            <div class="dropdown-content-grid" style="z-index: 99;">
               <a style="padding: 0px"><label class="uploadFromExcel-{{ theme }}"
                   style="padding: 12px; cursor: pointer"><span class="k-icon k-i-file-excel"></span>
                   {{ language.uploadFromExcel
@@ -46,27 +55,27 @@
           </div>
         </div>
       </ng-template>
-      <kendo-grid-column field="id" title="{{ language.id }}" width="70">
+      <kendo-grid-column field="id" title="{{ language.id }}" width="70" *ngIf="!isHidden('ID')">
       </kendo-grid-column>
-      <kendo-grid-column field="date" title="{{ language.date }}" width="150">
+      <kendo-grid-column field="date" title="{{ language.date }}" width="150" *ngIf="!isHidden('Date')">
         <ng-template kendoGridCellTemplate let-dataItem>
           {{ dataItem.date | date: "dd.MM.yyyy" }}
         </ng-template>
       </kendo-grid-column>
-      <kendo-grid-column field="amount" title="{{ language.amount }}" width="100">
+      <kendo-grid-column field="amount" title="{{ language.amount }}" width="100" *ngIf="!isHidden('Amount')">
       </kendo-grid-column>
-      <kendo-grid-column field="date_redeemed" title="{{ language.date_redeemed }}" width="180">
+      <kendo-grid-column field="date_redeemed" title="{{ language.date_redeemed }}" width="180" *ngIf="!isHidden('Date redeemed')">
         <ng-template kendoGridCellTemplate let-dataItem>
           {{ dataItem.date_redeemed | date: "dd.MM.yyyy" }}
         </ng-template>
       </kendo-grid-column>
-      <kendo-grid-column field="customer_name" title="{{ language.customerBuys }}" width="180">
+      <kendo-grid-column field="customer_name" title="{{ language.customerBuys }}" width="180" *ngIf="!isHidden('Customer buys')">
       </kendo-grid-column>
-      <kendo-grid-column field="customer_consumer_name" title="{{ language.customerConsumer }}" width="180">
+      <kendo-grid-column field="customer_consumer_name" title="{{ language.customerConsumer }}" width="180" *ngIf="!isHidden('Customer consumer')">
       </kendo-grid-column>
-      <kendo-grid-column field="user_name" title="{{ language.user }}" width="180">
+      <kendo-grid-column field="user_name" title="{{ language.user }}" width="180" *ngIf="!isHidden('User')">
       </kendo-grid-column>
-      <kendo-grid-column field="comment" title="{{ language.comment }}" width="200">
+      <kendo-grid-column field="comment" title="{{ language.comment }}" width="200" *ngIf="!isHidden('Comment')">
       </kendo-grid-column>
       <kendo-grid-column width="120">
         <ng-template kendoGridCellTemplate let-dataItem>

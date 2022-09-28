@@ -101,7 +101,8 @@ input[type="email"]:disabled {
     position: absolute;
     bottom: 5px;
     border-radius: 50px;
-    background-color: gray;
+    background-color: var(--theme-color);
+    color: white;
     opacity: 0.3;
 
     &:hover {

@@ -1,4 +1,13 @@
-<div #container>
+<div #container class="position-relative">
+
+  <div class="position-absolute columns-dropdown">
+    <app-column-chooser 
+        [columns]="columns" 
+        [isKendoGrid]="false" 
+        (outputHiddenColumns)="onOutputHiddenColumns($event)" 
+        [type]="'Reservations'"></app-column-chooser>
+  </div>
+
   <ejs-grid
     #grid
     *ngIf="config"
@@ -81,6 +90,20 @@
           >
             <span *ngIf="item.classIcon" class="{{ item.classIcon }}"></span>
             {{ language[item?.label] ? language[item?.label] : item?.label }}
+          </button>
+        </ng-template>
+        <ng-template
+          *ngIf="item?.type == 'detailsButton'"
+          class="item?.position"
+          #template
+          let-data
+        >
+          <button
+            class="detailsButton-button"
+            (click)="openClinicDetail(data.id)"
+          >
+            <!-- {{ language.details }} -->
+            Details
           </button>
         </ng-template>
       </e-column>

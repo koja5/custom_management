@@ -8,6 +8,7 @@ var fs = require("fs");
 const mysql = require("mysql");
 var url = require("url");
 const logger = require("./logger");
+const winston = require("winston");
 
 var link = process.env.link_api;
 var linkClient = process.env.link_client;
@@ -27,11 +28,27 @@ const monthNames = [
   "December",
 ];
 
+const logFormatter = winston.format.printf((info) => {
+  let { timestamp, level, stack, message } = info;
+  message = stack || message;
+  return `${timestamp} ${level}: ${message}`;
+});
+
+const logToConsole = winston.createLogger({
+  level: 'info',
+  format: winston.format.errors({ stack: true }),
+  transports: [
+    new winston.transports.Console({
+      format: winston.format.combine(winston.format.colorize(), winston.format.simple(), winston.format.timestamp(), logFormatter),
+    }),
+  ],
+});
+
 var connection = mysql.createPool({
-  host: "116.203.85.82",
-  user: "appprodu_appproduction",
-  password: "CJr4eUqWg33tT97mxPFx",
-  database: "appprodu_management",
+  host: process.env.host,
+  user: process.env.user,
+  password: process.env.password,
+  database: process.env.database,
 });
 
 /*var smtpTransport = nodemailer.createTransport({
@@ -45,15 +62,17 @@ var connection = mysql.createPool({
 });*/
 
 var smtpTransport = nodemailer.createTransport({
-  host: "116.203.85.82",
-  port: 25,
-  secure: false,
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
   tls: {
     rejectUnauthorized: false,
   },
+  debug: true,
+  ssl: true, 
   auth: {
-    user: "support@app-production.eu",
-    pass: "])3!~0YFU)S]",
+    user: "clinicnode2022@gmail.com",  // real email address
+    pass: "vfuvxgwdfrvestvd" // app password for clinicnode2022@gmail.com email
   },
 });
 
@@ -85,8 +104,11 @@ router.post("/send", function (req, res) {
       notReply: req.body.language?.notReply,
       copyRight: req.body.language?.copyRight,
       introductoryMessageForConfirmMail:
-        req.body.language?.introductoryMessageForConfirmMail,
+      req.body.language?.introductoryMessageForConfirmMail,
       confirmMailButtonText: req.body.language?.confirmMailButtonText,
+      unsubscribeMessage: req.body.language?.unsubscribeMessage,
+      unsubscribeHere: req.body.language?.unsubscribeHere,
+      unsubscribeLink: req.body.unsubscribeLink,
     }),
   };
 
@@ -263,6 +285,8 @@ router.post("/forgotmail", function (req, res) {
       verificationLink: verificationLinkButton,
       initialGreeting: req.body.language?.initialGreeting,
       finalGreeting: req.body.language?.finalGreeting,
+      initialGreeting: req.body.language?.initialGreeting,
+      finalGreeting: req.body.language?.finalGreeting,
       signature: req.body.language?.signature,
       thanksForUsing: req.body.language?.thanksForUsing,
       websiteLink: req.body.language?.websiteLink,
@@ -271,7 +295,7 @@ router.post("/forgotmail", function (req, res) {
       notReply: req.body.language?.notReply,
       copyRight: req.body.language?.copyRight,
       introductoryMessageForForgotMail:
-        req.body.language?.introductoryMessageForForgotMail,
+      req.body.language?.introductoryMessageForForgotMail,
       forgotMailButtonText: req.body.language?.forgotMailButtonText,
     }),
   };
@@ -1499,5 +1523,110 @@ router.post("/infoAboutConfirmDenyAccessDevice", function (req, res) {
     }
   });
 });
+
+router.sendMailAdminInfo = (data) => {
+  connection.getConnection(function (err, conn) {
+    var confirmTemplate = fs.readFileSync(
+      "./server/routes/templates/infoForCreatedSuperadmin.hjs",
+      "utf-8"
+    );
+    var infoForCreatedAccount = hogan.compile(confirmTemplate);
+    var verificationLinkButton =
+      link + "customerVerificationMail/" + sha1(data.email);
+
+    conn.query(
+      "SELECT * FROM users_superadmin WHERE users_superadmin = ?",
+      data.id,
+      function (err, mailMessage, fields) {
+        conn.release();
+        var mail = {};
+        var signatureAvailable = false;
+        var mailOptions = {
+          from: '"ClinicNode" support@app-production.eu',
+          to: data.email,
+          subject: mail.mailSubject
+            ? mail.mailSubject
+            : data.language?.subjectCreatedPatientForm,
+          html: infoForCreatedAccount.render({
+            firstName: data.firstname,
+            email: data.email,
+            password: data.password,
+            loginLink: loginLink,
+            initialGreeting: mail.mailInitialGreeting
+              ? mail.mailInitialGreeting
+              : data.language?.initialGreeting,
+            finalGreeting: mail.mailFinalGreeting
+              ? mail.mailFinalGreeting
+              : data.language?.finalGreeting,
+            signature: !signatureAvailable
+              ? mail.mailSignature
+                ? mail.mailSignature
+                : data.language?.signature
+              : "",
+            thanksForUsing: mail.mailThanksForUsing
+              ? mail.mailThanksForUsing
+              : data.language?.thanksForUsing,
+            websiteLink: data.language?.websiteLink,
+            ifYouHaveQuestion: mail.mailIfYouHaveQuestion
+              ? mail.mailIfYouHaveQuestion
+              : data.language?.ifYouHaveQuestion,
+            emailAddress: data.language?.emailAddress,
+            notReply: mail.mailNotReply
+              ? mail.mailNotReply
+              : data.language?.notReply,
+            copyRight: mail.mailCopyRight
+              ? mail.mailCopyRight
+              : data.language?.copyRight,
+            introductoryMessageForCreatedPatientAccount: mail.mailMessage
+              ? mail.mailMessage
+              : data.language?.introductoryMessageForCreatedPatientAccount,
+            linkForLogin: data.language?.linkForLogin,
+            emailForLogin: data.language?.emailForLogin,
+            passwordForLogin: data.language?.passwordForLogin,
+            signatureAddress:
+              signatureAvailable &&
+              mail.signatureAddress &&
+              (mail.street || mail.zipcode || mail.store_place)
+                ? mail.signatureAddress +
+                  "\n" +
+                  mail.street +
+                  "\n" +
+                  mail.zipcode +
+                  " " +
+                  mail.store_place
+                : "",
+            signatureTelephone:
+              signatureAvailable && mail.signatureTelephone && mail.telephone
+                ? mail.signatureTelephone + " " + mail.telephone
+                : "",
+            signatureMobile:
+              signatureAvailable && mail.signatureMobile && mail.mobile
+                ? mail.signatureMobile + " " + mail.mobile
+                : "",
+            signatureEmail:
+              signatureAvailable && mail.signatureEmail && mail.email
+                ? mail.signatureEmail + " " + mail.email
+                : "",
+          }),
+        };
+        smtpTransport.sendMail(mailOptions, function (error, response) {
+          if (error) {
+            logger.log(
+              "error",
+              `Error to sent mail for VERIFICATION MAIL on EMAIL: ${data.email}. Error: ${error}`
+            );
+            res.end("error");
+          } else {
+            logger.log(
+              "info",
+              `Sent mail for VERIFICATION MAIL for USER: ${data.shortname} on EMAIL: ${data.email}`
+            );
+            res.end("sent");
+          }
+        });
+      }
+    );
+  });
+}
 
 module.exports = router;

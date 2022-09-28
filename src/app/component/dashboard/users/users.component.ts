@@ -100,6 +100,10 @@ export class UsersComponent implements OnInit {
   savePage: any = {};
   checkIfInputValid = checkIfInputValid;
 
+  public showColumnPicker = false;
+  public columns: string[] = ["Username", "Email address", "Firstname", "Lastname",  "Street", "Active"];
+  public hiddenColumns: string[] = [];
+
   constructor(
     private service: UsersService,
     private storeService: StoreService,
@@ -577,5 +581,13 @@ export class UsersComponent implements OnInit {
 
   public generateLink(link, param) {
     this.router.navigate([link, param]);
+  }
+
+  public isHidden(columnName: string): boolean {
+    return this.hiddenColumns.indexOf(columnName) > -1;
+  }
+
+  public onOutputHiddenColumns(columns) {
+    this.hiddenColumns = columns;
   }
 }

@@ -11,6 +11,7 @@ import {
   GroupService,
   ResizeService,
   PdfExportService,
+  ColumnChooserService,
 } from "@syncfusion/ej2-angular-grids";
 
 // components
@@ -76,6 +77,7 @@ import { SharedEmailModule } from "../shared-module/shared-email-module";
 import { ModalModule } from "ngx-modal";
 import { DynamicTextFormComponent } from "./dynamic-text-form/dynamic-text-form.component";
 import { HomedModule } from "../home/routing-module/home.module";
+import { SharedComponentsModule } from "src/app/shared/shared-components.module";
 
 @NgModule({
   declarations: [
@@ -83,13 +85,13 @@ import { HomedModule } from "../home/routing-module/home.module";
     DynamicFormsComponent,
     DynamicSchedulerComponent,
     DynamicConfirmDialogComponent,
-    DynamicTextFormComponent,
+    DynamicTextFormComponent
   ],
   exports: [
     DynamicGridComponent,
     DynamicFormsComponent,
     DynamicConfirmDialogComponent,
-    DynamicTextFormComponent,
+    DynamicTextFormComponent
   ],
   imports: [
     CommonModule,
@@ -133,7 +135,8 @@ import { HomedModule } from "../home/routing-module/home.module";
     SharedSMSModule,
     SharedEmailModule,
     ModalModule,
-    HomedModule
+    HomedModule,
+    SharedComponentsModule
   ],
   providers: [
     EditService,
@@ -144,6 +147,7 @@ import { HomedModule } from "../home/routing-module/home.module";
     PageService,
     GroupService,
     ResizeService,
+    ColumnChooserService
   ],
   entryComponents: [
     TextboxComponent,

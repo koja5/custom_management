@@ -27,6 +27,8 @@ import { Tooltip } from "@syncfusion/ej2-popups";
 import { ClickEventArgs } from "@syncfusion/ej2-navigations";
 import { SystemLogsService } from "src/app/service/system-logs.service";
 import { Router } from "@angular/router";
+import { AccountService } from "src/app/service/account.service";
+import { PackLanguageService } from "src/app/service/pack-language.service";
 
 @Component({
   selector: "app-dynamic-grid",
@@ -67,20 +69,26 @@ export class DynamicGridComponent implements OnInit {
   isFormDirty = false;
   showDialog = false;
   currentDialog: any;
+  test = 'test';
+
+  public showColumnPicker = false;
+  public columns: string[] = [];
+  public hiddenColumns: string[] = [];
 
   constructor(
     private service: DynamicService,
     private helpService: HelpService,
     private messageService: MessageService,
     private router: Router,
-    private elem: ElementRef
+    private elem: ElementRef,
+    private packLanguage: PackLanguageService,
   ) {}
 
   ngOnInit() {
     this.savePage = this.helpService.getGridPageSize();
+    this.getConfiguration();
     this.initialization();
     this.checkMessageService();
-    this.getConfiguration();
     this.editSettings = {
       allowEditing: true,
       allowAdding: true,
@@ -96,18 +104,23 @@ export class DynamicGridComponent implements OnInit {
     this.currentUrl = this.router.url;
   }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() {
+  }
 
   initialization() {
     this.service
       .getConfiguration(this.path, this.name)
       .subscribe((data: any) => {
         this.config = data;
-
+        this.config.columns.forEach(column => {
+          if (column.title.length > 0) {
+            this.columns.push(column.title);
+          }
+        });
         this.config.paging.settings.pageSizes = [5, 10, 20];
         this.config.paging.settings.pageSize = 10;
 
-        if (this.savePage[this.currentUrl]) {
+      if (this.savePage[this.currentUrl]) {
           this.config.paging.settings.currentPage =
             this.savePage[this.currentUrl];
         }
@@ -318,6 +331,8 @@ export class DynamicGridComponent implements OnInit {
   }
 
   callServerMethod(request, data) {
+    data["language"] = this.packLanguage.getLanguageForCreatedPatientAccount();
+
     data = this.packAdditionalData(request.parameters, data);
     if (request.type === "POST") {
       this.service.callApiPost(request.api, data).subscribe((response) => {
@@ -350,9 +365,11 @@ export class DynamicGridComponent implements OnInit {
             );
           }
         }
+        this.refreshGrid();
       });
     } else {
       this.service.callApiGet(request.api, data).subscribe((data) => {});
+      this.refreshGrid();
     }
   }
 
@@ -425,14 +442,18 @@ export class DynamicGridComponent implements OnInit {
     this.actionEmitter.emit(actions);
   }
 
+  openClinicDetail(id: number) {
+    this.router.navigateByUrl('/dashboard/home/registered-clinic-detail/' + id);
+  }
+
   clickHandler(args: ClickEventArgs): void {
     const target: HTMLElement = (
       args.originalEvent.target as HTMLElement
     ).closest("button"); // find clicked button
-    if (target.id === "collapse") {
+    if (target && target.id === "collapse") {
       // collapse all expanded grouped row
       this.grid.groupModule.collapseAll();
-    } else if (target.id === "refresh") {
+    } else if (target && target.id === "refresh") {
       this.refreshGrid();
     } else if (args.item["properties"]["prefixIcon"] === "e-pdfexport") {
       this.grid.pdfExport();
@@ -445,6 +466,15 @@ export class DynamicGridComponent implements OnInit {
 
   refreshGrid() {
     this.ngOnInit();
+  }
+
+  public isHidden(columnName: string): boolean {
+    return this.hiddenColumns.indexOf(columnName) > -1;
+  }
+
+  public onOutputHiddenColumns(columns) {
+    this.hiddenColumns = columns;
+    this.grid.hideColumns(this.hiddenColumns);
   }
 }
 
