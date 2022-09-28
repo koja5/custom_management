@@ -1,17 +1,11 @@
 <div class="main-wrapper">
-  <app-home-navigation-menu
-    [color]="'navbar-dark'"
-    [language]="language"
-    (sendEventForChangeLanguage)="sendEventForChangeLanguage($event)"
-  ></app-home-navigation-menu>
+  <app-home-navigation-menu [color]="'navbar-dark'" [language]="language"
+    (sendEventForChangeLanguage)="sendEventForChangeLanguage($event)"></app-home-navigation-menu>
 
   <!--register section start-->
-  <section
-    class="sign-up-in-section bg-dark pt-5"
-    style="
+  <section class="sign-up-in-section bg-dark pt-5" style="
       background: url('./assets/home/page-header-bg.svg') no-repeat bottom right;
-    "
-  >
+    ">
     <div class="container">
       <div class="row align-items-center justify-content-between">
         <div class="col-xl-5 col-lg-5 col-md-12 order-1 order-lg-0">
@@ -22,10 +16,7 @@
             <p>
               {{ language.requestSectionText1 }}
             </p>
-            <div
-              class="tab-content testimonial-tab-content text-white-80"
-              id="pills-tabContent"
-            >
+            <div class="tab-content testimonial-tab-content text-white-80" id="pills-tabContent">
               <div id="testimonial-tab-1" role="tabpanel">
                 <blockquote class="blockquote">
                   <em>{{ language.requestSectionText2 }}</em>
@@ -39,9 +30,7 @@
           </div>
         </div>
         <div class="col-xl-5 col-lg-7 col-md-12 order-0 order-lg-1">
-          <div
-            class="register-wrap p-5 bg-white shadow rounded-custom mt-5 mt-lg-0 mt-xl-0"
-          >
+          <div class="register-wrap p-5 bg-white shadow rounded-custom mt-5 mt-lg-0 mt-xl-0">
             <h5 class="fw-medium">
               {{ language.requestSectionFormTitle }}
             </h5>
@@ -50,68 +39,39 @@
               <div class="row">
                 <div class="col-sm-12">
                   <div class="input-group mb-3">
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="{{ language.requestSectionFormName }}"
-                      name="name"
-                      [(ngModel)]="data.name"
-                    />
+                    <input type="text" class="form-control" placeholder="{{ language.requestSectionFormName }}"
+                      name="name" [(ngModel)]="data.name" />
                   </div>
                 </div>
                 <div class="col-sm-6">
                   <div class="input-group mb-3">
-                    <input
-                      type="email"
-                      class="form-control"
-                      placeholder="{{ language.requestSectionFormEmail }}"
-                      name="email"
-                      [(ngModel)]="data.email"
-                    />
+                    <input type="email" class="form-control" placeholder="{{ language.requestSectionFormEmail }}"
+                      name="email" [(ngModel)]="data.email" />
                   </div>
                 </div>
                 <div class="col-sm-6">
                   <div class="input-group mb-3">
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="{{ language.requestSectionFormPhone }}"
-                      name="phone"
-                      [(ngModel)]="data.phone"
-                    />
+                    <input type="text" class="form-control" placeholder="{{ language.requestSectionFormPhone }}"
+                      name="phone" [(ngModel)]="data.phone" />
                   </div>
                 </div>
                 <div class="col-sm-6">
                   <div class="input-group mb-3">
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="{{
+                    <input type="text" class="form-control" placeholder="{{
                         language.requestSectionFormnameOfCompany
-                      }}"
-                      name="nameOfCompany"
-                      [(ngModel)]="data.nameOfCompany"
-                    />
+                      }}" name="nameOfCompany" [(ngModel)]="data.nameOfCompany" />
                   </div>
                 </div>
                 <div class="col-sm-6">
                   <div class="input-group mb-3">
-                    <select
-                      class="form-control"
-                      name="countOfEmployees"
-                      id="countOfEmployees"
-                      [(ngModel)]="data.countOfEmployees"
-                      required=""
-                    >
+                    <select class="form-control" name="countOfEmployees" id="countOfEmployees"
+                      [(ngModel)]="data.countOfEmployees" required="">
                       <option value="undefined" selected="" disabled="">
                         {{
-                          language.requestSectionFormChooiceNumberOfChildrens
+                        language.requestSectionFormChooiceNumberOfChildrens
                         }}
                       </option>
-                      <option
-                        *ngFor="let item of language.requestDemoDropdownNumbers"
-                        value="{{ item }}"
-                      >
+                      <option *ngFor="let item of language.requestDemoDropdownNumbers" value="{{ item }}">
                         {{ item }}
                       </option>
                       <!-- <option value="0-50">
@@ -133,22 +93,36 @@
                     </select>
                   </div>
                 </div>
+                <div class="col-sm-12">
+                  <div class="input-group mb-3">
+                    <select class="form-control" (change)="selectPackage($event.target.value)" name="package"
+                      id="package">
+                      <option value="undefined" selected="" disabled="">
+                        {{
+                        language.choosePackage
+                        }}
+                      </option>
+                      <option *ngFor="let item of language.priceTable.header" value="{{ item.price }}"
+                        [selected]="item.nameOfPackageTitle === package ? true : false">
+                        {{ item.nameOfPackageText }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- <div class="col-sm-12">
+                  <div class="input-group mb-3">
+                    <app-dynamic-payment-form></app-dynamic-payment-form>
+                  </div>
+                </div> -->
                 <div class="col-xs-12">
                   <div class="input-group mb-3">
-                    <textarea
-                      class="form-control"
-                      placeholder="{{ language.requestSectionFormMessage }}"
-                      style="height: 120px"
-                      name="notes"
-                      [(ngModel)]="data.notes"
-                    ></textarea>
+                    <textarea class="form-control" placeholder="{{ language.requestSectionFormMessage }}"
+                      style="height: 120px" name="notes" [(ngModel)]="data.notes"></textarea>
                   </div>
                 </div>
                 <div class="col-xs-12 text-center">
-                  <button
-                    (click)="sendReqestForDemoAccount()"
-                    class="btn btn-primary mt-4 d-block w-100"
-                  >
+                  <button (click)="openPaymentForm()" class="btn btn-primary mt-4 d-block w-100">
                     {{ language.requestSectionFormSendRequestButton }}
                   </button>
                 </div>
@@ -169,6 +143,8 @@
   </section>
   <!--register section end-->
 
+
+
   <!--footer section start-->
   <footer class="footer-section">
     <!--footer bottom start-->
@@ -178,3 +154,56 @@
   </footer>
   <!--footer section end-->
 </div>
+
+<modal #paymentForm modalClass="modal-lg top-margin loggerModal adminModal" [closeOnOutsideClick]="false">
+  <modal-header>
+    <h3 *ngIf="language !== undefined">{{ language?.lastPaymentStep }}</h3>
+  </modal-header>
+  <modal-content>
+    <div class="row">
+      <div class="col-xs-12 col-md-6 border-right text-center">
+        <img src="./assets/icons/package.png" class="image-width">
+        <h4 class="m-4">{{language.choosePackage}}</h4>
+        <select class="form-control" (change)="selectPackage($event.target.value)" name="payment" id="payment">
+          <option value="undefined" selected="" disabled="">
+            {{
+            language.choosePackage
+            }}
+          </option>
+          <option *ngFor="let item of language.priceTable.header" value="{{ item.price }}"
+            [selected]="item.nameOfPackageTitle === package ? true : false">
+            {{ item.nameOfPackageText }}
+          </option>
+        </select>
+
+        <p *ngIf="data.package" class="selected-price">{{language.priceOfPackage}} {{data.package}} E</p>
+      </div>
+      <div class="col-xs-12 col-md-6 text-center">
+        <img src="./assets/icons/payment.png" class="image-width">
+        <h4 class="m-4">{{language.cardDetails}}</h4>
+        <div class="form-group">
+          <div id="card-element" class="field"></div>
+        </div>
+        <div class="col-xs-12 text-right">
+          <button [disabled]="!package" (click)="showDialog = true;"
+            class="btn btn-primary mt-4 d-block w-100">
+            {{ language.requestSectionFormSendRequestButton }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </modal-content>
+</modal>
+
+<kendo-dialog [title]="language.lastPaymentStep" *ngIf="showDialog" (close)="showDialog = false" [minWidth]="250"
+  [width]="450">
+  <p style="margin: 30px; text-align: center">
+    {{language.paymentMessage}}
+  </p>
+  <kendo-dialog-actions>
+    <button kendoButton (click)="submitPayment(); showDialog = false" primary="true">
+      {{language.yes}}
+    </button>
+    <button kendoButton (click)="showDialog = false; paymentForm.open()">{{language.no}}</button>
+  </kendo-dialog-actions>
+</kendo-dialog>

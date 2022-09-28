@@ -340,15 +340,10 @@
                             {{ language?.applicationParametersSettingsTitle }}
                           </li>
 
-                          <li
-                            class="{{ selectedNodeModel['users'] }}"
-                            *ngIf="type === userType.owner"
-                          >
-                            <a
-                              (click)="returnActiveNode('users')"
-                              routerLink="/dashboard/home/users"
-                              ><i class="fa fa-user"></i
-                              ><span class="navigation-link">{{
+                          <li class="{{ selectedNodeModel['users'] }}"
+                            *ngIf="type === userType.owner || type === userType.admin">
+                            <a (click)="returnActiveNode('users')" routerLink="/dashboard/home/users"><i
+                                class="fa fa-user"></i><span class="navigation-link">{{
                                 language["users"]
                               }}</span></a
                             >

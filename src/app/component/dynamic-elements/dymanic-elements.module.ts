@@ -85,13 +85,13 @@ import { SharedComponentsModule } from "src/app/shared/shared-components.module"
     DynamicFormsComponent,
     DynamicSchedulerComponent,
     DynamicConfirmDialogComponent,
-    DynamicTextFormComponent,
+    DynamicTextFormComponent
   ],
   exports: [
     DynamicGridComponent,
     DynamicFormsComponent,
     DynamicConfirmDialogComponent,
-    DynamicTextFormComponent,
+    DynamicTextFormComponent
   ],
   imports: [
     CommonModule,
