@@ -32,14 +32,10 @@
           <div class="card-body no-padding height-9">
             <div class="row">
               <div class="profile-userpic">
-                <img [src]="imagePath" class="img-responsive" alt="" />
-                <button
-                *ngIf="currentUser?.type == 0 || currentUser?.type == 1"
-                kendoButton
-                [icon]="'edit'"
-                class="edit-button-icon"
-                (click)="updateImage()"
-              ></button>
+                <img [src]="imagePath ? imagePath : (data.gender === 'male' ? maleImg : femaleImg)"
+                  class="img-responsive" alt="" />
+                <button *ngIf="currentUser?.type == 0 || currentUser?.type == 1" kendoButton [icon]="'edit'"
+                  class="edit-button-icon" (click)="updateImage()"></button>
               </div>
             </div>
             <div class="profile-usertitle">
@@ -1885,13 +1881,8 @@
     </modal-header>
     <modal-content>
       <form name="updateImageForm" (ngSubmit)="submitPhoto()">
-        <input
-          id="file-upload"
-          type="file"
-          name="updateImageInput"
-          class="choose-image-input"
-          (input)="fileChoosen($event)"
-        />
+        <input id="file-upload" type="file" name="updateImageInput" class="choose-image-input"
+          (input)="fileChoosen($event)" />
         <label for="file-upload" class="custom-file-upload">
           {{ language.chooseFile }}
         </label>

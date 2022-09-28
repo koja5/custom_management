@@ -8799,50 +8799,37 @@ router.post("/updateFaqTopic", function (req, res, next) {
   });
 });
 
-router.get(
-  "/getFaqTopics/:superAdminId/:countryCode",
-  function (req, res, next) {
-    var superAdminId = req.params.superAdminId;
-    var countryCode = req.params.countryCode;
-    connection.getConnection(function (err, conn) {
-      if (err) {
-        logger.log("error", err.sql + ". " + err.sqlMessage);
-        res.json(err);
-      }
-      conn.query(
-        "SELECT * FROM `help_topics` WHERE superAdminId=" +
-          superAdminId +
-          " AND `countryCode`='" +
-          countryCode +
-          "'",
-        function (err, rows) {
-          conn.release();
-          if (!err) {
-            res.json(rows);
-          } else {
-            res.json(err);
-            logger.log("error", err.sql + ". " + err.sqlMessage);
-          }
+router.get("/getFaqTopics/:countryCode", function (req, res, next) {
+  var countryCode = req.params.countryCode;
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query(
+      "SELECT * FROM `help_topics` WHERE `countryCode`='"+countryCode+"'",
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
-      );
-    });
-  }
-);
+      }
+    );
+  });
+});
 
-router.get("/getFaqTopic/:topicId/:superAdminId", function (req, res, next) {
+router.get("/getFaqTopic/:topicId", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
     }
     var topicId = req.params.topicId;
-    var superAdminId = req.params.superAdminId;
     conn.query(
-      "SELECT * FROM `help_topics` WHERE id=" +
-        topicId +
-        " AND superAdminId='" +
-        superAdminId +
-        "'",
+      "SELECT * FROM `help_topics` WHERE id="+topicId,
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -8947,34 +8934,27 @@ router.post("/updateFaq", function (req, res, next) {
   });
 });
 
-router.get(
-  "/getFaqQuestions/:topicId/:superAdminId",
-  function (req, res, next) {
-    connection.getConnection(function (err, conn) {
-      if (err) {
-        logger.log("error", err.sql + ". " + err.sqlMessage);
-        res.json(err);
-      }
-      var topicId = req.params.topicId;
-      var superAdminId = req.params.superAdminId;
-      conn.query(
-        "SELECT * FROM `faq_list` WHERE `helpTopicId`=" +
-          topicId +
-          " AND `superAdminId`=" +
-          superAdminId,
-        function (err, rows) {
-          conn.release();
-          if (!err) {
-            res.json(rows);
-          } else {
-            res.json(err);
-            logger.log("error", err.sql + ". " + err.sqlMessage);
-          }
+router.get("/getFaqQuestions/:topicId", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    var topicId = req.params.topicId;
+    conn.query(
+      "SELECT * FROM `faq_list` WHERE `helpTopicId`="+topicId,
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
-      );
-    });
-  }
-);
+      }
+    );
+  });
+});
 
 router.post("/deleteFaq", function (req, res, next) {
   connection.getConnection(function (err, conn) {
