@@ -40,6 +40,7 @@ export class RequestDemoComponent implements OnInit {
   ngOnInit(): void {
     this.language = this.helpService.getLanguageForLanding();
     this.package = this.route.snapshot.paramMap.get("package");
+    this.getPriceForPackage();
     // this.initializePaymentCard();
   }
 
@@ -144,6 +145,18 @@ export class RequestDemoComponent implements OnInit {
   }
 
   selectPackage(event) {
-    this.data.package = event;
+    this.data.price = event;
+  }
+
+  getPriceForPackage() {
+    if (this.package) {
+      for (let i = 0; i < this.language.priceTable.header.length; i++) {
+        if (
+          this.language.priceTable.header[i].nameOfPackageTitle === this.package
+        ) {
+          this.data.price = this.language.priceTable.header[i].price;
+        }
+      }
+    }
   }
 }
