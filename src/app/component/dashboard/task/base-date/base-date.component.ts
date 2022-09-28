@@ -141,7 +141,7 @@ export class BaseDateComponent implements OnInit {
     private mailService: MailService,
     private loginService: LoginService,
     private packLanguage: PackLanguageService,
-    private helpService: HelpService,
+    private helpService: HelpService
   ) {}
 
   ngOnInit() {
@@ -204,12 +204,12 @@ export class BaseDateComponent implements OnInit {
     const thisObject = this;
     thisObject.data["language"] = this.packLanguage.getLanguageForForgotMail();
     if (this.data.email !== "") {
-      this.loginService.forgotPassword(this.data, function (exist, notVerified) {
-        setTimeout(() => {
-          if (exist) {
-            thisObject.mailService
-              .sendForgetMail(thisObject.data)
-              .subscribe(
+      this.loginService.forgotPassword(
+        this.data,
+        function (exist, notVerified) {
+          setTimeout(() => {
+            if (exist) {
+              thisObject.mailService.sendForgetMail(thisObject.data).subscribe(
                 (data) => {
                   thisObject.helpService.successToastr(
                     thisObject.language.sendPasswordRecovery,
@@ -223,9 +223,10 @@ export class BaseDateComponent implements OnInit {
                   );
                 }
               );
-          }
-        }, 100);
-      });
+            }
+          }, 100);
+        }
+      );
     }
   }
 
@@ -603,7 +604,6 @@ export class BaseDateComponent implements OnInit {
 
     if (localStorage.getItem("username") === null) {
       this.usersService.getMe(localStorage.getItem("idUser"), (val) => {
-
         console.log(val);
         localStorage.setItem("username", val[0]["shortname"]);
         this.complaintData.employee_name = val[0]["shortname"];
