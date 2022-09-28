@@ -13,7 +13,7 @@ const calculateOrderAmount = (items) => {
 router.post("/create-payment", (req, res, next) => {
   stripe.charges.create(
     {
-      amount: req.body.package * 100,
+      amount: req.body.price * 100,
       currency: "EUR",
       description:
         "name: " +

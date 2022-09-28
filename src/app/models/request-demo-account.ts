@@ -7,6 +7,6 @@ export class ReqeustDemoAccount {
   nameOfCompany!: string;
   countOfEmployees!: string;
   notes!: string;
-  package: number;
+  price: number;
   message!: string;
 }

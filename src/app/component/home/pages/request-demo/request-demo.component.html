@@ -176,7 +176,7 @@
           </option>
         </select>
 
-        <p *ngIf="data.package" class="selected-price">{{language.priceOfPackage}} {{data.package}} E</p>
+        <p *ngIf="data.price" class="selected-price">{{language.priceOfPackage}} {{data.price}} €</p>
       </div>
       <div class="col-xs-12 col-md-6 text-center">
         <img src="./assets/icons/payment.png" class="image-width">
@@ -185,8 +185,7 @@
           <div id="card-element" class="field"></div>
         </div>
         <div class="col-xs-12 text-right">
-          <button [disabled]="!package" (click)="showDialog = true;"
-            class="btn btn-primary mt-4 d-block w-100">
+          <button [disabled]="!package" (click)="showDialog = true;" class="btn btn-primary mt-4 d-block w-100">
             {{ language.requestSectionFormSendRequestButton }}
           </button>
         </div>
