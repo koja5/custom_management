@@ -18,6 +18,7 @@ import { HelpService } from "src/app/service/help.service";
 import { Modal } from "ngx-modal";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { Router } from "@angular/router";
+import { PackLanguageService } from "src/app/service/pack-language.service";
 
 @Component({
   selector: "app-vaucher",
@@ -30,6 +31,8 @@ export class VaucherComponent implements OnInit {
 
   public allPages: boolean;
   private _allData: ExcelExportData;
+  toSendEmail: boolean = false;
+  toSendSms: boolean = false;
 
   public data = new VaucherModel();
   public unamePattern = "^[a-z0-9_-]{8,15}$";
@@ -95,7 +98,8 @@ export class VaucherComponent implements OnInit {
     private message: MessageService,
     private userService: UsersService,
     private helpService: HelpService,
-    private router: Router
+    private router: Router,
+    private packLanguage: PackLanguageService,
   ) {
     this.allData = this.allData.bind(this);
 
@@ -229,7 +233,6 @@ export class VaucherComponent implements OnInit {
   }
 
   createVaucher(form) {
-    console.log(this.data);
     this.data.superadmin = localStorage.getItem("idUser");
     if (this.customerUserBuys !== null) {
       this.data.customer = this.customerUserBuys.id;
@@ -249,6 +252,10 @@ export class VaucherComponent implements OnInit {
     }
     this.data.date = this.dateConst.toString();
     this.data.date_redeemed = this.dateredeemedConst.toString();
+    this.data['language'] = this.packLanguage.getLanguageForMailingVaucher();
+    this.data['toSendEmail'] = this.toSendEmail;
+    this.data['toSendSms'] = this.toSendSms;
+
     this.service.createVaucher(this.data).subscribe(data => {
       if (data["success"]) {
         this.data.id = data["id"];
@@ -318,6 +325,10 @@ export class VaucherComponent implements OnInit {
     }
     this.data.date = this.dateConst.toString();
     this.data.date_redeemed = this.dateredeemedConst.toString();
+    this.data['language'] = this.packLanguage.getLanguageForMailingVaucher();
+    this.data['toSendEmail'] = this.toSendEmail;
+    this.data['toSendSms'] = this.toSendSms;
+    
     this.service.editVaucher(this.data).subscribe(data => {
       console.log(data);
       if (data) {

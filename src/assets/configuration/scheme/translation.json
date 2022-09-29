@@ -191,6 +191,9 @@
             "newVaucher": {
                 "type": "string"
             },
+            "introductoryMessageForCreatedVaucher": {
+                "type": "string"
+            },
             "addVaucher": {
                 "type": "string"
             },
@@ -1596,6 +1599,12 @@
             "sendSMS": {
                 "type": "string"
             },
+            "sendVaucherEMail": {
+                "type": "string"
+            },
+            "sendVaucherSms": {
+                "type": "string"
+            },
             "inputSMSMessage": {
                 "type": "string"
             },
@@ -2566,6 +2575,9 @@
                         },
                         {
                             "key": "newVaucher"
+                        },
+                        {
+                            "key": "introductoryMessageForCreatedVaucher"
                         }
                     ]
                 },
@@ -5494,6 +5506,9 @@
                             "key": "sendSMS"
                         },
                         {
+                            "key": "sendVaucherSms"
+                        },
+                        {
                             "key": "inputSMSMessage"
                         }
                     ]
@@ -5553,6 +5568,9 @@
                         },
                         {
                             "key": "emailSubject"
+                        },
+                        {
+                            "key": "sendVaucherEMail"
                         }
                     ]
                 },

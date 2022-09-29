@@ -168,4 +168,31 @@ export class PackLanguageService {
         language.introductoryMessageForReminderReservation,
     };
   }
+
+  getLanguageForMailingVaucher() {
+    const language = this.helpService.getLanguage();
+    return {
+      subjectFormRegistration: language.subjectFormRegistration,
+      initialGreeting: language.initialGreeting,
+      finalGreeting: language.finalGreeting,
+      signature: language.signature,
+      thanksForUsing: language.thanksForUsing,
+      websiteLink: language.websiteLink,
+      ifYouHaveQuestion: language.ifYouHaveQuestion,
+      emailAddress: language.emailAddress,
+      notReply: language.notReply,
+      copyRight: language.copyRight,
+      introductoryMessageForCreatedVaucher: language.introductoryMessageForCreatedVaucher,
+      openForm: language.openForm,
+      linkForLogin: language.linkForLogin,
+      emailForLogin: language.emailForLogin,
+      passwordForLogin: language.passwordForLogin,
+      amount: language.amount,
+      date_redeemed: language.date_redeemed,
+      customerBuys: language.customerBuys,
+      customerConsumer: language.customerConsumer,
+      user: language.user,
+      comment: language.comment
+    };
+  }
 }

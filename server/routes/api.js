@@ -4517,6 +4517,10 @@ router.post("/createVaucher", function (req, res, next) {
       conn.release();
       if (!err) {
         if (!err) {
+          data['language'] = req.body.language;
+          if(req.body.toSendEmail) {
+            mailAPI.sendVaucherToMail(data);
+          }
           response.id = rows.insertId;
           response.success = true;
         } else {
@@ -4637,6 +4641,10 @@ router.post("/updateVaucher", function (req, res, next) {
           res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
+          data['language'] = req.body.language;
+          if(req.body.toSendEmail) {
+            mailAPI.sendVaucherToMail(data);
+          }
           response = true;
           res.json(response);
         }
