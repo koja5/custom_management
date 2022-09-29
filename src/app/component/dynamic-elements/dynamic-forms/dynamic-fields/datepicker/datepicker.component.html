@@ -10,19 +10,12 @@
     style="margin-top: 0px !important"
   >
     <ejs-datepicker
-      required
+      [required]="config.required"
       [id]="config.name"
       [placeholder]="config.placeholder ? config.placeholder : ''"
       [formControlName]="config.name"
       [format]="config.format"
     ></ejs-datepicker>
   </div>
-  <div
-    id="OrderIDError"
-    *ngIf="config.field.invalid && (config.field.dirty || config.field.touched)"
-  >
-    <label class="e-error" id="{{ config.name }}-info" style="display: block"
-      >*Order ID is required</label
-    >
-  </div>
+  <mat-error *ngIf="checkIfInputValid(config.name)">This field is required.</mat-error>
 </div>

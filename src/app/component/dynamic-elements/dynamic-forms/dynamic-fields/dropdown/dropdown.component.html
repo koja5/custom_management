@@ -13,7 +13,8 @@
     style="margin-top: 0px !important"
   >
     <ejs-dropdownlist
-      id="ddlelement"
+      [required]="config.required"
+      [id]="config.name"
       [dataSource]="data"
       [fields]="config.field"
       [placeholder]="config.placeholder ? config.placeholder : ''"
@@ -24,13 +25,7 @@
       (filtering)="onFiltering($event)"
       [formControlName]="config.name"
     ></ejs-dropdownlist>
+
   </div>
-  <div
-    id="OrderIDError"
-    *ngIf="config.field.invalid && (config.field.dirty || config.field.touched)"
-  >
-    <label class="e-error" id="{{ config.name }}-info" style="display: block"
-      >*Order ID is required</label
-    >
-  </div>
+  <mat-error *ngIf="checkIfInputValid(config.name)">This field is required.</mat-error>
 </div>

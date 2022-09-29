@@ -104,9 +104,10 @@
     <form name="holidayForm" class="holidayForm" (ngSubmit)="addHoliday()" #holidayForm="ngForm">
       <div class="form-group">
         <kendo-textbox-container floatingLabel="{{ language.title }}">
-          <input kendoTextBox required type="text" class="col-12" pattern="[a-zA-Z0-9 ]+"
+          <input kendoTextBox id="subject" required type="text" class="col-12" pattern="[a-zA-Z0-9 ]+"
             [(ngModel)]="currentHoliday.Subject" name="subject" />
         </kendo-textbox-container>
+        <mat-error *ngIf="checkIfInputValid('subject')">This field is required.</mat-error>
       </div>
       <div class="form-group">
         <kendo-textbox-container>
@@ -152,9 +153,10 @@
           : null
       " #templateForm="ngForm">
       <div class="form-group">
-        <kendo-textbox-container floatingLabel="{{ language.title }}">
+        <kendo-textbox-container id="title" floatingLabel="{{ language.title }}">
           <input kendoTextBox required type="text" class="col-12" [(ngModel)]="currentTemplate.name" name="name" />
         </kendo-textbox-container>
+        <mat-error *ngIf="checkIfInputValid('title')">This field is required.</mat-error>
       </div>
 
       <div class="form-group">
