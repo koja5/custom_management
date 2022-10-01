@@ -57,13 +57,13 @@
     "featureSectionSecondItem2TextSecondPart": "Wir helfen Ihnen dabei!",
     "featureSectionSecondItem3Title": "Sicherheit und Verfügbarkeit",
     "featureSectionSecondItem3Text": "Hochverfügbarkeit, modernste Servertechnologie und laufende Backups machen unsere Cloud-App sicher und verfügbar!",
-    "featureSectionTitle": "Diese Services von ClinicNode sparen Ihnen Zeit und steigern die Effizienz",
-    "featureSectionText": "ClinicNode ist eine neue Generation von Software, die Ihre Arbeit und die Ihrer Mitarbeiter optimiert und Ihnen dabei Zeit und Geld spart!",
+    "featureSectionTitle": "Diese Services von ClinicNode sparen Ihnen Zeit und steigern die Effizienz Ihres Unternehmens",
+    "featureSectionText": "ClinicNode ist eine neue Generation von Software, die Ihre Arbeit und die Ihrer Mitarbeiter optimiert, die Effizient Ihres Unternehmens steigert, die Auslastung erhöht und Ihnen dabei Zeit und Geld spart.",
     "featureSectionOneTitle": "Zugriff steuern: Verschiedene Rollen im Unternehmen / System",
     "featureSectionOneText1": "Gewähren Sie Ihren Mitarbeitern, je nach Rolle / Position im Unternehmen, unterschiedliche Zugriffsrechte im System!",
     "featureSectionOneText2": "Auf dieser Basis werden den Mitarbeitern nur die Daten angezeigt, die für sie bestimmt sind und welche Rolle sie im Unternehmen haben!",
     "featureSectionOneDescriptionTitle": "Dazu gehören folgende Rollen:",
-    "featureSectionOneDescriptionList1": "Besitzer des Unternehmens",
+   "featureSectionOneDescriptionList1": "Besitzer des Unternehmens",
     "featureSectionOneDescriptionList2": "Regionalleiter",
     "featureSectionOneDescriptionList3": "Filialleiter",
     "featureSectionOneDescriptionList4": "Gruppenleiter",
@@ -93,8 +93,8 @@
     "subscribeSectionSupport": "24/7-Support",
     "subscribeSectionAnytimeCancel": "Jederzeit kündbar",
     "priceSectionUpText": "Pakete und Preise",
-    "priceSectionTitle": "Günstige Preise und Top-Service!",
-    "priceSectionText": "Wählen Sie ein Paket basierend auf der Größe Ihrer Organisation und Sie können das Paket jederzeit ändern!",
+    "priceSectionTitle": "Faire Preise individuell auf Ihren Betrieb abgestimmt mit Top-Service!",
+    "priceSectionText": "Wählen Sie eines unserer Paket basierend auf Ihren Anforderungen und der Größe Ihres Unternehmens. Sie können das Paket jederzeit ändern oder individuell anpassen.",
     "priceSectionNoNeedCreditCard": "Keine Kreditkarte",
     "priceSectionTryPeriod": "Freie Periode 14 Tage",
     "priceSectionAnytimeCancel": "Jederzeit kündbar",
@@ -134,16 +134,16 @@
     "contactSectionFormMessagePlaceholder": "Wie können wir Ihnen helfen? Was ist Ihr Anliegen?",
     "contactSectionFormSendButton": "Anfrage senden",
     "needToInputRequiredFields": "Alle Pflichtfelder müssen ausgefüllt werden!",
-    "successfullySendMessageRequest": "Sie haben Ihre Nachricht erfolgreich gesendet!",
+    "successfullySendMessageRequest": "Ihre Anfrage wurde erfolgreich gesendet!",
     "requestSectionTitle": "Digitalisieren Sie Ihren Dienstleistungsbetrieb. Wir helfen Ihnen bei den ersten Schritten. Kostenlos!",
     "requestSectionText1": "Moderne Technologien sind dazu da, unsere tägliche Arbeit zu erleichtern und die Effizienz zu steigern!",
     "requestSectionText2": "Mit der Einführung von ClinicNode erhalten Sie ein benutzerfreundliches und hocheffizientes System, das Ihnen dabei hilft, Ihre Geschäftsprozesse in Ihrem Dienstleistungsbetrieb zu organisieren, jederzeit und an jedem Ort. Verwaltung Sie ihre Termine im Unternehmen, oder bieten Sie Ihren Kunden die Möglichkeit zur Online-Reservierung an. Bleiben Sie in Kontakt mit ihren Kunden über unsere innovativen und interaktiven Marketing-Tools, verwalten Sie ihre Mitarbeiter und Filialen und behalten Sie über unsere Management-Tools immer den Überblick über Ihr Unternehmen!",
     "requestSectionText3": "Wir sind stolz darauf, dass 90% der Unternehmen unser System nach der Testphase weiter nutzen. Durch Skalierbarkeit und Parametrisierung unserer Cloud-App, erhalten Sie eine absolut individuelle Lösung, abgestimmt auf Ihr Unternehmen. Damit erhalten Sie immer das richtige Angebot, vom EPU bis zum international tätigen Dienstleister. Abgestimmt auf Ihre Größe und Budget!",
-    "requestSectionFormTitle": "Füllen Sie das untenstehende Formular aus und wir eröffnen ein Konto für Sie!",
+    "requestSectionFormTitle": "Füllen Sie das Formular aus und wir eröffnen gemeinsam mit Ihnen ein Konto für Sie. Oder klicken Sie oben auf Einloggen und registrieren sich gleich selbst. Sie können 14 Tage lang alle Funktionen gratis testen!",
     "requestSectionFormName": "Firmenname(*)",
     "requestSectionFormEmail": "Email(*)",
     "requestSectionFormPhone": "Telefon(*)",
-    "requestSectionFormnameOfCompany": "Ansprechpartner(*)",
+    "requestSectionFormNameOfKindergarden": "Ansprechpartner(*)",
     "requestSectionFormChooiceNumberOfChildrens": "Wählen Sie die Anzahl der Mitarbeiter(*)",
     "requestSectionFormMessage": "Erzählen Sie uns mehr über Ihre Firma (optional)",
     "requestSectionFormSendRequestButton": "Anfrage senden",
@@ -183,64 +183,24 @@
     "priceTable": {
         "header": [
             {
-                "nameOfPackageTitle": "Free",
-                "nameOfPackageText": "Starter plan",
-                "price": "FREE"
+                "nameOfPackageTitle": "Basis",
+                "nameOfPackageText": "Basis Funktionen. Optimierte Version für den erfolgreichen Start.",
+                "price": "9.90"
             },
             {
-                "nameOfPackageTitle": "Personal",
-                "nameOfPackageText": "Longer data retention",
-                "price": "9/mo"
+                "nameOfPackageTitle": "Advanced",
+                "nameOfPackageText": "Erweiterte Funktionen. Für anspruchsvolle Nutzer",
+                "price": "29.70"
             },
             {
-                "nameOfPackageTitle": "Pro",
-                "nameOfPackageText": "Our complete solution",
-                "price": "39/mo"
+                "nameOfPackageTitle": "Premium",
+                "nameOfPackageText": "Umfangreiche Funktionen. Die keine Wünsche offen lassen.",
+                "price": "64.30"
             }
         ],
         "functions": [
             {
-                "name": "Sites",
-                "descriptionPerPackages": [
-                    "exists",
-                    "not-exists",
-                    "180 Days"
-                ]
-            },
-            {
-                "name": "Data Retention",
-                "descriptionPerPackages": [
-                    "30 Days",
-                    "90 Days",
-                    "180 Days"
-                ]
-            },
-            {
-                "name": "Chart Annotations",
-                "descriptionPerPackages": [
-                    "not-exists",
-                    "exists",
-                    "exists"
-                ]
-            },
-            {
-                "name": "Uptime Monitoring",
-                "descriptionPerPackages": [
-                    "not-exists",
-                    "exists",
-                    "exists"
-                ]
-            },
-            {
-                "name": "Weekly Reports",
-                "descriptionPerPackages": [
-                    "not-exists",
-                    "not-exists",
-                    "exists"
-                ]
-            },
-            {
-                "name": "Security Audit",
+                "name": "Kalender",
                 "descriptionPerPackages": [
                     "exists",
                     "exists",
@@ -248,7 +208,103 @@
                 ]
             },
             {
-                "name": "On-Demand Audit",
+                "name": "Kunden verwalten",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Dokumenten Management",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Filialen verwalten",
+                "descriptionPerPackages": [
+                    "eine Filiale",
+                    "eine Filiale, optional mehrere",
+                    "eine Filiale, optional mehrere"
+                ]
+            },
+            {
+                "name": "Mitarbeiter verwalten",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Rechnungen ertellen",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Gutscheine verwalten",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Online Reservierung",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Marketing - Basis Funktionen",
+                "descriptionPerPackages": [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                "name": "- Terminerinnerung Email / SMS",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "- Geburtstagsgrüße Email / SMS",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "SMS (100 Stück) für € 9.90",
+                "descriptionPerPackages": [
+                    "optional",
+                    "inkludiert",
+                    "inkludiert"
+                ]
+            },
+            {
+                "name": "Marketing - Erweiterte Funktionen",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Zugriffssteuerung auf Geräte",
                 "descriptionPerPackages": [
                     "not-exists",
                     "not-exists",
@@ -256,19 +312,59 @@
                 ]
             },
             {
-                "name": "Priority Support",
+                "name": "Erweiterte Marketing Funktionen",
                 "descriptionPerPackages": [
                     "not-exists",
-                    "exists",
+                    "not-exists",
                     "exists"
                 ]
             },
             {
-                "name": "Easy Billing + No Contracts",
+                "name": "Management Funktionen",
                 "descriptionPerPackages": [
-                    "exists",
-                    "exists",
+                    "not-exists",
+                    "not-exists",
                     "exists"
+                ]
+            },
+            {
+                "name": "Warteliste mit AI Algorithmus",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "not-exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Individuelle Funktionen",
+                "descriptionPerPackages": [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                "name": "- Multistore",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "€ 9.90 pro zusätzlicher Filiale",
+                    "€ 9.90 pro zusätzlicher Filiale"
+                ]
+            },
+            {
+                "name": "- Payment für Online-Reservierung",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "optional",
+                    "optional"
+                ]
+            },
+            {
+                "name": "- Online Support",
+                "descriptionPerPackages": [
+                    "optional",
+                    "optional",
+                    "optional"
                 ]
             }
         ]
@@ -276,5 +372,16 @@
     "notFoundTitle": "Seite nicht gefunden!",
     "notFoundText": "Die gesuchte Seite existiert nicht.",
     "notFoundBackButton": "Der Rücken",
-    "notFoundCopyRight": "Copyright © 2022 ClinicNode. Alle Rechte vorbehalten."
+    "notFoundCopyRight": "Copyright © 2022 ClinicNode. Alle Rechte vorbehalten.",
+     "choosePackage": "Paketauswahl",
+    "priceOfPackage": "Der Preis des ausgewählten Pakets beträgt: ",
+    "cardDetails": "Kartendetails",
+    "lastPaymentStep": "Der letzte Schritt",
+    "paymentMessage": "Bestätigen Sie Ihre Bestellung noch einmal!",
+    "yes": "Ja",
+    "no": "Nein",
+    "paymentSuccess": "Sie haben die Zahlung erfolgreich durchgeführt!",
+    "paymentText": "Ihre Zahlung wurde registriert. Nach der Registrierung werden wir uns mit Ihnen in Verbindung setzen!",
+    "backToHome": "Gehen Sie zurück zum Anfang",
+    "paymentError": "Während der Zahlung ist ein Problem aufgetreten. Bitte versuchen Sie es später erneut."
 }
