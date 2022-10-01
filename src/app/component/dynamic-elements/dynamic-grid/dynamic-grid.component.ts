@@ -331,7 +331,7 @@ export class DynamicGridComponent implements OnInit {
   }
 
   callServerMethod(request, data) {
-    data["language"] = this.packLanguage.getLanguageForCreatedPatientAccount();
+    // data["language"] = this.packLanguage.getLanguageForCreatedPatientAccount();
 
     data = this.packAdditionalData(request.parameters, data);
     if (request.type === "POST") {
