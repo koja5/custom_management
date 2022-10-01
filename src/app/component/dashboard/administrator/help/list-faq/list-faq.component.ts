@@ -17,7 +17,6 @@ import { MessageService } from 'src/app/service/message.service';
 export class ListFaqComponent implements OnInit {
   @ViewChild("faqModal") faqModal: Modal;
   @ViewChild("panelbar") panelRef;
-  @Input() countryCodeValue: string;
 
   topicId: number;
   public kendoPanelBarExpandMode = PanelBarExpandMode.Multiple;
@@ -30,7 +29,6 @@ export class ListFaqComponent implements OnInit {
   public operationMode = 'add';
 
   public userSuperAdmin = false;
-  private superAdminId;
   private userId;
 
   constructor(private service: FaqService,
@@ -43,13 +41,11 @@ export class ListFaqComponent implements OnInit {
       this.language = JSON.parse(localStorage.getItem("language"));
     }
 
-    this.superAdminId = this.helpService.getSuperadmin();
     this.userId = this.helpService.getMe();
-    this.userSuperAdmin = this.superAdminId == this.userId;
+    this.userSuperAdmin = this.userId==4 && this.helpService.getType()==0;
 
     this.topicId = this.route.snapshot.params["id"];
-    this.service.getFaqTopic(this.topicId,this.superAdminId).subscribe(data => {
-      console.log(data);
+    this.service.getFaqTopic(this.topicId).subscribe(data => {
       if (data && data["length"] > 0) {
         this.faqTopic = data[0];
       }      
@@ -60,8 +56,7 @@ export class ListFaqComponent implements OnInit {
   }
 
   public loadFaqs() {
-    this.service.getFaqsByTopic(this.topicId, this.superAdminId).subscribe(data => {
-      console.log(data);
+    this.service.getFaqsByTopic(this.topicId).subscribe(data => {
       this.list = data;
       this.filterList = data;
     });
@@ -76,7 +71,6 @@ export class ListFaqComponent implements OnInit {
     this.faqModal.open();
     this.faq = new FaqModel();
     this.faq.helpTopicId = this.topicId;
-    this.faq.superAdminId = this.superAdminId;
     this.faq.question = "";
     this.faq.answer = "";
     this.operationMode = 'add';

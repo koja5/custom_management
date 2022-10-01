@@ -52,6 +52,6 @@ export class PriceComponent implements OnInit {
   }
 
   getStarted(name, price) {
-    this.router.navigate(["/request-demo"]);
+    this.router.navigate(["/request-demo/" + name]);
   }
 }

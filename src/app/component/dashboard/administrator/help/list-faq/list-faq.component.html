@@ -8,7 +8,7 @@
     <div class="col-sm-6 p-0 text-center mt-5 text-uppercase font-weight-bold">
       <label>{{ faqTopic?.name }}</label>
     </div>
-    <div class="col-sm-3 p-0 mt-5 mr-4 float-right">
+    <div class="col-sm-3 p-0 mt-5 mr-4 float-right" *ngIf="userSuperAdmin">
       <button kendoButton [icon]="'add'" (click)="addNewModal()" [primary]="true" class="addButton float-right">
       {{ language.newFaq }}
       </button>
