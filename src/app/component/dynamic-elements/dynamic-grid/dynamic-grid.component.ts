@@ -331,9 +331,11 @@ export class DynamicGridComponent implements OnInit {
   }
 
   callServerMethod(request, data) {
-    // data["language"] = this.packLanguage.getLanguageForCreatedPatientAccount();
-
     data = this.packAdditionalData(request.parameters, data);
+  
+    if(request.api === "/api/createClinic") {
+      data["language"] = this.packLanguage.getLanguageForCreatedPatientAccount();
+    }
     if (request.type === "POST") {
       this.service.callApiPost(request.api, data).subscribe((response) => {
         if (response === true || response["success"] === true) {
