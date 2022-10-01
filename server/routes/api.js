@@ -6200,7 +6200,7 @@ router.post("/updateAvailableAreaCode", function (req, res, next) {
   });
 });
 
-router.get("/deleteAvailableAreaCode/:id", (req, res, next) => {
+router.post("/deleteAvailableAreaCode", (req, res, next) => {
   try {
     connection.getConnection(function (err, conn) {
       if (err) {
@@ -6211,7 +6211,7 @@ router.get("/deleteAvailableAreaCode/:id", (req, res, next) => {
         });
       } else {
         conn.query(
-          "delete from available_area_code where id = '" + req.params.id + "'",
+          "delete from available_area_code where id = '" + req.body.id + "'",
           function (err, rows, fields) {
             conn.release();
             if (err) {
