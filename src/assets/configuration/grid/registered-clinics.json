@@ -59,7 +59,24 @@
       "add": {
         "type": "POST",
         "api": "/api/createClinic",
-        "parameters": [],
+        "parameters": [
+          {"type": "language",
+           "translateFields":
+            [
+              "subjectFormRegistration",
+              "initialGreeting",
+              "finalGreeting",
+              "signature",
+              "thanksForUsing",
+              "websiteLink",
+              "ifYouHaveQuestion",
+              "emailAddress",
+              "notReply",
+              "copyRight",
+              "introductoryMessageForPatientRegistrationForm",
+              "openForm"
+            ]
+           }],
         "fields": "",
         "root": ""
       },

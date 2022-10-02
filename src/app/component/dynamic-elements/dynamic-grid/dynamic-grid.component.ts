@@ -332,10 +332,6 @@ export class DynamicGridComponent implements OnInit {
 
   callServerMethod(request, data) {
     data = this.packAdditionalData(request.parameters, data);
-  
-    if(request.api === "/api/createClinic") {
-      data["language"] = this.packLanguage.getLanguageForCreatedPatientAccount();
-    }
     if (request.type === "POST") {
       this.service.callApiPost(request.api, data).subscribe((response) => {
         if (response === true || response["success"] === true) {
@@ -378,16 +374,25 @@ export class DynamicGridComponent implements OnInit {
   packAdditionalData(parameters: any, data: any) {
     if (parameters && parameters.length > 0) {
       for (let i = 0; i < parameters.length; i++) {
-        switch (parameters[i]) {
-          case "superadmin":
+        switch (true) {
+          case parameters[i] == "superadmin":
             data["superadmin"] = this.helpService.getSuperadmin();
             break;
+
+          case parameters[i].type == "language":
+            data["language"] = this.translateFields(parameters[i].translateFields)
+            break;
+
           default:
             break;
         }
       }
     }
     return data;
+  }
+
+  translateFields(fields: Array<string>) {
+    return this.packLanguage.dynamicPackLanguage(fields);
   }
 
   previewDocument(filename: string) {
