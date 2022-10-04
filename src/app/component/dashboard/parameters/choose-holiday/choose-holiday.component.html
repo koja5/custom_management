@@ -1,82 +1,104 @@
 <div class="content-wrapper h-auto">
-  <div class="row mx-0 mb-3">
-    <div class="col-sm-6">
-      <label class="k-checkbox-label"> {{ language.selectClinicHolidays }} </label>
+
+  <!--HOLIDAYS DEFINED BY TEMPLATE SECTION-->
+  <div class="row mx-0 my-3">
+    <div class="col-sm-12">
+      <h4 class="k-checkbox-label"> {{ language.selectHolidayTemplate }} </h4>
       <br>
+      <br>
+    </div>
+    <div class="col-sm-4">
       <kendo-multiselect [data]="holidayTemplateList" [valueField]="'id'" [textField]="'name'"
         [(ngModel)]="selectedTemplates" name="template" (valueChange)="onTemplateChange()">
       </kendo-multiselect>
-      <button class="mt-4" kendoButton [primary]="false" [disabled]="isSaveDisabled" type="button"
-        (click)="addHolidayTemplatesForClinic()">
+      <button style="float:right" class="mt-4" kendoButton [primary]="false" [disabled]="isSaveDisabled" type="button"
+        (click)="saveTemplateSelection()">
         {{ language.save }}
       </button>
     </div>
   </div>
 
-  <div class="row m-auto ml-3" *ngIf="!clinicHolidays.length">
-    <h4> {{ language.noDataAvailable }}</h4>
-    <button type="button" (click)="openAddNewHolidayModal()" class="btn btn-primary btn-sm">
-      {{ language.addNew }}
-    </button>
+  <div class="row mx-0 my-3">
+    <div class="col-sm-12" *ngIf="!templateHolidays.length">
+      <h4> {{ language.noHolidayTemplateSelected }}</h4>
+    </div>
+
+    <div class="col-sm-12" *ngIf="templateHolidays.length">
+      <h4> {{ language.predifinedHolidayTitle }}</h4>
+    </div>
+
+    <div class="col-sm-12">
+      <table class="table table-responsive w-50" *ngIf="templateHolidays.length">
+        <thead>
+          <tr>
+            <th>{{ language.title }}</th>
+            <th>{{ language.date }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let holiday of templateHolidays">
+            <td>{{ holiday.Subject }}</td>
+            <td *ngIf="holiday.StartTime.getTime() == holiday.EndTime.getTime()">{{ holiday.StartTime | date:'dd.MM.y'}}
+            </td>
+            <td *ngIf="holiday.StartTime.getTime() !== holiday.EndTime.getTime()">
+              {{ holiday.StartTime | date:'dd.MM.y' }} - {{ holiday.EndTime | date: 'dd.MM.y' }}
+            </td>
+            <td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  <table class="table table-responsive" *ngIf="clinicHolidays.length">
-    <thead>
-      <tr>
-        <td>
-          <h4> {{ language.clinicDefinedHolidaysTitle }}</h4>
-        </td>
-        <td>
-          <button type="button" (click)="openAddNewHolidayModal()" class="btn btn-primary btn-sm">
-            {{ language.addNew }}
-          </button>
-        </td>
+  <hr style="border-color:grey;">
 
-      </tr>
-      <tr>
-        <th>{{ language.title }}</th>
-        <th>{{ language.date }}</th>
-        <th>{{ language.edit }}</th>
-        <th>{{ language.delete }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let holiday of clinicHolidays">
-        <td>{{holiday.Subject}}</td>
-        <td>{{ getFormattedDate(holiday) }}</td>
-        <td>
-          <button kendoButton [icon]="'k-icon k-i-edit'" (click)="openEditHolidayModal(holiday)"></button>
-        </td>
+  <!--SECTION FOR DEFINING CLINIC HOLIDAYS AND DISPLAY THEM-->
+  <div class="row mx-0 my-3">
+    <div class="col-12">
 
-        <td>
-          <button kendoButton [icon]="'k-icon k-i-delete'" (click)="openDeleteModal(holiday.id)"></button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+      <div class="col-sm-12 mb-4">
+        <h4> {{ language.clinicDefinedHolidaysTitle }}</h4>
+      </div>
 
-  <hr>
+      <div class="row m-auto ml-3">
+        <h4 *ngIf="!clinicHolidays.length"> {{ language.noDataAvailable }}</h4>
+        <button style="font-size:12px" type="button" (click)="openAddNewHolidayModal()" class="btn-primary btn-lg">
+          {{ language.addNew }}
+        </button>
+      </div>
 
-  <div class="row m-auto ml-3" *ngIf="!templateHolidays.length">
-    <h4> {{ language.noDataAvailable }}</h4>
-    <h4> {{ language.select }}</h4>
+      <div class="col-sm-12">
+        <table class="table table-responsive" *ngIf="clinicHolidays.length">
+          <thead>
+            <tr>
+              <th>{{ language.title }}</th>
+              <th>{{ language.date }}</th>
+              <th>{{ language.edit }}</th>
+              <th>{{ language.delete }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let holiday of clinicHolidays">
+              <td>{{ holiday.Subject }}</td>
+              <td *ngIf="holiday.StartTime.getTime() == holiday.EndTime.getTime()">{{ holiday.StartTime |
+                date:'dd.MM.y'}} </td>
+              <td *ngIf="holiday.StartTime.getTime() !== holiday.EndTime.getTime()">
+                {{ holiday.StartTime | date:'dd.MM.y' }} - {{ holiday.EndTime | date: 'dd.MM.y' }}
+              </td>
+              <td>
+                <button kendoButton [icon]="'k-icon k-i-edit'" (click)="openEditHolidayModal(holiday)"></button>
+              </td>
+
+              <td>
+                <button kendoButton [icon]="'k-icon k-i-delete'" (click)="openDeleteModal(holiday.id)"></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
-  <table class="table table-responsive w-50" *ngIf="templateHolidays.length">
-    <thead>
-      <tr> {{ language.predifinedHolidayTitle }} </tr>
-      <tr>
-        <th>{{ language.title }}</th>
-        <th>{{ language.date }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let holiday of templateHolidays">
-        <td>{{holiday.Subject}}</td>
-        <td>{{ getFormattedDate(holiday) }}</td>
-      </tr>
-    </tbody>
-  </table>
 </div>
 
 
@@ -85,7 +107,7 @@
     <h4> {{ holidayModalTitle }}</h4>
   </modal-header>
   <modal-content class="pb-0">
-    <form name="holidayForm" class="holidayForm" (ngSubmit)="addClinicHoliday()" #holidayForm="ngForm">
+    <form name="holidayForm" class="holidayForm" (ngSubmit)="addClinicHoliday(holidayForm)" #holidayForm="ngForm">
       <div class="form-group">
         <kendo-textbox-container floatingLabel="{{ language.title }}">
           <input kendoTextBox required type="text" class="col-12" pattern="[a-zA-Z0-9 ]+"
