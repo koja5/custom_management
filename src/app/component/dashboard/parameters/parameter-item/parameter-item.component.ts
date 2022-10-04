@@ -122,6 +122,9 @@ export class ParameterItemComponent implements OnInit {
       map((data) => {
         this.currentLoadData = data;
 
+        if(this.currentLoadData.length < this.gridState.skip) {
+          this.gridState.skip = 0;
+        }
         if (this.type === "Therapy") {
 
           data.forEach(element => {
@@ -153,10 +156,17 @@ export class ParameterItemComponent implements OnInit {
 
     this.currentUrl = this.router.url;
 
+    this.setPagination();
+  }
+
+  setPagination() {
     this.savePage = this.helpService.getGridPageSize();
-    if(this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
+    if (
+      (this.savePage && this.savePage[this.currentUrl]) ||
+      this.savePage[this.currentUrl + "Take"]
+    ) {
       this.gridState.skip = this.savePage[this.currentUrl];
-      this.gridState.take = this.savePage[this.currentUrl + 'Take'];
+      this.gridState.take = this.savePage[this.currentUrl + "Take"];
     }
   }
 

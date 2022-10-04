@@ -38,6 +38,7 @@ import { PackLanguageService } from "src/app/service/pack-language.service";
 export class DynamicGridComponent implements OnInit {
   @Input() path: string;
   @Input() name: string;
+  @Input() dataLength: number;
   @Output() actionEmitter = new EventEmitter<any>();
   @ViewChild(DynamicFormsComponent) form: DynamicFormsComponent;
   @ViewChild("orderForm") public orderForm: FormGroup;
@@ -127,6 +128,9 @@ export class DynamicGridComponent implements OnInit {
         if (this.savePage[this.currentUrl + "Take"]) {
           this.config.paging.settings.pageSize =
             this.savePage[this.currentUrl + "Take"];
+        }
+        if(this.dataLength < ((this.config.paging.settings.currentPage - 1) * this.config.paging.settings.pageSize)) {
+          this.config.paging.settings.currentPage = 1;
         }
         if (data["localData"]) {
           this.getLocalData(data["localData"]);

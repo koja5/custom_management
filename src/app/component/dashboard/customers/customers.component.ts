@@ -96,7 +96,14 @@ export class CustomersComponent implements OnInit {
   currentUrl: string;
 
   public showColumnPicker = false;
-  public columns: string[] = ["Username", "Firstname", "Lastname", "Telephone", "Mobile", "Email address"];
+  public columns: string[] = [
+    "Username",
+    "Firstname",
+    "Lastname",
+    "Telephone",
+    "Mobile",
+    "Email address",
+  ];
   public hiddenColumns: string[] = [];
 
   constructor(
@@ -116,7 +123,7 @@ export class CustomersComponent implements OnInit {
   ngOnInit() {
     this.height = this.helpService.getHeightForGrid();
     this.data.gender = "male";
-    this.data['type'] = 4;
+    this.data["type"] = 4;
 
     this.getCustomers();
 
@@ -145,18 +152,27 @@ export class CustomersComponent implements OnInit {
     this.helpService.setTitleForBrowserTab(this.language.customer);
 
     this.currentUrl = this.router.url;
+    this.setPagination();
+  }
 
+  setPagination() {
     this.savePage = this.helpService.getGridPageSize();
-    if (this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
+    if (
+      (this.savePage && this.savePage[this.currentUrl]) ||
+      this.savePage[this.currentUrl + "Take"]
+    ) {
       this.state.skip = this.savePage[this.currentUrl];
       this.state.take = this.savePage[this.currentUrl + "Take"];
     }
   }
-  
+
   getCustomers() {
     this.service.getCustomers(localStorage.getItem("superadmin"), (val) => {
       if (val !== null) {
         this.currentLoadData = val;
+        if(this.currentLoadData.length < this.state.skip) {
+          this.state.skip = 0;
+        }
         this._allData = <ExcelExportData>{
           data: process(this.currentLoadData, this.state).data,
         };
@@ -209,7 +225,6 @@ export class CustomersComponent implements OnInit {
     this.customer.closeOnOutsideClick = false;
     this.customer.hideCloseButton = true;
     this.customer.open();
-
   }
 
   initializeParams() {
@@ -311,7 +326,7 @@ export class CustomersComponent implements OnInit {
 
   previewUser(selectedUser) {
     if (selectedUser.img && selectedUser.img.data.length !== 0) {
-      this.imagePath = this.helpService.setUserProfileImagePath(selectedUser);;
+      this.imagePath = this.helpService.setUserProfileImagePath(selectedUser);
     } else {
       this.imagePath =
         selectedUser.gender == "male"
@@ -666,13 +681,13 @@ export class CustomersComponent implements OnInit {
   }
 
   emitImage(event) {
-    this.getCustomers()
+    this.getCustomers();
     setTimeout(() => {
       this.currentLoadData.forEach((el: any) => {
-        if(el.id == event.id) {
+        if (el.id == event.id) {
           this.selectedUser.img = el.img;
         }
-      })
+      });
       this.previewUser(this.selectedUser);
     }, 1000);
   }
