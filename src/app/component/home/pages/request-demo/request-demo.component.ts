@@ -22,7 +22,8 @@ export class RequestDemoComponent implements OnInit {
   public data = new ReqeustDemoAccount();
   public required = false;
   public success = false;
-  private package: string;
+  public package: string;
+  public showDialog = false;
   elements: Elements;
   card: StripeElement;
   elementsOptions: ElementsOptions = {
@@ -146,6 +147,7 @@ export class RequestDemoComponent implements OnInit {
 
   selectPackage(event) {
     this.data.price = event;
+    this.getNameOfPackage(event);
   }
 
   getPriceForPackage() {
@@ -156,6 +158,14 @@ export class RequestDemoComponent implements OnInit {
         ) {
           this.data.price = this.language.priceTable.header[i].price;
         }
+      }
+    }
+  }
+
+  getNameOfPackage(price) {
+    for (let i = 0; i < this.language.priceTable.header.length; i++) {
+      if (this.language.priceTable.header[i].price === price) {
+        this.package = this.language.priceTable.header[i].nameOfPackageTitle;
       }
     }
   }
