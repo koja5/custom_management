@@ -87,10 +87,17 @@ export class WorkTimeColorsComponent implements OnInit {
 
     this.getWorkTimeColors();
 
+    this.setPagination();
+  }
+
+  setPagination() {
     this.savePage = this.helpService.getGridPageSize();
-    if(this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
+    if (
+      (this.savePage && this.savePage[this.currentUrl]) ||
+      this.savePage[this.currentUrl + "Take"]
+    ) {
       this.state.skip = this.savePage[this.currentUrl];
-      this.state.take = this.savePage[this.currentUrl + 'Take'];
+      this.state.take = this.savePage[this.currentUrl + "Take"];
     }
   }
   
@@ -105,6 +112,9 @@ export class WorkTimeColorsComponent implements OnInit {
       .getWorkTimeColors(localStorage.getItem("superadmin"))
       .subscribe((data: []) => {
         this.currentLoadData = data;
+        if(this.currentLoadData.length < this.state.skip) {
+          this.state.skip = 0;
+        }
         this._allData = <ExcelExportData>{
           data: process(this.currentLoadData, this.state).data,
         }
