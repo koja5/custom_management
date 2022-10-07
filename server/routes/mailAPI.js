@@ -1209,13 +1209,6 @@ router.post("/sendMassiveEMail", function (req, res) {
       var sendMassive = hogan.compile(sendMassiveTemplate);
       var question = getSqlQuery(req.body);
       var joinTable = getJoinTable(req.body);
-    
-    console.log("select distinct c.email, c.shortname, mm.* from customers c join mail_massive_message mm on c.storeId = mm.superadmin join store s on c.storeId = s.superadmin " +
-    joinTable +
-    " where c.sendMassiveEmail = 1 and (c.email != '' and c.email IS NOT NULL)  and c.active = 1  and c.storeId = " +
-    Number(req.body.superadmin) +
-    " and " +
-      question);
 
     if (req.body.message != "") {
             connection.getConnection(function (err, conn) {
@@ -1232,8 +1225,7 @@ router.post("/sendMassiveEMail", function (req, res) {
             logger.log("error HERE", err);
             res.json(err);
           }
-          console.log(question);
-          console.log(rows);
+
           rows.forEach(function (to, i, array) {
             var mail = {};
             var signatureAvailable = false;
@@ -1307,7 +1299,7 @@ router.post("/sendMassiveEMail", function (req, res) {
 
                 unsubscribeMessage: req.body.language?.unsubscribeMessage,
                 unsubscribeHere: req.body.language?.unsubscribeHere,
-                unsubscribeLink: "http://localhost:4200/unsubscribe/" + to.email,
+                unsubscribeLink: process.env.unsubscribe + '/' + to.email,
               }),
             };
             smtpTransport.sendMail(mailOptions, function (error, response) {

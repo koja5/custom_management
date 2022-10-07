@@ -5975,11 +5975,11 @@ router.post("/getFilteredRecipients", function (req, res) {
       var joinTable = getJoinTable(req.body);
       var table = "";
       if (req.body.mode && req.body.mode === "mail") {
-        var checkAdditionalQuery = "(c.email != '' and c.email IS NOT NULL)";
+        var checkAdditionalQuery = "(c.email != '' and c.email IS NOT NULL) and c.sendMassiveEmail = 1 ";
         table = "mail_massive_message";
       } else {
         var checkAdditionalQuery =
-          "((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL))";
+          "((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL)) and c.sendMassiveSMS = 1 ";
         table = "sms_massive_message";
       }
 
@@ -5997,7 +5997,7 @@ router.post("/getFilteredRecipients", function (req, res) {
           " where " +
           excludeQuery +
           checkAdditionalQuery +
-          " and c.sendMassiveEmail = 1 and c.active = 1 and c.storeId = " +
+          " and c.active = 1 and c.storeId = " +
           Number(req.body.superadmin) +
           " and (" +
           question +
