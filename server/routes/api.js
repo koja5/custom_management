@@ -8381,15 +8381,15 @@ router.get("/getHolidaysByTemplates/:templateIds", function (req, res, next) {
   });
 });
 
-router.get("/getHolidaysForClinic/:clinicId", function (req, res, next) {
+router.get("/getHolidaysForClinic/:superAdminId", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
     }
-    var clinicId = req.params.clinicId;
+    var superAdminId = req.params.superAdminId;
     conn.query(
-      "SELECT * FROM `holidays` h where h.clinicId =" + clinicId,
+      "SELECT * FROM `holidays` h where h.superAdminId =" + superAdminId,
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -8429,7 +8429,7 @@ router.get("/getTemplateByUserId/:userId", function (req, res, next) {
 
 //store-template
 
-router.post("/createStoreTemplateConnection", (req, res, next) => {
+router.post("/createSuperAdminTemplateConnection", (req, res, next) => {
   try {
     connection.getConnection(function (err, conn) {
       if (err) {
@@ -8442,7 +8442,7 @@ router.post("/createStoreTemplateConnection", (req, res, next) => {
         console.log(req.body);
         const temp = req.body.query;
         conn.query(
-          "insert into store_holidayTemplate (storeId , templateId) values " +
+          "insert into store_holidayTemplate (superAdminId , templateId) values " +
             temp,
           function (err, results, fields) {
             conn.release();
@@ -8475,10 +8475,10 @@ router.post("/deleteStoreTemplateConnection", (req, res, next) => {
       } else {
         console.log(req.body);
         const temp = req.body.query;
-        const storeId = req.body.storeId;
+        const superAdminId = req.body.superAdminId;
         conn.query(
-          "DELETE FROM store_holidayTemplate where storeId =  " +
-            storeId +
+          "DELETE FROM store_holidayTemplate where superAdminId =  " +
+          superAdminId +
             " and templateId in " +
             temp,
           function (err, results, fields) {
@@ -8500,7 +8500,7 @@ router.post("/deleteStoreTemplateConnection", (req, res, next) => {
   }
 });
 
-router.get("/getStoreTemplateConnection/:storeId", (req, res, next) => {
+router.get("/getStoreTemplateConnection/:superAdminId", (req, res, next) => {
   try {
     connection.getConnection(function (err, conn) {
       if (err) {
@@ -8510,9 +8510,9 @@ router.get("/getStoreTemplateConnection/:storeId", (req, res, next) => {
           status: err,
         });
       } else {
-        const temp = req.params.storeId;
+        const temp = req.params.superAdminId;
         conn.query(
-          "select * from store_holidayTemplate where storeId = " + temp,
+          "select * from store_holidayTemplate where superAdminId = " + temp,
           function (err, results, fields) {
             conn.release();
             if (err) {

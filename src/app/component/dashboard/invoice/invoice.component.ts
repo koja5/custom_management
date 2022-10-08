@@ -191,8 +191,6 @@ export class InvoiceComponent implements OnInit {
         this.invoicePrefix = this.superadminProfile.invoicePrefix;
         this.invoiceID = this.superadminProfile.invoiceID;
         this.changedInvoiceID = this.superadminProfile.invoiceID;
-
-        console.log(data);
       });
 
     this.getParameters();

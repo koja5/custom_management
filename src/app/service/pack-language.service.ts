@@ -7,6 +7,17 @@ import { HelpService } from "./help.service";
 export class PackLanguageService {
   constructor(private helpService: HelpService) {}
 
+
+  dynamicPackLanguage(fields: Array<string>) {
+    const language = this.helpService.getLanguage();
+    const returnVal = {};
+
+    fields.forEach((el: string) => {
+      returnVal[el] = language[el];
+    })
+    return returnVal;
+  }
+
   getLanguageForPatientRegistrationForm() {
     const language = this.helpService.getLanguage();
     return {
