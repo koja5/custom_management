@@ -9,6 +9,8 @@ import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { DatePickerComponent } from '@progress/kendo-angular-dateinputs';
 import { HolidayTemplate } from 'src/app/models/holiday-template.model';
 import { DateService } from 'src/app/service/date.service';
+import { UserModel } from 'src/app/models/user-model';
+import { checkIfInputValid } from "../../../../shared/utils";
 import { NgForm } from '@angular/forms';
 
 @Component({
@@ -37,6 +39,7 @@ export class ChooseHolidayComponent implements OnInit {
   private overrideMessage: Partial<IndividualConfig> = { timeOut: 7000, positionClass: "toast-bottom-right" };
   public superAdminTemplates: number[] = [];
   private deleteHolidayTemplateId: number;
+  checkIfInputValid = checkIfInputValid;
 
   get holidayModalTitle(): string {
     return this.addNewHoliday ?

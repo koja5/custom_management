@@ -15,6 +15,7 @@ import { GridComponent, PageChangeEvent } from "@progress/kendo-angular-grid";
 import { HelpService } from "src/app/service/help.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { Router } from "@angular/router";
+import { checkIfInputValid } from "../../../../shared/utils";
 
 @Component({
   selector: "app-event-category",
@@ -75,6 +76,7 @@ export class WorkTimeColorsComponent implements OnInit {
   isFormDirty: boolean = false;
   currentUrl: string;
   savePage = {};
+  checkIfInputValid = checkIfInputValid;
 
   ngOnInit() {
     this.currentUrl = this.router.url;

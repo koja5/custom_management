@@ -184,17 +184,19 @@
       </div>
       <div class="col-md-12 col-xs-12">
         <kendo-textbox-container floatingLabel="{{ language.date }}({{ language.required }})">
-          <kendo-datepicker [format]="'dd.MM.yyyy'" class="email col-md-12 col-xs-12 noPadding" name="Date"
+          <kendo-datepicker id="date" [format]="'dd.MM.yyyy'" class="email col-md-12 col-xs-12 noPadding" name="Date"
             [(ngModel)]="dateConst" dateConst.value="" required>
           </kendo-datepicker>
         </kendo-textbox-container>
+        <mat-error *ngIf="checkIfInputValid('date')">{{ language?.thisFieldIsRequired }}</mat-error>
       </div>
       <div class="col-md-12 col-xs-12">
         <kendo-textbox-container floatingLabel="{{ language.amount }}({{ language.required }})">
-          <kendo-numerictextbox class="email col-md-12 col-xs-12 noPadding" name="Amount" [(ngModel)]="data.amount"
+          <kendo-numerictextbox id="amount" class="email col-md-12 col-xs-12 noPadding" name="Amount" [(ngModel)]="data.amount"
             amount.value="" required>
           </kendo-numerictextbox>
         </kendo-textbox-container>
+        <mat-error *ngIf="checkIfInputValid('amount')">{{ language?.thisFieldIsRequired }}</mat-error>
       </div>
       <div class="col-md-12 col-xs-12">
         <kendo-textbox-container floatingLabel="{{ language.date_redeemed }}">
@@ -221,11 +223,12 @@
       </div>
       <div class="col-md-12 col-xs-12">
         <kendo-textbox-container floatingLabel="{{ language.user }}({{ language.required }})">
-          <kendo-combobox class="email col-md-12 col-xs-12 noPadding" [data]="users" [textField]="'shortname'"
+          <kendo-combobox id="user" class="email col-md-12 col-xs-12 noPadding" [data]="users" [textField]="'shortname'"
             [valueField]="'id'" [(ngModel)]="user" name="user" [disabled]="operationMode === 'add' ? false : true"
             required>
           </kendo-combobox>
         </kendo-textbox-container>
+        <mat-error *ngIf="checkIfInputValid('user')">{{ language?.thisFieldIsRequired }}</mat-error>
       </div>
       <div class="col-md-12 col-xs-12" style="padding-top: 15px">
         <kendo-textbox-container floatingLabel="{{ language.comment }}">
