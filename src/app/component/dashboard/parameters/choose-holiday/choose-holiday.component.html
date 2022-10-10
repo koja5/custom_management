@@ -91,7 +91,7 @@
           <input id="subject" kendoTextBox required type="text" class="col-12" pattern="[a-zA-Z0-9 ]+"
             [(ngModel)]="currentHoliday.Subject" name="subject" />
         </kendo-textbox-container>
-        <mat-error *ngIf="checkIfInputValid('subject')">This field is required.</mat-error>
+        <mat-error *ngIf="checkIfInputValid('subject')">{{ language?.thisFieldIsRequired }}</mat-error>
       </div>
       <div class="form-group">
         <kendo-textbox-container>

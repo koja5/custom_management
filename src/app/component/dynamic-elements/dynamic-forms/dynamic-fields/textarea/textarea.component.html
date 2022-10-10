@@ -24,7 +24,7 @@
       }}</label
     >
   </div>
-  <mat-error *ngIf="checkIfInputValid(config.name)">This field is required.</mat-error>
+  <mat-error *ngIf="checkIfInputValid(config.name)">{{ language?.thisFieldIsRequired }}</mat-error>
   <div class="count-of-char text-right">
     <span *ngIf="value !== undefined">{{ value?.length }}</span>
   </div>

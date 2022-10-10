@@ -2208,6 +2208,12 @@
             },
             "columnHeader": {
                 "type": "string"
+            },
+            "thisFieldIsRequired": {
+                "type": "string"
+            },
+            "invalidFormat": {
+                "type": "string"
             }
         }
     },
@@ -6460,6 +6466,24 @@
                             "key": "successThemeEdit"
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "type": "section",
+            "title": "Validation error messages",
+            "expandable": true,
+            "expanded": false,
+            "items": [{
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [{
+                        "key": "thisFieldIsRequired"
+                    },
+                    {
+                        "key": "invalidFormat"
+                    }]
                 }
             ]
         }

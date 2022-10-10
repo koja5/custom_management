@@ -148,13 +148,13 @@
             <kendo-colorpicker id="color" #picker [view]="'combo'" (change)="isDirty()" [format]="'hex'" [(ngModel)]="data.color"
               [(value)]="data.color" name="color" required></kendo-colorpicker>
           </kendo-textbox-container>
-          <mat-error *ngIf="checkIfInputValid('color')">This field is required.</mat-error>
+          <mat-error *ngIf="checkIfInputValid('color')">{{ language?.thisFieldIsRequired }}</mat-error>
         </div>
         <div class="col-md-12 col-xs-12">
           <kendo-textbox-container floatingLabel="{{ language.sequence }}({{ language.required }})">
             <input id="sequence" kendoTextBox type="number" class="col-xs-12" [(ngModel)]="data.sequence" name="sequence" required />
           </kendo-textbox-container>
-          <mat-error *ngIf="checkIfInputValid('sequence')">This field is required.</mat-error>
+          <mat-error *ngIf="checkIfInputValid('sequence')">{{ language?.thisFieldIsRequired }}</mat-error>
         </div>
         <div class="form-group" style="text-align: center">
           <button *ngIf="operationMode === 'add'" kendoButton [primary]="true" class="form-button"

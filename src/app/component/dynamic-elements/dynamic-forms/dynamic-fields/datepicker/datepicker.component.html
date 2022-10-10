@@ -17,5 +17,5 @@
       [format]="config.format"
     ></ejs-datepicker>
   </div>
-  <mat-error *ngIf="checkIfInputValid(config.name)">This field is required.</mat-error>
+  <mat-error *ngIf="checkIfInputValid(config.name)">{{ language?.thisFieldIsRequired }}</mat-error>
 </div>

@@ -188,7 +188,7 @@
             [(ngModel)]="dateConst" dateConst.value="" required>
           </kendo-datepicker>
         </kendo-textbox-container>
-        <mat-error *ngIf="checkIfInputValid('date')">This field is required.</mat-error>
+        <mat-error *ngIf="checkIfInputValid('date')">{{ language?.thisFieldIsRequired }}</mat-error>
       </div>
       <div class="col-md-12 col-xs-12">
         <kendo-textbox-container floatingLabel="{{ language.amount }}({{ language.required }})">
@@ -196,7 +196,7 @@
             amount.value="" required>
           </kendo-numerictextbox>
         </kendo-textbox-container>
-        <mat-error *ngIf="checkIfInputValid('amount')">This field is required.</mat-error>
+        <mat-error *ngIf="checkIfInputValid('amount')">{{ language?.thisFieldIsRequired }}</mat-error>
       </div>
       <div class="col-md-12 col-xs-12">
         <kendo-textbox-container floatingLabel="{{ language.date_redeemed }}">
@@ -228,7 +228,7 @@
             required>
           </kendo-combobox>
         </kendo-textbox-container>
-        <mat-error *ngIf="checkIfInputValid('user')">This field is required.</mat-error>
+        <mat-error *ngIf="checkIfInputValid('user')">{{ language?.thisFieldIsRequired }}</mat-error>
       </div>
       <div class="col-md-12 col-xs-12" style="padding-top: 15px">
         <kendo-textbox-container floatingLabel="{{ language.comment }}">
