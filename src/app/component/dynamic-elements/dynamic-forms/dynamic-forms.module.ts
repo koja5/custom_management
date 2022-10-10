@@ -18,6 +18,7 @@ import { CheckboxComponent } from './dynamic-fields/checkbox/checkbox.component'
 import { SwitchComponent } from './dynamic-fields/switch/switch.component';
 import { MultiselectComponent } from './dynamic-fields/multiselect/multiselect.component';
 import { MultiSelectModule } from '@progress/kendo-angular-dropdowns';
+import { MatFormFieldModule, MatInputModule } from "@angular/material";
 
 @NgModule({
   declarations: [DynamicFieldsDirective, DropdownComponent, TextboxComponent, TextareaComponent, NumericComponent, DatepickerComponent, ButtonComponent, RadioComponent, CheckboxComponent, SwitchComponent, MultiselectComponent],
@@ -31,7 +32,9 @@ import { MultiSelectModule } from '@progress/kendo-angular-dropdowns';
     NumericTextBoxModule,
     RadioButtonModule,
     CheckBoxModule,
-    SwitchModule
+    SwitchModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   exports: [DynamicFieldsDirective],
   entryComponents: [TextboxComponent, DropdownComponent, TextareaComponent, NumericComponent, DatepickerComponent, ButtonComponent, RadioComponent, CheckboxComponent, SwitchComponent, MultiselectComponent],

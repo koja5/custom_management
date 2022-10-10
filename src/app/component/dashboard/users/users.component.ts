@@ -19,6 +19,7 @@ import * as XLSX from "ts-xlsx";
 import { MessageService } from "src/app/service/message.service";
 import { HelpService } from "src/app/service/help.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { checkIfInputValid } from "../../../shared/utils";
 
 @Component({
   selector: "app-users",
@@ -97,6 +98,7 @@ export class UsersComponent implements OnInit {
   isFormDirty: boolean = false;
   currentUrl: string;
   savePage: any = {};
+  checkIfInputValid = checkIfInputValid;
 
   public showColumnPicker = false;
   public columns: string[] = ["Username", "Email address", "Firstname", "Lastname",  "Street", "Active"];
@@ -130,10 +132,17 @@ export class UsersComponent implements OnInit {
     });
     this.currentUrl = this.router.url;
     
+    this.setPagination();
+  }
+
+  setPagination() {
     this.savePage = this.helpService.getGridPageSize();
-    if(this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
+    if (
+      (this.savePage && this.savePage[this.currentUrl]) ||
+      this.savePage[this.currentUrl + "Take"]
+    ) {
       this.state.skip = this.savePage[this.currentUrl];
-      this.state.take = this.savePage[this.currentUrl + 'Take'];
+      this.state.take = this.savePage[this.currentUrl + "Take"];
     }
   }
 
@@ -141,6 +150,9 @@ export class UsersComponent implements OnInit {
     this.service.getUsers(localStorage.getItem("superadmin"), (val) => {
       console.log(val);
       this.currentLoadData = val;
+      if(this.currentLoadData.length < this.state.skip) {
+        this.state.skip = 0;
+      }
       this.gridData = {
         data: val,
       };

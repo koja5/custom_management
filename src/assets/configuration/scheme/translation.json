@@ -200,10 +200,10 @@
             "uploadFromExcel": {
                 "type": "string"
             },
-            "selectClinicHolidays": {
+            "selectHolidayTemplate": {
                 "type": "string"
             },
-            "selectHolidayTemplate": {
+            "noHolidayTemplateSelected": {
                 "type": "string"
             },
             "clinicDefinedHolidaysTitle": {
@@ -504,7 +504,7 @@
                 "type": "string"
             },
             "manageClinics": {
-              "type": "string"
+                "type": "string"
             },
             "todo": {
                 "type": "string"
@@ -1200,7 +1200,7 @@
                 "type": "string"
             },
             "numberOfEmployees": {
-              "type": "string"
+                "type": "string"
             },
             "count": {
                 "type": "string"
@@ -2208,19 +2208,28 @@
             },
             "columnHeader": {
                 "type": "string"
+            },
+            "thisFieldIsRequired": {
+                "type": "string"
+            },
+            "invalidFormat": {
+                "type": "string"
             }
         }
     },
-    "layout": [{
+    "layout": [
+        {
             "type": "section",
             "title": "General",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "yes"
                         },
                         {
@@ -2241,7 +2250,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "successExecutedActionTitle"
                         },
                         {
@@ -2259,7 +2269,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "actionTitle"
                         },
                         {
@@ -2280,7 +2291,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "sendPasswordRecovery"
                         },
                         {
@@ -2295,7 +2307,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "subject"
                         },
                         {
@@ -2316,7 +2329,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "pleaseConfirm"
                         },
                         {
@@ -2337,11 +2351,13 @@
             "title": "Login",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "welcomeTitle"
                         },
                         {
@@ -2359,7 +2375,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "signUp"
                         },
                         {
@@ -2380,7 +2397,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "rememberMe"
                         },
                         {
@@ -2398,7 +2416,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "fullName"
                         },
                         {
@@ -2422,7 +2441,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "termOfUse"
                         },
                         {
@@ -2440,7 +2460,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "recoveryText"
                         },
                         {
@@ -2458,7 +2479,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "notCorrectPass"
                         },
                         {
@@ -2479,7 +2501,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "accountExists"
                         },
                         {
@@ -2497,7 +2520,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "userAccessFormTitle"
                         },
                         {
@@ -2515,7 +2539,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "needToSuperadminApproveAccess"
                         },
                         {},
@@ -2530,11 +2555,13 @@
             "title": "Vaucher",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "id"
                         },
                         {
@@ -2555,7 +2582,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "customerBuys"
                         },
                         {
@@ -2573,7 +2601,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "addVaucher"
                         },
                         {
@@ -2591,7 +2620,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "exportToPDF"
                         },
                         {
@@ -2609,7 +2639,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "user"
                         },
                         {
@@ -2627,11 +2658,13 @@
             "title": "Calendar",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "today"
                         },
                         {
@@ -2649,7 +2682,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "week"
                         },
                         {
@@ -2667,7 +2701,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "agenda"
                         },
                         {
@@ -2685,7 +2720,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "successUpdateText"
                         },
                         {
@@ -2703,7 +2739,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "successDeleteText"
                         },
                         {
@@ -2718,7 +2755,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "unsuccessCreateCustomerTitle"
                         },
                         {
@@ -2731,7 +2769,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "monday"
                         },
                         {
@@ -2749,7 +2788,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "friday"
                         },
                         {
@@ -2767,7 +2807,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "start"
                         },
                         {
@@ -2785,7 +2826,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "startDateLabel"
                         },
                         {
@@ -2797,7 +2839,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "telephone"
                         },
                         {
@@ -2815,7 +2858,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "required"
                         },
                         {
@@ -2833,7 +2877,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "gender"
                         },
                         {
@@ -2851,7 +2896,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "username"
                         },
                         {
@@ -2869,7 +2915,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "female"
                         },
                         {
@@ -2887,7 +2934,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "notConfirmed"
                         },
                         {
@@ -2905,7 +2953,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "confirmMessage"
                         },
                         {
@@ -2923,7 +2972,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "refreshEventToolbar"
                         },
                         {
@@ -2941,7 +2991,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "copyLinkToTheOnlineClinicReservation"
                         },
                         {
@@ -2962,7 +3013,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "firstDayOfWeek"
                         },
                         {
@@ -2983,7 +3035,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "confirmRequestFromClient"
                         },
                         {
@@ -3000,11 +3053,13 @@
             "title": "Navigation menu",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "calendar"
                         },
                         {
@@ -3022,7 +3077,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "parameters"
                         },
                         {
@@ -3040,7 +3096,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "myComplaint"
                         },
                         {
@@ -3058,7 +3115,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "myCalendar"
                         },
                         {
@@ -3079,7 +3137,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "therapyMenu"
                         },
                         {
@@ -3097,7 +3156,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "socialMenu"
                         },
                         {
@@ -3115,7 +3175,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "csMenu"
                         },
                         {
@@ -3136,7 +3197,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "areaCode"
                         },
                         {
@@ -3157,7 +3219,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "userTitleMenu"
                         },
                         {
@@ -3170,7 +3233,7 @@
                             "key": "templateAccount"
                         },
                         {
-                          "key": "manageClinics"
+                            "key": "manageClinics"
                         }
                     ]
                 },
@@ -3178,7 +3241,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "mailReminderMessage"
                         },
                         {
@@ -3199,7 +3263,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "mailPatientCreatedAccountViaForm"
                         },
                         {
@@ -3226,7 +3291,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "userAccess"
                         },
                         {
@@ -3247,7 +3313,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "addHoliday"
                         },
                         {
@@ -3262,7 +3329,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "headerMenuGeneralData"
                         },
                         {
@@ -3286,11 +3354,13 @@
             "title": "Grid",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "pagerPage"
                         },
                         {
@@ -3308,7 +3378,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "exportToExcel"
                         },
                         {
@@ -3326,7 +3397,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "lastname"
                         },
                         {
@@ -3344,7 +3416,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "gender"
                         },
                         {
@@ -3362,7 +3435,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "mobile"
                         },
                         {
@@ -3380,7 +3454,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "male"
                         },
                         {
@@ -3398,7 +3473,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "required"
                         },
                         {
@@ -3416,7 +3492,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "add"
                         },
                         {
@@ -3443,7 +3520,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "remove"
                         },
                         {
@@ -3464,7 +3542,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "successTextEdit"
                         },
                         {
@@ -3482,7 +3561,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "successTextDelete"
                         },
                         {
@@ -3500,7 +3580,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "active"
                         },
                         {
@@ -3524,35 +3605,40 @@
             "title": "Dashboard",
             "expandable": true,
             "expanded": false,
-            "items": [{
-                "type": "div",
-                "display": "flex",
-                "flex-direction": "row",
-                "items": [{
-                        "key": "profile"
-                    },
-                    {
-                        "key": "settings"
-                    },
-                    {
-                        "key": "logout"
-                    },
-                    {
-                        "key": "invoice"
-                    }
-                ]
-            }]
+            "items": [
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "profile"
+                        },
+                        {
+                            "key": "settings"
+                        },
+                        {
+                            "key": "logout"
+                        },
+                        {
+                            "key": "invoice"
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "section",
             "title": "User",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "pagerPage"
                         },
                         {
@@ -3570,7 +3656,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "backToGrid"
                         },
                         {
@@ -3588,7 +3675,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "successUpdateTextData"
                         },
                         {
@@ -3606,7 +3694,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "workTime"
                         },
                         {
@@ -3624,7 +3713,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "thursday"
                         },
                         {
@@ -3642,7 +3732,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "description"
                         },
                         {
@@ -3660,7 +3751,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "permissions"
                         },
                         {
@@ -3678,7 +3770,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "validFromDate"
                         },
                         {
@@ -3696,7 +3789,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "updateWorkTime"
                         },
                         {
@@ -3717,11 +3811,13 @@
             "title": "Parameters",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "title"
                         },
                         {
@@ -3739,7 +3835,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "artNr"
                         },
                         {
@@ -3760,7 +3857,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "category"
                         },
                         {
@@ -3778,7 +3876,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "titleOnInvoice"
                         },
                         {
@@ -3795,11 +3894,13 @@
             "title": "Store",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "pagerPage"
                         },
                         {
@@ -3817,7 +3918,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "exist"
                         },
                         {
@@ -3835,7 +3937,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "createNewStore"
                         },
                         {
@@ -3853,7 +3956,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "email"
                         },
                         {
@@ -3874,7 +3978,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "city"
                         },
                         {
@@ -3892,7 +3997,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "place"
                         },
                         {
@@ -3910,7 +4016,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "startWork"
                         },
                         {
@@ -3928,7 +4035,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "exportToPDF"
                         },
                         {
@@ -3949,11 +4057,13 @@
             "title": "Customer",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "addTherapy"
                         },
                         {
@@ -3971,7 +4081,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "choicePreviousTherapy"
                         },
                         {
@@ -3989,7 +4100,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "baseOne"
                         },
                         {
@@ -4007,7 +4119,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "relationship"
                         },
                         {
@@ -4025,7 +4138,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "firstDate"
                         },
                         {
@@ -4043,7 +4157,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "size"
                         },
                         {
@@ -4061,7 +4176,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "birthday"
                         },
                         {
@@ -4079,7 +4195,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "profession"
                         },
                         {
@@ -4097,7 +4214,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "previousFindidngs"
                         },
                         {
@@ -4115,7 +4233,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "pregnancy"
                         },
                         {
@@ -4133,7 +4252,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "baseDataTwo"
                         },
                         {
@@ -4151,7 +4271,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "telephone"
                         },
                         {
@@ -4169,7 +4290,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "streetnumber"
                         },
                         {
@@ -4184,7 +4306,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "updateUser"
                         },
                         {
@@ -4202,7 +4325,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "sincecompany"
                         },
                         {
@@ -4220,7 +4344,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "em"
                         },
                         {
@@ -4238,7 +4363,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "documentValue"
                         },
                         {
@@ -4256,7 +4382,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "exportToExcel"
                         },
                         {
@@ -4280,7 +4407,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "newCustomer"
                         },
                         {
@@ -4298,7 +4426,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "aboutMe"
                         },
                         {
@@ -4316,7 +4445,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "edit"
                         },
                         {
@@ -4334,7 +4464,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "searchAllColumn"
                         },
                         {
@@ -4352,7 +4483,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "addComplaint"
                         },
                         {
@@ -4370,7 +4502,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "createNewCustomerDialog"
                         },
                         {
@@ -4388,7 +4521,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "sendPatientFormButton"
                         },
                         {
@@ -4406,7 +4540,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "errorSendFormToMail"
                         },
                         {
@@ -4427,83 +4562,109 @@
             "title": "Complaint",
             "expandable": true,
             "expanded": false,
-            "items": [{
-                "type": "div",
-                "display": "flex",
-                "flex-direction": "row",
-                "items": [{
-                    "key": "complaint",
-                    "type": "array",
-                    "items": [{
-                        "type": "div",
-                        "displayFlex": true,
-                        "flex-direction": "row",
-                        "items": [{
-                            "key": "complaint[].text",
-                            "flex": "1 1 50px"
-                        }]
-                    }]
-                }]
-            }]
+            "items": [
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "complaint",
+                            "type": "array",
+                            "items": [
+                                {
+                                    "type": "div",
+                                    "displayFlex": true,
+                                    "flex-direction": "row",
+                                    "items": [
+                                        {
+                                            "key": "complaint[].text",
+                                            "flex": "1 1 50px"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "section",
             "title": "Therapy",
             "expandable": true,
             "expanded": false,
-            "items": [{
-                "type": "div",
-                "display": "flex",
-                "flex-direction": "row",
-                "items": [{
-                    "key": "therapy",
-                    "type": "array",
-                    "items": [{
-                        "type": "div",
-                        "displayFlex": true,
-                        "flex-direction": "row",
-                        "items": [{
-                            "key": "therapy[].text",
-                            "flex": "1 1 50px"
-                        }]
-                    }]
-                }]
-            }]
+            "items": [
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "therapy",
+                            "type": "array",
+                            "items": [
+                                {
+                                    "type": "div",
+                                    "displayFlex": true,
+                                    "flex-direction": "row",
+                                    "items": [
+                                        {
+                                            "key": "therapy[].text",
+                                            "flex": "1 1 50px"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "section",
             "title": "State",
             "expandable": true,
             "expanded": false,
-            "items": [{
-                "type": "div",
-                "display": "flex",
-                "flex-direction": "row",
-                "items": [{
-                    "key": "state",
-                    "type": "array",
-                    "items": [{
-                        "type": "div",
-                        "displayFlex": true,
-                        "flex-direction": "row",
-                        "items": [{
-                            "key": "state[].text",
-                            "flex": "1 1 50px"
-                        }]
-                    }]
-                }]
-            }]
+            "items": [
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "state",
+                            "type": "array",
+                            "items": [
+                                {
+                                    "type": "div",
+                                    "displayFlex": true,
+                                    "flex-direction": "row",
+                                    "items": [
+                                        {
+                                            "key": "state[].text",
+                                            "flex": "1 1 50px"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "section",
             "title": "Superadmin",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "adminSuccessCreateTitle"
                         },
                         {
@@ -4521,7 +4682,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "adminSuccessUpdateTitle"
                         },
                         {
@@ -4539,7 +4701,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "adminSuccessDeleteTitle"
                         },
                         {
@@ -4557,7 +4720,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "owner"
                         },
                         {
@@ -4575,7 +4739,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "patient"
                         },
                         {
@@ -4585,7 +4750,7 @@
                             "key": "count"
                         },
                         {
-                          "key": "numberOfEmployees"
+                            "key": "numberOfEmployees"
                         }
                     ]
                 }
@@ -4596,59 +4761,77 @@
             "title": "Priority",
             "expandable": true,
             "expanded": false,
-            "items": [{
-                "type": "div",
-                "display": "flex",
-                "flex-direction": "row",
-                "items": [{
-                    "key": "priority",
-                    "type": "array",
-                    "items": [{
-                        "type": "div",
-                        "displayFlex": true,
-                        "flex-direction": "row",
-                        "items": [{
-                            "key": "priority[].text",
-                            "flex": "1 1 50px"
-                        }]
-                    }]
-                }]
-            }]
+            "items": [
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "priority",
+                            "type": "array",
+                            "items": [
+                                {
+                                    "type": "div",
+                                    "displayFlex": true,
+                                    "flex-direction": "row",
+                                    "items": [
+                                        {
+                                            "key": "priority[].text",
+                                            "flex": "1 1 50px"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "section",
             "title": "Type of tasks",
             "expandable": true,
             "expanded": false,
-            "items": [{
-                "type": "div",
-                "display": "flex",
-                "flex-direction": "row",
-                "items": [{
-                    "key": "typeOfTask",
-                    "type": "array",
-                    "items": [{
-                        "type": "div",
-                        "displayFlex": true,
-                        "flex-direction": "row",
-                        "items": [{
-                            "key": "typeOfTask[].text",
-                            "flex": "1 1 50px"
-                        }]
-                    }]
-                }]
-            }]
+            "items": [
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "typeOfTask",
+                            "type": "array",
+                            "items": [
+                                {
+                                    "type": "div",
+                                    "displayFlex": true,
+                                    "flex-direction": "row",
+                                    "items": [
+                                        {
+                                            "key": "typeOfTask[].text",
+                                            "flex": "1 1 50px"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "section",
             "title": "Mail Template - general",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "initialGreeting"
                         },
                         {
@@ -4666,7 +4849,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "websiteLink"
                         },
                         {
@@ -4681,7 +4865,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "notReply"
                         },
                         {
@@ -4693,7 +4878,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "signatureStreet"
                         },
                         {
@@ -4714,28 +4900,34 @@
             "title": "Mail Template - Confirm arrival",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "subjectConfirmArrival"
-                    }]
+                    "items": [
+                        {
+                            "key": "subjectConfirmArrival"
+                        }
+                    ]
                 },
                 {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "introductoryMessageForConfirmArrival",
-                        "type": "textarea"
-                    }]
+                    "items": [
+                        {
+                            "key": "introductoryMessageForConfirmArrival",
+                            "type": "textarea"
+                        }
+                    ]
                 },
                 {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "dateMessage"
                         },
                         {
@@ -4753,18 +4945,22 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "finalMessageForConfirmArrival",
-                        "type": "textarea"
-                    }]
+                    "items": [
+                        {
+                            "key": "finalMessageForConfirmArrival",
+                            "type": "textarea"
+                        }
+                    ]
                 },
                 {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "confirmArrivalButtonText"
-                    }]
+                    "items": [
+                        {
+                            "key": "confirmArrivalButtonText"
+                        }
+                    ]
                 }
             ]
         },
@@ -4773,30 +4969,37 @@
             "title": "Mail Template - Confirm mail",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "subjectConfirmMail"
-                    }]
+                    "items": [
+                        {
+                            "key": "subjectConfirmMail"
+                        }
+                    ]
                 },
                 {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "introductoryMessageForConfirmMail",
-                        "type": "textarea"
-                    }]
+                    "items": [
+                        {
+                            "key": "introductoryMessageForConfirmMail",
+                            "type": "textarea"
+                        }
+                    ]
                 },
                 {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "confirmMailButtonText"
-                    }]
+                    "items": [
+                        {
+                            "key": "confirmMailButtonText"
+                        }
+                    ]
                 }
             ]
         },
@@ -4805,30 +5008,37 @@
             "title": "Mail Template - Forgot mail",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "subjectForgotMail"
-                    }]
+                    "items": [
+                        {
+                            "key": "subjectForgotMail"
+                        }
+                    ]
                 },
                 {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "introductoryMessageForForgotMail",
-                        "type": "textarea"
-                    }]
+                    "items": [
+                        {
+                            "key": "introductoryMessageForForgotMail",
+                            "type": "textarea"
+                        }
+                    ]
                 },
                 {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "forgotMailButtonText"
-                    }]
+                    "items": [
+                        {
+                            "key": "forgotMailButtonText"
+                        }
+                    ]
                 }
             ]
         },
@@ -4837,28 +5047,34 @@
             "title": "Mail Template - Created patient account",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "subjectCreatedPatientForm"
-                    }]
+                    "items": [
+                        {
+                            "key": "subjectCreatedPatientForm"
+                        }
+                    ]
                 },
                 {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "introductoryMessageForCreatedPatientAccount",
-                        "type": "textarea"
-                    }]
+                    "items": [
+                        {
+                            "key": "introductoryMessageForCreatedPatientAccount",
+                            "type": "textarea"
+                        }
+                    ]
                 },
                 {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "linkForLogin"
                         },
                         {
@@ -4876,30 +5092,37 @@
             "title": "Mail Template - Patient registration form",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "subjectFormRegistration"
-                    }]
+                    "items": [
+                        {
+                            "key": "subjectFormRegistration"
+                        }
+                    ]
                 },
                 {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "introductoryMessageForPatientRegistrationForm",
-                        "type": "textarea"
-                    }]
+                    "items": [
+                        {
+                            "key": "introductoryMessageForPatientRegistrationForm",
+                            "type": "textarea"
+                        }
+                    ]
                 },
                 {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "openForm"
-                    }]
+                    "items": [
+                        {
+                            "key": "openForm"
+                        }
+                    ]
                 }
             ]
         },
@@ -4908,22 +5131,27 @@
             "title": "Mail Template - Approve reservation",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "subjectApproveReservation"
-                    }]
+                    "items": [
+                        {
+                            "key": "subjectApproveReservation"
+                        }
+                    ]
                 },
                 {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "introductoryMessageForApproveReservation",
-                        "type": "textarea"
-                    }]
+                    "items": [
+                        {
+                            "key": "introductoryMessageForApproveReservation",
+                            "type": "textarea"
+                        }
+                    ]
                 }
             ]
         },
@@ -4932,22 +5160,27 @@
             "title": "Mail Template - Deny reservation",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "subjectDenyReservation"
-                    }]
+                    "items": [
+                        {
+                            "key": "subjectDenyReservation"
+                        }
+                    ]
                 },
                 {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "introductoryMessageForDenyReservation",
-                        "type": "textarea"
-                    }]
+                    "items": [
+                        {
+                            "key": "introductoryMessageForDenyReservation",
+                            "type": "textarea"
+                        }
+                    ]
                 }
             ]
         },
@@ -4956,22 +5189,27 @@
             "title": "Mail Template - Reminder for reservations",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "subjectForReminderReservation"
-                    }]
+                    "items": [
+                        {
+                            "key": "subjectForReminderReservation"
+                        }
+                    ]
                 },
                 {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "introductoryMessageForReminderReservation",
-                        "type": "textarea"
-                    }]
+                    "items": [
+                        {
+                            "key": "introductoryMessageForReminderReservation",
+                            "type": "textarea"
+                        }
+                    ]
                 }
             ]
         },
@@ -4980,22 +5218,27 @@
             "title": "SMS Template - Reminder for reservations",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "initialGreetingSMSReminder"
-                    }]
+                    "items": [
+                        {
+                            "key": "initialGreetingSMSReminder"
+                        }
+                    ]
                 },
                 {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "introductoryMessageForSMSReminderReservation",
-                        "type": "textarea"
-                    }]
+                    "items": [
+                        {
+                            "key": "introductoryMessageForSMSReminderReservation",
+                            "type": "textarea"
+                        }
+                    ]
                 }
             ]
         },
@@ -5004,11 +5247,13 @@
             "title": "Settings",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "settingsBackToHome"
                         },
                         {
@@ -5029,7 +5274,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "perimissionForPatientNavigationMenu"
                         },
                         {
@@ -5046,11 +5292,13 @@
             "title": "Settings - Account",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "accountBasicInformationTitle"
                         },
                         {
@@ -5077,7 +5325,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "accountSuccessUpdatedAccountTitle"
                         },
                         {
@@ -5111,7 +5360,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "accountErrorUpdatedAccountTitle"
                         },
                         {
@@ -5126,11 +5376,13 @@
             "title": "Settings - Change password",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "changePasswordTitle"
                         },
                         {
@@ -5145,7 +5397,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "changePasswordOldPassword"
                         },
                         {
@@ -5163,7 +5416,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "changePasswordSuccessUpdatedPasswordTitle"
                         },
                         {
@@ -5175,7 +5429,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "changePasswordErrorUpdatedPasswordTitle"
                         },
                         {
@@ -5187,7 +5442,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "changePasswordErrorNotEqualCurrentTitle"
                         },
                         {
@@ -5199,7 +5455,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "changePasswordErrorRequiredInputTitle"
                         },
                         {
@@ -5211,7 +5468,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "changePasswordErrorNotEqualTitle"
                         },
                         {
@@ -5226,11 +5484,13 @@
             "title": "Settings - Change language",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "saveLanguage"
                         },
                         {
@@ -5248,24 +5508,29 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "languages",
-                        "type": "array",
-                        "items": [{
-                            "type": "div",
-                            "displayFlex": true,
-                            "flex-direction": "row",
-                            "items": [{
-                                    "key": "languages[].countryCode",
-                                    "flex": "1 1 50px"
-                                },
+                    "items": [
+                        {
+                            "key": "languages",
+                            "type": "array",
+                            "items": [
                                 {
-                                    "key": "languages[].language",
-                                    "flex": "1 1 50px"
+                                    "type": "div",
+                                    "displayFlex": true,
+                                    "flex-direction": "row",
+                                    "items": [
+                                        {
+                                            "key": "languages[].countryCode",
+                                            "flex": "1 1 50px"
+                                        },
+                                        {
+                                            "key": "languages[].language",
+                                            "flex": "1 1 50px"
+                                        }
+                                    ]
                                 }
                             ]
-                        }]
-                    }]
+                        }
+                    ]
                 }
             ]
         },
@@ -5274,11 +5539,13 @@
             "title": "Settings - Permission Patient Menu",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "permissionPatientMenuTitle"
                         },
                         {
@@ -5296,7 +5563,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "permissionPatientMenuSuccessUpdateTitle"
                         },
                         {
@@ -5308,7 +5576,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "permissionPatientMenuErrorUpdateTitle"
                         },
                         {
@@ -5323,11 +5592,13 @@
             "title": "Reservation",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "reservationTitle"
                         },
                         {
@@ -5348,7 +5619,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "reservationSuccessUpdateTitle"
                         },
                         {
@@ -5360,7 +5632,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "reservationErrorUpdateTitle"
                         },
                         {
@@ -5372,7 +5645,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "reservationTooltip"
                         },
                         {
@@ -5389,11 +5663,13 @@
             "title": "File uploads",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "fileUploadTitle"
                         },
                         {
@@ -5417,7 +5693,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "documentDescription"
                         },
                         {
@@ -5438,7 +5715,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "uploadFile"
                         },
                         {
@@ -5456,7 +5734,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "uploadAll"
                         },
                         {
@@ -5480,11 +5759,13 @@
             "title": "Send SMS Message",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "sendSMSTitle"
                         },
                         {
@@ -5502,7 +5783,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "successSendSMSMessageText"
                         },
                         {
@@ -5520,7 +5802,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "needToConfigurationParams"
                         },
                         {},
@@ -5535,11 +5818,13 @@
             "title": "Send Email",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "sendEmailTitle"
                         },
                         {
@@ -5560,7 +5845,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "successSendEmailMessageText"
                         },
                         {
@@ -5578,11 +5864,13 @@
             "title": "Reminder settings",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "reminderMenu"
                         },
                         {
@@ -5600,7 +5888,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "sendReminderViaEMail"
                         },
                         {
@@ -5615,7 +5904,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "successChangeReminderSettingsText"
                         },
                         {
@@ -5630,11 +5920,13 @@
             "title": "Template account",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "loadDemoAccountTitle"
                         },
                         {
@@ -5652,7 +5944,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "loadDemoAccountNoThanks"
                         },
                         {
@@ -5670,9 +5963,11 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "loadingDemoText"
-                    }]
+                    "items": [
+                        {
+                            "key": "loadingDemoText"
+                        }
+                    ]
                 }
             ]
         },
@@ -5681,11 +5976,13 @@
             "title": "Mail reminder message",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "mailSubject"
                         },
                         {
@@ -5706,7 +6003,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "mailClinic"
                         },
                         {
@@ -5724,7 +6022,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "mailSignature"
                         },
                         {
@@ -5742,7 +6041,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "mailCopyRight"
                         },
                         {
@@ -5760,7 +6060,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "signatureMobile"
                         },
                         {
@@ -5777,11 +6078,13 @@
             "title": "SMS reminder message",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "smsSubject"
                         },
                         {
@@ -5799,7 +6102,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "smsClinic"
                         },
                         {
@@ -5817,7 +6121,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "smsSignatureEmail"
                         },
                         {
@@ -5834,11 +6139,13 @@
             "title": "Event category statistic",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "sequenceOfCount"
                         },
                         {
@@ -5856,7 +6163,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "displayOfCount"
                         },
                         {},
@@ -5871,11 +6179,13 @@
             "title": "Terms",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "termsHeaderTitleBrand"
                         },
                         {
@@ -5896,7 +6206,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "termsWelcomeTitle"
                         },
                         {},
@@ -5908,32 +6219,39 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "termsWelcomeText",
-                        "type": "textarea"
-                    }]
+                    "items": [
+                        {
+                            "key": "termsWelcomeText",
+                            "type": "textarea"
+                        }
+                    ]
                 },
                 {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "termsItems",
-                        "type": "array",
-                        "expandable": true,
-                        "expanded": false,
-                        "items": [{
-                            "type": "div",
-                            "items": [{
-                                    "key": "termsItems[].title"
-                                },
+                    "items": [
+                        {
+                            "key": "termsItems",
+                            "type": "array",
+                            "expandable": true,
+                            "expanded": false,
+                            "items": [
                                 {
-                                    "key": "termsItems[].text",
-                                    "type": "textarea"
+                                    "type": "div",
+                                    "items": [
+                                        {
+                                            "key": "termsItems[].title"
+                                        },
+                                        {
+                                            "key": "termsItems[].text",
+                                            "type": "textarea"
+                                        }
+                                    ]
                                 }
                             ]
-                        }]
-                    }]
+                        }
+                    ]
                 }
             ]
         },
@@ -5942,11 +6260,13 @@
             "title": "Privacy & policy",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "privacyHeaderTitle"
                         },
                         {
@@ -5964,7 +6284,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "privacyIntroductionTitle"
                         },
                         {},
@@ -5976,32 +6297,39 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "privacyIntroductionText",
-                        "type": "textarea"
-                    }]
+                    "items": [
+                        {
+                            "key": "privacyIntroductionText",
+                            "type": "textarea"
+                        }
+                    ]
                 },
                 {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "privacyItems",
-                        "type": "array",
-                        "expandable": true,
-                        "expanded": false,
-                        "items": [{
-                            "type": "div",
-                            "items": [{
-                                    "key": "privacyItems[].title"
-                                },
+                    "items": [
+                        {
+                            "key": "privacyItems",
+                            "type": "array",
+                            "expandable": true,
+                            "expanded": false,
+                            "items": [
                                 {
-                                    "key": "privacyItems[].text",
-                                    "type": "textarea"
+                                    "type": "div",
+                                    "items": [
+                                        {
+                                            "key": "privacyItems[].title"
+                                        },
+                                        {
+                                            "key": "privacyItems[].text",
+                                            "type": "textarea"
+                                        }
+                                    ]
                                 }
                             ]
-                        }]
-                    }]
+                        }
+                    ]
                 }
             ]
         },
@@ -6010,11 +6338,13 @@
             "title": "Impressum",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "impressumHeaderTitle"
                         },
                         {
@@ -6032,7 +6362,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "impressumIntroductionTitle"
                         },
                         {},
@@ -6044,32 +6375,39 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "impressumIntroductionText",
-                        "type": "textarea"
-                    }]
+                    "items": [
+                        {
+                            "key": "impressumIntroductionText",
+                            "type": "textarea"
+                        }
+                    ]
                 },
                 {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "impressumItems",
-                        "type": "array",
-                        "expandable": true,
-                        "expanded": false,
-                        "items": [{
-                            "type": "div",
-                            "items": [{
-                                    "key": "impressumItems[].title"
-                                },
+                    "items": [
+                        {
+                            "key": "impressumItems",
+                            "type": "array",
+                            "expandable": true,
+                            "expanded": false,
+                            "items": [
                                 {
-                                    "key": "impressumItems[].text",
-                                    "type": "textarea"
+                                    "type": "div",
+                                    "items": [
+                                        {
+                                            "key": "impressumItems[].title"
+                                        },
+                                        {
+                                            "key": "impressumItems[].text",
+                                            "type": "textarea"
+                                        }
+                                    ]
                                 }
                             ]
-                        }]
-                    }]
+                        }
+                    ]
                 }
             ]
         },
@@ -6079,54 +6417,62 @@
             "key": "eventCategoryPeriod",
             "expandable": true,
             "expanded": false,
-            "items": [{
-                "type": "div",
-                "items": [{
-                        "key": "eventCategoryPeriod[].id"
-                    },
-                    {
-                        "key": "eventCategoryPeriod[].text"
-                    },
-                    {
-                        "key": "periodForEvent"
-                    }
-                ]
-            }]
+            "items": [
+                {
+                    "type": "div",
+                    "items": [
+                        {
+                            "key": "eventCategoryPeriod[].id"
+                        },
+                        {
+                            "key": "eventCategoryPeriod[].text"
+                        },
+                        {
+                            "key": "periodForEvent"
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "section",
             "title": "Confirm arrival - client page",
             "expandable": true,
             "expanded": false,
-            "items": [{
-                "type": "div",
-                "display": "flex",
-                "flex-direction": "row",
-                "items": [{
-                        "key": "confirmArrivalThankYou"
-                    },
-                    {
-                        "key": "confirmArrivalText1"
-                    },
-                    {
-                        "key": "confirmArrivalText2"
-                    },
-                    {
-                        "key": "confirmArrivalGoToHome"
-                    }
-                ]
-            }]
+            "items": [
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "confirmArrivalThankYou"
+                        },
+                        {
+                            "key": "confirmArrivalText1"
+                        },
+                        {
+                            "key": "confirmArrivalText2"
+                        },
+                        {
+                            "key": "confirmArrivalGoToHome"
+                        }
+                    ]
+                }
+            ]
         },
         {
             "type": "section",
             "title": "Marketing",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "massiveSmsTitle"
                         },
                         {
@@ -6144,7 +6490,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "sendMassiveSms"
                         },
                         {
@@ -6162,7 +6509,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "congratulationBirthday"
                         },
                         {
@@ -6186,11 +6534,13 @@
             "title": "PDF/Word",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "invoiceTitle"
                         },
                         {
@@ -6208,7 +6558,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "invoiceAddress"
                         },
                         {
@@ -6229,7 +6580,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "invoiceGrossPrice"
                         },
                         {
@@ -6247,7 +6599,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "notesTitle"
                         },
                         {
@@ -6268,7 +6621,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "generatePDFTooltip"
                         },
                         {
@@ -6289,7 +6643,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "noDataAvailable"
                         },
                         {
@@ -6310,7 +6665,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "titleOnInvoice"
                         },
                         {
@@ -6334,11 +6690,13 @@
             "title": "Holidays",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "holidaysTitle"
                         },
                         {
@@ -6351,9 +6709,6 @@
                             "key": "editHoliday"
                         },
                         {
-                            "key": "selectClinicHolidays"
-                        },
-                        {
                             "key": "selectHolidayTemplate"
                         }
                     ]
@@ -6362,7 +6717,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "title"
                         },
                         {
@@ -6376,6 +6732,9 @@
                         },
                         {
                             "key": "predifinedHolidayTitle"
+                        },
+                        {
+                            "key": "noHolidayTemplateSelected"
                         }
                     ]
                 }
@@ -6386,11 +6745,13 @@
             "title": "Help",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "helpTitle"
                         },
                         {
@@ -6414,7 +6775,8 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "newFaq"
                         },
                         {
@@ -6438,19 +6800,23 @@
             "title": "Theme colors",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "changeThemeColor"
-                    }]
+                    "items": [
+                        {
+                            "key": "changeThemeColor"
+                        }
+                    ]
                 },
                 {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
+                    "items": [
+                        {
                             "key": "themeColorsMenu"
                         },
                         {
@@ -6460,6 +6826,24 @@
                             "key": "successThemeEdit"
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "type": "section",
+            "title": "Validation error messages",
+            "expandable": true,
+            "expanded": false,
+            "items": [{
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [{
+                        "key": "thisFieldIsRequired"
+                    },
+                    {
+                        "key": "invalidFormat"
+                    }]
                 }
             ]
         }

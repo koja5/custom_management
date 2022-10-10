@@ -8,6 +8,7 @@ import { Modal } from 'ngx-modal';
 import { HelpService } from 'src/app/service/help.service';
 import { HelpTopicModel } from 'src/app/models/help-topic-model';
 import { MessageService } from 'src/app/service/message.service';
+import { checkIfInputValid } from "../../../../../shared/utils";
 
 @Component({
   selector: 'app-list-faq',
@@ -30,6 +31,7 @@ export class ListFaqComponent implements OnInit {
 
   public userSuperAdmin = false;
   private userId;
+  checkIfInputValid = checkIfInputValid;
 
   constructor(private service: FaqService,
     private route: ActivatedRoute,

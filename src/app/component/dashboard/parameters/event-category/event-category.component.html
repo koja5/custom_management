@@ -178,19 +178,22 @@
         " #eventCategoryForm="ngForm" (change)="isDirty()">
         <div class="col-md-12 col-xs-12">
           <kendo-textbox-container floatingLabel="{{ language.category }}({{ language.required }})">
-            <input kendoTextBox type="text" class="col-xs-12" [(ngModel)]="data.category" name="category" required />
+            <input id="category" kendoTextBox type="text" class="col-xs-12" [(ngModel)]="data.category" name="category" required />
           </kendo-textbox-container>
+          <mat-error *ngIf="checkIfInputValid('category')">{{ language?.thisFieldIsRequired }}</mat-error>
         </div>
         <div class="col-md-12 col-xs-12">
           <kendo-textbox-container floatingLabel="{{ language.sequence }}({{ language.required }})">
-            <input kendoTextBox type="number" class="col-xs-12" [(ngModel)]="data.sequence" name="sequence" required />
+            <input id="sequence" kendoTextBox type="number" class="col-xs-12" [(ngModel)]="data.sequence" name="sequence" required />
           </kendo-textbox-container>
+          <mat-error *ngIf="checkIfInputValid('sequence')">{{ language?.thisFieldIsRequired }}</mat-error>
         </div>
         <div class="col-md-12 col-xs-12">
           <kendo-textbox-container floatingLabel="{{ language.color }}({{ language.required }})">
-            <kendo-colorpicker #picker [view]="'combo'" [format]="'hex'" [(ngModel)]="data.color" [(value)]="data.color"
+            <kendo-colorpicker id="color" #picker [view]="'combo'" [format]="'hex'" [(ngModel)]="data.color" [(value)]="data.color"
               name="color" required></kendo-colorpicker>
           </kendo-textbox-container>
+          <mat-error *ngIf="checkIfInputValid('color')">{{ language?.thisFieldIsRequired }}</mat-error>
         </div>
         <div class="col-md-12 col-xs-12 p-4">
           <input kendoCheckBox type="checkbox" [(ngModel)]="data.allowSendInformation" name="allowSendInformation" />

@@ -14,6 +14,7 @@ import { GridComponent, PageChangeEvent } from "@progress/kendo-angular-grid";
 import { Modal } from "ngx-modal";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { Router } from "@angular/router";
+import { checkIfInputValid } from "../../../../shared/utils";
 
 @Component({
   selector: "app-event-category",
@@ -59,6 +60,7 @@ export class EventCategoryComponent implements OnInit {
   public importExcel = false;
   public theme: any;
   public fileValue: any;
+  checkIfInputValid = checkIfInputValid;
 
   constructor(
     private service: EventCategoryService,
@@ -90,10 +92,17 @@ export class EventCategoryComponent implements OnInit {
 
     this.currentUrl = this.router.url;
 
+    this.setPagination();
+  }
+
+  setPagination() {
     this.savePage = this.helpService.getGridPageSize();
-    if(this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
+    if (
+      (this.savePage && this.savePage[this.currentUrl]) ||
+      this.savePage[this.currentUrl + "Take"]
+    ) {
       this.state.skip = this.savePage[this.currentUrl];
-      this.state.take = this.savePage[this.currentUrl + 'Take'];
+      this.state.take = this.savePage[this.currentUrl + "Take"];
     }
   }
 
@@ -107,6 +116,9 @@ export class EventCategoryComponent implements OnInit {
       .getEventCategory(localStorage.getItem("superadmin"))
       .subscribe((data: []) => {
         this.currentLoadData = data;
+        if(this.currentLoadData.length < this.state.skip) {
+          this.state.skip = 0;
+        }
         this._allData = <ExcelExportData>{
           data: process(this.currentLoadData, this.state).data,
         }

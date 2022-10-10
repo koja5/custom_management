@@ -19,6 +19,7 @@ import { DynamicSchedulerService } from "src/app/service/dynamic-scheduler.servi
 import { TabType } from "src/app/component/enum/tab-type";
 import { DateService } from "src/app/service/date.service";
 import { UserModel } from 'src/app/models/user-model';
+import { checkIfInputValid } from "../../../../shared/utils";
 
 @Component({
   selector: "app-add-holiday",
@@ -57,6 +58,7 @@ export class AddHolidayComponent implements OnInit {
       },
     ],
   };
+  checkIfInputValid = checkIfInputValid;
 
   @ViewChild("holidayModal") holidayModal: Modal;
   @ViewChild("templateModal") templateModal: Modal;
