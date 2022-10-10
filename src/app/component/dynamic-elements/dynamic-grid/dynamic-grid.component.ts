@@ -38,6 +38,7 @@ import { PackLanguageService } from "src/app/service/pack-language.service";
 export class DynamicGridComponent implements OnInit {
   @Input() path: string;
   @Input() name: string;
+  @Input() dataLength: number;
   @Output() actionEmitter = new EventEmitter<any>();
   @ViewChild(DynamicFormsComponent) form: DynamicFormsComponent;
   @ViewChild("orderForm") public orderForm: FormGroup;
@@ -127,6 +128,9 @@ export class DynamicGridComponent implements OnInit {
         if (this.savePage[this.currentUrl + "Take"]) {
           this.config.paging.settings.pageSize =
             this.savePage[this.currentUrl + "Take"];
+        }
+        if(this.dataLength < ((this.config.paging.settings.currentPage - 1) * this.config.paging.settings.pageSize)) {
+          this.config.paging.settings.currentPage = 1;
         }
         if (data["localData"]) {
           this.getLocalData(data["localData"]);
@@ -331,8 +335,6 @@ export class DynamicGridComponent implements OnInit {
   }
 
   callServerMethod(request, data) {
-    data["language"] = this.packLanguage.getLanguageForCreatedPatientAccount();
-
     data = this.packAdditionalData(request.parameters, data);
     if (request.type === "POST") {
       this.service.callApiPost(request.api, data).subscribe((response) => {
@@ -376,16 +378,25 @@ export class DynamicGridComponent implements OnInit {
   packAdditionalData(parameters: any, data: any) {
     if (parameters && parameters.length > 0) {
       for (let i = 0; i < parameters.length; i++) {
-        switch (parameters[i]) {
-          case "superadmin":
+        switch (true) {
+          case parameters[i] == "superadmin":
             data["superadmin"] = this.helpService.getSuperadmin();
             break;
+
+          case parameters[i].type == "language":
+            data["language"] = this.translateFields(parameters[i].translateFields)
+            break;
+
           default:
             break;
         }
       }
     }
     return data;
+  }
+
+  translateFields(fields: Array<string>) {
+    return this.packLanguage.dynamicPackLanguage(fields);
   }
 
   previewDocument(filename: string) {

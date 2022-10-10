@@ -132,14 +132,22 @@ export class VaucherComponent implements OnInit {
 
     this.currentUrl = this.router.url;
 
-    this.savePage = this.helpService.getGridPageSize();
-    if(this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
-      this.state.skip = this.savePage[this.currentUrl];
-      this.state.take = this.savePage[this.currentUrl + 'Take'];
-    }
+    this.setPagination();
+
     this.vaucher.closeOnEscape = false;
     this.vaucher.closeOnOutsideClick = false;
     this.vaucher.hideCloseButton = true;
+  }
+
+  setPagination() {
+    this.savePage = this.helpService.getGridPageSize();
+    if (
+      (this.savePage && this.savePage[this.currentUrl]) ||
+      this.savePage[this.currentUrl + "Take"]
+    ) {
+      this.state.skip = this.savePage[this.currentUrl];
+      this.state.take = this.savePage[this.currentUrl + "Take"];
+    }
   }
 
   getVauchers() {
@@ -148,10 +156,13 @@ export class VaucherComponent implements OnInit {
       .getVauchers(this.helpService.getSuperadmin())
       .subscribe((data: []) => {
         if (data !== null) {
-          console.log(data);
           this.currentLoadData = data.sort(function (a, b) {
             return b["id"] - a["id"];
           });
+          if(this.currentLoadData.length < this.state.skip) {
+            console.log('?')
+            this.state.skip = 0;
+          }
           this.gridData = {
             data: data
           };

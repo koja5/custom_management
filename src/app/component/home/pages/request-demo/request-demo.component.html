@@ -104,7 +104,7 @@
                       </option>
                       <option *ngFor="let item of language.priceTable.header" value="{{ item.price }}"
                         [selected]="item.nameOfPackageTitle === package ? true : false">
-                        {{ item.nameOfPackageText }}
+                        {{ item.nameOfPackageTitle }}
                       </option>
                     </select>
                   </div>
@@ -172,7 +172,7 @@
           </option>
           <option *ngFor="let item of language.priceTable.header" value="{{ item.price }}"
             [selected]="item.nameOfPackageTitle === package ? true : false">
-            {{ item.nameOfPackageText }}
+            {{ item.nameOfPackageTitle }}
           </option>
         </select>
 

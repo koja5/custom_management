@@ -132,10 +132,17 @@ export class UsersComponent implements OnInit {
     });
     this.currentUrl = this.router.url;
     
+    this.setPagination();
+  }
+
+  setPagination() {
     this.savePage = this.helpService.getGridPageSize();
-    if(this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
+    if (
+      (this.savePage && this.savePage[this.currentUrl]) ||
+      this.savePage[this.currentUrl + "Take"]
+    ) {
       this.state.skip = this.savePage[this.currentUrl];
-      this.state.take = this.savePage[this.currentUrl + 'Take'];
+      this.state.take = this.savePage[this.currentUrl + "Take"];
     }
   }
 
@@ -143,6 +150,9 @@ export class UsersComponent implements OnInit {
     this.service.getUsers(localStorage.getItem("superadmin"), (val) => {
       console.log(val);
       this.currentLoadData = val;
+      if(this.currentLoadData.length < this.state.skip) {
+        this.state.skip = 0;
+      }
       this.gridData = {
         data: val,
       };

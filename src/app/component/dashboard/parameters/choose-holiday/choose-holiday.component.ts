@@ -1,11 +1,9 @@
-import { StorageService } from './../../../../service/storage.service';
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { HolidayModel } from 'src/app/models/holiday-model';
 import { DynamicSchedulerService } from 'src/app/service/dynamic-scheduler.service';
 import { HelpService } from 'src/app/service/help.service';
 import { HolidayService } from 'src/app/service/holiday.service';
 import { MessageService } from 'src/app/service/message.service';
-import { UsersService } from 'src/app/service/users.service';
 import { Modal } from 'ngx-modal';
 import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { DatePickerComponent } from '@progress/kendo-angular-dateinputs';
@@ -13,6 +11,7 @@ import { HolidayTemplate } from 'src/app/models/holiday-template.model';
 import { DateService } from 'src/app/service/date.service';
 import { UserModel } from 'src/app/models/user-model';
 import { checkIfInputValid } from "../../../../shared/utils";
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-choose-holiday',
@@ -33,13 +32,12 @@ export class ChooseHolidayComponent implements OnInit {
   public clinicHolidays: HolidayModel[] = [];
   public holidays: HolidayModel[] = [];
   public holidayTemplateList: HolidayTemplate[];
-  private storeId: number;
+  private superAdminId: number;
   public selectedTemplates = null;
-  public user: UserModel;
 
   height: string;
   private overrideMessage: Partial<IndividualConfig> = { timeOut: 7000, positionClass: "toast-bottom-right" };
-  public storeTemplates: number[] = [];
+  public superAdminTemplates: number[] = [];
   private deleteHolidayTemplateId: number;
   checkIfInputValid = checkIfInputValid;
 
@@ -50,7 +48,7 @@ export class ChooseHolidayComponent implements OnInit {
   }
 
   get isSaveDisabled(): boolean {
-    return this.areEqual(this.storeTemplates, this.selectedTemplates ? this.selectedTemplates.map(elem => elem.id) : []);
+    return this.areEqual(this.superAdminTemplates, this.selectedTemplates ? this.selectedTemplates.map(elem => elem.id) : []);
   }
 
   constructor(
@@ -58,20 +56,14 @@ export class ChooseHolidayComponent implements OnInit {
     private holidayService: HolidayService,
     private helpService: HelpService,
     private dateService: DateService,
-    private usersService: UsersService,
     private toastrService: ToastrService,
-    private storageService: StorageService,
     private dynamicService: DynamicSchedulerService) { }
 
   ngOnInit() {
     this.initializationConfig();
-    const id = this.helpService.getMe();
-    this.storeId = this.storageService.getSelectedStore(id);
-    this.currentHoliday = new HolidayModel();
+    this.superAdminId = Number(this.helpService.getSuperadmin());
 
-    this.usersService.getUserWithIdPromise(id).then(data => {
-      this.user = data;
-    });
+    this.currentHoliday = new HolidayModel();
 
     this.loadHolidayTemplates();
     this.loadHolidaysForClinic();
@@ -86,14 +78,14 @@ export class ChooseHolidayComponent implements OnInit {
 
   public loadHolidaysForClinic(): void {
 
-    if (!this.storeId) {
+    if (!this.superAdminId) {
       return;
     }
 
     this.clinicHolidays = [];
     this.templateHolidays = [];
 
-    this.holidayService.getHolidaysForClinic(this.storeId).then(result => {
+    this.holidayService.getHolidaysForClinic(this.superAdminId).then(result => {
       console.log(result);
       if (result && result.length > 0) {
 
@@ -107,12 +99,12 @@ export class ChooseHolidayComponent implements OnInit {
 
     // load holidays defined by clinic and holidays defined by selected clinic template (if there is some)
 
-    this.holidayService.getStoreTemplateConnection(this.storeId).then((ids) => {
-      this.storeTemplates = ids.map(elem => elem.templateId);
-      this.selectedTemplates = this.holidayTemplateList ? this.holidayTemplateList.filter(x => this.storeTemplates.includes(x.id)) : [];
+    this.holidayService.getStoreTemplateConnection(this.superAdminId).then((ids) => {
+      this.superAdminTemplates = ids.map(elem => elem.templateId);
+      this.selectedTemplates = this.holidayTemplateList ? this.holidayTemplateList.filter(x => this.superAdminTemplates.includes(x.id)) : [];
 
       if (ids.length) {
-        this.getHolidaysByTemplates(this.storeTemplates);
+        this.getHolidaysByTemplates(this.superAdminTemplates);
       }
     });
   }
@@ -192,11 +184,9 @@ export class ChooseHolidayComponent implements OnInit {
         this.language = undefined;
         setTimeout(() => {
           this.language = JSON.parse(localStorage.getItem("language"));
-          console.log(this.language);
         }, 10);
       });
     }
-
   }
 
   public onTemplateChange(): void {
@@ -204,6 +194,7 @@ export class ChooseHolidayComponent implements OnInit {
       this.loadHolidaysByTemplates();
     } else {
       //reset
+      this.selectedTemplates = [];
       this.templateHolidays = [];
     }
   }
@@ -212,14 +203,14 @@ export class ChooseHolidayComponent implements OnInit {
   // if those templates are already connected save button is disabled
   // ako selectedTemplates sadrzi idjeve koji nisu u storeTemplates to su novi idjevi, njih dodajemo
   // ako selectedTemplates ne sadrzi neki ili sve idjeve koji su u storeTemplates njih brisemo
-  public addHolidayTemplatesForClinic(): void {
+  public saveTemplateSelection(): void {
     const ids = this.selectedTemplates.map(elem => elem.id);
-    const idsForAdding = ids.filter(x => !this.storeTemplates.includes(x));
+    const idsForAdding = ids.filter(x => !this.superAdminTemplates.includes(x));
 
     if (idsForAdding.length) {
-      this.holidayService.createStoreTemplateConnection(idsForAdding, this.storeId, (result) => {
-        console.log(result);
+      this.holidayService.createStoreTemplateConnection(idsForAdding, this.superAdminId, (result) => {
         if (result) {
+          this.superAdminTemplates = ids;
           this.displaySuccessMessage(this.language.adminSuccessCreateTitle, this.language.adminSuccessCreateText);
         } else {
           this.displayErrorMessage(this.language.adminErrorCreateTitle, this.language.adminErrorCreateText);
@@ -229,11 +220,12 @@ export class ChooseHolidayComponent implements OnInit {
     }
 
     // for removing
-    const idsForRemoving = this.storeTemplates.filter(x => !ids.includes(x));
+    const idsForRemoving = this.superAdminTemplates.filter(x => !ids.includes(x));
     if (idsForRemoving.length) {
-      this.holidayService.deleteStoreTemplateConnection(idsForRemoving, this.storeId, (result) => {
+      this.holidayService.deleteStoreTemplateConnection(idsForRemoving, this.superAdminId, (result) => {
         console.log(result);
         if (result) {
+          this.superAdminTemplates = ids;
           this.displaySuccessMessage(this.language.adminSuccessDeleteTitle, this.language.adminSuccessDeleteText);
         } else {
           this.displayErrorMessage(this.language.adminErrorDeleteTitle, this.language.adminErrorDeleteText);
@@ -242,12 +234,10 @@ export class ChooseHolidayComponent implements OnInit {
     }
   }
 
-  public addClinicHoliday(): void {
-    this.currentHoliday.clinicId = this.storeId;
+  public addClinicHoliday(form: NgForm): void {
+    this.currentHoliday.superAdminId = this.superAdminId;
     this.currentHoliday.StartTime = new Date(this.currentHoliday.StartTime.toISOString());
     this.currentHoliday.EndTime = new Date(this.currentHoliday.EndTime.toISOString());
-
-    console.log('NEW HOLIDAY ', this.currentHoliday);
 
     this.holidayService.createHoliday(this.currentHoliday, (insertedId) => {
       if (insertedId) {
