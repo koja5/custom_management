@@ -31,6 +31,7 @@ import { MailService } from "src/app/service/mail.service";
 import { PackLanguageService } from "src/app/service/pack-language.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { Router } from "@angular/router";
+import { checkIfInputValid } from "../../../shared/utils";
 import { DomSanitizer } from "@angular/platform-browser";
 
 const newLocal = "data";
@@ -79,6 +80,7 @@ export class CustomersComponent implements OnInit {
   allDataForGrid: DataResult;
   showDialog: boolean = false;
   isFormDirty: boolean = false;
+  checkIfInputValid = checkIfInputValid;
 
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);

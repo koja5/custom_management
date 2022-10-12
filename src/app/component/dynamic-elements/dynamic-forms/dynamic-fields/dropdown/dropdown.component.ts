@@ -4,6 +4,7 @@ import { HelpService } from "src/app/service/help.service";
 import { Field } from "../../models/field";
 import { FieldConfig } from "../../models/field-config";
 import { Query } from "@syncfusion/ej2-data";
+import { checkIfInputValid } from "../../../../../shared/utils";
 
 @Component({
   selector: "app-dropdown",
@@ -19,6 +20,7 @@ export class DropdownComponent implements OnInit, Field {
   public data: any;
 
   public query: Query = new Query().from("entries");
+  checkIfInputValid = checkIfInputValid;
 
   ngOnInit() {
     this.language = this.helpService.getLanguage();

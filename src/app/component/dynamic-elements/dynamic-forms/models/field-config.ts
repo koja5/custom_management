@@ -20,6 +20,7 @@ export interface FieldConfig {
   value?: any;
   multiline?: boolean;
   request?: Request;
+  required?: boolean;
   data?: any;
   dataArray?: any[];
   fieldConfig?: DropDown;

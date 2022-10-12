@@ -4,6 +4,7 @@ import { FaqService } from 'src/app/service/faq.service';
 import { Modal } from 'ngx-modal';
 import { HelpService } from 'src/app/service/help.service';
 import { DynamicService } from 'src/app/service/dynamic.service';
+import { checkIfInputValid } from "../../../../shared/utils";
 
 @Component({
   selector: 'app-help',
@@ -35,6 +36,7 @@ export class HelpComponent implements OnInit {
   public height: string = "400px";
   public countryCodeValue: any;
   public selectedLanguage: any;
+  checkIfInputValid = checkIfInputValid;
 
   constructor(private service: FaqService,
     private helpService: HelpService,

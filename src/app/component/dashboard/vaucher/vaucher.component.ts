@@ -25,6 +25,7 @@ import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { Router } from "@angular/router";
 import { PackLanguageService } from "src/app/service/pack-language.service";
 import { SendSmsService } from "src/app/service/send-sms.service";
+import { checkIfInputValid } from "../../../shared/utils";
 
 @Component({
   selector: "app-vaucher",
@@ -93,6 +94,7 @@ export class VaucherComponent implements OnInit {
   isFormDirty: boolean = false;
   savePage: any = {};
   currentUrl: string;
+  checkIfInputValid = checkIfInputValid;
 
   public showColumnPicker = false;
   public columns: string[] = [

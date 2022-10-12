@@ -133,9 +133,10 @@
     <form name="loginForm" class="loginForm" (ngSubmit)="createStore(store)" #storeForm="ngForm" (change)="isDirty()">
       <div class="col-md-12 col-xs-12">
         <kendo-textbox-container floatingLabel="{{ language.storename }}({{ language.required }})">
-          <input kendoTextBox type="text" class="col-xs-12" name="storename" [(ngModel)]="data.storename" required
+          <input id="storename" kendoTextBox type="text" class="col-xs-12" name="storename" [(ngModel)]="data.storename" required
             #storename="ngModel" />
         </kendo-textbox-container>
+        <mat-error *ngIf="checkIfInputValid('storename')">{{ language?.thisFieldIsRequired }}</mat-error>
       </div>
       <div class="col-md-12 col-xs-12">
         <kendo-textbox-container floatingLabel="{{ language.vat }}">
@@ -172,9 +173,10 @@
         </div>
         <div class="col-md-12 col-xs-12">
           <kendo-textbox-container floatingLabel="{{ language.email }}({{ language.required }})">
-            <input kendoTextBox type="email" class="col-xs-12" name="email" [(ngModel)]="data.email" required
+            <input id="email" kendoTextBox type="email" class="col-xs-12" name="email" [(ngModel)]="data.email" required
               #email="ngModel" />
           </kendo-textbox-container>
+          <mat-error *ngIf="checkIfInputValid('email')">{{ language?.thisFieldIsRequired }}</mat-error>
         </div>
       </div>
       <div class="col-md-12 col-xs-12">
@@ -185,27 +187,31 @@
       <div class="form-group">
         <div class="col-md-6 col-xs-12">
           <kendo-textbox-container floatingLabel="{{ language.timeDuration }}({{ language.required }})">
-            <input kendoTextBox type="text" class="col-xs-12" name="time_duraiton" [(ngModel)]="data.time_duration"
+            <input id="timeDuration" kendoTextBox type="text" class="col-xs-12" name="time_duraiton" [(ngModel)]="data.time_duration"
               required #time_duration="ngModel" />
           </kendo-textbox-container>
+          <mat-error *ngIf="checkIfInputValid('timeDuration')">{{ language?.thisFieldIsRequired }}</mat-error>
         </div>
         <div class="col-md-6 col-xs-12">
           <kendo-textbox-container floatingLabel="{{ language.timeTherapy }}({{ language.required }})">
-            <input kendoTextBox type="text" class="col-xs-12" name="time_therapy" [(ngModel)]="data.time_therapy"
+            <input id="timeTherapy" kendoTextBox type="text" class="col-xs-12" name="time_therapy" [(ngModel)]="data.time_therapy"
               required #time_therapy="ngModel" />
           </kendo-textbox-container>
+          <mat-error *ngIf="checkIfInputValid('timeTherapy')">{{ language?.thisFieldIsRequired }}</mat-error>
         </div>
       </div>
       <div class="form-group">
         <div class="col-md-6 col-xs-12">
           <kendo-textbox-container floatingLabel="{{ language.startWork }}({{ language.required }})">
-            <kendo-timepicker class="col-xs-12" [(ngModel)]="start_work" name="start_work" required></kendo-timepicker>
+            <kendo-timepicker id="startWork" class="col-xs-12" [(ngModel)]="start_work" name="start_work" required></kendo-timepicker>
           </kendo-textbox-container>
+          <mat-error *ngIf="checkIfInputValid('startWork')">{{ language?.thisFieldIsRequired }}</mat-error>
         </div>
         <div class="col-md-6 col-xs-12">
           <kendo-textbox-container floatingLabel="{{ language.endWork }}({{ language.required }})">
-            <kendo-timepicker class="col-xs-12" [(ngModel)]="end_work" name="end_work" required></kendo-timepicker>
+            <kendo-timepicker id="endWork" class="col-xs-12" [(ngModel)]="end_work" name="end_work" required></kendo-timepicker>
           </kendo-textbox-container>
+          <mat-error *ngIf="checkIfInputValid('endWork')">{{ language?.thisFieldIsRequired }}</mat-error>
         </div>
       </div>
       <div class="form-group">
