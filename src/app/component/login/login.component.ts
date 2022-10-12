@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
     private packLanguage: PackLanguageService,
     private storageService: StorageService,
     public http: HttpClient
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.initialization();
@@ -145,7 +145,7 @@ export class LoginComponent implements OnInit {
                   "language",
                   JSON.stringify(this.language)
                 );
-                this.helpService.setLocalStorage("accountLanguage", "US");
+                this.helpService.setLocalStorage("accountLanguage", "RS");
                 this.router.navigate(["/dashboard/home/task"]);
               } else {
                 this.router.navigate(["/maintence"]);
@@ -186,7 +186,7 @@ export class LoginComponent implements OnInit {
                   "language",
                   JSON.stringify(this.language)
                 );
-                this.helpService.setLocalStorage("accountLanguage", "US");
+                this.helpService.setLocalStorage("accountLanguage", "RS");
                 this.router.navigate(["/dashboard/home/task"]);
               } else {
                 this.router.navigate(["/maintence"]);
