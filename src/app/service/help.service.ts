@@ -24,6 +24,10 @@ export class HelpService {
     return valueToJSON;
   }
 
+  getCountryCode() {
+    return localStorage.getItem("accountLanguage");
+  }
+
   setGridPageSize(pageSize: any) {
     localStorage.setItem("pageSize", JSON.stringify(pageSize));
   }

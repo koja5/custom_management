@@ -63,7 +63,7 @@
           <p style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;">
             {{initialGreeting}} {{firstName}}, <br>
             <p style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
-            {{introductoryMessageForCreatedPatientAccount}}</p>
+            {{introductoryMessageForCreatedVaucher}}</p>
             <p style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
             {{vaucherAmount}}: {{amount}}</p>
              <p style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">

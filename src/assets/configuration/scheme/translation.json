@@ -194,6 +194,9 @@
             "introductoryMessageForCreatedVaucher": {
                 "type": "string"
             },
+            "subjectCreatedVaucher": {
+                "type": "string"
+            },
             "addVaucher": {
                 "type": "string"
             },
@@ -2600,6 +2603,9 @@
                         },
                         {
                             "key": "introductoryMessageForCreatedVaucher"
+                        },
+                        {
+                            "key": "subjectCreatedVaucher"
                         }
                     ]
                 },

@@ -183,6 +183,7 @@ export class PackLanguageService {
   getLanguageForMailingVaucher() {
     const language = this.helpService.getLanguage();
     return {
+      subjectCreatedVaucher: language.subjectCreatedVaucher,
       subjectFormRegistration: language.subjectFormRegistration,
       initialGreeting: language.initialGreeting,
       finalGreeting: language.finalGreeting,

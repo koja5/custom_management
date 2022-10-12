@@ -1526,9 +1526,6 @@ router.post("/infoAboutConfirmDenyAccessDevice", function (req, res) {
 
 router.sendVaucherToMail = (data) => {
 
-  console.log('test');
-  console.log(data);
-
   connection.getConnection(function (err, conn) {
     var confirmTemplate = fs.readFileSync(
       "./server/routes/templates/sendVaucher.hjs",
@@ -1547,7 +1544,7 @@ router.sendVaucherToMail = (data) => {
           to: user.email,
           subject: mail.mailSubject
             ? mail.mailSubject
-            : data.language?.subjectCreatedPatientForm,
+            : data.language?.subjectCreatedVaucher,
           html: infoForCreatedAccount.render({
             firstName: data.user_name,
             amount: data.amount,
