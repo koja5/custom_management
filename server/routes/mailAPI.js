@@ -10,6 +10,7 @@ var url = require("url");
 const logger = require("./logger");
 const winston = require("winston");
 
+
 var link = process.env.link_api;
 var linkClient = process.env.link_client;
 var loginLink = process.env.link_client_login;
@@ -68,18 +69,19 @@ var connection = mysql.createPool({
    },
 });*/
 
-// var smtpTransport = nodemailer.createTransport({
-//   host: "116.203.85.82",
-//   port: 25,
-//   secure: false,
-//   tls: {
-//     rejectUnauthorized: false,
-//   },
-//   auth: {
-//     user: "support@app-production.eu",
-//     pass: "])3!~0YFU)S]",
-//   },
-// });
+// production
+var smtpTransport = nodemailer.createTransport({
+  host: "116.203.85.82",
+  port: 25,
+  secure: false,
+  tls: {
+    rejectUnauthorized: false,
+  },
+  auth: {
+    user: "support@app-production.eu",
+    pass: "])3!~0YFU)S]",
+  },
+});
 
 //local purpose
 var smtpTransport = nodemailer.createTransport({
