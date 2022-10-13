@@ -495,9 +495,8 @@ export class DashboardComponent implements OnInit {
 
               const holidayTemplateId = this.templateAccount.find((t) => t.id === this.templateAccountValue).holiday_template;
               const userId = this.helpService.getMe();
-              const storeId = this.storageService.getSelectedStore(userId);
 
-              this.holidayService.createStoreTemplateConnection([holidayTemplateId], storeId, () => {
+              this.holidayService.createStoreTemplateConnection([holidayTemplateId], userId, () => {
                 console.log('uspesno!');
               });
             });
