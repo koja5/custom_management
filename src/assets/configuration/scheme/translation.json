@@ -311,6 +311,12 @@
             "unsuccessCreateCustomerText": {
                 "type": "string"
             },
+            "eventAlreadyExistsTitle": {
+              "type": "string"
+            },
+            "eventAlreadyExistsText": {
+              "type": "string"
+            },
             "monday": {
                 "type": "string"
             },
@@ -2732,6 +2738,12 @@
                         },
                         {
                             "key": "successDeleteTitle"
+                        },
+                        {
+                            "key": "eventAlreadyExistsTitle"
+                        },
+                        {
+                            "key": "eventAlreadyExistsText"
                         }
                     ]
                 },
