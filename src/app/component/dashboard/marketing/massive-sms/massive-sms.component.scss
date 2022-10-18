@@ -1,0 +1,51 @@
+.button-padding > button {
+  margin-left: 16px;
+}
+
+.drafts-list {
+  width: 275px;
+  border: 1px solid #dee2e6;
+  margin-right: 30px;
+  background-color: white;
+  overflow: auto;
+}
+
+.sms-content {
+  width: 100px;
+  flex: 1 0 auto;
+  height: auto;
+}
+
+.header-buttons {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  border: 1px solid #dee2e6;
+  color: #6c757d;
+  background-color: #F8F9FA;
+}
+
+.sms-page-container {
+  display: flex;
+}
+
+.drafts-list ul {
+  padding-inline-start: 0px;
+  margin-top: 10px;
+}
+
+.drafts-list ul li a {
+  padding: 8px 20px 8px 20px;
+  display: block;
+  color: #3a3a3a;
+  text-decoration: none;
+}
+
+.drafts-list ul li a:hover {
+  background-color: #EBEBEB;
+  transition: 0.5s;
+}
+
+.active {
+  background-color: #EBEBEB;
+}

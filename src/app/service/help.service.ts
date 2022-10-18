@@ -358,4 +358,30 @@ export class HelpService {
     
       return path;
   }
+
+  multiSelectArrayToString(array): string {
+    let semicolonSeparatedString = "";
+    if (array) {
+      for (let i = 0; i < array.length; i++) {
+        semicolonSeparatedString += array[i] + ";";
+      }
+      semicolonSeparatedString = semicolonSeparatedString.substring(
+        0,
+        semicolonSeparatedString.length - 1
+      );
+    }
+    return semicolonSeparatedString;
+  }
+
+  multiSelectStringToArray(string): number[] {
+    let multiSelectArrayToString;
+    if (string.split(";") !== undefined) {
+      multiSelectArrayToString = string
+        .split(";")
+        .map(Number);
+    } else {
+      multiSelectArrayToString = Number(string);
+    }
+    return multiSelectArrayToString
+  }
 }

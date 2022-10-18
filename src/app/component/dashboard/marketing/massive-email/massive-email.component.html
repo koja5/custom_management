@@ -1,47 +1,133 @@
 <div *ngIf="loading" style="height: 80vh">
   <div class="spinner loading"></div>
 </div>
-<div *ngIf="!loading" class="settings-container">
-  <h3 class="center">{{ language?.massiveEmailTitle }}</h3>
-  <app-dynamic-forms
-    *ngIf="configField"
-    [config]="configField"
-    (submit)="submitEmitter($event)"
-    #form="dynamicForm"
-  >
-  </app-dynamic-forms>
-  <modal #recipients modalClass="modal-md">
-    <modal-header> </modal-header>
-    <modal-content>
-      <div *ngIf="!allRecipients" style="height: 80vh">
-        <div class="spinner loading"></div>
+
+<div *ngIf="!loading">
+  <div class="header-buttons">
+    <div class="button-padding">
+      <button
+        class="e-control e-btn e-lib e-primary e-flat"
+        (click)="onCreateNewDraft()"
+      >
+        {{ language?.createNewDraft }}
+      </button>
+      <button
+        class="e-control e-btn e-lib e-primary e-flat"
+        (click)="openSaveDraftModal()"
+      >
+        {{ editMode ? language?.editDraft : language?.saveDraft }}
+      </button>
+      <button *ngIf="editMode"
+        class="e-control e-btn e-lib e-danger e-flat"
+        (click)="deleteEmailDraft()"
+      >
+        {{ language?.deleteDraft }}
+      </button>
+    </div>
+  </div>
+   
+  <div class="email-page-container">
+    <div class="drafts-list">
+        <ul style="list-style-type:none">
+          <li *ngFor="let emailDraft of emailDrafts; let i = index" 
+              (click)="onDraftChange(emailDraft); setSelectedIndex(i)"
+              [ngClass]="{'active': selectedIndex === i}">
+            <a>{{ emailDraft.draftName }}</a>
+          </li>
+        </ul>
+    </div>
+  
+    <div class="email-content">
+      <div *ngIf="!loading" class="settings-container">
+        <h3 class="center">{{ language?.massiveEmailTitle }}</h3>
+        <app-dynamic-forms
+        *ngIf="configField"
+        [config]="configField"
+        (submit)="submitEmitter($event)"
+        [showDialogExit]="showDialogExit"
+        (isDataSaved)="isDataSavedChange($event)"
+        (isFormDirtyChange)="changeFormDirty($event)"
+        (showDialogExitChange)="changeShowDialogExit($event)"
+        #form="dynamicForm"
+      >
+      </app-dynamic-forms>
+        <modal #saveDraft modalClass="modal-md">
+          <modal-header> {{editMode ? language?.editEmailDraft : language?.saveEmailDraft}} </modal-header>
+          <modal-content>
+            <div class="col-md-12 form-group">
+              <div class="e-float-input e-control-wrapper">
+                <input
+                  id="draftName"
+                  name="draftName"
+                  [(ngModel)]="draftName"
+                />
+                <span class="e-float-line"></span>
+                <label class="e-float-text e-label-top">
+                  {{
+                    language?.draftName
+                  }}</label
+                >
+              </div>
+            </div>
+            <div>
+              <div class="mt-4 end">
+                <button
+                  class="e-control e-btn e-lib e-primary e-flat"
+                  (click)="saveEmailDraft()"
+                >
+                  {{ editMode ? language?.editDraft : language?.saveDraft }}
+                </button>
+              </div>
+            </div>
+          </modal-content>
+          <modal-footer class="modal-footer-none"> </modal-footer>
+        </modal>
+      
+        <modal #recipients modalClass="modal-md">
+          <modal-header> </modal-header>
+          <modal-content>
+            <div *ngIf="!allRecipients" style="height: 80vh">
+              <div class="spinner loading"></div>
+            </div>
+            <div *ngIf="allRecipients">
+              <div class="mb-2 font-bold" *ngIf="allRecipients">
+                {{ language.countOfRecipientsForEmail }} {{ allRecipients.length }}
+              </div>
+              <kendo-grid
+                *ngIf="allRecipients"
+                [data]="allRecipients"
+                [style.height]="'515px'"
+              >
+                <kendo-grid-column field="firstname" title="{{ language.firstname }}">
+                </kendo-grid-column>
+                <kendo-grid-column field="lastname" title="{{ language.lastname }}">
+                </kendo-grid-column>
+                <kendo-grid-column field="email" title="{{ language.email }}">
+                </kendo-grid-column>
+              </kendo-grid>
+              <div class="mt-4 end">
+                <button
+                  class="e-control e-btn e-lib e-primary e-flat"
+                  (click)="sendMails()"
+                >
+                  {{ language.sendEmail }}
+                </button>
+              </div>
+            </div>
+          </modal-content>
+          <modal-footer class="modal-footer-none"> </modal-footer>
+        </modal>
       </div>
-      <div *ngIf="allRecipients">
-        <div class="mb-2 font-bold" *ngIf="allRecipients">
-          {{ language.countOfRecipientsForEmail }} {{ allRecipients.length }}
-        </div>
-        <kendo-grid
-          *ngIf="allRecipients"
-          [data]="allRecipients"
-          [style.height]="'515px'"
-        >
-          <kendo-grid-column field="firstname" title="{{ language.firstname }}">
-          </kendo-grid-column>
-          <kendo-grid-column field="lastname" title="{{ language.lastname }}">
-          </kendo-grid-column>
-          <kendo-grid-column field="email" title="{{ language.email }}">
-          </kendo-grid-column>
-        </kendo-grid>
-        <div class="mt-4 end">
-          <button
-            class="e-control e-btn e-lib e-primary e-flat"
-            (click)="sendMails()"
-          >
-            {{ language.sendEmail }}
-          </button>
-        </div>
-      </div>
-    </modal-content>
-    <modal-footer class="modal-footer-none"> </modal-footer>
-  </modal>
+    </div>
+  
+    <app-dynamic-confirm-dialog
+      [showDialog]="showDialog"
+      [title]="language?.changesWontBeSavedTitle"
+      [question]="language?.changesWontBeSaved"
+      (sendEmitter)="receiveConfirm($event)"
+    >
+    </app-dynamic-confirm-dialog>
+  </div>
 </div>
+
+

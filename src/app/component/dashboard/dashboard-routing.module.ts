@@ -292,10 +292,12 @@ const routes: Routes = [
       },
       {
         path: "massive-sms",
+        canDeactivate: [FormGuard],
         component: MassiveSmsComponent,
       },
       {
         path: "massive-email",
+        canDeactivate: [FormGuard],
         component: MassiveEmailComponent,
       },
       {
