@@ -1239,7 +1239,7 @@ router.post("/sendMassiveEMail", function (req, res) {
             }
             console.log(to);
             var mailOptions = {
-              from: '"Clinic Node" clinicnode2022@gmail.com',
+              from: '"ClinicNode" support@app-production.eu',
               to: to.email,
               subject: req.body.subject ? req.body.subject : mail.mailSubject,
               html: sendMassive.render({
