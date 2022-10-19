@@ -109,6 +109,7 @@ import { HelpComponent } from './administrator/help/help.component';
 import { TopicCardComponent } from './administrator/help/topic-card/topic-card.component';
 import { MatFormFieldModule, MatInputModule } from "@angular/material";
 import { ListFaqComponent } from './administrator/help/list-faq/list-faq.component';
+import { MassiveUnsubscribeComponent } from './marketing/massive-unsubscribe/massive-unsubscribe.component';
 import { RegisteredClinicsComponent } from './administrator/registered-clinics/registered-clinics.component';
 import { RegisteredClinicDetailComponent } from './administrator/registered-clinics/registered-clinic-detail/registered-clinic-detail.component';
 import { SharedComponentsModule } from 'src/app/shared/shared-components.module';
@@ -171,7 +172,8 @@ import { SharedComponentsModule } from 'src/app/shared/shared-components.module'
     TopicCardComponent,
     ListFaqComponent,
     RegisteredClinicsComponent,
-    RegisteredClinicDetailComponent
+    RegisteredClinicDetailComponent,
+    MassiveUnsubscribeComponent
   ],
   imports: [
     CommonModule,
