@@ -69,6 +69,25 @@ var connection = mysql.createPool({
    },
 });*/
 
+
+//local purpose
+/* var smtpTransport = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  tls: {
+    rejectUnauthorized: false,
+  },
+  debug: true,
+  ssl: true, 
+  auth: {
+    user: "clinicnode2022@gmail.com",  // real email address
+    pass: "vfuvxgwdfrvestvd" // app password for clinicnode2022@gmail.com email
+  }
+});
+
+*/
+
 // production
 var smtpTransport = nodemailer.createTransport({
   host: "116.203.85.82",
@@ -83,21 +102,6 @@ var smtpTransport = nodemailer.createTransport({
   },
 });
 
-//local purpose
-var smtpTransport = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
-  tls: {
-    rejectUnauthorized: false,
-  },
-  debug: true,
-  ssl: true, 
-  auth: {
-    user: "clinicnode2022@gmail.com",  // real email address
-    pass: "vfuvxgwdfrvestvd" // app password for clinicnode2022@gmail.com email
-  }
-});
 
 //slanje maila pri registraciji
 
@@ -1237,7 +1241,7 @@ router.post("/sendMassiveEMail", function (req, res) {
             }
             console.log(to);
             var mailOptions = {
-              from: '"Clinic Node" clinicnode2022@gmail.com',
+              from: '"ClinicNode" support@app-production.eu',
               to: to.email,
               subject: req.body.subject ? req.body.subject : mail.mailSubject,
               html: sendMassive.render({
