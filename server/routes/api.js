@@ -6129,11 +6129,11 @@ router.post("/getFilteredRecipients", function (req, res) {
       var joinTable = getJoinTable(req.body);
       var table = "";
       if (req.body.mode && req.body.mode === "mail") {
-        var checkAdditionalQuery = "(c.email != '' and c.email IS NOT NULL)";
+        var checkAdditionalQuery = "(c.email != '' and c.email IS NOT NULL) and c.sendMassiveEmail = 1 ";
         table = "mail_massive_message";
       } else {
         var checkAdditionalQuery =
-          "((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL))";
+          "((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL)) and c.sendMassiveSMS = 1 ";
         table = "sms_massive_message";
       }
 
@@ -9754,5 +9754,57 @@ router.get('/getClinicEmployees/:id', function (req, res) {
 });
 
 /* End Registered Clinics */
+
+/* UNSUBSCRIBE */
+
+router.post("/updateMassiveEmailForUser", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.send(err);
+    }
+    conn.query(
+      "update customers SET sendMassiveEmail = ? where email = ?",
+      [req.body.value, req.body.email],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            res.send(true);
+          } else {
+            res.send(false);
+          }
+        } else {
+          res.send(err);
+        }
+      }
+    );
+  });
+});
+
+router.post("/updateMassiveSMSForUser", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.send(err);
+    }
+    conn.query(
+      "update customers SET sendMassiveSMS = ? where email = ?",
+      [req.body.value, req.body.email],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            res.send(true);
+          } else {
+            res.send(false);
+          }
+        } else {
+          res.send(err);
+        }
+      }
+    );
+  });
+});
+
+/* END UNSUBSCRIBE */
 
 module.exports = router;

@@ -1,15 +1,16 @@
+import { MassiveUnsubscribeComponent } from './component/dashboard/marketing/massive-unsubscribe/massive-unsubscribe.component';
 import { ConfirmArrivalComponent } from "./component/templates/confirm-arrival/confirm-arrival.component";
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-import { LoginGuard } from "./service/login-guard/loginGuard";
-import { LoggedGuard } from "./service/login-guard/loggedGuard";
-import { DashboardGuard } from "./service/login-guard/dashboardGuard";
+import { LoginGuard } from "./service/guards/loginGuard";
+import { LoggedGuard } from "./service/guards/loggedGuard";
 
 import { NotFoundComponent } from "./component/templates/not-found/not-found.component";
 import { PatientFormSuccessComponent } from "./component/templates/patient-form-success/patient-form-success.component";
 import { ImpressumComponent } from "./component/templates/impressum/impressum.component";
 import { PrivacyPolicyComponent } from "./component/templates/privacy-policy/privacy-policy.component";
 import { TermsComponent } from "./component/templates/terms/terms.component";
+import { UnsubscribeGuard } from './service/guards/unsubscribe.guard';
 
 const routes: Routes = [
   {
@@ -44,6 +45,11 @@ const routes: Routes = [
     component: TermsComponent,
   },
   {
+    path: "unsubscribe/:userEmail",
+    canActivate: [UnsubscribeGuard],
+    component: MassiveUnsubscribeComponent,
+  },
+  {
     path: "**",
     pathMatch: "full",
     component: NotFoundComponent,
@@ -58,4 +64,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

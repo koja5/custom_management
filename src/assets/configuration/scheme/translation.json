@@ -2226,6 +2226,24 @@
             },
             "invalidFormat": {
                 "type": "string"
+            },
+            "unsubscribeMessage": {
+                "type": "string"
+            },
+            "unsubscribeHere": {
+                "type": "string"
+            },
+            "unsubscribeQuestion": {
+                "type": "string"
+            },
+            "unsubscribeInfoMessage": {
+                "type": "string"
+            },
+            "unsubscribeButton": {
+                "type": "string"
+            },
+            "goBack": {
+                "type": "string"
             }
         }
     },
@@ -6858,16 +6876,52 @@
             "title": "Validation error messages",
             "expandable": true,
             "expanded": false,
-            "items": [{
+            "items": [
+                {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items": [{
-                        "key": "thisFieldIsRequired"
-                    },
-                    {
-                        "key": "invalidFormat"
-                    }]
+                    "items": [
+                        {
+                            "key": "thisFieldIsRequired"
+                        },
+                        {
+                            "key": "invalidFormat"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "section",
+            "title": "Unsubscribe",
+            "expandable": true,
+            "expanded": false,
+            "items": [
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "unsubscribeMessage"
+                        },
+                        {
+                            "key": "unsubscribeHere"
+                        },
+                        {
+                            "key": "unsubscribeQuestion"
+                        },
+                        {
+                            "key": "unsubscribeInfoMessage"
+                        },
+                        {
+                            "key": "unsubscribeButton"
+                        },
+                        {
+                            "key": "goBack"
+                        }
+                    ]
                 }
             ]
         }
