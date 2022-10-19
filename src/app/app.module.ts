@@ -20,9 +20,9 @@ import { LayoutModule } from "@progress/kendo-angular-layout";
 import { ToastrModule } from "ngx-toastr";
 
 // guard
-import { LoggedGuard } from "./service/login-guard/loggedGuard";
-import { LoginGuard } from "./service/login-guard/loginGuard";
-import { DashboardGuard } from "./service/login-guard/dashboardGuard";
+import { LoggedGuard } from "./service/guards/loggedGuard";
+import { LoginGuard } from "./service/guards/loginGuard";
+import { DashboardGuard } from "./service/guards/dashboardGuard";
 
 //component
 import { AppComponent } from "./app.component";
