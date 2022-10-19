@@ -9601,9 +9601,9 @@ router.get('/getClinicEmployees/:id', function (req, res) {
 
 /* End Registered Clinics */
 
-// start email drafts
+// start drafts
 
-router.get("/getEmailDrafts/:id", function (req, res, next) {
+router.get("/getDrafts/:id/:type", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
@@ -9611,7 +9611,7 @@ router.get("/getEmailDrafts/:id", function (req, res, next) {
     }
     var id = req.params.id;
     conn.query(
-      "select * from email_drafts where superadmin = ?",
+      "select * from marketing_drafts where superadmin = ? AND type = '" + req.params.type + "'",
       [id],
       function (err, rows) {
         conn.release();
@@ -9626,7 +9626,7 @@ router.get("/getEmailDrafts/:id", function (req, res, next) {
   });
 });
 
-router.post("/createEmailDraft", function (req, res, next) {
+router.post("/createDraft", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
@@ -9634,34 +9634,10 @@ router.post("/createEmailDraft", function (req, res, next) {
     }
 
     response = null;
-    logger.log("req.body: ", req.body)
-    var data = {
-      birthdayFrom: req.body.birthdayFrom,
-      birthdayTo: req.body.birthdayTo,
-      category: req.body.category,
-      childs: req.body.childs,
-      creator_id: req.body.creator_id,
-      doctor: req.body.doctor,
-      draftName: req.body.draftName,
-      end: req.body.end,
-      excludeCustomersWithEvents: req.body.excludeCustomersWithEvents,
-      female: req.body.female,
-      male: req.body.male,
-      message: req.body.message,
-      place: req.body.place,
-      profession: req.body.profession,
-      recommendation: req.body.recommendation,
-      relationship: req.body.relationship,
-      social: req.body.social,
-      start: req.body.start,
-      store: req.body.store,
-      subject: req.body.subject,
-      superadmin: req.body.superadmin,
-    };
 
     conn.query(
-      "insert into email_drafts SET ?",
-      data,
+      "insert into marketing_drafts SET ?",
+      req.body,
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -9680,7 +9656,7 @@ router.post("/createEmailDraft", function (req, res, next) {
   });
 });
 
-router.post("/updateEmailDraft", function (req, res, next) {
+router.post("/editDraft", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
@@ -9688,33 +9664,10 @@ router.post("/updateEmailDraft", function (req, res, next) {
     }
 
     var response = null;
-    var data = {
-      birthdayFrom: req.body.birthdayFrom,
-      birthdayTo: req.body.birthdayTo,
-      category: req.body.category,
-      childs: req.body.childs,
-      creator_id: req.body.creator_id,
-      doctor: req.body.doctor,
-      draftName: req.body.draftName,
-      end: req.body.end,
-      excludeCustomersWithEvents: req.body.excludeCustomersWithEvents,
-      female: req.body.female,
-      male: req.body.male,
-      message: req.body.message,
-      place: req.body.place,
-      profession: req.body.profession,
-      recommendation: req.body.recommendation,
-      relationship: req.body.relationship,
-      social: req.body.social,
-      start: req.body.start,
-      store: req.body.store,
-      subject: req.body.subject,
-      superadmin: req.body.superadmin,
-    };
 
     conn.query(
-      "update email_drafts set ? where id = '" + req.body.id + "'",
-      data,
+      "update marketing_drafts set ? where id = '" + req.body.id + "'",
+      req.body,
       function (err, rows, fields) {
         conn.release();
         if (err) {
@@ -9729,7 +9682,7 @@ router.post("/updateEmailDraft", function (req, res, next) {
   });
 });
 
-router.post("/deleteEmailDraft", (req, res, next) => {
+router.post("/deleteDraft", (req, res, next) => {
   try {
     connection.getConnection(function (err, conn) {
       if (err) {
@@ -9740,7 +9693,7 @@ router.post("/deleteEmailDraft", (req, res, next) => {
         });
       } else {
         conn.query(
-          "delete from email_drafts where id = '" + req.body.id + "'",
+          "delete from marketing_drafts where id = '" + req.body.id + "'",
           function (err, rows, fields) {
             conn.release();
             if (err) {
@@ -9759,164 +9712,6 @@ router.post("/deleteEmailDraft", (req, res, next) => {
   }
 });
 
-// end email drafts
-
-// start sms drafts
-
-router.get("/getSmsDrafts/:id", function (req, res, next) {
-  connection.getConnection(function (err, conn) {
-    if (err) {
-      logger.log("error", err.sql + ". " + err.sqlMessage);
-      res.json(err);
-    }
-    var id = req.params.id;
-    conn.query(
-      "select * from sms_drafts where superadmin = ?",
-      [id],
-      function (err, rows) {
-        conn.release();
-        if (!err) {
-          res.json(rows);
-        } else {
-          res.json(err);
-          logger.log("error", err.sql + ". " + err.sqlMessage);
-        }
-      }
-    );
-  });
-});
-
-router.post("/createSmsDraft", function (req, res, next) {
-  connection.getConnection(function (err, conn) {
-    if (err) {
-      logger.log("error", err.sql + ". " + err.sqlMessage);
-      res.json(err);
-    }
-
-    response = null;
-    logger.log("req.body: ", req.body)
-    var data = {
-      birthdayFrom: req.body.birthdayFrom,
-      birthdayTo: req.body.birthdayTo,
-      category: req.body.category,
-      childs: req.body.childs,
-      creator_id: req.body.creator_id,
-      doctor: req.body.doctor,
-      draftName: req.body.draftName,
-      end: req.body.end,
-      excludeCustomersWithEvents: req.body.excludeCustomersWithEvents,
-      female: req.body.female,
-      male: req.body.male,
-      message: req.body.message,
-      place: req.body.place,
-      profession: req.body.profession,
-      recommendation: req.body.recommendation,
-      relationship: req.body.relationship,
-      social: req.body.social,
-      start: req.body.start,
-      store: req.body.store,
-      superadmin: req.body.superadmin,
-    };
-
-    conn.query(
-      "insert into sms_drafts SET ?",
-      data,
-      function (err, rows) {
-        conn.release();
-        if (!err) {
-          if (!err) {
-            response = true;
-          } else {
-            response.success = false;
-          }
-          res.json(response);
-        } else {
-          res.json(err);
-          logger.log("error", err.sql + ". " + err.sqlMessage);
-        }
-      }
-    );
-  });
-});
-
-router.post("/updateSmsDraft", function (req, res, next) {
-  connection.getConnection(function (err, conn) {
-    if (err) {
-      logger.log("error", err.sql + ". " + err.sqlMessage);
-      res.json(err);
-    }
-
-    var response = null;
-    var data = {
-      birthdayFrom: req.body.birthdayFrom,
-      birthdayTo: req.body.birthdayTo,
-      category: req.body.category,
-      childs: req.body.childs,
-      creator_id: req.body.creator_id,
-      doctor: req.body.doctor,
-      draftName: req.body.draftName,
-      end: req.body.end,
-      excludeCustomersWithEvents: req.body.excludeCustomersWithEvents,
-      female: req.body.female,
-      male: req.body.male,
-      message: req.body.message,
-      place: req.body.place,
-      profession: req.body.profession,
-      recommendation: req.body.recommendation,
-      relationship: req.body.relationship,
-      social: req.body.social,
-      start: req.body.start,
-      store: req.body.store,
-      superadmin: req.body.superadmin,
-    };
-
-    conn.query(
-      "update sms_drafts set ? where id = '" + req.body.id + "'",
-      data,
-      function (err, rows, fields) {
-        conn.release();
-        if (err) {
-          res.json(err);
-          logger.log("error", err.sql + ". " + err.sqlMessage);
-        } else {
-          response = true;
-          res.json(response);
-        }
-      }
-    );
-  });
-});
-
-router.post("/deleteSmsDraft", (req, res, next) => {
-  try {
-    connection.getConnection(function (err, conn) {
-      if (err) {
-        console.error("SQL Connection error: ", err);
-        res.json({
-          code: 100,
-          status: err,
-        });
-      } else {
-        conn.query(
-          "delete from sms_drafts where id = '" + req.body.id + "'",
-          function (err, rows, fields) {
-            conn.release();
-            if (err) {
-              res.json(false);
-              logger.log("error", err.sql + ". " + err.sqlMessage);
-            } else {
-              res.json(true);
-            }
-          }
-        );
-      }
-    });
-  } catch (ex) {
-    logger.log("error", err.sql + ". " + err.sqlMessage);
-    res.json(ex);
-  }
-});
-
-// end sms drafts
+// end drafts
 
 module.exports = router;

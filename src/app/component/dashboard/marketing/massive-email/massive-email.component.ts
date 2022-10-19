@@ -7,6 +7,8 @@ import { DynamicService } from "src/app/service/dynamic.service";
 import { HelpService } from "src/app/service/help.service";
 import { MarketingService } from "src/app/service/marketing.service";
 
+const draftType = 'email';
+
 @Component({
   selector: "app-massive-email",
   templateUrl: "./massive-email.component.html",
@@ -57,7 +59,7 @@ export class MassiveEmailComponent implements OnInit, FormGuardData {
   }
 
   getEmailDrafts(selectNewlyCreated?: boolean) {
-    this.marketingService.getEmailDrafts(this.superadmin).subscribe((data) => {
+    this.marketingService.getDrafts(this.superadmin, draftType).subscribe((data) => {
       this.emailDrafts = data;
       if (selectNewlyCreated) {
         this.selectedIndex = this.emailDrafts.length - 1;
@@ -152,38 +154,18 @@ export class MassiveEmailComponent implements OnInit, FormGuardData {
 
   saveEmailDraft() {
     const formValues = this.form.form.value;
-    let emailDraft = {
-      ...this.form.form.value,
-      draftName: this.draftName ? this.draftName : "",
-      place: formValues.place ? formValues.place : "",
-      male: formValues.male ? formValues.male : false,
-      female: formValues.female ? formValues.female : false,
-      excludeCustomersWithEvents: formValues.excludeCustomersWithEvents ? formValues.excludeCustomersWithEvents : false,
-      birthdayFrom: formValues.birthdayFrom ? formValues.birthdayFrom : "",
-      birthdayTo: formValues.birthdayTo ? formValues.birthdayTo : "",
-      profession: formValues.profession ? formValues.profession : "",
-      childs: formValues.childs ? formValues.childs : "",
-      start: formValues.start ? formValues.start : "",
-      end: formValues.end ? formValues.end : "",
-      subject: formValues.subject ? formValues.subject : "",
-      message: formValues.message ? formValues.message : "",
-      
-      category: this.helpService.multiSelectArrayToString(formValues.category),
-      creator_id: this.helpService.multiSelectArrayToString(formValues.creator_id),
-      recommendation: this.helpService.multiSelectArrayToString(formValues.recommendation),
-      relationship: this.helpService.multiSelectArrayToString(formValues.relationship),
-      social: this.helpService.multiSelectArrayToString(formValues.social),
-      doctor: this.helpService.multiSelectArrayToString(formValues.doctor),
-      store: this.helpService.multiSelectArrayToString(formValues.store),
-      superadmin: this.helpService.getSuperadmin(),
-    };
+    let emailDraft = this.helpService.prepareDraft(
+      formValues,
+      this.draftName,
+      draftType
+    );
 
     if(this.editMode) {
       emailDraft = {
         ...emailDraft,
         id: this.data.id,
       };
-      this.marketingService.editEmailDraft(emailDraft).subscribe((data) => {
+      this.marketingService.editDraft(emailDraft).subscribe((data) => {
         this.getEmailDrafts();
         this.saveDraft.close();
         this.editMode = true;
@@ -200,7 +182,7 @@ export class MassiveEmailComponent implements OnInit, FormGuardData {
         }
       })
     } else {
-      this.marketingService.createEmailDraft(emailDraft).subscribe((data) => {
+      this.marketingService.createDraft(emailDraft).subscribe((data) => {
         if (data) {
           this.helpService.successToastr(
             this.language.successTitle,
@@ -214,8 +196,6 @@ export class MassiveEmailComponent implements OnInit, FormGuardData {
         }
         this.getEmailDrafts(true);
         this.selectedIndex = this.emailDrafts.length - 1;
-        console.log('this.emailDrafts: ', this.emailDrafts);
-        console.log('this.selectedIndex: ', this.selectedIndex);
         this.saveDraft.close();
         this.editMode = true;
       });
@@ -238,7 +218,7 @@ export class MassiveEmailComponent implements OnInit, FormGuardData {
   }
 
   deleteEmailDraft() {
-    this.marketingService.deleteEmailDraft(this.data).subscribe((data) => {
+    this.marketingService.deleteDraft(this.data).subscribe((data) => {
       this.getEmailDrafts();
       this.form.form.reset();
       this.editMode = false;

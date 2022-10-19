@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -8,36 +8,19 @@ export class MarketingService {
 
   constructor(private http: HttpClient) { }
   
-  getEmailDrafts(superadmin) {
-    return this.http.get("/api/getEmailDrafts/" + superadmin);
+  getDrafts(superadmin, draftType) {
+    return this.http.get("/api/getDrafts/" + superadmin + "/" + draftType);
   }
 
-  createEmailDraft(data) {
-    return this.http.post("/api/createEmailDraft", data);
+  createDraft(data) {
+    return this.http.post("/api/createDraft", data);
   }
 
-  editEmailDraft(data) {
-    return this.http.post("/api/updateEmailDraft", data);
+  editDraft(data) {
+    return this.http.post("/api/editDraft", data);
   }
 
-  deleteEmailDraft(data) {
-    return this.http.post("/api/deleteEmailDraft", data);
+  deleteDraft(data) {
+    return this.http.post("/api/deleteDraft", data);
   }
-
-  getSmsDrafts(superadmin) {
-    return this.http.get("/api/getSmsDrafts/" + superadmin);
-  }
-
-  createSmsDraft(data) {
-    return this.http.post("/api/createSmsDraft", data);
-  }
-
-  editSmsDraft(data) {
-    return this.http.post("/api/updateSmsDraft", data);
-  }
-
-  deleteSmsDraft(data) {
-    return this.http.post("/api/deleteSmsDraft", data);
-  }
-
 }

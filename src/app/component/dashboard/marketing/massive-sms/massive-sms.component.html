@@ -3,8 +3,8 @@
 </div>
 
 <div *ngIf="!loading">
-  <div class="header-buttons">
-    <div class="button-padding">
+  <div class="drafts-header-buttons">
+    <div class="drafts-button-padding">
       <button
         class="e-control e-btn e-lib e-primary e-flat"
         (click)="onCreateNewDraft()"
@@ -26,18 +26,18 @@
     </div>
   </div>
    
-  <div class="sms-page-container">
+  <div class="drafts-page-container">
     <div class="drafts-list">
         <ul style="list-style-type:none">
           <li *ngFor="let smsDraft of smsDrafts; let i = index" 
               (click)="onDraftChange(smsDraft); setSelectedIndex(i)"
-              [ngClass]="{'active': selectedIndex === i}">
+              [ngClass]="{'drafts-active': selectedIndex === i}">
             <a>{{ smsDraft.draftName }}</a>
           </li>
         </ul>
     </div>
   
-    <div class="sms-content">
+    <div class="drafts-content">
       <div *ngIf="!loading" class="settings-container">
         <h3 class="center">{{ language?.massiveSmsTitle }}</h3>
         <app-dynamic-forms

@@ -384,4 +384,33 @@ export class HelpService {
     }
     return multiSelectArrayToString
   }
+
+  prepareDraft(formValues, draftName, draftType) {
+    return {
+      ...formValues,
+      draftName: draftName ? draftName : "",
+      place: formValues.place ? formValues.place : "",
+      male: formValues.male ? formValues.male : false,
+      female: formValues.female ? formValues.female : false,
+      excludeCustomersWithEvents: formValues.excludeCustomersWithEvents ? formValues.excludeCustomersWithEvents : false,
+      birthdayFrom: formValues.birthdayFrom ? formValues.birthdayFrom : "",
+      birthdayTo: formValues.birthdayTo ? formValues.birthdayTo : "",
+      profession: formValues.profession ? formValues.profession : "",
+      childs: formValues.childs ? formValues.childs : "",
+      start: formValues.start ? formValues.start : "",
+      end: formValues.end ? formValues.end : "",
+      subject: formValues.subject ? formValues.subject : "",
+      message: formValues.message ? formValues.message : "",
+      
+      category: this.multiSelectArrayToString(formValues.category),
+      creator_id: this.multiSelectArrayToString(formValues.creator_id),
+      recommendation: this.multiSelectArrayToString(formValues.recommendation),
+      relationship: this.multiSelectArrayToString(formValues.relationship),
+      social: this.multiSelectArrayToString(formValues.social),
+      doctor: this.multiSelectArrayToString(formValues.doctor),
+      store: this.multiSelectArrayToString(formValues.store),
+      superadmin: this.getSuperadmin(),
+      type: draftType
+    }
+  }
 }

@@ -7,6 +7,8 @@ import { Subject } from "rxjs";
 import { MarketingService } from "src/app/service/marketing.service";
 import { FormGuardData } from "src/app/models/formGuard-data";
 
+const draftType = 'sms';
+
 @Component({
   selector: "app-massive-sms",
   templateUrl: "./massive-sms.component.html",
@@ -57,7 +59,7 @@ export class MassiveSmsComponent implements OnInit, FormGuardData {
   }
 
   getSmsDrafts(selectNewlyCreated?: boolean) {
-    this.marketingService.getSmsDrafts(this.superadmin).subscribe((data) => {
+    this.marketingService.getDrafts(this.superadmin, draftType).subscribe((data) => {
       this.smsDrafts = data;
       if (selectNewlyCreated) {
         this.selectedIndex = this.smsDrafts.length - 1;
@@ -170,38 +172,19 @@ export class MassiveSmsComponent implements OnInit, FormGuardData {
 
   saveSmsDraft() {
     const formValues = this.form.form.value;
-    let smsDraft = {
-      ...this.form.form.value,
-      draftName: this.draftName ? this.draftName : "",
-      place: formValues.place ? formValues.place : "",
-      male: formValues.male ? formValues.male : false,
-      female: formValues.female ? formValues.female : false,
-      excludeCustomersWithEvents: formValues.excludeCustomersWithEvents ? formValues.excludeCustomersWithEvents : false,
-      birthdayFrom: formValues.birthdayFrom ? formValues.birthdayFrom : "",
-      birthdayTo: formValues.birthdayTo ? formValues.birthdayTo : "",
-      profession: formValues.profession ? formValues.profession : "",
-      childs: formValues.childs ? formValues.childs : "",
-      start: formValues.start ? formValues.start : "",
-      end: formValues.end ? formValues.end : "",
-      subject: formValues.subject ? formValues.subject : "",
-      message: formValues.message ? formValues.message : "",
-      
-      category: this.helpService.multiSelectArrayToString(formValues.category),
-      creator_id: this.helpService.multiSelectArrayToString(formValues.creator_id),
-      recommendation: this.helpService.multiSelectArrayToString(formValues.recommendation),
-      relationship: this.helpService.multiSelectArrayToString(formValues.relationship),
-      social: this.helpService.multiSelectArrayToString(formValues.social),
-      doctor: this.helpService.multiSelectArrayToString(formValues.doctor),
-      store: this.helpService.multiSelectArrayToString(formValues.store),
-      superadmin: this.helpService.getSuperadmin(),
-    };
+
+    let smsDraft = this.helpService.prepareDraft(
+      formValues,
+      this.draftName,
+      draftType
+    );
 
     if(this.editMode) {
       smsDraft = {
         ...smsDraft,
         id: this.data.id,
       };
-      this.marketingService.editSmsDraft(smsDraft).subscribe((data) => {
+      this.marketingService.editDraft(smsDraft).subscribe((data) => {
         this.getSmsDrafts();
         this.saveDraft.close();
         this.editMode = true;
@@ -218,7 +201,7 @@ export class MassiveSmsComponent implements OnInit, FormGuardData {
         }
       })
     } else {
-      this.marketingService.createSmsDraft(smsDraft).subscribe((data) => {
+      this.marketingService.createDraft(smsDraft).subscribe((data) => {
         if (data) {
           this.helpService.successToastr(
             this.language.successTitle,
@@ -254,7 +237,7 @@ export class MassiveSmsComponent implements OnInit, FormGuardData {
   } 
 
   deleteSmsDraft() {
-    this.marketingService.deleteSmsDraft(this.data).subscribe((data) => {
+    this.marketingService.deleteDraft(this.data).subscribe((data) => {
       this.getSmsDrafts();
       this.form.form.reset();
       this.editMode = false;
