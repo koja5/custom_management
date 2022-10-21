@@ -1555,6 +1555,124 @@ router.post("/infoAboutConfirmDenyAccessDevice", function (req, res) {
   });
 });
 
+router.sendVaucherToMail = (data) => {
+
+  connection.getConnection(function (err, conn) {
+    var confirmTemplate = fs.readFileSync(
+      "./server/routes/templates/sendVaucher.hjs",
+      "utf-8"
+    );
+    var infoForCreatedAccount = hogan.compile(confirmTemplate);
+
+    conn.query(
+      "SELECT * FROM users WHERE users.id = ?", data.user, function (err, row) {
+        let user = row[0];
+        conn.release();
+        var mail = {};
+        var signatureAvailable = false;
+        var mailOptions = {
+          from: '"ClinicNode" support@app-production.eu',
+          to: user.email,
+          subject: mail.mailSubject
+            ? mail.mailSubject
+            : data.language?.subjectCreatedVaucher,
+          html: infoForCreatedAccount.render({
+            firstName: data.user_name,
+            amount: data.amount,
+            date_redeemed: data.date_redeemed,
+            comment: data.comment,
+            customer: data.customer,
+            customer_name: data.customer_name,
+            customer_consumer: data.customer_consumer,
+            customer_consumer_name: data.customer_consumer_name,
+            superadmin: data.superadmin,
+
+            loginLink: loginLink,
+            initialGreeting: mail.mailInitialGreeting
+              ? mail.mailInitialGreeting
+              : data.language?.initialGreeting,
+            finalGreeting: mail.mailFinalGreeting
+              ? mail.mailFinalGreeting
+              : data.language?.finalGreeting,
+            signature: !signatureAvailable
+              ? mail.mailSignature
+                ? mail.mailSignature
+                : data.language?.signature
+              : "",
+            thanksForUsing: mail.mailThanksForUsing
+              ? mail.mailThanksForUsing
+              : data.language?.thanksForUsing,
+            websiteLink: data.language?.websiteLink,
+            ifYouHaveQuestion: mail.mailIfYouHaveQuestion
+              ? mail.mailIfYouHaveQuestion
+              : data.language?.ifYouHaveQuestion,
+            emailAddress: data.language?.emailAddress,
+            notReply: mail.mailNotReply
+              ? mail.mailNotReply
+              : data.language?.notReply,
+            copyRight: mail.mailCopyRight
+              ? mail.mailCopyRight
+              : data.language?.copyRight,
+              introductoryMessageForCreatedVaucher: mail.mailMessage
+              ? mail.mailMessage
+              : data.language?.introductoryMessageForCreatedVaucher,
+            linkForLogin: data.language?.linkForLogin,
+            emailForLogin: data.language?.emailForLogin,
+            vaucherAmount: data.language?.amount,
+            date_redeemedTitle: data.language?.date_redeemed,
+            commentTitle: data.language?.comment,
+            // customerTitle: data.language?.customer,
+            customerBuysTitle: data.language?.customerBuys,
+            // customer_consumerTitle: data.language?.customer_consumer,
+            customerConsumerTitle: data.language?.customerConsumer,
+            passwordForLogin: data.language?.passwordForLogin,
+            signatureAddress:
+              signatureAvailable &&
+              mail.signatureAddress &&
+              (mail.street || mail.zipcode || mail.store_place)
+                ? mail.signatureAddress +
+                  "\n" +
+                  mail.street +
+                  "\n" +
+                  mail.zipcode +
+                  " " +
+                  mail.store_place
+                : "",
+            signatureTelephone:
+              signatureAvailable && mail.signatureTelephone && mail.telephone
+                ? mail.signatureTelephone + " " + mail.telephone
+                : "",
+            signatureMobile:
+              signatureAvailable && mail.signatureMobile && mail.mobile
+                ? mail.signatureMobile + " " + mail.mobile
+                : "",
+            signatureEmail:
+              signatureAvailable && mail.signatureEmail && mail.email
+                ? mail.signatureEmail + " " + mail.email
+                : "",
+          }),
+        };
+
+        smtpTransport.sendMail(mailOptions, function (error, response) {
+          if (error) {
+            logger.log(
+              "error",
+              `Error to sent mail for VERIFICATION MAIL on EMAIL: ${user.email}. Error: ${error}`
+            );
+            res.end("error");
+          } else {
+            logger.log(
+              "info",
+              `Sent mail for VERIFICATION MAIL for USER: ${user.shortname} on EMAIL: ${user.email}`
+            );
+            res.end("sent");
+          }
+        });
+      }
+    );
+  });
+}
+
 router.sendMailAdminInfo = (data) => {
   connection.getConnection(function (err, conn) {
     var confirmTemplate = fs.readFileSync(
