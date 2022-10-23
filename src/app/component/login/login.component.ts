@@ -50,15 +50,6 @@ export class LoginComponent implements OnInit {
   };
   // public data: LoginData;
 
-  readonly LANGUAGE_MAPPING = {
-    AT: 'Deutsch',
-    IT: 'Italian',
-    RS: 'SerbianAPP',
-    US: 'English',
-    SL: 'Slovenian',
-    HR: 'Croatia'
-  }
-
   constructor(
     private service: LoginService,
     private mailService: MailService,
@@ -426,14 +417,13 @@ export class LoginComponent implements OnInit {
         JSON.stringify(data.storeSettings)
       );
     }
-
     if (data.language) {
-      this.getTranslationByLanguage(this.LANGUAGE_MAPPING[data.language]);
+      // actually this will check user settings for account language, not the country code
+      this.getTranslationByCountryCode(data.language);
     } else {
-      this.getTranslationByCountryCode(
-        this.helpService.getLocalStorage("countryCode")
-      );
+      this.checkDemoAccountLanguage();
     }
+
     /*if (
       data.language !== this.helpService.getLocalStorage("countryCode") ||
       this.helpService.getLocalStorage("language") == undefined
