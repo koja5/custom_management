@@ -76,7 +76,7 @@ export class UserDetailsComponent implements OnInit {
     private packLanguage: PackLanguageService,
     private helpService: HelpService,
     private accountService: AccountService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.params["id"];
@@ -441,18 +441,18 @@ export class UserDetailsComponent implements OnInit {
   }
 
   receiveConfirm(event: boolean): void {
-    if(event) {
+    if (event) {
       this.user.close();
       this.isFormDirty = false;
     }
-      this.showDialog = false;
+    this.showDialog = false;
   }
 
   confirmClose(): void {
     this.user.modalRoot.nativeElement.focus();
-    if(this.isFormDirty) {
+    if (this.isFormDirty) {
       this.showDialog = true;
-    }else {
+    } else {
       this.user.close()
       this.showDialog = false;
       this.isFormDirty = false
@@ -619,7 +619,7 @@ export class UserDetailsComponent implements OnInit {
     if (event.target.value) {
       this.isFileChoosen = true;
       this.updateImageInput = <File>event.target.files[0];
-    }else {
+    } else {
       this.isFileChoosen = false;
     }
   }
@@ -744,6 +744,10 @@ export class UserDetailsComponent implements OnInit {
 
   changeColorPalette(event) {
     this.selectedColor = event;
+  }
+
+  isValidDate(date: any) {
+    return !isNaN(date) && date instanceof Date;
   }
 
   /*submitEmitter(event) {

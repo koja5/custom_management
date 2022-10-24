@@ -236,17 +236,18 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.firstname }}">
-                              <input kendoTextBox *ngIf="
-                                  data.firstname === '' ||
-                                  data.firstname === null ||
-                                  data.firstname === undefined
-                                " [(ngModel)]="language['noInformation']" name="firstname" class="noPadding"
+                              <input kendoTextBox 
+                                *ngIf="!data || !data.firstname"
+                                [(ngModel)]="language['noInformation']"
+                                name="firstname"
+                                class="noPadding"
                                 readonly="true" />
-                              <input kendoTextBox *ngIf="
-                                  data.firstname !== null &&
-                                  data.firstname !== undefined &&
-                                  data.firstname !== ''
-                                " [(ngModel)]="data.firstname" name="firstname" class="noPadding" readonly="true" />
+                              <input kendoTextBox
+                                *ngIf="data && data.firstname"
+                                [(ngModel)]="data.firstname"
+                                name="firstname" 
+                                class="noPadding" 
+                                readonly="true" />
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -254,17 +255,18 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.lastname }}">
-                              <input kendoTextBox *ngIf="
-                                  data.lastname === '' ||
-                                  data.lastname === null ||
-                                  data.telephone === undefined
-                                " [(ngModel)]="language['noInformation']" name="lastname" class="noPadding"
+                              <input kendoTextBox 
+                                *ngIf="!data || !data.lastname"
+                                [(ngModel)]="language['noInformation']"
+                                name="lastname"
+                                class="noPadding"
                                 readonly="true" />
-                              <input kendoTextBox *ngIf="
-                                  data.lastname !== null &&
-                                  data.lastname !== undefined &&
-                                  data.lastname !== ''
-                                " [(ngModel)]="data.lastname" name="lastname" class="noPadding" readonly="true" />
+                              <input kendoTextBox
+                                *ngIf="data && data.lastname"
+                                [(ngModel)]="data.lastname"
+                                name="lastname"
+                                class="noPadding"
+                                readonly="true" />
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -272,17 +274,18 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.gender }}">
-                              <input kendoTextBox *ngIf="
-                                  data.gender === '' ||
-                                  data.gender === null ||
-                                  data.gender === undefined
-                                " [(ngModel)]="language['noInformation']" name="gender" class="noPadding"
+                              <input kendoTextBox
+                                *ngIf="!data || !data.gender"
+                                [(ngModel)]="language['noInformation']"
+                                name="gender"
+                                class="noPadding"
                                 readonly="true" />
-                              <input kendoTextBox *ngIf="
-                                  data.gender !== null &&
-                                  data.gender !== undefined &&
-                                  data.gender !== ''
-                                " [(ngModel)]="data.gender" name="gender" class="noPadding" readonly="true" />
+                              <input kendoTextBox
+                                *ngIf="data && data.gender"
+                                [(ngModel)]="data.gender"
+                                name="gender"
+                                class="noPadding"
+                                readonly="true" />
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -290,17 +293,18 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.shortname }}">
-                              <input kendoTextBox *ngIf="
-                                  data.shortname === '' ||
-                                  data.shortname === null ||
-                                  data.shortname === undefined
-                                " [(ngModel)]="language['noInformation']" name="shortname" class="noPadding"
+                              <input kendoTextBox
+                                *ngIf="!data || !data.shortname"
+                                [(ngModel)]="language['noInformation']"
+                                name="shortname"
+                                class="noPadding"
                                 readonly="true" />
-                              <input kendoTextBox *ngIf="
-                                  data.shortname !== null &&
-                                  data.shortname !== undefined &&
-                                  data.shortname !== ''
-                                " [(ngModel)]="data.shortname" name="shortname" class="noPadding" readonly="true" />
+                              <input kendoTextBox
+                                *ngIf="data && data.shortname"
+                                [(ngModel)]="data.shortname"
+                                name="shortname"
+                                class="noPadding"
+                                readonly="true" />
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -308,17 +312,18 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.email }}">
-                              <input kendoTextBox *ngIf="
-                                  data.email === '' ||
-                                  data.email === null ||
-                                  data.email === undefined
-                                " [(ngModel)]="language['noInformation']" name="email" class="noPadding"
+                              <input kendoTextBox
+                                *ngIf="!data || !data.email"
+                                [(ngModel)]="language['noInformation']"
+                                name="email"
+                                class="noPadding"
                                 readonly="true" />
-                              <input kendoTextBox *ngIf="
-                                  data.email !== null &&
-                                  data.email !== undefined &&
-                                  data.email !== ''
-                                " [(ngModel)]="data.email" name="email" class="noPadding" readonly="true" />
+                              <input kendoTextBox
+                                *ngIf="data && data.email"
+                                [(ngModel)]="data.email"
+                                name="email"
+                                class="noPadding"
+                                readonly="true" />
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -326,17 +331,18 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.street }}">
-                              <input kendoTextBox *ngIf="
-                                  data.street === '' ||
-                                  data.street === null ||
-                                  data.street === undefined
-                                " [(ngModel)]="language['noInformation']" name="street" class="noPadding"
+                              <input kendoTextBox
+                                *ngIf="!data || !data.street"
+                                [(ngModel)]="language['noInformation']"
+                                name="street"
+                                class="noPadding"
                                 readonly="true" />
-                              <input kendoTextBox *ngIf="
-                                  data.street !== null &&
-                                  data.street !== undefined &&
-                                  data.street !== ''
-                                " [(ngModel)]="data.street" name="street" class="noPadding" readonly="true" />
+                              <input kendoTextBox
+                                *ngIf="data && data.street"
+                                [(ngModel)]="data.street"
+                                name="street"
+                                class="noPadding"
+                                readonly="true" />
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -344,17 +350,17 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.streetnumber }}">
-                              <input kendoTextBox *ngIf="
-                                  data.streetnumber === '' ||
-                                  data.streetnumber === null ||
-                                  data.streetnumber === undefined
-                                " [(ngModel)]="language['noInformation']" name="streetnumber" class="noPadding"
+                              <input kendoTextBox
+                                *ngIf="!data || !data.streetnumber"
+                                [(ngModel)]="language['noInformation']"
+                                name="streetnumber"
+                                class="noPadding"
                                 readonly="true" />
-                              <input kendoTextBox *ngIf="
-                                  data.city !== null &&
-                                  data.city !== undefined &&
-                                  data.city !== ''
-                                " [(ngModel)]="data.streetnumber" name="streetnumber" class="noPadding"
+                              <input kendoTextBox
+                                *ngIf="data && data.streetnumber"
+                                [(ngModel)]="data.streetnumber"
+                                name="streetnumber"
+                                class="noPadding"
                                 readonly="true" />
                             </kendo-textbox-container>
                           </p>
@@ -362,18 +368,19 @@
                         <div class="col-md-3 col-xs-6 b-r">
                           <br />
                           <p class="text-muted">
-                            <kendo-textbox-container floatingLabel="{{ language.zipcode }}">
-                              <input kendoTextBox *ngIf="
-                                  data.zipcode === '' ||
-                                  data.zipcode === null ||
-                                  data.zipcode === undefined
-                                " [(ngModel)]="language['noInformation']" name="zipcode" class="noPadding"
+                            <kendo-textbox-container floatingLabel="{{ language.zipCode }}">
+                              <input kendoTextBox
+                                *ngIf="!data || !data.zipcode"
+                                [(ngModel)]="language['noInformation']"
+                                name="zipcode"
+                                class="noPadding"
                                 readonly="true" />
-                              <input kendoTextBox *ngIf="
-                                  data.zipcode !== null &&
-                                  data.zipcode !== undefined &&
-                                  data.zipcode !== ''
-                                " [(ngModel)]="data.zipcode" name="zipcode" class="noPadding" readonly="true" />
+                              <input kendoTextBox
+                                *ngIf="data && data.zipcode"
+                                [(ngModel)]="data.zipcode"
+                                name="zipcode"
+                                class="noPadding"
+                                readonly="true" />
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -381,17 +388,18 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.city }}">
-                              <input kendoTextBox *ngIf="
-                                  data.city === '' ||
-                                  data.city === null ||
-                                  data.city === undefined
-                                " [(ngModel)]="language['noInformation']" name="city" class="noPadding"
+                              <input kendoTextBox
+                                *ngIf="!data || !data.city"
+                                [(ngModel)]="language['noInformation']"
+                                name="city"
+                                class="noPadding"
                                 readonly="true" />
-                              <input kendoTextBox *ngIf="
-                                  data.city !== null &&
-                                  data.city !== undefined &&
-                                  data.city !== ''
-                                " [(ngModel)]="data.city" name="city" class="noPadding" readonly="true" />
+                              <input kendoTextBox
+                                *ngIf="data && data.city"
+                                [(ngModel)]="data.city"
+                                name="city"
+                                class="noPadding"
+                                readonly="true" />
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -399,17 +407,18 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.mobile }}">
-                              <input kendoTextBox *ngIf="
-                                  data.mobile === '' ||
-                                  data.mobile === null ||
-                                  data.mobile === undefined
-                                " [(ngModel)]="language['noInformation']" name="mobile" class="noPadding"
+                              <input kendoTextBox
+                                *ngIf="!data || !data.mobile"
+                                [(ngModel)]="language['noInformation']"
+                                name="mobile"
+                                class="noPadding"
                                 readonly="true" />
-                              <input kendoTextBox *ngIf="
-                                  data.mobile !== null &&
-                                  data.mobile !== undefined &&
-                                  data.mobile !== ''
-                                " [(ngModel)]="data.mobile" name="mobile" class="noPadding" readonly="true" />
+                              <input kendoTextBox
+                                *ngIf="data && data.mobile"
+                                [(ngModel)]="data.mobile"
+                                name="mobile"
+                                class="noPadding"
+                                readonly="true" />
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -417,17 +426,18 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.telephone }}">
-                              <input kendoTextBox *ngIf="
-                                  data.telephone === '' ||
-                                  data.telephone === null ||
-                                  data.telephone === undefined
-                                " [(ngModel)]="language['noInformation']" name="telephone" class="noPadding"
+                              <input kendoTextBox
+                                *ngIf="!data || !data.telephone"
+                                [(ngModel)]="language['noInformation']"
+                                name="telephone"
+                                class="noPadding"
                                 readonly="true" />
-                              <input kendoTextBox *ngIf="
-                                  data.telephone !== null &&
-                                  data.telephone !== undefined &&
-                                  data.telephone !== ''
-                                " [(ngModel)]="data.telephone" name="telephone" class="noPadding" readonly="true" />
+                              <input kendoTextBox
+                                *ngIf="data && data.telephone"
+                                [(ngModel)]="data.telephone"
+                                name="telephone"
+                                class="noPadding"
+                                readonly="true" />
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -435,16 +445,21 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.birthday }}">
-                              <input kendoTextBox *ngIf="
-                                  data.birthday === '' ||
-                                  data.birthday === null ||
-                                  data.birthday === undefined
-                                " [(ngModel)]="language['noInformation']" name="birthday" class="noPadding"
-                                readonly="true" />
-
-                              <kendo-datepicker [format]="'dd.MM.yyyy'" *ngIf="data.birthday"
-                                [(ngModel)]="data.birthday" name="birthday" class="noPadding" readonly="true">
-                              </kendo-datepicker>
+                              <input kendoTextBox
+                                *ngIf="!data || !data.birthday || !isValidDate(data.birthday)"
+                                [ngModel]="language['noInformation']" 
+                                name="birthday" 
+                                class="noPadding"
+                                readonly="true"
+                                />
+                              <kendo-datepicker
+                                *ngIf="data && data.birthday && isValidDate(data.birthday)"
+                                format="dd.MM.yyyy"
+                                [ngModel]="data.birthday" 
+                                name="birthday" 
+                                class="noPadding" 
+                                readonly="true">
+                              </kendo-datepicker> 
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -689,15 +704,25 @@
                 <div class="form-group">
                   <div class="email col-md-6 col-xs-12">
                     <p>{{ language.birthday }}</p>
-                    <kendo-datepicker [format]="'dd.MM.yyyy'" class="col-xs-12 noPadding" name="birthday"
-                      placeholder="{{ language.birthday }}" [(ngModel)]="data.birthday" birthday.value="">
+                    <kendo-datepicker 
+                      format="dd.MM.yyyy" 
+                      class="col-xs-12 noPadding" 
+                      name="birthday"
+                      [placeholder]="language.birthday"
+                      [value]="data && isValidDate(data.birthday) ? data.birthday : null"
+                      (valueChange)="isValidDate($event) && (data.birthday=$event)">
                     </kendo-datepicker>
                   </div>
                   <div class="email col-md-6 col-xs-12">
                     <p>{{ language.sincecompany }}</p>
-                    <kendo-datepicker [format]="'dd.MM.yyyy'" class="col-xs-12 noPadding" name="sincecompany"
-                      placeholder="{{ language.sincecompany }}" [(ngModel)]="data.incompanysince"
-                      incompanysince.value=""></kendo-datepicker>
+                    <kendo-datepicker
+                        format="dd.MM.yyyy"
+                        class="col-xs-12 noPadding" 
+                        name="sincecompany"
+                        [placeholder]="language.sincecompany"
+                        [value]="data && isValidDate(data.incompanysince) ? data.incompanysince : null"
+                        (valueChange)="isValidDate($event) && (data.incompanysince=$event)"
+                    ></kendo-datepicker>
                   </div>
                 </div>
                 <div class="form-group">
