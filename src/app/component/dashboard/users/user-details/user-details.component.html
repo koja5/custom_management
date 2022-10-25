@@ -446,14 +446,14 @@
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.birthday }}">
                               <input kendoTextBox
-                                *ngIf="!data || !data.birthday || !isValidDate(data.birthday)"
+                                *ngIf="!data || !data.birthday || !checkIsValidDate(data.birthday)"
                                 [ngModel]="language['noInformation']" 
                                 name="birthday" 
                                 class="noPadding"
                                 readonly="true"
                                 />
                               <kendo-datepicker
-                                *ngIf="data && data.birthday && isValidDate(data.birthday)"
+                                *ngIf="data && data.birthday && checkIsValidDate(data.birthday)"
                                 format="dd.MM.yyyy"
                                 [ngModel]="data.birthday" 
                                 name="birthday" 
@@ -709,8 +709,8 @@
                       class="col-xs-12 noPadding" 
                       name="birthday"
                       [placeholder]="language.birthday"
-                      [value]="data && isValidDate(data.birthday) ? data.birthday : null"
-                      (valueChange)="isValidDate($event) && (data.birthday=$event)">
+                      [value]="data && checkIsValidDate(data.birthday) ? data.birthday : null"
+                      (valueChange)="checkIsValidDate($event) && (data.birthday=$event)">
                     </kendo-datepicker>
                   </div>
                   <div class="email col-md-6 col-xs-12">
@@ -720,8 +720,8 @@
                         class="col-xs-12 noPadding" 
                         name="sincecompany"
                         [placeholder]="language.sincecompany"
-                        [value]="data && isValidDate(data.incompanysince) ? data.incompanysince : null"
-                        (valueChange)="isValidDate($event) && (data.incompanysince=$event)"
+                        [value]="data && checkIsValidDate(data.incompanysince) ? data.incompanysince : null"
+                        (valueChange)="checkIsValidDate($event) && (data.incompanysince=$event)"
                     ></kendo-datepicker>
                   </div>
                 </div>

@@ -19,7 +19,7 @@ import * as XLSX from "ts-xlsx";
 import { MessageService } from "src/app/service/message.service";
 import { HelpService } from "src/app/service/help.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
-import { checkIfInputValid } from "../../../shared/utils";
+import { checkIfInputValid, checkIsValidDate } from "../../../shared/utils";
 
 @Component({
   selector: "app-users",
@@ -99,9 +99,10 @@ export class UsersComponent implements OnInit {
   currentUrl: string;
   savePage: any = {};
   checkIfInputValid = checkIfInputValid;
+  checkIsValidDate = checkIsValidDate;
 
   public showColumnPicker = false;
-  public columns: string[] = ["Username", "Email address", "Firstname", "Lastname",  "Street", "Active"];
+  public columns: string[] = ["Username", "Email address", "Firstname", "Lastname", "Street", "Active"];
   public hiddenColumns: string[] = [];
 
   constructor(
@@ -114,7 +115,7 @@ export class UsersComponent implements OnInit {
     // this.excelIO = new Excel.IO();
     this.allData = this.allData.bind(this);
   }
-  
+
 
   ngOnInit() {
     this.height = this.helpService.getHeightForGrid();
@@ -131,7 +132,7 @@ export class UsersComponent implements OnInit {
       this.theme = mess;
     });
     this.currentUrl = this.router.url;
-    
+
     this.setPagination();
   }
 
@@ -150,7 +151,7 @@ export class UsersComponent implements OnInit {
     this.service.getUsers(localStorage.getItem("superadmin"), (val) => {
       console.log(val);
       this.currentLoadData = val;
-      if(this.currentLoadData.length < this.state.skip) {
+      if (this.currentLoadData.length < this.state.skip) {
         this.state.skip = 0;
       }
       this.gridData = {
@@ -166,18 +167,18 @@ export class UsersComponent implements OnInit {
   }
 
   receiveConfirm(event: boolean): void {
-    if(event) {
+    if (event) {
       this.user.close();
       this.isFormDirty = false;
     }
-      this.showDialog = false;
+    this.showDialog = false;
   }
 
   confirmClose(): void {
     this.user.modalRoot.nativeElement.focus();
-    if(this.isFormDirty) {
+    if (this.isFormDirty) {
       this.showDialog = true;
-    }else {
+    } else {
       this.user.close()
       this.showDialog = false;
       this.isFormDirty = false

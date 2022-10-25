@@ -16,6 +16,7 @@ import { LoginService } from "src/app/service/login.service";
 import { HelpService } from "src/app/service/help.service";
 import { PackLanguageService } from "src/app/service/pack-language.service";
 import { AccountService } from "src/app/service/account.service";
+import { checkIsValidDate } from "src/app/shared/utils";
 
 @Component({
   selector: "app-user-details",
@@ -60,6 +61,7 @@ export class UserDetailsComponent implements OnInit {
   isFileChoosen: boolean = false;
   fileName: string = '';
   currentUser: any;
+  checkIsValidDate = checkIsValidDate;
 
   constructor(
     public route: ActivatedRoute,
@@ -744,10 +746,6 @@ export class UserDetailsComponent implements OnInit {
 
   changeColorPalette(event) {
     this.selectedColor = event;
-  }
-
-  isValidDate(date: any) {
-    return !isNaN(date) && date instanceof Date;
   }
 
   /*submitEmitter(event) {
