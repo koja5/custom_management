@@ -662,6 +662,51 @@
             "massiveEmail": {
                 "type": "string"
             },
+            "emailDrafts": {
+                "type": "string"
+            },
+            "draftName": {
+                "type": "string"
+            },
+            "saveDraft": {
+                "type": "string"
+            },
+            "editDraft": {
+                "type": "string"
+            },
+            "saveEmailDraft": {
+                "type": "string"
+            },
+            "editEmailDraft": {
+                "type": "string"
+            },
+            "deleteDraft": {
+                "type": "string"
+            },
+            "addNewEmailDraft": {
+                "type": "string"
+            },
+            "emailDraftSavedSuccessfully": {
+                "type": "string"
+            },
+            "emailDraftEditedSuccessfully": {
+                "type": "string"
+            },
+            "emailDraftDeletedSuccessfully": {
+                "type": "string"
+            },
+            "createNewDraft": {
+                "type": "string"
+            },
+            "smsDraftSavedSuccessfully": {
+                "type": "string"
+            },
+            "smsDraftEditedSuccessfully": {
+                "type": "string"
+            },
+            "smsDraftDeletedSuccessfully": {
+                "type": "string"
+            },
             "addHoliday": {
                 "type": "string"
             },
@@ -669,6 +714,18 @@
                 "type": "string"
             },
             "emailBirthdayCongratulation": {
+                "type": "string"
+            },
+            "smsDrafts": {
+                "type": "string"
+            },
+            "saveSmsDraft": {
+                "type": "string"
+            },
+            "editSmsDraft": {
+                "type": "string"
+            },
+            "addNewSmsDraft": {
                 "type": "string"
             },
             "headerMenuGeneralData": {
@@ -6580,7 +6637,100 @@
                             "key": "signatureAddress3"
                         }
                     ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "createNewDraft"
+                        },
+                        {
+                            "key": "draftName"
+                        },
+                        {
+                            "key": "saveDraft"
+                        },
+                        {
+                            "key": "editDraft"
+                        },
+                        {
+                            "key": "deleteDraft"
+                        }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "emailDrafts"
+                        },
+                        {
+                            "key": "saveEmailDraft"
+                        },
+                        {
+                            "key": "editEmailDraft"
+                        },
+                        {
+                            "key": "addNewEmailDraft"
+                        }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "emailDraftSavedSuccessfully"
+                        },
+                        {
+                            "key": "emailDraftEditedSuccessfully"
+                        },
+                        {
+                            "key": "emailDraftDeletedSuccessfully"
+                        }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "smsDrafts"
+                        },
+                        {
+                            "key": "saveSmsDraft"
+                        },
+                        {
+                            "key": "editSmsDraft"
+                        },
+                        {
+                            "key": "addNewSmsDraft"
+                        }
+                    ]
+                }, 
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "smsDraftSavedSuccessfully"
+                        },
+                        {
+                            "key": "smsDraftEditedSuccessfully"
+                        },
+                        {
+                            "key": "smsDraftDeletedSuccessfully"
+                        }
+                    ]
                 }
+
             ]
         },
         {
