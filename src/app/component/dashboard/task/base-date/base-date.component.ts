@@ -85,6 +85,7 @@ export class BaseDateComponent implements OnInit {
   public socialList: any;
   public doctorList: any;
   public doctorsList: any;
+  public doctorsListTmp: any;
   public selectedRecommendation: any;
   public operationMode = "add";
   public selectedComplaint: any;
@@ -1034,6 +1035,12 @@ export class BaseDateComponent implements OnInit {
       .getCustomerList("Doctors", localStorage.getItem("superadmin"))
       .subscribe((data) => {
         this.doctorsList = data;
+        this.doctorsListTmp = this.doctorsList.slice();
+        this.doctorsListTmp.forEach(doctor => {
+          const firstName = doctor.firstname ? doctor.firstname : '';
+          const lastName = doctor.lastname ? doctor.lastname : '';
+          doctor.fullname = firstName + ' ' + lastName;
+        });
       });
 
     this.service.getBaseDataOne(this.data.id).subscribe((data) => {
@@ -1321,7 +1328,9 @@ export class BaseDateComponent implements OnInit {
     }, 50);
   }
 
-  filterDoctor(event) { }
+  filterDoctor(event) {
+    this.doctorsListTmp = this.doctorsList.filter((doctor) => doctor.fullname.toLowerCase().indexOf(event.toLowerCase()) !== -1);
+  }
 
   printCustomer() {
     window.print();
