@@ -236,6 +236,18 @@
             [autoSize]="true"></textarea>
         </kendo-textbox-container>
       </div>
+      <div class="col-xs-6 text-center mt-4">
+        <label class="k-form-field col-md-12 label__active">
+          {{ language.sendVaucherEMail }} &nbsp;
+          <kendo-switch [(ngModel)]="toSendEmail" name="sendMail"></kendo-switch>
+        </label>
+      </div>
+      <div class="col-xs-6 text-center mt-4">
+        <label class="k-form-field col-md-12 label__active">
+          {{ language.sendVaucherSms }} &nbsp;
+          <kendo-switch [(ngModel)]="toSendSms" name="sendSms"></kendo-switch>
+        </label>
+      </div>
       <div class="form-group" style="text-align: center">
         <button *ngIf="operationMode === 'add'" kendoButton [primary]="true" class="form-button" type="submit"
           [disabled]="voucher.form.invalid">

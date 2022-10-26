@@ -4517,6 +4517,10 @@ router.post("/createVaucher", function (req, res, next) {
       conn.release();
       if (!err) {
         if (!err) {
+          data['language'] = req.body.language;
+          if(req.body.toSendEmail) {
+            mailAPI.sendVaucherToMail(data);
+          }
           response.id = rows.insertId;
           response.success = true;
         } else {
@@ -4637,6 +4641,10 @@ router.post("/updateVaucher", function (req, res, next) {
           res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
+          data['language'] = req.body.language;
+          if(req.body.toSendEmail) {
+            mailAPI.sendVaucherToMail(data);
+          }
           response = true;
           res.json(response);
         }
@@ -5592,6 +5600,152 @@ router.post("/sendCustomSMS", function (req, res) {
 
 const timer = (ms) => new Promise((res) => setTimeout(res, ms));
 
+router.post("/sendVaucherSms", function (req, res) {
+  var phoneNumber = req.body.mobile;
+  if (req.body.message != "") {
+    request(
+      link + "/getTranslationByCountryCode/" + req.body.countryCode,
+      function (error, language, body) {
+        var language = JSON.parse(body)["config"];
+        request(
+          link + "/getAvailableAreaCode",
+          function (error, response, codes) {
+            connection.getConnection(function (err, conn) {
+              if (err) {
+                res.json(err);
+              }
+              var question = getSqlQuery(req.body);
+              var joinTable = getJoinTable(req.body);
+              conn.query(
+                "select distinct c.telephone, c.mobile, c.shortname, sm.* from customers c join sms_massive_message sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin " +
+                  joinTable +
+                  " where ((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL)) and c.active = 1 and c.storeId = " +
+                  Number(req.body.superadmin) +
+                  " and " +
+                  question,
+                function (err, rows) {
+                  // splitSenderToPartArray(rows, codes, req, language);
+                  globalCount = 0;
+                  count = 0;
+                  if(rows) {
+                    rows.forEach(async function (to, i, array) {
+                      var phoneNumber = to.mobile ? to.mobile : req.body.mobile;
+                      if (
+                        checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
+                        req.body.message
+                      ) {
+                        count++;
+                        var message =
+                          (to.smsSubject
+                            ? to.smsSubject
+                            : language.initialGreetingSMSReminder) +
+                          " " +
+                          req.body.firstname +
+                          ", \n \n" +
+                          req.body.message;
+                        var signature = "";
+                        if (to.signatureAvailable) {
+                          if (to.smsSignatureCompanyName) {
+                            signature += to.smsSignatureCompanyName + "\n";
+                          }
+                          if (to.smsSignatureAddress1) {
+                            signature += to.smsSignatureAddress1 + "\n";
+                          }
+                          if (to.smsSignatureAddress2) {
+                            signature += to.smsSignatureAddress2 + "\n";
+                          }
+                          if (to.smsSignatureAddress3) {
+                            signature += to.smsSignatureAddress3 + "\n";
+                          }
+                          if (to.smsSignatureTelephone) {
+                            signature += to.smsSignatureTelephone + " \n";
+                          }
+                          if (to.smsSignatureMobile) {
+                            signature += to.smsSignatureMobile + " \n";
+                          }
+                          if (to.smsSignatureEmail) {
+                            signature += to.smsSignatureEmail + " \n";
+                          }
+                        }
+  
+                        if (language.smsSignaturePoweredBy) {
+                          signature +=
+                            " \n" + language.smsSignaturePoweredBy + " \n";
+                        }
+  
+                        var content =
+                          "To: " +
+                          phoneNumber +
+                          "\r\n\r\n" +
+                          message +
+                          "\n\n" +
+                          signature;
+                        const fullMessage = message + "\n\n" + signature;
+                        var fileName = "server/sms/" + phoneNumber + ".txt";
+                        sendSmsFromMail(phoneNumber, fullMessage);
+                      } else {
+                        logger.log(
+                          "warn",
+                          `Number ${phoneNumber} is not start with available area code!`
+                        );
+                      }
+                    });
+                  }else {
+                    var phoneNumber = req.body.mobile;
+                      if (
+                        checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
+                        req.body.message
+                      ) {
+                        count++;
+                        var message =
+                          (language.initialGreetingSMSReminder) +
+                          " " +
+                          req.body.firstname +
+                          ", \n \n" +
+                          req.body.message;
+                        var signature = "";
+  
+                        if (language.smsSignaturePoweredBy) {
+                          signature +=
+                            " \n" + language.smsSignaturePoweredBy + " \n";
+                        }
+  
+                        var content =
+                          "To: " +
+                          phoneNumber +
+                          "\r\n\r\n" +
+                          message +
+                          "\n\n" +
+                          signature;
+                        const fullMessage = message + "\n\n" + signature;
+                        var fileName = "server/sms/" + phoneNumber + ".txt";
+                        sendSmsFromMail(phoneNumber, fullMessage);
+                      } else {
+                        logger.log(
+                          "warn",
+                          `Number ${phoneNumber} is not start with available area code!`
+                        );
+                      }
+                  }
+                  
+                  updateAvailableSMSCount(count, req.body.superadmin);
+                  res.send(true);
+                }
+              );
+            });
+          }
+        );
+      }
+    );
+  } else {
+    res.send(false);
+    logger.log(
+      "error",
+      `Client don't input message for send massive sms: ${req.body.email}`
+    );
+  }
+});
+
 router.post("/sendMassiveSMS", function (req, res) {
   var phoneNumber = req.body.number;
   if (req.body.message != "") {
@@ -5975,11 +6129,11 @@ router.post("/getFilteredRecipients", function (req, res) {
       var joinTable = getJoinTable(req.body);
       var table = "";
       if (req.body.mode && req.body.mode === "mail") {
-        var checkAdditionalQuery = "(c.email != '' and c.email IS NOT NULL)";
+        var checkAdditionalQuery = "(c.email != '' and c.email IS NOT NULL) and c.sendMassiveEmail = 1 ";
         table = "mail_massive_message";
       } else {
         var checkAdditionalQuery =
-          "((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL))";
+          "((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL)) and c.sendMassiveSMS = 1 ";
         table = "sms_massive_message";
       }
 
@@ -6548,6 +6702,7 @@ router.post("/loadTemplateAccount", function (req, res, next) {
       req.body.account_id,
       req.body.id
     );
+    insertFromTemplate(conn, "theme_configuration", req.body.account_id, req.body.id);
     getCustomersDemoData(conn, "customers", req.body.account_id, req.body.id);
     insertFromTemplate(conn, "vaucher", req.body.account_id, req.body.id);
     insertFromTemplateForUsers(conn, "users", req.body.account_id, req.body.id);
@@ -9600,5 +9755,57 @@ router.get('/getClinicEmployees/:id', function (req, res) {
 });
 
 /* End Registered Clinics */
+
+/* UNSUBSCRIBE */
+
+router.post("/updateMassiveEmailForUser", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.send(err);
+    }
+    conn.query(
+      "update customers SET sendMassiveEmail = ? where email = ?",
+      [req.body.value, req.body.email],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            res.send(true);
+          } else {
+            res.send(false);
+          }
+        } else {
+          res.send(err);
+        }
+      }
+    );
+  });
+});
+
+router.post("/updateMassiveSMSForUser", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.send(err);
+    }
+    conn.query(
+      "update customers SET sendMassiveSMS = ? where email = ?",
+      [req.body.value, req.body.email],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            res.send(true);
+          } else {
+            res.send(false);
+          }
+        } else {
+          res.send(err);
+        }
+      }
+    );
+  });
+});
+
+/* END UNSUBSCRIBE */
 
 module.exports = router;

@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { LoginComponent } from "./login.component";
 import { ChangePasswordComponent } from "./change-password/change-password.component";
-import { LoggedGuard } from 'src/app/service/login-guard/loggedGuard';
+import { LoggedGuard } from 'src/app/service/guards/loggedGuard';
 import { RegistrationPatientComponent } from "./registration-patient/registration-patient.component";
 
 const routes: Routes = [
@@ -25,4 +25,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class LoginRouting {}
+export class LoginRouting { }

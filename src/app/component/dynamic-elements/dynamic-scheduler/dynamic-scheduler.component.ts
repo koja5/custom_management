@@ -3637,14 +3637,27 @@ export class DynamicSchedulerComponent implements OnInit {
         args.requestType === "viewNavigate"
       ) {
         if (args.requestType === "eventCreate") {
-          this.createNewTask();
+          let evts = this.scheduleObj.getEvents(this.eventTime.start, this.eventTime.end)
+          if (evts.length > 0) {
+            this.toastr.error(
+              this.language.eventAlreadyExistsText,
+              this.language.eventAlreadyExistsTitle,
+              { timeOut: 7000, positionClass: "toast-bottom-right" }
+            );
+          } else {
+            this.createNewTask();
+          }
 
           args.cancel = true;
         } else if (args.requestType === "eventChange") {
-          if (
-            this.currentEventAction !== TypeOfEventAction.Drag &&
-            this.type !== this.userType.patient
-          ) {
+          let evts = this.scheduleObj.getEvents(this.eventTime.start, this.eventTime.end)
+          if (evts.length > 1) {
+            this.toastr.error(
+              this.language.eventAlreadyExistsText,
+              this.language.eventAlreadyExistsTitle,
+              { timeOut: 7000, positionClass: "toast-bottom-right" }
+            );
+          } else if (this.currentEventAction !== TypeOfEventAction.Drag && this.type !== this.userType.patient) {
             this.updateTask(args);
           }
           args.cancel = true;
