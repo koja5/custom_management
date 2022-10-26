@@ -102,6 +102,7 @@ import { PDFService } from "src/app/service/pdf.service";
 import { ParameterItemService } from "src/app/service/parameter-item.service";
 import { DateService } from "src/app/service/date.service";
 import { InvoiceService } from "src/app/service/invoice.service";
+import { checkIfInputValid, checkIfInputValueValid } from "../../../shared/utils";
 declare var moment: any;
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
@@ -403,6 +404,8 @@ export class DynamicSchedulerComponent implements OnInit {
   isDateSet: boolean = false;
   invoiceID: any;
   changedInvoiceID: any;
+  checkIfInputValid = checkIfInputValid;
+  checkIfInputValueValid = checkIfInputValueValid;
 
   public generateEvents(): Object[] {
     const eventData: Object[] = [];
