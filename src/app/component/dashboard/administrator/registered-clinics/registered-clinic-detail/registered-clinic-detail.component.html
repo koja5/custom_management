@@ -429,7 +429,7 @@
                   <br />
                   <p class="text-muted">
                     <kendo-textbox-container
-                      floatingLabel="{{ language.zipcode }}"
+                      floatingLabel="{{ language.zipCode }}"
                     >
                       <input
                         kendoTextBox
@@ -609,14 +609,10 @@
                 <div class="col-md-3 col-xs-6 b-r">
                   <br />
                   <p class="text-muted">
-                    <kendo-textbox-container floatingLabel="company name">
+                    <kendo-textbox-container floatingLabel="{{ language.sincecompany }}">
                       <input
                         kendoTextBox
-                        *ngIf="
-                          data.incompanysince === '' ||
-                          data.incompanysince === null ||
-                          data.incompanysince === undefined
-                        "
+                        *ngIf="!data || !data.incompanysince"
                         [(ngModel)]="language['noInformation']"
                         name="incompanysince"
                         class="noPadding"
@@ -625,7 +621,7 @@
 
                       <kendo-datepicker
                         [format]="'dd.MM.yyyy'"
-                        *ngIf="data.incompanysince"
+                        *ngIf="data && data.incompanysince"
                         [(ngModel)]="data.incompanysince"
                         name="incompanysince"
                         class="noPadding"
