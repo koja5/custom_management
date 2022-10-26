@@ -19580,3 +19580,31 @@ body {
 .drafts-active {
   background-color: #EBEBEB;
 }
+
+//multiselect
+
+.k-multiselect .k-multiselect-wrap, .k-dropdowntree .k-multiselect-wrap {
+  background-color: #FFFFFF;
+  border-color: #ced4da;
+  border-width: 1px;
+  border-radius: 4px;
+  border-top-color: #ced4da !important;
+  padding-left: 7px;
+}
+
+.k-multiselect .k-multiselect-wrap:hover, .k-dropdowntree .k-multiselect-wrap:hover, .k-multiselect .k-multiselect-wrap.k-state-hover, .k-dropdowntree .k-multiselect-wrap.k-state-hover {
+  border-color: #80bdff;
+  border-top-color: #80bdff !important;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.k-multiselect.k-state-focused > .k-multiselect-wrap, .k-state-focused.k-dropdowntree > .k-multiselect-wrap {
+  border-color: #80bdff;
+  border-top-color: #80bdff !important;
+}
+
+.k-multiselect.k-state-invalid .k-multiselect-wrap, .k-state-invalid.k-dropdowntree .k-multiselect-wrap, .k-multiselect.ng-invalid.ng-touched .k-multiselect-wrap, .ng-invalid.ng-touched.k-dropdowntree .k-multiselect-wrap, .k-multiselect.ng-invalid.ng-dirty .k-multiselect-wrap, .ng-invalid.ng-dirty.k-dropdowntree .k-multiselect-wrap {
+  border-color: #ced4da;
+  border-top-color: #ced4da !important;
+}
