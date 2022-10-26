@@ -6702,6 +6702,7 @@ router.post("/loadTemplateAccount", function (req, res, next) {
       req.body.account_id,
       req.body.id
     );
+    insertFromTemplate(conn, "theme_configuration", req.body.account_id, req.body.id);
     getCustomersDemoData(conn, "customers", req.body.account_id, req.body.id);
     insertFromTemplate(conn, "vaucher", req.body.account_id, req.body.id);
     insertFromTemplateForUsers(conn, "users", req.body.account_id, req.body.id);
