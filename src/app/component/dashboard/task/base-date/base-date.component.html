@@ -345,7 +345,7 @@
                                 " [(ngModel)]="language['noInformation']" name="doctor" class="noPadding"
                                 readonly="true" />
                               <kendo-combobox *ngIf="baseDataOne.doctor" class="col-md-12 col-xs-12 noPadding"
-                                [data]="doctorsList" [textField]="'shortname'" [valueField]="'id'"
+                                [data]="doctorsListTmp" textField="fullname" [valueField]="'id'"
                                 [(ngModel)]="baseDataOne.doctor" [valuePrimitive]="true" name="doctors" readonly="true">
                               </kendo-combobox>
                             </kendo-textbox-container>
@@ -1609,14 +1609,19 @@
                   </div>
                   <div class="col-md-4 col-xs-12 b-r" *ngIf="doctorList !== undefined">
                     <kendo-textbox-container floatingLabel="{{ language.doctor }}">
-                      <kendo-combobox class="col-md-12 col-xs-12 noPadding" [suggest]="true" [data]="doctorsList"
-                        [textField]="'shortname'" [valueField]="'id'" [(ngModel)]="baseDataOne.doctor"
-                        [valuePrimitive]="true" [filterable]="true" (filterChange)="filterDoctor($event)"
+                      <kendo-combobox class="col-md-12 col-xs-12 noPadding"
+                        [suggest]="true"
+                        [data]="doctorsListTmp"
+                        textField="fullname"
+                        [valueField]="'id'"
+                        [(ngModel)]="baseDataOne.doctor"
+                        [valuePrimitive]="true"
+                        [filterable]="true"
+                        (filterChange)="filterDoctor($event)"
                         name="doctors">
                         <ng-template kendoComboBoxItemTemplate let-dataItem>
                           <p style="height: 50px !important">
-                            <span style="font-weight: bold; font-size: 13px">{{ dataItem.firstname }}
-                              {{ dataItem.lastname }}</span>
+                            <span style="font-weight: bold; font-size: 13px"> {{ dataItem.fullname}}</span>
                             <br />
                             <span class="customerInfo" *ngIf="dataItem.city !== ''" style="font-size: 11px">
                               {{ dataItem.city }}</span>
