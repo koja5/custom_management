@@ -574,7 +574,7 @@
                           <label class="col-xs-12 control-label" style="text-align: left">{{
                             languageUser.physicalComplaint }}:</label>
                           <textarea kendoTextArea class="col-xs-12 textAreaInput"
-                            [(ngModel)]="customerUser.physicalComplaint">{{ customerUser.physicalComplaint + '2' }}</textarea>
+                            [(ngModel)]="customerUser.physicalComplaint">{{ customerUser.physicalComplaint }}</textarea>
                           <!-- col-sm-10 -->
                         </div>
                       </div>
@@ -593,11 +593,11 @@
                       </div>
 
                       <div style="width: 100%">
-                        <kendo-textbox-container required id="test" floatingLabel="{{ languageUser.patient }}">
+                        <kendo-textbox-container floatingLabel="{{ languageUser.patient }}">
                           <kendo-combobox required #fieldName1 id="customerUsers" [suggest]="true" [data]="customerUsers"
                             [textField]="'shortname'" [valueField]="'id'" (valueChange)="onValueChange($event)"
                             [(ngModel)]="customerUser" [filterable]="true" (filterChange)="searchCustomer($event)"
-                            [loading]="customerLoading" >
+                            [loading]="customerLoading">
                             <ng-template kendoComboBoxItemTemplate let-dataItem>
                               <p style="height: 50px !important">
                                 <span style="font-weight: bold">{{
