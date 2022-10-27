@@ -2233,6 +2233,9 @@
             "invalidFormat": {
                 "type": "string"
             },
+            "allRequiredFieldsMustBeFilledOut": {
+                "type": "string"
+            },
             "unsubscribeMessage": {
                 "type": "string"
             },
@@ -6899,6 +6902,9 @@
                         },
                         {
                             "key": "invalidFormat"
+                        },
+                        {
+                            "key": "allRequiredFieldsMustBeFilledOut"
                         }
                     ]
                 }

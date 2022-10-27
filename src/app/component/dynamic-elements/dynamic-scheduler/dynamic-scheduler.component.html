@@ -305,7 +305,7 @@
                 [dateFormat]="dateFormatScheduler" [group]="value ? group : []" [showWeekNumber]="true"
                 [eventSettings]="eventSettings" [allowKeyboardInteraction]="
                   type === userType.patient ? false : true
-                " (renderCell)="onRenderCell($event)" (actionBegin)="onActionBegin($event)"
+                " (renderCell)="onRenderCell($event)" (actionBegin)="onActionBegin($event)" (popupClose)="onPopupClose($event)"
                 (popupOpen)="onPopupOpen($event)" (drag)="onItemDrag($event)" (resizeStop)="onItemDrag($event)">
                 <ng-template #dateHeaderTemplate let-data>
                   <div class="date-text" title=" {{ getDateHeaderText(data.date) }}">
@@ -593,7 +593,7 @@
                       </div>
 
                       <div style="width: 100%">
-                        <kendo-textbox-container floatingLabel="{{ languageUser.patient }}">
+                        <kendo-textbox-container floatingLabel="{{ languageUser.patient }}({{ language.required }})">
                           <kendo-combobox required #fieldName1 id="customerUsers" [suggest]="true" [data]="customerUsers"
                             [textField]="'shortname'" [valueField]="'id'" (valueChange)="onValueChange($event)"
                             [(ngModel)]="customerUser" [filterable]="true" (filterChange)="searchCustomer($event)"
@@ -682,7 +682,7 @@
                     </div>
                     <div *ngIf="eventTime" class="k-form-field k-datetime-picker-wrapper">
                       <div class="col-sm-8">
-                        <kendo-textbox-container floatingLabel="{{ language.start }}">
+                        <kendo-textbox-container floatingLabel="{{ language.start }}({{ language.required }})">
                           <kendo-datepicker id="start" [format]="'dd.MM.yyyy'" class="dateWidth" [(ngModel)]="eventTime.start" required
                             [disabled]="
                               type === userType.patient ? true : false
@@ -692,7 +692,7 @@
                         <mat-error *ngIf="checkIfInputValid('start')">{{ language?.thisFieldIsRequired }}</mat-error>
                       </div>
                       <div class="col-sm-4">
-                        <kendo-textbox-container floatingLabel="{{ language.startTime }}">
+                        <kendo-textbox-container floatingLabel="{{ language.startTime }}({{ language.required }})">
                           <kendo-timepicker id="startTime" [(ngModel)]="eventTime.start" [disabled]="
                               type === userType.patient ? true : false
                             " required>
@@ -703,7 +703,7 @@
                     </div>
                     <div *ngIf="eventTime" class="k-form-field k-datetime-picker-wrapper">
                       <div class="col-sm-8">
-                        <kendo-textbox-container floatingLabel="{{ language.end }}">
+                        <kendo-textbox-container floatingLabel="{{ language.end }}({{ language.required }})">
                           <kendo-datepicker id="end" [format]="'dd.MM.yyyy'" class="dateWidth" [(ngModel)]="eventTime.end" required
                             [disabled]="
                               type === userType.patient ? true : false
@@ -713,7 +713,7 @@
                         <mat-error *ngIf="checkIfInputValid('end')">{{ language?.thisFieldIsRequired }}</mat-error>
                       </div>
                       <div class="col-sm-4">
-                        <kendo-textbox-container floatingLabel="{{ language.endTime }}">
+                        <kendo-textbox-container floatingLabel="{{ language.endTime }}({{ language.required }})">
                           <kendo-timepicker id="endTime" [(ngModel)]="eventTime.end" [disabled]="
                               type === userType.patient ? true : false
                             " required>

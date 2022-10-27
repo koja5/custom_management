@@ -42,6 +42,8 @@ import {
   ExcelExportService,
   ExportOptions,
   PrintService,
+  ActionEventArgs,
+  PopupOpenEventArgs,
 } from "@syncfusion/ej2-angular-schedule";
 import {
   addClass,
@@ -1246,6 +1248,13 @@ export class DynamicSchedulerComponent implements OnInit {
   //required high version of angular. In angular 7.2 has a problem with static params. Without static doesn't work.
   //@ViewChild("fieldName1", {static: true}) public fieldName1: ElementRef;
   // @ViewChild("fieldName1") public fieldName1: ElementRef;
+
+  validateRequiredFields() {
+    if (this.eventTime.start && this.eventTime.end && this.customerUser.id) {
+      return false;
+    }
+    return true;
+  }
 
   onPopupOpen(args): void {
     console.log(args);
@@ -3617,7 +3626,22 @@ export class DynamicSchedulerComponent implements OnInit {
     }
   }
 
-  onActionBegin(args: any) {
+  onPopupClose(args: PopupOpenEventArgs) {
+    console.log("onPopupClose args: ", args);
+    if (args.type === "Editor") {
+      if ((this.scheduleObj.eventWindow as any).isCrudAction) {
+        if (this.validateRequiredFields()) {
+          args.cancel = true;
+          this.helpService.errorToastr(
+            this.language.allRequiredFieldsMustBeFilledOut,
+            ""
+          );
+        }
+      }
+    }
+  }
+
+  onActionBegin(args: ActionEventArgs) {
     console.log(args);
     console.log(window.innerWidth);
 
@@ -3637,7 +3661,10 @@ export class DynamicSchedulerComponent implements OnInit {
         args.requestType === "viewNavigate"
       ) {
         if (args.requestType === "eventCreate") {
-          let evts = this.scheduleObj.getEvents(this.eventTime.start, this.eventTime.end)
+          let evts = this.scheduleObj.getEvents(
+            this.eventTime.start,
+            this.eventTime.end
+          );
           if (evts.length > 0) {
             this.toastr.error(
               this.language.eventAlreadyExistsText,
@@ -3650,14 +3677,20 @@ export class DynamicSchedulerComponent implements OnInit {
 
           args.cancel = true;
         } else if (args.requestType === "eventChange") {
-          let evts = this.scheduleObj.getEvents(this.eventTime.start, this.eventTime.end)
+          let evts = this.scheduleObj.getEvents(
+            this.eventTime.start,
+            this.eventTime.end
+          );
           if (evts.length > 1) {
             this.toastr.error(
               this.language.eventAlreadyExistsText,
               this.language.eventAlreadyExistsTitle,
               { timeOut: 7000, positionClass: "toast-bottom-right" }
             );
-          } else if (this.currentEventAction !== TypeOfEventAction.Drag && this.type !== this.userType.patient) {
+          } else if (
+            this.currentEventAction !== TypeOfEventAction.Drag &&
+            this.type !== this.userType.patient
+          ) {
             this.updateTask(args);
           }
           args.cancel = true;
