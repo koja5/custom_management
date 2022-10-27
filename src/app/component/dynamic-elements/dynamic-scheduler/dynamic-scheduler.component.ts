@@ -1654,8 +1654,10 @@ export class DynamicSchedulerComponent implements OnInit {
 
   // load holidays defined by clinic and holidays defined by selected clinic template (if there is some)
   public loadHolidays() {
+    const superAdminId = this.helpService.getSuperadmin();
+    
     this.holidayService
-      .getHolidaysForClinic(this.selectedStoreId)
+      .getHolidaysForClinic(superAdminId)
       .then((result) => {
         console.log(result);
         if (result && result.length > 0) {
@@ -1681,7 +1683,7 @@ export class DynamicSchedulerComponent implements OnInit {
     // load holidays defined by clinic and holidays defined by selected clinic template (if there is some)
 
     this.holidayService
-      .getStoreTemplateConnection(this.selectedStoreId)
+      .getStoreTemplateConnection(superAdminId)
       .then((ids) => {
         const templateIds = ids.map((elem) => elem.templateId);
 
