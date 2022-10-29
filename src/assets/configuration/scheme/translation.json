@@ -2208,6 +2208,9 @@
             },
             "columnHeader": {
                 "type": "string"
+            },
+            "lastMinute":{
+                "type":"string"
             }
         }
     },
@@ -2988,8 +2991,10 @@
                         },
                         {
                             "key": "confirmEventMove"
+                        },                        
+                        {
+                            "key":"lastMinute"
                         },
-                        {},
                         {}
                     ]
                 }

@@ -1179,7 +1179,61 @@ router.post("/confirmUserViaMacAddress", function (req, res) {
     }
   });
 });
+router.post("/sendLastMinuteOfferMails", function (req, res){
+  var lastMinuteOfferTemplate = fs.readFileSync(
+    "./server/routes/templates/sendLastMinuteOfferMails.hjs",
+    "utf-8"
+  );
+  var sendMassive = hogan.compile(lastMinuteOfferTemplate);
 
+    connection.getConnection(function (err, conn) {
+      conn.query(
+        "select email, shortname from customers " +
+          " where (email != '' and email IS NOT NULL) and active = 1 and id = " +
+          Number(req.body.userId),
+        function (err, rows) {
+          conn.release();
+          if (err) {
+            logger.log("error", err);
+            res.json(false);
+          }
+          rows.forEach(function (to, i, array) {
+            var mail = {};
+            var signatureAvailable = false;
+            mail = to;
+            if (mail.signatureAvailable) {
+              signatureAvailable = true;
+            }
+            console.log(to);
+            var mailOptions = {
+              from: '"ClinicNode" support@app-production.eu',
+              to: to.email,
+              subject: req.body.subject ? req.body.subject : mail.mailSubject,
+              html: sendMassive.render({
+                firstName: to.shortname,
+                initialGreeting: req.body.language?.initialGreeting,
+                introductoryMessageForFreeEvent: req.body.message,
+                offerLink: req.body.link,
+                finalGreeting: req.body.language?.finalGreeting,
+                signature: "Your ClinicNode Team"
+              }),
+            };
+            smtpTransport.sendMail(mailOptions, function (error, response) {
+              if (error) {
+                logger.log("error", error);
+              } else {
+                logger.log(
+                  "info",
+                  `Sent mail for last minute offers on EMAIL: ${to.email}`
+                );
+              }
+            });
+          });
+          res.send(true);
+        }
+      );
+    });
+});
 router.post("/sendMassiveEMail", function (req, res) {
   var sendMassiveTemplate = fs.readFileSync(
     "./server/routes/templates/sendMassiveMails.hjs",

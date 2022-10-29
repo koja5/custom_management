@@ -96,12 +96,16 @@ import { UserType } from "../../enum/user-type";
 import { AccountService } from "src/app/service/account.service";
 import { ComboBoxModule } from "@progress/kendo-angular-dropdowns";
 import { TypeOfEventAction } from "../../enum/typeOfEventAction";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router, UrlSerializer } from "@angular/router";
 import { HolidayService } from "src/app/service/holiday.service";
 import { PDFService } from "src/app/service/pdf.service";
 import { ParameterItemService } from "src/app/service/parameter-item.service";
 import { DateService } from "src/app/service/date.service";
 import { InvoiceService } from "src/app/service/invoice.service";
+import { DatePipe } from "@angular/common";
+import { DynamicService } from "src/app/service/dynamic.service";
+import * as CryptoJS from 'crypto-js';
+
 declare var moment: any;
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
@@ -347,6 +351,56 @@ export class DynamicSchedulerComponent implements OnInit {
     { Name: "11.5 hours", Value: 690 },
     { Name: "12 hours", Value: 720 },
   ];
+  public lastMinuteTimeSlot: Object[]=[
+    { Value:"00.00h" },
+    { Value:"00.30h" },
+    { Value:"01.00h" },
+    { Value:"01.30h" },
+    { Value:"02.00h" },
+    { Value:"02.30h" },
+    { Value:"03.00h" },
+    { Value:"03.30h" },
+    { Value:"04.00h" },
+    { Value:"04.30h" },
+    { Value:"05.00h" },
+    { Value:"05.30h" },
+    { Value:"06.00h" },
+    { Value:"06.30h" },
+    { Value:"07.00h" },
+    { Value:"07.30h" },
+    { Value:"08.00h" },
+    { Value:"08.30h" },
+    { Value:"09.00h" },
+    { Value:"09.30h" },
+    { Value:"10.00h" },
+    { Value:"10.30h" },
+    { Value:"11.00h" },
+    { Value:"11.30h" },
+    { Value:"12.00h" },
+    { Value:"12.30h" },
+    { Value:"13.00h" },
+    { Value:"13.30h" },
+    { Value:"14.00h" },
+    { Value:"14.30h" },
+    { Value:"15.00h" },
+    { Value:"15.30h" },
+    { Value:"16.00h" },
+    { Value:"16.30h" },
+    { Value:"17.00h" },
+    { Value:"17.30h" },
+    { Value:"18.00h" },
+    { Value:"18.30h" },
+    { Value:"19.00h" },
+    { Value:"19.30h" },
+    { Value:"20.00h" },
+    { Value:"20.30h" },
+    { Value:"21.00h" },
+    { Value:"21.30h" },
+    { Value:"22.00h" },
+    { Value:"22.30h" },
+    { Value:"23.00h" },
+    { Value:"23.30h" }
+  ]
   public timeSlotFields = { text: "Name", value: "Value" };
   public timeSlotCount: Number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   public timeSlotDurationValue: Number = 60;
@@ -403,6 +457,8 @@ export class DynamicSchedulerComponent implements OnInit {
   isDateSet: boolean = false;
   invoiceID: any;
   changedInvoiceID: any;
+
+  range: any;
 
   public generateEvents(): Object[] {
     const eventData: Object[] = [];
@@ -669,13 +725,40 @@ export class DynamicSchedulerComponent implements OnInit {
     this.scheduleObj.refresh();
   }
 
-  public onSettingsClick(): void {
+  public onLastMinuteClick(): void {
     const settingsPanel: Element = document.querySelector(
       ".overview-content .settings-panel"
+    );  
+  
+    const lastMinutePanel: Element = document.querySelector(
+      ".overview-content .last-minute-panel"
     );
-    if (settingsPanel.classList.contains("hide")) {
-      removeClass([settingsPanel], "hide");
+
+    if (lastMinutePanel.classList.contains("hide")) {
+      if(!settingsPanel.classList.contains("hide"))
+        addClass([settingsPanel], "hide");
+      
+      removeClass([lastMinutePanel], "hide");
     } else {
+      addClass([lastMinutePanel], "hide");
+    }
+  }
+  
+  public onSettingsClick(): void {  
+    const settingsPanel: Element = document.querySelector(
+      ".overview-content .settings-panel"
+    );  
+  
+    const lastMinutePanel: Element = document.querySelector(
+      ".overview-content .last-minute-panel"
+    );
+    
+    if (settingsPanel.classList.contains("hide")) {
+      if(!lastMinutePanel.classList.contains("hide"))
+        addClass([lastMinutePanel], "hide");
+      
+      removeClass([settingsPanel], "hide");
+    } else {      
       addClass([settingsPanel], "hide");
     }
   }
@@ -1601,6 +1684,22 @@ export class DynamicSchedulerComponent implements OnInit {
   public modalConfirmEventMove = false;
   public mobileEventChange: any;
 
+  public patients: any = [];
+  public therapeuts:any= [];
+  public lastMinuteWeekDays: any=[];
+  public notificationsVia: any=[];
+  public lastMinuteStartDate: Date=new Date();
+  public lastMinuteEndDate: Date=new Date();
+  public lastMinute:any;
+  public lastMinuteHoursValue: any=[];
+
+  public typesOfNotifications:Object[]=[
+    { text: "Email", value: 0 },
+    { text: "SMS", value: 1 }
+  ];
+
+  private static secretKey = "YourSecretKeyForEncryption&Descryption";
+
   constructor(
     public service: TaskService,
     public customer: CustomersService,
@@ -1611,7 +1710,7 @@ export class DynamicSchedulerComponent implements OnInit {
     public eventCategoryService: EventCategoryService,
     public ngZone: NgZone,
     private toastr: ToastrService,
-    private dynamicService: DynamicSchedulerService,
+    private dynamicSchedulerService: DynamicSchedulerService,
     private helpService: HelpService,
     private storageService: StorageService,
     private packLanguage: PackLanguageService,
@@ -1621,7 +1720,11 @@ export class DynamicSchedulerComponent implements OnInit {
     private pdfService: PDFService,
     private parameterItemService: ParameterItemService,
     private dateService: DateService,
-    private invoiceService: InvoiceService
+    private invoiceService: InvoiceService,
+    private datePipe: DatePipe,
+    private router: Router,
+    private serializer: UrlSerializer,
+    private dynamicService: DynamicService
   ) {}
 
   ngOnInit() {
@@ -1631,11 +1734,12 @@ export class DynamicSchedulerComponent implements OnInit {
     this.helpService.setDefaultBrowserTabTitle();
     this.loadUser();
     this.loadHolidays();
+    this.loadCustomers();
   }
 
   @HostListener("window:resize", ["$event"])
   onResize(event) {
-    this.height = this.dynamicService.getSchedulerHeight() + "px";
+    this.height = this.dynamicSchedulerService.getSchedulerHeight() + "px";
   }
 
   get user() {
@@ -1769,9 +1873,9 @@ export class DynamicSchedulerComponent implements OnInit {
     }
 
     if (this.displayToolbar) {
-      this.height = this.dynamicService.getSchedulerHeight();
+      this.height = this.dynamicSchedulerService.getSchedulerHeight();
     } else {
-      this.height = this.dynamicService.getSchedulerHeightWithoutToolbar();
+      this.height = this.dynamicSchedulerService.getSchedulerHeightWithoutToolbar();
     }
 
     /*if (localStorage.getItem("currentView")) {
@@ -1870,7 +1974,7 @@ export class DynamicSchedulerComponent implements OnInit {
     this.storeService.getStore(this.helpService.getSuperadmin(), (data) => {
       this.store = data;
       for (let i = 0; i < data.length; i++) {
-        this.service.getUsersInCompany(data[i].id, (users: []) => {
+        this.usersService.getUsersInCompany(data[i].id, (users: []) => {
           this.usersInCompany = users;
           for (let j = 0; j < users.length; j++) {
             if (users[j]["id"] === this.helpService.getMe()) {
@@ -2483,6 +2587,52 @@ export class DynamicSchedulerComponent implements OnInit {
     this.customerUserModal2.close();
   }
 
+  sendLastMinuteOffer(){
+    
+    this.patients.forEach(patient => {
+      const url = this.router.createUrlTree([location.origin+'/'+'dashboard/home/customers/last-minute-event'], { 
+        queryParams: 
+        { 
+          user: patient.id,
+          therapeuts: this.therapeuts.map(({id})=>id),
+          startDate: this.lastMinuteStartDate,
+          endDate: this.lastMinuteEndDate,
+          days: this.lastMinuteWeekDays.map(({value})=>value),
+          time: this.lastMinuteHoursValue.map(({value})=>value),
+          storeId: this.selectedStoreId
+        } 
+      });
+
+      console.log();
+
+      const firstPartUrl = url.toString().split("?")[0].substring(1);
+      const encryptedUrl = this.encryptData(url.toString().split("?")[1]);
+
+      let sendMail={
+        link: firstPartUrl+"?"+encryptedUrl,
+        userId: patient.id,
+        message: "GoodLuck",
+        subject: "Free time slot"
+      };
+      // this.dynamicService.callApiPost("/api/sendLastMinuteOfferMails", sendMail)
+      //   .subscribe((data) => {
+      //     this.helpService.successToastr(
+      //       this.language.successExecutedActionTitle,
+      //       this.language.successExecutedActionText
+      //     );
+      //   });
+        // console.log(this.serializer.serialize(url).substring(1));
+      });   
+  }
+
+  encryptData(data) {
+    try {
+      return CryptoJS.AES.encrypt(JSON.stringify(data),  DynamicSchedulerComponent.secretKey).toString();
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   public handleValue(selected) {
     this.resetCalendarData();
     this.value = selected;
@@ -2798,7 +2948,7 @@ export class DynamicSchedulerComponent implements OnInit {
 
   getUserInCompany(storeId) {
     if (this.type === this.userType.patient) {
-      this.service.getUsersAllowedOnlineInCompany(storeId, (val) => {
+      this.usersService.getUsersAllowedOnlineInCompany(storeId, (val) => {
         this.usersInCompany = val;
         if (this.activatedRouter.snapshot.params.storeId) {
           this.value = val;
@@ -2807,7 +2957,7 @@ export class DynamicSchedulerComponent implements OnInit {
         }
       });
     } else {
-      this.service.getUsersInCompany(storeId, (val) => {
+      this.usersService.getUsersInCompany(storeId, (val) => {
         this.usersInCompany = val;
         if (this.activatedRouter.snapshot.params.storeId) {
           this.value = val;
@@ -3120,7 +3270,7 @@ export class DynamicSchedulerComponent implements OnInit {
       });
     });
 
-    this.service.getCompanyUsers(this.helpService.getMe(), (val) => {
+    this.usersService.getCompanyUsers(this.helpService.getMe(), (val) => {
       console.log(val);
       if (val.length !== 0) {
         this.allUsers = val.sort((a, b) =>
@@ -3583,6 +3733,15 @@ export class DynamicSchedulerComponent implements OnInit {
     }
   }
 
+  loadCustomers() {
+    this.customer.getCustomers(localStorage.getItem("superadmin"), (val) => {
+      this.customerUsers = val.sort((a, b) =>
+          String(a["shortname"]).localeCompare(String(b["shortname"]))
+        );
+        this.customerLoading = false;
+    });
+  }
+
   onValueChange(event) {
     console.log(event);
     if (event !== undefined) {
@@ -3749,11 +3908,11 @@ export class DynamicSchedulerComponent implements OnInit {
   hideToolbar() {
     if (this.displayToolbar) {
       this.displayToolbar = false;
-      this.height = this.dynamicService.getSchedulerHeightWithoutToolbar();
+      this.height = this.dynamicSchedulerService.getSchedulerHeightWithoutToolbar();
       this.hideAllPanels();
     } else {
       this.displayToolbar = true;
-      this.height = this.dynamicService.getSchedulerHeight();
+      this.height = this.dynamicSchedulerService.getSchedulerHeight();
     }
     this.scheduleObj.refresh();
     localStorage.setItem("displayToolbar", this.displayToolbar.toString());
@@ -3766,8 +3925,12 @@ export class DynamicSchedulerComponent implements OnInit {
     const settingsPanel: Element = document.querySelector(
       ".overview-content .settings-panel"
     );
+    const lastMinutePanel: Element = document.querySelector(
+      ".overview-content .last-minute-panel"
+    );
     addClass([filterPanel], "hide");
     addClass([settingsPanel], "hide");
+    addClass([lastMinutePanel],"hide");
   }
 
   selectedEventCategory(event) {

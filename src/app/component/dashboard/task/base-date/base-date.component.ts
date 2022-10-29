@@ -271,7 +271,7 @@ export class BaseDateComponent implements OnInit {
         });
       });
 
-    this.taskService.getCompanyUsers(localStorage.getItem("idUser"), (val) => {
+    this.usersService.getCompanyUsers(localStorage.getItem("idUser"), (val) => {
       this.allUsers = val;
     });
 

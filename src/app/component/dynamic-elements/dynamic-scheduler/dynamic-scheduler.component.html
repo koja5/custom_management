@@ -175,6 +175,23 @@
                     </div>
                   </ng-template>
                 </e-item>
+                
+                <e-item tooltipText="{{
+                  language.lastMinute
+                }}">
+                <ng-template #template>
+                  <div class="toolbarElement" (click)="onLastMinuteClick()">
+                    <div class="icon-child">
+                      <div>
+                        <span class="fa fa-clock-o"></span>
+                      </div>
+                    </div>
+                    <div class="text-child" style="font-size: 14px">
+                      {{ language.lastMinute }}
+                    </div>
+                  </div>
+                </ng-template>
+              </e-item>
                 <!-- <e-item tooltipText="Week Number">
                   <ng-template #template>
                     <div style="height: 46px; line-height: 23px">
@@ -944,6 +961,112 @@
                   </ejs-dropdownlist>
                 </div>
               </div> -->
+            </div>
+          </div>
+          <div class="right-panel last-minute-panel hide" [style.height]="height" *ngIf="!loading">
+            <div class="control-panel e-css">
+              <!-- PATIENTS -->              
+              <div class="col-row">
+                <div class="col-left">
+                  <label style="line-height: 34px; margin: 0">{{ language.Patients }} Patients</label>
+                </div>
+                <div class="col-right">
+                  <kendo-multiselect [data]="customerUsers" [(ngModel)]="patients" 
+                    [valueField]="'id'" name="patientsInCompany"
+                    [textField]="type !== userType.patient ? 'shortname' : 'alias_name'">
+                  </kendo-multiselect>                  
+                </div>
+              </div>
+              <!-- STORE -->
+              <div class="col-row">
+                <div class="col-left">
+                  <label style="line-height: 34px; margin: 0">Store{{ language.Store }}</label>
+                </div>
+                <div class="col-right">
+                  <kendo-combobox [data]="store" [textField]="'storename'" [valueField]="'id'"
+                    [(ngModel)]="selectedStoreId" [valuePrimitive]="true" (valueChange)="getUserInCompany($event)"
+                    [suggest]="true">
+                  </kendo-combobox>
+                </div>
+              </div>
+              <!-- THERAPEUT -->
+              <div class="col-row">
+                <div class="col-left">
+                  <label style="line-height: 34px; margin: 0">{{ language.Therapeuts }} Therapeuts</label>
+                </div>
+                <div class="col-right">
+                  <kendo-multiselect [data]="usersInCompany" [(ngModel)]="therapeuts" 
+                    [textField]="type !== userType.patient ? 'shortname' : 'alias_name'" 
+                    [valueField]="'id'" name="therapeutsInCompany">
+                  </kendo-multiselect>
+                </div>
+              </div>
+              <!-- EVENT OF WEEK -->
+              <div class="col-row">
+                <div class="col-left">
+                  <label style="line-height: 34px; margin: 0">Event week</label>
+                </div>
+                <div class="col-right">
+                  <div class="col-row">
+                    <kendo-daterange>
+                      <label class="mr-4">
+                        <span class="date-range-label"> {{ language.startDateLabel }}</span>
+                        <kendo-dateinput format="dd.MM.yyyy" class="full-width" kendoDateRangeStartInput
+                          [navigateCalendarOnFocus]="true" [(value)]="lastMinuteStartDate">
+                        </kendo-dateinput>
+                      </label>
+                      <label>
+                        <span class="date-range-label"> {{ language.endDateLabel }} </span>
+                        <kendo-dateinput format="dd.MM.yyyy" class="full-width" kendoDateRangeEndInput
+                          [navigateCalendarOnFocus]="true" (valueChange)="popup.toggle()" [(value)]="lastMinuteEndDate">
+                        </kendo-dateinput>
+                      </label>
+                      <kendo-daterange-popup [anchor]="anchor" #popup></kendo-daterange-popup>
+                    </kendo-daterange>
+                  </div>
+                </div>
+              </div>
+              <!-- DAYS -->
+              <div class="col-row">
+                <div class="col-left">
+                  <label style="line-height: 34px; margin: 0">Days</label>
+                </div>
+                <div class="col-right">
+                    <kendo-multiselect [data]="weekDays" [textField]="'text'" [valueField]="'value'" [(ngModel)]="lastMinuteWeekDays"
+                      name="lastMinuteWeek">
+                    </kendo-multiselect>
+                </div>
+              </div>
+              <!-- TIME -->
+              <div class="col-row">
+                <div class="col-left">
+                  <label style="line-height: 34px; margin: 0">Time</label>
+                </div>
+                <div class="col-right">
+                  <kendo-multiselect [data]="lastMinuteTimeSlot" [textField]="'Value'" [valueField]="'Value'" [(ngModel)]="lastMinuteHoursValue"
+                    name="lastMinuteWeek">
+                  </kendo-multiselect>                  
+                </div>
+              </div> 
+              <!-- NOTIFICATION VIA -->
+              <div class="col-row">
+                <div class="col-left">
+                  <label style="line-height: 34px; margin: 0">Notification via</label>
+                </div>
+                <div class="col-right">                  
+                  <kendo-multiselect [data]="typesOfNotifications" 
+                    [textField]="'text'" [valueField]="'value'" 
+                    [(ngModel)]="notificationsVia" name="notificationsVia">
+                  </kendo-multiselect>
+                </div>
+              </div>   
+              <div class="col-row">
+                <div class="col-12 text-center">
+                  <button kendoButton [primary]="true" class="form-button" (click)="sendLastMinuteOffer()">
+                    Send
+                  </button>
+                </div>
+              </div>          
             </div>
           </div>
         </div>

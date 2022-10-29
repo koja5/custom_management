@@ -36,6 +36,7 @@ export class MassiveSmsComponent implements OnInit {
     this.dynamicService
       .getConfiguration("administarator", "massive-sms")
       .subscribe((config) => {
+        console.log(config);
         this.configField = config;
         this.loading = false;
       });

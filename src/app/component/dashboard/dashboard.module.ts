@@ -111,6 +111,8 @@ import { ListFaqComponent } from './administrator/help/list-faq/list-faq.compone
 import { RegisteredClinicsComponent } from './administrator/registered-clinics/registered-clinics.component';
 import { RegisteredClinicDetailComponent } from './administrator/registered-clinics/registered-clinic-detail/registered-clinic-detail.component';
 import { SharedComponentsModule } from 'src/app/shared/shared-components.module';
+import { LastMinuteEventConfirmationComponent } from './customers/last-minute-event-confirmation/last-minute-event-confirmation.component';
+import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
 
 @NgModule({
   declarations: [
@@ -170,7 +172,8 @@ import { SharedComponentsModule } from 'src/app/shared/shared-components.module'
     TopicCardComponent,
     ListFaqComponent,
     RegisteredClinicsComponent,
-    RegisteredClinicDetailComponent
+    RegisteredClinicDetailComponent,
+    LastMinuteEventConfirmationComponent
   ],
   imports: [
     CommonModule,
@@ -210,7 +213,8 @@ import { SharedComponentsModule } from 'src/app/shared/shared-components.module'
     ScheduleModule,
     ToolbarModule,
     ColorPickerModule,
-    SharedComponentsModule
+    SharedComponentsModule,
+    DatePickerModule
   ],
   providers: [
     {

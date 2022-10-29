@@ -1,6 +1,6 @@
 import { LayoutModule } from "@progress/kendo-angular-layout";
 import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { CommonModule, DatePipe } from "@angular/common";
 import {
   GridModule,
   EditService,
@@ -147,7 +147,8 @@ import { SharedComponentsModule } from "src/app/shared/shared-components.module"
     PageService,
     GroupService,
     ResizeService,
-    ColumnChooserService
+    ColumnChooserService,
+    DatePipe
   ],
   entryComponents: [
     TextboxComponent,

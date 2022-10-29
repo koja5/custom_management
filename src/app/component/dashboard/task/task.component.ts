@@ -1344,7 +1344,7 @@ export class TaskComponent implements OnInit {
   }
 
   getUserInCompany(storeId) {
-    this.service.getUsersInCompany(storeId, (val) => {
+    this.usersService.getUsersInCompany(storeId, (val) => {
       this.usersInCompany = val;
       // this.language.selectedUsers += this.usersInCompany[0].shortname;
       this.loading = false;
@@ -1539,7 +1539,7 @@ export class TaskComponent implements OnInit {
       });
     });
 
-    this.service.getCompanyUsers(localStorage.getItem("idUser"), (val) => {
+    this.usersService.getCompanyUsers(localStorage.getItem("idUser"), (val) => {
       console.log(val);
       if (val.length !== 0) {
         this.allUsers = val.sort((a, b) =>
