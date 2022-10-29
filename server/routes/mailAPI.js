@@ -71,7 +71,7 @@ var connection = mysql.createPool({
 
 
 //local purpose
-/* var smtpTransport = nodemailer.createTransport({
+ var smtpTransport = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
   secure: true,
@@ -86,21 +86,21 @@ var connection = mysql.createPool({
   }
 });
 
-*/
+
 
 // production
-var smtpTransport = nodemailer.createTransport({
-  host: "116.203.85.82",
-  port: 25,
-  secure: false,
-  tls: {
-    rejectUnauthorized: false,
-  },
-  auth: {
-    user: "support@app-production.eu",
-    pass: "])3!~0YFU)S]",
-  },
-});
+// var smtpTransport = nodemailer.createTransport({
+//   host: "116.203.85.82",
+//   port: 25,
+//   secure: false,
+//   tls: {
+//     rejectUnauthorized: false,
+//   },
+//   auth: {
+//     user: "support@app-production.eu",
+//     pass: "])3!~0YFU)S]",
+//   },
+// });
 
 
 //slanje maila pri registraciji
