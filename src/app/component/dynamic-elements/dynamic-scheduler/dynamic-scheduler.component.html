@@ -968,7 +968,7 @@
               <!-- PATIENTS -->              
               <div class="col-row">
                 <div class="col-left">
-                  <label style="line-height: 34px; margin: 0">{{ language.Patients }} Patients</label>
+                  <label style="line-height: 34px; margin: 0">{{ language.patients }}</label>
                 </div>
                 <div class="col-right">
                   <kendo-multiselect [data]="customerUsers" [(ngModel)]="patients" 
@@ -980,7 +980,7 @@
               <!-- STORE -->
               <div class="col-row">
                 <div class="col-left">
-                  <label style="line-height: 34px; margin: 0">Store{{ language.Store }}</label>
+                  <label style="line-height: 34px; margin: 0">{{ language.store }}</label>
                 </div>
                 <div class="col-right">
                   <kendo-combobox [data]="store" [textField]="'storename'" [valueField]="'id'"
@@ -992,7 +992,7 @@
               <!-- THERAPEUT -->
               <div class="col-row">
                 <div class="col-left">
-                  <label style="line-height: 34px; margin: 0">{{ language.Therapeuts }} Therapeuts</label>
+                  <label style="line-height: 34px; margin: 0">{{ language.therapeuts }}</label>
                 </div>
                 <div class="col-right">
                   <kendo-multiselect [data]="usersInCompany" [(ngModel)]="therapeuts" 
@@ -1004,7 +1004,7 @@
               <!-- EVENT OF WEEK -->
               <div class="col-row">
                 <div class="col-left">
-                  <label style="line-height: 34px; margin: 0">Event week</label>
+                  <label style="line-height: 34px; margin: 0">{{ language.eventDates }}</label>
                 </div>
                 <div class="col-right">
                   <div class="col-row">
@@ -1029,7 +1029,7 @@
               <!-- DAYS -->
               <div class="col-row">
                 <div class="col-left">
-                  <label style="line-height: 34px; margin: 0">Days</label>
+                  <label style="line-height: 34px; margin: 0">{{ language.days }}</label>
                 </div>
                 <div class="col-right">
                     <kendo-multiselect [data]="weekDays" [textField]="'text'" [valueField]="'value'" [(ngModel)]="lastMinuteWeekDays"
@@ -1040,7 +1040,7 @@
               <!-- TIME -->
               <div class="col-row">
                 <div class="col-left">
-                  <label style="line-height: 34px; margin: 0">Time</label>
+                  <label style="line-height: 34px; margin: 0">{{ language.time }}</label>
                 </div>
                 <div class="col-right">
                   <kendo-multiselect [data]="lastMinuteTimeSlot" [textField]="'Value'" [valueField]="'Value'" [(ngModel)]="lastMinuteHoursValue"
@@ -1051,7 +1051,7 @@
               <!-- NOTIFICATION VIA -->
               <div class="col-row">
                 <div class="col-left">
-                  <label style="line-height: 34px; margin: 0">Notification via</label>
+                  <label style="line-height: 34px; margin: 0">{{ language.notificationVia }}</label>
                 </div>
                 <div class="col-right">                  
                   <kendo-multiselect [data]="typesOfNotifications" 
@@ -1061,9 +1061,14 @@
                 </div>
               </div>   
               <div class="col-row">
-                <div class="col-12 text-center">
+                <div class="col-left">
                   <button kendoButton [primary]="true" class="form-button" (click)="sendLastMinuteOffer()">
-                    Send
+                    {{ language.clearLastMinuteOffer}}Clear
+                  </button>
+                </div>
+                <div class="col-right">
+                  <button kendoButton [primary]="true" class="form-button pull-right" (click)="sendLastMinuteOffer()">
+                    {{language.sendLastMinuteOffer}}
                   </button>
                 </div>
               </div>          

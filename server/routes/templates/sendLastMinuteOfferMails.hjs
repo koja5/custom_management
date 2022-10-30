@@ -64,7 +64,11 @@
             {{initialGreeting}} {{firstName}}, <br>
           <p style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
             {{introductoryMessageForFreeEvent}}</p><br>
-          <a href={{offerLink}} style="cursor: pointer; text-decoration: initial;"><button class="text-white text-sm tracking-wide rounded w-full my-8 p-4 " style="background: #01A9E9;box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;font-family: inherit;font-size: 12px; font-family: Arial, Helvetica, sans-serif;line-height: 1.15;margin: 0;overflow: visible;text-transform: none;-webkit-appearance: button;padding: 1rem;cursor: pointer;border-radius: .25rem;margin-top: 2rem;margin-bottom: 2rem;color: #fff;letter-spacing: .05em;">View offer</button></a>
+          <a href={{offerLink}} style="cursor: pointer; text-decoration: initial;">
+            <button class="text-white text-sm tracking-wide rounded w-full my-8 p-4 " style="background: #01A9E9;box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;font-family: inherit;font-size: 12px; font-family: Arial, Helvetica, sans-serif;line-height: 1.15;margin: 0;overflow: visible;text-transform: none;-webkit-appearance: button;padding: 1rem;cursor: pointer;border-radius: .25rem;margin-top: 2rem;margin-bottom: 2rem;color: #fff;letter-spacing: .05em;">
+              {{viewOffer}}
+            </button>
+          </a>
           <br>
           <p class="text-sm"
             style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;font-size: 12px; font-family: Arial, Helvetica, sans-serif;">

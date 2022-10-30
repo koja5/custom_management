@@ -1235,14 +1235,21 @@ router.post("/sendLastMinuteOfferMails", function (req, res){
             var mailOptions = {
               from: '"ClinicNode" support@app-production.eu',
               to: to.email,
-              subject: req.body.subject ? req.body.subject : mail.mailSubject,
+              subject: req.body.lastMinuteEMailSubject,
               html: sendMassive.render({
                 firstName: to.shortname,
-                initialGreeting: req.body.language?.initialGreeting,
-                introductoryMessageForFreeEvent: req.body.message,
+                initialGreeting: req.body.initialGreeting,
+                introductoryMessageForFreeEvent: req.body.lastMinuteEMailMessage,
                 offerLink: req.body.link,
-                finalGreeting: req.body.language?.finalGreeting,
-                signature: "Your ClinicNode Team"
+                finalGreeting: req.body.finalGreeting,
+                viewOffer: req.body.viewLastMinuteOffer,
+                signature: req.body.signature,
+                thanksForUsing: req.body.thanksForUsing,
+                websiteLink: req.body.websiteLink,
+                ifYouHaveQuestion: req.body.ifYouHaveQuestion,
+                emailAddress: req.body.emailAddress,
+                notReply: req.body.notReply,
+                copyRight: req.body.copyRight,
               }),
             };
             smtpTransport.sendMail(mailOptions, function (error, response) {

@@ -2287,6 +2287,33 @@
             "lastMinute":{
                 "type":"string"
 			},
+            "patients":{
+                "type":"string"
+			},
+            "therapeuts":{
+                "type":"string"
+			},
+            "days":{
+                "type":"string"
+			},
+            "lastMinuteEMailMessage":{
+                "type":"string"
+			},
+            "lastMinuteEMailSubject":{
+                "type":"string"
+			},            
+            "eventDates":{
+                "type":"string"
+			},           
+            "notificationVia":{
+                "type":"string"
+			},
+            "sendLastMinuteOffer":{
+                "type":"string"
+            },
+            "viewLastMinuteOffer":{
+                "type":"string"
+            },
             "thisFieldIsRequired": {
                 "type": "string"
             },
@@ -3149,11 +3176,54 @@
                         },
                         {
                             "key": "confirmEventMove"
-                        },                        
+                        }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items":[
                         {
                             "key":"lastMinute"
                         },
-                        {}
+                        {
+                            "key":"patients"
+                        },
+                        {
+                            "key":"therapeuts"
+                        },
+                        {
+                            "key":"days"
+                        },
+                        {
+                            "key":"eventDates"
+                        },
+                        {
+                            "key":"time"
+                        },
+                        {
+                            "key":"notificationVia"
+                        }         
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items":[
+                        {
+                            "key":"lastMinuteEMailMessage"
+                        },
+                        {
+                            "key":"lastMinuteEMailSubject"
+                        },                        
+                        {
+                            "key":"sendLastMinuteOffer"
+                        },
+                        {
+                            "key":"viewLastMinuteOffer"
+                        }                 
                     ]
                 }
             ]

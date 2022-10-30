@@ -105,6 +105,7 @@ import { InvoiceService } from "src/app/service/invoice.service";
 import { DatePipe } from "@angular/common";
 import { DynamicService } from "src/app/service/dynamic.service";
 import * as CryptoJS from 'crypto-js';
+import { connectableObservableDescriptor } from "rxjs/internal/observable/ConnectableObservable";
 
 declare var moment: any;
 
@@ -2591,40 +2592,65 @@ export class DynamicSchedulerComponent implements OnInit {
 
   sendLastMinuteOffer(){
     
-    this.patients.forEach(patient => {
-      const url = this.router.createUrlTree([location.origin+'/'+'dashboard/home/customers/last-minute-event'], { 
-        queryParams: 
-        { 
-          user: patient.id,
-          therapeuts: this.therapeuts.map(({id})=>id),
-          startDate: this.lastMinuteStartDate,
-          endDate: this.lastMinuteEndDate,
-          days: this.lastMinuteWeekDays.map(({value})=>value),
-          time: this.lastMinuteHoursValue.map(({value})=>value),
-          storeId: this.selectedStoreId
-        } 
-      });
+    if(this.patients.length==0 || this.selectedStoreId == undefined || this.therapeuts.length==0 || this.lastMinuteWeekDays.length==0 || this.lastMinuteHoursValue==0)
+    {
+      this.helpService.errorToastr(
+        this.language.errorExecutedActionTitle,
+        this.language.errorExecutedActionText
+      );
+    }else{
+      this.patients.forEach(patient => {
+        const url = this.router.createUrlTree([location.origin+'/'+'dashboard/home/customers/last-minute-event'], { 
+          queryParams: 
+          { 
+            user: patient.id,
+            therapeuts: this.therapeuts.map(({id})=>id),
+            startDate: this.lastMinuteStartDate,
+            endDate: this.lastMinuteEndDate,
+            days: this.lastMinuteWeekDays.map(({value})=>value),
+            time: this.lastMinuteHoursValue.map(({value})=>value),
+            storeId: this.selectedStoreId
+          } 
+        });
+  
+        const firstPartUrl = url.toString().split("?")[0].substring(1);
+        const encryptedUrl = this.encryptData(url.toString().split("?")[1]);
+  
+        let sendMail={
+          link: firstPartUrl+"?"+encryptedUrl,
+          userId: patient.id,
+          initialGreeting:this.language.initialGreeting,
+          lastMinuteEMailSubject:this.language.lastMinuteEMailSubject,
+          finalGreeting:this.language.finalGreeting,
+          lastMinuteEMailMessage:this.language.lastMinuteEMailMessage,
+          viewLastMinuteOffer:this.language.viewLastMinuteOffer,
+          signature:this.language.signature,
+          thanksForUsing:this.language.thanksForUsing,
+          websiteLink:this.language.websiteLink,
+          ifYouHaveQuestion:this.language.ifYouHaveQuestion,
+          emailAddress:this.language.emailAddress,
+          notReply:this.language.notReply,
+          copyRight:this.language.copyRight
+        };
+        
+        this.dynamicService.callApiPost("/api/sendLastMinuteOfferMails", sendMail)
+          .subscribe((data) => {
+            console.log(data);
+            this.helpService.successToastr(
+              this.language.successExecutedActionTitle,
+              this.language.successExecutedActionText
+            );
+          });
+        });
 
-      console.log();
-
-      const firstPartUrl = url.toString().split("?")[0].substring(1);
-      const encryptedUrl = this.encryptData(url.toString().split("?")[1]);
-
-      let sendMail={
-        link: firstPartUrl+"?"+encryptedUrl,
-        userId: patient.id,
-        message: "GoodLuck",
-        subject: "Free time slot"
-      };
-      // this.dynamicService.callApiPost("/api/sendLastMinuteOfferMails", sendMail)
-      //   .subscribe((data) => {
-      //     this.helpService.successToastr(
-      //       this.language.successExecutedActionTitle,
-      //       this.language.successExecutedActionText
-      //     );
-      //   });
-        // console.log(this.serializer.serialize(url).substring(1));
-      });   
+        //clear data
+        this.patients.clear();
+        this.therapeuts.clear();
+        this.lastMinuteStartDate=new Date();
+        this.lastMinuteEndDate=new Date();
+        this.lastMinuteWeekDays.clear();
+        this.lastMinuteHoursValue.clear();
+    }
   }
 
   encryptData(data) {
