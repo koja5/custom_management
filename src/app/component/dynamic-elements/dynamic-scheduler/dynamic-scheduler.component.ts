@@ -1722,9 +1722,7 @@ export class DynamicSchedulerComponent implements OnInit {
     private parameterItemService: ParameterItemService,
     private dateService: DateService,
     private invoiceService: InvoiceService,
-    private datePipe: DatePipe,
     private router: Router,
-    private serializer: UrlSerializer,
     private dynamicService: DynamicService
   ) {}
 
@@ -2644,12 +2642,12 @@ export class DynamicSchedulerComponent implements OnInit {
         });
 
         //clear data
-        this.patients.clear();
-        this.therapeuts.clear();
+        this.patients.length=0;
+        this.therapeuts.length=0;
         this.lastMinuteStartDate=new Date();
         this.lastMinuteEndDate=new Date();
-        this.lastMinuteWeekDays.clear();
-        this.lastMinuteHoursValue.clear();
+        this.lastMinuteWeekDays.length=0;
+        this.lastMinuteHoursValue.length=0;
     }
   }
 
