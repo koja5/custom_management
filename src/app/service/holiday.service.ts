@@ -26,9 +26,9 @@ export class HolidayService {
       .get<HolidayModel[]>("/api/getHolidaysByTemplates/" + templateIds).toPromise();
   }
 
-  public getHolidaysForClinic(clinicId): Promise<HolidayModel[]> {
+  public getHolidaysForClinic(superAdminId): Promise<HolidayModel[]> {
     return this.httpClient
-      .get<HolidayModel[]>("/api/getHolidaysForClinic/" + clinicId).toPromise();
+      .get<HolidayModel[]>("/api/getHolidaysForClinic/" + superAdminId).toPromise();
   }
 
   public createHoliday(data, callback): void {
@@ -38,21 +38,21 @@ export class HolidayService {
       .subscribe(val => callback(val));
   }
 
-  public createStoreTemplateConnection(ids, storeId, callback) {
+  public createStoreTemplateConnection(ids, superAdminId, callback) {
     let query = "";
     ids.forEach(id => {
-      query += "(" + storeId + "," + id + "),"
+      query += "(" + superAdminId + "," + id + "),"
     });
 
     const temp = query.slice(0, -1);
     console.log(query.slice(0, -1));
     return this.httpClient
-      .post("/api/createStoreTemplateConnection", { query: temp })
+      .post("/api/createSuperAdminTemplateConnection", { query: temp })
       .map(res => res)
       .subscribe(val => callback(val));
   }
 
-  public deleteStoreTemplateConnection(ids, storeId, callback) {
+  public deleteStoreTemplateConnection(ids, superAdminId, callback) {
     let query = "";
     ids.forEach(id => {
       query += id + ","
@@ -63,14 +63,14 @@ export class HolidayService {
     console.log(temp);
 
     return this.httpClient
-      .post("/api/deleteStoreTemplateConnection", { query: temp, storeId: storeId })
+      .post("/api/deleteStoreTemplateConnection", { query: temp, superAdminId: superAdminId })
       .map(res => res)
       .subscribe(val => callback(val));
   }
 
 
-  public getStoreTemplateConnection(storeId) {
-    return this.httpClient.get<any[]>("/api/getStoreTemplateConnection/" + storeId).toPromise();
+  public getStoreTemplateConnection(superAdminId) {
+    return this.httpClient.get<any[]>("/api/getStoreTemplateConnection/" + superAdminId).toPromise();
   }
 
   public updateHoliday(data, callback) {

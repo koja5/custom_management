@@ -143,8 +143,8 @@
     "requestSectionFormName": "Ime(*)",
     "requestSectionFormEmail": "Email(*)",
     "requestSectionFormPhone": "Telefon(*)",
-    "requestSectionFormnameOfCompany": "Ime vrtića(*)",
-    "requestSectionFormChooiceNumberOfChildrens": "Odaberite broj dece(*)",
+    "requestSectionFormNameOfKindergarden": "Kontant osoba(*)",
+    "requestSectionFormChooiceNumberOfChildrens": "Odaberite broj zaposlenih(*)",
     "requestSectionFormMessage": "Recite nam nešto više o vama(opciono)",
     "requestSectionFormSendRequestButton": "Pošalji zahtev",
     "needToFillAllField": "Neophodno je da unesete polja označena zvezdicom(*)",
@@ -170,7 +170,7 @@
     "from": "Od",
     "to": "Do",
     "across": "Preko",
-    "getStarted": "IZABERI PAKET",
+    "getStarted": "Izaberi",
     "requestDemoDropdownNumbers": [
         "0 - 5",
         "6 - 10",
@@ -183,64 +183,24 @@
     "priceTable": {
         "header": [
             {
-                "nameOfPackageTitle": "Free",
-                "nameOfPackageText": "Starter plan",
-                "price": "FREE"
+                "nameOfPackageTitle": "Osnovni",
+                "nameOfPackageText": "Osnovne funkcije. Optimizovana verzija za uspešan početak.",
+                "price": "9.90"
             },
             {
-                "nameOfPackageTitle": "Personal",
-                "nameOfPackageText": "Longer data retention",
-                "price": "9/mo"
+                "nameOfPackageTitle": "Napredni",
+                "nameOfPackageText": "Napredne funkcije. Za zahtevne korisnike",
+                "price": "29.70"
             },
             {
-                "nameOfPackageTitle": "Pro",
-                "nameOfPackageText": "Our complete solution",
-                "price": "39/mo"
+                "nameOfPackageTitle": "Premium",
+                "nameOfPackageText": "Premium funkcije. Sve što Vam je potrebno.",
+                "price": "64.30"
             }
         ],
         "functions": [
             {
-                "name": "Sites",
-                "descriptionPerPackages": [
-                    "exists",
-                    "not-exists",
-                    "180 Days"
-                ]
-            },
-            {
-                "name": "Data Retention",
-                "descriptionPerPackages": [
-                    "30 Days",
-                    "90 Days",
-                    "180 Days"
-                ]
-            },
-            {
-                "name": "Chart Annotations",
-                "descriptionPerPackages": [
-                    "not-exists",
-                    "exists",
-                    "exists"
-                ]
-            },
-            {
-                "name": "Uptime Monitoring",
-                "descriptionPerPackages": [
-                    "not-exists",
-                    "exists",
-                    "exists"
-                ]
-            },
-            {
-                "name": "Weekly Reports",
-                "descriptionPerPackages": [
-                    "not-exists",
-                    "not-exists",
-                    "exists"
-                ]
-            },
-            {
-                "name": "Security Audit",
+                "name": "Kalendar",
                 "descriptionPerPackages": [
                     "exists",
                     "exists",
@@ -248,7 +208,95 @@
                 ]
             },
             {
-                "name": "On-Demand Audit",
+                "name": "Upravljaj pacijentima",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Upravljaj klinikama",
+                "descriptionPerPackages": [
+                    "jedna klinika",
+                    "jedna klinika, opciono više",
+                    "jedna klinika, opciono više"
+                ]
+            },
+            {
+                "name": "Upravljaj zaposlenima",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Kreiraj fakture",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Upravljaj kuponima",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Online rezervacija",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Osnovne marketing funkcionalnosti",
+                "descriptionPerPackages": [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                "name": "- Podsetnik za termin putem Email/SMS-a",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "- Automatizovano čestitanje rođendana putem Email/SMS-a",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "SMS (100 poruka) za € 9.90",
+                "descriptionPerPackages": [
+                    "opciono",
+                    "uključeno",
+                    "uključeno"
+                ]
+            },
+            {
+                "name": "Napredne marketing funkcionalnosti",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Pristup spoljnim uređajima",
                 "descriptionPerPackages": [
                     "not-exists",
                     "not-exists",
@@ -256,19 +304,59 @@
                 ]
             },
             {
-                "name": "Priority Support",
+                "name": "Proširene marketin funcionalnosti",
                 "descriptionPerPackages": [
                     "not-exists",
-                    "exists",
+                    "not-exists",
                     "exists"
                 ]
             },
             {
-                "name": "Easy Billing + No Contracts",
+                "name": "Funkcije upravljanja",
                 "descriptionPerPackages": [
-                    "exists",
-                    "exists",
+                    "not-exists",
+                    "not-exists",
                     "exists"
+                ]
+            },
+            {
+                "name": "Lista čekanja sa AI algoritmom",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "not-exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Individualne funkcionalnosti",
+                "descriptionPerPackages": [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                "name": "- Više klinika",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "€ 9.90 po dodatnoj klinici",
+                    "€ 9.90 po dodatnoj klinici"
+                ]
+            },
+            {
+                "name": "- Plaćanje za online rezervacije",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "opciono",
+                    "opciono"
+                ]
+            },
+            {
+                "name": "- Podrška",
+                "descriptionPerPackages": [
+                    "opciono",
+                    "opciono",
+                    "opciono"
                 ]
             }
         ]
@@ -276,5 +364,15 @@
     "notFoundTitle": "Stranica nije pronadjena!",
     "notFoundText": "Stranica koju trazite nije pronadjena ili uopste ne postoji!",
     "notFoundBackButton": "Vrati se nazad",
-    "notFoundCopyRight": "Autorska prava © 2020 ClinicNode. Sva prava zadrzana."
+    "notFoundCopyRight": "Autorska prava © 2020 ClinicNode. Sva prava zadrzana.","choosePackage": "Izbor paketa",
+    "priceOfPackage": "Cena izabranog paketa je: ",
+    "cardDetails": "Podaci o kartici",
+    "lastPaymentStep": "Poslednji korak",
+    "paymentMessage": "Potvrdite još jednom Vašu naruđbinu!",
+    "yes": "Da",
+    "no": "Ne",
+    "paymentSuccess": "Uspešno ste izvršili plaćanje!",
+    "paymentText": "Vaša uplata je evidentirana. Nakon što bude proknjižena, kontaktiraćemo Vas!",
+    "backToHome": "Vrati se na početnu",
+    "paymentError": "Desio se problem prilikom plaćanja"
 }

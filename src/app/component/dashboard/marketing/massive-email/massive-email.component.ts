@@ -1,17 +1,23 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { Modal } from "ngx-modal";
+import { Subject } from "rxjs";
 import { DynamicFormsComponent } from "src/app/component/dynamic-elements/dynamic-forms/dynamic-forms.component";
+import { FormGuardData } from "src/app/models/formGuard-data";
 import { DynamicService } from "src/app/service/dynamic.service";
 import { HelpService } from "src/app/service/help.service";
+import { MarketingService } from "src/app/service/marketing.service";
+
+const draftType = 'email';
 
 @Component({
   selector: "app-massive-email",
   templateUrl: "./massive-email.component.html",
   styleUrls: ["./massive-email.component.scss"],
 })
-export class MassiveEmailComponent implements OnInit {
+export class MassiveEmailComponent implements OnInit, FormGuardData {
   @ViewChild(DynamicFormsComponent) form: DynamicFormsComponent;
   @ViewChild("recipients") recipients: Modal;
+  @ViewChild("saveDraft") saveDraft: Modal;
   public configField: any;
   public language: any;
   public superadmin: string;
@@ -20,11 +26,20 @@ export class MassiveEmailComponent implements OnInit {
   public changeData: any;
   public showDialog = false;
   public allRecipients: any;
+  public emailDrafts;
+  public fields: Object = { text: 'draftName', value: 'id' };
+  public editMode: boolean = false;
+  public draftName: string;
+  isFormDirty: boolean = false;
+  isDataSaved$: Subject<boolean> = new Subject<boolean>();
+  showDialogExit: boolean = false
+  selectedIndex: number;
 
   constructor(
     private helpService: HelpService,
-    private dynamicService: DynamicService
-  ) { }
+    private dynamicService: DynamicService,
+    private marketingService: MarketingService
+  ) {}
 
   ngOnInit() {
     this.language = this.helpService.getLanguage();
@@ -37,8 +52,61 @@ export class MassiveEmailComponent implements OnInit {
       .getConfiguration("administarator", "massive-email")
       .subscribe((config) => {
         this.configField = config;
+        this.getEmailDrafts();
+
         this.loading = false;
       });
+  }
+
+  getEmailDrafts(selectNewlyCreated?: boolean) {
+    this.marketingService.getDrafts(this.superadmin, draftType).subscribe((data) => {
+      this.emailDrafts = data;
+      if (selectNewlyCreated) {
+        this.selectedIndex = this.emailDrafts.length - 1;
+        this.packDraftData(this.emailDrafts[this.emailDrafts.length - 1]);
+      }
+    })
+  }
+
+  onDraftChange(emailDraft) {
+    this.form.form.reset();
+    this.draftName = "";
+    if(emailDraft.id !== 0) {
+      this.editMode = true;
+      this.packDraftData(emailDraft)
+    }
+    else {
+      this.editMode = false;
+    }
+  }
+
+  packDraftData(data) {
+    this.data = data;
+
+    if (this.data) {
+      for (let i = 0; i < this.configField.length; i++) {
+        if (this.configField[i].type === "multiselect") {
+          this.configField[i].value = Array.isArray(
+            this.data[this.configField[i].name]
+          )
+            ? this.data[this.configField[i].name]
+            : this.helpService.multiSelectStringToArray(
+                this.data[this.configField[i].name]
+              );
+          this.data[this.configField[i].name] = this.configField[i].value;
+        } 
+        else if (this.configField[i].type === "checkbox") {
+          this.configField[i].value = !!this.data[this.configField[i].field];
+          this.data[this.configField[i].field] = this.configField[i].value
+        }
+        else {
+          this.configField[i].value = this.data[this.configField[i].field];
+        }
+      }
+    }
+
+    this.draftName = this.data.draftName;
+    this.form.form.patchValue(this.data);
   }
 
   submitEmitter(event) {
@@ -78,5 +146,115 @@ export class MassiveEmailComponent implements OnInit {
         );
         this.recipients.close();
       });
+  }
+
+  openSaveDraftModal() {
+    this.saveDraft.open();
+  }
+
+  saveEmailDraft() {
+    const formValues = this.form.form.value;
+    let emailDraft = this.helpService.prepareDraft(
+      formValues,
+      this.draftName,
+      draftType
+    );
+
+    if(this.editMode) {
+      emailDraft = {
+        ...emailDraft,
+        id: this.data.id,
+      };
+      this.marketingService.editDraft(emailDraft).subscribe((data) => {
+        this.getEmailDrafts();
+        this.saveDraft.close();
+        this.editMode = true;
+        if (data) {
+          this.helpService.successToastr(
+            this.language.successTitle,
+            this.language.emailDraftEditedSuccessfully
+          );
+        }else {
+          this.helpService.errorToastr(
+            this.language.errorTitle,
+            this.language.errorTextEdit
+          );
+        }
+      })
+    } else {
+      this.marketingService.createDraft(emailDraft).subscribe((data) => {
+        if (data) {
+          this.helpService.successToastr(
+            this.language.successTitle,
+            this.language.emailDraftSavedSuccessfully
+          );
+        }else {
+          this.helpService.errorToastr(
+            this.language.errorTitle,
+            this.language.accountErrorUpdatedAccountText
+          );
+        }
+        this.getEmailDrafts(true);
+        this.selectedIndex = this.emailDrafts.length - 1;
+        this.saveDraft.close();
+        this.editMode = true;
+      });
+    }
+    
+  }
+
+  onCreateNewDraft() {
+    this.selectedIndex = 0;
+    this.draftName = "";
+    this.form.form.reset();
+    this.editMode = false;
+    if(!this.emailDrafts || !this.emailDrafts.length) {
+      this.emailDrafts.unshift({id: 0, draftName: this.language.addNewEmailDraft});
+      return;
+    }
+    if(this.emailDrafts[0].draftName !== this.language.addNewEmailDraft) {
+      this.emailDrafts.unshift({id: 0, draftName: this.language.addNewEmailDraft});
+    }
+  }
+
+  deleteEmailDraft() {
+    this.marketingService.deleteDraft(this.data).subscribe((data) => {
+      this.getEmailDrafts();
+      this.form.form.reset();
+      this.editMode = false;
+      this.selectedIndex = -1;
+      this.draftName = "";
+      if (data) {
+        this.helpService.successToastr(
+          this.language.successTitle,
+          this.language.emailDraftDeletedSuccessfully
+        );
+      }else {
+        this.helpService.errorToastr(
+          this.language.errorTitle,
+          this.language.errorTextEdit,
+        );
+      }
+    })
+  }
+
+  isDataSavedChange(event: boolean) {
+    this.isDataSaved$.next(event);
+  }
+
+  openConfirmModal(): void {
+    this.showDialogExit = true;
+  }
+
+  changeFormDirty(event) {
+    this.isFormDirty = event
+  }
+
+  changeShowDialogExit(event) {
+    this.showDialogExit = event;
+  }
+
+  setSelectedIndex(index: number): void {
+    this.selectedIndex = index;
   }
 }

@@ -1,11 +1,16 @@
 import { Component, OnInit, HostListener, ViewChild } from "@angular/core";
 import { VaucherModel } from "src/app/models/vaucher-model";
-import { process, State, GroupDescriptor, SortDescriptor } from "@progress/kendo-data-query";
+import {
+  process,
+  State,
+  GroupDescriptor,
+  SortDescriptor,
+} from "@progress/kendo-data-query";
 import {
   RowArgs,
   DataStateChangeEvent,
   PageChangeEvent,
-  GridComponent
+  GridComponent,
 } from "@progress/kendo-angular-grid";
 import { VaucherService } from "src/app/service/vaucher.service";
 import Swal from "sweetalert2";
@@ -18,18 +23,23 @@ import { HelpService } from "src/app/service/help.service";
 import { Modal } from "ngx-modal";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { Router } from "@angular/router";
+import { PackLanguageService } from "src/app/service/pack-language.service";
+import { SendSmsService } from "src/app/service/send-sms.service";
+import { checkIfInputValid } from "../../../shared/utils";
 
 @Component({
   selector: "app-vaucher",
   templateUrl: "./vaucher.component.html",
-  styleUrls: ["./vaucher.component.scss"]
+  styleUrls: ["./vaucher.component.scss"],
 })
 export class VaucherComponent implements OnInit {
-  @ViewChild('vaucher') vaucher: Modal;
-  @ViewChild('grid') grid;
+  @ViewChild("vaucher") vaucher: Modal;
+  @ViewChild("grid") grid;
 
   public allPages: boolean;
   private _allData: ExcelExportData;
+  toSendEmail: boolean = false;
+  toSendSms: boolean = false;
 
   public data = new VaucherModel();
   public unamePattern = "^[a-z0-9_-]{8,15}$";
@@ -41,7 +51,7 @@ export class VaucherComponent implements OnInit {
   public state: State = {
     skip: 0,
     take: 10,
-    filter: null
+    filter: null,
   };
   public storeLocation: any;
   public language: any;
@@ -78,15 +88,25 @@ export class VaucherComponent implements OnInit {
   public pageSize = 5;
   public pageable = {
     pageSizes: true,
-    previousNext: true
+    previousNext: true,
   };
   showDialog: boolean = false;
   isFormDirty: boolean = false;
   savePage: any = {};
   currentUrl: string;
+  checkIfInputValid = checkIfInputValid;
 
   public showColumnPicker = false;
-  public columns: string[] = ["ID", "Date", "Amount", "Date redeemed", "Customer buys", "Customer consumer", "User", "Comment"];
+  public columns: string[] = [
+    "ID",
+    "Date",
+    "Amount",
+    "Date redeemed",
+    "Customer buys",
+    "Customer consumer",
+    "User",
+    "Comment",
+  ];
   public hiddenColumns: string[] = [];
 
   constructor(
@@ -95,10 +115,11 @@ export class VaucherComponent implements OnInit {
     private message: MessageService,
     private userService: UsersService,
     private helpService: HelpService,
-    private router: Router
+    private router: Router,
+    private packLanguage: PackLanguageService,
+    private sendSMS: SendSmsService
   ) {
     this.allData = this.allData.bind(this);
-
   }
 
   ngOnInit() {
@@ -123,21 +144,29 @@ export class VaucherComponent implements OnInit {
       this.changeTheme(this.theme);
     });*/
 
-    this.message.getTheme().subscribe(mess => {
+    this.message.getTheme().subscribe((mess) => {
       this.changeTheme(mess);
       this.theme = mess;
     });
 
     this.currentUrl = this.router.url;
 
-    this.savePage = this.helpService.getGridPageSize();
-    if(this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
-      this.state.skip = this.savePage[this.currentUrl];
-      this.state.take = this.savePage[this.currentUrl + 'Take'];
-    }
+    this.setPagination();
+
     this.vaucher.closeOnEscape = false;
     this.vaucher.closeOnOutsideClick = false;
     this.vaucher.hideCloseButton = true;
+  }
+
+  setPagination() {
+    this.savePage = this.helpService.getGridPageSize();
+    if (
+      (this.savePage && this.savePage[this.currentUrl]) ||
+      this.savePage[this.currentUrl + "Take"]
+    ) {
+      this.state.skip = this.savePage[this.currentUrl];
+      this.state.take = this.savePage[this.currentUrl + "Take"];
+    }
   }
 
   getVauchers() {
@@ -146,16 +175,19 @@ export class VaucherComponent implements OnInit {
       .getVauchers(this.helpService.getSuperadmin())
       .subscribe((data: []) => {
         if (data !== null) {
-          console.log(data);
           this.currentLoadData = data.sort(function (a, b) {
             return b["id"] - a["id"];
           });
+          if (this.currentLoadData.length < this.state.skip) {
+            console.log("?");
+            this.state.skip = 0;
+          }
           this.gridData = {
-            data: data
+            data: data,
           };
           this._allData = <ExcelExportData>{
             data: process(this.currentLoadData, this.state).data,
-          }
+          };
           this.gridView = process(data, this.state);
           this["loadingGridVaucher"] = false;
         } else {
@@ -170,28 +202,27 @@ export class VaucherComponent implements OnInit {
   }
 
   receiveConfirm(event: boolean): void {
-    if(event) {
+    if (event) {
       this.vaucher.close();
       this.isFormDirty = false;
     }
-      this.showDialog = false;
+    this.showDialog = false;
   }
 
   confirmClose(): void {
     this.vaucher.modalRoot.nativeElement.focus();
-    if(this.isFormDirty) {
+    if (this.isFormDirty) {
       this.showDialog = true;
-    }else {
-      this.vaucher.close()
+    } else {
+      this.vaucher.close();
       this.showDialog = false;
-      this.isFormDirty = false
+      this.isFormDirty = false;
     }
   }
 
   isDirty(): void {
     this.isFormDirty = true;
   }
-
 
   newVaucher() {
     this.operationMode = "add";
@@ -210,7 +241,7 @@ export class VaucherComponent implements OnInit {
       customer_name: "",
       user: null,
       user_name: "",
-      comment: ""
+      comment: "",
     };
     this.dateConst = new Date();
     this.dateredeemedConst = "";
@@ -221,15 +252,23 @@ export class VaucherComponent implements OnInit {
   }
 
   getNextVaucherId() {
-    this.service.getNextVaucherId().subscribe(
-      data => {
-        this.data.id = data.toString();
-      }
-    )
+    this.service.getNextVaucherId().subscribe((data) => {
+      this.data.id = data.toString();
+    });
+  }
+
+  sendVaucherSmsData(vaucherData: any) {
+    this.userService.getUserWithIdPromise(this.data.user).then((dataSms) => {
+      dataSms[0]["countryCode"] = this.helpService.getCountryCode();
+      dataSms[0][
+        "message"
+      ] = `${this.language.introductoryMessageForCreatedVaucher} \n \n${this.language.amount}: ${vaucherData.amount} \n \n${this.language.date_redeemed}: ${vaucherData.date_redeemed} \n \n${this.language.comment}: ${vaucherData.comment} \n \n${this.language.customerBuys}: ${vaucherData.customer_name} \n \n${this.language.customerConsumer}: ${vaucherData.customer_consumer_name}`;
+
+      this.sendSMS.sendVaucherSMS(dataSms[0]).subscribe();
+    });
   }
 
   createVaucher(form) {
-    console.log(this.data);
     this.data.superadmin = localStorage.getItem("idUser");
     if (this.customerUserBuys !== null) {
       this.data.customer = this.customerUserBuys.id;
@@ -249,7 +288,14 @@ export class VaucherComponent implements OnInit {
     }
     this.data.date = this.dateConst.toString();
     this.data.date_redeemed = this.dateredeemedConst.toString();
-    this.service.createVaucher(this.data).subscribe(data => {
+    this.data["language"] = this.packLanguage.getLanguageForMailingVaucher();
+    this.data["toSendEmail"] = this.toSendEmail;
+
+    if (this.toSendSms) {
+      this.sendVaucherSmsData(this.data);
+    }
+
+    this.service.createVaucher(this.data).subscribe((data) => {
       if (data["success"]) {
         this.data.id = data["id"];
         /*this.gridData = {
@@ -267,14 +313,14 @@ export class VaucherComponent implements OnInit {
           title: "Successfull!",
           text: "New vaucher is successfull added!",
           timer: 3000,
-          type: "success"
+          type: "success",
         });
       } else {
         Swal.fire({
           title: "Error",
           text: "New vaucher is not added!",
           timer: 3000,
-          type: "error"
+          type: "error",
         });
       }
     });
@@ -283,7 +329,7 @@ export class VaucherComponent implements OnInit {
   deleteVaucher(event) {
     if (event === "yes") {
       console.log(this.data);
-      this.service.deleteVaucher(this.data.id).subscribe(data => {
+      this.service.deleteVaucher(this.data.id).subscribe((data) => {
         console.log(data);
         if (data) {
           this.getVauchers();
@@ -309,7 +355,10 @@ export class VaucherComponent implements OnInit {
       this.data.customer_name =
         this.customerUserBuys.firstname + " " + this.customerUserBuys.lastname;
     }
-    if (this.customerUserConsumer !== null && this.customerUserConsumer !== undefined) {
+    if (
+      this.customerUserConsumer !== null &&
+      this.customerUserConsumer !== undefined
+    ) {
       this.data.customer_consumer = this.customerUserConsumer.id;
       this.data.customer_consumer_name =
         this.customerUserConsumer.firstname +
@@ -318,7 +367,11 @@ export class VaucherComponent implements OnInit {
     }
     this.data.date = this.dateConst.toString();
     this.data.date_redeemed = this.dateredeemedConst.toString();
-    this.service.editVaucher(this.data).subscribe(data => {
+    this.data["language"] = this.packLanguage.getLanguageForMailingVaucher();
+    this.data["toSendEmail"] = this.toSendEmail;
+    this.data["toSendSms"] = this.toSendSms;
+
+    this.service.editVaucher(this.data).subscribe((data) => {
       console.log(data);
       if (data) {
         this.getVauchers();
@@ -326,7 +379,7 @@ export class VaucherComponent implements OnInit {
           title: "Successfull update",
           text: "Store data is successfull update!",
           timer: 3000,
-          type: "success"
+          type: "success",
         });
         this.vaucher.close();
       } else {
@@ -334,7 +387,7 @@ export class VaucherComponent implements OnInit {
           title: "Error update",
           text: "Store data is not successfull update!",
           timer: 3000,
-          type: "error"
+          type: "error",
         });
       }
     });
@@ -348,22 +401,18 @@ export class VaucherComponent implements OnInit {
       this.dateredeemedConst = "";
     }
     this.data.amount = Number(data.amount);
-    this.customer.getInfoCustomer(data.customer).subscribe(
-      data => {
-        if (data !== null) {
-          this.customerBuysUsers.push(data[0]);
-          this.customerUserBuys = data[0];
-        }
+    this.customer.getInfoCustomer(data.customer).subscribe((data) => {
+      if (data !== null) {
+        this.customerBuysUsers.push(data[0]);
+        this.customerUserBuys = data[0];
       }
-    );
-    this.customer.getInfoCustomer(data.customer_consumer).subscribe(
-      data => {
-        if (data !== null) {
-          this.customerConsumersUsers.push(data[0]);
-          this.customerUserConsumer = data[0];;
-        }
+    });
+    this.customer.getInfoCustomer(data.customer_consumer).subscribe((data) => {
+      if (data !== null) {
+        this.customerConsumersUsers.push(data[0]);
+        this.customerUserConsumer = data[0];
       }
-    );
+    });
     this.user = this.getSelectedUser(data.user);
   }
 
@@ -400,7 +449,7 @@ export class VaucherComponent implements OnInit {
     this.loadProducts();
 
     this.savePage[this.currentUrl] = event.skip;
-    this.savePage[this.currentUrl + 'Take'] = event.take;
+    this.savePage[this.currentUrl + "Take"] = event.take;
     this.helpService.setGridPageSize(this.savePage);
   }
 
@@ -422,13 +471,13 @@ export class VaucherComponent implements OnInit {
     if (event === "yes") {
       this.vaucherDialogOpened = false;
       setTimeout(() => {
-        this.service.insertMultiData(this.gridData).subscribe(data => {
+        this.service.insertMultiData(this.gridData).subscribe((data) => {
           if (data) {
             Swal.fire({
               title: "Successfull!",
               text: "New vaucher is successfull added",
               timer: 3000,
-              type: "success"
+              type: "success",
             });
             this.getVauchers();
           }
@@ -464,7 +513,7 @@ export class VaucherComponent implements OnInit {
 
     this.vaucherDialogOpened = true;
     let fileReader = new FileReader();
-    fileReader.onload = e => {
+    fileReader.onload = (e) => {
       this.arrayBuffer = fileReader.result;
       var data = new Uint8Array(this.arrayBuffer);
       var arr = new Array();
@@ -505,7 +554,7 @@ export class VaucherComponent implements OnInit {
   }
 
   public setDataForExcelExport(allPages: boolean): void {
-    console.log('allPages ', allPages);
+    console.log("allPages ", allPages);
 
     if (allPages) {
       var myState: State = {
@@ -515,18 +564,17 @@ export class VaucherComponent implements OnInit {
 
       this._allData = <ExcelExportData>{
         data: process(this.currentLoadData, myState).data,
-      }
+      };
     } else {
       this._allData = <ExcelExportData>{
         data: process(this.currentLoadData, this.state).data,
-      }
+      };
     }
   }
 
   public allData(): ExcelExportData {
     return this._allData;
   }
-
 
   xlsxToJson(data) {
     const rowCount = data.length;
@@ -547,7 +595,7 @@ export class VaucherComponent implements OnInit {
     const allData = {
       table: "vaucher",
       columns: columns,
-      data: dataArray
+      data: dataArray,
     };
     return allData;
   }
@@ -565,7 +613,7 @@ export class VaucherComponent implements OnInit {
   }
 
   getUsers() {
-    this.userService.getUsers(localStorage.getItem("superadmin"), val => {
+    this.userService.getUsers(localStorage.getItem("superadmin"), (val) => {
       console.log(val);
       this.users = val;
       this.loading = false;
@@ -681,30 +729,30 @@ export class VaucherComponent implements OnInit {
           {
             field: "amount",
             operator: "contains",
-            value: inputValue
+            value: inputValue,
           },
           {
             field: "customer_name",
             operator: "contains",
-            value: inputValue
+            value: inputValue,
           },
           {
             field: "customer_consumer_name",
             operator: "contains",
-            value: inputValue
+            value: inputValue,
           },
           {
             field: "user_name",
             operator: "contains",
-            value: inputValue
+            value: inputValue,
           },
           {
             field: "comment",
             operator: "contains",
-            value: inputValue
-          }
-        ]
-      }
+            value: inputValue,
+          },
+        ],
+      },
     });
     this.gridView = process(this.gridData.data, this.state);
   }
@@ -715,7 +763,7 @@ export class VaucherComponent implements OnInit {
       this.customerBuysLoading = true;
       const searchFilter = {
         superadmin: localStorage.getItem("superadmin"),
-        filter: event
+        filter: event,
       };
       this.customer.searchCustomer(searchFilter).subscribe((val: []) => {
         console.log(val);
@@ -735,7 +783,7 @@ export class VaucherComponent implements OnInit {
       this.customerConsumersLoading = true;
       const searchFilter = {
         superadmin: localStorage.getItem("superadmin"),
-        filter: event
+        filter: event,
       };
       this.customer.searchCustomer(searchFilter).subscribe((val: []) => {
         console.log(val);

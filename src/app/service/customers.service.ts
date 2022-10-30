@@ -207,4 +207,12 @@ export class CustomersService {
       .post("/api/updateCustomerSendReminderOption", data)
       .map((res) => res);
   }
+
+  unsubscribeUserFromMassiveEmail(data) {
+    return this.http.post("/api/updateMassiveEmailForUser", data).map((res) => res);
+  }
+
+  unsubscribeUserFromMassiveSMS(data) {
+    return this.http.post("/api/updateMassiveSMSForUser", data).map((res) => res);
+  }
 }

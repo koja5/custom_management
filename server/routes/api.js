@@ -4517,6 +4517,10 @@ router.post("/createVaucher", function (req, res, next) {
       conn.release();
       if (!err) {
         if (!err) {
+          data['language'] = req.body.language;
+          if(req.body.toSendEmail) {
+            mailAPI.sendVaucherToMail(data);
+          }
           response.id = rows.insertId;
           response.success = true;
         } else {
@@ -4637,6 +4641,10 @@ router.post("/updateVaucher", function (req, res, next) {
           res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
+          data['language'] = req.body.language;
+          if(req.body.toSendEmail) {
+            mailAPI.sendVaucherToMail(data);
+          }
           response = true;
           res.json(response);
         }
@@ -5592,6 +5600,152 @@ router.post("/sendCustomSMS", function (req, res) {
 
 const timer = (ms) => new Promise((res) => setTimeout(res, ms));
 
+router.post("/sendVaucherSms", function (req, res) {
+  var phoneNumber = req.body.mobile;
+  if (req.body.message != "") {
+    request(
+      link + "/getTranslationByCountryCode/" + req.body.countryCode,
+      function (error, language, body) {
+        var language = JSON.parse(body)["config"];
+        request(
+          link + "/getAvailableAreaCode",
+          function (error, response, codes) {
+            connection.getConnection(function (err, conn) {
+              if (err) {
+                res.json(err);
+              }
+              var question = getSqlQuery(req.body);
+              var joinTable = getJoinTable(req.body);
+              conn.query(
+                "select distinct c.telephone, c.mobile, c.shortname, sm.* from customers c join sms_massive_message sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin " +
+                  joinTable +
+                  " where ((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL)) and c.active = 1 and c.storeId = " +
+                  Number(req.body.superadmin) +
+                  " and " +
+                  question,
+                function (err, rows) {
+                  // splitSenderToPartArray(rows, codes, req, language);
+                  globalCount = 0;
+                  count = 0;
+                  if(rows) {
+                    rows.forEach(async function (to, i, array) {
+                      var phoneNumber = to.mobile ? to.mobile : req.body.mobile;
+                      if (
+                        checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
+                        req.body.message
+                      ) {
+                        count++;
+                        var message =
+                          (to.smsSubject
+                            ? to.smsSubject
+                            : language.initialGreetingSMSReminder) +
+                          " " +
+                          req.body.firstname +
+                          ", \n \n" +
+                          req.body.message;
+                        var signature = "";
+                        if (to.signatureAvailable) {
+                          if (to.smsSignatureCompanyName) {
+                            signature += to.smsSignatureCompanyName + "\n";
+                          }
+                          if (to.smsSignatureAddress1) {
+                            signature += to.smsSignatureAddress1 + "\n";
+                          }
+                          if (to.smsSignatureAddress2) {
+                            signature += to.smsSignatureAddress2 + "\n";
+                          }
+                          if (to.smsSignatureAddress3) {
+                            signature += to.smsSignatureAddress3 + "\n";
+                          }
+                          if (to.smsSignatureTelephone) {
+                            signature += to.smsSignatureTelephone + " \n";
+                          }
+                          if (to.smsSignatureMobile) {
+                            signature += to.smsSignatureMobile + " \n";
+                          }
+                          if (to.smsSignatureEmail) {
+                            signature += to.smsSignatureEmail + " \n";
+                          }
+                        }
+  
+                        if (language.smsSignaturePoweredBy) {
+                          signature +=
+                            " \n" + language.smsSignaturePoweredBy + " \n";
+                        }
+  
+                        var content =
+                          "To: " +
+                          phoneNumber +
+                          "\r\n\r\n" +
+                          message +
+                          "\n\n" +
+                          signature;
+                        const fullMessage = message + "\n\n" + signature;
+                        var fileName = "server/sms/" + phoneNumber + ".txt";
+                        sendSmsFromMail(phoneNumber, fullMessage);
+                      } else {
+                        logger.log(
+                          "warn",
+                          `Number ${phoneNumber} is not start with available area code!`
+                        );
+                      }
+                    });
+                  }else {
+                    var phoneNumber = req.body.mobile;
+                      if (
+                        checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
+                        req.body.message
+                      ) {
+                        count++;
+                        var message =
+                          (language.initialGreetingSMSReminder) +
+                          " " +
+                          req.body.firstname +
+                          ", \n \n" +
+                          req.body.message;
+                        var signature = "";
+  
+                        if (language.smsSignaturePoweredBy) {
+                          signature +=
+                            " \n" + language.smsSignaturePoweredBy + " \n";
+                        }
+  
+                        var content =
+                          "To: " +
+                          phoneNumber +
+                          "\r\n\r\n" +
+                          message +
+                          "\n\n" +
+                          signature;
+                        const fullMessage = message + "\n\n" + signature;
+                        var fileName = "server/sms/" + phoneNumber + ".txt";
+                        sendSmsFromMail(phoneNumber, fullMessage);
+                      } else {
+                        logger.log(
+                          "warn",
+                          `Number ${phoneNumber} is not start with available area code!`
+                        );
+                      }
+                  }
+                  
+                  updateAvailableSMSCount(count, req.body.superadmin);
+                  res.send(true);
+                }
+              );
+            });
+          }
+        );
+      }
+    );
+  } else {
+    res.send(false);
+    logger.log(
+      "error",
+      `Client don't input message for send massive sms: ${req.body.email}`
+    );
+  }
+});
+
 router.post("/sendMassiveSMS", function (req, res) {
   var phoneNumber = req.body.number;
   if (req.body.message != "") {
@@ -5975,11 +6129,11 @@ router.post("/getFilteredRecipients", function (req, res) {
       var joinTable = getJoinTable(req.body);
       var table = "";
       if (req.body.mode && req.body.mode === "mail") {
-        var checkAdditionalQuery = "(c.email != '' and c.email IS NOT NULL)";
+        var checkAdditionalQuery = "(c.email != '' and c.email IS NOT NULL) and c.sendMassiveEmail = 1 ";
         table = "mail_massive_message";
       } else {
         var checkAdditionalQuery =
-          "((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL))";
+          "((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL)) and c.sendMassiveSMS = 1 ";
         table = "sms_massive_message";
       }
 
@@ -6200,7 +6354,7 @@ router.post("/updateAvailableAreaCode", function (req, res, next) {
   });
 });
 
-router.get("/deleteAvailableAreaCode/:id", (req, res, next) => {
+router.post("/deleteAvailableAreaCode", (req, res, next) => {
   try {
     connection.getConnection(function (err, conn) {
       if (err) {
@@ -6211,7 +6365,7 @@ router.get("/deleteAvailableAreaCode/:id", (req, res, next) => {
         });
       } else {
         conn.query(
-          "delete from available_area_code where id = '" + req.params.id + "'",
+          "delete from available_area_code where id = '" + req.body.id + "'",
           function (err, rows, fields) {
             conn.release();
             if (err) {
@@ -6548,6 +6702,7 @@ router.post("/loadTemplateAccount", function (req, res, next) {
       req.body.account_id,
       req.body.id
     );
+    insertFromTemplate(conn, "theme_configuration", req.body.account_id, req.body.id);
     getCustomersDemoData(conn, "customers", req.body.account_id, req.body.id);
     insertFromTemplate(conn, "vaucher", req.body.account_id, req.body.id);
     insertFromTemplateForUsers(conn, "users", req.body.account_id, req.body.id);
@@ -8373,15 +8528,15 @@ router.get("/getHolidaysByTemplates/:templateIds", function (req, res, next) {
   });
 });
 
-router.get("/getHolidaysForClinic/:clinicId", function (req, res, next) {
+router.get("/getHolidaysForClinic/:superAdminId", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
     }
-    var clinicId = req.params.clinicId;
+    var superAdminId = req.params.superAdminId;
     conn.query(
-      "SELECT * FROM `holidays` h where h.clinicId =" + clinicId,
+      "SELECT * FROM `holidays` h where h.superAdminId =" + superAdminId,
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -8421,7 +8576,7 @@ router.get("/getTemplateByUserId/:userId", function (req, res, next) {
 
 //store-template
 
-router.post("/createStoreTemplateConnection", (req, res, next) => {
+router.post("/createSuperAdminTemplateConnection", (req, res, next) => {
   try {
     connection.getConnection(function (err, conn) {
       if (err) {
@@ -8434,7 +8589,7 @@ router.post("/createStoreTemplateConnection", (req, res, next) => {
         console.log(req.body);
         const temp = req.body.query;
         conn.query(
-          "insert into store_holidayTemplate (storeId , templateId) values " +
+          "insert into store_holidayTemplate (superAdminId , templateId) values " +
             temp,
           function (err, results, fields) {
             conn.release();
@@ -8467,10 +8622,10 @@ router.post("/deleteStoreTemplateConnection", (req, res, next) => {
       } else {
         console.log(req.body);
         const temp = req.body.query;
-        const storeId = req.body.storeId;
+        const superAdminId = req.body.superAdminId;
         conn.query(
-          "DELETE FROM store_holidayTemplate where storeId =  " +
-            storeId +
+          "DELETE FROM store_holidayTemplate where superAdminId =  " +
+          superAdminId +
             " and templateId in " +
             temp,
           function (err, results, fields) {
@@ -8492,7 +8647,7 @@ router.post("/deleteStoreTemplateConnection", (req, res, next) => {
   }
 });
 
-router.get("/getStoreTemplateConnection/:storeId", (req, res, next) => {
+router.get("/getStoreTemplateConnection/:superAdminId", (req, res, next) => {
   try {
     connection.getConnection(function (err, conn) {
       if (err) {
@@ -8502,9 +8657,9 @@ router.get("/getStoreTemplateConnection/:storeId", (req, res, next) => {
           status: err,
         });
       } else {
-        const temp = req.params.storeId;
+        const temp = req.params.superAdminId;
         conn.query(
-          "select * from store_holidayTemplate where storeId = " + temp,
+          "select * from store_holidayTemplate where superAdminId = " + temp,
           function (err, results, fields) {
             conn.release();
             if (err) {
@@ -8799,50 +8954,37 @@ router.post("/updateFaqTopic", function (req, res, next) {
   });
 });
 
-router.get(
-  "/getFaqTopics/:superAdminId/:countryCode",
-  function (req, res, next) {
-    var superAdminId = req.params.superAdminId;
-    var countryCode = req.params.countryCode;
-    connection.getConnection(function (err, conn) {
-      if (err) {
-        logger.log("error", err.sql + ". " + err.sqlMessage);
-        res.json(err);
-      }
-      conn.query(
-        "SELECT * FROM `help_topics` WHERE superAdminId=" +
-          superAdminId +
-          " AND `countryCode`='" +
-          countryCode +
-          "'",
-        function (err, rows) {
-          conn.release();
-          if (!err) {
-            res.json(rows);
-          } else {
-            res.json(err);
-            logger.log("error", err.sql + ". " + err.sqlMessage);
-          }
+router.get("/getFaqTopics/:countryCode", function (req, res, next) {
+  var countryCode = req.params.countryCode;
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query(
+      "SELECT * FROM `help_topics` WHERE `countryCode`='"+countryCode+"'",
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
-      );
-    });
-  }
-);
+      }
+    );
+  });
+});
 
-router.get("/getFaqTopic/:topicId/:superAdminId", function (req, res, next) {
+router.get("/getFaqTopic/:topicId", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
     }
     var topicId = req.params.topicId;
-    var superAdminId = req.params.superAdminId;
     conn.query(
-      "SELECT * FROM `help_topics` WHERE id=" +
-        topicId +
-        " AND superAdminId='" +
-        superAdminId +
-        "'",
+      "SELECT * FROM `help_topics` WHERE id="+topicId,
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -8947,34 +9089,27 @@ router.post("/updateFaq", function (req, res, next) {
   });
 });
 
-router.get(
-  "/getFaqQuestions/:topicId/:superAdminId",
-  function (req, res, next) {
-    connection.getConnection(function (err, conn) {
-      if (err) {
-        logger.log("error", err.sql + ". " + err.sqlMessage);
-        res.json(err);
-      }
-      var topicId = req.params.topicId;
-      var superAdminId = req.params.superAdminId;
-      conn.query(
-        "SELECT * FROM `faq_list` WHERE `helpTopicId`=" +
-          topicId +
-          " AND `superAdminId`=" +
-          superAdminId,
-        function (err, rows) {
-          conn.release();
-          if (!err) {
-            res.json(rows);
-          } else {
-            res.json(err);
-            logger.log("error", err.sql + ". " + err.sqlMessage);
-          }
+router.get("/getFaqQuestions/:topicId", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    var topicId = req.params.topicId;
+    conn.query(
+      "SELECT * FROM `faq_list` WHERE `helpTopicId`="+topicId,
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
         }
-      );
-    });
-  }
-);
+      }
+    );
+  });
+});
 
 router.post("/deleteFaq", function (req, res, next) {
   connection.getConnection(function (err, conn) {
@@ -9620,5 +9755,170 @@ router.get('/getClinicEmployees/:id', function (req, res) {
 });
 
 /* End Registered Clinics */
+
+/* UNSUBSCRIBE */
+
+router.post("/updateMassiveEmailForUser", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.send(err);
+    }
+    conn.query(
+      "update customers SET sendMassiveEmail = ? where email = ?",
+      [req.body.value, req.body.email],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            res.send(true);
+          } else {
+            res.send(false);
+          }
+        } else {
+          res.send(err);
+        }
+      }
+    );
+  });
+});
+
+router.post("/updateMassiveSMSForUser", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      res.send(err);
+    }
+    conn.query(
+      "update customers SET sendMassiveSMS = ? where email = ?",
+      [req.body.value, req.body.email],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            res.send(true);
+          } else {
+            res.send(false);
+          }
+        } else {
+          res.send(err);
+        }
+      }
+    );
+  });
+});
+
+/* END UNSUBSCRIBE */
+
+// start drafts
+
+router.get("/getDrafts/:id/:type", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    var id = req.params.id;
+    conn.query(
+      "select * from marketing_drafts where superadmin = ? AND type = '" + req.params.type + "'",
+      [id],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
+router.post("/createDraft", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+
+    response = null;
+
+    conn.query(
+      "insert into marketing_drafts SET ?",
+      req.body,
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          if (!err) {
+            response = true;
+          } else {
+            response.success = false;
+          }
+          res.json(response);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
+router.post("/editDraft", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+
+    var response = null;
+
+    conn.query(
+      "update marketing_drafts set ? where id = '" + req.body.id + "'",
+      req.body,
+      function (err, rows, fields) {
+        conn.release();
+        if (err) {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        } else {
+          response = true;
+          res.json(response);
+        }
+      }
+    );
+  });
+});
+
+router.post("/deleteDraft", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "delete from marketing_drafts where id = '" + req.body.id + "'",
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              res.json(false);
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+// end drafts
 
 module.exports = router;

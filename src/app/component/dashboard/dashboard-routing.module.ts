@@ -51,8 +51,6 @@ import { ThemeColorsComponent } from "./parameters/theme-colors/theme-colors.com
 import { HelpComponent } from "./administrator/help/help.component";
 import { ListFaqComponent } from "./administrator/help/list-faq/list-faq.component";
 
-import { AdminGuard } from "src/app/service/login-guard/adminGuard";
-
 import { ChooseHolidayComponent } from "./parameters/choose-holiday/choose-holiday.component";
 import { FormGuard } from "src/app/service/form-guard/formGuard";
 import { RegisteredClinicsComponent } from "./administrator/registered-clinics/registered-clinics.component";
@@ -299,10 +297,12 @@ const routes: Routes = [
       },
       {
         path: "massive-sms",
+        canDeactivate: [FormGuard],
         component: MassiveSmsComponent,
       },
       {
         path: "massive-email",
+        canDeactivate: [FormGuard],
         component: MassiveEmailComponent,
       },
       {
@@ -330,4 +330,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DashboardRouting {}
+export class DashboardRouting { }

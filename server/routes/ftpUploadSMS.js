@@ -25,6 +25,21 @@ var smtpTransport = nodemailer.createTransport({
   },
 });
 
+// var smtpTransport = nodemailer.createTransport({
+//   host: 'smtp.gmail.com',
+//   port: 465,
+//   secure: true,
+//   tls: {
+//     rejectUnauthorized: false,
+//   },
+//   debug: true,
+//   ssl: true, 
+//   auth: {
+//     user: "clinicnode2022@gmail.com",  // real email address
+//     pass: "vfuvxgwdfrvestvd" // app password for clinicnode2022@gmail.com email
+//   },
+// });
+
 async function sendSMSFromMail(phoneNumber, message) {
   var mailOptions = {
     from: '"ClinicNode" support@app-production.eu',

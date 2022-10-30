@@ -22,6 +22,7 @@ import { MessageService } from "src/app/service/message.service";
 import { HelpService } from "src/app/service/help.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { Router } from "@angular/router";
+import { checkIfInputValid } from "../../../shared/utils";
 
 @Component({
   selector: "app-store",
@@ -76,6 +77,7 @@ export class StoreComponent implements OnInit {
   isFormDirty: boolean = false;
   savePage: any = {};
   currentUrl: string;
+  checkIfInputValid = checkIfInputValid;
 
   public showColumnPicker = false;
   public columns: string[] = ["Store name", "Vat", "Email address", "Street", "Place", "Telephone"];
@@ -107,10 +109,17 @@ export class StoreComponent implements OnInit {
 
     this.currentUrl = this.router.url;
 
+    this.setPagination();
+  }
+
+  setPagination() {
     this.savePage = this.helpService.getGridPageSize();
-    if(this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
+    if (
+      (this.savePage && this.savePage[this.currentUrl]) ||
+      this.savePage[this.currentUrl + "Take"]
+    ) {
       this.state.skip = this.savePage[this.currentUrl];
-      this.state.take = this.savePage[this.currentUrl + 'Take'];
+      this.state.take = this.savePage[this.currentUrl + "Take"];
     }
   }
 
@@ -119,6 +128,9 @@ export class StoreComponent implements OnInit {
     this.service.getStore(this.idUser, (val) => {
       console.log(val);
       this.currentLoadData = val;
+      if(this.currentLoadData.length < this.state.skip) {
+        this.state.skip = 0;
+      }
       this._allData = <ExcelExportData>{
         data: process(this.currentLoadData, this.state).data,
       }

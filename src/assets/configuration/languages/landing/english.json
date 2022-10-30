@@ -143,8 +143,8 @@
     "requestSectionFormName": "Name(*)",
     "requestSectionFormEmail": "E-mail(*)",
     "requestSectionFormPhone": "Phone(*)",
-    "requestSectionFormnameOfCompany": "Kindergarten name(*)",
-    "requestSectionFormChooiceNumberOfChildrens": "Choose the number of children(*)",
+    "requestSectionFormNameOfKindergarden": "Contact person(*)",
+    "requestSectionFormChooiceNumberOfChildrens": "Choose the number of employees(*)",
     "requestSectionFormMessage": "Tell us more about you (optional)",
     "requestSectionFormSendRequestButton": "Send request",
     "needToFillAllField": "Fields marked with an asterisk (*) are required",
@@ -183,64 +183,24 @@
     "priceTable": {
         "header": [
             {
-                "nameOfPackageTitle": "Free",
-                "nameOfPackageText": "Starter plan",
-                "price": "FREE"
+                "nameOfPackageTitle": "Basis",
+                "nameOfPackageText": "Basic functions. Optimized version for a successful start.",
+                "price": "9.90"
             },
             {
-                "nameOfPackageTitle": "Personal",
-                "nameOfPackageText": "Longer data retention",
-                "price": "9/mo"
+                "nameOfPackageTitle": "Advanced",
+                "nameOfPackageText": "Advanced features. For demanding users",
+                "price": "29.70"
             },
             {
-                "nameOfPackageTitle": "Pro",
-                "nameOfPackageText": "Our complete solution",
-                "price": "39/mo"
+                "nameOfPackageTitle": "Premium",
+                "nameOfPackageText": "Extensive functions. Which leave nothing to be desired.",
+                "price": "64.30"
             }
         ],
         "functions": [
             {
-                "name": "Sites",
-                "descriptionPerPackages": [
-                    "exists",
-                    "not-exists",
-                    "180 Days"
-                ]
-            },
-            {
-                "name": "Data Retention",
-                "descriptionPerPackages": [
-                    "30 Days",
-                    "90 Days",
-                    "180 Days"
-                ]
-            },
-            {
-                "name": "Chart Annotations",
-                "descriptionPerPackages": [
-                    "not-exists",
-                    "exists",
-                    "exists"
-                ]
-            },
-            {
-                "name": "Uptime Monitoring",
-                "descriptionPerPackages": [
-                    "not-exists",
-                    "exists",
-                    "exists"
-                ]
-            },
-            {
-                "name": "Weekly Reports",
-                "descriptionPerPackages": [
-                    "not-exists",
-                    "not-exists",
-                    "exists"
-                ]
-            },
-            {
-                "name": "Security Audit",
+                "name": "Calendar",
                 "descriptionPerPackages": [
                     "exists",
                     "exists",
@@ -248,7 +208,95 @@
                 ]
             },
             {
-                "name": "On-Demand Audit",
+                "name": "Manage customers",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Manage branches",
+                "descriptionPerPackages": [
+                    "one clinic",
+                    "one clinic, optionally several",
+                    "one clinic, optionally several"
+                ]
+            },
+            {
+                "name": "Manage employees",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Create invoices",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Manage coupons",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Online Reservation",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Marketing Basic Functions",
+                "descriptionPerPackages": [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                "name": "- Appointment reminder Email / SMS",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "- Birthday Greetings Email/SMS",
+                "descriptionPerPackages": [
+                    "exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "SMS (100 pieces) for € 9.90",
+                "descriptionPerPackages": [
+                    "optional",
+                    "included",
+                    "included"
+                ]
+            },
+            {
+                "name": "Marketing Advanced Features",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Access control to devices",
                 "descriptionPerPackages": [
                     "not-exists",
                     "not-exists",
@@ -256,19 +304,59 @@
                 ]
             },
             {
-                "name": "Priority Support",
+                "name": "Extended marketing functions",
                 "descriptionPerPackages": [
                     "not-exists",
-                    "exists",
+                    "not-exists",
                     "exists"
                 ]
             },
             {
-                "name": "Easy Billing + No Contracts",
+                "name": "Management Functions",
                 "descriptionPerPackages": [
-                    "exists",
-                    "exists",
+                    "not-exists",
+                    "not-exists",
                     "exists"
+                ]
+            },
+            {
+                "name": "Waiting list with AI algorithm",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "not-exists",
+                    "exists"
+                ]
+            },
+            {
+                "name": "Individual functions",
+                "descriptionPerPackages": [
+                    "",
+                    "",
+                    ""
+                ]
+            },
+            {
+                "name": "- Multistore",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "€ 9.90 per additional clinic",
+                    "€ 9.90 per additional clinic"
+                ]
+            },
+            {
+                "name": "- Payment for online reservation",
+                "descriptionPerPackages": [
+                    "not-exists",
+                    "optional",
+                    "optional"
+                ]
+            },
+            {
+                "name": "- Online Support",
+                "descriptionPerPackages": [
+                    "optional",
+                    "optional",
+                    "optional"
                 ]
             }
         ]
@@ -276,5 +364,16 @@
     "notFoundTitle": "Page not found!",
     "notFoundText": "The page you are looking for does not exist.",
     "notFoundBackButton": "Back",
-    "notFoundCopyRight": "Copyright © 2020 ClinicNode. All rights reserved."
+    "notFoundCopyRight": "Copyright © 2020 ClinicNode. All rights reserved.",
+     "choosePackage": "Package selection",
+    "priceOfPackage": "The price of the selected package is: ",
+    "cardDetails": "Card details",
+    "lastPaymentStep": "The last step",
+    "paymentMessage": "Confirm your order once again!",
+    "yes": "Yes",
+    "no": "No",
+    "paymentSuccess": "You have successfully made the payment!",
+    "paymentText": "Your payment has been registered. After it is registered, we will contact you!",
+    "backToHome": "Go back to the beginning",
+    "paymentError": "A problem occurred during payment. Please try again later."
 }

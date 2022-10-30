@@ -2,7 +2,7 @@
     <div class="spinner loading"></div>
 </div>
 
-<div *ngIf="!loading && selectedUser === undefined" style="height: 100%">
+<div *ngIf="!loading" style="height: 100%">
   <div class="container">
     <div class="row" *ngIf="userSuperAdmin">  
       <div class="float-left mt-4 col-sm-12 col-md-3 col-lg-3">
@@ -88,6 +88,7 @@
       <div class="form-group">
         <kendo-textbox-container floatingLabel="{{ language.title }}">
           <input
+            id="title" 
             kendoTextBox
             required
             type="text"
@@ -96,6 +97,7 @@
             name="name"
           />
         </kendo-textbox-container>
+        <mat-error *ngIf="checkIfInputValid('title')">{{ language?.thisFieldIsRequired }}</mat-error>
       </div>      
 
       <div class="form-group" style="text-align: center">

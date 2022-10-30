@@ -38,6 +38,7 @@ import { PackLanguageService } from "src/app/service/pack-language.service";
 export class DynamicGridComponent implements OnInit {
   @Input() path: string;
   @Input() name: string;
+  @Input() dataLength: number;
   @Output() actionEmitter = new EventEmitter<any>();
   @ViewChild(DynamicFormsComponent) form: DynamicFormsComponent;
   @ViewChild("orderForm") public orderForm: FormGroup;
@@ -69,6 +70,7 @@ export class DynamicGridComponent implements OnInit {
   isFormDirty = false;
   showDialog = false;
   currentDialog: any;
+  test = 'test';
 
   public showColumnPicker = false;
   public columns: string[] = [];
@@ -78,7 +80,6 @@ export class DynamicGridComponent implements OnInit {
     private service: DynamicService,
     private helpService: HelpService,
     private messageService: MessageService,
-    private accountService: AccountService,
     private router: Router,
     private elem: ElementRef,
     private packLanguage: PackLanguageService,
@@ -86,9 +87,9 @@ export class DynamicGridComponent implements OnInit {
 
   ngOnInit() {
     this.savePage = this.helpService.getGridPageSize();
+    this.getConfiguration();
     this.initialization();
     this.checkMessageService();
-    this.getConfiguration();
     this.editSettings = {
       allowEditing: true,
       allowAdding: true,
@@ -104,7 +105,8 @@ export class DynamicGridComponent implements OnInit {
     this.currentUrl = this.router.url;
   }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() {
+  }
 
   initialization() {
     this.service
@@ -126,6 +128,9 @@ export class DynamicGridComponent implements OnInit {
         if (this.savePage[this.currentUrl + "Take"]) {
           this.config.paging.settings.pageSize =
             this.savePage[this.currentUrl + "Take"];
+        }
+        if(this.dataLength < ((this.config.paging.settings.currentPage - 1) * this.config.paging.settings.pageSize)) {
+          this.config.paging.settings.currentPage = 1;
         }
         if (data["localData"]) {
           this.getLocalData(data["localData"]);
@@ -330,8 +335,6 @@ export class DynamicGridComponent implements OnInit {
   }
 
   callServerMethod(request, data) {
-    data["language"] = this.packLanguage.getLanguageForCreatedPatientAccount();
-    console.log("cal server method ", request, data);
     data = this.packAdditionalData(request.parameters, data);
     if (request.type === "POST") {
       this.service.callApiPost(request.api, data).subscribe((response) => {
@@ -364,25 +367,36 @@ export class DynamicGridComponent implements OnInit {
             );
           }
         }
+        this.refreshGrid();
       });
     } else {
       this.service.callApiGet(request.api, data).subscribe((data) => {});
+      this.refreshGrid();
     }
   }
 
   packAdditionalData(parameters: any, data: any) {
     if (parameters && parameters.length > 0) {
       for (let i = 0; i < parameters.length; i++) {
-        switch (parameters[i]) {
-          case "superadmin":
+        switch (true) {
+          case parameters[i] == "superadmin":
             data["superadmin"] = this.helpService.getSuperadmin();
             break;
+
+          case parameters[i].type == "language":
+            data["language"] = this.translateFields(parameters[i].translateFields)
+            break;
+
           default:
             break;
         }
       }
     }
     return data;
+  }
+
+  translateFields(fields: Array<string>) {
+    return this.packLanguage.dynamicPackLanguage(fields);
   }
 
   previewDocument(filename: string) {

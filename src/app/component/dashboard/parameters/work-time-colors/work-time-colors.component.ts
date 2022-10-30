@@ -15,6 +15,7 @@ import { GridComponent, PageChangeEvent } from "@progress/kendo-angular-grid";
 import { HelpService } from "src/app/service/help.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { Router } from "@angular/router";
+import { checkIfInputValid } from "../../../../shared/utils";
 
 @Component({
   selector: "app-event-category",
@@ -75,6 +76,7 @@ export class WorkTimeColorsComponent implements OnInit {
   isFormDirty: boolean = false;
   currentUrl: string;
   savePage = {};
+  checkIfInputValid = checkIfInputValid;
 
   ngOnInit() {
     this.currentUrl = this.router.url;
@@ -87,10 +89,17 @@ export class WorkTimeColorsComponent implements OnInit {
 
     this.getWorkTimeColors();
 
+    this.setPagination();
+  }
+
+  setPagination() {
     this.savePage = this.helpService.getGridPageSize();
-    if(this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
+    if (
+      (this.savePage && this.savePage[this.currentUrl]) ||
+      this.savePage[this.currentUrl + "Take"]
+    ) {
       this.state.skip = this.savePage[this.currentUrl];
-      this.state.take = this.savePage[this.currentUrl + 'Take'];
+      this.state.take = this.savePage[this.currentUrl + "Take"];
     }
   }
   
@@ -105,6 +114,9 @@ export class WorkTimeColorsComponent implements OnInit {
       .getWorkTimeColors(localStorage.getItem("superadmin"))
       .subscribe((data: []) => {
         this.currentLoadData = data;
+        if(this.currentLoadData.length < this.state.skip) {
+          this.state.skip = 0;
+        }
         this._allData = <ExcelExportData>{
           data: process(this.currentLoadData, this.state).data,
         }

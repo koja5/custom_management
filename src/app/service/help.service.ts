@@ -24,6 +24,10 @@ export class HelpService {
     return valueToJSON;
   }
 
+  getCountryCode() {
+    return localStorage.getItem("accountLanguage");
+  }
+
   setGridPageSize(pageSize: any) {
     localStorage.setItem("pageSize", JSON.stringify(pageSize));
   }
@@ -357,5 +361,60 @@ export class HelpService {
       );
     
       return path;
+  }
+
+  multiSelectArrayToString(array): string {
+    let semicolonSeparatedString = "";
+    if (array) {
+      for (let i = 0; i < array.length; i++) {
+        semicolonSeparatedString += array[i] + ";";
+      }
+      semicolonSeparatedString = semicolonSeparatedString.substring(
+        0,
+        semicolonSeparatedString.length - 1
+      );
+    }
+    return semicolonSeparatedString;
+  }
+
+  multiSelectStringToArray(string): number[] {
+    let multiSelectArrayToString;
+    if (string.split(";") !== undefined) {
+      multiSelectArrayToString = string
+        .split(";")
+        .map(Number);
+    } else {
+      multiSelectArrayToString = Number(string);
+    }
+    return multiSelectArrayToString
+  }
+
+  prepareDraft(formValues, draftName, draftType) {
+    return {
+      ...formValues,
+      draftName: draftName ? draftName : "",
+      place: formValues.place ? formValues.place : "",
+      male: formValues.male ? formValues.male : false,
+      female: formValues.female ? formValues.female : false,
+      excludeCustomersWithEvents: formValues.excludeCustomersWithEvents ? formValues.excludeCustomersWithEvents : false,
+      birthdayFrom: formValues.birthdayFrom ? formValues.birthdayFrom : "",
+      birthdayTo: formValues.birthdayTo ? formValues.birthdayTo : "",
+      profession: formValues.profession ? formValues.profession : "",
+      childs: formValues.childs ? formValues.childs : "",
+      start: formValues.start ? formValues.start : "",
+      end: formValues.end ? formValues.end : "",
+      subject: formValues.subject ? formValues.subject : "",
+      message: formValues.message ? formValues.message : "",
+      
+      category: this.multiSelectArrayToString(formValues.category),
+      creator_id: this.multiSelectArrayToString(formValues.creator_id),
+      recommendation: this.multiSelectArrayToString(formValues.recommendation),
+      relationship: this.multiSelectArrayToString(formValues.relationship),
+      social: this.multiSelectArrayToString(formValues.social),
+      doctor: this.multiSelectArrayToString(formValues.doctor),
+      store: this.multiSelectArrayToString(formValues.store),
+      superadmin: this.getSuperadmin(),
+      type: draftType
+    }
   }
 }

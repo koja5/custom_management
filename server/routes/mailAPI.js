@@ -10,6 +10,7 @@ var url = require("url");
 const logger = require("./logger");
 const winston = require("winston");
 
+
 var link = process.env.link_api;
 var linkClient = process.env.link_client;
 var loginLink = process.env.link_client_login;
@@ -44,6 +45,13 @@ const logToConsole = winston.createLogger({
   ],
 });
 
+// var connection = mysql.createPool({
+//   host: "116.203.85.82",
+//   user: "appprodu_appproduction",
+//   password: "CJr4eUqWg33tT97mxPFx",
+//   database: "appprodu_management",
+// });
+
 var connection = mysql.createPool({
   host: process.env.host,
   user: process.env.user,
@@ -61,7 +69,9 @@ var connection = mysql.createPool({
    },
 });*/
 
-var smtpTransport = nodemailer.createTransport({
+
+//local purpose
+ var smtpTransport = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
   secure: true,
@@ -73,8 +83,25 @@ var smtpTransport = nodemailer.createTransport({
   auth: {
     user: "clinicnode2022@gmail.com",  // real email address
     pass: "vfuvxgwdfrvestvd" // app password for clinicnode2022@gmail.com email
-  },
+  }
 });
+
+
+
+// production
+// var smtpTransport = nodemailer.createTransport({
+//   host: "116.203.85.82",
+//   port: 25,
+//   secure: false,
+//   tls: {
+//     rejectUnauthorized: false,
+//   },
+//   auth: {
+//     user: "support@app-production.eu",
+//     pass: "])3!~0YFU)S]",
+//   },
+// });
+
 
 //slanje maila pri registraciji
 
@@ -1235,31 +1262,30 @@ router.post("/sendLastMinuteOfferMails", function (req, res){
     });
 });
 router.post("/sendMassiveEMail", function (req, res) {
-  var sendMassiveTemplate = fs.readFileSync(
-    "./server/routes/templates/sendMassiveMails.hjs",
-    "utf-8"
-  );
-  var sendMassive = hogan.compile(sendMassiveTemplate);
-  var question = getSqlQuery(req.body);
-  var joinTable = getJoinTable(req.body);
+      var sendMassiveTemplate = fs.readFileSync(
+        "./server/routes/templates/sendMassiveMails.hjs",
+        "utf-8"
+      );
+      var sendMassive = hogan.compile(sendMassiveTemplate);
+      var question = getSqlQuery(req.body);
+      var joinTable = getJoinTable(req.body);
 
-  if (req.body.message != "") {
-    connection.getConnection(function (err, conn) {
+    if (req.body.message != "") {
+            connection.getConnection(function (err, conn) {
       conn.query(
         "select distinct c.email, c.shortname, mm.* from customers c join mail_massive_message mm on c.storeId = mm.superadmin join store s on c.storeId = s.superadmin " +
           joinTable +
-          " where (c.email != '' and c.email IS NOT NULL) and c.active = 1 and c.storeId = " +
+          " where c.sendMassiveEmail = 1 and (c.email != '' and c.email IS NOT NULL) and c.active = 1 and c.storeId = " +
           Number(req.body.superadmin) +
           " and " +
           question,
         function (err, rows) {
           conn.release();
           if (err) {
-            logger.log("error", err);
-            res.json(false);
+            logger.log("error HERE", err);
+            res.json(err);
           }
-          console.log(question);
-          console.log(rows);
+
           rows.forEach(function (to, i, array) {
             var mail = {};
             var signatureAvailable = false;
@@ -1330,11 +1356,16 @@ router.post("/sendMassiveEMail", function (req, res) {
                   signatureAvailable && mail.signatureEmail
                     ? mail.signatureEmail
                     : "",
+
+                unsubscribeMessage: req.body.language?.unsubscribeMessage,
+                unsubscribeHere: req.body.language?.unsubscribeHere,
+                unsubscribeLink: process.env.unsubscribe + '/' + to.email,
               }),
             };
             smtpTransport.sendMail(mailOptions, function (error, response) {
               if (error) {
-                logger.log("error", error);
+                //logger.log("error sendMail", error);
+              logToConsole.error(error);
               } else {
                 logger.log(
                   "info",
@@ -1578,6 +1609,124 @@ router.post("/infoAboutConfirmDenyAccessDevice", function (req, res) {
   });
 });
 
+router.sendVaucherToMail = (data) => {
+
+  connection.getConnection(function (err, conn) {
+    var confirmTemplate = fs.readFileSync(
+      "./server/routes/templates/sendVaucher.hjs",
+      "utf-8"
+    );
+    var infoForCreatedAccount = hogan.compile(confirmTemplate);
+
+    conn.query(
+      "SELECT * FROM users WHERE users.id = ?", data.user, function (err, row) {
+        let user = row[0];
+        conn.release();
+        var mail = {};
+        var signatureAvailable = false;
+        var mailOptions = {
+          from: '"ClinicNode" support@app-production.eu',
+          to: user.email,
+          subject: mail.mailSubject
+            ? mail.mailSubject
+            : data.language?.subjectCreatedVaucher,
+          html: infoForCreatedAccount.render({
+            firstName: data.user_name,
+            amount: data.amount,
+            date_redeemed: data.date_redeemed,
+            comment: data.comment,
+            customer: data.customer,
+            customer_name: data.customer_name,
+            customer_consumer: data.customer_consumer,
+            customer_consumer_name: data.customer_consumer_name,
+            superadmin: data.superadmin,
+
+            loginLink: loginLink,
+            initialGreeting: mail.mailInitialGreeting
+              ? mail.mailInitialGreeting
+              : data.language?.initialGreeting,
+            finalGreeting: mail.mailFinalGreeting
+              ? mail.mailFinalGreeting
+              : data.language?.finalGreeting,
+            signature: !signatureAvailable
+              ? mail.mailSignature
+                ? mail.mailSignature
+                : data.language?.signature
+              : "",
+            thanksForUsing: mail.mailThanksForUsing
+              ? mail.mailThanksForUsing
+              : data.language?.thanksForUsing,
+            websiteLink: data.language?.websiteLink,
+            ifYouHaveQuestion: mail.mailIfYouHaveQuestion
+              ? mail.mailIfYouHaveQuestion
+              : data.language?.ifYouHaveQuestion,
+            emailAddress: data.language?.emailAddress,
+            notReply: mail.mailNotReply
+              ? mail.mailNotReply
+              : data.language?.notReply,
+            copyRight: mail.mailCopyRight
+              ? mail.mailCopyRight
+              : data.language?.copyRight,
+              introductoryMessageForCreatedVaucher: mail.mailMessage
+              ? mail.mailMessage
+              : data.language?.introductoryMessageForCreatedVaucher,
+            linkForLogin: data.language?.linkForLogin,
+            emailForLogin: data.language?.emailForLogin,
+            vaucherAmount: data.language?.amount,
+            date_redeemedTitle: data.language?.date_redeemed,
+            commentTitle: data.language?.comment,
+            // customerTitle: data.language?.customer,
+            customerBuysTitle: data.language?.customerBuys,
+            // customer_consumerTitle: data.language?.customer_consumer,
+            customerConsumerTitle: data.language?.customerConsumer,
+            passwordForLogin: data.language?.passwordForLogin,
+            signatureAddress:
+              signatureAvailable &&
+              mail.signatureAddress &&
+              (mail.street || mail.zipcode || mail.store_place)
+                ? mail.signatureAddress +
+                  "\n" +
+                  mail.street +
+                  "\n" +
+                  mail.zipcode +
+                  " " +
+                  mail.store_place
+                : "",
+            signatureTelephone:
+              signatureAvailable && mail.signatureTelephone && mail.telephone
+                ? mail.signatureTelephone + " " + mail.telephone
+                : "",
+            signatureMobile:
+              signatureAvailable && mail.signatureMobile && mail.mobile
+                ? mail.signatureMobile + " " + mail.mobile
+                : "",
+            signatureEmail:
+              signatureAvailable && mail.signatureEmail && mail.email
+                ? mail.signatureEmail + " " + mail.email
+                : "",
+          }),
+        };
+
+        smtpTransport.sendMail(mailOptions, function (error, response) {
+          if (error) {
+            logger.log(
+              "error",
+              `Error to sent mail for VERIFICATION MAIL on EMAIL: ${user.email}. Error: ${error}`
+            );
+            res.end("error");
+          } else {
+            logger.log(
+              "info",
+              `Sent mail for VERIFICATION MAIL for USER: ${user.shortname} on EMAIL: ${user.email}`
+            );
+            res.end("sent");
+          }
+        });
+      }
+    );
+  });
+}
+
 router.sendMailAdminInfo = (data) => {
   connection.getConnection(function (err, conn) {
     var confirmTemplate = fs.readFileSync(
@@ -1664,7 +1813,6 @@ router.sendMailAdminInfo = (data) => {
           }),
         };
         smtpTransport.sendMail(mailOptions, function (error, response) {
-          console.log(response);
           if (error) {
             logger.log(
               "error",
