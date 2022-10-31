@@ -228,6 +228,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   isDateSet: boolean = false;
   invoiceID: any;
   changedInvoiceID: any;
+  noStoreSelectedToastrId: number;
 
   public generateEvents(): Object[] {
     const eventData: Object[] = [];
@@ -1478,14 +1479,14 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   }
 
   private displayInfoMessageEmptyCalendar() {
-    this.toastr.info(
+    this.noStoreSelectedToastrId = this.toastr.info(
       this.language.noStoreSelectedIndicatorText,
       this.language.noStoreSelectedIndicatorTitle,
       {
           timeOut: 0,
           extendedTimeOut: 0,
           closeButton: true
-      });
+      }).toastId;
   }
 
   public loadUser(): void {
@@ -2516,6 +2517,9 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
           )
         );
       }
+      if(this.noStoreSelectedToastrId) {
+        this.toastr.clear(this.noStoreSelectedToastrId);
+      }
       this.sharedCalendarResources = this.value;
       this.getTaskForSelectedUsers(this.value);
       this.getUserInCompany(event);
@@ -2523,6 +2527,9 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     } else {
       this.value = null;
       if (event !== undefined) {
+        if(this.noStoreSelectedToastrId) {
+          this.toastr.clear(this.noStoreSelectedToastrId);
+        }
         this.service
           .getTasksForStore(event, this.id, this.type)
           .subscribe((data) => {
