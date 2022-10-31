@@ -2314,6 +2314,9 @@
             "viewLastMinuteOffer":{
                 "type":"string"
             },
+            "lastMinuteOffer":{
+                "type":"string"
+            },
             "thisFieldIsRequired": {
                 "type": "string"
             },
@@ -3223,7 +3226,10 @@
                         },
                         {
                             "key":"viewLastMinuteOffer"
-                        }                 
+                        },
+                        {
+                            "key":"lastMinuteOffer"
+                        }               
                     ]
                 }
             ]

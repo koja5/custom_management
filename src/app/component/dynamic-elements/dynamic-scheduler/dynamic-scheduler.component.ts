@@ -547,6 +547,7 @@ export class DynamicSchedulerComponent implements OnInit {
         IsReadonly: endDate < new Date(),
         CalendarId: (a % 4) + 1,
       });
+
       id++;
     }
     if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) {
@@ -1357,6 +1358,7 @@ export class DynamicSchedulerComponent implements OnInit {
           args.cancel = true;
         } else {
           this.selected = null;
+          console.log(args.data);
           this.getSelectEventData(args.data);
         }
       }
@@ -1432,6 +1434,7 @@ export class DynamicSchedulerComponent implements OnInit {
       }
     }
 
+    console.log(typeof(args.data.StartTime));
     this.eventTime = {
       start: args.data.StartTime,
       end: new Date(
@@ -1723,7 +1726,8 @@ export class DynamicSchedulerComponent implements OnInit {
     private dateService: DateService,
     private invoiceService: InvoiceService,
     private router: Router,
-    private dynamicService: DynamicService
+    private dynamicService: DynamicService,
+    private datePipe: DatePipe
   ) {}
 
   ngOnInit() {
@@ -2603,17 +2607,17 @@ export class DynamicSchedulerComponent implements OnInit {
           { 
             user: patient.id,
             therapeuts: this.therapeuts.map(({id})=>id),
-            startDate: this.lastMinuteStartDate,
-            endDate: this.lastMinuteEndDate,
+            startDate: this.datePipe.transform(this.lastMinuteStartDate,"MM/dd/yyyy"),
+            endDate: this.datePipe.transform(this.lastMinuteEndDate,"MM/dd/yyyy"),
             days: this.lastMinuteWeekDays.map(({value})=>value),
-            time: this.lastMinuteHoursValue.map(({value})=>value),
+            time: this.lastMinuteHoursValue.map(({Value})=>Value),
             storeId: this.selectedStoreId
           } 
         });
   
         const firstPartUrl = url.toString().split("?")[0].substring(1);
         const encryptedUrl = this.encryptData(url.toString().split("?")[1]);
-  
+  	    console.log(url);
         let sendMail={
           link: firstPartUrl+"?"+encryptedUrl,
           userId: patient.id,
@@ -2630,7 +2634,10 @@ export class DynamicSchedulerComponent implements OnInit {
           notReply:this.language.notReply,
           copyRight:this.language.copyRight
         };
-        
+
+        console.log(sendMail.link);
+        console.log(encryptedUrl);
+
         this.dynamicService.callApiPost("/api/sendLastMinuteOfferMails", sendMail)
           .subscribe((data) => {
             console.log(data);
@@ -3593,6 +3600,7 @@ export class DynamicSchedulerComponent implements OnInit {
         }
         this.customer.addTherapy(this.complaintData).subscribe((data) => {
           if (data["success"]) {
+            console.log(data["id"]);
             formValue.therapy_id = data["id"];
             if (this.type === 0) {
               formValue["storeId"] = this.selectedStoreId;
