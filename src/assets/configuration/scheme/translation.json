@@ -344,6 +344,12 @@
             "selectStoreIndicatorText": {
                 "type": "string"
             },
+            "noStoreSelectedIndicatorTitle": {
+                "type": "string"
+            },
+            "noStoreSelectedIndicatorText": {
+                "type": "string"
+            },
             "color": {
                 "type": "string"
             },
