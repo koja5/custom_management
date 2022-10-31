@@ -3527,17 +3527,6 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     this.dateHeaderCounter = 0;
   }
 
-  addOptionalMessage() {
-    if (!this.selectedStoreId) {
-      const calendarDiv = document.getElementsByTagName("ejs-schedule")[0].getElementsByClassName("e-content-wrap")[0];
-      var el = document.createElement("div");
-      el.appendChild(document.createTextNode("Test txt"));
-      if(calendarDiv) {
-        calendarDiv.insertBefore(el, calendarDiv.firstChild);
-      }
-    }
-  }
-
   onValueChangeCS(event) {
     this.complaintData.cs_title = this.getTitleForCS(event);
   }
