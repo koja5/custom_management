@@ -344,12 +344,6 @@
             "selectStoreIndicatorText": {
                 "type": "string"
             },
-            "noStoreSelectedIndicatorTitle": {
-                "type": "string"
-            },
-            "noStoreSelectedIndicatorText": {
-                "type": "string"
-            },
             "color": {
                 "type": "string"
             },
@@ -477,6 +471,12 @@
                 "type": "string"
             },
             "confirmEventMove": {
+                "type": "string"
+            },
+            "noStoreSelectedIndicatorTitle": {
+                "type": "string"
+            },
+            "noStoreSelectedIndicatorText": {
                 "type": "string"
             },
             "refreshEventToolbar": {
@@ -3153,8 +3153,12 @@
                         {
                             "key": "confirmEventMove"
                         },
-                        {},
-                        {}
+                        {
+                            "key": "noStoreSelectedIndicatorTitle"
+                        },
+                        {
+                            "key": "noStoreSelectedIndicatorText"
+                        }
                     ]
                 }
             ]
