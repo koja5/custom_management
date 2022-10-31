@@ -1654,8 +1654,10 @@ export class DynamicSchedulerComponent implements OnInit {
 
   // load holidays defined by clinic and holidays defined by selected clinic template (if there is some)
   public loadHolidays() {
+    const superAdminId = this.helpService.getSuperadmin();
+    
     this.holidayService
-      .getHolidaysForClinic(this.selectedStoreId)
+      .getHolidaysForClinic(superAdminId)
       .then((result) => {
         console.log(result);
         if (result && result.length > 0) {
@@ -1681,7 +1683,7 @@ export class DynamicSchedulerComponent implements OnInit {
     // load holidays defined by clinic and holidays defined by selected clinic template (if there is some)
 
     this.holidayService
-      .getStoreTemplateConnection(this.selectedStoreId)
+      .getStoreTemplateConnection(superAdminId)
       .then((ids) => {
         const templateIds = ids.map((elem) => elem.templateId);
 
@@ -3634,14 +3636,27 @@ export class DynamicSchedulerComponent implements OnInit {
         args.requestType === "viewNavigate"
       ) {
         if (args.requestType === "eventCreate") {
-          this.createNewTask();
+          let evts = this.scheduleObj.getEvents(this.eventTime.start, this.eventTime.end)
+          if (evts.length > 0 && this.type === this.userType.patient) {
+            this.toastr.error(
+              this.language.eventAlreadyExistsText,
+              this.language.eventAlreadyExistsTitle,
+              { timeOut: 7000, positionClass: "toast-bottom-right" }
+            );
+          } else {
+            this.createNewTask();
+          }
 
           args.cancel = true;
         } else if (args.requestType === "eventChange") {
-          if (
-            this.currentEventAction !== TypeOfEventAction.Drag &&
-            this.type !== this.userType.patient
-          ) {
+          let evts = this.scheduleObj.getEvents(this.eventTime.start, this.eventTime.end)
+          if (evts.length > 1 && this.type === this.userType.patient) {
+            this.toastr.error(
+              this.language.eventAlreadyExistsText,
+              this.language.eventAlreadyExistsTitle,
+              { timeOut: 7000, positionClass: "toast-bottom-right" }
+            );
+          } else if (this.currentEventAction !== TypeOfEventAction.Drag && this.type !== this.userType.patient) {
             this.updateTask(args);
           }
           args.cancel = true;

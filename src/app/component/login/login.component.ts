@@ -417,6 +417,12 @@ export class LoginComponent implements OnInit {
         JSON.stringify(data.storeSettings)
       );
     }
+    if (data.language) {
+      // actually this will check user settings for account language, not the country code
+      this.getTranslationByCountryCode(data.language);
+    } else {
+      this.checkDemoAccountLanguage();
+    }
 
     /*if (
       data.language !== this.helpService.getLocalStorage("countryCode") ||
@@ -427,7 +433,6 @@ export class LoginComponent implements OnInit {
       this.router.navigate(["/dashboard/home/task"]);
     }*/
 
-    this.checkDemoAccountLanguage();
   }
 
   checkDemoAccountLanguage() {

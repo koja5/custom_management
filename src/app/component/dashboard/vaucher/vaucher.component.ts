@@ -270,6 +270,7 @@ export class VaucherComponent implements OnInit {
       dataSms[0][
         "message"
       ] = `${this.language.introductoryMessageForCreatedVaucher} \n \n${this.language.amount}: ${vaucherData.amount} \n \n${this.language.date_redeemed}: ${vaucherData.date_redeemed} \n \n${this.language.comment}: ${vaucherData.comment} \n \n${this.language.customerBuys}: ${vaucherData.customer_name} \n \n${this.language.customerConsumer}: ${vaucherData.customer_consumer_name}`;
+
       this.sendSMS.sendVaucherSMS(dataSms[0]).subscribe();
     });
   }
