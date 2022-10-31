@@ -182,6 +182,12 @@
             "date_redeemed": {
                 "type": "string"
             },
+            "vaucherPurchasedBy": {
+                "type": "string"
+            },
+            "vaucherRedeemedBy": {
+                "type": "string"
+            },
             "customerBuys": {
                 "type": "string"
             },
@@ -2605,6 +2611,12 @@
                         },
                         {
                             "key": "date_redeemed"
+                        },
+                        {
+                            "key": "vaucherPurchasedBy"
+                        },
+                        {
+                            "key": "vaucherRedeemedBy"
                         }
                     ]
                 },

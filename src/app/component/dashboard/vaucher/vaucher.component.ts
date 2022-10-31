@@ -26,6 +26,11 @@ import { Router } from "@angular/router";
 import { PackLanguageService } from "src/app/service/pack-language.service";
 import { SendSmsService } from "src/app/service/send-sms.service";
 import { checkIfInputValid } from "../../../shared/utils";
+import { PDFService } from "./../../../service/pdf.service";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import pdfMake from "pdfmake/build/pdfmake";
+import { StoreService } from "src/app/service/store.service";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: "app-vaucher",
@@ -95,6 +100,7 @@ export class VaucherComponent implements OnInit {
   savePage: any = {};
   currentUrl: string;
   checkIfInputValid = checkIfInputValid;
+  selectedVaucher: any;
 
   public showColumnPicker = false;
   public columns: string[] = [
@@ -117,7 +123,8 @@ export class VaucherComponent implements OnInit {
     private helpService: HelpService,
     private router: Router,
     private packLanguage: PackLanguageService,
-    private sendSMS: SendSmsService
+    private sendSMS: SendSmsService,
+    private pdfService: PDFService,
   ) {
     this.allData = this.allData.bind(this);
   }
@@ -263,7 +270,6 @@ export class VaucherComponent implements OnInit {
       dataSms[0][
         "message"
       ] = `${this.language.introductoryMessageForCreatedVaucher} \n \n${this.language.amount}: ${vaucherData.amount} \n \n${this.language.date_redeemed}: ${vaucherData.date_redeemed} \n \n${this.language.comment}: ${vaucherData.comment} \n \n${this.language.customerBuys}: ${vaucherData.customer_name} \n \n${this.language.customerConsumer}: ${vaucherData.customer_consumer_name}`;
-
       this.sendSMS.sendVaucherSMS(dataSms[0]).subscribe();
     });
   }
@@ -346,6 +352,7 @@ export class VaucherComponent implements OnInit {
     this.convertValue(data);
     this.operationMode = "edit";
     this.vaucher.open();
+    this.selectedVaucher = data;
   }
 
   editVaucher(store) {
@@ -414,6 +421,23 @@ export class VaucherComponent implements OnInit {
       }
     });
     this.user = this.getSelectedUser(data.user);
+  }
+
+  downloadPDF(): void {
+    const docDefinition = this.setupPDF();
+
+    pdfMake.createPdf(docDefinition).download();
+  }
+
+  printPDF(): void {
+    const docDefinition = this.setupPDF();
+
+    pdfMake.createPdf(docDefinition).print();
+  }
+
+  setupPDF() {
+    let docDefinition = this.pdfService.createVaucherPDF(this.language, this.selectedVaucher);
+    return docDefinition;
   }
 
   getSelectedUser(id) {
