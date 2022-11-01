@@ -15,7 +15,7 @@
   right: 0;
   left: 0;
   z-index: 1002;
-  background-color: #fff;
+  background-color: var(--navbar-background-color);
   border-bottom: 1px solid #e9e9ef;
   height: 60px;
 }
@@ -118,6 +118,10 @@ body[data-layout="horizontal"][data-layout-size="boxed"] .footer {
   display: none;
 }
 
+.dropdown-toggle > i.fa-angle-down {
+  color: var(--navbar-font-color) !important;
+}
+
 @media (max-width: 600px) {
   .navbar-header .dropdown {
     position: static;
@@ -174,7 +178,7 @@ body[data-layout="horizontal"][data-layout-size="boxed"] .navbar-header {
   height: 60px;
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
-  color: #555b6d;
+  color: var(--navbar-font-color);
   border: 0;
   border-radius: 0;
 }
@@ -425,8 +429,19 @@ body[data-layout="horizontal"][data-topbar="colored"]
   pointer-events: none;
   cursor: default;
   font-size: 11px;
-  color: #8f96ad;
+  color: var(--sidebar-group-color);
   font-weight: bold;
+}
+
+ul > li > a > i.fa, a > span.navigation-link, a.has-arrow::after {
+  color: var(--sidebar-font-color);
+}
+
+.metismenu li:hover {
+  a > i.fa, a > span.navigation-link, a.has-arrow::after {
+    transition: all 0.4s;
+    color: var(--sidebar-selected-color) !important;
+  }
 }
 
 .mm-active > a {
@@ -978,7 +993,7 @@ body[data-layout-size="boxed"][data-sidebar-size="md"] .footer {
 
 .username {
   font-size: 13px;
-  color: #000;
+  color: var(--navbar-font-color);
 }
 
 .navigation-link {
@@ -1113,12 +1128,16 @@ li.active a i {
 
 .store-name {
   padding-top: 20px;
+  color: var(--navbar-font-color);
 }
 
 .menu-help{
   height: 58px !important;
   padding-top: 19px !important;
-  color: #000 !important;
+  color: var(--navbar-font-color);
+  i.fa-question-circle {
+    color: var(--navbar-font-color) !important;
+  }
 }
 
 .header-item-node {
