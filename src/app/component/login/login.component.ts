@@ -67,20 +67,19 @@ export class LoginComponent implements OnInit {
     this.initialization();
     // ovde treba da se napravi da se ocita lokacija korisnika i na osnovu toga povuce odgovarajuci jezik
     // kada se korisnik loguje, povlaci se ona konfiguracija koju je on sacuvao...
-    if (localStorage.getItem("language") !== null) {
-      this.language = JSON.parse(localStorage.getItem("language"));
-    } else {
-      /*this.dashboardService.getTranslation("english").subscribe(data => {
-        console.log(data);
-        this.helpService.setLocalStorage("language", JSON.stringify(data));
-        this.language = data["login"];
-      });*/
-    }
   }
 
   initialization() {
-    if (this.helpService.getLocalStorage("countryCode")) {
-      this.language = JSON.parse(this.helpService.getLocalStorage("language"));
+    if (
+      this.helpService.getSelectionLanguageCode() &&
+      this.helpService.getLanguage()
+    ) {
+      this.language = this.helpService.getLanguage();
+    } else if (
+      this.helpService.getLocalStorage("countryCode") &&
+      this.helpService.getLanguage()
+    ) {
+      this.language = this.helpService.getLanguage();
     } else {
       this.checkCountryLocation();
     }
@@ -132,6 +131,10 @@ export class LoginComponent implements OnInit {
             "language",
             JSON.stringify(this.language)
           );
+          this.helpService.setLocalStorage(
+            "accountLanguage",
+            language["countryCode"]
+          );
           this.router.navigate(["/dashboard/home/task"]);
         } else {
           this.service.getDefaultLanguage().subscribe(
@@ -142,6 +145,7 @@ export class LoginComponent implements OnInit {
                   "language",
                   JSON.stringify(this.language)
                 );
+                this.helpService.setLocalStorage("accountLanguage", "US");
                 this.router.navigate(["/dashboard/home/task"]);
               } else {
                 this.router.navigate(["/maintence"]);
@@ -168,6 +172,10 @@ export class LoginComponent implements OnInit {
             "language",
             JSON.stringify(this.language)
           );
+          this.helpService.setLocalStorage(
+            "accountLanguage",
+            language["countryCode"]
+          );
           this.router.navigate(["/dashboard/home/task"]);
         } else {
           this.service.getDefaultLanguage().subscribe(
@@ -178,6 +186,7 @@ export class LoginComponent implements OnInit {
                   "language",
                   JSON.stringify(this.language)
                 );
+                this.helpService.setLocalStorage("accountLanguage", "US");
                 this.router.navigate(["/dashboard/home/task"]);
               } else {
                 this.router.navigate(["/maintence"]);
@@ -203,6 +212,10 @@ export class LoginComponent implements OnInit {
         this.helpService.setLocalStorage(
           "language",
           JSON.stringify(this.language)
+        );
+        this.helpService.setLocalStorage(
+          "accountLanguage",
+          language["countryCode"]
         );
         this.helpService.setLocalStorage("countryCode", language["demoCode"]);
         this.helpService.setLocalStorage(
@@ -404,6 +417,12 @@ export class LoginComponent implements OnInit {
         JSON.stringify(data.storeSettings)
       );
     }
+    if (data.language) {
+      // actually this will check user settings for account language, not the country code
+      this.getTranslationByCountryCode(data.language);
+    } else {
+      this.checkDemoAccountLanguage();
+    }
 
     /*if (
       data.language !== this.helpService.getLocalStorage("countryCode") ||
@@ -414,7 +433,6 @@ export class LoginComponent implements OnInit {
       this.router.navigate(["/dashboard/home/task"]);
     }*/
 
-    this.checkDemoAccountLanguage();
   }
 
   checkDemoAccountLanguage() {
@@ -476,5 +494,9 @@ export class LoginComponent implements OnInit {
       this.loginForm = "active";
       this.loginInfo = this.language.successUserAccessDeviceName;
     });
+  }
+
+  backToLanding() {
+    this.router.navigate(["./"]);
   }
 }

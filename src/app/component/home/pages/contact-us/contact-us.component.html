@@ -1,0 +1,207 @@
+<div *ngIf="language">
+  <app-home-navigation-menu
+    [language]="language"
+    (sendEventForChangeLanguage)="sendEventForChangeLanguage($event)"
+  ></app-home-navigation-menu>
+  <app-header-section
+    [title]="language.contactSectionHeaderTitle"
+    [text]="language.contactSectionHeaderText"
+  ></app-header-section>
+  <!--contact us promo section start-->
+  <section class="contact-promo ptb-120">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-4 col-md-6 mt-4 mt-lg-0">
+          <div
+            class="contact-us-promo p-5 bg-white rounded-custom custom-shadow text-center d-flex flex-column h-100"
+          >
+            <span class="fa fa-comment fa-3x text-primary"></span>
+            <div class="contact-promo-info mb-4">
+              <h5>{{ language.contactSectionItem1Title }}</h5>
+              <p>
+                {{ language.contactSectionItem1Text }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mt-4 mt-lg-0">
+          <div
+            class="contact-us-promo p-5 bg-white rounded-custom custom-shadow text-center d-flex flex-column h-100"
+          >
+            <span class="fa fa-envelope fa-3x text-primary"></span>
+            <div class="contact-promo-info mb-4">
+              <h5>{{ language.contactSectionItem2Title }}</h5>
+              <p>
+                {{ language.contactSectionItem2TextFirst }}
+                <strong>{{ language.contactSectionItem2TextEmail }}</strong>
+                {{ language.contactSectionItem2TextSecond }}
+              </p>
+            </div>
+            <a
+              href="mailto:kidsnode@yandex.com"
+              class="btn btn-primary mt-auto"
+              >{{ language.contactSectionItem2Button }}</a
+            >
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mt-4 mt-lg-0">
+          <div
+            class="contact-us-promo p-5 bg-white rounded-custom custom-shadow text-center d-flex flex-column h-100"
+          >
+            <span class="fa fa-phone fa-3x text-primary"></span>
+            <div class="contact-promo-info mb-6">
+              <h5>{{ language.contactSectionItem3Title }}</h5>
+              <p>{{ language.contactSectionItem3Text }}</p>
+            </div>
+            <a href="tel:0694505544" class="btn btn-link phone-number">{{
+              language.contactSectionItem3Phone
+            }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--contact us promo section end-->
+
+  <!--contact us form start-->
+  <section
+    class="contact-us-form pt-60 pb-120"
+    style="
+      background: url('./assets/home/shape/contact-us-bg.svg') no-repeat center
+        bottom;
+    "
+  >
+    <div class="container">
+      <div class="row justify-content-lg-between align-items-center">
+        <div class="col-lg-6 col-md-8">
+          <div class="section-heading">
+            <h1>{{ language.contactSectionFormTitle }}</h1>
+            <p>
+              {{ language.contactSectionFormText }}
+            </p>
+          </div>
+          <form action="#" class="register-form">
+            <div class="row">
+              <div class="col-sm-6">
+                <label for="firstName" class="mb-1"
+                  >{{ language.contactSectionFormFirstname }}
+                  <span class="text-danger">*</span></label
+                >
+                <div class="input-group mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="firstname"
+                    [(ngModel)]="form.firstname"
+                    placeholder="{{
+                      language.contactSectionFormFirstnamePlaceholder
+                    }}"
+                  />
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <label for="lastName" class="mb-1">{{
+                  language.contactSectionFormLastname
+                }}</label>
+                <div class="input-group mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="lastname"
+                    [(ngModel)]="form.lastname"
+                    placeholder="{{
+                      language.contactSectionFormLastnamePlaceholder
+                    }}"
+                  />
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <label for="phone" class="mb-1"
+                  >{{ language.contactSectionFormTelephone }}
+                  <span class="text-danger">*</span></label
+                >
+                <div class="input-group mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="phone"
+                    [(ngModel)]="form.phone"
+                    placeholder="{{
+                      language.contactSectionFormTelephonePlaceholder
+                    }}"
+                  />
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <label for="email" class="mb-1"
+                  >{{ language.contactSectionFormEmail }}
+                  <span class="text-danger">*</span></label
+                >
+                <div class="input-group mb-3">
+                  <input
+                    type="email"
+                    class="form-control"
+                    name="email"
+                    [(ngModel)]="form.email"
+                    placeholder="{{
+                      language.contactSectionFormEmailPlaceholder
+                    }}"
+                  />
+                </div>
+              </div>
+              <div class="col-xs-12">
+                <label for="yourMessage" class="mb-1"
+                  >{{ language.contactSectionFormMessage }}
+                  <span class="text-danger">*</span></label
+                >
+                <div class="input-group mb-3">
+                  <textarea
+                    class="form-control"
+                    name="message"
+                    [(ngModel)]="form.message"
+                    placeholder="{{
+                      language.contactSectionFormMessagePlaceholder
+                    }}"
+                    style="height: 120px"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="message-status">
+              <p class="text-danger" *ngIf="status === 0">
+                {{ language.needToInputRequiredFields }}
+              </p>
+              <p class="text-success" *ngIf="status === 1">
+                {{ language.successfullySendMessageRequest }}
+              </p>
+            </div>
+            <button (click)="submitForm()" class="btn btn-primary mt-4">
+              {{ language.contactSectionFormSendButton }}
+            </button>
+          </form>
+        </div>
+        <div class="col-lg-5 col-md-10">
+          <div class="contact-us-img">
+            <img
+              src="./assets/home/contact-us-img-2.svg"
+              alt="contact us"
+              class="img-fluid"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--contact us form end-->
+
+  <!-- subscribe scrtion start -->
+  <app-subscribe-section [language]="language"></app-subscribe-section>
+  <!-- subscribe scrtion end -->
+
+  <!--footer section start-->
+  <footer class="footer-section">
+    <app-footer-section></app-footer-section>
+    <app-home-footer [language]="language"></app-home-footer>
+  </footer>
+  <!--footer section end-->
+</div>

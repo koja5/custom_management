@@ -8,11 +8,13 @@ import {
 import { EventCategoryService } from "../../../../service/event-category.service";
 import { EventCategoryModel } from "src/app/models/event-category-model";
 import { ServiceHelperService } from "src/app/service/service-helper.service";
-import { ToastrService } from "ngx-toastr";
 import { GradientSettings } from "@progress/kendo-angular-inputs";
 import { HelpService } from "src/app/service/help.service";
-import { PageChangeEvent } from "@progress/kendo-angular-grid";
+import { GridComponent, PageChangeEvent } from "@progress/kendo-angular-grid";
 import { Modal } from "ngx-modal";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { Router } from "@angular/router";
+import { checkIfInputValid } from "../../../../shared/utils";
 
 @Component({
   selector: "app-event-category",
@@ -21,6 +23,11 @@ import { Modal } from "ngx-modal";
 })
 export class EventCategoryComponent implements OnInit {
   @ViewChild("eventCategoryModal") eventCategoryModal: Modal;
+  @ViewChild('grid') grid;
+
+  public allPages: boolean;
+  private _allData: ExcelExportData;
+
   public height: any;
   public state: State = {
     skip: 0,
@@ -53,20 +60,50 @@ export class EventCategoryComponent implements OnInit {
   public importExcel = false;
   public theme: any;
   public fileValue: any;
+  checkIfInputValid = checkIfInputValid;
 
   constructor(
     private service: EventCategoryService,
     private serviceHelper: ServiceHelperService,
-    private toastr: ToastrService,
-    private helpService: HelpService
-  ) { }
+    private helpService: HelpService,
+    private router: Router
+  ) {
+    this.allData = this.allData.bind(this);
+  }
+  showDialog: boolean = false;
+  isFormDirty: boolean = false;
+  currentUrl: string;
+  savePage = {};
+
+  public showColumnPicker = false;
+  public columns: string[] = ["Category", "Sequence", "Color", "Allow sending information", "Show at Invoice", "Comment"];
+  public hiddenColumns: string[] = [];
 
   ngOnInit() {
+    this.eventCategoryModal.closeOnEscape = false;
+    this.eventCategoryModal.closeOnOutsideClick = false;
+    this.eventCategoryModal.hideCloseButton = true;
+
     this.height = this.helpService.getHeightForGrid();
 
     this.language = JSON.parse(localStorage.getItem("language"));
 
     this.getEventCategory();
+
+    this.currentUrl = this.router.url;
+
+    this.setPagination();
+  }
+
+  setPagination() {
+    this.savePage = this.helpService.getGridPageSize();
+    if (
+      (this.savePage && this.savePage[this.currentUrl]) ||
+      this.savePage[this.currentUrl + "Take"]
+    ) {
+      this.state.skip = this.savePage[this.currentUrl];
+      this.state.take = this.savePage[this.currentUrl + "Take"];
+    }
   }
 
   @HostListener("window:resize", ["$event"])
@@ -79,7 +116,16 @@ export class EventCategoryComponent implements OnInit {
       .getEventCategory(localStorage.getItem("superadmin"))
       .subscribe((data: []) => {
         this.currentLoadData = data;
+        if(this.currentLoadData.length < this.state.skip) {
+          this.state.skip = 0;
+        }
+        this._allData = <ExcelExportData>{
+          data: process(this.currentLoadData, this.state).data,
+        }
         this.gridView = process(data, this.state);
+        this.gridData = {
+          data: data
+        }
         this.loading = false;
       });
   }
@@ -122,11 +168,38 @@ export class EventCategoryComponent implements OnInit {
     this.state.take = event.take;
     this.pageSize = event.take;
     this.gridView = process(this.currentLoadData, this.state);
+
+    this.savePage[this.currentUrl] = event.skip;
+    this.savePage[this.currentUrl + 'Take'] = event.take;
+    this.helpService.setGridPageSize(this.savePage);
   }
 
   public sortChange(sort: SortDescriptor[]): void {
     this.state.sort = sort;
     this.gridView = process(this.currentLoadData, this.state);
+  }
+
+  receiveConfirm(event: boolean): void {
+    if(event) {
+      this.eventCategoryModal.close();
+      this.isFormDirty = false;
+    }
+      this.showDialog = false;
+  }
+
+  confirmClose(): void {
+    this.eventCategoryModal.modalRoot.nativeElement.focus();
+    if(this.isFormDirty) {
+      this.showDialog = true;
+    }else {
+      this.eventCategoryModal.close()
+      this.showDialog = false;
+      this.isFormDirty = false
+    }
+  }
+
+  isDirty(): void {
+    this.isFormDirty = true;
   }
 
   addNewModal() {
@@ -230,6 +303,45 @@ export class EventCategoryComponent implements OnInit {
     fileReader.readAsArrayBuffer(args.target.files[0]);*/
   }
 
+  exportPDF(value: boolean): void {
+    this.allPages = value;
+
+    setTimeout(() => {
+      this.grid.saveAsPDF();
+    }, 0);
+  }
+
+  exportToExcel(grid: GridComponent, allPages: boolean) {
+    this.setDataForExcelExport(allPages);
+
+    setTimeout(() => {
+      grid.saveAsExcel();
+    }, 0);
+  }
+
+  public setDataForExcelExport(allPages: boolean): void {
+    console.log('allPages ', allPages);
+
+    if (allPages) {
+      var myState: State = {
+        skip: 0,
+        take: this.gridData.total,
+      };
+
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, myState).data,
+      }
+    } else {
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, this.state).data,
+      }
+    }
+  }
+
+  public allData(): ExcelExportData {
+    return this._allData;
+  }
+
   xlsxToJson(data) {
     const rowCount = data.length;
     const objectArray = [];
@@ -252,5 +364,13 @@ export class EventCategoryComponent implements OnInit {
       data: dataArray,
     };
     return allData;
+  }
+
+  public isHidden(columnName: string): boolean {
+    return this.hiddenColumns.indexOf(columnName) > -1;
+  }
+
+  public onOutputHiddenColumns(columns) {
+    this.hiddenColumns = columns;
   }
 }

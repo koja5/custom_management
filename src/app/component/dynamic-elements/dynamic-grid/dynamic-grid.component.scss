@@ -1,3 +1,18 @@
 #dialog {
     visibility: hidden;
 }
+.detailsButton-button {
+    background-color: var(--theme-color);
+    color: white;
+    border: none;
+    border-radius: 2px;
+    padding: 4px 8px 4px 8px;
+}
+
+.e-dlg-modal {
+    width: 80% !important;
+
+    @media screen and (max-width: 1024px) {
+        width: 60% !important;
+      }    
+}

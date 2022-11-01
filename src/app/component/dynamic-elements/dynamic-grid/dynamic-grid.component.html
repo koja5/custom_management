@@ -1,4 +1,13 @@
-<div #container>
+<div #container class="position-relative">
+
+  <div class="position-absolute columns-dropdown">
+    <app-column-chooser 
+        [columns]="columns" 
+        [isKendoGrid]="false" 
+        (outputHiddenColumns)="onOutputHiddenColumns($event)" 
+        [type]="'Reservations'"></app-column-chooser>
+  </div>
+
   <ejs-grid
     #grid
     *ngIf="config"
@@ -50,7 +59,12 @@
         [format]="item.format"
         [validationRules]="item.validation"
       >
-        <ng-template *ngIf="item?.type == 'documentPreview'" class="item?.position" #template let-data>
+        <ng-template
+          *ngIf="item?.type == 'documentPreview'"
+          class="item?.position"
+          #template
+          let-data
+        >
           <div>
             <button
               kendoButton
@@ -62,7 +76,12 @@
             </button>
           </div>
         </ng-template>
-        <ng-template *ngIf="item?.type == 'button'" class="item?.position" #template let-data>
+        <ng-template
+          *ngIf="item?.type == 'button'"
+          class="item?.position"
+          #template
+          let-data
+        >
           <button
             *ngIf="item?.mode === 'action'"
             kendoButton
@@ -71,6 +90,20 @@
           >
             <span *ngIf="item.classIcon" class="{{ item.classIcon }}"></span>
             {{ language[item?.label] ? language[item?.label] : item?.label }}
+          </button>
+        </ng-template>
+        <ng-template
+          *ngIf="item?.type == 'detailsButton'"
+          class="item?.position"
+          #template
+          let-data
+        >
+          <button
+            class="detailsButton-button"
+            (click)="openClinicDetail(data.id)"
+          >
+            <!-- {{ language.details }} -->
+            Details
           </button>
         </ng-template>
       </e-column>
@@ -115,9 +148,18 @@
           <app-dynamic-forms
             [config]="config.configField"
             (submit)="submitEmitter($event)"
+            (isFormDirtyChange)="setDirtyForm($event)"
             #form="dynamicForm"
           >
           </app-dynamic-forms>
+
+          <app-dynamic-confirm-dialog
+            [showDialog]="showDialog"
+            [title]="language?.changesWontBeSavedTitle"
+            [question]="language?.changesWontBeSaved"
+            (sendEmitter)="receiveConfirm($event)"
+          >
+          </app-dynamic-confirm-dialog>
         </div>
       </div>
     </ng-template>

@@ -1,0 +1,174 @@
+<app-home-navigation-menu
+  [language]="language"
+  (sendEventForChangeLanguage)="sendEventForChangeLanguage($event)"
+></app-home-navigation-menu>
+
+<!--style guide block start-->
+<div class="style-guide" *ngIf="language">
+  <!--feature section three start-->
+  <section class="feature-section soft-bg ptb-120">
+    <div class="container">
+      <div class="row align-items-center justify-content-center">
+        <div class="col-lg-6 col-md-12">
+          <div class="feature-subtitle">
+            <h5 class="h6 text-primary">
+              {{ language.featureSectionFirstUpText }}
+            </h5>
+            <h1>
+              {{ language.featureSectionFirstTitle }}
+            </h1>
+            <p>
+              {{ language.featureSectionFirstText }}
+            </p>
+          </div>
+          <div class="row mt-5">
+            <div class="col-12 col-md-6">
+              <h6 class="fw-bold display-5 text-primary mb-4">
+                {{ language.featureSectionFirstLeftProcent }}
+              </h6>
+              <h3 class="h5">{{ language.featureSectionFirstLeftTitle }}</h3>
+              <p>
+                {{ language.featureSectionFirstLeftText }}
+              </p>
+            </div>
+            <div class="col-12 col-md-6">
+              <h6 class="fw-bold display-5 text-primary mb-4">
+                {{ language.featureSectionFirstRightProcent }}
+              </h6>
+              <h3 class="h5">{{ language.featureSectionFirstRightTitle }}</h3>
+              <p>
+                {{ language.featureSectionFirstRightText }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-10">
+          <div class="feature-img mt-5 mt-lg-0">
+            <img
+              src="./assets/home/8.png"
+              class="img-fluid rounded-custom shadow"
+              alt="feature image"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--feature section three end-->
+</div>
+<!--style guide block end-->
+
+<!--style guide block start-->
+<div class="style-guide">
+  <!--feature section start-->
+  <section class="feature-section ptb-120">
+    <div class="container">
+      <div
+        class="feature-color bg-primary-soft px-5 rounded-custom position-relative"
+      >
+        <div class="row align-items-center justify-content-between">
+          <div class="col-lg-5 col-md-12">
+            <div
+              class="feature-content-wrap pe-lg-4 ptb-60 p-lg-0 mb-5 mb-lg-0"
+            >
+              <h5 class="text-primary h6 fw-bold">
+                {{ language.featureSectionSecondUpText }}
+              </h5>
+              <h1>{{ language.featureSectionSecondTitle }}</h1>
+              <p>
+                {{ language.featureSectionSecondText }}
+              </p>
+
+              <!-- <a href="#" class="btn btn-primary mt-4">Learn More</a> -->
+            </div>
+          </div>
+          <div class="col-lg-7 col-md-12">
+            <div
+              class="row align-items-center justify-content-center position-relative mt--100 z-2"
+            >
+              <div class="col-md-6">
+                <div
+                  class="cta-card rounded-custom text-center shadow p-5 bg-white my-4"
+                >
+                  <div class="feature-icon d-inline-block bg-dark rounded mb-4">
+                    <i class="fa fa-laptop text-white fa-2x"></i>
+                  </div>
+                  <h3 class="h5 fw-bold">
+                    {{ language.featureSectionSecondItem1Title }}
+                  </h3>
+                  <p class="mb-0">
+                    {{ language.featureSectionSecondItem1Text }}
+                  </p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div
+                  class="cta-card rounded-custom text-center shadow p-5 bg-white my-4"
+                >
+                  <div
+                    class="feature-icon d-inline-block bg-danger rounded mb-4"
+                  >
+                    <i class="fa fa-barcode text-white fa-2x"></i>
+                  </div>
+                  <h3 class="h5 fw-bold">
+                    {{ language.featureSectionSecondItem2Title }}
+                  </h3>
+                  <p class="mb-0">
+                    {{ language.featureSectionSecondItem2TextFirstPart }}
+                    <a routerLink="/request-demo">{{
+                      language.featureSectionSecondItem2TextForm
+                    }}</a>
+                    {{ language.featureSectionSecondItem2TextSecondPart }}
+                  </p>
+                </div>
+                <div
+                  class="cta-card rounded-custom text-center shadow p-5 bg-white my-4"
+                >
+                  <div
+                    class="feature-icon d-inline-block bg-success rounded mb-4"
+                  >
+                    <i class="fa fa-lock text-white fa-2x"></i>
+                  </div>
+                  <h3 class="h5 fw-bold">
+                    {{ language.featureSectionSecondItem3Title }}
+                  </h3>
+                  <p class="mb-0">
+                    {{ language.featureSectionSecondItem3Text }}
+                  </p>
+                </div>
+              </div>
+              <!--animated shape start-->
+              <ul
+                class="position-absolute animate-element parallax-element z--1"
+              >
+                <li class="layer" data-depth="0.06">
+                  <img
+                    src="./assets/home/shape/shape-bg-3.svg"
+                    alt="shape"
+                    class="img-fluid"
+                  />
+                </li>
+              </ul>
+              <!--animated shape end-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--feature section end-->
+</div>
+<!--style guide block end-->
+
+<app-feature-section [language]="language"></app-feature-section>
+
+<!-- subscribe scrtion start -->
+<app-subscribe-section [language]="language"></app-subscribe-section>
+<!-- subscribe scrtion end -->
+
+<!--footer section start-->
+<footer class="footer-section">
+  <app-footer-section></app-footer-section>
+  <app-home-footer [language]="language"></app-home-footer>
+</footer>
+<!--footer section end-->

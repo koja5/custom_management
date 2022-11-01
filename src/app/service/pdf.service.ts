@@ -1,13 +1,20 @@
 import { Injectable } from '@angular/core';
+import { DateService } from './date.service';
 import { MessageService } from './message.service';
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import pdfMake from "pdfmake/build/pdfmake";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Injectable({
   providedIn: 'root'
 })
 export class PDFService {
+  private dotSign = " • ";
+
   public language: any;
 
-  constructor(private messageService: MessageService) {
+  constructor(private messageService: MessageService,
+    private dateService: DateService) {
     if (localStorage.getItem("language") !== undefined) {
       this.language = JSON.parse(localStorage.getItem("language"));
     } else {
@@ -21,44 +28,241 @@ export class PDFService {
     }
   }
 
+  getPDFDefinition(superadminProfile, store, customerUser, therapyPricesData, isPriceIncluded, invoicePrefixID, selectedLanguage?) {
+    const invoiceLanguage = selectedLanguage ? selectedLanguage : this.language;
+
+    const therapies = therapyPricesData.therapies;
+    const netPrices = therapyPricesData.netPrices.filter(num => !isNaN(parseFloat(num)));
+    const brutoPrices = therapyPricesData.brutoPrices.filter(num => !isNaN(parseFloat(num)));
+
+    // console.log(therapies);
+
+    let vatPrices = brutoPrices.map(function (item, index) {
+      // In this case item correspond to currentValue of array a, 
+      // using index to get value from array b
+      return item - netPrices[index];
+    });
+
+    const vat = vatPrices.reduce((a, b) => a + b, 0).toFixed(2);
+    const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
+    const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
+
+
+    let definition = {
+      header: {
+        columns: [
+          {
+            text: invoiceLanguage.invoiceSubTitle + " " + invoicePrefixID,
+            style: "documentHeaderLeft",
+            width: "*",
+          },
+          {
+            text: invoiceLanguage.dateTitle + " " + this.dateService.currentDateFormatted,
+            style: "documentHeaderRight",
+            width: "*",
+          },
+        ],
+      },
+      content: [
+        // Title headers
+        {
+          columns: [
+            [
+              {
+                text: "\n" + invoiceLanguage.invoiceTitle,
+                style: "invoiceTitle",
+                width: "*",
+              },
+              {
+                columns: [
+                  {
+                    text: "\n",
+                    style: "invoiceSubTitle",
+                    width: "*",
+                  },
+                  {
+                    text: "\n",
+                    style: "invoiceSubValue",
+                    width: "*",
+                  },
+                ],
+              },
+            ],
+          ],
+        },
+        // Billing Headers
+        {
+          columns: [
+            {
+              text: invoiceLanguage.invoiceBillingTitleFrom + "\n \n",
+              style: "invoiceBillingTitleLeft",
+            },
+            {
+              text: invoiceLanguage.invoiceBillingTitleTo + "\n \n",
+              style: "invoiceBillingTitleRight",
+            },
+          ],
+        },
+        // Billing Details
+        {
+          columns: [
+            {
+              text: superadminProfile.shortname,
+              style: "invoiceBillingDetailsLeft",
+            },
+            {
+              text: customerUser.lastname.trim() + ' ' + customerUser.firstname.trim(),
+              style: "invoiceBillingDetailsRight",
+            },
+          ],
+        },
+        // Billing Address
+        {
+          columns: [
+            {
+              text: store.vatcode ?
+                store.street + "\n " + store.zipcode + " " + store.place + "\n" + invoiceLanguage.vatIdentificationNumber + " " + store.vatcode
+                : store.street + "\n " + store.zipcode + " " + store.place + "\n" + invoiceLanguage.vatIdentificationNumber + " " + superadminProfile.vatcode,
+              style: "invoiceBillingAddressLeft",
+            },
+            {
+              text:
+                customerUser["street"] +
+                "\n" +
+                customerUser["streetnumber"] +
+                " " +
+                customerUser["city"] +
+                "\n",
+              style: "invoiceBillingAddressRight",
+            },
+          ],
+        },
+        // Line breaks
+        "\n\n",
+        // Items
+        {
+          layout: {
+            // code from lightHorizontalLines:
+            hLineWidth: function (i, node) {
+              if (i === 0) {
+                return 0;
+              }
+              return i === node.table.headerRows ? 2 : 1;
+            },
+            vLineWidth: function () {
+              return 0;
+            },
+            hLineColor: function (i) {
+              return "black";
+            },
+            paddingLeft: function (i) {
+              return i === 0 ? 0 : 8;
+            },
+            paddingRight: function (i, node) {
+              return i === node.table.widths.length - 1 ? 0 : 8;
+            },
+          },
+          table: {
+            // headers are automatically repeated if the table spans over multiple pages
+            // you can declare how many rows should be treated as headers
+            headerRows: 1,
+            widths: ["20%", "20%", "20%", "20%", "20%"],
+
+            body: this.createItemsTable(therapies, isPriceIncluded),
+          }, // table
+          //  layout: 'lightHorizontalLines'
+        },
+        // Line break
+        "\n",
+        // TOTAL
+        {
+          columns: [
+            {
+              text: '',
+              width: '20%'
+            },
+            {
+              text: '',
+              width: '20%'
+            },
+            {
+              text: isPriceIncluded ?
+                (netPrices.length === 0 ? invoiceLanguage.noDataAvailable : (invoiceLanguage.euroSign + " " + subtotal)) : '',
+              style: "itemsFooterSubValue",
+              width: '20%',
+            },
+            {
+              text: isPriceIncluded ?
+                (vatPrices.length === 0 ? invoiceLanguage.noDataAvailable : (invoiceLanguage.euroSign + " " + vat)) : '',
+              style: "itemsFooterVATValue",
+              width: '20%',
+            },
+            {
+              text: isPriceIncluded ?
+                (brutoPrices.length === 0 ? invoiceLanguage.noDataAvailable : (invoiceLanguage.euroSign + " " + total)) : '',
+              style: "itemsFooterTotalValue",
+              width: '20%',
+            },
+          ],
+        },
+        {
+          text: invoiceLanguage.notesTitle,
+          style: 'notesTextBold'
+        },
+        {
+          text: invoiceLanguage.notesText,
+          style: 'notesText'
+        },
+      ],
+      footer: {
+        columns: [
+          {
+            text:
+              store.storename + ' ' + superadminProfile.shortname +
+              this.dotSign +
+              store.street +
+              this.dotSign +
+              store.zipcode +
+              " " +
+              store.place +
+              "\n" +
+              store.telephone +
+              this.dotSign +
+              store.email,
+            style: "documentFooter",
+          },
+        ],
+      },
+      styles: this.getStyles(),
+      defaultStyle: {
+        columnGap: 20,
+      },
+    };
+
+    return definition;
+  }
+
   getStyles() {
     return {
       // Document Header
       documentHeaderLeft: {
-        fontSize: 10,
-        margin: [5, 5, 5, 5],
+        fontSize: 11,
+        // margin: [left, top, right, bottom]
+        margin: [45, 25, 0, 0],
         alignment: "left",
-      },
-      documentHeaderCenter: {
-        fontSize: 10,
-        margin: [5, 5, 5, 5],
-        alignment: "center",
+        color: 'gray'
       },
       documentHeaderRight: {
-        fontSize: 10,
-        margin: [5, 5, 5, 5],
+        fontSize: 11,
+        margin: [0, 25, 45, 0],
         alignment: "right",
+        color: 'gray'
       },
       // Document Footer
       documentFooter: {
         fontSize: 11,
         alignment: "center",
         color: 'gray'
-      },
-      documentFooterLeft: {
-        fontSize: 10,
-        margin: [5, 5, 5, 5],
-        alignment: "left",
-      },
-      documentFooterCenter: {
-        fontSize: 10,
-        margin: [5, 5, 5, 5],
-        alignment: "center",
-      },
-      documentFooterRight: {
-        fontSize: 10,
-        margin: [5, 5, 5, 5],
-        alignment: "right",
       },
       // Invoice Title
       invoiceTitle: {
@@ -99,16 +303,6 @@ export class PDFService {
       invoiceBillingDetailsRight: {
         alignment: "right",
       },
-      invoiceBillingAddressTitleLeft: {
-        margin: [0, 7, 0, 3],
-        bold: true,
-        alignment: "left",
-      },
-      invoiceBillingAddressTitleRight: {
-        margin: [0, 7, 0, 3],
-        bold: true,
-        alignment: "right",
-      },
       invoiceBillingAddressLeft: {
         alignment: "left",
       },
@@ -129,6 +323,7 @@ export class PDFService {
         fontSize: 11,
       },
       itemDate: {
+        margin: [0, 5, 0, 5],
         alignment: "left",
       },
       itemNumber: {
@@ -136,7 +331,8 @@ export class PDFService {
         alignment: "center",
       },
       itemGrossPrice: {
-        alignment: "right",
+        margin: [0, 5, 0, 5],
+        alignment: "center",
       },
       itemTotal: {
         margin: [0, 5, 0, 5],
@@ -155,7 +351,7 @@ export class PDFService {
         margin: [0, 5, 0, 5],
         bold: true,
         fontSize: 13,
-        alignment: "right",
+        alignment: "center",
       },
       itemsFooterTotalTitle: {
         margin: [0, 5, 0, 5],
@@ -168,13 +364,13 @@ export class PDFService {
         margin: [0, 5, 0, 5],
         bold: true,
         fontSize: 13,
-        alignment: "right",
+        alignment: "center",
       },
       itemsFooterTotalValue: {
         margin: [0, 5, 0, 5],
         bold: true,
         fontSize: 13,
-        alignment: "right",
+        alignment: "center",
       },
       notesTitle: {
         fontSize: 14,
@@ -194,6 +390,7 @@ export class PDFService {
     };
   }
 
+
   public createItemsTable(therapies, isPriceIncluded = true) {
     const arr = [
       // Table Header
@@ -211,7 +408,7 @@ export class PDFService {
           style: ["itemsHeader", "center"],
         },
         {
-          text: isPriceIncluded ? this.language.vat + " (%)" : '',
+          text: isPriceIncluded ? this.language.vatPercentageTitle : '',
           style: ["itemsHeader", "center"],
         },
         {
@@ -228,9 +425,7 @@ export class PDFService {
           style: "itemDate",
         },
         {
-          text: therapy.description
-            ? therapy.title + "\n" + therapy.description
-            : therapy.title,
+          text: therapy.title,
           style: "itemTitle",
         },
         {

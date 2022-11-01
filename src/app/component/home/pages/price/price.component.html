@@ -1,0 +1,244 @@
+<app-home-navigation-menu
+  [language]="language"
+  (sendEventForChangeLanguage)="sendEventForChangeLanguage($event)"
+></app-home-navigation-menu>
+
+<!--pricing section start-->
+<section class="pricing-section pt-60 position-relative" *ngIf="language">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-10">
+        <div class="section-heading text-center">
+          <h4 class="h5 text-primary">{{ language.priceSectionUpText }}</h4>
+          <h1>{{ language.priceSectionTitle }}</h1>
+          <p>
+            {{ language.priceSectionText }}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center mb-5">
+      <div class="col-lg-3">
+        <div class="media d-flex align-items-center py-2 p-sm-2">
+          <div
+            class="icon-box mb-0 bg-primary-soft rounded-circle d-block mr-3"
+          >
+            <i class="fa fa-credit-card text-primary"></i>
+          </div>
+          <div class="media-body fw-medium h6 mb-0">
+            {{ language.priceSectionNoNeedCreditCard }}
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="media d-flex align-items-center py-2 p-sm-2">
+          <div
+            class="icon-box mb-0 bg-success-soft rounded-circle d-block mr-3"
+          >
+            <i class="fa fa-calendar text-success"></i>
+          </div>
+          <div class="media-body fw-medium h6 mb-0">
+            {{ language.priceSectionTryPeriod }}
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="media d-flex align-items-center py-2 p-sm-2">
+          <div class="icon-box mb-0 bg-danger-soft rounded-circle d-block mr-3">
+            <i class="fa fa-minus text-danger"></i>
+          </div>
+          <div class="media-body fw-medium h6 mb-0">
+            {{ language.priceSectionAnytimeCancel }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!--pricing section end-->
+
+<!-- <div>
+  <h3 class="text-center">{{ language.priceSectionHowManyChildren }}</h3>
+  <h5 class="text-center selected-range">
+    <img class="arrow-down-price" src="./assets/icons/arrow-down-bangi.gif" />{{
+      language.priceSectionSelectionNumberOfChildren
+    }}
+  </h5>
+  <div class="row number-of-children mt-4">
+    <div
+      *ngFor="let item of prices; let i = index"
+      class="col-md-2 {{ i < 6 ? 'border-right' : '' }} {{
+        i === selectedPackage ? 'active' : ''
+      }}"
+      (click)="selectPackage(i)"
+    >
+      {{ item.count }}
+    </div>
+  </div>
+</div> -->
+
+<!-- <div>
+  <div class="price-tab mt-5">
+    <div class="row m-0 pt-4 pb-4">
+      <div class="col-xs-12 col-md-6 col-lg-6">
+        <div style="text-align: center">
+          <div>
+            <div class="font-18-white-sb">
+              {{ prices[selectedPackage].count }}
+              {{ language.priceSectionChildrens }}
+            </div>
+            <div class="annual-price" style="display: none">
+              <div class="font-36-white-sb">€</div>
+              <div class="font-80-white-sb">
+                {{ prices[selectedPackage].price }}
+              </div>
+              <div class="font-20-white-sb-price">
+                /{{ language.priceSectionMonth }}
+              </div>
+            </div>
+            <div class="monthly-price-2" style="display: flex">
+              <div class="font-36-white-sb">€</div>
+              <div class="font-80-white-sb">
+                {{ prices[selectedPackage].price }}
+              </div>
+              <div class="font-20-white-sb-price">
+                /{{ language.priceSectionMonth }}
+              </div>
+            </div>
+          </div>
+          <img
+            src="./assets/home/children-group/{{ selectedPackage + 1 }}.png"
+            alt=""
+            class="site-image"
+          />
+        </div>
+      </div>
+      <div class="col-xs-12 col-md-6 col-lg-6 pt-4 pb-5">
+        <div class="check-list-box">
+          <ul role="list" class="check-list new w-list-unstyled">
+            <li class="check-list-item new">
+              <img
+                src="https://assets-global.website-files.com/5b71d8d18f97f2123be6a81c/5cbdf415505f3e78334d650f_Check%20Circle.png"
+                width="20"
+                alt="White Check
+"
+              />
+              <div class="spacer-column-10"></div>
+              <div>{{ language.priceSectionItem1 }}</div>
+            </li>
+            <li class="check-list-item new">
+              <img
+                src="https://assets-global.website-files.com/5b71d8d18f97f2123be6a81c/5cbdf415505f3e78334d650f_Check%20Circle.png"
+                width="20"
+                alt="White Check
+"
+              />
+              <div class="spacer-column-10"></div>
+              <div>{{ language.priceSectionItem2 }}</div>
+            </li>
+            <li class="check-list-item new">
+              <img
+                src="https://assets-global.website-files.com/5b71d8d18f97f2123be6a81c/5cbdf415505f3e78334d650f_Check%20Circle.png"
+                width="20"
+                alt="White Check
+"
+              />
+              <div class="spacer-column-10"></div>
+              <div>{{ language.priceSectionItem3 }}</div>
+            </li>
+            <li class="check-list-item new">
+              <img
+                src="https://assets-global.website-files.com/5b71d8d18f97f2123be6a81c/5cbdf415505f3e78334d650f_Check%20Circle.png"
+                width="20"
+                alt="White Check
+"
+              />
+              <div class="spacer-column-10"></div>
+              <div>
+                <strong>{{ language.priceSectionItem4 }}</strong>
+              </div>
+            </li>
+          </ul>
+          <div class="spacer-row-20"></div>
+          <div class="price-box-inner new pt-4">
+            <a routerLink="/request-demo" class="button green big w-button">{{
+              language.priceSectionTryFreeButton
+            }}</a>
+            <div class="spacer-row-10"></div>
+            <div class="font-14-white-sb mt-2">
+              {{ language.priceSectionTryNoNeedCreditCardLabel }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<section *ngIf="language.priceTable">
+  <div class="main">
+    <table class="price-table">
+      <tbody>
+        <tr class="price-table-head btn-info">
+          <td class="col-xs-3"></td>
+          <td
+            *ngFor="let item of language.priceTable.header"
+            class="col-xs-{{ 9 / language.priceTable.header.length }}"
+          >
+            <p>{{ item.nameOfPackageTitle }}</p>
+            <small style="font-size: 12px; font-weight: 400">{{
+              item.nameOfPackageText
+            }}</small>
+          </td>
+        </tr>
+        <tr>
+          <td class="col-xs-3"></td>
+
+          <td
+            *ngFor="let item of language.priceTable.header"
+            class="price col-xs-{{ 9 / language.priceTable.header.length }}"
+          >
+            {{ item.price }}
+          </td>
+        </tr>
+        <tr *ngFor="let item of language.priceTable.functions">
+          <td class="col-xs-3">
+            {{ item.name }}
+          </td>
+          <td
+            *ngFor="let description of item.descriptionPerPackages"
+            class="col-xs-{{ 9 / language.priceTable.header.length }}"
+          >
+            <i *ngIf="description === 'not-exists'" class="fa fa-times"></i>
+            <i *ngIf="description === 'exists'" class="fa fa-check"></i>
+            <span
+              *ngIf="description !== 'exists' && description !== 'not-exists'"
+              >{{ description }}</span
+            >
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+
+          <td *ngFor="let item of language.priceTable.header" class="price">
+            <a
+              class="btn btn-info"
+              (click)="getStarted(item.nameOfPackageTitle, item.price)"
+              >{{ language.getStarted }}</a
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<app-feature-section [language]="language"></app-feature-section>
+
+<app-subscribe-section [language]="language"></app-subscribe-section>
+
+<footer class="footer-section">
+  <app-footer-section></app-footer-section>
+  <app-home-footer [language]="language"></app-home-footer>
+</footer>

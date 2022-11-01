@@ -1,11 +1,18 @@
-import { InvoiceService } from './../../../service/invoice.service';
+import { filter } from 'rxjs/operators/filter';
+import { InvoiceService } from "./../../../service/invoice.service";
 import { ParameterItemService } from "src/app/service/parameter-item.service";
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import { CustomerModel } from "src/app/models/customer-model";
 import { CustomersService } from "src/app/service/customers.service";
 import { DateRangeService } from "@progress/kendo-angular-dateinputs";
 import { FormGroup } from "@angular/forms";
-import { GridDataResult, PageChangeEvent } from "@progress/kendo-angular-grid";
+import { GridComponent, GridDataResult, PageChangeEvent } from "@progress/kendo-angular-grid";
 import { HelpService } from "src/app/service/help.service";
 import { MessageService } from "src/app/service/message.service";
 import { PDFService } from "./../../../service/pdf.service";
@@ -22,7 +29,10 @@ import pdfMake from "pdfmake/build/pdfmake";
 import PizZip from "pizzip";
 import PizZipUtils from "pizzip/utils/index.js";
 import { DashboardService } from "src/app/service/dashboard.service";
-import { LoadingScreenService } from 'src/app/shared/loading-screen/loading-screen.service';
+import { LoadingScreenService } from "src/app/shared/loading-screen/loading-screen.service";
+import { DateService } from "src/app/service/date.service";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { Router } from '@angular/router';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -38,7 +48,10 @@ export class InvoiceComponent implements OnInit {
 
   @ViewChild("filterToolbar") filterToolbar: ElementRef<HTMLElement>;
   @ViewChild("contentWrapper") contentElement: ElementRef<HTMLElement>;
-
+  invoiceStore = null;
+  allStores: any[];
+  gridData: any;
+  allInvoiceData: any[];
 
   @HostListener("window:resize", ["$event"])
   onResize(): void {
@@ -50,6 +63,7 @@ export class InvoiceComponent implements OnInit {
   }
 
   private invoiceID: number;
+  private changedInvoiceID: number;
   private height: number;
   public currentLoadData: any[] = [];
   public customerLoading = false;
@@ -67,16 +81,19 @@ export class InvoiceComponent implements OnInit {
   public selectedItemIDs = [];
   public selectedTherapies: any;
   public store: StoreModel;
-  public superadmin: string;
+  public superadminID: string;
   public therapyValue: any;
   public type: UserType;
   public userType = UserType;
   public vatTaxList;
   public isPriceIncluded: boolean = true;
   public languageList;
+  public storeList;
+  public selectedStoreInfo;
   public invoiceLanguage;
   public invoicePrefix: string;
-
+  currentUrl: string;
+  savePage = {};
   public pageSize = 10;
   public state: State = {
     skip: 0,
@@ -109,8 +126,10 @@ export class InvoiceComponent implements OnInit {
   }
 
   public get tableHeight(): number {
-
-    let height = 100 - (100 * this.filterToolbar.nativeElement.clientHeight) / this.contentElement.nativeElement.clientHeight;
+    let height =
+      100 -
+      (100 * this.filterToolbar.nativeElement.clientHeight) /
+      this.contentElement.nativeElement.clientHeight;
 
     return height;
   }
@@ -124,16 +143,26 @@ export class InvoiceComponent implements OnInit {
     private parameterItemService: ParameterItemService,
     private pdfService: PDFService,
     private dashboardService: DashboardService,
+    private loadingScreenService: LoadingScreenService,
+    private dateService: DateService,
     private invoiceService: InvoiceService,
-    private loadingScreenService: LoadingScreenService
-  ) { }
+    private router: Router
+  ) {
+    this.allData = this.allData.bind(this);
+  }
 
   ngOnInit() {
+    this.currentUrl = this.router.url;
     this.initializationConfig();
     this.initializationData();
 
     this.helpService.setDefaultBrowserTabTitle();
-    this.invoiceID = Math.ceil(Math.random() * 10000);
+
+    this.savePage = this.helpService.getGridPageSize();
+    if(this.savePage && this.savePage[this.currentUrl] || this.savePage[this.currentUrl + 'Take']) {
+      this.state.skip = this.savePage[this.currentUrl];
+      this.state.take = this.savePage[this.currentUrl + 'Take'];
+    }
   }
 
   public initializationConfig(): void {
@@ -153,29 +182,29 @@ export class InvoiceComponent implements OnInit {
   public initializationData(): void {
     this.type = this.helpService.getType();
     this.loggedInUserId = this.helpService.getMe();
-    this.superadmin = this.helpService.getSuperadmin();
+
+    this.superadminID = this.helpService.getSuperadmin();
+    this.parameterItemService
+      .getSuperadminProfile(this.superadminID)
+      .subscribe((data) => {
+        this.superadminProfile = data[0];
+        this.invoicePrefix = this.superadminProfile.invoicePrefix;
+        this.invoiceID = this.superadminProfile.invoiceID;
+        this.changedInvoiceID = this.superadminProfile.invoiceID;
+      });
 
     this.getParameters();
 
-    this.dashboardService.getTranslation().subscribe(
-      data => {
-        console.log(data);
-        this.languageList = [];
-
-        data.forEach(elem => {
-          this.languageList.push({
-            'text': elem.language,
-            'value': elem.config
-          })
-        });
-      }
-    );
-
-    this.invoiceService.getInvoicePrefix(this.superadmin).then(data => {
+    this.dashboardService.getTranslation().subscribe((data) => {
       console.log(data);
-      if (data && data.length) {
-        this.invoicePrefix = data[0].prefix;
-      }
+      this.languageList = [];
+
+      data.forEach((elem) => {
+        this.languageList.push({
+          text: elem.language,
+          value: elem.config,
+        });
+      });
     });
   }
 
@@ -184,18 +213,31 @@ export class InvoiceComponent implements OnInit {
     this.selectedInvoiceLanguage = event;
   }
 
+  storeValueChange(event) {
+    this.invoiceStore = this.allStores.find((elem) => elem.id === event);
+    console.log("this.invoiceStore ", this.invoiceStore);
+    this.selectedStoreInfo = event;
+
+    const data = this.invoiceStore ? this.allInvoiceData.filter(elem => elem.storeId === this.invoiceStore.id) : this.allInvoiceData;
+    this.currentLoadData = data;
+
+    this.gridViewData = process(this.currentLoadData, this.state);
+  }
+
   public getParameters(): void {
     this.customerService
-      .getParameters("Therapy", this.superadmin)
+      .getParameters("Therapy", this.superadminID)
       .subscribe((data: []) => {
         this.therapyValue = data.sort(function (a, b) {
           return a["sequence"] - b["sequence"];
         });
       });
 
-    this.parameterItemService.getVATTex(this.superadmin).subscribe((data: []) => {
-      this.vatTaxList = data;
-    });
+    this.parameterItemService
+      .getVATTex(this.superadminID)
+      .subscribe((data: []) => {
+        this.vatTaxList = data;
+      });
   }
 
   public searchCustomer(event): void {
@@ -203,7 +245,7 @@ export class InvoiceComponent implements OnInit {
       this.customerLoading = true;
 
       const searchFilter = {
-        superadmin: this.superadmin,
+        superadmin: this.superadminID,
         filter: event,
       };
 
@@ -269,8 +311,9 @@ export class InvoiceComponent implements OnInit {
     this.isAllChecked = false;
 
     this.taskService.getDataForMassiveInvoice(patientId).then((data) => {
-      console.log('getDataForMassiveInvoice : ', data);
+      console.log("getDataForMassiveInvoice : ", data);
       this.currentLoadData = [];
+      this.allInvoiceData = [];
 
       if (this.range.start && this.range.end) {
         data.forEach((element) => {
@@ -289,6 +332,7 @@ export class InvoiceComponent implements OnInit {
             element.end.getTime() <= endDate
           ) {
             this.currentLoadData.push(element);
+            this.allInvoiceData.push(element);
           }
         });
       } else {
@@ -296,6 +340,7 @@ export class InvoiceComponent implements OnInit {
           elem.checked = false;
         });
         this.currentLoadData = data;
+        this.allInvoiceData = data;
       }
 
       if (this.currentLoadData.length > 0) {
@@ -306,14 +351,35 @@ export class InvoiceComponent implements OnInit {
             this.store = data[0];
           });
 
-        this.parameterItemService.getSuperadminProfile(this.superadmin).subscribe((data) => {
-          this.superadminProfile = data[0];
+        const storeIds = this.currentLoadData.map((elem) => elem.storeId);
+        const unique = (x, i, a) => a.indexOf(x) == i;
+        const uniqueStoreIds = storeIds.filter(unique);
 
-          console.log(data);
+        console.log("unique ", uniqueStoreIds);
+
+        this.storeService.getStoreList(uniqueStoreIds).then((data) => {
+          this.allStores = data;
+          this.storeList = [];
+
+          data.forEach((elem) => {
+            this.storeList.push({
+              text: elem.storename,
+              value: elem.id,
+            });
+          });
+
+          console.log("storeList ", this.storeList);
         });
       }
 
       this.gridViewData = process(this.currentLoadData, this.state);
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, this.state).data,
+      }
+      this.gridData = {
+        data: this.currentLoadData,
+      };
+
       this.loading = false;
     });
   }
@@ -327,6 +393,10 @@ export class InvoiceComponent implements OnInit {
     this.state.take = event.take;
     this.pageSize = event.take;
     this.gridViewData = process(this.currentLoadData, this.state);
+
+    this.savePage[this.currentUrl] = event.skip;
+    this.savePage[this.currentUrl + 'Take'] = event.take;
+    this.helpService.setGridPageSize(this.savePage);
   }
 
   public sortChange(sort: SortDescriptor[]): void {
@@ -361,248 +431,53 @@ export class InvoiceComponent implements OnInit {
     pdfMake
       .createPdf(docDefinition)
       .download(this.customerUser["firstname"] + this.customerUser["lastname"]);
+
+    this.updateInvoiceID();
   }
 
   public printPDF(): void {
     const docDefinition = this.setupPDF();
     pdfMake.createPdf(docDefinition).print();
+
+    this.updateInvoiceID();
+  }
+
+  private updateInvoiceID(): void {
+    if (this.invoiceID !== this.changedInvoiceID) {
+      const data = {
+        superAdminId: this.superadminID,
+        id: this.changedInvoiceID,
+      };
+      console.log("updateInvoiceID");
+
+      this.invoiceService.updateInvoiceID(data);
+    }
   }
 
   private setupPDF() {
-    const dotSign = " • ";
-    const data = this.getTherapyAndPricesData();
+    if (this.invoiceID === this.changedInvoiceID) {
+      this.changedInvoiceID++;
+    }
 
+    const therapyPricesData = this.getTherapyAndPricesData();
 
-    const therapies = data.therapies;
-    const netPrices = data.netPrices.filter(num => !isNaN(parseFloat(num)));
-    const brutoPrices = data.brutoPrices.filter(num => !isNaN(parseFloat(num)));
+    console.log("invoice store ", this.invoiceStore);
+    const store =
+      this.invoiceStore !== undefined && this.invoiceStore !== null
+        ? this.invoiceStore
+        : this.store;
 
-    let vatValues = brutoPrices.map(function (item, index) {
-      // In this case item correspond to currentValue of array a, 
-      // using index to get value from array b
-      return item - netPrices[index];
-    });
+    const invoicePrefixID = this.invoicePrefix + "-" + this.invoiceID;
 
-    const vat = vatValues.reduce((a, b) => a + b, 0).toFixed(2);
-    const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
-    const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
-
-    let docDefinition = {
-      content: [
-        // Header
-        {
-          columns: [
-            [
-              {
-                text: this.invoiceLanguage.invoiceTitle,
-                style: "invoiceTitle",
-                width: "*",
-              },
-              {
-                stack: [
-                  {
-                    columns: [
-                      {
-                        text: this.invoiceLanguage.invoiceSubTitle,
-                        style: "invoiceSubTitle",
-                        width: "*",
-                      },
-                      {
-                        text: this.invoicePrefix ? this.invoicePrefix + this.invoiceID : this.invoiceID,
-                        style: "invoiceSubValue",
-                        width: 130,
-                      },
-                    ],
-                  },
-                  {
-                    columns: [
-                      {
-                        text: this.invoiceLanguage.dateTitle,
-                        style: "invoiceSubTitle",
-                        width: "*",
-                      },
-                      {
-                        text: this.currentDateFormatted,
-                        style: "invoiceSubValue",
-                        width: 130,
-                      },
-                    ],
-                  },
-
-                  {
-                    columns: [
-                      {
-                        text: "\n",
-                        style: "invoiceSubTitle",
-                        width: "*",
-                      },
-                      {
-                        text: "\n",
-                        style: "invoiceSubValue",
-                        width: "*",
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          ],
-        },
-        // Billing Headers
-        {
-          columns: [
-            {
-              text: this.invoiceLanguage.invoiceBillingTitleFrom + "\n \n",
-              style: "invoiceBillingTitleLeft",
-            },
-            {
-              text: this.invoiceLanguage.invoiceBillingTitleTo + "\n \n",
-              style: "invoiceBillingTitleRight",
-            },
-          ],
-        },
-        // Billing Details
-        {
-          columns: [
-            {
-              text: this.store.companyname ? this.store.companyname : this.store.storename,
-              style: "invoiceBillingDetailsLeft",
-            },
-            {
-              text: this.customerUser.lastname + this.customerUser.firstname,
-              style: "invoiceBillingDetailsRight",
-            },
-          ],
-        },
-        // Billing Address
-        {
-          columns: [
-            {
-              text: this.store.vatcode ?
-                this.store.street + "\n " + this.store.zipcode + " " + this.store.place + "\n" + this.invoiceLanguage.vat + " " + this.store.vatcode
-                : this.store.street + "\n " + this.store.zipcode + " " + this.store.place + "\n" + this.invoiceLanguage.vat + " " + this.superadminProfile.vatcode,
-              style: "invoiceBillingAddressLeft",
-            },
-            {
-              text:
-                this.customerUser["street"] +
-                "\n" +
-                this.customerUser["streetnumber"] +
-                " " +
-                this.customerUser["city"] +
-                "\n",
-              style: "invoiceBillingAddressRight",
-            },
-          ],
-        },
-        // Line breaks
-        "\n\n",
-        // Items
-        {
-          layout: {
-            // code from lightHorizontalLines:
-            hLineWidth: function (i, node) {
-              if (i === 0) {
-                return 0;
-              }
-              return i === node.table.headerRows ? 2 : 1;
-            },
-            vLineWidth: function () {
-              return 0;
-            },
-            hLineColor: function (i) {
-              return "black";
-            },
-            paddingLeft: function (i) {
-              return i === 0 ? 0 : 8;
-            },
-            paddingRight: function (i, node) {
-              return i === node.table.widths.length - 1 ? 0 : 8;
-            },
-            // // code for zebra style:
-            // fillColor: function (i) {
-            //   return i % 2 === 0 ? "#CCCCCC" : null;
-            // },
-          },
-          table: {
-            // headers are automatically repeated if the table spans over multiple pages
-            // you can declare how many rows should be treated as headers
-            headerRows: 1,
-            widths: ["*", "*", "auto", "auto", "auto"],
-
-            body: this.pdfService.createItemsTable(therapies, this.isPriceIncluded),
-          }, // table
-          //  layout: 'lightHorizontalLines'
-        },
-        // Line break
-        "\n",
-        // TOTAL
-        {
-          table: {
-            // headers are automatically repeated if the table spans over multiple pages
-            // you can declare how many rows should be treated as headers
-            headerRows: 0,
-            widths: ["63%", "auto", "auto", "auto"],
-
-            body: [
-              // Total
-              [
-                {
-                  text: "",
-                },
-                {
-                  text: this.isPriceIncluded ?
-                    (netPrices.length === 0 ? this.invoiceLanguage.noDataAvailable : (this.invoiceLanguage.euroSign + " " + subtotal)) : '',
-                  style: "itemsFooterSubValue",
-                },
-                {
-                  text: this.isPriceIncluded ?
-                    (netPrices.length === 0 ? this.invoiceLanguage.noDataAvailable : (this.invoiceLanguage.euroSign + " " + vat)) : '',
-                  style: "itemsFooterVATValue",
-                },
-                {
-                  text: this.isPriceIncluded ?
-                    (brutoPrices.length === 0 ? this.invoiceLanguage.noDataAvailable : (this.invoiceLanguage.euroSign + " " + total)) : '',
-                  style: "itemsFooterTotalValue",
-                },
-              ],
-            ],
-          },
-          layout: "lightHorizontalLines",
-        },
-        {
-          text: this.invoiceLanguage.notesTitle,
-          style: 'notesTextBold'
-        },
-        {
-          text: this.invoiceLanguage.notesText,
-          style: 'notesText'
-        },
-      ],
-      footer: {
-        columns: [
-          {
-            text:
-              (this.store.companyname ? this.store.companyname : this.store.storename) +
-              dotSign +
-              this.store.street +
-              dotSign +
-              this.store.zipcode +
-              " " +
-              this.store.place +
-              "\n" +
-              this.store.telephone +
-              dotSign +
-              this.store.email,
-            style: "documentFooter",
-          },
-        ],
-      },
-      styles: this.pdfService.getStyles(),
-      defaultStyle: {
-        columnGap: 20,
-      },
-    };
+    let docDefinition = this.pdfService.getPDFDefinition(
+      this.superadminProfile,
+      store,
+      this.customerUser,
+      therapyPricesData,
+      this.isPriceIncluded,
+      invoicePrefixID,
+      this.invoiceLanguage
+    );
 
     return docDefinition;
   }
@@ -647,51 +522,60 @@ export class InvoiceComponent implements OnInit {
             const isNaNPrice = isNaN(parseFloat(therapy.net_price));
 
             if (isNaNPrice) {
-              console.log('Net price not a number: ', therapy.net_price);
+              console.log("Net price not a number: ", therapy.net_price);
             }
 
             netPrices.push(parseFloat(therapy.net_price));
 
-
             const isNaNBrutoPrice = isNaN(parseFloat(therapy.gross_price));
 
             if (isNaNBrutoPrice) {
-              console.log('Bruto price not a number: ', therapy.gross_price);
+              console.log("Bruto price not a number: ", therapy.gross_price);
             }
 
             brutoPrices.push(parseFloat(therapy.gross_price));
-
-            // if (vatDefinition) {
-            //   bruto =
-            //     parseFloat(therapy.net_price) *
-            //     (1 + Number(vatDefinition.title) / 100);
-            // } else {
-            //   bruto = parseFloat(therapy.net_price) * (1 + 20 / 100);
-            // }
-            // brutoPrices.push(bruto);
 
             const shouldSetDate =
               (selectedTherapies.length > 1 && i == 0) ||
               selectedTherapies.length === 1 ||
               !this.isDateSet;
 
+            // console.log(shouldSetDate + ' should set date');
 
             if (therapy.printOnInvoice) {
               therapies.push({
-                title: (therapy.titleOnInvoice && therapy.titleOnInvoice.trim() !== "") ? therapy.titleOnInvoice : therapy.title,
-                date: shouldSetDate ? this.formatDate(therapy.date) : '',
-                net_price: this.isPriceIncluded ? (isNaNPrice ? this.invoiceLanguage.noDataAvailable : this.invoiceLanguage.euroSign + ' ' + parseFloat(therapy.net_price).toFixed(2)) : '',
-                vat: this.isPriceIncluded ? (vatDefinition ? vatDefinition.title : 20) : '',
-                gross_price: this.isPriceIncluded ? (isNaNBrutoPrice ? this.invoiceLanguage.noDataAvailable : this.invoiceLanguage.euroSign + ' ' + parseFloat(therapy.gross_price).toFixed(2)) : ''
+                title:
+                  therapy.titleOnInvoice && therapy.titleOnInvoice.trim() !== ""
+                    ? therapy.titleOnInvoice
+                    : therapy.title,
+                date: shouldSetDate ? this.formatDate(therapy.date) : "",
+                net_price: this.isPriceIncluded
+                  ? isNaNPrice
+                    ? this.invoiceLanguage.noDataAvailable
+                    : this.invoiceLanguage.euroSign +
+                    " " +
+                    parseFloat(therapy.net_price).toFixed(2)
+                  : "",
+                vat: this.isPriceIncluded
+                  ? vatDefinition
+                    ? vatDefinition.title
+                    : 20
+                  : "",
+                gross_price: this.isPriceIncluded
+                  ? isNaNBrutoPrice
+                    ? this.invoiceLanguage.noDataAvailable
+                    : this.invoiceLanguage.euroSign +
+                    " " +
+                    parseFloat(therapy.gross_price).toFixed(2)
+                  : "",
               });
             }
-
-
           }
         }
       }
     });
 
+    console.log(therapies);
     return {
       therapies: therapies,
       netPrices: netPrices,
@@ -701,61 +585,27 @@ export class InvoiceComponent implements OnInit {
 
   private formatDate(value) {
     this.isDateSet = true;
-    let date: string;
 
-    if (value.indexOf('/') != -1) {
-      date = value.split('/')[0];
-
-    } else if (value.indexOf(' ') != -1) {
-      date = value.split(' ')[0];
-    } else if (value.indexOf('T') != -1) { // 2022-03-29T06:00:00.000Z
-      date = value.split('T')[0];
-
-      //console.log(date.split("-").reverse().join("-"));
-      date = date.split("-").reverse().join("-");
-    }
-
-    // console.log(date);
-    return this.reverseString(date.trim());
-  }
-
-  private reverseString(str) {
-    // Step 1. Use the split() method to return a new array
-    var splitString;
-    if (str.indexOf('.') != -1) {
-      splitString = str.split(".");
-    } else if (str.indexOf('-') != -1) {
-      splitString = str.split("-");
-    } else if (str.indexOf('/') != -1) {
-      splitString = str.split("/");
-    }
-
-    console.log(splitString);
-
-    // Step 2. Use the reverse() method to reverse the new created array
-    // var reverseArray = splitString.reverse();
-    // console.log(reverseArray)
-
-    // Step 3. Use the join() method to join all elements of the array into a string
-    var joinArray = splitString.join(".");
-    // console.log(joinArray)
-
-    //Step 4. Return the reversed string
-    return joinArray;
+    return this.dateService.formatDate(value);
   }
 
   public downloadWord(): void {
     const componentRef = this;
 
+    if (this.invoiceID === this.changedInvoiceID) {
+      this.changedInvoiceID++;
+    }
     const data = this.getTherapyAndPricesData();
 
     let vatValues = [];
     const therapies = data.therapies;
-    const netPrices = data.netPrices.filter(num => !isNaN(parseFloat(num)));
-    const brutoPrices = data.brutoPrices.filter(num => !isNaN(parseFloat(num)));
+    const netPrices = data.netPrices.filter((num) => !isNaN(parseFloat(num)));
+    const brutoPrices = data.brutoPrices.filter(
+      (num) => !isNaN(parseFloat(num))
+    );
 
     vatValues = brutoPrices.map(function (item, index) {
-      // In this case item correspond to currentValue of array a, 
+      // In this case item correspond to currentValue of array a,
       // using index to get value from array b
       return item - netPrices[index];
     });
@@ -764,6 +614,8 @@ export class InvoiceComponent implements OnInit {
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
+
+    //THIS ONE SHOULD BE ACTIVE
     const link =
       window.location.protocol +
       "//" +
@@ -772,97 +624,117 @@ export class InvoiceComponent implements OnInit {
       window.location.port +
       "/assets/Invoice_template.docx";
 
-    //const link = "http://127.0.0.1:8887/Invoice_template.docx";
-    this.loadFile(link,
-      function (error, content) {
-        if (error) {
-          throw error;
-        }
-
-        const zip = new PizZip(content);
-        const doc = new Docxtemplater(zip, {
-          paragraphLoop: true,
-          linebreaks: true,
-          nullGetter: function () {
-            return "";
-          },
-        });
-
-        doc.setData({
-          invoice_title: componentRef.invoiceLanguage.invoiceTitle,
-          invoice_number: componentRef.invoiceLanguage.invoiceSubTitle,
-          invoice_id: componentRef.invoiceID,
-          invoice_generated_date: componentRef.currentDateFormatted,
-          billing_from_title: componentRef.invoiceLanguage.invoiceBillingTitleFrom,
-          billing_to_title: componentRef.invoiceLanguage.invoiceBillingTitleTo,
-          clinic_name: componentRef.store.companyname ? componentRef.store.companyname : componentRef.store.storename,
-          customer_lastname: componentRef.customerUser.lastname,
-          customer_firstname: componentRef.customerUser.firstname,
-          clinic_street: componentRef.store.street,
-          customer_street: componentRef.customerUser.street,
-          customer_streetnumber: componentRef.customerUser.streetnumber,
-          clinic_zipcode: componentRef.store.zipcode,
-          clinic_city: componentRef.store.place,
-          customer_city: componentRef.customerUser.city,
-          clinic_telephone: componentRef.store.telephone,
-          clinic_email: componentRef.store.email,
-          subtotal_title: componentRef.invoiceLanguage.invoiceSubtotal,
-          total_title: componentRef.invoiceLanguage.invoiceTotal,
-          products: therapies,
-          subtotal_price: componentRef.isPriceIncluded ?
-            (netPrices.length === 0 ? componentRef.invoiceLanguage.noDataAvailable : (componentRef.invoiceLanguage.euroSign + " " + subtotal)) : '',
-          total_price: componentRef.isPriceIncluded ?
-            (brutoPrices.length === 0 ? componentRef.invoiceLanguage.noDataAvailable : (componentRef.invoiceLanguage.euroSign + " " + total)) : '',
-          item_date: componentRef.invoiceLanguage.date,
-          item_title: componentRef.invoiceLanguage.invoiceItem,
-          netto_price_title: componentRef.isPriceIncluded ? componentRef.invoiceLanguage.invoiceNetPrice : '',
-          vat: componentRef.isPriceIncluded ? componentRef.invoiceLanguage.vat + " (%)" : '',
-          vat_title: componentRef.invoiceLanguage.vat,
-          vat_code: componentRef.store.vatcode ? componentRef.store.vatcode : componentRef.superadminProfile.vatcode,
-          vat_price: componentRef.isPriceIncluded ? vat : '',
-          gross_price_title: componentRef.isPriceIncluded ? componentRef.invoiceLanguage.invoiceGrossPrice : '',
-          date_title: componentRef.invoiceLanguage.dateTitle,
-          price_title: componentRef.invoiceLanguage.invoiceNetPrice,
-          // notes_title: componentRef.invoiceLanguage,
-          notes_text: componentRef.invoiceLanguage.notesText
-        });
-
-        try {
-          // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
-          doc.render();
-        } catch (error) {
-          // The error thrown here contains additional information when logged with JSON.stringify (it contains a properties object containing all suberrors).
-          this.replaceErrors();
-          // console.log(JSON.stringify({ error: error }, replaceErrors));
-
-          if (error.properties && error.properties.errors instanceof Array) {
-            const errorMessages = error.properties.errors
-              .map(function (error) {
-                return error.properties.explanation;
-              })
-              .join("\n");
-            console.log("errorMessages", errorMessages);
-            // errorMessages is a humanly readable message looking like this :
-            // 'The tag beginning with "foobar" is unopened'
-          }
-          throw error;
-        }
-        const out = doc.getZip().generate({
-          type: "blob",
-          mimeType:
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        });
-        // Output the document using Data-URI
-
-        const filename =
-          componentRef.customerUser.lastname +
-          componentRef.customerUser.firstname +
-          ".docx";
-        saveAs(out, filename);
-
-        componentRef.loadingScreenService.stopLoading();
+    // LOCAL PURPOSE TESTING
+    // const link = "http://127.0.0.1:8887/Invoice_template.docx";
+    this.loadFile(link, function (error, content) {
+      if (error) {
+        throw error;
       }
-    )
+
+      const zip = new PizZip(content);
+      const doc = new Docxtemplater(zip, {
+        paragraphLoop: true,
+        linebreaks: true,
+        nullGetter: function () {
+          return "";
+        },
+      });
+
+      const store =
+        componentRef.invoiceStore !== undefined && componentRef.invoiceStore !== null
+          ? componentRef.invoiceStore
+          : componentRef.store;
+
+      doc.setData({
+        invoice_title: componentRef.invoiceLanguage.invoiceTitle,
+        invoice_number: componentRef.invoiceLanguage.invoiceSubTitle,
+        invoice_prefix: componentRef.invoicePrefix,
+        invoice_id: componentRef.invoiceID,
+        invoice_generated_date: componentRef.currentDateFormatted,
+        billing_from_title:
+          componentRef.invoiceLanguage.invoiceBillingTitleFrom,
+        billing_to_title: componentRef.invoiceLanguage.invoiceBillingTitleTo,
+        clinic_name: componentRef.superadminProfile.shortname,
+        customer_lastname: componentRef.customerUser.lastname,
+        customer_firstname: componentRef.customerUser.firstname,
+        clinic_street: store.street,
+        customer_street: componentRef.customerUser.street,
+        customer_streetnumber: componentRef.customerUser.streetnumber,
+        clinic_zipcode: store.zipcode,
+        clinic_city: store.place,
+        customer_city: componentRef.customerUser.city,
+        clinic_telephone: store.telephone,
+        clinic_email: store.email,
+        subtotal_title: componentRef.invoiceLanguage.invoiceSubtotal,
+        total_title: componentRef.invoiceLanguage.invoiceTotal,
+        products: therapies,
+        subtotal_price: componentRef.isPriceIncluded
+          ? netPrices.length === 0
+            ? componentRef.invoiceLanguage.noDataAvailable
+            : componentRef.invoiceLanguage.euroSign + " " + subtotal
+          : "",
+        total_price: componentRef.isPriceIncluded
+          ? brutoPrices.length === 0
+            ? componentRef.invoiceLanguage.noDataAvailable
+            : componentRef.invoiceLanguage.euroSign + " " + total
+          : "",
+        item_date: componentRef.invoiceLanguage.date,
+        item_title: componentRef.invoiceLanguage.invoiceItem,
+        netto_price_title: componentRef.isPriceIncluded
+          ? componentRef.invoiceLanguage.invoiceNetPrice
+          : "",
+        vat_percentage_title: componentRef.isPriceIncluded ? componentRef.invoiceLanguage.vatPercentageTitle : "",
+        vat_identification_number: componentRef.invoiceLanguage.vatIdentificationNumber,
+        vat_code: store.vatcode
+          ? store.vatcode
+          : componentRef.superadminProfile.vatcode,
+        vat_price: componentRef.isPriceIncluded ? vat : "",
+        gross_price_title: componentRef.isPriceIncluded
+          ? componentRef.invoiceLanguage.invoiceGrossPrice
+          : "",
+        date_title: componentRef.invoiceLanguage.dateTitle,
+        price_title: componentRef.invoiceLanguage.invoiceNetPrice,
+        // notes_title: componentRef.invoiceLanguage,
+        notes_text: componentRef.invoiceLanguage.notesText,
+      });
+
+      try {
+        // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
+        doc.render();
+      } catch (error) {
+        // The error thrown here contains additional information when logged with JSON.stringify (it contains a properties object containing all suberrors).
+        this.replaceErrors();
+        // console.log(JSON.stringify({ error: error }, replaceErrors));
+
+        if (error.properties && error.properties.errors instanceof Array) {
+          const errorMessages = error.properties.errors
+            .map(function (error) {
+              return error.properties.explanation;
+            })
+            .join("\n");
+          console.log("errorMessages", errorMessages);
+          // errorMessages is a humanly readable message looking like this :
+          // 'The tag beginning with "foobar" is unopened'
+        }
+        throw error;
+      }
+      const out = doc.getZip().generate({
+        type: "blob",
+        mimeType:
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      });
+      // Output the document using Data-URI
+
+      const filename =
+        componentRef.customerUser.lastname +
+        componentRef.customerUser.firstname +
+        ".docx";
+      saveAs(out, filename);
+
+      componentRef.loadingScreenService.stopLoading();
+
+      componentRef.updateInvoiceID();
+    });
   }
 
   replaceErrors(value) {
@@ -882,10 +754,50 @@ export class InvoiceComponent implements OnInit {
   }
 
   private get currentDateFormatted(): string {
-    // return new Date().toLocaleString().replace(/(.*)\D\d+/, "$1");
-
-    const date = new Date().toLocaleDateString('en-GB');
-
-    return this.reverseString(date);
+    return this.dateService.currentDateFormatted;
   }
+
+
+  exportPDF(value: boolean): void {
+    this.allPages = value;
+
+    setTimeout(() => {
+      this.grid.saveAsPDF();
+    }, 0);
+  }
+
+  exportToExcel(grid: GridComponent, allPages: boolean) {
+    this.setDataForExcelExport(allPages);
+
+    setTimeout(() => {
+      grid.saveAsExcel();
+    }, 0);
+  }
+
+  public setDataForExcelExport(allPages: boolean): void {
+    console.log('allPages ', allPages);
+
+    if (allPages) {
+      var myState: State = {
+        skip: 0,
+        take: this.gridData.total,
+      };
+
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, myState).data,
+      }
+    } else {
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, this.state).data,
+      }
+    }
+  }
+
+  public allData(): ExcelExportData {
+    return this._allData;
+  }
+
+  private _allData: ExcelExportData;
+  @ViewChild('grid') grid;
+  public allPages: boolean;
 }

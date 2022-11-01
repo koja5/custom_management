@@ -3,6 +3,7 @@ import { FormGroup } from "@angular/forms";
 import { HelpService } from "src/app/service/help.service";
 import { FieldConfig } from "../../models/field-config";
 import { Query } from "@syncfusion/ej2-data";
+import { checkIfInputValid } from "../../../../../shared/utils";
 
 @Component({
   selector: "app-multiselect",
@@ -18,6 +19,7 @@ export class MultiselectComponent implements OnInit {
   public data: any;
 
   public query: Query = new Query().from("entries");
+  checkIfInputValid = checkIfInputValid;
 
   ngOnInit() {
     console.log(this.group);

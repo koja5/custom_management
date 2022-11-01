@@ -5,13 +5,12 @@ import { StoreService } from "../../../service/store.service";
 import { process, State, GroupDescriptor } from "@progress/kendo-data-query";
 import {
   DataStateChangeEvent,
+  GridComponent,
   PageChangeEvent,
   RowArgs,
 } from "@progress/kendo-angular-grid";
-import { FormGroup, FormControl } from "@angular/forms";
-import { SortDescriptor, orderBy } from "@progress/kendo-data-query";
-import { UrlTree, Router, UrlSegment, UrlSegmentGroup } from "@angular/router";
-import { throttleTime } from "rxjs/operators";
+import { SortDescriptor } from "@progress/kendo-data-query";
+import { UrlTree, Router } from "@angular/router";
 import { UserModel } from "../../../models/user-model";
 import Swal from "sweetalert2";
 // import * as GC from '@grapecity/spread-sheets';
@@ -19,6 +18,8 @@ import Swal from "sweetalert2";
 import * as XLSX from "ts-xlsx";
 import { MessageService } from "src/app/service/message.service";
 import { HelpService } from "src/app/service/help.service";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { checkIfInputValid } from "../../../shared/utils";
 
 @Component({
   selector: "app-users",
@@ -27,6 +28,11 @@ import { HelpService } from "src/app/service/help.service";
 })
 export class UsersComponent implements OnInit {
   @ViewChild("user") user: Modal;
+  @ViewChild('grid') grid;
+
+  public allPages: boolean;
+  private _allData: ExcelExportData;
+
   public data = new UserModel();
   public userType = ["Employee", "Manager", "Admin", "Read only scheduler"];
   public gridData: any;
@@ -88,16 +94,27 @@ export class UsersComponent implements OnInit {
     pageSizes: true,
     previousNext: true,
   };
+  showDialog: boolean = false;
+  isFormDirty: boolean = false;
+  currentUrl: string;
+  savePage: any = {};
+  checkIfInputValid = checkIfInputValid;
+
+  public showColumnPicker = false;
+  public columns: string[] = ["Username", "Email address", "Firstname", "Lastname",  "Street", "Active"];
+  public hiddenColumns: string[] = [];
 
   constructor(
     private service: UsersService,
     private storeService: StoreService,
     private router: Router,
     private message: MessageService,
-    private helpService: HelpService
+    private helpService: HelpService,
   ) {
     // this.excelIO = new Excel.IO();
+    this.allData = this.allData.bind(this);
   }
+  
 
   ngOnInit() {
     this.height = this.helpService.getHeightForGrid();
@@ -113,19 +130,62 @@ export class UsersComponent implements OnInit {
       this.changeTheme(mess);
       this.theme = mess;
     });
+    this.currentUrl = this.router.url;
+    
+    this.setPagination();
+  }
+
+  setPagination() {
+    this.savePage = this.helpService.getGridPageSize();
+    if (
+      (this.savePage && this.savePage[this.currentUrl]) ||
+      this.savePage[this.currentUrl + "Take"]
+    ) {
+      this.state.skip = this.savePage[this.currentUrl];
+      this.state.take = this.savePage[this.currentUrl + "Take"];
+    }
   }
 
   getUser() {
     this.service.getUsers(localStorage.getItem("superadmin"), (val) => {
       console.log(val);
       this.currentLoadData = val;
+      if(this.currentLoadData.length < this.state.skip) {
+        this.state.skip = 0;
+      }
       this.gridData = {
         data: val,
       };
       this.gridView = process(val, this.state);
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, this.state).data,
+      }
       this.changeTheme(this.theme);
       this.loading = false;
     });
+  }
+
+  receiveConfirm(event: boolean): void {
+    if(event) {
+      this.user.close();
+      this.isFormDirty = false;
+    }
+      this.showDialog = false;
+  }
+
+  confirmClose(): void {
+    this.user.modalRoot.nativeElement.focus();
+    if(this.isFormDirty) {
+      this.showDialog = true;
+    }else {
+      this.user.close()
+      this.showDialog = false;
+      this.isFormDirty = false
+    }
+  }
+
+  isDirty(): void {
+    this.isFormDirty = true;
   }
 
   newUser() {
@@ -135,6 +195,9 @@ export class UsersComponent implements OnInit {
       this.storeLocation = val;
     });
     this.changeTheme(this.theme);
+    this.user.closeOnEscape = false;
+    this.user.closeOnOutsideClick = false;
+    this.user.hideCloseButton = true;
     this.user.open();
   }
 
@@ -218,6 +281,10 @@ export class UsersComponent implements OnInit {
     this.state.take = event.take;
     this.pageSize = event.take;
     this.loadProducts();
+
+    this.savePage[this.currentUrl] = event.skip;
+    this.savePage[this.currentUrl + 'Take'] = event.take;
+    this.helpService.setGridPageSize(this.savePage);
   }
 
   loadProducts(): void {
@@ -317,6 +384,45 @@ export class UsersComponent implements OnInit {
       }, 50);
     };
     fileReader.readAsArrayBuffer(args.target.files[0]);
+  }
+
+  exportPDF(value: boolean): void {
+    this.allPages = value;
+
+    setTimeout(() => {
+      this.grid.saveAsPDF();
+    }, 0);
+  }
+
+  exportToExcel(grid: GridComponent, allPages: boolean) {
+    this.setDataForExcelExport(allPages);
+
+    setTimeout(() => {
+      grid.saveAsExcel();
+    }, 0);
+  }
+
+  public setDataForExcelExport(allPages: boolean): void {
+    console.log('allPages ', allPages);
+
+    if (allPages) {
+      var myState: State = {
+        skip: 0,
+        take: this.gridData.total,
+      };
+
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, myState).data,
+      }
+    } else {
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, this.state).data,
+      }
+    }
+  }
+
+  public allData(): ExcelExportData {
+    return this._allData;
   }
 
   xlsxToJson(data) {
@@ -485,5 +591,13 @@ export class UsersComponent implements OnInit {
 
   public generateLink(link, param) {
     this.router.navigate([link, param]);
+  }
+
+  public isHidden(columnName: string): boolean {
+    return this.hiddenColumns.indexOf(columnName) > -1;
+  }
+
+  public onOutputHiddenColumns(columns) {
+    this.hiddenColumns = columns;
   }
 }

@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Title } from "@angular/platform-browser";
+import { DomSanitizer, Title } from "@angular/platform-browser";
 import "rxjs/add/operator/map";
 import { ToastrService } from "ngx-toastr";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -11,8 +12,25 @@ export class HelpService {
   constructor(
     private http: HttpClient,
     private titleService: Title,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private sanitizer: DomSanitizer,
   ) {}
+
+  getGridPageSize() {
+    const valueToJSON = JSON.parse(localStorage.getItem("pageSize"));
+    if (valueToJSON === null) {
+      return {};
+    }
+    return valueToJSON;
+  }
+
+  getCountryCode() {
+    return localStorage.getItem("accountLanguage");
+  }
+
+  setGridPageSize(pageSize: any) {
+    localStorage.setItem("pageSize", JSON.stringify(pageSize));
+  }
 
   postApiRequest(method, parametar) {
     return this.http.post(method, parametar).map((res) => res);
@@ -236,5 +254,167 @@ export class HelpService {
       }
     }
     return data;
+  }
+
+  setLanguageForLanding(value: any) {
+    localStorage.setItem(
+      "language-landing",
+      typeof value === "string" ? value : JSON.stringify(value)
+    );
+  }
+
+  getLanguageForLanding() {
+    if (localStorage.getItem("language-landing")) {
+      return JSON.parse(
+        localStorage.getItem("language-landing")
+          ? localStorage.getItem("language-landing")
+          : "{}"
+      );
+    } else {
+      return null;
+    }
+  }
+
+  setSelectionLanguage(value: string) {
+    localStorage.setItem("selectionLanguage", value);
+  }
+
+  getSelectionLanguage() {
+    if (localStorage.getItem("selectionLanguage")) {
+      return localStorage.getItem("selectionLanguage");
+    } else {
+      return null;
+    }
+  }
+
+  getRealLanguageName(): Observable<any> {
+    if (this.getSelectionLanguage()) {
+      return <any>this.getSelectionLanguage();
+    } else {
+      const selectedLanguageCode = this.getSelectionLanguageCode();
+      this.getAllLangs().subscribe((data: any) => {
+        for (let i = 0; i < data.length; i++) {
+          for (let j = 0; j < data[i].similarCode.length; j++) {
+            if (data[i].similarCode[j] === selectedLanguageCode) {
+              return data[i].name;
+            }
+          }
+        }
+      });
+    }
+  }
+
+  getAllLangs() {
+    return this.http.get(
+      "../../assets/configuration/languages/choose-lang.json"
+    );
+  }
+
+  public checkMobileDevice() {
+    if (window.innerWidth < 992) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  setSelectionLanguageCode(value: string) {
+    localStorage.setItem("selectionLanguageCode", value);
+  }
+
+  getSelectionLanguageCode() {
+    if (localStorage.getItem("selectionLanguageCode")) {
+      return localStorage.getItem("selectionLanguageCode");
+    }
+    return null;
+  }
+
+  getNameOfFlag() {
+    const selectionLanguage = this.getSelectionLanguageCode();
+    this.getAllLangs().subscribe((langs: any) => {
+      for (let i = 0; i < langs.length; i++) {
+        for (let j = 0; j < langs[i].similarCode.length; j++) {
+          if (langs[i].similarCode[j] === selectionLanguage) {
+            return langs[i].name;
+          }
+        }
+      }
+    });
+  }
+
+  getLanguageFromFolder(folder: string, language: string) {
+    return this.http.get(
+      "../assets/configuration/languages/landing/pages/" +
+        folder +
+        "/" +
+        language +
+        ".json"
+    );
+  }
+
+  setUserProfileImagePath(user: any) {
+      const TYPED_ARRAY = new Uint8Array(user.img.data);
+      const STRING_CHAR = String.fromCharCode.apply(null, TYPED_ARRAY);
+      let base64String = btoa(STRING_CHAR);
+      let path = this.sanitizer.bypassSecurityTrustUrl(
+        "data:image/png;base64," + base64String
+      );
+    
+      return path;
+  }
+
+  multiSelectArrayToString(array): string {
+    let semicolonSeparatedString = "";
+    if (array) {
+      for (let i = 0; i < array.length; i++) {
+        semicolonSeparatedString += array[i] + ";";
+      }
+      semicolonSeparatedString = semicolonSeparatedString.substring(
+        0,
+        semicolonSeparatedString.length - 1
+      );
+    }
+    return semicolonSeparatedString;
+  }
+
+  multiSelectStringToArray(string): number[] {
+    let multiSelectArrayToString;
+    if (string.split(";") !== undefined) {
+      multiSelectArrayToString = string
+        .split(";")
+        .map(Number);
+    } else {
+      multiSelectArrayToString = Number(string);
+    }
+    return multiSelectArrayToString
+  }
+
+  prepareDraft(formValues, draftName, draftType) {
+    return {
+      ...formValues,
+      draftName: draftName ? draftName : "",
+      place: formValues.place ? formValues.place : "",
+      male: formValues.male ? formValues.male : false,
+      female: formValues.female ? formValues.female : false,
+      excludeCustomersWithEvents: formValues.excludeCustomersWithEvents ? formValues.excludeCustomersWithEvents : false,
+      birthdayFrom: formValues.birthdayFrom ? formValues.birthdayFrom : "",
+      birthdayTo: formValues.birthdayTo ? formValues.birthdayTo : "",
+      profession: formValues.profession ? formValues.profession : "",
+      childs: formValues.childs ? formValues.childs : "",
+      start: formValues.start ? formValues.start : "",
+      end: formValues.end ? formValues.end : "",
+      subject: formValues.subject ? formValues.subject : "",
+      message: formValues.message ? formValues.message : "",
+      
+      category: this.multiSelectArrayToString(formValues.category),
+      creator_id: this.multiSelectArrayToString(formValues.creator_id),
+      recommendation: this.multiSelectArrayToString(formValues.recommendation),
+      relationship: this.multiSelectArrayToString(formValues.relationship),
+      social: this.multiSelectArrayToString(formValues.social),
+      doctor: this.multiSelectArrayToString(formValues.doctor),
+      store: this.multiSelectArrayToString(formValues.store),
+      superadmin: this.getSuperadmin(),
+      type: draftType
+    }
   }
 }

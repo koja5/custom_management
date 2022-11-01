@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject, HostListener } from "@angular/core";
+import { Component, OnInit, Input, Inject, HostListener, Output, EventEmitter } from "@angular/core";
 import { State, process } from "@progress/kendo-data-query";
 import { FormGroup, FormControl } from "@angular/forms";
 import { Observable } from "rxjs";
@@ -12,6 +12,7 @@ import {
 import { SortDescriptor, orderBy } from "@progress/kendo-data-query";
 import { MessageService } from "src/app/service/message.service";
 import { HelpService } from "src/app/service/help.service";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: "app-parameter-item",
@@ -19,6 +20,7 @@ import { HelpService } from "src/app/service/help.service";
   styleUrls: ["./parameter-item.component.scss"],
 })
 export class ParameterItemComponent implements OnInit {
+  @Output() checkIsFormChanged = new EventEmitter<boolean>();
   @Input() type: string;
   public view: Observable<GridDataResult>;
   public gridState: State = {
@@ -56,7 +58,18 @@ export class ParameterItemComponent implements OnInit {
   public editButton = [];
   public height: any;
   public language: any;
-  disabled: boolean = true;
+  public checkBoxDisabled = [];
+  public newRowCheckboxDisabled = true;
+  savePage: any = {};
+  currentUrl: string;
+  // isFormDirty: boolean = false;
+  // showDialog = false;
+
+  public showColumnPicker = false;
+  public columnsComplaint: string[] = ["Title", "Order"];
+  public columnsDoctors: string[] = ["Title", "Firstname", "Lastname", "Gender", "Street", "Web address", "Zip code", "City", "Telephone", "Email address", "Doctor type"];
+  public columnsTherapy: string[] = ["Title", "Title on Invoice", "Order", "Print on Invoice", "Unit", "Description", "Art. nr.", "Net Price", "Vat", "Gross Price", "Category"];
+  public hiddenColumns: string[] = [];
 
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
@@ -69,8 +82,9 @@ export class ParameterItemComponent implements OnInit {
   constructor(
     private service: ParameterItemService,
     private message: MessageService,
-    private helpService: HelpService
-  ) {}
+    private helpService: HelpService,
+    private router: Router
+  ) { }
 
   public ngOnInit(): void {
     this.language = this.helpService.getLanguage();
@@ -87,10 +101,15 @@ export class ParameterItemComponent implements OnInit {
     if (this.type === "Therapies") {
       this.service.getTherapy(superadmin).subscribe((data) => {
         this.therapyList = data;
+
+
       });
     }
 
     if (this.type === "Therapy") {
+
+      console.log('Therapy')
+
       this.service.getVATTex(superadmin).subscribe((data: []) => {
         this.vatTexList = data.sort(function (a, b) {
           return a["sequence"] - b["sequence"];
@@ -103,16 +122,23 @@ export class ParameterItemComponent implements OnInit {
       map((data) => {
         this.currentLoadData = data;
 
-        // data.forEach(elem => {
-        //   elem.printOnInvoice = elem.printOnInvoice ? true : false;
-        // })
+        if(this.currentLoadData.length < this.gridState.skip) {
+          this.gridState.skip = 0;
+        }
+        if (this.type === "Therapy") {
+
+          data.forEach(element => {
+            this.checkBoxDisabled.push(true);
+          });
+
+        }
 
         return process(data, this.gridState);
       })
     );
 
     this.service.getData(this.type, superadmin);
-    console.log(this.view);
+    console.log('view', this.view);
 
     if (localStorage.getItem("theme") !== null) {
       this.theme = localStorage.getItem("theme");
@@ -127,6 +153,29 @@ export class ParameterItemComponent implements OnInit {
       this.changeTheme(this.theme);
     }, 350);
     // this.view = this.service.getData(this.type);
+
+    this.currentUrl = this.router.url;
+
+    this.setPagination();
+  }
+
+  setPagination() {
+    this.savePage = this.helpService.getGridPageSize();
+    if (
+      (this.savePage && this.savePage[this.currentUrl]) ||
+      this.savePage[this.currentUrl + "Take"]
+    ) {
+      this.gridState.skip = this.savePage[this.currentUrl];
+      this.gridState.take = this.savePage[this.currentUrl + "Take"];
+    }
+  }
+
+  checkIsDataSaved() {
+    if(this.editedRowIndex > -1) {
+      this.checkIsFormChanged.emit(true);
+    }else {
+      this.checkIsFormChanged.emit(false);
+    }
   }
 
   public onStateChange(state: State) {
@@ -139,6 +188,7 @@ export class ParameterItemComponent implements OnInit {
   public addHandler({ sender }) {
     this.closeEditor(sender);
     this.editedRowIndex = -1;
+
     if (this.type === "Doctors") {
       this.formGroup = new FormGroup({
         title: new FormControl(),
@@ -152,11 +202,14 @@ export class ParameterItemComponent implements OnInit {
         email: new FormControl(),
       });
     } else if (this.type === "Therapy") {
+
+      this.newRowCheckboxDisabled = false;
+
       this.formGroup = new FormGroup({
         id: new FormControl(),
         title: new FormControl(),
         titleOnInvoice: new FormControl(),
-        printOnInvoice: new FormControl(),
+        printOnInvoice: new FormControl(false),
         sequence: new FormControl(),
         unit: new FormControl(),
         description: new FormControl(),
@@ -181,7 +234,6 @@ export class ParameterItemComponent implements OnInit {
     this.closeEditor(sender);
     console.log(dataItem);
 
-    this.disabled = false;
 
     if (this.type === "Doctors") {
       this.formGroup = new FormGroup({
@@ -199,6 +251,11 @@ export class ParameterItemComponent implements OnInit {
       this.selectedDoctorType = dataItem.doctor_type;
       this.selectedGender = dataItem.gender;
     } else if (this.type === "Therapy") {
+
+
+      console.log('rowIndex', rowIndex);
+      this.checkBoxDisabled[rowIndex] = false;
+
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
         title: new FormControl(dataItem.title),
@@ -223,6 +280,10 @@ export class ParameterItemComponent implements OnInit {
 
     this.editedRowIndex = rowIndex;
     sender.editRow(rowIndex, this.formGroup);
+
+    // this.checkBoxDisabled = this.checkBoxDisabled.map(element => true);
+    // console.log(this.checkBoxDisabled);
+
     this.refreshData();
   }
 
@@ -231,21 +292,32 @@ export class ParameterItemComponent implements OnInit {
     this.vatTexList = this.firstVatTexList;
     this.closeEditor(sender, rowIndex);
     this.refreshData();
+
+    this.checkBoxDisabled = this.checkBoxDisabled.map(element => true);
+
     this.changeTheme(this.theme);
+    this.checkIsFormChanged.emit(false);
   }
 
   setSelectedItem(dataItem): void {
-    console.log(dataItem);
     dataItem.printOnInvoice = !dataItem.printOnInvoice;
 
     this.formGroup.value.printOnInvoice = dataItem.printOnInvoice;
   }
 
   public saveHandler({ sender, rowIndex, formGroup, isNew }) {
-    this.disabled = true;
+
+    this.checkIsFormChanged.emit(false);
+
     this.editedRowIndex = -1;
     const product = formGroup.value;
-    if (this.type === "Therapy" && !this.selectedVATEvent) {
+    console.log(product);
+
+      if (this.type === "Therapy" && !this.selectedVATEvent) {
+
+      this.checkBoxDisabled = this.checkBoxDisabled.map(element => true);
+      console.log(this.checkBoxDisabled);
+
       const sortedData = {
         data: orderBy(this.currentLoadData, this.sort),
         total: this.currentLoadData.length,
@@ -262,7 +334,7 @@ export class ParameterItemComponent implements OnInit {
       } else if (
         rowIndex !== -1 &&
         sortedData.data[rowIndex]["gross_price"] !==
-          formGroup.value.gross_price &&
+        formGroup.value.gross_price &&
         sortedData.data[rowIndex]["vat"] !== formGroup.value.vat
       ) {
         formGroup.value.net_price = (
@@ -304,6 +376,7 @@ export class ParameterItemComponent implements OnInit {
     this.view = this.service.pipe(
       map((data) => {
         this.currentLoadData = data;
+        this.newRowCheckboxDisabled = true;
         return process(data, this.gridState);
       })
     );
@@ -403,7 +476,12 @@ export class ParameterItemComponent implements OnInit {
 
   pageChange(event: PageChangeEvent): void {
     this.gridState.skip = event.skip;
+    this.gridState.take = event.take;
     this.loadProducts();
+
+    this.savePage[this.currentUrl] = event.skip;
+    this.savePage[this.currentUrl + 'Take'] = event.take;
+    this.helpService.setGridPageSize(this.savePage);
   }
 
   sortChange(sort: SortDescriptor[]): void {
@@ -528,5 +606,13 @@ export class ParameterItemComponent implements OnInit {
   @HostListener("window:resize", ["$event"])
   onResize(event) {
     this.height = this.helpService.getHeightForGrid();
+  }
+
+  public isHidden(columnName: string): boolean {
+    return this.hiddenColumns.indexOf(columnName) > -1;
+  }
+
+  public onOutputHiddenColumns(columns) {
+    this.hiddenColumns = columns;
   }
 }

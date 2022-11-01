@@ -1,4 +1,3 @@
-import { InvoicePrefixComponent } from "./administrator/invoice-prefix/invoice-prefix.component";
 import { AddHolidayComponent } from "./administrator/add-holiday/add-holiday.component";
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
@@ -48,6 +47,14 @@ import { InvoiceComponent } from "./invoice/invoice.component";
 import { SmsBirthdayCongratulationComponent } from "./parameters/sms-birthday-congratulation/sms-birthday-congratulation.component";
 import { MailBirthdayCongratulationComponent } from "./parameters/mail-birthday-congratulation/mail-birthday-congratulation.component";
 import { MailPatientCreatedAccountViaFormComponent } from "./parameters/mail-parameters/mail-patient-created-account-via-form/mail-patient-created-account-via-form.component";
+import { ThemeColorsComponent } from "./parameters/theme-colors/theme-colors.component";
+import { HelpComponent } from "./administrator/help/help.component";
+import { ListFaqComponent } from "./administrator/help/list-faq/list-faq.component";
+
+import { ChooseHolidayComponent } from "./parameters/choose-holiday/choose-holiday.component";
+import { FormGuard } from "src/app/service/form-guard/formGuard";
+import { RegisteredClinicsComponent } from "./administrator/registered-clinics/registered-clinics.component";
+import { RegisteredClinicDetailComponent } from "./administrator/registered-clinics/registered-clinic-detail/registered-clinic-detail.component";
 
 const routes: Routes = [
   {
@@ -85,27 +92,67 @@ const routes: Routes = [
       },
       {
         path: "complaint",
+        canDeactivate: [FormGuard],
+
         component: ParametersComponent,
       },
-      { path: "therapy", component: ParametersComponent },
+      {
+        path: "therapy",
+        canDeactivate: [FormGuard],
+        component: ParametersComponent,
+      },
+
       {
         path: "treatment",
+        canDeactivate: [FormGuard],
         component: ParametersComponent,
       },
       {
         path: "recommendation",
+        canDeactivate: [FormGuard],
         component: ParametersComponent,
       },
       {
         path: "relationship",
+        canDeactivate: [FormGuard],
         component: ParametersComponent,
       },
-      { path: "social", component: ParametersComponent },
-      { path: "doctor", component: ParametersComponent },
-      { path: "doctors", component: ParametersComponent },
-      { path: "vat_tax", component: ParametersComponent },
-      { path: "CS", component: ParametersComponent },
-      { path: "state", component: ParametersComponent },
+      {
+        path: "social",
+        canDeactivate: [FormGuard],
+        component: ParametersComponent,
+      },
+      {
+        path: "doctor",
+        canDeactivate: [FormGuard],
+        component: ParametersComponent,
+      },
+      {
+        path: "doctors",
+        canDeactivate: [FormGuard],
+        component: ParametersComponent,
+      },
+      {
+        path: "vat_tax",
+        canDeactivate: [FormGuard],
+        component: ParametersComponent,
+      },
+      {
+        path: "CS",
+        canDeactivate: [FormGuard],
+        component: ParametersComponent,
+      },
+      {
+        path: "state",
+        canDeactivate: [FormGuard],
+        component: ParametersComponent,
+      },
+
+      {
+        path: "theme-colors",
+        canDeactivate: [FormGuard],
+        component: ThemeColorsComponent,
+      },
       {
         path: "event-category",
         component: EventCategoryComponent,
@@ -120,6 +167,7 @@ const routes: Routes = [
       },
       {
         path: "reminders",
+        canDeactivate: [FormGuard],
         component: RemindersComponent,
       },
       {
@@ -169,41 +217,67 @@ const routes: Routes = [
       { path: "reservations", component: ReservationsComponent },
       { path: "template-account", component: TemplateAccountComponent },
       { path: "add-holiday", component: AddHolidayComponent },
-      { path: "invoice-prefix", component: InvoicePrefixComponent },
-      { path: "mail-reminder", component: MailReminderComponent },
+      { path: "define-holidays", component: ChooseHolidayComponent },
+      { path: "registered-clinics", component: RegisteredClinicsComponent },
+      { path: "registered-clinic-detail/:id", component: RegisteredClinicDetailComponent },
+      {
+        path: "mail-reminder",
+        canDeactivate: [FormGuard],
+        component: MailReminderComponent,
+      },
       {
         path: "mail-approve-reservation",
+        canDeactivate: [FormGuard],
         component: MailApproveReservationComponent,
       },
       {
         path: "mail-deny-reservation",
+        canDeactivate: [FormGuard],
         component: MailDenyReservationComponent,
       },
-      { path: "mail-confirm-arrival", component: MailConfirmArrivalComponent },
+      {
+        path: "mail-confirm-arrival",
+        canDeactivate: [FormGuard],
+        component: MailConfirmArrivalComponent,
+      },
       {
         path: "mail-patient-created-account",
+        canDeactivate: [FormGuard],
         component: MailPatientCreatedAccountComponent,
       },
       {
         path: "mail-patient-created-account-via-form",
+        canDeactivate: [FormGuard],
         component: MailPatientCreatedAccountViaFormComponent,
       },
       {
         path: "mail-patient-form-registration",
+        canDeactivate: [FormGuard],
         component: MailPatientFormRegistrationComponent,
       },
       {
         path: "mail-massive",
+        canDeactivate: [FormGuard],
         component: MailMassiveEmailComponent,
       },
-      { path: "sms-reminder", component: SmsReminderComponent },
-      { path: "sms-massive", component: SmsMassiveComponent },
+      {
+        path: "sms-reminder",
+        canDeactivate: [FormGuard],
+        component: SmsReminderComponent,
+      },
+      {
+        path: "sms-massive",
+        canDeactivate: [FormGuard],
+        component: SmsMassiveComponent,
+      },
       {
         path: "change-superadmin-profile",
+        canDeactivate: [FormGuard],
         component: ChangeSuperadminProfileComponent,
       },
       {
         path: "permission-patient-menu",
+        canDeactivate: [FormGuard],
         component: PermissionPatientMenuComponent,
       },
       {
@@ -216,19 +290,30 @@ const routes: Routes = [
       },
       {
         path: "massive-sms",
+        canDeactivate: [FormGuard],
         component: MassiveSmsComponent,
       },
       {
         path: "massive-email",
+        canDeactivate: [FormGuard],
         component: MassiveEmailComponent,
       },
       {
         path: "sms-birthday-congratulation",
+        canDeactivate: [FormGuard],
         component: SmsBirthdayCongratulationComponent,
       },
       {
         path: "mail-birthday-congratulation",
+        canDeactivate: [FormGuard],
         component: MailBirthdayCongratulationComponent,
+      },
+      {
+        path: "help",
+        children: [
+          { path: "", component: HelpComponent, pathMatch: "full" },
+          { path: "faq/:id", component: ListFaqComponent },
+        ],
       },
     ],
   },
@@ -238,4 +323,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DashboardRouting {}
+export class DashboardRouting { }

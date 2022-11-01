@@ -9,6 +9,7 @@ import {
 } from "@progress/kendo-data-query";
 import {
   DataStateChangeEvent,
+  GridComponent,
   PageChangeEvent,
   RowArgs,
 } from "@progress/kendo-angular-grid";
@@ -19,6 +20,9 @@ import Swal from "sweetalert2";
 import * as XLSX from "ts-xlsx";
 import { MessageService } from "src/app/service/message.service";
 import { HelpService } from "src/app/service/help.service";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { Router } from "@angular/router";
+import { checkIfInputValid } from "../../../shared/utils";
 
 @Component({
   selector: "app-store",
@@ -30,6 +34,12 @@ export class StoreComponent implements OnInit {
   @ViewChild("storeEdit") storeEdit: Modal;
   @ViewChild("storeCreate") storeCreate: Modal;
   // public storeEdit = false;
+
+  @ViewChild('grid') grid;
+
+  public allPages: boolean;
+  private _allData: ExcelExportData;
+
   public data = new StoreModel();
   public currentLoadData: any;
   public gridData: any;
@@ -63,13 +73,23 @@ export class StoreComponent implements OnInit {
     pageSizes: true,
     previousNext: true,
   };
+  showDialog: boolean = false;
+  isFormDirty: boolean = false;
+  savePage: any = {};
+  currentUrl: string;
+  checkIfInputValid = checkIfInputValid;
+
+  public showColumnPicker = false;
+  public columns: string[] = ["Store name", "Vat", "Email address", "Street", "Place", "Telephone"];
+  public hiddenColumns: string[] = [];
 
   constructor(
     public service: StoreService,
     public message: MessageService,
-    private helpService: HelpService
+    private helpService: HelpService,
+    private router: Router
   ) {
-    // this.excelIO = new Excel.IO();
+    this.allData = this.allData.bind(this);
   }
 
   ngOnInit() {
@@ -86,6 +106,21 @@ export class StoreComponent implements OnInit {
       this.changeTheme(mess);
       this.theme = mess;
     });
+
+    this.currentUrl = this.router.url;
+
+    this.setPagination();
+  }
+
+  setPagination() {
+    this.savePage = this.helpService.getGridPageSize();
+    if (
+      (this.savePage && this.savePage[this.currentUrl]) ||
+      this.savePage[this.currentUrl + "Take"]
+    ) {
+      this.state.skip = this.savePage[this.currentUrl];
+      this.state.take = this.savePage[this.currentUrl + "Take"];
+    }
   }
 
   getStore() {
@@ -93,19 +128,53 @@ export class StoreComponent implements OnInit {
     this.service.getStore(this.idUser, (val) => {
       console.log(val);
       this.currentLoadData = val;
+      if(this.currentLoadData.length < this.state.skip) {
+        this.state.skip = 0;
+      }
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, this.state).data,
+      }
+      this.gridView = process(val, this.state);
+
       this.gridData = {
         data: val,
       };
-      this.gridView = process(val, this.state);
+
       this.changeTheme(this.theme);
       this.loading = false;
       this.loadingGrid = false;
     });
   }
 
+  receiveConfirm(event: boolean, modal: Modal): void {
+    if(event) {
+      modal.close();
+      this.isFormDirty = false;
+    }
+      this.showDialog = false;
+  }
+
+  confirmClose(modal: Modal): void {
+    modal.modalRoot.nativeElement.focus();
+    if(this.isFormDirty) {
+      this.showDialog = true;
+    }else {
+      modal.close()
+      this.showDialog = false;
+      this.isFormDirty = false
+    }
+  }
+
+  isDirty(): void {
+    this.isFormDirty = true;
+  }
+
   newStore() {
     this.initialParams();
     this.changeTheme(this.theme);
+    this.storeCreate.closeOnEscape = false;
+    this.storeCreate.closeOnOutsideClick = false;
+    this.storeCreate.hideCloseButton = true;
     this.storeCreate.open();
   }
 
@@ -194,7 +263,7 @@ export class StoreComponent implements OnInit {
     this.storeEdit.close();
   }
 
-  deleteStore(store) {}
+  deleteStore(store) { }
 
   dataStateChange(state: DataStateChangeEvent): void {
     this.state = state;
@@ -213,6 +282,10 @@ export class StoreComponent implements OnInit {
     this.state.take = event.take;
     this.pageSize = event.take;
     this.loadProducts();
+
+    this.savePage[this.currentUrl] = event.skip;
+    this.savePage[this.currentUrl + 'Take'] = event.take;
+    this.helpService.setGridPageSize(this.savePage);
   }
 
   loadProducts(): void {
@@ -224,6 +297,9 @@ export class StoreComponent implements OnInit {
     this.data = store;
     this.start_work = new Date(this.data.start_work);
     this.end_work = new Date(this.data.end_work);
+    this.storeEdit.closeOnEscape = false;
+    this.storeEdit.closeOnOutsideClick = false;
+    this.storeEdit.hideCloseButton = true;
     this.storeEdit.open();
     this.changeTheme(this.theme);
   }
@@ -332,6 +408,45 @@ export class StoreComponent implements OnInit {
       }, 50);
     };
     fileReader.readAsArrayBuffer(args.target.files[0]);
+  }
+
+  exportPDF(value: boolean): void {
+    this.allPages = value;
+
+    setTimeout(() => {
+      this.grid.saveAsPDF();
+    }, 0);
+  }
+
+  exportToExcel(grid: GridComponent, allPages: boolean) {
+    this.setDataForExcelExport(allPages);
+
+    setTimeout(() => {
+      grid.saveAsExcel();
+    }, 0);
+  }
+
+  public setDataForExcelExport(allPages: boolean): void {
+    console.log('allPages ', allPages);
+
+    if (allPages) {
+      var myState: State = {
+        skip: 0,
+        take: this.gridData.total,
+      };
+
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, myState).data,
+      }
+    } else {
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, this.state).data,
+      }
+    }
+  }
+
+  public allData(): ExcelExportData {
+    return this._allData;
   }
 
   xlsxToJson(data) {
@@ -497,5 +612,13 @@ export class StoreComponent implements OnInit {
   public sortChange(sort: SortDescriptor[]): void {
     this.state.sort = sort;
     this.gridView = process(this.gridData.data, this.state);
+  }
+
+  public isHidden(columnName: string): boolean {
+    return this.hiddenColumns.indexOf(columnName) > -1;
+  }
+
+  public onOutputHiddenColumns(columns) {
+    this.hiddenColumns = columns;
   }
 }

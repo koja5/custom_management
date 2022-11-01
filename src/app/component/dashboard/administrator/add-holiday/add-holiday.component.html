@@ -1,100 +1,73 @@
 <div class="tabs widget">
   <ul class="nav nav-tabs widget mb-0">
-    <li
-      *ngIf="type === userType.owner || type === userType.admin"
-      [ngClass]="currentTab === 'holidays' ? 'active' : ''"
-    >
+    <li [ngClass]="currentTab === tabType.Holidays ? 'active' : '' ">
       <a (click)="changeTab(tabType.Holidays)">{{ language.holidaysTitle }}</a>
     </li>
-    <li *ngIf="isOwner" [ngClass]="currentTab === 'templates' ? 'active' : ''">
-      <a (click)="changeTab(tabType.Templates)">{{
-        language.templatesTitle
-      }}</a>
+    <li [ngClass]="currentTab === tabType.Templates ? 'active' : '' ">
+      <a (click)="changeTab(tabType.Templates)">{{ language.templatesTitle }}</a>
     </li>
   </ul>
 </div>
 
 <!-- Tab panes -->
-<div
-  *ngIf="currentTab === tabType.Holidays"
-  class="content-wrapper"
-  [style.height]="height"
->
+<div class="content-wrapper" *ngIf="currentTab === tabType.Holidays">
   <div class="row mx-0 mb-3">
     <div class="col-4">
-      <kendo-combobox
-        [data]="templateList"
-        [valueField]="'id'"
-        [textField]="'name'"
-        (valueChange)="onTemplateChange()"
-        class="col-4"
-        [(ngModel)]="selectedTemplate"
-        name="template"
-      >
+      <kendo-combobox [data]="holidayTemplateList" [valueField]="'id'" [textField]="'name'"
+        (valueChange)="onHolidayTemplateChange()" class="col-4" [(ngModel)]="selectedHolidayTemplate" name="template">
       </kendo-combobox>
     </div>
   </div>
 
-  <div [style.height]="height">
-    <ejs-schedule
-      #scheduleObj
-      width="100%"
-      height="100%"
-      currentView="Month"
-      cssClass="custom-class"
-      [eventSettings]="eventSettings"
-      [allowDragAndDrop]="false"
-      (renderCell)="onRenderCell($event)"
-      (popupOpen)="onPopupOpen($event)"
-      (cellClick)="onCellClick($event)"
-    >
-      <e-views>
-        <e-view option="Month">
-          <ng-template #eventSettingsTemplate let-data>
-            <div class="template-wrap w-100 h-100">
-              <div class="subject">{{ data.Subject }}</div>
-            </div>
-          </ng-template>
-        </e-view>
-      </e-views>
-    </ejs-schedule>
+  <div class="content-wrapper" *ngIf="currentTab === tabType.Holidays">
+    <div class="h-100">
+
+      <div class="float-left pt-3">
+        <button kendoButton [icon]="'add'" (click)="openAddNewHolidayModal()" [primary]="true" class="addButton">
+          {{ language.addNew }}
+        </button>
+      </div>
+      <hr />
+      <table class="table table-responsive">
+        <thead>
+          <tr>
+            <th>{{ language.title }}</th>
+            <th>{{ language.date }}</th>
+            <th>{{ language.edit }}</th>
+            <th>{{ language.delete }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let holiday of holidayList">
+            <td>{{ holiday.Subject }}</td>
+            <td>{{ getFormattedDate(holiday) }}</td>
+            <td>
+              <button kendoButton [icon]="'k-icon k-i-edit'" (click)="openEditHolidayModal(holiday)"></button>
+            </td>
+            <td>
+              <button kendoButton [icon]="'k-icon k-i-delete'" (click)="openDeleteHolidayDialog(holiday.id)"></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
 <div class="content-wrapper" *ngIf="currentTab === tabType.Templates">
   <div class="h-100">
-    <kendo-grid
-      *ngIf="language !== undefined"
-      [data]="gridTemplateData"
-      style="height: 89.5vh"
-      [resizable]="true"
-      [pageSize]="state.take"
-      [skip]="state.skip"
-      [sort]="state.sort"
-      [sortable]="true"
-      [pageable]="pageable"
-      (pageChange)="pageChange($event)"
-      [pageSize]="pageSize"
-      (sortChange)="sortChange($event)"
-      [loading]="loading"
-    >
-      <kendo-grid-messages
-        pagerPage="{{ language.pagerPage }}"
-        pagerOf="{{ language.pagerOf }}"
-        pagerItems="{{ language.pagerItems }}"
-        pagerItemsPerPage="{{ language.pagerItemsPerPage }}"
-      >
+    <kendo-grid *ngIf="language !== undefined" [data]="holidayTemplatesGridData" style="height: 89.5vh"
+      [resizable]="true" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [sortable]="true"
+      [pageable]="pageable" (pageChange)="pageChange($event)" [pageSize]="pageSize" (sortChange)="sortChange($event)"
+      [loading]="loading">
+      <kendo-grid-messages pagerPage="{{ language.pagerPage }}" pagerOf="{{ language.pagerOf }}"
+        pagerItems="{{ language.pagerItems }}" pagerItemsPerPage="{{ language.pagerItemsPerPage }}">
       </kendo-grid-messages>
 
       <ng-template kendoGridToolbarTemplate>
         <div class="float-left pt-3">
-          <button
-            kendoButton
-            [icon]="'add'"
-            (click)="addNewModal()"
-            [primary]="true"
-            class="addButton"
-          >
+          <button kendoButton [icon]="'add'" (click)="openAddNewHolidayTemplateModal()" [primary]="true"
+            class="addButton">
             {{ language.addNew }}
           </button>
         </div>
@@ -109,182 +82,96 @@
 
       <kendo-grid-column width="100">
         <ng-template kendoGridCellTemplate let-dataItem>
-          <button
-            kendoButton
-            [icon]="'k-icon k-i-edit'"
-            (click)="openEditTemplateModal(dataItem)"
-          ></button>
+          <button kendoButton [icon]="'k-icon k-i-edit'" (click)="openEditHolidayTemplateModal(dataItem)"></button>
         </ng-template>
       </kendo-grid-column>
 
       <kendo-grid-column width="100">
         <ng-template kendoGridCellTemplate let-dataItem>
-          <button
-            kendoButton
-            [icon]="'k-icon k-i-delete'"
-            (click)="deleteTemplate(dataItem.id)"
-          ></button>
+          <button kendoButton [icon]="'k-icon k-i-delete'"
+            (click)="openDeleteHolidayTemplateDialog(dataItem.id)"></button>
         </ng-template>
       </kendo-grid-column>
     </kendo-grid>
   </div>
 </div>
 
-<modal
-  #addVacationModal
-  (onClose)="closeAddVacationModal()"
-  modalClass="modal-md modal-dialog-centered no-footer"
->
+<modal #holidayModal (onClose)="closeHolidayModal()" modalClass="modal-md modal-dialog-centered no-footer">
   <modal-header>
-    <h4>{{ language.addHoliday }}</h4>
+    <h4> {{ holidayModalTitle }}</h4>
   </modal-header>
   <modal-content class="pb-0">
-    <form
-      name="addHolidayForm"
-      class="addHolidayForm"
-      (ngSubmit)="addHoliday()"
-      #addHolidayForm="ngForm"
-    >
+    <form name="holidayForm" class="holidayForm" (ngSubmit)="addHoliday()" #holidayForm="ngForm">
       <div class="form-group">
         <kendo-textbox-container floatingLabel="{{ language.title }}">
-          <input
-            kendoTextBox
-            required
-            type="text"
-            class="col-12"
-            pattern="[a-zA-Z0-9 ]+"
-            [(ngModel)]="newHoliday.Subject"
-            name="subject"
-          />
+          <input kendoTextBox id="subject" required type="text" class="col-12" pattern="[a-zA-Z0-9 ]+"
+            [(ngModel)]="currentHoliday.Subject" name="subject" />
         </kendo-textbox-container>
+        <mat-error *ngIf="checkIfInputValid('subject')">{{ language?.thisFieldIsRequired }}</mat-error>
       </div>
       <div class="form-group">
         <kendo-textbox-container>
-          <kendo-datepicker
-            id="startTime"
-            [format]="'dd.MM.yyyy'"
-            class="noPadding"
-            name="startTime"
-            [(ngModel)]="newHoliday.StartTime"
-            (valueChange)="setMinEndTime($event)"
-          >
+          <kendo-datepicker id="startTime" [format]="'dd.MM.yyyy'" class="noPadding" name="startTime"
+            [(ngModel)]="currentHoliday.StartTime" (valueChange)="setMinEndTime($event)">
           </kendo-datepicker>
         </kendo-textbox-container>
       </div>
       <div class="form-group">
         <kendo-textbox-container>
-          <kendo-datepicker
-            #endTime
-            [format]="'dd.MM.yyyy'"
-            class="noPadding"
-            name="endTime"
-            [(ngModel)]="newHoliday.EndTime"
-          >
+          <kendo-datepicker #endTime [format]="'dd.MM.yyyy'" class="noPadding" name="endTime"
+            [(ngModel)]="currentHoliday.EndTime">
           </kendo-datepicker>
         </kendo-textbox-container>
       </div>
 
       <div class="form-group text-center" *ngIf="addNewHoliday">
-        <button
-          kendoButton
-          [disabled]="addHolidayForm.form.invalid"
-          [primary]="true"
-          class="form-button"
-          type="submit"
-        >
+        <button kendoButton [disabled]="holidayForm.form.invalid" [primary]="true" class="form-button" type="submit">
           {{ language.add }}
         </button>
       </div>
 
       <div class="form-group text-center" *ngIf="!addNewHoliday">
-        <button
-          kendoButton
-          [disabled]="addHolidayForm.form.invalid"
-          [primary]="true"
-          class="form-button"
-          type="button"
-          (click)="updateHoliday()"
-        >
+        <button kendoButton [disabled]="holidayForm.form.invalid" [primary]="true" class="form-button" type="button"
+          (click)="updateHoliday()">
           {{ language.update }}
-        </button>
-
-        <button
-          kendoButton
-          [primary]="false"
-          class="form-button"
-          type="button"
-          (click)="deleteHoliday()"
-        >
-          {{ language.delete }}
         </button>
       </div>
     </form>
   </modal-content>
 </modal>
 
-<modal
-  #templateModal
-  (onClose)="closeTemplateModal()"
-  modalClass="modal-md modal-dialog-centered no-footer"
->
+<modal #templateModal (onClose)="closeTemplateModal()" modalClass="modal-md modal-dialog-centered no-footer">
   <modal-header>
-    <h4>{{ language.editTemplate }}</h4>
+    <h4> {{ templateModalTitle }}</h4>
   </modal-header>
   <modal-content class="pb-0">
-    <form
-      (ngSubmit)="
+    <form (ngSubmit)="
         templateForm.form.valid === true
-          ? operationMode === 'add'
+          ? addTemplate
             ? createTemplate()
             : updateTemplate()
           : null
-      "
-      #templateForm="ngForm"
-    >
+      " #templateForm="ngForm">
       <div class="form-group">
-        <kendo-textbox-container floatingLabel="{{ language.title }}">
-          <input
-            kendoTextBox
-            required
-            type="text"
-            class="col-12"
-            [(ngModel)]="data.name"
-            name="name"
-          />
+        <kendo-textbox-container id="title" floatingLabel="{{ language.title }}">
+          <input kendoTextBox required type="text" class="col-12" [(ngModel)]="currentTemplate.name" name="name" />
         </kendo-textbox-container>
+        <mat-error *ngIf="checkIfInputValid('title')">{{ language?.thisFieldIsRequired }}</mat-error>
       </div>
 
       <div class="form-group">
         <kendo-textbox-container floatingLabel="{{ language.description }}">
-          <input
-            kendoTextBox
-            type="text"
-            class="col-12"
-            [(ngModel)]="data.description"
-            name="description"
-          />
+          <input kendoTextBox type="text" class="col-12" [(ngModel)]="currentTemplate.description" name="description" />
         </kendo-textbox-container>
       </div>
 
       <div class="form-group" style="text-align: center">
-        <button
-          *ngIf="operationMode === 'add'"
-          kendoButton
-          [primary]="true"
-          class="form-button"
-          [disabled]="templateForm.form.invalid"
-          type="submit"
-        >
+        <button *ngIf="addTemplate" kendoButton [primary]="true" class="form-button"
+          [disabled]="templateForm.form.invalid" type="submit">
           {{ language.add }}
         </button>
-        <button
-          *ngIf="operationMode === 'edit'"
-          kendoButton
-          [primary]="true"
-          class="form-button"
-          [disabled]="templateForm.form.invalid"
-          type="submit"
-        >
+        <button *ngIf="!addTemplate" kendoButton [primary]="true" class="form-button"
+          [disabled]="templateForm.form.invalid" type="submit">
           {{ language.edit }}
         </button>
       </div>
@@ -292,24 +179,27 @@
   </modal-content>
 </modal>
 
-<kendo-dialog
-  title="{{ language.pleaseConfirm }}"
-  *ngIf="deleteModal"
-  (close)="deleteModal = false"
-  [minWidth]="250"
-  [width]="450"
->
+<kendo-dialog title="{{ language.pleaseConfirm }}" *ngIf="deleteModal" (close)="closeDeleteDialog()" [minWidth]="250"
+  [width]="450">
   <div class="modal-body text-center">
-    <img
-      src="../../../../assets/images/sent.png"
-      alt=""
-      width="50"
-      height="46"
-    />
-    <h3>Are you sure you want to continue?</h3>
+    <img src="../../../../assets/images/sent.png" alt="" width="50" height="46" />
+    <h3>{{language.deleteDialogTitleAreYouSure}}</h3>
   </div>
   <kendo-dialog-actions>
-    <button kendoButton (click)="action('no')">No</button>
-    <button kendoButton (click)="action('yes')" primary="true">Yes</button>
+    <button kendoButton (click)="closeDeleteDialog()">{{ language.no }}</button>
+    <button kendoButton (click)="deleteHolidayTemplate()" primary="true">{{ language.yes }}</button>
+  </kendo-dialog-actions>
+</kendo-dialog>
+
+
+<kendo-dialog title="{{ language.pleaseConfirm }}" *ngIf="deleteHolidayModal" (close)="closeDeleteHolidayDialog()"
+  [minWidth]="250" [width]="450">
+  <div class="modal-body text-center">
+    <img src="../../../../assets/images/sent.png" alt="" width="50" height="46" />
+    <h3>{{ language.deleteDialogTitleAreYouSure }}</h3>
+  </div>
+  <kendo-dialog-actions>
+    <button kendoButton (click)="closeDeleteHolidayDialog()">{{ language.no }}</button>
+    <button kendoButton (click)="deleteHoliday()" primary="true">{{ language.yes }}</button>
   </kendo-dialog-actions>
 </kendo-dialog>

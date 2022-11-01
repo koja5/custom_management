@@ -308,13 +308,8 @@
                 " (renderCell)="onRenderCell($event)" (actionBegin)="onActionBegin($event)"
                 (popupOpen)="onPopupOpen($event)" (drag)="onItemDrag($event)" (resizeStop)="onItemDrag($event)">
                 <ng-template #dateHeaderTemplate let-data>
-                  <div
-                    class="date-text"
-                    title=" {{ getDateHeaderText(data.date) }}"
-                  >
+                  <div class="date-text" title=" {{ getDateHeaderText(data.date) }}">
                     {{ getDateHeaderText(data.date) }}
-                    <br />
-                    {{ getDateHoliday(data.date) }}
                   </div>
                 </ng-template>
                 <e-views>
@@ -439,13 +434,7 @@
                         title="{{ language.confirmed }}"></span>
                     </ng-template>
                   </e-view>
-                  <e-view option="Month">
-                    <!-- <ng-template #eventSettingsTemplate let-data>
-                      <div class='template-wrap w-100 h-100'>
-                        <div class="subject"> {{ getDateHoliday(data.date) }}</div>
-                      </div>
-                    </ng-template> -->
-                  </e-view>
+                  <e-view option="Month"></e-view>
                   <e-view option="Year"></e-view>
                   <e-view option="Agenda"></e-view>
                   <e-view option="TimelineDay"></e-view>
@@ -1096,12 +1085,8 @@
     <modal-footer class="modal-footer-none"> </modal-footer>
   </modal>
 
-  <kendo-dialog
-    *ngIf="requestForConfirmArrival"
-    (close)="requestForConfirmArrival = false"
-    [minWidth]="250"
-    [width]="365"
-  >
+  <kendo-dialog *ngIf="requestForConfirmArrival" (close)="requestForConfirmArrival = false" [minWidth]="250"
+    [width]="365">
     <p style="margin: 30px; text-align: center">
       {{ language.confirmRequestFromClient }}
     </p>
@@ -1115,12 +1100,8 @@
     </kendo-dialog-actions>
   </kendo-dialog>
 
-  <kendo-dialog
-    *ngIf="modalConfirmEventMove"
-    (close)="modalConfirmEventMove = false; refreshEvents()"
-    [minWidth]="250"
-    [width]="365"
-  >
+  <kendo-dialog *ngIf="modalConfirmEventMove" (close)="modalConfirmEventMove = false; refreshEvents()" [minWidth]="250"
+    [width]="365">
     <p style="margin: 30px; text-align: center">
       {{ language.confirmEventMove }}
     </p>

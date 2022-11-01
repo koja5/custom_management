@@ -27,6 +27,7 @@ import { ParametersRouting } from './parameters-routing';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
 };
+import { SharedComponentsModule } from "src/app/shared/shared-components.module";
 
 @NgModule({
   declarations: [],
@@ -51,6 +52,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ModalModule,
     LayoutModule,
     SplitterModule,
+    SharedComponentsModule
   ],
   providers: [
     {
@@ -59,4 +61,4 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     },
   ],
 })
-export class ParametersModule {}
+export class ParametersModule { }

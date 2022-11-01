@@ -1,0 +1,76 @@
+<section
+  class="cta-subscribe bg-dark ptb-120 position-relative overflow-hidden"
+  *ngIf="language"
+>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-7 col-md-8">
+        <div class="subscribe-info-wrap text-center position-relative z-2">
+          <div class="section-heading">
+            <h4 class="h5 text-warning">
+              {{ language.subscribeSectionUpText }}
+            </h4>
+            <h1>{{ language.subscribeSectionTitle }}</h1>
+            <p>
+              {{ language.subscribeSectionText }}
+            </p>
+          </div>
+          <div class="form-block-banner mw-60 m-auto mt-5">
+            <form
+              id="email-form2"
+              name="email-form"
+              class="subscribe-form d-flex"
+            >
+              <input
+                type="email"
+                class="form-control mr-2"
+                name="Email"
+                placeholder="{{ language.subscribeSectionTextPlaceholder }}"
+                [(ngModel)]="email"
+                email="true"
+              />
+              <button
+                (click)="sendForDemoAccount()"
+                class="btn-primary btn-subscribe"
+              >
+                {{ language.subscribeSectionSendButton }}
+              </button>
+            </form>
+          </div>
+          <ul class="nav justify-content-center subscribe-feature-list mt-3">
+            <li class="nav-item">
+              <span
+                ><i class="fa fa-check text-primary mr-2"></i
+                >{{ language.subscribeSectionTryPeriod }}</span
+              >
+            </li>
+            <li class="nav-item">
+              <span
+                ><i class="fa fa-check text-primary mr-2"></i
+                >{{ language.subscribeSectionNoNeedCreditCard }}</span
+              >
+            </li>
+            <li class="nav-item">
+              <span
+                ><i class="fa fa-check text-primary mr-2"></i
+                >{{ language.subscribeSectionSupport }}</span
+              >
+            </li>
+            <li class="nav-item">
+              <span
+                ><i class="fa fa-check text-primary mr-2"></i
+                >{{ language.subscribeSectionAnytimeCancel }}</span
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div
+      class="bg-circle rounded-circle circle-shape-3 position-absolute bg-dark-light left-5"
+    ></div>
+    <div
+      class="bg-circle rounded-circle circle-shape-1 position-absolute bg-warning right-5"
+    ></div>
+  </div>
+</section>

@@ -7,7 +7,11 @@ registerLocaleData(localeDE);
 
 import { AppRoutingModule } from "./app-routing.module";
 import { HttpModule } from "@angular/http";
-import { HttpClientModule, HttpClientJsonpModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import {
+  HttpClientModule,
+  HttpClientJsonpModule,
+  HTTP_INTERCEPTORS,
+} from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
@@ -16,9 +20,9 @@ import { LayoutModule } from "@progress/kendo-angular-layout";
 import { ToastrModule } from "ngx-toastr";
 
 // guard
-import { LoggedGuard } from "./service/login-guard/loggedGuard";
-import { LoginGuard } from "./service/login-guard/loginGuard";
-import { DashboardGuard } from "./service/login-guard/dashboardGuard";
+import { LoggedGuard } from "./service/guards/loggedGuard";
+import { LoginGuard } from "./service/guards/loginGuard";
+import { DashboardGuard } from "./service/guards/dashboardGuard";
 
 //component
 import { AppComponent } from "./app.component";
@@ -41,14 +45,17 @@ import { NotFoundComponent } from "./component/templates/not-found/not-found.com
 
 import { DashboardModule } from "./component/dashboard/dashboard.module";
 import { ConfirmArrivalComponent } from "./component/templates/confirm-arrival/confirm-arrival.component";
-import { SharedModule } from './shared.module';
-import { DymanicElementsModule } from './component/dynamic-elements/dymanic-elements.module';
-import { DynamicMessageComponent } from './component/templates/dynamic-message/dynamic-message.component';
-import { PatientFormSuccessComponent } from './component/templates/patient-form-success/patient-form-success.component';
+import { SharedModule } from "./shared.module";
+import { DymanicElementsModule } from "./component/dynamic-elements/dymanic-elements.module";
+import { DynamicMessageComponent } from "./component/templates/dynamic-message/dynamic-message.component";
+import { PatientFormSuccessComponent } from "./component/templates/patient-form-success/patient-form-success.component";
 import { PrivacyPolicyComponent } from "./component/templates/privacy-policy/privacy-policy.component";
 import { TermsComponent } from "./component/templates/terms/terms.component";
 import { ImpressumComponent } from "./component/templates/impressum/impressum.component";
 import { SharedComponentsModule } from "./shared/shared-components.module";
+import { RouterModule } from "@angular/router";
+import { FormGuard } from "./service/form-guard/formGuard";
+import { NgxStripeModule } from "ngx-stripe";
 
 @NgModule({
   declarations: [
@@ -76,17 +83,20 @@ import { SharedComponentsModule } from "./shared/shared-components.module";
     LayoutModule,
     SharedModule,
     DymanicElementsModule,
-    SharedComponentsModule
+    SharedComponentsModule,
+    RouterModule,
+    NgxStripeModule.forRoot('pk_test_51LhYhHL4uVudLiXA5WwSojoMtx6m0rOM7fufOkPllausovqA0BhBJ0Id0ROuRb336IVLZMjshamhIIOlT1hFOAAS00zH00KnIN')
   ],
   providers: [
     MailService,
     CookieService,
     TaskService,
     LoggedGuard,
+    FormGuard,
     DashboardGuard,
     LoginGuard,
     MessageService,
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

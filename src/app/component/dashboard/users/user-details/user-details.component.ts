@@ -11,6 +11,11 @@ import { MessageService } from "src/app/service/message.service";
 import { WorkTimeColorsService } from "src/app/service/work-time-colors.service";
 import { DynamicService } from "src/app/service/dynamic.service";
 import { UserType } from "src/app/component/enum/user-type";
+import { MailService } from "src/app/service/mail.service";
+import { LoginService } from "src/app/service/login.service";
+import { HelpService } from "src/app/service/help.service";
+import { PackLanguageService } from "src/app/service/pack-language.service";
+import { AccountService } from "src/app/service/account.service";
 
 @Component({
   selector: "app-user-details",
@@ -19,6 +24,7 @@ import { UserType } from "src/app/component/enum/user-type";
 })
 export class UserDetailsComponent implements OnInit {
   @ViewChild("user") user: Modal;
+  @ViewChild("chooseImage") chooseImage: Modal;
   public id: string;
   public data: any;
   public imagePath: any;
@@ -48,6 +54,12 @@ export class UserDetailsComponent implements OnInit {
   public statisticLastWeek: any;
   public configField: any;
   public userTypeEnum = UserType;
+  showDialog: boolean = false;
+  isFormDirty: boolean = false;
+  updateImageInput: any;
+  isFileChoosen: boolean = false;
+  fileName: string = '';
+  currentUser: any;
 
   constructor(
     public route: ActivatedRoute,
@@ -58,14 +70,70 @@ export class UserDetailsComponent implements OnInit {
     public taskService: TaskService,
     public message: MessageService,
     public workTimeColorService: WorkTimeColorsService,
-    private dynamicService: DynamicService
+    private dynamicService: DynamicService,
+    private mailService: MailService,
+    private loginService: LoginService,
+    private packLanguage: PackLanguageService,
+    private helpService: HelpService,
+    private accountService: AccountService,
   ) {}
 
   ngOnInit() {
     this.id = this.route.snapshot.params["id"];
+    this.getCurrentUser();
+    this.getUser();
+
+    this.language = JSON.parse(localStorage.getItem("language"));
+
+    this.storeService.getStore(localStorage.getItem("idUser"), (val) => {
+      this.storeLocation = val;
+    });
+
+    /*this.taskService.getTaskColor().subscribe(data => {
+      for (let i = 0; i < data['length']; i++) {
+        this.palette.push(data[i].color);
+      }
+    });*/
+
+    this.workTimeColorService
+      .getWorkTimeColors(localStorage.getItem("superadmin"))
+      .subscribe((data: []) => {
+        const colors = data.sort(function (a, b) {
+          return a["sequence"] - b["sequence"];
+        });
+        for (let i = 0; i < colors["length"]; i++) {
+          this.palette.push(colors[i]["color"]);
+        }
+      });
+
+    this.workTimeData();
+
+    if (localStorage.getItem("theme") !== null) {
+      this.theme = localStorage.getItem("theme");
+    }
+
+    setTimeout(() => {
+      this.changeTheme(this.theme);
+    }, 500);
+
+    this.message.getTheme().subscribe((mess) => {
+      this.changeTheme(mess);
+      this.theme = mess;
+    });
+
+    this.onInitData();
+  }
+
+  getCurrentUser() {
+    this.service.getMe(localStorage.getItem("idUser"), (val) => {
+      this.currentUser = val[0];
+    });
+  }
+
+  getUser() {
     this.service.getUserWithId(this.id, (val) => {
-      console.log(val);
       this.data = val[0];
+      console.log(this.data);
       this.modelData();
       if (
         val[0].img !== null &&
@@ -91,52 +159,39 @@ export class UserDetailsComponent implements OnInit {
         console.log(this.imagePath);
       }
     });
+  }
 
-    this.language = JSON.parse(localStorage.getItem("language"));
-
-    this.storeService.getStore(localStorage.getItem("idUser"), (val) => {
-      this.storeLocation = val;
-    });
-
-    /*this.taskService.getTaskColor().subscribe(data => {
-      for (let i = 0; i < data['length']; i++) {
-        this.palette.push(data[i].color);
-      }
-    });*/
-
-    this.workTimeColorService
-      .getWorkTimeColors(localStorage.getItem("superadmin"))
-      .subscribe((data: []) => {
-        const colors = data.sort(function (a, b) {
-          return a["sequence"] - b["sequence"];
-        });
-        console.log(data);
-        for (let i = 0; i < colors["length"]; i++) {
-          this.palette.push(colors[i]["color"]);
-        }
+  sendRecoveryLink() {
+    const thisObject = this;
+    thisObject.data["language"] = this.packLanguage.getLanguageForForgotMail();
+    if (this.data.email !== "") {
+      this.loginService.forgotPassword(this.data, function (exist, notVerified) {
+        setTimeout(() => {
+          if (exist) {
+            thisObject.mailService
+              .sendForgetMail(thisObject.data)
+              .subscribe(
+                (data) => {
+                  thisObject.helpService.successToastr(
+                    thisObject.language.sendPasswordRecovery,
+                    thisObject.language.sendPasswordRecoverySucess
+                  );
+                },
+                (error) => {
+                  thisObject.helpService.errorToastr(
+                    thisObject.language.sendPasswordRecovery,
+                    thisObject.language.sendPasswordRecoveryError
+                  );
+                }
+              );
+          }
+        }, 100);
       });
-
-    this.workTimeData();
-
-    if (localStorage.getItem("theme") !== null) {
-      this.theme = localStorage.getItem("theme");
     }
-
-    setTimeout(() => {
-      this.changeTheme(this.theme);
-    }, 500);
-
-    this.message.getTheme().subscribe((mess) => {
-      this.changeTheme(mess);
-      this.theme = mess;
-    });
-
-    this.onInitData();
   }
 
   onInitData() {
     this.service.getCountAllTasksForUser(this.id).subscribe((data) => {
-      console.log(data);
       if (data["length"] !== 0) {
         this.totalSum = data[0].total;
       } else {
@@ -222,6 +277,7 @@ export class UserDetailsComponent implements OnInit {
             configFieldCopy
           );
         }, 100);
+        this.isFormDirty = false;
       }
     });
   }
@@ -384,8 +440,34 @@ export class UserDetailsComponent implements OnInit {
     this.location.back();
   }
 
+  receiveConfirm(event: boolean): void {
+    if(event) {
+      this.user.close();
+      this.isFormDirty = false;
+    }
+      this.showDialog = false;
+  }
+
+  confirmClose(): void {
+    this.user.modalRoot.nativeElement.focus();
+    if(this.isFormDirty) {
+      this.showDialog = true;
+    }else {
+      this.user.close()
+      this.showDialog = false;
+      this.isFormDirty = false
+    }
+  }
+
+  isDirty(): void {
+    this.isFormDirty = true;
+  }
+
   editOptions() {
     this.workTimeData();
+    this.user.closeOnEscape = false;
+    this.user.closeOnOutsideClick = false;
+    this.user.hideCloseButton = true;
     this.user.open();
     this.changeTheme(this.theme);
   }
@@ -504,10 +586,47 @@ export class UserDetailsComponent implements OnInit {
     this[component + "Opened"] = true;
   }
 
+  updateImage() {
+    this.chooseImage.open();
+  }
+
+  submitPhoto() {
+    let form = new FormData();
+
+    form.append("updateImageInput", this.updateImageInput);
+    this.accountService.updateEmployeeProfileImage(form, this.data).subscribe(
+      (data) => {
+        this.helpService.successToastr(
+          this.language.accountSuccessUpdatedAccountTitle,
+          this.language.accountSuccessUpdatedAccountText
+        );
+      },
+      (error) => {
+        this.helpService.errorToastr(
+          this.language.accountErrorUpdatedAccountTitle,
+          this.language.accountErrorUpdatedAccountText
+        );
+      }
+    );
+    this.chooseImage.close();
+    setTimeout(() => {
+      this.getUser();
+    }, 0);
+  }
+
+  fileChoosen(event: any) {
+    this.fileName = event.target.value.substring(event.target.value.indexOf('h') + 2);
+    if (event.target.value) {
+      this.isFileChoosen = true;
+      this.updateImageInput = <File>event.target.files[0];
+    }else {
+      this.isFileChoosen = false;
+    }
+  }
+
   action(event) {
     console.log(event);
     if (event === "yes") {
-      console.log(this.data);
       this.service.deleteUser(this.id).subscribe((data) => {
         if (data) {
           Swal.fire({

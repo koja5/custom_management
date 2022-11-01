@@ -1,0 +1,505 @@
+.pricing-header .package-name {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.pricing-header h4 span {
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 5px;
+}
+.pricing-feature-list li {
+  font-size: 15px;
+  padding: 5px 0;
+}
+.single-pricing-wrap {
+  transition: transform 300ms ease;
+}
+.transform-hover:hover {
+  transform: translate(0px, -10px);
+}
+.transition-base {
+  transition: all 0.3s ease;
+}
+
+/*******************/
+
+.price-tab {
+  margin: 12px auto 30px;
+  padding-bottom: 0;
+  padding-left: 0;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  border: 1px solid #d4dce9;
+  border-radius: 12px;
+  background-color: #fff;
+  background-image: url("../../../../../assets/home/price-background.jpg");
+  background-position: 50% 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  box-shadow: 1px 1px 10px 0 rgb(0 0 0 / 20%);
+}
+
+@media (min-width: 992px) {
+  .price-tab {
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    width: 100%;
+    height: 450px;
+    min-height: auto;
+    min-width: 800px;
+  }
+}
+
+@media (max-width: 991px) {
+  .site-image {
+    display: none;
+  }
+}
+
+.pricing-image._1 {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: auto;
+  bottom: auto;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding-top: 26px;
+  opacity: 1;
+}
+
+.pricing-image {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: auto;
+  bottom: auto;
+  z-index: 1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 50%;
+  height: auto;
+  min-height: auto;
+  min-width: 200px;
+  padding-top: 40px;
+  padding-bottom: 10px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background-color: transparent;
+}
+
+.price-holder {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  overflow: visible;
+  width: 200px;
+  height: auto;
+  margin-top: 0;
+  margin-bottom: 20px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.pricing-right-div {
+  position: absolute;
+  left: auto;
+  top: 0;
+  right: 0;
+  bottom: auto;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 50%;
+  height: 420px;
+  min-height: auto;
+  min-width: 200px;
+  padding-top: 20px;
+  padding-left: 20px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: start;
+  -webkit-align-items: flex-start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  background-color: transparent;
+}
+
+.button.green.big {
+  height: 46px;
+  padding: 12px;
+  border-radius: 5px;
+  padding-bottom: 0;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background-color: #11b683;
+  color: #fff;
+  font-size: 18px;
+  line-height: 18px;
+  font-weight: bold;
+}
+
+.spacer-column-10 {
+  width: 10px;
+  height: 100%;
+}
+
+.site-image {
+  position: relative;
+  width: 520px;
+  height: auto;
+}
+
+.price-box-inner.new {
+  width: 220px;
+  margin: auto;
+  padding-left: 0;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+.price-box-inner {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 0;
+  margin-right: auto;
+  margin-left: auto;
+  padding-top: 0;
+  padding-left: 5px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.font-18-white-sb {
+  font-family: "Mark simonson proxima soft", Tahoma, sans-serif;
+  color: #f3f8fd;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.annual-price {
+  position: relative;
+  left: -15px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: 80px;
+  margin-top: 4px;
+  margin-bottom: 0;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: start;
+  -webkit-align-items: flex-start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  font-family: "Mark simonson proxima soft", Tahoma, sans-serif;
+  color: #fff;
+  font-size: 80px;
+  line-height: 80px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.monthly-price-2 {
+  position: relative;
+  left: -15px;
+  display: none;
+  height: 80px;
+  margin-top: 4px;
+  margin-bottom: 0;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: start;
+  -webkit-align-items: flex-start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  font-family: "Mark simonson proxima soft", Tahoma, sans-serif;
+  color: #fff;
+  font-size: 80px;
+  line-height: 80px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.font-36-white-sb {
+  font-family: "Mark simonson proxima soft", Tahoma, sans-serif;
+  color: #fff;
+  font-size: 36px;
+  line-height: 50px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.font-80-white-sb {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: 80px;
+  margin-top: 4px;
+  margin-bottom: -4px;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: end;
+  -webkit-align-items: flex-end;
+  -ms-flex-align: end;
+  align-items: flex-end;
+  font-family: "Mark simonson proxima soft", Tahoma, sans-serif;
+  color: #fff;
+  font-size: 80px;
+  line-height: 80px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.font-20-white-sb-price {
+  margin-top: 45px;
+  font-family: "Mark simonson proxima soft", Tahoma, sans-serif;
+  color: #fff;
+  font-size: 20px;
+  line-height: 30px;
+  font-weight: 600;
+}
+
+.font-14-white-sb {
+  font-family: "Mark simonson proxima soft", Tahoma, sans-serif;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-decoration: none;
+}
+
+.font-14-white-barokah {
+  position: absolute;
+  left: 0;
+  top: auto;
+  right: 0;
+  bottom: -18%;
+  width: 100px;
+  margin-right: auto;
+  margin-left: auto;
+  padding-top: 2px;
+  background-color: #fff;
+  box-shadow: 1px 1px 5px 0 rgb(0 0 0 / 10%);
+  -webkit-transform: rotate(-1deg);
+  -ms-transform: rotate(-1deg);
+  transform: rotate(-1deg);
+  font-family: "Mark simonson proxima soft", Tahoma, sans-serif;
+  color: #2ea2f8;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.check-list-item.new {
+  height: 30px;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.check-list-item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: 40px;
+  margin-bottom: 0;
+  padding-left: 0;
+  -webkit-box-align: start;
+  -webkit-align-items: flex-start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  font-family: "Mark simonson proxima soft", Tahoma, sans-serif;
+  color: #566278;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+li {
+  margin-bottom: 12px;
+  font-family: "Mark simonson proxima soft", Tahoma, sans-serif;
+  color: #3a414e;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 400;
+  list-style-type: disc;
+}
+
+.number-of-children {
+  margin: auto;
+  width: 50%;
+  background: #13bcff;
+  color: #fff;
+}
+
+.number-of-children div {
+  text-align: center;
+  padding: 10px;
+  font-size: 23px;
+  font-weight: bolder;
+}
+
+.number-of-children div:hover {
+  background: #004e6c;
+  cursor: pointer;
+}
+
+.number-of-children div.active {
+  background: #004e6c;
+}
+
+.list-unstyled li {
+  list-style: none;
+}
+
+.arrow-down-price {
+  width: 32px;
+}
+
+.selected-range {
+  color: #f25767;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* PRICE TABLE */
+
+.main {
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.15) !important;
+  font-family: sans-serif;
+  margin: 0 auto;
+  overflow: auto;
+}
+
+@media (min-width: 992px) {
+  .main {
+    width: 75%;
+  }
+}
+
+.price-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 0 none;
+  background: #fff;
+  border: 1px solid lightgray;
+}
+
+.price-table-head {
+  background: #13bcff;
+  color: #fff;
+}
+
+.price-table-head td {
+  text-transform: uppercase;
+  font-weight: bolder;
+}
+
+.price-table-head td p {
+  margin: 0px;
+  font-size: 19px;
+}
+
+.price-table tr:not(:last-child) {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+}
+.price-table tr td {
+  border-left: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 6px 24px;
+  font-size: 14px;
+}
+.price-table tr td:first-child {
+  border-left: 0 none;
+}
+.price-table tr td:not(:first-child) {
+  text-align: center;
+}
+
+.price-table tr:hover {
+  background: #f1f1f1;
+}
+
+.price-table .fa-check {
+  color: #5336ca;
+}
+.price-table .fa-times {
+  color: #d8d6e3;
+}
+
+td.price {
+  font-size: 24px !important;
+  font-weight: bolder;
+  height: 90px;
+}
+
+/* END PRICE TABLE */

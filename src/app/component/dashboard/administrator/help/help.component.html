@@ -1,0 +1,127 @@
+<div *ngIf="loading" style="height: 90vh">
+    <div class="spinner loading"></div>
+</div>
+
+<div *ngIf="!loading" style="height: 100%">
+  <div class="container">
+    <div class="row" *ngIf="userSuperAdmin">  
+      <div class="float-left mt-4 col-sm-12 col-md-3 col-lg-3">
+        <div>
+          <label for="language">{{language?.labelTitle}}</label>
+          <ejs-dropdownlist
+            [dataSource]="data"
+            [(value)]="countryCodeValue"
+            [fields]="fields"
+            [popupHeight]="height"
+            (select)="changeLanguageEvent($event)"
+          ></ejs-dropdownlist>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-9 col-lg-9">
+        <div class="float-right mt-5 pr-4">
+          <button
+            kendoButton
+            [icon]="'add'"
+            (click)="addNewModal()"
+            [primary]="true"
+            class="addButton">
+            {{language.addHelpTopic}}
+          </button>          
+        </div>      
+      </div>
+    </div>
+    <div class="row">
+      <ng-container class="col" *ngFor="let topic of topics">
+        <app-topic-card [topic]="topic" (editEmmiter)="openEditTemplateModal($event)" (deleteEmmiter)="deleteHelpTopic($event)"></app-topic-card>            
+      </ng-container>         
+    </div>      
+  </div>
+</div>
+<modal
+  #iconListModal
+    (onClose)="closeIconListModal()"
+    modalClass="modal-md modal-dialog-centered no-footer"
+    *ngIf="userSuperAdmin">
+    <modal-header>
+      <h4>{{ language.chooseIcon }}</h4>
+    </modal-header>
+    <modal-content class="pb-0">
+      <div class="mt-5">
+        <div class="row">
+           <div class="col-sm-2" *ngFor="let icon of icons">
+               <div class="card p-3 mb-4">
+                 <a href="javascript:void(0);" (click)="choosenIcon(icon)">
+                   <i id="{{icon}}" [ngClass]="getIconClass(icon)"></i>
+                 </a>
+              </div>
+           </div>
+        </div>        
+     </div>
+    </modal-content>
+</modal>
+<modal
+  #helpTopicModal
+  (onClose)="closeHelpTopicModal()"
+  modalClass="modal-md modal-dialog-centered no-footer"
+  *ngIf="userSuperAdmin"
+>
+  <modal-header>
+    <h4>{{ language.helpTopic }}</h4>
+  </modal-header>
+  <modal-content class="pb-0">
+    <form
+      (ngSubmit)="
+      helpTopicModal.form.valid === true
+          ? operationMode === 'add'
+            ? createHelpTopic()
+            : updateHelpTopic()
+          : null
+      "
+      #helpTopicModal="ngForm"
+    >
+      <div class="form-group">
+        <p>{{language.icon}}</p>
+        <a href="javascript:void(0);" (click)="chooseIcon()">
+          <i [ngClass]="getIconClass(topic.iconCss)"></i>          
+        </a>
+      </div>
+      <div class="form-group">
+        <kendo-textbox-container floatingLabel="{{ language.title }}">
+          <input
+            id="title" 
+            kendoTextBox
+            required
+            type="text"
+            class="col-12"
+            [(ngModel)]="topic.name"
+            name="name"
+          />
+        </kendo-textbox-container>
+        <mat-error *ngIf="checkIfInputValid('title')">{{ language?.thisFieldIsRequired }}</mat-error>
+      </div>      
+
+      <div class="form-group" style="text-align: center">
+        <button
+          *ngIf="operationMode === 'add'"
+          kendoButton
+          [primary]="true"
+          class="form-button"
+          [disabled]="helpTopicModal.form.invalid"
+          type="submit"
+        >
+          {{ language.add }}
+        </button>
+        <button
+          *ngIf="operationMode === 'edit'"
+          kendoButton
+          [primary]="true"
+          class="form-button"
+          [disabled]="helpTopicModal.form.invalid"
+          type="submit"
+        >
+          {{ language.edit }}
+        </button>
+      </div>
+    </form>
+  </modal-content>
+</modal>

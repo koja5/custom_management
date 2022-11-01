@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild, HostListener } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  HostListener,
+  ElementRef,
+} from "@angular/core";
 import { Modal } from "ngx-modal";
 import { CustomersService } from "../../../service/customers.service";
 import { StoreService } from "../../../service/store.service";
@@ -7,24 +13,26 @@ import {
   State,
   GroupDescriptor,
   SortDescriptor,
+  DataResult,
 } from "@progress/kendo-data-query";
-import { UploadEvent, SelectEvent } from "@progress/kendo-angular-upload";
+import { UploadEvent } from "@progress/kendo-angular-upload";
 import {
-  DataStateChangeEvent,
   PageChangeEvent,
   RowArgs,
   DataBindingDirective,
+  GridComponent,
 } from "@progress/kendo-angular-grid";
 import { MessageService } from "../../../service/message.service";
 import { CustomerModel } from "../../../models/customer-model";
 import Swal from "sweetalert2";
-// import * as GC from "@grapecity/spread-sheets";
-// import * as Excel from "@grapecity/spread-excelio";
-import { WindowModule } from "@progress/kendo-angular-dialog";
 import * as XLSX from "ts-xlsx";
 import { HelpService } from "src/app/service/help.service";
 import { MailService } from "src/app/service/mail.service";
 import { PackLanguageService } from "src/app/service/pack-language.service";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { Router } from "@angular/router";
+import { checkIfInputValid } from "../../../shared/utils";
+import { DomSanitizer } from "@angular/platform-browser";
 
 const newLocal = "data";
 @Component({
@@ -34,8 +42,10 @@ const newLocal = "data";
 })
 export class CustomersComponent implements OnInit {
   @ViewChild(DataBindingDirective) dataBinding: DataBindingDirective;
-  @ViewChild('customer') customer: Modal;
-  @ViewChild('patientFormRegistrationDialog') patientFormRegistrationDialog: Modal;
+  @ViewChild("customer") customer: Modal;
+  @ViewChild("grid") grid;
+  @ViewChild("patientFormRegistrationDialog")
+  patientFormRegistrationDialog: Modal;
   public data = new CustomerModel();
   public unamePattern = "^[a-z0-9_-]{8,15}$";
   public emailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$";
@@ -52,7 +62,7 @@ export class CustomersComponent implements OnInit {
   public storeLocation: any;
   public language: any;
   public selectedUser: any;
-  public imagePath = "defaultUser";
+  public imagePath: any = "defaultUser";
   public loading = true;
   // public uploadSaveUrl = 'http://localhost:3000/api/uploadImage'; // should represent an actual API endpoint
   public uploadSaveUrl = "http://116.203.85.82:8080/uploadImage";
@@ -62,6 +72,16 @@ export class CustomersComponent implements OnInit {
   public customerDialogOpened = false;
   public fileValue: any;
   public theme: string;
+  public allPages: boolean;
+  _excelData: any;
+
+  gridForExport: GridComponent;
+  private _allData;
+  allDataForGrid: DataResult;
+  showDialog: boolean = false;
+  isFormDirty: boolean = false;
+  checkIfInputValid = checkIfInputValid;
+
   private mySelectionKey(context: RowArgs): string {
     return JSON.stringify(context.index);
   }
@@ -74,6 +94,19 @@ export class CustomersComponent implements OnInit {
     previousNext: true,
   };
   public patientMail: string;
+  savePage: any = {};
+  currentUrl: string;
+
+  public showColumnPicker = false;
+  public columns: string[] = [
+    "Username",
+    "Firstname",
+    "Lastname",
+    "Telephone",
+    "Mobile",
+    "Email address",
+  ];
+  public hiddenColumns: string[] = [];
 
   constructor(
     private service: CustomersService,
@@ -81,14 +114,19 @@ export class CustomersComponent implements OnInit {
     private message: MessageService,
     private helpService: HelpService,
     private mailService: MailService,
-    private packLanguage: PackLanguageService
+    private packLanguage: PackLanguageService,
+    private router: Router,
+    public sanitizer: DomSanitizer
   ) {
     // this.excelIO = new Excel.IO();
+    this.allData = this.allData.bind(this);
   }
 
   ngOnInit() {
     this.height = this.helpService.getHeightForGrid();
     this.data.gender = "male";
+    this.data["type"] = 4;
+
     this.getCustomers();
 
     if (localStorage.getItem("language") !== null) {
@@ -114,34 +152,80 @@ export class CustomersComponent implements OnInit {
       this.theme = mess;
     });
     this.helpService.setTitleForBrowserTab(this.language.customer);
+
+    this.currentUrl = this.router.url;
+    this.setPagination();
+  }
+
+  setPagination() {
+    this.savePage = this.helpService.getGridPageSize();
+    if (
+      (this.savePage && this.savePage[this.currentUrl]) ||
+      this.savePage[this.currentUrl + "Take"]
+    ) {
+      this.state.skip = this.savePage[this.currentUrl];
+      this.state.take = this.savePage[this.currentUrl + "Take"];
+    }
   }
 
   getCustomers() {
     this.service.getCustomers(localStorage.getItem("superadmin"), (val) => {
-      console.log(val);
       if (val !== null) {
         this.currentLoadData = val;
+        if(this.currentLoadData.length < this.state.skip) {
+          this.state.skip = 0;
+        }
+        this._allData = <ExcelExportData>{
+          data: process(this.currentLoadData, this.state).data,
+        };
         this.gridData = {
           data: val,
         };
         this.gridView = process(val, this.state);
+        this.allDataForGrid = process(val, { skip: 0, take: val.length });
         this.loading = false;
       } else {
         this.gridData[newLocal] = [];
         this.gridView = this.gridData;
+        this.allDataForGrid = this.gridData;
         this.loading = false;
       }
       this.changeTheme(this.theme);
     });
   }
 
+  receiveConfirm(event: boolean): void {
+    if (event) {
+      this.customer.close();
+      this.isFormDirty = false;
+    }
+    this.showDialog = false;
+  }
+
+  confirmClose(): void {
+    this.customer.modalRoot.nativeElement.focus();
+    if (this.isFormDirty) {
+      this.showDialog = true;
+    } else {
+      this.customer.close();
+      this.showDialog = false;
+      this.isFormDirty = false;
+    }
+  }
+
+  isDirty(): void {
+    this.isFormDirty = true;
+  }
+
   newUser() {
     this.storeService.getStore(localStorage.getItem("idUser"), (val) => {
-      console.log(val);
       this.storeLocation = val;
     });
     this.initializeParams();
     this.changeTheme(this.theme);
+    this.customer.closeOnEscape = false;
+    this.customer.closeOnOutsideClick = false;
+    this.customer.hideCloseButton = true;
     this.customer.open();
   }
 
@@ -160,12 +244,11 @@ export class CustomersComponent implements OnInit {
       attention: "",
       physicalComplaint: "",
       isConfirm: false,
-      language: null
+      language: null,
     };
   }
 
   createCustomer(form) {
-    console.log(this.data);
     this.data.storeId = localStorage.getItem("superadmin");
     this.service.createCustomer(this.data, (val) => {
       if (val.success) {
@@ -188,7 +271,8 @@ export class CustomersComponent implements OnInit {
           type: "success",
         });
         this.data.password = val.password;
-        this.data.language = this.packLanguage.getLanguageForCreatedPatientAccount();
+        this.data.language =
+          this.packLanguage.getLanguageForCreatedPatientAccount();
         this.data.superadmin = this.helpService.getSuperadmin();
         this.mailService
           .sendInfoToPatientForCreatedAccount(this.data)
@@ -218,20 +302,24 @@ export class CustomersComponent implements OnInit {
     console.log(event);
   }
 
-  public dataStateChange(state: DataStateChangeEvent): void {
-    this.state = state;
-    this.gridView = process(this.currentLoadData, this.state);
-    if (this.state.filter !== null && this.state.filter.filters.length === 0) {
-      this.gridView.total = this.currentLoadData.length;
-    }
-    this.changeTheme(this.theme);
-  }
+  // public dataStateChange(state: DataStateChangeEvent): void {
+  //   this.state = state;
+  //   this.gridView = process(this.currentLoadData, this.state);
+  //   if (this.state.filter !== null && this.state.filter.filters.length === 0) {
+  //     this.gridView.total = this.currentLoadData.length;
+  //   }
+  //   this.changeTheme(this.theme);
+  // }
 
   pageChange(event: PageChangeEvent): void {
     this.state.skip = event.skip;
     this.state.take = event.take;
     this.pageSize = event.take;
     this.loadProducts();
+
+    this.savePage[this.currentUrl] = event.skip;
+    this.savePage[this.currentUrl + "Take"] = event.take;
+    this.helpService.setGridPageSize(this.savePage);
   }
 
   loadProducts(): void {
@@ -239,7 +327,14 @@ export class CustomersComponent implements OnInit {
   }
 
   previewUser(selectedUser) {
-    console.log(selectedUser);
+    if (selectedUser.img && selectedUser.img.data.length !== 0) {
+      this.imagePath = this.helpService.setUserProfileImagePath(selectedUser);
+    } else {
+      this.imagePath =
+        selectedUser.gender == "male"
+          ? "../../../../../assets/images/users/male-patient.png"
+          : "../../../../../assets/images/users/female-patient.png";
+    }
     this.selectedUser = selectedUser;
   }
 
@@ -248,7 +343,6 @@ export class CustomersComponent implements OnInit {
   }
 
   action(event) {
-    console.log(event);
     if (event === "yes") {
       this.customerDialogOpened = false;
       setTimeout(() => {
@@ -316,6 +410,45 @@ export class CustomersComponent implements OnInit {
       }, 50);
     };
     fileReader.readAsArrayBuffer(args.target.files[0]);
+  }
+
+  exportPDF(value: boolean): void {
+    this.allPages = value;
+
+    setTimeout(() => {
+      this.grid.saveAsPDF();
+    }, 0);
+  }
+
+  exportToExcel(grid: GridComponent, allPages: boolean) {
+    this.exportToExcelData(grid, allPages);
+
+    setTimeout(() => {
+      grid.saveAsExcel();
+    }, 0);
+  }
+
+  public exportToExcelData(grid: GridComponent, allPages: boolean): void {
+    console.log("allPages ", allPages);
+
+    if (allPages) {
+      var myState: State = {
+        skip: 0,
+        take: this.gridData.total,
+      };
+
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, myState).data,
+      };
+    } else {
+      this._allData = <ExcelExportData>{
+        data: process(this.currentLoadData, this.state).data,
+      };
+    }
+  }
+
+  public allData(): ExcelExportData {
+    return this._allData;
   }
 
   xlsxToJson(data) {
@@ -536,16 +669,35 @@ export class CustomersComponent implements OnInit {
     const data = {
       email: this.patientMail,
       link: this.helpService.getLinkForPatientFormRegistration(),
-      language: this.packLanguage.getLanguageForPatientRegistrationForm()
+      language: this.packLanguage.getLanguageForPatientRegistrationForm(),
     };
     this.patientFormRegistrationDialog.close();
     this.mailService.sendPatientFormRegistration(data).subscribe((data) => {
       console.log(data);
-      if(data) {
+      if (data) {
         this.helpService.successToastr(this.language.successSendFormToMail, "");
       } else {
         this.helpService.errorToastr(this.language.errorSendFormToMail, "");
       }
     });
+  }
+
+  emitImage(event) {
+    this.getCustomers();
+    setTimeout(() => {
+      this.currentLoadData.forEach((el: any) => {
+        if (el.id == event.id) {
+          this.selectedUser.img = el.img;
+        }
+      });
+      this.previewUser(this.selectedUser);
+    }, 1000);
+  }
+  public isHidden(columnName: string): boolean {
+    return this.hiddenColumns.indexOf(columnName) > -1;
+  }
+
+  public onOutputHiddenColumns(columns) {
+    this.hiddenColumns = columns;
   }
 }

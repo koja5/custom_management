@@ -21,6 +21,13 @@
     "field": "female"
   },
   {
+    "type": "checkbox",
+    "width": "col-md-12",
+    "name": "excludeCustomersWithEvents",
+    "label": "excludeCustomersWithEvents",
+    "field": "excludeCustomersWithEvents"
+  },
+  {
     "type": "datepicker",
     "width": "col-md-6",
     "format": "dd.MM.yyyy",
@@ -51,7 +58,7 @@
     "field": "childs"
   },
   {
-    "type": "dropdown",
+    "type": "multiselect",
     "width": "col-md-6",
     "name": "category",
     "label": "category",
@@ -75,7 +82,7 @@
     "required": true
   },
   {
-    "type": "dropdown",
+    "type": "multiselect",
     "width": "col-md-6",
     "name": "creator_id",
     "label": "user",
@@ -115,7 +122,7 @@
     "field": "end"
   },
   {
-    "type": "dropdown",
+    "type": "multiselect",
     "width": "col-md-6",
     "name": "recommendation",
     "label": "recommendation",
@@ -139,7 +146,7 @@
     "required": true
   },
   {
-    "type": "dropdown",
+    "type": "multiselect",
     "width": "col-md-6",
     "name": "relationship",
     "label": "relationship",
@@ -163,7 +170,7 @@
     "required": true
   },
   {
-    "type": "dropdown",
+    "type": "multiselect",
     "width": "col-md-6",
     "name": "social",
     "label": "social",
@@ -187,7 +194,7 @@
     "required": true
   },
   {
-    "type": "dropdown",
+    "type": "multiselect",
     "width": "col-md-6",
     "name": "doctor",
     "label": "doctor",
@@ -211,7 +218,7 @@
     "required": true
   },
   {
-    "type": "dropdown",
+    "type": "multiselect",
     "width": "col-md-12",
     "name": "store",
     "label": "store",

@@ -8,6 +8,11 @@
     [config]="configField"
     (submit)="submitEmitter($event)"
     #form="dynamicForm"
+    (isFormDirty)="getIsFormDirty($event)"
+    [showDialogExit]="showDialogExit"
+    (isDataSaved)="isDataSavedChange($event)"
+    (isFormDirtyChange)="changeFormDirty($event)"
+    (showDialogExitChange)="changeShowDialogExit($event)"
   >
   </app-dynamic-forms>
   <app-dynamic-confirm-dialog
@@ -15,5 +20,6 @@
     [title]="language?.accountConfirmDialogTitle"
     [question]="language?.accountConfirmDialogQuestion"
     (sendEmitter)="receiveConfirm($event)"
-  ></app-dynamic-confirm-dialog>
+  >
+  </app-dynamic-confirm-dialog>
 </div>

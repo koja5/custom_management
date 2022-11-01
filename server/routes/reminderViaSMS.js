@@ -68,7 +68,7 @@ function reminderViaSMS() {
       function (error, response, body) {
         if (!error && response.statusCode === 200) {
           conn.query(
-            "SELECT distinct r.sms, c.telephone, c.mobile, c.shortname, s.storename, s.street, s.zipcode, s.place, s.telephone as storeTelephone, s.mobile as storeMobile, s.email, t.start, t.end, us.firstname, us.lastname, th.therapies_title, sr.*, e.allowSendInformation FROM reminder r join tasks t on r.superadmin = t.superadmin join customers c on t.customer_id = c.id join store s on t.storeId = s.id join users us on t.creator_id = us.id join therapy th on t.therapy_id = th.id join sms_reminder_message sr on r.superadmin = sr.superadmin join event_category e on t.colorTask = e.id where c.reminderViaSMS = 1 and r.sms = 1 and CAST(t.start AS DATE) = CAST((NOW() + interval 2 DAY) as DATE) and e.allowSendInformation = 1",
+            "SELECT distinct r.sms, c.telephone, c.mobile, c.shortname, s.storename, s.street, s.zipcode, s.place, s.telephone as storeTelephone, s.mobile as storeMobile, s.email, t.start, t.end, us.firstname, us.lastname, th.therapies_title, sr.*, e.allowSendInformation FROM reminder r join tasks t on r.superadmin = t.superadmin join customers c on t.customer_id = c.id join store s on t.storeId = s.id join users us on t.creator_id = us.id join therapy th on t.therapy_id = th.id join sms_reminder_message sr on r.superadmin = sr.superadmin join event_category e on t.colorTask = e.id where c.reminderViaSMS = 1 and r.sms = 1 and CAST(t.start AS DATE) = CAST((NOW() + interval 2 DAY) as DATE) and e.allowSendInformation = 1 and c.active = 1",
             function (err, rows, fields) {
               if (err) {
                 console.error("SQL error:", err);
@@ -194,7 +194,6 @@ function reminderViaSMS() {
                             signature;
                           const fullMessage = message + "\r\n" + signature;
                           var fileName = "server/sms/" + phoneNumber + ".txt";
-                          console.log(content);
                           sendSmsFromMail(phoneNumber, fullMessage);
                         }
                       }
@@ -202,6 +201,7 @@ function reminderViaSMS() {
                   }
                 );
               }
+              conn.release();
             }
           );
         }

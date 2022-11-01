@@ -16,13 +16,6 @@
   {
     "type": "textbox",
     "width": "col-md-4",
-    "name": "companyname",
-    "label": "companyName",
-    "field": "companyname"
-  },
-  {
-    "type": "textbox",
-    "width": "col-md-4",
     "name": "shortname",
     "label": "storename",
     "field": "shortname"
@@ -45,7 +38,7 @@
     "type": "textbox",
     "width": "col-md-4",
     "name": "zipcode",
-    "label": "zipcode",
+    "label": "zipCode",
     "field": "zipcode"
   },
   {
@@ -90,6 +83,20 @@
     "name": "incompanysince",
     "label": "incompanysince",
     "field": "incompanysince"
+  },
+  {
+    "type": "textbox",
+    "width": "col-md-4",
+    "name": "invoicePrefix",
+    "label": "invoicePrefix",
+    "field": "invoicePrefix"
+  },
+  {
+    "type": "textbox",
+    "width": "col-md-4",
+    "name": "invoiceID",
+    "label": "invoiceID",
+    "field": "invoiceID"
   },
   {
     "type": "button",

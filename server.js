@@ -28,6 +28,8 @@ var reminderViaEmail = require("./server/routes/reminderViaEmail");
 var reminderViaSMS = require("./server/routes/reminderViaSMS");
 var sendHappyBirthdayViaSMS = require("./server/routes/sendHappyBirthdayViaSMS");
 var sendHappyBirthdayViaEmail = require("./server/routes/sendHappyBirthdayViaEmail");
+const mailServer = require("./server/routes/dynamic-mail-server/mail-server");
+const payment = require("./server/routes/payment-process");
 
 app.use(compression());
 
@@ -167,6 +169,8 @@ app.use("/api", api);
 app.use("/api", mail);
 app.use("/api", mongo);
 api.use("/api", sms);
+app.use("/api/mail-server", mailServer);
+app.use("/api/payment", payment);
 
 // Catch all other routes and return the index file
 app.get("*", (req, res) => {
@@ -212,15 +216,15 @@ var j = schedule.scheduleJob("10 15 * * *", function () {
   reminderViaEmail();
 });
 
-var j = schedule.scheduleJob("03 01 * * *", function () {
+var j = schedule.scheduleJob("00 12 * * *", function () {
   reminderViaSMS();
 });
 
-var j = schedule.scheduleJob("22 00 * * *", function () {
+var j = schedule.scheduleJob("30 13 * * *", function () {
   sendHappyBirthdayViaSMS();
 });
 
-var j = schedule.scheduleJob("23 00 * * *", function () {
+var j = schedule.scheduleJob("35 10 * * *", function () {
   sendHappyBirthdayViaEmail();
 });
 

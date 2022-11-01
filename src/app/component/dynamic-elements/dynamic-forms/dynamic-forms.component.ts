@@ -7,6 +7,7 @@ import {
   Output,
 } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { HelpService } from "src/app/service/help.service";
 import { MessageService } from "src/app/service/message.service";
 
 import { FieldConfig } from "./models/field-config";
@@ -21,8 +22,29 @@ export class DynamicFormsComponent implements OnInit {
   @Input()
   config: FieldConfig[] = [];
 
+  @Input()
+  showDialogExit: boolean = false;
+
+  @Input()
+  isFormDirty = false;
+
+  @Output()
+  isFormDirtyChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  @Output()
+  showDialogExitChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  @Output()
+  receiveConfirmExitResponse: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   @Output()
   submit: EventEmitter<any> = new EventEmitter<any>();
+
+  @Output()
+  isDataSaved: EventEmitter<any> = new EventEmitter<any>();
+
+  @Output()
+  emitValue: EventEmitter<any> = new EventEmitter<any>();
 
   form: FormGroup;
 
@@ -38,11 +60,32 @@ export class DynamicFormsComponent implements OnInit {
   get value() {
     return this.form.value;
   }
+  language: any;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private helpService: HelpService,) {}
 
   ngOnInit() {
+    this.language = this.helpService.getLanguage();
     this.form = this.createGroup();
+  }
+
+  getIsFormDirty() {
+    this.isFormDirty = true;
+    this.isFormDirtyChange.emit(true);
+  }
+
+  sendValue(): void {
+    this.emitValue.emit(this.value);
+  }
+
+  receiveConfirmExit(event: boolean): void {
+    if (event) {
+      this.isFormDirty = false;
+      this.isFormDirtyChange.emit(false);
+    }
+    this.showDialogExit = false;
+    this.showDialogExitChange.emit(false);
+    this.isDataSaved.emit(event);
   }
 
   ngOnChanges() {

@@ -1,0 +1,16 @@
+.float-right{
+    float: right;
+}
+
+.col{
+    display: table-cell; /* Make elements inside the container behave like table cells */
+}
+
+a{
+    i{
+        color:black;        
+        :active{
+            border: 2px 2px solid black;
+        }
+    }    
+}

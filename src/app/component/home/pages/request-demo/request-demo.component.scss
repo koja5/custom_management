@@ -1,0 +1,26 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+.blockquote {
+  border: none;
+}
+
+.testimonial-tab-content {
+  margin-left: -20px;
+}
+
+.selected-price {
+  color: #979393;
+}
+
+.border-right {
+  border-right: 1px solid lightgray;
+}
+
+.image-width {
+  width: 200px;
+}

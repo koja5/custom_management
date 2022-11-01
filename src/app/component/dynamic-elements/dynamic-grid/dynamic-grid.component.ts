@@ -9,6 +9,7 @@ import {
 } from "@angular/core";
 import { FormGroup, Validators } from "@angular/forms";
 import {
+  DataStateChangeEventArgs,
   DialogEditEventArgs,
   EditSettingsModel,
   SaveEventArgs,
@@ -25,6 +26,9 @@ import { QueryCellInfoEventArgs } from "@syncfusion/ej2-angular-grids";
 import { Tooltip } from "@syncfusion/ej2-popups";
 import { ClickEventArgs } from "@syncfusion/ej2-navigations";
 import { SystemLogsService } from "src/app/service/system-logs.service";
+import { Router } from "@angular/router";
+import { AccountService } from "src/app/service/account.service";
+import { PackLanguageService } from "src/app/service/pack-language.service";
 
 @Component({
   selector: "app-dynamic-grid",
@@ -34,10 +38,12 @@ import { SystemLogsService } from "src/app/service/system-logs.service";
 export class DynamicGridComponent implements OnInit {
   @Input() path: string;
   @Input() name: string;
+  @Input() dataLength: number;
   @Output() actionEmitter = new EventEmitter<any>();
   @ViewChild(DynamicFormsComponent) form: DynamicFormsComponent;
   @ViewChild("orderForm") public orderForm: FormGroup;
   @ViewChild("editSettingsTemplate") editSettingsTemplate: DialogComponent;
+  public targetElement: HTMLElement;
   @ViewChild("grid") public grid: GridComponent;
   @ViewChild("container") public container: ElementRef;
 
@@ -59,22 +65,35 @@ export class DynamicGridComponent implements OnInit {
   public index: number;
   public height: number;
   public language: any;
+  savePage: any = {};
+  currentUrl: string;
+  isFormDirty = false;
+  showDialog = false;
+  currentDialog: any;
+  test = 'test';
+
+  public showColumnPicker = false;
+  public columns: string[] = [];
+  public hiddenColumns: string[] = [];
 
   constructor(
     private service: DynamicService,
     private helpService: HelpService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private router: Router,
+    private elem: ElementRef,
+    private packLanguage: PackLanguageService,
   ) {}
 
   ngOnInit() {
+    this.savePage = this.helpService.getGridPageSize();
+    this.getConfiguration();
     this.initialization();
     this.checkMessageService();
-    this.getConfiguration();
     this.editSettings = {
       allowEditing: true,
       allowAdding: true,
       allowDeleting: true,
-      showDeleteConfirmDialog: true,
       mode: "Dialog",
     };
     this.toolbar = ["Add", "Edit", "Delete"];
@@ -82,19 +101,43 @@ export class DynamicGridComponent implements OnInit {
       this.helpService.getHeightForGrid();
     this.height = this.helpService.getHeightForGridWithoutPx();
     this.helpService.setDefaultBrowserTabTitle();
+
+    this.currentUrl = this.router.url;
   }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() {
+  }
 
   initialization() {
-    this.service.getConfiguration(this.path, this.name).subscribe((data) => {
-      this.config = data;
-      if (data["localData"]) {
-        this.getLocalData(data["localData"]);
-      } else {
-        this.callApi(data["request"]);
-      }
-    });
+    this.service
+      .getConfiguration(this.path, this.name)
+      .subscribe((data: any) => {
+        this.config = data;
+        this.config.columns.forEach(column => {
+          if (column.title.length > 0) {
+            this.columns.push(column.title);
+          }
+        });
+        this.config.paging.settings.pageSizes = [5, 10, 20];
+        this.config.paging.settings.pageSize = 10;
+
+      if (this.savePage[this.currentUrl]) {
+          this.config.paging.settings.currentPage =
+            this.savePage[this.currentUrl];
+        }
+        if (this.savePage[this.currentUrl + "Take"]) {
+          this.config.paging.settings.pageSize =
+            this.savePage[this.currentUrl + "Take"];
+        }
+        if(this.dataLength < ((this.config.paging.settings.currentPage - 1) * this.config.paging.settings.pageSize)) {
+          this.config.paging.settings.currentPage = 1;
+        }
+        if (data["localData"]) {
+          this.getLocalData(data["localData"]);
+        } else {
+          this.callApi(data["request"]);
+        }
+      });
   }
 
   getConfiguration() {
@@ -155,7 +198,15 @@ export class DynamicGridComponent implements OnInit {
     return parameters;
   }
 
-  actionBegin(args: SaveEventArgs): void {
+  actionBegin(args: any): void {
+    if (args.currentPage) {
+      let elements =
+        this.elem.nativeElement.querySelectorAll(".e-dropdownlist");
+      this.savePage[this.currentUrl] = args.currentPage;
+      this.savePage[this.currentUrl + "Take"] = elements[0].value;
+      this.helpService.setGridPageSize(this.savePage);
+    }
+
     /*if (args.requestType === "beginEdit" || args.requestType === "add") {
       this.orderData = Object.assign({}, args.rowData);
     }
@@ -172,12 +223,66 @@ export class DynamicGridComponent implements OnInit {
       } */
   }
 
+  setDirtyForm(event: boolean): void {
+    this.isFormDirty = event;
+  }
+
+  receiveConfirm(event: boolean) {
+    if (event) {
+      this.isFormDirty = false;
+      this.currentDialog.close();
+    }
+    this.showDialog = false;
+  }
+
   actionComplete(args: DialogEditEventArgs): void {
     if (args.requestType === "beginEdit" || args.requestType === "add") {
       args.dialog.buttons = [];
+      args.dialog.showCloseIcon = false;
+      args.dialog.closeOnEscape = false;
+      this.currentDialog = args.dialog;
+
       setTimeout(() => {
         this.setValue(this.config.configField, args.rowData);
       }, 50);
+
+      const elWrapper = document.createElement("div");
+
+      const elHeader = document.createElement("div");
+      elHeader.setAttribute("id", "dialog-header-text");
+      if (args.requestType === "beginEdit") {
+        elHeader.textContent = "Details of " + args.primaryKeyValue[0];
+      } else {
+        elHeader.textContent = "Add new record";
+      }
+
+      const elCloseButton = document.createElement("button");
+      elCloseButton.setAttribute("id", "close-button-id");
+      elCloseButton.setAttribute("class", "close");
+
+      const elCloseButtonSpan = document.createElement("span");
+      elCloseButtonSpan.setAttribute("aria-hidden", "true");
+      elCloseButtonSpan.style.fontSize = "25px";
+      elCloseButtonSpan.innerHTML = "&times;";
+
+      elCloseButton.appendChild(elCloseButtonSpan);
+      elCloseButton.style.position = "absolute";
+      elCloseButton.style.right = "20px";
+      elCloseButton.style.top = "11px";
+
+      elWrapper.appendChild(elHeader);
+      elWrapper.appendChild(elCloseButton);
+
+      args.dialog.header = elWrapper;
+
+      elCloseButtonSpan.addEventListener("click", () => {
+        if (this.isFormDirty) {
+          this.showDialog = true;
+        } else {
+          args.dialog.close();
+          this.isFormDirty = false;
+        }
+      });
     }
 
     if (args.requestType === "delete") {
@@ -186,6 +291,7 @@ export class DynamicGridComponent implements OnInit {
 
     this.typeOfModification = args.requestType;
     this.operations = args;
+
     /*
       setTimeout(() => {
         let previousValid = this.form.valid;
@@ -221,6 +327,7 @@ export class DynamicGridComponent implements OnInit {
 
     this.operations.dialog.close();
     this.initialization();
+    this.isFormDirty = false;
   }
 
   deleteData(event) {
@@ -260,19 +367,26 @@ export class DynamicGridComponent implements OnInit {
             );
           }
         }
+        this.refreshGrid();
       });
     } else {
       this.service.callApiGet(request.api, data).subscribe((data) => {});
+      this.refreshGrid();
     }
   }
 
   packAdditionalData(parameters: any, data: any) {
     if (parameters && parameters.length > 0) {
       for (let i = 0; i < parameters.length; i++) {
-        switch (parameters[i]) {
-          case "superadmin":
+        switch (true) {
+          case parameters[i] == "superadmin":
             data["superadmin"] = this.helpService.getSuperadmin();
             break;
+
+          case parameters[i].type == "language":
+            data["language"] = this.translateFields(parameters[i].translateFields)
+            break;
+
           default:
             break;
         }
@@ -281,11 +395,13 @@ export class DynamicGridComponent implements OnInit {
     return data;
   }
 
+  translateFields(fields: Array<string>) {
+    return this.packLanguage.dynamicPackLanguage(fields);
+  }
+
   previewDocument(filename: string) {
     this.helpService.getPdfFile(filename).subscribe((data) => {
-      console.log(data);
       let file = new Blob([data], { type: "application/pdf" });
-      console.log(file);
       var fileURL = URL.createObjectURL(file);
       window.open(fileURL);
     });
@@ -324,7 +440,10 @@ export class DynamicGridComponent implements OnInit {
   /* tooltip END */
 
   action(data, mode, item) {
-    this.index = Number(data.index);
+    this.index =
+      Number(data.index) +
+      (this.grid.pageSettings.currentPage - 1) *
+        this.grid.pageSettings.pageSize;
     const actions = {
       data: data,
       mode: mode,
@@ -334,14 +453,18 @@ export class DynamicGridComponent implements OnInit {
     this.actionEmitter.emit(actions);
   }
 
+  openClinicDetail(id: number) {
+    this.router.navigateByUrl('/dashboard/home/registered-clinic-detail/' + id);
+  }
+
   clickHandler(args: ClickEventArgs): void {
     const target: HTMLElement = (
       args.originalEvent.target as HTMLElement
     ).closest("button"); // find clicked button
-    if (target.id === "collapse") {
+    if (target && target.id === "collapse") {
       // collapse all expanded grouped row
       this.grid.groupModule.collapseAll();
-    } else if (target.id === "refresh") {
+    } else if (target && target.id === "refresh") {
       this.refreshGrid();
     } else if (args.item["properties"]["prefixIcon"] === "e-pdfexport") {
       this.grid.pdfExport();
@@ -354,6 +477,15 @@ export class DynamicGridComponent implements OnInit {
 
   refreshGrid() {
     this.ngOnInit();
+  }
+
+  public isHidden(columnName: string): boolean {
+    return this.hiddenColumns.indexOf(columnName) > -1;
+  }
+
+  public onOutputHiddenColumns(columns) {
+    this.hiddenColumns = columns;
+    this.grid.hideColumns(this.hiddenColumns);
   }
 }
 

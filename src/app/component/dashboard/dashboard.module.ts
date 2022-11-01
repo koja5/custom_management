@@ -1,3 +1,4 @@
+import { ChooseHolidayComponent } from './parameters/choose-holiday/choose-holiday.component';
 import { ToolbarModule } from '@syncfusion/ej2-angular-navigations';
 import { NgModule } from "@angular/core";
 import { DashboardRouting } from "./dashboard-routing.module";
@@ -42,6 +43,7 @@ import { CustomersComponent } from "./customers/customers.component";
 import { WorkTimeColorsComponent } from "./parameters/work-time-colors/work-time-colors.component";
 import { UserDetailsComponent } from "./users/user-details/user-details.component";
 import { TaskComponent } from "./task/task.component";
+import { ThemeColorsComponent } from "./parameters/theme-colors/theme-colors.component"
 import { EventCategoryComponent } from "./parameters/event-category/event-category.component";
 import { EditTranslationComponent } from "./translation/edit-translation/edit-translation.component";
 import { UploadModule } from "@progress/kendo-angular-upload";
@@ -99,10 +101,18 @@ import {
   WorkWeekService,
 } from "@syncfusion/ej2-angular-schedule";
 import { InvoiceComponent } from './invoice/invoice.component';
-import { InvoicePrefixComponent } from './administrator/invoice-prefix/invoice-prefix.component';
 import { SmsBirthdayCongratulationComponent } from './parameters/sms-birthday-congratulation/sms-birthday-congratulation.component';
 import { MailBirthdayCongratulationComponent } from './parameters/mail-birthday-congratulation/mail-birthday-congratulation.component';
 import { MailPatientCreatedAccountViaFormComponent } from './parameters/mail-parameters/mail-patient-created-account-via-form/mail-patient-created-account-via-form.component';
+import { ColorPickerModule } from '@syncfusion/ej2-angular-inputs';
+import { HelpComponent } from './administrator/help/help.component';
+import { TopicCardComponent } from './administrator/help/topic-card/topic-card.component';
+import { MatFormFieldModule, MatInputModule } from "@angular/material";
+import { ListFaqComponent } from './administrator/help/list-faq/list-faq.component';
+import { MassiveUnsubscribeComponent } from './marketing/massive-unsubscribe/massive-unsubscribe.component';
+import { RegisteredClinicsComponent } from './administrator/registered-clinics/registered-clinics.component';
+import { RegisteredClinicDetailComponent } from './administrator/registered-clinics/registered-clinic-detail/registered-clinic-detail.component';
+import { SharedComponentsModule } from 'src/app/shared/shared-components.module';
 
 @NgModule({
   declarations: [
@@ -121,6 +131,7 @@ import { MailPatientCreatedAccountViaFormComponent } from './parameters/mail-par
     StatisticComponent,
     VaucherComponent,
     EventCategoryComponent,
+    ThemeColorsComponent,
     EventCategoryStatisticComponent,
     WorkTimeColorsComponent,
     TranslationComponent,
@@ -153,10 +164,16 @@ import { MailPatientCreatedAccountViaFormComponent } from './parameters/mail-par
     MailMassiveEmailComponent,
     SmsMassiveComponent,
     AddHolidayComponent,
+    ChooseHolidayComponent,
     InvoiceComponent,
-    InvoicePrefixComponent,
     SmsBirthdayCongratulationComponent,
-    MailBirthdayCongratulationComponent
+    MailBirthdayCongratulationComponent,
+    HelpComponent,
+    TopicCardComponent,
+    ListFaqComponent,
+    RegisteredClinicsComponent,
+    RegisteredClinicDetailComponent,
+    MassiveUnsubscribeComponent
   ],
   imports: [
     CommonModule,
@@ -194,7 +211,11 @@ import { MailPatientCreatedAccountViaFormComponent } from './parameters/mail-par
     SharedEmailModule,
     SharedSMSModule,
     ScheduleModule,
-    ToolbarModule
+    ToolbarModule,
+    ColorPickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    SharedComponentsModule
   ],
   providers: [
     {
@@ -209,4 +230,4 @@ import { MailPatientCreatedAccountViaFormComponent } from './parameters/mail-par
     MonthAgendaService,
   ],
 })
-export class DashboardModule { }
+export class DashboardModule {}

@@ -1,0 +1,83 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-3 p-0 search mt-3">
+      <kendo-textbox-container floatingLabel="{{ language.search }}">
+        <input kendoTextBox (input)="onFilter($event.target.value)" />
+      </kendo-textbox-container>
+    </div>
+    <div class="col-sm-6 p-0 text-center mt-5 text-uppercase font-weight-bold">
+      <label>{{ faqTopic?.name }}</label>
+    </div>
+    <div class="col-sm-3 p-0 mt-5 mr-4 float-right" *ngIf="userSuperAdmin">
+      <button kendoButton [icon]="'add'" (click)="addNewModal()" [primary]="true" class="addButton float-right">
+      {{ language.newFaq }}
+      </button>
+    </div>
+  </div>
+  <div class="row" style="padding-top: 10px;">
+    <div class="col">
+      <kendo-panelbar #panelbar>
+        <kendo-panelbar-item [title]="item.question" *ngFor="let item of filterList">
+          <ng-template kendoPanelBarItemTitle *ngIf="userSuperAdmin">
+            <button kendoButton (click)="openEditFaqModal(item, $event)" [primary]="false" class="p-3"><i class="fa fa-edit" (click)="onIconEvent(item, $event, 'edit')"></i></button>
+            <button kendoButton (click)="deleteQuestion(item, $event)" [primary]="false" class="p-3"><i class="fa fa-trash" (click)="onIconEvent(item, $event, 'delete')"></i></button>
+          </ng-template>
+
+          <ng-template kendoPanelBarContent>
+            <div class="p-4">
+              {{ item.answer}}
+            </div>
+          </ng-template>
+        </kendo-panelbar-item>
+      </kendo-panelbar>
+
+    </div>
+  </div>
+</div>
+
+
+<modal #faqModal (onClose)="closeFaqModal()" modalClass="modal-md modal-dialog-centered no-footer"
+  *ngIf="userSuperAdmin">
+  <modal-header>
+    <h4 *ngIf="operationMode === 'add'">{{ language.newFaq }}</h4>
+    <h4 *ngIf="operationMode === 'edit'">{{ language.editFaq }}</h4>
+  </modal-header>
+  <modal-content class="pb-0">
+    <form (ngSubmit)="
+      faqModal.form.valid === true
+          ? operationMode === 'add'
+            ? createFaq()
+            : updateFaq()
+          : null" 
+        #faqModal="ngForm">
+      <div class="form-group col-12">
+        <kendo-textbox-container floatingLabel="{{ language.question }}">
+          <input id="question" kendoTextBox required type="text" [(ngModel)]="faq.question" name="question" />
+        </kendo-textbox-container>
+        <mat-error *ngIf="checkIfInputValid('question')">{{ language?.thisFieldIsRequired }}</mat-error>
+      </div>
+
+      <div class="form-group col-12">
+        <label id="answer" class="form-label">{{language.answer}}</label>
+        <div class="row">
+          <div class="input-group">
+            <textarea kendoTextArea id="answer" class="form-control" required rows="4" [(ngModel)]="faq.answer" name="answer">
+            </textarea>
+            <mat-error *ngIf="checkIfInputValid('answer')">{{ language?.thisFieldIsRequired }}</mat-error>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" style="text-align: center">
+        <button *ngIf="operationMode === 'add'" kendoButton [primary]="true" class="form-button"
+          [disabled]="faqModal.form.invalid" type="submit">
+          {{ language.add }}
+        </button>
+        <button *ngIf="operationMode === 'edit'" kendoButton [primary]="true" class="form-button"
+          [disabled]="faqModal.form.invalid" type="submit">
+          {{ language.edit }}
+        </button>
+      </div>
+    </form>
+  </modal-content>
+</modal>

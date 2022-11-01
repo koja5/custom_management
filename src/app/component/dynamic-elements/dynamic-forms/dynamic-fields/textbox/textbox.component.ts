@@ -3,6 +3,7 @@ import { FormGroup } from "@angular/forms";
 import { HelpService } from "src/app/service/help.service";
 import { Field } from "../../models/field";
 import { FieldConfig } from "../../models/field-config";
+import { checkIfInputValid } from "../../../../../shared/utils";
 
 @Component({
   selector: "app-text-box",
@@ -13,6 +14,7 @@ export class TextboxComponent implements OnInit, Field {
   config: FieldConfig;
   group: FormGroup;
   public language: any;
+  checkIfInputValid = checkIfInputValid;
 
   constructor(private helpService: HelpService) {
 

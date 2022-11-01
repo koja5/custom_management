@@ -1,4 +1,3 @@
-import { Subject } from 'rxjs/Subject';
 import { EventCategoryService } from "./../../../service/event-category.service";
 import { UsersService } from "./../../../service/users.service";
 import { StoreService } from "./../../../service/store.service";
@@ -12,6 +11,7 @@ import {
   OnInit,
   NgZone,
   HostListener,
+  OnDestroy,
 } from "@angular/core";
 import { ItemModel as ItemModelSplit } from "@syncfusion/ej2-angular-splitbuttons";
 import {
@@ -101,125 +101,13 @@ import { ActivatedRoute } from "@angular/router";
 import { HolidayService } from "src/app/service/holiday.service";
 import { PDFService } from "src/app/service/pdf.service";
 import { ParameterItemService } from "src/app/service/parameter-item.service";
+import { DateService } from "src/app/service/date.service";
+import { InvoiceService } from "src/app/service/invoice.service";
+import { SCHEDULER_TRANSLATIONS, TIMESLOT_DURATION, TIMEZONE_DATA, WEEK_DAYS } from "./dynamic-scheduler-data";
 declare var moment: any;
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
-L10n.load({
-  "fr-CH": {
-    schedule: {
-      day: "ngày",
-      week: "Tuần",
-      workWeek: "Tuần làm việc",
-      month: "tháng",
-      agenda: "Chương trình nghị sự",
-      weekAgenda: "Chương trình nghị sự tuần",
-      workWeekAgenda: "Chương trình làm việc trong tuần",
-      monthAgenda: "Chương trình nghị sự tháng",
-      today: "Hôm nay",
-      noEvents: "Không có sự kiện",
-      emptyContainer: "Không có sự kiện theo lịch trình vào ngày này.",
-      allDay: "Cả ngày",
-      start: "Khởi đầu",
-      end: "Kết thúc",
-      more: "hơn",
-      close: "Gần",
-      cancel: "Hủy bỏ",
-      noTitle: "(Không tiêu đề)",
-      delete: "Xóa bỏ",
-      deleteEvent: "Xóa sự kiện",
-      deleteMultipleEvent: "Xóa nhiều sự kiện",
-      selectedItems: "Các mục được chọn",
-      deleteSeries: "Xóa sê-ri",
-      edit: "Chỉnh sửa",
-      editSeries: "Chỉnh sửa sê-ri",
-      editEvent: "Chỉnh sửa sự kiện",
-      createEvent: "Tạo nên",
-      subject: "Môn học",
-      addTitle: "Thêm tiêu đề",
-      moreDetails: "Thêm chi tiết",
-      save: "Tiết kiệm",
-      editContent: "Bạn có muốn chỉnh sửa chỉ sự kiện này hoặc toàn bộ loạt?",
-      deleteRecurrenceContent:
-        "Bạn có muốn xóa chỉ sự kiện này hoặc toàn bộ loạt?",
-      deleteContent: "Bạn có chắc chắn muốn xóa sự kiện này?",
-      deleteMultipleContent: "Bạn có chắc chắn muốn xóa các sự kiện đã chọn?",
-      newEvent: "Sự kiện mới",
-      title: "Chức vụ",
-      location: "Vị trí",
-      description: "Sự miêu tả",
-      timezone: "Múi giờ",
-      startTimezone: "Bắt đầu múi giờ",
-      endTimezone: "Múi giờ kết thúc",
-      repeat: "Nói lại",
-      saveButton: "Tiết kiệm",
-      cancelButton: "Hủy bỏ",
-      deleteButton: "Xóa bỏ",
-      recurrence: "Sự tái xuất",
-      wrongPattern: "Mẫu tái phát không hợp lệ.",
-      seriesChangeAlert:
-        "Các thay đổi được thực hiện cho các phiên bản cụ thể của chuỗi này sẽ bị hủy và các sự kiện đó sẽ khớp với chuỗi đó một lần nữa.",
-      createError:
-        "Thời gian của sự kiện phải ngắn hơn tần suất xảy ra. Rút ngắn thời lượng hoặc thay đổi mẫu lặp lại trong trình chỉnh sửa sự kiện lặp lại.",
-      recurrenceDateValidation:
-        "Một số tháng có ít hơn ngày đã chọn. Đối với những tháng này, sự xuất hiện sẽ rơi vào ngày cuối cùng của tháng.",
-      sameDayAlert:
-        "Hai lần xuất hiện của cùng một sự kiện không thể xảy ra trong cùng một ngày.",
-      editRecurrence: "Chỉnh sửa tái phát",
-      repeats: "Lặp lại",
-      alert: "Thông báo",
-      startEndError: "Ngày kết thúc được chọn xảy ra trước ngày bắt đầu.",
-      invalidDateError: "Giá trị ngày nhập không hợp lệ.",
-      ok: "Được",
-      occurrence: "Xảy ra",
-      series: "Loạt",
-      previous: "Trước",
-      next: "Kế tiếp",
-      timelineDay: "Ngày thời gian",
-      timelineWeek: "Tuần thời gian",
-      timelineWorkWeek: "Tuần làm việc",
-      timelineMonth: "Mốc thời gian",
-    },
-    recurrenceeditor: {
-      none: "không ai",
-      daily: "hằng ngày",
-      weekly: "Hàng tuần",
-      monthly: "Hàng tháng",
-      month: "tháng",
-      yearly: "Hàng năm",
-      never: "Không bao giờ",
-      until: "Cho đến khi",
-      count: "Đếm",
-      first: "Đầu tiên",
-      second: "Thứ hai",
-      third: "Thứ ba",
-      fourth: "Thứ tư",
-      last: "Cuối cùng",
-      repeat: "Nói lại",
-      repeatEvery: "Lặp lại mỗi",
-      on: "Lặp lại trên",
-      end: "Kết thúc",
-      onDay: "ngày",
-      days: "Ngày",
-      weeks: "Tuần",
-      months: "Tháng)",
-      years: "Năm",
-      every: "mỗi",
-      summaryTimes: "thời gian",
-      summaryOn: "trên",
-      summaryUntil: "cho đến khi",
-      summaryRepeat: "Lặp lại",
-      summaryDay: "ngày",
-      summaryWeek: "tuần",
-      summaryMonth: "tháng)",
-      summaryYear: "năm",
-      monthWeek: "Tháng tuần",
-      monthPosition: "Vị trí tháng",
-      monthExpander: "Mở rộng tháng",
-      yearExpander: "Mở rộng năm",
-      repeatInterval: "Khoảng lặp lại",
-    },
-  },
-});
+L10n.load(SCHEDULER_TRANSLATIONS);
 
 @Component({
   selector: "app-dynamic-scheduler",
@@ -242,7 +130,7 @@ L10n.load({
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class DynamicSchedulerComponent implements OnInit {
+export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   @ViewChild("scheduleObj") scheduleObj: ScheduleComponent;
   @ViewChild("eventTypeObj") eventTypeObj: DropDownListComponent;
   @ViewChild("titleObj") titleObj: TextBoxComponent;
@@ -281,71 +169,9 @@ export class DynamicSchedulerComponent implements OnInit {
   public dayEndHourValue: Date = new Date(new Date().setHours(23, 59, 59));
   public workStartHourValue: Date = new Date(new Date().setHours(9, 0, 0));
   public workEndHourValue: Date = new Date(new Date().setHours(18, 0, 0));
-  public weekDays: Object[] = [
-    { text: "Sunday", value: 0 },
-    { text: "Monday", value: 1 },
-    { text: "Tuesday", value: 2 },
-    { text: "Wednesday", value: 3 },
-    { text: "Thursday", value: 4 },
-    { text: "Friday", value: 5 },
-    { text: "Saturday", value: 6 },
-  ];
-  public timezoneData: Object[] = [
-    { text: "UTC -12:00", value: "Etc/GMT+12" },
-    { text: "UTC -11:00", value: "Etc/GMT+11" },
-    { text: "UTC -10:00", value: "Etc/GMT+10" },
-    { text: "UTC -09:00", value: "Etc/GMT+9" },
-    { text: "UTC -08:00", value: "Etc/GMT+8" },
-    { text: "UTC -07:00", value: "Etc/GMT+7" },
-    { text: "UTC -06:00", value: "Etc/GMT+6" },
-    { text: "UTC -05:00", value: "Etc/GMT+5" },
-    { text: "UTC -04:00", value: "Etc/GMT+4" },
-    { text: "UTC -03:00", value: "Etc/GMT+3" },
-    { text: "UTC -02:00", value: "Etc/GMT+2" },
-    { text: "UTC -01:00", value: "Etc/GMT+1" },
-    { text: "UTC +00:00", value: "Etc/GMT" },
-    { text: "UTC +01:00", value: "Etc/GMT-1" },
-    { text: "UTC +02:00", value: "Etc/GMT-2" },
-    { text: "UTC +03:00", value: "Etc/GMT-3" },
-    { text: "UTC +04:00", value: "Etc/GMT-4" },
-    { text: "UTC +05:00", value: "Etc/GMT-5" },
-    { text: "UTC +05:30", value: "Asia/Calcutta" },
-    { text: "UTC +06:00", value: "Etc/GMT-6" },
-    { text: "UTC +07:00", value: "Etc/GMT-7" },
-    { text: "UTC +08:00", value: "Etc/GMT-8" },
-    { text: "UTC +09:00", value: "Etc/GMT-9" },
-    { text: "UTC +10:00", value: "Etc/GMT-10" },
-    { text: "UTC +11:00", value: "Etc/GMT-11" },
-    { text: "UTC +12:00", value: "Etc/GMT-12" },
-    { text: "UTC +13:00", value: "Etc/GMT-13" },
-    { text: "UTC +14:00", value: "Etc/GMT-14" },
-  ];
-  public timeSlotDuration: Object[] = [
-    { Name: "0.5 hour", Value: 30 },
-    { Name: "1 hour", Value: 60 },
-    { Name: "1.5 hours", Value: 90 },
-    { Name: "2 hours", Value: 120 },
-    { Name: "2.5 hours", Value: 150 },
-    { Name: "3 hours", Value: 180 },
-    { Name: "3.5 hours", Value: 210 },
-    { Name: "4 hours", Value: 240 },
-    { Name: "4.5 hours", Value: 270 },
-    { Name: "5 hours", Value: 300 },
-    { Name: "5.5 hours", Value: 330 },
-    { Name: "6 hours", Value: 360 },
-    { Name: "6.5 hours", Value: 390 },
-    { Name: "7 hours", Value: 420 },
-    { Name: "7.5 hours", Value: 450 },
-    { Name: "8 hours", Value: 480 },
-    { Name: "8.5 hours", Value: 510 },
-    { Name: "9 hours", Value: 540 },
-    { Name: "9.5 hours", Value: 570 },
-    { Name: "10 hours", Value: 600 },
-    { Name: "10.5 hours", Value: 630 },
-    { Name: "11 hours", Value: 660 },
-    { Name: "11.5 hours", Value: 690 },
-    { Name: "12 hours", Value: 720 },
-  ];
+  public weekDays: Object[] = WEEK_DAYS;
+  public timezoneData: Object[] = TIMEZONE_DATA;
+  public timeSlotDuration: Object[] = TIMESLOT_DURATION;
   public timeSlotFields = { text: "Name", value: "Value" };
   public timeSlotCount: Number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   public timeSlotDurationValue: Number = 60;
@@ -398,6 +224,11 @@ export class DynamicSchedulerComponent implements OnInit {
   eventChange = false;
   adminUser: any;
   public template: any;
+  superadminProfile: any;
+  isDateSet: boolean = false;
+  invoiceID: any;
+  changedInvoiceID: any;
+  noStoreSelectedToastrId: number;
 
   public generateEvents(): Object[] {
     const eventData: Object[] = [];
@@ -687,26 +518,7 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   public getDateHeaderText(date): string {
-
     return this.intl.formatDate(date, { skeleton: "Ed" });
-  }
-
-  public getDateHoliday(value): string {
-    const date = value.getDate();
-    const month = value.getMonth();
-    const year = value.getYear();
-    const holiday = this.holidays.find(
-      (elem) =>
-        value &&
-        date >= elem.StartTime.getDate() &&
-        month == elem.StartTime.getMonth() &&
-        year == elem.StartTime.getYear() &&
-        date <= elem.EndTime.getDate() &&
-        month == elem.EndTime.getMonth() &&
-        year == elem.EndTime.getYear()
-    );
-
-    return holiday ? holiday.Subject : '';
   }
 
   public onWeekDayChange(args: ChangeEventArgs): void {
@@ -1633,15 +1445,21 @@ export class DynamicSchedulerComponent implements OnInit {
     private activatedRouter: ActivatedRoute,
     private holidayService: HolidayService,
     private pdfService: PDFService,
-    private parameterItemService: ParameterItemService
+    private parameterItemService: ParameterItemService,
+    private dateService: DateService,
+    private invoiceService: InvoiceService
   ) {}
 
   ngOnInit() {
     this.initializationConfig();
-    this.initializaionData();
-    this.loadHolidays();
     this.helpService.setDefaultBrowserTabTitle();
     this.loadUser();
+    this.loadHolidays();
+    this.initData();
+  }
+
+  ngOnDestroy(): void {
+      this.toastr.clear();
   }
 
   @HostListener("window:resize", ["$event"])
@@ -1651,6 +1469,24 @@ export class DynamicSchedulerComponent implements OnInit {
 
   get user() {
     return this.customerUser;
+  }
+
+  private initData() {
+    this.initializationData();
+    if (!this.selectedStoreId) {
+      this.displayInfoMessageEmptyCalendar();
+    }
+  }
+
+  private displayInfoMessageEmptyCalendar() {
+    this.noStoreSelectedToastrId = this.toastr.info(
+      this.language.noStoreSelectedIndicatorText,
+      this.language.noStoreSelectedIndicatorTitle,
+      {
+          timeOut: 0,
+          extendedTimeOut: 0,
+          closeButton: true
+      }).toastId;
   }
 
   public loadUser(): void {
@@ -1663,36 +1499,75 @@ export class DynamicSchedulerComponent implements OnInit {
     });
   }
 
-  public loadHolidays(): void {
+  // load holidays defined by clinic and holidays defined by selected clinic template (if there is some)
+  public loadHolidays() {
     const superAdminId = this.helpService.getSuperadmin();
+    
+    this.holidayService
+      .getHolidaysForClinic(superAdminId)
+      .then((result) => {
+        console.log(result);
+        if (result && result.length > 0) {
+          result.forEach((r) => {
+            // console.log('R: ', r);
+            this.allEvents.push({
+              Subject: r.Subject,
+              StartTime: new Date(r.StartTime).setHours(Number(this.startWork)),
+              EndTime: new Date(r.EndTime).setHours(Number(this.startWork + 1)),
+              IsAllDay: false,
+            });
 
-    console.log("superAdminId", superAdminId);
-    this.holidayService.getHolidays(superAdminId).subscribe((result) => {
-      console.log("holidays", result);
-      if (result && result.length > 0) {
-        console.log("holidayss");
-        result.forEach((r) => {
-          console.log(r);
-          this.allEvents.push({
-            Subject: r.Subject,
-            StartTime: new Date(r.StartTime),
-            EndTime: new Date(r.EndTime),
-            IsAllDay: true
+            this.holidays.push({
+              Subject: r.Subject,
+              StartTime: new Date(r.StartTime),
+              EndTime: new Date(r.EndTime),
+              IsAllDay: true,
+            });
           });
+        }
+      });
 
-          this.holidays.push({
-            Subject: r.Subject,
-            StartTime: new Date(r.StartTime),
-            EndTime: new Date(r.EndTime),
-            IsAllDay: true
-          });
-        });
+    // load holidays defined by clinic and holidays defined by selected clinic template (if there is some)
 
-        this.eventSettings.dataSource = this.allEvents;
-      } else {
-        console.log("no holidayss");
-      }
-    });
+    this.holidayService
+      .getStoreTemplateConnection(superAdminId)
+      .then((ids) => {
+        const templateIds = ids.map((elem) => elem.templateId);
+
+        if (ids.length) {
+          this.holidayService
+            .getHolidaysByTemplates(templateIds)
+            .then((result) => {
+              if (result && result.length > 0) {
+                result.forEach((r) => {
+                  this.allEvents.push({
+                    Subject: r.Subject,
+                    StartTime: new Date(r.StartTime).setHours(
+                      Number(this.startWork)
+                    ),
+                    EndTime: new Date(r.EndTime).setHours(
+                      Number(this.startWork + 1)
+                    ),
+                    IsAllDay: false,
+                  });
+
+                  this.holidays.push({
+                    Subject: r.Subject,
+                    StartTime: new Date(r.StartTime),
+                    EndTime: new Date(r.EndTime),
+                    IsAllDay: true,
+                  });
+                });
+
+                this.scheduleObj.eventSettings.dataSource = this.allEvents;
+                this.scheduleObj.refresh();
+                this.scheduleObj.refreshEvents();
+              } else {
+                console.log("no holidayss");
+              }
+            });
+        }
+      });
   }
 
   checkPreselectedStore() {
@@ -1753,7 +1628,7 @@ export class DynamicSchedulerComponent implements OnInit {
     }*/
   }
 
-  initializaionData() {
+  initializationData() {
     this.loading = true;
     this.type = this.helpService.getType();
     this.id = this.helpService.getMe();
@@ -1821,7 +1696,7 @@ export class DynamicSchedulerComponent implements OnInit {
   }
 
   initializeStore() {
-    if (this.helpService.getType() === this.userType.patient) {
+   if (this.helpService.getType() === this.userType.patient) {
       this.storeService.getStoreAllowedOnline(
         this.helpService.getSuperadmin(),
         (val) => {
@@ -1836,6 +1711,28 @@ export class DynamicSchedulerComponent implements OnInit {
         this.setTimesForStore();
       });
     }
+  }
+
+  setEmployeeStore() {
+    this.sharedCalendarResources = [];
+    this.value = [];
+    this.storeService.getStore(this.helpService.getSuperadmin(), (data) => {
+      this.store = data;
+      for (let i = 0; i < data.length; i++) {
+        this.service.getUsersInCompany(data[i].id, (users: []) => {
+          this.usersInCompany = users;
+          for (let j = 0; j < users.length; j++) {
+            if (users[j]["id"] === this.helpService.getMe()) {
+              this.selectedStoreId = data[i].id;
+              this.value.push(users[j]);
+              this.sharedCalendarResources = this.value;
+              this.handleValue(this.value);
+              this.setTimesForStore();
+            }
+          }
+        });
+      }
+    });
   }
 
   checkPreselectedForAllowedOnlineStore() {
@@ -2130,6 +2027,9 @@ export class DynamicSchedulerComponent implements OnInit {
           }
         }
       );
+    } else if (this.helpService.getType() === this.userType.employee) {
+      this.setEmployeeStore();
+      this.filterToolbarInd = false;
     } else {
       this.storeService.getStore(this.helpService.getSuperadmin(), (val) => {
         this.store = val;
@@ -2617,6 +2517,9 @@ export class DynamicSchedulerComponent implements OnInit {
           )
         );
       }
+      if(this.noStoreSelectedToastrId) {
+        this.toastr.clear(this.noStoreSelectedToastrId);
+      }
       this.sharedCalendarResources = this.value;
       this.getTaskForSelectedUsers(this.value);
       this.getUserInCompany(event);
@@ -2624,6 +2527,9 @@ export class DynamicSchedulerComponent implements OnInit {
     } else {
       this.value = null;
       if (event !== undefined) {
+        if(this.noStoreSelectedToastrId) {
+          this.toastr.clear(this.noStoreSelectedToastrId);
+        }
         this.service
           .getTasksForStore(event, this.id, this.type)
           .subscribe((data) => {
@@ -2652,35 +2558,7 @@ export class DynamicSchedulerComponent implements OnInit {
           });
         this.getUserInCompany(event);
       } else {
-        this.service
-          .getTasks(this.helpService.getSuperadmin())
-          .subscribe((data) => {
-            this.events = [];
-            if (data.length !== 0) {
-              this.packEventsForShow(data);
-              const objectCalendar = {
-                name: null,
-                events: this.events,
-                workTime: undefined,
-              };
-              this.calendars.push(objectCalendar);
-            } else {
-              this.calendars.push({ name: null, events: [] });
-            }
-            this.storageService.removeSelectedStore(this.id);
-            this.usersInCompany = [];
-            this.startWork = "08:00";
-            this.endWork = "22:00";
-            this.timeDuration = "60";
-            this.therapyDuration = 1;
-            this.loading = false;
-            this.sharedCalendarResources = [];
-            this.renderTimeInSchedule();
-            /// this.setWidthForCalendarHeader();
-            /// this.setSplitterBarEvent();
-            this.size = [];
-            this.size.push("100%");
-          });
+        this.initData();
       }
     }
 
@@ -2821,26 +2699,6 @@ export class DynamicSchedulerComponent implements OnInit {
 
     if (holiday) {
       date.element.style.backgroundColor = "#e9ecef";
-      date.element.style.pointerEvents = "none";
-
-      // if (date.elementType !== "monthDay" && this.currentView === "Month") {
-
-      //   const span = document.createElement("SPAN");
-      //   date.element.appendChild(span);
-      //   span.innerHTML = holiday.Subject;
-      //   span.style.overflow = 'hidden';
-      //   span.style.whiteSpace = 'nowrap';
-      //   span.style.textOverflow = 'ellipsis';
-
-      // }
-
-      if (date.elementType === "dateHeader" && this.currentView !== "Month") {
-        const dateSplitted = date.date.toString().split(" ");
-
-        // date - day - holiday
-        date.element.firstChild.innerText =
-          dateSplitted[2] + " " + dateSplitted[0] + " - " + holiday.Subject;
-      }
     }
 
     if (date.elementType === "resourceHeader") {
@@ -3103,6 +2961,22 @@ export class DynamicSchedulerComponent implements OnInit {
       this.vatTaxList = data;
       // console.log(data);
     });
+
+    this.parameterItemService
+      .getSuperadminProfile(superadmin)
+      .subscribe((data) => {
+        this.superadminProfile = data[0];
+        this.invoiceID =
+          this.superadminProfile.invoicePrefix +
+          "-" +
+          this.superadminProfile.invoiceID;
+
+        console.log("invoiceID", this.invoiceID);
+
+        this.changedInvoiceID = this.superadminProfile.invoiceID;
+
+        console.log(data);
+      });
   }
 
   pickToModel(data: any, titleValue) {
@@ -3571,7 +3445,11 @@ export class DynamicSchedulerComponent implements OnInit {
     console.log(args);
     console.log(window.innerWidth);
 
-    if (window.innerWidth > 992 || this.eventMoveConfirm || args.requestType !== "eventChange") {
+    if (
+      window.innerWidth > 992 ||
+      this.eventMoveConfirm ||
+      args.requestType !== "eventChange"
+    ) {
       if (!args) {
         args = this.mobileEventChange;
       }
@@ -3583,14 +3461,27 @@ export class DynamicSchedulerComponent implements OnInit {
         args.requestType === "viewNavigate"
       ) {
         if (args.requestType === "eventCreate") {
-          this.createNewTask();
+          let evts = this.scheduleObj.getEvents(this.eventTime.start, this.eventTime.end)
+          if (evts.length > 0 && this.type === this.userType.patient) {
+            this.toastr.error(
+              this.language.eventAlreadyExistsText,
+              this.language.eventAlreadyExistsTitle,
+              { timeOut: 7000, positionClass: "toast-bottom-right" }
+            );
+          } else {
+            this.createNewTask();
+          }
 
           args.cancel = true;
         } else if (args.requestType === "eventChange") {
-          if (
-            this.currentEventAction !== TypeOfEventAction.Drag &&
-            this.type !== this.userType.patient
-          ) {
+          let evts = this.scheduleObj.getEvents(this.eventTime.start, this.eventTime.end)
+          if (evts.length > 1 && this.type === this.userType.patient) {
+            this.toastr.error(
+              this.language.eventAlreadyExistsText,
+              this.language.eventAlreadyExistsTitle,
+              { timeOut: 7000, positionClass: "toast-bottom-right" }
+            );
+          } else if (this.currentEventAction !== TypeOfEventAction.Drag && this.type !== this.userType.patient) {
             this.updateTask(args);
           }
           args.cancel = true;
@@ -3806,25 +3697,42 @@ export class DynamicSchedulerComponent implements OnInit {
     );
   }
 
+  private updateInvoiceID(): void {
+    if (this.invoiceID !== this.changedInvoiceID) {
+      const data = {
+        superAdminId: this.superadminProfile.id,
+        id: this.changedInvoiceID,
+      };
+      console.log("updateInvoiceID");
+
+      this.invoiceService.updateInvoiceID(data).then(() => {
+        this.invoiceID = this.changedInvoiceID;
+      });
+    }
+  }
+
   public downloadPDF(): void {
-    console.log(this.selectedTherapies);
     const docDefinition = this.setupPDF();
 
     // pass file name
     pdfMake
       .createPdf(docDefinition)
       .download(this.customerUser["firstname"] + this.customerUser["lastname"]);
+
+    this.updateInvoiceID();
   }
 
   public printPDF(): void {
-    console.log(this.selectedTherapies);
-
     const docDefinition = this.setupPDF();
     pdfMake.createPdf(docDefinition).print();
+
+    this.updateInvoiceID();
   }
 
   private setupPDF() {
-    const dotSign = " • ";
+    const selectedStore = this.store.filter(
+      (s) => (s.id = this.selectedStoreId)
+    )[0];
 
     const therapies = [];
     const netPrices = [];
@@ -3832,53 +3740,61 @@ export class DynamicSchedulerComponent implements OnInit {
     let bruto = 0;
     for (let i = 0; i < this.selectedTherapies.length; i++) {
       const id = this.selectedTherapies[i];
-      const temp = this.therapyValue.find((therapy) => therapy.id == id);
+      const therapy = this.therapyValue.find((therapy) => therapy.id == id);
 
-      if (temp) {
+      if (therapy) {
         const vatDefinition = this.vatTaxList.find(
-          (elem) => elem.id === temp.vat
+          (elem) => elem.id === therapy.vat
         );
         // console.log(vatDefinition);
 
-        temp.date = this.formatDateForPDF(this.eventTime.start);
+        therapy.date = this.dateService.formatDate(
+          new Date(this.eventTime.start).toLocaleDateString("en-CA").toString()
+        );
 
-        console.log("temp.date", temp.date);
+        console.log("temp.date", therapy.date);
 
-        const isNaNPrice = isNaN(parseFloat(temp.net_price));
+        const isNaNPrice = isNaN(parseFloat(therapy.net_price));
 
         if (isNaNPrice) {
-          console.log("Not a number: ", temp.net_price);
+          console.log("Not a number: ", therapy.net_price);
         }
 
         isNaNPrice
           ? netPrices.push(-1)
-          : netPrices.push(parseFloat(temp.net_price));
+          : netPrices.push(parseFloat(therapy.net_price));
 
         if (!isNaNPrice) {
           if (vatDefinition) {
             bruto =
-              parseFloat(temp.net_price) *
+              parseFloat(therapy.net_price) *
               (1 + Number(vatDefinition.title) / 100);
           } else {
-            bruto = parseFloat(temp.net_price) * (1 + 20 / 100);
+            bruto = parseFloat(therapy.net_price) * (1 + 20 / 100);
           }
           brutoPrices.push(bruto);
         } else {
           brutoPrices.push(-1);
         }
+
+        const shouldSetDate =
+          (this.selectedTherapies.length > 1 && i == 0) ||
+          this.selectedTherapies.length === 1 ||
+          !this.isDateSet;
+
+        // console.log(shouldSetDate + ' should set date');
+
         therapies.push({
-          title: temp.title,
-          description: temp.description ? temp.description : "",
-          date:
-            (this.selectedTherapies.length > 1 && i == 0) ||
-            this.selectedTherapies.length === 1
-              ? temp.date
-              : "",
+          title:
+            therapy.titleOnInvoice && therapy.titleOnInvoice.trim() !== ""
+              ? therapy.titleOnInvoice
+              : therapy.title,
+          date: shouldSetDate ? therapy.date : "",
           net_price: isNaNPrice
             ? this.language.noDataAvailable
             : this.language.euroSign +
               " " +
-              parseFloat(temp.net_price).toFixed(2),
+              parseFloat(therapy.net_price).toFixed(2),
           vat: vatDefinition ? vatDefinition.title : 20,
           gross_price: isNaNPrice
             ? this.language.noDataAvailable
@@ -3893,72 +3809,54 @@ export class DynamicSchedulerComponent implements OnInit {
     const filteredBrutoPrices = brutoPrices.filter(
       (num) => !isNaN(parseFloat(num))
     );
-
+    let vatValues = brutoPrices.map(function (item, index) {
+      // In this case item correspond to currentValue of array a,
+      // using index to get value from array b
+      return item - netPrices[index];
+    });
+    const vat = vatValues.reduce((a, b) => a + b, 0).toFixed(2);
     const subtotal = filteredNetPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = filteredBrutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
     let docDefinition = {
+      header: {
+        columns: [
+          {
+            text: this.language.invoiceSubTitle + " " + this.invoiceID,
+            style: "documentHeaderLeft",
+            width: "*",
+          },
+          {
+            text:
+              this.language.dateTitle +
+              " " +
+              this.dateService.currentDateFormatted,
+            style: "documentHeaderRight",
+            width: "*",
+          },
+        ],
+      },
       content: [
         // Header
         {
           columns: [
-            // {
-            //   image: 'data:image/png;base64,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',
-            //   width: 150
-            // },
-
             [
               {
-                text: this.language.invoiceTitle,
+                text: "\n" + this.language.invoiceTitle,
                 style: "invoiceTitle",
                 width: "*",
               },
               {
-                stack: [
+                columns: [
                   {
-                    columns: [
-                      {
-                        text: this.language.invoiceSubTitle,
-                        style: "invoiceSubTitle",
-                        width: "*",
-                      },
-                      {
-                        text: this.complaintData["id"],
-                        style: "invoiceSubValue",
-                        width: 130,
-                      },
-                    ],
+                    text: "\n",
+                    style: "invoiceSubTitle",
+                    width: "*",
                   },
                   {
-                    columns: [
-                      {
-                        text: this.language.dateTitle,
-                        style: "invoiceSubTitle",
-                        width: "*",
-                      },
-                      {
-                        text: new Date(
-                          this.complaintData["date"]
-                        ).toLocaleString(),
-                        style: "invoiceSubValue",
-                        width: 130,
-                      },
-                    ],
-                  },
-
-                  {
-                    columns: [
-                      {
-                        text: "\n",
-                        style: "invoiceSubTitle",
-                        width: "*",
-                      },
-                      {
-                        text: "\n",
-                        style: "invoiceSubValue",
-                        width: "*",
-                      },
-                    ],
+                    text: "\n",
+                    style: "invoiceSubValue",
+                    width: "*",
                   },
                 ],
               },
@@ -3982,11 +3880,17 @@ export class DynamicSchedulerComponent implements OnInit {
         {
           columns: [
             {
-              text: this.adminUser.clinicName,
+              text:
+                selectedStore.storename +
+                "\n" +
+                this.superadminProfile.shortname,
               style: "invoiceBillingDetailsLeft",
             },
             {
-              text: this.customerUser.lastname + this.customerUser.firstname,
+              text:
+                this.customerUser.lastname.trim() +
+                " " +
+                this.customerUser.firstname.trim(),
               style: "invoiceBillingDetailsRight",
             },
           ],
@@ -3995,21 +3899,33 @@ export class DynamicSchedulerComponent implements OnInit {
         {
           columns: [
             {
-              text:
-                this.adminUser.street +
-                "\n " +
-                this.adminUser.zipcode +
-                " " +
-                this.adminUser.place,
-
+              text: selectedStore.vatcode
+                ? selectedStore.street +
+                  "\n " +
+                  selectedStore.zipcode +
+                  " " +
+                  selectedStore.place +
+                  "\n" +
+                  this.language.vatIdentificationNumber +
+                  " " +
+                  selectedStore.vatcode
+                : selectedStore.street +
+                  "\n " +
+                  selectedStore.zipcode +
+                  " " +
+                  selectedStore.place +
+                  "\n" +
+                  this.language.vatIdentificationNumber +
+                  " " +
+                  this.superadminProfile.vatcode,
               style: "invoiceBillingAddressLeft",
             },
             {
               text:
                 this.customerUser["street"] +
-                " " +
-                this.customerUser["streetnumber"] +
                 "\n" +
+                this.customerUser["streetnumber"] +
+                " " +
                 this.customerUser["city"] +
                 "\n",
               style: "invoiceBillingAddressRight",
@@ -4040,16 +3956,12 @@ export class DynamicSchedulerComponent implements OnInit {
             paddingRight: function (i, node) {
               return i === node.table.widths.length - 1 ? 0 : 8;
             },
-            // // code for zebra style:
-            // fillColor: function (i) {
-            //   return i % 2 === 0 ? "#CCCCCC" : null;
-            // },
           },
           table: {
             // headers are automatically repeated if the table spans over multiple pages
             // you can declare how many rows should be treated as headers
             headerRows: 1,
-            widths: ["*", "*", "auto", "auto", "auto"],
+            widths: ["20%", "20%", "20%", "20%", "20%"],
             body: this.pdfService.createItemsTable(therapies),
           }, // table
           //  layout: 'lightHorizontalLines'
@@ -4058,76 +3970,67 @@ export class DynamicSchedulerComponent implements OnInit {
         "\n",
         // TOTAL
         {
-          table: {
-            // headers are automatically repeated if the table spans over multiple pages
-            // you can declare how many rows should be treated as headers
-            headerRows: 0,
-            widths: ["*", 80],
-
-            body: [
-              // Total
-              [
-                {
-                  text: this.language.invoiceSubtotal,
-                  style: "itemsFooterSubTitle",
-                },
-                {
-                  text:
-                    filteredNetPrices.length === 0
-                      ? this.language.noDataAvailable
-                      : this.language.euroSign + " " + subtotal,
-                  style: "itemsFooterSubValue",
-                },
-              ],
-              [
-                {
-                  text: this.language.invoiceTotal,
-                  style: "itemsFooterTotalTitle",
-                },
-                {
-                  text:
-                    filteredBrutoPrices.length === 0
-                      ? this.language.noDataAvailable
-                      : this.language.euroSign + " " + total,
-                  style: "itemsFooterTotalValue",
-                },
-              ],
-            ],
-          },
-          layout: "lightHorizontalLines",
+          columns: [
+            {
+              text: "",
+              width: "20%",
+            },
+            {
+              text: "",
+              width: "20%",
+            },
+            {
+              text:
+                netPrices.length === 0
+                  ? this.language.noDataAvailable
+                  : this.language.euroSign + " " + subtotal,
+              style: "itemsFooterSubValue",
+              width: "20%",
+            },
+            {
+              text:
+                netPrices.length === 0
+                  ? this.language.noDataAvailable
+                  : this.language.euroSign + " " + vat,
+              style: "itemsFooterVATValue",
+              width: "20%",
+            },
+            {
+              text:
+                brutoPrices.length === 0
+                  ? this.language.noDataAvailable
+                  : this.language.euroSign + " " + total,
+              style: "itemsFooterTotalValue",
+              width: "20%",
+            },
+          ],
         },
-        // {
-        //   text: this.language.notesTitle,
-        //   style: 'notesTitle'
-        // },
-        // {
-        //   text: this.language.notesText,
-        //   style: 'notesTextBold'
-        // },
-        // {
-        //   text: "\n \n",
-        //   style: 'notesText'
-        // },
-        // {
-        //   text: this.language.notesDate + new Date().toLocaleDateString() + ", " + this.store.storename,
-        //   style: 'notesTextBold'
-        // }
+        {
+          text: this.language.notesTitle,
+          style: "notesTextBold",
+        },
+        {
+          text: this.language.notesText,
+          style: "notesText",
+        },
       ],
       footer: {
         columns: [
           {
             text:
-              this.adminUser.clinicName +
-              dotSign +
-              this.adminUser.street +
-              dotSign +
-              this.adminUser.zipcode +
+              selectedStore.storename +
               " " +
-              this.adminUser.place +
+              this.superadminProfile.shortname +
+              this.dotSign +
+              selectedStore.street +
+              this.dotSign +
+              selectedStore.zipcode +
+              " " +
+              selectedStore.place +
               "\n" +
-              this.adminUser.telephone +
-              dotSign +
-              this.adminUser.email,
+              selectedStore.telephone +
+              this.dotSign +
+              selectedStore.email,
             style: "documentFooter",
           },
         ],
@@ -4140,11 +4043,5 @@ export class DynamicSchedulerComponent implements OnInit {
 
     return docDefinition;
   }
-
-  private formatDateForPDF(value) {
-    if (!value) {
-      return;
-    }
-    return new Date(value).toLocaleDateString("en-CA");
-  }
+  private dotSign = " • ";
 }

@@ -86,13 +86,13 @@ body[data-layout="horizontal"][data-layout-size="boxed"] .footer {
 }
 
 .navbar-header .dropdown .show.header-item {
-  background-color: #f8f9fa;
+  background-color: var(--theme-color);
 }
 
 .navbar-brand-box {
   padding: 0 1.5rem;
   width: 235px;
-  background: #091467;
+  background: var(--theme-color);
   border-right: 1px solid #e9e9ef;
   -webkit-box-shadow: 0 2px 2px #fbfaff;
   box-shadow: 0 2px 2px #fbfaff;
@@ -1089,11 +1089,13 @@ body[data-sidebar-size="sm"] .vertical-menu #sidebar-menu > ul ul {
   display: none;
 }
 
-li.active a, li.active a i {
+li.active a,
+li.active a i {
   color: #01a9e9;
 }
 
-.trophy, .replication {
+.trophy,
+.replication {
   text-align: center;
 }
 
@@ -1111,4 +1113,16 @@ li.active a, li.active a i {
 
 .store-name {
   padding-top: 20px;
+}
+
+.menu-help{
+  height: 58px !important;
+  padding-top: 19px !important;
+  color: #000 !important;
+}
+
+.header-item-node {
+  color: #8f96ad;
+  font-weight: bolder;
+  font-size: 12px;
 }

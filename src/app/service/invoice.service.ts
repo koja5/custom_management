@@ -6,17 +6,10 @@ import { Injectable } from '@angular/core';
 })
 export class InvoiceService {
 
-  constructor(public http: HttpClient) { }
+  constructor(public httpClient: HttpClient) { }
 
-  public getInvoicePrefix(superAdminId) {
-    return this.http.get<any[]>("/api/getInvoicePrefix/" + superAdminId).toPromise();
+  public updateInvoiceID(data) {
+    return this.httpClient.post("/api/updateInvoiceID", data).toPromise();
   }
 
-  public updateInvoicePrefix(data) {
-    return this.http.post("/api/updateInvoicePrefix", data);
-  }
-
-  public createInvoicePrefix(data) {
-    return this.http.post("/api/createInvoicePrefix", data);
-  }
 }
