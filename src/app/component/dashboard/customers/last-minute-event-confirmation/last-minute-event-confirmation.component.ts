@@ -21,14 +21,15 @@ export class LastMinuteEventConfirmationComponent implements OnInit {
   public selectedDay;
   public language: any;
   public checkIfInputValid = checkIfInputValid;
+  public loading=true;
 
   private user;
   private startDate:Date;
   private endDate:Date;
   private days;
   private storeId;
-  private therapeuts:any[];
-  private hours:any[];
+  private therapeuts:any[]=[];
+  private hours:any[]=[];
 
   private selectedTherapeuts;
   private static secretKey = "YourSecretKeyForEncryption&Descryption";
@@ -94,15 +95,17 @@ export class LastMinuteEventConfirmationComponent implements OnInit {
     
     this.usersService.getUsersInCompany(this.storeId, (val) => {
       if(this.selectedTherapeuts instanceof Array){
-        this.therapeuts = val.filter(item=>this.selectedTherapeuts.includes(item.id.toString()));     
+        this.therapeuts = val.filter((item) => this.selectedTherapeuts.includes(item.id));
       }else{
-        this.therapeuts = val.filter((item)=> item.id===this.selectedTherapeuts);       
+        this.therapeuts = val.filter((item) => item.id===this.selectedTherapeuts);       
       }
     });   
     
     if (localStorage.getItem("language") !== null) {
       this.language = JSON.parse(localStorage.getItem("language"));
     }
+
+    this.loading=false;
   }
 
   availableDates(startDate: Date, endDate: Date){
@@ -140,12 +143,14 @@ export class LastMinuteEventConfirmationComponent implements OnInit {
         formValue.colorTask="12";
         formValue.creator_id = this.helpService.getMe();
         formValue.confirm=1;
+
         console.log(formValue);
+        
         this.taskService.createTask(formValue, (val) => {
           if (val.success) {     
-            this.helpService.successToastr("Success","");
+            this.helpService.successToastr(this.language.successExecutedActionTitle,this.language.successExecutedActionText);
           } else {
-            this.helpService.errorToastr("Error","");
+            this.helpService.errorToastr(this.language.errorExecutedActionTitle,this.language.errorExecutedActionText);
           }
         });    
     });

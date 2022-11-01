@@ -1047,19 +1047,7 @@
                     name="lastMinuteWeek">
                   </kendo-multiselect>                  
                 </div>
-              </div> 
-              <!-- NOTIFICATION VIA -->
-              <div class="col-row">
-                <div class="col-left">
-                  <label style="line-height: 34px; margin: 0">{{ language.notificationVia }}</label>
-                </div>
-                <div class="col-right">                  
-                  <kendo-multiselect [data]="typesOfNotifications" 
-                    [textField]="'text'" [valueField]="'value'" 
-                    [(ngModel)]="notificationsVia" name="notificationsVia">
-                  </kendo-multiselect>
-                </div>
-              </div>   
+              </div>  
               <div class="col-row">
                 <div class="col-left">
                   <button kendoButton [primary]="true" class="form-button" (click)="sendLastMinuteOffer()">
@@ -1078,7 +1066,6 @@
       </div>
     </div>
   </div>
-
   <!-- MODALS -->
   <modal #customerModal (onClose)="closeCustomerModal()" modalClass="modal-lg">
     <modal-header>
@@ -1090,11 +1077,11 @@
           <div class="panel-body">
             <div class="text-center vd_info-parent col-md-4 col-xs-12">
               <img *ngIf="data.gender === ''" alt="example image" style="width: 190px"
-                src="../../../../assets/images/users/{{ imagePath }}.png" class="rounded-circle" />
+              src="../../../../assets/images/users/{{ imagePath }}.png" class="rounded-circle" />
               <img *ngIf="data.gender !== '' && data.gender === 'male'" alt="example image" style="width: 190px"
-                src="../../../../assets/images/users/male-patient.png" class="rounded-circle" />
+              src="../../../../assets/images/users/male-patient.png" class="rounded-circle" />
               <img *ngIf="data.gender !== '' && data.gender === 'female'" alt="example image" style="width: 190px"
-                src="../../../../assets/images/users/female-patient.png" class="rounded-circle" />
+              src="../../../../assets/images/users/female-patient.png" class="rounded-circle" />
               <h2 class="font-semibold">
                 {{ data.firstname }} {{ data.lastname }}
               </h2>
@@ -1104,7 +1091,7 @@
                 <div class="row mgbt-xs-0">
                   <kendo-textbox-container floatingLabel="{{ language.attention }}">
                     <textarea kendoTextArea [(ngModel)]="data.attention" [autoSize]="true" name="attention"
-                      style="width: 95%"></textarea>
+                    style="width: 95%"></textarea>
                   </kendo-textbox-container>
                 </div>
               </div>
@@ -1112,16 +1099,16 @@
                 <div class="row mgbt-xs-0">
                   <kendo-textbox-container floatingLabel="{{ language.physicalComplaint }}">
                     <textarea kendoTextArea [(ngModel)]="data.physicalComplaint" [autoSize]="true"
-                      name="physicalComplaint" style="width: 95%"></textarea>
+                    name="physicalComplaint" style="width: 95%"></textarea>
                   </kendo-textbox-container>
                 </div>
               </div>
               <div>
                 <kendo-textbox-container floatingLabel="{{ language.firstname }}({{
-                    language.required
+                  language.required
                   }})">
                   <input kendoTextBox [(ngModel)]="data.firstname" name="firstname" class="noPadding" required
-                    #firstname="ngModel" />
+                  #firstname="ngModel" />
                 </kendo-textbox-container>
               </div>
               <div>
@@ -1129,7 +1116,7 @@
                     language.required
                   }})">
                   <input kendoTextBox [(ngModel)]="data.lastname" name="lastname" class="noPadding" required
-                    #lastname="ngModel" />
+                  #lastname="ngModel" />
                 </kendo-textbox-container>
               </div>
               <div class="form-group col-md-12 col-xs-12">
@@ -1139,18 +1126,18 @@
                   </p>
                   <label class="k-radio-label col-md-6 col-xs-12" for="female">
                     <input type="radio" name="gender" id="female" class="k-radio"
-                      checked="data.gender === 'female' ? checked : ''" [(ngModel)]="data.gender" [value]="'female'" />
+                    checked="data.gender === 'female' ? checked : ''" [(ngModel)]="data.gender" [value]="'female'" />
                     {{ language.female }}</label>
-                  <label class="k-radio-label col-md-6 col-xs-12" for="male">
+                    <label class="k-radio-label col-md-6 col-xs-12" for="male">
                     <input type="radio" name="gender" id="male" class="k-radio"
-                      checked="data.gender === 'male' ? checked : ''" [(ngModel)]="data.gender" [value]="'male'" />
+                    checked="data.gender === 'male' ? checked : ''" [(ngModel)]="data.gender" [value]="'male'" />
                     {{ language.male }}</label>
-                </div>
-                <div class="birthday-container col-md-6 col-xs-12">
+                  </div>
+                  <div class="birthday-container col-md-6 col-xs-12">
                   <kendo-textbox-container floatingLabel="{{ language.birthday }}">
                     <kendo-datepicker [format]="'dd.MM.yyyy'" class="email noPadding" name="birthday"
-                      [(ngModel)]="data.birthday">
-                    </kendo-datepicker>
+                    [(ngModel)]="data.birthday">
+                  </kendo-datepicker>
                   </kendo-textbox-container>
                 </div>
               </div>
@@ -1161,13 +1148,13 @@
           <div class="email col-md-4 col-xs-12">
             <kendo-textbox-container floatingLabel="{{ language.telephone }}">
               <input kendoTextBox type="text" class="col-xs-12" name="telephone" [(ngModel)]="data.telephone"
-                telephone.value="" />
+              telephone.value="" />
             </kendo-textbox-container>
           </div>
           <div class="email col-md-4 col-xs-12">
             <kendo-textbox-container floatingLabel="{{ language.mobile }}">
               <input kendoTextBox type="text" class="col-xs-12" name="mobile" [(ngModel)]="data.mobile"
-                mobile.value="" />
+              mobile.value="" />
             </kendo-textbox-container>
           </div>
           <div class="email col-md-4 col-xs-12">
@@ -1214,7 +1201,7 @@
   </modal>
 
   <kendo-dialog *ngIf="requestForConfirmArrival" (close)="requestForConfirmArrival = false" [minWidth]="250"
-    [width]="365">
+  [width]="365">
     <p style="margin: 30px; text-align: center">
       {{ language.confirmRequestFromClient }}
     </p>
@@ -1227,7 +1214,7 @@
       </button>
     </kendo-dialog-actions>
   </kendo-dialog>
-
+  
   <kendo-dialog *ngIf="modalConfirmEventMove" (close)="modalConfirmEventMove = false; refreshEvents()" [minWidth]="250"
     [width]="365">
     <p style="margin: 30px; text-align: center">
@@ -1242,6 +1229,6 @@
       </button>
     </kendo-dialog-actions>
   </kendo-dialog>
-
+  
   <!-- END MODALS -->
 </div>

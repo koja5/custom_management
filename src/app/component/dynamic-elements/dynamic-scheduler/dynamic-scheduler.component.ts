@@ -1691,16 +1691,10 @@ export class DynamicSchedulerComponent implements OnInit {
   public patients: any = [];
   public therapeuts:any= [];
   public lastMinuteWeekDays: any=[];
-  public notificationsVia: any=[];
   public lastMinuteStartDate: Date=new Date();
   public lastMinuteEndDate: Date=new Date();
   public lastMinute:any;
   public lastMinuteHoursValue: any=[];
-
-  public typesOfNotifications:Object[]=[
-    { text: "Email", value: 0 },
-    { text: "SMS", value: 1 }
-  ];
 
   private static secretKey = "YourSecretKeyForEncryption&Descryption";
 

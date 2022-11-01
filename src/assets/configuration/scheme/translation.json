@@ -2305,7 +2305,10 @@
             "eventDates":{
                 "type":"string"
 			},           
-            "notificationVia":{
+            "therapeut":{
+                "type":"string"
+			},
+            "hour":{
                 "type":"string"
 			},
             "sendLastMinuteOffer":{
@@ -3206,7 +3209,10 @@
                             "key":"time"
                         },
                         {
-                            "key":"notificationVia"
+                            "key":"therapeut"
+                        },
+                        {
+                            "key":"hour"
                         }         
                     ]
                 },
@@ -3229,7 +3235,7 @@
                         },
                         {
                             "key":"lastMinuteOffer"
-                        }               
+                        }
                     ]
                 }
             ]
