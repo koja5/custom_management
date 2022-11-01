@@ -473,6 +473,12 @@
             "confirmEventMove": {
                 "type": "string"
             },
+            "noStoreSelectedIndicatorTitle": {
+                "type": "string"
+            },
+            "noStoreSelectedIndicatorText": {
+                "type": "string"
+            },
             "refreshEventToolbar": {
                 "type": "string"
             },
@@ -3147,8 +3153,12 @@
                         {
                             "key": "confirmEventMove"
                         },
-                        {},
-                        {}
+                        {
+                            "key": "noStoreSelectedIndicatorTitle"
+                        },
+                        {
+                            "key": "noStoreSelectedIndicatorText"
+                        }
                     ]
                 }
             ]
