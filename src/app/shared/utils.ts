@@ -9,3 +9,7 @@ export function checkIfInputValid(inputId: string): boolean {
     return true;
   return false;
 }
+
+export function checkIsValidDate(date: any) {
+  return !isNaN(date) && date instanceof Date;
+}
