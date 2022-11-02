@@ -143,6 +143,7 @@
     "requestSectionFormName": "Firmenname(*)",
     "requestSectionFormEmail": "Email(*)",
     "requestSectionFormPhone": "Telefon(*)",
+    "requestSectionFormnameOfCompany": "Ansprechpartner(*)",
     "requestSectionFormNameOfKindergarden": "Ansprechpartner(*)",
     "requestSectionFormChooiceNumberOfChildrens": "Wählen Sie die Anzahl der Mitarbeiter(*)",
     "requestSectionFormMessage": "Erzählen Sie uns mehr über Ihre Firma (optional)",

@@ -5,10 +5,11 @@ import { HelpService } from 'src/app/service/help.service';
 import { Location } from "@angular/common";
 import { Modal } from "ngx-modal";
 import { DomSanitizer } from "@angular/platform-browser";
-import { UsersService } from 'src/app/service/users.service';
 import { PackLanguageService } from 'src/app/service/pack-language.service';
 import { LoginService } from 'src/app/service/login.service';
 import { MailService } from 'src/app/service/mail.service';
+import { checkIsValidDate } from 'src/app/shared/utils';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-registered-clinic-detail',
@@ -24,7 +25,7 @@ export class RegisteredClinicDetailComponent implements OnInit {
   clinicId: number;
   language: any;
   numberOfEmployees: number = 0;
-  loading = true;
+  loading: boolean;
   theme: string;
   showDialog: boolean = false;
   isFormDirty: boolean = false;
@@ -33,6 +34,7 @@ export class RegisteredClinicDetailComponent implements OnInit {
   isFileChoosen: boolean = false;
   fileName: string = '';
   dialogOpened: boolean = false;
+  checkIsValidDate = checkIsValidDate;
 
   constructor(
     public accountService: AccountService,
@@ -46,38 +48,40 @@ export class RegisteredClinicDetailComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.loading = true;
     this.clinicId = +this.router.snapshot.paramMap.get('id');
     this.language = this.helpService.getLanguage();
-    this.getSuperAdmin();
-    this.getClinic();
-    
-    setTimeout(() => {
-      this.modelData();
-    }, 1000);
-  }
-
-  modelData() {
-    this.data.birthday = new Date(this.data.birthday);
-    this.data.incompanysince = new Date(this.data.incompanysince);
-    this.loading = false;
+    this.getSuperAdmin()
+      .pipe(
+        switchMap(() => this.getClinic())
+      )
+      .subscribe(() => this.loading = false)
   }
 
   getSuperAdmin() {
-    this.accountService.getSuperadmin(this.clinicId).subscribe(res => {
-      this.data = res[0];
-
-      if (this.data.img && this.data.img.data.length !== 0) {
-        this.imagePath = this.helpService.setUserProfileImagePath(this.data);
-      } else {
-          this.imagePath = "../../../../../assets/images/users/defaultUser.png";
-      }
-    });
+    return this.accountService.getSuperadmin(this.clinicId)
+      .pipe(
+        map(res => {
+          this.data = res[0];
+          this.data.birthday = this.data && this.data.birthday ? new Date(this.data.birthday) : null;
+          this.data.incompanysince = this.data && this.data.incompanysince ? new Date(this.data.incompanysince) : null;
+          if (this.data.img && this.data.img.data.length !== 0) {
+            this.imagePath = this.helpService.setUserProfileImagePath(this.data);
+          } else {
+            this.imagePath = "../../../../../assets/images/users/defaultUser.png";
+          }
+          return res;
+        })
+      );
   }
 
   getClinic() {
-    this.accountService.getClinicEmployees(this.clinicId).subscribe((res: any) => {
-      this.numberOfEmployees = res.length;
-    });
+    return this.accountService.getClinicEmployees(this.clinicId).pipe(
+      map((res: any) => {
+        this.numberOfEmployees = res.length;
+        return res;
+      })
+    );
   }
 
   editOptions() {
@@ -91,9 +95,9 @@ export class RegisteredClinicDetailComponent implements OnInit {
 
   confirmClose(): void {
     this.clinic.modalRoot.nativeElement.focus();
-    if(this.isFormDirty) {
+    if (this.isFormDirty) {
       this.showDialog = true;
-    }else {
+    } else {
       this.clinic.close()
       this.showDialog = false;
       this.isFormDirty = false
@@ -101,11 +105,11 @@ export class RegisteredClinicDetailComponent implements OnInit {
   }
 
   receiveConfirm(event: boolean): void {
-    if(event) {
+    if (event) {
       this.clinic.close();
       this.isFormDirty = false;
     }
-      this.showDialog = false;
+    this.showDialog = false;
   }
 
   isDirty(): void {
@@ -121,7 +125,7 @@ export class RegisteredClinicDetailComponent implements OnInit {
         );
         this.clinic.close();
         this.isFormDirty = false;
-      }else {
+      } else {
         this.helpService.errorToastr(
           this.language.clinicsEditTitle,
           this.language.clinicErrorUpdated
@@ -143,7 +147,7 @@ export class RegisteredClinicDetailComponent implements OnInit {
             this.language.accountSuccessUpdatedAccountText
           );
           this.location.back();
-        }else {
+        } else {
           this.helpService.errorToastr(
             this.language.clinicErrorDeleted,
             this.language.accountErrorUpdatedAccountText
@@ -167,24 +171,25 @@ export class RegisteredClinicDetailComponent implements OnInit {
     let form = new FormData();
 
     form.append("updateImageInput", this.updateImageInput);
-    this.accountService.updateProfileImage(form, this.data).subscribe(
-      (data) => {
-        this.helpService.successToastr(
-          this.language.accountSuccessUpdatedAccountTitle,
-          this.language.accountSuccessUpdatedAccountText
-        );
-      },
-      (error) => {
-        this.helpService.errorToastr(
-          this.language.accountErrorUpdatedAccountTitle,
-          this.language.accountErrorUpdatedAccountText
-        );
-      }
-    );
+    this.accountService.updateProfileImage(form, this.data)
+      .pipe(
+        switchMap(() => this.getSuperAdmin())
+      )
+      .subscribe(
+        () => {
+          this.helpService.successToastr(
+            this.language.accountSuccessUpdatedAccountTitle,
+            this.language.accountSuccessUpdatedAccountText
+          );
+        },
+        () => {
+          this.helpService.errorToastr(
+            this.language.accountErrorUpdatedAccountTitle,
+            this.language.accountErrorUpdatedAccountText
+          );
+        }
+      );
     this.chooseImage.close();
-    setTimeout(() => {
-      this.getSuperAdmin();
-    }, 1000);
   }
 
   fileChoosen(event: any) {
@@ -192,7 +197,7 @@ export class RegisteredClinicDetailComponent implements OnInit {
     if (event.target.value) {
       this.isFileChoosen = true;
       this.updateImageInput = <File>event.target.files[0];
-    }else {
+    } else {
       this.isFileChoosen = false;
     }
   }

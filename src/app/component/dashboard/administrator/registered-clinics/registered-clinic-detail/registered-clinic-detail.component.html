@@ -429,7 +429,7 @@
                   <br />
                   <p class="text-muted">
                     <kendo-textbox-container
-                      floatingLabel="{{ language.zipcode }}"
+                      floatingLabel="{{ language.zipCode }}"
                     >
                       <input
                         kendoTextBox
@@ -581,56 +581,44 @@
                     <kendo-textbox-container
                       floatingLabel="{{ language.birthday }}"
                     >
-                      <input
-                        kendoTextBox
-                        *ngIf="
-                          data.birthday === '' ||
-                          data.birthday === null ||
-                          data.birthday === undefined
-                        "
-                        [(ngModel)]="language['noInformation']"
-                        name="birthday"
+                      <input kendoTextBox
+                        *ngIf="!data || !data.birthday || !checkIsValidDate(data.birthday)"
+                        [ngModel]="language['noInformation']" 
+                        name="birthday" 
                         class="noPadding"
                         readonly="true"
-                      />
-
+                        />
                       <kendo-datepicker
-                        [format]="'dd.MM.yyyy'"
-                        *ngIf="data.birthday"
-                        [(ngModel)]="data.birthday"
-                        name="birthday"
-                        class="noPadding"
-                        readonly="true"
-                      >
-                      </kendo-datepicker>
+                        *ngIf="data && data.birthday && checkIsValidDate(data.birthday)"
+                        format="dd.MM.yyyy"
+                        [ngModel]="data.birthday" 
+                        name="birthday" 
+                        class="noPadding" 
+                        readonly="true">
+                      </kendo-datepicker> 
                     </kendo-textbox-container>
                   </p>
                 </div>
                 <div class="col-md-3 col-xs-6 b-r">
                   <br />
                   <p class="text-muted">
-                    <kendo-textbox-container floatingLabel="company name">
-                      <input
-                        kendoTextBox
-                        *ngIf="
-                          data.incompanysince === '' ||
-                          data.incompanysince === null ||
-                          data.incompanysince === undefined
-                        "
-                        [(ngModel)]="language['noInformation']"
-                        name="incompanysince"
+                    <kendo-textbox-container floatingLabel="{{ language.sincecompany }}">
+                      <input kendoTextBox
+                        *ngIf="!data || !data.incompanysince || !checkIsValidDate(data.incompanysince)"
+                        [ngModel]="language['noInformation']" 
+                        name="incompanysince" 
                         class="noPadding"
                         readonly="true"
-                      />
-
+                        />
                       <kendo-datepicker
-                        [format]="'dd.MM.yyyy'"
-                        *ngIf="data.incompanysince"
-                        [(ngModel)]="data.incompanysince"
+                        format="dd.MM.yyyy"
+                        *ngIf="data && data.incompanysince && checkIsValidDate(data.incompanysince)"
+                        class="col-xs-12 noPadding" 
                         name="incompanysince"
-                        class="noPadding"
                         readonly="true"
-                      >
+                        [placeholder]="language.sincecompany"
+                        [ngModel]="data && checkIsValidDate(data.incompanysince) ? data.incompanysince : null"
+                        (valueChange)="checkIsValidDate($event) && (data.incompanysince=$event)">
                       </kendo-datepicker>
                     </kendo-textbox-container>
                   </p>
@@ -851,25 +839,24 @@
                 <div class="form-group">
                   <div class="email col-md-6 col-xs-12">
                     <p>{{ language.birthday }}</p>
-                    <kendo-datepicker
-                      [format]="'dd.MM.yyyy'"
-                      class="col-xs-12 noPadding"
+                    <kendo-datepicker 
+                      format="dd.MM.yyyy" 
+                      class="col-xs-12 noPadding" 
                       name="birthday"
-                      placeholder="{{ language.birthday }}"
-                      [(ngModel)]="data.birthday"
-                      birthday.value=""
-                    >
+                      [placeholder]="language.birthday"
+                      [value]="data && checkIsValidDate(data.birthday) ? data.birthday : null"
+                      (valueChange)="checkIsValidDate($event) && (data.birthday=$event)">
                     </kendo-datepicker>
                   </div>
                   <div class="email col-md-6 col-xs-12">
                     <p>{{ language.sincecompany }}</p>
                     <kendo-datepicker
-                      [format]="'dd.MM.yyyy'"
-                      class="col-xs-12 noPadding"
-                      name="sincecompany"
-                      placeholder="{{ language.sincecompany }}"
-                      [(ngModel)]="data.incompanysince"
-                      incompanysince.value=""
+                        format="dd.MM.yyyy"
+                        class="col-xs-12 noPadding" 
+                        name="sincecompany"
+                        [placeholder]="language.sincecompany"
+                        [value]="data && checkIsValidDate(data.incompanysince) ? data.incompanysince : null"
+                        (valueChange)="checkIsValidDate($event) && (data.incompanysince=$event)"
                     ></kendo-datepicker>
                   </div>
                 </div>

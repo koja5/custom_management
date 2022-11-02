@@ -27,3 +27,7 @@ export function checkIfInputValueValid(
   element.classList.remove("ng-invalid");
   return false;
 }
+
+export function checkIsValidDate(date: any) {
+  return !isNaN(date) && date instanceof Date;
+}
