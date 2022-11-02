@@ -38,7 +38,7 @@
     "type": "textbox",
     "width": "col-md-4",
     "name": "zipcode",
-    "label": "zipcode",
+    "label": "zipCode",
     "field": "zipcode"
   },
   {

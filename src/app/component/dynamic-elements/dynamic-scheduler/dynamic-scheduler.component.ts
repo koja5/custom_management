@@ -1654,8 +1654,10 @@ export class DynamicSchedulerComponent implements OnInit {
 
   // load holidays defined by clinic and holidays defined by selected clinic template (if there is some)
   public loadHolidays() {
+    const superAdminId = this.helpService.getSuperadmin();
+    
     this.holidayService
-      .getHolidaysForClinic(this.selectedStoreId)
+      .getHolidaysForClinic(superAdminId)
       .then((result) => {
         console.log(result);
         if (result && result.length > 0) {
@@ -1681,7 +1683,7 @@ export class DynamicSchedulerComponent implements OnInit {
     // load holidays defined by clinic and holidays defined by selected clinic template (if there is some)
 
     this.holidayService
-      .getStoreTemplateConnection(this.selectedStoreId)
+      .getStoreTemplateConnection(superAdminId)
       .then((ids) => {
         const templateIds = ids.map((elem) => elem.templateId);
 
@@ -3635,7 +3637,7 @@ export class DynamicSchedulerComponent implements OnInit {
       ) {
         if (args.requestType === "eventCreate") {
           let evts = this.scheduleObj.getEvents(this.eventTime.start, this.eventTime.end)
-          if (evts.length > 0) {
+          if (evts.length > 0 && this.type === this.userType.patient) {
             this.toastr.error(
               this.language.eventAlreadyExistsText,
               this.language.eventAlreadyExistsTitle,
@@ -3648,7 +3650,7 @@ export class DynamicSchedulerComponent implements OnInit {
           args.cancel = true;
         } else if (args.requestType === "eventChange") {
           let evts = this.scheduleObj.getEvents(this.eventTime.start, this.eventTime.end)
-          if (evts.length > 1) {
+          if (evts.length > 1 && this.type === this.userType.patient) {
             this.toastr.error(
               this.language.eventAlreadyExistsText,
               this.language.eventAlreadyExistsTitle,
