@@ -2215,6 +2215,21 @@
             "changeThemeColor": {
                 "type": "string"
             },
+            "changeSidebarFontColor": {
+                "type": "string"
+            },
+            "changeSidebarGroupColor": {
+                "type": "string"
+            },
+            "changeSidebarSelectedColor": {
+                "type": "string"
+            },
+            "changeNavbarBackgroundColor": {
+                "type": "string"
+            },
+            "changeNavbarFontColor": {
+                "type": "string"
+            },
             "themeColorsMenu": {
                 "type": "string"
             },
@@ -7031,6 +7046,21 @@
                     "items": [
                         {
                             "key": "changeThemeColor"
+                        },
+                        {
+                            "key": "changeSidebarFontColor"
+                        },
+                        {
+                            "key": "changeSidebarGroupColor"
+                        },
+                        {
+                            "key": "changeSidebarSelectedColor"
+                        },
+                        {
+                            "key": "changeNavbarBackgroundColor"
+                        },
+                        {
+                            "key": "changeNavbarFontColor"
                         }
                     ]
                 },

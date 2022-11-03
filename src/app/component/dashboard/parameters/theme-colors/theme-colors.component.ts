@@ -9,7 +9,12 @@ import { ThemeColorsService } from "src/app/service/theme-color.service";
 
 interface Theme {
   id?: number;
-  color: string;
+  color?: string;
+  fontColor?: string;
+  selectedColor?: string;
+  groupColor?: string;
+  navbarColor?: string;
+  navbarFontColor?: string;
   superadmin: number;
 }
 
@@ -19,13 +24,26 @@ interface Theme {
   styleUrls: ["./theme-colors.component.scss"],
 })
 export class ThemeColorsComponent implements OnInit, FormGuardData {
-  colorValue: string;
+  sidebarBackgroundColorValue: string;
+  sidebarFontColorValue: string;
+  sidebarGroupColorValue: string;
+  sidebarSelectedColorValue: string;
+  navbarBackgroundColorValue: string;
+  navbarFontColorValue: string;
   themeData: any;
   language: any;
   loading = true;
   isFormDirty: boolean = false;
   isDataSaved$: Subject<boolean> = new Subject<boolean>();
   showDialog: boolean = false;
+  public colorTypes = {
+    sidebarBackgroundColor: 'Sidebar Background Color',
+    sidebarFontColor: 'Sidebar Font Color',
+    sidebarGroupColor: 'Sidebar Group Color',
+    sidebarSelectedColor: 'Sidebar Selected Color',
+    navbarBackgroundColor: 'Navbar Background Color',
+    navbarFontColor: 'Navbar Font Color',
+  }
 
   constructor(
     private themeColorsService: ThemeColorsService,
@@ -37,7 +55,7 @@ export class ThemeColorsComponent implements OnInit, FormGuardData {
   ngOnInit() {
     this.language = JSON.parse(localStorage.getItem("language"));
 
-    this.getThemeColor();
+    this.getThemeColors();
   }
 
   receiveConfirm(event: boolean): void {
@@ -53,15 +71,37 @@ export class ThemeColorsComponent implements OnInit, FormGuardData {
   }
 
   // function to handle the ColorPicker change event
-  change(args: ColorPickerEventArgs): void {
+  changeColor(value: ColorPickerEventArgs, type: string): void {
     this.isFormDirty = true;
-    this.colorValue = args.currentValue.hex;
+    if (type === this.colorTypes.sidebarBackgroundColor) {
+      this.sidebarBackgroundColorValue = value.currentValue.hex;
+    }
+    if (type === this.colorTypes.sidebarFontColor) {
+      this.sidebarFontColorValue = value.currentValue.hex;
+    }
+    if (type === this.colorTypes.sidebarGroupColor) {
+      this.sidebarGroupColorValue = value.currentValue.hex;
+    }
+    if (type === this.colorTypes.sidebarSelectedColor) {
+      this.sidebarSelectedColorValue = value.currentValue.hex;
+    }
+    if (type === this.colorTypes.navbarBackgroundColor) {
+      this.navbarBackgroundColorValue = value.currentValue.hex;
+    }
+    if (type === this.colorTypes.navbarFontColor) {
+      this.navbarFontColorValue = value.currentValue.hex;
+    }
+    
     this.themeData = {
       ...this.themeData,
-      color: args.currentValue.hex,
+      color: this.sidebarBackgroundColorValue,
+      fontColor: this.sidebarFontColorValue,
+      groupColor: this.sidebarGroupColorValue,
+      selectedColor: this.sidebarSelectedColorValue,
+      navbarColor: this.navbarBackgroundColorValue,
+      navbarFontColor: this.navbarFontColorValue,
       superadmin: localStorage.getItem("superadmin"),
     };
-    this.themeData.color = args.currentValue.hex;
   }
 
   saveTheme() {
@@ -73,18 +113,53 @@ export class ThemeColorsComponent implements OnInit, FormGuardData {
     }
   }
 
-  getThemeColor() {
+  resetToDefaultColors() {
+    this.isFormDirty = false;
+    this.themeData = {
+      ...this.themeData,
+      color: '#091467',
+      fontColor: '#e3e3e3',
+      groupColor: '#8f96ad',
+      selectedColor: '#01a9e9',
+      navbarColor: '#fff',
+      navbarFontColor: '#333',
+      superadmin: localStorage.getItem("superadmin"),
+    }
+    this.updateThemeColors();
+  }
+
+  getThemeColors() {
     this.loading = true;
 
     this.themeColorsService
       .getThemeColors(localStorage.getItem("superadmin"))
       .subscribe((data: Theme[]) => {
-        if (data.length === 0) {
-          this.colorValue = getComputedStyle(document.documentElement)
+        if (!data.length) {
+          this.sidebarBackgroundColorValue = getComputedStyle(document.documentElement)
             .getPropertyValue("--theme-color")
             .trim();
+          this.sidebarFontColorValue = getComputedStyle(document.documentElement)
+          .getPropertyValue("--sidebar-font-color")
+          .trim();
+          this.sidebarSelectedColorValue = getComputedStyle(document.documentElement)
+          .getPropertyValue("--sidebar-selected-color")
+          .trim();
+          this.sidebarGroupColorValue = getComputedStyle(document.documentElement)
+          .getPropertyValue("--sidebar-group-color")
+          .trim();
+          this.navbarBackgroundColorValue = getComputedStyle(document.documentElement)
+          .getPropertyValue("--navbar-background-color")
+          .trim();
+          this.navbarFontColorValue = getComputedStyle(document.documentElement)
+          .getPropertyValue("--navbar-font-color")
+          .trim();
         } else {
-          this.colorValue = data[0].color;
+          this.sidebarBackgroundColorValue = data[0].color;
+          this.sidebarFontColorValue = data[0].fontColor;
+          this.sidebarSelectedColorValue = data[0].selectedColor;
+          this.sidebarGroupColorValue = data[0].groupColor;
+          this.navbarBackgroundColorValue = data[0].navbarColor;
+          this.navbarFontColorValue = data[0].navbarFontColor;
           this.themeData = data[0];
           this.themeColorsService.setThemeColors(data[0]);
         }
@@ -99,7 +174,7 @@ export class ThemeColorsComponent implements OnInit, FormGuardData {
     this.themeColorsService
       .createThemeColors(this.themeData)
       .subscribe((data) => {
-        this.getThemeColor();
+        this.getThemeColors();
         if (data) {
           this.toastr.success(
             this.language.successTitle,
@@ -119,16 +194,11 @@ export class ThemeColorsComponent implements OnInit, FormGuardData {
 
   updateThemeColors() {
     this.loading = true;
-    let data = {
-      color: this.colorValue,
-      superadmin: localStorage.getItem("superadmin"),
-    };
     this.themeColorsService
       .updateThemeColors(this.themeData)
-
       .subscribe((data) => {
         if (data) {
-          this.getThemeColor();
+          this.getThemeColors();
           this.toastr.success(
             this.language.successTitle,
             this.language.successThemeEdit,
