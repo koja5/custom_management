@@ -43,6 +43,8 @@ import {
   ExcelExportService,
   ExportOptions,
   PrintService,
+  ActionEventArgs,
+  PopupOpenEventArgs,
 } from "@syncfusion/ej2-angular-schedule";
 import {
   addClass,
@@ -103,6 +105,7 @@ import { PDFService } from "src/app/service/pdf.service";
 import { ParameterItemService } from "src/app/service/parameter-item.service";
 import { DateService } from "src/app/service/date.service";
 import { InvoiceService } from "src/app/service/invoice.service";
+import { checkIfInputValid, checkIfInputValueValid } from "../../../shared/utils";
 import { SCHEDULER_TRANSLATIONS, TIMESLOT_DURATION, TIMEZONE_DATA, WEEK_DAYS } from "./dynamic-scheduler-data";
 declare var moment: any;
 
@@ -228,6 +231,8 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   isDateSet: boolean = false;
   invoiceID: any;
   changedInvoiceID: any;
+  checkIfInputValid = checkIfInputValid;
+  checkIfInputValueValid = checkIfInputValueValid;
   noStoreSelectedToastrId: number;
 
   public generateEvents(): Object[] {
@@ -1069,6 +1074,13 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   //required high version of angular. In angular 7.2 has a problem with static params. Without static doesn't work.
   //@ViewChild("fieldName1", {static: true}) public fieldName1: ElementRef;
   // @ViewChild("fieldName1") public fieldName1: ElementRef;
+
+  validateRequiredFields() {
+    if (this.eventTime.start && this.eventTime.end && this.customerUser.id) {
+      return false;
+    }
+    return true;
+  }
 
   onPopupOpen(args): void {
     console.log(args);
@@ -3441,7 +3453,22 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     }
   }
 
-  onActionBegin(args: any) {
+  onPopupClose(args: PopupOpenEventArgs) {
+    console.log("onPopupClose args: ", args);
+    if (args.type === "Editor") {
+      if ((this.scheduleObj.eventWindow as any).isCrudAction) {
+        if (this.validateRequiredFields()) {
+          args.cancel = true;
+          this.helpService.errorToastr(
+            this.language.allRequiredFieldsMustBeFilledOut,
+            ""
+          );
+        }
+      }
+    }
+  }
+
+  onActionBegin(args: ActionEventArgs) {
     console.log(args);
     console.log(window.innerWidth);
 
@@ -3481,7 +3508,10 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
               this.language.eventAlreadyExistsTitle,
               { timeOut: 7000, positionClass: "toast-bottom-right" }
             );
-          } else if (this.currentEventAction !== TypeOfEventAction.Drag && this.type !== this.userType.patient) {
+          } else if (
+            this.currentEventAction !== TypeOfEventAction.Drag &&
+            this.type !== this.userType.patient
+          ) {
             this.updateTask(args);
           }
           args.cancel = true;
