@@ -397,29 +397,19 @@
                   <e-view option="WorkWeek">
                     <ng-template #eventTemplate let-data>
                       <div class="event-details" [style.background]="data.color">
-                        <div *ngIf="
-                            type !== userType.patient ||
-                            (type === userType.patient &&
-                              data.customer_id === id)
-                          ">
+                        <div *ngIf="type !== userType.patient || (type === userType.patient && data.customer_id === id)">
                           <div class="eventName">
                             {{ data.title.split("+")[0] }}
                           </div>
-                          <div *ngIf="
-                              data.title &&
-                              data.title.split('+')[2] &&
-                              data.title.split('+')[2] !== 'null' &&
-                              data.title.split('+')[2] !== 'undefined'
-                            " class="eventTitle">
+                          <div *ngIf="data.title && data.title.split('+')[2] && data.title.split('+')[2] !== 'undefined' && data.title.split('+')[2] !== 'null'" class="eventTitle">
                             {{ data.title.split("+")[2] }}
                           </div>
-                          <div *ngIf="data.title && data.title.split('+')[1]" class="eventTitle">
+                          <div *ngIf="data.title && data.title.split('+')[1] && data.title.split('+')[1] !== 'undefined' && data.title.split('+')[1] !== 'null'" class="eventTitle">
                             {{ data.title.split("+")[1] }}
                           </div>
                         </div>
-                        <div class="reserved-title" *ngIf="
-                            type === userType.patient && data.customer_id !== id
-                          ">
+                        <div class="reserved-title" 
+                          *ngIf="type === userType.patient && data.customer_id !== id">
                           {{ language.reserved }}
                         </div>
                       </div>
