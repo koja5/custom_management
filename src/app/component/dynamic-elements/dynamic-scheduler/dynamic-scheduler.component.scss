@@ -751,13 +751,16 @@
 }
 
 .event-details {
+  border: 3px solid #fff !important;
+  border-radius: 4px;
   flex: auto;
   padding: 4px 8px 0;
+  margin: -4px -8px 0;
   text-align: left;
   position: absolute;
   height: 100%;
   width: 100%;
-  display: table;
+  overflow: hidden;
 }
 
 .checkButton {
@@ -780,10 +783,6 @@
 .blur-form {
   opacity: 0.5;
   filter: blur(2px);
-}
-
-.event-details {
-  border: 3px solid #fff !important;
 }
 
 .show-hide-toolbar {
