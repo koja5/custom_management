@@ -713,6 +713,9 @@
             "smsDraftDeletedSuccessfully": {
                 "type": "string"
             },
+            "saveChanges": {
+                "type": "string"
+            },
             "addHoliday": {
                 "type": "string"
             },
@@ -2294,6 +2297,9 @@
                 "type": "string"
             },
             "invalidFormat": {
+                "type": "string"
+            },
+            "allRequiredFieldsMustBeFilledOut": {
                 "type": "string"
             },
             "unsubscribeMessage": {
@@ -6667,6 +6673,9 @@
                         },
                         {
                             "key": "deleteDraft"
+                        },
+                        {
+                            "key": "saveChanges"
                         }
                     ]
                 },
@@ -7059,6 +7068,9 @@
                         },
                         {
                             "key": "invalidFormat"
+                        },
+                        {
+                            "key": "allRequiredFieldsMustBeFilledOut"
                         }
                     ]
                 }

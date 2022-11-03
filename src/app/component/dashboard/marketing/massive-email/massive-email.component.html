@@ -18,6 +18,12 @@
         {{ editMode ? language?.editDraft : language?.saveDraft }}
       </button>
       <button *ngIf="editMode"
+        class="e-control e-btn e-lib e-primary e-flat"
+        (click)="saveEmailDraft()"
+      >
+        {{ language?.saveChanges }}
+      </button>
+      <button *ngIf="editMode"
         class="e-control e-btn e-lib e-danger e-flat"
         (click)="deleteEmailDraft()"
       >
