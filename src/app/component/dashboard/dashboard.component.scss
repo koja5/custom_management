@@ -384,16 +384,16 @@ body[data-layout="horizontal"][data-topbar="colored"]
   margin-top: -3px;
 }
 
-#sidebar-menu ul li a:hover {
-  color: var(--sidebar-selected-color);
-}
-
-#sidebar-menu ul li a:hover i {
+#sidebar-menu ul li a:hover,
+#sidebar-menu ul li a:hover i,
+#sidebar-menu ul li a:hover svg,
+#sidebar-menu ul li.active a,
+#sidebar-menu ul li.active a i,
+#sidebar-menu ul li.active a svg {
   color: var(--sidebar-selected-color);
 }
 
 #sidebar-menu ul li a:hover svg {
-  color: var(--sidebar-selected-color);
   fill: rgba(81, 86, 190, 0.2);
 }
 
@@ -409,6 +409,10 @@ body[data-layout="horizontal"][data-topbar="colored"]
   padding: 0.4rem 1.5rem 0.4rem 3.3rem;
   font-size: 1.2rem;
   color:  var(--sidebar-font-color);
+}
+
+#sidebar-menu ul li ul.sub-menu li.active a {
+  color: var(--sidebar-selected-color);
 }
 
 #sidebar-menu ul li ul.sub-menu li a:hover {
@@ -572,7 +576,8 @@ body:not([data-sidebar-size="sm"]) #vertical-menu-btn {
 
 .sidemenu-closed .vertical-menu #sidebar-menu > ul > li > a:active,
 .sidemenu-closed .vertical-menu #sidebar-menu > ul > li > a:focus,
-.sidemenu-closed .vertical-menu #sidebar-menu > ul > li > a:hover {
+.sidemenu-closed .vertical-menu #sidebar-menu > ul > li > a:hover,
+.sidemenu-closed .vertical-menu #sidebar-menu > ul > li.active > a {
   color: var(--sidebar-selected-color);
 }
 
@@ -1088,7 +1093,7 @@ body[data-sidebar-size="sm"] .vertical-menu #sidebar-menu > ul ul {
 
 li.active a,
 li.active a i {
-  color: #01a9e9;
+  color: var(--sidebar-selected-color);
 }
 
 .trophy,
