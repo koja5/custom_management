@@ -34,6 +34,7 @@ export class MassiveEmailComponent implements OnInit, FormGuardData {
   isDataSaved$: Subject<boolean> = new Subject<boolean>();
   showDialogExit: boolean = false
   selectedIndex: number;
+  public dialogOpened = false;
 
   constructor(
     private helpService: HelpService,
@@ -256,5 +257,16 @@ export class MassiveEmailComponent implements OnInit, FormGuardData {
 
   setSelectedIndex(index: number): void {
     this.selectedIndex = index;
+  }
+
+  closeDeleteDialog(status: string): void {
+    if(status === 'yes') {
+      this.deleteEmailDraft();
+    }
+    this.dialogOpened = false;
+  }
+
+  openDeleteDialog(): void {
+    this.dialogOpened = true;
   }
 }

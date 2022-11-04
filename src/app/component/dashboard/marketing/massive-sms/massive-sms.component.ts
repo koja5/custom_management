@@ -34,6 +34,7 @@ export class MassiveSmsComponent implements OnInit, FormGuardData {
   isDataSaved$: Subject<boolean> = new Subject<boolean>();
   showDialogExit: boolean = false
   selectedIndex: number;
+  public dialogOpened = false;
 
   constructor(
     private helpService: HelpService,
@@ -275,5 +276,16 @@ export class MassiveSmsComponent implements OnInit, FormGuardData {
 
   setSelectedIndex(index: number): void {
     this.selectedIndex = index;
+  }
+
+  closeDeleteDialog(status: string): void {
+    if(status === 'yes') {
+      this.deleteSmsDraft();
+    }
+    this.dialogOpened = false;
+  }
+
+  openDeleteDialog(): void {
+    this.dialogOpened = true;
   }
 }

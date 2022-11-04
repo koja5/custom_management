@@ -18,8 +18,14 @@
         {{ editMode ? language?.editDraft : language?.saveDraft }}
       </button>
       <button *ngIf="editMode"
+        class="e-control e-btn e-lib e-primary e-flat"
+        (click)="saveSmsDraft()"
+      >
+        {{ language?.saveChanges }}
+      </button>
+      <button *ngIf="editMode"
         class="e-control e-btn e-lib e-danger e-flat"
-        (click)="deleteSmsDraft()"
+        (click)="openDeleteDialog()"
       >
         {{ language?.deleteDraft }}
       </button>
@@ -131,5 +137,19 @@
     </app-dynamic-confirm-dialog>
   </div>
 </div>
+
+<kendo-dialog title="{{ language.pleaseConfirm }}" *ngIf="dialogOpened" (close)="closeDeleteDialog('dialog')" [minWidth]="250"
+  [width]="450">
+  <div class="modal-body text-center">
+    <img src="../../../../assets/images/sent.png" alt="" width="50" height="46" />
+    <h3>{{ language.areYouSure }}</h3>
+  </div>
+  <kendo-dialog-actions>
+    <button kendoButton (click)="closeDeleteDialog('no')">{{ language.no }}</button>
+    <button kendoButton (click)="closeDeleteDialog('yes')" primary="true">
+      {{ language.yes }}
+    </button>
+  </kendo-dialog-actions>
+</kendo-dialog>
 
 
