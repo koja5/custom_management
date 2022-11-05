@@ -30,6 +30,7 @@ import { PDFService } from "./../../../service/pdf.service";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import pdfMake from "pdfmake/build/pdfmake";
 import { StoreService } from "src/app/service/store.service";
+import { AccountService } from "src/app/service/account.service";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -101,6 +102,9 @@ export class VaucherComponent implements OnInit {
   currentUrl: string;
   checkIfInputValid = checkIfInputValid;
   selectedVaucher: any;
+  selectedClinic: any;
+  vaucherUser: any = 0;
+  canExportPdf: boolean = false;
 
   public showColumnPicker = false;
   public columns: string[] = [
@@ -125,6 +129,7 @@ export class VaucherComponent implements OnInit {
     private packLanguage: PackLanguageService,
     private sendSMS: SendSmsService,
     private pdfService: PDFService,
+    private accountService: AccountService
   ) {
     this.allData = this.allData.bind(this);
   }
@@ -174,6 +179,20 @@ export class VaucherComponent implements OnInit {
       this.state.skip = this.savePage[this.currentUrl];
       this.state.take = this.savePage[this.currentUrl + "Take"];
     }
+  }
+
+  getClinic(superadminId: any) {
+    this.accountService.getSuperadmin(superadminId).subscribe((res) => {
+      this.selectedClinic = res[0];
+    });
+  }
+
+  getUser(userId: number) {
+    this.accountService.getCustomerWithId(userId).subscribe((res) => {
+      if(res[0]) {
+        this.vaucherUser = res[0];
+      }
+    });
   }
 
   getVauchers() {
@@ -232,6 +251,7 @@ export class VaucherComponent implements OnInit {
   }
 
   newVaucher() {
+    this.canExportPdf = false;
     this.operationMode = "add";
     this.initializeParams();
     this.getNextVaucherId();
@@ -347,6 +367,7 @@ export class VaucherComponent implements OnInit {
   }
 
   editForm(data) {
+    this.canExportPdf = true;
     this.changeTheme(this.theme);
     this.data = data;
     console.log(data);
@@ -354,6 +375,8 @@ export class VaucherComponent implements OnInit {
     this.operationMode = "edit";
     this.vaucher.open();
     this.selectedVaucher = data;
+    this.getClinic(this.selectedVaucher.superadmin);
+    this.getUser(this.selectedVaucher.customer);
   }
 
   editVaucher(store) {
@@ -437,7 +460,12 @@ export class VaucherComponent implements OnInit {
   }
 
   setupPDF() {
-    let docDefinition = this.pdfService.createVaucherPDF(this.language, this.selectedVaucher);
+    let docDefinition = this.pdfService.createVaucherPDF(
+      this.language,
+      this.selectedVaucher,
+      this.selectedClinic,
+      this.vaucherUser
+    );
     return docDefinition;
   }
 

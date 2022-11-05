@@ -462,7 +462,10 @@
       <div class="col-xs-6 text-center mt-4">
         <label class="k-form-field col-md-12 label__active">
           {{ language.sendVaucherEMail }} &nbsp;
-          <kendo-switch [(ngModel)]="toSendEmail" name="sendMail"></kendo-switch>
+          <kendo-switch
+            [(ngModel)]="toSendEmail"
+            name="sendMail"
+          ></kendo-switch>
         </label>
       </div>
       <div class="col-xs-6 text-center mt-4">
@@ -472,10 +475,24 @@
         </label>
       </div>
       <div class="col-xs-6 text-center mt-4">
-        <button type="button" class="button-pdf" (click)="downloadPDF()">{{ language.exportToPDF }}</button>
+        <button
+          type="button"
+          class="button-pdf"
+          [ngStyle]="{ display: canExportPdf ? 'initial' : 'none' }"
+          (click)="downloadPDF()"
+        >
+          {{ language.exportToPDF }}
+        </button>
       </div>
       <div class="col-xs-6 text-center mt-4">
-        <button type="button" class="button-pdf" (click)="printPDF()">{{ language.print }}</button>
+        <button
+          type="button"
+          class="button-pdf"
+          [ngStyle]="{ display: canExportPdf ? 'initial' : 'none' }"
+          (click)="printPDF()"
+        >
+          {{ language.print }}
+        </button>
       </div>
       <div class="form-group" style="text-align: center">
         <button

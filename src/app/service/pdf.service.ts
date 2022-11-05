@@ -28,8 +28,7 @@ export class PDFService {
     }
   }
 
-  createVaucherPDF(language: any, vaucher: any) {
-
+  createVaucherPDF(language: any, vaucher: any, clinic: any, customer: any) {
     let definition = {
       header: {
         columns: [
@@ -60,6 +59,33 @@ export class PDFService {
                     text: "\n",
                     style: "vaucherSubValue",
                     width: "*",
+                  },
+                ],
+              },
+              {
+                columns: [
+                  {
+                    text: language.mailClinic + "\n \n",
+                    style: "vaucherTitleLeft",
+                  },
+                  {
+                    text: language.customer + "\n \n",
+                    style: "vaucherTitleRight",
+                  },
+                ],
+              },
+              {
+                columns: [
+                  {
+                    text: clinic.shortname + "\n" + clinic.street + "\n" + clinic.zipcode + ' ' + clinic.place,
+                    style: "vaucherAddressLeft",
+                  },
+                  {
+                    text:
+                     vaucher.customer_consumer_name + "\n" 
+                     + (customer ? customer.street : '') + "\n"
+                    + (customer ? (customer.zipcode ? customer.zipcode : customer.streetnumber) + ' ' + (customer.place ? customer.place : customer.city) : '') + "\n",
+                    style: "vaucherAddressRight",
                   },
                 ],
               },
@@ -512,7 +538,7 @@ export class PDFService {
         alignment: "right",
       },
       // vaucher Headers
-      vaucherBillingTitleLeft: {
+      vaucherTitleLeft: {
         fontSize: 14,
         bold: true,
         alignment: "left",
@@ -520,23 +546,23 @@ export class PDFService {
       },
 
       // vaucher Headers
-      vaucherBillingTitleRight: {
+      vaucherTitleRight: {
         fontSize: 14,
         bold: true,
         alignment: "right",
         margin: [0, 20, 0, 5],
       },
       // vaucher Details
-      vaucherBillingDetailsLeft: {
+      vaucherDetailsLeft: {
         alignment: "left",
       },
-      vaucherBillingDetailsRight: {
+      vaucherDetailsRight: {
         alignment: "right",
       },
-      vaucherBillingAddressLeft: {
+      vaucherAddressLeft: {
         alignment: "left",
       },
-      vaucherBillingAddressRight: {
+      vaucherAddressRight: {
         alignment: "right",
       },
       // Items Header
@@ -622,6 +648,11 @@ export class PDFService {
 
   public createItemsTableVaucher(language, vaucher) {
     let date = new Date(vaucher.date).toISOString()
+    let dateRedeemed;
+    if(vaucher.date_redeemed) {
+      dateRedeemed = new Date(vaucher.date_redeemed).toISOString()
+    }
+    
 
     const arr = [
       // Table Header
@@ -667,7 +698,7 @@ export class PDFService {
         style: "itemDate",
       },
       {
-        text: vaucher.date_redeemed,
+        text: dateRedeemed ? this.dateService.formatDate(dateRedeemed) : '',
         style: "itemDate",
       },
       {
