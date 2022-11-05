@@ -4,14 +4,16 @@
     "width": "col-md-4",
     "name": "firstname",
     "label": "firstname",
-    "field": "firstname"
+    "field": "firstname",
+    "required": true
   },
   {
     "type": "textbox",
     "width": "col-md-4",
     "name": "lastname",
     "label": "lastname",
-    "field": "lastname"
+    "field": "lastname",
+    "required": true
   },
   {
     "type": "textbox",
@@ -32,7 +34,8 @@
     "width": "col-md-4",
     "name": "street",
     "label": "street",
-    "field": "street"
+    "field": "street",
+    "required": true
   },
   {
     "type": "textbox",
@@ -46,7 +49,8 @@
     "width": "col-md-4",
     "name": "place",
     "label": "place",
-    "field": "place"
+    "field": "place",
+    "required": true
   },
   {
     "type": "textbox",
@@ -96,7 +100,8 @@
     "width": "col-md-4",
     "name": "invoiceID",
     "label": "invoiceID",
-    "field": "invoiceID"
+    "field": "invoiceID",
+    "required": true
   },
   {
     "type": "button",

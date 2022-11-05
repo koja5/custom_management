@@ -1,5 +1,5 @@
 <div class="form-group" [ngClass]="config.width">
-  <label class="mb-0" for="{{ config.name }}"> {{language[config.label] ? language[config.label] : config.label}}</label>
+  <label class="mb-0" for="{{ config.name }}"> {{language[config.label] ? language[config.label] : config.label}}{{ config.required ? "(" + language.required + ")" : "" }}</label>
   <div
     class="e-float-input e-control-wrapper"
     [formGroup]="group"
