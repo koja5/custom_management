@@ -213,6 +213,7 @@ export class AddHolidayComponent implements OnInit {
           this.language.adminSuccessCreateText
         );
         this.holidayList.push(this.currentHoliday);
+        this.sortHolidays();
       } else {
         this.displayErrorMessage(
           this.language.adminErrorCreateTitle,
@@ -221,6 +222,10 @@ export class AddHolidayComponent implements OnInit {
       }
       this.closeHolidayModal();
     });
+  }
+
+  private sortHolidays() {
+    this.holidayList.sort(function (a, b) { return a.StartTime.getTime() - b.StartTime.getTime() })
   }
 
   public openEditHolidayModal(holiday: HolidayModel): void {

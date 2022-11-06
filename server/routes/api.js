@@ -8462,28 +8462,6 @@ router.post("/deleteHolidaysByTemplateId", (req, res, next) => {
   }
 });
 
-router.get("/getHolidays/:userId", function (req, res, next) {
-  connection.getConnection(function (err, conn) {
-    if (err) {
-      logger.log("error", err.sql + ". " + err.sqlMessage);
-      res.json(err);
-    }
-    var userId = req.params.userId;
-    conn.query(
-      "SELECT * FROM `holidays` where userId=" + userId,
-      function (err, rows) {
-        conn.release();
-        if (!err) {
-          res.json(rows);
-        } else {
-          res.json(err);
-          logger.log("error", err.sql + ". " + err.sqlMessage);
-        }
-      }
-    );
-  });
-});
-
 router.get("/getHolidaysByTemplate/:templateId", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
@@ -8492,7 +8470,7 @@ router.get("/getHolidaysByTemplate/:templateId", function (req, res, next) {
     }
     var templateId = req.params.templateId;
     conn.query(
-      "SELECT * FROM `holidays` h where h.templateId = " + templateId,
+      "SELECT * FROM `holidays` h where h.templateId = " + templateId + " ORDER BY StartTime asc",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -8514,7 +8492,7 @@ router.get("/getHolidaysByTemplates/:templateIds", function (req, res, next) {
     }
     var templateIds = req.params.templateIds;
     conn.query(
-      "SELECT * FROM `holidays` h where h.templateId in (" + templateIds + ")",
+      "SELECT * FROM `holidays` h where h.templateId in (" + templateIds + ") ORDER BY StartTime asc",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -8536,7 +8514,7 @@ router.get("/getHolidaysForClinic/:superAdminId", function (req, res, next) {
     }
     var superAdminId = req.params.superAdminId;
     conn.query(
-      "SELECT * FROM `holidays` h where h.superAdminId =" + superAdminId,
+      "SELECT * FROM `holidays` h where h.superAdminId =" + superAdminId + " ORDER BY StartTime asc",
       function (err, rows) {
         conn.release();
         if (!err) {

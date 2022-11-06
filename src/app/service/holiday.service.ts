@@ -11,11 +11,6 @@ export class HolidayService {
 
   constructor(public httpClient: HttpClient) { }
 
-  public getHolidays(superAdminId: string): Observable<HolidayModel[]> {
-    return this.httpClient
-      .get<HolidayModel[]>("/api/getHolidays/" + superAdminId).map((res) => res);
-  }
-
   public getHolidaysByTemplate(templateId: number): Promise<HolidayModel[]> {
     return this.httpClient
       .get<HolidayModel[]>("/api/getHolidaysByTemplate/" + templateId).map((res) => res).toPromise();
