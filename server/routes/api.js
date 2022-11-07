@@ -9178,6 +9178,11 @@ router.post("/createThemeColors", function (req, res, next) {
     response = null;
     var data = {
       color: req.body.color,
+      fontColor: req.body.fontColor,
+      selectedColor: req.body.selectedColor,
+      groupColor: req.body.groupColor,
+      navbarColor: req.body.navbarColor,
+      navbarFontColor: req.body.navbarFontColor,
       superadmin: req.body.superadmin,
     };
 
@@ -9212,6 +9217,11 @@ router.post("/updateThemeColors", function (req, res, next) {
     var response = null;
     var data = {
       color: req.body.color,
+      fontColor: req.body.fontColor,
+      selectedColor: req.body.selectedColor,
+      groupColor: req.body.groupColor,
+      navbarColor: req.body.navbarColor,
+      navbarFontColor: req.body.navbarFontColor,
       superadmin: req.body.superadmin,
     };
 

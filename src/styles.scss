@@ -13318,10 +13318,14 @@ tr.group:hover {
 
 :root {
   --sidebar-color: #ffffff;
-  --sidebar-font-color: #4680ff;
+  --sidebar-font-color: #e3e3e3;
+  --sidebar-selected-color: #01a9e9;
+  --sidebar-group-color: #8f96ad;
   --logo-color: #222c3c;
   --header-color: #091467;
   --theme-color: #091467;
+  --navbar-background-color: #ffffff;
+  --navbar-font-color: #333;
 }
 
 /*
@@ -17950,8 +17954,10 @@ kendo-window {
 }
 
 .e-schedule .e-vertical-view .e-day-wrapper .e-appointment {
-  border-right: 3px solid #fff !important;
+  border: none !important;
   background: none !important;
+  padding-top: 2px;
+  padding-left: 2px;
   /*width: 100% !important;*/
 }
 

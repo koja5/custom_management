@@ -473,6 +473,12 @@
             "confirmEventMove": {
                 "type": "string"
             },
+            "noStoreSelectedIndicatorTitle": {
+                "type": "string"
+            },
+            "noStoreSelectedIndicatorText": {
+                "type": "string"
+            },
             "refreshEventToolbar": {
                 "type": "string"
             },
@@ -705,6 +711,9 @@
                 "type": "string"
             },
             "smsDraftDeletedSuccessfully": {
+                "type": "string"
+            },
+            "saveChanges": {
                 "type": "string"
             },
             "addHoliday": {
@@ -2206,6 +2215,21 @@
             "changeThemeColor": {
                 "type": "string"
             },
+            "changeSidebarFontColor": {
+                "type": "string"
+            },
+            "changeSidebarGroupColor": {
+                "type": "string"
+            },
+            "changeSidebarSelectedColor": {
+                "type": "string"
+            },
+            "changeNavbarBackgroundColor": {
+                "type": "string"
+            },
+            "changeNavbarFontColor": {
+                "type": "string"
+            },
             "themeColorsMenu": {
                 "type": "string"
             },
@@ -2288,6 +2312,9 @@
                 "type": "string"
             },
             "invalidFormat": {
+                "type": "string"
+            },
+            "allRequiredFieldsMustBeFilledOut": {
                 "type": "string"
             },
             "unsubscribeMessage": {
@@ -3147,8 +3174,12 @@
                         {
                             "key": "confirmEventMove"
                         },
-                        {},
-                        {}
+                        {
+                            "key": "noStoreSelectedIndicatorTitle"
+                        },
+                        {
+                            "key": "noStoreSelectedIndicatorText"
+                        }
                     ]
                 }
             ]
@@ -6657,6 +6688,9 @@
                         },
                         {
                             "key": "deleteDraft"
+                        },
+                        {
+                            "key": "saveChanges"
                         }
                     ]
                 },
@@ -7012,6 +7046,21 @@
                     "items": [
                         {
                             "key": "changeThemeColor"
+                        },
+                        {
+                            "key": "changeSidebarFontColor"
+                        },
+                        {
+                            "key": "changeSidebarGroupColor"
+                        },
+                        {
+                            "key": "changeSidebarSelectedColor"
+                        },
+                        {
+                            "key": "changeNavbarBackgroundColor"
+                        },
+                        {
+                            "key": "changeNavbarFontColor"
                         }
                     ]
                 },
@@ -7049,6 +7098,9 @@
                         },
                         {
                             "key": "invalidFormat"
+                        },
+                        {
+                            "key": "allRequiredFieldsMustBeFilledOut"
                         }
                     ]
                 }

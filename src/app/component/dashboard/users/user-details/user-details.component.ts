@@ -16,6 +16,7 @@ import { LoginService } from "src/app/service/login.service";
 import { HelpService } from "src/app/service/help.service";
 import { PackLanguageService } from "src/app/service/pack-language.service";
 import { AccountService } from "src/app/service/account.service";
+import { checkIsValidDate } from "src/app/shared/utils";
 
 @Component({
   selector: "app-user-details",
@@ -60,6 +61,7 @@ export class UserDetailsComponent implements OnInit {
   isFileChoosen: boolean = false;
   fileName: string = '';
   currentUser: any;
+  checkIsValidDate = checkIsValidDate;
 
   constructor(
     public route: ActivatedRoute,
@@ -76,7 +78,7 @@ export class UserDetailsComponent implements OnInit {
     private packLanguage: PackLanguageService,
     private helpService: HelpService,
     private accountService: AccountService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.params["id"];
@@ -441,18 +443,18 @@ export class UserDetailsComponent implements OnInit {
   }
 
   receiveConfirm(event: boolean): void {
-    if(event) {
+    if (event) {
       this.user.close();
       this.isFormDirty = false;
     }
-      this.showDialog = false;
+    this.showDialog = false;
   }
 
   confirmClose(): void {
     this.user.modalRoot.nativeElement.focus();
-    if(this.isFormDirty) {
+    if (this.isFormDirty) {
       this.showDialog = true;
-    }else {
+    } else {
       this.user.close()
       this.showDialog = false;
       this.isFormDirty = false
@@ -619,7 +621,7 @@ export class UserDetailsComponent implements OnInit {
     if (event.target.value) {
       this.isFileChoosen = true;
       this.updateImageInput = <File>event.target.files[0];
-    }else {
+    } else {
       this.isFileChoosen = false;
     }
   }
