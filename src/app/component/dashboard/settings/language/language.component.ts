@@ -9,7 +9,7 @@ import { MessageService } from "src/app/service/message.service";
   styleUrls: ["./language.component.scss"],
 })
 export class LanguageComponent implements OnInit {
-  public data: any;
+  private activeLanguages: any[] = [];
   public fields: Object = {
     text: "language",
     value: "countryCode",
@@ -34,8 +34,9 @@ export class LanguageComponent implements OnInit {
   }
 
   checkDefaultLanguage() {
-    if (this.helpService.getLocalStorage("accountLanguage")) {
-      this.value = this.helpService.getLocalStorage("accountLanguage");
+    var accountLanguage = this.helpService.getLocalStorage("accountLanguage");
+    if (accountLanguage) {
+      this.value = accountLanguage;
     } else {
       this.value = "US";
     }
@@ -48,47 +49,32 @@ export class LanguageComponent implements OnInit {
         "/api/getAllTranslationsByDemoAccount",
         this.helpService.getLocalStorage("demoAccountLanguage")
       )
-      .subscribe((data) => {
+      .subscribe((data: any[]) => {
         console.log(data);
-        this.data = data;
+        if(data) {
+          this.activeLanguages = data.filter(l => l.active === true)
+        }
         this.translateTextValue();
       });
-    // if (this.helpService.getLocalStorage("demoAccountLanguage")) {
-    //   this.dynamicService.callApiGet("/api/getAllTranslationForDemoAccount", this.helpService.getLocalStorage("demoAccountLanguage")).subscribe(
-    //     data => {
-    //       this.data = data;
-    //       this.translateTextValue();
-    //     }
-    //   )
-    // } else {
-    //   this.dynamicService
-    //     .callApiGet("/api/getTranslation", this.helpService.getLocalStorage("demoAccountLanguage"))
-    //     .subscribe((data) => {
-    //       console.log(data);
-    //       this.data = data;
-    //       this.translateTextValue();
-    //     });
-    // }
   }
 
   translateTextValue() {
     const languageConfig = JSON.parse(
       this.helpService.getLocalStorage("language")
     );
-    if (languageConfig) {
-      for (let i = 0; i < this.data.length; i++) {
-        for (let j = 0; j < languageConfig["languages"].length; j++) {
-          if (
-            this.data[i].countryCode ===
-            languageConfig["languages"][j].countryCode
-          ) {
-            this.data[i].language = languageConfig["languages"][j].language;
-            break;
-          }
+    
+    if (languageConfig && languageConfig["languages"] && languageConfig["languages"].length) {
+      var languagesTranslationsArr: any[] = languageConfig["languages"]
+      this.activeLanguages.forEach(activeLanguage => {
+        var languageTranslationObj = 
+          languagesTranslationsArr.find(
+            t => t.countryCode == activeLanguage.countryCode
+          );
+        if(languageTranslationObj) {
+          activeLanguage.language = languageTranslationObj.language;
         }
-      }
+      });
     }
-
     this.loading = false;
   }
 
