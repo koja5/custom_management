@@ -113,6 +113,7 @@ import { MassiveUnsubscribeComponent } from './marketing/massive-unsubscribe/mas
 import { RegisteredClinicsComponent } from './administrator/registered-clinics/registered-clinics.component';
 import { RegisteredClinicDetailComponent } from './administrator/registered-clinics/registered-clinic-detail/registered-clinic-detail.component';
 import { SharedComponentsModule } from 'src/app/shared/shared-components.module';
+import { LicenceComponent } from './licence/licence.component';
 
 @NgModule({
   declarations: [
@@ -173,7 +174,8 @@ import { SharedComponentsModule } from 'src/app/shared/shared-components.module'
     ListFaqComponent,
     RegisteredClinicsComponent,
     RegisteredClinicDetailComponent,
-    MassiveUnsubscribeComponent
+    MassiveUnsubscribeComponent,
+    LicenceComponent
   ],
   imports: [
     CommonModule,

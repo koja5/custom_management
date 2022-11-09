@@ -105,8 +105,16 @@ import { PDFService } from "src/app/service/pdf.service";
 import { ParameterItemService } from "src/app/service/parameter-item.service";
 import { DateService } from "src/app/service/date.service";
 import { InvoiceService } from "src/app/service/invoice.service";
-import { checkIfInputValid, checkIfInputValueValid } from "../../../shared/utils";
-import { SCHEDULER_TRANSLATIONS, TIMESLOT_DURATION, TIMEZONE_DATA, WEEK_DAYS } from "./dynamic-scheduler-data";
+import {
+  checkIfInputValid,
+  checkIfInputValueValid,
+} from "../../../shared/utils";
+import {
+  SCHEDULER_TRANSLATIONS,
+  TIMESLOT_DURATION,
+  TIMEZONE_DATA,
+  WEEK_DAYS,
+} from "./dynamic-scheduler-data";
 declare var moment: any;
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
@@ -1102,6 +1110,10 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
       this.creatorEvent = args.data["creator_id"];
       if (!args.data["id"]) {
         this.clearAllSelectedData();
+        if (this.type === this.userType.patient) {
+          this.telephoneValue = this.customerUser.telephone;
+          this.mobileValue = this.customerUser.mobile;
+        }
       } else if (args.data["id"]) {
         if (
           (this.type === this.userType.patient &&
@@ -1471,7 +1483,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-      this.toastr.clear();
+    this.toastr.clear();
   }
 
   @HostListener("window:resize", ["$event"])
@@ -1495,10 +1507,11 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
       this.language.noStoreSelectedIndicatorText,
       this.language.noStoreSelectedIndicatorTitle,
       {
-          timeOut: 0,
-          extendedTimeOut: 0,
-          closeButton: true
-      }).toastId;
+        timeOut: 0,
+        extendedTimeOut: 0,
+        closeButton: true,
+      }
+    ).toastId;
   }
 
   public loadUser(): void {
@@ -1514,72 +1527,68 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   // load holidays defined by clinic and holidays defined by selected clinic template (if there is some)
   public loadHolidays() {
     const superAdminId = this.helpService.getSuperadmin();
-    
-    this.holidayService
-      .getHolidaysForClinic(superAdminId)
-      .then((result) => {
-        console.log(result);
-        if (result && result.length > 0) {
-          result.forEach((r) => {
-            // console.log('R: ', r);
-            this.allEvents.push({
-              Subject: r.Subject,
-              StartTime: new Date(r.StartTime).setHours(Number(this.startWork)),
-              EndTime: new Date(r.EndTime).setHours(Number(this.startWork + 1)),
-              IsAllDay: false,
-            });
 
-            this.holidays.push({
-              Subject: r.Subject,
-              StartTime: new Date(r.StartTime),
-              EndTime: new Date(r.EndTime),
-              IsAllDay: true,
-            });
+    this.holidayService.getHolidaysForClinic(superAdminId).then((result) => {
+      console.log(result);
+      if (result && result.length > 0) {
+        result.forEach((r) => {
+          // console.log('R: ', r);
+          this.allEvents.push({
+            Subject: r.Subject,
+            StartTime: new Date(r.StartTime).setHours(Number(this.startWork)),
+            EndTime: new Date(r.EndTime).setHours(Number(this.startWork + 1)),
+            IsAllDay: false,
           });
-        }
-      });
+
+          this.holidays.push({
+            Subject: r.Subject,
+            StartTime: new Date(r.StartTime),
+            EndTime: new Date(r.EndTime),
+            IsAllDay: true,
+          });
+        });
+      }
+    });
 
     // load holidays defined by clinic and holidays defined by selected clinic template (if there is some)
 
-    this.holidayService
-      .getStoreTemplateConnection(superAdminId)
-      .then((ids) => {
-        const templateIds = ids.map((elem) => elem.templateId);
+    this.holidayService.getStoreTemplateConnection(superAdminId).then((ids) => {
+      const templateIds = ids.map((elem) => elem.templateId);
 
-        if (ids.length) {
-          this.holidayService
-            .getHolidaysByTemplates(templateIds)
-            .then((result) => {
-              if (result && result.length > 0) {
-                result.forEach((r) => {
-                  this.allEvents.push({
-                    Subject: r.Subject,
-                    StartTime: new Date(r.StartTime).setHours(
-                      Number(this.startWork)
-                    ),
-                    EndTime: new Date(r.EndTime).setHours(
-                      Number(this.startWork + 1)
-                    ),
-                    IsAllDay: false,
-                  });
-
-                  this.holidays.push({
-                    Subject: r.Subject,
-                    StartTime: new Date(r.StartTime),
-                    EndTime: new Date(r.EndTime),
-                    IsAllDay: true,
-                  });
+      if (ids.length) {
+        this.holidayService
+          .getHolidaysByTemplates(templateIds)
+          .then((result) => {
+            if (result && result.length > 0) {
+              result.forEach((r) => {
+                this.allEvents.push({
+                  Subject: r.Subject,
+                  StartTime: new Date(r.StartTime).setHours(
+                    Number(this.startWork)
+                  ),
+                  EndTime: new Date(r.EndTime).setHours(
+                    Number(this.startWork + 1)
+                  ),
+                  IsAllDay: false,
                 });
 
-                this.scheduleObj.eventSettings.dataSource = this.allEvents;
-                this.scheduleObj.refresh();
-                this.scheduleObj.refreshEvents();
-              } else {
-                console.log("no holidayss");
-              }
-            });
-        }
-      });
+                this.holidays.push({
+                  Subject: r.Subject,
+                  StartTime: new Date(r.StartTime),
+                  EndTime: new Date(r.EndTime),
+                  IsAllDay: true,
+                });
+              });
+
+              this.scheduleObj.eventSettings.dataSource = this.allEvents;
+              this.scheduleObj.refresh();
+              this.scheduleObj.refreshEvents();
+            } else {
+              console.log("no holidayss");
+            }
+          });
+      }
+    });
   }
 
   checkPreselectedStore() {
@@ -1708,7 +1717,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   }
 
   initializeStore() {
-   if (this.helpService.getType() === this.userType.patient) {
+    if (this.helpService.getType() === this.userType.patient) {
       this.storeService.getStoreAllowedOnline(
         this.helpService.getSuperadmin(),
         (val) => {
@@ -2529,7 +2538,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
           )
         );
       }
-      if(this.noStoreSelectedToastrId) {
+      if (this.noStoreSelectedToastrId) {
         this.toastr.clear(this.noStoreSelectedToastrId);
       }
       this.sharedCalendarResources = this.value;
@@ -2539,7 +2548,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     } else {
       this.value = null;
       if (event !== undefined) {
-        if(this.noStoreSelectedToastrId) {
+        if (this.noStoreSelectedToastrId) {
           this.toastr.clear(this.noStoreSelectedToastrId);
         }
         this.service
@@ -2570,7 +2579,8 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
           });
         this.getUserInCompany(event);
       } else {
-        this.initData();
+        // this.initData();
+        this.resetCalendarData();
       }
     }
 
@@ -2585,12 +2595,14 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   }
 
   getStoreName(id) {
-    if (this.store) {
+    if (this.store && id) {
       for (let i = 0; i < this.store.length; i++) {
         if (this.store[i].id === id) {
           return this.store[i].storename;
         }
       }
+    } else {
+      return "Management System";
     }
   }
 
@@ -3065,6 +3077,9 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     this.value = null;
     this.allEvents = [];
     this.sharedCalendarResources = null;
+    if (!this.selectedStoreId) {
+      this.displayInfoMessageEmptyCalendar();
+    }
   }
 
   public createFormGroup(args): FormGroup {
@@ -3488,7 +3503,10 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
         args.requestType === "viewNavigate"
       ) {
         if (args.requestType === "eventCreate") {
-          let evts = this.scheduleObj.getEvents(this.eventTime.start, this.eventTime.end)
+          let evts = this.scheduleObj.getEvents(
+            this.eventTime.start,
+            this.eventTime.end
+          );
           if (evts.length > 0 && this.type === this.userType.patient) {
             this.toastr.error(
               this.language.eventAlreadyExistsText,
@@ -3500,8 +3518,12 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
           }
 
           args.cancel = true;
-        } else if (args.requestType === "eventChange") {
-          let evts = this.scheduleObj.getEvents(this.eventTime.start, this.eventTime.end)
+        } 
+        else if (args.requestType === "eventChange") {
+          let evts = this.scheduleObj.getEvents(
+            this.eventTime.start,
+            this.eventTime.end
+          );
           if (evts.length > 1 && this.type === this.userType.patient) {
             this.toastr.error(
               this.language.eventAlreadyExistsText,
@@ -3515,7 +3537,8 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
             this.updateTask(args);
           }
           args.cancel = true;
-        } else if (args.requestType === "eventRemove") {
+        } 
+        else if (args.requestType === "eventRemove") {
           // this.deleteTask(args.deletedRecords[0]);
           const eventDetails: { [key: string]: Object } = this.scheduleObj
             .activeEventData.event as { [key: string]: Object };

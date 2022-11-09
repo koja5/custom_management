@@ -110,7 +110,15 @@
                     routerLink="/dashboard/home/help"
                     (click)="showHideProfile()"
                   >
-                    <i class="fa fa-question-circle"></i> Help
+                    <i class="fa fa-question-circle"></i> {{language.helpTitle}}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    routerLink="/dashboard/home/licence"
+                    (click)="showHideProfile()"
+                  >
+                    <i class="fa fa-id-card"></i> {{language.licence}}
                   </a>
                 </li>
                 <li class="divider"></li>

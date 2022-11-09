@@ -1,0 +1,18 @@
+<div class="container">
+  <h3 class="text-center">{{language.licence}}</h3>
+  <hr>
+
+  <p>{{language.yourLicence}}: <b>{{licence.name}} ({{licence.price}} €)</b></p>
+  <p>{{language.licenceExpiration}}: <b [ngStyle]="diffDate > 0 ? {'color': 'green'} : {'color': 'red'}">{{licence.expiration_date | date :'dd.MM.yyyy' }} ({{diffDate}} {{language.daysLeft}})</b></p>
+
+  <div class="button-licence">
+    <div class="row">
+      <div class="col-md-6">
+        <button class="btn btn-primary" [disabled]="true">{{language.upgradeLicence}}</button>
+      </div>
+      <div class="col-md-6">
+        <button class="btn btn-success" [disabled]="true">{{language.renewLicence}}</button>
+      </div>
+    </div>
+  </div>
+</div>

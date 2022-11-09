@@ -318,10 +318,10 @@
                 "type": "string"
             },
             "eventAlreadyExistsTitle": {
-              "type": "string"
+                "type": "string"
             },
             "eventAlreadyExistsText": {
-              "type": "string"
+                "type": "string"
             },
             "monday": {
                 "type": "string"
@@ -750,6 +750,9 @@
                 "type": "string"
             },
             "headerMenuSMSTemplateSettings": {
+                "type": "string"
+            },
+            "licence": {
                 "type": "string"
             },
             "reservations": {
@@ -2334,6 +2337,33 @@
             },
             "goBack": {
                 "type": "string"
+            },
+            "accountExpiredCode": {
+                "type": "string"
+            },
+            "accountExpiredTitle": {
+                "type": "string"
+            },
+            "accountExpiredTextOne": {
+                "type": "string"
+            },
+            "accountExpiredTextTwo": {
+                "type": "string"
+            },
+            "yourLicence": {
+                "type": "string"
+            },
+            "licenceExpiration": {
+                "type": "string"
+            },
+            "daysLeft": {
+                "type": "string"
+            },
+            "upgradeLicence": {
+                "type": "string"
+            },
+            "renewLicence": {
+                "type": "string"
             }
         }
     },
@@ -2461,6 +2491,9 @@
                         },
                         {
                             "key": "across"
+                        },
+                        {
+                            "key": "goBack"
                         }
                     ]
                 }
@@ -3480,6 +3513,22 @@
                         },
                         {
                             "key": "headerMenuSMSTemplateSettings"
+                        }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "licence"
+                        },
+                        {
+                        },
+                        {
+                        },
+                        {
                         }
                     ]
                 }
@@ -6747,7 +6796,7 @@
                             "key": "addNewSmsDraft"
                         }
                     ]
-                }, 
+                },
                 {
                     "type": "div",
                     "display": "flex",
@@ -6764,7 +6813,6 @@
                         }
                     ]
                 }
-
             ]
         },
         {
@@ -7131,9 +7179,63 @@
                         },
                         {
                             "key": "unsubscribeButton"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "section",
+            "title": "Access forbiden",
+            "expandable": true,
+            "expanded": false,
+            "items": [
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "accountExpiredCode"
                         },
                         {
-                            "key": "goBack"
+                            "key": "accountExpiredTitle"
+                        },
+                        {
+                            "key": "accountExpiredTextOne"
+                        },
+                        {
+                            "key": "accountExpiredTextTwo"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "section",
+            "title": "Licence",
+            "expandable": true,
+            "expanded": false,
+            "items": [
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "yourLicence"
+                        },
+                        {
+                            "key": "licenceExpiration"
+                        },
+                        {
+                            "key": "daysLeft"
+                        },
+                        {
+                            "key": "upgradeLicence"
+                        },
+                        {
+                            "key": "renewLicence"
                         }
                     ]
                 }
