@@ -74,6 +74,7 @@ export class RequestDemoComponent implements OnInit {
     });
   }
 
+  // this method use for directly payment
   submitPayment() {
     this.stripeService
       .createToken(this.card, { name: this.data.name })
@@ -143,6 +144,17 @@ export class RequestDemoComponent implements OnInit {
           });
       }, 20);
     }
+  }
+
+  sendRequestForDemoAccount() {
+    this.callApi
+      .callApiPost("/api/sendReqestForDemoAccountFull", this.data)
+      .subscribe((data) => {
+        if (data) {
+          this.success = true;
+          this.data = new ReqeustDemoAccount();
+        }
+      });
   }
 
   selectPackage(event) {

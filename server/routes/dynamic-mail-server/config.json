@@ -6,7 +6,7 @@
         "fields": {
             "title": "Novi zahtev za kreiranje naloga",
             "text": "Dobili ste zahtev za kreiranje naloga za mail koji se nalazi u nastavku!",
-            "greeting": "Poštovani"
+            "greeting": "Postovani"
         }
     },
     "request_for_demo_account_full": {
@@ -16,7 +16,7 @@
         "fields": {
             "title": "Novi zahtev za kreiranje naloga",
             "text": "Dobili ste zahtev za kreiranje naloga za mail koji se nalazi u nastavku!",
-            "greeting": "Poštovani"
+            "greeting": "Postovani"
         }
     },
     "send_from_contact_form": {
@@ -26,7 +26,7 @@
         "fields": {
             "title": "Upit putem kontakt forme",
             "text": "Dobili ste upit putem kontakt forme. Podaci o korisniku i poruka se nalaze u nastavku!",
-            "greeting": "Poštovani"
+            "greeting": "Postovani"
         }
     }
 }
