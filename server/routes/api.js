@@ -4517,8 +4517,8 @@ router.post("/createVaucher", function (req, res, next) {
       conn.release();
       if (!err) {
         if (!err) {
-          data['language'] = req.body.language;
-          if(req.body.toSendEmail) {
+          data["language"] = req.body.language;
+          if (req.body.toSendEmail) {
             mailAPI.sendVaucherToMail(data);
           }
           response.id = rows.insertId;
@@ -4641,8 +4641,8 @@ router.post("/updateVaucher", function (req, res, next) {
           res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
-          data['language'] = req.body.language;
-          if(req.body.toSendEmail) {
+          data["language"] = req.body.language;
+          if (req.body.toSendEmail) {
             mailAPI.sendVaucherToMail(data);
           }
           response = true;
@@ -5627,7 +5627,7 @@ router.post("/sendVaucherSms", function (req, res) {
                   // splitSenderToPartArray(rows, codes, req, language);
                   globalCount = 0;
                   count = 0;
-                  if(rows) {
+                  if (rows) {
                     rows.forEach(async function (to, i, array) {
                       var phoneNumber = to.mobile ? to.mobile : req.body.mobile;
                       if (
@@ -5667,12 +5667,12 @@ router.post("/sendVaucherSms", function (req, res) {
                             signature += to.smsSignatureEmail + " \n";
                           }
                         }
-  
+
                         if (language.smsSignaturePoweredBy) {
                           signature +=
                             " \n" + language.smsSignaturePoweredBy + " \n";
                         }
-  
+
                         var content =
                           "To: " +
                           phoneNumber +
@@ -5690,44 +5690,44 @@ router.post("/sendVaucherSms", function (req, res) {
                         );
                       }
                     });
-                  }else {
+                  } else {
                     var phoneNumber = req.body.mobile;
-                      if (
-                        checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
-                        req.body.message
-                      ) {
-                        count++;
-                        var message =
-                          (language.initialGreetingSMSReminder) +
-                          " " +
-                          req.body.firstname +
-                          ", \n \n" +
-                          req.body.message;
-                        var signature = "";
-  
-                        if (language.smsSignaturePoweredBy) {
-                          signature +=
-                            " \n" + language.smsSignaturePoweredBy + " \n";
-                        }
-  
-                        var content =
-                          "To: " +
-                          phoneNumber +
-                          "\r\n\r\n" +
-                          message +
-                          "\n\n" +
-                          signature;
-                        const fullMessage = message + "\n\n" + signature;
-                        var fileName = "server/sms/" + phoneNumber + ".txt";
-                        sendSmsFromMail(phoneNumber, fullMessage);
-                      } else {
-                        logger.log(
-                          "warn",
-                          `Number ${phoneNumber} is not start with available area code!`
-                        );
+                    if (
+                      checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
+                      req.body.message
+                    ) {
+                      count++;
+                      var message =
+                        language.initialGreetingSMSReminder +
+                        " " +
+                        req.body.firstname +
+                        ", \n \n" +
+                        req.body.message;
+                      var signature = "";
+
+                      if (language.smsSignaturePoweredBy) {
+                        signature +=
+                          " \n" + language.smsSignaturePoweredBy + " \n";
                       }
+
+                      var content =
+                        "To: " +
+                        phoneNumber +
+                        "\r\n\r\n" +
+                        message +
+                        "\n\n" +
+                        signature;
+                      const fullMessage = message + "\n\n" + signature;
+                      var fileName = "server/sms/" + phoneNumber + ".txt";
+                      sendSmsFromMail(phoneNumber, fullMessage);
+                    } else {
+                      logger.log(
+                        "warn",
+                        `Number ${phoneNumber} is not start with available area code!`
+                      );
+                    }
                   }
-                  
+
                   updateAvailableSMSCount(count, req.body.superadmin);
                   res.send(true);
                 }
@@ -6421,7 +6421,8 @@ router.post("/getFilteredRecipients", function (req, res) {
       console.log('joinTable: ', joinTable);
       var table = "";
       if (req.body.mode && req.body.mode === "mail") {
-        var checkAdditionalQuery = "(c.email != '' and c.email IS NOT NULL) and c.sendMassiveEmail = 1 ";
+        var checkAdditionalQuery =
+          "(c.email != '' and c.email IS NOT NULL) and c.sendMassiveEmail = 1 ";
         table = "mail_massive_message";
       } else {
         var checkAdditionalQuery =
@@ -6994,7 +6995,12 @@ router.post("/loadTemplateAccount", function (req, res, next) {
       req.body.account_id,
       req.body.id
     );
-    insertFromTemplate(conn, "theme_configuration", req.body.account_id, req.body.id);
+    insertFromTemplate(
+      conn,
+      "theme_configuration",
+      req.body.account_id,
+      req.body.id
+    );
     getCustomersDemoData(conn, "customers", req.body.account_id, req.body.id);
     insertFromTemplate(conn, "vaucher", req.body.account_id, req.body.id);
     insertFromTemplateForUsers(conn, "users", req.body.account_id, req.body.id);
@@ -8754,28 +8760,6 @@ router.post("/deleteHolidaysByTemplateId", (req, res, next) => {
   }
 });
 
-router.get("/getHolidays/:userId", function (req, res, next) {
-  connection.getConnection(function (err, conn) {
-    if (err) {
-      logger.log("error", err.sql + ". " + err.sqlMessage);
-      res.json(err);
-    }
-    var userId = req.params.userId;
-    conn.query(
-      "SELECT * FROM `holidays` where userId=" + userId,
-      function (err, rows) {
-        conn.release();
-        if (!err) {
-          res.json(rows);
-        } else {
-          res.json(err);
-          logger.log("error", err.sql + ". " + err.sqlMessage);
-        }
-      }
-    );
-  });
-});
-
 router.get("/getHolidaysByTemplate/:templateId", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
@@ -8784,7 +8768,7 @@ router.get("/getHolidaysByTemplate/:templateId", function (req, res, next) {
     }
     var templateId = req.params.templateId;
     conn.query(
-      "SELECT * FROM `holidays` h where h.templateId = " + templateId,
+      "SELECT * FROM `holidays` h where h.templateId = " + templateId + " ORDER BY StartTime asc",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -8806,7 +8790,7 @@ router.get("/getHolidaysByTemplates/:templateIds", function (req, res, next) {
     }
     var templateIds = req.params.templateIds;
     conn.query(
-      "SELECT * FROM `holidays` h where h.templateId in (" + templateIds + ")",
+      "SELECT * FROM `holidays` h where h.templateId in (" + templateIds + ") ORDER BY StartTime asc",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -8828,7 +8812,7 @@ router.get("/getHolidaysForClinic/:superAdminId", function (req, res, next) {
     }
     var superAdminId = req.params.superAdminId;
     conn.query(
-      "SELECT * FROM `holidays` h where h.superAdminId =" + superAdminId,
+      "SELECT * FROM `holidays` h where h.superAdminId =" + superAdminId + " ORDER BY StartTime asc",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -8917,7 +8901,7 @@ router.post("/deleteStoreTemplateConnection", (req, res, next) => {
         const superAdminId = req.body.superAdminId;
         conn.query(
           "DELETE FROM store_holidayTemplate where superAdminId =  " +
-          superAdminId +
+            superAdminId +
             " and templateId in " +
             temp,
           function (err, results, fields) {
@@ -9254,7 +9238,7 @@ router.get("/getFaqTopics/:countryCode", function (req, res, next) {
       res.json(err);
     }
     conn.query(
-      "SELECT * FROM `help_topics` WHERE `countryCode`='"+countryCode+"'",
+      "SELECT * FROM `help_topics` WHERE `countryCode`='" + countryCode + "'",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -9276,7 +9260,7 @@ router.get("/getFaqTopic/:topicId", function (req, res, next) {
     }
     var topicId = req.params.topicId;
     conn.query(
-      "SELECT * FROM `help_topics` WHERE id="+topicId,
+      "SELECT * FROM `help_topics` WHERE id=" + topicId,
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -9389,7 +9373,7 @@ router.get("/getFaqQuestions/:topicId", function (req, res, next) {
     }
     var topicId = req.params.topicId;
     conn.query(
-      "SELECT * FROM `faq_list` WHERE `helpTopicId`="+topicId,
+      "SELECT * FROM `faq_list` WHERE `helpTopicId`=" + topicId,
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -9587,7 +9571,7 @@ router.post("/sendReqestForDemoAccountFull", function (req, res, next) {
       res.json(false);
     }
   });
-  // this is not good, try to make handler for return correct value
+  // this need to make real back status response
   res.json(true);
 });
 
@@ -9734,125 +9718,186 @@ router.post("/deleteHolidayTemplate", (req, res, next) => {
 
 /* UPLOAD PROFILE IMAGE FOR EMPLOYEES*/
 
-router.post("/uploadeEmployeeProfileImage/:id", upload.single('updateImageInput'), (req, res) => {
-  if (!req.file) {
-    return res.send({
-      success: false
-    });
-  } 
-  const data = readImageFile('server/routes/uploads/user-profile-images/' + req.file.filename);
-  let imageName = req.file.filename;
-  let currentImage;
-  const id = req.params.id;
-
-  connection.query("SELECT * FROM users WHERE id = ?", id, function (err, result) {
-    if(result[0] && result[0].imgName) {
-      currentImage = result[0].imgName;
-    }
-  });
-
-  connection.query("UPDATE users SET img = ? WHERE id = ?", [data, id], function(err, res) {
-      if (err) {
-        throw err;
-      }else {
-        deleteImage(currentImage);
-      } 
-  })
-
-  connection.query("UPDATE users SET imgName = ? WHERE id = ?", [imageName, id], function(err, res) {
-    if (err) throw err;
-  })
-  
-
-  return res.send({
-        success: true
+router.post(
+  "/uploadeEmployeeProfileImage/:id",
+  upload.single("updateImageInput"),
+  (req, res) => {
+    if (!req.file) {
+      return res.send({
+        success: false,
       });
-})
+    }
+    const data = readImageFile(
+      "server/routes/uploads/user-profile-images/" + req.file.filename
+    );
+    let imageName = req.file.filename;
+    let currentImage;
+    const id = req.params.id;
 
+    connection.query(
+      "SELECT * FROM users WHERE id = ?",
+      id,
+      function (err, result) {
+        if (result[0] && result[0].imgName) {
+          currentImage = result[0].imgName;
+        }
+      }
+    );
+
+    connection.query(
+      "UPDATE users SET img = ? WHERE id = ?",
+      [data, id],
+      function (err, res) {
+        if (err) {
+          throw err;
+        } else {
+          deleteImage(currentImage);
+        }
+      }
+    );
+
+    connection.query(
+      "UPDATE users SET imgName = ? WHERE id = ?",
+      [imageName, id],
+      function (err, res) {
+        if (err) throw err;
+      }
+    );
+
+    return res.send({
+      success: true,
+    });
+  }
+);
 
 /* END UPLOAD PROFILE IMAGE FOR EMPLOYEES */
 
 /* UPLOAD PROFILE IMAGE */
 
-router.post("/uploadProfileImage/:id/:userType", upload.single('updateImageInput'), (req, res) => {
-  if (!req.file) {
-    return res.send({
-      success: false
-    });
-  } 
-  const data = readImageFile('server/routes/uploads/user-profile-images/' + req.file.filename);
-  let imageName = req.file.filename;
-  let currentImage;
-  const id = req.params.id;
-  const userType = req.params.userType;
-
-  if(userType == 0 || userType == 1) {
-    connection.query("SELECT * FROM users_superadmin WHERE id = ?", id, function (err, result) {
-      if( result[0] && result[0].imgName) {
-        currentImage = result[0].imgName;
-      }
-    });
-
-    connection.query("UPDATE users_superadmin SET img = ? WHERE id = ?", [data, id], function(err, res) {
-        if (err) {
-          throw err;
-        }else {
-          deleteImage(currentImage);
-        } 
-    })
-
-    connection.query("UPDATE users_superadmin SET imgName = ? WHERE id = ?", [imageName, id], function(err, res) {
-      if (err) throw err;
-    })
-
-  } else if (userType == 2 || userType == 3 || userType == 5 || userType == 6) {
-    connection.query("SELECT * FROM users WHERE id = ?", id, function (err, result) {
-      if(result[0] && result[0].imgName) {
-        currentImage = result[0].imgName;
-      }
-    });
-
-    connection.query("UPDATE users SET img = ? WHERE id = ?", [data, id], function(err, res) {
-        if (err) {
-          throw err;
-        }else {
-          deleteImage(currentImage);
-        } 
-    })
-
-    connection.query("UPDATE users SET imgName = ? WHERE id = ?", [imageName, id], function(err, res) {
-      if (err) throw err;
-    })
-  } else {
-    connection.query("SELECT * FROM customers WHERE id = ?", id, function (err, result) {
-      if(result[0] && result[0].imgName) {
-        currentImage = result[0].imgName;
-      }
-    });
-
-    connection.query("UPDATE customers SET img = ? WHERE id = ?", [data, id], function(err, res) {
-        if (err) {
-          throw err;
-        }else {
-          deleteImage(currentImage);
-        } 
-    })
-    
-    connection.query("UPDATE customers SET imgName = ? WHERE id = ?", [imageName, id], function(err, res) {
-      if (err) throw err;
-    })
-  }
-
-  return res.send({
-        success: true
+router.post(
+  "/uploadProfileImage/:id/:userType",
+  upload.single("updateImageInput"),
+  (req, res) => {
+    if (!req.file) {
+      return res.send({
+        success: false,
       });
-})
+    }
+    const data = readImageFile(
+      "server/routes/uploads/user-profile-images/" + req.file.filename
+    );
+    let imageName = req.file.filename;
+    let currentImage;
+    const id = req.params.id;
+    const userType = req.params.userType;
+
+    if (userType == 0 || userType == 1) {
+      connection.query(
+        "SELECT * FROM users_superadmin WHERE id = ?",
+        id,
+        function (err, result) {
+          if (result[0] && result[0].imgName) {
+            currentImage = result[0].imgName;
+          }
+        }
+      );
+
+      connection.query(
+        "UPDATE users_superadmin SET img = ? WHERE id = ?",
+        [data, id],
+        function (err, res) {
+          if (err) {
+            throw err;
+          } else {
+            deleteImage(currentImage);
+          }
+        }
+      );
+
+      connection.query(
+        "UPDATE users_superadmin SET imgName = ? WHERE id = ?",
+        [imageName, id],
+        function (err, res) {
+          if (err) throw err;
+        }
+      );
+    } else if (
+      userType == 2 ||
+      userType == 3 ||
+      userType == 5 ||
+      userType == 6
+    ) {
+      connection.query(
+        "SELECT * FROM users WHERE id = ?",
+        id,
+        function (err, result) {
+          if (result[0] && result[0].imgName) {
+            currentImage = result[0].imgName;
+          }
+        }
+      );
+
+      connection.query(
+        "UPDATE users SET img = ? WHERE id = ?",
+        [data, id],
+        function (err, res) {
+          if (err) {
+            throw err;
+          } else {
+            deleteImage(currentImage);
+          }
+        }
+      );
+
+      connection.query(
+        "UPDATE users SET imgName = ? WHERE id = ?",
+        [imageName, id],
+        function (err, res) {
+          if (err) throw err;
+        }
+      );
+    } else {
+      connection.query(
+        "SELECT * FROM customers WHERE id = ?",
+        id,
+        function (err, result) {
+          if (result[0] && result[0].imgName) {
+            currentImage = result[0].imgName;
+          }
+        }
+      );
+
+      connection.query(
+        "UPDATE customers SET img = ? WHERE id = ?",
+        [data, id],
+        function (err, res) {
+          if (err) {
+            throw err;
+          } else {
+            deleteImage(currentImage);
+          }
+        }
+      );
+
+      connection.query(
+        "UPDATE customers SET imgName = ? WHERE id = ?",
+        [imageName, id],
+        function (err, res) {
+          if (err) throw err;
+        }
+      );
+    }
+
+    return res.send({
+      success: true,
+    });
+  }
+);
 /* END UPLOAD PROFILE IMAGE */
 
 /* Registered Clinics */
 
-router.get('/getRegisteredClinics', function (req, res) {
-
+router.get("/getRegisteredClinics", function (req, res) {
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
@@ -9871,66 +9916,66 @@ router.get('/getRegisteredClinics', function (req, res) {
 });
 
 router.post("/createClinic", function (req, res, next) {
-    connection.getConnection(function (err, conn) {
-      if (err) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+
+    var createPassword;
+
+    if (!req.body.password) {
+      var password = passwordGenerate.generate({
+        length: 10,
+        numbers: true,
+      });
+      createPassword = sha1(password);
+    } else {
+      createPassword = req.body.password;
+    }
+
+    var expiryDate = new Date();
+    expiryDate.setDate(d.getDate() + 14);
+
+    response = {};
+    const data = {
+      id: req.body.id,
+      password: createPassword,
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      shortname: req.body.shortname,
+      street: req.body.street,
+      zipcode: req.body.zipcode,
+      place: req.body.place,
+      email: req.body.email,
+      telephone: req.body.telephone,
+      mobile: req.body.mobile,
+      birthday: req.body.birthday,
+      incompanysince: req.body.incompanysince,
+      type: 0,
+      active: req.body.active,
+      companyname: req.body.companyname,
+      expiryDate: expiryDate,
+    };
+
+    conn.query("insert users_superadmin SET ?", data, function (err, rows) {
+      conn.release();
+      if (!err) {
+        if (!err) {
+          response.id = rows.id;
+          response.success = true;
+          data["language"] = req.body.language;
+          mailAPI.sendMailAdminInfo(data);
+        } else {
+          response.success = false;
+        }
+        res.json(response);
+      } else {
         logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
       }
-
-      var createPassword;
-
-      if(!req.body.password) {
-        var password = passwordGenerate.generate({
-          length: 10,
-          numbers: true,
-        });
-        createPassword = sha1(password);
-      }else {
-        createPassword = req.body.password;
-      }
-      
-      response = {};
-      const data = {
-        id: req.body.id,
-        password: createPassword,
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        shortname: req.body.shortname,
-        street: req.body.street,
-        zipcode: req.body.zipcode,
-        place: req.body.place,
-        email: req.body.email,
-        telephone: req.body.telephone,
-        mobile: req.body.mobile,
-        birthday: req.body.birthday,
-        incompanysince: req.body.incompanysince,
-        type: 0,
-        active: req.body.active,
-        companyname: req.body.companyname,
-      };
-      
-      conn.query(
-        "insert users_superadmin SET ?",
-        data,
-        function (err, rows) {
-          conn.release();
-          if (!err) {
-            if (!err) {
-              response.id = rows.id;
-              response.success = true;
-              data['language'] = req.body.language;
-              mailAPI.sendMailAdminInfo(data);
-            } else {
-              response.success = false;
-            }
-            res.json(response);
-          } else {
-            logger.log("error", err.sql + ". " + err.sqlMessage);
-            res.json(err);
-          }
-        }
-      );
     });
+  });
 });
 
 router.post("/updateRegisteredClinic", function (req, res, next) {
@@ -9942,18 +9987,19 @@ router.post("/updateRegisteredClinic", function (req, res, next) {
 
     var createPassword;
 
-      if(!req.body.password) {
-        var password = passwordGenerate.generate({
-          length: 10,
-          numbers: true,
-        });
-        createPassword = sha1(password);
-      }else {
-        createPassword = req.body.password;
-      }
+    if (!req.body.password) {
+      var password = passwordGenerate.generate({
+        length: 10,
+        numbers: true,
+      });
+      createPassword = sha1(password);
+    } else {
+      createPassword = req.body.password;
+    }
 
     conn.query(
-      "select * from users_superadmin where id = ?", req.body.id,
+      "select * from users_superadmin where id = ?",
+      req.body.id,
       function (err, rows) {
         if (!err) {
           if (!err) {
@@ -10038,21 +10084,25 @@ router.post("/deleteRegisteredClinic", (req, res, next) => {
   }
 });
 
-router.get('/getClinicEmployees/:id', function (req, res) {
+router.get("/getClinicEmployees/:id", function (req, res) {
   const id = req.params.id;
 
   connection.getConnection(function (err, conn) {
     if (err) {
       res.json(err);
     }
-    conn.query("SELECT * FROM users WHERE users.superadmin = ?", id, function (err, result) {
-      if (err) {
-        console.log(err);
-        res.json(err);
-      }else {
-        res.json(result);
+    conn.query(
+      "SELECT * FROM users WHERE users.superadmin = ?",
+      id,
+      function (err, result) {
+        if (err) {
+          console.log(err);
+          res.json(err);
+        } else {
+          res.json(result);
+        }
       }
-    });
+    );
   });
 });
 
@@ -10120,7 +10170,9 @@ router.get("/getDrafts/:id/:type", function (req, res, next) {
     }
     var id = req.params.id;
     conn.query(
-      "select * from marketing_drafts where superadmin = ? AND type = '" + req.params.type + "'",
+      "select * from marketing_drafts where superadmin = ? AND type = '" +
+        req.params.type +
+        "'",
       [id],
       function (err, rows) {
         conn.release();
@@ -10222,5 +10274,29 @@ router.post("/deleteDraft", (req, res, next) => {
 });
 
 // end drafts
+
+//licence
+
+router.get("/getLicenceForUser/:superadmin_id", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query(
+      "select * from licence_per_user lp join licence l on lp.licence_id = l.id where lp.superadmin_id = ?",
+      [req.params.superadmin_id],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
 
 module.exports = router;

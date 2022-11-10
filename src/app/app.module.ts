@@ -56,6 +56,7 @@ import { SharedComponentsModule } from "./shared/shared-components.module";
 import { RouterModule } from "@angular/router";
 import { FormGuard } from "./service/form-guard/formGuard";
 import { NgxStripeModule } from "ngx-stripe";
+import { AccessForbiddenComponent } from './component/templates/access-forbidden/access-forbidden.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { NgxStripeModule } from "ngx-stripe";
     PatientFormSuccessComponent,
     PrivacyPolicyComponent,
     TermsComponent,
-    ImpressumComponent
+    ImpressumComponent,
+    AccessForbiddenComponent
   ],
   imports: [
     CommonModule,
