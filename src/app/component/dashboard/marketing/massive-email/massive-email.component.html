@@ -78,6 +78,7 @@
             <div>
               <div class="mt-4 end">
                 <button
+                  [disabled]="!draftName"
                   class="e-control e-btn e-lib e-primary e-flat"
                   (click)="saveEmailDraft()"
                 >

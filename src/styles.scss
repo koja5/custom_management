@@ -19614,3 +19614,15 @@ body {
   border-color: #ced4da;
   border-top-color: #ced4da !important;
 }
+
+.e-btn.e-flat.e-primary:disabled {
+  color: rgba(0, 0, 0, 0.38) !important;
+  background-color: #e0e0e0 !important;
+  opacity: 1 !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+.e-btn.e-flat.e-primary[disabled]:hover {
+  filter: none;
+}
