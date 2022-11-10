@@ -34,6 +34,7 @@ export class MassiveEmailComponent implements OnInit, FormGuardData {
   isDataSaved$: Subject<boolean> = new Subject<boolean>();
   showDialogExit: boolean = false
   selectedIndex: number;
+  public dialogOpened = false;
 
   constructor(
     private helpService: HelpService,
@@ -71,6 +72,8 @@ export class MassiveEmailComponent implements OnInit, FormGuardData {
   onDraftChange(emailDraft) {
     this.form.form.reset();
     this.draftName = "";
+    this.isDataSavedChange(true);
+    this.changeFormDirty(false);
     if(emailDraft.id !== 0) {
       this.editMode = true;
       this.packDraftData(emailDraft)
@@ -169,6 +172,8 @@ export class MassiveEmailComponent implements OnInit, FormGuardData {
         this.getEmailDrafts();
         this.saveDraft.close();
         this.editMode = true;
+        this.isDataSavedChange(true);
+        this.changeFormDirty(false);
         if (data) {
           this.helpService.successToastr(
             this.language.successTitle,
@@ -197,6 +202,8 @@ export class MassiveEmailComponent implements OnInit, FormGuardData {
         this.getEmailDrafts(true);
         this.selectedIndex = this.emailDrafts.length - 1;
         this.saveDraft.close();
+        this.isDataSavedChange(true);
+        this.changeFormDirty(false);
         this.editMode = true;
       });
     }
@@ -209,11 +216,11 @@ export class MassiveEmailComponent implements OnInit, FormGuardData {
     this.form.form.reset();
     this.editMode = false;
     if(!this.emailDrafts || !this.emailDrafts.length) {
-      this.emailDrafts.unshift({id: 0, draftName: this.language.addNewEmailDraft});
+      this.emailDrafts.unshift({id: 0, draftName: this.language.addNewEmailDraft || 'Add new email draft'});
       return;
     }
     if(this.emailDrafts[0].draftName !== this.language.addNewEmailDraft) {
-      this.emailDrafts.unshift({id: 0, draftName: this.language.addNewEmailDraft});
+      this.emailDrafts.unshift({id: 0, draftName: this.language.addNewEmailDraft || 'Add new email draft'});
     }
   }
 
@@ -224,6 +231,9 @@ export class MassiveEmailComponent implements OnInit, FormGuardData {
       this.editMode = false;
       this.selectedIndex = -1;
       this.draftName = "";
+      this.isDataSavedChange(true);
+      this.changeFormDirty(false);
+      
       if (data) {
         this.helpService.successToastr(
           this.language.successTitle,
@@ -256,5 +266,16 @@ export class MassiveEmailComponent implements OnInit, FormGuardData {
 
   setSelectedIndex(index: number): void {
     this.selectedIndex = index;
+  }
+
+  closeDeleteDialog(status: string): void {
+    if(status === 'yes') {
+      this.deleteEmailDraft();
+    }
+    this.dialogOpened = false;
+  }
+
+  openDeleteDialog(): void {
+    this.dialogOpened = true;
   }
 }
