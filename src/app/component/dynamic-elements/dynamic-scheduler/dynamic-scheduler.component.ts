@@ -3520,10 +3520,9 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
           args.cancel = true;
         } 
         else if (args.requestType === "eventChange") {
-          let evts = this.scheduleObj.getEvents(
-            this.eventTime.start,
-            this.eventTime.end
-          );
+          const startTime = this.eventTime.start ? this.eventTime.start : args.data.start;
+          const endTime = this.eventTime.end ? this.eventTime.end : args.data.end;
+          let evts = this.scheduleObj.getEvents(startTime, endTime);
           if (evts.length > 1 && this.type === this.userType.patient) {
             this.toastr.error(
               this.language.eventAlreadyExistsText,
