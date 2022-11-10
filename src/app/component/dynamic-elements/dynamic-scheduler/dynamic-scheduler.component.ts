@@ -3518,10 +3518,11 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
           }
 
           args.cancel = true;
-        } 
+        }
         else if (args.requestType === "eventChange") {
-          const startTime = this.eventTime.start ? this.eventTime.start : args.data.start;
-          const endTime = this.eventTime.end ? this.eventTime.end : args.data.end;
+          const eventData: any = args.data;
+          const startTime = this.eventTime.start ? this.eventTime.start : eventData.start;
+          const endTime = this.eventTime.end ? this.eventTime.end : eventData.end;
           let evts = this.scheduleObj.getEvents(startTime, endTime);
           if (evts.length > 1 && this.type === this.userType.patient) {
             this.toastr.error(
@@ -3536,7 +3537,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
             this.updateTask(args);
           }
           args.cancel = true;
-        } 
+        }
         else if (args.requestType === "eventRemove") {
           // this.deleteTask(args.deletedRecords[0]);
           const eventDetails: { [key: string]: Object } = this.scheduleObj
