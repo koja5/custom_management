@@ -111,7 +111,7 @@ export class MassiveSmsComponent implements OnInit, FormGuardData {
 
   submitEmitter(event) {
     this.allRecipients = null;
-    this.changeData = event;
+    this.changeData = this.helpService.removeZeroArrayFromObject(event);
     this.changeData.superadmin = this.helpService.getSuperadmin();
     this.changeData.countryCode =
       this.helpService.getLocalStorage("countryCode");

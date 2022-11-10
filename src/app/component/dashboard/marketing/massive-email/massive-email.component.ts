@@ -110,7 +110,7 @@ export class MassiveEmailComponent implements OnInit, FormGuardData {
   }
 
   submitEmitter(event) {
-    this.changeData = event;
+    this.changeData = this.helpService.removeZeroArrayFromObject(event);
     this.changeData.superadmin = this.helpService.getSuperadmin();
     this.changeData.mode = "mail";
     this.changeData.language = this.language;
