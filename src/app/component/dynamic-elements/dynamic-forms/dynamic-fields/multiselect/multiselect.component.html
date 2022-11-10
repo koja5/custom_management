@@ -1,5 +1,5 @@
 <div class="form-group" [ngClass]="config.width">
-  <label for="{{ config.name }}">  {{language[config.label] ? language[config.label] : config.label}}</label>
+  <label for="{{ config.name }}">  {{language[config.label] ? language[config.label] : config.label}}{{ config.required ? "(" + language.required + ")" : "" }}</label>
   <div *ngIf="data"
     [formGroup]="group"
     [ngClass]="{

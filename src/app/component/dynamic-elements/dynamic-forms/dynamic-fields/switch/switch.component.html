@@ -3,7 +3,7 @@
     <table class="size">
       <tr>
         <td class="pr-6">
-          {{ language[config.label] ? language[config.label] : config.label }}
+          {{ language[config.label] ? language[config.label] : config.label }}{{ config.required ? "(" + language.required + ")" : "" }}
         </td>
         <td class="pt-2">
           <ejs-switch [id]="config.name" name="{{config.name}}"
