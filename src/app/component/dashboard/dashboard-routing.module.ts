@@ -55,6 +55,7 @@ import { ChooseHolidayComponent } from "./parameters/choose-holiday/choose-holid
 import { FormGuard } from "src/app/service/form-guard/formGuard";
 import { RegisteredClinicsComponent } from "./administrator/registered-clinics/registered-clinics.component";
 import { RegisteredClinicDetailComponent } from "./administrator/registered-clinics/registered-clinic-detail/registered-clinic-detail.component";
+import { LicenceComponent } from "./licence/licence.component";
 
 const routes: Routes = [
   {
@@ -315,6 +316,10 @@ const routes: Routes = [
           { path: "faq/:id", component: ListFaqComponent },
         ],
       },
+      {
+        path: 'licence',
+        component: LicenceComponent
+      }
     ],
   },
 ];
