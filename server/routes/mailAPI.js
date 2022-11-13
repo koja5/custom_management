@@ -1207,6 +1207,11 @@ router.post("/confirmUserViaMacAddress", function (req, res) {
   });
 });
 router.post("/sendLastMinuteOfferMails", function (req, res){
+  var clientLink = process.env.link_client;
+  var clientLinkArray=clientLink.split("/");
+  clientLinkArray.pop();
+  clientLink = clientLinkArray.join("/")
+  console.log(clientLink);
   var lastMinuteOfferTemplate = fs.readFileSync(
     "./server/routes/templates/sendLastMinuteOfferMails.hjs",
     "utf-8"
@@ -1224,13 +1229,9 @@ router.post("/sendLastMinuteOfferMails", function (req, res){
             logger.log("error", err);
             res.json(false);
           }
+          
+
           rows.forEach(function (to, i, array) {
-            var mail = {};
-            var signatureAvailable = false;
-            mail = to;
-            if (mail.signatureAvailable) {
-              signatureAvailable = true;
-            }
             console.log(to);
             var mailOptions = {
               from: '"ClinicNode" support@app-production.eu',
@@ -1240,7 +1241,7 @@ router.post("/sendLastMinuteOfferMails", function (req, res){
                 firstName: to.shortname,
                 initialGreeting: req.body.initialGreeting,
                 introductoryMessageForFreeEvent: req.body.lastMinuteEMailMessage,
-                offerLink: req.body.link,
+                offerLink: clientLink+"/dashboard/home/customers/last-minute-event?"+req.body.link,
                 finalGreeting: req.body.finalGreeting,
                 viewOffer: req.body.viewLastMinuteOffer,
                 signature: req.body.signature,

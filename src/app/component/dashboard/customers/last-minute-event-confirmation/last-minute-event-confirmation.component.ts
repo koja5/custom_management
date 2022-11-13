@@ -43,8 +43,6 @@ export class LastMinuteEventConfirmationComponent implements OnInit {
     private helpService: HelpService) { }
 
   ngOnInit() {    
-    // http:/localhost:4200/dashboard/home/customers/last-minute-event?therapeuts=363&therapeuts=381&therapeuts=364&weekNumber=42&days=1&days=2&days=3&time=Wed%20Oct%2019%202022%2021:00:00%20GMT%2B0200%20(Central%20European%20Summer%20Time)
-    console.log(this.activatedRoute.queryParams);
     this.activatedRoute.queryParams.subscribe(params=>{
       const jString = JSON.stringify(params);
       const jObj=JSON.parse(jString);  
@@ -90,7 +88,11 @@ export class LastMinuteEventConfirmationComponent implements OnInit {
       this.startDate=lastMinuteOfferObject.startDate;
       this.endDate=lastMinuteOfferObject.endDate;
       this.dates=this.availableDates(this.startDate,this.endDate);
-      this.hours=lastMinuteOfferObject.time
+  
+      if(lastMinuteOfferObject.time instanceof Array)
+        this.hours=lastMinuteOfferObject.time;
+      else
+        this.hours.push(lastMinuteOfferObject.time);
     });
     
     this.usersService.getUsersInCompany(this.storeId, (val) => {

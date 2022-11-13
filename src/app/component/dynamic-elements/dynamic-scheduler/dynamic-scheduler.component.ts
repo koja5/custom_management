@@ -2507,12 +2507,9 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
             storeId: this.selectedStoreId
           } 
         });
-  
-        const firstPartUrl = url.toString().split("?")[0].substring(1);
         const encryptedUrl = this.encryptData(url.toString().split("?")[1]);
-  	    console.log(url);
         let sendMail={
-          link: firstPartUrl+"?"+encryptedUrl,
+          link: encryptedUrl,
           userId: patient.id,
           initialGreeting:this.language.initialGreeting,
           lastMinuteEMailSubject:this.language.lastMinuteEMailSubject,
@@ -2528,21 +2525,18 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
           copyRight:this.language.copyRight
         };
 
-        console.log(sendMail.link);
-        console.log(encryptedUrl);
-
         this.dynamicService.callApiPost("/api/sendLastMinuteOfferMails", sendMail)
           .subscribe((data) => {
-            console.log(data);
             this.helpService.successToastr(
               this.language.successExecutedActionTitle,
               this.language.successExecutedActionText
             );
           });
-        });
+        
+      });
 
-        //clear data
-        this.clearLastMinuteForm();
+      //clear data
+      this.clearLastMinuteForm();
     }
   }
 
@@ -2558,6 +2552,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     this.msTherapeuts.reset();
     this.msDays.reset();
     this.msLastMinuteTime.reset();
+    this.lastMinuteOfferSubmitted=false;
   }
 
   encryptData(data) {
