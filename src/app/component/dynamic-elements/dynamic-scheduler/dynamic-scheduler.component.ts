@@ -97,7 +97,7 @@ import * as timeZoneNames from "../../../../../node_modules/cldr-data/main/fr-CH
 import { PackLanguageService } from "src/app/service/pack-language.service";
 import { UserType } from "../../enum/user-type";
 import { AccountService } from "src/app/service/account.service";
-import { ComboBoxModule } from "@progress/kendo-angular-dropdowns";
+import { ComboBoxModule, MultiSelectComponent } from "@progress/kendo-angular-dropdowns";
 import { TypeOfEventAction } from "../../enum/typeOfEventAction";
 import { ActivatedRoute, Router, UrlSerializer } from "@angular/router";
 import { HolidayService } from "src/app/service/holiday.service";
@@ -1549,6 +1549,11 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
 
   private static secretKey = "YourSecretKeyForEncryption&Descryption";
 
+  @ViewChild("msPatients") public msPatients: MultiSelectComponent;
+  @ViewChild("msTherapeuts") public msTherapeuts: MultiSelectComponent;
+  @ViewChild("msDays") public msDays: MultiSelectComponent;
+  @ViewChild("msLastMinuteTime") public msLastMinuteTime: MultiSelectComponent;
+
   constructor(
     public service: TaskService,
     public customer: CustomersService,
@@ -2514,13 +2519,22 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
         });
 
         //clear data
-        this.patients.length=0;
-        this.therapeuts.length=0;
-        this.lastMinuteStartDate=new Date();
-        this.lastMinuteEndDate=new Date();
-        this.lastMinuteWeekDays.length=0;
-        this.lastMinuteHoursValue.length=0;
+        this.clearLastMinuteForm();
     }
+  }
+
+  private clearLastMinuteForm(){
+    this.patients=[];
+    this.therapeuts=[];
+    this.lastMinuteStartDate=new Date();
+    this.lastMinuteEndDate=new Date();
+    this.lastMinuteWeekDays=[];
+    this.lastMinuteHoursValue=[];
+
+    this.msPatients.reset();
+    this.msTherapeuts.reset();
+    this.msDays.reset();
+    this.msLastMinuteTime.reset();
   }
 
   encryptData(data) {

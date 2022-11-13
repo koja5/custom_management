@@ -966,8 +966,8 @@
                   <label style="line-height: 34px; margin: 0">{{ language.patients }}</label>
                 </div>
                 <div class="col-right">
-                  <kendo-multiselect [data]="customerUsers" [(ngModel)]="patients" 
-                    [valueField]="'id'" name="patientsInCompany"
+                  <kendo-multiselect #msPatients [data]="customerUsers" [(ngModel)]="patients" 
+                    [valueField]="'id'" name="msPatients"
                     [textField]="type !== userType.patient ? 'shortname' : 'alias_name'">
                   </kendo-multiselect>                  
                 </div>
@@ -990,9 +990,9 @@
                   <label style="line-height: 34px; margin: 0">{{ language.therapeuts }}</label>
                 </div>
                 <div class="col-right">
-                  <kendo-multiselect [data]="usersInCompany" [(ngModel)]="therapeuts" 
+                  <kendo-multiselect #msTherapeuts [data]="usersInCompany" [(ngModel)]="therapeuts" 
                     [textField]="type !== userType.patient ? 'shortname' : 'alias_name'" 
-                    [valueField]="'id'" name="therapeutsInCompany">
+                    [valueField]="'id'" name="msTherapeuts">
                   </kendo-multiselect>
                 </div>
               </div>
@@ -1027,8 +1027,8 @@
                   <label style="line-height: 34px; margin: 0">{{ language.days }}</label>
                 </div>
                 <div class="col-right">
-                    <kendo-multiselect [data]="weekDays" [textField]="'text'" [valueField]="'value'" [(ngModel)]="lastMinuteWeekDays"
-                      name="lastMinuteWeek">
+                    <kendo-multiselect #msDays [data]="weekDays" [textField]="'text'" [valueField]="'value'" [(ngModel)]="lastMinuteWeekDays"
+                      name="msDays">
                     </kendo-multiselect>
                 </div>
               </div>
@@ -1038,15 +1038,15 @@
                   <label style="line-height: 34px; margin: 0">{{ language.time }}</label>
                 </div>
                 <div class="col-right">
-                  <kendo-multiselect [data]="lastMinuteTimeSlot" [textField]="'Value'" [valueField]="'Value'" [(ngModel)]="lastMinuteHoursValue"
-                    name="lastMinuteWeek">
+                  <kendo-multiselect #msLastMinuteTime [data]="lastMinuteTimeSlot" [textField]="'Value'" [valueField]="'Value'" [(ngModel)]="lastMinuteHoursValue"
+                    name="msLastMinuteTime">
                   </kendo-multiselect>                  
                 </div>
               </div>  
               <div class="col-row">
                 <div class="col-left">
-                  <button kendoButton [primary]="true" class="form-button" (click)="sendLastMinuteOffer()">
-                    {{ language.clearLastMinuteOffer}}Clear
+                  <button kendoButton [primary]="true" class="form-button" (click)="clearLastMinuteForm()">
+                    {{ language.clearLastMinuteOffer}}
                   </button>
                 </div>
                 <div class="col-right">
