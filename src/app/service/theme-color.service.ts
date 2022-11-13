@@ -39,6 +39,11 @@ export class ThemeColorsService {
     if(data) {
       document.body.style.setProperty("--theme-color", data.color);
       document.body.style.setProperty("--header-color", data.color);
+      document.body.style.setProperty("--sidebar-font-color", data.fontColor);
+      document.body.style.setProperty("--sidebar-selected-color", data.selectedColor);
+      document.body.style.setProperty("--sidebar-group-color", data.groupColor);
+      document.body.style.setProperty("--navbar-background-color", data.navbarColor);
+      document.body.style.setProperty("--navbar-font-color", data.navbarFontColor);
     }
   }
 

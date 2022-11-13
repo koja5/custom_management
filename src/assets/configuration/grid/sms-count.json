@@ -117,7 +117,8 @@
       "width": "col-md-12",
       "name": "count",
       "label": "count",
-      "field": "count"
+      "field": "count",
+      "required": true
     },
     {
       "type": "button",

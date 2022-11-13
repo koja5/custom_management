@@ -12,20 +12,82 @@
 
 <div
   *ngIf="!loading"
-  class="content-wrapper w-100"
+  class="d-flex flex-column justify-content-center align-items-center"
   style="height: 100%; overflow: hidden"
 >
-  <div class="theme-colors-container">
-    <span> {{ language?.changeThemeColor }} </span>
+  <div class="theme-colors-row d-flex justify-content-between align-items-center mb-5">
+    <span class="mr-3"> {{ language?.changeThemeColor }} </span>
     <input
       ejs-colorpicker
       type="color"
       id="colorpicker"
-      [value]="colorValue"
-      (change)="change($event)"
+      [value]="sidebarBackgroundColorValue"
+      (change)="changeColor($event, colorTypes.sidebarBackgroundColor)"
     />
-    <button kendoButton [primary]="true" type="button" (click)="saveTheme()">
+  </div>
+
+  <div class="theme-colors-row d-flex justify-content-between align-items-center mb-5">
+    <span class="mr-3"> {{ language?.changeSidebarFontColor }} </span>
+    <input
+      ejs-colorpicker
+      type="color"
+      id="colorpicker"
+      [value]="sidebarFontColorValue"
+      (change)="changeColor($event, colorTypes.sidebarFontColor)"
+    />
+  </div>
+
+  <div class="theme-colors-row d-flex justify-content-between align-items-center mb-5">
+    <span class="mr-3"> {{ language?.changeSidebarGroupColor }} </span>
+    <input
+      ejs-colorpicker
+      type="color"
+      id="colorpicker"
+      [value]="sidebarGroupColorValue"
+      (change)="changeColor($event, colorTypes.sidebarGroupColor)"
+    />
+  </div>
+
+  <div class="theme-colors-row d-flex justify-content-between align-items-center mb-5">
+    <span class="mr-3"> {{ language?.changeSidebarSelectedColor }} </span>
+    <input
+      ejs-colorpicker
+      type="color"
+      id="colorpicker"
+      [value]="sidebarSelectedColorValue"
+      (change)="changeColor($event, colorTypes.sidebarSelectedColor)"
+    />
+  </div>
+
+  <div class="theme-colors-row d-flex justify-content-between align-items-center mb-5">
+    <span class="mr-3"> {{ language?.changeNavbarBackgroundColor }} </span>
+    <input
+      ejs-colorpicker
+      type="color"
+      id="colorpicker"
+      [value]="navbarBackgroundColorValue"
+      (change)="changeColor($event, colorTypes.navbarBackgroundColor)"
+    />
+  </div>
+
+  <div class="theme-colors-row d-flex justify-content-between align-items-center mb-5">
+    <span class="mr-3"> {{ language?.changeNavbarFontColor }} </span>
+    <input
+      ejs-colorpicker
+      type="color"    
+      id="colorpicker"
+      [value]="navbarFontColorValue"
+      (change)="changeColor($event, colorTypes.navbarFontColor)"
+    />
+  </div>
+  
+  <div class="theme-colors-row d-flex justify-content-end align-items-center mb-5">
+    <button kendoButton [primary]="true" type="button" (click)="resetToDefaultColors()" class="pt-3 mr-3">
+      Reset to default
+    </button>
+    <button kendoButton [primary]="true" type="button" (click)="saveTheme()" class="pt-3">
       Save
     </button>
   </div>
+  
 </div>

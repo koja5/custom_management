@@ -34,6 +34,7 @@ export class MassiveSmsComponent implements OnInit, FormGuardData {
   isDataSaved$: Subject<boolean> = new Subject<boolean>();
   showDialogExit: boolean = false
   selectedIndex: number;
+  public dialogOpened = false;
 
   constructor(
     private helpService: HelpService,
@@ -72,6 +73,8 @@ export class MassiveSmsComponent implements OnInit, FormGuardData {
   onDraftChange(smsDraft) {
     this.form.form.reset();
     this.draftName = "";
+    this.isDataSavedChange(true);
+    this.changeFormDirty(false);
     if(smsDraft.id !== 0) {
       this.editMode = true;
       this.packDraftData(smsDraft)
@@ -189,6 +192,8 @@ export class MassiveSmsComponent implements OnInit, FormGuardData {
         this.getSmsDrafts();
         this.saveDraft.close();
         this.editMode = true;
+        this.isDataSavedChange(true);
+        this.changeFormDirty(false);
         if (data) {
           this.helpService.successToastr(
             this.language.successTitle,
@@ -217,6 +222,8 @@ export class MassiveSmsComponent implements OnInit, FormGuardData {
         this.getSmsDrafts(true);
         this.selectedIndex = this.smsDrafts.length - 1;
         this.saveDraft.close();
+        this.isDataSavedChange(true);
+        this.changeFormDirty(false);
         this.editMode = true;
       });
     }
@@ -229,11 +236,11 @@ export class MassiveSmsComponent implements OnInit, FormGuardData {
     this.form.form.reset();
     this.editMode = false;
     if(!this.smsDrafts || !this.smsDrafts.length) {
-      this.smsDrafts.unshift({id: 0, draftName: this.language.addNewSmsDraft});
+      this.smsDrafts.unshift({id: 0, draftName: this.language.addNewSmsDraft || 'Add new sms draft'});
       return;
     }
     if(this.smsDrafts[0].draftName !== this.language.addNewSmsDraft) {
-      this.smsDrafts.unshift({id: 0, draftName: this.language.addNewSmsDraft});
+      this.smsDrafts.unshift({id: 0, draftName: this.language.addNewSmsDraft || 'Add new sms draft'});
     }
   } 
 
@@ -244,6 +251,8 @@ export class MassiveSmsComponent implements OnInit, FormGuardData {
       this.editMode = false;
       this.selectedIndex = -1;
       this.draftName = "";
+      this.isDataSavedChange(true);
+      this.changeFormDirty(false);
       if (data) {
         this.helpService.successToastr(
           this.language.successTitle,
@@ -276,5 +285,16 @@ export class MassiveSmsComponent implements OnInit, FormGuardData {
 
   setSelectedIndex(index: number): void {
     this.selectedIndex = index;
+  }
+
+  closeDeleteDialog(status: string): void {
+    if(status === 'yes') {
+      this.deleteSmsDraft();
+    }
+    this.dialogOpened = false;
+  }
+
+  openDeleteDialog(): void {
+    this.dialogOpened = true;
   }
 }

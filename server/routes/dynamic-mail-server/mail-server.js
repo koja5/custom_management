@@ -19,10 +19,17 @@ var fs = require("fs");
 });*/
 
 var smtpTransport = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  tls: {
+    rejectUnauthorized: false,
+  },
+  debug: true,
+  ssl: true,
   auth: {
-    user: "akojicpmf@gmail.com",
-    pass: "vrbovac12345",
+    user: "clinicnode2022@gmail.com", // real email address
+    pass: "vfuvxgwdfrvestvd", // app password for clinicnode2022@gmail.com email
   },
 });
 
@@ -54,13 +61,11 @@ router.post("/sendMail", function (req, res) {
     html: compiledTemplate.render(req.body.fields),
   };
 
-  console.log(mailOptions);
-
   smtpTransport.sendMail(mailOptions, function (error, response) {
     if (error) {
-      res.end(false);
+      // res.end(false);
     } else {
-      res.end(true);
+      // res.end(true);
     }
   });
 });

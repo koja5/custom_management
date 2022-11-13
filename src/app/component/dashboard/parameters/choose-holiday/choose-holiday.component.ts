@@ -9,7 +9,6 @@ import { IndividualConfig, ToastrService } from 'ngx-toastr';
 import { DatePickerComponent } from '@progress/kendo-angular-dateinputs';
 import { HolidayTemplate } from 'src/app/models/holiday-template.model';
 import { DateService } from 'src/app/service/date.service';
-import { UserModel } from 'src/app/models/user-model';
 import { checkIfInputValid } from "../../../../shared/utils";
 import { NgForm } from '@angular/forms';
 
@@ -245,7 +244,9 @@ export class ChooseHolidayComponent implements OnInit {
           this.language.adminSuccessCreateTitle,
           this.language.adminSuccessCreateText
         );
+
         this.clinicHolidays.push(this.currentHoliday);
+        this.clinicHolidays.sort(function (a, b) { return a.StartTime.getTime() - b.StartTime.getTime() })
       }
       else {
         this.displayErrorMessage(

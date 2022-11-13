@@ -483,24 +483,25 @@
       </div>
       <div class="col-md-6 col-xs-12 b-r">
         <kendo-textbox-container floatingLabel="{{ language.birthday }}">
-          <kendo-datepicker
-            [format]="'dd.MM.yyyy'"
-            class="col-xs-12 noPadding"
+          <kendo-datepicker 
+            format="dd.MM.yyyy" 
+            class="col-xs-12 noPadding" 
             name="birthday"
-            [(ngModel)]="data.birthday"
-            birthday.value=""
-          >
+            [placeholder]="language.birthday"
+            [ngModel]="data && checkIsValidDate(data.birthday) ? data.birthday : null"
+            (valueChange)="checkIsValidDate($event) && (data.birthday=$event)">
           </kendo-datepicker>
         </kendo-textbox-container>
       </div>
       <div class="col-md-6 col-xs-12 b-r">
         <kendo-textbox-container floatingLabel="{{ language.sincecompany }}">
           <kendo-datepicker
-            [format]="'dd.MM.yyyy'"
-            class="col-xs-12 noPadding"
-            name="sincecompany"
-            [(ngModel)]="data.incompanysince"
-            incompanysince.value=""
+              format="dd.MM.yyyy"
+              class="col-xs-12 noPadding" 
+              name="sincecompany"
+              [placeholder]="language.sincecompany"
+              [ngModel]="data && checkIsValidDate(data.incompanysince) ? data.incompanysince : null"
+              (valueChange)="checkIsValidDate($event) && (data.incompanysince=$event)"
           ></kendo-datepicker>
         </kendo-textbox-container>
       </div>

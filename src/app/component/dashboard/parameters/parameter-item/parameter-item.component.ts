@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Inject, HostListener, Output, EventEmitter } from "@angular/core";
 import { State, process } from "@progress/kendo-data-query";
-import { FormGroup, FormControl } from "@angular/forms";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
 import { GridDataResult, RowArgs } from "@progress/kendo-angular-grid";
 import { map } from "rxjs/operators";
@@ -207,21 +207,21 @@ export class ParameterItemComponent implements OnInit {
 
       this.formGroup = new FormGroup({
         id: new FormControl(),
-        title: new FormControl(),
+        title: new FormControl('', Validators.required),
         titleOnInvoice: new FormControl(),
         printOnInvoice: new FormControl(false),
-        sequence: new FormControl(),
+        sequence: new FormControl('', Validators.required),
         unit: new FormControl(),
         description: new FormControl(),
-        art_nr: new FormControl(),
+        art_nr: new FormControl('', Validators.required),
         net_price: new FormControl(),
         gross_price: new FormControl(),
         category: new FormControl(),
       });
     } else {
       this.formGroup = new FormGroup({
-        title: new FormControl(),
-        sequence: new FormControl(),
+        title: new FormControl('', Validators.required),
+        sequence: new FormControl('', Validators.required),
         superadmin: new FormControl(),
       });
     }
@@ -258,13 +258,13 @@ export class ParameterItemComponent implements OnInit {
 
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
-        title: new FormControl(dataItem.title),
+        title: new FormControl(dataItem.title, Validators.required),
         titleOnInvoice: new FormControl(dataItem.titleOnInvoice),
         printOnInvoice: new FormControl(dataItem.printOnInvoice),
-        sequence: new FormControl(dataItem.sequence),
+        sequence: new FormControl(dataItem.sequence, Validators.required),
         unit: new FormControl(dataItem.unit),
         description: new FormControl(dataItem.description),
-        art_nr: new FormControl(dataItem.art_nr),
+        art_nr: new FormControl(dataItem.art_nr, Validators.required),
         net_price: new FormControl(dataItem.net_price),
         gross_price: new FormControl(dataItem.gross_price),
         category: new FormControl(dataItem.category),
@@ -273,8 +273,8 @@ export class ParameterItemComponent implements OnInit {
     } else {
       this.formGroup = new FormGroup({
         id: new FormControl(dataItem.id),
-        title: new FormControl(dataItem.title),
-        sequence: new FormControl(dataItem.sequence),
+        title: new FormControl(dataItem.title, Validators.required),
+        sequence: new FormControl(dataItem.sequence, Validators.required),
       });
     }
 

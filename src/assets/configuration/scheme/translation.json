@@ -182,6 +182,12 @@
             "date_redeemed": {
                 "type": "string"
             },
+            "vaucherPurchasedBy": {
+                "type": "string"
+            },
+            "vaucherRedeemedBy": {
+                "type": "string"
+            },
             "customerBuys": {
                 "type": "string"
             },
@@ -318,10 +324,10 @@
                 "type": "string"
             },
             "eventAlreadyExistsTitle": {
-              "type": "string"
+                "type": "string"
             },
             "eventAlreadyExistsText": {
-              "type": "string"
+                "type": "string"
             },
             "monday": {
                 "type": "string"
@@ -471,6 +477,12 @@
                 "type": "string"
             },
             "confirmEventMove": {
+                "type": "string"
+            },
+            "noStoreSelectedIndicatorTitle": {
+                "type": "string"
+            },
+            "noStoreSelectedIndicatorText": {
                 "type": "string"
             },
             "refreshEventToolbar": {
@@ -707,6 +719,9 @@
             "smsDraftDeletedSuccessfully": {
                 "type": "string"
             },
+            "saveChanges": {
+                "type": "string"
+            },
             "addHoliday": {
                 "type": "string"
             },
@@ -741,6 +756,9 @@
                 "type": "string"
             },
             "headerMenuSMSTemplateSettings": {
+                "type": "string"
+            },
+            "licence": {
                 "type": "string"
             },
             "reservations": {
@@ -2206,6 +2224,21 @@
             "changeThemeColor": {
                 "type": "string"
             },
+            "changeSidebarFontColor": {
+                "type": "string"
+            },
+            "changeSidebarGroupColor": {
+                "type": "string"
+            },
+            "changeSidebarSelectedColor": {
+                "type": "string"
+            },
+            "changeNavbarBackgroundColor": {
+                "type": "string"
+            },
+            "changeNavbarFontColor": {
+                "type": "string"
+            },
             "themeColorsMenu": {
                 "type": "string"
             },
@@ -2326,6 +2359,9 @@
             "invalidFormat": {
                 "type": "string"
             },
+            "allRequiredFieldsMustBeFilledOut": {
+                "type": "string"
+            },
             "unsubscribeMessage": {
                 "type": "string"
             },
@@ -2342,6 +2378,33 @@
                 "type": "string"
             },
             "goBack": {
+                "type": "string"
+            },
+            "accountExpiredCode": {
+                "type": "string"
+            },
+            "accountExpiredTitle": {
+                "type": "string"
+            },
+            "accountExpiredTextOne": {
+                "type": "string"
+            },
+            "accountExpiredTextTwo": {
+                "type": "string"
+            },
+            "yourLicence": {
+                "type": "string"
+            },
+            "licenceExpiration": {
+                "type": "string"
+            },
+            "daysLeft": {
+                "type": "string"
+            },
+            "upgradeLicence": {
+                "type": "string"
+            },
+            "renewLicence": {
                 "type": "string"
             }
         }
@@ -2470,6 +2533,9 @@
                         },
                         {
                             "key": "across"
+                        },
+                        {
+                            "key": "goBack"
                         }
                     ]
                 }
@@ -2704,6 +2770,12 @@
                         },
                         {
                             "key": "date_redeemed"
+                        },
+                        {
+                            "key": "vaucherPurchasedBy"
+                        },
+                        {
+                            "key": "vaucherRedeemedBy"
                         }
                     ]
                 },
@@ -3193,6 +3265,13 @@
                         {
                             "key":"lastMinute"
                         },
+                        {},
+                        {
+                            "key": "noStoreSelectedIndicatorTitle"
+                        },
+                        {
+                            "key": "noStoreSelectedIndicatorText"
+                        },
                         {
                             "key":"patients"
                         },
@@ -3536,6 +3615,22 @@
                         },
                         {
                             "key": "headerMenuSMSTemplateSettings"
+                        }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "licence"
+                        },
+                        {
+                        },
+                        {
+                        },
+                        {
                         }
                     ]
                 }
@@ -6744,6 +6839,9 @@
                         },
                         {
                             "key": "deleteDraft"
+                        },
+                        {
+                            "key": "saveChanges"
                         }
                     ]
                 },
@@ -6800,7 +6898,7 @@
                             "key": "addNewSmsDraft"
                         }
                     ]
-                }, 
+                },
                 {
                     "type": "div",
                     "display": "flex",
@@ -6817,7 +6915,6 @@
                         }
                     ]
                 }
-
             ]
         },
         {
@@ -7099,6 +7196,21 @@
                     "items": [
                         {
                             "key": "changeThemeColor"
+                        },
+                        {
+                            "key": "changeSidebarFontColor"
+                        },
+                        {
+                            "key": "changeSidebarGroupColor"
+                        },
+                        {
+                            "key": "changeSidebarSelectedColor"
+                        },
+                        {
+                            "key": "changeNavbarBackgroundColor"
+                        },
+                        {
+                            "key": "changeNavbarFontColor"
                         }
                     ]
                 },
@@ -7136,6 +7248,9 @@
                         },
                         {
                             "key": "invalidFormat"
+                        },
+                        {
+                            "key": "allRequiredFieldsMustBeFilledOut"
                         }
                     ]
                 }
@@ -7166,9 +7281,63 @@
                         },
                         {
                             "key": "unsubscribeButton"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "section",
+            "title": "Access forbiden",
+            "expandable": true,
+            "expanded": false,
+            "items": [
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "accountExpiredCode"
                         },
                         {
-                            "key": "goBack"
+                            "key": "accountExpiredTitle"
+                        },
+                        {
+                            "key": "accountExpiredTextOne"
+                        },
+                        {
+                            "key": "accountExpiredTextTwo"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "section",
+            "title": "Licence",
+            "expandable": true,
+            "expanded": false,
+            "items": [
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "yourLicence"
+                        },
+                        {
+                            "key": "licenceExpiration"
+                        },
+                        {
+                            "key": "daysLeft"
+                        },
+                        {
+                            "key": "upgradeLicence"
+                        },
+                        {
+                            "key": "renewLicence"
                         }
                     ]
                 }

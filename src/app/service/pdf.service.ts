@@ -28,6 +28,114 @@ export class PDFService {
     }
   }
 
+  createVaucherPDF(language: any, vaucher: any, clinic: any, customer: any) {
+    let definition = {
+      header: {
+        columns: [
+          {
+            text: 'Datum:' + " " + this.dateService.currentDateFormatted,
+            style: "documentHeaderRight",
+            width: "*",
+          },
+        ],
+      },
+      content: [
+        {
+          columns: [
+            [
+              {
+                text: "\n" + language.vaucher,
+                style: "vaucherTitle",
+                width: "*",
+              },
+              {
+                columns: [
+                  {
+                    text: "\n",
+                    style: "vaucherSubTitle",
+                    width: "*",
+                  },
+                  {
+                    text: "\n",
+                    style: "vaucherSubValue",
+                    width: "*",
+                  },
+                ],
+              },
+              {
+                columns: [
+                  {
+                    text: language.mailClinic + "\n \n",
+                    style: "vaucherTitleLeft",
+                  },
+                  {
+                    text: language.customer + "\n \n",
+                    style: "vaucherTitleRight",
+                  },
+                ],
+              },
+              {
+                columns: [
+                  {
+                    text: clinic.shortname + "\n" + clinic.street + "\n" + clinic.zipcode + ' ' + clinic.place,
+                    style: "vaucherAddressLeft",
+                  },
+                  {
+                    text:
+                     vaucher.customer_consumer_name + "\n" 
+                     + (customer ? customer.street : '') + "\n"
+                    + (customer ? (customer.zipcode ? customer.zipcode : customer.streetnumber) + ' ' + (customer.place ? customer.place : customer.city) : '') + "\n",
+                    style: "vaucherAddressRight",
+                  },
+                ],
+              },
+              "\n\n",
+        // Items
+        {
+          layout: {
+            // code from lightHorizontalLines:
+            hLineWidth: function (i, node) {
+              if (i === 0) {
+                return 0;
+              }
+              return i === node.table.headerRows ? 2 : 1;
+            },
+            vLineWidth: function () {
+              return 0;
+            },
+            hLineColor: function (i) {
+              return "black";
+            },
+            paddingLeft: function (i) {
+              return i === 0 ? 0 : 8;
+            },
+            paddingRight: function (i, node) {
+              return i === node.table.widths.length - 1 ? 0 : 8;
+            },
+          },
+          table: {
+            // headers are automatically repeated if the table spans over multiple pages
+            // you can declare how many rows should be treated as headers
+            headerRows: 1,
+            widths: ["20%", "20%", "20%", "20%", "20%"],
+
+            body: this.createItemsTableVaucher(language, vaucher),
+          }, // table
+          //  layout: 'lightHorizontalLines'
+        },
+            ],
+          ],
+        
+        },
+      ],
+      styles: this.getVaucherStyles(),
+      defaultStyle: {
+        columnGap: 20,
+      },
+    }
+    return definition;
+  }
+
   getPDFDefinition(superadminProfile, store, customerUser, therapyPricesData, isPriceIncluded, invoicePrefixID, selectedLanguage?) {
     const invoiceLanguage = selectedLanguage ? selectedLanguage : this.language;
 
@@ -388,6 +496,222 @@ export class PDFService {
         alignment: "center",
       },
     };
+  }
+
+  getVaucherStyles() {
+    return {
+      // Document Header
+      documentHeaderLeft: {
+        fontSize: 11,
+        // margin: [left, top, right, bottom]
+        margin: [45, 25, 0, 0],
+        alignment: "left",
+        color: 'gray'
+      },
+      documentHeaderRight: {
+        fontSize: 11,
+        margin: [0, 25, 45, 0],
+        alignment: "right",
+        color: 'gray'
+      },
+      // Document Footer
+      documentFooter: {
+        fontSize: 11,
+        alignment: "center",
+        color: 'gray'
+      },
+      // vaucher Title
+      vaucherTitle: {
+        fontSize: 28,
+        bold: false,
+        underline: true,
+        alignment: "left",
+        margin: [0, 0, 0, 15],
+      },
+      // vaucher Details
+      vaucherSubTitle: {
+        fontSize: 12,
+        alignment: "right",
+      },
+      vaucherSubValue: {
+        fontSize: 12,
+        alignment: "right",
+      },
+      // vaucher Headers
+      vaucherTitleLeft: {
+        fontSize: 14,
+        bold: true,
+        alignment: "left",
+        margin: [0, 20, 0, 5],
+      },
+
+      // vaucher Headers
+      vaucherTitleRight: {
+        fontSize: 14,
+        bold: true,
+        alignment: "right",
+        margin: [0, 20, 0, 5],
+      },
+      // vaucher Details
+      vaucherDetailsLeft: {
+        alignment: "left",
+      },
+      vaucherDetailsRight: {
+        alignment: "right",
+      },
+      vaucherAddressLeft: {
+        alignment: "left",
+      },
+      vaucherAddressRight: {
+        alignment: "right",
+      },
+      // Items Header
+      itemsHeader: {
+        margin: [0, 5, 0, 5],
+        bold: true,
+      },
+      // Item Title
+      itemTitle: {
+        bold: false,
+      },
+      itemSubTitle: {
+        italics: true,
+        fontSize: 11,
+      },
+      itemDate: {
+        margin: [0, 5, 0, 5],
+        alignment: "left",
+      },
+      itemNumber: {
+        margin: [0, 5, 0, 5],
+        alignment: "center",
+      },
+      itemGrossPrice: {
+        margin: [0, 5, 0, 5],
+        alignment: "center",
+      },
+      itemTotal: {
+        margin: [0, 5, 0, 5],
+        bold: true,
+        alignment: "center",
+      },
+
+      // Items Footer (Subtotal, Total, Tax, etc)
+      itemsFooterSubTitle: {
+        margin: [0, 5, 0, 5],
+        bold: true,
+        fontSize: 13,
+        alignment: "right",
+      },
+      itemsFooterSubValue: {
+        margin: [0, 5, 0, 5],
+        bold: true,
+        fontSize: 13,
+        alignment: "center",
+      },
+      itemsFooterTotalTitle: {
+        margin: [0, 5, 0, 5],
+        bold: true,
+        fontSize: 16,
+        alignment: "right",
+      },
+
+      itemsFooterVATValue: {
+        margin: [0, 5, 0, 5],
+        bold: true,
+        fontSize: 13,
+        alignment: "center",
+      },
+      itemsFooterTotalValue: {
+        margin: [0, 5, 0, 5],
+        bold: true,
+        fontSize: 13,
+        alignment: "center",
+      },
+      notesTitle: {
+        fontSize: 14,
+        bold: true,
+        margin: [0, 50, 0, 3],
+      },
+      notesText: {
+        fontSize: 12,
+      },
+      notesTextBold: {
+        fontSize: 12,
+        bold: true
+      },
+      center: {
+        alignment: "center",
+      },
+    };
+  }
+
+  public createItemsTableVaucher(language, vaucher) {
+    let date = new Date(vaucher.date).toISOString()
+    let dateRedeemed;
+    if(vaucher.date_redeemed) {
+      dateRedeemed = new Date(vaucher.date_redeemed).toISOString()
+    }
+    
+
+    const arr = [
+      // Table Header
+      [
+        {
+          text: 'Datum',
+          style: ["itemsHeader", "left"],
+        },
+        {
+          text: language.amount,
+          style: "itemsHeader",
+        },
+        {
+          text: language.date_redeemed,
+          style: ["itemsHeader", "center"],
+        },
+        {
+          text: language.vaucherPurchasedBy,
+          style: ["itemsHeader", "center"],
+        },
+        {
+          text: language.vaucherRedeemedBy,
+          style: ["itemsHeader", "center"],
+        },
+        // {
+        //   text: 'user',
+        //   style: "itemsHeader",
+        // },
+        // {
+        //   text: 'remark',
+        //   style: ["itemsHeader", "center"],
+        // }
+      ]
+    ]
+
+    let obj = [
+      {
+        text: this.dateService.formatDate(date),
+        style: "itemDate",
+      },
+      {
+        text: vaucher.amount,
+        style: "itemDate",
+      },
+      {
+        text: dateRedeemed ? this.dateService.formatDate(dateRedeemed) : '',
+        style: "itemDate",
+      },
+      {
+        text: vaucher.user_name,
+        style: "itemDate",
+      },
+      {
+        text: vaucher.customer_consumer_name,
+        style: "itemDate",
+      },
+  ]
+    arr.push(obj);
+    return arr;
   }
 
 

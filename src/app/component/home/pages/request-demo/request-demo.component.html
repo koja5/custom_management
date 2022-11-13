@@ -74,22 +74,6 @@
                       <option *ngFor="let item of language.requestDemoDropdownNumbers" value="{{ item }}">
                         {{ item }}
                       </option>
-                      <!-- <option value="0-50">
-                        {{ language.from }} 0 {{ language.to }} 50
-                      </option>
-                      <option value="51-100">
-                        {{ language.from }} 51 {{ language.to }} 100
-                      </option>
-                      <option value="101-250">
-                        {{ language.from }} 101 {{ language.to }} 250
-                      </option>
-                      <option value="251-350">
-                        {{ language.from }} 251 {{ language.to }} 350
-                      </option>
-                      <option value="351-500">
-                        {{ language.from }} 351 {{ language.to }} 500
-                      </option>
-                      <option value="500-~">{{ language.across }} 500</option> -->
                     </select>
                   </div>
                 </div>
@@ -109,12 +93,6 @@
                     </select>
                   </div>
                 </div>
-
-                <!-- <div class="col-sm-12">
-                  <div class="input-group mb-3">
-                    <app-dynamic-payment-form></app-dynamic-payment-form>
-                  </div>
-                </div> -->
                 <div class="col-xs-12">
                   <div class="input-group mb-3">
                     <textarea class="form-control" placeholder="{{ language.requestSectionFormMessage }}"
@@ -122,7 +100,7 @@
                   </div>
                 </div>
                 <div class="col-xs-12 text-center">
-                  <button (click)="openPaymentForm()" class="btn btn-primary mt-4 d-block w-100">
+                  <button (click)="sendRequestForDemoAccount()" class="btn btn-primary mt-4 d-block w-100">
                     {{ language.requestSectionFormSendRequestButton }}
                   </button>
                 </div>
@@ -155,7 +133,7 @@
   <!--footer section end-->
 </div>
 
-<modal #paymentForm modalClass="modal-lg top-margin loggerModal adminModal" [closeOnOutsideClick]="false">
+<!-- <modal #paymentForm modalClass="modal-lg top-margin loggerModal adminModal" [closeOnOutsideClick]="false">
   <modal-header>
     <h3 *ngIf="language !== undefined">{{ language?.lastPaymentStep }}</h3>
   </modal-header>
@@ -205,4 +183,4 @@
     </button>
     <button kendoButton (click)="showDialog = false; paymentForm.open()">{{language.no}}</button>
   </kendo-dialog-actions>
-</kendo-dialog>
+</kendo-dialog> -->

@@ -115,6 +115,7 @@ import { RegisteredClinicDetailComponent } from './administrator/registered-clin
 import { SharedComponentsModule } from 'src/app/shared/shared-components.module';
 import { LastMinuteEventConfirmationComponent } from './customers/last-minute-event-confirmation/last-minute-event-confirmation.component';
 import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
+import { LicenceComponent } from './licence/licence.component';
 
 @NgModule({
   declarations: [
@@ -176,7 +177,8 @@ import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
     RegisteredClinicsComponent,
     RegisteredClinicDetailComponent,
     MassiveUnsubscribeComponent,
-    LastMinuteEventConfirmationComponent
+    LastMinuteEventConfirmationComponent,
+    LicenceComponent
   ],
   imports: [
     CommonModule,

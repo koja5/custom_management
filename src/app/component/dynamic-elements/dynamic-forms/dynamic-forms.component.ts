@@ -122,6 +122,13 @@ export class DynamicFormsComponent implements OnInit {
   handleSubmit(event: Event) {
     event.preventDefault();
     event.stopPropagation();
+    if(this.form.invalid) {
+      this.helpService.errorToastr(
+        this.language.allRequiredFieldsMustBeFilledOut,
+        ""
+      );
+      return;
+    }
     this.submit.emit(this.value);
   }
 

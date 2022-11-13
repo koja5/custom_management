@@ -322,7 +322,7 @@
                 [dateFormat]="dateFormatScheduler" [group]="value ? group : []" [showWeekNumber]="true"
                 [eventSettings]="eventSettings" [allowKeyboardInteraction]="
                   type === userType.patient ? false : true
-                " (renderCell)="onRenderCell($event)" (actionBegin)="onActionBegin($event)"
+                " (renderCell)="onRenderCell($event)" (actionBegin)="onActionBegin($event)" (popupClose)="onPopupClose($event)"
                 (popupOpen)="onPopupOpen($event)" (drag)="onItemDrag($event)" (resizeStop)="onItemDrag($event)">
                 <ng-template #dateHeaderTemplate let-data>
                   <div class="date-text" title=" {{ getDateHeaderText(data.date) }}">
@@ -414,29 +414,19 @@
                   <e-view option="WorkWeek">
                     <ng-template #eventTemplate let-data>
                       <div class="event-details" [style.background]="data.color">
-                        <div *ngIf="
-                            type !== userType.patient ||
-                            (type === userType.patient &&
-                              data.customer_id === id)
-                          ">
+                        <div *ngIf="type !== userType.patient || (type === userType.patient && data.customer_id === id)">
                           <div class="eventName">
                             {{ data.title.split("+")[0] }}
                           </div>
-                          <div *ngIf="
-                              data.title &&
-                              data.title.split('+')[2] &&
-                              data.title.split('+')[2] !== 'null' &&
-                              data.title.split('+')[2] !== 'undefined'
-                            " class="eventTitle">
+                          <div *ngIf="data.title && data.title.split('+')[2] && data.title.split('+')[2] !== 'undefined' && data.title.split('+')[2] !== 'null'" class="eventTitle">
                             {{ data.title.split("+")[2] }}
                           </div>
-                          <div *ngIf="data.title && data.title.split('+')[1]" class="eventTitle">
+                          <div *ngIf="data.title && data.title.split('+')[1] && data.title.split('+')[1] !== 'undefined' && data.title.split('+')[1] !== 'null'" class="eventTitle">
                             {{ data.title.split("+")[1] }}
                           </div>
                         </div>
-                        <div class="reserved-title" *ngIf="
-                            type === userType.patient && data.customer_id !== id
-                          ">
+                        <div class="reserved-title" 
+                          *ngIf="type === userType.patient && data.customer_id !== id">
                           {{ language.reserved }}
                         </div>
                       </div>
@@ -610,8 +600,8 @@
                       </div>
 
                       <div style="width: 100%">
-                        <kendo-textbox-container floatingLabel="{{ languageUser.patient }}">
-                          <kendo-combobox #fieldName1 id="customerUsers" [suggest]="true" [data]="customerUsers"
+                        <kendo-textbox-container floatingLabel="{{ languageUser.patient }}({{ language.required }})">
+                          <kendo-combobox required #fieldName1 id="customerUsers" [suggest]="true" [data]="customerUsers"
                             [textField]="'shortname'" [valueField]="'id'" (valueChange)="onValueChange($event)"
                             [(ngModel)]="customerUser" [filterable]="true" (filterChange)="searchCustomer($event)"
                             [loading]="customerLoading">
@@ -628,7 +618,8 @@
                             </ng-template>
                           </kendo-combobox>
                         </kendo-textbox-container>
-                      </div>
+                        <mat-error *ngIf="checkIfInputValueValid(customerUser?.id, 'customerUsers')">{{ language?.thisFieldIsRequired }}</mat-error>
+                      </div> 
                     </div>
                     <div class="k-form-field">
                       <kendo-textbox-container floatingLabel="{{ languageUser.complaintValue }}">
@@ -698,40 +689,44 @@
                     </div>
                     <div *ngIf="eventTime" class="k-form-field k-datetime-picker-wrapper">
                       <div class="col-sm-8">
-                        <kendo-textbox-container floatingLabel="{{ language.start }}">
-                          <kendo-datepicker [format]="'dd.MM.yyyy'" class="dateWidth" [(ngModel)]="eventTime.start"
+                        <kendo-textbox-container floatingLabel="{{ language.start }}({{ language.required }})">
+                          <kendo-datepicker id="start" [format]="'dd.MM.yyyy'" class="dateWidth" [(ngModel)]="eventTime.start" required
                             [disabled]="
                               type === userType.patient ? true : false
                             ">
                           </kendo-datepicker>
                         </kendo-textbox-container>
+                        <mat-error *ngIf="checkIfInputValid('start')">{{ language?.thisFieldIsRequired }}</mat-error>
                       </div>
                       <div class="col-sm-4">
-                        <kendo-textbox-container floatingLabel="{{ language.startTime }}">
-                          <kendo-timepicker [(ngModel)]="eventTime.start" [disabled]="
+                        <kendo-textbox-container floatingLabel="{{ language.startTime }}({{ language.required }})">
+                          <kendo-timepicker id="startTime" [(ngModel)]="eventTime.start" [disabled]="
                               type === userType.patient ? true : false
-                            ">
+                            " required>
                           </kendo-timepicker>
                         </kendo-textbox-container>
+                        <mat-error *ngIf="checkIfInputValid('startTime')">{{ language?.thisFieldIsRequired }}</mat-error>
                       </div>
                     </div>
                     <div *ngIf="eventTime" class="k-form-field k-datetime-picker-wrapper">
                       <div class="col-sm-8">
-                        <kendo-textbox-container floatingLabel="{{ language.end }}">
-                          <kendo-datepicker [format]="'dd.MM.yyyy'" class="dateWidth" [(ngModel)]="eventTime.end"
+                        <kendo-textbox-container floatingLabel="{{ language.end }}({{ language.required }})">
+                          <kendo-datepicker id="end" [format]="'dd.MM.yyyy'" class="dateWidth" [(ngModel)]="eventTime.end" required
                             [disabled]="
                               type === userType.patient ? true : false
                             ">
                           </kendo-datepicker>
                         </kendo-textbox-container>
+                        <mat-error *ngIf="checkIfInputValid('end')">{{ language?.thisFieldIsRequired }}</mat-error>
                       </div>
                       <div class="col-sm-4">
-                        <kendo-textbox-container floatingLabel="{{ language.endTime }}">
-                          <kendo-timepicker [(ngModel)]="eventTime.end" [disabled]="
+                        <kendo-textbox-container floatingLabel="{{ language.endTime }}({{ language.required }})">
+                          <kendo-timepicker id="endTime" [(ngModel)]="eventTime.end" [disabled]="
                               type === userType.patient ? true : false
-                            ">
+                            " required>
                           </kendo-timepicker>
                         </kendo-textbox-container>
+                        <mat-error *ngIf="checkIfInputValid('endTime')">{{ language?.thisFieldIsRequired }}</mat-error>
                       </div>
                     </div>
                     <div class="k-form-field">

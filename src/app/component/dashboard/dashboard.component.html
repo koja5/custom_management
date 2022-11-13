@@ -110,7 +110,15 @@
                     routerLink="/dashboard/home/help"
                     (click)="showHideProfile()"
                   >
-                    <i class="fa fa-question-circle"></i> Help
+                    <i class="fa fa-question-circle"></i> {{language.helpTitle}}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    routerLink="/dashboard/home/licence"
+                    (click)="showHideProfile()"
+                  >
+                    <i class="fa fa-id-card"></i> {{language.licence}}
                   </a>
                 </li>
                 <li class="divider"></li>
@@ -294,11 +302,10 @@
                                 <a
                                   (click)="returnActiveNode('massive_sms')"
                                   routerLink="/dashboard/home/massive-sms"
-                                  ><i class="fa fa-paper-plane"></i
-                                  ><span class="navigation-link">{{
-                                    language["massiveSms"]
-                                  }}</span></a
-                                >
+                                  >
+                                  <i class="fa fa-paper-plane"></i><span class="navigation-link"></span>
+                                  {{ language["massiveSms"] }}
+                                </a>
                               </li>
 
                               <li
@@ -307,11 +314,11 @@
                                 <a
                                   (click)="returnActiveNode('massive_email')"
                                   routerLink="/dashboard/home/massive-email"
-                                  ><i class="fa fa-envelope"></i
-                                  ><span class="navigation-link">{{
-                                    language["massiveEmail"]
-                                  }}</span></a
-                                >
+                                  >
+                                  <i class="fa fa-envelope"></i
+                                  ><span class="navigation-link"></span>
+                                  {{ language["massiveEmail"] }}
+                                </a>
                               </li>
                             </ul>
                           </li>
@@ -397,9 +404,8 @@
                                   routerLink="/dashboard/home/complaint"
                                   (click)="returnActiveNode('complaint')"
                                   ><i class="fa fa-list-alt"></i>
-                                  <span class="navigation-link">{{
-                                    language?.complaintMenu
-                                  }}</span>
+                                  <span class="navigation-link"></span>
+                                    {{ language?.complaintMenu }}
                                 </a>
                               </li>
 
@@ -601,9 +607,8 @@
                                   routerLink="/dashboard/home/define-holidays"
                                 >
                                   <i class="fa fa-calendar-plus-o"></i>
-                                  <span class="navigation-link">
-                                    {{ language["chooseHoliday"] }}</span
-                                  >
+                                  <span class="navigation-link"></span>
+                                  {{ language["chooseHoliday"] }}
                                 </a>
                               </li>
                               <li class="pl-4 pt-2 pb-2">
@@ -907,11 +912,11 @@
                             class="{{ activeGroup[0] }}"
                           >
                             <a (click)="collapse(0)" class="has-arrow"
-                              ><i class="fa fa-cogs"></i
-                              ><span class="navigation-link">{{
-                                language?.systemSettingsTitle
-                              }}</span></a
-                            >
+                              ><i class="fa fa-cogs"></i>
+                              <span class="navigation-link">
+                                {{ language?.systemSettingsTitle }}
+                              </span> 
+                            </a>
                             <ul
                               *ngIf="user && user.id === 4"
                               class="sub-menu mm-collapse {{
@@ -925,10 +930,9 @@
                                   (click)="returnActiveNode('translation')"
                                   routerLink="/dashboard/home/translation"
                                   ><i class="fa fa-tasks"></i
-                                  ><span class="navigation-link">{{
-                                    language["translation"]
-                                  }}</span></a
-                                >
+                                  ><span class="navigation-link"></span>
+                                  {{ language["translation"] }}
+                                </a>
                               </li>
 
                               <li class="{{ selectedNodeModel['todo'] }}">
@@ -936,10 +940,9 @@
                                   (click)="returnActiveNode('todo')"
                                   routerLink="/dashboard/home/todo"
                                   ><i class="fa fa-clipboard"></i
-                                  ><span class="navigation-link">{{
-                                    language["todo"]
-                                  }}</span></a
-                                >
+                                  ><span class="navigation-link"></span>
+                                  {{ language["todo"] }}
+                                </a>
                               </li>
 
                               <li class="{{ selectedNodeModel['area_code'] }}">
@@ -947,10 +950,9 @@
                                   (click)="returnActiveNode('area_code')"
                                   routerLink="/dashboard/home/area-code"
                                   ><i class="fa fa-volume-control-phone"></i
-                                  ><span class="navigation-link">{{
-                                    language["areaCode"]
-                                  }}</span></a
-                                >
+                                  ><span class="navigation-link"></span>
+                                  {{ language["areaCode"] }}
+                                </a>
                               </li>
 
                               <li
@@ -962,10 +964,9 @@
                                   (click)="returnActiveNode('template_account')"
                                   routerLink="/dashboard/home/template-account"
                                   ><i class="fa fa-users"></i
-                                  ><span class="navigation-link">{{
-                                    language["templateAccount"]
-                                  }}</span></a
-                                >
+                                  ><span class="navigation-link"></span>
+                                  {{ language["templateAccount"] }}
+                                </a>
                               </li>
 
                               <li class="{{ selectedNodeModel['sms_count'] }}">
@@ -973,10 +974,9 @@
                                   (click)="returnActiveNode('sms_count')"
                                   routerLink="/dashboard/home/sms-count"
                                   ><i class="fa fa-comment"></i
-                                  ><span class="navigation-link">{{
-                                    language["smsCount"]
-                                  }}</span></a
-                                >
+                                  ><span class="navigation-link"></span>
+                                  {{ language["smsCount"] }}
+                                </a>
                               </li>
 
                               <li
@@ -986,10 +986,9 @@
                                   (click)="returnActiveNode('add_holiday')"
                                   routerLink="/dashboard/home/add-holiday"
                                   ><i class="fa fa-calendar-plus-o"></i
-                                  ><span class="navigation-link">{{
-                                    language["addHoliday"]
-                                  }}</span></a
-                                >
+                                  ><span class="navigation-link"></span>
+                                  {{ language["addHoliday"] }}
+                                </a>
                               </li>
 
                               <li
@@ -999,10 +998,9 @@
                                   (click)="returnActiveNode('manage_clinics')"
                                   routerLink="/dashboard/home/registered-clinics"
                                   ><i class="fa fa-users"></i
-                                  ><span class="navigation-link">{{
-                                    language?.manageClinics
-                                  }}</span></a
-                                >
+                                  ><span class="navigation-link"></span>
+                                  {{ language?.manageClinics }}
+                                </a>
                               </li>
                             </ul>
                           </li>
@@ -1032,10 +1030,9 @@
                                   (click)="returnActiveNode('systemLogErrors')"
                                   routerLink="/dashboard/home/system-logs/error"
                                   ><i class="fa fa-bug"></i
-                                  ><span class="navigation-link">{{
-                                    language?.systemLogErrors
-                                  }}</span></a
-                                >
+                                  ><span class="navigation-link"></span>
+                                  {{ language?.systemLogErrors }}
+                                </a>
                               </li>
 
                               <li
@@ -1045,10 +1042,9 @@
                                   (click)="returnActiveNode('systemLogInfo')"
                                   routerLink="/dashboard/home/system-logs/info"
                                   ><i class="fa fa-info-circle"></i
-                                  ><span class="navigation-link">{{
-                                    language?.systemLogInfo
-                                  }}</span></a
-                                >
+                                  ><span class="navigation-link"></span>
+                                  {{ language?.systemLogInfo }}
+                                </a>
                               </li>
 
                               <li
@@ -1058,10 +1054,9 @@
                                   (click)="returnActiveNode('systemLogWarn')"
                                   routerLink="/dashboard/home/system-logs/warn"
                                   ><i class="fa fa-exclamation-triangle"></i
-                                  ><span class="navigation-link">{{
-                                    language?.systemLogWarn
-                                  }}</span></a
-                                >
+                                  ><span class="navigation-link"></span>
+                                    {{ language?.systemLogWarn }}
+                                </a>
                               </li>
                             </ul>
                           </li>

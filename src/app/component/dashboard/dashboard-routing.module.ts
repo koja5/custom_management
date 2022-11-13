@@ -56,6 +56,7 @@ import { FormGuard } from "src/app/service/form-guard/formGuard";
 import { RegisteredClinicsComponent } from "./administrator/registered-clinics/registered-clinics.component";
 import { RegisteredClinicDetailComponent } from "./administrator/registered-clinics/registered-clinic-detail/registered-clinic-detail.component";
 import { LastMinuteEventConfirmationComponent } from "./customers/last-minute-event-confirmation/last-minute-event-confirmation.component";
+import { LicenceComponent } from "./licence/licence.component";
 
 const routes: Routes = [
   {
@@ -322,6 +323,10 @@ const routes: Routes = [
           { path: "faq/:id", component: ListFaqComponent },
         ],
       },
+      {
+        path: 'licence',
+        component: LicenceComponent
+      }
     ],
   },
 ];

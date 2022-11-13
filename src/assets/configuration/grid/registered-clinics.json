@@ -218,7 +218,7 @@
         "name": "firstname",
         "label": "First name",
         "field": "firstname",
-        "required": false
+        "required": true
       },
       {
         "type": "textbox",
@@ -226,7 +226,7 @@
         "name": "lastname",
         "label": "Last name",
         "field": "lastname",
-        "required": false
+        "required": true
       },
       {
         "type": "textbox",
@@ -242,7 +242,7 @@
         "name": "street",
         "label": "Street",
         "field": "street",
-        "required": false
+        "required": true
       },
       {
         "type": "textbox",
@@ -258,7 +258,7 @@
         "name": "place",
         "label": "City",
         "field": "place",
-        "required": false
+        "required": true
       },
       {
         "type": "textbox",

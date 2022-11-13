@@ -75,6 +75,7 @@ export class DynamicGridComponent implements OnInit {
   public showColumnPicker = false;
   public columns: string[] = [];
   public hiddenColumns: string[] = [];
+  public type = 'Reservations';
 
   constructor(
     private service: DynamicService,
@@ -486,6 +487,13 @@ export class DynamicGridComponent implements OnInit {
   public onOutputHiddenColumns(columns) {
     this.hiddenColumns = columns;
     this.grid.hideColumns(this.hiddenColumns);
+    let shownColumns = [];
+    shownColumns = this.columns.map(column => {
+      if (!columns.includes(column)) {
+        return column;
+      }
+    })
+    this.grid.showColumns(shownColumns);
   }
 }
 

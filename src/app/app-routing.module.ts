@@ -11,6 +11,7 @@ import { ImpressumComponent } from "./component/templates/impressum/impressum.co
 import { PrivacyPolicyComponent } from "./component/templates/privacy-policy/privacy-policy.component";
 import { TermsComponent } from "./component/templates/terms/terms.component";
 import { UnsubscribeGuard } from './service/guards/unsubscribe.guard';
+import { AccessForbiddenComponent } from './component/templates/access-forbidden/access-forbidden.component';
 
 const routes: Routes = [
   {
@@ -48,6 +49,10 @@ const routes: Routes = [
     path: "unsubscribe/:userEmail",
     canActivate: [UnsubscribeGuard],
     component: MassiveUnsubscribeComponent,
+  },
+  {
+    path: "access-forbiden",
+    component: AccessForbiddenComponent
   },
   {
     path: "**",

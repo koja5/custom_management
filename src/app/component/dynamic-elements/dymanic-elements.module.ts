@@ -78,6 +78,7 @@ import { ModalModule } from "ngx-modal";
 import { DynamicTextFormComponent } from "./dynamic-text-form/dynamic-text-form.component";
 import { HomedModule } from "../home/routing-module/home.module";
 import { SharedComponentsModule } from "src/app/shared/shared-components.module";
+import { MatFormFieldModule, MatInputModule } from "@angular/material";
 
 @NgModule({
   declarations: [
@@ -136,7 +137,9 @@ import { SharedComponentsModule } from "src/app/shared/shared-components.module"
     SharedEmailModule,
     ModalModule,
     HomedModule,
-    SharedComponentsModule
+    SharedComponentsModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   providers: [
     EditService,

@@ -13318,10 +13318,14 @@ tr.group:hover {
 
 :root {
   --sidebar-color: #ffffff;
-  --sidebar-font-color: #4680ff;
+  --sidebar-font-color: #e3e3e3;
+  --sidebar-selected-color: #01a9e9;
+  --sidebar-group-color: #8f96ad;
   --logo-color: #222c3c;
   --header-color: #091467;
   --theme-color: #091467;
+  --navbar-background-color: #ffffff;
+  --navbar-font-color: #333;
 }
 
 /*
@@ -17950,8 +17954,10 @@ kendo-window {
 }
 
 .e-schedule .e-vertical-view .e-day-wrapper .e-appointment {
-  border-right: 3px solid #fff !important;
+  border: none !important;
   background: none !important;
+  padding-top: 2px;
+  padding-left: 2px;
   /*width: 100% !important;*/
 }
 
@@ -19607,4 +19613,16 @@ body {
 .k-multiselect.k-state-invalid .k-multiselect-wrap, .k-state-invalid.k-dropdowntree .k-multiselect-wrap, .k-multiselect.ng-invalid.ng-touched .k-multiselect-wrap, .ng-invalid.ng-touched.k-dropdowntree .k-multiselect-wrap, .k-multiselect.ng-invalid.ng-dirty .k-multiselect-wrap, .ng-invalid.ng-dirty.k-dropdowntree .k-multiselect-wrap {
   border-color: #ced4da;
   border-top-color: #ced4da !important;
+}
+
+.e-btn.e-flat.e-primary:disabled {
+  color: rgba(0, 0, 0, 0.38) !important;
+  background-color: #e0e0e0 !important;
+  opacity: 1 !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+.e-btn.e-flat.e-primary[disabled]:hover {
+  filter: none;
 }

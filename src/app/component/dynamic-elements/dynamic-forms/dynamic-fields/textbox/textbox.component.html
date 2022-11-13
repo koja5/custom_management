@@ -21,8 +21,8 @@
     <label class="e-float-text e-label-top">
       {{
         language[config.label] ? language[config.label] : config.label
-      }}</label
-    >
+      }}{{ config.required ? "(" + language.required + ")" : "" }}
+    </label>
   </div>
   <mat-error *ngIf="checkIfInputValid(config.name)">{{ language?.thisFieldIsRequired }}</mat-error>
 </div>
