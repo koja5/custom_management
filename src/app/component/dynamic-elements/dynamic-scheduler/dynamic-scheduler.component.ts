@@ -1539,13 +1539,16 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   public modalConfirmEventMove = false;
   public mobileEventChange: any;
 
+  public lastMinuteWeekDays:Object[]=WEEK_DAYS;
   public patients: any = [];
   public therapeuts:any= [];
-  public lastMinuteWeekDays: any=[];
+  public selectedLastMinuteWeekDays: any=[];
   public lastMinuteStartDate: Date=new Date();
   public lastMinuteEndDate: Date=new Date();
+  public days=(new Date()).getDay();
   public lastMinute:any;
   public lastMinuteHoursValue: any=[];
+  public lastMinuteOfferSubmitted = false;
 
   private static secretKey = "YourSecretKeyForEncryption&Descryption";
 
@@ -1553,7 +1556,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   @ViewChild("msTherapeuts") public msTherapeuts: MultiSelectComponent;
   @ViewChild("msDays") public msDays: MultiSelectComponent;
   @ViewChild("msLastMinuteTime") public msLastMinuteTime: MultiSelectComponent;
-
+  
   constructor(
     public service: TaskService,
     public customer: CustomersService,
@@ -1579,7 +1582,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     private dynamicService: DynamicService,
     private datePipe: DatePipe
   ) { }
-
+  
   ngOnInit() {
     this.initializationConfig();
     this.helpService.setDefaultBrowserTabTitle();
@@ -1587,6 +1590,25 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     this.loadHolidays();
     this.initData();
     this.loadCustomers();
+
+    this.lastMinuteWeekDays=this.weekDays.filter((item: any)=>{
+        return item.value==new Date().getDay();     
+    });
+    
+    console.log(this.lastMinuteWeekDays); 
+  }
+
+  checkAvailableDate(startDate, endDate){    
+    for(var arr=new Set(),dt=new Date(startDate); dt<=new Date(endDate); dt.setDate(dt.getDate()+1)){
+      arr.add(dt.getDay());
+    }
+
+    const daysArray = Array.from(arr);
+
+    this.lastMinuteWeekDays=this.weekDays.filter((item: any)=>{
+      return daysArray.includes(item.value);
+    })
+
   }
 
   ngOnDestroy(): void {
@@ -2463,8 +2485,9 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   }
 
   sendLastMinuteOffer(){
-    
-    if(this.patients.length==0 || this.selectedStoreId == undefined || this.therapeuts.length==0 || this.lastMinuteWeekDays.length==0 || this.lastMinuteHoursValue==0)
+    this.lastMinuteOfferSubmitted=true;
+
+    if(this.patients.length==0 || this.selectedStoreId == undefined || this.therapeuts.length==0 || this.selectedLastMinuteWeekDays.length==0 || this.lastMinuteHoursValue==0)
     {
       this.helpService.errorToastr(
         this.language.errorExecutedActionTitle,
@@ -2479,7 +2502,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
             therapeuts: this.therapeuts.map(({id})=>id),
             startDate: this.datePipe.transform(this.lastMinuteStartDate,"MM/dd/yyyy"),
             endDate: this.datePipe.transform(this.lastMinuteEndDate,"MM/dd/yyyy"),
-            days: this.lastMinuteWeekDays.map(({value})=>value),
+            days: this.selectedLastMinuteWeekDays.map(({value})=>value),
             time: this.lastMinuteHoursValue.map(({Value})=>Value),
             storeId: this.selectedStoreId
           } 
@@ -2528,7 +2551,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     this.therapeuts=[];
     this.lastMinuteStartDate=new Date();
     this.lastMinuteEndDate=new Date();
-    this.lastMinuteWeekDays=[];
+    this.selectedLastMinuteWeekDays=[];
     this.lastMinuteHoursValue=[];
 
     this.msPatients.reset();
