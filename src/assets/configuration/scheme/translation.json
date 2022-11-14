@@ -722,6 +722,9 @@
             "saveChanges": {
                 "type": "string"
             },
+            "saveAsNewDraft": {
+                "type": "string"
+            },
             "addHoliday": {
                 "type": "string"
             },
@@ -6752,6 +6755,9 @@
                         },
                         {
                             "key": "saveChanges"
+                        },
+                        {
+                            "key": "saveAsNewDraft"
                         }
                     ]
                 },

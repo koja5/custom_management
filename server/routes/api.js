@@ -6100,8 +6100,35 @@ function getSqlQueryMultiSelect(body) {
     question += " and ";
   }
   if (body.place) {
-    question = "c.city = '" + body.place + "'";
+    if(body.place.length < 2) {
+      if (question) {
+        
+        question += " and c.city = '" + body.place[0] + "'";
+      } else {
+        question += " c.city = '" + body.place[0] + "'";
+      }
+    }
+    else {
+      body.place.forEach((item, index) => {
+        if(item !== 0) {
+          if (question) {
+            if(index === 0) {
+              question += " and (c.city = '" + item + "'";
+            }
+            else if(index === body.place.length - 1) {
+              question += " or c.city = '" + item + "'" + ")";
+            }
+            else {
+              question += " or c.city = '" + item + "'";
+            }
+          } else {
+            question += " (c.city = '" + item + "'";
+          }
+        }
+      })
+    }
   }
+  
   if (body.male && body.female) {
     var male = "'male'";
     var female = "'female'";

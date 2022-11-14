@@ -15,6 +15,7 @@ export class MultiselectComponent implements OnInit {
   config: FieldConfig;
   group: FormGroup;
   public language: any;
+  public selectedValues: string[] = [];
 
   public data: any;
 
@@ -36,8 +37,7 @@ export class MultiselectComponent implements OnInit {
   }
 
   initialization() {
-    if (this.config.request.type === "POST") {
-    } else {
+    if (!this.config.allowCustom && this.config.request.type === "GET") {
       this.getApiRequest();
     }
   }
@@ -75,4 +75,9 @@ export class MultiselectComponent implements OnInit {
   }
 
   onFiltering(event) {}
+
+  onValueChange(event) {
+    this.selectedValues = event;
+  }
+
 }

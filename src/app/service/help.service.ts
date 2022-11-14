@@ -377,7 +377,7 @@ export class HelpService {
     return semicolonSeparatedString;
   }
 
-  multiSelectStringToArray(string): number[] {
+  multiSelectStringToArrayNumber(string): number[] {
     let multiSelectArrayToString;
     if (string.split(";") !== undefined) {
       multiSelectArrayToString = string
@@ -389,11 +389,22 @@ export class HelpService {
     return multiSelectArrayToString
   }
 
+  multiSelectStringToArrayString(string): string[] {
+    let multiSelectArrayToString;
+    if (string.split(";") !== undefined) {
+      multiSelectArrayToString = string
+        .split(";")
+    } else {
+      multiSelectArrayToString = string;
+    }
+    return multiSelectArrayToString
+  }
+
   prepareDraft(formValues, draftName, draftType) {
     return {
       ...formValues,
       draftName: draftName ? draftName : "",
-      place: formValues.place ? formValues.place : "",
+      place: this.multiSelectArrayToString(formValues.place),
       male: formValues.male ? formValues.male : false,
       female: formValues.female ? formValues.female : false,
       excludeCustomersWithEvents: formValues.excludeCustomersWithEvents ? formValues.excludeCustomersWithEvents : false,

@@ -19626,3 +19626,7 @@ body {
 .e-btn.e-flat.e-primary[disabled]:hover {
   filter: none;
 }
+
+.k-list-container .k-nodata {
+  min-height: 0px;
+}

@@ -1,6 +1,6 @@
 <div class="form-group" [ngClass]="config.width">
   <label for="{{ config.name }}">  {{language[config.label] ? language[config.label] : config.label}}{{ config.required ? "(" + language.required + ")" : "" }}</label>
-  <div *ngIf="data"
+  <div
     [formGroup]="group"
     [ngClass]="{
       'e-error':
@@ -8,17 +8,35 @@
     }"
     style="margin-top: 0px !important"
   >
-    <kendo-multiselect
-      [required]="config.required"
-      [id]="config.name"
-      [data]="data"
-      [textField]="config.field.text"
-      [valueField]="config.field.value"
-      [valuePrimitive]="true"
-      [placeholder]="config.placeholder ? config.placeholder : ''"
-      (filtering)="onFiltering($event)"
-      [formControlName]="config.name"
-    ></kendo-multiselect>
+    <ng-container *ngIf="!config.allowCustom">
+      <kendo-multiselect
+        [required]="config.required"
+        [id]="config.name"
+        [data]="data"
+        [textField]="config.field.text"
+        [valueField]="config.field.value"
+        [valuePrimitive]="true"
+        [placeholder]="config.placeholder ? config.placeholder : ''"
+        (filtering)="onFiltering($event)"
+        [formControlName]="config.name"
+      ></kendo-multiselect>
+    </ng-container>
+    <ng-container *ngIf="config.allowCustom">
+      <kendo-multiselect
+        [required]="config.required"
+        [id]="config.name"
+        [data]="data"
+        [value]="selectedValues"
+        [placeholder]="config.placeholder ? config.placeholder : ''"
+        (filtering)="onFiltering($event)"
+        [formControlName]="config.name"
+        [allowCustom]="config.allowCustom"
+        (valueChange)="onValueChange($event)"
+      >
+        <ng-template kendoMultiSelectNoDataTemplate>
+        </ng-template>
+      </kendo-multiselect>
+    </ng-container>
   </div>
   <mat-error *ngIf="checkIfInputValid(config.name)">{{ language?.thisFieldIsRequired }}</mat-error>
 </div>
