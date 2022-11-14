@@ -414,7 +414,21 @@ export class HelpService {
       doctor: this.multiSelectArrayToString(formValues.doctor),
       store: this.multiSelectArrayToString(formValues.store),
       superadmin: this.getSuperadmin(),
-      type: draftType
-    }
+      type: draftType,
+    };
+  }
+
+  removeZeroArrayFromObject(object) {
+    const objectKeys = Object.keys(object);
+    objectKeys.forEach((key) => {
+      if (
+        Array.isArray(object[key]) &&
+        ((object[key].length === 1 && object[key][0] === 0) ||
+          object[key].length === 0)
+      ) {
+        delete object[key];
+      }
+    });
+    return object;
   }
 }
