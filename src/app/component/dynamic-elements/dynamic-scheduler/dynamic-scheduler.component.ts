@@ -1533,9 +1533,26 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     );
     if(editorHeaderTitleElement) {
       if(editorHeaderTitleElement.innerHTML === "New Event") {
-        editorHeaderTitleElement.innerHTML = this.language.successUpdateTitle;
+        editorHeaderTitleElement.innerHTML = this.language.newEventTitle;
       } else if (editorHeaderTitleElement.innerHTML === "Edit Event") {
-        editorHeaderTitleElement.innerHTML = this.language.successUpdateTitle;
+        editorHeaderTitleElement.innerHTML = this.language.editEventTitle;
+      }
+    }
+    let editorFooter = document.querySelector(
+      "#_dialog_wrapper > .e-footer-content"
+    );
+    if(editorFooter) {
+      let deleteBtn = editorFooter.querySelector("button.e-event-delete");
+      let cancelBtn = editorFooter.querySelector("button.e-event-cancel");
+      let saveBtn = editorFooter.querySelector("button.e-event-save");
+      if(deleteBtn) {
+        deleteBtn.innerHTML = this.language.delete;
+      }
+      if(cancelBtn) {
+        cancelBtn.innerHTML = this.language.cancel;
+      }
+      if(saveBtn) {
+        saveBtn.innerHTML = this.language.save;
       }
     }
   }
