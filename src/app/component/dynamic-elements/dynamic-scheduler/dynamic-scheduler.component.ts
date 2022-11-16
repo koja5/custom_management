@@ -241,7 +241,6 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   changedInvoiceID: any;
   checkIfInputValid = checkIfInputValid;
   checkIfInputValueValid = checkIfInputValueValid;
-  noStoreSelectedToastrId: number;
 
   public generateEvents(): Object[] {
     const eventData: Object[] = [];
@@ -1500,21 +1499,6 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
 
   private initData() {
     this.initializationData();
-    if (!this.selectedStoreId) {
-      this.displayInfoMessageEmptyCalendar();
-    }
-  }
-
-  private displayInfoMessageEmptyCalendar() {
-    this.noStoreSelectedToastrId = this.toastr.info(
-      this.language.noStoreSelectedIndicatorText,
-      this.language.noStoreSelectedIndicatorTitle,
-      {
-        timeOut: 0,
-        extendedTimeOut: 0,
-        closeButton: true,
-      }
-    ).toastId;
   }
 
   public loadUser(): void {
@@ -2573,9 +2557,6 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
           )
         );
       }
-      if (this.noStoreSelectedToastrId) {
-        this.toastr.clear(this.noStoreSelectedToastrId);
-      }
       this.sharedCalendarResources = this.value;
       this.getTaskForSelectedUsers(this.value);
       this.getUserInCompany(event);
@@ -2583,9 +2564,6 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     } else {
       this.value = null;
       if (event !== undefined) {
-        if (this.noStoreSelectedToastrId) {
-          this.toastr.clear(this.noStoreSelectedToastrId);
-        }
         this.service
           .getTasksForStore(event, this.id, this.type)
           .subscribe((data) => {
@@ -3119,9 +3097,6 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     this.value = null;
     this.allEvents = [];
     this.sharedCalendarResources = null;
-    if (!this.selectedStoreId) {
-      this.displayInfoMessageEmptyCalendar();
-    }
   }
 
   public createFormGroup(args): FormGroup {

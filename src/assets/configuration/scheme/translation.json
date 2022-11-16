@@ -479,9 +479,6 @@
             "confirmEventMove": {
                 "type": "string"
             },
-            "noStoreSelectedIndicatorTitle": {
-                "type": "string"
-            },
             "noStoreSelectedIndicatorText": {
                 "type": "string"
             },
@@ -3224,9 +3221,6 @@
                         },
                         {
                             "key": "confirmEventMove"
-                        },
-                        {
-                            "key": "noStoreSelectedIndicatorTitle"
                         },
                         {
                             "key": "noStoreSelectedIndicatorText"
