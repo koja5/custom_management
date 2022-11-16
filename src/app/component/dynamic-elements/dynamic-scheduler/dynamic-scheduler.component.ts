@@ -1094,6 +1094,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
 
   onPopupOpen(args): void {
     console.log(args);
+    this.updateEventModalLanguage();
     if (
       (!this.checkConditionForEvent(args) &&
         this.type === this.userType.patient) ||
@@ -1524,6 +1525,19 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
         console.log(this.adminUser);
       }
     });
+  }
+
+  private updateEventModalLanguage() {
+    let editorHeaderTitleElement = document.querySelector(
+      "#_dialog_wrapper > #_dialog_wrapper_dialog-header > #_dialog_wrapper_title > .e-title-text"
+    );
+    if(editorHeaderTitleElement) {
+      if(editorHeaderTitleElement.innerHTML === "New Event") {
+        editorHeaderTitleElement.innerHTML = this.language.successUpdateTitle;
+      } else if (editorHeaderTitleElement.innerHTML === "Edit Event") {
+        editorHeaderTitleElement.innerHTML = this.language.successUpdateTitle;
+      }
+    }
   }
 
   // load holidays defined by clinic and holidays defined by selected clinic template (if there is some)
@@ -3497,7 +3511,6 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   onActionBegin(args: ActionEventArgs) {
     console.log(args);
     console.log(window.innerWidth);
-
     if (
       window.innerWidth > 992 ||
       this.eventMoveConfirm ||
