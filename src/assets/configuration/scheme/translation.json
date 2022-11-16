@@ -485,6 +485,12 @@
             "noStoreSelectedIndicatorText": {
                 "type": "string"
             },
+            "newEventTitle": {
+                "type": "string"
+            },
+            "editEventTitle": {
+                "type": "string"
+            },
             "refreshEventToolbar": {
                 "type": "string"
             },
@@ -3224,6 +3230,19 @@
                         },
                         {
                             "key": "noStoreSelectedIndicatorText"
+                        }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "newEventTitle"
+                        },
+                        {
+                            "key": "editEventTitle"
                         }
                     ]
                 }
