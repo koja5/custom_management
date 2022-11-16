@@ -1,0 +1,23 @@
+<div class="settings-container">
+  <h3 class="center">{{ language?.mailMultipleRecepient }}</h3>
+  <div *ngIf="loading" style="height: 80vh">
+    <div class="spinner loading"></div>
+  </div>
+  <app-dynamic-forms
+    *ngIf="!loading"
+    [config]="configField"
+    (submit)="submitEmitter($event)"
+    #form="dynamicForm"
+    [showDialogExit]="showDialogExit"
+    (isDataSaved)="isDataSavedChange($event)"
+    (isFormDirtyChange)="changeFormDirty($event)"
+    (showDialogExitChange)="changeShowDialogExit($event)"
+  >
+  </app-dynamic-forms>
+  <app-dynamic-confirm-dialog
+    [showDialog]="showDialog"
+    [title]="language?.accountConfirmDialogTitle"
+    [question]="language?.accountConfirmDialogQuestion"
+    (sendEmitter)="receiveConfirm($event)"
+  ></app-dynamic-confirm-dialog>
+</div>

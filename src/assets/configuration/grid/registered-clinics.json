@@ -46,7 +46,8 @@
       "Edit",
       "Delete",
       "Print",
-      "Search"
+      "Search",
+      { "text": "Send message to mail", "tooltipText": "Used to send email to clients", "id": "Mail" }
     ],
     "editSettings": {
       "allowEditing": true,
@@ -96,6 +97,14 @@
       }
     },
     "columns": [
+      {
+        "title": "",
+        "width": 40,
+        "filterable": false,
+        "type": "checkbox",
+        "class": "text-align-center",
+        "field": "checkbox"
+      },
       {
         "title": "ID",
         "width": 60,

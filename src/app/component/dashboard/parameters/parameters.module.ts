@@ -28,9 +28,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
 };
 import { SharedComponentsModule } from "src/app/shared/shared-components.module";
+import { MailMultipleRecepientComponent } from './mail-parameters/mail-multiple-recepient/mail-multiple-recepient.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [MailMultipleRecepientComponent],
   imports: [
     CommonModule,
     ParametersRouting,
