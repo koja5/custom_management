@@ -416,17 +416,22 @@ router.post("/updateTranslation", function (req, res, next) {
     if (err) throw err;
     var dbo = db.db(database_name);
     console.log(req.body);
-    dbo.collection("translation").updateOne(
-      { _id: ObjectId(req.body._id) },
-      {
-        $set: {
-          language: req.body.language,
-          countryCode: req.body.countryCode,
-          active: req.body.active,
-          config: req.body.config,
-          demoAccount: req.body.demoAccount,
-          demoCode: req.body.demoCode,
-        },
+    dbo.collection("translation").findOne({_id: ObjectId(req.body._id)}, function (err, rows) {
+      if (err) throw err;
+      const currentTranslation = rows.config;
+      const updatedTranslation = req.body.config;
+      const translationToUpdate = { ...currentTranslation, ...updatedTranslation };
+      dbo.collection("translation").updateOne(
+        { _id: ObjectId(req.body._id) },
+        {
+          $set: {
+            language: req.body.language,
+            countryCode: req.body.countryCode,
+            active: req.body.active,
+            config: translationToUpdate,
+            demoAccount: req.body.demoAccount,
+            demoCode: req.body.demoCode,
+          },
       },
       { upsert: true },
       function (err, rows) {
@@ -434,9 +439,10 @@ router.post("/updateTranslation", function (req, res, next) {
 
         res.json(true);
       }
-    );
+      );
+    });
   });
-  // res.json({ code: 201 });
+    // res.json({ code: 201 });
 });
 
 router.get("/getPermissionPatientMenu/:clinic", function (req, res, next) {
