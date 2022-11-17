@@ -27,4 +27,5 @@ export interface FieldConfig {
   positionClass?: string;
   onLabel?: string;
   offLabel?: string;
+  allowCustom?: boolean;
 }

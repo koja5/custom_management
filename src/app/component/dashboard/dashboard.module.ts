@@ -91,6 +91,7 @@ import { MassiveSmsComponent } from "./marketing/massive-sms/massive-sms.compone
 import { MailMassiveEmailComponent } from "./parameters/mail-parameters/mail-massive-email/mail-massive-email.component";
 import { SmsMassiveComponent } from "./parameters/sms-massive/sms-massive.component";
 import { AddHolidayComponent } from "./administrator/add-holiday/add-holiday.component";
+import { MailMultipleRecepientComponent } from './parameters/mail-parameters/mail-multiple-recepient/mail-multiple-recepient.component';
 import {
   AgendaService,
   DayService,
@@ -175,7 +176,8 @@ import { LicenceComponent } from './licence/licence.component';
     RegisteredClinicsComponent,
     RegisteredClinicDetailComponent,
     MassiveUnsubscribeComponent,
-    LicenceComponent
+    LicenceComponent,
+    MailMultipleRecepientComponent
   ],
   imports: [
     CommonModule,

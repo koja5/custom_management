@@ -638,6 +638,9 @@
             "mailConfirmArrival": {
                 "type": "string"
             },
+            "mailMultipleRecepient": {
+                "type": "string"
+            },
             "mailPatientCreatedAccount": {
                 "type": "string"
             },
@@ -723,6 +726,9 @@
                 "type": "string"
             },
             "saveChanges": {
+                "type": "string"
+            },
+            "saveAsNewDraft": {
                 "type": "string"
             },
             "addHoliday": {
@@ -1727,6 +1733,12 @@
             },
             "successSendEmailMessageText": {
                 "type": "string"
+            },
+            "successSendEmailMessageTextClinics": {
+                "type": "string"
+            },
+            "noClinicSelected": {
+              "type": "string"
             },
             "errorSendEmailMessageText": {
                 "type": "string"
@@ -3447,6 +3459,9 @@
                         },
                         {
                             "key": "mailConfirmArrival"
+                        },
+                        {
+                            "key": "mailMultipleRecepient"
                         },
                         {
                             "key": "mailPatientCreatedAccount"
@@ -6066,10 +6081,16 @@
                             "key": "successSendEmailMessageText"
                         },
                         {
+                            "key": "successSendEmailMessageTextClinics"
+                        },
+                        {
                             "key": "errorSendEmailMessageText"
                         },
                         {
                             "key": "countOfRecipientsForEmail"
+                        },
+                        {
+                            "key": "noClinicSelected"
                         }
                     ]
                 }
@@ -6765,6 +6786,9 @@
                         },
                         {
                             "key": "saveChanges"
+                        },
+                        {
+                            "key": "saveAsNewDraft"
                         }
                     ]
                 },
