@@ -14,5 +14,15 @@
 
     @media screen and (max-width: 1024px) {
         width: 60% !important;
-      }    
+      }
+}
+
+.text-area {
+  resize: vertical;
+  display: block;
+  width: 100%;
+  height: 70%;
+  border-radius: 4px;
+  border-color: #ced4da;
+  padding: 5px;
 }

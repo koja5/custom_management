@@ -56,6 +56,7 @@ import { FormGuard } from "src/app/service/form-guard/formGuard";
 import { RegisteredClinicsComponent } from "./administrator/registered-clinics/registered-clinics.component";
 import { RegisteredClinicDetailComponent } from "./administrator/registered-clinics/registered-clinic-detail/registered-clinic-detail.component";
 import { LicenceComponent } from "./licence/licence.component";
+import { MailMultipleRecepientComponent } from "./parameters/mail-parameters/mail-multiple-recepient/mail-multiple-recepient.component";
 
 const routes: Routes = [
   {
@@ -240,6 +241,11 @@ const routes: Routes = [
         path: "mail-confirm-arrival",
         canDeactivate: [FormGuard],
         component: MailConfirmArrivalComponent,
+      },
+      {
+        path: "mail-multiple-recepient",
+        canDeactivate: [FormGuard],
+        component: MailMultipleRecepientComponent,
       },
       {
         path: "mail-patient-created-account",
