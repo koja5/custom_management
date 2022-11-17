@@ -1280,7 +1280,7 @@ router.post("/sendMassiveEMail", function (req, res) {
         "utf-8"
       );
       var sendMassive = hogan.compile(sendMassiveTemplate);
-      var question = getSqlQuery(req.body);
+      var question = getSqlQueryMultiSelect(req.body);
       var joinTable = getJoinTable(req.body);
 
     if (req.body.message != "") {
@@ -1399,6 +1399,296 @@ router.post("/sendMassiveEMail", function (req, res) {
     res.send(false);
   }
 });
+
+function getSqlQueryMultiSelect(body) {
+  var question = "";
+  if (question) {
+    question += " and ";
+  }
+  if (body.place) {
+    question = "c.city = '" + body.place + "'";
+  }
+  if (body.male && body.female) {
+    var male = "'male'";
+    var female = "'female'";
+    if (question) {
+      question += " and (c.gender = " + male;
+      question += " or c.gender = " + female + ")";
+    } else {
+      question += "(c.gender = " + male;
+      question += " or c.gender = " + female + ")";
+    }
+  } else {
+    if (body.male) {
+      if (question) {
+        question += " and c.gender = 'male'";
+      } else {
+        question += "c.gender = 'male'";
+      }
+    } else if (body.female) {
+      if (question) {
+        question += " and c.gender = 'female'";
+      } else {
+        question += "c.gender = 'female'";
+      }
+    }
+  }
+
+  console.log(body);
+  if (body.birthdayFrom) {
+    if (question) {
+      question += " and c.birthday >= '" + body.birthdayFrom + "'";
+    } else {
+      question += "c.birthday >= '" + body.birthdayFrom + "'";
+    }
+  }
+  if (body.birthdayTo) {
+    if (question) {
+      question += " and c.birthday <= '" + body.birthdayTo + "'";
+    } else {
+      question += "c.birthday <= '" + body.birthdayTo + "'";
+    }
+  }
+
+  if (body.category) {
+    if(body.category.length < 2) {
+      if (question) {
+        question += " and t.colorTask = " + body.category[0];
+      } else {
+        question += " t.colorTask = " + body.category[0];
+      }
+    }
+    else {
+      body.category.forEach((item, index) => {
+        if(item !== 0) {
+          if (question) {
+            if(index === 0) {
+              question += " and (t.colorTask = " + item;;
+            }
+            else if(index === body.category.length - 1) {
+              question += " or t.colorTask = " + item + ")";
+            }
+            else {
+              question += " or t.colorTask = " + item;
+            }
+          } else {
+            question += " (t.colorTask = " + item;
+          }
+        }
+      })
+    }
+  }
+
+  if (body.start) {
+    if (question) {
+      question += " and t.start >= '" + body.start + "'";
+    } else {
+      question += " t.start >= '" + body.start + "'";
+    }
+  }
+
+  if (body.end) {
+    if (question) {
+      question += " and t.end <= '" + body.end + "'";
+    } else {
+      question += " t.end <= '" + body.end + "'";
+    }
+  }
+
+  if (body.creator_id) {
+    if(body.creator_id.length < 2) {
+      if (question) {
+        question += " and t.creator_id = " + body.creator_id[0];
+      } else {
+        question += " t.creator_id = " + body.creator_id[0];
+      }
+    }
+    else {
+      body.creator_id.forEach((item, index) => {
+        if(item !== 0) {
+          if (question) {
+            if(index === 0) {
+              question += " and (t.creator_id = " + item;;
+            }
+            else if(index === body.creator_id.length - 1) {
+              question += " or t.creator_id = " + item + ")";
+            }
+            else {
+              question += " or t.creator_id = " + item;
+            }
+          } else {
+            question += " (t.creator_id = " + item;
+          }
+        }
+      })
+    }
+  }
+
+  if (body.store) {
+    if(body.store.length < 2) {
+      if (question) {
+        question += " and t.storeId = " + body.store[0];
+      } else {
+        question += " t.storeId = " + body.store[0];
+      }
+    }
+    else {
+      body.store.forEach((item, index) => {
+        if(item !== 0) {
+          if (question) {
+            if(index === 0) {
+              question += " and (t.storeId = " + item;;
+            }
+            else if(index === body.store.length - 1) {
+              question += " or t.storeId = " + item + ")";
+            }
+            else {
+              question += " or t.storeId = " + item;
+            }
+          } else {
+            question += " (t.storeId = " + item;
+          }
+        }
+      })
+    }
+  }
+
+  if (body.recommendation) {
+    if(body.recommendation.length < 2) {
+      if (question) {
+        question += " and bo.recommendation = " + body.recommendation[0];
+      } else {
+        question += " bo.recommendation = " + body.recommendation[0];
+      }
+    }
+    else {
+      body.recommendation.forEach((item, index) => {
+        if(item !== 0) {
+          if (question) {
+            if(index === 0) {
+              question += " and (bo.recommendation = " + item;;
+            }
+            else if(index === body.recommendation.length - 1) {
+              question += " or bo.recommendation = " + item + ")";
+            }
+            else {
+              question += " or bo.recommendation = " + item;
+            }
+          } else {
+            question += " (bo.recommendation = " + item;
+          }
+        }
+      })
+    }
+  }
+
+  if (body.relationship) {
+    if(body.relationship.length < 2) {
+      if (question) {
+        question += " and bo.relationship = " + body.relationship[0];
+      } else {
+        question += " bo.relationship = " + body.relationship[0];
+      }
+    }
+    else {
+      body.relationship.forEach((item, index) => {
+        if(item !== 0) {
+          if (question) {
+            if(index === 0) {
+              question += " and (bo.relationship = " + item;;
+            }
+            else if(index === body.relationship.length - 1) {
+              question += " or bo.relationship = " + item + ")";
+            }
+            else {
+              question += " or bo.relationship = " + item;
+            }
+          } else {
+            question += " (bo.relationship = " + item;
+          }
+        }
+      })
+    }
+  }
+
+  if (body.social) {
+    if(body.social.length < 2) {
+      if (question) {
+        question += " and bo.social = " + body.social[0];
+      } else {
+        question += " bo.social = " + body.social[0];
+      }
+    }
+    else {
+      body.social.forEach((item, index) => {
+        if(item !== 0) {
+          if (question) {
+            if(index === 0) {
+              question += " and (bo.social = " + item;;
+            }
+            else if(index === body.social.length - 1) {
+              question += " or bo.social = " + item + ")";
+            }
+            else {
+              question += " or bo.social = " + item;
+            }
+          } else {
+            question += " (bo.social = " + item;
+          }
+        }
+      })
+    }
+  }
+
+  if (body.doctor) {
+    if(body.doctor.length < 2) {
+      if (question) {
+        question += " and bo.doctor = " + body.doctor[0];
+      } else {
+        question += " bo.doctor = " + body.doctor[0];
+      }
+    }
+    else {
+      body.doctor.forEach((item, index) => {
+        if(item !== 0) {
+          if (question) {
+            if(index === 0) {
+              question += " and (bo.doctor = " + item;;
+            }
+            else if(index === body.doctor.length - 1) {
+              question += " or bo.doctor = " + item + ")";
+            }
+            else {
+              question += " or bo.doctor = " + item;
+            }
+          } else {
+            question += " (bo.doctor = " + item;
+          }
+        }
+      })
+    }
+  }
+
+  if (body.profession) {
+    if (question) {
+      question += " and bt.profession = " + body.profession;
+    } else {
+      question += " bt.profession = " + body.profession;
+    }
+  }
+
+  if (body.childs) {
+    if (question) {
+      question += " and bt.childs = " + body.childs;
+    } else {
+      question += " bt.childs = " + body.childs;
+    }
+  }
+
+  console.log(question);
+
+  return question;
+}
 
 function getSqlQuery(body) {
   var question = "";
@@ -1549,15 +1839,15 @@ function getJoinTable(body) {
     body.creator_id ||
     body.store
   ) {
-    joinTable += "join tasks t on c.id = t.customer_id";
+    joinTable += " join tasks t on c.id = t.customer_id";
   }
 
   if (body.recommendation || body.relationship || body.social || body.doctor) {
-    joinTable += "join base_one bo on c.id = bo.customer_id";
+    joinTable += " join base_one bo on c.id = bo.customer_id";
   }
 
   if (body.profession || body.childs) {
-    joinTable = "join base_two bt on c.id = bt.customer_id";
+    joinTable += " join base_two bt on c.id = bt.customer_id";
   }
 
   return joinTable;
