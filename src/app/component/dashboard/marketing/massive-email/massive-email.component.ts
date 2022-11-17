@@ -89,20 +89,29 @@ export class MassiveEmailComponent implements OnInit, FormGuardData {
     if (this.data) {
       for (let i = 0; i < this.configField.length; i++) {
         if (this.configField[i].type === "multiselect") {
-          this.configField[i].value = Array.isArray(
-            this.data[this.configField[i].name]
-          )
-            ? this.data[this.configField[i].name]
-            : this.helpService.multiSelectStringToArray(
-                this.data[this.configField[i].name]
-              );
-          this.data[this.configField[i].name] = this.configField[i].value;
-        } 
-        else if (this.configField[i].type === "checkbox") {
+          if (this.configField[i].allowCustom) {
+            this.configField[i].value =
+              Array.isArray(this.data[this.configField[i].name]) ||
+              this.data[this.configField[i].name] === ""
+                ? this.data[this.configField[i].name]
+                : this.helpService.multiSelectStringToArrayString(
+                    this.data[this.configField[i].name]
+                  );
+            this.data[this.configField[i].name] = this.configField[i].value;
+          } else {
+            this.configField[i].value = Array.isArray(
+              this.data[this.configField[i].name]
+            )
+              ? this.data[this.configField[i].name]
+              : this.helpService.multiSelectStringToArrayNumber(
+                  this.data[this.configField[i].name]
+                );
+            this.data[this.configField[i].name] = this.configField[i].value;
+          }
+        } else if (this.configField[i].type === "checkbox") {
           this.configField[i].value = !!this.data[this.configField[i].field];
-          this.data[this.configField[i].field] = this.configField[i].value
-        }
-        else {
+          this.data[this.configField[i].field] = this.configField[i].value;
+        } else {
           this.configField[i].value = this.data[this.configField[i].field];
         }
       }

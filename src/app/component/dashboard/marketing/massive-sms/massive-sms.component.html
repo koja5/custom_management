@@ -76,7 +76,14 @@
               </div>
             </div>
             <div>
-              <div class="mt-4 end">
+              <div class="mt-4 end drafts-button-padding">
+                <button *ngIf="editMode"
+                  [disabled]="!draftName"
+                  class="e-control e-btn e-lib e-primary e-flat"
+                  (click)="editMode = false; saveSmsDraft()"
+                >
+                  {{ language?.saveAsNewDraft ? language?.saveAsNewDraft : 'Save as new draft' }}
+                </button>
                 <button
                   [disabled]="!draftName"
                   class="e-control e-btn e-lib e-primary e-flat"
