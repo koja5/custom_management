@@ -300,7 +300,16 @@
           </div>
           <div class="left-panel" [style.height]="height">
             <div class="overview-scheduler">
-              <ejs-schedule *ngIf="!loading && sharedCalendarResources" #scheduleObj
+              <div *ngIf="loading" class="d-flex-center-column p-3 height-100">
+                <div class="fa fa-2x fa-spinner fa-spin"></div>
+              </div>
+              <div *ngIf="!loading && !isValidStoreSelected" class="d-flex-center-column p-3 height-100">
+                <i class="fa fa-search"></i>
+                <span>
+                  {{this.language.noStoreSelectedIndicatorText}}
+                </span>
+              </div>
+              <ejs-schedule *ngIf="!loading && sharedCalendarResources && isValidStoreSelected" #scheduleObj
                 cssClass="e-control schedule-overview table" height="100%" [(currentView)]="currentView"
                 [dateFormat]="dateFormatScheduler" [group]="value ? group : []" [showWeekNumber]="true"
                 [eventSettings]="eventSettings" [allowKeyboardInteraction]="
