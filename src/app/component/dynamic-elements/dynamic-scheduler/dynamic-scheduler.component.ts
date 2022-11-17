@@ -115,6 +115,7 @@ import {
   TIMEZONE_DATA,
   WEEK_DAYS,
 } from "./dynamic-scheduler-data";
+import { Subject, Subscription } from "rxjs";
 declare var moment: any;
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
@@ -1381,7 +1382,10 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   public createFormLoading: boolean;
   public orientation = "horizontal";
   public workTime: any[] = [];
-  public selectedStoreId: number;
+  public selectedStoreId: number = null;
+  public selectedStoreIdSubject = new Subject();
+  public selectedStoreIdSub: Subscription;
+  public isValidStoreSelected = false;
   public splitterSizeFull = 100;
   public splitterSize: number;
   public dateEvent: string;
@@ -1477,6 +1481,8 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.selectedStoreIdSub = this.selectedStoreIdSubject.asObservable()
+      .subscribe(this.checkIsStoreSelected);
     this.initializationConfig();
     this.helpService.setDefaultBrowserTabTitle();
     this.loadUser();
@@ -1486,6 +1492,9 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.toastr.clear();
+    if(this.selectedStoreIdSub) {
+      this.selectedStoreIdSub.unsubscribe();
+    }
   }
 
   @HostListener("window:resize", ["$event"])
@@ -1495,6 +1504,18 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
 
   get user() {
     return this.customerUser;
+  }
+
+  private checkIsStoreSelected = () => {
+    let storeExists = false;
+    if (this.store) {
+      storeExists = this.store.some(s => s.id === this.selectedStoreId);
+    }
+    this.isValidStoreSelected = 
+      !isNaN(this.selectedStoreId) &&
+      this.selectedStoreId !== null &&
+      this.selectedStoreId !== undefined &&
+      storeExists;
   }
 
   private initData() {
@@ -1621,6 +1642,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
 
   setSelectedStoreFromUrl() {
     this.selectedStoreId = Number(this.activatedRouter.snapshot.params.storeId);
+    this.selectedStoreIdSubject.next();
   }
 
   initializationConfig() {
@@ -1680,9 +1702,8 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
 
     if (!this.checkPreselectedStore()) {
       if (this.type === 3) {
-        this.selectedStoreId = Number(
-          localStorage.getItem("storeId-" + this.id)
-        );
+        this.selectedStoreId = this.storageService.getSelectedStore(this.id);
+        this.selectedStoreIdSubject.next();
       }
     }
 
@@ -1741,6 +1762,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
         this.helpService.getSuperadmin(),
         (val) => {
           this.store = val;
+          this.selectedStoreIdSubject.next();
           this.checkPreselectedForAllowedOnlineStore();
           this.setTimesForStore();
         }
@@ -1748,6 +1770,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     } else {
       this.storeService.getStore(this.helpService.getSuperadmin(), (val) => {
         this.store = val;
+        this.selectedStoreIdSubject.next();
         this.setTimesForStore();
       });
     }
@@ -1758,12 +1781,14 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     this.value = [];
     this.storeService.getStore(this.helpService.getSuperadmin(), (data) => {
       this.store = data;
+      this.selectedStoreIdSubject.next();
       for (let i = 0; i < data.length; i++) {
         this.service.getUsersInCompany(data[i].id, (users: []) => {
           this.usersInCompany = users;
           for (let j = 0; j < users.length; j++) {
             if (users[j]["id"] === this.helpService.getMe()) {
               this.selectedStoreId = data[i].id;
+              this.selectedStoreIdSubject.next();
               this.value.push(users[j]);
               this.sharedCalendarResources = this.value;
               this.handleValue(this.value);
@@ -1784,18 +1809,13 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
       }
     }
     if (notAllowedOnlinePreselected) {
-      if (this.store.length) {
-        if (this.activatedRouter.snapshot.params.storeId === undefined) {
+      if (this.store.length && this.activatedRouter.snapshot.params.storeId === undefined) {
           this.selectedStoreId = this.store[0].id;
           this.storageService.setSelectedStore(
             this.id,
             this.selected.toString()
           );
           this.getUserInCompany(this.selectedStoreId);
-        } else {
-          this.selectedStoreId = null;
-          this.value = null;
-        }
       } else {
         this.selectedStoreId = null;
         this.value = null;
@@ -2050,12 +2070,14 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   }
 
   initializeTasks() {
-    this.selectedStoreId = Number(localStorage.getItem("storeId-" + this.id));
+    this.selectedStoreId = this.storageService.getSelectedStore(this.id);
+    this.selectedStoreIdSubject.next();
     if (this.helpService.getType() === this.userType.patient) {
       this.storeService.getStoreAllowedOnline(
         this.helpService.getSuperadmin(),
         (val) => {
           this.store = val;
+          this.selectedStoreIdSubject.next();
           if (this.store.length !== 0) {
             this.language.selectStore += this.store[0].storename + ")";
           }
@@ -2073,6 +2095,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     } else {
       this.storeService.getStore(this.helpService.getSuperadmin(), (val) => {
         this.store = val;
+        this.selectedStoreIdSubject.next();
         if (this.store.length !== 0) {
           this.language.selectStore += this.store[0].storename + ")";
         }
@@ -2094,6 +2117,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
       this.calendars = [];
       if (!this.checkPreselectedStore()) {
         this.selectedStoreId = this.storageService.getSelectedStore(this.id);
+        this.selectedStoreIdSubject.next();
       }
       if (this.activatedRouter.snapshot.params.storeId === undefined) {
         this.value = JSON.parse(
@@ -2122,6 +2146,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
         this.selectedStoreId = Number(
           this.storageService.getSelectedStore(this.id)
         );
+        this.selectedStoreIdSubject.next();
       }
       this.selectedStore(this.selectedStoreId);
     } else if (localStorage.getItem("type") === "3") {
@@ -2538,6 +2563,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.calendars = [];
     this.selectedStoreId = event;
+    this.selectedStoreIdSubject.next();
     this.storeName = this.getStoreName(event);
     this.helpService.setTitleForBrowserTab(this.storeName);
     this.setStoreWork();
@@ -2594,6 +2620,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
       } else {
         // this.initData();
         this.resetCalendarData();
+        this.loading = false;
       }
     }
 
