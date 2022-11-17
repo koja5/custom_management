@@ -1002,6 +1002,16 @@
                                   {{ language?.manageClinics }}
                                 </a>
                               </li>
+
+                              <li class="{{ selectedNodeModel['mail-multiple-recepient'] }}">
+                                <a routerLink="/dashboard/home/mail-multiple-recepient"
+                                   (click)="returnActiveNode('mail-multiple-recepient')"
+                                   class="nav-link">
+                                  <i class="fa fa-envelope"></i>
+                                  <span class="navigation-link"></span>
+                                  {{ language?.mailMultipleRecepient }}
+                                </a>
+                              </li>
                             </ul>
                           </li>
 
@@ -1103,8 +1113,8 @@
             <h4 _ngcontent-vwt-c6="" class="page-title selectedNode">{{selectedNode}}</h4>
           </li>
           <li><a routerlink="/dashboard/main"
-              href="#/dashboard/main"><i _ngcontent-vwt-c6="" class="fa fa-home"></i> / 
-              Home</a></li> / 
+              href="#/dashboard/main"><i _ngcontent-vwt-c6="" class="fa fa-home"></i> /
+              Home</a></li> /
           <li *ngFor="let item of pathFromUrl">
              <a routerLink="{{item}}">
               &nbsp;{{item}}&nbsp;/

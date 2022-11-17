@@ -30,6 +30,12 @@ export class MailService {
       .map((res) => res);
   }
 
+  public sendMailToMultiple(data) {
+    const headers = new HttpHeaders();
+    headers.append("Content-Type", "text/plain; charset=utf-8");
+    return this.http.post("/api/sendMailToMultiple", data, { headers: headers, responseType: 'text' as 'json' });
+  }
+
   public posaljiMiPoruku(data, callback) {
     this.http
       .post("/api/askQuestion", data)

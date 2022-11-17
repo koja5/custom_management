@@ -7,7 +7,7 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import { FormGroup, Validators } from "@angular/forms";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import {
   DataStateChangeEventArgs,
   DialogEditEventArgs,
@@ -29,6 +29,7 @@ import { SystemLogsService } from "src/app/service/system-logs.service";
 import { Router } from "@angular/router";
 import { AccountService } from "src/app/service/account.service";
 import { PackLanguageService } from "src/app/service/pack-language.service";
+import { MailService } from "src/app/service/mail.service";
 
 @Component({
   selector: "app-dynamic-grid",
@@ -43,6 +44,7 @@ export class DynamicGridComponent implements OnInit {
   @ViewChild(DynamicFormsComponent) form: DynamicFormsComponent;
   @ViewChild("orderForm") public orderForm: FormGroup;
   @ViewChild("editSettingsTemplate") editSettingsTemplate: DialogComponent;
+  @ViewChild("mailTemplate") mailTemplate: DialogComponent;
   public targetElement: HTMLElement;
   @ViewChild("grid") public grid: GridComponent;
   @ViewChild("container") public container: ElementRef;
@@ -77,6 +79,13 @@ export class DynamicGridComponent implements OnInit {
   public hiddenColumns: string[] = [];
   public type = 'Reservations';
 
+  emailsForSendingMessage = [];
+  mailGroup = new FormGroup(
+    {
+      subject: new FormControl(''),
+      message: new FormControl(''),
+    }
+  )
   constructor(
     private service: DynamicService,
     private helpService: HelpService,
@@ -84,6 +93,7 @@ export class DynamicGridComponent implements OnInit {
     private router: Router,
     private elem: ElementRef,
     private packLanguage: PackLanguageService,
+    private mailService: MailService
   ) {}
 
   ngOnInit() {
@@ -218,8 +228,8 @@ export class DynamicGridComponent implements OnInit {
         args.cancel = true;
       }
     }*/
-    /*if (args.requestType === "beginEdit" || args.requestType === "add") { 
-        // set buttons here.... 
+    /*if (args.requestType === "beginEdit" || args.requestType === "add") {
+        // set buttons here....
         args.dialog.buttons = [ ];
       } */
   }
@@ -234,6 +244,19 @@ export class DynamicGridComponent implements OnInit {
       this.currentDialog.close();
     }
     this.showDialog = false;
+  }
+
+  sendEmail() {
+    const subject = this.mailGroup.get('subject').value;
+    const message = this.mailGroup.get('message').value;
+    const superadminId = this.helpService.getSuperadmin();
+    const request = { subject, message, emails: this.emailsForSendingMessage, id: superadminId };
+    this.mailService.sendMailToMultiple(request).subscribe(res => {
+      this.helpService.successToastr(this.language.successSendEmailMessageTextClinics, this.language.confirmed);
+    }, error => {
+      this.helpService.errorToastr(this.language.errorSendEmailMessageText, this.language.errorTitle);
+    });
+    this.mailTemplate.hide()
   }
 
   actionComplete(args: DialogEditEventArgs): void {
@@ -306,8 +329,8 @@ export class DynamicGridComponent implements OnInit {
         this.form.setDisabled("submit", true);
         this.form.setValue("storename", "Todd Motto");
       }, 100);*/
-    /*if (args.requestType === "beginEdit" || args.requestType === "add") { 
-        // set buttons here.... 
+    /*if (args.requestType === "beginEdit" || args.requestType === "add") {
+        // set buttons here....
         args.dialog.buttons = [ ];
       } */
   }
@@ -462,7 +485,15 @@ export class DynamicGridComponent implements OnInit {
     const target: HTMLElement = (
       args.originalEvent.target as HTMLElement
     ).closest("button"); // find clicked button
-    if (target && target.id === "collapse") {
+
+    if (target && target.id === "Mail") {
+      this.emailsForSendingMessage = [];
+      const selectedClinics: any = this.grid.getSelectedRecords();
+      selectedClinics.forEach(clinic => {
+        this.emailsForSendingMessage.push(clinic.email)
+      });
+      this.mailTemplate.show();
+    } else if (target && target.id === "collapse") {
       // collapse all expanded grouped row
       this.grid.groupModule.collapseAll();
     } else if (target && target.id === "refresh") {

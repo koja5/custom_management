@@ -485,6 +485,12 @@
             "noStoreSelectedIndicatorText": {
                 "type": "string"
             },
+            "newEventTitle": {
+                "type": "string"
+            },
+            "editEventTitle": {
+                "type": "string"
+            },
             "refreshEventToolbar": {
                 "type": "string"
             },
@@ -633,6 +639,9 @@
                 "type": "string"
             },
             "mailConfirmArrival": {
+                "type": "string"
+            },
+            "mailMultipleRecepient": {
                 "type": "string"
             },
             "mailPatientCreatedAccount": {
@@ -1727,6 +1736,12 @@
             },
             "successSendEmailMessageText": {
                 "type": "string"
+            },
+            "successSendEmailMessageTextClinics": {
+                "type": "string"
+            },
+            "noClinicSelected": {
+              "type": "string"
             },
             "errorSendEmailMessageText": {
                 "type": "string"
@@ -3229,6 +3244,19 @@
                             "key": "noStoreSelectedIndicatorText"
                         }
                     ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "newEventTitle"
+                        },
+                        {
+                            "key": "editEventTitle"
+                        }
+                    ]
                 }
             ]
         },
@@ -3437,6 +3465,9 @@
                         },
                         {
                             "key": "mailConfirmArrival"
+                        },
+                        {
+                            "key": "mailMultipleRecepient"
                         },
                         {
                             "key": "mailPatientCreatedAccount"
@@ -6056,10 +6087,16 @@
                             "key": "successSendEmailMessageText"
                         },
                         {
+                            "key": "successSendEmailMessageTextClinics"
+                        },
+                        {
                             "key": "errorSendEmailMessageText"
                         },
                         {
                             "key": "countOfRecipientsForEmail"
+                        },
+                        {
+                            "key": "noClinicSelected"
                         }
                     ]
                 }

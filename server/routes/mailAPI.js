@@ -79,7 +79,7 @@ var connection = mysql.createPool({
     rejectUnauthorized: false,
   },
   debug: true,
-  ssl: true, 
+  ssl: true,
   auth: {
     user: "clinicnode2022@gmail.com",  // real email address
     pass: "vfuvxgwdfrvestvd" // app password for clinicnode2022@gmail.com email
@@ -342,6 +342,73 @@ router.post("/forgotmail", function (req, res) {
       res.end("sent");
     }
   });
+});
+
+router.post("/sendMailToMultiple", function (req, res) {
+
+  const superadminId = req.body.id;
+
+  connection.getConnection(function (err, conn) {
+    var confirmTemplate = fs.readFileSync(
+      "./server/routes/templates/multipleRecepient.hjs",
+      "utf-8"
+    );
+    var compiledTemplate = hogan.compile(confirmTemplate);
+    if (err) {
+      res.json({
+        code: 100,
+        status: "Error in connection database",
+      });
+      return;
+    }
+
+    conn.query("select * from mail_multiple_recepient where superadmin = ?", superadminId, function(err, message) {
+      conn.release();
+      if (err) {
+        console.log("SQL error:", err);
+      }
+      let mail = {};
+      let signatureAvailable = false;
+      if (message.length > 0) {
+        mail = message[0];
+        if (mail.signatureAvailable) {
+          signatureAvailable = true;
+        }
+      }
+      console.log(mail);
+
+      var mailOptions = {
+        from: '"ClinicNode" support@app-production.eu',
+        to: req.body.emails,
+        subject: req.body.subject ? req.body.subject : mail.mailSubject,
+        html: compiledTemplate.render({
+          initialGreeting: mail.mailInitialGreeting ? mail.mailInitialGreeting : req.body.language?.initialGreeting,
+          finalGreeting: mail.mailFinalGreeting ? mail.mailFinalGreeting : '',
+          signature: signatureAvailable && mail.mailSignature ? mail.mailSignature : "",
+          finalMessageForMultipleRecepient: req.body.message ? req.body.message : mail.mailMessage,
+          thanksForUsing: mail.mailThanksForUsing ? mail.mailThanksForUsing : req.body.language?.thanksForUsing,
+          ifYouHaveQuestion: mail.mailIfYouHaveQuestion ? mail.mailIfYouHaveQuestion : req.body.language?.ifYouHaveQuestion,
+          emailAddress: req.body.language?.emailAddress,
+          notReply: mail.mailNotReply ? mail.mailNotReply : "",
+          copyRight: mail.mailCopyRight ? mail.mailCopyRight : "",
+          signatureTelephone: signatureAvailable && mail.signatureTelephone ? mail.signatureTelephone + " " : "",
+          signatureMobile: signatureAvailable && mail.signatureMobile ? mail.signatureMobile : "",
+          signatureEmail: signatureAvailable && mail.signatureEmail ? mail.signatureEmail : "",
+        })
+      };
+
+      smtpTransport.sendMail(mailOptions, function (error, response) {
+        console.log(response);
+        if (error) {
+          console.log(error);
+          res.end("error");
+        } else {
+          console.log("Message sent: " + response.message);
+          res.end("sent");
+        }
+      });
+    })
+  })
 });
 
 router.post("/askQuestion", function (req, res) {
