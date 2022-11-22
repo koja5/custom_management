@@ -3283,7 +3283,15 @@
                             "key": "noStoreSelectedIndicatorText"
                         }
                     ]
-                },
+                }
+            ]
+        },
+        {
+            "type": "section",
+            "title": "Last Minute Offer",
+            "expandable": true,
+            "expanded": false,
+            "items": [                
                 {
                     "type": "div",
                     "display": "flex",
