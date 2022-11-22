@@ -57,6 +57,7 @@ import { RegisteredClinicsComponent } from "./administrator/registered-clinics/r
 import { RegisteredClinicDetailComponent } from "./administrator/registered-clinics/registered-clinic-detail/registered-clinic-detail.component";
 import { LastMinuteEventConfirmationComponent } from "./customers/last-minute-event-confirmation/last-minute-event-confirmation.component";
 import { LicenceComponent } from "./licence/licence.component";
+import { MailMultipleRecepientComponent } from "./parameters/mail-parameters/mail-multiple-recepient/mail-multiple-recepient.component";
 
 const routes: Routes = [
   {
@@ -247,6 +248,11 @@ const routes: Routes = [
         path: "mail-confirm-arrival",
         canDeactivate: [FormGuard],
         component: MailConfirmArrivalComponent,
+      },
+      {
+        path: "mail-multiple-recepient",
+        canDeactivate: [FormGuard],
+        component: MailMultipleRecepientComponent,
       },
       {
         path: "mail-patient-created-account",

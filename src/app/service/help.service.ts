@@ -377,7 +377,7 @@ export class HelpService {
     return semicolonSeparatedString;
   }
 
-  multiSelectStringToArray(string): number[] {
+  multiSelectStringToArrayNumber(string): number[] {
     let multiSelectArrayToString;
     if (string.split(";") !== undefined) {
       multiSelectArrayToString = string
@@ -389,11 +389,22 @@ export class HelpService {
     return multiSelectArrayToString
   }
 
+  multiSelectStringToArrayString(string): string[] {
+    let multiSelectArrayToString;
+    if (string.split(";") !== undefined) {
+      multiSelectArrayToString = string
+        .split(";")
+    } else {
+      multiSelectArrayToString = string;
+    }
+    return multiSelectArrayToString
+  }
+
   prepareDraft(formValues, draftName, draftType) {
     return {
       ...formValues,
       draftName: draftName ? draftName : "",
-      place: formValues.place ? formValues.place : "",
+      place: this.multiSelectArrayToString(formValues.place),
       male: formValues.male ? formValues.male : false,
       female: formValues.female ? formValues.female : false,
       excludeCustomersWithEvents: formValues.excludeCustomersWithEvents ? formValues.excludeCustomersWithEvents : false,
@@ -414,7 +425,21 @@ export class HelpService {
       doctor: this.multiSelectArrayToString(formValues.doctor),
       store: this.multiSelectArrayToString(formValues.store),
       superadmin: this.getSuperadmin(),
-      type: draftType
-    }
+      type: draftType,
+    };
+  }
+
+  removeZeroArrayFromObject(object) {
+    const objectKeys = Object.keys(object);
+    objectKeys.forEach((key) => {
+      if (
+        Array.isArray(object[key]) &&
+        ((object[key].length === 1 && object[key][0] === 0) ||
+          object[key].length === 0)
+      ) {
+        delete object[key];
+      }
+    });
+    return object;
   }
 }

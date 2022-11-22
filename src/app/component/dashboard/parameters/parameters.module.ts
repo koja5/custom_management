@@ -30,7 +30,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 import { SharedComponentsModule } from "src/app/shared/shared-components.module";
 
 @NgModule({
-  declarations: [],
   imports: [
     CommonModule,
     ParametersRouting,

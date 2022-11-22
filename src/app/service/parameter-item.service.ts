@@ -126,6 +126,18 @@ export class ParameterItemService extends BehaviorSubject<any[]> {
     return this.http.post("/api/updateMailConfirmArrival", data);
   }
 
+  getMailMultipleRecepient(id: number) {
+    return this.http.get("/api/getMailMultipleRecepient/" + id);
+  }
+
+  createMailMultipleRecepient(data) {
+    return this.http.post("/api/createMailMultipleRecepient", data);
+  }
+
+  updateMailMultipleRecepient(data) {
+    return this.http.post("/api/updateMailMultipleRecepient", data);
+  }
+
   getMailDenyReservation(id: number) {
     return this.http.get("/api/getMailDenyReservation/" + id);
   }

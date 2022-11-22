@@ -108,6 +108,22 @@
         </ng-template>
       </e-column>
     </e-columns>
+
+    <ejs-dialog #mailTemplate [visible]='false' width="400px" height="440px">
+      <form [formGroup]="mailGroup">
+        <label *ngIf="emailsForSendingMessage.length < 1" style="color:red; display: block;"> {{ language.noClinicSelected }} </label>
+        {{ language.emailSubject }}
+        <input class="e-input" type="text" placeholder="{{ language.emailSubject }}" formControlName="subject"/>
+        <hr>
+        {{ language.mailMessage }}
+        <textarea cols="45" rows="10" class="text-area" placeholder="{{ language.inputEmailMessage }}" formControlName="message"></textarea>
+      </form>
+      <ng-template #footerTemplate>
+        <button id="cancelButton" (click)="mailTemplate.hide()" class="e-control e-btn e-primary cancelButton">{{ language.cancel }}</button>
+        <button id="sendButton" [disabled]="emailsForSendingMessage.length < 1" (click)="sendEmail()" class="e-control e-btn e-primary sendButton">{{ language.sendPatientFormButton }}</button>
+    </ng-template>
+    </ejs-dialog>
+
     <ng-template #editSettingsTemplate let-data>
       <div ngForm #orderForm="ngForm" style="max-height: 70% !important">
         <div class="form-row">

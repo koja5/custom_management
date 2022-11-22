@@ -18027,6 +18027,10 @@ kendo-window {
   width: 100%;
 }
 
+.height-100 {
+  height: 100%;
+}
+
 .display-inline-block {
   display: inline-block;
 }
@@ -19415,6 +19419,13 @@ select:invalid {
   display: flex !important;
 }
 
+.d-flex-center-column {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
 .nav {
   display: flex;
   flex-wrap: wrap;
@@ -19625,4 +19636,8 @@ body {
 
 .e-btn.e-flat.e-primary[disabled]:hover {
   filter: none;
+}
+
+.k-list-container .k-nodata {
+  min-height: 0px;
 }

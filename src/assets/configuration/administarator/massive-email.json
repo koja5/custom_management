@@ -1,10 +1,18 @@
 [
   {
-    "type": "textbox",
+    "type": "multiselect",
     "width": "col-md-12",
     "name": "place",
     "label": "place",
-    "field": "place"
+    "field": {
+      "text": "place",
+      "value": "id"
+    },
+    "fieldConfig": {
+      "ignoreAccent": false,
+      "filter": true
+    },
+    "allowCustom": true
   },
   {
     "type": "checkbox",
@@ -78,8 +86,7 @@
     "fieldConfig": {
       "ignoreAccent": false,
       "filter": true
-    },
-    "required": true
+    }
   },
   {
     "type": "multiselect",
@@ -102,8 +109,7 @@
     "fieldConfig": {
       "ignoreAccent": false,
       "filter": true
-    },
-    "required": true
+    }
   },
   {
     "type": "datepicker",
@@ -142,8 +148,7 @@
     "fieldConfig": {
       "ignoreAccent": false,
       "filter": true
-    },
-    "required": true
+    }
   },
   {
     "type": "multiselect",
@@ -166,8 +171,7 @@
     "fieldConfig": {
       "ignoreAccent": false,
       "filter": true
-    },
-    "required": true
+    }
   },
   {
     "type": "multiselect",
@@ -190,8 +194,7 @@
     "fieldConfig": {
       "ignoreAccent": false,
       "filter": true
-    },
-    "required": true
+    }
   },
   {
     "type": "multiselect",
@@ -214,8 +217,7 @@
     "fieldConfig": {
       "ignoreAccent": false,
       "filter": true
-    },
-    "required": true
+    }
   },
   {
     "type": "multiselect",
@@ -238,8 +240,7 @@
     "fieldConfig": {
       "ignoreAccent": false,
       "filter": true
-    },
-    "required": true
+    }
   },
   {
     "type": "textbox",
