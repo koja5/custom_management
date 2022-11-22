@@ -12,19 +12,21 @@ var FTPAccessData = {
   password: process.env.ftp_password,
 };
 
-var smtpTransport = nodemailer.createTransport({
-  host: "116.203.85.82",
-  port: 25,
-  secure: false,
-  tls: {
-    rejectUnauthorized: false,
-  },
-  auth: {
-    user: "support@app-production.eu",
-    pass: "])3!~0YFU)S]",
-  },
-});
+// var smtpTransport = nodemailer.createTransport({
+//   host: "116.203.85.82",
+//   port: 25,
+//   secure: false,
+//   tls: {
+//     rejectUnauthorized: false,
+//   },
+//   auth: {
+//     user: "support@app-production.eu",
+//     pass: "])3!~0YFU)S]",
+//   },
+// });
 
+
+// local purpose only
 // var smtpTransport = nodemailer.createTransport({
 //   host: 'smtp.gmail.com',
 //   port: 465,
