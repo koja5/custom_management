@@ -1372,7 +1372,7 @@ router.post("/sendMassiveEMail", function (req, res) {
 
                 unsubscribeMessage: req.body.language?.unsubscribeMessage,
                 unsubscribeHere: req.body.language?.unsubscribeHere,
-                unsubscribeLink: process.env.unsubscribe + '/' + to.email,
+                unsubscribeLink: process.env.unsubscribeEmail + '/' + to.email,
               }),
             };
             smtpTransport.sendMail(mailOptions, function (error, response) {

@@ -46,7 +46,12 @@ const routes: Routes = [
     component: TermsComponent,
   },
   {
-    path: "unsubscribe/:userEmail",
+    path: "unsubscribeSMS/:userEmail",
+    canActivate: [UnsubscribeGuard],
+    component: MassiveUnsubscribeComponent,
+  },
+  {
+    path: "unsubscribeEmail/:userEmail",
     canActivate: [UnsubscribeGuard],
     component: MassiveUnsubscribeComponent,
   },
