@@ -50,7 +50,6 @@
     "label": "noEventSinceDate",
     "field": "noEventSinceDate",
     "required": true,
-    "maxDate": "currentDate",
     "condition": {
       "fieldName": "noEventSinceCheckbox",
       "value": false
