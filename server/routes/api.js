@@ -6476,19 +6476,21 @@ router.post("/getFilteredRecipients", function (req, res) {
           "c.id not in (select t.customer_id from tasks t where t.start > now()) and";
       }
 
+      let queryString = "select distinct c.* from customers c join " +
+      table +
+      " sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin " +
+      joinTable +
+      " where " +
+      excludeQuery +
+      checkAdditionalQuery +
+      " and c.active = 1 and c.storeId = " +
+      Number(req.body.superadmin) +
+      " and (" +
+      question +
+      ")";
+      console.log(queryString);
       conn.query(
-        "select distinct c.* from customers c join " +
-          table +
-          " sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin " +
-          joinTable +
-          " where " +
-          excludeQuery +
-          checkAdditionalQuery +
-          " and c.active = 1 and c.storeId = " +
-          Number(req.body.superadmin) +
-          " and (" +
-          question +
-          ")",
+        queryString,
         function (err, rows) {
           conn.release();
           if (err) return err;

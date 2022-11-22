@@ -136,9 +136,9 @@ export class MassiveSmsComponent implements OnInit, FormGuardData {
     this.dynamicService
       .callApiPost("/api/getFilteredRecipients", this.changeData)
       .subscribe((data) => {
-        if (data && data["length"] > 0) {
+        if (data) {
           this.allRecipients = data;
-        } else {
+        } else if(!data) {
           this.recipients.close();
           this.helpService.warningToastr(
             "",
