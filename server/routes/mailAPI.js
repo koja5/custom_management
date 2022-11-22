@@ -59,7 +59,7 @@ var connection = mysql.createPool({
   database: process.env.database,
 });
 
-/*var smtpTransport = nodemailer.createTransport({
+var smtpTransport = nodemailer.createTransport({
   host: "116.203.85.82",
   secure: false,
    port: 587,
@@ -67,24 +67,24 @@ var connection = mysql.createPool({
       user: "support@app-production.eu",
       pass: "Iva#$2019#$",
    },
-});*/
+});
 
 
 //local purpose
- var smtpTransport = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
-  tls: {
-    rejectUnauthorized: false,
-  },
-  debug: true,
-  ssl: true,
-  auth: {
-    user: "clinicnode2022@gmail.com",  // real email address
-    pass: "vfuvxgwdfrvestvd" // app password for clinicnode2022@gmail.com email
-  }
-});
+//  var smtpTransport = nodemailer.createTransport({
+//   host: 'smtp.gmail.com',
+//   port: 465,
+//   secure: true,
+//   tls: {
+//     rejectUnauthorized: false,
+//   },
+//   debug: true,
+//   ssl: true,
+//   auth: {
+//     user: "clinicnode2022@gmail.com",  // real email address
+//     pass: "vfuvxgwdfrvestvd" // app password for clinicnode2022@gmail.com email
+//   }
+// });
 
 
 

@@ -45,8 +45,8 @@ var smtpTransport = nodemailer.createTransport({
 async function sendSMSFromMail(phoneNumber, message) {
   var mailOptions = {
     from: '"ClinicNode" support@app-production.eu',
-    // to: "webaj.info@gmail.com",
-    to: "maki3196@gmail.com",
+    to: "webaj.info@gmail.com",
+    // to: "PERSONAL EMAIL",
     subject: phoneNumber,
     text: message,
   };
