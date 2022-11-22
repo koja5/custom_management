@@ -137,24 +137,31 @@ export class LastMinuteEventConfirmationComponent implements OnInit {
 
         let start =  new Date(this.selectedDay.value.getFullYear(), this.selectedDay.value.getMonth(), this.selectedDay.value.getDate(), this.getHours(this.selectedHour), this.getMinutes(this.selectedHour));
         let end = new Date(start);
-        end.setMinutes(start.getMinutes()+30);
-        formValue.start = this.datePipe.transform(start,"yyyy-MM-ddTHH:mm:ssZ");
-        formValue.end =  this.datePipe.transform(end,"yyyy-MM-ddTHH:mm:ssZ");
-        formValue.superadmin = this.helpService.getSuperadmin();
-        formValue.color = "#63f26f";
-        formValue.colorTask="12";
-        formValue.creator_id = this.helpService.getMe();
-        formValue.confirm=1;
 
-        console.log(formValue);
-        
-        this.taskService.createTask(formValue, (val) => {
-          if (val.success) {     
-            this.helpService.successToastr(this.language.successExecutedActionTitle,this.language.successExecutedActionText);
-          } else {
-            this.helpService.errorToastr(this.language.errorExecutedActionTitle,this.language.errorExecutedActionText);
-          }
-        });    
+        console.log(this.selectedTherapeut);
+        if(start.getTime()>new Date().getTime())
+        {
+          end.setMinutes(start.getMinutes()+30);
+          formValue.start = this.datePipe.transform(start,"yyyy-MM-ddTHH:mm:ssZ");
+          formValue.end =  this.datePipe.transform(end,"yyyy-MM-ddTHH:mm:ssZ");
+          formValue.superadmin = this.helpService.getSuperadmin();
+          formValue.color = "#63f26f";
+          formValue.colorTask="12";
+          formValue.creator_id = this.selectedTherapeut;
+          formValue.confirm=1;
+  
+          console.log(formValue);
+          
+          this.taskService.createTask(formValue, (val) => {
+            if (val.success) {     
+              this.helpService.successToastr(this.language.successExecutedActionTitle,this.language.successExecutedActionText);
+            } else {
+              this.helpService.errorToastr(this.language.errorExecutedActionTitle,this.language.errorExecutedActionText);
+            }
+          });      
+        }else{
+          this.helpService.errorToastr("Time Passed","Time passed");
+        }
     });
   }
 
