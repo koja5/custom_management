@@ -5775,6 +5775,7 @@ router.post("/sendMassiveSMS", function (req, res) {
                   count = 0;
                   rows.forEach(async function (to, i, array) {
                     var phoneNumber = to.mobile ? to.mobile : null;
+                    console.log(JSON.parse(codes));
                     if (
                       checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
                       req.body.message

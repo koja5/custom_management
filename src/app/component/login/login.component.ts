@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { LoginService } from "../../service/login.service";
 import { MailService } from "../../service/mail.service";
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router } from "@angular/router";
 import { CookieService } from "ng2-cookies";
 import { DashboardService } from "../../service/dashboard.service";
 import { MongoService } from "../../service/mongo.service";
@@ -75,13 +75,16 @@ export class LoginComponent implements OnInit {
       this.helpService.getLanguage()
     ) {
       this.language = this.helpService.getLanguage();
+      console.log('ovde 1');
     } else if (
       this.helpService.getLocalStorage("countryCode") &&
       this.helpService.getLanguage()
     ) {
       this.language = this.helpService.getLanguage();
+      console.log('ovde 2');
     } else {
       this.checkCountryLocation();
+      console.log('ovde 3');
     }
     if (this.helpService.getLocalStorage("registrationData")) {
       const registrationData = JSON.parse(
@@ -117,7 +120,6 @@ export class LoginComponent implements OnInit {
           );
         });
         this.helpService.setLocalStorage("countryCode", "US");
-        this.helpService.setLocalStorage("countryCode", "US");
       }
     );
   }
@@ -140,6 +142,8 @@ export class LoginComponent implements OnInit {
           this.service.getDefaultLanguage().subscribe(
             (language) => {
               if (language !== null) {
+                console.log('language', language);
+
                 this.language = language["config"];
                 this.helpService.setLocalStorage(
                   "language",
@@ -181,6 +185,7 @@ export class LoginComponent implements OnInit {
           this.service.getDefaultLanguage().subscribe(
             (language) => {
               if (language !== null) {
+                console.log('language', language);
                 this.language = language["config"];
                 this.helpService.setLocalStorage(
                   "language",
