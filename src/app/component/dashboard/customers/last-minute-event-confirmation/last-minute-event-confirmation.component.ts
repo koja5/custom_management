@@ -160,7 +160,7 @@ export class LastMinuteEventConfirmationComponent implements OnInit {
             }
           });      
         }else{
-          this.helpService.errorToastr("Time Passed","Time passed");
+          this.helpService.errorToastr(this.language.lastMinuteOfferDatePassedTitle,this.language.lastMinuteOfferDatePassedText);
         }
     });
   }

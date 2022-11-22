@@ -2365,7 +2365,16 @@
             "viewLastMinuteOffer":{
                 "type":"string"
             },
+            "clearLastMinuteOffer":{
+                "type":"string"
+            },
             "lastMinuteOffer":{
+                "type":"string"
+            },
+            "lastMinuteOfferDatePassedTitle":{
+                "type":"string"
+            },
+            "lastMinuteOfferDatePassedText":{
                 "type":"string"
             },
             "thisFieldIsRequired": {
@@ -3269,6 +3278,9 @@
                         },
                         {
                             "key": "confirmEventMove"
+                        },
+                        {
+                            "key": "noStoreSelectedIndicatorText"
                         }
                     ]
                 },
@@ -3276,13 +3288,18 @@
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items":[
+                    "items":[                        
                         {
                             "key":"lastMinute"
                         },
-                        {},
                         {
-                            "key": "noStoreSelectedIndicatorText"
+                            "key":"lastMinuteOffer"
+                        },
+                        {
+                            "key":"lastMinuteOfferDatePassedText"
+                        },
+                        {
+                            "key":"lastMinuteOfferDatePassedTitle"
                         }
                     ]
                 },
@@ -3338,7 +3355,7 @@
                             "key":"viewLastMinuteOffer"
                         },
                         {
-                            "key":"lastMinuteOffer"
+                            "key":"clearLastMinuteOffer"
                         }
                     ]
                 }
