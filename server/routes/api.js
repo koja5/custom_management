@@ -6406,6 +6406,14 @@ function getSqlQueryMultiSelect(body) {
     }
   }
 
+  if(body.noEventSinceCheckbox && body.noEventSinceDate) {
+    if(question) {
+      question += ` and CAST(t.end AS DATE) < CAST('${body.noEventSinceDate}' AS DATE)`
+    } else {
+      question = ` CAST(t.end AS DATE) < CAST('${body.noEventSinceDate}' AS DATE)`
+    }
+  }
+
   console.log(question);
 
   return question;
@@ -6421,7 +6429,8 @@ function getJoinTable(body) {
     body.start ||
     body.end ||
     body.creator_id ||
-    body.store
+    body.store ||
+    body.noEventSinceCheckbox
   ) {
     joinTable += " join tasks t on c.id = t.customer_id";
   }
@@ -6444,6 +6453,10 @@ router.post("/getFilteredRecipients", function (req, res) {
         res.json(err);
       }
       var question = getSqlQueryMultiSelect(req.body);
+      if(!question || question.length === 0) {
+        return res.status(400).send('Invalid data send!');
+      }
+      console.log(req.body);
       var joinTable = getJoinTable(req.body);
       console.log('joinTable: ', joinTable);
       var table = "";

@@ -145,6 +145,13 @@ export class MassiveSmsComponent implements OnInit, FormGuardData {
             this.language.needToConfigurationParams
           );
         }
+      }, (error) => {
+        console.log(error);
+        this.recipients.close();
+        this.helpService.warningToastr(
+          "",
+          this.language.needToConfigurationParams
+        );
       });
   }
 
