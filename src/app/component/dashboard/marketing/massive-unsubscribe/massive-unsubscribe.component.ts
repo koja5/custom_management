@@ -21,8 +21,6 @@ export class MassiveUnsubscribeComponent implements OnInit {
 
   ngOnInit() {
     this.loadLanguage();
-    console.log(this.activatedRoute.outlet);
-    console.log(this.activatedRoute.url);
     this.email = this.activatedRoute.snapshot.paramMap.get('userEmail');
   }
 
@@ -44,20 +42,18 @@ export class MassiveUnsubscribeComponent implements OnInit {
       "email": this.email,
       "value": 0
     };
+    console.log(this.router.url.indexOf('unsubscribeSMS'))
+    console.log(this.router.url.indexOf('unsubscribeEmail'))
 
-    // if(this.activatedRoute.snapshot === 'unsubscribeSMS'){
-
-    //   this.customerService.unsubscribeUserFromMassiveSMS(obj).subscribe((data) => {
-    //     this.router.navigate(['/login']);
-    //   });
-    // }else if(this.activatedRoute.snapshot === 'unsubscribeEmail'){
-
-    //   this.customerService.unsubscribeUserFromMassiveEmail(obj).subscribe((data) => {
-    //     this.router.navigate(['/login']);
-    //   });
-  
+    if(this.router.url.indexOf('unsubscribeSMS')){
+      this.customerService.unsubscribeUserFromMassiveSMS(obj).subscribe((data) => {
+        this.router.navigate(['/login']);
+      });
+    } else if(this.router.url.indexOf('unsubscribeEmail')){
+      this.customerService.unsubscribeUserFromMassiveEmail(obj).subscribe((data) => {
+        this.router.navigate(['/login']);
+      });
     }
-
   }
 
   redirectUser(): void {
