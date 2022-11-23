@@ -46,12 +46,12 @@ const routes: Routes = [
     component: TermsComponent,
   },
   {
-    path: "unsubscribeSMS/:userEmail",
+    path: "unsubscribeSMS/:customerId",
     canActivate: [UnsubscribeGuard],
     component: MassiveUnsubscribeComponent,
   },
   {
-    path: "unsubscribeEmail/:userEmail",
+    path: "unsubscribeEmail/:customerId",
     canActivate: [UnsubscribeGuard],
     component: MassiveUnsubscribeComponent,
   },
