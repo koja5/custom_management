@@ -967,7 +967,7 @@
               </div> -->
             </div>
           </div>
-          <div class="right-panel last-minute-panel hide" [style.height]="height" *ngIf="!loading">
+          <div class="right-panel last-minute-panel hide" style="width: 600px !important;" [style.height]="height" *ngIf="!loading">
             <div class="control-panel e-css">
               <!-- PATIENTS -->              
               <div class="col-row">
@@ -1057,17 +1057,15 @@
                   <mat-error *ngIf="this.lastMinuteHoursValue.length<1 && this.lastMinuteOfferSubmitted">{{ language?.thisFieldIsRequired }}</mat-error>               
                 </div>
               </div>  
-              <div class="col-row">
-                <div class="col-left">
+              <div class="col-row d-flex justify-content-center">
                   <button kendoButton [primary]="true" class="form-button" (click)="clearLastMinuteForm()">
                     {{ language.clearLastMinuteOffer}}
                   </button>
-                </div>
-                <div class="col-right">
-                  <button kendoButton [primary]="true" class="form-button pull-right" (click)="sendLastMinuteOffer()">
+              </div>
+              <div class="col-row d-flex justify-content-center">
+                <button kendoButton [primary]="true" class="form-button pull-right" (click)="sendLastMinuteOffer()">
                     {{language.sendLastMinuteOffer}}
-                  </button>
-                </div>
+                </button>
               </div>          
             </div>
           </div>
