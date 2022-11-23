@@ -2299,6 +2299,12 @@
             "excludeCustomersWithEvents": {
                 "type": "string"
             },
+            "noEventSinceCheckbox": {
+                "type": "string"
+            },
+            "noEventSinceDate": {
+                "type": "string"
+            },
             "chooseImage": {
                 "type": "string"
             },
@@ -6739,6 +6745,19 @@
                         },
                         {
                             "key": "excludeCustomersWithEvents"
+                        }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "noEventSinceCheckbox"
+                        },
+                        {
+                            "key": "noEventSinceDate"
                         }
                     ]
                 },
