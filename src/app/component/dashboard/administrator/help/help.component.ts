@@ -3,8 +3,8 @@ import { HelpTopicModel } from 'src/app/models/help-topic-model';
 import { FaqService } from 'src/app/service/faq.service';
 import { Modal } from 'ngx-modal';
 import { HelpService } from 'src/app/service/help.service';
-import { DynamicService } from 'src/app/service/dynamic.service';
 import { checkIfInputValid } from "../../../../shared/utils";
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-help',
@@ -38,9 +38,9 @@ export class HelpComponent implements OnInit {
   public selectedLanguage: any;
   checkIfInputValid = checkIfInputValid;
 
-  constructor(private service: FaqService,
+  constructor(private faqService: FaqService,
     private helpService: HelpService,
-    private dynamicService: DynamicService) {}
+    private httpClient: HttpClient) {}
 
   ngOnInit() {  
     if (localStorage.getItem("language") !== null) {
@@ -61,13 +61,8 @@ export class HelpComponent implements OnInit {
 
   getAllLanguages() {
     this.loading = true;
-    this.dynamicService
-      .callApiGet(
-        "/api/getAllTranslationsByDemoAccount",
-        this.helpService.getLocalStorage("demoAccountLanguage")
-      )
+    this.httpClient.get("/api/getTranslationWithoutConfig")
       .subscribe((data) => {
-        console.log(data);
         this.data = data;
         this.translateTextValue();
       });
@@ -95,7 +90,7 @@ export class HelpComponent implements OnInit {
   }
 
   loadTopics(){
-    this.service.getFaqTopics(this.countryCodeValue).subscribe((data)=>{
+    this.faqService.getFaqTopics(this.countryCodeValue).subscribe((data)=>{
       this.topics=data
       this.loading = false;
     });
@@ -124,7 +119,7 @@ export class HelpComponent implements OnInit {
   }
 
   createHelpTopic(): void{
-    this.service.createFaqTopic(this.topic).then(result=>{
+    this.faqService.createFaqTopic(this.topic).then(result=>{
       this.loadTopics();
       this.closeHelpTopicModal();
       if (result) {
@@ -136,7 +131,7 @@ export class HelpComponent implements OnInit {
   }
 
   updateHelpTopic(){
-    this.service.updateFaqTopic(this.topic).then(result=>{
+    this.faqService.updateFaqTopic(this.topic).then(result=>{
       this.closeHelpTopicModal();
       if (result) {
         this.helpService.successToastr(this.language.adminSuccessUpdateTitle, this.language.adminSuccessUpdateText);
@@ -147,7 +142,7 @@ export class HelpComponent implements OnInit {
   }
 
   deleteHelpTopic(topic){
-    this.service.deleteFaqTopic(topic).then(result=>{
+    this.faqService.deleteFaqTopic(topic).then(result=>{
       if (result) {
         this.helpService.successToastr(this.language.adminSuccessUpdateTitle, this.language.adminSuccessUpdateText);
         this.loadTopics();

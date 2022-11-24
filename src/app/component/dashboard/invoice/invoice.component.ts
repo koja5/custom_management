@@ -1,4 +1,3 @@
-import { filter } from 'rxjs/operators/filter';
 import { InvoiceService } from "./../../../service/invoice.service";
 import { ParameterItemService } from "src/app/service/parameter-item.service";
 import {
@@ -28,11 +27,11 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import pdfMake from "pdfmake/build/pdfmake";
 import PizZip from "pizzip";
 import PizZipUtils from "pizzip/utils/index.js";
-import { DashboardService } from "src/app/service/dashboard.service";
 import { LoadingScreenService } from "src/app/shared/loading-screen/loading-screen.service";
 import { DateService } from "src/app/service/date.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -142,7 +141,7 @@ export class InvoiceComponent implements OnInit {
     private taskService: TaskService,
     private parameterItemService: ParameterItemService,
     private pdfService: PDFService,
-    private dashboardService: DashboardService,
+    private httpClient: HttpClient,
     private loadingScreenService: LoadingScreenService,
     private dateService: DateService,
     private invoiceService: InvoiceService,
@@ -195,10 +194,9 @@ export class InvoiceComponent implements OnInit {
 
     this.getParameters();
 
-    this.dashboardService.getTranslation().subscribe((data) => {
-      console.log(data);
+    this.httpClient.get<any[]>("/api/getTranslationWithoutConfig")
+    .subscribe((data) => {
       this.languageList = [];
-
       data.forEach((elem) => {
         this.languageList.push({
           text: elem.language,
