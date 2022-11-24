@@ -1,15 +1,14 @@
 <form
   [formGroup]="form"
   (submit)="handleSubmit($event)"
-  (change)="getIsFormDirty()"
-  (click)="sendValue()"
 >
-  <ng-container
-    *ngFor="let field of config"
-    dynamicField
-    [config]="field"
-    [group]="form"
-  >
+  <ng-container *ngFor="let field of config">
+    <ng-container 
+      dynamicField
+      [config]="field"
+      [group]="form"
+      *ngIf="!field.condition || (field.condition && field.condition.value)">
+    </ng-container>
   </ng-container>
 </form>
 <app-dynamic-confirm-dialog

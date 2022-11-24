@@ -28,4 +28,8 @@ export interface FieldConfig {
   onLabel?: string;
   offLabel?: string;
   allowCustom?: boolean;
+  condition?: {
+    fieldName: string;
+    value?: any;
+  }
 }
