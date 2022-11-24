@@ -136,15 +136,22 @@ export class MassiveEmailComponent implements OnInit, FormGuardData {
       .callApiPost("/api/getFilteredRecipients", this.changeData)
       .subscribe((data) => {
         console.log(data);
-        if (data && data["length"] > 0) {
+        if (data) {
           this.allRecipients = data;
-        } else {
+        }  else if(!data) {
           this.recipients.close();
           this.helpService.warningToastr(
             "",
             this.language.needToConfigurationParams
           );
         }
+      }, (error) => {
+        console.log(error);
+        this.recipients.close();
+        this.helpService.warningToastr(
+          "",
+          this.language.needToConfigurationParams
+        );
       });
   }
 
