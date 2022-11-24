@@ -1,9 +1,11 @@
-<div class="container">
+<div class="container" *ngIf="licence">
   <h3 class="text-center">{{language.licence}}</h3>
   <hr>
 
   <p>{{language.yourLicence}}: <b>{{licence.name}} ({{licence.price}} €)</b></p>
-  <p>{{language.licenceExpiration}}: <b [ngStyle]="diffDate > 0 ? {'color': 'green'} : {'color': 'red'}">{{licence.expiration_date | date :'dd.MM.yyyy' }} ({{diffDate}} {{language.daysLeft}})</b></p>
+  <p>{{language.licenceExpiration}}: <b
+      [ngStyle]="diffDate > 0 ? {'color': 'green'} : {'color': 'red'}">{{licence.expiration_date | date :'dd.MM.yyyy' }}
+      ({{diffDate + 1}} {{language.daysLeft}})</b></p>
 
   <div class="button-licence">
     <div class="row">
@@ -11,8 +13,46 @@
         <button class="btn btn-primary" [disabled]="true">{{language.upgradeLicence}}</button>
       </div>
       <div class="col-md-6">
-        <button class="btn btn-success" [disabled]="true">{{language.renewLicence}}</button>
+        <button class="btn btn-success" (click)="openPaymentForm()">{{language.renewLicence}}</button>
       </div>
     </div>
   </div>
 </div>
+
+<modal #paymentForm modalClass="modal-md top-margin" [closeOnOutsideClick]="false">
+  <modal-header>
+    <h3 *ngIf="language !== undefined">{{ language?.lastPaymentStep }}</h3>
+  </modal-header>
+  <modal-content>
+    <div class="row">
+      <div class="col-xs-12 col-md-12 text-center">
+        <h4 class="m-4">{{language.cardDetails}}</h4>
+        <div class="form-group">
+
+          <div>
+            <input [(ngModel)]="data.firstname" class="col-md-12 payment-input" [placeholder]="language.firstname">
+            <input [(ngModel)]="data.lastname" class="col-md-12 payment-input" [placeholder]="language.lastname">
+            <input type="email" [(ngModel)]="data.email" class="col-md-12 payment-input" [placeholder]="language.email">
+            <input [(ngModel)]="data.phone" class="col-md-12 payment-input" [placeholder]="language.phone">
+            <select class="col-md-12 payment-input" [(ngModel)]="data.expired">
+              <option disabled selected value="undefined">Select number of month</option>
+              <option *ngFor="let item of [].constructor(12); let i = index" value="{{i + 1}}">{{i + 1}} Month</option>
+            </select>
+          </div>
+          <div class="div-flex"></div>
+          <div id="card-element" class="field mt-3"></div>
+          <div class="sum-div" *ngIf="data.expired">
+            <h4>{{data.expired}} Month x {{licence.price}} €</h4>
+            <h3 class="sum-price">{{data.expired * licence.price}} €</h3>
+          </div>
+        </div>
+        <div class="col-xs-12 text-right" *ngIf="card">
+          <button [disabled]="card['_implementation']['_empty'] || card['_implementation']['_invalid'] || checkRequiredFields()"
+            (click)="submitPayment()" class="btn btn-primary mt-4 d-block w-100">
+            {{ language.requestSectionFormSendRequestButton }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </modal-content>
+</modal>

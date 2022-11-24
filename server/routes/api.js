@@ -6100,35 +6100,31 @@ function getSqlQueryMultiSelect(body) {
     question += " and ";
   }
   if (body.place) {
-    if(body.place.length < 2) {
+    if (body.place.length < 2) {
       if (question) {
-        
         question += " and c.city = '" + body.place[0] + "'";
       } else {
         question += " c.city = '" + body.place[0] + "'";
       }
-    }
-    else {
+    } else {
       body.place.forEach((item, index) => {
-        if(item !== 0) {
+        if (item !== 0) {
           if (question) {
-            if(index === 0) {
+            if (index === 0) {
               question += " and (c.city = '" + item + "'";
-            }
-            else if(index === body.place.length - 1) {
+            } else if (index === body.place.length - 1) {
               question += " or c.city = '" + item + "'" + ")";
-            }
-            else {
+            } else {
               question += " or c.city = '" + item + "'";
             }
           } else {
             question += " (c.city = '" + item + "'";
           }
         }
-      })
+      });
     }
   }
-  
+
   if (body.male && body.female) {
     var male = "'male'";
     var female = "'female'";
@@ -6172,31 +6168,28 @@ function getSqlQueryMultiSelect(body) {
   }
 
   if (body.category) {
-    if(body.category.length < 2) {
+    if (body.category.length < 2) {
       if (question) {
         question += " and t.colorTask = " + body.category[0];
       } else {
         question += " t.colorTask = " + body.category[0];
       }
-    }
-    else {
+    } else {
       body.category.forEach((item, index) => {
-        if(item !== 0) {
+        if (item !== 0) {
           if (question) {
-            if(index === 0) {
-              question += " and (t.colorTask = " + item;;
-            }
-            else if(index === body.category.length - 1) {
+            if (index === 0) {
+              question += " and (t.colorTask = " + item;
+            } else if (index === body.category.length - 1) {
               question += " or t.colorTask = " + item + ")";
-            }
-            else {
+            } else {
               question += " or t.colorTask = " + item;
             }
           } else {
             question += " (t.colorTask = " + item;
           }
         }
-      })
+      });
     }
   }
 
@@ -6217,176 +6210,158 @@ function getSqlQueryMultiSelect(body) {
   }
 
   if (body.creator_id) {
-    if(body.creator_id.length < 2) {
+    if (body.creator_id.length < 2) {
       if (question) {
         question += " and t.creator_id = " + body.creator_id[0];
       } else {
         question += " t.creator_id = " + body.creator_id[0];
       }
-    }
-    else {
+    } else {
       body.creator_id.forEach((item, index) => {
-        if(item !== 0) {
+        if (item !== 0) {
           if (question) {
-            if(index === 0) {
-              question += " and (t.creator_id = " + item;;
-            }
-            else if(index === body.creator_id.length - 1) {
+            if (index === 0) {
+              question += " and (t.creator_id = " + item;
+            } else if (index === body.creator_id.length - 1) {
               question += " or t.creator_id = " + item + ")";
-            }
-            else {
+            } else {
               question += " or t.creator_id = " + item;
             }
           } else {
             question += " (t.creator_id = " + item;
           }
         }
-      })
+      });
     }
   }
 
   if (body.store) {
-    if(body.store.length < 2) {
+    if (body.store.length < 2) {
       if (question) {
         question += " and t.storeId = " + body.store[0];
       } else {
         question += " t.storeId = " + body.store[0];
       }
-    }
-    else {
+    } else {
       body.store.forEach((item, index) => {
-        if(item !== 0) {
+        if (item !== 0) {
           if (question) {
-            if(index === 0) {
-              question += " and (t.storeId = " + item;;
-            }
-            else if(index === body.store.length - 1) {
+            if (index === 0) {
+              question += " and (t.storeId = " + item;
+            } else if (index === body.store.length - 1) {
               question += " or t.storeId = " + item + ")";
-            }
-            else {
+            } else {
               question += " or t.storeId = " + item;
             }
           } else {
             question += " (t.storeId = " + item;
           }
         }
-      })
+      });
     }
   }
 
   if (body.recommendation) {
-    if(body.recommendation.length < 2) {
+    if (body.recommendation.length < 2) {
       if (question) {
         question += " and bo.recommendation = " + body.recommendation[0];
       } else {
         question += " bo.recommendation = " + body.recommendation[0];
       }
-    }
-    else {
+    } else {
       body.recommendation.forEach((item, index) => {
-        if(item !== 0) {
+        if (item !== 0) {
           if (question) {
-            if(index === 0) {
-              question += " and (bo.recommendation = " + item;;
-            }
-            else if(index === body.recommendation.length - 1) {
+            if (index === 0) {
+              question += " and (bo.recommendation = " + item;
+            } else if (index === body.recommendation.length - 1) {
               question += " or bo.recommendation = " + item + ")";
-            }
-            else {
+            } else {
               question += " or bo.recommendation = " + item;
             }
           } else {
             question += " (bo.recommendation = " + item;
           }
         }
-      })
+      });
     }
   }
 
   if (body.relationship) {
-    if(body.relationship.length < 2) {
+    if (body.relationship.length < 2) {
       if (question) {
         question += " and bo.relationship = " + body.relationship[0];
       } else {
         question += " bo.relationship = " + body.relationship[0];
       }
-    }
-    else {
+    } else {
       body.relationship.forEach((item, index) => {
-        if(item !== 0) {
+        if (item !== 0) {
           if (question) {
-            if(index === 0) {
-              question += " and (bo.relationship = " + item;;
-            }
-            else if(index === body.relationship.length - 1) {
+            if (index === 0) {
+              question += " and (bo.relationship = " + item;
+            } else if (index === body.relationship.length - 1) {
               question += " or bo.relationship = " + item + ")";
-            }
-            else {
+            } else {
               question += " or bo.relationship = " + item;
             }
           } else {
             question += " (bo.relationship = " + item;
           }
         }
-      })
+      });
     }
   }
 
   if (body.social) {
-    if(body.social.length < 2) {
+    if (body.social.length < 2) {
       if (question) {
         question += " and bo.social = " + body.social[0];
       } else {
         question += " bo.social = " + body.social[0];
       }
-    }
-    else {
+    } else {
       body.social.forEach((item, index) => {
-        if(item !== 0) {
+        if (item !== 0) {
           if (question) {
-            if(index === 0) {
-              question += " and (bo.social = " + item;;
-            }
-            else if(index === body.social.length - 1) {
+            if (index === 0) {
+              question += " and (bo.social = " + item;
+            } else if (index === body.social.length - 1) {
               question += " or bo.social = " + item + ")";
-            }
-            else {
+            } else {
               question += " or bo.social = " + item;
             }
           } else {
             question += " (bo.social = " + item;
           }
         }
-      })
+      });
     }
   }
 
   if (body.doctor) {
-    if(body.doctor.length < 2) {
+    if (body.doctor.length < 2) {
       if (question) {
         question += " and bo.doctor = " + body.doctor[0];
       } else {
         question += " bo.doctor = " + body.doctor[0];
       }
-    }
-    else {
+    } else {
       body.doctor.forEach((item, index) => {
-        if(item !== 0) {
+        if (item !== 0) {
           if (question) {
-            if(index === 0) {
-              question += " and (bo.doctor = " + item;;
-            }
-            else if(index === body.doctor.length - 1) {
+            if (index === 0) {
+              question += " and (bo.doctor = " + item;
+            } else if (index === body.doctor.length - 1) {
               question += " or bo.doctor = " + item + ")";
-            }
-            else {
+            } else {
               question += " or bo.doctor = " + item;
             }
           } else {
             question += " (bo.doctor = " + item;
           }
         }
-      })
+      });
     }
   }
 
@@ -6410,7 +6385,6 @@ function getSqlQueryMultiSelect(body) {
 
   return question;
 }
-
 
 //join tasks t on c.id = t.customer_id join base_one bo on c.id = bo.customer_id join base_two bt on c.id = bt.customer_id
 
@@ -6445,7 +6419,7 @@ router.post("/getFilteredRecipients", function (req, res) {
       }
       var question = getSqlQueryMultiSelect(req.body);
       var joinTable = getJoinTable(req.body);
-      console.log('joinTable: ', joinTable);
+      console.log("joinTable: ", joinTable);
       var table = "";
       if (req.body.mode && req.body.mode === "mail") {
         var checkAdditionalQuery =
@@ -8885,7 +8859,9 @@ router.get("/getHolidaysByTemplate/:templateId", function (req, res, next) {
     }
     var templateId = req.params.templateId;
     conn.query(
-      "SELECT * FROM `holidays` h where h.templateId = " + templateId + " ORDER BY StartTime asc",
+      "SELECT * FROM `holidays` h where h.templateId = " +
+        templateId +
+        " ORDER BY StartTime asc",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -8907,7 +8883,9 @@ router.get("/getHolidaysByTemplates/:templateIds", function (req, res, next) {
     }
     var templateIds = req.params.templateIds;
     conn.query(
-      "SELECT * FROM `holidays` h where h.templateId in (" + templateIds + ") ORDER BY StartTime asc",
+      "SELECT * FROM `holidays` h where h.templateId in (" +
+        templateIds +
+        ") ORDER BY StartTime asc",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -8929,7 +8907,9 @@ router.get("/getHolidaysForClinic/:superAdminId", function (req, res, next) {
     }
     var superAdminId = req.params.superAdminId;
     conn.query(
-      "SELECT * FROM `holidays` h where h.superAdminId =" + superAdminId + " ORDER BY StartTime asc",
+      "SELECT * FROM `holidays` h where h.superAdminId =" +
+        superAdminId +
+        " ORDER BY StartTime asc",
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -10410,6 +10390,37 @@ router.get("/getLicenceForUser/:superadmin_id", function (req, res, next) {
         } else {
           res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
+router.post("/updateLicence", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+
+    var new_date = new Date();
+    var date = {
+      licence_id: req.body.licenceId,
+      superadmin_id: req.body.superadminId,
+      expiration_date: new Date(req.body.expiration_date),
+    };
+
+    conn.query(
+      "update licence_per_user set ? where superadmin_id = ?",
+      [date, req.body.superadminId],
+      function (err, rows, fields) {
+        conn.release();
+        if (err) {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        } else {
+          response = true;
+          res.json(response);
         }
       }
     );

@@ -13,7 +13,7 @@ export class HelpService {
     private http: HttpClient,
     private titleService: Title,
     private toastr: ToastrService,
-    private sanitizer: DomSanitizer,
+    private sanitizer: DomSanitizer
   ) {}
 
   getGridPageSize() {
@@ -353,14 +353,14 @@ export class HelpService {
   }
 
   setUserProfileImagePath(user: any) {
-      const TYPED_ARRAY = new Uint8Array(user.img.data);
-      const STRING_CHAR = String.fromCharCode.apply(null, TYPED_ARRAY);
-      let base64String = btoa(STRING_CHAR);
-      let path = this.sanitizer.bypassSecurityTrustUrl(
-        "data:image/png;base64," + base64String
-      );
-    
-      return path;
+    const TYPED_ARRAY = new Uint8Array(user.img.data);
+    const STRING_CHAR = String.fromCharCode.apply(null, TYPED_ARRAY);
+    let base64String = btoa(STRING_CHAR);
+    let path = this.sanitizer.bypassSecurityTrustUrl(
+      "data:image/png;base64," + base64String
+    );
+
+    return path;
   }
 
   multiSelectArrayToString(array): string {
@@ -380,24 +380,21 @@ export class HelpService {
   multiSelectStringToArrayNumber(string): number[] {
     let multiSelectArrayToString;
     if (string.split(";") !== undefined) {
-      multiSelectArrayToString = string
-        .split(";")
-        .map(Number);
+      multiSelectArrayToString = string.split(";").map(Number);
     } else {
       multiSelectArrayToString = Number(string);
     }
-    return multiSelectArrayToString
+    return multiSelectArrayToString;
   }
 
   multiSelectStringToArrayString(string): string[] {
     let multiSelectArrayToString;
     if (string.split(";") !== undefined) {
-      multiSelectArrayToString = string
-        .split(";")
+      multiSelectArrayToString = string.split(";");
     } else {
       multiSelectArrayToString = string;
     }
-    return multiSelectArrayToString
+    return multiSelectArrayToString;
   }
 
   prepareDraft(formValues, draftName, draftType) {
@@ -407,7 +404,9 @@ export class HelpService {
       place: this.multiSelectArrayToString(formValues.place),
       male: formValues.male ? formValues.male : false,
       female: formValues.female ? formValues.female : false,
-      excludeCustomersWithEvents: formValues.excludeCustomersWithEvents ? formValues.excludeCustomersWithEvents : false,
+      excludeCustomersWithEvents: formValues.excludeCustomersWithEvents
+        ? formValues.excludeCustomersWithEvents
+        : false,
       birthdayFrom: formValues.birthdayFrom ? formValues.birthdayFrom : "",
       birthdayTo: formValues.birthdayTo ? formValues.birthdayTo : "",
       profession: formValues.profession ? formValues.profession : "",
@@ -416,7 +415,7 @@ export class HelpService {
       end: formValues.end ? formValues.end : "",
       subject: formValues.subject ? formValues.subject : "",
       message: formValues.message ? formValues.message : "",
-      
+
       category: this.multiSelectArrayToString(formValues.category),
       creator_id: this.multiSelectArrayToString(formValues.creator_id),
       recommendation: this.multiSelectArrayToString(formValues.recommendation),
@@ -441,5 +440,16 @@ export class HelpService {
       }
     });
     return object;
+  }
+
+  convertStringToDate(date: string) {
+    const days = date.split("T")[0];
+    const hours = date.split("T")[1];
+
+    const day = Number(days.split("-")[2]);
+    const month = Number(days.split("-")[1]) - 1;
+    const year = Number(days.split("-")[0]);
+
+    return new Date(year, month, day);
   }
 }

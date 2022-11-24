@@ -1,6 +1,8 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 var router = express.Router();
+var request = require("request");
 // This is your test secret API key.
 const stripe = require("stripe")(
   "sk_test_51LhYhHL4uVudLiXAsXYCGWFY7RhraCcUwR9wbfV2xoL04pccSeLCLkbZvbPsxhivnRp9RJmu61YGFinNd7lKzOJz00r5f2ldt5"
@@ -29,6 +31,13 @@ router.post("/create-payment", (req, res, next) => {
         console.log(err);
         next(err);
       }
+      var options = {
+        url: process.env.link_api + "updateLicence",
+        method: "POST",
+        body: req.body,
+        json: true,
+      };
+      request(options, function (error, response, body) {});
       res.json({ success: true, status: "Payment successfull!" });
     }
   );

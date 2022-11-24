@@ -962,12 +962,12 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     const checkCustomerId = this.customerUser.id
       ? this.customerUser
       : {
-        id: args.data.customer_id
-          ? args.data.customer_id
-          : args.data.user.id
+          id: args.data.customer_id
+            ? args.data.customer_id
+            : args.data.user.id
             ? args.data.user.id
             : null,
-      };
+        };
     formValue.user = checkCustomerId;
     formValue.customer_id = checkCustomerId.id;
     formValue.therapy_id = args.data.therapy_id;
@@ -1175,7 +1175,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
         );
         timeDurationInd =
           Number(informationAboutStore.time_therapy) !==
-            Number(this.timeDuration)
+          Number(this.timeDuration)
             ? 1
             : 0;
         timeDuration = Number(informationAboutStore.time_therapy);
@@ -1193,7 +1193,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
         } else {
           timeDurationInd =
             Number(informationAboutStore.time_therapy) !==
-              Number(this.timeDuration)
+            Number(this.timeDuration)
               ? 1
               : 0;
           timeDuration = Number(informationAboutStore.time_therapy);
@@ -1252,7 +1252,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     this.selectedTarget = closest(
       targetElement,
       ".e-appointment,.e-work-cells," +
-      ".e-vertical-view .e-date-header-wrap .e-all-day-cells,.e-vertical-view .e-date-header-wrap .e-header-cells"
+        ".e-vertical-view .e-date-header-wrap .e-all-day-cells,.e-vertical-view .e-date-header-wrap .e-header-cells"
     );
     if (isNullOrUndefined(this.selectedTarget)) {
       args.cancel = true;
@@ -1478,10 +1478,11 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     private parameterItemService: ParameterItemService,
     private dateService: DateService,
     private invoiceService: InvoiceService
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.selectedStoreIdSub = this.selectedStoreIdSubject.asObservable()
+    this.selectedStoreIdSub = this.selectedStoreIdSubject
+      .asObservable()
       .subscribe(this.checkIsStoreSelected);
     this.initializationConfig();
     this.helpService.setDefaultBrowserTabTitle();
@@ -1492,7 +1493,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.toastr.clear();
-    if(this.selectedStoreIdSub) {
+    if (this.selectedStoreIdSub) {
       this.selectedStoreIdSub.unsubscribe();
     }
   }
@@ -1509,14 +1510,14 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   private checkIsStoreSelected = () => {
     let storeExists = false;
     if (this.store) {
-      storeExists = this.store.some(s => s.id === this.selectedStoreId);
+      storeExists = this.store.some((s) => s.id === this.selectedStoreId);
     }
-    this.isValidStoreSelected = 
+    this.isValidStoreSelected =
       !isNaN(this.selectedStoreId) &&
       this.selectedStoreId !== null &&
       this.selectedStoreId !== undefined &&
       storeExists;
-  }
+  };
 
   private initData() {
     this.initializationData();
@@ -1536,8 +1537,8 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     let editorHeaderTitleElement = document.querySelector(
       "#_dialog_wrapper > #_dialog_wrapper_dialog-header > #_dialog_wrapper_title > .e-title-text"
     );
-    if(editorHeaderTitleElement) {
-      if(editorHeaderTitleElement.innerHTML === "New Event") {
+    if (editorHeaderTitleElement) {
+      if (editorHeaderTitleElement.innerHTML === "New Event") {
         editorHeaderTitleElement.innerHTML = this.language.newEventTitle;
       } else if (editorHeaderTitleElement.innerHTML === "Edit Event") {
         editorHeaderTitleElement.innerHTML = this.language.editEventTitle;
@@ -1546,17 +1547,17 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     let editorFooter = document.querySelector(
       "#_dialog_wrapper > .e-footer-content"
     );
-    if(editorFooter) {
+    if (editorFooter) {
       let deleteBtn = editorFooter.querySelector("button.e-event-delete");
       let cancelBtn = editorFooter.querySelector("button.e-event-cancel");
       let saveBtn = editorFooter.querySelector("button.e-event-save");
-      if(deleteBtn) {
+      if (deleteBtn) {
         deleteBtn.innerHTML = this.language.delete;
       }
-      if(cancelBtn) {
+      if (cancelBtn) {
         cancelBtn.innerHTML = this.language.cancel;
       }
-      if(saveBtn) {
+      if (saveBtn) {
         saveBtn.innerHTML = this.language.save;
       }
     }
@@ -1566,19 +1567,17 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   public loadHolidays() {
     const superAdminId = this.helpService.getSuperadmin();
 
-    this.holidayService
-      .getHolidaysForClinic(superAdminId)
-      .then((result) => {
-        console.log(result);
-        if (result && result.length > 0) {
-          result.forEach((r) => {
-            // console.log('R: ', r);
-            this.allEvents.push({
-              Subject: r.Subject,
-              StartTime: new Date(r.StartTime).setHours(Number(this.startWork)),
-              EndTime: new Date(r.EndTime).setHours(Number(this.startWork + 1)),
-              IsAllDay: false,
-            });
+    this.holidayService.getHolidaysForClinic(superAdminId).then((result) => {
+      console.log(result);
+      if (result && result.length > 0) {
+        result.forEach((r) => {
+          // console.log('R: ', r);
+          this.allEvents.push({
+            Subject: r.Subject,
+            StartTime: new Date(r.StartTime).setHours(Number(this.startWork)),
+            EndTime: new Date(r.EndTime).setHours(Number(this.startWork + 1)),
+            IsAllDay: false,
+          });
 
           this.holidays.push({
             Subject: r.Subject,
@@ -1619,10 +1618,11 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
                   IsAllDay: true,
                 });
               });
-
-              this.scheduleObj.eventSettings.dataSource = this.allEvents;
-              this.scheduleObj.refresh();
-              this.scheduleObj.refreshEvents();
+              if (this.scheduleObj) {
+                this.scheduleObj.eventSettings.dataSource = this.allEvents;
+                this.scheduleObj.refresh();
+                this.scheduleObj.refreshEvents();
+              }
             } else {
               console.log("no holidayss");
             }
@@ -1809,13 +1809,13 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
       }
     }
     if (notAllowedOnlinePreselected) {
-      if (this.store.length && this.activatedRouter.snapshot.params.storeId === undefined) {
-          this.selectedStoreId = this.store[0].id;
-          this.storageService.setSelectedStore(
-            this.id,
-            this.selected.toString()
-          );
-          this.getUserInCompany(this.selectedStoreId);
+      if (
+        this.store.length &&
+        this.activatedRouter.snapshot.params.storeId === undefined
+      ) {
+        this.selectedStoreId = this.store[0].id;
+        this.storageService.setSelectedStore(this.id, this.selected.toString());
+        this.getUserInCompany(this.selectedStoreId);
       } else {
         this.selectedStoreId = null;
         this.value = null;
@@ -2414,7 +2414,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
       value: this.value,
     };
 
-    this.mongo.setUsersFor(item).subscribe((data) => { });
+    this.mongo.setUsersFor(item).subscribe((data) => {});
   }
 
   getTaskForSelectedUsers(value) {
@@ -2521,7 +2521,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
           for (let j = 0; j < eventStatistic.length; j++) {
             if (
               this.sharedCalendarResources[i].id ===
-              eventStatistic[j].creator_id &&
+                eventStatistic[j].creator_id &&
               userId === eventStatistic[j].creator_id
             ) {
               for (let k = 0; k < listOfCategorie.length; k++) {
@@ -2764,7 +2764,10 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     if (holiday && date.elementType === "workCells") {
       date.element.style.backgroundColor = "#e9ecef";
 
-      if (date.date.getHours() == this.dayStartHourValue.getHours() && date.date.getMinutes() == this.dayStartHourValue.getMinutes()) {
+      if (
+        date.date.getHours() == this.dayStartHourValue.getHours() &&
+        date.date.getMinutes() == this.dayStartHourValue.getMinutes()
+      ) {
         date.element.innerHTML = holiday.Subject;
       }
 
@@ -2843,9 +2846,9 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
               new Date(workItem.change) <= date.date &&
               (i + 1 <= this.calendars[0].workTime[date.groupIndex].length - 1
                 ? date.date <
-                new Date(
-                  this.calendars[0].workTime[date.groupIndex][i + 1].change
-                )
+                  new Date(
+                    this.calendars[0].workTime[date.groupIndex][i + 1].change
+                  )
                 : true) &&
               date.date.getDay() - 1 < 5 &&
               date.date.getDay() !== 0
@@ -2854,15 +2857,15 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
                 (workItem.times[date.date.getDay() - 1].start <=
                   date.date.getHours() &&
                   workItem.times[date.date.getDay() - 1].end >
-                  date.date.getHours()) ||
+                    date.date.getHours()) ||
                 (workItem.times[date.date.getDay() - 1].start2 <=
                   date.date.getHours() &&
                   workItem.times[date.date.getDay() - 1].end2 >
-                  date.date.getHours()) ||
+                    date.date.getHours()) ||
                 (workItem.times[date.date.getDay() - 1].start3 <=
                   date.date.getHours() &&
                   workItem.times[date.date.getDay() - 1].end3 >
-                  date.date.getHours())
+                    date.date.getHours())
               ) {
                 date.element.style.background = workItem.color;
                 if (this.type === this.userType.readOnlyScheduler) {
@@ -3561,11 +3564,14 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
           }
 
           args.cancel = true;
-        }
-        else if (args.requestType === "eventChange") {
+        } else if (args.requestType === "eventChange") {
           const eventData: any = args.data;
-          const startTime = this.eventTime.start ? this.eventTime.start : eventData.start;
-          const endTime = this.eventTime.end ? this.eventTime.end : eventData.end;
+          const startTime = this.eventTime.start
+            ? this.eventTime.start
+            : eventData.start;
+          const endTime = this.eventTime.end
+            ? this.eventTime.end
+            : eventData.end;
           let evts = this.scheduleObj.getEvents(startTime, endTime);
           if (evts.length > 1 && this.type === this.userType.patient) {
             this.toastr.error(
@@ -3580,8 +3586,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
             this.updateTask(args);
           }
           args.cancel = true;
-        }
-        else if (args.requestType === "eventRemove") {
+        } else if (args.requestType === "eventRemove") {
           // this.deleteTask(args.deletedRecords[0]);
           const eventDetails: { [key: string]: Object } = this.scheduleObj
             .activeEventData.event as { [key: string]: Object };
@@ -3784,8 +3789,8 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   copyLinkToTheClinic() {
     this.helpService.copyToClipboard(
       this.helpService.getFullHostName() +
-      "/dashboard/home/task/" +
-      this.selectedStoreId
+        "/dashboard/home/task/" +
+        this.selectedStoreId
     );
     this.helpService.successToastr(
       this.language.successCopiedLinkForClinicReservation,
@@ -3889,8 +3894,8 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
           net_price: isNaNPrice
             ? this.language.noDataAvailable
             : this.language.euroSign +
-            " " +
-            parseFloat(therapy.net_price).toFixed(2),
+              " " +
+              parseFloat(therapy.net_price).toFixed(2),
           vat: vatDefinition ? vatDefinition.title : 20,
           gross_price: isNaNPrice
             ? this.language.noDataAvailable
@@ -3997,23 +4002,23 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
             {
               text: selectedStore.vatcode
                 ? selectedStore.street +
-                "\n " +
-                selectedStore.zipcode +
-                " " +
-                selectedStore.place +
-                "\n" +
-                this.language.vatIdentificationNumber +
-                " " +
-                selectedStore.vatcode
+                  "\n " +
+                  selectedStore.zipcode +
+                  " " +
+                  selectedStore.place +
+                  "\n" +
+                  this.language.vatIdentificationNumber +
+                  " " +
+                  selectedStore.vatcode
                 : selectedStore.street +
-                "\n " +
-                selectedStore.zipcode +
-                " " +
-                selectedStore.place +
-                "\n" +
-                this.language.vatIdentificationNumber +
-                " " +
-                this.superadminProfile.vatcode,
+                  "\n " +
+                  selectedStore.zipcode +
+                  " " +
+                  selectedStore.place +
+                  "\n" +
+                  this.language.vatIdentificationNumber +
+                  " " +
+                  this.superadminProfile.vatcode,
               style: "invoiceBillingAddressLeft",
             },
             {
