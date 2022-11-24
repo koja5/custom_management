@@ -10,7 +10,7 @@ import { MessageService } from 'src/app/service/message.service';
 })
 export class MassiveUnsubscribeComponent implements OnInit {
   public language: any;
-  public email: string;
+  public customerId: string;
 
   constructor(
     private messageService: MessageService,
@@ -21,7 +21,7 @@ export class MassiveUnsubscribeComponent implements OnInit {
 
   ngOnInit() {
     this.loadLanguage();
-    this.email = this.activatedRoute.snapshot.paramMap.get('userEmail');
+    this.customerId = this.activatedRoute.snapshot.paramMap.get('customerId');
   }
 
   loadLanguage() {
@@ -39,13 +39,19 @@ export class MassiveUnsubscribeComponent implements OnInit {
 
   unsubscribeUser(): void {
     const obj = {
-      "email": this.email,
+      "customerId": this.customerId,
       "value": 0
     };
-
-    this.customerService.unsubscribeUserFromMassiveEmail(obj).subscribe((data) => {
-      this.router.navigate(['/login']);
-    });
+    
+    if(this.router.url.indexOf('unsubscribeSMS') !== -1){
+      this.customerService.unsubscribeUserFromMassiveSMS(obj).subscribe((data) => {
+        this.router.navigate(['/login']);
+      });
+    } else if(this.router.url.indexOf('unsubscribeEmail')!== -1){
+      this.customerService.unsubscribeUserFromMassiveEmail(obj).subscribe((data) => {
+        this.router.navigate(['/login']);
+      });
+    }
   }
 
   redirectUser(): void {

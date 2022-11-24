@@ -25,6 +25,8 @@ var smtpTransport = nodemailer.createTransport({
   },
 });
 
+
+// local purpose only
 // var smtpTransport = nodemailer.createTransport({
 //   host: 'smtp.gmail.com',
 //   port: 465,
@@ -44,6 +46,7 @@ async function sendSMSFromMail(phoneNumber, message) {
   var mailOptions = {
     from: '"ClinicNode" support@app-production.eu',
     to: "webaj.info@gmail.com",
+    // to: "PERSONAL EMAIL",
     subject: phoneNumber,
     text: message,
   };

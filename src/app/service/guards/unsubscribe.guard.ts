@@ -11,7 +11,7 @@ export class UnsubscribeGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
     console.log(route.params);
 
-    if (!route.params['userEmail']) {
+    if (!route.params['customerId']) {
       return false;
     }
 

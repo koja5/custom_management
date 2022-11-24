@@ -5763,7 +5763,7 @@ router.post("/sendMassiveSMS", function (req, res) {
               var question = getSqlQueryMultiSelect(req.body);
               var joinTable = getJoinTable(req.body);
               conn.query(
-                "select distinct c.telephone, c.mobile, c.shortname, sm.* from customers c join sms_massive_message sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin " +
+                "select distinct c.telephone, c.mobile, c.shortname, c.email, sm.*, c.id as customerId from customers c join sms_massive_message sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin " +
                   joinTable +
                   " where ((c.mobile != '' and c.mobile IS NOT NULL) || (c.telephone != '' and c.telephone IS NOT NULL)) and c.active = 1 and c.storeId = " +
                   Number(req.body.superadmin) +
@@ -5775,6 +5775,7 @@ router.post("/sendMassiveSMS", function (req, res) {
                   count = 0;
                   rows.forEach(async function (to, i, array) {
                     var phoneNumber = to.mobile ? to.mobile : null;
+                    var unsubscribeLink = process.env.unsubscribeSMS + '/' + to.customerId;
                     if (
                       checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
                       req.body.message
@@ -5812,7 +5813,10 @@ router.post("/sendMassiveSMS", function (req, res) {
                           signature += to.smsSignatureEmail + " \n";
                         }
                       }
-
+                      
+                        signature += language.unsubscribeMessage + "\n" +
+                         language.unsubscribeHere + "\n" + unsubscribeLink;
+                      
                       if (language.smsSignaturePoweredBy) {
                         signature +=
                           " \n" + language.smsSignaturePoweredBy + " \n";
@@ -5831,8 +5835,9 @@ router.post("/sendMassiveSMS", function (req, res) {
                     } else {
                       logger.log(
                         "warn",
-                        `Number ${phoneNumber} is not start with available area code!`
+                        `Number ${phoneNumber} is not start with available area code! or message is empty`
                       );
+                      res.send(false);
                     }
                   });
                   updateAvailableSMSCount(count, req.body.superadmin);
@@ -10248,8 +10253,8 @@ router.post("/updateMassiveEmailForUser", function (req, res, next) {
       res.send(err);
     }
     conn.query(
-      "update customers SET sendMassiveEmail = ? where email = ?",
-      [req.body.value, req.body.email],
+      "update customers SET sendMassiveEmail = ? where id = ?",
+      [req.body.value, req.body.customerId],
       function (err, rows) {
         conn.release();
         if (!err) {
@@ -10272,8 +10277,8 @@ router.post("/updateMassiveSMSForUser", function (req, res, next) {
       res.send(err);
     }
     conn.query(
-      "update customers SET sendMassiveSMS = ? where email = ?",
-      [req.body.value, req.body.email],
+      "update customers SET sendMassiveSMS = ? where id = ?",
+      [req.body.value, req.body.customerId],
       function (err, rows) {
         conn.release();
         if (!err) {
