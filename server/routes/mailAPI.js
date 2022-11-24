@@ -1273,7 +1273,69 @@ router.post("/confirmUserViaMacAddress", function (req, res) {
     }
   });
 });
+router.post("/sendLastMinuteOfferMails", function (req, res){
+  var clientLink = process.env.link_client;
+  var clientLinkArray=clientLink.split("/");
+  clientLinkArray.pop();
+  clientLink = clientLinkArray.join("/")
+  console.log(clientLink);
+  var lastMinuteOfferTemplate = fs.readFileSync(
+    "./server/routes/templates/sendLastMinuteOfferMails.hjs",
+    "utf-8"
+  );
+  var sendMassive = hogan.compile(lastMinuteOfferTemplate);
 
+    connection.getConnection(function (err, conn) {
+      conn.query(
+        "select email, shortname from customers " +
+          " where (email != '' and email IS NOT NULL) and active = 1 and id = " +
+          Number(req.body.userId),
+        function (err, rows) {
+          conn.release();
+          if (err) {
+            logger.log("error", err);
+            res.json(false);
+          }
+          
+
+          rows.forEach(function (to, i, array) {
+            console.log(to);
+            var mailOptions = {
+              from: '"ClinicNode" support@app-production.eu',
+              to: to.email,
+              subject: req.body.lastMinuteEMailSubject,
+              html: sendMassive.render({
+                firstName: to.shortname,
+                initialGreeting: req.body.initialGreeting,
+                introductoryMessageForFreeEvent: req.body.lastMinuteEMailMessage,
+                offerLink: clientLink+"/dashboard/home/customers/last-minute-event?"+req.body.link,
+                finalGreeting: req.body.finalGreeting,
+                viewOffer: req.body.viewLastMinuteOffer,
+                signature: req.body.signature,
+                thanksForUsing: req.body.thanksForUsing,
+                websiteLink: req.body.websiteLink,
+                ifYouHaveQuestion: req.body.ifYouHaveQuestion,
+                emailAddress: req.body.emailAddress,
+                notReply: req.body.notReply,
+                copyRight: req.body.copyRight,
+              }),
+            };
+            smtpTransport.sendMail(mailOptions, function (error, response) {
+              if (error) {
+                logger.log("error", error);
+              } else {
+                logger.log(
+                  "info",
+                  `Sent mail for last minute offers on EMAIL: ${to.email}`
+                );
+              }
+            });
+          });
+          res.send(true);
+        }
+      );
+    });
+});
 router.post("/sendMassiveEMail", function (req, res) {
       var sendMassiveTemplate = fs.readFileSync(
         "./server/routes/templates/sendMassiveMails.hjs",

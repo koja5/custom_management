@@ -52,6 +52,7 @@ export class MassiveSmsComponent implements OnInit, FormGuardData {
     this.dynamicService
       .getConfiguration("administarator", "massive-sms")
       .subscribe((config) => {
+        console.log(config);
         this.configField = config;
         this.getSmsDrafts();
 

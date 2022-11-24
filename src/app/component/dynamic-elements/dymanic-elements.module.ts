@@ -1,6 +1,6 @@
 import { LayoutModule } from "@progress/kendo-angular-layout";
 import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { CommonModule, DatePipe } from "@angular/common";
 import {
   GridModule,
   EditService,
@@ -150,7 +150,8 @@ import { MatFormFieldModule, MatInputModule } from "@angular/material";
     PageService,
     GroupService,
     ResizeService,
-    ColumnChooserService
+    ColumnChooserService,
+    DatePipe
   ],
   entryComponents: [
     TextboxComponent,

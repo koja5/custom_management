@@ -31,6 +31,13 @@ export class UsersService {
       .subscribe((val) => callback(val));
   }
 
+  getUsersInCompany(id, callback) {
+    return this.http
+      .get("/api/getUsersInCompany/" + id)
+      .map((res) => res)
+      .subscribe((val) => callback(val));
+  }
+
   getMe(id, callback) {
     return this.http
       .get("/api/getMe/" + id)
@@ -106,5 +113,19 @@ export class UsersService {
 
   insertMultiData(data) {
     return this.http.post("/api/insertFromExcel", data).map((res) => res);
+  }
+
+  getUsersAllowedOnlineInCompany(id, callback) {
+    return this.http
+      .get("/api/getUsersAllowedOnlineInCompany/" + id)
+      .map((res) => res)
+      .subscribe((val) => callback(val));
+  }
+
+  getCompanyUsers(id, callback) {
+    return this.http
+      .get("/api/getUsers/" + id)
+      .map((res) => res)
+      .subscribe((val) => callback(val));
   }
 }

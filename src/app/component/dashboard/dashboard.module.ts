@@ -114,6 +114,8 @@ import { MassiveUnsubscribeComponent } from './marketing/massive-unsubscribe/mas
 import { RegisteredClinicsComponent } from './administrator/registered-clinics/registered-clinics.component';
 import { RegisteredClinicDetailComponent } from './administrator/registered-clinics/registered-clinic-detail/registered-clinic-detail.component';
 import { SharedComponentsModule } from 'src/app/shared/shared-components.module';
+import { LastMinuteEventConfirmationComponent } from './customers/last-minute-event-confirmation/last-minute-event-confirmation.component';
+import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
 import { LicenceComponent } from './licence/licence.component';
 
 @NgModule({
@@ -177,6 +179,7 @@ import { LicenceComponent } from './licence/licence.component';
     RegisteredClinicDetailComponent,
     MassiveUnsubscribeComponent,
     LicenceComponent,
+    LastMinuteEventConfirmationComponent,
     MailMultipleRecepientComponent
   ],
   imports: [
@@ -219,7 +222,8 @@ import { LicenceComponent } from './licence/licence.component';
     ColorPickerModule,
     MatFormFieldModule,
     MatInputModule,
-    SharedComponentsModule
+    SharedComponentsModule,
+    DatePickerModule
   ],
   providers: [
     {

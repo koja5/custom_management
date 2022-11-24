@@ -191,7 +191,7 @@ router.post("/signUp", function (req, res, next) {
   });
 });
 
-router.post("/createTask", function (req, res, next) {
+router.post("/createTask", function (req, res) {
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
@@ -233,7 +233,7 @@ router.post("/createTask", function (req, res, next) {
   });
 });
 
-router.post("/updateTask", function (req, res, next) {
+router.post("/updateTask", function (req, res) {
   req.setMaxListeners(0);
   connection.getConnection(function (err, conn) {
     if (err) {
