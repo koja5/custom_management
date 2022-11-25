@@ -1545,6 +1545,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
 
   public lastMinuteWeekDays:Object[]=WEEK_DAYS;
   public patients: any = [];
+  public isUserSelected = false;
   public therapeuts:any= [];
   public selectedLastMinuteWeekDays: any=[];
   public lastMinuteStartDate: Date=new Date();
@@ -2621,6 +2622,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     };
 
     this.mongo.setUsersFor(item).subscribe((data) => { });
+    this.isUserSelected = selected && selected.length > 0;
   }
 
   getTaskForSelectedUsers(value) {
@@ -2829,7 +2831,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
         this.loading = false;
       }
     }
-
+    this.isUserSelected = this.value && this.value.length > 0;
     const item = {
       user_id: this.helpService.getMe(),
       selectedStore: event,
@@ -2913,6 +2915,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
         }
       });
     }
+    this.isUserSelected = this.value && this.value.length > 0;
   }
 
   onRenderCell(event) {
