@@ -2121,13 +2121,17 @@ router.sendVaucherToMail = (data) => {
 
 router.sendMailAdminInfo = (data) => {
   connection.getConnection(function (err, conn) {
+    if(err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      return err;
+    }
     var confirmTemplate = fs.readFileSync(
       "./server/routes/templates/infoForCreatedSuperadmin.hjs",
       "utf-8"
     );
     var infoForCreatedAccount = hogan.compile(confirmTemplate);
-    var verificationLinkButton =
-      link + "customerVerificationMail/" + sha1(data.email);
+    // var verificationLinkButton =
+    //   link + "customerVerificationMail/" + sha1(data.email);
 
     conn.query(
       "SELECT * FROM users_superadmin WHERE users_superadmin = ?",
@@ -2204,19 +2208,26 @@ router.sendMailAdminInfo = (data) => {
                 : "",
           }),
         };
-        smtpTransport.sendMail(mailOptions, function (error, response) {
+        smtpTransport.sendMail(mailOptions, function (error, res) {
+          if(!res) {
+            logger.log(
+              "error",
+              `Error to sent mail for VERIFICATION MAIL on EMAIL: ${data.email}. Error: Response object not defined`
+            );
+            return;
+          }
           if (error) {
             logger.log(
               "error",
               `Error to sent mail for VERIFICATION MAIL on EMAIL: ${data.email}. Error: ${error}`
             );
-            res.end("error");
+            res.json("error");
           } else {
             logger.log(
               "info",
               `Sent mail for VERIFICATION MAIL for USER: ${data.shortname} on EMAIL: ${data.email}`
             );
-            res.end("sent");
+            res.json("sent");
           }
         });
       }

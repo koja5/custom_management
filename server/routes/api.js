@@ -89,7 +89,6 @@ var connection = mysql.createPool({
   database: 'appprodu_management_prod'
 });*/
 
-connection.getConnection(function (err, conn) {});
 
 /* GET api listing. */
 router.get("/", (req, res) => {
@@ -114,6 +113,7 @@ router.post("/signUp", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var email = req.body.email;
@@ -196,6 +196,7 @@ router.post("/createTask", function (req, res) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     test = {};
@@ -239,6 +240,7 @@ router.post("/updateTask", function (req, res) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     test = {};
@@ -325,6 +327,7 @@ router.get("/getTasks/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "select t.*, e.color from tasks t join event_category e on t.colorTask = e.id where e.superadmin = '" +
@@ -348,6 +351,7 @@ router.get("/getTasksForUser/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var id = req.params.id;
@@ -374,6 +378,7 @@ router.get(
       if (err) {
         logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
+        return;
       }
 
       var id = req.params.id;
@@ -601,6 +606,7 @@ router.post("/createUser", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var firstname = req.body.firstname;
@@ -640,6 +646,7 @@ router.post("/createUser", function (req, res, next) {
         if (err) {
           res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
+          return;
         }
         if (rows.length >= 1) {
           test.success = false;
@@ -677,6 +684,7 @@ router.get("/getUsers/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
 
@@ -702,6 +710,7 @@ router.get("/getUsersInCompany/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query(
@@ -725,6 +734,7 @@ router.get("/getUsersAllowedOnlineInCompany/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query(
@@ -749,6 +759,7 @@ router.get("/getMe/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query(
@@ -798,6 +809,7 @@ router.get("/getCompany/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query(
@@ -821,6 +833,7 @@ router.post("/createStore", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     test = {};
@@ -848,6 +861,7 @@ router.post("/createStore", function (req, res, next) {
         if (err) {
           res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
+          return;
         }
 
         if (rows.length >= 1) {
@@ -891,6 +905,7 @@ router.get("/getStore/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query(
@@ -914,6 +929,7 @@ router.get("/getStoreList/:ids", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var ids = req.params.ids;
     conn.query(
@@ -936,6 +952,7 @@ router.get("/getStoreById/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query("SELECT * from store where id = ?", [id], function (err, rows) {
@@ -955,6 +972,7 @@ router.get("/getStoreAllowedOnline/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query(
@@ -978,6 +996,7 @@ router.post("/updateStore", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var response = null;
@@ -1052,6 +1071,7 @@ router.post("/createCustomer", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     test = {};
@@ -1127,6 +1147,7 @@ router.post("/createCustomerFromPatientForm", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     test = {};
@@ -1188,6 +1209,7 @@ router.get("/getCustomers/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query(
@@ -1210,6 +1232,7 @@ router.get("/getSuperadmin/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query(
@@ -1232,6 +1255,7 @@ router.get("/getAllSuperadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query("SELECT * from users_superadmin", [id], function (err, rows) {
@@ -1250,6 +1274,7 @@ router.post("/updateSuperadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     test = {};
     var id = req.body.id;
@@ -1280,6 +1305,7 @@ router.post("/updatePasswordForSuperadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     conn.query(
@@ -1305,6 +1331,7 @@ router.post("/updatePasswordForUser", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     conn.query(
@@ -1330,6 +1357,7 @@ router.post("/updatePasswordForCustomer", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     conn.query(
@@ -1355,6 +1383,7 @@ router.post("/updateUserFromSettings", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     test = {};
     var id = req.body.id;
@@ -1385,6 +1414,7 @@ router.get("/getInfoForCustomer/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query(
@@ -1407,6 +1437,7 @@ router.post("/searchCustomer", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var superadmin = req.body.superadmin;
     var filter = req.body.filter;
@@ -1433,6 +1464,7 @@ router.get("/getCustomerWithId/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query(
@@ -1455,6 +1487,7 @@ router.get("/getDocuments/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query(
@@ -1517,6 +1550,7 @@ router.post("/updateDocument", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     test = {};
     var id = req.body.id;
@@ -1557,6 +1591,7 @@ router.get("/activeUser/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     test = {};
     var id = req.params.id;
@@ -1592,6 +1627,7 @@ router.post("/uploadImage", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     test = {};
 
@@ -1628,6 +1664,7 @@ router.get("/deactiveUser/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     test = {};
     var id = req.params.id;
@@ -1663,6 +1700,7 @@ router.post("/addUser", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var nameOfClinic = req.body.nameOfClinic;
@@ -1716,6 +1754,7 @@ router.post("/updateUser", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var bodyPassword = null;
@@ -1835,6 +1874,7 @@ router.post("/updateCustomer", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     test = {};
     var id = req.body.id;
@@ -1865,6 +1905,7 @@ router.post("/updateAttentionAndPhysical", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     test = {};
     var id = req.body.id;
@@ -2206,6 +2247,7 @@ router.get("/getUserWithID/:userid", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "select * from users where active = 1 and id = ?",
@@ -2227,6 +2269,7 @@ router.post("/setWorkTimeForUser", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = {};
@@ -2265,6 +2308,7 @@ router.get("/getWorkTimeForUser/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query(
@@ -2318,6 +2362,7 @@ router.post("/updateWorkTimeForUser", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = {};
@@ -2360,6 +2405,7 @@ router.get("/getWorkandTaskForUser/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query(
@@ -2427,6 +2473,7 @@ router.post("/addComplaint", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = null;
@@ -2481,6 +2528,7 @@ router.post("/updateComplaint", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var response = null;
@@ -2565,6 +2613,7 @@ router.get("/getComplaintForCustomer/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query(
@@ -2588,6 +2637,7 @@ router.post("/addTherapy", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = {};
@@ -2653,6 +2703,7 @@ router.post("/updateTherapy", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var response = null;
@@ -2745,6 +2796,7 @@ router.get("/getTherapyForCustomer/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query(
@@ -2768,6 +2820,7 @@ router.get("/getTherapy/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query(
@@ -2791,6 +2844,7 @@ router.get("/getComplaintList/:superadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var superadmin = req.params.superadmin;
 
@@ -2814,6 +2868,7 @@ router.post("/addComplaintList", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = null;
@@ -2875,6 +2930,7 @@ router.post("/updateComplaintList", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var response = null;
@@ -2909,6 +2965,7 @@ router.get("/getTherapyList/:superadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var superadmin = req.params.superadmin;
 
@@ -2932,6 +2989,7 @@ router.post("/addTherapyList", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = null;
@@ -3002,6 +3060,7 @@ router.post("/updateTherapyList", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var response = null;
@@ -3048,6 +3107,7 @@ router.get("/getRecommendationList/:superadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var superadmin = req.params.superadmin;
     conn.query(
@@ -3072,6 +3132,7 @@ router.post("/addRecommendationList", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = null;
@@ -3137,6 +3198,7 @@ router.post("/updateRecommendationList", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var response = null;
@@ -3173,6 +3235,7 @@ router.get("/getRelationshipList/:superadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var superadmin = req.params.superadmin;
     conn.query(
@@ -3195,6 +3258,7 @@ router.post("/addRelationshipList", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = null;
@@ -3260,6 +3324,7 @@ router.post("/updateRelationshipList", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var response = null;
@@ -3296,6 +3361,7 @@ router.get("/getSocialList/:superadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var superadmin = req.params.superadmin;
     conn.query(
@@ -3318,6 +3384,7 @@ router.post("/addSocialList", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = null;
@@ -3379,6 +3446,7 @@ router.post("/updateSocialList", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var response = null;
@@ -3415,6 +3483,7 @@ router.get("/getDoctorList/:superadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var superadmin = req.params.superadmin;
     conn.query(
@@ -3437,6 +3506,7 @@ router.post("/addDoctorList", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = null;
@@ -3498,6 +3568,7 @@ router.post("/updateDoctorList", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var response = null;
@@ -3534,6 +3605,7 @@ router.get("/getDoctorsList/:superadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var superadmin = req.params.superadmin;
     conn.query(
@@ -3558,6 +3630,7 @@ router.post("/addDoctorsList", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = null;
@@ -3628,6 +3701,7 @@ router.post("/updateDoctorsList", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var response = null;
@@ -3672,6 +3746,7 @@ router.get("/getTreatmentList/:superadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var superadmin = req.params.superadmin;
     conn.query(
@@ -3694,6 +3769,7 @@ router.post("/addTreatmentList", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = null;
@@ -3755,6 +3831,7 @@ router.post("/updateTreatmentList", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var response = null;
@@ -3791,6 +3868,7 @@ router.get("/getVATTaxList/:superadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var superadmin = req.params.superadmin;
     conn.query(
@@ -3813,6 +3891,7 @@ router.post("/addVATTaxList", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = null;
@@ -3874,6 +3953,7 @@ router.post("/updateVATTaxList", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var response = null;
@@ -3910,6 +3990,7 @@ router.get("/getCSList/:superadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var superadmin = req.params.superadmin;
     conn.query(
@@ -3932,6 +4013,7 @@ router.post("/addCSList", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = null;
@@ -3993,6 +4075,7 @@ router.post("/updateCSList", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var response = null;
@@ -4029,6 +4112,7 @@ router.get("/getStateList/:superadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var superadmin = req.params.superadmin;
     conn.query(
@@ -4051,6 +4135,7 @@ router.post("/addStateList", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = null;
@@ -4112,6 +4197,7 @@ router.post("/updateStateList", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var response = null;
@@ -4149,6 +4235,7 @@ router.get("/getBaseDataOne/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "select * from base_one where customer_id = '" + id + "'",
@@ -4170,6 +4257,7 @@ router.post("/addBaseDataOne", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = null;
@@ -4246,6 +4334,7 @@ router.get("/getBaseDataTwo/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "select * from base_two where customer_id = '" + id + "'",
@@ -4267,6 +4356,7 @@ router.post("/addBaseDataTwo", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = null;
@@ -4306,6 +4396,7 @@ router.post("/updateBaseDataTwo", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var response = null;
@@ -4349,6 +4440,7 @@ router.get("/getPhysicalIllness/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "select * from physical_illness where customer_id = '" + id + "'",
@@ -4370,6 +4462,7 @@ router.post("/addPhysicalIllness", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = null;
@@ -4411,6 +4504,7 @@ router.post("/updatePhysicalIllness", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var response = null;
@@ -4449,6 +4543,7 @@ router.post("/insertFromExcel", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var response = {};
@@ -4495,6 +4590,7 @@ router.post("/createVaucher", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = {};
@@ -4569,6 +4665,7 @@ router.get("/getVauchers/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query(
@@ -4592,6 +4689,7 @@ router.get("/getNextVaucherId", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query(
@@ -4614,6 +4712,7 @@ router.post("/updateVaucher", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var response = null;
@@ -4660,6 +4759,7 @@ router.get("/getEventCategory/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query(
@@ -4683,6 +4783,7 @@ router.post("/createEventCategory", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = null;
@@ -4749,6 +4850,7 @@ router.post("/updateEventCategory", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var response = null;
@@ -4787,6 +4889,7 @@ router.get("/getWorkTimeColors/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query(
@@ -4810,6 +4913,7 @@ router.post("/createWorkTimeColors", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = null;
@@ -4874,6 +4978,7 @@ router.post("/updateWorkTimeColors", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var response = null;
@@ -4938,6 +5043,7 @@ router.get("/getCountAllTasksForUser/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "SELECT COUNT(*) as total from tasks where creator_id = '" + reqObj + "'",
@@ -4961,6 +5067,7 @@ router.get("/getCountAllTasksForUserPerMonth/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "SELECT COUNT(*) as month from tasks where creator_id = '" +
@@ -4986,6 +5093,7 @@ router.get("/getCountAllTasksForUserPerWeek/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "SELECT COUNT(*) as week from tasks where creator_id = '" +
@@ -5012,6 +5120,7 @@ router.post("/createToDo", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = {};
@@ -5040,6 +5149,7 @@ router.get("/getToDo", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query("SELECT * from todo", function (err, rows) {
       conn.release();
@@ -5124,6 +5234,7 @@ router.get("/getReservations/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "select t.*, e.color, c.firstname, c.lastname, c.mobile, c.email, c.birthday, u.shortname from tasks t join event_category e on t.colorTask = e.id join customers c on t.customer_id = c.id join users u on t.creator_id = u.id where t.online = 1 and t.superadmin = ? and c.active = 1",
@@ -5144,6 +5255,7 @@ router.post("/approveReservation", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       res.json(err);
+      return;
     }
     conn.query(
       "update tasks set online = 2 where id = '" + req.body.id + "'",
@@ -5163,6 +5275,7 @@ router.post("/denyReservation", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       res.json(err);
+      return;
     }
     conn.query(
       "delete from tasks where id = '" + req.body.id + "'",
@@ -5380,6 +5493,7 @@ function updateAvailableSMSCount(usedSms, superadmin) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       return err;
+      return;
     }
     conn.query(
       "select * from sms_count where superadmin = ?",
@@ -6456,6 +6570,7 @@ router.post("/getFilteredRecipients", function (req, res) {
     connection.getConnection(function (err, conn) {
       if (err) {
         res.json(err);
+        return;
       }
       var question = getSqlQueryMultiSelect(req.body);
       if(!question || question.length === 0) {
@@ -6542,6 +6657,7 @@ router.post("/setReminderSettings", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       res.json(err);
+      return;
     }
 
     conn.query(
@@ -6585,6 +6701,7 @@ router.post("/updateCustomerSendReminderOption", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       res.send(err);
+      return;
     }
     conn.query(
       "update customers SET ? where id = ?",
@@ -6637,6 +6754,7 @@ router.post("/createAvailableAreaCode", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = {};
@@ -6668,6 +6786,7 @@ router.post("/updateAvailableAreaCode", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = {};
@@ -6733,6 +6852,7 @@ router.post("/createTemplateAccount", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     conn.query(
@@ -6790,6 +6910,7 @@ router.post("/updateTemplateAccount", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     conn.query(
@@ -6848,6 +6969,7 @@ router.get("/getTemplateAccount", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "SELECT ta.*, us.password from template_account ta join users_superadmin us on ta.account_id = us.id",
@@ -6870,6 +6992,7 @@ router.get("/getTemplateAccountByUserId/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "SELECT ta.* from `user_template` ut join `template_account` ta on ut.templateId=ta.id where ut.userId='" +
@@ -6923,6 +7046,7 @@ router.post("/loadTemplateAccount", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     insertFromTemplate(
       conn,
@@ -7222,6 +7346,7 @@ router.get("/getDemoAccountLanguage/:superadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "SELECT * from account_language where superadmin = ?",
@@ -7248,6 +7373,7 @@ router.get("/getMailReminderMessage/:superadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "SELECT * from mail_reminder_message where superadmin = ?",
@@ -7338,6 +7464,7 @@ router.get("/getMailApproveReservation/:superadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "SELECT * from mail_approve_reservation where superadmin = ?",
@@ -7428,6 +7555,7 @@ router.get("/getMailConfirmArrival/:superadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "SELECT * from mail_confirm_arrival where superadmin = ?",
@@ -7518,6 +7646,7 @@ router.get("/getMailMultipleRecepient/:superadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "SELECT * from mail_multiple_recepient where superadmin = ?",
@@ -7608,6 +7737,7 @@ router.get("/getMailDenyReservation/:superadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "SELECT * from mail_deny_reservation where superadmin = ?",
@@ -7700,6 +7830,7 @@ router.get(
       if (err) {
         logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
+        return;
       }
       conn.query(
         "SELECT * from mail_patient_created_account where superadmin = ?",
@@ -7793,6 +7924,7 @@ router.get(
       if (err) {
         logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
+        return;
       }
       conn.query(
         "SELECT * from mail_patient_created_account_via_form where superadmin = ?",
@@ -7886,6 +8018,7 @@ router.get(
       if (err) {
         logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
+        return;
       }
       conn.query(
         "SELECT * from mail_patient_form_registration where superadmin = ?",
@@ -7977,6 +8110,7 @@ router.get("/getSmsReminderMessage/:superadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "SELECT * from sms_reminder_message where superadmin = ?",
@@ -8067,6 +8201,7 @@ router.get("/getSmsMassiveMessage/:superadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "SELECT * from sms_massive_message where superadmin = ?",
@@ -8157,6 +8292,7 @@ router.get("/getEventCategoryStatistic/:superadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "SELECT * from event_category_statistic where superadmin = ?",
@@ -8283,6 +8419,7 @@ router.get(
       if (err) {
         logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
+        return;
       }
       conn.query(
         "SELECT * from sms_birthday_congratulation where superadmin = ?",
@@ -8376,6 +8513,7 @@ router.get(
       if (err) {
         logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
+        return;
       }
       conn.query(
         "SELECT * from mail_birthday_congratulation where superadmin = ?",
@@ -8467,6 +8605,7 @@ router.get("/getUserAccess/:superadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "SELECT ua.*, u.firstname, u.lastname, u.email from user_access ua join users u on ua.user_id = u.id where ua.superadmin = ?",
@@ -8566,6 +8705,7 @@ router.get("/getSMSCount", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "SELECT s.*, us.email from sms_count s join users_superadmin us on s.superadmin = us.id",
@@ -8686,6 +8826,7 @@ router.get("/getMailMassive/:superadmin", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "SELECT * from mail_massive_message where superadmin = ?",
@@ -8902,6 +9043,7 @@ router.get("/getHolidaysByTemplate/:templateId", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var templateId = req.params.templateId;
     conn.query(
@@ -8924,6 +9066,7 @@ router.get("/getHolidaysByTemplates/:templateIds", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var templateIds = req.params.templateIds;
     conn.query(
@@ -8946,6 +9089,7 @@ router.get("/getHolidaysForClinic/:superAdminId", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var superAdminId = req.params.superAdminId;
     conn.query(
@@ -8970,6 +9114,7 @@ router.get("/getTemplateByUserId/:userId", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var userId = req.params.userId;
     conn.query(
@@ -9159,6 +9304,7 @@ router.post("/updateTemplate", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     test = {};
     var id = req.body.id;
@@ -9189,6 +9335,7 @@ router.post("/deleteUserTemplate", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     test = {};
     var id = req.body.id;
@@ -9219,6 +9366,7 @@ router.post("/deleteTemplate", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     test = {};
     var id = req.body.id;
@@ -9249,6 +9397,7 @@ router.get("/getDataForMassiveInvoice/:customerId", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var customerId = req.params.customerId;
@@ -9278,6 +9427,7 @@ router.post("/updateInvoiceID", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     test = {};
     var id = req.body.id;
@@ -9342,6 +9492,7 @@ router.post("/updateFaqTopic", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     test = {};
     var id = req.body.id;
@@ -9373,6 +9524,7 @@ router.get("/getFaqTopics/:countryCode", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "SELECT * FROM `help_topics` WHERE `countryCode`='" + countryCode + "'",
@@ -9394,6 +9546,7 @@ router.get("/getFaqTopic/:topicId", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var topicId = req.params.topicId;
     conn.query(
@@ -9416,6 +9569,7 @@ router.post("/deleteFaqTopic", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     test = {};
     var id = req.body.id;
@@ -9477,6 +9631,7 @@ router.post("/updateFaq", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     test = {};
     var id = req.body.id;
@@ -9507,6 +9662,7 @@ router.get("/getFaqQuestions/:topicId", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var topicId = req.params.topicId;
     conn.query(
@@ -9529,6 +9685,7 @@ router.post("/deleteFaq", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     test = {};
     var id = req.body.id;
@@ -9563,6 +9720,7 @@ router.get("/getThemeColors/:id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query(
@@ -9586,6 +9744,7 @@ router.post("/createThemeColors", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = null;
@@ -9625,6 +9784,7 @@ router.post("/updateThemeColors", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var response = null;
@@ -9747,6 +9907,7 @@ router.get("/getHolidayTemplates", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query("SELECT * from holiday_templates", function (err, rows) {
       conn.release();
@@ -9765,6 +9926,7 @@ router.post("/createHolidayTemplate", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     const data = {
       name: req.body.name,
@@ -9795,6 +9957,7 @@ router.post("/updateHolidayTemplate", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     const data = {
       id: req.body.id,
@@ -10039,6 +10202,7 @@ router.get("/getRegisteredClinics", function (req, res) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query("SELECT * from users_superadmin", function (err, rows) {
       conn.release();
@@ -10057,6 +10221,7 @@ router.post("/createClinic", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var createPassword;
@@ -10071,8 +10236,10 @@ router.post("/createClinic", function (req, res, next) {
       createPassword = req.body.password;
     }
 
-    var expiryDate = new Date();
-    expiryDate.setDate(d.getDate() + 14);
+    // var expiryDate = new Date();
+    // expiryDate.setDate(expiryDate.getDate() + 14);
+    // console.log('**********************');
+    // console.log(expiryDate);
 
     response = {};
     const data = {
@@ -10091,8 +10258,7 @@ router.post("/createClinic", function (req, res, next) {
       incompanysince: req.body.incompanysince,
       type: 0,
       active: req.body.active,
-      companyname: req.body.companyname,
-      expiryDate: expiryDate,
+      companyname: req.body.companyname
     };
 
     conn.query("insert users_superadmin SET ?", data, function (err, rows) {
@@ -10120,6 +10286,7 @@ router.post("/updateRegisteredClinic", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var createPassword;
@@ -10227,6 +10394,7 @@ router.get("/getClinicEmployees/:id", function (req, res) {
   connection.getConnection(function (err, conn) {
     if (err) {
       res.json(err);
+      return;
     }
     conn.query(
       "SELECT * FROM users WHERE users.superadmin = ?",
@@ -10251,6 +10419,7 @@ router.post("/updateMassiveEmailForUser", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       res.send(err);
+      return;
     }
     conn.query(
       "update customers SET sendMassiveEmail = ? where id = ?",
@@ -10275,6 +10444,7 @@ router.post("/updateMassiveSMSForUser", function (req, res, next) {
   connection.getConnection(function (err, conn) {
     if (err) {
       res.send(err);
+      return;
     }
     conn.query(
       "update customers SET sendMassiveSMS = ? where id = ?",
@@ -10304,6 +10474,7 @@ router.get("/getDrafts/:id/:type", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     var id = req.params.id;
     conn.query(
@@ -10329,6 +10500,7 @@ router.post("/createDraft", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     response = null;
@@ -10359,6 +10531,7 @@ router.post("/editDraft", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
 
     var response = null;
@@ -10419,6 +10592,7 @@ router.get("/getLicenceForUser/:superadmin_id", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
+      return;
     }
     conn.query(
       "select * from licence_per_user lp join licence l on lp.licence_id = l.id where lp.superadmin_id = ?",
@@ -10435,5 +10609,7 @@ router.get("/getLicenceForUser/:superadmin_id", function (req, res, next) {
     );
   });
 });
+
+
 
 module.exports = router;
