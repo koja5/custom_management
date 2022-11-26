@@ -59,7 +59,7 @@ var connection = mysql.createPool({
   database: process.env.database,
 });
 
-/*var smtpTransport = nodemailer.createTransport({
+var smtpTransport = nodemailer.createTransport({
   host: "116.203.85.82",
   secure: false,
    port: 587,
@@ -67,24 +67,24 @@ var connection = mysql.createPool({
       user: "support@app-production.eu",
       pass: "Iva#$2019#$",
    },
-});*/
+});
 
 
 //local purpose
- var smtpTransport = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
-  tls: {
-    rejectUnauthorized: false,
-  },
-  debug: true,
-  ssl: true,
-  auth: {
-    user: "clinicnode2022@gmail.com",  // real email address
-    pass: "vfuvxgwdfrvestvd" // app password for clinicnode2022@gmail.com email
-  }
-});
+//  var smtpTransport = nodemailer.createTransport({
+//   host: 'smtp.gmail.com',
+//   port: 465,
+//   secure: true,
+//   tls: {
+//     rejectUnauthorized: false,
+//   },
+//   debug: true,
+//   ssl: true,
+//   auth: {
+//     user: "clinicnode2022@gmail.com",  // real email address
+//     pass: "vfuvxgwdfrvestvd" // app password for clinicnode2022@gmail.com email
+//   }
+// });
 
 
 
@@ -1273,7 +1273,69 @@ router.post("/confirmUserViaMacAddress", function (req, res) {
     }
   });
 });
+router.post("/sendLastMinuteOfferMails", function (req, res){
+  var clientLink = process.env.link_client;
+  var clientLinkArray=clientLink.split("/");
+  clientLinkArray.pop();
+  clientLink = clientLinkArray.join("/")
+  console.log(clientLink);
+  var lastMinuteOfferTemplate = fs.readFileSync(
+    "./server/routes/templates/sendLastMinuteOfferMails.hjs",
+    "utf-8"
+  );
+  var sendMassive = hogan.compile(lastMinuteOfferTemplate);
 
+    connection.getConnection(function (err, conn) {
+      conn.query(
+        "select email, shortname from customers " +
+          " where (email != '' and email IS NOT NULL) and active = 1 and id = " +
+          Number(req.body.userId),
+        function (err, rows) {
+          conn.release();
+          if (err) {
+            logger.log("error", err);
+            res.json(false);
+          }
+          
+
+          rows.forEach(function (to, i, array) {
+            console.log(to);
+            var mailOptions = {
+              from: '"ClinicNode" support@app-production.eu',
+              to: to.email,
+              subject: req.body.lastMinuteEMailSubject,
+              html: sendMassive.render({
+                firstName: to.shortname,
+                initialGreeting: req.body.initialGreeting,
+                introductoryMessageForFreeEvent: req.body.lastMinuteEMailMessage,
+                offerLink: clientLink+"/dashboard/home/customers/last-minute-event?"+req.body.link,
+                finalGreeting: req.body.finalGreeting,
+                viewOffer: req.body.viewLastMinuteOffer,
+                signature: req.body.signature,
+                thanksForUsing: req.body.thanksForUsing,
+                websiteLink: req.body.websiteLink,
+                ifYouHaveQuestion: req.body.ifYouHaveQuestion,
+                emailAddress: req.body.emailAddress,
+                notReply: req.body.notReply,
+                copyRight: req.body.copyRight,
+              }),
+            };
+            smtpTransport.sendMail(mailOptions, function (error, response) {
+              if (error) {
+                logger.log("error", error);
+              } else {
+                logger.log(
+                  "info",
+                  `Sent mail for last minute offers on EMAIL: ${to.email}`
+                );
+              }
+            });
+          });
+          res.send(true);
+        }
+      );
+    });
+});
 router.post("/sendMassiveEMail", function (req, res) {
       var sendMassiveTemplate = fs.readFileSync(
         "./server/routes/templates/sendMassiveMails.hjs",
@@ -1372,7 +1434,7 @@ router.post("/sendMassiveEMail", function (req, res) {
 
                 unsubscribeMessage: req.body.language?.unsubscribeMessage,
                 unsubscribeHere: req.body.language?.unsubscribeHere,
-                unsubscribeLink: process.env.unsubscribe + '/' + to.email,
+                unsubscribeLink: process.env.unsubscribeEmail + '/' + to.email,
               }),
             };
             smtpTransport.sendMail(mailOptions, function (error, response) {

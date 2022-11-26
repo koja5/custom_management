@@ -162,27 +162,6 @@ export class TaskService extends BaseEditService<MyEvent> {
       .map((res) => res);
   }
 
-  getUsersInCompany(id, callback) {
-    return this.http
-      .get("/api/getUsersInCompany/" + id)
-      .map((res) => res)
-      .subscribe((val) => callback(val));
-  }
-
-  getUsersAllowedOnlineInCompany(id, callback) {
-    return this.http
-      .get("/api/getUsersAllowedOnlineInCompany/" + id)
-      .map((res) => res)
-      .subscribe((val) => callback(val));
-  }
-
-  getCompanyUsers(id, callback) {
-    return this.http
-      .get("/api/getUsers/" + id)
-      .map((res) => res)
-      .subscribe((val) => callback(val));
-  }
-
   getTaskColor() {
     return this.http
       .get("../assets/configuration/task-color.json")

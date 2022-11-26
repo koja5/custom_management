@@ -18,7 +18,7 @@ import { FieldConfig } from "./models/field-config";
   templateUrl: "./dynamic-forms.component.html",
   styleUrls: ["./dynamic-forms.component.scss"],
 })
-export class DynamicFormsComponent implements OnInit {
+export class DynamicFormsComponent implements OnInit, OnChanges {
   @Input()
   config: FieldConfig[] = [];
 
@@ -62,16 +62,27 @@ export class DynamicFormsComponent implements OnInit {
   }
   language: any;
 
-  constructor(private fb: FormBuilder, private helpService: HelpService,) {}
+  constructor(private fb: FormBuilder, private helpService: HelpService) {}
 
   ngOnInit() {
     this.language = this.helpService.getLanguage();
     this.form = this.createGroup();
+    this.onChanges();
   }
 
   getIsFormDirty() {
-    this.isFormDirty = true;
+    this.isFormDirty = this.form.dirty;
     this.isFormDirtyChange.emit(true);
+  }
+
+  onChanges(): void {
+    this.form.valueChanges.subscribe((val) => {
+      this.getIsFormDirty();
+      this.sendValue();
+    });
+    this.form.get('noEventSinceCheckbox').valueChanges.subscribe(val => {
+      this.mapCondition(val);
+    })
   }
 
   sendValue(): void {
@@ -145,6 +156,21 @@ export class DynamicFormsComponent implements OnInit {
       }
       return item;
     });
+  }
+
+  private mapCondition(noEventSinceCheckboxVal) {
+    let field = this.config.find(x => x.name === 'noEventSinceDate')
+    let control = this.form.get(field.name);
+    if(field.condition) {
+      if(noEventSinceCheckboxVal) {
+        field.condition.value = true;
+        control.setValidators(Validators.required);
+      } else {
+        field.condition.value = false;
+        control.clearValidators();
+      }
+      control.updateValueAndValidity();
+    }
   }
 
   setValue(name: string, value: any) {

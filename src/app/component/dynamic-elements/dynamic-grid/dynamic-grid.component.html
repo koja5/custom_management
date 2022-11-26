@@ -109,7 +109,7 @@
       </e-column>
     </e-columns>
 
-    <ejs-dialog #mailTemplate [visible]='false' width="400px" height="440px">
+    <ejs-dialog #mailTemplate [visible]='false' width="400px" height="440px" [target]='targetElement'>
       <form [formGroup]="mailGroup">
         <label *ngIf="emailsForSendingMessage.length < 1" style="color:red; display: block;"> {{ language.noClinicSelected }} </label>
         {{ language.emailSubject }}

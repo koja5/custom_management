@@ -52,6 +52,7 @@ export class MassiveSmsComponent implements OnInit, FormGuardData {
     this.dynamicService
       .getConfiguration("administarator", "massive-sms")
       .subscribe((config) => {
+        console.log(config);
         this.configField = config;
         this.getSmsDrafts();
 
@@ -136,15 +137,22 @@ export class MassiveSmsComponent implements OnInit, FormGuardData {
     this.dynamicService
       .callApiPost("/api/getFilteredRecipients", this.changeData)
       .subscribe((data) => {
-        if (data && data["length"] > 0) {
+        if (data) {
           this.allRecipients = data;
-        } else {
+        } else if(!data) {
           this.recipients.close();
           this.helpService.warningToastr(
             "",
             this.language.needToConfigurationParams
           );
         }
+      }, (error) => {
+        console.log(error);
+        this.recipients.close();
+        this.helpService.warningToastr(
+          "",
+          this.language.needToConfigurationParams
+        );
       });
   }
 

@@ -55,6 +55,7 @@ import { ChooseHolidayComponent } from "./parameters/choose-holiday/choose-holid
 import { FormGuard } from "src/app/service/form-guard/formGuard";
 import { RegisteredClinicsComponent } from "./administrator/registered-clinics/registered-clinics.component";
 import { RegisteredClinicDetailComponent } from "./administrator/registered-clinics/registered-clinic-detail/registered-clinic-detail.component";
+import { LastMinuteEventConfirmationComponent } from "./customers/last-minute-event-confirmation/last-minute-event-confirmation.component";
 import { LicenceComponent } from "./licence/licence.component";
 import { MailMultipleRecepientComponent } from "./parameters/mail-parameters/mail-multiple-recepient/mail-multiple-recepient.component";
 
@@ -79,7 +80,13 @@ const routes: Routes = [
       },
       { path: "store", component: StoreComponent },
       { path: "profile", component: ProfileComponent },
-      { path: "customers", component: CustomersComponent },
+      { path: "customers",
+        children: [
+          { path:"", component:CustomersComponent },
+          { path: "last-minute-event", component: LastMinuteEventConfirmationComponent}          
+          
+        ], 
+      },
       { path: "invoice", component: InvoiceComponent },
       {
         path: "parameters",

@@ -1,0 +1,68 @@
+<div *ngIf="loading" style="height: 80vh">
+  <div class="spinner loading"></div>
+</div>
+<div *ngIf="!loading" class="settings-container">
+  <h1 class="text-center">{{ language?.lastMinuteOffer }}</h1>
+  <form
+      (ngSubmit)="
+      lastMinuteForm.form.valid === true
+          ? addLastMinuteEvent()
+          : null
+      "
+      #lastMinuteForm="ngForm"
+    >
+      <div class="form-group">
+        <div style="text-align: center;">
+          <div>
+            <label style="line-height: 34px; margin: 0">{{ language.therapeut }}</label>            
+          </div>
+          <div>
+            <kendo-combobox [data]="therapeuts" [textField]="'shortname'" [valueField]="'id'" 
+              name="therapeutsInCompany" [(ngModel)]="selectedTherapeut" [valuePrimitive]="true"         
+              [suggest]="true" required>
+            </kendo-combobox>
+            <mat-error *ngIf="checkIfInputValid('therapeutsInCompany')">{{ language?.thisFieldIsRequired }}</mat-error>                      
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div style="text-align: center;">
+          <div>
+            <label style="line-height: 34px; margin: 0">{{ language.day }}</label>            
+          </div>
+          <div>
+            <kendo-combobox [data]="dates" [textField]="'displayValue'" [valueField]="'value'"
+              name="lastMinuteDates" [(ngModel)]="selectedDay"        
+              [suggest]="true" required>
+            </kendo-combobox>
+            <mat-error *ngIf="checkIfInputValid('lastMinuteDates')">{{ language?.thisFieldIsRequired }}</mat-error>
+          </div>          
+        </div>
+      </div>
+      <div class="form-group">
+        <div style="text-align: center;">
+          <div>
+            <label style="line-height: 34px; margin: 0">{{ language.hour }}</label>            
+          </div>
+          <div>
+            <kendo-combobox [data]="hours"  
+              name="lastMinuteHours" [(ngModel)]="selectedHour" [valuePrimitive]="true"         
+              [suggest]="true" required>
+            </kendo-combobox>
+            <mat-error *ngIf="checkIfInputValid('lastMinuteHours')">{{ language?.thisFieldIsRequired }}</mat-error>
+          </div>
+        </div>
+      </div>      
+      <div class="form-group" style="text-align: center">
+        <button
+          kendoButton
+          [primary]="true"
+          class="form-button"
+          [disabled]="lastMinuteForm.form.invalid"
+          type="submit"
+        >
+          {{ language.add }}
+        </button>        
+      </div>
+    </form>
+</div>

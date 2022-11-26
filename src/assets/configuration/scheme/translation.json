@@ -2299,6 +2299,12 @@
             "excludeCustomersWithEvents": {
                 "type": "string"
             },
+            "noEventSinceCheckbox": {
+                "type": "string"
+            },
+            "noEventSinceDate": {
+                "type": "string"
+            },
             "chooseImage": {
                 "type": "string"
             },
@@ -2331,6 +2337,51 @@
             },
             "columnHeader": {
                 "type": "string"
+            },
+            "lastMinute":{
+                "type":"string"
+			},
+            "patients":{
+                "type":"string"
+			},
+            "therapeuts":{
+                "type":"string"
+			},
+            "days":{
+                "type":"string"
+			},
+            "lastMinuteEMailMessage":{
+                "type":"string"
+			},
+            "lastMinuteEMailSubject":{
+                "type":"string"
+			},            
+            "eventDates":{
+                "type":"string"
+			},           
+            "therapeut":{
+                "type":"string"
+			},
+            "hour":{
+                "type":"string"
+			},
+            "sendLastMinuteOffer":{
+                "type":"string"
+            },
+            "viewLastMinuteOffer":{
+                "type":"string"
+            },
+            "clearLastMinuteOffer":{
+                "type":"string"
+            },
+            "lastMinuteOffer":{
+                "type":"string"
+            },
+            "lastMinuteOfferDatePassedTitle":{
+                "type":"string"
+            },
+            "lastMinuteOfferDatePassedText":{
+                "type":"string"
             },
             "thisFieldIsRequired": {
                 "type": "string"
@@ -3259,6 +3310,33 @@
                             "key": "noStoreSelectedIndicatorText"
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "type": "section",
+            "title": "Last Minute Offer",
+            "expandable": true,
+            "expanded": false,
+            "items": [                
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items":[                        
+                        {
+                            "key":"lastMinute"
+                        },
+                        {
+                            "key":"lastMinuteOffer"
+                        },
+                        {
+                            "key":"lastMinuteOfferDatePassedText"
+                        },
+                        {
+                            "key":"lastMinuteOfferDatePassedTitle"
+                        }
+                    ]
                 },
                 {
                     "type": "div",
@@ -3270,6 +3348,49 @@
                         },
                         {
                             "key": "editEventTitle"
+                        },
+                        {
+                            "key":"patients"
+                        },
+                        {
+                            "key":"therapeuts"
+                        },
+                        {
+                            "key":"days"
+                        },
+                        {
+                            "key":"eventDates"
+                        },
+                        {
+                            "key":"time"
+                        },
+                        {
+                            "key":"therapeut"
+                        },
+                        {
+                            "key":"hour"
+                        }         
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items":[
+                        {
+                            "key":"lastMinuteEMailMessage"
+                        },
+                        {
+                            "key":"lastMinuteEMailSubject"
+                        },                        
+                        {
+                            "key":"sendLastMinuteOffer"
+                        },
+                        {
+                            "key":"viewLastMinuteOffer"
+                        },
+                        {
+                            "key":"clearLastMinuteOffer"
                         }
                     ]
                 }
@@ -6757,6 +6878,19 @@
                         },
                         {
                             "key": "excludeCustomersWithEvents"
+                        }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "noEventSinceCheckbox"
+                        },
+                        {
+                            "key": "noEventSinceDate"
                         }
                     ]
                 },

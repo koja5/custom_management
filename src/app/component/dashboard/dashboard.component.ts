@@ -185,7 +185,7 @@ export class DashboardComponent implements OnInit {
 
   checkDefaultLink() {
     if (this.helpService.getSessionStorage("defaultLink")) {
-      this.router.navigate([this.helpService.getSessionStorage("defaultLink")]);
+      this.router.navigateByUrl(this.helpService.getSessionStorage("defaultLink"));
     }
   }
 

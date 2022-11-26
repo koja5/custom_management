@@ -36,6 +36,26 @@
     "field": "excludeCustomersWithEvents"
   },
   {
+    "type": "checkbox",
+    "width": "col-md-12",
+    "name": "noEventSinceCheckbox",
+    "label": "noEventSinceCheckbox",
+    "field": "noEventSinceCheckbox"
+  },
+  {
+    "type": "datepicker",
+    "width": "col-md-12",
+    "format": "dd.MM.yyyy",
+    "name": "noEventSinceDate",
+    "label": "noEventSinceDate",
+    "field": "noEventSinceDate",
+    "required": true,
+    "condition": {
+      "fieldName": "noEventSinceCheckbox",
+      "value": false
+    }
+  },
+  {
     "type": "datepicker",
     "width": "col-md-6",
     "format": "dd.MM.yyyy",

@@ -114,6 +114,11 @@ export class DynamicGridComponent implements OnInit {
     this.helpService.setDefaultBrowserTabTitle();
 
     this.currentUrl = this.router.url;
+    this.initilaizeTarget();
+  }
+
+  public initilaizeTarget = () => {
+    this.targetElement = this.container.nativeElement.parentElement;
   }
 
   ngAfterViewInit() {
