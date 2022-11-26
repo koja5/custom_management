@@ -10,4 +10,8 @@ export class LicenceService {
   getStatusLicence(superadmin: string) {
     return this.httpClient.get("/api/getLicenceForUser/" + superadmin).map((res) => res);;
   }
+
+  getAllLicence() {
+    return this.httpClient.get("/api/getAllLicences/").map((res) => res);;
+  }
 }

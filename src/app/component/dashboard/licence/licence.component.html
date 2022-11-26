@@ -10,7 +10,7 @@
   <div class="button-licence">
     <div class="row">
       <div class="col-md-6">
-        <button class="btn btn-primary" [disabled]="true">{{language.upgradeLicence}}</button>
+        <button class="btn btn-primary" (click)="openPaymentForm(); getLicences()">{{language.upgradeLicence}}</button>
       </div>
       <div class="col-md-6">
         <button class="btn btn-success" (click)="openPaymentForm()">{{language.renewLicence}}</button>
@@ -34,6 +34,9 @@
             <input [(ngModel)]="data.lastname" class="col-md-12 payment-input" [placeholder]="language.lastname">
             <input type="email" [(ngModel)]="data.email" class="col-md-12 payment-input" [placeholder]="language.email">
             <input [(ngModel)]="data.phone" class="col-md-12 payment-input" [placeholder]="language.phone">
+            <select *ngIf="updateLicence&&allLicences" name="licence" class="col-md-12 payment-input" (change)="changeLicence($event.target.selectedIndex)">
+              <option *ngFor="let item of allLicences" [ngValue]="item" [selected]="item.name === licence.name ? true : false">{{language[item.name] ? language[item.name] : item.name}}</option>
+            </select>
             <select class="col-md-12 payment-input" [(ngModel)]="data.expired">
               <option disabled selected value="undefined">Select number of month</option>
               <option *ngFor="let item of [].constructor(12); let i = index" value="{{i + 1}}">{{i + 1}} Month</option>
@@ -43,7 +46,7 @@
           <div id="card-element" class="field mt-3"></div>
           <div class="sum-div" *ngIf="data.expired">
             <h4>{{data.expired}} Month x {{licence.price}} €</h4>
-            <h3 class="sum-price">{{data.expired * licence.price}} €</h3>
+            <h3 class="sum-price">{{getSum()}} €</h3>
           </div>
         </div>
         <div class="col-xs-12 text-right" *ngIf="card">

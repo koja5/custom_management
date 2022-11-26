@@ -21,6 +21,7 @@ export class LicenceComponent implements OnInit {
   @ViewChild("paymentForm") paymentForm: Modal;
   public language: any;
   public licence: any;
+  public currentLicence: any;
   public diffDate: number;
   elements: Elements;
   card: StripeElement;
@@ -28,6 +29,8 @@ export class LicenceComponent implements OnInit {
     locale: "en",
   };
   public data = new ReqeustDemoAccount();
+  public allLicences: any;
+  public updateLicence = false;
 
   constructor(
     private helpService: HelpService,
@@ -48,7 +51,7 @@ export class LicenceComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && data.length) {
           this.licence = data[0];
-          this.licence.price = 49;
+          this.currentLicence = JSON.parse(JSON.stringify(this.licence));
           this.diffDate = this.calculateDiff(this.licence.expiration_date);
         }
       });
@@ -65,6 +68,7 @@ export class LicenceComponent implements OnInit {
   }
 
   openPaymentForm() {
+    this.updateLicence = false;
     this.paymentForm.open();
     setTimeout(() => {
       this.stripeService
@@ -94,6 +98,13 @@ export class LicenceComponent implements OnInit {
     }, 100);
   }
 
+  getLicences() {
+    this.updateLicence = true;
+    this.licenceService.getAllLicence().subscribe((data) => {
+      this.allLicences = data;
+    });
+  }
+
   submitPayment() {
     this.data.price = this.licence.price * this.data.expired;
     this.stripeService
@@ -103,6 +114,7 @@ export class LicenceComponent implements OnInit {
       .subscribe(
         (result) => {
           if (result.token) {
+            this.licence.expiration_date = this.currentLicence.expiration_date;
             const date = this.helpService.convertStringToDate(
               this.licence.expiration_date
             );
@@ -143,11 +155,22 @@ export class LicenceComponent implements OnInit {
       !this.data.lastname ||
       !this.data.email ||
       !this.data.phone ||
-      !this.data.expired
+      !this.data.expired ||
+      !this.licence
     ) {
       return true;
     } else {
       return false;
     }
+  }
+
+  getSum() {
+    const sum = Number(this.data.expired) * Number(this.licence.price);
+    return sum.toFixed(2);
+  }
+
+  changeLicence(event) {
+    console.log(event);
+    this.licence = this.allLicences[event];
   }
 }

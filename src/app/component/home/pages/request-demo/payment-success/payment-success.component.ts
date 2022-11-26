@@ -17,6 +17,6 @@ export class PaymentSuccessComponent implements OnInit {
   }
 
   backToLanding() {
-    this.router.navigate(["./"]);
+    this.router.navigate(["/dashboard/home/licence"]);
   }
 }

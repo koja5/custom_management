@@ -300,6 +300,8 @@ export class LoginComponent implements OnInit {
               this.loginForm = "";
               this.userAccessForm = "active";
             }
+          } else if (info === "licence_expired") {
+            this.router.navigate(["/access-forbiden"]);
           } else {
             this.loginInfo = JSON.parse(localStorage.getItem("language"))[
               "notCorrectPass"
@@ -432,7 +434,6 @@ export class LoginComponent implements OnInit {
     } else {
       this.router.navigate(["/dashboard/home/task"]);
     }*/
-
   }
 
   checkDemoAccountLanguage() {

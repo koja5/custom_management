@@ -170,6 +170,16 @@ router.post("/signUp", function (req, res, next) {
                 conn.query(
                   "insert into sms_count SET ?",
                   smsCountData,
+                  function (err, rows) {}
+                );
+                const licence = {
+                  licence_id: 1,
+                  superadmin_id: rows.insertId,
+                  expiration_date: new Date(),
+                };
+                conn.query(
+                  "insert into licence_per_user SET ?",
+                  [licence],
                   function (err, rows) {
                     conn.release();
                   }
@@ -435,157 +445,177 @@ router.post("/login", (req, res, next) => {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(err);
             }
-            console.log(rows);
-            if (rows.length >= 1 && rows[0].active === 1) {
-              logger.log(
-                "info",
-                `User ${req.body.email} is SUCCESS login on a system like a USER!`
-              );
-              conn.query(
-                "SELECT * FROM user_access where mac_address = ?",
-                [req.body.ipAddress],
-                function (err, res_access, fields) {
-                  if (res_access.length > 0) {
-                    conn.release();
-                    if (res_access[0].access) {
-                      res.send({
-                        login: true,
-                        notVerified: rows[0].active,
-                        user: rows[0].shortname,
-                        type: rows[0].type,
-                        id: rows[0].id,
-                        storeId: rows[0].storeId,
-                        superadmin: rows[0].superadmin,
-                      });
-                    } else {
-                      res.send({
-                        login: false,
-                        info: "deny_access",
-                      });
-                    }
-                  } else {
-                    var access_date = new Date();
-
-                    var access_data = {
-                      user_id: rows[0].id,
-                      superadmin: rows[0].superadmin,
-                      mac_address: ipAddress,
-                      date: access_date,
-                      access: 0,
-                    };
-
-                    conn.query(
-                      "insert into user_access set ?",
-                      [access_data],
-                      function (err, user_access_response, fields) {
-                        res.send({
-                          login: false,
-                          info: "deny_access",
-                          user_access_id: user_access_response.insertId,
-                        });
-                      }
-                    );
-
-                    conn.query(
-                      "select * from users_superadmin where id = ?",
-                      [rows[0].superadmin],
-                      function (err, superadmin, fields) {
-                        conn.release();
-                        var body = {
-                          email: superadmin[0].email,
-                          firstname: rows[0].firstname,
-                          lastname: rows[0].lastname,
-                          date: access_date,
-                          mac_address: ipAddress,
-                        };
-
-                        var options = {
-                          url: link + "confirmUserViaMacAddress",
-                          method: "POST",
-                          body: body,
-                          json: true,
-                        };
-                        request(options, function (error, response, body) {});
-                      }
-                    );
-                  }
-                }
-              );
-            } else {
-              conn.query(
-                "SELECT * FROM users_superadmin WHERE email=? AND password=?",
-                [reqObj.email, sha1(reqObj.password)],
-                function (err, rows, fields) {
-                  if (err) {
-                    logger.log("error", err.sql + ". " + err.sqlMessage);
-                    res.json(err);
-                  }
+            conn.query(
+              "SELECT * FROM users u join licence_per_user l on u.superadmin = l.superadmin_id where l.expiration_date >= ?",
+              [new Date()],
+              function (err, licence, fields) {
+                console.log(err);
+                console.log(licence);
+                if (licence.length > 0) {
                   if (rows.length >= 1 && rows[0].active === 1) {
                     logger.log(
                       "info",
-                      `User ${req.body.email} is SUCCESS login on a system like a SUPERADMIN!`
+                      `User ${req.body.email} is SUCCESS login on a system like a USER!`
                     );
-                    res.send({
-                      login: true,
-                      notVerified: rows[0].active,
-                      user: rows[0].shortname,
-                      type: rows[0].type,
-                      id: rows[0].id,
-                      storeId: 0,
-                      superadmin: rows[0].id,
-                      last_login: rows[0].last_login,
-                    });
                     conn.query(
-                      "update users_superadmin SET last_login = ? where id = ?",
-                      [new Date(), rows[0].id],
-                      function (err, rows, fields) {
-                        conn.release();
+                      "SELECT * FROM user_access where mac_address = ?",
+                      [req.body.ipAddress],
+                      function (err, res_access, fields) {
+                        if (res_access.length > 0) {
+                          conn.release();
+                          if (res_access[0].access) {
+                            res.send({
+                              login: true,
+                              notVerified: rows[0].active,
+                              user: rows[0].shortname,
+                              type: rows[0].type,
+                              id: rows[0].id,
+                              storeId: rows[0].storeId,
+                              superadmin: rows[0].superadmin,
+                            });
+                          } else {
+                            res.send({
+                              login: false,
+                              info: "deny_access",
+                            });
+                          }
+                        } else {
+                          var access_date = new Date();
+
+                          var access_data = {
+                            user_id: rows[0].id,
+                            superadmin: rows[0].superadmin,
+                            mac_address: ipAddress,
+                            date: access_date,
+                            access: 0,
+                          };
+
+                          conn.query(
+                            "insert into user_access set ?",
+                            [access_data],
+                            function (err, user_access_response, fields) {
+                              res.send({
+                                login: false,
+                                info: "deny_access",
+                                user_access_id: user_access_response.insertId,
+                              });
+                            }
+                          );
+
+                          conn.query(
+                            "select * from users_superadmin where id = ?",
+                            [rows[0].superadmin],
+                            function (err, superadmin, fields) {
+                              conn.release();
+                              var body = {
+                                email: superadmin[0].email,
+                                firstname: rows[0].firstname,
+                                lastname: rows[0].lastname,
+                                date: access_date,
+                                mac_address: ipAddress,
+                              };
+
+                              var options = {
+                                url: link + "confirmUserViaMacAddress",
+                                method: "POST",
+                                body: body,
+                                json: true,
+                              };
+                              request(
+                                options,
+                                function (error, response, body) {}
+                              );
+                            }
+                          );
+                        }
                       }
                     );
                   } else {
                     conn.query(
-                      "SELECT * FROM customers WHERE email=? AND password=? and active = 1",
+                      "SELECT * FROM users_superadmin WHERE email=? AND password=?",
                       [reqObj.email, sha1(reqObj.password)],
                       function (err, rows, fields) {
                         if (err) {
                           logger.log("error", err.sql + ". " + err.sqlMessage);
                           res.json(err);
                         }
-
-                        if (rows.length >= 1) {
-                          conn.release();
+                        if (rows.length >= 1 && rows[0].active === 1) {
                           logger.log(
                             "info",
-                            `User ${req.body.email} is SUCCESS login on a system like a PATIENT!`
+                            `User ${req.body.email} is SUCCESS login on a system like a SUPERADMIN!`
                           );
                           res.send({
                             login: true,
-                            type: 4,
-                            notVerified: 1,
+                            notVerified: rows[0].active,
                             user: rows[0].shortname,
+                            type: rows[0].type,
                             id: rows[0].id,
-                            storeId: rows[0].storeId,
-                            superadmin: rows[0].storeId,
+                            storeId: 0,
+                            superadmin: rows[0].id,
+                            last_login: rows[0].last_login,
                           });
+                          conn.query(
+                            "update users_superadmin SET last_login = ? where id = ?",
+                            [new Date(), rows[0].id],
+                            function (err, rows, fields) {
+                              conn.release();
+                            }
+                          );
                         } else {
-                          logger.log(
-                            "error",
-                            `Bad username and password for users ${req.body.email}`
+                          conn.query(
+                            "SELECT * FROM customers WHERE email=? AND password=? and active = 1",
+                            [reqObj.email, sha1(reqObj.password)],
+                            function (err, rows, fields) {
+                              if (err) {
+                                logger.log(
+                                  "error",
+                                  err.sql + ". " + err.sqlMessage
+                                );
+                                res.json(err);
+                              }
+
+                              if (rows.length >= 1) {
+                                conn.release();
+                                logger.log(
+                                  "info",
+                                  `User ${req.body.email} is SUCCESS login on a system like a PATIENT!`
+                                );
+                                res.send({
+                                  login: true,
+                                  type: 4,
+                                  notVerified: 1,
+                                  user: rows[0].shortname,
+                                  id: rows[0].id,
+                                  storeId: rows[0].storeId,
+                                  superadmin: rows[0].storeId,
+                                });
+                              } else {
+                                logger.log(
+                                  "error",
+                                  `Bad username and password for users ${req.body.email}`
+                                );
+                                logger.log(
+                                  "warn",
+                                  `User ${req.body.email} is NOT SUCCESS login on a system!`
+                                );
+                                res.send({
+                                  login: false,
+                                });
+                              }
+                            }
                           );
-                          logger.log(
-                            "warn",
-                            `User ${req.body.email} is NOT SUCCESS login on a system!`
-                          );
-                          res.send({
-                            login: false,
-                          });
                         }
                       }
                     );
                   }
+                } else {
+                  res.send({
+                    login: false,
+                    info: "licence_expired",
+                  });
                 }
-              );
-            }
+              }
+            );
           }
         );
       }
@@ -8904,22 +8934,23 @@ router.get("/getHolidaysForClinic/:superAdminId", function (req, res, next) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
-    }
-    var superAdminId = req.params.superAdminId;
-    conn.query(
-      "SELECT * FROM `holidays` h where h.superAdminId =" +
-        superAdminId +
-        " ORDER BY StartTime asc",
-      function (err, rows) {
-        conn.release();
-        if (!err) {
-          res.json(rows);
-        } else {
-          res.json(err);
-          logger.log("error", err.sql + ". " + err.sqlMessage);
+    } else {
+      var superAdminId = req.params.superAdminId;
+      conn.query(
+        "SELECT * FROM `holidays` h where h.superAdminId =" +
+          superAdminId +
+          " ORDER BY StartTime asc",
+        function (err, rows) {
+          conn.release();
+          if (!err) {
+            res.json(rows);
+          } else {
+            res.json(err);
+            logger.log("error", err.sql + ". " + err.sqlMessage);
+          }
         }
-      }
-    );
+      );
+    }
   });
 });
 
@@ -10031,9 +10062,6 @@ router.post("/createClinic", function (req, res, next) {
       createPassword = req.body.password;
     }
 
-    var expiryDate = new Date();
-    expiryDate.setDate(d.getDate() + 14);
-
     response = {};
     const data = {
       id: req.body.id,
@@ -10052,16 +10080,30 @@ router.post("/createClinic", function (req, res, next) {
       type: 0,
       active: req.body.active,
       companyname: req.body.companyname,
-      expiryDate: expiryDate,
     };
 
     conn.query("insert users_superadmin SET ?", data, function (err, rows) {
-      conn.release();
       if (!err) {
         if (!err) {
-          response.id = rows.id;
+          response.id = rows.insertId;
           response.success = true;
           data["language"] = req.body.language;
+          var expiryDate = new Date();
+          expiryDate.setDate(expiryDate.getDate() + 14);
+          const licence = {
+            licence_id: 1,
+            superadmin_id: rows.insertId,
+            expiration_date: expiryDate,
+          };
+          console.log(licence);
+          conn.query(
+            "insert licence_per_user SET ?",
+            licence,
+            function (err, rows) {
+              console.log(err);
+              conn.release();
+            }
+          );
           mailAPI.sendMailAdminInfo(data);
         } else {
           response.success = false;
@@ -10424,6 +10466,24 @@ router.post("/updateLicence", function (req, res, next) {
         }
       }
     );
+  });
+});
+
+router.get("/getAllLicences", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query("select * from licence", function (err, rows) {
+      conn.release();
+      if (!err) {
+        res.json(rows);
+      } else {
+        res.json(err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+      }
+    });
   });
 });
 

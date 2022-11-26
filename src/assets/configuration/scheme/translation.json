@@ -2394,6 +2394,18 @@
             },
             "requestSectionFormSendRequestButton": {
                 "type": "string"
+            },
+            "demo": {
+                "type": "string"
+            },
+            "basic": {
+                "type": "string"
+            },
+            "advanced": {
+                "type": "string"
+            },
+            "premium": {
+                "type": "string"
             }
         }
     },
@@ -7310,6 +7322,25 @@
                         },
                         {},
                         {}
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "demo"
+                        },
+                        {
+                            "key": "basic"
+                        },
+                        {
+                            "key": "advanced"
+                        },
+                        {
+                            "key": "premium"
+                        }
                     ]
                 }
             ]
