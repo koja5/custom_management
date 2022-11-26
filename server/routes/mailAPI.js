@@ -2130,8 +2130,6 @@ router.sendMailAdminInfo = (data) => {
       "utf-8"
     );
     var infoForCreatedAccount = hogan.compile(confirmTemplate);
-    // var verificationLinkButton =
-    //   link + "customerVerificationMail/" + sha1(data.email);
 
     conn.query(
       "SELECT * FROM users_superadmin WHERE users_superadmin = ?",
