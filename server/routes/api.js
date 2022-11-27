@@ -445,14 +445,12 @@ router.post("/login", (req, res, next) => {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(err);
             }
-            conn.query(
-              "SELECT * FROM users u join licence_per_user l on u.superadmin = l.superadmin_id where l.expiration_date >= ?",
-              [new Date()],
-              function (err, licence, fields) {
-                console.log(err);
-                console.log(licence);
-                if (licence.length > 0) {
-                  if (rows.length >= 1 && rows[0].active === 1) {
+            if (rows.length >= 1 && rows[0].active === 1) {
+              conn.query(
+                "SELECT * from licence_per_user l where l.superadmin_id = ? and  l.expiration_date >= ?",
+                [rows[0].superadmin, new Date()],
+                function (err, licence, fields) {
+                  if (licence.length > 0) {
                     logger.log(
                       "info",
                       `User ${req.body.email} is SUCCESS login on a system like a USER!`
@@ -531,15 +529,30 @@ router.post("/login", (req, res, next) => {
                       }
                     );
                   } else {
+                    res.send({
+                      login: false,
+                      info: "licence_expired",
+                    });
+                  }
+                }
+              );
+            } else {
+              conn.query(
+                "SELECT * FROM users_superadmin WHERE email=? AND password=?",
+                [reqObj.email, sha1(reqObj.password)],
+                function (err, rows, fields) {
+                                console.log(err);
+                  if (err) {
+                    logger.log("error", err.sql + ". " + err.sqlMessage);
+                    res.json(err);
+                  }
+                  if (rows.length >= 1 && rows[0].active === 1) {
                     conn.query(
-                      "SELECT * FROM users_superadmin WHERE email=? AND password=?",
-                      [reqObj.email, sha1(reqObj.password)],
-                      function (err, rows, fields) {
-                        if (err) {
-                          logger.log("error", err.sql + ". " + err.sqlMessage);
-                          res.json(err);
-                        }
-                        if (rows.length >= 1 && rows[0].active === 1) {
+                      "SELECT * from licence_per_user l where l.superadmin_id = ? and l.expiration_date >= ?",
+                      [rows[0].id, new Date()],
+                      function (err, licence, fields) {
+                                console.log(err);
+                        if (licence.length > 0) {
                           logger.log(
                             "info",
                             `User ${req.body.email} is SUCCESS login on a system like a SUPERADMIN!`
@@ -562,19 +575,29 @@ router.post("/login", (req, res, next) => {
                             }
                           );
                         } else {
-                          conn.query(
-                            "SELECT * FROM customers WHERE email=? AND password=? and active = 1",
-                            [reqObj.email, sha1(reqObj.password)],
-                            function (err, rows, fields) {
-                              if (err) {
-                                logger.log(
-                                  "error",
-                                  err.sql + ". " + err.sqlMessage
-                                );
-                                res.json(err);
-                              }
+                          res.send({
+                            login: false,
+                            info: "licence_expired",
+                          });
+                        }
+                      }
+                    );
+                  } else {
+                    conn.query(
+                      "SELECT * FROM customers WHERE email=? AND password=? and active = 1",
+                      [reqObj.email, sha1(reqObj.password)],
+                      function (err, rows, fields) {
+                        if (err) {
+                          logger.log("error", err.sql + ". " + err.sqlMessage);
+                          res.json(err);
+                        }
 
-                              if (rows.length >= 1) {
+                        if (rows.length >= 1) {
+                          conn.query(
+                            "SELECT * from licence_per_user l where l.superadmin_id = ? and  l.expiration_date >= ?",
+                            [rows[0].storeId, new Date()],
+                            function (err, licence, fields) {
+                              if (licence.length > 0) {
                                 conn.release();
                                 logger.log(
                                   "info",
@@ -590,32 +613,40 @@ router.post("/login", (req, res, next) => {
                                   superadmin: rows[0].storeId,
                                 });
                               } else {
-                                logger.log(
-                                  "error",
-                                  `Bad username and password for users ${req.body.email}`
-                                );
-                                logger.log(
-                                  "warn",
-                                  `User ${req.body.email} is NOT SUCCESS login on a system!`
-                                );
                                 res.send({
                                   login: false,
+                                  info: "licence_expired",
                                 });
                               }
                             }
                           );
+                        } else {
+                          logger.log(
+                            "error",
+                            `Bad username and password for users ${req.body.email}`
+                          );
+                          logger.log(
+                            "warn",
+                            `User ${req.body.email} is NOT SUCCESS login on a system!`
+                          );
+                          res.send({
+                            login: false,
+                          });
                         }
                       }
                     );
                   }
-                } else {
-                  res.send({
-                    login: false,
-                    info: "licence_expired",
-                  });
                 }
-              }
-            );
+              );
+            }
+            //     } else {
+            //       res.send({
+            //         login: false,
+            //         info: "licence_expired",
+            //       });
+            //     }
+            //   }
+            // );
           }
         );
       }
@@ -5805,7 +5836,8 @@ router.post("/sendMassiveSMS", function (req, res) {
                   count = 0;
                   rows.forEach(async function (to, i, array) {
                     var phoneNumber = to.mobile ? to.mobile : null;
-                    var unsubscribeLink = process.env.unsubscribeSMS + '/' + to.customerId;
+                    var unsubscribeLink =
+                      process.env.unsubscribeSMS + "/" + to.customerId;
                     if (
                       checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
                       req.body.message
@@ -5843,10 +5875,14 @@ router.post("/sendMassiveSMS", function (req, res) {
                           signature += to.smsSignatureEmail + " \n";
                         }
                       }
-                      
-                        signature += language.unsubscribeMessage + "\n" +
-                         language.unsubscribeHere + "\n" + unsubscribeLink;
-                      
+
+                      signature +=
+                        language.unsubscribeMessage +
+                        "\n" +
+                        language.unsubscribeHere +
+                        "\n" +
+                        unsubscribeLink;
+
                       if (language.smsSignaturePoweredBy) {
                         signature +=
                           " \n" + language.smsSignaturePoweredBy + " \n";
@@ -6416,11 +6452,11 @@ function getSqlQueryMultiSelect(body) {
     }
   }
 
-  if(body.noEventSinceCheckbox && body.noEventSinceDate) {
-    if(question) {
-      question += ` and CAST(t.end AS DATE) < CAST('${body.noEventSinceDate}' AS DATE)`
+  if (body.noEventSinceCheckbox && body.noEventSinceDate) {
+    if (question) {
+      question += ` and CAST(t.end AS DATE) < CAST('${body.noEventSinceDate}' AS DATE)`;
     } else {
-      question = ` CAST(t.end AS DATE) < CAST('${body.noEventSinceDate}' AS DATE)`
+      question = ` CAST(t.end AS DATE) < CAST('${body.noEventSinceDate}' AS DATE)`;
     }
   }
 
@@ -6462,8 +6498,8 @@ router.post("/getFilteredRecipients", function (req, res) {
         res.json(err);
       }
       var question = getSqlQueryMultiSelect(req.body);
-      if(!question || question.length === 0) {
-        return res.status(400).send('Invalid data send!');
+      if (!question || question.length === 0) {
+        return res.status(400).send("Invalid data send!");
       }
       console.log(req.body);
       var joinTable = getJoinTable(req.body);
@@ -6485,27 +6521,25 @@ router.post("/getFilteredRecipients", function (req, res) {
           "c.id not in (select t.customer_id from tasks t where t.start > now()) and";
       }
 
-      let queryString = "select distinct c.* from customers c join " +
-      table +
-      " sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin " +
-      joinTable +
-      " where " +
-      excludeQuery +
-      checkAdditionalQuery +
-      " and c.active = 1 and c.storeId = " +
-      Number(req.body.superadmin) +
-      " and (" +
-      question +
-      ")";
+      let queryString =
+        "select distinct c.* from customers c join " +
+        table +
+        " sm on c.storeId = sm.superadmin join store s on c.storeId = s.superadmin " +
+        joinTable +
+        " where " +
+        excludeQuery +
+        checkAdditionalQuery +
+        " and c.active = 1 and c.storeId = " +
+        Number(req.body.superadmin) +
+        " and (" +
+        question +
+        ")";
       console.log(queryString);
-      conn.query(
-        queryString,
-        function (err, rows) {
-          conn.release();
-          if (err) return err;
-          res.json(rows);
-        }
-      );
+      conn.query(queryString, function (err, rows) {
+        conn.release();
+        if (err) return err;
+        res.json(rows);
+      });
     });
   } catch (ex) {
     logger.log("error", err.sql + ". " + err.sqlMessage);
