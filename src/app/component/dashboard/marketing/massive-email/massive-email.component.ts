@@ -27,14 +27,17 @@ export class MassiveEmailComponent implements OnInit, FormGuardData {
   public showDialog = false;
   public allRecipients: any;
   public emailDrafts;
-  public fields: Object = { text: 'draftName', value: 'id' };
   public editMode: boolean = false;
+  public copyMode: boolean = false;
   public draftName: string;
+  public originalDraftName: string;
   isFormDirty: boolean = false;
+  
   isDataSaved$: Subject<boolean> = new Subject<boolean>();
   showDialogExit: boolean = false
   selectedIndex: number;
   public dialogOpened = false;
+  public saveDraftModalHeader: string;
 
   constructor(
     private helpService: HelpService,
@@ -167,8 +170,25 @@ export class MassiveEmailComponent implements OnInit, FormGuardData {
       });
   }
 
-  openSaveDraftModal() {
+  openSaveDraftModal(headerName: string) {
+    this.saveDraftModalHeader = headerName;
     this.saveDraft.open();
+  }
+
+  prepareForCopyModal(headerName: string) {
+    this.copyMode = true;
+    this.editMode = false;
+    this.originalDraftName = this.draftName
+    this.draftName = `${this.draftName} Copy`;
+    this.openSaveDraftModal(headerName);
+  }
+
+  actionOnClose() {
+    if(this.copyMode) {
+      this.copyMode = false
+      this.editMode = true;
+      this.draftName = this.originalDraftName;
+    }
   }
 
   saveEmailDraft() {
