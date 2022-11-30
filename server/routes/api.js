@@ -584,7 +584,7 @@ router.post("/login", (req, res, next) => {
                     );
                   } else {
                     conn.query(
-                      "SELECT * FROM users_superadmin WHERE email=? AND password=?",
+                      "SELECT * FROM customers WHERE email=? AND password=? and active = 1",
                       [reqObj.email, sha1(reqObj.password)],
                       function (err, rows, fields) {
                         if (err) {
@@ -621,57 +621,21 @@ router.post("/login", (req, res, next) => {
                             }
                           );
                         } else {
-                          conn.query(
-                            "SELECT * FROM customers WHERE email=? AND password=? and active = 1",
-                            [reqObj.email, sha1(reqObj.password)],
-                            function (err, rows, fields) {
-                              if (err) {
-                                logger.log(
-                                  "error",
-                                  err.sql + ". " + err.sqlMessage
-                                );
-                                res.json(err);
-                              }
-
-                              if (rows.length >= 1) {
-                                conn.release();
-                                logger.log(
-                                  "info",
-                                  `User ${req.body.email} is SUCCESS login on a system like a PATIENT!`
-                                );
-                                res.send({
-                                  login: true,
-                                  type: 4,
-                                  notVerified: 1,
-                                  user: rows[0].shortname,
-                                  id: rows[0].id,
-                                  storeId: rows[0].storeId,
-                                  superadmin: rows[0].storeId,
-                                });
-                              } else {
-                                logger.log(
-                                  "error",
-                                  `Bad username and password for users ${req.body.email}`
-                                );
-                                logger.log(
-                                  "warn",
-                                  `User ${req.body.email} is NOT SUCCESS login on a system!`
-                                );
-                                res.send({
-                                  login: false,
-                                });
-                              }
-                            }
+                          logger.log(
+                            "error",
+                            `Bad username and password for users ${req.body.email}`
                           );
+                          logger.log(
+                            "warn",
+                            `User ${req.body.email} is NOT SUCCESS login on a system!`
+                          );
+                          res.send({
+                            login: false,
+                          });
                         }
                       }
                     );
                   }
-                } else {
-                  res.send({
-                    login: false,
-                    info: "licence_expired",
-                  });
                 }
               );
             }
