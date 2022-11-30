@@ -541,7 +541,7 @@ router.post("/login", (req, res, next) => {
                 "SELECT * FROM users_superadmin WHERE email=? AND password=?",
                 [reqObj.email, sha1(reqObj.password)],
                 function (err, rows, fields) {
-                                console.log(err);
+                  console.log(err);
                   if (err) {
                     logger.log("error", err.sql + ". " + err.sqlMessage);
                     res.json(err);
@@ -551,7 +551,7 @@ router.post("/login", (req, res, next) => {
                       "SELECT * from licence_per_user l where l.superadmin_id = ? and l.expiration_date >= ?",
                       [rows[0].id, new Date()],
                       function (err, licence, fields) {
-                                console.log(err);
+                        console.log(err);
                         if (licence.length > 0) {
                           logger.log(
                             "info",
@@ -8618,6 +8618,60 @@ router.get("/getSMSCount", function (req, res, next) {
       }
     );
   });
+});
+
+router.get("/getSMSCountPerUser/:id", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query(
+      "SELECT s.* from sms_count s where s.superadmin = ?",
+      [req.params.id],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
+      }
+    );
+  });
+});
+
+router.post("/updateSmsCountForSuperadmin", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "update sms_count SET count = ? where superadmin = ?",
+          [req.body.smsCount, req.body.superadminId],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+              console.log(err);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
 });
 
 router.post("/createSmsCount", (req, res, next) => {

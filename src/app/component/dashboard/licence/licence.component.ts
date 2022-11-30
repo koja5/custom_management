@@ -19,8 +19,10 @@ import { LicenceService } from "src/app/service/licence.service";
 })
 export class LicenceComponent implements OnInit {
   @ViewChild("paymentForm") paymentForm: Modal;
+  @ViewChild("paymentSMSForm") paymentSMSForm: Modal;
   public language: any;
   public licence: any;
+  public sms: any;
   public currentLicence: any;
   public diffDate: number;
   elements: Elements;
@@ -31,6 +33,7 @@ export class LicenceComponent implements OnInit {
   public data = new ReqeustDemoAccount();
   public allLicences: any;
   public updateLicence = false;
+  public paySms: number;
 
   constructor(
     private helpService: HelpService,
@@ -43,6 +46,7 @@ export class LicenceComponent implements OnInit {
   ngOnInit() {
     this.language = this.helpService.getLanguage();
     this.getLicence();
+    this.getSMSCountPerUser();
   }
 
   getLicence() {
@@ -53,6 +57,16 @@ export class LicenceComponent implements OnInit {
           this.licence = data[0];
           this.currentLicence = JSON.parse(JSON.stringify(this.licence));
           this.diffDate = this.calculateDiff(this.licence.expiration_date);
+        }
+      });
+  }
+
+  getSMSCountPerUser() {
+    this.licenceService
+      .getSMSCountPerUser(this.helpService.getSuperadmin())
+      .subscribe((data: any) => {
+        if (data && data.length) {
+          this.sms = data[0];
         }
       });
   }
@@ -70,6 +84,37 @@ export class LicenceComponent implements OnInit {
   openPaymentForm() {
     this.updateLicence = false;
     this.paymentForm.open();
+    setTimeout(() => {
+      this.stripeService
+        .elements(this.elementsOptions)
+        .subscribe((elements) => {
+          this.elements = elements;
+          if (!this.card) {
+            this.card = this.elements.create("card", {
+              iconStyle: "solid",
+              style: {
+                base: {
+                  iconColor: "#666EE8",
+                  color: "#31325F",
+                  lineHeight: "40px",
+                  fontWeight: 300,
+                  fontFamily: '"Helverica Neue", Helvetica, sans-serif',
+                  fontSize: "18px",
+                  "::placeholder": {
+                    color: "#CFD7E8",
+                  },
+                },
+              },
+            });
+            this.card.mount("#card-element");
+          }
+        });
+    }, 100);
+  }
+
+  openPaymentSMSForm() {
+    this.updateLicence = false;
+    this.paymentSMSForm.open();
     setTimeout(() => {
       this.stripeService
         .elements(this.elementsOptions)
@@ -149,6 +194,40 @@ export class LicenceComponent implements OnInit {
       );
   }
 
+  submitSMSPayment() {
+    this.stripeService
+      .createToken(this.card, {
+        name: this.data.firstname + " " + this.data.lastname,
+      })
+      .subscribe(
+        (result) => {
+          if (result.token) {
+            let data = {};
+            data["token"] = result.token;
+            data["price"] = this.getSumForSMS();
+            data["smsCount"] = this.paySms;
+            data["superadminId"] = this.helpService.getSuperadmin();
+
+            this.callApi.callApiPost("/api/payment/buy-sms", data).subscribe(
+              (res) => {
+                if (res["success"]) {
+                  this.helpService.successToastr(this.language.paymentSuccess, "");
+                } else {
+                  this.helpService.errorToastr(this.language.paymentError, "");
+                }
+              },
+              (error) => {
+                this.helpService.errorToastr(this.language.paymentError, "");
+              }
+            );
+          }
+        },
+        (error) => {
+          this.helpService.errorToastr(this.language.paymentError, "");
+        }
+      );
+  }
+
   checkRequiredFields() {
     if (
       !this.data.firstname ||
@@ -166,6 +245,11 @@ export class LicenceComponent implements OnInit {
 
   getSum() {
     const sum = Number(this.data.expired) * Number(this.licence.price);
+    return sum.toFixed(2);
+  }
+
+  getSumForSMS() {
+    const sum = Number(this.paySms) * Number(this.language.smsPrice);
     return sum.toFixed(2);
   }
 

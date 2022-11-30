@@ -43,6 +43,35 @@ router.post("/create-payment", (req, res, next) => {
   );
 });
 
+router.post("/buy-sms", (req, res, next) => {
+  stripe.charges.create(
+    {
+      amount: req.body.price * 100,
+      currency: "EUR",
+      description:
+        "Buy SMS: " +
+        req.body.smsCount +
+        ", SUPERADMIN: " +
+        req.body.superadminId,
+      source: req.body.token.id,
+    },
+    (err, charge) => {
+      if (err) {
+        console.log(err);
+        next(err);
+      }
+      var options = {
+        url: process.env.link_api + "updateSmsCountForSuperadmin",
+        method: "POST",
+        body: req.body,
+        json: true,
+      };
+      request(options, function (error, response, body) {});
+      res.json({ success: true, status: "Payment successfull!" });
+    }
+  );
+});
+
 router.post("/create-payment-intent", async (req, res) => {
   const { items } = req.body;
 

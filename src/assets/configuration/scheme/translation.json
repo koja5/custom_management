@@ -2338,50 +2338,50 @@
             "columnHeader": {
                 "type": "string"
             },
-            "lastMinute":{
-                "type":"string"
-			},
-            "patients":{
-                "type":"string"
-			},
-            "therapeuts":{
-                "type":"string"
-			},
-            "days":{
-                "type":"string"
-			},
-            "lastMinuteEMailMessage":{
-                "type":"string"
-			},
-            "lastMinuteEMailSubject":{
-                "type":"string"
-			},            
-            "eventDates":{
-                "type":"string"
-			},           
-            "therapeut":{
-                "type":"string"
-			},
-            "hour":{
-                "type":"string"
-			},
-            "sendLastMinuteOffer":{
-                "type":"string"
+            "lastMinute": {
+                "type": "string"
             },
-            "viewLastMinuteOffer":{
-                "type":"string"
+            "patients": {
+                "type": "string"
             },
-            "clearLastMinuteOffer":{
-                "type":"string"
+            "therapeuts": {
+                "type": "string"
             },
-            "lastMinuteOffer":{
-                "type":"string"
+            "days": {
+                "type": "string"
             },
-            "lastMinuteOfferDatePassedTitle":{
-                "type":"string"
+            "lastMinuteEMailMessage": {
+                "type": "string"
             },
-            "lastMinuteOfferDatePassedText":{
-                "type":"string"
+            "lastMinuteEMailSubject": {
+                "type": "string"
+            },
+            "eventDates": {
+                "type": "string"
+            },
+            "therapeut": {
+                "type": "string"
+            },
+            "hour": {
+                "type": "string"
+            },
+            "sendLastMinuteOffer": {
+                "type": "string"
+            },
+            "viewLastMinuteOffer": {
+                "type": "string"
+            },
+            "clearLastMinuteOffer": {
+                "type": "string"
+            },
+            "lastMinuteOffer": {
+                "type": "string"
+            },
+            "lastMinuteOfferDatePassedTitle": {
+                "type": "string"
+            },
+            "lastMinuteOfferDatePassedText": {
+                "type": "string"
             },
             "thisFieldIsRequired": {
                 "type": "string"
@@ -2456,6 +2456,30 @@
                 "type": "string"
             },
             "premium": {
+                "type": "string"
+            },
+            "selectNumberOfMonth": {
+                "type": "string"
+            },
+            "aboutSMS": {
+                "type": "string"
+            },
+            "availableSMS": {
+                "type": "string"
+            },
+            "sms": {
+                "type": "string"
+            },
+            "buySms": {
+                "type": "string"
+            },
+            "smsPrice": {
+                "type": "string"
+            },
+            "paymentSuccess": {
+                "type": "string"
+            },
+            "paymentError": {
                 "type": "string"
             }
         }
@@ -3318,23 +3342,23 @@
             "title": "Last Minute Offer",
             "expandable": true,
             "expanded": false,
-            "items": [                
+            "items": [
                 {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items":[                        
+                    "items": [
                         {
-                            "key":"lastMinute"
+                            "key": "lastMinute"
                         },
                         {
-                            "key":"lastMinuteOffer"
+                            "key": "lastMinuteOffer"
                         },
                         {
-                            "key":"lastMinuteOfferDatePassedText"
+                            "key": "lastMinuteOfferDatePassedText"
                         },
                         {
-                            "key":"lastMinuteOfferDatePassedTitle"
+                            "key": "lastMinuteOfferDatePassedTitle"
                         }
                     ]
                 },
@@ -3350,47 +3374,47 @@
                             "key": "editEventTitle"
                         },
                         {
-                            "key":"patients"
+                            "key": "patients"
                         },
                         {
-                            "key":"therapeuts"
+                            "key": "therapeuts"
                         },
                         {
-                            "key":"days"
+                            "key": "days"
                         },
                         {
-                            "key":"eventDates"
+                            "key": "eventDates"
                         },
                         {
-                            "key":"time"
+                            "key": "time"
                         },
                         {
-                            "key":"therapeut"
+                            "key": "therapeut"
                         },
                         {
-                            "key":"hour"
-                        }         
+                            "key": "hour"
+                        }
                     ]
                 },
                 {
                     "type": "div",
                     "display": "flex",
                     "flex-direction": "row",
-                    "items":[
+                    "items": [
                         {
-                            "key":"lastMinuteEMailMessage"
+                            "key": "lastMinuteEMailMessage"
                         },
                         {
-                            "key":"lastMinuteEMailSubject"
-                        },                        
-                        {
-                            "key":"sendLastMinuteOffer"
+                            "key": "lastMinuteEMailSubject"
                         },
                         {
-                            "key":"viewLastMinuteOffer"
+                            "key": "sendLastMinuteOffer"
                         },
                         {
-                            "key":"clearLastMinuteOffer"
+                            "key": "viewLastMinuteOffer"
+                        },
+                        {
+                            "key": "clearLastMinuteOffer"
                         }
                     ]
                 }
@@ -7475,6 +7499,56 @@
                         {
                             "key": "premium"
                         }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "selectNumberOfMonth"
+                        },
+                        {
+                            "key": "aboutSMS"
+                        },
+                        {
+                            "key": "availableSMS"
+                        },
+                        {
+                            "key": "sms"
+                        },
+                        {
+                            "key": "buySms"
+                        }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "smsPrice"
+                        },
+                        {},
+                        {},
+                        {}
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "paymentSuccess"
+                        },
+                        {
+                            "key": "paymentError"
+                        },
+                        {},
+                        {}
                     ]
                 }
             ]

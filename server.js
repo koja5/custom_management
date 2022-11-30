@@ -28,6 +28,7 @@ var reminderViaEmail = require("./server/routes/reminderViaEmail");
 var reminderViaSMS = require("./server/routes/reminderViaSMS");
 var sendHappyBirthdayViaSMS = require("./server/routes/sendHappyBirthdayViaSMS");
 var sendHappyBirthdayViaEmail = require("./server/routes/sendHappyBirthdayViaEmail");
+var checkLicenceExpired = require("./server/routes/checkLicenceExpired");
 const mailServer = require("./server/routes/dynamic-mail-server/mail-server");
 const payment = require("./server/routes/payment-process");
 
@@ -226,6 +227,10 @@ var j = schedule.scheduleJob("30 13 * * *", function () {
 
 var j = schedule.scheduleJob("35 10 * * *", function () {
   sendHappyBirthdayViaEmail();
+});
+
+var j = schedule.scheduleJob("18 15 * * *", function () {
+  checkLicenceExpired();
 });
 
 /**

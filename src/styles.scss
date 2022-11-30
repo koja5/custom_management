@@ -19607,7 +19607,8 @@ body {
 .k-combobox .k-dropdown-wrap,
 .k-textarea,
 .k-datepicker .k-picker-wrap,
-.k-textbox {
+.k-textbox,
+.k-timepicker .k-picker-wrap {
   background-color: #ffffff;
   border-color: #ced4da;
   border-width: 1px;
@@ -19626,7 +19627,8 @@ body {
 .k-textbox:hover,
 .k-textarea:focus,
 .k-textarea.k-state-focus,
-.k-textarea.k-state-focused {
+.k-textarea.k-state-focused,
+.k-timepicker .k-picker-wrap:hover {
   border-color: #80bdff !important;
   border-top-color: #80bdff !important;
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
