@@ -139,6 +139,7 @@ export class RegisteredClinicDetailComponent implements OnInit {
   }
 
   action(event) {
+    //Delete action
     if (event === "yes") {
       this.accountService.deleteRegisteredClinic(this.data).subscribe((data) => {
         if (data) {
@@ -153,6 +154,12 @@ export class RegisteredClinicDetailComponent implements OnInit {
             this.language.accountErrorUpdatedAccountText
           );
         }
+      }, (error) => {
+        console.log(error);
+        this.helpService.errorToastr(
+          this.language.clinicErrorDeleted,
+          this.language.accountErrorUpdatedAccountText
+        );
       });
     } else {
       this.dialogOpened = false;
