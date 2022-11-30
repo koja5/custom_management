@@ -9,4 +9,5 @@ export class ReqeustDemoAccount {
   notes!: string;
   price: number;
   message!: string;
+  expired!: number;
 }

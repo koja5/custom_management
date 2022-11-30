@@ -1738,7 +1738,7 @@
                 "type": "string"
             },
             "noClinicSelected": {
-              "type": "string"
+                "type": "string"
             },
             "errorSendEmailMessageText": {
                 "type": "string"
@@ -2435,6 +2435,27 @@
                 "type": "string"
             },
             "renewLicence": {
+                "type": "string"
+            },
+            "lastPaymentStep": {
+                "type": "string"
+            },
+            "cardDetails": {
+                "type": "string"
+            },
+            "requestSectionFormSendRequestButton": {
+                "type": "string"
+            },
+            "demo": {
+                "type": "string"
+            },
+            "basic": {
+                "type": "string"
+            },
+            "advanced": {
+                "type": "string"
+            },
+            "premium": {
                 "type": "string"
             }
         }
@@ -3685,12 +3706,9 @@
                         {
                             "key": "licence"
                         },
-                        {
-                        },
-                        {
-                        },
-                        {
-                        }
+                        {},
+                        {},
+                        {}
                     ]
                 }
             ]
@@ -7419,6 +7437,43 @@
                         },
                         {
                             "key": "renewLicence"
+                        }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "lastPaymentStep"
+                        },
+                        {
+                            "key": "cardDetails"
+                        },
+                        {
+                            "key": "requestSectionFormSendRequestButton"
+                        },
+                        {},
+                        {}
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "demo"
+                        },
+                        {
+                            "key": "basic"
+                        },
+                        {
+                            "key": "advanced"
+                        },
+                        {
+                            "key": "premium"
                         }
                     ]
                 }

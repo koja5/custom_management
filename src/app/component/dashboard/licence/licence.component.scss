@@ -4,3 +4,27 @@
   width: 350px;
   margin-top: 50px;
 }
+
+.payment-input,
+.InputElement {
+  border: 1px solid lightgray !important;
+  border-radius: 5px !important;
+  padding: 5px !important;
+  margin-bottom: 5px;
+}
+
+.div-flex {
+  width: 100%;
+  display: flex;
+}
+
+.sum-div {
+  float: right;
+  width: 154px;
+}
+
+.sum-price {
+  border-top: 1px solid lightgray;
+  padding: 9px;
+  margin: 0px;
+}
