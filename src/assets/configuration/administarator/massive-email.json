@@ -12,7 +12,8 @@
       "ignoreAccent": false,
       "filter": true
     },
-    "allowCustom": true
+    "allowCustom": true,
+    "placeholder": "Please type one or more different towns"
   },
   {
     "type": "checkbox",
