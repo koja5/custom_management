@@ -1,6 +1,7 @@
 import { EventCategoryService } from "./../../../service/event-category.service";
 import { UsersService } from "./../../../service/users.service";
 import { StoreService } from "./../../../service/store.service";
+import { WebApiAdaptor, DataManager as SyncfusionDataManager } from '@syncfusion/ej2-data';
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -68,6 +69,7 @@ import {
   MenuItemModel,
   BeforeOpenCloseMenuEventArgs,
   MenuEventArgs,
+  ToolbarComponent,
 } from "@syncfusion/ej2-angular-navigations";
 import { ChangeEventArgs as TimeEventArgs } from "@syncfusion/ej2-calendars";
 import { TaskService } from "../../../service/task.service";
@@ -252,6 +254,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     }*/
     ],
   };
+  public combinedEventSettings: EventSettingsModel; 
   @ViewChild("menuObj")
   public menuObj: ContextMenuComponent;
   public selectedTarget: Element;
@@ -602,6 +605,65 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
       addClass([settingsPanel], "hide");
     }
   }
+
+  public onSyncWithGoogleCalendar() {
+    if (this.user.googleCalendarData) {
+      this.bindEventsToGoogleCalendar(
+        this.user.googleCalendarData.calendarId,
+        this.user.googleCalendarData.publicKey
+      );
+    } else {
+      this.dynamicSchedulerService.syncWithGoogleCalendar(this.user.id, "", "")
+      .subscribe(()=>{
+        this.toastr.success("Sync with Google calendar successful!");
+        this.bindEventsToGoogleCalendar(
+          this.user.googleCalendarData.calendarId,
+          this.user.googleCalendarData.publicKey
+        );
+      }, (error) => {
+        console.log(error);
+        this.toastr.error("Sync with Google calendar failed!");
+      })
+    }
+  }
+
+  private bindEventsToGoogleCalendar(calendarId: string, publicKey: string) {
+    let dataManger: SyncfusionDataManager = new SyncfusionDataManager({
+      url: `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?key=${publicKey}`,
+      adaptor: new WebApiAdaptor(),
+      crossDomain: true
+    });
+    this.combinedEventSettings = { dataSource: dataManger };
+  }
+
+  public onDataBinding(e: { [key: string]: Object }): void {
+    let items: { [key: string]: Object }[] = (e.result as { [key: string]: Object }).items as { [key: string]: Object }[];
+    let scheduleData: Object[] = [];
+    if (items.length > 0) {
+        for (let i: number = 0; i < items.length; i++) {
+            let event: { [key: string]: Object } = items[i];
+            let when: string = (event.start as { [key: string]: Object }).dateTime as string;
+            let start: string = (event.start as { [key: string]: Object }).dateTime as string;
+            let end: string = (event.end as { [key: string]: Object }).dateTime as string;
+            if (!when) {
+                when = (event.start as { [key: string]: Object }).date as string;
+                start = (event.start as { [key: string]: Object }).date as string;
+                end = (event.end as { [key: string]: Object }).date as string;
+            }
+            scheduleData.push({
+                Id: event.id,
+                Subject: event.summary,
+                StartTime: new Date(start),
+                EndTime: new Date(end),
+                IsAllDay: !(event.start as { [key: string]: Object }).dateTime
+            });
+        }
+    }
+    if(this.allEvents && this.allEvents.length > 0) {
+      scheduleData.push(this.allEvents);
+    }
+    e.result = scheduleData;
+}
 
   public showFilterPanel(): void {
     const settingsPanel: Element = document.querySelector(

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +24,15 @@ export class DynamicSchedulerService {
 
   getDefineHolidayHeight() {
     return window.innerHeight - 185 + 'px';
+  }
+
+  syncWithGoogleCalendar(userId: string, calendarId: string, publicKey: string): Observable<any> {
+    return this.http.put("/api/syncWithGoogleCalendar", {
+      userId,
+      googleCalendarData: {
+        calendarId,
+        publicKey
+      }
+    });
   }
 }

@@ -176,18 +176,30 @@
                   </ng-template>
                 </e-item>
                 
-                <e-item tooltipText="{{
-                  language.lastMinute
-                }}">
+                <e-item tooltipText="{{ language.lastMinute }}">
+                  <ng-template #template>
+                    <div class="toolbarElement" (click)="onLastMinuteClick()">
+                      <div class="icon-child">
+                        <div>
+                          <span class="fa fa-clock-o"></span>
+                        </div>
+                      </div>
+                      <div class="text-child" style="font-size: 14px">
+                        {{ language.lastMinute }}
+                      </div>
+                    </div>
+                  </ng-template>
+              </e-item>
+              <e-item tooltipText="Sync with Google calendar">
                 <ng-template #template>
-                  <div class="toolbarElement" (click)="onLastMinuteClick()">
+                  <div class="toolbarElement" (click)="onSyncWithGoogleCalendar()">
                     <div class="icon-child">
                       <div>
-                        <span class="fa fa-clock-o"></span>
+                        <span class="fa fa-calendar-plus-o"></span>
                       </div>
                     </div>
                     <div class="text-child" style="font-size: 14px">
-                      {{ language.lastMinute }}
+                      Sync with Google Calendar
                     </div>
                   </div>
                 </ng-template>
@@ -326,13 +338,24 @@
                   {{this.language.noStoreSelectedIndicatorText}}
                 </span>
               </div>
-              <ejs-schedule *ngIf="!loading && sharedCalendarResources && isValidStoreSelected && isUserSelected" #scheduleObj
-                cssClass="e-control schedule-overview table" height="100%" [(currentView)]="currentView"
-                [dateFormat]="dateFormatScheduler" [group]="value ? group : []" [showWeekNumber]="true"
-                [eventSettings]="eventSettings" [allowKeyboardInteraction]="
-                  type === userType.patient ? false : true
-                " (renderCell)="onRenderCell($event)" (actionBegin)="onActionBegin($event)" (popupClose)="onPopupClose($event)"
-                (popupOpen)="onPopupOpen($event)" (drag)="onItemDrag($event)" (resizeStop)="onItemDrag($event)">
+              <ejs-schedule 
+                *ngIf="!loading && sharedCalendarResources && isValidStoreSelected && isUserSelected" #scheduleObj
+                cssClass="e-control schedule-overview table"
+                height="100%"
+                [(currentView)]="currentView"
+                [dateFormat]="dateFormatScheduler"
+                [group]="value ? group : []"
+                [showWeekNumber]="true"
+                [eventSettings]="combinedEventSettings ? combinedEventSettings : eventSettings"
+                [allowKeyboardInteraction]="type === userType.patient ? false : true"
+                (renderCell)="onRenderCell($event)"
+                (actionBegin)="onActionBegin($event)"
+                (popupClose)="onPopupClose($event)"
+                (popupOpen)="onPopupOpen($event)"
+                (drag)="onItemDrag($event)"
+                (resizeStop)="onItemDrag($event)"
+                (dataBinding)="onDataBinding($event)"
+                >
                 <ng-template #dateHeaderTemplate let-data>
                   <div class="date-text" title=" {{ getDateHeaderText(data.date) }}">
                     {{ getDateHeaderText(data.date) }}

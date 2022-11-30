@@ -19,4 +19,8 @@ export class CustomerModel {
     isConfirm?: boolean;
     language?: any;
     superadmin?: string;
+    googleCalendarData?: {
+        calendarId: string;
+        publicKey: string;
+    }
 }
