@@ -20,6 +20,8 @@ import { TabType } from "src/app/component/enum/tab-type";
 import { DateService } from "src/app/service/date.service";
 import { UserModel } from 'src/app/models/user-model';
 import { checkIfInputValid } from "../../../../shared/utils";
+import { SortMode } from 'src/app/component/enum/sort-mode';
+import { SortDirection } from 'src/app/component/enum/sort-direction';
 
 @Component({
   selector: "app-add-holiday",
@@ -37,6 +39,8 @@ export class AddHolidayComponent implements OnInit {
   public currentHoliday: HolidayModel = new HolidayModel();
   public holidayTemplateList: HolidayTemplate[];
   public currentTab = TabType.Holidays;
+  public sortingOptionsList = [];
+  public selectedSortOption;
   public tabType = TabType;
   public addTemplate: boolean;
 
@@ -92,6 +96,10 @@ export class AddHolidayComponent implements OnInit {
       : this.language.editTemplate;
   }
 
+   get holidayTemplateNotSelected():boolean{
+    return this.selectedHolidayTemplate==null || this.selectedHolidayTemplate==undefined;
+  }
+
   constructor(
     public messageService: MessageService,
     private holidayService: HolidayService,
@@ -110,6 +118,8 @@ export class AddHolidayComponent implements OnInit {
       });
 
     this.loadHolidayTemplates();
+    this.setSortOptions();
+    this.selectedSortOption = this.sortingOptionsList[0];
 
     this.height = this.dynamicService.getHolidayCalendarHeight();
   }
@@ -133,6 +143,33 @@ export class AddHolidayComponent implements OnInit {
       this.holidayTemplateList = result;
       this.holidayTemplatesGridData = process(this.holidayTemplateList, this.state);
     });
+  }
+
+  private setSortOptions():void{
+    this.sortingOptionsList =[];
+
+    for(const mode in SortMode){
+      if(mode){
+        const translationKeyAsc = SortMode[mode] + SortDirection.Ascending;
+        const translationKeyDesc = SortMode[mode] + SortDirection.Descending;
+
+        this.sortingOptionsList.push({
+          value: {
+            mode:mode,
+            direction: SortDirection.Ascending
+          },
+          text: this.language[translationKeyAsc]
+        })
+
+        this.sortingOptionsList.push({
+          value: {
+            mode:mode,
+            direction: SortDirection.Descending
+          },
+          text: this.language[translationKeyDesc]
+        })
+      }
+    }
   }
 
   public changeTab(value: TabType): void {
@@ -214,6 +251,11 @@ export class AddHolidayComponent implements OnInit {
         );
         this.holidayList.push(this.currentHoliday);
         this.sortHolidays();
+
+        if(this.selectedSortOption.value.direction == SortDirection.Descending){
+          this.holidayList.reverse();
+        }
+
       } else {
         this.displayErrorMessage(
           this.language.adminErrorCreateTitle,
@@ -225,7 +267,7 @@ export class AddHolidayComponent implements OnInit {
   }
 
   private sortHolidays() {
-    this.holidayList.sort(function (a, b) { return a.StartTime.getTime() - b.StartTime.getTime() })
+    this.holidayList = this.holidayList.sort((a, b) => a.StartTime.getTime() > b.StartTime.getTime() ? 1 : a.StartTime.getTime() < b.StartTime.getTime() ? -1 : 0 );
   }
 
   public openEditHolidayModal(holiday: HolidayModel): void {
@@ -420,6 +462,10 @@ export class AddHolidayComponent implements OnInit {
 
   private displayErrorMessage(message: string, title: string): void {
     this.toastrService.error(message, title, this.overrideMessage);
+  }
+
+  public onSortValueChanged():void{
+    this.holidayList.reverse();
   }
 
 }
