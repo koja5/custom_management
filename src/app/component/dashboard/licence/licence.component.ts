@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
+import { CookieService } from "ng2-cookies";
 import { Modal } from "ngx-modal";
 import {
   Elements,
@@ -11,6 +12,7 @@ import { ReqeustDemoAccount } from "src/app/models/request-demo-account";
 import { DynamicService } from "src/app/service/dynamic.service";
 import { HelpService } from "src/app/service/help.service";
 import { LicenceService } from "src/app/service/licence.service";
+import { StorageService } from "src/app/service/storage.service";
 
 @Component({
   selector: "app-licence",
@@ -34,19 +36,23 @@ export class LicenceComponent implements OnInit {
   public allLicences: any;
   public updateLicence = false;
   public paySms: number;
+  public checkUrl: any;
 
   constructor(
     private helpService: HelpService,
     private licenceService: LicenceService,
     private stripeService: StripeService,
     private callApi: DynamicService,
-    private router: Router
+    private router: Router,
+    private cookie: CookieService
   ) {}
 
   ngOnInit() {
     this.language = this.helpService.getLanguage();
     this.getLicence();
     this.getSMSCountPerUser();
+    this.checkUrl = this.router.url;
+    console.log(this.checkUrl);
   }
 
   getLicence() {
@@ -205,13 +211,17 @@ export class LicenceComponent implements OnInit {
             let data = {};
             data["token"] = result.token;
             data["price"] = this.getSumForSMS();
-            data["smsCount"] = this.paySms;
+            data["smsCount"] = this.sms.count + this.paySms;
             data["superadminId"] = this.helpService.getSuperadmin();
 
             this.callApi.callApiPost("/api/payment/buy-sms", data).subscribe(
               (res) => {
                 if (res["success"]) {
-                  this.helpService.successToastr(this.language.paymentSuccess, "");
+                  this.helpService.successToastr(
+                    this.language.paymentSuccess,
+                    ""
+                  );
+                  this.sms.count += this.paySms;
                 } else {
                   this.helpService.errorToastr(this.language.paymentError, "");
                 }
@@ -256,5 +266,16 @@ export class LicenceComponent implements OnInit {
   changeLicence(event) {
     console.log(event);
     this.licence = this.allLicences[event];
+  }
+
+  logout() {
+    this.cookie.deleteAll("/");
+    sessionStorage.clear();
+    localStorage.removeItem("idUser");
+    localStorage.removeItem("themeColors");
+    this.cookie.deleteAll("/dashboard/home");
+    setTimeout(() => {
+      this.router.navigate(["login"]);
+    }, 50);
   }
 }
