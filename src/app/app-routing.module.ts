@@ -12,6 +12,7 @@ import { PrivacyPolicyComponent } from "./component/templates/privacy-policy/pri
 import { TermsComponent } from "./component/templates/terms/terms.component";
 import { UnsubscribeGuard } from './service/guards/unsubscribe.guard';
 import { AccessForbiddenComponent } from './component/templates/access-forbidden/access-forbidden.component';
+import { LicenceComponent } from './component/dashboard/licence/licence.component';
 
 const routes: Routes = [
   {
@@ -58,6 +59,10 @@ const routes: Routes = [
   {
     path: "access-forbiden",
     component: AccessForbiddenComponent
+  },
+  {
+    path: "licence",
+    component: LicenceComponent
   },
   {
     path: "**",

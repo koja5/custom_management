@@ -8,10 +8,18 @@ export class LicenceService {
   constructor(private httpClient: HttpClient) {}
 
   getStatusLicence(superadmin: string) {
-    return this.httpClient.get("/api/getLicenceForUser/" + superadmin).map((res) => res);;
+    return this.httpClient
+      .get("/api/getLicenceForUser/" + superadmin)
+      .map((res) => res);
   }
 
   getAllLicence() {
-    return this.httpClient.get("/api/getAllLicences/").map((res) => res);;
+    return this.httpClient.get("/api/getAllLicences/").map((res) => res);
+  }
+
+  getSMSCountPerUser(id) {
+    return this.httpClient
+      .get("/api/getSMSCountPerUser/" + id)
+      .map((res) => res);
   }
 }

@@ -1,7 +1,9 @@
+<div class="exit" *ngIf="checkUrl === '/licence'"><span class="fa fa-times-circle" title="{{language.logout}}"
+    (click)="logout()"></span></div>
 <div class="container" *ngIf="licence">
   <h3 class="text-center">{{language.licence}}</h3>
   <hr>
-
+  <h5 *ngIf="diffDate <= 0" style="color: red">{{language.yourLicenceExpired}}</h5>
   <p>{{language.yourLicence}}: <b>{{licence.name}} ({{licence.price}} €)</b></p>
   <p>{{language.licenceExpiration}}: <b
       [ngStyle]="diffDate > 0 ? {'color': 'green'} : {'color': 'red'}">{{licence.expiration_date | date :'dd.MM.yyyy' }}
@@ -9,15 +11,60 @@
 
   <div class="button-licence">
     <div class="row">
-      <div class="col-md-6">
+      <div [ngClass]="licence.name === 'demo' ? 'col-md-12' : 'col-md-6'">
         <button class="btn btn-primary" (click)="openPaymentForm(); getLicences()">{{language.upgradeLicence}}</button>
       </div>
       <div class="col-md-6">
-        <button class="btn btn-success" (click)="openPaymentForm()">{{language.renewLicence}}</button>
+        <button *ngIf="licence.name !== 'demo'" class="btn btn-success" (click)="openPaymentForm()">{{language.renewLicence}}</button>
       </div>
     </div>
   </div>
 </div>
+
+<div class="container mt-6">
+  <h3 class="text-center">{{language.aboutSMS}}</h3>
+  <hr>
+
+  <p *ngIf="sms">{{language.availableSMS}}: <b
+      [ngStyle]="(sms && sms.count > 0) ? {'color': 'green'} : {'color': 'red'}">{{sms.count}}</b></p>
+
+  <div class="button-licence">
+    <div class="row">
+      <div>
+        <button class="btn btn-success" (click)="openPaymentSMSForm()">{{language.renewLicence}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<modal #paymentSMSForm modalClass="modal-md top-margin" [closeOnOutsideClick]="false">
+  <modal-header>
+    <h3 *ngIf="language !== undefined">{{ language?.lastPaymentStep }}</h3>
+  </modal-header>
+  <modal-content>
+    <div class="row">
+      <div class="col-xs-12 col-md-12 text-center">
+        <div class="form-group">
+          <div>
+            <input type="number" [(ngModel)]="paySms" class="col-md-12 payment-input" [placeholder]="language.sms"
+              min="1">
+          </div>
+          <div class="div-flex"></div>
+          <div id="card-element" class="field mt-3"></div>
+          <div class="sum-div" *ngIf="paySms">
+            <h4>{{paySms}} {{language.sms}} x {{language.smsPrice}} €</h4>
+            <h3 class="sum-price">{{getSumForSMS()}} €</h3>
+          </div>
+        </div>
+        <div class="col-xs-12 text-right" *ngIf="card">
+          <button [disabled]="!paySms" (click)="submitSMSPayment()" class="btn btn-primary mt-4 d-block w-100">
+            {{ language.buySms }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </modal-content>
+</modal>
 
 <modal #paymentForm modalClass="modal-md top-margin" [closeOnOutsideClick]="false">
   <modal-header>
@@ -34,12 +81,16 @@
             <input [(ngModel)]="data.lastname" class="col-md-12 payment-input" [placeholder]="language.lastname">
             <input type="email" [(ngModel)]="data.email" class="col-md-12 payment-input" [placeholder]="language.email">
             <input [(ngModel)]="data.phone" class="col-md-12 payment-input" [placeholder]="language.phone">
-            <select *ngIf="updateLicence&&allLicences" name="licence" class="col-md-12 payment-input" (change)="changeLicence($event.target.selectedIndex)">
-              <option *ngFor="let item of allLicences" [ngValue]="item" [selected]="item.name === licence.name ? true : false">{{language[item.name] ? language[item.name] : item.name}}</option>
+            <select *ngIf="updateLicence&&allLicences" name="licence" class="col-md-12 payment-input"
+              (change)="changeLicence($event.target.selectedIndex)">
+              <option *ngFor="let item of allLicences" [ngValue]="item"
+                [selected]="item.name === licence.name ? true : false">{{language[item.name] ? language[item.name] :
+                item.name}}</option>
             </select>
             <select class="col-md-12 payment-input" [(ngModel)]="data.expired">
-              <option disabled selected value="undefined">Select number of month</option>
-              <option *ngFor="let item of [].constructor(12); let i = index" value="{{i + 1}}">{{i + 1}} Month</option>
+              <option disabled selected value="undefined">{{language.selectNumberOfMonth}}</option>
+              <option *ngFor="let item of [].constructor(12); let i = index" value="{{i + 1}}">{{i + 1}}
+                {{language.month}}</option>
             </select>
           </div>
           <div class="div-flex"></div>
@@ -50,7 +101,8 @@
           </div>
         </div>
         <div class="col-xs-12 text-right" *ngIf="card">
-          <button [disabled]="card['_implementation']['_empty'] || card['_implementation']['_invalid'] || checkRequiredFields()"
+          <button
+            [disabled]="card['_implementation']['_empty'] || card['_implementation']['_invalid'] || checkRequiredFields()"
             (click)="submitPayment()" class="btn btn-primary mt-4 d-block w-100">
             {{ language.requestSectionFormSendRequestButton }}
           </button>

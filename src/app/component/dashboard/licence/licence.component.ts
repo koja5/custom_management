@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
+import { CookieService } from "ng2-cookies";
 import { Modal } from "ngx-modal";
 import {
   Elements,
@@ -11,6 +12,7 @@ import { ReqeustDemoAccount } from "src/app/models/request-demo-account";
 import { DynamicService } from "src/app/service/dynamic.service";
 import { HelpService } from "src/app/service/help.service";
 import { LicenceService } from "src/app/service/licence.service";
+import { StorageService } from "src/app/service/storage.service";
 
 @Component({
   selector: "app-licence",
@@ -19,8 +21,10 @@ import { LicenceService } from "src/app/service/licence.service";
 })
 export class LicenceComponent implements OnInit {
   @ViewChild("paymentForm") paymentForm: Modal;
+  @ViewChild("paymentSMSForm") paymentSMSForm: Modal;
   public language: any;
   public licence: any;
+  public sms: any;
   public currentLicence: any;
   public diffDate: number;
   elements: Elements;
@@ -31,18 +35,24 @@ export class LicenceComponent implements OnInit {
   public data = new ReqeustDemoAccount();
   public allLicences: any;
   public updateLicence = false;
+  public paySms: number;
+  public checkUrl: any;
 
   constructor(
     private helpService: HelpService,
     private licenceService: LicenceService,
     private stripeService: StripeService,
     private callApi: DynamicService,
-    private router: Router
+    private router: Router,
+    private cookie: CookieService
   ) {}
 
   ngOnInit() {
     this.language = this.helpService.getLanguage();
     this.getLicence();
+    this.getSMSCountPerUser();
+    this.checkUrl = this.router.url;
+    console.log(this.checkUrl);
   }
 
   getLicence() {
@@ -53,6 +63,16 @@ export class LicenceComponent implements OnInit {
           this.licence = data[0];
           this.currentLicence = JSON.parse(JSON.stringify(this.licence));
           this.diffDate = this.calculateDiff(this.licence.expiration_date);
+        }
+      });
+  }
+
+  getSMSCountPerUser() {
+    this.licenceService
+      .getSMSCountPerUser(this.helpService.getSuperadmin())
+      .subscribe((data: any) => {
+        if (data && data.length) {
+          this.sms = data[0];
         }
       });
   }
@@ -98,6 +118,37 @@ export class LicenceComponent implements OnInit {
     }, 100);
   }
 
+  openPaymentSMSForm() {
+    this.updateLicence = false;
+    this.paymentSMSForm.open();
+    setTimeout(() => {
+      this.stripeService
+        .elements(this.elementsOptions)
+        .subscribe((elements) => {
+          this.elements = elements;
+          if (!this.card) {
+            this.card = this.elements.create("card", {
+              iconStyle: "solid",
+              style: {
+                base: {
+                  iconColor: "#666EE8",
+                  color: "#31325F",
+                  lineHeight: "40px",
+                  fontWeight: 300,
+                  fontFamily: '"Helverica Neue", Helvetica, sans-serif',
+                  fontSize: "18px",
+                  "::placeholder": {
+                    color: "#CFD7E8",
+                  },
+                },
+              },
+            });
+            this.card.mount("#card-element");
+          }
+        });
+    }, 100);
+  }
+
   getLicences() {
     this.updateLicence = true;
     this.licenceService.getAllLicence().subscribe((data) => {
@@ -109,7 +160,7 @@ export class LicenceComponent implements OnInit {
     this.data.price = this.licence.price * this.data.expired;
     this.stripeService
       .createToken(this.card, {
-        name: this.data.firstname + " " + this.data.lastname,
+        name: this.data.firstname,
       })
       .subscribe(
         (result) => {
@@ -149,6 +200,44 @@ export class LicenceComponent implements OnInit {
       );
   }
 
+  submitSMSPayment() {
+    this.stripeService
+      .createToken(this.card, {
+        name: this.data.firstname + " " + this.data.lastname,
+      })
+      .subscribe(
+        (result) => {
+          if (result.token) {
+            let data = {};
+            data["token"] = result.token;
+            data["price"] = this.getSumForSMS();
+            data["smsCount"] = this.sms.count + this.paySms;
+            data["superadminId"] = this.helpService.getSuperadmin();
+
+            this.callApi.callApiPost("/api/payment/buy-sms", data).subscribe(
+              (res) => {
+                if (res["success"]) {
+                  this.helpService.successToastr(
+                    this.language.paymentSuccess,
+                    ""
+                  );
+                  this.sms.count += this.paySms;
+                } else {
+                  this.helpService.errorToastr(this.language.paymentError, "");
+                }
+              },
+              (error) => {
+                this.helpService.errorToastr(this.language.paymentError, "");
+              }
+            );
+          }
+        },
+        (error) => {
+          this.helpService.errorToastr(this.language.paymentError, "");
+        }
+      );
+  }
+
   checkRequiredFields() {
     if (
       !this.data.firstname ||
@@ -169,8 +258,24 @@ export class LicenceComponent implements OnInit {
     return sum.toFixed(2);
   }
 
+  getSumForSMS() {
+    const sum = Number(this.paySms) * Number(this.language.smsPrice);
+    return sum.toFixed(2);
+  }
+
   changeLicence(event) {
     console.log(event);
     this.licence = this.allLicences[event];
+  }
+
+  logout() {
+    this.cookie.deleteAll("/");
+    sessionStorage.clear();
+    localStorage.removeItem("idUser");
+    localStorage.removeItem("themeColors");
+    this.cookie.deleteAll("/dashboard/home");
+    setTimeout(() => {
+      this.router.navigate(["login"]);
+    }, 50);
   }
 }
