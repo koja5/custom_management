@@ -698,7 +698,13 @@
             "editEmailDraft": {
                 "type": "string"
             },
+            "copyEmailDraft": {
+                "type": "string"
+            },
             "deleteDraft": {
+                "type": "string"
+            },
+            "copyDraft": {
                 "type": "string"
             },
             "addNewEmailDraft": {
@@ -747,6 +753,9 @@
                 "type": "string"
             },
             "editSmsDraft": {
+                "type": "string"
+            },
+            "copySmsDraft": {
                 "type": "string"
             },
             "addNewSmsDraft": {
@@ -6961,6 +6970,9 @@
                             "key": "deleteDraft"
                         },
                         {
+                            "key": "copyDraft"
+                        },
+                        {
                             "key": "saveChanges"
                         },
                         {
@@ -6981,6 +6993,9 @@
                         },
                         {
                             "key": "editEmailDraft"
+                        },
+                        {
+                            "key": "copyEmailDraft"
                         },
                         {
                             "key": "addNewEmailDraft"
@@ -7016,6 +7031,9 @@
                         },
                         {
                             "key": "editSmsDraft"
+                        },
+                        {
+                            "key": "copySmsDraft"
                         },
                         {
                             "key": "addNewSmsDraft"

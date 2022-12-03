@@ -404,9 +404,9 @@ export class HelpService {
       place: this.multiSelectArrayToString(formValues.place),
       male: formValues.male ? formValues.male : false,
       female: formValues.female ? formValues.female : false,
-      excludeCustomersWithEvents: formValues.excludeCustomersWithEvents
-        ? formValues.excludeCustomersWithEvents
-        : false,
+      excludeCustomersWithEvents: formValues.excludeCustomersWithEvents ? formValues.excludeCustomersWithEvents : false,
+      noEventSinceCheckbox: formValues.noEventSinceCheckbox ? formValues.noEventSinceCheckbox : false,
+      noEventSinceDate: formValues.noEventSinceDate ? formValues.noEventSinceDate : "",
       birthdayFrom: formValues.birthdayFrom ? formValues.birthdayFrom : "",
       birthdayTo: formValues.birthdayTo ? formValues.birthdayTo : "",
       profession: formValues.profession ? formValues.profession : "",

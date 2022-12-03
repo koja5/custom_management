@@ -72,7 +72,7 @@ export class DynamicFormsComponent implements OnInit, OnChanges {
 
   getIsFormDirty() {
     this.isFormDirty = this.form.dirty;
-    this.isFormDirtyChange.emit(true);
+    this.isFormDirtyChange.emit(this.form.dirty);
   }
 
   onChanges(): void {
