@@ -11,11 +11,11 @@
 
   <div class="button-licence">
     <div class="row">
-      <div class="col-md-6">
+      <div [ngClass]="licence.name === 'demo' ? 'col-md-12' : 'col-md-6'">
         <button class="btn btn-primary" (click)="openPaymentForm(); getLicences()">{{language.upgradeLicence}}</button>
       </div>
       <div class="col-md-6">
-        <button class="btn btn-success" (click)="openPaymentForm()">{{language.renewLicence}}</button>
+        <button *ngIf="licence.name !== 'demo'" class="btn btn-success" (click)="openPaymentForm()">{{language.renewLicence}}</button>
       </div>
     </div>
   </div>

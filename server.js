@@ -229,7 +229,7 @@ var j = schedule.scheduleJob("35 10 * * *", function () {
   sendHappyBirthdayViaEmail();
 });
 
-var j = schedule.scheduleJob("18 15 * * *", function () {
+var j = schedule.scheduleJob("28 23 * * *", function () {
   checkLicenceExpired();
 });
 

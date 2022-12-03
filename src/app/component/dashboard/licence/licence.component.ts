@@ -160,7 +160,7 @@ export class LicenceComponent implements OnInit {
     this.data.price = this.licence.price * this.data.expired;
     this.stripeService
       .createToken(this.card, {
-        name: this.data.firstname + " " + this.data.lastname,
+        name: this.data.firstname,
       })
       .subscribe(
         (result) => {
