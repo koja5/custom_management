@@ -2487,9 +2487,13 @@
             },
             "yourLicenceExpired": {
                 "type": "string"
+            },
+            "sortByDateAsc": {
+                "type": "string"
+            },
+            "sortByDateDesc": {
+                "type": "string"
             }
-
-
         }
     },
     "layout": [
@@ -7257,6 +7261,19 @@
                         },
                         {
                             "key": "noHolidayTemplateSelected"
+                        }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "sortByDateAsc"
+                        },
+                        {
+                            "key": "sortByDateDesc"
                         }
                     ]
                 }
