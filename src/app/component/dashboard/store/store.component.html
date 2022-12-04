@@ -58,6 +58,8 @@
     </ng-template>
     <kendo-grid-column field="storename" title="{{ language.storename }}" width="120" *ngIf="!isHidden('Store name')">
     </kendo-grid-column>
+    <kendo-grid-column field="companyname" title="{{ language.companyname }}" width="120" *ngIf="!isHidden('Company name')">
+    </kendo-grid-column>
     <kendo-grid-column field="vatcode" title="{{ language.vat }}" width="120" *ngIf="!isHidden('Vat')">
     </kendo-grid-column>
     <kendo-grid-column field="email" title="{{ language.email }}" width="200" *ngIf="!isHidden('Email address')">
@@ -137,6 +139,12 @@
             #storename="ngModel" />
         </kendo-textbox-container>
         <mat-error *ngIf="checkIfInputValid('storename')">{{ language?.thisFieldIsRequired }}</mat-error>
+      </div>
+      <div class="col-md-12 col-xs-12">
+        <kendo-textbox-container floatingLabel="{{ language.companyname }}">
+          <input id="companyname" kendoTextBox type="text" class="col-xs-12" name="companyname" [(ngModel)]="data.companyname"
+            #companyname="ngModel" />
+        </kendo-textbox-container>
       </div>
       <div class="col-md-12 col-xs-12">
         <kendo-textbox-container floatingLabel="{{ language.vat }}">
@@ -249,6 +257,13 @@
         <kendo-textbox-container floatingLabel="{{ language.storename }}({{ language.required }})">
           <input kendoTextBox type="text" class="col-xs-12" name="storename" [(ngModel)]="data.storename" required
             #storename="ngModel" />
+        </kendo-textbox-container>
+      </div>
+
+      <div class="col-md-12 col-xs-12">
+        <kendo-textbox-container floatingLabel="{{ language.companyname }}">
+          <input id="companyname" kendoTextBox type="text" class="col-xs-12" name="companyname" [(ngModel)]="data.companyname"
+            #companyname="ngModel" />
         </kendo-textbox-container>
       </div>
 

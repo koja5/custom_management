@@ -80,11 +80,11 @@ export class StoreComponent implements OnInit {
   checkIfInputValid = checkIfInputValid;
 
   public showColumnPicker = false;
-  public columns: string[] = ["Store name", "Vat", "Email address", "Street", "Place", "Telephone"];
+  public columns: string[] = ["Store name", "Company name", "Vat", "Email address", "Street", "Place", "Telephone"];
   public hiddenColumns: string[] = [];
 
   constructor(
-    public service: StoreService,
+    public storeService: StoreService,
     public message: MessageService,
     private helpService: HelpService,
     private router: Router
@@ -125,7 +125,7 @@ export class StoreComponent implements OnInit {
 
   getStore() {
     this.loadingGrid = true;
-    this.service.getStore(this.idUser, (val) => {
+    this.storeService.getStore(this.idUser, (val) => {
       console.log(val);
       this.currentLoadData = val;
       if(this.currentLoadData.length < this.state.skip) {
@@ -197,7 +197,7 @@ export class StoreComponent implements OnInit {
   createStore(form) {
     this.data.start_work = this.start_work.toString();
     this.data.end_work = this.end_work.toString();
-    this.service.createStore(this.data, (val) => {
+    this.storeService.createStore(this.data, (val) => {
       if (val.success) {
         console.log(val);
         this.data.id = val.id;
@@ -232,7 +232,7 @@ export class StoreComponent implements OnInit {
   updateStore(store) {
     this.data.start_work = this.start_work.toString();
     this.data.end_work = this.end_work.toString();
-    this.service.editStore(this.data).subscribe((data) => {
+    this.storeService.editStore(this.data).subscribe((data) => {
       console.log(data);
       if (data) {
         this.getStore();
@@ -322,7 +322,7 @@ export class StoreComponent implements OnInit {
     console.log(event);
     if (event === "yes") {
       console.log(this.data);
-      this.service.deleteStore(this.data.id).subscribe((data) => {
+      this.storeService.deleteStore(this.data.id).subscribe((data) => {
         console.log(data);
         if (data) {
           this.state = {
@@ -349,7 +349,7 @@ export class StoreComponent implements OnInit {
     if (event === "yes") {
       this.excelOpened = false;
       setTimeout(() => {
-        this.service.insertMultiData(this.gridData).subscribe((data) => {
+        this.storeService.insertMultiData(this.gridData).subscribe((data) => {
           if (data) {
             Swal.fire({
               title: "Successfull!",
@@ -615,7 +615,7 @@ export class StoreComponent implements OnInit {
   }
 
   public isHidden(columnName: string): boolean {
-    return this.hiddenColumns.indexOf(columnName) > -1;
+    return this.hiddenColumns && this.hiddenColumns.indexOf(columnName) > -1;
   }
 
   public onOutputHiddenColumns(columns) {
