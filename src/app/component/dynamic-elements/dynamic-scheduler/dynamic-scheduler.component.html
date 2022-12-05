@@ -1092,6 +1092,52 @@
               </div>          
             </div>
           </div>
+          <div class="right-panel google-sync-panel hide" style="width: 600px !important;" [style.height]="height" *ngIf="!loading">
+            <div class="control-panel e-css">
+              <div class="col-row">
+                <kendo-textbox-container floatingLabel="{{ 'language.publicKey' }}({{
+                  language.required
+                  }})">
+                  <input kendoTextBox 
+                    [(ngModel)]="googleSyncCalendar.publicKey"
+                    name="googleSyncCalendarPublicKey"
+                    class="noPadding"
+                    required
+                  />
+                </kendo-textbox-container>
+              </div>
+              <div class="col-row">
+                <kendo-textbox-container floatingLabel="{{ 'language.calendarId' }}({{
+                  language.required
+                  }})">
+                  <input kendoTextBox 
+                    [(ngModel)]="googleSyncCalendar.calendarId"
+                    name="googleSyncCalendarCalendarId"
+                    class="noPadding"
+                    required
+                  />
+                </kendo-textbox-container>
+              </div>
+              <div class="col-row pt-3">
+                <a target="_blank" href="https://support.google.com/googleapi/answer/6158862">How to get public key</a>
+              </div>
+              <div class="col-row">
+                <a target="_blank" href="https://support.google.com/calendar/search?q=Get+the+ID+of+the+calendar+you+want+to+share">How to get calendar ID</a>
+              </div>
+              <div class="col-row d-flex justify-content-center">
+                  <button kendoButton [style.min-width.px]="60" [primary]="true" class="form-button" (click)="syncWithGoogleCalendar()">
+                    <!-- {{ language.sync }} -->
+                    Sync
+                  </button>
+              </div>
+              <div class="col-row d-flex justify-content-center">
+                <button kendoButton [style.min-width.px]="60" [primary]="true" class="form-button pull-right" (click)="enableEditGoogleCalendarData()">
+                    <!-- {{ language.edit }} -->
+                    Edit
+                </button>
+              </div>          
+            </div>
+          </div>
         </div>
       </div>
     </div>

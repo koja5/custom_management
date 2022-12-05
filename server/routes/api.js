@@ -10595,4 +10595,25 @@ router.get("/getAllLicences", function (req, res, next) {
   });
 });
 
+router.post('/api/syncWithGoogleCalendar', function(req, res, next){
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    var id = req.body.id;
+    conn.query(
+      "UPDATE user SET ? where id = '" + id + "'",
+      [{ googleCalendarData: req.body.googleCalendarData }],
+      function (err, rows) {
+        conn.release();
+        if (err) {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+})
+
 module.exports = router;

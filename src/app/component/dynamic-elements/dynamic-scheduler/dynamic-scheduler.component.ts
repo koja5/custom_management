@@ -577,10 +577,15 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
       ".overview-content .last-minute-panel"
     );
 
+    const googleSyncPanel: Element = document.querySelector(
+      ".overview-content .google-sync-panel"
+    );
+
     if (lastMinutePanel.classList.contains("hide")) {
       if(!settingsPanel.classList.contains("hide"))
         addClass([settingsPanel], "hide");
-      
+      if(!googleSyncPanel.classList.contains("hide"))
+        addClass([googleSyncPanel], "hide");
       removeClass([lastMinutePanel], "hide");
     } else {
       addClass([lastMinutePanel], "hide");
@@ -595,11 +600,15 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     const lastMinutePanel: Element = document.querySelector(
       ".overview-content .last-minute-panel"
     );
+    const googleSyncPanel: Element = document.querySelector(
+      ".overview-content .google-sync-panel"
+    );
     
     if (settingsPanel.classList.contains("hide")) {
       if(!lastMinutePanel.classList.contains("hide"))
         addClass([lastMinutePanel], "hide");
-      
+      if(!googleSyncPanel.classList.contains("hide"))
+        addClass([googleSyncPanel], "hide");
       removeClass([settingsPanel], "hide");
     } else {      
       addClass([settingsPanel], "hide");
@@ -607,11 +616,41 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   }
 
   public onSyncWithGoogleCalendar() {
-    if (this.user.googleCalendarData) {
+    const settingsPanel: Element = document.querySelector(
+      ".overview-content .settings-panel"
+    );  
+  
+    const lastMinutePanel: Element = document.querySelector(
+      ".overview-content .last-minute-panel"
+    );
+    const googleSyncPanel: Element = document.querySelector(
+      ".overview-content .google-sync-panel"
+    );
+    
+    if (googleSyncPanel.classList.contains("hide")) {
+      if(!lastMinutePanel.classList.contains("hide"))
+        addClass([lastMinutePanel], "hide");
+      if(!settingsPanel.classList.contains("hide"))
+        addClass([settingsPanel], "hide");
+      removeClass([googleSyncPanel], "hide");
+    } else {      
+      addClass([googleSyncPanel], "hide");
+    }
+  }
+
+  public enableEditGoogleCalendarData() {
+
+  }
+
+  public syncWithGoogleCalendar() {
+    if (this.user.googleCalendarData && 
+      this.user.googleCalendarData.publicKey === this.googleSyncCalendar.publicKey &&
+      this.user.googleCalendarData.calendarId === this.googleSyncCalendar.calendarId
+    ) {
       this.bindEventsToGoogleCalendar(
         this.user.googleCalendarData.calendarId,
         this.user.googleCalendarData.publicKey
-      );
+      ); 
     } else {
       this.dynamicSchedulerService.syncWithGoogleCalendar(this.user.id, "", "")
       .subscribe(()=>{
@@ -1514,6 +1553,10 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   public theme: string;
   public selected = "#cac6c3";
   public palette: any[] = [];
+  public googleSyncCalendar = {
+    publicKey: "",
+    calendarId: ""
+  };
   public colorPalette: any;
   public selectedColorId: any;
   public language: any;
