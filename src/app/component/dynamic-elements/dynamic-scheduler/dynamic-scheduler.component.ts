@@ -694,7 +694,8 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
                 Subject: event.summary,
                 StartTime: new Date(start),
                 EndTime: new Date(end),
-                IsAllDay: !(event.start as { [key: string]: Object }).dateTime
+                IsAllDay: !(event.start as { [key: string]: Object }).dateTime,
+                isGoogleCalendarEvent: true               
             });
         }
     }
