@@ -676,7 +676,7 @@
                         </kendo-multiselect>
                       </kendo-textbox-container>
                     </div>
-                    <div class="k-form-field">
+                    <div class="k-form-field mt-4">
                       <kendo-textbox-container floatingLabel="{{ languageUser.comment }}">
                         <textarea kendoTextArea type="text" class="col-md-12 col-xs-12" name="comment"
                           [(ngModel)]="complaintData.comment" comment.value="" [autoSize]="true"
@@ -684,7 +684,7 @@
                       </kendo-textbox-container>
                     </div>
                     <div *ngIf="type !== userType.patient" class="k-form-field">
-                      <div class="col-md-12 col-xs-12">
+                      <div>
                         <kendo-textbox-container floatingLabel="{{ languageUser.cs }}">
                           <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="CSValue" [textField]="'title'"
                             [valueField]="'id'" [(ngModel)]="complaintData.cs" (valueChange)="onValueChangeCS($event)"
@@ -693,7 +693,7 @@
                         </kendo-textbox-container>
                       </div>
 
-                      <div class="col-md-12 col-xs-12">
+                      <div>
                         <kendo-textbox-container floatingLabel="{{ languageUser.stateValue }}">
                           <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="stateValue"
                             [textField]="'title'" [valueField]="'id'" [(ngModel)]="complaintData.state"
@@ -702,7 +702,7 @@
                         </kendo-textbox-container>
                       </div>
 
-                      <div class="col-md-12 col-xs-12">
+                      <div>
                         <kendo-textbox-container floatingLabel="{{ languageUser.em }}">
                           <kendo-combobox class="col-md-12 col-xs-12 noPadding" [data]="allUsers"
                             [textField]="'shortname'" [valueField]="'id'" (valueChange)="onValueUserEmChange($event)"
@@ -713,13 +713,13 @@
                     </div>
                     <div class="k-form-field" [ngClass]="type === userType.patient ? 'hide' : ''">
                       <kendo-textbox-container floatingLabel="{{ language.eventCategory }}">
-                        <kendo-combobox class="col-md-12 col-xs-12" [data]="eventCategory" [textField]="'category'"
+                        <kendo-combobox [data]="eventCategory" [textField]="'category'"
                           [valuePrimitive]="true" [valueField]="'id'" (valueChange)="selectedEventCategory($event)"
                           [(ngModel)]="selected" [disabled]="patientReadOnly">
                         </kendo-combobox>
                       </kendo-textbox-container>
                     </div>
-                    <div *ngIf="eventTime" class="k-form-field k-datetime-picker-wrapper">
+                    <div *ngIf="eventTime" class="k-form-field k-datetime-picker-wrapper row">
                       <div class="col-sm-8">
                         <kendo-textbox-container floatingLabel="{{ language.start }}({{ language.required }})">
                           <kendo-datepicker id="start" [format]="'dd.MM.yyyy'" class="dateWidth" [(ngModel)]="eventTime.start" required
@@ -740,7 +740,7 @@
                         <mat-error *ngIf="checkIfInputValid('startTime')">{{ language?.thisFieldIsRequired }}</mat-error>
                       </div>
                     </div>
-                    <div *ngIf="eventTime" class="k-form-field k-datetime-picker-wrapper">
+                    <div *ngIf="eventTime" class="k-form-field k-datetime-picker-wrapper row">
                       <div class="col-sm-8">
                         <kendo-textbox-container floatingLabel="{{ language.end }}({{ language.required }})">
                           <kendo-datepicker id="end" [format]="'dd.MM.yyyy'" class="dateWidth" [(ngModel)]="eventTime.end" required
@@ -762,13 +762,13 @@
                       </div>
                     </div>
                     <div class="k-form-field">
-                      <div class="col-md-12 col-xs-12">
+                      <div>
                         <kendo-textbox-container floatingLabel="{{ language.telephone }}">
                           <input kendoTextBox class="k-textbox" [(ngModel)]="telephoneValue" name="telephone" readonly
                             style="width: 100%" [disabled]="patientReadOnly" />
                         </kendo-textbox-container>
                       </div>
-                      <div class="col-md-12 col-xs-12">
+                      <div>
                         <kendo-textbox-container floatingLabel="{{ language.mobile }}">
                           <input kendoTextBox class="k-textbox" [(ngModel)]="mobileValue" name="mobile" readonly
                             style="width: 100%" [disabled]="patientReadOnly" />

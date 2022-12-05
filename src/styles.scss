@@ -17480,7 +17480,8 @@ kendo-grid-filter-cell-operators {
   width: auto !important;
 }
 
-.k-button-primary, .k-button.k-primary {
+.k-button-primary,
+.k-button.k-primary {
   border-color: var(--theme-color);
   color: #ffffff;
   background-color: var(--theme-color);
@@ -17488,7 +17489,8 @@ kendo-grid-filter-cell-operators {
 
 .e-btn.e-flat.e-primary,
 .e-css.e-btn.e-flat.e-primary,
-.e-btn.e-flat.e-primary:active, .e-btn.e-flat.e-primary.e-active,
+.e-btn.e-flat.e-primary:active,
+.e-btn.e-flat.e-primary.e-active,
 .e-css.e-btn.e-flat.e-primary:active,
 .e-css.e-btn.e-flat.e-primary.e-active {
   border-color: var(--theme-color) !important;
@@ -17503,9 +17505,10 @@ kendo-grid-filter-cell-operators {
   filter: brightness(90%);
 }
 
-.mat-button, .mat-raised-button{
+.mat-button,
+.mat-raised-button {
   background-color: var(--theme-color) !important;
-} 
+}
 
 //theme color for buttons END
 
@@ -19521,7 +19524,6 @@ select:invalid {
   text-decoration: none;
 }
 
-
 /*
 * {
   box-sizing: border-box;
@@ -19570,7 +19572,7 @@ body {
   align-items: center;
   border: 1px solid #dee2e6;
   color: #6c757d;
-  background-color: #F8F9FA;
+  background-color: #f8f9fa;
 }
 
 .drafts-page-container {
@@ -19590,18 +19592,24 @@ body {
 }
 
 .drafts-list ul li a:hover {
-  background-color: #EBEBEB;
+  background-color: #ebebeb;
   transition: 0.5s;
 }
 
 .drafts-active {
-  background-color: #EBEBEB;
+  background-color: #ebebeb;
 }
 
 //multiselect
 
-.k-multiselect .k-multiselect-wrap, .k-dropdowntree .k-multiselect-wrap {
-  background-color: #FFFFFF;
+.k-multiselect .k-multiselect-wrap,
+.k-dropdowntree .k-multiselect-wrap,
+.k-combobox .k-dropdown-wrap,
+.k-textarea,
+.k-datepicker .k-picker-wrap,
+.k-textbox,
+.k-timepicker .k-picker-wrap {
+  background-color: #ffffff;
   border-color: #ced4da;
   border-width: 1px;
   border-radius: 4px;
@@ -19609,19 +19617,36 @@ body {
   padding-left: 7px;
 }
 
-.k-multiselect .k-multiselect-wrap:hover, .k-dropdowntree .k-multiselect-wrap:hover, .k-multiselect .k-multiselect-wrap.k-state-hover, .k-dropdowntree .k-multiselect-wrap.k-state-hover {
-  border-color: #80bdff;
+.k-multiselect .k-multiselect-wrap:hover,
+.k-dropdowntree .k-multiselect-wrap:hover,
+.k-multiselect .k-multiselect-wrap.k-state-hover,
+.k-dropdowntree .k-multiselect-wrap.k-state-hover,
+.k-combobox .k-dropdown-wrap:hover,
+.k-textarea:hover,
+.k-datepicker .k-picker-wrap:hover,
+.k-textbox:hover,
+.k-textarea:focus,
+.k-textarea.k-state-focus,
+.k-textarea.k-state-focused,
+.k-timepicker .k-picker-wrap:hover {
+  border-color: #80bdff !important;
   border-top-color: #80bdff !important;
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-.k-multiselect.k-state-focused > .k-multiselect-wrap, .k-state-focused.k-dropdowntree > .k-multiselect-wrap {
+.k-multiselect.k-state-focused > .k-multiselect-wrap,
+.k-state-focused.k-dropdowntree > .k-multiselect-wrap {
   border-color: #80bdff;
   border-top-color: #80bdff !important;
 }
 
-.k-multiselect.k-state-invalid .k-multiselect-wrap, .k-state-invalid.k-dropdowntree .k-multiselect-wrap, .k-multiselect.ng-invalid.ng-touched .k-multiselect-wrap, .ng-invalid.ng-touched.k-dropdowntree .k-multiselect-wrap, .k-multiselect.ng-invalid.ng-dirty .k-multiselect-wrap, .ng-invalid.ng-dirty.k-dropdowntree .k-multiselect-wrap {
+.k-multiselect.k-state-invalid .k-multiselect-wrap,
+.k-state-invalid.k-dropdowntree .k-multiselect-wrap,
+.k-multiselect.ng-invalid.ng-touched .k-multiselect-wrap,
+.ng-invalid.ng-touched.k-dropdowntree .k-multiselect-wrap,
+.k-multiselect.ng-invalid.ng-dirty .k-multiselect-wrap,
+.ng-invalid.ng-dirty.k-dropdowntree .k-multiselect-wrap {
   border-color: #ced4da;
   border-top-color: #ced4da !important;
 }
@@ -19640,4 +19665,20 @@ body {
 
 .k-list-container .k-nodata {
   min-height: 0px;
+}
+
+.k-combobox {
+  width: 100% !important;
+}
+
+.k-combobox.k-state-invalid .k-dropdown-wrap,
+.k-combobox.ng-invalid.ng-touched .k-dropdown-wrap,
+.k-combobox.ng-invalid.ng-dirty .k-dropdown-wrap,
+.k-textbox.ng-invalid.ng-touched {
+  border-color: #80bdff !important;
+}
+
+.k-textbox-container.k-state-empty > .k-label,
+.k-floating-label-container.k-state-empty > .k-label {
+  padding-left: 10px !important;
 }
