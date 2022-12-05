@@ -2487,9 +2487,10 @@
             },
             "yourLicenceExpired": {
                 "type": "string"
+            },
+            "companyname": {
+                "type": "string"
             }
-
-
         }
     },
     "layout": [
@@ -4386,6 +4387,9 @@
                         },
                         {
                             "key": "storename"
+                        },
+                        {
+                            "key": "companyname"
                         },
                         {
                             "key": "zipCode"
