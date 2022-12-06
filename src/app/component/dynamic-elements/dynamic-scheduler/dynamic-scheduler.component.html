@@ -1101,6 +1101,7 @@
                   <input kendoTextBox 
                     [(ngModel)]="googleSyncCalendar.publicKey"
                     name="googleSyncCalendarPublicKey"
+                    [disabled]="!editGoogleCalendarDataEnabled"
                     class="noPadding"
                     required
                   />
@@ -1113,6 +1114,7 @@
                   <input kendoTextBox 
                     [(ngModel)]="googleSyncCalendar.calendarId"
                     name="googleSyncCalendarCalendarId"
+                    [disabled]="!editGoogleCalendarDataEnabled"
                     class="noPadding"
                     required
                   />
@@ -1122,7 +1124,7 @@
                 <a target="_blank" href="https://support.google.com/googleapi/answer/6158862">How to get public key</a>
               </div>
               <div class="col-row">
-                <a target="_blank" href="https://support.google.com/calendar/search?q=Get+the+ID+of+the+calendar+you+want+to+share">How to get calendar ID</a>
+                <a target="_blank" href="https://support.google.com/calendar/answer/44105#zippy=%2Ccreate-an-event-that-shows-up-on-a-shared-calendar">How to get calendar ID</a>
               </div>
               <div class="col-row d-flex justify-content-center">
                   <button kendoButton [style.min-width.px]="60" [primary]="true" class="form-button" (click)="syncWithGoogleCalendar()">
@@ -1131,7 +1133,7 @@
                   </button>
               </div>
               <div class="col-row d-flex justify-content-center">
-                <button kendoButton [style.min-width.px]="60" [primary]="true" class="form-button pull-right" (click)="enableEditGoogleCalendarData()">
+                <button kendoButton [style.min-width.px]="60" [primary]="true" class="form-button pull-right" (click)="editGoogleCalendarDataEnabled=true">
                     <!-- {{ language.edit }} -->
                     Edit
                 </button>

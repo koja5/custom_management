@@ -10595,16 +10595,17 @@ router.get("/getAllLicences", function (req, res, next) {
   });
 });
 
-router.post('/api/syncWithGoogleCalendar', function(req, res, next){
+router.post('/syncWithGoogleCalendar', function(req, res, next){
   connection.getConnection(function (err, conn) {
     if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
     }
-    var id = req.body.id;
+    console.log(req.body);
+    var id = req.body.userId;
     conn.query(
-      "UPDATE user SET ? where id = '" + id + "'",
-      [{ googleCalendarData: req.body.googleCalendarData }],
+      "update users SET ? where id = '" + id + "'",
+      [req.body.googleCalendarData],
       function (err, rows) {
         conn.release();
         if (err) {

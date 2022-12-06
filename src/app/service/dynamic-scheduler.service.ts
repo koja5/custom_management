@@ -27,7 +27,7 @@ export class DynamicSchedulerService {
   }
 
   syncWithGoogleCalendar(userId: string, calendarId: string, publicKey: string): Observable<any> {
-    return this.http.put("/api/syncWithGoogleCalendar", {
+    return this.http.post("/api/syncWithGoogleCalendar", {
       userId,
       googleCalendarData: {
         calendarId,

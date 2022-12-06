@@ -121,7 +121,7 @@ import { Subject, Subscription } from "rxjs";
 import { DatePipe } from "@angular/common";
 import { DynamicService } from "src/app/service/dynamic.service";
 import * as CryptoJS from 'crypto-js';
-import { connectableObservableDescriptor } from "rxjs/internal/observable/ConnectableObservable";
+import { catchError, map } from "rxjs/operators";
 declare var moment: any;
 
 loadCldr(numberingSystems, gregorian, numbers, timeZoneNames);
@@ -616,6 +616,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   }
 
   public onSyncWithGoogleCalendar() {
+    this.editGoogleCalendarDataEnabled = !this.adminUser.googleCalendarData;
     const settingsPanel: Element = document.querySelector(
       ".overview-content .settings-panel"
     );  
@@ -638,27 +639,36 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     }
   }
 
-  public enableEditGoogleCalendarData() {
-
-  }
-
   public syncWithGoogleCalendar() {
-    if (this.user.googleCalendarData && 
-      this.user.googleCalendarData.publicKey === this.googleSyncCalendar.publicKey &&
-      this.user.googleCalendarData.calendarId === this.googleSyncCalendar.calendarId
+    if (this.adminUser.googleCalendarData && 
+      this.adminUser.googleCalendarData.publicKey === this.googleCalendarData.publicKey &&
+      this.adminUser.googleCalendarData.calendarId === this.googleCalendarData.calendarId
     ) {
       this.bindEventsToGoogleCalendar(
-        this.user.googleCalendarData.calendarId,
-        this.user.googleCalendarData.publicKey
+        this.adminUser.googleCalendarData.calendarId,
+        this.adminUser.googleCalendarData.publicKey
       ); 
-    } else {
-      this.dynamicSchedulerService.syncWithGoogleCalendar(this.user.id, "", "")
+    } else if(this.googleCalendarData.publicKey && this.googleCalendarData.calendarId) {
+      this.dynamicSchedulerService.syncWithGoogleCalendar(this.adminUser.id, this.googleCalendarData.calendarId, this.googleCalendarData.publicKey)
+      .pipe(
+        map(() => {
+          this.adminUser.googleCalendarData = {
+            calendarId: this.googleCalendarData.calendarId,
+            publicKey: this.googleCalendarData.publicKey
+          };
+          this.bindEventsToGoogleCalendar(
+            this.adminUser.googleCalendarData.calendarId,
+            this.adminUser.googleCalendarData.publicKey
+          );
+        }),
+        catchError((error) => {
+          console.log(error);
+          this.toastr.error("Sync with Google calendar failed!");
+          throw error;
+        })
+      )
       .subscribe(()=>{
         this.toastr.success("Sync with Google calendar successful!");
-        this.bindEventsToGoogleCalendar(
-          this.user.googleCalendarData.calendarId,
-          this.user.googleCalendarData.publicKey
-        );
       }, (error) => {
         console.log(error);
         this.toastr.error("Sync with Google calendar failed!");
@@ -1554,10 +1564,11 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   public theme: string;
   public selected = "#cac6c3";
   public palette: any[] = [];
-  public googleSyncCalendar = {
+  public googleCalendarData = {
     publicKey: "",
     calendarId: ""
   };
+  public editGoogleCalendarDataEnabled = false;
   public colorPalette: any;
   public selectedColorId: any;
   public language: any;
@@ -1761,7 +1772,11 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     this.usersService.getMe(this.helpService.getMe(), (val) => {
       if (val && val.length > 0) {
         this.adminUser = val[0];
-
+        this.editGoogleCalendarDataEnabled = !this.adminUser.googleCalendarData;
+        if(this.adminUser.googleCalendarData) {
+          this.googleCalendarData.publicKey = this.adminUser.googleCalendarData.publicKey;
+          this.googleCalendarData.calendarId = this.adminUser.googleCalendarData.calendarId;
+        }
         console.log(this.adminUser);
       }
     });
