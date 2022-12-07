@@ -1,5 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
-import { NgModule, LOCALE_ID } from "@angular/core";
+import { NgModule, APP_INITIALIZER } from "@angular/core";
 
 import { CommonModule, registerLocaleData } from "@angular/common";
 import localeDE from "@angular/common/locales/de";
@@ -10,7 +10,6 @@ import { HttpModule } from "@angular/http";
 import {
   HttpClientModule,
   HttpClientJsonpModule,
-  HTTP_INTERCEPTORS,
 } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -57,7 +56,20 @@ import { RouterModule } from "@angular/router";
 import { FormGuard } from "./service/form-guard/formGuard";
 import { NgxStripeModule } from "ngx-stripe";
 import { AccessForbiddenComponent } from './component/templates/access-forbidden/access-forbidden.component';
+
 import { RightOfWithdrawalComponent } from './component/templates/right-of-withdrawal/right-of-withdrawal.component';
+
+import { VersionInfoService } from "./shared/version-info/version-info.service";
+import { VersionCheckService } from "./shared/version-check/version-check.service";
+
+export const setupVersionCheckerFactory=(
+  versionInfoService: VersionInfoService,
+  versionCheckService: VersionCheckService): ()=> void => () => {
+
+    versionInfoService.setLanguageVersion().then(()=>{
+        versionCheckService.initializeVersionChecker();
+    });
+  }
 
 @NgModule({
   declarations: [
@@ -100,6 +112,12 @@ import { RightOfWithdrawalComponent } from './component/templates/right-of-withd
     DashboardGuard,
     LoginGuard,
     MessageService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: setupVersionCheckerFactory,
+      deps:[VersionInfoService,VersionCheckService],
+      multi:true
+    }
   ],
   bootstrap: [AppComponent],
 })

@@ -522,6 +522,11 @@ export class DynamicGridComponent implements OnInit {
 
   public onOutputHiddenColumns(columns) {
     this.hiddenColumns = columns;
+    
+    if(!this.grid)
+    {
+      return;
+    }
     this.grid.hideColumns(this.hiddenColumns);
     let shownColumns = [];
     shownColumns = this.columns.map(column => {

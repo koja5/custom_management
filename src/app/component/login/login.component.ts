@@ -118,6 +118,9 @@ export class LoginComponent implements OnInit {
             "language",
             JSON.stringify(this.language)
           );
+
+          this.helpService.setLocalStorage("languageVersion", language["timestamp"]);
+          this.helpService.setLocalStorage("languageName", language["language"]);
         });
         this.helpService.setLocalStorage("countryCode", "US");
       }
@@ -133,6 +136,8 @@ export class LoginComponent implements OnInit {
             "language",
             JSON.stringify(this.language)
           );
+          this.helpService.setLocalStorage("languageVersion", language["timestamp"]);
+          this.helpService.setLocalStorage("languageName", language["language"]);
           this.helpService.setLocalStorage(
             "accountLanguage",
             language["countryCode"]
@@ -176,6 +181,8 @@ export class LoginComponent implements OnInit {
             "language",
             JSON.stringify(this.language)
           );
+          this.helpService.setLocalStorage("languageVersion", language["timestamp"]);
+          this.helpService.setLocalStorage("languageName", language["language"]);
           this.helpService.setLocalStorage(
             "accountLanguage",
             language["countryCode"]

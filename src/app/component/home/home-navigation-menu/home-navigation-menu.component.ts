@@ -87,6 +87,8 @@ export class HomeNavigationMenuComponent implements OnInit {
             "language",
             JSON.stringify(language["config"])
           );
+          this.helpService.setLocalStorage("languageVersion", language["timestamp"]);
+          this.helpService.setLocalStorage("languageName", language["language"]);
         }
       });
   }

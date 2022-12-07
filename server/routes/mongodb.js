@@ -431,6 +431,7 @@ router.post("/updateTranslation", function (req, res, next) {
             config: translationToUpdate,
             demoAccount: req.body.demoAccount,
             demoCode: req.body.demoCode,
+            timestamp: req.body.timestamp
           },
       },
       { upsert: true },

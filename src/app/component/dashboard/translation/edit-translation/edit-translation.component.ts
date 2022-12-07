@@ -3,6 +3,7 @@ import { TranslationModel } from "src/app/models/translation-model";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { DashboardService } from "src/app/service/dashboard.service";
+import { HelpService } from "src/app/service/help.service";
 
 @Component({
   selector: "app-edit",
@@ -20,7 +21,8 @@ export class EditTranslationComponent implements OnInit {
     private service: DashboardService,
     public route: ActivatedRoute,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private helpService: HelpService
   ) {}
 
   ngOnInit() {
@@ -148,6 +150,8 @@ export class EditTranslationComponent implements OnInit {
 
   saveConfiguration(event) {
     this.data.config = event;
+    this.data.timestamp= Date.now();
+
     if (this.id === "create") {
       this.service.createTranslation(this.data).subscribe((data) => {
         if (data) {
@@ -171,6 +175,7 @@ export class EditTranslationComponent implements OnInit {
         }
       });
     } else {
+      const config=this.data['config'];
       this.service.updateTranslation(this.data).subscribe((data) => {
         if (data) {
           this.toastr.success(
