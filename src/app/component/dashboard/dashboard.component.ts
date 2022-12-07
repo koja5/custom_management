@@ -55,6 +55,7 @@ export class DashboardComponent implements OnInit {
   public templateAccountValue: any;
   public allTranslationsByCountryCode: any;
   public themeColors: any
+  userTypeView = '';
 
   constructor(
     private router: Router,
@@ -159,10 +160,19 @@ export class DashboardComponent implements OnInit {
       });*/
     }
 
+    const userTypeKey = this.userType[this.type];
+    this.userTypeView = this.language[userTypeKey+'UserType'];
+
     this.getMe();
 
     this.message.getImageProfile().subscribe((mess) => {
       this.getMe();
+    });
+
+    this.message.getNewLanguage().subscribe(message => {
+      this.language = JSON.parse(this.helpService.getLocalStorage('language'));
+      const userTypeKey = this.userType[this.type];
+      this.userTypeView = this.language[userTypeKey+'UserType'];
     });
 
     /*this.mongo.getConfigurationForUser(this.helpService.getLocalStorage('idUser')).subscribe(

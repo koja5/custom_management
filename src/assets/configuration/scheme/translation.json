@@ -899,6 +899,27 @@
             "invoice": {
                 "type": "string"
             },
+            "ownerUserType": {
+                "type": "string"
+            },
+            "adminUserType": {
+                "type": "string"
+            },
+            "managerUserType": {
+                "type": "string"
+            },
+            "employeeUserType": {
+                "type": "string"
+            },
+            "patientUserType": {
+                "type": "string"
+            },
+            "administratorUserType": {
+                "type": "string"
+            },
+            "schedulerUserType": {
+                "type": "string"
+            },
             "backToGrid": {
                 "type": "string"
             },
@@ -4021,6 +4042,27 @@
                         },
                         {
                             "key": "invoice"
+                        },
+                        {
+                            "key": "ownerUserType"
+                        },
+                        {
+                            "key": "adminUserType"
+                        },
+                        {
+                            "key": "managerUserType"
+                        },
+                        {
+                            "key": "employeeUserType"
+                        },
+                        {
+                            "key": "patientUserType"
+                        },
+                        {
+                            "key": "administratorUserType"
+                        },
+                        {
+                            "key": "schedulerUserType"
                         }
                     ]
                 }
