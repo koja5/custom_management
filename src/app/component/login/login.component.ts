@@ -75,16 +75,16 @@ export class LoginComponent implements OnInit {
       this.helpService.getLanguage()
     ) {
       this.language = this.helpService.getLanguage();
-      console.log('ovde 1');
+      console.log("ovde 1");
     } else if (
       this.helpService.getLocalStorage("countryCode") &&
       this.helpService.getLanguage()
     ) {
       this.language = this.helpService.getLanguage();
-      console.log('ovde 2');
+      console.log("ovde 2");
     } else {
       this.checkCountryLocation();
-      console.log('ovde 3');
+      console.log("ovde 3");
     }
     if (this.helpService.getLocalStorage("registrationData")) {
       const registrationData = JSON.parse(
@@ -142,7 +142,7 @@ export class LoginComponent implements OnInit {
           this.service.getDefaultLanguage().subscribe(
             (language) => {
               if (language !== null) {
-                console.log('language', language);
+                console.log("language", language);
 
                 this.language = language["config"];
                 this.helpService.setLocalStorage(
@@ -185,7 +185,7 @@ export class LoginComponent implements OnInit {
           this.service.getDefaultLanguage().subscribe(
             (language) => {
               if (language !== null) {
-                console.log('language', language);
+                console.log("language", language);
                 this.language = language["config"];
                 this.helpService.setLocalStorage(
                   "language",
@@ -279,12 +279,7 @@ export class LoginComponent implements OnInit {
             ];
             this.loading = false;
           } else {
-            this.cookie.set("user", type);
-            this.helpService.setLocalStorage("type", type);
-            this.helpService.setLocalStorage("idUser", id);
-            this.helpService.setLocalStorage("indicatorUser", id);
-            this.helpService.setLocalStorage("storeId-" + id, storeId);
-            this.helpService.setLocalStorage("superadmin", superadmin);
+            this.setUserInfoToLocalStorage(type, id, storeId, superadmin);
             this.superadmin = superadmin;
             if (last_login === null) {
               console.log("last login NULL");
@@ -307,8 +302,9 @@ export class LoginComponent implements OnInit {
             }
           } else if (info === "licence_expired") {
             this.router.navigate(["/access-forbiden"]);
-          } else if(info === 'licence_expired_owner') {
-            this.router.navigate(['/licence']);
+          } else if (info === "licence_expired_owner") {
+            this.setUserInfoToLocalStorage(type, id, storeId, superadmin);
+            this.router.navigate(["/licence"]);
           } else {
             this.loginInfo = JSON.parse(localStorage.getItem("language"))[
               "notCorrectPass"
@@ -318,6 +314,15 @@ export class LoginComponent implements OnInit {
         }
       }
     );
+  }
+
+  setUserInfoToLocalStorage(type, id, storeId, superadmin) {
+    this.cookie.set("user", type);
+    this.helpService.setLocalStorage("type", type);
+    this.helpService.setLocalStorage("idUser", id);
+    this.helpService.setLocalStorage("indicatorUser", id);
+    this.helpService.setLocalStorage("storeId-" + id, storeId);
+    this.helpService.setLocalStorage("superadmin", superadmin);
   }
 
   signUp(form) {

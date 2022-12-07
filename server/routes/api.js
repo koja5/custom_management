@@ -578,6 +578,11 @@ router.post("/login", (req, res, next) => {
                           res.send({
                             login: false,
                             info: "licence_expired_owner",
+                            type: rows[0].type,
+                            id: rows[0].id,
+                            storeId: 0,
+                            superadmin: rows[0].id,
+                            last_login: rows[0].last_login
                           });
                         }
                       }

@@ -63,6 +63,14 @@ export class LicenceComponent implements OnInit {
           this.licence = data[0];
           this.currentLicence = JSON.parse(JSON.stringify(this.licence));
           this.diffDate = this.calculateDiff(this.licence.expiration_date);
+        } else {
+          this.licence = {
+            name: "demo",
+            price: 0.0,
+            expiration_date: new Date()
+          };
+          this.currentLicence = JSON.parse(JSON.stringify(this.licence));
+          this.diffDate = -1;
         }
       });
   }
@@ -88,6 +96,7 @@ export class LicenceComponent implements OnInit {
   }
 
   openPaymentForm() {
+    this.card = null;
     this.updateLicence = false;
     this.paymentForm.open();
     setTimeout(() => {
@@ -119,6 +128,7 @@ export class LicenceComponent implements OnInit {
   }
 
   openPaymentSMSForm() {
+    this.card = null;
     this.updateLicence = false;
     this.paymentSMSForm.open();
     setTimeout(() => {
@@ -169,6 +179,7 @@ export class LicenceComponent implements OnInit {
             const date = this.helpService.convertStringToDate(
               this.licence.expiration_date
             );
+            this.data["name"] = this.data.firstname + " " + this.data.lastname;
             this.data["token"] = result.token;
             this.data["licenceId"] = this.licence.id;
             this.data["superadminId"] = this.helpService.getSuperadmin();

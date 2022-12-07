@@ -3,11 +3,12 @@
 <div class="container" *ngIf="licence">
   <h3 class="text-center">{{language.licence}}</h3>
   <hr>
-  <h5 *ngIf="diffDate <= 0" style="color: red">{{language.yourLicenceExpired}}</h5>
+  <h5 *ngIf="diffDate <= 0 || !diffDate" style="color: red">{{language.yourLicenceExpired}}</h5>
   <p>{{language.yourLicence}}: <b>{{licence.name}} ({{licence.price}} €)</b></p>
-  <p>{{language.licenceExpiration}}: <b
+  <p>{{language.licenceExpiration}}: <b *ngIf="licence.expiration_date"
       [ngStyle]="diffDate > 0 ? {'color': 'green'} : {'color': 'red'}">{{licence.expiration_date | date :'dd.MM.yyyy' }}
-      ({{diffDate + 1}} {{language.daysLeft}})</b></p>
+      ({{diffDate + 1}} {{language.daysLeft}})</b>
+  </p>
 
   <div class="button-licence">
     <div class="row">
@@ -15,7 +16,8 @@
         <button class="btn btn-primary" (click)="openPaymentForm(); getLicences()">{{language.upgradeLicence}}</button>
       </div>
       <div class="col-md-6">
-        <button *ngIf="licence.name !== 'demo'" class="btn btn-success" (click)="openPaymentForm()">{{language.renewLicence}}</button>
+        <button *ngIf="licence.name !== 'demo'" class="btn btn-success"
+          (click)="openPaymentForm()">{{language.renewLicence}}</button>
       </div>
     </div>
   </div>
