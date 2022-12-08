@@ -599,6 +599,12 @@
             "workTimeColorsMenu": {
                 "type": "string"
             },
+            "currentWorkTime":{
+                "type":"string"
+            },
+            "selectCurrentWorkTime":{
+                "type":"string"
+            },
             "areaCode": {
                 "type": "string"
             },
@@ -4165,6 +4171,19 @@
                         },
                         {
                             "key": "createNewUser"
+                        }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "currentWorkTime"
+                        },
+                        {
+                            "key": "selectCurrentWorkTime"
                         }
                     ]
                 }
