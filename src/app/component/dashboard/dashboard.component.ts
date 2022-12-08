@@ -160,8 +160,7 @@ export class DashboardComponent implements OnInit {
       });*/
     }
 
-    const userTypeKey = this.userType[this.type];
-    this.userTypeView = this.language[userTypeKey+'UserType'];
+    this.loadUserType();
 
     this.getMe();
 
@@ -171,8 +170,7 @@ export class DashboardComponent implements OnInit {
 
     this.message.getNewLanguage().subscribe(message => {
       this.language = JSON.parse(this.helpService.getLocalStorage('language'));
-      const userTypeKey = this.userType[this.type];
-      this.userTypeView = this.language[userTypeKey+'UserType'];
+      this.loadUserType();
     });
 
     /*this.mongo.getConfigurationForUser(this.helpService.getLocalStorage('idUser')).subscribe(
@@ -189,6 +187,11 @@ export class DashboardComponent implements OnInit {
     this.message.getNewLanguage().subscribe((mess) => {
       this.language = JSON.parse(this.helpService.getLocalStorage("language"));
     });
+  }
+
+  loadUserType() {
+    const userTypeKey = this.userType[this.type];
+    this.userTypeView = this.language[userTypeKey+'UserType'];
   }
 
   getMainStoreName() { }
