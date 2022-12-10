@@ -2509,6 +2509,9 @@
             "yourLicenceExpired": {
                 "type": "string"
             },
+            "companyname": {
+                "type": "string"
+            },
             "sortByDateAsc": {
                 "type": "string"
             },
@@ -4432,6 +4435,9 @@
                         },
                         {
                             "key": "storename"
+                        },
+                        {
+                            "key": "companyname"
                         },
                         {
                             "key": "zipCode"

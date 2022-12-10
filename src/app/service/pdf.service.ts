@@ -1,20 +1,22 @@
-import { Injectable } from '@angular/core';
-import { DateService } from './date.service';
-import { MessageService } from './message.service';
+import { Injectable } from "@angular/core";
+import { DateService } from "./date.service";
+import { MessageService } from "./message.service";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import pdfMake from "pdfmake/build/pdfmake";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class PDFService {
   private dotSign = " • ";
 
   public language: any;
 
-  constructor(private messageService: MessageService,
-    private dateService: DateService) {
+  constructor(
+    private messageService: MessageService,
+    private dateService: DateService
+  ) {
     if (localStorage.getItem("language") !== undefined) {
       this.language = JSON.parse(localStorage.getItem("language"));
     } else {
@@ -33,7 +35,7 @@ export class PDFService {
       header: {
         columns: [
           {
-            text: 'Datum:' + " " + this.dateService.currentDateFormatted,
+            text: "Datum:" + " " + this.dateService.currentDateFormatted,
             style: "documentHeaderRight",
             width: "*",
           },
@@ -77,76 +79,103 @@ export class PDFService {
               {
                 columns: [
                   {
-                    text: clinic.shortname + "\n" + clinic.street + "\n" + clinic.zipcode + ' ' + clinic.place,
+                    text:
+                      clinic.shortname +
+                      "\n" +
+                      clinic.street +
+                      "\n" +
+                      clinic.zipcode +
+                      " " +
+                      clinic.place,
                     style: "vaucherAddressLeft",
                   },
                   {
                     text:
-                     vaucher.customer_consumer_name + "\n" 
-                     + (customer ? customer.street : '') + "\n"
-                    + (customer ? (customer.zipcode ? customer.zipcode : customer.streetnumber) + ' ' + (customer.place ? customer.place : customer.city) : '') + "\n",
+                      vaucher.customer_consumer_name +
+                      "\n" +
+                      (customer ? customer.street : "") +
+                      "\n" +
+                      (customer
+                        ? (customer.zipcode
+                            ? customer.zipcode
+                            : customer.streetnumber) +
+                          " " +
+                          (customer.place ? customer.place : customer.city)
+                        : "") +
+                      "\n",
                     style: "vaucherAddressRight",
                   },
                 ],
               },
               "\n\n",
-        // Items
-        {
-          layout: {
-            // code from lightHorizontalLines:
-            hLineWidth: function (i, node) {
-              if (i === 0) {
-                return 0;
-              }
-              return i === node.table.headerRows ? 2 : 1;
-            },
-            vLineWidth: function () {
-              return 0;
-            },
-            hLineColor: function (i) {
-              return "black";
-            },
-            paddingLeft: function (i) {
-              return i === 0 ? 0 : 8;
-            },
-            paddingRight: function (i, node) {
-              return i === node.table.widths.length - 1 ? 0 : 8;
-            },
-          },
-          table: {
-            // headers are automatically repeated if the table spans over multiple pages
-            // you can declare how many rows should be treated as headers
-            headerRows: 1,
-            widths: ["20%", "20%", "20%", "20%", "20%"],
+              // Items
+              {
+                layout: {
+                  // code from lightHorizontalLines:
+                  hLineWidth: function (i, node) {
+                    if (i === 0) {
+                      return 0;
+                    }
+                    return i === node.table.headerRows ? 2 : 1;
+                  },
+                  vLineWidth: function () {
+                    return 0;
+                  },
+                  hLineColor: function (i) {
+                    return "black";
+                  },
+                  paddingLeft: function (i) {
+                    return i === 0 ? 0 : 8;
+                  },
+                  paddingRight: function (i, node) {
+                    return i === node.table.widths.length - 1 ? 0 : 8;
+                  },
+                },
+                table: {
+                  // headers are automatically repeated if the table spans over multiple pages
+                  // you can declare how many rows should be treated as headers
+                  headerRows: 1,
+                  widths: ["20%", "20%", "20%", "20%", "20%"],
 
-            body: this.createItemsTableVaucher(language, vaucher),
-          }, // table
-          //  layout: 'lightHorizontalLines'
-        },
+                  body: this.createItemsTableVaucher(language, vaucher),
+                }, // table
+                //  layout: 'lightHorizontalLines'
+              },
             ],
           ],
-        
         },
       ],
       styles: this.getVaucherStyles(),
       defaultStyle: {
         columnGap: 20,
       },
-    }
+    };
     return definition;
   }
 
-  getPDFDefinition(superadminProfile, store, customerUser, therapyPricesData, isPriceIncluded, invoicePrefixID, selectedLanguage?) {
+  getPDFDefinition(
+    superadminProfile,
+    store,
+    customerUser,
+    therapyPricesData,
+    isPriceIncluded,
+    invoicePrefixID,
+    selectedLanguage?
+  ) {
     const invoiceLanguage = selectedLanguage ? selectedLanguage : this.language;
 
     const therapies = therapyPricesData.therapies;
-    const netPrices = therapyPricesData.netPrices.filter(num => !isNaN(parseFloat(num)));
-    const brutoPrices = therapyPricesData.brutoPrices.filter(num => !isNaN(parseFloat(num)));
+    const netPrices = therapyPricesData.netPrices.filter(
+      (num) => !isNaN(parseFloat(num))
+    );
+    const brutoPrices = therapyPricesData.brutoPrices.filter(
+      (num) => !isNaN(parseFloat(num))
+    );
 
     // console.log(therapies);
 
     let vatPrices = brutoPrices.map(function (item, index) {
-      // In this case item correspond to currentValue of array a, 
+      // In this case item correspond to currentValue of array a,
       // using index to get value from array b
       return item - netPrices[index];
     });
@@ -155,6 +184,15 @@ export class PDFService {
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
+    const billingAddress =
+      store.street +
+      "\n " +
+      store.zipcode +
+      " " +
+      store.place +
+      "\n" +
+      invoiceLanguage.vatIdentificationNumber +
+      " ";
 
     let definition = {
       header: {
@@ -165,7 +203,10 @@ export class PDFService {
             width: "*",
           },
           {
-            text: invoiceLanguage.dateTitle + " " + this.dateService.currentDateFormatted,
+            text:
+              invoiceLanguage.dateTitle +
+              " " +
+              this.dateService.currentDateFormatted,
             style: "documentHeaderRight",
             width: "*",
           },
@@ -215,11 +256,14 @@ export class PDFService {
         {
           columns: [
             {
-              text: superadminProfile.shortname,
+              text: store.companyname ? store.companyname : superadminProfile.shortname,
               style: "invoiceBillingDetailsLeft",
             },
             {
-              text: customerUser.lastname.trim() + ' ' + customerUser.firstname.trim(),
+              text:
+                customerUser.lastname.trim() +
+                " " +
+                customerUser.firstname.trim(),
               style: "invoiceBillingDetailsRight",
             },
           ],
@@ -228,9 +272,9 @@ export class PDFService {
         {
           columns: [
             {
-              text: store.vatcode ?
-                store.street + "\n " + store.zipcode + " " + store.place + "\n" + invoiceLanguage.vatIdentificationNumber + " " + store.vatcode
-                : store.street + "\n " + store.zipcode + " " + store.place + "\n" + invoiceLanguage.vatIdentificationNumber + " " + superadminProfile.vatcode,
+              text: store.vatcode
+                ? billingAddress + store.vatcode
+                : billingAddress + superadminProfile.vatcode,
               style: "invoiceBillingAddressLeft",
             },
             {
@@ -286,47 +330,58 @@ export class PDFService {
         {
           columns: [
             {
-              text: '',
-              width: '20%'
+              text: "",
+              width: "20%",
             },
             {
-              text: '',
-              width: '20%'
+              text: "",
+              width: "20%",
             },
             {
-              text: isPriceIncluded ?
-                (netPrices.length === 0 ? invoiceLanguage.noDataAvailable : (invoiceLanguage.euroSign + " " + subtotal)) : '',
+              text: isPriceIncluded
+                ? netPrices.length === 0
+                  ? invoiceLanguage.noDataAvailable
+                  : invoiceLanguage.euroSign + " " + subtotal
+                : "",
               style: "itemsFooterSubValue",
-              width: '20%',
+              width: "20%",
             },
             {
-              text: isPriceIncluded ?
-                (vatPrices.length === 0 ? invoiceLanguage.noDataAvailable : (invoiceLanguage.euroSign + " " + vat)) : '',
+              text: isPriceIncluded
+                ? vatPrices.length === 0
+                  ? invoiceLanguage.noDataAvailable
+                  : invoiceLanguage.euroSign + " " + vat
+                : "",
               style: "itemsFooterVATValue",
-              width: '20%',
+              width: "20%",
             },
             {
-              text: isPriceIncluded ?
-                (brutoPrices.length === 0 ? invoiceLanguage.noDataAvailable : (invoiceLanguage.euroSign + " " + total)) : '',
+              text: isPriceIncluded
+                ? brutoPrices.length === 0
+                  ? invoiceLanguage.noDataAvailable
+                  : invoiceLanguage.euroSign + " " + total
+                : "",
               style: "itemsFooterTotalValue",
-              width: '20%',
+              width: "20%",
             },
           ],
         },
         {
           text: invoiceLanguage.notesTitle,
-          style: 'notesTextBold'
+          style: "notesTextBold",
         },
         {
           text: invoiceLanguage.notesText,
-          style: 'notesText'
+          style: "notesText",
         },
       ],
       footer: {
         columns: [
           {
             text:
-              store.storename + ' ' + superadminProfile.shortname +
+              store.storename +
+              " " +
+              superadminProfile.shortname +
               this.dotSign +
               store.street +
               this.dotSign +
@@ -358,19 +413,19 @@ export class PDFService {
         // margin: [left, top, right, bottom]
         margin: [45, 25, 0, 0],
         alignment: "left",
-        color: 'gray'
+        color: "gray",
       },
       documentHeaderRight: {
         fontSize: 11,
         margin: [0, 25, 45, 0],
         alignment: "right",
-        color: 'gray'
+        color: "gray",
       },
       // Document Footer
       documentFooter: {
         fontSize: 11,
         alignment: "center",
-        color: 'gray'
+        color: "gray",
       },
       // Invoice Title
       invoiceTitle: {
@@ -490,7 +545,7 @@ export class PDFService {
       },
       notesTextBold: {
         fontSize: 12,
-        bold: true
+        bold: true,
       },
       center: {
         alignment: "center",
@@ -506,19 +561,19 @@ export class PDFService {
         // margin: [left, top, right, bottom]
         margin: [45, 25, 0, 0],
         alignment: "left",
-        color: 'gray'
+        color: "gray",
       },
       documentHeaderRight: {
         fontSize: 11,
         margin: [0, 25, 45, 0],
         alignment: "right",
-        color: 'gray'
+        color: "gray",
       },
       // Document Footer
       documentFooter: {
         fontSize: 11,
         alignment: "center",
-        color: 'gray'
+        color: "gray",
       },
       // vaucher Title
       vaucherTitle: {
@@ -638,7 +693,7 @@ export class PDFService {
       },
       notesTextBold: {
         fontSize: 12,
-        bold: true
+        bold: true,
       },
       center: {
         alignment: "center",
@@ -647,18 +702,17 @@ export class PDFService {
   }
 
   public createItemsTableVaucher(language, vaucher) {
-    let date = new Date(vaucher.date).toISOString()
+    let date = new Date(vaucher.date).toISOString();
     let dateRedeemed;
-    if(vaucher.date_redeemed) {
-      dateRedeemed = new Date(vaucher.date_redeemed).toISOString()
+    if (vaucher.date_redeemed) {
+      dateRedeemed = new Date(vaucher.date_redeemed).toISOString();
     }
-    
 
     const arr = [
       // Table Header
       [
         {
-          text: 'Datum',
+          text: "Datum",
           style: ["itemsHeader", "left"],
         },
         {
@@ -685,8 +739,8 @@ export class PDFService {
         //   text: 'remark',
         //   style: ["itemsHeader", "center"],
         // }
-      ]
-    ]
+      ],
+    ];
 
     let obj = [
       {
@@ -698,7 +752,7 @@ export class PDFService {
         style: "itemDate",
       },
       {
-        text: dateRedeemed ? this.dateService.formatDate(dateRedeemed) : '',
+        text: dateRedeemed ? this.dateService.formatDate(dateRedeemed) : "",
         style: "itemDate",
       },
       {
@@ -709,11 +763,10 @@ export class PDFService {
         text: vaucher.customer_consumer_name,
         style: "itemDate",
       },
-  ]
+    ];
     arr.push(obj);
     return arr;
   }
-
 
   public createItemsTable(therapies, isPriceIncluded = true) {
     const arr = [
@@ -728,15 +781,15 @@ export class PDFService {
           style: "itemsHeader",
         },
         {
-          text: isPriceIncluded ? this.language.invoiceNetPrice : '',
+          text: isPriceIncluded ? this.language.invoiceNetPrice : "",
           style: ["itemsHeader", "center"],
         },
         {
-          text: isPriceIncluded ? this.language.vatPercentageTitle : '',
+          text: isPriceIncluded ? this.language.vatPercentageTitle : "",
           style: ["itemsHeader", "center"],
         },
         {
-          text: isPriceIncluded ? this.language.invoiceGrossPrice : '',
+          text: isPriceIncluded ? this.language.invoiceGrossPrice : "",
           style: ["itemsHeader", "center"],
         },
       ],
@@ -753,17 +806,17 @@ export class PDFService {
           style: "itemTitle",
         },
         {
-          text: isPriceIncluded ? therapy.net_price : '',
+          text: isPriceIncluded ? therapy.net_price : "",
           style: "itemNumber",
         },
         {
-          text: isPriceIncluded ? therapy.vat : '',
+          text: isPriceIncluded ? therapy.vat : "",
           style: "itemNumber",
         },
         {
-          text: isPriceIncluded ? therapy.gross_price : '',
-          style: "itemGrossPrice"
-        }
+          text: isPriceIncluded ? therapy.gross_price : "",
+          style: "itemGrossPrice",
+        },
       ];
 
       arr.push(obj);

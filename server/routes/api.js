@@ -887,6 +887,7 @@ router.post("/createStore", function (req, res, next) {
     test = {};
     var podaci = {
       storename: req.body.storename,
+      companyname: req.body.companyname,
       vatcode: req.body.vatcode,
       street: req.body.street,
       zipcode: req.body.zipcode,
@@ -1045,6 +1046,7 @@ router.post("/updateStore", function (req, res, next) {
     var podaci = {
       id: req.body.id,
       storename: req.body.storename,
+      companyname: req.body.companyname,
       street: req.body.street,
       zipcode: req.body.zipcode,
       place: req.body.place,
