@@ -4,6 +4,9 @@ span.h {
 .wrkTimeDiv{
   padding: 2vh;
 }
+.dayInWeekDiv{
+  width: 110%;
+}
 .label__active {
   text-align: right;
   padding: 30px 40px 0 0;
@@ -160,6 +163,9 @@ h5 {
 @media (min-width: 768px) {
   .card-container {
     height: 310px;
+  }
+  .dayInWeekDiv{
+    width: 20%; 
   }
 }
 

@@ -377,15 +377,16 @@
                     <p *ngIf="noSetWorkTime" class="noSetWorkTime">
                       *{{ language.noSetTimeForUserNote }}
                     </p>
-                    <div class="k-form-field col-sm-12 row" style="padding: 2vh 0 2vh 0">
-                      <div class="col-sm-8 col-xs-10 wrkTimeDiv">
+                    <div class="k-form-field col-sm-12 row" style="padding: 0vh">
+                      <div class="col-sm-8 col-xs-10">
                         <label>{{ language.currentWorkTime }}</label><br/>
-                        <select class="col-lg-2 col-sm-5 col-xs-5"(change)="onOptionSelected($event.target.value)">
+                        <select [(ngModel)]="index" class="col-lg-2 col-sm-5 col-xs-5"(change)="onOptionSelected($event.target.value)">
                           <option *ngFor="let workTime of allWorkTime;
                            index as indexOfelement;" [value]="indexOfelement">{{indexOfelement + 1}}</option>
                         </select>
                       </div>
                       <div class="col-sm-8 col-xs-10 wrkTimeDiv">
+                        <label>{{ language.validFromDate }}</label><br/>
                         <kendo-datepicker [format]="'dd.MM.yyyy'" class="noPadding" name="validDate"
                           placeholder="Valid date" [(ngModel)]="validDate" validDate.value="" readonly="true">
                         </kendo-datepicker>
@@ -405,7 +406,7 @@
                           : updateWorkTimeForUser(workTime)
                       ">
                       <div class="row"></div>
-                      <div class="form-group col-md-2 col-xs-12 b-r" *ngFor="let item of workTime; let i = index">
+                      <div class="form-group dayInWeekDiv col-xs-12 b-r" *ngFor="let item of workTime; let i = index">
                           <label for="example-number-input" class="col-sm col-sx-1 col-form-label">{{ language[(item.day).toLowerCase()] }}</label>
                           <div class="row col-sm-12 col-xs-12">
                             <input class="col-sm-5 col-xs-5 b-r" kendoTextBox type="number" min="0" max="24"
@@ -662,16 +663,15 @@
               <p *ngIf="noSetWorkTime" class="noSetWorkTime">
                 *{{ language.noSetTimeForUserNote }}
               </p>
-              <div class="k-form-field row" style="padding: 2vh 0 2vh 0">
-                
-                <div class="col-sm-8 col-xs-10 wrkTimeDiv">
+              <div class="k-form-field row">
+                <div class="col-sm-8 col-xs-10" style="padding-top: 2%;">
                   <label>{{ language.currentWorkTime }}</label><br/>
-                  <select class="col-lg-3 col-sm-5 col-xs-5"(change)="onOptionSelected($event.target.value)">
+                  <select [(ngModel)]="index" class="col-lg-3 col-sm-5 col-xs-5"(change)="onOptionSelected($event.target.value)">
                     <option *ngFor="let workTime of allWorkTime;
                      index as indexOfelement;" [value]="indexOfelement">{{indexOfelement + 1}}</option>
                   </select>
                 </div>
-                <div class="col-sm-6 col-xs-5">
+                <div class="col-sm-6 col-xs-5" style="padding-top: 2%;">
                   <span>{{ language.color }}</span>
                   <div>
                     <kendo-colorpalette [palette]="palette" [value]="selectedColor" [tileSize]="30"
@@ -680,10 +680,8 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group row">
-                <label class="col-md-2 col-xs-8 col-sm-5 col-form-label">{{
-                  language.validFromDate
-                  }}</label>
+              <div class="form-group row "style="padding-top: 2%;">
+                <label class="col-md-2 col-xs-8 col-sm-5 col-form-label" > {{ language.validFromDate}} </label>
                 <kendo-datepicker [format]="'dd.MM.yyyy'" class="col-md-5 col-xs-6" name="validDate"
                   placeholder="Valid date" [(ngModel)]="validDate" validDate.value=""></kendo-datepicker>
                 <div class="col-sm-3 col-xs-6">
