@@ -144,8 +144,8 @@ router.post("/signUp", function (req, res, next) {
       [req.body.email],
       function (err, rows, fields) {
         if (err) {
-          res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
         }
         if (rows.length >= 1) {
           test.success = false;
@@ -314,8 +314,8 @@ router.get("/deleteTask/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              res.json(err);
               logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(err);
             } else {
               res.json(true);
             }
@@ -345,8 +345,8 @@ router.get("/getTasks/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
         }
       }
     );
@@ -369,8 +369,8 @@ router.get("/getTasksForUser/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
         }
       }
     );
@@ -398,8 +398,8 @@ router.get(
             if (!err) {
               res.json(rows);
             } else {
-              res.json(err);
               logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(err);
             }
           }
         );
@@ -412,8 +412,8 @@ router.get(
             if (!err) {
               res.json(rows);
             } else {
-              res.json(err);
               logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(err);
             }
           }
         );
@@ -699,8 +699,8 @@ router.post("/createUser", function (req, res, next) {
       [req.body.email, req.body.superadmin],
       function (err, rows, fields) {
         if (err) {
-          res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
         }
         if (rows.length >= 1) {
           test.success = false;
@@ -750,8 +750,8 @@ router.get("/getUsers/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
         }
       }
     );
@@ -773,8 +773,8 @@ router.get("/getUsersInCompany/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
         }
       }
     );
@@ -796,8 +796,8 @@ router.get("/getUsersAllowedOnlineInCompany/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
         }
       }
     );
@@ -843,8 +843,8 @@ router.get("/getMe/:id", function (req, res, next) {
                   );
                 }
               } else {
-                res.json(err);
                 logger.log("error", err.sql + ". " + err.sqlMessage);
+                res.json(err);
               }
             }
           );
@@ -908,8 +908,8 @@ router.post("/createStore", function (req, res, next) {
       [req.body.email, req.body.superadmin],
       function (err, rows, fields) {
         if (err) {
-          res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
         }
 
         if (rows.length >= 1) {
@@ -938,8 +938,8 @@ router.post("/createStore", function (req, res, next) {
               }
               res.json(test);
             } else {
-              res.json(err);
               logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(err);
             }
           });
         }
@@ -963,8 +963,8 @@ router.get("/getStore/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
         }
       }
     );
@@ -985,8 +985,8 @@ router.get("/getStoreList/:ids", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
         }
       }
     );
@@ -1005,8 +1005,8 @@ router.get("/getStoreById/:id", function (req, res, next) {
       if (!err) {
         res.json(rows);
       } else {
-        res.json(err);
         logger.log("error", err.sql + ". " + err.sqlMessage);
+        res.json(err);
       }
     });
   });
@@ -1027,8 +1027,8 @@ router.get("/getStoreAllowedOnline/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
         }
       }
     );
@@ -1069,8 +1069,8 @@ router.post("/updateStore", function (req, res, next) {
       function (err, rows, fields) {
         conn.release();
         if (err) {
-          res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
         } else {
           response = true;
           res.json(response);
@@ -1094,8 +1094,8 @@ router.get("/deleteStore/:id", (req, res, next) => {
           function (err, rows, fields) {
             conn.release();
             if (err) {
-              res.json(err);
               logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(err);
             } else {
               logger.log("info", `Store ID:${reqObj} SUCCESSED DELETE!`);
               res.json(true);
@@ -1435,8 +1435,8 @@ router.post("/updateUserFromSettings", function (req, res, next) {
           }
           res.json(test);
         } else {
-          res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
         }
       }
     );
@@ -5394,7 +5394,7 @@ router.post("/sendSMS", function (req, res) {
                       message: "need_configure",
                     });
                   } else {
-                    res.send(false);
+                    res.json(false);
                   }
                 }
               );
@@ -5403,7 +5403,7 @@ router.post("/sendSMS", function (req, res) {
         }
       );
     } else {
-      res.send(false);
+      res.json(false);
       logger.log(
         "warn",
         `Number ${req.body.number} is not start with available area code!`
@@ -5529,7 +5529,7 @@ router.post("/sendCustomSMS", function (req, res) {
       updateAvailableSMSCount(1, req.body.superadmin);
       res.send(true);
     } else {
-      res.send(false);
+      res.json(false);
       logger.log(
         "warn",
         `Number ${req.body.number} is not start with available area code or clinic ${req.body.superadmin} doesn't have SMS!`
@@ -5638,7 +5638,7 @@ router.post("/sendCustomSMS", function (req, res) {
 //                         res.send(true);
 //                       });
 //                     } else {
-//                       res.send(false);
+//                       res.json(false);
 //                       logger.log(
 //                         "warn",
 //                         `Number ${req.body.number} is not start with available area code!`
@@ -5653,7 +5653,7 @@ router.post("/sendCustomSMS", function (req, res) {
 //       }
 //     );
 //   } else {
-//     res.send(false);
+//     res.json(false);
 //     logger.log(
 //       "error",
 //       `Client don't input message for send massive sms: ${req.body.email}`
@@ -5801,7 +5801,7 @@ router.post("/sendVaucherSms", function (req, res) {
       }
     );
   } else {
-    res.send(false);
+    res.json(false);
     logger.log(
       "error",
       `Client don't input message for send massive sms: ${req.body.email}`
@@ -5837,7 +5837,7 @@ router.post("/sendMassiveSMS", function (req, res) {
                   globalCount = 0;
                   count = 0;
                   rows.forEach(async function (to, i, array) {
-                    var phoneNumber = to.mobile ? to.mobile : null;
+                    var phoneNumber = to.mobile ? to.mobile : (to.telephone ? to.telephone : null);
                     var unsubscribeLink =
                       process.env.unsubscribeSMS + "/" + to.customerId;
                     if (
@@ -5905,7 +5905,7 @@ router.post("/sendMassiveSMS", function (req, res) {
                         "warn",
                         `Number ${phoneNumber} is not start with available area code! or message is empty`
                       );
-                      res.send(false);
+                      res.json(false);
                     }
                   });
                   updateAvailableSMSCount(count, req.body.superadmin);
@@ -5918,7 +5918,7 @@ router.post("/sendMassiveSMS", function (req, res) {
       }
     );
   } else {
-    res.send(false);
+    res.json(false);
     logger.log(
       "error",
       `Client don't input message for send massive sms: ${req.body.email}`
@@ -6635,7 +6635,7 @@ router.post("/updateCustomerSendReminderOption", function (req, res, next) {
           if (!err) {
             res.send(true);
           } else {
-            res.send(false);
+            res.json(false);
           }
         } else {
           res.send(err);
@@ -10373,7 +10373,7 @@ router.post("/updateMassiveEmailForUser", function (req, res, next) {
           if (!err) {
             res.send(true);
           } else {
-            res.send(false);
+            res.json(false);
           }
         } else {
           res.send(err);
@@ -10397,7 +10397,7 @@ router.post("/updateMassiveSMSForUser", function (req, res, next) {
           if (!err) {
             res.send(true);
           } else {
-            res.send(false);
+            res.json(false);
           }
         } else {
           res.send(err);
