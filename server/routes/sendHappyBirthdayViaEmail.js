@@ -125,13 +125,13 @@ function sendHappyBirthdayViaEmail() {
                     function (error, response) {
                       if (error) {
                         logger.log("error", error);
-                        response.send(false);
+                        response.json(false);
                       } else {
                         logger.log(
                           "info",
                           `Sent mail for marketing promotion on EMAIL: ${to.email}`
                         );
-                        response.send(true);
+                        response.json(true);
                       }
                     }
                   );

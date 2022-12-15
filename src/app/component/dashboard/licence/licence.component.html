@@ -3,7 +3,7 @@
 <div class="container" *ngIf="licence">
   <h3 class="text-center">{{language.licence}}</h3>
   <hr>
-  <h5 *ngIf="diffDate <= 0 || !diffDate" style="color: red">{{language.yourLicenceExpired}}</h5>
+  <h5 *ngIf="diffDate <= 0" style="color: red">{{language.yourLicenceExpired}}</h5>
   <p>{{language.yourLicence}}: <b>{{licence.name}} ({{licence.price}} €)</b></p>
   <p>{{language.licenceExpiration}}: <b *ngIf="licence.expiration_date"
       [ngStyle]="diffDate > 0 ? {'color': 'green'} : {'color': 'red'}">{{licence.expiration_date | date :'dd.MM.yyyy' }}
@@ -57,9 +57,21 @@
             <h4>{{paySms}} {{language.sms}} x {{language.smsPrice}} €</h4>
             <h3 class="sum-price">{{getSumForSMS()}} €</h3>
           </div>
+          <div class="form-group">
+            <label class="checkbox text-left">
+              <input type="checkbox" [(ngModel)]="agreeValue" name="agreeValue" /><span class="label-text">{{
+                language.clickAgreeText }}
+                <a routerLink="/terms" target="_blank" class="signup-term-link">{{ language.termOfUse }}</a>
+                {{ language.and }}
+                <a routerLink="/privacy-policy" target="_blank" class="signup-term-link">{{
+                  language.privacyPolicy }}</a> {{language.and}} <a routerLink="/right-of-withdrawal" target="_blank"
+                  class="signup-term-link">{{language.rightOfWithdrawal}}</a></span>
+            </label>
+          </div>
         </div>
         <div class="col-xs-12 text-right" *ngIf="card">
-          <button [disabled]="!paySms" (click)="submitSMSPayment()" class="btn btn-primary mt-4 d-block w-100">
+          <button [disabled]="!paySms || !agreeValue" (click)="submitSMSPayment()"
+            class="btn btn-primary mt-4 d-block w-100">
             {{ language.buySms }}
           </button>
         </div>
@@ -101,10 +113,21 @@
             <h4>{{data.expired}} Month x {{licence.price}} €</h4>
             <h3 class="sum-price">{{getSum()}} €</h3>
           </div>
+          <div class="form-group">
+            <label class="checkbox text-left">
+              <input type="checkbox" [(ngModel)]="agreeValue" name="agreeValue" /><span class="label-text">{{
+                language.clickAgreeText }}
+                <a routerLink="/terms" target="_blank" class="signup-term-link">{{ language.termOfUse }}</a>
+                {{ language.and }}
+                <a routerLink="/privacy-policy" target="_blank" class="signup-term-link">{{
+                  language.privacyPolicy }}</a> {{language.and}} <a routerLink="/right-of-withdrawal" target="_blank"
+                  class="signup-term-link">{{language.rightOfWithdrawal}}</a></span>
+            </label>
+          </div>
         </div>
         <div class="col-xs-12 text-right" *ngIf="card">
           <button
-            [disabled]="card['_implementation']['_empty'] || card['_implementation']['_invalid'] || checkRequiredFields()"
+            [disabled]="card['_implementation']['_empty'] || card['_implementation']['_invalid'] || checkRequiredFields() || !agreeValue"
             (click)="submitPayment()" class="btn btn-primary mt-4 d-block w-100">
             {{ language.requestSectionFormSendRequestButton }}
           </button>

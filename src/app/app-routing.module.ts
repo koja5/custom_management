@@ -1,4 +1,4 @@
-import { MassiveUnsubscribeComponent } from './component/dashboard/marketing/massive-unsubscribe/massive-unsubscribe.component';
+import { MassiveUnsubscribeComponent } from "./component/dashboard/marketing/massive-unsubscribe/massive-unsubscribe.component";
 import { ConfirmArrivalComponent } from "./component/templates/confirm-arrival/confirm-arrival.component";
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
@@ -10,9 +10,10 @@ import { PatientFormSuccessComponent } from "./component/templates/patient-form-
 import { ImpressumComponent } from "./component/templates/impressum/impressum.component";
 import { PrivacyPolicyComponent } from "./component/templates/privacy-policy/privacy-policy.component";
 import { TermsComponent } from "./component/templates/terms/terms.component";
-import { UnsubscribeGuard } from './service/guards/unsubscribe.guard';
-import { AccessForbiddenComponent } from './component/templates/access-forbidden/access-forbidden.component';
-import { LicenceComponent } from './component/dashboard/licence/licence.component';
+import { UnsubscribeGuard } from "./service/guards/unsubscribe.guard";
+import { AccessForbiddenComponent } from "./component/templates/access-forbidden/access-forbidden.component";
+import { LicenceComponent } from "./component/dashboard/licence/licence.component";
+import { RightOfWithdrawalComponent } from "./component/templates/right-of-withdrawal/right-of-withdrawal.component";
 
 const routes: Routes = [
   {
@@ -47,6 +48,10 @@ const routes: Routes = [
     component: TermsComponent,
   },
   {
+    path: "right-of-withdrawal",
+    component: RightOfWithdrawalComponent,
+  },
+  {
     path: "unsubscribeSMS/:customerId",
     canActivate: [UnsubscribeGuard],
     component: MassiveUnsubscribeComponent,
@@ -58,7 +63,11 @@ const routes: Routes = [
   },
   {
     path: "access-forbiden",
-    component: AccessForbiddenComponent
+    component: AccessForbiddenComponent,
+  },
+  {
+    path: "licence",
+    component: LicenceComponent,
   },
   {
     path: "licence",
@@ -79,4 +88,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

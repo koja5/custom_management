@@ -118,6 +118,10 @@ body[data-layout="horizontal"][data-layout-size="boxed"] .footer {
   display: none;
 }
 
+.dropdown-toggle {
+  padding: 10px 20px 10px 5px;
+}
+
 .dropdown-toggle > i.fa-angle-down {
   color: var(--navbar-font-color) !important;
 }
@@ -981,6 +985,13 @@ body[data-layout-size="boxed"][data-sidebar-size="md"] .footer {
 .username {
   font-size: 13px;
   color: var(--navbar-font-color);
+}
+
+.usertype {
+  display: table;
+  margin: 0 auto;
+  font-size: 14px;
+  line-height: 10px;
 }
 
 .navigation-link {

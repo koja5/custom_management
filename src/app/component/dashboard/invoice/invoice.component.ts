@@ -215,11 +215,6 @@ export class InvoiceComponent implements OnInit {
     this.invoiceStore = this.allStores.find((elem) => elem.id === event);
     console.log("this.invoiceStore ", this.invoiceStore);
     this.selectedStoreInfo = event;
-
-    const data = this.invoiceStore ? this.allInvoiceData.filter(elem => elem.storeId === this.invoiceStore.id) : this.allInvoiceData;
-    this.currentLoadData = data;
-
-    this.gridViewData = process(this.currentLoadData, this.state);
   }
 
   public getParameters(): void {
@@ -459,7 +454,6 @@ export class InvoiceComponent implements OnInit {
 
     const therapyPricesData = this.getTherapyAndPricesData();
 
-    console.log("invoice store ", this.invoiceStore);
     const store =
       this.invoiceStore !== undefined && this.invoiceStore !== null
         ? this.invoiceStore
@@ -612,7 +606,6 @@ export class InvoiceComponent implements OnInit {
     const subtotal = netPrices.reduce((a, b) => a + b, 0).toFixed(2);
     const total = brutoPrices.reduce((a, b) => a + b, 0).toFixed(2);
 
-
     //THIS ONE SHOULD BE ACTIVE
     const link =
       window.location.protocol +
@@ -652,7 +645,7 @@ export class InvoiceComponent implements OnInit {
         billing_from_title:
           componentRef.invoiceLanguage.invoiceBillingTitleFrom,
         billing_to_title: componentRef.invoiceLanguage.invoiceBillingTitleTo,
-        clinic_name: componentRef.superadminProfile.shortname,
+        clinic_name: store.companyname ? store.companyname : componentRef.superadminProfile.shortname,
         customer_lastname: componentRef.customerUser.lastname,
         customer_firstname: componentRef.customerUser.firstname,
         clinic_street: store.street,
