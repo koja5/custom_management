@@ -80,10 +80,6 @@ function checkLicenceExpired() {
               "." +
               expiration_date.getFullYear();
 
-            var signatureAvailable = false;
-            if (to.signatureAvailable) {
-              signatureAvailable = true;
-            }
             var mailOptions = {
               from: '"ClinicNode" info@app-production.eu',
               subject: "Licence expired!",

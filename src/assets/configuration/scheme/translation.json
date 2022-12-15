@@ -2512,6 +2512,15 @@
             "yourLicenceExpired": {
                 "type": "string"
             },
+            "paymentSuccessTitle": {
+                "type": "string"
+            },
+            "paymentText": {
+                "type": "string"
+            },
+            "paymentBackToHome": {
+                "type": "string"
+            },
             "companyname": {
                 "type": "string"
             },
@@ -2521,8 +2530,6 @@
             "sortByDateDesc": {
                 "type": "string"
             }
-
-
         }
     },
     "layout": [
@@ -7634,6 +7641,22 @@
                             "key": "yourLicenceExpired"
                         },
                         {}
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "paymentSuccessTitle"
+                        },
+                        {
+                            "key": "paymentText"
+                        },
+                        {
+                            "key": "paymentBackToHome"
+                        }
                     ]
                 }
             ]

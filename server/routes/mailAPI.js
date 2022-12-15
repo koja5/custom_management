@@ -10,7 +10,6 @@ var url = require("url");
 const logger = require("./logger");
 const winston = require("winston");
 
-
 var link = process.env.link_api;
 var linkClient = process.env.link_client;
 var loginLink = process.env.link_client_login;
@@ -36,11 +35,16 @@ const logFormatter = winston.format.printf((info) => {
 });
 
 const logToConsole = winston.createLogger({
-  level: 'info',
+  level: "info",
   format: winston.format.errors({ stack: true }),
   transports: [
     new winston.transports.Console({
-      format: winston.format.combine(winston.format.colorize(), winston.format.simple(), winston.format.timestamp(), logFormatter),
+      format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.simple(),
+        winston.format.timestamp(),
+        logFormatter
+      ),
     }),
   ],
 });
@@ -59,34 +63,31 @@ var connection = mysql.createPool({
   database: process.env.database,
 });
 
-var smtpTransport = nodemailer.createTransport({
-  host: "116.203.85.82",
-  secure: false,
-   port: 587,
-   auth: {
-      user: "support@app-production.eu",
-      pass: "Iva#$2019#$",
-   },
-});
-
-
-//local purpose
-//  var smtpTransport = nodemailer.createTransport({
-//   host: 'smtp.gmail.com',
-//   port: 465,
-//   secure: true,
-//   tls: {
-//     rejectUnauthorized: false,
-//   },
-//   debug: true,
-//   ssl: true,
+// var smtpTransport = nodemailer.createTransport({
+//   host: "116.203.85.82",
+//   secure: false,
+//   port: 587,
 //   auth: {
-//     user: "clinicnode2022@gmail.com",  // real email address
-//     pass: "vfuvxgwdfrvestvd" // app password for clinicnode2022@gmail.com email
-//   }
+//     user: "support@app-production.eu",
+//     pass: "Iva#$2019#$",
+//   },
 // });
 
-
+//local purpose
+var smtpTransport = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  tls: {
+    rejectUnauthorized: false,
+  },
+  debug: true,
+  ssl: true,
+  auth: {
+    user: "clinicnode2022@gmail.com", // real email address
+    pass: "vfuvxgwdfrvestvd", // app password for clinicnode2022@gmail.com email
+  },
+});
 
 // production
 // var smtpTransport = nodemailer.createTransport({
@@ -101,7 +102,6 @@ var smtpTransport = nodemailer.createTransport({
 //     pass: "])3!~0YFU)S]",
 //   },
 // });
-
 
 //slanje maila pri registraciji
 
@@ -131,7 +131,7 @@ router.post("/send", function (req, res) {
       notReply: req.body.language?.notReply,
       copyRight: req.body.language?.copyRight,
       introductoryMessageForConfirmMail:
-      req.body.language?.introductoryMessageForConfirmMail,
+        req.body.language?.introductoryMessageForConfirmMail,
       confirmMailButtonText: req.body.language?.confirmMailButtonText,
       unsubscribeMessage: req.body.language?.unsubscribeMessage,
       unsubscribeHere: req.body.language?.unsubscribeHere,
@@ -322,7 +322,7 @@ router.post("/forgotmail", function (req, res) {
       notReply: req.body.language?.notReply,
       copyRight: req.body.language?.copyRight,
       introductoryMessageForForgotMail:
-      req.body.language?.introductoryMessageForForgotMail,
+        req.body.language?.introductoryMessageForForgotMail,
       forgotMailButtonText: req.body.language?.forgotMailButtonText,
     }),
   };
@@ -345,7 +345,6 @@ router.post("/forgotmail", function (req, res) {
 });
 
 router.post("/sendMailToMultiple", function (req, res) {
-
   const superadminId = req.body.id;
 
   connection.getConnection(function (err, conn) {
@@ -362,53 +361,77 @@ router.post("/sendMailToMultiple", function (req, res) {
       return;
     }
 
-    conn.query("select * from mail_multiple_recepient where superadmin = ?", superadminId, function(err, message) {
-      conn.release();
-      if (err) {
-        console.log("SQL error:", err);
-      }
-      let mail = {};
-      let signatureAvailable = false;
-      if (message.length > 0) {
-        mail = message[0];
-        if (mail.signatureAvailable) {
-          signatureAvailable = true;
+    conn.query(
+      "select * from mail_multiple_recepient where superadmin = ?",
+      superadminId,
+      function (err, message) {
+        conn.release();
+        if (err) {
+          console.log("SQL error:", err);
         }
-      }
-      console.log(mail);
-
-      var mailOptions = {
-        from: '"ClinicNode" support@app-production.eu',
-        to: req.body.emails,
-        subject: req.body.subject ? req.body.subject : mail.mailSubject,
-        html: compiledTemplate.render({
-          initialGreeting: mail.mailInitialGreeting ? mail.mailInitialGreeting : req.body.language?.initialGreeting,
-          finalGreeting: mail.mailFinalGreeting ? mail.mailFinalGreeting : '',
-          signature: signatureAvailable && mail.mailSignature ? mail.mailSignature : "",
-          finalMessageForMultipleRecepient: req.body.message ? req.body.message : mail.mailMessage,
-          thanksForUsing: mail.mailThanksForUsing ? mail.mailThanksForUsing : req.body.language?.thanksForUsing,
-          ifYouHaveQuestion: mail.mailIfYouHaveQuestion ? mail.mailIfYouHaveQuestion : req.body.language?.ifYouHaveQuestion,
-          emailAddress: req.body.language?.emailAddress,
-          notReply: mail.mailNotReply ? mail.mailNotReply : "",
-          copyRight: mail.mailCopyRight ? mail.mailCopyRight : "",
-          signatureTelephone: signatureAvailable && mail.signatureTelephone ? mail.signatureTelephone + " " : "",
-          signatureMobile: signatureAvailable && mail.signatureMobile ? mail.signatureMobile : "",
-          signatureEmail: signatureAvailable && mail.signatureEmail ? mail.signatureEmail : "",
-        })
-      };
-
-      smtpTransport.sendMail(mailOptions, function (error, response) {
-        console.log(response);
-        if (error) {
-          console.log(error);
-          res.end("error");
-        } else {
-          console.log("Message sent: " + response.message);
-          res.end("sent");
+        let mail = {};
+        let signatureAvailable = false;
+        if (message.length > 0) {
+          mail = message[0];
+          if (mail.signatureAvailable) {
+            signatureAvailable = true;
+          }
         }
-      });
-    })
-  })
+        console.log(mail);
+
+        var mailOptions = {
+          from: '"ClinicNode" support@app-production.eu',
+          to: req.body.emails,
+          subject: req.body.subject ? req.body.subject : mail.mailSubject,
+          html: compiledTemplate.render({
+            initialGreeting: mail.mailInitialGreeting
+              ? mail.mailInitialGreeting
+              : req.body.language?.initialGreeting,
+            finalGreeting: mail.mailFinalGreeting ? mail.mailFinalGreeting : "",
+            signature:
+              signatureAvailable && mail.mailSignature
+                ? mail.mailSignature
+                : "",
+            finalMessageForMultipleRecepient: req.body.message
+              ? req.body.message
+              : mail.mailMessage,
+            thanksForUsing: mail.mailThanksForUsing
+              ? mail.mailThanksForUsing
+              : req.body.language?.thanksForUsing,
+            ifYouHaveQuestion: mail.mailIfYouHaveQuestion
+              ? mail.mailIfYouHaveQuestion
+              : req.body.language?.ifYouHaveQuestion,
+            emailAddress: req.body.language?.emailAddress,
+            notReply: mail.mailNotReply ? mail.mailNotReply : "",
+            copyRight: mail.mailCopyRight ? mail.mailCopyRight : "",
+            signatureTelephone:
+              signatureAvailable && mail.signatureTelephone
+                ? mail.signatureTelephone + " "
+                : "",
+            signatureMobile:
+              signatureAvailable && mail.signatureMobile
+                ? mail.signatureMobile
+                : "",
+            signatureEmail:
+              signatureAvailable && mail.signatureEmail
+                ? mail.signatureEmail
+                : "",
+          }),
+        };
+
+        smtpTransport.sendMail(mailOptions, function (error, response) {
+          console.log(response);
+          if (error) {
+            console.log(error);
+            res.end("error");
+          } else {
+            console.log("Message sent: " + response.message);
+            res.end("sent");
+          }
+        });
+      }
+    );
+  });
 });
 
 router.post("/askQuestion", function (req, res) {
@@ -1273,11 +1296,11 @@ router.post("/confirmUserViaMacAddress", function (req, res) {
     }
   });
 });
-router.post("/sendLastMinuteOfferMails", function (req, res){
+router.post("/sendLastMinuteOfferMails", function (req, res) {
   var clientLink = process.env.link_client;
-  var clientLinkArray=clientLink.split("/");
+  var clientLinkArray = clientLink.split("/");
   clientLinkArray.pop();
-  clientLink = clientLinkArray.join("/")
+  clientLink = clientLinkArray.join("/");
   console.log(clientLink);
   var lastMinuteOfferTemplate = fs.readFileSync(
     "./server/routes/templates/sendLastMinuteOfferMails.hjs",
@@ -1285,68 +1308,70 @@ router.post("/sendLastMinuteOfferMails", function (req, res){
   );
   var sendMassive = hogan.compile(lastMinuteOfferTemplate);
 
-    connection.getConnection(function (err, conn) {
-      conn.query(
-        "select email, shortname from customers " +
-          " where (email != '' and email IS NOT NULL) and active = 1 and id = " +
-          Number(req.body.userId),
-        function (err, rows) {
-          conn.release();
-          if (err) {
-            logger.log("error", err);
-            res.json(false);
-          }
-          
-
-          rows.forEach(function (to, i, array) {
-            console.log(to);
-            var mailOptions = {
-              from: '"ClinicNode" support@app-production.eu',
-              to: to.email,
-              subject: req.body.lastMinuteEMailSubject,
-              html: sendMassive.render({
-                firstName: to.shortname,
-                initialGreeting: req.body.initialGreeting,
-                introductoryMessageForFreeEvent: req.body.lastMinuteEMailMessage,
-                offerLink: clientLink+"/dashboard/home/customers/last-minute-event?"+req.body.link,
-                finalGreeting: req.body.finalGreeting,
-                viewOffer: req.body.viewLastMinuteOffer,
-                signature: req.body.signature,
-                thanksForUsing: req.body.thanksForUsing,
-                websiteLink: req.body.websiteLink,
-                ifYouHaveQuestion: req.body.ifYouHaveQuestion,
-                emailAddress: req.body.emailAddress,
-                notReply: req.body.notReply,
-                copyRight: req.body.copyRight,
-              }),
-            };
-            smtpTransport.sendMail(mailOptions, function (error, response) {
-              if (error) {
-                logger.log("error", error);
-              } else {
-                logger.log(
-                  "info",
-                  `Sent mail for last minute offers on EMAIL: ${to.email}`
-                );
-              }
-            });
-          });
-          res.send(true);
+  connection.getConnection(function (err, conn) {
+    conn.query(
+      "select email, shortname from customers " +
+        " where (email != '' and email IS NOT NULL) and active = 1 and id = " +
+        Number(req.body.userId),
+      function (err, rows) {
+        conn.release();
+        if (err) {
+          logger.log("error", err);
+          res.json(false);
         }
-      );
-    });
+
+        rows.forEach(function (to, i, array) {
+          console.log(to);
+          var mailOptions = {
+            from: '"ClinicNode" support@app-production.eu',
+            to: to.email,
+            subject: req.body.lastMinuteEMailSubject,
+            html: sendMassive.render({
+              firstName: to.shortname,
+              initialGreeting: req.body.initialGreeting,
+              introductoryMessageForFreeEvent: req.body.lastMinuteEMailMessage,
+              offerLink:
+                clientLink +
+                "/dashboard/home/customers/last-minute-event?" +
+                req.body.link,
+              finalGreeting: req.body.finalGreeting,
+              viewOffer: req.body.viewLastMinuteOffer,
+              signature: req.body.signature,
+              thanksForUsing: req.body.thanksForUsing,
+              websiteLink: req.body.websiteLink,
+              ifYouHaveQuestion: req.body.ifYouHaveQuestion,
+              emailAddress: req.body.emailAddress,
+              notReply: req.body.notReply,
+              copyRight: req.body.copyRight,
+            }),
+          };
+          smtpTransport.sendMail(mailOptions, function (error, response) {
+            if (error) {
+              logger.log("error", error);
+            } else {
+              logger.log(
+                "info",
+                `Sent mail for last minute offers on EMAIL: ${to.email}`
+              );
+            }
+          });
+        });
+        res.send(true);
+      }
+    );
+  });
 });
 router.post("/sendMassiveEMail", function (req, res) {
-      var sendMassiveTemplate = fs.readFileSync(
-        "./server/routes/templates/sendMassiveMails.hjs",
-        "utf-8"
-      );
-      var sendMassive = hogan.compile(sendMassiveTemplate);
-      var question = getSqlQueryMultiSelect(req.body);
-      var joinTable = getJoinTable(req.body);
+  var sendMassiveTemplate = fs.readFileSync(
+    "./server/routes/templates/sendMassiveMails.hjs",
+    "utf-8"
+  );
+  var sendMassive = hogan.compile(sendMassiveTemplate);
+  var question = getSqlQueryMultiSelect(req.body);
+  var joinTable = getJoinTable(req.body);
 
-    if (req.body.message != "") {
-            connection.getConnection(function (err, conn) {
+  if (req.body.message != "") {
+    connection.getConnection(function (err, conn) {
       conn.query(
         "select distinct c.email, c.shortname, mm.* from customers c join mail_massive_message mm on c.storeId = mm.superadmin join store s on c.storeId = s.superadmin " +
           joinTable +
@@ -1434,13 +1459,13 @@ router.post("/sendMassiveEMail", function (req, res) {
 
                 unsubscribeMessage: req.body.language?.unsubscribeMessage,
                 unsubscribeHere: req.body.language?.unsubscribeHere,
-                unsubscribeLink: process.env.unsubscribeEmail + '/' + to.email,
+                unsubscribeLink: process.env.unsubscribeEmail + "/" + to.email,
               }),
             };
             smtpTransport.sendMail(mailOptions, function (error, response) {
               if (error) {
                 //logger.log("error sendMail", error);
-              logToConsole.error(error);
+                logToConsole.error(error);
               } else {
                 logger.log(
                   "info",
@@ -1468,35 +1493,31 @@ function getSqlQueryMultiSelect(body) {
     question += " and ";
   }
   if (body.place) {
-    if(body.place.length < 2) {
+    if (body.place.length < 2) {
       if (question) {
-        
         question += " and c.city = '" + body.place[0] + "'";
       } else {
         question += " c.city = '" + body.place[0] + "'";
       }
-    }
-    else {
+    } else {
       body.place.forEach((item, index) => {
-        if(item !== 0) {
+        if (item !== 0) {
           if (question) {
-            if(index === 0) {
+            if (index === 0) {
               question += " and (c.city = '" + item + "'";
-            }
-            else if(index === body.place.length - 1) {
+            } else if (index === body.place.length - 1) {
               question += " or c.city = '" + item + "'" + ")";
-            }
-            else {
+            } else {
               question += " or c.city = '" + item + "'";
             }
           } else {
             question += " (c.city = '" + item + "'";
           }
         }
-      })
+      });
     }
   }
-  
+
   if (body.male && body.female) {
     var male = "'male'";
     var female = "'female'";
@@ -1540,31 +1561,28 @@ function getSqlQueryMultiSelect(body) {
   }
 
   if (body.category) {
-    if(body.category.length < 2) {
+    if (body.category.length < 2) {
       if (question) {
         question += " and t.colorTask = " + body.category[0];
       } else {
         question += " t.colorTask = " + body.category[0];
       }
-    }
-    else {
+    } else {
       body.category.forEach((item, index) => {
-        if(item !== 0) {
+        if (item !== 0) {
           if (question) {
-            if(index === 0) {
-              question += " and (t.colorTask = " + item;;
-            }
-            else if(index === body.category.length - 1) {
+            if (index === 0) {
+              question += " and (t.colorTask = " + item;
+            } else if (index === body.category.length - 1) {
               question += " or t.colorTask = " + item + ")";
-            }
-            else {
+            } else {
               question += " or t.colorTask = " + item;
             }
           } else {
             question += " (t.colorTask = " + item;
           }
         }
-      })
+      });
     }
   }
 
@@ -1585,176 +1603,158 @@ function getSqlQueryMultiSelect(body) {
   }
 
   if (body.creator_id) {
-    if(body.creator_id.length < 2) {
+    if (body.creator_id.length < 2) {
       if (question) {
         question += " and t.creator_id = " + body.creator_id[0];
       } else {
         question += " t.creator_id = " + body.creator_id[0];
       }
-    }
-    else {
+    } else {
       body.creator_id.forEach((item, index) => {
-        if(item !== 0) {
+        if (item !== 0) {
           if (question) {
-            if(index === 0) {
-              question += " and (t.creator_id = " + item;;
-            }
-            else if(index === body.creator_id.length - 1) {
+            if (index === 0) {
+              question += " and (t.creator_id = " + item;
+            } else if (index === body.creator_id.length - 1) {
               question += " or t.creator_id = " + item + ")";
-            }
-            else {
+            } else {
               question += " or t.creator_id = " + item;
             }
           } else {
             question += " (t.creator_id = " + item;
           }
         }
-      })
+      });
     }
   }
 
   if (body.store) {
-    if(body.store.length < 2) {
+    if (body.store.length < 2) {
       if (question) {
         question += " and t.storeId = " + body.store[0];
       } else {
         question += " t.storeId = " + body.store[0];
       }
-    }
-    else {
+    } else {
       body.store.forEach((item, index) => {
-        if(item !== 0) {
+        if (item !== 0) {
           if (question) {
-            if(index === 0) {
-              question += " and (t.storeId = " + item;;
-            }
-            else if(index === body.store.length - 1) {
+            if (index === 0) {
+              question += " and (t.storeId = " + item;
+            } else if (index === body.store.length - 1) {
               question += " or t.storeId = " + item + ")";
-            }
-            else {
+            } else {
               question += " or t.storeId = " + item;
             }
           } else {
             question += " (t.storeId = " + item;
           }
         }
-      })
+      });
     }
   }
 
   if (body.recommendation) {
-    if(body.recommendation.length < 2) {
+    if (body.recommendation.length < 2) {
       if (question) {
         question += " and bo.recommendation = " + body.recommendation[0];
       } else {
         question += " bo.recommendation = " + body.recommendation[0];
       }
-    }
-    else {
+    } else {
       body.recommendation.forEach((item, index) => {
-        if(item !== 0) {
+        if (item !== 0) {
           if (question) {
-            if(index === 0) {
-              question += " and (bo.recommendation = " + item;;
-            }
-            else if(index === body.recommendation.length - 1) {
+            if (index === 0) {
+              question += " and (bo.recommendation = " + item;
+            } else if (index === body.recommendation.length - 1) {
               question += " or bo.recommendation = " + item + ")";
-            }
-            else {
+            } else {
               question += " or bo.recommendation = " + item;
             }
           } else {
             question += " (bo.recommendation = " + item;
           }
         }
-      })
+      });
     }
   }
 
   if (body.relationship) {
-    if(body.relationship.length < 2) {
+    if (body.relationship.length < 2) {
       if (question) {
         question += " and bo.relationship = " + body.relationship[0];
       } else {
         question += " bo.relationship = " + body.relationship[0];
       }
-    }
-    else {
+    } else {
       body.relationship.forEach((item, index) => {
-        if(item !== 0) {
+        if (item !== 0) {
           if (question) {
-            if(index === 0) {
-              question += " and (bo.relationship = " + item;;
-            }
-            else if(index === body.relationship.length - 1) {
+            if (index === 0) {
+              question += " and (bo.relationship = " + item;
+            } else if (index === body.relationship.length - 1) {
               question += " or bo.relationship = " + item + ")";
-            }
-            else {
+            } else {
               question += " or bo.relationship = " + item;
             }
           } else {
             question += " (bo.relationship = " + item;
           }
         }
-      })
+      });
     }
   }
 
   if (body.social) {
-    if(body.social.length < 2) {
+    if (body.social.length < 2) {
       if (question) {
         question += " and bo.social = " + body.social[0];
       } else {
         question += " bo.social = " + body.social[0];
       }
-    }
-    else {
+    } else {
       body.social.forEach((item, index) => {
-        if(item !== 0) {
+        if (item !== 0) {
           if (question) {
-            if(index === 0) {
-              question += " and (bo.social = " + item;;
-            }
-            else if(index === body.social.length - 1) {
+            if (index === 0) {
+              question += " and (bo.social = " + item;
+            } else if (index === body.social.length - 1) {
               question += " or bo.social = " + item + ")";
-            }
-            else {
+            } else {
               question += " or bo.social = " + item;
             }
           } else {
             question += " (bo.social = " + item;
           }
         }
-      })
+      });
     }
   }
 
   if (body.doctor) {
-    if(body.doctor.length < 2) {
+    if (body.doctor.length < 2) {
       if (question) {
         question += " and bo.doctor = " + body.doctor[0];
       } else {
         question += " bo.doctor = " + body.doctor[0];
       }
-    }
-    else {
+    } else {
       body.doctor.forEach((item, index) => {
-        if(item !== 0) {
+        if (item !== 0) {
           if (question) {
-            if(index === 0) {
-              question += " and (bo.doctor = " + item;;
-            }
-            else if(index === body.doctor.length - 1) {
+            if (index === 0) {
+              question += " and (bo.doctor = " + item;
+            } else if (index === body.doctor.length - 1) {
               question += " or bo.doctor = " + item + ")";
-            }
-            else {
+            } else {
               question += " or bo.doctor = " + item;
             }
           } else {
             question += " (bo.doctor = " + item;
           }
         }
-      })
+      });
     }
   }
 
@@ -2002,7 +2002,6 @@ router.post("/infoAboutConfirmDenyAccessDevice", function (req, res) {
 });
 
 router.sendVaucherToMail = (data) => {
-
   connection.getConnection(function (err, conn) {
     var confirmTemplate = fs.readFileSync(
       "./server/routes/templates/sendVaucher.hjs",
@@ -2011,7 +2010,9 @@ router.sendVaucherToMail = (data) => {
     var infoForCreatedAccount = hogan.compile(confirmTemplate);
 
     conn.query(
-      "SELECT * FROM users WHERE users.id = ?", data.user, function (err, row) {
+      "SELECT * FROM users WHERE users.id = ?",
+      data.user,
+      function (err, row) {
         let user = row[0];
         conn.release();
         var mail = {};
@@ -2059,7 +2060,7 @@ router.sendVaucherToMail = (data) => {
             copyRight: mail.mailCopyRight
               ? mail.mailCopyRight
               : data.language?.copyRight,
-              introductoryMessageForCreatedVaucher: mail.mailMessage
+            introductoryMessageForCreatedVaucher: mail.mailMessage
               ? mail.mailMessage
               : data.language?.introductoryMessageForCreatedVaucher,
             linkForLogin: data.language?.linkForLogin,
@@ -2117,11 +2118,11 @@ router.sendVaucherToMail = (data) => {
       }
     );
   });
-}
+};
 
 router.sendMailAdminInfo = (data) => {
   connection.getConnection(function (err, conn) {
-    if(err) {
+    if (err) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       return err;
     }
@@ -2207,7 +2208,7 @@ router.sendMailAdminInfo = (data) => {
           }),
         };
         smtpTransport.sendMail(mailOptions, function (error, res) {
-          if(!res) {
+          if (!res) {
             logger.log(
               "error",
               `Error to sent mail for VERIFICATION MAIL on EMAIL: ${data.email}. Error: Response object not defined`
@@ -2231,6 +2232,81 @@ router.sendMailAdminInfo = (data) => {
       }
     );
   });
-}
+};
+
+router.post("/sendInfoForLicencePaymentSuccess", function (req, res) {
+  var template = fs.readFileSync(
+    "./server/routes/templates/licencePaymentSuccess.hjs",
+    "utf-8"
+  );
+  var compiledTemplate = hogan.compile(template);
+  var expiration_date = new Date(req.body.expiration_date);
+  var date =
+    expiration_date.getDate() +
+    "." +
+    (expiration_date.getMonth() + 1) +
+    "." +
+    expiration_date.getFullYear();
+  var mailOptions = {
+    from: '"ClinicNode" info@app-production.eu',
+    to: req.body.email,
+    subject: "Payment received successfully!",
+    html: compiledTemplate.render({
+      name: req.body.name,
+      price: req.body.price,
+      expiration_date: date,
+    }),
+  };
+
+  smtpTransport.sendMail(mailOptions, function (error, response) {
+    if (error) {
+      logger.log(
+        "error",
+        `Payment NOT received successfully for licence: ${req.body.email}. Error: ${error}`
+      );
+      res.send(false);
+    } else {
+      logger.log(
+        "info",
+        `Payment received successfully for licence: ${req.body.email}`
+      );
+      res.send(true);
+    }
+  });
+});
+
+router.post("/sendInfoForSMSPaymentSuccess", function (req, res) {
+  var template = fs.readFileSync(
+    "./server/routes/templates/smsPaymentSuccess.hjs",
+    "utf-8"
+  );
+  var compiledTemplate = hogan.compile(template);
+  var mailOptions = {
+    from: '"ClinicNode" info@app-production.eu',
+    to: req.body.email,
+    subject: "Payment received successfully!",
+    html: compiledTemplate.render({
+      name: req.body.name,
+      price: req.body.price,
+      smsCount: req.body.smsCount,
+    }),
+  };
+
+  smtpTransport.sendMail(mailOptions, function (error, response) {
+    if (error) {
+      logger.log(
+        "error",
+        `Payment NOT received successfully for sms: ${req.body.email}. Error: ${error}`
+      );
+      res.send(false);
+    } else {
+      logger.log(
+        "info",
+        `Payment received successfully for sms: ${req.body.email}`
+      );
+      res.send(true);
+    }
+  });
+});
 
 module.exports = router;
