@@ -57,6 +57,7 @@ import { RouterModule } from "@angular/router";
 import { FormGuard } from "./service/form-guard/formGuard";
 import { NgxStripeModule } from "ngx-stripe";
 import { AccessForbiddenComponent } from './component/templates/access-forbidden/access-forbidden.component';
+import { RightOfWithdrawalComponent } from './component/templates/right-of-withdrawal/right-of-withdrawal.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { AccessForbiddenComponent } from './component/templates/access-forbidden
     PrivacyPolicyComponent,
     TermsComponent,
     ImpressumComponent,
-    AccessForbiddenComponent
+    AccessForbiddenComponent,
+    RightOfWithdrawalComponent
   ],
   imports: [
     CommonModule,

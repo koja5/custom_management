@@ -37,6 +37,7 @@ export class LicenceComponent implements OnInit {
   public updateLicence = false;
   public paySms: number;
   public checkUrl: any;
+  public agreeValue = false;
 
   constructor(
     private helpService: HelpService,
@@ -157,7 +158,9 @@ export class LicenceComponent implements OnInit {
   }
 
   submitPayment() {
-    this.data.price = Number((this.licence.price * this.data.expired).toFixed(2));
+    this.data.price = Number(
+      (this.licence.price * this.data.expired).toFixed(2)
+    );
     this.stripeService
       .createToken(this.card, {
         name: this.data.firstname,

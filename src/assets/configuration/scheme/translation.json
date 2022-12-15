@@ -2470,6 +2470,9 @@
             "requestSectionFormSendRequestButton": {
                 "type": "string"
             },
+            "rightOfWithdrawal": {
+                "type": "string"
+            },
             "demo": {
                 "type": "string"
             },
@@ -7554,7 +7557,9 @@
                         {
                             "key": "requestSectionFormSendRequestButton"
                         },
-                        {},
+                        {
+                            "key": "rightOfWithdrawal"
+                        },
                         {}
                     ]
                 },
