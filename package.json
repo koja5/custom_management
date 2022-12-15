@@ -70,7 +70,7 @@
     "cors": "^2.8.5",
     "docxtemplater": "^3.28.6",
     "dotenv": "^9.0.2",
-    "express": "^4.16.3",
+    "express": "^4.17.3",
     "express-handlebars": "^5.3.2",
     "express-session": "^1.15.6",
     "file-saver": "^2.0.2",
