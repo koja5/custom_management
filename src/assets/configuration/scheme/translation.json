@@ -2470,6 +2470,9 @@
             "requestSectionFormSendRequestButton": {
                 "type": "string"
             },
+            "rightOfWithdrawal": {
+                "type": "string"
+            },
             "demo": {
                 "type": "string"
             },
@@ -2507,6 +2510,15 @@
                 "type": "string"
             },
             "yourLicenceExpired": {
+                "type": "string"
+            },
+            "paymentSuccessTitle": {
+                "type": "string"
+            },
+            "paymentText": {
+                "type": "string"
+            },
+            "paymentBackToHome": {
                 "type": "string"
             },
             "companyname": {
@@ -7554,7 +7566,9 @@
                         {
                             "key": "requestSectionFormSendRequestButton"
                         },
-                        {},
+                        {
+                            "key": "rightOfWithdrawal"
+                        },
                         {}
                     ]
                 },
@@ -7627,6 +7641,22 @@
                             "key": "yourLicenceExpired"
                         },
                         {}
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "paymentSuccessTitle"
+                        },
+                        {
+                            "key": "paymentText"
+                        },
+                        {
+                            "key": "paymentBackToHome"
+                        }
                     ]
                 }
             ]

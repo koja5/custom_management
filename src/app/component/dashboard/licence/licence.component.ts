@@ -37,6 +37,7 @@ export class LicenceComponent implements OnInit {
   public updateLicence = false;
   public paySms: number;
   public checkUrl: any;
+  public agreeValue = false;
 
   constructor(
     private helpService: HelpService,
@@ -63,6 +64,14 @@ export class LicenceComponent implements OnInit {
           this.licence = data[0];
           this.currentLicence = JSON.parse(JSON.stringify(this.licence));
           this.diffDate = this.calculateDiff(this.licence.expiration_date);
+        } else {
+          this.licence = {
+            name: "demo",
+            price: 0.0,
+            expiration_date: new Date(),
+          };
+          this.currentLicence = JSON.parse(JSON.stringify(this.licence));
+          this.diffDate = -1;
         }
       });
   }
@@ -84,10 +93,14 @@ export class LicenceComponent implements OnInit {
     let days = Math.floor(
       (date.getTime() - currentDate.getTime()) / 1000 / 60 / 60 / 24
     );
+    if (days < 0) {
+      days = -1;
+    }
     return days;
   }
 
   openPaymentForm() {
+    this.card = null;
     this.updateLicence = false;
     this.paymentForm.open();
     setTimeout(() => {
@@ -119,6 +132,7 @@ export class LicenceComponent implements OnInit {
   }
 
   openPaymentSMSForm() {
+    this.card = null;
     this.updateLicence = false;
     this.paymentSMSForm.open();
     setTimeout(() => {
@@ -157,10 +171,17 @@ export class LicenceComponent implements OnInit {
   }
 
   submitPayment() {
-    this.data.price = Number((this.licence.price * this.data.expired).toFixed(2));
+    this.data.price = Number(
+      (this.licence.price * this.data.expired).toFixed(2)
+    );
     this.stripeService
       .createToken(this.card, {
-        name: this.data.firstname,
+        name:
+          this.data.firstname +
+          " " +
+          this.data.lastname +
+          " - " +
+          this.helpService.getSuperadmin(),
       })
       .subscribe(
         (result) => {
@@ -169,6 +190,7 @@ export class LicenceComponent implements OnInit {
             const date = this.helpService.convertStringToDate(
               this.licence.expiration_date
             );
+            this.data["name"] = this.data.firstname + " " + this.data.lastname;
             this.data["token"] = result.token;
             this.data["licenceId"] = this.licence.id;
             this.data["superadminId"] = this.helpService.getSuperadmin();
@@ -180,6 +202,18 @@ export class LicenceComponent implements OnInit {
               .subscribe(
                 (res) => {
                   if (res["success"]) {
+                    const successPayment = {
+                      name: this.data["name"],
+                      price: this.data["price"],
+                      email: this.data["email"],
+                      expiration_date: this.data["expiration_date"],
+                    };
+                    this.callApi
+                      .callApiPost(
+                        "/api/sendInfoForLicencePaymentSuccess",
+                        successPayment
+                      )
+                      .subscribe((res) => {});
                     this.router.navigate(["payment-success"]);
                   } else {
                     this.helpService.errorToastr(
@@ -203,7 +237,12 @@ export class LicenceComponent implements OnInit {
   submitSMSPayment() {
     this.stripeService
       .createToken(this.card, {
-        name: this.data.firstname + " " + this.data.lastname,
+        name:
+          this.data.firstname +
+          " " +
+          this.data.lastname +
+          " - " +
+          this.helpService.getSuperadmin(),
       })
       .subscribe(
         (result) => {
@@ -217,11 +256,23 @@ export class LicenceComponent implements OnInit {
             this.callApi.callApiPost("/api/payment/buy-sms", data).subscribe(
               (res) => {
                 if (res["success"]) {
+                  this.sms.count += this.paySms;
+                  const successPayment = {
+                    name: this.data.firstname + " " + this.data.lastname,
+                    price: data["price"],
+                    email: this.data["email"],
+                    smsCount: this.sms.count,
+                  };
+                  this.callApi
+                    .callApiPost(
+                      "/api/sendInfoForSMSPaymentSuccess",
+                      successPayment
+                    )
+                    .subscribe((res) => {});
                   this.helpService.successToastr(
                     this.language.paymentSuccess,
                     ""
                   );
-                  this.sms.count += this.paySms;
                 } else {
                   this.helpService.errorToastr(this.language.paymentError, "");
                 }
@@ -233,6 +284,7 @@ export class LicenceComponent implements OnInit {
           }
         },
         (error) => {
+          console.log(error);
           this.helpService.errorToastr(this.language.paymentError, "");
         }
       );
@@ -246,6 +298,19 @@ export class LicenceComponent implements OnInit {
       !this.data.phone ||
       !this.data.expired ||
       !this.licence
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  checkRequiredSMSFields() {
+    if (
+      !this.data.firstname ||
+      !this.data.lastname ||
+      !this.data.email ||
+      !this.data.phone
     ) {
       return true;
     } else {

@@ -13,7 +13,7 @@ export class PaymentSuccessComponent implements OnInit {
   constructor(private helpService: HelpService, private router: Router) {}
 
   ngOnInit() {
-    this.language = this.helpService.getLanguageForLanding();
+    this.language = this.helpService.getLanguage();
   }
 
   backToLanding() {
