@@ -6189,14 +6189,21 @@ function getSqlQueryMultiSelect(body) {
         if (item !== 0) {
           if (question) {
             if (index === 0) {
-              question += " and (c.city = '" + item + "'";
+              if (body.place.length > 1) {
+                question += " and (c.city = '" + item + "'";
+              } else {
+                question += " and c.city = '" + item + "'";
+              }
             } else if (index === body.place.length - 1) {
               question += " or c.city = '" + item + "'" + ")";
             } else {
               question += " or c.city = '" + item + "'";
             }
           } else {
-            question += " (c.city = '" + item + "'";
+            if (body.place.length > 1) {
+              question += " (";
+            }
+            question += " c.city = '" + item + "'";
           }
         }
       });
@@ -6229,7 +6236,6 @@ function getSqlQueryMultiSelect(body) {
     }
   }
 
-  console.log(body);
   if (body.birthdayFrom) {
     if (question) {
       question += " and c.birthday >= '" + body.birthdayFrom + "'";
@@ -6256,15 +6262,22 @@ function getSqlQueryMultiSelect(body) {
       body.category.forEach((item, index) => {
         if (item !== 0) {
           if (question) {
-            if (index === 0) {
-              question += " and (t.colorTask = " + item;
+            if (index === 1) {
+              if (body.category.length > 2) {
+                question += " and (t.colorTask = " + item;
+              } else {
+                question += " and t.colorTask = " + item;
+              }
             } else if (index === body.category.length - 1) {
               question += " or t.colorTask = " + item + ")";
             } else {
               question += " or t.colorTask = " + item;
             }
           } else {
-            question += " (t.colorTask = " + item;
+            if (body.category.length > 2) {
+              question += " (";
+            }
+            question += " t.colorTask = " + item;
           }
         }
       });
@@ -6298,15 +6311,22 @@ function getSqlQueryMultiSelect(body) {
       body.creator_id.forEach((item, index) => {
         if (item !== 0) {
           if (question) {
-            if (index === 0) {
-              question += " and (t.creator_id = " + item;
+            if (index === 1) {
+              if (body.creator_id.length > 2) {
+                question += " and (t.creator_id = " + item;
+              } else {
+                question += " and t.creator_id = " + item;
+              }
             } else if (index === body.creator_id.length - 1) {
               question += " or t.creator_id = " + item + ")";
             } else {
               question += " or t.creator_id = " + item;
             }
           } else {
-            question += " (t.creator_id = " + item;
+            if (body.creator_id.length > 2) {
+              question += " (";
+            }
+            question += " t.creator_id = " + item;
           }
         }
       });
@@ -6324,15 +6344,22 @@ function getSqlQueryMultiSelect(body) {
       body.store.forEach((item, index) => {
         if (item !== 0) {
           if (question) {
-            if (index === 0) {
-              question += " and (t.storeId = " + item;
+            if (index === 1) {
+              if (body.store.length > 2) {
+                question += " and (t.storeId = " + item;
+              } else {
+                question += " and t.storeId = " + item;
+              }
             } else if (index === body.store.length - 1) {
               question += " or t.storeId = " + item + ")";
             } else {
               question += " or t.storeId = " + item;
             }
           } else {
-            question += " (t.storeId = " + item;
+            if (body.store.length > 2) {
+              question += " (";
+            }
+            question += " t.storeId = " + item;
           }
         }
       });
@@ -6350,15 +6377,22 @@ function getSqlQueryMultiSelect(body) {
       body.recommendation.forEach((item, index) => {
         if (item !== 0) {
           if (question) {
-            if (index === 0) {
-              question += " and (bo.recommendation = " + item;
+            if (index === 1) {
+              if (body.recommendation.length > 2) {
+                question += " and (bo.recommendation = " + item;
+              } else {
+                question += " and bo.recommendation = " + item;
+              }
             } else if (index === body.recommendation.length - 1) {
               question += " or bo.recommendation = " + item + ")";
             } else {
               question += " or bo.recommendation = " + item;
             }
           } else {
-            question += " (bo.recommendation = " + item;
+            if (body.recommendation.length > 2) {
+              question += " (";
+            }
+            question += " bo.recommendation = " + item;
           }
         }
       });
@@ -6376,15 +6410,22 @@ function getSqlQueryMultiSelect(body) {
       body.relationship.forEach((item, index) => {
         if (item !== 0) {
           if (question) {
-            if (index === 0) {
-              question += " and (bo.relationship = " + item;
+            if (index === 1) {
+              if (body.relationship.length > 2) {
+                question += " and (bo.relationship = " + item;
+              } else {
+                question += " and bo.relationship = " + item;
+              }
             } else if (index === body.relationship.length - 1) {
               question += " or bo.relationship = " + item + ")";
             } else {
               question += " or bo.relationship = " + item;
             }
           } else {
-            question += " (bo.relationship = " + item;
+            if (body.relationship.length > 2) {
+              question += " (";
+            }
+            question += " bo.relationship = " + item;
           }
         }
       });
@@ -6402,15 +6443,22 @@ function getSqlQueryMultiSelect(body) {
       body.social.forEach((item, index) => {
         if (item !== 0) {
           if (question) {
-            if (index === 0) {
-              question += " and (bo.social = " + item;
+            if (index === 1) {
+              if (body.social.length > 2) {
+                question += " and (bo.social = " + item;
+              } else {
+                question += " and bo.social = " + item;
+              }
             } else if (index === body.social.length - 1) {
               question += " or bo.social = " + item + ")";
             } else {
               question += " or bo.social = " + item;
             }
           } else {
-            question += " (bo.social = " + item;
+            if (body.social.length > 2) {
+              question += " (";
+            }
+            question += " bo.social = " + item;
           }
         }
       });
@@ -6428,15 +6476,22 @@ function getSqlQueryMultiSelect(body) {
       body.doctor.forEach((item, index) => {
         if (item !== 0) {
           if (question) {
-            if (index === 0) {
-              question += " and (bo.doctor = " + item;
+            if (index === 1) {
+              if (body.doctor.length > 2) {
+                question += " and (bo.doctor = " + item;
+              } else {
+                question += " and bo.doctor = " + item;
+              }
             } else if (index === body.doctor.length - 1) {
               question += " or bo.doctor = " + item + ")";
             } else {
               question += " or bo.doctor = " + item;
             }
           } else {
-            question += " (bo.doctor = " + item;
+            if (body.doctor.length > 2) {
+              question += " (";
+            }
+            question += " bo.doctor = " + item;
           }
         }
       });
