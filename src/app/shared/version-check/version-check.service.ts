@@ -21,8 +21,8 @@ export class VersionCheckService {
           window.location.reload();
         }
       });
-    }, 36000)
-
+    }, 3600000)
+    // 1 hour
   }
 
   public stopVersionChecker():void{
