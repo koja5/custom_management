@@ -1373,7 +1373,7 @@ router.post("/sendMassiveEMail", function (req, res) {
   if (req.body.message != "") {
     connection.getConnection(function (err, conn) {
       conn.query(
-        "select distinct c.email, c.shortname, mm.* from customers c join mail_massive_message mm on c.storeId = mm.superadmin join store s on c.storeId = s.superadmin " +
+        "select distinct c.id as customerId, c.email, c.shortname, mm.* from customers c join mail_massive_message mm on c.storeId = mm.superadmin join store s on c.storeId = s.superadmin " +
           joinTable +
           " where c.sendMassiveEmail = 1 and (c.email != '' and c.email IS NOT NULL) and c.active = 1 and c.storeId = " +
           Number(req.body.superadmin) +
@@ -1459,7 +1459,7 @@ router.post("/sendMassiveEMail", function (req, res) {
 
                 unsubscribeMessage: req.body.language?.unsubscribeMessage,
                 unsubscribeHere: req.body.language?.unsubscribeHere,
-                unsubscribeLink: process.env.unsubscribeEmail + "/" + to.email,
+                unsubscribeLink: process.env.unsubscribeEmail + "/" + global.btoa(to.customerId)
               }),
             };
             smtpTransport.sendMail(mailOptions, function (error, response) {

@@ -5844,7 +5844,7 @@ router.post("/sendMassiveSMS", function (req, res) {
                   rows.forEach(async function (to, i, array) {
                     var phoneNumber = to.mobile ? to.mobile : (to.telephone ? to.telephone : null);
                     var unsubscribeLink =
-                      process.env.unsubscribeSMS + "/" + to.customerId;
+                      process.env.unsubscribeSMS + "/" + global.btoa(to.customerId);
                     if (
                       checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
                       req.body.message
