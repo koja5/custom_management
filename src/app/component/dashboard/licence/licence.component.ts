@@ -82,6 +82,8 @@ export class LicenceComponent implements OnInit {
       .subscribe((data: any) => {
         if (data && data.length) {
           this.sms = data[0];
+        } else {
+          this.sms = 0;
         }
       });
   }
