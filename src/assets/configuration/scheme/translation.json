@@ -2470,7 +2470,19 @@
             "requestSectionFormSendRequestButton": {
                 "type": "string"
             },
+            "clickAgreeLicenceText": {
+                "type": "string"
+            },
+            "termOfUseLicence": {
+                "type": "string"
+            },
+            "privacyPolicyLicence": {
+                "type": "string"
+            },
             "rightOfWithdrawal": {
+                "type": "string"
+            },
+            "andLicence": {
                 "type": "string"
             },
             "demo": {
@@ -7566,10 +7578,29 @@
                         {
                             "key": "requestSectionFormSendRequestButton"
                         },
+                        {}
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "clickAgreeLicenceText"
+                        },
+                        {
+                            "key": "termOfUseLicence"
+                        },
+                        {
+                            "key": "privacyPolicyLicence"
+                        },
                         {
                             "key": "rightOfWithdrawal"
                         },
-                        {}
+                        {
+                            "key": "andLicence"
+                        }
                     ]
                 },
                 {

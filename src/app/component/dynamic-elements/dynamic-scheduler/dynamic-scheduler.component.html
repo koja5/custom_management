@@ -584,22 +584,20 @@
                     <div class="k-form-field" style="text-align: center; margin: 0px !important">
                       <div *ngIf="type !== userType.patient" class="col-sm-6" style="margin-bottom: 2vh">
                         <div class="mgbt-xs-0">
-                          <kendo-textbox-container floatingLabel="{{
-                            languageUser.attention }}">
+                          <label class="col-xs-12  p-0 control-label" style="color: red; text-align: left">{{
+                            languageUser.attention }}:</label>
+                          <textarea kendoTextArea class="col-xs-12 textAreaInput"
+                            [(ngModel)]="customerUser.attention">{{ customerUser.attention }}</textarea>
 
-                            <textarea kendoTextArea class="col-xs-12 textAreaInput"
-                              [(ngModel)]="customerUser.attention">{{ customerUser.attention }}</textarea>
-                          </kendo-textbox-container>
                           <!-- col-sm-10 -->
                         </div>
                       </div>
                       <div *ngIf="type !== userType.patient" class="col-sm-6" style="margin-bottom: 2vh">
                         <div class="mgbt-xs-0">
-                          <kendo-textbox-container floatingLabel="{{
-                            languageUser.physicalComplaint }}">
-                            <textarea kendoTextArea class="col-xs-12 textAreaInput"
-                              [(ngModel)]="customerUser.physicalComplaint">{{ customerUser.physicalComplaint }}</textarea>
-                          </kendo-textbox-container>
+                          <label class="col-xs-12 p-0 control-label" style="text-align: left">{{
+                            languageUser.physicalComplaint }}:</label>
+                          <textarea kendoTextArea class="col-xs-12 textAreaInput"
+                            [(ngModel)]="customerUser.physicalComplaint">{{ customerUser.physicalComplaint }}</textarea>
                           <!-- col-sm-10 -->
                         </div>
                       </div>
@@ -663,12 +661,12 @@
                         </kendo-multiselect>
                       </kendo-textbox-container>
                     </div>
-                    <div class="k-form-field mt-4">
-                      <kendo-textbox-container floatingLabel="{{ languageUser.comment }}">
-                        <textarea kendoTextArea type="text" class="col-md-12 col-xs-12" name="comment"
-                          [(ngModel)]="complaintData.comment" comment.value="" [autoSize]="true"
-                          [disabled]="patientReadOnly"></textarea>
-                      </kendo-textbox-container>
+                    <div class="k-form-field mt-2">
+                      <label class="col-xs-12 p-0 control-label" style="text-align: left">{{
+                        languageUser.comment }}</label>
+                      <textarea kendoTextArea type="text" class="col-md-12 col-xs-12 textAreaInput" name="comment"
+                        [(ngModel)]="complaintData.comment" comment.value=""
+                        [disabled]="patientReadOnly"></textarea>
                     </div>
                     <div *ngIf="type !== userType.patient" class="k-form-field">
                       <div>
