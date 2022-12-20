@@ -172,11 +172,14 @@ router.post("/signUp", function (req, res, next) {
                   smsCountData,
                   function (err, rows) {}
                 );
+                var expiryDate = new Date();
+                expiryDate.setDate(expiryDate.getDate() + 14);
                 const licence = {
                   licence_id: 1,
                   superadmin_id: rows.insertId,
-                  expiration_date: new Date(),
+                  expiration_date: expiryDate,
                 };
+
                 conn.query(
                   "insert into licence_per_user SET ?",
                   [licence],
@@ -582,7 +585,7 @@ router.post("/login", (req, res, next) => {
                             id: rows[0].id,
                             storeId: 0,
                             superadmin: rows[0].id,
-                            last_login: rows[0].last_login
+                            last_login: rows[0].last_login,
                           });
                         }
                       }
@@ -5842,7 +5845,11 @@ router.post("/sendMassiveSMS", function (req, res) {
                   globalCount = 0;
                   count = 0;
                   rows.forEach(async function (to, i, array) {
-                    var phoneNumber = to.mobile ? to.mobile : (to.telephone ? to.telephone : null);
+                    var phoneNumber = to.mobile
+                      ? to.mobile
+                      : to.telephone
+                      ? to.telephone
+                      : null;
                     var unsubscribeLink =
                       process.env.unsubscribeSMS + "/" + to.customerId;
                     if (

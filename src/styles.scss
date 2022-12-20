@@ -19686,3 +19686,7 @@ body {
 .k-textbox-container.k-textarea-wrapper .k-label, .k-floating-label-container.k-textarea-wrapper .k-label {
   left: 0px !important;
 }
+
+.k-textbox-container.k-textarea-wrapper:not(.k-state-empty) > .k-label {
+  padding-left: 10px;
+}
