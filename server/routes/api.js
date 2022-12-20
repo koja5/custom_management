@@ -582,7 +582,7 @@ router.post("/login", (req, res, next) => {
                             id: rows[0].id,
                             storeId: 0,
                             superadmin: rows[0].id,
-                            last_login: rows[0].last_login
+                            last_login: rows[0].last_login,
                           });
                         }
                       }
@@ -5842,7 +5842,11 @@ router.post("/sendMassiveSMS", function (req, res) {
                   globalCount = 0;
                   count = 0;
                   rows.forEach(async function (to, i, array) {
-                    var phoneNumber = to.mobile ? to.mobile : (to.telephone ? to.telephone : null);
+                    var phoneNumber = to.mobile
+                      ? to.mobile
+                      : to.telephone
+                      ? to.telephone
+                      : null;
                     var unsubscribeLink =
                       process.env.unsubscribeSMS + "/" + to.customerId;
                     if (
@@ -10626,13 +10630,29 @@ router.post("/updateLicence", function (req, res, next) {
       "update licence_per_user set ? where superadmin_id = ?",
       [date, req.body.superadminId],
       function (err, rows, fields) {
-        conn.release();
         if (err) {
+          conn.release();
           res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
-          response = true;
-          res.json(response);
+          date["price"] = req.body.price;
+          date["date_paid"] = new Date();
+          conn.query(
+            "insert into licence_payment SET ?",
+            [date],
+            function (err, rows, fields) {
+              if (err) {
+                logger.log("error", err.sql + ". " + err.sqlMessage);
+              } else {
+                conn.release();
+                console.log(rows);
+                res.json({
+                  payment_id: sha1(rows.insertId),
+                  status: true,
+                });
+              }
+            }
+          );
         }
       }
     );
@@ -10646,6 +10666,24 @@ router.get("/getAllLicences", function (req, res, next) {
       res.json(err);
     }
     conn.query("select * from licence", function (err, rows) {
+      conn.release();
+      if (!err) {
+        res.json(rows);
+      } else {
+        res.json(err);
+        logger.log("error", err.sql + ". " + err.sqlMessage);
+      }
+    });
+  });
+});
+
+router.get("/getInvoiceForLicence/:id", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query("select * from licence_payment lp join licence l on lp.licence_id = l.id where lp.id = ?", [sha1(req.params.id)],function (err, rows) {
       conn.release();
       if (!err) {
         res.json(rows);

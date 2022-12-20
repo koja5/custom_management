@@ -22,4 +22,10 @@ export class LicenceService {
       .get("/api/getSMSCountPerUser/" + id)
       .map((res) => res);
   }
+
+  getInvoiceForLicence(id) {
+    return this.httpClient
+      .get("/api/getInvoiceForLicence/" + id)
+      .map((res) => res);
+  }
 }

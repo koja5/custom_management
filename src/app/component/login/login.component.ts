@@ -302,8 +302,9 @@ export class LoginComponent implements OnInit {
             }
           } else if (info === "licence_expired") {
             this.router.navigate(["/access-forbiden"]);
-          } else if(info === 'licence_expired_owner') {
-            this.router.navigate(['/licence']);
+          } else if (info === "licence_expired_owner") {
+            this.setUserInfoToLocalStorage(type, id, storeId, superadmin);
+            this.router.navigate(["/licence"]);
           } else {
             this.loginInfo = JSON.parse(localStorage.getItem("language"))[
               "notCorrectPass"

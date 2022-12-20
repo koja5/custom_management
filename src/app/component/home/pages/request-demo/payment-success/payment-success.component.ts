@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { HelpService } from "src/app/service/help.service";
+import { LicenceService } from "src/app/service/licence.service";
 
 @Component({
   selector: "app-payment-success",
@@ -10,7 +11,12 @@ import { HelpService } from "src/app/service/help.service";
 export class PaymentSuccessComponent implements OnInit {
   public language: any;
 
-  constructor(private helpService: HelpService, private router: Router) {}
+  constructor(
+    private helpService: HelpService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private licenceService: LicenceService
+  ) {}
 
   ngOnInit() {
     this.language = this.helpService.getLanguage();
@@ -18,5 +24,16 @@ export class PaymentSuccessComponent implements OnInit {
 
   backToLanding() {
     this.router.navigate(["/dashboard/home/licence"]);
+  }
+
+  previewInvoice() {
+    console.log(this.route.snapshot.params.id);
+    this.licenceService
+      .getInvoiceForLicence(this.route.snapshot.params.id)
+      .subscribe((data: any) => {
+        if (data && data.length > 0) {
+          console.log(data);
+        }
+      });
   }
 }

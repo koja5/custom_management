@@ -23,7 +23,7 @@ const routes: Routes = [
     component: RequestDemoComponent,
   },
   {
-    path: 'payment-success',
+    path: 'payment-success/:id',
     component: PaymentSuccessComponent
   },
   {

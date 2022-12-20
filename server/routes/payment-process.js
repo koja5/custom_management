@@ -37,8 +37,9 @@ router.post("/create-payment", (req, res, next) => {
         body: req.body,
         json: true,
       };
-      request(options, function (error, response, body) {});
-      res.json({ success: true, status: "Payment successfull!" });
+      request(options, function (error, response, body) {
+        res.json(response.body);
+      });
     }
   );
 });

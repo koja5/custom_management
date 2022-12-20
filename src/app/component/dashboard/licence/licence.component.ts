@@ -201,7 +201,7 @@ export class LicenceComponent implements OnInit {
               .callApiPost("/api/payment/create-payment", this.data)
               .subscribe(
                 (res) => {
-                  if (res["success"]) {
+                  if (res["status"]) {
                     const successPayment = {
                       name: this.data["name"],
                       price: this.data["price"],
@@ -214,7 +214,7 @@ export class LicenceComponent implements OnInit {
                         successPayment
                       )
                       .subscribe((res) => {});
-                    this.router.navigate(["payment-success"]);
+                    this.router.navigate(["payment-success/" + res['payment_id']]);
                   } else {
                     this.helpService.errorToastr(
                       this.language.paymentError,
