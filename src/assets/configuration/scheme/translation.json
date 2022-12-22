@@ -2476,13 +2476,19 @@
             "termOfUseLicence": {
                 "type": "string"
             },
+            "andPrivacyPolicy": {
+                "type": "string"
+            },
             "privacyPolicyLicence": {
+                "type": "string"
+            },
+            "andLicence": {
                 "type": "string"
             },
             "rightOfWithdrawal": {
                 "type": "string"
             },
-            "andLicence": {
+            "rightOfWithdrawalPost": {
                 "type": "string"
             },
             "demo": {
@@ -7593,13 +7599,26 @@
                             "key": "termOfUseLicence"
                         },
                         {
+                            "key": "andPrivacyPolicy"
+                        }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
                             "key": "privacyPolicyLicence"
+                        },
+                        {
+                            "key": "andLicence"
                         },
                         {
                             "key": "rightOfWithdrawal"
                         },
                         {
-                            "key": "andLicence"
+                            "key": "rightOfWithdrawalPost"
                         }
                     ]
                 },
