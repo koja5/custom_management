@@ -1,5 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Modal } from "ngx-modal";
 import { HelpService } from "src/app/service/help.service";
 import { LicenceService } from "src/app/service/licence.service";
 
@@ -9,7 +10,9 @@ import { LicenceService } from "src/app/service/licence.service";
   styleUrls: ["./payment-success.component.scss"],
 })
 export class PaymentSuccessComponent implements OnInit {
+  @ViewChild("paidLicense") paidLicense: Modal;
   public language: any;
+  public license: any;
 
   constructor(
     private helpService: HelpService,
@@ -28,11 +31,13 @@ export class PaymentSuccessComponent implements OnInit {
 
   previewInvoice() {
     console.log(this.route.snapshot.params.id);
+    this.paidLicense.open();
     this.licenceService
       .getInvoiceForLicence(this.route.snapshot.params.id)
       .subscribe((data: any) => {
         if (data && data.length > 0) {
           console.log(data);
+          this.license = data[0];
         }
       });
   }

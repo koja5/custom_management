@@ -180,7 +180,7 @@ import { LicenceComponent } from './licence/licence.component';
     MassiveUnsubscribeComponent,
     LicenceComponent,
     LastMinuteEventConfirmationComponent,
-    MailMultipleRecepientComponent
+    MailMultipleRecepientComponent,
   ],
   imports: [
     CommonModule,

@@ -16,3 +16,10 @@
   <button class="btn-success" (click)="backToLanding()">{{language.paymentBackToHome}}</button>
   <button class="btn-info ml-4" (click)="previewInvoice()">{{language.paymentBackToHome}}</button>
 </div>
+
+<modal #paidLicense modalClass="modal-md top-margin loggerModal adminModal" [hideCloseButton]="true"
+  [closeOnOutsideClick]="false">
+  <modal-content>
+    <!-- <paid-license [license]="license"></paid-license> -->
+  </modal-content>
+</modal>
