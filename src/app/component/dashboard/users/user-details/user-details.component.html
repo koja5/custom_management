@@ -407,7 +407,7 @@
                       ">
                       <div class="row"></div>
                       <div class="form-group dayInWeekDiv col-xs-12 b-r" *ngFor="let item of workTime; let i = index">
-                          <label for="example-number-input" class="col-sm col-sx-1 col-form-label">{{ language[(item.day).toLowerCase()] }}</label>
+                          <label for="example-number-input" class="col-sm col-sx-1 col-form-label">{{item.day}}</label>
                           <div class="row col-sm-12 col-xs-12">
                             <input class="col-sm-5 col-xs-5 b-r" kendoTextBox type="number" min="0" max="24"
                               id="example-number-input" value="{{ item.start }}" [(ngModel)]="workTime[i].start"
@@ -522,7 +522,7 @@
               <a (click)="changeTab('profile')">{{ language.profile }}</a>
             </li>
             <li [ngClass]="currentTab === 'workTime' ? 'active' : ''">
-              <a (click)="changeTab('workTime')">{{ language.workTime }}</a>
+              <a (click)="changeTab('workTime')">{{ language.workTime }}</a>language
             </li>
             <li [ngClass]="currentTab === 'permissions' ? 'active' : ''">
               <a (click)="changeTab('permissions')">{{
