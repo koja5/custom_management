@@ -74,34 +74,34 @@ var connection = mysql.createPool({
 // });
 
 //local purpose
-var smtpTransport = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  tls: {
-    rejectUnauthorized: false,
-  },
-  debug: true,
-  ssl: true,
-  auth: {
-    user: "clinicnode2022@gmail.com", // real email address
-    pass: "vfuvxgwdfrvestvd", // app password for clinicnode2022@gmail.com email
-  },
-});
-
-// production
 // var smtpTransport = nodemailer.createTransport({
-//   host: "116.203.85.82",
-//   port: 25,
-//   secure: false,
+//   host: "smtp.gmail.com",
+//   port: 465,
+//   secure: true,
 //   tls: {
 //     rejectUnauthorized: false,
 //   },
+//   debug: true,
+//   ssl: true,
 //   auth: {
-//     user: "support@app-production.eu",
-//     pass: "])3!~0YFU)S]",
+//     user: "clinicnode2022@gmail.com", // real email address
+//     pass: "vfuvxgwdfrvestvd", // app password for clinicnode2022@gmail.com email
 //   },
 // });
+
+// production
+var smtpTransport = nodemailer.createTransport({
+  host: "116.203.85.82",
+  port: 25,
+  secure: false,
+  tls: {
+    rejectUnauthorized: false,
+  },
+  auth: {
+    user: "support@app-production.eu",
+    pass: "])3!~0YFU)S]",
+  },
+});
 
 //slanje maila pri registraciji
 
@@ -1373,7 +1373,7 @@ router.post("/sendMassiveEMail", function (req, res) {
   if (req.body.message != "") {
     connection.getConnection(function (err, conn) {
       conn.query(
-        "select distinct c.email, c.shortname, mm.* from customers c join mail_massive_message mm on c.storeId = mm.superadmin join store s on c.storeId = s.superadmin " +
+        "select distinct c.id as customerId, c.email, c.shortname, mm.* from customers c join mail_massive_message mm on c.storeId = mm.superadmin join store s on c.storeId = s.superadmin " +
           joinTable +
           " where c.sendMassiveEmail = 1 and (c.email != '' and c.email IS NOT NULL) and c.active = 1 and c.storeId = " +
           Number(req.body.superadmin) +
@@ -1459,7 +1459,7 @@ router.post("/sendMassiveEMail", function (req, res) {
 
                 unsubscribeMessage: req.body.language?.unsubscribeMessage,
                 unsubscribeHere: req.body.language?.unsubscribeHere,
-                unsubscribeLink: process.env.unsubscribeEmail + "/" + to.email,
+                unsubscribeLink: process.env.unsubscribeEmail + "/" + global.btoa(to.customerId)
               }),
             };
             smtpTransport.sendMail(mailOptions, function (error, response) {
