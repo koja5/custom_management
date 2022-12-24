@@ -73,7 +73,7 @@
       <div class="row">
         <div class="col-sm-6 border-right">
           <div class="row mt-2">
-            <div class="col-sm-4">
+            <div class="col-sm-6">
               <kendo-textbox-container floatingLabel=" {{ language.patient }}">
                 <kendo-combobox #fieldName1 id="customerUsers" [suggest]="true" [data]="customerUsers"
                   [textField]="'shortname'" [valueField]="'id'" (valueChange)="onValueChange($event)"
@@ -131,6 +131,12 @@
               <input class="k-checkbox" type="checkbox" [(ngModel)]="isPriceIncluded">
               <label class="k-checkbox-label"> {{ language.printBruttoNettoPrice}} </label>
             </div>
+
+            <div class="col-sm-4 mt-4">
+              <label class="k-textbox-label"> {{ language.invoicePrefix}} </label>
+              <input class="k-textbox" type="textbox" [(ngModel)]="invoiceNumber">
+            </div>
+
             <div class="col-sm-12 mt-5">
               <label class="k-checkbox-label"> {{ language.selectInvoiceLanguage }} </label>
               <br>
@@ -139,7 +145,7 @@
               </kendo-dropdownlist>
             </div>
 
-            <div class="col-sm-12 mt-5">
+            <div class="col-sm-6 mt-5">
               <label class="k-checkbox-label"> {{ language.selectInvoiceStore }} </label>
               <br>
               <kendo-combobox [data]="storeList" textField="text" valueField="value" [valuePrimitive]="true"

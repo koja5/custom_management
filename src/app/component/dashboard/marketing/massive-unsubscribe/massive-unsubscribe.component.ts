@@ -21,7 +21,7 @@ export class MassiveUnsubscribeComponent implements OnInit {
 
   ngOnInit() {
     this.loadLanguage();
-    this.customerId = this.activatedRoute.snapshot.paramMap.get('customerId');
+    this.customerId = window.atob(this.activatedRoute.snapshot.paramMap.get('customerId'));
   }
 
   loadLanguage() {

@@ -2547,6 +2547,9 @@
             },
             "sortByDateDesc": {
                 "type": "string"
+            },
+            "translationUpdate": {
+                "type":"string"
             }
         }
     },
@@ -3527,6 +3530,9 @@
                         },
                         {
                             "key": "translation"
+                        },
+                        {
+                            "key": "translationUpdate"
                         },
                         {
                             "key": "todo"
