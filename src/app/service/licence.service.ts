@@ -28,4 +28,10 @@ export class LicenceService {
       .get("/api/getInvoiceForLicence/" + id)
       .map((res) => res);
   }
+
+  getAllPaidLicenseForUser(id: string) {
+    return this.httpClient
+      .get("/api/getAllPaidLicenseForUser/" + id)
+      .map((res) => res);
+  }
 }

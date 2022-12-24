@@ -1,48 +1,49 @@
-<body>
-  <div class="container">
+<body *ngIf="license">
+  <div id="licensePdf" #licensePdf>
     <div class="left">
       <div class="info-box">
         <div class="receipt">
-          Receipt for <span>Dribbble</span>
+          {{language.licence}}
         </div>
         <div class="entry">
-          <i class="icon-wallet" aria-hidden="true"></i>
-          <p>Amount:<span>$20.00 USD</span></p>
+          <span class="fa fa-money" aria-hidden="true"></span>
+          <p>{{language.licencePriceTitle}}:<span> {{license.price}} €</span></p>
         </div>
         <div class="entry">
-          <i class="icon-calendar" aria-hidden="true"></i>
-          <p>Date:<span>Nov 5</span></p>
+          <span class="fa fa-calendar" aria-hidden="true"></span>
+          <p>{{language.licenceExpiration}}:<span> {{license.expiration_date | date :'dd.MM.yyyy' }}</span></p>
         </div>
         <div class="entry">
-          <i class="icon-star" aria-hidden="true"></i>
-          <p>Issuer:<span>Dribbble</span></p>
-        </div>
-        <div class="entry">
-          <i class="icon-notebook" aria-hidden="true"></i>
-          <p>Confirmation Nr:<span>0YX123580219G</span></p>
+          <span class="fa fa-id-card" aria-hidden="true"></span>
+          <p>{{language.yourLicence}}:<span> {{language[license.name] ? language[license.name] : license.name}}</span>
+          </p>
         </div>
       </div>
     </div>
     <div class="right">
       <div class="content">
         <div class="header">
-          <img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-200px.png">
-          <h4>Oct 18, 2015 08:30:57 PDT</h4>
+          <!-- <img src="http://app-production.eu:8080/assets/images/brand-logo.png"> -->
+          <div class="col-xs-12 text-right">
+            <h4>{{license.date_paid | date :'dd.MM.yyyy' }}</h4>
+          </div>
         </div>
         <div class="main">
-          <h3>Dribbble Pro Account (1 year)</h3>
-          <h5>Total: $20.00 USD</h5>
+          <h3>{{language.extendedLicenceFor}} {{language[license.name] ? language[license.name] : license.name}}</h3>
+          <h5>{{language.licencePriceTitle}}: {{license.price}} €</h5>
         </div>
         <div class="message">
-          <p>Hello Ennio,You sent a payment of $20.00 USD to Dribbble (<a
-              href="mailto:paypal@dribbble.com">paypal@dribbble.com</a>)</p>
-          <h6>It may take a few moments for thistransaction to appear in your account.</h6>
+          <p>{{language.greetingForPayment}} {{license.firstname}},</p>
+          <p> {{language.messageForPayment}}</p>
         </div>
         <div class="footer">
-          <a href="#">www.paypal.com/help</a>
-          <h6>Invoice ID: 108165</h6>
+          <a href="http://clinicnode.com">www.clinicnode.com</a>
         </div>
       </div>
     </div>
   </div>
 </body>
+
+<div class="col-xs-12 text-center mt-6">
+  <button class="btn btn-success" (click)="generatePDF()">{{language.downloadLicenceDoc}}</button>
+</div>

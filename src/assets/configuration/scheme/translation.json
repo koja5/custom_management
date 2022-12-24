@@ -2512,6 +2512,21 @@
             "yourLicenceExpired": {
                 "type": "string"
             },
+            "licencePriceTitle": {
+                "type": "string"
+            },
+            "extendedLicenceFor": {
+                "type": "string"
+            },
+            "greetingForPayment": {
+                "type": "string"
+            },
+            "messageForPayment": {
+                "type": "string"
+            },
+            "downloadLicenceDoc": {
+                "type": "string"
+            },
             "paymentSuccessTitle": {
                 "type": "string"
             },
@@ -7640,7 +7655,9 @@
                         {
                             "key": "yourLicenceExpired"
                         },
-                        {}
+                        {
+                            "key": "licencePriceTitle"
+                        }
                     ]
                 },
                 {
@@ -7656,6 +7673,27 @@
                         },
                         {
                             "key": "paymentBackToHome"
+                        },
+                        {
+                            "key": "extendedLicenceFor"
+                        }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "greetingForPayment"
+                        },
+                        {
+                            "key": "messageForPayment"
+                        },
+                        {
+                            "key": "downloadLicenceDoc"
+                        },
+                        {
                         }
                     ]
                 }

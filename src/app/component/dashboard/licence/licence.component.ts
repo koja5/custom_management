@@ -22,6 +22,8 @@ import { StorageService } from "src/app/service/storage.service";
 export class LicenceComponent implements OnInit {
   @ViewChild("paymentForm") paymentForm: Modal;
   @ViewChild("paymentSMSForm") paymentSMSForm: Modal;
+  @ViewChild("paidLicense") paidLicense: Modal;
+  @ViewChild("previewLicence") previewLicence: Modal;
   public language: any;
   public licence: any;
   public sms: any;
@@ -38,6 +40,8 @@ export class LicenceComponent implements OnInit {
   public paySms: number;
   public checkUrl: any;
   public agreeValue = false;
+  public licences: any;
+  public itemLicence: any;
 
   constructor(
     private helpService: HelpService,
@@ -214,7 +218,9 @@ export class LicenceComponent implements OnInit {
                         successPayment
                       )
                       .subscribe((res) => {});
-                    this.router.navigate(["payment-success/" + res['payment_id']]);
+                    this.router.navigate([
+                      "payment-success/" + res["payment_id"],
+                    ]);
                   } else {
                     this.helpService.errorToastr(
                       this.language.paymentError,
@@ -342,5 +348,19 @@ export class LicenceComponent implements OnInit {
     setTimeout(() => {
       this.router.navigate(["login"]);
     }, 50);
+  }
+
+  showPaidLicense() {
+    this.licenceService
+      .getAllPaidLicenseForUser(this.helpService.getSuperadmin())
+      .subscribe((data) => {
+        this.licences = data;
+      });
+    this.paidLicense.open();
+  }
+
+  showItemLicence(item) {
+    this.itemLicence = item;
+    this.previewLicence.open();
   }
 }
