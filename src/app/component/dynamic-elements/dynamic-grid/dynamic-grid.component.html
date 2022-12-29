@@ -23,6 +23,7 @@
     [allowPaging]="config.paging.enable"
     [pageSettings]="config.paging.settings"
     [allowFiltering]="config.filtering.enable"
+    [textWrapSettings]='config.wrapSettings'
     (actionBegin)="actionBegin($event)"
     (actionComplete)="actionComplete($event)"
     (toolbarClick)="clickHandler($event)"
