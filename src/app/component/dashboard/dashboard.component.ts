@@ -1,5 +1,13 @@
 import { HolidayService } from "src/app/service/holiday.service";
-import { Component, OnInit, ViewChild, HostListener, OnChanges, SimpleChanges, ChangeDetectorRef } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  HostListener,
+  OnChanges,
+  SimpleChanges,
+  ChangeDetectorRef,
+} from "@angular/core";
 import { CookieService } from "ng2-cookies";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Modal } from "ngx-modal";
@@ -56,8 +64,8 @@ export class DashboardComponent implements OnInit, OnChanges {
   };
   public templateAccountValue: any;
   public allTranslationsByCountryCode: any;
-  public themeColors: any
-  userTypeView = '';
+  public themeColors: any;
+  userTypeView = "";
 
   constructor(
     private router: Router,
@@ -72,24 +80,24 @@ export class DashboardComponent implements OnInit, OnChanges {
     private storageService: StorageService,
     private holidayService: HolidayService,
     private themeColorsService: ThemeColorsService,
-    private cdr:ChangeDetectorRef,
+    private cdr: ChangeDetectorRef,
     private versionCheckService: VersionCheckService,
     private versionInfoService: VersionInfoService
   ) {
     this.helpService.setTitleForBrowserTab("ClinicNode");
   }
-  
+
   ngOnChanges(changes: SimpleChanges): void {
     this.cdr.detectChanges();
   }
 
   ngOnInit() {
-
     console.log(localStorage.getItem("languageName"));
-    this.versionInfoService.getVersion(localStorage.getItem("languageName")).subscribe( data =>{
-
-      console.log(data);
-    });
+    this.versionInfoService
+      .getVersion(localStorage.getItem("languageName"))
+      .subscribe((data) => {
+        console.log(data);
+      });
 
     this.height = this.helpService.getHeightForGrid();
     this.sidebarHeight = window.innerHeight - 60 + "px";
@@ -184,8 +192,8 @@ export class DashboardComponent implements OnInit, OnChanges {
       this.getMe();
     });
 
-    this.message.getNewLanguage().subscribe(message => {
-      this.language = JSON.parse(this.helpService.getLocalStorage('language'));
+    this.message.getNewLanguage().subscribe((message) => {
+      this.language = JSON.parse(this.helpService.getLocalStorage("language"));
       this.loadUserType();
     });
 
@@ -207,14 +215,16 @@ export class DashboardComponent implements OnInit, OnChanges {
 
   loadUserType() {
     const userTypeKey = this.userType[this.type];
-    this.userTypeView = this.language[userTypeKey+'UserType'];
+    this.userTypeView = this.language[userTypeKey + "UserType"];
   }
 
-  getMainStoreName() { }
+  getMainStoreName() {}
 
   checkDefaultLink() {
     if (this.helpService.getSessionStorage("defaultLink")) {
-      this.router.navigateByUrl(this.helpService.getSessionStorage("defaultLink"));
+      this.router.navigateByUrl(
+        this.helpService.getSessionStorage("defaultLink")
+      );
     }
   }
 
@@ -523,18 +533,25 @@ export class DashboardComponent implements OnInit, OnChanges {
             .then((data) => {
               console.log(data);
 
-              const holidayTemplateId = this.templateAccount.find((t) => t.id === this.templateAccountValue).holiday_template;
+              const holidayTemplateId = this.templateAccount.find(
+                (t) => t.id === this.templateAccountValue
+              ).holiday_template;
               const userId = this.helpService.getMe();
 
-              this.holidayService.createStoreTemplateConnection([holidayTemplateId], userId, () => {
-                console.log('uspesno!');
-              });
+              this.holidayService.createStoreTemplateConnection(
+                [holidayTemplateId],
+                userId,
+                () => {
+                  console.log("uspesno!");
+                }
+              );
             });
         });
     }
     this.dashboardService.loadTemplateAccount(data).subscribe((response) => {
       if (response) {
         this.templateLoading.close();
+        this.getThemeColors();
       }
     });
   }
@@ -557,5 +574,16 @@ export class DashboardComponent implements OnInit, OnChanges {
         return this.allTranslationsByCountryCode[i];
       }
     }
+  }
+
+  getThemeColors() {
+    this.themeColorsService
+      .getThemeColors(localStorage.getItem("superadmin"))
+      .subscribe((data: any[]) => {
+        if (data.length) {
+          this.themeColorsService.setThemeColors(data[0]);
+        }
+        this.helpService.setLocalStorage("themeColors", JSON.stringify(data));
+      });
   }
 }

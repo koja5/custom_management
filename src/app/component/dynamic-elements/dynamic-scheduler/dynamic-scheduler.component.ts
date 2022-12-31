@@ -97,7 +97,10 @@ import * as timeZoneNames from "../../../../../node_modules/cldr-data/main/fr-CH
 import { PackLanguageService } from "src/app/service/pack-language.service";
 import { UserType } from "../../enum/user-type";
 import { AccountService } from "src/app/service/account.service";
-import { ComboBoxModule, MultiSelectComponent } from "@progress/kendo-angular-dropdowns";
+import {
+  ComboBoxModule,
+  MultiSelectComponent,
+} from "@progress/kendo-angular-dropdowns";
 import { TypeOfEventAction } from "../../enum/typeOfEventAction";
 import { ActivatedRoute, Router, UrlSerializer } from "@angular/router";
 import { HolidayService } from "src/app/service/holiday.service";
@@ -118,7 +121,7 @@ import {
 import { Subject, Subscription } from "rxjs";
 import { DatePipe } from "@angular/common";
 import { DynamicService } from "src/app/service/dynamic.service";
-import * as CryptoJS from 'crypto-js';
+import * as CryptoJS from "crypto-js";
 import { connectableObservableDescriptor } from "rxjs/internal/observable/ConnectableObservable";
 declare var moment: any;
 
@@ -188,56 +191,56 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   public weekDays: Object[] = WEEK_DAYS;
   public timezoneData: Object[] = TIMEZONE_DATA;
   public timeSlotDuration: Object[] = TIMESLOT_DURATION;
-  public lastMinuteTimeSlot: Object[]=[
-    { Value:"00.00h" },
-    { Value:"00.30h" },
-    { Value:"01.00h" },
-    { Value:"01.30h" },
-    { Value:"02.00h" },
-    { Value:"02.30h" },
-    { Value:"03.00h" },
-    { Value:"03.30h" },
-    { Value:"04.00h" },
-    { Value:"04.30h" },
-    { Value:"05.00h" },
-    { Value:"05.30h" },
-    { Value:"06.00h" },
-    { Value:"06.30h" },
-    { Value:"07.00h" },
-    { Value:"07.30h" },
-    { Value:"08.00h" },
-    { Value:"08.30h" },
-    { Value:"09.00h" },
-    { Value:"09.30h" },
-    { Value:"10.00h" },
-    { Value:"10.30h" },
-    { Value:"11.00h" },
-    { Value:"11.30h" },
-    { Value:"12.00h" },
-    { Value:"12.30h" },
-    { Value:"13.00h" },
-    { Value:"13.30h" },
-    { Value:"14.00h" },
-    { Value:"14.30h" },
-    { Value:"15.00h" },
-    { Value:"15.30h" },
-    { Value:"16.00h" },
-    { Value:"16.30h" },
-    { Value:"17.00h" },
-    { Value:"17.30h" },
-    { Value:"18.00h" },
-    { Value:"18.30h" },
-    { Value:"19.00h" },
-    { Value:"19.30h" },
-    { Value:"20.00h" },
-    { Value:"20.30h" },
-    { Value:"21.00h" },
-    { Value:"21.30h" },
-    { Value:"22.00h" },
-    { Value:"22.30h" },
-    { Value:"23.00h" },
-    { Value:"23.30h" }
-  ]
+  public lastMinuteTimeSlot: Object[] = [
+    { Value: "00.00h" },
+    { Value: "00.30h" },
+    { Value: "01.00h" },
+    { Value: "01.30h" },
+    { Value: "02.00h" },
+    { Value: "02.30h" },
+    { Value: "03.00h" },
+    { Value: "03.30h" },
+    { Value: "04.00h" },
+    { Value: "04.30h" },
+    { Value: "05.00h" },
+    { Value: "05.30h" },
+    { Value: "06.00h" },
+    { Value: "06.30h" },
+    { Value: "07.00h" },
+    { Value: "07.30h" },
+    { Value: "08.00h" },
+    { Value: "08.30h" },
+    { Value: "09.00h" },
+    { Value: "09.30h" },
+    { Value: "10.00h" },
+    { Value: "10.30h" },
+    { Value: "11.00h" },
+    { Value: "11.30h" },
+    { Value: "12.00h" },
+    { Value: "12.30h" },
+    { Value: "13.00h" },
+    { Value: "13.30h" },
+    { Value: "14.00h" },
+    { Value: "14.30h" },
+    { Value: "15.00h" },
+    { Value: "15.30h" },
+    { Value: "16.00h" },
+    { Value: "16.30h" },
+    { Value: "17.00h" },
+    { Value: "17.30h" },
+    { Value: "18.00h" },
+    { Value: "18.30h" },
+    { Value: "19.00h" },
+    { Value: "19.30h" },
+    { Value: "20.00h" },
+    { Value: "20.30h" },
+    { Value: "21.00h" },
+    { Value: "21.30h" },
+    { Value: "22.00h" },
+    { Value: "22.30h" },
+    { Value: "23.00h" },
+    { Value: "23.30h" },
+  ];
   public timeSlotFields = { text: "Name", value: "Value" };
   public timeSlotCount: Number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   public timeSlotDurationValue: Number = 60;
@@ -568,37 +571,37 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   public onLastMinuteClick(): void {
     const settingsPanel: Element = document.querySelector(
       ".overview-content .settings-panel"
-    );  
-  
+    );
+
     const lastMinutePanel: Element = document.querySelector(
       ".overview-content .last-minute-panel"
     );
 
     if (lastMinutePanel.classList.contains("hide")) {
-      if(!settingsPanel.classList.contains("hide"))
+      if (!settingsPanel.classList.contains("hide"))
         addClass([settingsPanel], "hide");
-      
+
       removeClass([lastMinutePanel], "hide");
     } else {
       addClass([lastMinutePanel], "hide");
     }
   }
-  
-  public onSettingsClick(): void {  
+
+  public onSettingsClick(): void {
     const settingsPanel: Element = document.querySelector(
       ".overview-content .settings-panel"
-    );  
-  
+    );
+
     const lastMinutePanel: Element = document.querySelector(
       ".overview-content .last-minute-panel"
     );
-    
+
     if (settingsPanel.classList.contains("hide")) {
-      if(!lastMinutePanel.classList.contains("hide"))
+      if (!lastMinutePanel.classList.contains("hide"))
         addClass([lastMinutePanel], "hide");
-      
+
       removeClass([settingsPanel], "hide");
-    } else {      
+    } else {
       addClass([settingsPanel], "hide");
     }
   }
@@ -1286,7 +1289,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
       }
     }
 
-    console.log(typeof(args.data.StartTime));
+    console.log(typeof args.data.StartTime);
     this.eventTime = {
       start: args.data.StartTime,
       end: new Date(
@@ -1543,16 +1546,16 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   public modalConfirmEventMove = false;
   public mobileEventChange: any;
 
-  public lastMinuteWeekDays:Object[]=WEEK_DAYS;
+  public lastMinuteWeekDays: Object[] = WEEK_DAYS;
   public patients: any = [];
   public isUserSelected = false;
-  public therapeuts:any= [];
-  public selectedLastMinuteWeekDays: any=[];
-  public lastMinuteStartDate: Date=new Date();
-  public lastMinuteEndDate: Date=new Date();
-  public days=(new Date()).getDay();
-  public lastMinute:any;
-  public lastMinuteHoursValue: any=[];
+  public therapeuts: any = [];
+  public selectedLastMinuteWeekDays: any = [];
+  public lastMinuteStartDate: Date = new Date();
+  public lastMinuteEndDate: Date = new Date();
+  public days = new Date().getDay();
+  public lastMinute: any;
+  public lastMinuteHoursValue: any = [];
   public lastMinuteOfferSubmitted = false;
 
   private static secretKey = "YourSecretKeyForEncryption&Descryption";
@@ -1561,7 +1564,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   @ViewChild("msTherapeuts") public msTherapeuts: MultiSelectComponent;
   @ViewChild("msDays") public msDays: MultiSelectComponent;
   @ViewChild("msLastMinuteTime") public msLastMinuteTime: MultiSelectComponent;
-  
+
   constructor(
     public service: TaskService,
     public customer: CustomersService,
@@ -1586,8 +1589,8 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     private router: Router,
     private dynamicService: DynamicService,
     private datePipe: DatePipe
-  ) { }
-  
+  ) {}
+
   ngOnInit() {
     this.selectedStoreIdSub = this.selectedStoreIdSubject
       .asObservable()
@@ -1599,24 +1602,27 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     this.initData();
     this.loadCustomers();
 
-    this.lastMinuteWeekDays=this.weekDays.filter((item: any)=>{
-        return item.value==new Date().getDay();     
+    this.lastMinuteWeekDays = this.weekDays.filter((item: any) => {
+      return item.value == new Date().getDay();
     });
-    
-    console.log(this.lastMinuteWeekDays); 
+
+    console.log(this.lastMinuteWeekDays);
   }
 
-  checkAvailableDate(startDate, endDate){    
-    for(var arr=new Set(),dt=new Date(startDate); dt<=new Date(endDate); dt.setDate(dt.getDate()+1)){
+  checkAvailableDate(startDate, endDate) {
+    for (
+      var arr = new Set(), dt = new Date(startDate);
+      dt <= new Date(endDate);
+      dt.setDate(dt.getDate() + 1)
+    ) {
       arr.add(dt.getDay());
     }
 
     const daysArray = Array.from(arr);
 
-    this.lastMinuteWeekDays=this.weekDays.filter((item: any)=>{
+    this.lastMinuteWeekDays = this.weekDays.filter((item: any) => {
       return daysArray.includes(item.value);
-    })
-
+    });
   }
 
   ngOnDestroy(): void {
@@ -1810,7 +1816,8 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     if (this.displayToolbar) {
       this.height = this.dynamicSchedulerService.getSchedulerHeight();
     } else {
-      this.height = this.dynamicSchedulerService.getSchedulerHeightWithoutToolbar();
+      this.height =
+        this.dynamicSchedulerService.getSchedulerHeightWithoutToolbar();
     }
 
     /*if (localStorage.getItem("currentView")) {
@@ -1822,7 +1829,6 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.type = this.helpService.getType();
     this.id = this.helpService.getMe();
-    console.log(this.events);
     this.calendars = [];
     const superadmin = this.helpService.getSuperadmin();
 
@@ -1985,6 +1991,9 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
       }
       this.storeName = this.getStoreName(this.selectedStoreId);
       this.helpService.setTitleForBrowserTab(this.storeName);
+    } else {
+      this.isValidStoreSelected = false;
+      this.loading = false;
     }
   }
 
@@ -2525,55 +2534,72 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     this.customerUserModal2.close();
   }
 
-  sendLastMinuteOffer(){
-    this.lastMinuteOfferSubmitted=true;
+  sendLastMinuteOffer() {
+    this.lastMinuteOfferSubmitted = true;
 
-    if(this.patients.length==0 || this.selectedStoreId == undefined || this.therapeuts.length==0 || this.selectedLastMinuteWeekDays.length==0 || this.lastMinuteHoursValue==0)
-    {
+    if (
+      this.patients.length == 0 ||
+      this.selectedStoreId == undefined ||
+      this.therapeuts.length == 0 ||
+      this.selectedLastMinuteWeekDays.length == 0 ||
+      this.lastMinuteHoursValue == 0
+    ) {
       this.helpService.errorToastr(
         this.language.errorExecutedActionTitle,
         this.language.errorExecutedActionText
       );
-    }else{
-      this.patients.forEach(patient => {
-        const url = this.router.createUrlTree([location.origin+'/'+'dashboard/home/customers/last-minute-event'], { 
-          queryParams: 
-          { 
-            user: patient.id,
-            therapeuts: this.therapeuts.map(({id})=>id),
-            startDate: this.datePipe.transform(this.lastMinuteStartDate,"MM/dd/yyyy"),
-            endDate: this.datePipe.transform(this.lastMinuteEndDate,"MM/dd/yyyy"),
-            days: this.selectedLastMinuteWeekDays.map(({value})=>value),
-            time: this.lastMinuteHoursValue.map(({Value})=>Value),
-            storeId: this.selectedStoreId
-          } 
-        });
+    } else {
+      this.patients.forEach((patient) => {
+        const url = this.router.createUrlTree(
+          [
+            location.origin +
+              "/" +
+              "dashboard/home/customers/last-minute-event",
+          ],
+          {
+            queryParams: {
+              user: patient.id,
+              therapeuts: this.therapeuts.map(({ id }) => id),
+              startDate: this.datePipe.transform(
+                this.lastMinuteStartDate,
+                "MM/dd/yyyy"
+              ),
+              endDate: this.datePipe.transform(
+                this.lastMinuteEndDate,
+                "MM/dd/yyyy"
+              ),
+              days: this.selectedLastMinuteWeekDays.map(({ value }) => value),
+              time: this.lastMinuteHoursValue.map(({ Value }) => Value),
+              storeId: this.selectedStoreId,
+            },
+          }
+        );
         const encryptedUrl = this.encryptData(url.toString().split("?")[1]);
-        let sendMail={
+        let sendMail = {
           link: encryptedUrl,
           userId: patient.id,
-          initialGreeting:this.language.initialGreeting,
-          lastMinuteEMailSubject:this.language.lastMinuteEMailSubject,
-          finalGreeting:this.language.finalGreeting,
-          lastMinuteEMailMessage:this.language.lastMinuteEMailMessage,
-          viewLastMinuteOffer:this.language.viewLastMinuteOffer,
-          signature:this.language.signature,
-          thanksForUsing:this.language.thanksForUsing,
-          websiteLink:this.language.websiteLink,
-          ifYouHaveQuestion:this.language.ifYouHaveQuestion,
-          emailAddress:this.language.emailAddress,
-          notReply:this.language.notReply,
-          copyRight:this.language.copyRight
+          initialGreeting: this.language.initialGreeting,
+          lastMinuteEMailSubject: this.language.lastMinuteEMailSubject,
+          finalGreeting: this.language.finalGreeting,
+          lastMinuteEMailMessage: this.language.lastMinuteEMailMessage,
+          viewLastMinuteOffer: this.language.viewLastMinuteOffer,
+          signature: this.language.signature,
+          thanksForUsing: this.language.thanksForUsing,
+          websiteLink: this.language.websiteLink,
+          ifYouHaveQuestion: this.language.ifYouHaveQuestion,
+          emailAddress: this.language.emailAddress,
+          notReply: this.language.notReply,
+          copyRight: this.language.copyRight,
         };
 
-        this.dynamicService.callApiPost("/api/sendLastMinuteOfferMails", sendMail)
+        this.dynamicService
+          .callApiPost("/api/sendLastMinuteOfferMails", sendMail)
           .subscribe((data) => {
             this.helpService.successToastr(
               this.language.successExecutedActionTitle,
               this.language.successExecutedActionText
             );
           });
-        
       });
 
       //clear data
@@ -2581,24 +2607,27 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     }
   }
 
-  private clearLastMinuteForm(){
-    this.patients=[];
-    this.therapeuts=[];
-    this.lastMinuteStartDate=new Date();
-    this.lastMinuteEndDate=new Date();
-    this.selectedLastMinuteWeekDays=[];
-    this.lastMinuteHoursValue=[];
+  private clearLastMinuteForm() {
+    this.patients = [];
+    this.therapeuts = [];
+    this.lastMinuteStartDate = new Date();
+    this.lastMinuteEndDate = new Date();
+    this.selectedLastMinuteWeekDays = [];
+    this.lastMinuteHoursValue = [];
 
     this.msPatients.reset();
     this.msTherapeuts.reset();
     this.msDays.reset();
     this.msLastMinuteTime.reset();
-    this.lastMinuteOfferSubmitted=false;
+    this.lastMinuteOfferSubmitted = false;
   }
 
   encryptData(data) {
     try {
-      return CryptoJS.AES.encrypt(JSON.stringify(data),  DynamicSchedulerComponent.secretKey).toString();
+      return CryptoJS.AES.encrypt(
+        JSON.stringify(data),
+        DynamicSchedulerComponent.secretKey
+      ).toString();
     } catch (e) {
       console.log(e);
     }
@@ -2621,7 +2650,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
       value: this.value,
     };
 
-    this.mongo.setUsersFor(item).subscribe((data) => { });
+    this.mongo.setUsersFor(item).subscribe((data) => {});
     this.isUserSelected = selected && selected.length > 0;
   }
 
@@ -3237,7 +3266,6 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
           a["shortname"].localeCompare(b["shortname"])
         );
       }
-      console.log(this.allUsers);
     });
 
     this.parameterItemService.getVATTex(superadmin).subscribe((data: []) => {
@@ -3257,8 +3285,6 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
         console.log("invoiceID", this.invoiceID);
 
         this.changedInvoiceID = this.superadminProfile.invoiceID;
-
-        console.log(data);
       });
   }
 
@@ -3697,9 +3723,9 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   loadCustomers() {
     this.customer.getCustomers(localStorage.getItem("superadmin"), (val) => {
       this.customerUsers = val.sort((a, b) =>
-          String(a["shortname"]).localeCompare(String(b["shortname"]))
-        );
-        this.customerLoading = false;
+        String(a["shortname"]).localeCompare(String(b["shortname"]))
+      );
+      this.customerLoading = false;
     });
   }
 
@@ -3909,7 +3935,8 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
   hideToolbar() {
     if (this.displayToolbar) {
       this.displayToolbar = false;
-      this.height = this.dynamicSchedulerService.getSchedulerHeightWithoutToolbar();
+      this.height =
+        this.dynamicSchedulerService.getSchedulerHeightWithoutToolbar();
       this.hideAllPanels();
     } else {
       this.displayToolbar = true;
@@ -3931,7 +3958,7 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
     );
     addClass([filterPanel], "hide");
     addClass([settingsPanel], "hide");
-    addClass([lastMinutePanel],"hide");
+    addClass([lastMinutePanel], "hide");
   }
 
   selectedEventCategory(event) {

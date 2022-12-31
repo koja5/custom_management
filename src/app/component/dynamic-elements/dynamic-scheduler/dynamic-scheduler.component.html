@@ -1089,7 +1089,7 @@
     </div>
   </div>
   <!-- MODALS -->
-  <modal #customerModal (onClose)="closeCustomerModal()" modalClass="modal-lg">
+  <modal #customerModal (onClose)="closeCustomerModal()" modalClass="modal-lg" [closeOnOutsideClick]="false">
     <modal-header>
       <h4>{{ language.createNewCustomerDialog }}</h4>
     </modal-header>
@@ -1211,7 +1211,7 @@
     <modal-footer class="modal-footer-none"> </modal-footer>
   </modal>
 
-  <modal #customerUserModal2 (onClose)="closebaseDataForUser()" modalClass="modal-lg">
+  <modal #customerUserModal2 (onClose)="closebaseDataForUser()" modalClass="modal-lg" [closeOnOutsideClick]="false">
     <modal-header>
       <h4>{{ language.customerInformationDialog }}</h4>
     </modal-header>
