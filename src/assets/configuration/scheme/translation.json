@@ -602,11 +602,11 @@
             "workTimeColorsMenu": {
                 "type": "string"
             },
-            "currentWorkTime":{
-                "type":"string"
+            "currentWorkTime": {
+                "type": "string"
             },
-            "selectCurrentWorkTime":{
-                "type":"string"
+            "selectCurrentWorkTime": {
+                "type": "string"
             },
             "areaCode": {
                 "type": "string"
@@ -2551,6 +2551,21 @@
             "downloadLicenceDoc": {
                 "type": "string"
             },
+            "licenceName": {
+                "type": "string"
+            },
+            "licencePrice": {
+                "type": "string"
+            },
+            "licencePaymentDate": {
+                "type": "string"
+            },
+            "licenceExpiredDate": {
+                "type": "string"
+            },
+            "licencePreview": {
+                "type": "string"
+            },
             "paymentSuccessTitle": {
                 "type": "string"
             },
@@ -2570,7 +2585,7 @@
                 "type": "string"
             },
             "translationUpdate": {
-                "type":"string"
+                "type": "string"
             }
         }
     },
@@ -7768,7 +7783,28 @@
                         {
                             "key": "downloadLicenceDoc"
                         },
+                        {}
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
                         {
+                            "key": "licenceName"
+                        },
+                        {
+                            "key": "licencePrice"
+                        },
+                        {
+                            "key": "licencePaymentDate"
+                        },
+                        {
+                            "key": "licenceExpiredDate"
+                        },
+                        {
+                            "key": "licencePreview"
                         }
                     ]
                 }

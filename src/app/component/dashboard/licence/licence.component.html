@@ -156,11 +156,11 @@
   <modal-content>
     <table>
       <tr>
-        <td>Name</td>
-        <td>Price</td>
-        <td>Payment date</td>
-        <td>Expired date</td>
-        <td>Preview</td>
+        <td>{{language.licenceName}}</td>
+        <td>{{language.licencePrice}}</td>
+        <td>{{language.licencePaymentDate}}</td>
+        <td>{{language.licenceExpiredDate}}</td>
+        <td>{{language.licencePreview}}</td>
       </tr>
       <tr *ngFor="let item of licences" class="paid-licence">
         <td>{{language[item.name] ? language[item.name] : item.name}}</td>
