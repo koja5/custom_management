@@ -33,13 +33,8 @@
             <div class="row">
               <div class="profile-userpic">
                 <img alt="example image" style="width: 190px" [src]="imagePath" class="rounded-circle" />
-                <button
-                *ngIf="currentUser?.type == 0 || currentUser?.type == 1"
-                kendoButton
-                [icon]="'edit'"
-                class="edit-button-icon"
-                (click)="updateImage()"
-              ></button>
+                <button *ngIf="currentUser?.type == 0 || currentUser?.type == 1" kendoButton [icon]="'edit'"
+                  class="edit-button-icon" (click)="updateImage()"></button>
               </div>
               <div style="text-align: center">
                 <h2 class="font-semibold mgbt-xs-5" style="text-align: center">
@@ -236,18 +231,11 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.firstname }}">
-                              <input kendoTextBox 
-                                *ngIf="!data || !data.firstname"
-                                [(ngModel)]="language['noInformation']"
-                                name="firstname"
-                                class="noPadding"
+                              <input kendoTextBox *ngIf="!data || !data.firstname"
+                                [(ngModel)]="language['noInformation']" name="firstname" class="noPadding"
                                 readonly="true" />
-                              <input kendoTextBox
-                                *ngIf="data && data.firstname"
-                                [(ngModel)]="data.firstname"
-                                name="firstname" 
-                                class="noPadding" 
-                                readonly="true" />
+                              <input kendoTextBox *ngIf="data && data.firstname" [(ngModel)]="data.firstname"
+                                name="firstname" class="noPadding" readonly="true" />
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -255,18 +243,11 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.lastname }}">
-                              <input kendoTextBox 
-                                *ngIf="!data || !data.lastname"
-                                [(ngModel)]="language['noInformation']"
-                                name="lastname"
-                                class="noPadding"
+                              <input kendoTextBox *ngIf="!data || !data.lastname"
+                                [(ngModel)]="language['noInformation']" name="lastname" class="noPadding"
                                 readonly="true" />
-                              <input kendoTextBox
-                                *ngIf="data && data.lastname"
-                                [(ngModel)]="data.lastname"
-                                name="lastname"
-                                class="noPadding"
-                                readonly="true" />
+                              <input kendoTextBox *ngIf="data && data.lastname" [(ngModel)]="data.lastname"
+                                name="lastname" class="noPadding" readonly="true" />
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -274,18 +255,10 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.gender }}">
-                              <input kendoTextBox
-                                *ngIf="!data || !data.gender"
-                                [(ngModel)]="language['noInformation']"
-                                name="gender"
-                                class="noPadding"
-                                readonly="true" />
-                              <input kendoTextBox
-                                *ngIf="data && data.gender"
-                                [(ngModel)]="data.gender"
-                                name="gender"
-                                class="noPadding"
-                                readonly="true" />
+                              <input kendoTextBox *ngIf="!data || !data.gender" [(ngModel)]="language['noInformation']"
+                                name="gender" class="noPadding" readonly="true" />
+                              <input kendoTextBox *ngIf="data && data.gender" [(ngModel)]="data.gender" name="gender"
+                                class="noPadding" readonly="true" />
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -293,18 +266,11 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.shortname }}">
-                              <input kendoTextBox
-                                *ngIf="!data || !data.shortname"
-                                [(ngModel)]="language['noInformation']"
-                                name="shortname"
-                                class="noPadding"
+                              <input kendoTextBox *ngIf="!data || !data.shortname"
+                                [(ngModel)]="language['noInformation']" name="shortname" class="noPadding"
                                 readonly="true" />
-                              <input kendoTextBox
-                                *ngIf="data && data.shortname"
-                                [(ngModel)]="data.shortname"
-                                name="shortname"
-                                class="noPadding"
-                                readonly="true" />
+                              <input kendoTextBox *ngIf="data && data.shortname" [(ngModel)]="data.shortname"
+                                name="shortname" class="noPadding" readonly="true" />
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -312,18 +278,10 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.email }}">
-                              <input kendoTextBox
-                                *ngIf="!data || !data.email"
-                                [(ngModel)]="language['noInformation']"
-                                name="email"
-                                class="noPadding"
-                                readonly="true" />
-                              <input kendoTextBox
-                                *ngIf="data && data.email"
-                                [(ngModel)]="data.email"
-                                name="email"
-                                class="noPadding"
-                                readonly="true" />
+                              <input kendoTextBox *ngIf="!data || !data.email" [(ngModel)]="language['noInformation']"
+                                name="email" class="noPadding" readonly="true" />
+                              <input kendoTextBox *ngIf="data && data.email" [(ngModel)]="data.email" name="email"
+                                class="noPadding" readonly="true" />
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -331,18 +289,10 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.street }}">
-                              <input kendoTextBox
-                                *ngIf="!data || !data.street"
-                                [(ngModel)]="language['noInformation']"
-                                name="street"
-                                class="noPadding"
-                                readonly="true" />
-                              <input kendoTextBox
-                                *ngIf="data && data.street"
-                                [(ngModel)]="data.street"
-                                name="street"
-                                class="noPadding"
-                                readonly="true" />
+                              <input kendoTextBox *ngIf="!data || !data.street" [(ngModel)]="language['noInformation']"
+                                name="street" class="noPadding" readonly="true" />
+                              <input kendoTextBox *ngIf="data && data.street" [(ngModel)]="data.street" name="street"
+                                class="noPadding" readonly="true" />
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -350,18 +300,11 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.streetnumber }}">
-                              <input kendoTextBox
-                                *ngIf="!data || !data.streetnumber"
-                                [(ngModel)]="language['noInformation']"
-                                name="streetnumber"
-                                class="noPadding"
+                              <input kendoTextBox *ngIf="!data || !data.streetnumber"
+                                [(ngModel)]="language['noInformation']" name="streetnumber" class="noPadding"
                                 readonly="true" />
-                              <input kendoTextBox
-                                *ngIf="data && data.streetnumber"
-                                [(ngModel)]="data.streetnumber"
-                                name="streetnumber"
-                                class="noPadding"
-                                readonly="true" />
+                              <input kendoTextBox *ngIf="data && data.streetnumber" [(ngModel)]="data.streetnumber"
+                                name="streetnumber" class="noPadding" readonly="true" />
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -369,18 +312,10 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.zipCode }}">
-                              <input kendoTextBox
-                                *ngIf="!data || !data.zipcode"
-                                [(ngModel)]="language['noInformation']"
-                                name="zipcode"
-                                class="noPadding"
-                                readonly="true" />
-                              <input kendoTextBox
-                                *ngIf="data && data.zipcode"
-                                [(ngModel)]="data.zipcode"
-                                name="zipcode"
-                                class="noPadding"
-                                readonly="true" />
+                              <input kendoTextBox *ngIf="!data || !data.zipcode" [(ngModel)]="language['noInformation']"
+                                name="zipcode" class="noPadding" readonly="true" />
+                              <input kendoTextBox *ngIf="data && data.zipcode" [(ngModel)]="data.zipcode" name="zipcode"
+                                class="noPadding" readonly="true" />
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -388,18 +323,10 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.city }}">
-                              <input kendoTextBox
-                                *ngIf="!data || !data.city"
-                                [(ngModel)]="language['noInformation']"
-                                name="city"
-                                class="noPadding"
-                                readonly="true" />
-                              <input kendoTextBox
-                                *ngIf="data && data.city"
-                                [(ngModel)]="data.city"
-                                name="city"
-                                class="noPadding"
-                                readonly="true" />
+                              <input kendoTextBox *ngIf="!data || !data.city" [(ngModel)]="language['noInformation']"
+                                name="city" class="noPadding" readonly="true" />
+                              <input kendoTextBox *ngIf="data && data.city" [(ngModel)]="data.city" name="city"
+                                class="noPadding" readonly="true" />
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -407,18 +334,10 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.mobile }}">
-                              <input kendoTextBox
-                                *ngIf="!data || !data.mobile"
-                                [(ngModel)]="language['noInformation']"
-                                name="mobile"
-                                class="noPadding"
-                                readonly="true" />
-                              <input kendoTextBox
-                                *ngIf="data && data.mobile"
-                                [(ngModel)]="data.mobile"
-                                name="mobile"
-                                class="noPadding"
-                                readonly="true" />
+                              <input kendoTextBox *ngIf="!data || !data.mobile" [(ngModel)]="language['noInformation']"
+                                name="mobile" class="noPadding" readonly="true" />
+                              <input kendoTextBox *ngIf="data && data.mobile" [(ngModel)]="data.mobile" name="mobile"
+                                class="noPadding" readonly="true" />
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -426,18 +345,11 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.telephone }}">
-                              <input kendoTextBox
-                                *ngIf="!data || !data.telephone"
-                                [(ngModel)]="language['noInformation']"
-                                name="telephone"
-                                class="noPadding"
+                              <input kendoTextBox *ngIf="!data || !data.telephone"
+                                [(ngModel)]="language['noInformation']" name="telephone" class="noPadding"
                                 readonly="true" />
-                              <input kendoTextBox
-                                *ngIf="data && data.telephone"
-                                [(ngModel)]="data.telephone"
-                                name="telephone"
-                                class="noPadding"
-                                readonly="true" />
+                              <input kendoTextBox *ngIf="data && data.telephone" [(ngModel)]="data.telephone"
+                                name="telephone" class="noPadding" readonly="true" />
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -445,21 +357,13 @@
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.birthday }}">
-                              <input kendoTextBox
-                                *ngIf="!data || !data.birthday || !checkIsValidDate(data.birthday)"
-                                [ngModel]="language['noInformation']" 
-                                name="birthday" 
-                                class="noPadding"
-                                readonly="true"
-                                />
-                              <kendo-datepicker
-                                *ngIf="data && data.birthday && checkIsValidDate(data.birthday)"
-                                format="dd.MM.yyyy"
-                                [ngModel]="data.birthday" 
-                                name="birthday" 
-                                class="noPadding" 
+                              <input kendoTextBox *ngIf="!data || !data.birthday || !checkIsValidDate(data.birthday)"
+                                [ngModel]="language['noInformation']" name="birthday" class="noPadding"
+                                readonly="true" />
+                              <kendo-datepicker *ngIf="data && data.birthday && checkIsValidDate(data.birthday)"
+                                format="dd.MM.yyyy" [ngModel]="data.birthday" name="birthday" class="noPadding"
                                 readonly="true">
-                              </kendo-datepicker> 
+                              </kendo-datepicker>
                             </kendo-textbox-container>
                           </p>
                         </div>
@@ -473,8 +377,21 @@
                     <p *ngIf="noSetWorkTime" class="noSetWorkTime">
                       *{{ language.noSetTimeForUserNote }}
                     </p>
-                    <div class="k-form-field row" style="padding: 2vh 0 2vh 0">
-                      <div class="col-sm-6">
+                    <div class="k-form-field col-sm-12 row" style="padding: 0vh">
+                      <div class="col-sm-8 col-xs-10">
+                        <label>{{ language.currentWorkTime }}</label><br/>
+                        <select [(ngModel)]="index" class="col-lg-2 col-sm-5 col-xs-5"(change)="onOptionSelected($event.target.value)">
+                          <option *ngFor="let workTime of allWorkTime;
+                           index as indexOfelement;" [value]="indexOfelement">{{indexOfelement + 1}}</option>
+                        </select>
+                      </div>
+                      <div class="col-sm-8 col-xs-10 wrkTimeDiv">
+                        <label>{{ language.validFromDate }}</label><br/>
+                        <kendo-datepicker [format]="'dd.MM.yyyy'" class="noPadding" name="validDate"
+                          placeholder="Valid date" [(ngModel)]="validDate" validDate.value="" readonly="true">
+                        </kendo-datepicker>
+                      </div>
+                      <div class="col-sm-8 col-xs-10 wrkTimeDiv">
                         <span>{{ language.color }}</span>
                         <div>
                           <kendo-colorpalette [palette]="palette" [value]="selectedColor" [(ngModel)]="selectedColor"
@@ -482,79 +399,59 @@
                           </kendo-colorpalette>
                         </div>
                       </div>
-                      <div class="col-sm-6" *ngIf="!noSetWorkTime" style="padding-top: 2vh">
-                        <button class="btn btn-warning mr-3 {{ previousInd }}" (click)="previousWorkTime()">
-                          <i class="fa fa-arrow-left"></i>
-                          {{ language.previous }}
-                        </button>
-                        <button class="btn btn-warning {{ nextInd }}" (click)="nextWorkTime()">
-                          <i class="fa fa-arrow-right"></i>
-                          {{ language.next }}
-                        </button>
-                      </div>
-                    </div>
-                    <div class="form-group row">
-                      <h4 class="col-sm-12" *ngIf="allWorkTime">
-                        {{ language.orderNumber }}:
-                        {{ allWorkTime.length - index }}
-                      </h4>
-                      <label class="col-md-2 col-sm-12 col-form-label">{{
-                        language.validFromDate
-                        }}</label>
-                      <kendo-datepicker [format]="'dd.MM.yyyy'" class="col-md-5 col-xs-8 noPadding" name="validDate"
-                        placeholder="Valid date" [(ngModel)]="validDate" validDate.value="" readonly="true">
-                      </kendo-datepicker>
                     </div>
                     <form name="loginForm" class="loginForm" (ngSubmit)="
                         updateSetIndicator === 1
                           ? setWorkTimeForUser(workTime)
                           : updateWorkTimeForUser(workTime)
                       ">
-                      <div class="form-group row" *ngFor="let item of workTime; let i = index">
-                        <label for="example-number-input" class="col-sm-2 col-form-label">{{ item.day }}</label>
-                        <div class="col-sm-10">
-                          <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24"
-                            id="example-number-input" value="{{ item.start }}" [(ngModel)]="workTime[i].start"
-                            name="{{ item.day }}start" readonly="true" /><span class="col-sm-1 h">h</span>
-                          <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                      <div class="row"></div>
+                      <div class="form-group dayInWeekDiv col-xs-12 b-r" *ngFor="let item of workTime; let i = index">
+                          <label for="example-number-input" class="col-sm col-sx-1 col-form-label">{{item.day}}</label>
+                          <div class="row col-sm-12 col-xs-12">
+                            <input class="col-sm-5 col-xs-5 b-r" kendoTextBox type="number" min="0" max="24"
+                              id="example-number-input" value="{{ item.start }}" [(ngModel)]="workTime[i].start"
+                              name="{{ item.day }}start" readonly="true" /><span class="col-sm-1 col-xs-1 h">h</span>
+                            <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                             value="{{item.startMin}}" [(ngModel)]="workTime[i].startMin" name="{{item.day}}startMin"><span
                             class="col-sm-1 h">min</span> -->
-                          <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24"
-                            id="example-number-input" value="{{ item.end }}" [(ngModel)]="workTime[i].end"
-                            name="{{ item.day }}end" readonly="true" />
-                          <span class="col-sm-1 h">h</span>
-                          <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                            <input class="col-sm-5 col-xs-5 b-r" kendoTextBox type="number" min="0" max="24"
+                              id="example-number-input" value="{{ item.end }}" [(ngModel)]="workTime[i].end"
+                              name="{{ item.day }}end" readonly="true" />
+                            <span class="col-sm-1 col-xs-1 h">h</span>
+                            <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                             value="{{item.endMin}}" [(ngModel)]="workTime[i].endMin" name="{{item.day}}endMin"> <span
                             class="col-sm-1 h">min</span> -->
 
-                          <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24"
-                            id="example-number-input" value="{{ item.start2 }}" [(ngModel)]="workTime[i].start2"
-                            name="{{ item.day }}start2" readonly="true" /><span class="col-sm-1 h">h</span>
-                          <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                            <input class="col-sm-5 col-xs-5 b-r" kendoTextBox  type="number" min="0" max="24"
+                              id="example-number-input" value="{{ item.start2 }}" [(ngModel)]="workTime[i].start2"
+                              name="{{ item.day }}start2" readonly="true" /><span class="col-sm-1 col-xs-1 h">h</span>
+                            <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                             value="{{item.start2Min}}" [(ngModel)]="workTime[i].start2Min" name="{{item.day}}start2Min"><span
                             class="col-sm-1 h">min</span> -->
-                          <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24"
-                            id="example-number-input" value="{{ item.end2 }}" [(ngModel)]="workTime[i].end2"
-                            name="{{ item.day }}end2" readonly="true" />
-                          <span class="col-sm-1 h">h</span>
-                          <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                            <input class="col-sm-5 col-xs-5 b-r" kendoTextBox  type="number" min="0" max="24"
+                              id="example-number-input" value="{{ item.end2 }}" [(ngModel)]="workTime[i].end2"
+                              name="{{ item.day }}end2" readonly="true" />
+                            <span  class="col-sm-1 col-xs-1 h">h</span>
+                            <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                             value="{{item.end2Min}}" [(ngModel)]="workTime[i].end2Min" name="{{item.day}}end2Min"> <span
                             class="col-sm-1 h">min</span> -->
 
-                          <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24"
-                            id="example-number-input" value="{{ item.start3 }}" [(ngModel)]="workTime[i].start3"
-                            name="{{ item.day }}start3" readonly="true" /><span class="col-sm-1 h">h</span>
-                          <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                            <input class="col-sm-5 col-xs-5 b-r" kendoTextBox type="number" min="0" max="24"
+                              id="example-number-input" value="{{ item.start3 }}" [(ngModel)]="workTime[i].start3"
+                              name="{{ item.day }}start3" readonly="true" /><span class="col-sm-1 col-xs-1 h">h</span>
+                            <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                             value="{{item.start3Min}}" [(ngModel)]="workTime[i].start3Min" name="{{item.day}}start3Min"><span
                             class="col-sm-1 h">min</span> -->
-                          <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24"
-                            id="example-number-input" value="{{ item.end3 }}" [(ngModel)]="workTime[i].end3"
-                            name="{{ item.day }}end3" readonly="true" />
-                          <span class="col-sm-1 h">h</span>
-                          <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
+                            <input class="col-sm-5 col-xs-5 b-r" kendoTextBox type="number" min="0" max="24"
+                              id="example-number-input" value="{{ item.end3 }}" [(ngModel)]="workTime[i].end3"
+                              name="{{ item.day }}end3" readonly="true" />
+                            <span class="col-sm-1 col-xs-1 h">h</span>
+                            <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                             value="{{item.end3Min}}" [(ngModel)]="workTime[i].end3Min" name="{{item.day}}end3Min"> <span
                             class="col-sm-1 h">min</span> -->
-                        </div>
+                          </div>
+                     
                       </div>
                     </form>
                   </div>
@@ -625,7 +522,7 @@
               <a (click)="changeTab('profile')">{{ language.profile }}</a>
             </li>
             <li [ngClass]="currentTab === 'workTime' ? 'active' : ''">
-              <a (click)="changeTab('workTime')">{{ language.workTime }}</a>
+              <a (click)="changeTab('workTime')">{{ language.workTime }}</a>language
             </li>
             <li [ngClass]="currentTab === 'permissions' ? 'active' : ''">
               <a (click)="changeTab('permissions')">{{
@@ -704,10 +601,7 @@
                 <div class="form-group">
                   <div class="email col-md-6 col-xs-12">
                     <p>{{ language.birthday }}</p>
-                    <kendo-datepicker 
-                      format="dd.MM.yyyy" 
-                      class="col-xs-12 noPadding" 
-                      name="birthday"
+                    <kendo-datepicker format="dd.MM.yyyy" class="col-xs-12 noPadding" name="birthday"
                       [placeholder]="language.birthday"
                       [value]="data && checkIsValidDate(data.birthday) ? data.birthday : null"
                       (valueChange)="checkIsValidDate($event) && (data.birthday=$event)">
@@ -715,14 +609,10 @@
                   </div>
                   <div class="email col-md-6 col-xs-12">
                     <p>{{ language.sincecompany }}</p>
-                    <kendo-datepicker
-                        format="dd.MM.yyyy"
-                        class="col-xs-12 noPadding" 
-                        name="sincecompany"
-                        [placeholder]="language.sincecompany"
-                        [value]="data && checkIsValidDate(data.incompanysince) ? data.incompanysince : null"
-                        (valueChange)="checkIsValidDate($event) && (data.incompanysince=$event)"
-                    ></kendo-datepicker>
+                    <kendo-datepicker format="dd.MM.yyyy" class="col-xs-12 noPadding" name="sincecompany"
+                      [placeholder]="language.sincecompany"
+                      [value]="data && checkIsValidDate(data.incompanysince) ? data.incompanysince : null"
+                      (valueChange)="checkIsValidDate($event) && (data.incompanysince=$event)"></kendo-datepicker>
                   </div>
                 </div>
                 <div class="form-group">
@@ -773,8 +663,15 @@
               <p *ngIf="noSetWorkTime" class="noSetWorkTime">
                 *{{ language.noSetTimeForUserNote }}
               </p>
-              <div class="k-form-field row" style="padding: 2vh 0 2vh 0">
-                <div class="col-sm-6">
+              <div class="k-form-field row">
+                <div class="col-sm-8 col-xs-10" style="padding-top: 2%;">
+                  <label>{{ language.currentWorkTime }}</label><br/>
+                  <select [(ngModel)]="index" class="col-lg-3 col-sm-5 col-xs-5"(change)="onOptionSelected($event.target.value)">
+                    <option *ngFor="let workTime of allWorkTime;
+                     index as indexOfelement;" [value]="indexOfelement">{{indexOfelement + 1}}</option>
+                  </select>
+                </div>
+                <div class="col-sm-6 col-xs-5" style="padding-top: 2%;">
                   <span>{{ language.color }}</span>
                   <div>
                     <kendo-colorpalette [palette]="palette" [value]="selectedColor" [tileSize]="30"
@@ -782,32 +679,17 @@
                     </kendo-colorpalette>
                   </div>
                 </div>
-                <div *ngIf="!noSetWorkTime" class="col-sm-6" style="padding-top: 2vh">
-                  <button class="btn btn-warning mr-3 {{ previousInd }}" (click)="previousWorkTime()">
-                    <i class="fa fa-arrow-left"></i>
-                    {{ language.previous }}
-                  </button>
-                  <button class="btn btn-warning {{ nextInd }}" (click)="nextWorkTime()">
-                    <i class="fa fa-arrow-right"></i>
-                    {{ language.next }}
-                  </button>
-                </div>
               </div>
-              <div class="form-group row">
-                <h4 class="col-sm-12" *ngIf="allWorkTime">
-                  {{ language.orderNumber }}: {{ allWorkTime.length - index }}
-                </h4>
-                <label class="col-md-2 col-sm-12 col-form-label">{{
-                  language.validFromDate
-                  }}</label>
-                <kendo-datepicker [format]="'dd.MM.yyyy'" class="col-md-5 col-xs-8 noPadding" name="validDate"
+              <div class="form-group row "style="padding-top: 2%;">
+                <label class="col-md-2 col-xs-8 col-sm-5 col-form-label" > {{ language.validFromDate}} </label>
+                <kendo-datepicker [format]="'dd.MM.yyyy'" class="col-md-5 col-xs-6" name="validDate"
                   placeholder="Valid date" [(ngModel)]="validDate" validDate.value=""></kendo-datepicker>
-                <div>
-                  <button class="col-md-2 col-xs-4 btn-save" kendoButton [icon]="'k-icon k-i-save'"
+                <div class="col-sm-3 col-xs-6">
+                  <button class="col-md-2 col-xs-2 btn-save" kendoButton [icon]="'k-icon k-i-save'"
                     (click)="newValidDate()">
                     {{ language.createTime }}
                   </button>
-                  <button class="col-md-1 col-xs-4 btn-delete" kendoButton [icon]="'k-icon k-i-delete'"
+                  <button class="col-md-1 col-xs-2 btn-delete" kendoButton [icon]="'k-icon k-i-delete'"
                     (click)="modalDeletedWorkTimeConfirm = true; user.close()"></button>
                 </div>
               </div>
@@ -818,45 +700,45 @@
                 " (change)="isDirty()">
                 <div class="form-group row" *ngFor="let item of workTime; let i = index">
                   <label for="example-number-input" class="col-sm-2 col-form-label">{{ item.day }}</label>
-                  <div class="col-sm-10">
-                    <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24"
+                  <div class="row col-sm-12 col-xs-12" style="padding-left: 3vh;">
+                    <input kendoTextBox class="col-sm-5 col-xs-5 b-r" type="number" min="0" max="24"
                       id="example-number-input" value="{{ item.start }}" [(ngModel)]="workTime[i].start"
-                      name="{{ item.day }}start" /><span class="col-sm-1 h">h</span>
+                      name="{{ item.day }}start" /><span class="col-sm-1 col-xs-1 h">h</span>
                     <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.startMin}}" [(ngModel)]="workTime[i].startMin" name="{{item.day}}startMin"><span
                     class="col-sm-1 h">min</span> -->
-                    <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24"
+                    <input kendoTextBox class="col-sm-5 col-xs-5 b-r" type="number" min="0" max="24"
                       id="example-number-input" value="{{ item.end }}" [(ngModel)]="workTime[i].end"
                       name="{{ item.day }}end" />
-                    <span class="col-sm-1 h">h</span>
+                    <span class="col-sm-1 col-xs-1 h">h</span>
                     <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.endMin}}" [(ngModel)]="workTime[i].endMin" name="{{item.day}}endMin"> <span
                     class="col-sm-1 h">min</span> -->
 
-                    <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24"
+                    <input kendoTextBox class="col-sm-5 col-xs-5 b-r" type="number" min="0" max="24"
                       id="example-number-input" value="{{ item.start2 }}" [(ngModel)]="workTime[i].start2"
-                      name="{{ item.day }}start2" /><span class="col-sm-1 h">h</span>
+                      name="{{ item.day }}start2" /><span class="col-sm-1 col-xs-1 h">h</span>
                     <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.start2Min}}" [(ngModel)]="workTime[i].start2Min" name="{{item.day}}start2Min"><span
                     class="col-sm-1 h">min</span> -->
-                    <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24"
+                    <input kendoTextBox class="col-sm-5 col-xs-5 b-r" type="number" min="0" max="24"
                       id="example-number-input" value="{{ item.end2 }}" [(ngModel)]="workTime[i].end2"
                       name="{{ item.day }}end2" />
-                    <span class="col-sm-1 h">h</span>
+                    <span class="col-sm-1 col-xs-1 h">h</span>
                     <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.end2Min}}" [(ngModel)]="workTime[i].end2Min" name="{{item.day}}end2Min"> <span
                     class="col-sm-1 h">min</span> -->
 
-                    <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24"
+                    <input kendoTextBox class="col-sm-5 col-xs-5 b-r" type="number" min="0" max="24"
                       id="example-number-input" value="{{ item.start3 }}" [(ngModel)]="workTime[i].start3"
-                      name="{{ item.day }}start3" /><span class="col-sm-1 h">h</span>
+                      name="{{ item.day }}start3" /><span class="col-sm-1 col-xs-1 h">h</span>
                     <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.start3Min}}" [(ngModel)]="workTime[i].start3Min" name="{{item.day}}start3Min"><span
                     class="col-sm-1 h">min</span> -->
-                    <input kendoTextBox class="col-sm-2 col-xs-6" type="number" min="0" max="24"
+                    <input kendoTextBox class="col-sm-5 col-xs-5 b-r" type="number" min="0" max="24"
                       id="example-number-input" value="{{ item.end3 }}" [(ngModel)]="workTime[i].end3"
                       name="{{ item.day }}end3" />
-                    <span class="col-sm-1 h">h</span>
+                    <span class="col-sm-1 col-xs-1 h">h</span>
                     <!-- <input class="col-sm-2 col-xs-6" type="number" min="0" max="24" id="example-number-input"
                     value="{{item.end3Min}}" [(ngModel)]="workTime[i].end3Min" name="{{item.day}}end3Min"> <span
                     class="col-sm-1 h">min</span> -->
@@ -903,13 +785,8 @@
     </modal-header>
     <modal-content>
       <form name="updateImageForm" (ngSubmit)="submitPhoto()">
-        <input
-          id="file-upload"
-          type="file"
-          name="updateImageInput"
-          class="choose-image-input"
-          (input)="fileChoosen($event)"
-        />
+        <input id="file-upload" type="file" name="updateImageInput" class="choose-image-input"
+          (input)="fileChoosen($event)" />
         <label for="file-upload" class="custom-file-upload">
           {{ language.chooseFile }}
         </label>
@@ -923,4 +800,3 @@
     </modal-content>
   </modal>
 </div>
-

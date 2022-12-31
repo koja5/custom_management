@@ -86,7 +86,7 @@ export class UserDetailsComponent implements OnInit {
     this.getUser();
 
     this.language = JSON.parse(localStorage.getItem("language"));
-
+    
     this.storeService.getStore(localStorage.getItem("idUser"), (val) => {
       this.storeLocation = val;
     });
@@ -529,7 +529,13 @@ export class UserDetailsComponent implements OnInit {
     this.workTime = this.packWorkTimeFromDatabase(this.allWorkTime[this.index]);
     this.validDate = new Date(this.allWorkTime[this.index].dateChange);
   }
-
+  onOptionSelected(selectedIndex : string){
+   console.log("Selected index->", selectedIndex)
+   this.index = Number(selectedIndex);
+   this.previousInd = "";
+    this.workTime = this.packWorkTimeFromDatabase(this.allWorkTime[selectedIndex]);
+    this.validDate = new Date(this.allWorkTime[selectedIndex].dateChange);
+  }
   nextWorkTime() {
     this.updateSetIndicator = 0;
     if (this.index > 0) {
