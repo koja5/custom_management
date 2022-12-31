@@ -118,6 +118,9 @@ export class LoginComponent implements OnInit {
             "language",
             JSON.stringify(this.language)
           );
+
+          this.helpService.setLocalStorage("languageVersion", language["timestamp"]);
+          this.helpService.setLocalStorage("languageName", language["language"]);
         });
         this.helpService.setLocalStorage("countryCode", "US");
       }
@@ -133,6 +136,8 @@ export class LoginComponent implements OnInit {
             "language",
             JSON.stringify(this.language)
           );
+          this.helpService.setLocalStorage("languageVersion", language["timestamp"]);
+          this.helpService.setLocalStorage("languageName", language["language"]);
           this.helpService.setLocalStorage(
             "accountLanguage",
             language["countryCode"]
@@ -176,6 +181,8 @@ export class LoginComponent implements OnInit {
             "language",
             JSON.stringify(this.language)
           );
+          this.helpService.setLocalStorage("languageVersion", language["timestamp"]);
+          this.helpService.setLocalStorage("languageName", language["language"]);
           this.helpService.setLocalStorage(
             "accountLanguage",
             language["countryCode"]
@@ -302,9 +309,9 @@ export class LoginComponent implements OnInit {
             }
           } else if (info === "licence_expired") {
             this.router.navigate(["/access-forbiden"]);
-          } else if (info === "licence_expired_owner") {
+          } else if(info === 'licence_expired_owner') {
             this.setUserInfoToLocalStorage(type, id, storeId, superadmin);
-            this.router.navigate(["/licence"]);
+            this.router.navigate(['/licence']);
           } else {
             this.loginInfo = JSON.parse(localStorage.getItem("language"))[
               "notCorrectPass"

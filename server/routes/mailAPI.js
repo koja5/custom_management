@@ -180,6 +180,7 @@ router.post("/sendCustomerVerificationMail", function (req, res) {
             signatureAvailable = true;
           }
         }
+        console.log(req.body);
         var mailOptions = {
           from: '"ClinicNode" support@app-production.eu',
           to: req.body.email,
@@ -187,7 +188,7 @@ router.post("/sendCustomerVerificationMail", function (req, res) {
             ? mail.mailSubject
             : req.body.language?.subjectConfirmMail,
           html: compiledTemplate.render({
-            firstName: req.body.firstname,
+            firstName: (req.body.firstname + " " + req.body.lastname),
             initialGreeting: mail.mailInitialGreeting
               ? mail.mailInitialGreeting
               : req.body.language?.initialGreeting,

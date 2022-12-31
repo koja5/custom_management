@@ -4902,6 +4902,11 @@ li.nav-item {
 .control-label {
   margin-top: 1px;
   font-weight: 400;
+  text-align: left;
+  margin: 0;
+  color: #919191;
+  font-size: 12px;
+  margin-bottom: 0px;
 }
 
 .control-label .required,
@@ -19614,7 +19619,7 @@ body {
   border-width: 1px;
   border-radius: 4px;
   border-top-color: #ced4da !important;
-  padding-left: 7px;
+  padding-left: 7px !important;
 }
 
 .k-multiselect .k-multiselect-wrap:hover,
@@ -19683,6 +19688,7 @@ body {
   padding-left: 10px !important;
 }
 
-.k-textbox-container.k-textarea-wrapper .k-label, .k-floating-label-container.k-textarea-wrapper .k-label {
+.k-textbox-container.k-textarea-wrapper .k-label,
+.k-floating-label-container.k-textarea-wrapper .k-label {
   left: 0px !important;
 }

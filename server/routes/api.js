@@ -172,11 +172,14 @@ router.post("/signUp", function (req, res, next) {
                   smsCountData,
                   function (err, rows) {}
                 );
+                var expiryDate = new Date();
+                expiryDate.setDate(expiryDate.getDate() + 14);
                 const licence = {
                   licence_id: 1,
                   superadmin_id: rows.insertId,
-                  expiration_date: new Date(),
+                  expiration_date: expiryDate,
                 };
+
                 conn.query(
                   "insert into licence_per_user SET ?",
                   [licence],
@@ -5848,7 +5851,7 @@ router.post("/sendMassiveSMS", function (req, res) {
                       ? to.telephone
                       : null;
                     var unsubscribeLink =
-                      process.env.unsubscribeSMS + "/" + to.customerId;
+                      process.env.unsubscribeSMS + "/" + global.btoa(to.customerId);
                     if (
                       checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
                       req.body.message

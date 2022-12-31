@@ -4,5 +4,6 @@ export class TranslationModel {
     demoCode?: string;
     demoAccount?: string;
     active?: number;
+    timestamp?: number;
     config?: any;
 }

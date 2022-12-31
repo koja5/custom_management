@@ -2470,7 +2470,25 @@
             "requestSectionFormSendRequestButton": {
                 "type": "string"
             },
+            "clickAgreeLicenceText": {
+                "type": "string"
+            },
+            "termOfUseLicence": {
+                "type": "string"
+            },
+            "andPrivacyPolicy": {
+                "type": "string"
+            },
+            "privacyPolicyLicence": {
+                "type": "string"
+            },
+            "andLicence": {
+                "type": "string"
+            },
             "rightOfWithdrawal": {
+                "type": "string"
+            },
+            "rightOfWithdrawalPost": {
                 "type": "string"
             },
             "demo": {
@@ -2544,6 +2562,9 @@
             },
             "sortByDateDesc": {
                 "type": "string"
+            },
+            "translationUpdate": {
+                "type":"string"
             }
         }
     },
@@ -3524,6 +3545,9 @@
                         },
                         {
                             "key": "translation"
+                        },
+                        {
+                            "key": "translationUpdate"
                         },
                         {
                             "key": "todo"
@@ -7581,10 +7605,42 @@
                         {
                             "key": "requestSectionFormSendRequestButton"
                         },
+                        {}
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "clickAgreeLicenceText"
+                        },
+                        {
+                            "key": "termOfUseLicence"
+                        },
+                        {
+                            "key": "andPrivacyPolicy"
+                        }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "privacyPolicyLicence"
+                        },
+                        {
+                            "key": "andLicence"
+                        },
                         {
                             "key": "rightOfWithdrawal"
                         },
-                        {}
+                        {
+                            "key": "rightOfWithdrawalPost"
+                        }
                     ]
                 },
                 {
