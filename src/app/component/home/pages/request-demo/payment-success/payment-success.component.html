@@ -14,4 +14,11 @@
   <h2>{{language.paymentSuccessTitle}}</h2>
   <p>{{language.paymentText}}</p>
   <button class="btn-success" (click)="backToLanding()">{{language.paymentBackToHome}}</button>
+  <button class="btn-info ml-4" (click)="previewInvoice()">{{language.licence}}</button>
 </div>
+
+<modal #paidLicense modalClass="modal-lg top-margin loggerModal adminModal">
+  <modal-content>
+    <app-paid-licence [license]="license"></app-paid-licence>
+  </modal-content>
+</modal>

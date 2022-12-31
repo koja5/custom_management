@@ -2,6 +2,9 @@
     (click)="logout()"></span></div>
 <div class="container" *ngIf="licence">
   <h3 class="text-center">{{language.licence}}</h3>
+  <div class="col-xs-12 text-right">
+    <button class="btn btn-warning" (click)="showPaidLicense()">Arhiva placenih licenci</button>
+  </div>
   <h5 *ngIf="diffDate <= 0" class="licence-expired-title">{{language.yourLicenceExpired}}</h5>
   <hr>
   <p>{{language.yourLicence}}: <b>{{licence.name}} ({{licence.price}} €)</b></p>
@@ -146,5 +149,32 @@
         </div>
       </div>
     </div>
+  </modal-content>
+</modal>
+
+<modal #paidLicense modalClass="modal-md top-margin loggerModal adminModal">
+  <modal-content>
+    <table>
+      <tr>
+        <td>Name</td>
+        <td>Price</td>
+        <td>Payment date</td>
+        <td>Expired date</td>
+        <td>Preview</td>
+      </tr>
+      <tr *ngFor="let item of licences" class="paid-licence">
+        <td>{{language[item.name] ? language[item.name] : item.name}}</td>
+        <td>{{item.price}} €</td>
+        <td>{{item.date_paid | date :'dd.MM.yyyy'}}</td>
+        <td>{{item.expiration_date | date :'dd.MM.yyyy'}}</td>
+        <td><span class="fa fa-search" (click)="showItemLicence(item)"></span></td>
+      </tr>
+    </table>
+  </modal-content>
+</modal>
+
+<modal #previewLicence modalClass="modal-lg top-margin loggerModal adminModal">
+  <modal-content>
+    <app-paid-licence [license]="itemLicence"></app-paid-licence>
   </modal-content>
 </modal>

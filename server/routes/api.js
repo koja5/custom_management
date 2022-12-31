@@ -10633,13 +10633,29 @@ router.post("/updateLicence", function (req, res, next) {
       "update licence_per_user set ? where superadmin_id = ?",
       [date, req.body.superadminId],
       function (err, rows, fields) {
-        conn.release();
         if (err) {
+          conn.release();
           res.json(err);
           logger.log("error", err.sql + ". " + err.sqlMessage);
         } else {
-          response = true;
-          res.json(response);
+          date["price"] = req.body.price;
+          date["date_paid"] = new Date();
+          conn.query(
+            "insert into licence_payment SET ?",
+            [date],
+            function (err, rows, fields) {
+              if (err) {
+                logger.log("error", err.sql + ". " + err.sqlMessage);
+              } else {
+                conn.release();
+                console.log(rows);
+                res.json({
+                  payment_id: sha1(rows.insertId),
+                  status: true,
+                });
+              }
+            }
+          );
         }
       }
     );
@@ -10661,6 +10677,50 @@ router.get("/getAllLicences", function (req, res, next) {
         logger.log("error", err.sql + ". " + err.sqlMessage);
       }
     });
+  });
+});
+
+router.get("/getInvoiceForLicence/:id", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query(
+      "select * from licence_payment lp join licence l on lp.licence_id = l.id join users_superadmin u on lp.superadmin_id = u.id where lp.id = ?",
+      [sha1(req.params.id)],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
+  });
+});
+
+router.get("/getAllPaidLicenseForUser/:id", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query(
+      "select * from licence_payment lp join licence l on lp.licence_id = l.id join users_superadmin u on lp.superadmin_id = u.id where lp.superadmin_id = ? order by lp.date_paid desc",
+      [req.params.id],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          res.json(err);
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+        }
+      }
+    );
   });
 });
 

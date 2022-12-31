@@ -94,3 +94,30 @@
   color: red;
   text-align: center;
 }
+
+.paid-licence {
+  height: 36px;
+  padding: 5px;
+}
+
+.paid-licence:hover {
+  background: rgb(204, 204, 204);
+}
+
+.paid-licence span {
+  cursor: pointer;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td,
+th {
+  border: 1px solid #dddddd;
+  text-align: center;
+  padding: 8px;
+}
+
