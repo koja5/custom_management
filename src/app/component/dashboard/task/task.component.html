@@ -600,7 +600,7 @@
     </kendo-splitter>
   </div>
 
-  <modal #customerModal (onClose)="closeCustomerModal()" modalClass="modal-lg">
+  <modal #customerModal (onClose)="closeCustomerModal()" modalClass="modal-lg" [closeOnOutsideClick]="false">
     <modal-header>
       <h4>{{language.createNewCustomer}}</h4>
     </modal-header>
@@ -726,7 +726,7 @@
   <modal-footer class="modal-footer-none"> </modal-footer>
   </modal>
 
-  <modal #customerUserModal2 modalClass="modal-lg">
+  <modal #customerUserModal2 modalClass="modal-lg" [closeOnOutsideClick]="false">
     <modal-header>
       <h4>Please provide additional data</h4>
     </modal-header>
