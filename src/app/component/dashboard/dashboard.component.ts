@@ -92,7 +92,6 @@ export class DashboardComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    console.log(localStorage.getItem("languageName"));
     this.versionInfoService
       .getVersion(localStorage.getItem("languageName"))
       .subscribe((data) => {

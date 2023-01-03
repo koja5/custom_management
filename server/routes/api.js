@@ -629,6 +629,7 @@ router.post("/login", (req, res, next) => {
                             }
                           );
                         } else {
+                          conn.release();
                           logger.log(
                             "error",
                             `Bad username and password for users ${req.body.email}`
@@ -10643,14 +10644,13 @@ router.post("/updateLicence", function (req, res, next) {
           conn.query(
             "insert into licence_payment SET ?",
             [date],
-            function (err, rows, fields) {
+            function (err, rowsLicence, fields) {
               if (err) {
                 logger.log("error", err.sql + ". " + err.sqlMessage);
               } else {
                 conn.release();
-                console.log(rows);
                 res.json({
-                  payment_id: sha1(rows.insertId),
+                  payment_id: sha1(rowsLicence.insertId.toString()),
                   status: true,
                 });
               }
@@ -10686,9 +10686,9 @@ router.get("/getInvoiceForLicence/:id", function (req, res, next) {
       logger.log("error", err.sql + ". " + err.sqlMessage);
       res.json(err);
     }
+    console.log(req.params.id);
     conn.query(
-      "select * from licence_payment lp join licence l on lp.licence_id = l.id join users_superadmin u on lp.superadmin_id = u.id where lp.id = ?",
-      [sha1(req.params.id)],
+      "select * from licence_payment lp join licence l on lp.licence_id = l.id join users_superadmin u on lp.superadmin_id = u.id where SHA1(lp.id) like ?", [req.params.id],
       function (err, rows) {
         conn.release();
         if (!err) {

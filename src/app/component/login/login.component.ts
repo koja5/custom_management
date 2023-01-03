@@ -75,16 +75,13 @@ export class LoginComponent implements OnInit {
       this.helpService.getLanguage()
     ) {
       this.language = this.helpService.getLanguage();
-      console.log("ovde 1");
     } else if (
       this.helpService.getLocalStorage("countryCode") &&
       this.helpService.getLanguage()
     ) {
       this.language = this.helpService.getLanguage();
-      console.log("ovde 2");
     } else {
       this.checkCountryLocation();
-      console.log("ovde 3");
     }
     if (this.helpService.getLocalStorage("registrationData")) {
       const registrationData = JSON.parse(
