@@ -26,7 +26,7 @@ import { QueryCellInfoEventArgs } from "@syncfusion/ej2-angular-grids";
 import { Tooltip } from "@syncfusion/ej2-popups";
 import { ClickEventArgs } from "@syncfusion/ej2-navigations";
 import { SystemLogsService } from "src/app/service/system-logs.service";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { AccountService } from "src/app/service/account.service";
 import { PackLanguageService } from "src/app/service/pack-language.service";
 import { MailService } from "src/app/service/mail.service";
@@ -91,6 +91,7 @@ export class DynamicGridComponent implements OnInit {
     private helpService: HelpService,
     private messageService: MessageService,
     private router: Router,
+    public activateRouter: ActivatedRoute,
     private elem: ElementRef,
     private packLanguage: PackLanguageService,
     private mailService: MailService
@@ -204,11 +205,14 @@ export class DynamicGridComponent implements OnInit {
   }
 
   packParametersConfig(parameters) {
+    console.log(this.activateRouter.snapshot.paramMap);
     for (let i = 0; i < parameters.length; i++) {
       if (parameters[i] === "getMe") {
         parameters[i] = this.helpService.getMe();
       } else if (parameters[i] === "superadmin") {
         parameters[i] = this.helpService.getSuperadmin();
+      } else {
+        parameters[i] = this.activateRouter.snapshot.paramMap.get(parameters[i]);
       }
     }
     return parameters;

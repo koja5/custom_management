@@ -205,13 +205,16 @@
     <div class="white-box">
       <div class="tabs widget">
         <ul class="nav nav-tabs widget">
-          <li [ngClass]="currentTab === 'profile' ? 'active' : ''">
+          <li [ngClass]="currentTab === 'profile' ? 'active' : ''" (click)="currentTab = 'profile'">
             <a>{{ language.profile }}</a>
+          </li>
+          <li [ngClass]="currentTab === 'payment' ? 'active' : ''" (click)="currentTab = 'payment'">
+            <a>{{ language.archiveOfPaidLicenses }}</a>
           </li>
         </ul>
         <br />
         <!-- Tab panes -->
-        <div class="tab-content">
+        <div class="tab-content" *ngIf="currentTab === 'profile'">
           <div class="tab-pane active fontawesome-demo" id="tab1">
             <div id="biography">
               <div class="row" *ngIf="data === undefined">
@@ -660,6 +663,10 @@
               <hr />
             </div>
           </div>
+        </div>
+
+        <div class="tab-content" *ngIf="currentTab === 'payment'">
+          <app-dynamic-grid [path]="'grid'" [name]="'registered-clinics-payment-licence'"></app-dynamic-grid>
         </div>
       </div>
     </div>

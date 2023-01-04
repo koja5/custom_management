@@ -1,0 +1,95 @@
+{
+    "pageSize": 10,
+    "request": {
+        "type": "GET",
+        "api": "/api/getAllPaidLicenseForUser",
+        "parameters": [
+            "id"
+        ],
+        "fields": "",
+        "root": ""
+    },
+    "paging": {
+        "enable": true,
+        "settings": {
+            "pageSize": 10
+        }
+    },
+    "sorting": {
+        "enable": true,
+        "initalSorting": {
+            "columns": [
+                {
+                    "field": "expiration_date",
+                    "direction": "Descending"
+                }
+            ]
+        }
+    },
+    "grouping": {
+        "enable": true,
+        "group": []
+    },
+    "filtering": {
+        "enable": false
+    },
+    "customGrouping": false,
+    "allowResizing": true,
+    "reorderable": true,
+    "selectable": true,
+    "scrollable": false,
+    "hideable": true,
+    "refresh": false,
+    "reset": true,
+    "toolbar": [
+        "Print",
+        "Search"
+    ],
+    "columns": [
+        {
+            "title": "licenceName",
+            "width": 150,
+            "filterable": true,
+            "filter": "text",
+            "type": "textbox",
+            "class": "text-align-right",
+            "field": "name"
+        },
+        {
+            "title": "licencePrice",
+            "width": 150,
+            "filterable": true,
+            "filter": "text",
+            "type": "textbox",
+            "class": "text-align-right",
+            "field": "price"
+        },
+        {
+            "title": "licencePaymentDate",
+            "width": 150,
+            "filterable": true,
+            "filter": "text",
+            "type": "date",
+            "class": "text-align-right",
+            "field": "date_paid",
+            "format": {
+                "type": "date",
+                "format": "dd/MM/yyyy"
+            }
+        },
+        {
+            "title": "licenceExpiredDate",
+            "width": 150,
+            "filterable": true,
+            "filter": "text",
+            "type": "date",
+            "class": "text-align-right",
+            "field": "expiration_date",
+            "format": {
+                "type": "date",
+                "format": "dd/MM/yyyy"
+            }
+        }
+    ],
+    "configField": []
+}

@@ -12,7 +12,7 @@
     #grid
     *ngIf="config"
     width="100%"
-    [height]="height"
+    [height]="config.height ? config.height : height"
     [dataSource]="data"
     [editSettings]="config.editSettings"
     [toolbar]="config.toolbar"

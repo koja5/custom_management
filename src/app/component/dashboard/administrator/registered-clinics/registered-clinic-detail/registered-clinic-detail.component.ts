@@ -34,6 +34,7 @@ export class RegisteredClinicDetailComponent implements OnInit {
   isFileChoosen: boolean = false;
   fileName: string = '';
   dialogOpened: boolean = false;
+  public currentTab = 'profile';
   checkIsValidDate = checkIsValidDate;
 
   constructor(
