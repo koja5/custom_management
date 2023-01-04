@@ -5852,7 +5852,9 @@ router.post("/sendMassiveSMS", function (req, res) {
                       ? to.telephone
                       : null;
                     var unsubscribeLink =
-                      process.env.unsubscribeSMS + "/" + global.btoa(to.customerId);
+                      process.env.unsubscribeSMS +
+                      "/" +
+                      global.btoa(to.customerId);
                     if (
                       checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
                       req.body.message
@@ -10204,21 +10206,27 @@ router.post(
 /* Registered Clinics */
 
 router.get("/getRegisteredClinics", function (req, res) {
-  connection.getConnection(function (err, conn) {
-    if (err) {
-      logger.log("error", err.sql + ". " + err.sqlMessage);
-      res.json(err);
-    }
-    conn.query("SELECT * from users_superadmin", function (err, rows) {
-      conn.release();
-      if (!err) {
-        res.json(rows);
-      } else {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
         logger.log("error", err.sql + ". " + err.sqlMessage);
         res.json(err);
       }
+      conn.query("SELECT * from users_superadmin", function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
+      });
     });
-  });
+  } catch (ex) {
+    console.log(ex);
+    logger.log("error", ex);
+    res.json(false);
+  }
 });
 
 router.post("/createClinic", function (req, res, next) {
@@ -10688,7 +10696,8 @@ router.get("/getInvoiceForLicence/:id", function (req, res, next) {
     }
     console.log(req.params.id);
     conn.query(
-      "select * from licence_payment lp join licence l on lp.licence_id = l.id join users_superadmin u on lp.superadmin_id = u.id where SHA1(lp.id) like ?", [req.params.id],
+      "select * from licence_payment lp join licence l on lp.licence_id = l.id join users_superadmin u on lp.superadmin_id = u.id where SHA1(lp.id) like ?",
+      [req.params.id],
       function (err, rows) {
         conn.release();
         if (!err) {
