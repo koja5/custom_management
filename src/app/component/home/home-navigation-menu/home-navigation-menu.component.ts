@@ -6,6 +6,7 @@ import {
   OnInit,
   Output,
 } from "@angular/core";
+import { Router } from "@angular/router";
 import { HelpService } from "src/app/service/help.service";
 import { LoginService } from "src/app/service/login.service";
 
@@ -27,7 +28,8 @@ export class HomeNavigationMenuComponent implements OnInit {
 
   constructor(
     private helpService: HelpService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -87,9 +89,19 @@ export class HomeNavigationMenuComponent implements OnInit {
             "language",
             JSON.stringify(language["config"])
           );
-          this.helpService.setLocalStorage("languageVersion", language["timestamp"]);
-          this.helpService.setLocalStorage("languageName", language["language"]);
+          this.helpService.setLocalStorage(
+            "languageVersion",
+            language["timestamp"]
+          );
+          this.helpService.setLocalStorage(
+            "languageName",
+            language["language"]
+          );
         }
       });
+  }
+
+  navigationUrl(url: string) {
+    this.router.navigate([url]);
   }
 }

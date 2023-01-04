@@ -58,8 +58,9 @@
       </div>
 
       <div class="action-btns text-end mr-5 me-lg-0 d-none d-md-block d-lg-block">
-        <a routerLink="../login" class="btn btn-link text-decoration-none mr-2">{{ language.navigationMenuSignIn }}</a>
-        <a routerLink="../request-demo" class="btn btn-primary">{{
+        <a (click)="navigationUrl('./login')" class="btn btn-link text-decoration-none mr-2">{{
+          language.navigationMenuSignIn }}</a>
+        <a (click)="navigationUrl('./request-demo')" class="btn btn-primary">{{
           language.navigationMenuSignUp
           }}</a>
       </div>
@@ -97,9 +98,9 @@
             </li>
           </ul>
           <div class="action-btns mt-4 ps-3 text-center">
-            <a routerLink="../login" class="btn btn-outline-primary mr-2">
+            <a (click)="navigationUrl('./login')" class="btn btn-outline-primary mr-2">
               {{ language.navigationMenuSignIn }}</a>
-            <a routerLink="../request-demo" class="btn btn-primary">
+            <a (click)="navigationUrl('./request-demo')" class="btn btn-primary">
               {{ language.navigationMenuSignUp }}</a>
           </div>
         </div>
