@@ -75,7 +75,7 @@ export class LoginService {
 
   getDefaultLanguage() {
     return this.http
-      .get("/api/getTranslationByCountryCode/US")
+      .get("/api/getTranslationByCountryCode/AT")
       .map((res) => res);
   }
 

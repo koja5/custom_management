@@ -317,10 +317,10 @@
           </div>
           <div class="left-panel" [style.height]="height">
             <div class="overview-scheduler">
-              <div *ngIf="loading" class="d-flex-center-column p-3 height-100">
+              <div *ngIf="loading && store && value" class="d-flex-center-column p-3 height-100">
                 <div class="fa fa-2x fa-spinner fa-spin"></div>
               </div>
-              <div *ngIf="(!loading && !isValidStoreSelected) || !isUserSelected"
+              <div *ngIf="(!loading && !isValidStoreSelected) || !isUserSelected || !store || !value"
                 class="d-flex-center-column p-3 height-100">
                 <i class="fa fa-search"></i>
                 <span>

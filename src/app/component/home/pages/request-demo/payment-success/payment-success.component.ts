@@ -30,14 +30,13 @@ export class PaymentSuccessComponent implements OnInit {
   }
 
   previewInvoice() {
-    console.log(this.route.snapshot.params.id);
-    this.paidLicense.open();
     this.licenceService
       .getInvoiceForLicence(this.route.snapshot.params.id)
       .subscribe((data: any) => {
         if (data && data.length > 0) {
           console.log(data);
           this.license = data[0];
+          this.paidLicense.open();
         }
       });
   }

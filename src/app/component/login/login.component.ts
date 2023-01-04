@@ -75,16 +75,13 @@ export class LoginComponent implements OnInit {
       this.helpService.getLanguage()
     ) {
       this.language = this.helpService.getLanguage();
-      console.log("ovde 1");
     } else if (
       this.helpService.getLocalStorage("countryCode") &&
       this.helpService.getLanguage()
     ) {
       this.language = this.helpService.getLanguage();
-      console.log("ovde 2");
     } else {
       this.checkCountryLocation();
-      console.log("ovde 3");
     }
     if (this.helpService.getLocalStorage("registrationData")) {
       const registrationData = JSON.parse(
@@ -119,8 +116,14 @@ export class LoginComponent implements OnInit {
             JSON.stringify(this.language)
           );
 
-          this.helpService.setLocalStorage("languageVersion", language["timestamp"]);
-          this.helpService.setLocalStorage("languageName", language["language"]);
+          this.helpService.setLocalStorage(
+            "languageVersion",
+            language["timestamp"]
+          );
+          this.helpService.setLocalStorage(
+            "languageName",
+            language["language"]
+          );
         });
         this.helpService.setLocalStorage("countryCode", "US");
       }
@@ -136,8 +139,14 @@ export class LoginComponent implements OnInit {
             "language",
             JSON.stringify(this.language)
           );
-          this.helpService.setLocalStorage("languageVersion", language["timestamp"]);
-          this.helpService.setLocalStorage("languageName", language["language"]);
+          this.helpService.setLocalStorage(
+            "languageVersion",
+            language["timestamp"]
+          );
+          this.helpService.setLocalStorage(
+            "languageName",
+            language["language"]
+          );
           this.helpService.setLocalStorage(
             "accountLanguage",
             language["countryCode"]
@@ -154,7 +163,7 @@ export class LoginComponent implements OnInit {
                   "language",
                   JSON.stringify(this.language)
                 );
-                this.helpService.setLocalStorage("accountLanguage", "US");
+                this.helpService.setLocalStorage("accountLanguage", "AT");
                 this.router.navigate(["/dashboard/home/task"]);
               } else {
                 this.router.navigate(["/maintence"]);
@@ -181,8 +190,14 @@ export class LoginComponent implements OnInit {
             "language",
             JSON.stringify(this.language)
           );
-          this.helpService.setLocalStorage("languageVersion", language["timestamp"]);
-          this.helpService.setLocalStorage("languageName", language["language"]);
+          this.helpService.setLocalStorage(
+            "languageVersion",
+            language["timestamp"]
+          );
+          this.helpService.setLocalStorage(
+            "languageName",
+            language["language"]
+          );
           this.helpService.setLocalStorage(
             "accountLanguage",
             language["countryCode"]
@@ -309,9 +324,9 @@ export class LoginComponent implements OnInit {
             }
           } else if (info === "licence_expired") {
             this.router.navigate(["/access-forbiden"]);
-          } else if(info === 'licence_expired_owner') {
+          } else if (info === "licence_expired_owner") {
             this.setUserInfoToLocalStorage(type, id, storeId, superadmin);
-            this.router.navigate(['/licence']);
+            this.router.navigate(["/licence"]);
           } else {
             this.loginInfo = JSON.parse(localStorage.getItem("language"))[
               "notCorrectPass"

@@ -38,7 +38,7 @@ function sendHappyBirthdayViaEmail() {
   connection.getConnection(function (err, conn) {
     request(
       link + "/getTranslationByCountryCode/AT",
-      function (error, response, body) {
+      function (error, res, body) {
         if (!error && response.statusCode === 200) {
           conn.query(
             /*"SELECT distinct c.*, mb.* from customers c join mail_birthday_congratulation mb on c.storeId = mb.superadmin where DAY(c.birthday + interval 1 DAY) = DAY(CURRENT_DATE()) and MONTH(c.birthday) = MONTH(CURRENT_DATE())",*/
@@ -125,23 +125,18 @@ function sendHappyBirthdayViaEmail() {
                     function (error, response) {
                       if (error) {
                         logger.log("error", error);
-                        response.json(false);
                       } else {
                         logger.log(
                           "info",
-                          `Sent mail for marketing promotion on EMAIL: ${to.email}`
+                          `Sent mail for celebrate birthday on EMAIL: ${to.email}`
                         );
-                        response.json(true);
                       }
                     }
-                  );
-                  logger.log(
-                    "info",
-                    `Sent mail for marketing promotion on EMAIL: ${to.email}`
                   );
                 }
               });
               conn.release();
+              res.json(true);
             }
           );
         }
