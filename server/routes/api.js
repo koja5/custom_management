@@ -1207,7 +1207,7 @@ router.post("/createCustomerFromPatientForm", function (req, res, next) {
       firstname: req.body.firstname,
       lastname: req.body.lastname,
       gender: req.body.gender,
-      telephone: req.body.telephone,
+      mobile: req.body.mobile,
       email: req.body.email,
       password: sha1(req.body.password),
       birthday: req.body.birthday,
@@ -1292,6 +1292,7 @@ router.get("/getSuperadmin/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
+          console.log(err);
           res.json(null);
         }
       }
