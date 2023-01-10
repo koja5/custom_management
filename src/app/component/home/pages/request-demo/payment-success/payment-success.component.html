@@ -19,6 +19,6 @@
 
 <modal #paidLicense modalClass="modal-lg top-margin loggerModal adminModal">
   <modal-content>
-    <app-paid-licence [license]="license"></app-paid-licence>
+    <app-paid-licence *ngIf="license" [license]="license"></app-paid-licence>
   </modal-content>
 </modal>

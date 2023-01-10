@@ -165,8 +165,8 @@
       <tr *ngFor="let item of licences" class="paid-licence">
         <td>{{language[item.name] ? language[item.name] : item.name}}</td>
         <td>{{item.price}} €</td>
-        <td>{{item.date_paid | date :'dd.MM.yyyy'}}</td>
-        <td>{{item.expiration_date | date :'dd.MM.yyyy'}}</td>
+        <td>{{convertToDate(item.date_paid) | date :'dd.MM.yyyy'}}</td>
+        <td>{{convertToDate(item.expiration_date) | date :'dd.MM.yyyy'}}</td>
         <td><span class="fa fa-search" (click)="showItemLicence(item)"></span></td>
       </tr>
     </table>
@@ -175,6 +175,6 @@
 
 <modal #previewLicence modalClass="modal-lg top-margin loggerModal adminModal">
   <modal-content>
-    <app-paid-licence [license]="itemLicence"></app-paid-licence>
+    <app-paid-licence *ngIf="itemLicence" [license]="itemLicence"></app-paid-licence>
   </modal-content>
 </modal>

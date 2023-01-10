@@ -77,7 +77,7 @@
               <br
                 style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"
               /><br
-                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"
+                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7; white-space: pre-line;"
               />{{introductoryMessage}}</p>
 
             <div style="text-align: center; padding: 15px;">

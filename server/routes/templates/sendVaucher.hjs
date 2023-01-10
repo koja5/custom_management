@@ -62,7 +62,7 @@
           style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;border-bottom-width: 1px;padding-top: 2rem;padding-bottom: 2rem;">
           <p style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;">
             {{initialGreeting}} {{firstName}}, <br>
-            <p style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
+            <p style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7; white-space: pre-line;">
             {{introductoryMessageForCreatedVaucher}}</p>
             <p style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
             {{vaucherAmount}}: {{amount}}</p>
@@ -82,7 +82,7 @@
               style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
             {{signature}}
               <br />
-             {{signatureAddress}}
+             <span style="white-space: break-spaces;">{{signatureAddress}}</span>
               <br />
               {{signatureTelephone}}
               <br />

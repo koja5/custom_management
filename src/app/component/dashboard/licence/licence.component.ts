@@ -208,12 +208,13 @@ export class LicenceComponent implements OnInit {
               .subscribe(
                 (res) => {
                   if (res["status"]) {
-                    const successPayment = {
-                      name: this.data["name"],
-                      price: this.data["price"],
-                      email: this.data["email"],
-                      expiration_date: this.data["expiration_date"],
-                    };
+                    // const successPayment = {
+                    //   name: this.data["name"],
+                    //   price: this.data["price"],
+                    //   email: this.data["email"],
+                    //   expiration_date: this.data["expiration_date"],
+                    // };
+                    const successPayment = this.packDateForSendLicenseMail();
                     this.callApi
                       .callApiPost(
                         "/api/sendInfoForLicencePaymentSuccess",
@@ -240,6 +241,44 @@ export class LicenceComponent implements OnInit {
           this.helpService.errorToastr(this.language.paymentError, "");
         }
       );
+  }
+
+  packDateForSendLicenseMail() {
+    return {
+      licenseInvoice: this.language.licenseInvoice,
+      licenseCompany: this.language.licenseCompany,
+      licenseCompanyName: this.language.licenseCompanyName,
+      licenseCompanyAddress: this.language.licenseCompanyAddress,
+      licenseZipCode: this.language.licenseZipCode,
+      licenseCity: this.language.licenseCity,
+      licenseInvoiceNumber: this.language.licenseInvoiceNumber,
+      number: 1,
+      invoiceDate: this.language.invoiceDate,
+      date: new Date(),
+      licensePayer: this.language.licensePayer,
+      payerName: this.data.name,
+      payerEmail: this.data.email,
+      payerPhone: this.data.phone,
+      licencePaymentDate: this.language.licencePaymentDate,
+      licenceName: this.language.licenceName,
+      licencePrice: this.language.licencePrice,
+      licenseMonth: this.language.licenseMonth,
+      licenseNetoPrice: this.language.licenseNetoPrice,
+      licenseFee: this.language.licenseFee,
+      licenseBrutoPrice: this.language.licenseBrutoPrice,
+      licenceExpiredDate: this.language.licenceExpiredDate,
+      datePaid: new Date(),
+      name: this.language[this.licence.name]
+        ? this.language[this.licence.name]
+        : this.licence.name,
+      price: this.licence.price,
+      expired: this.data["expired"],
+      feeValue: this.language.feeValue,
+      expirationDate: this.data["expiration_date"],
+      paymentType: this.language.paymentType,
+      licenseCompanyPhone: this.language.licenseCompanyPhone,
+      licenseCompanyEmail: this.language.licenseCompanyEmail,
+    };
   }
 
   submitSMSPayment() {
@@ -364,5 +403,9 @@ export class LicenceComponent implements OnInit {
   showItemLicence(item) {
     this.itemLicence = item;
     this.previewLicence.open();
+  }
+
+  convertToDate(date) {
+    return new Date(date);
   }
 }
