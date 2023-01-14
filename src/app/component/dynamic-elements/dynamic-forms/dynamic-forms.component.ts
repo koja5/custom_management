@@ -35,7 +35,8 @@ export class DynamicFormsComponent implements OnInit, OnChanges {
   showDialogExitChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @Output()
-  receiveConfirmExitResponse: EventEmitter<boolean> = new EventEmitter<boolean>();
+  receiveConfirmExitResponse: EventEmitter<boolean> =
+    new EventEmitter<boolean>();
 
   @Output()
   submit: EventEmitter<any> = new EventEmitter<any>();
@@ -80,9 +81,11 @@ export class DynamicFormsComponent implements OnInit, OnChanges {
       this.getIsFormDirty();
       this.sendValue();
     });
-    // this.form.get('noEventSinceCheckbox').valueChanges.subscribe(val => {
-    //   this.mapCondition(val);
-    // })
+    if (this.form.get("noEventSinceCheckbox")) {
+      this.form.get("noEventSinceCheckbox").valueChanges.subscribe((val) => {
+        this.mapCondition(val);
+      });
+    }
   }
 
   sendValue(): void {
@@ -133,7 +136,7 @@ export class DynamicFormsComponent implements OnInit, OnChanges {
   handleSubmit(event: Event) {
     event.preventDefault();
     event.stopPropagation();
-    if(this.form.invalid) {
+    if (this.form.invalid) {
       this.helpService.errorToastr(
         this.language.allRequiredFieldsMustBeFilledOut,
         ""
@@ -159,15 +162,15 @@ export class DynamicFormsComponent implements OnInit, OnChanges {
   }
 
   private mapCondition(noEventSinceCheckboxVal) {
-    let field = this.config.find(x => x.name === 'noEventSinceDate')
+    let field = this.config.find((x) => x.name === "noEventSinceDate");
     let control = this.form.get(field.name);
-    if(field.condition) {
-      if(noEventSinceCheckboxVal) {
+    if (field.condition) {
+      if (noEventSinceCheckboxVal) {
         field.condition.value = true;
-        control.setValidators(Validators.required);
+        // control.setValidators(Validators.required);
       } else {
         field.condition.value = false;
-        control.clearValidators();
+        // control.clearValidators();
       }
       control.updateValueAndValidity();
     }

@@ -1153,39 +1153,39 @@ router.post("/sendReminderViaEmailManual", function (req, res) {
           to: req.body.email,
           subject: mail.mailSubject,
           html: compiledTemplate.render({
-            initialGreeting: mail?.mailInitialGreeting
-              ? mail?.mailInitialGreeting
+            initialGreeting: mail.mailInitialGreeting
+              ? mail.mailInitialGreeting
               : req.body.language?.initialGreeting,
-            introductoryMessageForReminderReservation: mail?.mailMessage
-              ? mail?.mailMessage
+            introductoryMessageForReminderReservation: mail.mailMessage
+              ? mail.mailMessage
               : req.body.language?.introductoryMessageForReminderReservation,
             dateMessage: mail.mailDate ? mail.mailDate + " " : "",
             timeMessage: mail.mailTime ? mail.mailTime + " " : "",
             storeLocation: mail.mailClinic ? mail.mailClinic + " " : "",
-            therapyMessage: mail?.mailTherapy
-              ? mail?.mailTherapy
+            therapyMessage: mail.mailTherapy
+              ? mail.mailTherapy
               : req.body.language?.therapyMessage,
-            doctorMessage: mail?.mailDoctor
-              ? mail?.mailDoctor
+            doctorMessage: mail.mailDoctor
+              ? mail.mailDoctor
               : req.body.language?.doctorMessage,
-            finalGreeting: mail?.mailFinalGreeting
-              ? mail?.mailFinalGreeting
+            finalGreeting: mail.mailFinalGreeting
+              ? mail.mailFinalGreeting
               : req.body.language?.finalGreeting,
             signature:
               signatureAvailable && mail.mailSignature
                 ? mail.mailSignature
                 : "",
-            thanksForUsing: mail?.mailThanksForUsing
-              ? mail?.mailThanksForUsing
+            thanksForUsing: mail.mailThanksForUsing
+              ? mail.mailThanksForUsing
               : req.body.language?.thanksForUsing,
-            ifYouHaveQuestion: mail?.mailIfYouHaveQuestion
-              ? mail?.mailIfYouHaveQuestion
+            ifYouHaveQuestion: mail.mailIfYouHaveQuestion
+              ? mail.mailIfYouHaveQuestion
               : req.body.language?.ifYouHaveQuestion,
-            notReply: mail?.mailNotReply
-              ? mail?.mailNotReply
+            notReply: mail.mailNotReply
+              ? mail.mailNotReply
               : req.body.language?.notReply,
-            copyRight: mail?.mailCopyRight
-              ? mail?.mailCopyRight
+            copyRight: mail.mailCopyRight
+              ? mail.mailCopyRight
               : req.body.language?.copyRight,
             firstName: req.body.shortname,
             date: mail.mailDate ? date : "",
@@ -1231,7 +1231,7 @@ router.post("/sendReminderViaEmailManual", function (req, res) {
           } else {
             logger.log(
               "info",
-              `Sent reminder via email on EMAIL: ${req.body.email}`
+              `Sent MANUAL reminder via email on EMAIL: ${req.body.email}`
             );
             res.send(true);
           }
