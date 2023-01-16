@@ -275,6 +275,7 @@ export class LicenceComponent implements OnInit {
       expired: this.data["expired"],
       feeValue: this.language.feeValue,
       expirationDate: this.data["expiration_date"],
+      numberOfMonth: this.data['expired'],
       paymentType: this.language.paymentType,
       licenseCompanyPhone: this.language.licenseCompanyPhone,
       licenseCompanyEmail: this.language.licenseCompanyEmail,

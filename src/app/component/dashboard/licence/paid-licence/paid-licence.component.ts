@@ -26,13 +26,12 @@ export class PaidLicenceComponent implements OnInit {
   convertDates() {
     this.license["date_paid"] = new Date(this.license.date_paid);
     this.license.expiration_date = new Date(this.license.expiration_date);
-    var diffDays =
-      new Date(this.license.expiration_date).getMonth() -
-      new Date(this.license.date_paid).getMonth();
-    this.license["expired"] = diffDays;
+    // var diffDays =
+    //   new Date(this.license.expiration_date).getMonth() -
+    //   new Date(this.license.date_paid).getMonth();
+    // this.license["expired"] = diffDays;
     this.license["brutoPrice"] = (
-      Number(this.license.price) * diffDays
-    ).toFixed(2);
+      Number(this.license.price) * this.license.numberOfMonth
     this.license["netoPrice"] = (
       (this.license.brutoPrice / (100 + Number(this.language.feeValue))) *
       100

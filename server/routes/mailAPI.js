@@ -2288,7 +2288,7 @@ router.post("/sendInfoForLicencePaymentSuccess", function (req, res) {
         new Date(req.body.datePaid).getFullYear(),
       name: req.body.name,
       price: req.body.price,
-      expired: req.body.expired,
+      numberOfMonth: req.body.numberOfMonth,
       netoPrice: (
         ((Number(req.body.price) * Number(req.body.expired)).toFixed(2) /
           (100 + Number(req.body.feeValue))) *

@@ -10653,6 +10653,7 @@ router.post("/updateLicence", function (req, res, next) {
         } else {
           date["price"] = req.body.price;
           date["date_paid"] = new Date();
+          date['numberOfMonth'] = req.body.expired;
           conn.query(
             "insert into licence_payment SET ?",
             [date],
