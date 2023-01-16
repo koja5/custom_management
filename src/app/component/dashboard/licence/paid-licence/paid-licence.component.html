@@ -1,49 +1,370 @@
-<body *ngIf="license">
-  <div id="licensePdf" #licensePdf>
-    <div class="left">
-      <div class="info-box">
-        <div class="receipt">
-          {{language.licence}}
-        </div>
-        <div class="entry">
-          <span class="fa fa-money" aria-hidden="true"></span>
-          <p>{{language.licencePriceTitle}}:<span> {{license.price}} €</span></p>
-        </div>
-        <div class="entry">
-          <span class="fa fa-calendar" aria-hidden="true"></span>
-          <p>{{language.licenceExpiration}}:<span> {{license.expiration_date | date :'dd.MM.yyyy' }}</span></p>
-        </div>
-        <div class="entry">
-          <span class="fa fa-id-card" aria-hidden="true"></span>
-          <p>{{language.yourLicence}}:<span> {{language[license.name] ? language[license.name] : license.name}}</span>
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="right">
-      <div class="content">
-        <div class="header">
-          <!-- <img src="http://app-production.eu:8080/assets/images/brand-logo.png"> -->
-          <div class="col-xs-12 text-right">
-            <h4>{{license.date_paid | date :'dd.MM.yyyy' }}</h4>
-          </div>
-        </div>
-        <div class="main">
-          <h3>{{language.extendedLicenceFor}} {{language[license.name] ? language[license.name] : license.name}}</h3>
-          <h5>{{language.licencePriceTitle}}: {{license.price}} €</h5>
-        </div>
-        <div class="message">
-          <p>{{language.greetingForPayment}} {{license.firstname}},</p>
-          <p> {{language.messageForPayment}}</p>
-        </div>
-        <div class="footer">
-          <a href="http://clinicnode.com">www.clinicnode.com</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</body>
+<div *ngIf="license && language" id="licensePdf" #licensePdf>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title> Order confirmation </title>
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="viewport" content="width=device-width; initial-scale=1.0;" />
+  <style type="text/css">
+    body {
+      margin: 0;
+      padding: 0;
+      background: #e1e1e1;
+    }
 
-<div class="col-xs-12 text-center mt-6">
-  <button class="btn btn-success" (click)="generatePDF()">{{language.downloadLicenceDoc}}</button>
+    div,
+    p,
+    a,
+    li,
+    td {
+      -webkit-text-size-adjust: none;
+    }
+
+    .ReadMsgBody {
+      width: 100%;
+      background-color: #ffffff;
+    }
+
+    .ExternalClass {
+      width: 100%;
+      background-color: #ffffff;
+    }
+
+    body {
+      width: 100%;
+      height: 100%;
+      background-color: #e1e1e1;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    html {
+      width: 100%;
+    }
+
+    p {
+      padding: 0 !important;
+      margin-top: 0 !important;
+      margin-right: 0 !important;
+      margin-bottom: 0 !important;
+      margin-left: 0 !important;
+    }
+
+    .visibleMobile {
+      display: none;
+    }
+
+    .hiddenMobile {
+      display: block;
+    }
+
+    @media only screen and (max-width: 600px) {
+      body {
+        width: auto !important;
+      }
+
+      table[class=fullTable] {
+        width: 96% !important;
+        clear: both;
+      }
+
+      table[class=fullPadding] {
+        width: 85% !important;
+        clear: both;
+      }
+
+      table[class=col] {
+        width: 45% !important;
+      }
+
+      .erase {
+        display: none;
+      }
+    }
+
+    @media only screen and (max-width: 420px) {
+      table[class=fullTable] {
+        width: 100% !important;
+        clear: both;
+      }
+
+      table[class=fullPadding] {
+        width: 85% !important;
+        clear: both;
+      }
+
+      table[class=col] {
+        width: 100% !important;
+        clear: both;
+      }
+
+      table[class=col] td {
+        text-align: left !important;
+      }
+
+      .erase {
+        display: none;
+        font-size: 0;
+        max-height: 0;
+        line-height: 0;
+        padding: 0;
+      }
+
+      .visibleMobile {
+        display: block !important;
+      }
+
+      .hiddenMobile {
+        display: none !important;
+      }
+    }
+  </style>
+
+
+  <!-- Header -->
+  <table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" class="fullTable" bgcolor="#e1e1e1">
+    <tr>
+      <td height="20"></td>
+    </tr>
+    <tr>
+      <td>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" class="fullTable"
+          bgcolor="#ffffff" style="border-radius: 10px 10px 0 0;">
+          <tr class="visibleMobile">
+            <td height="30"></td>
+          </tr>
+
+          <tr>
+            <td>
+              <table width="720" border="0" cellpadding="0" cellspacing="0" align="center" class="fullPadding">
+                <tbody>
+                  <tr>
+                    <td>
+                      <table width="330" border="0" cellpadding="0" cellspacing="0" align="left" class="col">
+                        <tbody>
+                          <tr>
+                            <td
+                              style="font-size: 21px; color: #ff0000; letter-spacing: -1px; font-family: 'Open Sans', sans-serif; line-height: 1; vertical-align: top;">
+                              {{language.licenseInvoice}}
+                            </td>
+                          </tr>
+                          <tr class="hiddenMobile">
+                            <td height="40"></td>
+                          </tr>
+                          <tr class="visibleMobile">
+                            <td height="20"></td>
+                          </tr>
+                          <tr>
+                            <td
+                              style="font-size: 12px; color: #5b5b5b; font-family: 'Open Sans', sans-serif; line-height: 18px; vertical-align: top; text-align: left;">
+                              {{language.licenseCompany}}
+                              <br>
+                              {{language.licenseCompanyName}}
+                              <br>
+                              {{language.licenseCompanyAddress}}
+                              <br>
+                              {{language.licenseZipCode}} {{language.licenseCity}}
+                              <br>
+                              {{language.companyNumber}}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table width="330" border="0" cellpadding="0" cellspacing="0" align="right" class="col">
+                        <tbody>
+                          <tr>
+                            <td
+                              style="font-size: 12px; color: #5b5b5b; font-family: 'Open Sans', sans-serif; line-height: 18px; vertical-align: top; text-align: right;">
+                              <!-- <small>{{language.licenseInvoiceNumber}}</small> #{{number}}<br /> -->
+                              <small>{{language.licencePaymentDate}} {{license.date_paid | date: 'dd.MM.yyyy'}}</small>
+                            </td>
+                          </tr>
+                          <tr>
+                          <tr class="hiddenMobile">
+                            <td height="20"></td>
+                          </tr>
+                          <tr>
+                            <td
+                              style="font-size: 12px; color: #5b5b5b; font-family: 'Open Sans', sans-serif; line-height: 18px; vertical-align: top; text-align: right; display: grid">
+                              {{language.licensePayer}}
+                              <br>
+                              {{license.firstname}} {{license.lastname}}
+                              <br>
+                              {{license.zipcode}} {{license.street}}
+                              <br>
+                              {{license.place}}
+                              <br>
+                              {{license.telephone}}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <!-- /Header -->
+  <!-- Order Details -->
+  <table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" class="fullTable" bgcolor="#e1e1e1">
+    <tbody>
+      <tr>
+        <td>
+          <table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" class="fullTable"
+            bgcolor="#ffffff">
+            <tbody>
+              <tr>
+              <tr class="hiddenMobile">
+                <td height="60"></td>
+              </tr>
+              <tr class="visibleMobile">
+                <td height="40"></td>
+              </tr>
+              <tr>
+                <td>
+                  <table width="720" border="0" cellpadding="0" cellspacing="0" align="center" class="fullPadding">
+                    <tbody>
+                      <tr>
+                        <th
+                          style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #5b5b5b;  line-height: 1; vertical-align: top; padding: 0 0 7px; text-align: center;"
+                          align="center">
+                          {{language.licencePaymentDate}}
+                        </th>
+                        <th
+                          style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #5b5b5b;  line-height: 1; vertical-align: top; padding: 0 0 7px; text-align: center;"
+                          align="center">
+                          {{language.licenceName}}
+                        </th>
+                        <th
+                          style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #5b5b5b;  line-height: 1; vertical-align: top; padding: 0 0 7px; text-align: center;"
+                          align="center">
+                          {{language.licencePrice}}
+                        </th>
+                        <th
+                          style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33;  line-height: 1; vertical-align: top; padding: 0 0 7px; text-align: center;"
+                          align="center">
+                          {{language.licenseMonth}}
+                        </th>
+                        <th
+                          style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33;  line-height: 1; vertical-align: top; padding: 0 0 7px; text-align: center;"
+                          align="center">
+                          {{language.licenseNetoPrice}}
+                        </th>
+                        <th
+                          style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33;  line-height: 1; vertical-align: top; padding: 0 0 7px; text-align: center;"
+                          align="center">
+                          {{language.licenseFee}}
+                        </th>
+                        <th
+                          style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33;  line-height: 1; vertical-align: top; padding: 0 0 7px; text-align: center;"
+                          align="center">
+                          {{language.licenseBrutoPrice}}
+                        </th>
+                        <th
+                          style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33;  line-height: 1; vertical-align: top; padding: 0 0 7px; text-align: center;"
+                          align="center">
+                          {{language.licenceExpiredDate}}
+                        </th>
+                      </tr>
+                      <tr>
+                        <td height="1" style="background: #bebebe;" colspan="8"></td>
+                      </tr>
+                      <tr>
+                        <td
+                          style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #646a6e;  line-height: 18px;  vertical-align: top; padding:10px 0; text-align: center;"
+                          class="article">
+                          {{license.date_paid | date: 'dd.MM.yyyy'}}
+                        </td>
+                        <td
+                          style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #646a6e;  line-height: 18px;  vertical-align: top; padding:10px 0; text-align: center;">
+                          {{license.name}}
+                        </td>
+                        <td
+                          style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #646a6e;  line-height: 18px;  vertical-align: top; padding:10px 0; text-align: center;"
+                          align="center">€ {{license.price}}</td>
+                        <td
+                          style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33;  line-height: 18px;  vertical-align: top; padding:10px 0; text-align: center"
+                          align="center">{{license.expired}}</td>
+                        <td
+                          style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33;  line-height: 18px;  vertical-align: top; padding:10px 0; text-align: center"
+                          align="center">{{license.netoPrice}}</td>
+                        <td
+                          style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33;  line-height: 18px;  vertical-align: top; padding:10px 0; text-align: center"
+                          align="center">{{language.feeValue}}</td>
+                        <td
+                          style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33;  line-height: 18px;  vertical-align: top; padding:10px 0; text-align: center"
+                          align="center">{{license.brutoPrice}}</td>
+                        <td
+                          style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33;  line-height: 18px;  vertical-align: top; padding:10px 0; text-align: center"
+                          align="center">{{license.expiration_date | date: 'dd.MM.yyyy'}}</td>
+                      </tr>
+                      <tr>
+                        <td height="1" colspan="8" style="background: #bebebe;"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td height="20"></td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- /Order Details -->
+  <table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" class="fullTable" bgcolor="#e1e1e1">
+
+    <tr>
+      <td>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" class="fullTable"
+          bgcolor="#ffffff" style="border-radius: 0 0 10px 10px;">
+          <tr>
+            <td>
+              <table width="720" border="0" cellpadding="0" cellspacing="0" align="center" class="fullPadding">
+                <tbody>
+                  <tr>
+                    <td
+                      style="font-size: 12px; color: #5b5b5b; font-family: 'Open Sans', sans-serif; line-height: 18px; vertical-align: top; text-align: left;">
+                      {{language.paymentType}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+          <tr class="spacer">
+            <td height="100"></td>
+          </tr>
+          <tr>
+            <td
+              style="font-size: 12px; color: #5b5b5b; font-family: 'Open Sans', sans-serif; line-height: 18px; vertical-align: top; text-align: center;">
+              {{language.licenseCompanyName}} ⋅ {{language.licenseCompanyAddress}} ⋅ {{language.licenseZipCode}}
+              {{language.licenseCity}}
+              <br>
+              {{language.licenseCompanyPhone}} ⋅ {{language.licenseCompanyEmail}}
+            </td>
+          </tr>
+          <tr class="spacer">
+            <td height="30"></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td height="20"></td>
+    </tr>
+
+  </table>
+
 </div>
+
+<!-- <div class="col-xs-12 text-center mt-6">
+    <button class="btn btn-success" (click)="generatePDF()">{{language.downloadLicenceDoc}}</button>
+  </div> -->

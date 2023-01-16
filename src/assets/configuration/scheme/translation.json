@@ -2569,6 +2569,57 @@
             "licencePreview": {
                 "type": "string"
             },
+            "licenseInvoice": {
+                "type": "string"
+            },
+            "licenseCompany": {
+                "type": "string"
+            },
+            "licenseInvoiceNumber": {
+                "type": "string"
+            },
+            "licenseDate": {
+                "type": "string"
+            },
+            "licensePayer": {
+                "type": "string"
+            },
+            "licenseMonth": {
+                "type": "string"
+            },
+            "licenseNetoPrice": {
+                "type": "string"
+            },
+            "licenseBrutoPrice": {
+                "type": "string"
+            },
+            "licenseFee": {
+                "type": "string"
+            },
+            "feeValue": {
+                "type": "string"
+            },
+            "paymentType": {
+                "type": "string"
+            },
+            "licenseCompanyName": {
+                "type": "string"
+            },
+            "licenseCompanyAddress": {
+                "type": "string"
+            },
+            "licenseZipCode": {
+                "type": "string"
+            },
+            "licenseCity": {
+                "type": "string"
+            },
+            "licenseCompanyPhone": {
+                "type": "string"
+            },
+            "licenseCompanyEmail": {
+                "type": "string"
+            },
             "paymentSuccessTitle": {
                 "type": "string"
             },
@@ -7810,6 +7861,78 @@
                         },
                         {
                             "key": "licencePreview"
+                        }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "licenseInvoice"
+                        },
+                        {
+                            "key": "licenseCompany"
+                        },
+                        {
+                            "key": "licenseInvoiceNumber"
+                        },
+                        {
+                            "key": "licenseDate"
+                        },
+                        {
+                            "key": "licensePayer"
+                        },
+                        {
+                            "key": "licenseMonth"
+                        }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "licenseNetoPrice"
+                        },
+                        {
+                            "key": "licenseFee"
+                        },
+                        {
+                            "key": "feeValue"
+                        },
+                        {
+                            "key": "licenseBrutoPrice"
+                        },
+                        {
+                            "key": "paymentType"
+                        }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "licenseCompanyName"
+                        },
+                        {
+                            "key": "licenseCompanyAddress"
+                        },
+                        {
+                            "key": "licenseZipCode"
+                        },
+                        {
+                            "key": "licenseCity"
+                        },
+                        {
+                            "key": "licenseCompanyPhone"
+                        },
+                        {
+                            "key": "licenseCompanyEmail"
                         }
                     ]
                 }

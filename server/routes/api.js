@@ -2281,7 +2281,7 @@ router.get("/getUserWithID/:userid", function (req, res, next) {
       res.json(err);
     }
     conn.query(
-      "select * from users where active = 1 and id = ?",
+      "select * from users where id = ?",
       [req.params.userid],
       function (err, rows) {
         conn.release();
@@ -6525,11 +6525,14 @@ function getSqlQueryMultiSelect(body) {
     }
   }
 
-  if (body.noEventSinceCheckbox && body.noEventSinceDate) {
+  if (body.noEventSinceCheckbox) {
+    if (!body.noEventSinceDate) {
+      body.noEventSinceDate =  new Date().toISOString();
+    }
     if (question) {
-      question += ` and CAST(t.end AS DATE) < CAST('${body.noEventSinceDate}' AS DATE)`;
+      question += ` and CAST(t.end AS DATETIME) < CAST('${body.noEventSinceDate}' AS DATETIME)`;
     } else {
-      question = ` CAST(t.end AS DATE) < CAST('${body.noEventSinceDate}' AS DATE)`;
+      question = ` CAST(t.end AS DATETIME) < CAST('${body.noEventSinceDate}' AS DATETIME)`;
     }
   }
 

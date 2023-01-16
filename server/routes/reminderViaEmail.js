@@ -159,17 +159,17 @@ function reminderViaEmail() {
                       doctor: to.lastname + " " + to.firstname,
                       month: month,
                       day: day,
-                      signatureStreet:
-                        signatureAvailable && to.signatureStreet
-                          ? to.signatureStreet
+                      signatureAddress:
+                        signatureAvailable && to.signatureAddress
+                          ? to.signatureAddress
                           : "",
-                      signatureZipCode:
-                        signatureAvailable && to.signatureZipCode
+                      signatureTelephone:
+                        signatureAvailable && to.signatureTelephone
                           ? to.signatureZipCode
                           : "",
-                      signaturePhone:
-                        signatureAvailable && to.signaturePhone
-                          ? to.signaturePhone
+                      signatureMobile:
+                        signatureAvailable && to.signatureMobile
+                          ? to.signatureMobile
                           : "",
                       signatureEmail:
                         signatureAvailable && to.signatureEmail

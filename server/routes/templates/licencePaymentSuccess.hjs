@@ -1,188 +1,362 @@
-<html
-  lang="en"
-  style="box-sizing: border-box;border-width: 0;border-style: solid;border-color: #dae1e7;line-height: 1.15;-webkit-text-size-adjust: 100%;font-family: sans-serif;"
->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title> Order confirmation </title>
+<meta name="robots" content="noindex,nofollow" />
+<meta name="viewport" content="width=device-width; initial-scale=1.0;" />
+<style type="text/css">
+  @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
 
-  <head
-    style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"
-  >
-    <meta
-      charset="UTF-8"
-      style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"
-    />
-    <title
-      style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"
-    >Licence expired - ClinicNode</title>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/tailwindcss@0.7.4/dist/tailwind.min.css"
-      style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"
-    />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.0.4/css/all.css"
-      style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"
-    />
-    <style>
-      table, th, td { border: 1px solid black; border-collapse: collapse; } th,
-      td { padding: 5px; text-align: left; } @media (max-width: 768px) {
-      .date-large { display: none; } } @media (min-width: 768px) { .date-small {
-      display: none; } } p, pre { font-size: 12px; font-family: Arial,
-      Helvetica, sans-serif; }
-    </style>
-  </head>
+  body {
+    margin: 0;
+    padding: 0;
+    background: #e1e1e1;
+  }
 
-  <body
-    style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;"
-  >
-    <!-- partial:index.partial.html -->
-    <div
-      class="app font-sans min-w-screen min-h-screen bg-grey-lighter py-8 px-4"
-      style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;background-color: #f1f5f8;font-family: system-ui,BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;min-height: 100vh;padding-left: 1rem;padding-right: 1rem;padding-top: 2rem;padding-bottom: 2rem;"
-    >
+  div,
+  p,
+  a,
+  li,
+  td {
+    -webkit-text-size-adjust: none;
+  }
 
-      <div
-        class="mail__wrapper max-w-md mx-auto"
-        style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin-left: auto;margin-right: auto;max-width: 40rem;"
-      >
+  .ReadMsgBody {
+    width: 100%;
+    background-color: #ffffff;
+  }
 
-        <div
-          class="mail__content bg-white p-8 shadow-md"
-          style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;background-color: #fff;padding: 2rem;box-shadow: 0 4px 8px 0 rgba(0,0,0,.12),0 2px 4px 0 rgba(0,0,0,.08);"
-        >
+  .ExternalClass {
+    width: 100%;
+    background-color: #ffffff;
+  }
 
-          <div
-            class="content__header text-center tracking-wide border-b"
-            style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;border-bottom-width: 1px;text-align: center;letter-spacing: .05em;"
-          >
-            <div
-              class="text-red text-sm font-bold h-24"
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;font-weight: 700;height: 6rem;color: #e3342f;font-size: 12px; font-family: Arial, Helvetica, sans-serif;"
-            >
-              <img
-                src="http://app-production.eu:8080/assets/images/brand-logo.png"
-                style="width: 280px;box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;max-width: 100%;height: auto;"
-              />
-            </div>
-          </div>
+  body {
+    width: 100%;
+    height: 100%;
+    background-color: #e1e1e1;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+  }
 
-          <div
-            class="content__body py-8 border-b"
-            style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;border-bottom-width: 1px;padding-top: 2rem;padding-bottom: 2rem;"
-          >
-            <p
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;"
-            >
-              Hi
-              {{name}},
-              <br
-                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"
-              /><br
-                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"
-              />The license renewal payment has been successfully received.
-              Thank you for renewing your license. Below is the payment
-              information.</p>
+  html {
+    width: 100%;
+  }
 
-            <div style="text-align: center; padding: 15px;">
-              <table style="width:80%; margin: auto;">
+  p {
+    padding: 0 !important;
+    margin-top: 0 !important;
+    margin-right: 0 !important;
+    margin-bottom: 0 !important;
+    margin-left: 0 !important;
+  }
+
+  .visibleMobile {
+    display: none;
+  }
+
+  .hiddenMobile {
+    display: block;
+  }
+
+  @media only screen and (max-width: 600px) {
+    body {
+      width: auto !important;
+    }
+
+    table[class=fullTable] {
+      width: 96% !important;
+      clear: both;
+    }
+
+    table[class=fullPadding] {
+      width: 85% !important;
+      clear: both;
+    }
+
+    table[class=col] {
+      width: 45% !important;
+    }
+
+    .erase {
+      display: none;
+    }
+  }
+
+  @media only screen and (max-width: 420px) {
+    table[class=fullTable] {
+      width: 100% !important;
+      clear: both;
+    }
+
+    table[class=fullPadding] {
+      width: 85% !important;
+      clear: both;
+    }
+
+    table[class=col] {
+      width: 100% !important;
+      clear: both;
+    }
+
+    table[class=col] td {
+      text-align: left !important;
+    }
+
+    .erase {
+      display: none;
+      font-size: 0;
+      max-height: 0;
+      line-height: 0;
+      padding: 0;
+    }
+
+    .visibleMobile {
+      display: block !important;
+    }
+
+    .hiddenMobile {
+      display: none !important;
+    }
+  }
+</style>
+
+
+<!-- Header -->
+<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" class="fullTable" bgcolor="#e1e1e1">
+  <tr>
+    <td height="20"></td>
+  </tr>
+  <tr>
+    <td>
+      <table width="900" border="0" cellpadding="0" cellspacing="0" align="center" class="fullTable" bgcolor="#ffffff"
+        style="border-radius: 10px 10px 0 0;">
+        <tr class="hiddenMobile">
+          <td height="40"></td>
+        </tr>
+        <tr class="visibleMobile">
+          <td height="30"></td>
+        </tr>
+
+        <tr>
+          <td>
+            <table width="720" border="0" cellpadding="0" cellspacing="0" align="center" class="fullPadding">
+              <tbody>
                 <tr>
                   <td>
-                    <p
-                      style="text-align: initial; font-size: 13px; margin: 0px"
-                    >Your payment:
-                      <span
-                        style="font-size: 15px; font-weight: bold;"
-                      >{{price}} €</span>
-                    </p>
+                    <table width="330" border="0" cellpadding="0" cellspacing="0" align="left" class="col">
+                      <tbody>
+                        <tr>
+                          <td
+                            style="font-size: 21px; color: #ff0000; letter-spacing: -1px; font-family: 'Open Sans', sans-serif; line-height: 1; vertical-align: top;">
+                            {{licenseInvoice}}
+                          </td>
+                        </tr>
+                        <tr class="hiddenMobile">
+                          <td height="40"></td>
+                        </tr>
+                        <tr class="visibleMobile">
+                          <td height="20"></td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="font-size: 12px; color: #5b5b5b; font-family: 'Open Sans', sans-serif; line-height: 18px; vertical-align: top; text-align: left;">
+                            {{licenseCompany}}
+                            <br>
+                            {{licenseCompanyName}}
+                            <br>
+                            {{licenseCompanyAddress}}
+                            <br>
+                            {{licenseZipCode}} {{licenseCity}}
+                            <br>
+                            {{companyNumber}}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <table width="330" border="0" cellpadding="0" cellspacing="0" align="right" class="col">
+                      <tbody>
+                        <tr>
+                          <td
+                            style="font-size: 12px; color: #5b5b5b; font-family: 'Open Sans', sans-serif; line-height: 18px; vertical-align: top; text-align: right;">
+                            <small>{{licencePaymentDate}} {{date}}</small>
+                          </td>
+                        </tr>
+                        <tr>
+                        <tr class="hiddenMobile">
+                          <td height="42"></td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="font-size: 12px; color: #5b5b5b; font-family: 'Open Sans', sans-serif; line-height: 18px; vertical-align: top; text-align: right; display: grid">
+                            {{licensePayer}}
+                            <br>
+                            {{payerName}}
+                            {{payerEmail}}
+                            {{payerPhone}}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </td>
                 </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- /Header -->
+<!-- Order Details -->
+<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" class="fullTable" bgcolor="#e1e1e1">
+  <tbody>
+    <tr>
+      <td>
+        <table width="900" border="0" cellpadding="0" cellspacing="0" align="center" class="fullTable"
+          bgcolor="#ffffff">
+          <tbody>
+            <tr>
+            <tr class="hiddenMobile">
+              <td height="60"></td>
+            </tr>
+            <tr class="visibleMobile">
+              <td height="40"></td>
+            </tr>
+            <tr>
+              <td>
+                <table width="720" border="0" cellpadding="0" cellspacing="0" align="center" class="fullPadding">
+                  <tbody>
+                    <tr>
+                      <th
+                        style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #5b5b5b; font-weight: normal; line-height: 1; vertical-align: top; padding: 0 0 7px; text-align: center"
+                        align="left">
+                        {{licencePaymentDate}}
+                      </th>
+                      <th
+                        style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #5b5b5b; font-weight: normal; line-height: 1; vertical-align: top; padding: 0 0 7px; text-align: center"
+                        align="left">
+                        {{licenceName}}
+                      </th>
+                      <th
+                        style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #5b5b5b; font-weight: normal; line-height: 1; vertical-align: top; padding: 0 0 7px; text-align: center"
+                        align="center">
+                        {{licencePrice}}
+                      </th>
+                      <th
+                        style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33; font-weight: normal; line-height: 1; vertical-align: top; padding: 0 0 7px; text-align: center"
+                        align="right">
+                        {{licenseMonth}}
+                      </th>
+                      <th
+                        style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33; font-weight: normal; line-height: 1; vertical-align: top; padding: 0 0 7px; text-align: center"
+                        align="right">
+                        {{licenseNetoPrice}}
+                      </th>
+                      <th
+                        style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33; font-weight: normal; line-height: 1; vertical-align: top; padding: 0 0 7px; text-align: center"
+                        align="right">
+                        {{licenseFee}}
+                      </th>
+                      <th
+                        style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33; font-weight: normal; line-height: 1; vertical-align: top; padding: 0 0 7px; text-align: center"
+                        align="right">
+                        {{licenseBrutoPrice}}
+                      </th>
+                      <th
+                        style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33; font-weight: normal; line-height: 1; vertical-align: top; padding: 0 0 7px; text-align: center"
+                        align="right">
+                        {{licenceExpiredDate}}
+                      </th>
+                    </tr>
+                    <tr>
+                      <td height="1" style="background: #bebebe;" colspan="8"></td>
+                    </tr>
+                    <tr>
+                      <td
+                        style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #646a6e;  line-height: 18px;  vertical-align: top; padding:10px 0; text-align: center"
+                        class="article">
+                        {{datePaid}}
+                      </td>
+                      <td
+                        style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #646a6e;  line-height: 18px;  vertical-align: top; padding:10px 0; text-align: center">
+                        {{name}}
+                      </td>
+                      <td
+                        style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #646a6e;  line-height: 18px;  vertical-align: top; padding:10px 0; text-align: center"
+                        align="center">€ {{price}}</td>
+                      <td
+                        style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33;  line-height: 18px;  vertical-align: top; padding:10px 0; text-align: center"
+                        align="right">{{expired}}</td>
+                      <td
+                        style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33;  line-height: 18px;  vertical-align: top; padding:10px 0; text-align: center"
+                        align="right">{{netoPrice}}</td>
+                      <td
+                        style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33;  line-height: 18px;  vertical-align: top; padding:10px 0; text-align: center"
+                        align="right">{{feeValue}}</td>
+                      <td
+                        style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33;  line-height: 18px;  vertical-align: top; padding:10px 0; text-align: center"
+                        align="right">{{brutoPrice}}</td>
+                      <td
+                        style="font-size: 12px; font-family: 'Open Sans', sans-serif; color: #1e2b33;  line-height: 18px;  vertical-align: top; padding:10px 0; text-align: center"
+                        align="right">{{expirationDate}}</td>
+                    </tr>
+                    <tr>
+                      <td height="1" colspan="8" style="background: #bebebe;"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td height="20"></td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- /Order Details -->
+<table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" class="fullTable" bgcolor="#e1e1e1">
+
+  <tr>
+    <td>
+      <table width="900" border="0" cellpadding="0" cellspacing="0" align="center" class="fullTable" bgcolor="#ffffff"
+        style="border-radius: 0 0 10px 10px;">
+        <tr>
+          <td>
+            <table width="720" border="0" cellpadding="0" cellspacing="0" align="center" class="fullPadding">
+              <tbody>
                 <tr>
-                  <td>
-                    <p
-                      style="text-align: initial; font-size: 13px; margin: 0px"
-                    >Your license has been extended to:
-                      <span
-                        style="font-size: 15px; font-weight: bold;"
-                      >{{expiration_date}}</span>
-                    </p>
+                  <td
+                    style="font-size: 12px; color: #5b5b5b; font-family: 'Open Sans', sans-serif; line-height: 18px; vertical-align: top; text-align: left;">
+                    {{paymentType}}
                   </td>
                 </tr>
-              </table>
-            </div>
-            <br />
-            <p
-              class="text-sm"
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;font-size: 12px; font-family: Arial, Helvetica, sans-serif;"
-            >
-              Greetings,<br
-                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"
-              />
-              ClinicNode Team
-            </p>
-            <br />
-          </div>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr class="spacer">
+          <td height="100"></td>
+        </tr>
+        <tr>
+          <td
+            style="font-size: 12px; color: #5b5b5b; font-family: 'Open Sans', sans-serif; line-height: 18px; vertical-align: top; text-align: center;">
+            {{licenseCompanyName}} ⋅ {{licenseCompanyAddress}} ⋅ {{licenseZipCode}} {{licenseCity}}
+            <br>
+            {{licenseCompanyPhone}} ⋅ {{licenseCompanyEmail}}
+          </td>
+        </tr>
+        <tr class="spacer">
+          <td height="30"></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td height="20"></td>
+  </tr>
 
-          <div
-            class="content__footer mt-8 text-center text-grey-darker"
-            style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin-top: 2rem;text-align: center;color: #606f7b;"
-          >
-            <p
-              class="text-base sm:text-lg mb-4"
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;margin-bottom: 1rem;font-size: 1.125rem;"
-            >
-              Thank for using our software!</p>
-            <p
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;"
-            >
-              www.clinicnode.com</p>
-          </div>
-
-        </div>
-
-        <div
-          class="mail__meta text-center text-sm text-grey-darker mt-8"
-          style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin-top: 2rem;text-align: center;color: #606f7b;font-size: 12px; font-family: Arial, Helvetica, sans-serif;"
-        >
-
-          <div
-            class="meta__help"
-            style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"
-          >
-            <p
-              class="leading-loose"
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;line-height: 2;"
-            >
-              If you have some problem or question, please contact us on
-              <a
-                href="#"
-                class="text-grey-darkest"
-                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;background-color: transparent;color: #3d4852;"
-              >info@clinicnode.com</a>
-            </p>
-          </div>
-          <div
-            class="auto-generate"
-            style="font-size: 10px;box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"
-          >
-            <p
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;"
-            >
-              This mail is automate generate and please don't answer on it!
-            </p>
-            <p
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;"
-            >
-              ClinicNode 2022. All right is reserved!
-            </p>
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-    <!-- partial -->
-
-  </body>
-
-</html>
+</table>

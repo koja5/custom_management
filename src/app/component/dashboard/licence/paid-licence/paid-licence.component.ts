@@ -13,13 +13,30 @@ import htmlToPdfmake from "html-to-pdfmake";
 })
 export class PaidLicenceComponent implements OnInit {
   @Input() license: any;
-  @ViewChild('licensePdf') licensePdf: ElementRef;
+  @ViewChild("licensePdf") licensePdf: ElementRef;
   public language: any;
 
   constructor(private helpService: HelpService) {}
 
   ngOnInit() {
     this.language = this.helpService.getLanguage();
+    this.convertDates();
+  }
+
+  convertDates() {
+    this.license["date_paid"] = new Date(this.license.date_paid);
+    this.license.expiration_date = new Date(this.license.expiration_date);
+    var diffDays =
+      new Date(this.license.expiration_date).getMonth() -
+      new Date(this.license.date_paid).getMonth();
+    this.license["expired"] = diffDays;
+    this.license["brutoPrice"] = (
+      Number(this.license.price) * diffDays
+    ).toFixed(2);
+    this.license["netoPrice"] = (
+      (this.license.brutoPrice / (100 + Number(this.language.feeValue))) *
+      100
+    ).toFixed(2);
   }
 
   generatePDF() {

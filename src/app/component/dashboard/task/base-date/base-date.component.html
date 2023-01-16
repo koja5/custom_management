@@ -1460,35 +1460,35 @@
                           </kendo-textbox-container>
                         </div>
                       </div>
-                      <div>
-                        <kendo-textbox-container floatingLabel="{{ language.firstname }}">
-                          <input kendoTextBox *ngIf="
+                      <div class="col-sm-12">
+                        <label class="label_name">{{ language.firstname }}</label>
+                        <input kendoTextBox *ngIf="
                               data.firstname === '' ||
                               data.firstname === null ||
                               data.firstname === undefined
-                            " [(ngModel)]="language['noInformation']" name="firstname" class="noPadding" required />
-                          <input kendoTextBox *ngIf="
+                            " [(ngModel)]="language['noInformation']" name="firstname" class="noPadding full-width"
+                          required />
+                        <input kendoTextBox *ngIf="
                               data.firstname !== null &&
                               data.firstname !== undefined &&
                               data.firstname !== ''
-                            " [(ngModel)]="data.firstname" name="firstname" class="noPadding" required
-                            #firstname="ngModel" />
-                        </kendo-textbox-container>
+                            " [(ngModel)]="data.firstname" name="firstname" class="noPadding full-width" required
+                          #firstname="ngModel" />
                       </div>
-                      <div>
-                        <kendo-textbox-container floatingLabel="{{ language.lastname }}">
-                          <input kendoTextBox *ngIf="
+                      <div class="col-sm-12">
+                        <label class="label_name">{{ language.lastname }}</label>
+                        <input kendoTextBox *ngIf="
                               data.lastname === '' ||
                               data.lastname === null ||
                               data.lastname === undefined
-                            " [(ngModel)]="language['noInformation']" name="lastname" class="noPadding" required />
-                          <input kendoTextBox *ngIf="
+                            " [(ngModel)]="language['noInformation']" name="lastname" class="noPadding full-width"
+                          required />
+                        <input kendoTextBox *ngIf="
                               data.lastname !== null &&
                               data.lastname !== undefined &&
                               data.lastname !== ''
-                            " [(ngModel)]="data.lastname" name="lastname" class="noPadding" required
-                            #lastname="ngModel" />
-                        </kendo-textbox-container>
+                            " [(ngModel)]="data.lastname" name="lastname" class="noPadding full-width" required
+                          #lastname="ngModel" />
                       </div>
                       <div class="form-group col-md-12 col-xs-12">
                         <div class="col-md-6 col-xs-12">
@@ -1609,15 +1609,9 @@
                   </div>
                   <div class="col-md-4 col-xs-12 b-r" *ngIf="doctorList !== undefined">
                     <kendo-textbox-container floatingLabel="{{ language.doctor }}">
-                      <kendo-combobox class="col-md-12 col-xs-12 noPadding"
-                        [suggest]="true"
-                        [data]="doctorsListTmp"
-                        textField="fullname"
-                        [valueField]="'id'"
-                        [(ngModel)]="baseDataOne.doctor"
-                        [valuePrimitive]="true"
-                        [filterable]="true"
-                        (filterChange)="filterDoctor($event)"
+                      <kendo-combobox class="col-md-12 col-xs-12 noPadding" [suggest]="true" [data]="doctorsListTmp"
+                        textField="fullname" [valueField]="'id'" [(ngModel)]="baseDataOne.doctor"
+                        [valuePrimitive]="true" [filterable]="true" (filterChange)="filterDoctor($event)"
                         name="doctors">
                         <ng-template kendoComboBoxItemTemplate let-dataItem>
                           <p style="height: 50px !important">

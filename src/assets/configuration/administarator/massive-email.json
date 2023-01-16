@@ -50,7 +50,6 @@
     "name": "noEventSinceDate",
     "label": "noEventSinceDate",
     "field": "noEventSinceDate",
-    "required": true,
     "condition": {
       "fieldName": "noEventSinceCheckbox",
       "value": false

@@ -188,7 +188,7 @@ router.post("/sendCustomerVerificationMail", function (req, res) {
             ? mail.mailSubject
             : req.body.language?.subjectConfirmMail,
           html: compiledTemplate.render({
-            firstName: (req.body.firstname + " " + req.body.lastname),
+            firstName: req.body.firstname + " " + req.body.lastname,
             initialGreeting: mail.mailInitialGreeting
               ? mail.mailInitialGreeting
               : req.body.language?.initialGreeting,
@@ -663,7 +663,7 @@ router.post("/sendPatientFormRegistration", function (req, res) {
           to: req.body.email,
           subject: mail.mailSubject
             ? mail.mailSubject
-            : req.body.langauge?.subjectFormRegistration,
+            : req.body.language?.subjectFormRegistration,
           html: patientRegistrationForm.render({
             link: req.body.link,
             initialGreeting: mail.mailInitialGreeting
@@ -1153,39 +1153,39 @@ router.post("/sendReminderViaEmailManual", function (req, res) {
           to: req.body.email,
           subject: mail.mailSubject,
           html: compiledTemplate.render({
-            initialGreeting: mail?.mailInitialGreeting
-              ? mail?.mailInitialGreeting
+            initialGreeting: mail.mailInitialGreeting
+              ? mail.mailInitialGreeting
               : req.body.language?.initialGreeting,
-            introductoryMessageForReminderReservation: mail?.mailMessage
-              ? mail?.mailMessage
+            introductoryMessageForReminderReservation: mail.mailMessage
+              ? mail.mailMessage
               : req.body.language?.introductoryMessageForReminderReservation,
             dateMessage: mail.mailDate ? mail.mailDate + " " : "",
             timeMessage: mail.mailTime ? mail.mailTime + " " : "",
             storeLocation: mail.mailClinic ? mail.mailClinic + " " : "",
-            therapyMessage: mail?.mailTherapy
-              ? mail?.mailTherapy
+            therapyMessage: mail.mailTherapy
+              ? mail.mailTherapy
               : req.body.language?.therapyMessage,
-            doctorMessage: mail?.mailDoctor
-              ? mail?.mailDoctor
+            doctorMessage: mail.mailDoctor
+              ? mail.mailDoctor
               : req.body.language?.doctorMessage,
-            finalGreeting: mail?.mailFinalGreeting
-              ? mail?.mailFinalGreeting
+            finalGreeting: mail.mailFinalGreeting
+              ? mail.mailFinalGreeting
               : req.body.language?.finalGreeting,
             signature:
               signatureAvailable && mail.mailSignature
                 ? mail.mailSignature
                 : "",
-            thanksForUsing: mail?.mailThanksForUsing
-              ? mail?.mailThanksForUsing
+            thanksForUsing: mail.mailThanksForUsing
+              ? mail.mailThanksForUsing
               : req.body.language?.thanksForUsing,
-            ifYouHaveQuestion: mail?.mailIfYouHaveQuestion
-              ? mail?.mailIfYouHaveQuestion
+            ifYouHaveQuestion: mail.mailIfYouHaveQuestion
+              ? mail.mailIfYouHaveQuestion
               : req.body.language?.ifYouHaveQuestion,
-            notReply: mail?.mailNotReply
-              ? mail?.mailNotReply
+            notReply: mail.mailNotReply
+              ? mail.mailNotReply
               : req.body.language?.notReply,
-            copyRight: mail?.mailCopyRight
-              ? mail?.mailCopyRight
+            copyRight: mail.mailCopyRight
+              ? mail.mailCopyRight
               : req.body.language?.copyRight,
             firstName: req.body.shortname,
             date: mail.mailDate ? date : "",
@@ -1231,7 +1231,7 @@ router.post("/sendReminderViaEmailManual", function (req, res) {
           } else {
             logger.log(
               "info",
-              `Sent reminder via email on EMAIL: ${req.body.email}`
+              `Sent MANUAL reminder via email on EMAIL: ${req.body.email}`
             );
             res.send(true);
           }
@@ -2250,12 +2250,63 @@ router.post("/sendInfoForLicencePaymentSuccess", function (req, res) {
     expiration_date.getFullYear();
   var mailOptions = {
     from: '"ClinicNode" info@app-production.eu',
-    to: req.body.email,
+    to: req.body.payerEmail,
     subject: "Payment received successfully!",
     html: compiledTemplate.render({
+      licenseInvoice: req.body.licenseInvoice,
+      licenseCompany: req.body.licenseCompany,
+      licenseCompanyName: req.body.licenseCompanyName,
+      licenseCompanyAddress: req.body.licenseCompanyAddress,
+      licenseZipCode: req.body.licenseZipCode,
+      licenseCity: req.body.licenseCity,
+      licenseInvoiceNumber: req.body.licenseInvoiceNumber,
+      number: req.body.number,
+      invoiceDate: req.body.invoiceDate,
+      date:
+        new Date(req.body.date).getDate() +
+        "." +
+        (new Date(req.body.date).getMonth() + 1) +
+        "." +
+        new Date(req.body.date).getFullYear(),
+      licensePayer: req.body.licensePayer,
+      payerName: req.body.payerName,
+      payerEmail: req.body.payerEmail,
+      payerPhone: req.body.payerPhone,
+      licencePaymentDate: req.body.licencePaymentDate,
+      licenceName: req.body.licenceName,
+      licencePrice: req.body.licencePrice,
+      licenseMonth: req.body.licenseMonth,
+      licenseNetoPrice: req.body.licenseNetoPrice,
+      licenseFee: req.body.licenseFee,
+      licenseBrutoPrice: req.body.licenseBrutoPrice,
+      licenceExpiredDate: req.body.licenceExpiredDate,
+      datePaid:
+        new Date(req.body.datePaid).getDate() +
+        "." +
+        (new Date(req.body.datePaid).getMonth() + 1) +
+        "." +
+        new Date(req.body.datePaid).getFullYear(),
       name: req.body.name,
       price: req.body.price,
-      expiration_date: date,
+      expired: req.body.expired,
+      netoPrice: (
+        ((Number(req.body.price) * Number(req.body.expired)).toFixed(2) /
+          (100 + Number(req.body.feeValue))) *
+        100
+      ).toFixed(2),
+      feeValue: req.body.feeValue,
+      brutoPrice: (Number(req.body.price) * Number(req.body.expired)).toFixed(
+        2
+      ),
+      expirationDate:
+        new Date(req.body.expirationDate).getDate() +
+        "." +
+        (new Date(req.body.expirationDate).getMonth() + 1) +
+        "." +
+        new Date(req.body.expirationDate).getFullYear(),
+      paymentType: req.body.paymentType,
+      licenseCompanyPhone: req.body.licenseCompanyPhone,
+      licenseCompanyEmail: req.body.licenseCompanyEmail,
     }),
   };
 

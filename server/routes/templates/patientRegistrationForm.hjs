@@ -71,11 +71,11 @@
             <p
               style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;"
             >
-              {{initialGreeting}}</p>,
+              {{initialGreeting}},</p>
             <br />
             <br />
             <pre
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"
+              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7; white-space: pre-line;"
             >
               {{introductoryMessageForPatientRegistrationForm}}</pre>
 
@@ -95,7 +95,7 @@
               />
               {{signature}}
               <br />
-              {{signatureAddress}}
+              <span style="white-space: break-spaces;">{{signatureAddress}}</span>
               <br />
               {{signatureTelephone}}
               <br />

@@ -40,9 +40,9 @@
             <!-- Logo -->
             <tr>
               <td style="text-align:center;">
-                <a href="http://app-production.eu:8080" title="logo" target="_blank">
-                  <img
-                    width="180"
+                <a href="https://rakeshmandal.com" title="logo" target="_blank">
+                 <img
+                    width="200"
                     src="http://app-production.eu:8080/assets/images/brand-logo.png"
                     title="logo"
                     alt="logo"
@@ -92,14 +92,14 @@
                       <br />
 
                       <p
-                        style="color:#455056; font-size:15px;line-height:24px; margin:0;"
+                        style="color:#455056; font-size:15px;line-height:24px; margin:0; white-space: pre-line;"
                       >
                         {{text}}
                       </p><br />
                       <p
                         style="color:#455056; font-size:15px;line-height:24px; margin:0;"
                       >
-                        Ime:
+                        Name:
                         {{name}}
                       </p>
                       <p
@@ -111,25 +111,25 @@
                       <p
                         style="color:#455056; font-size:15px;line-height:24px; margin:0;"
                       >
-                        Telefon:
+                        Telephone:
                         {{phone}}
                       </p>
                       <p
                         style="color:#455056; font-size:15px;line-height:24px; margin:0;"
                       >
-                        Ime vrtica:
-                        {{nameOfCompany}}
+                        Name of company:
+                        {{nameOfKindergarden}}
                       </p>
                       <p
                         style="color:#455056; font-size:15px;line-height:24px; margin:0;"
                       >
-                        Broj dece u vrtiću:
-                        {{countOfEmployees}}
+                        Name of employees:
+                        {{countOfChildrens}}
                       </p>
                       <p
                         style="color:#455056; font-size:15px;line-height:24px; margin:0;"
                       >
-                        Napomena / Vise o vrtiću:
+                        Notes:
                         {{notes}}
                       </p>
                       <br />
@@ -148,8 +148,7 @@
               <td style="text-align:center;">
                 <p
                   style="font-size:13px; color:##485963bd; line-height:18px; font-style: italic;"
-                ><strong>Ovaj mail je automatski generisan. Molimo Vas da ne
-                    odgovarate na njega.</strong></p>
+                ><strong>This email was automatically generated. Please do not respond to him.</strong></p>
               </td>
             </tr>
           </table>

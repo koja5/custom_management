@@ -77,7 +77,7 @@
             </p>
             <br/>
             <p
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;"
+              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0; white-space: pre-line;"
             >{{finalMessageForMultipleRecepient}}
             </p>
             <br style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"/>
@@ -90,7 +90,7 @@
               />
               {{signature}}
               <br />
-              {{signatureAddress}}
+              <span style="white-space: break-spaces;">{{signatureAddress}}</span>
               <br />
               {{signatureTelephone}}
               <br />
