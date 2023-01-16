@@ -32,6 +32,7 @@ export class PaidLicenceComponent implements OnInit {
     // this.license["expired"] = diffDays;
     this.license["brutoPrice"] = (
       Number(this.license.price) * this.license.numberOfMonth
+    ).toFixed(2);
     this.license["netoPrice"] = (
       (this.license.brutoPrice / (100 + Number(this.language.feeValue))) *
       100
