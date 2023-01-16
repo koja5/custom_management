@@ -173,7 +173,7 @@
   </modal-content>
 </modal>
 
-<modal #previewLicence modalClass="modal-lg top-margin loggerModal adminModal">
+<modal #previewLicence modalClass="modal-lg top-margin loggerModal adminModal" (onClose)="itemLicence = null">
   <modal-content>
     <app-paid-licence *ngIf="itemLicence" [license]="itemLicence"></app-paid-licence>
   </modal-content>
