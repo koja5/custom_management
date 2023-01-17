@@ -451,14 +451,12 @@ export class InvoiceComponent implements OnInit {
 
   private setupPDF() {
 
-    let invoiceNumberToUse;
+    let invoiceNumberToUse=this.invoiceID;
 
     if(this.invoiceNumber !== this.invoiceID){
       invoiceNumberToUse = this.invoiceNumber;
     }else{
-
       if (this.invoiceID === this.changedInvoiceID) {
-        invoiceNumberToUse = this.invoiceID;
         this.changedInvoiceID++;
       }
     }
@@ -595,16 +593,6 @@ export class InvoiceComponent implements OnInit {
   public downloadWord(): void {
     const componentRef = this;
 
-    let invoiceNumberToUse;
-    if(this.invoiceNumber !== this.invoiceID){
-      invoiceNumberToUse = this.invoiceNumber;
-    } else {
-      if (this.invoiceID === this.changedInvoiceID) {
-        invoiceNumberToUse = this.invoiceID;
-        this.changedInvoiceID++;
-      }
-    }
-
     const data = this.getTherapyAndPricesData();
 
     let vatValues = [];
@@ -654,13 +642,21 @@ export class InvoiceComponent implements OnInit {
           ? componentRef.invoiceStore
           : componentRef.store;
 
-      const invoicePrefixID = this.invoicePrefix + "-" + invoiceNumberToUse;
+      let invoiceNumberToUse;
+          if(componentRef .invoiceNumber !== componentRef .invoiceID){
+            invoiceNumberToUse = componentRef .invoiceNumber;
+          } else {
+            if (componentRef .invoiceID === componentRef .changedInvoiceID) {
+              invoiceNumberToUse = componentRef .invoiceID;
+              componentRef .changedInvoiceID++;
+            }
+          }
 
       doc.setData({
         invoice_title: componentRef.invoiceLanguage.invoiceTitle,
         invoice_number: componentRef.invoiceLanguage.invoiceSubTitle,
-        invoice_prefix: invoicePrefixID,
-        invoice_id: componentRef.invoiceID,
+        invoice_prefix: componentRef.invoicePrefix,
+        invoice_id: invoiceNumberToUse,
         invoice_generated_date: componentRef.currentDateFormatted,
         billing_from_title:
           componentRef.invoiceLanguage.invoiceBillingTitleFrom,
