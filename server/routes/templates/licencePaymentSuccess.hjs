@@ -168,7 +168,7 @@
                             <br>
                             {{licenseZipCode}} {{licenseCity}}
                             <br>
-                            {{companyNumber}}
+                            {{licenseCompanyUID}} {{licenseCompanyFN}}
                           </td>
                         </tr>
                       </tbody>
@@ -178,6 +178,7 @@
                         <tr>
                           <td
                             style="font-size: 12px; color: #5b5b5b; font-family: 'Open Sans', sans-serif; line-height: 18px; vertical-align: top; text-align: right;">
+                            <small>{{licenseInvoiceNumber}}</small> {{licenseInvoicePrefix}} {{licensePaidId}}<br />
                             <small>{{licencePaymentDate}} {{date}}</small>
                           </td>
                         </tr>

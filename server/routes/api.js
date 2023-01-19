@@ -17,6 +17,7 @@ const macAddress = require("os").networkInterfaces();
 const multer = require("multer");
 const { Blob } = require("buffer");
 const mailAPI = require("./mailAPI");
+const btoa = require("btoa");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -5822,6 +5823,9 @@ router.post("/sendVaucherSms", function (req, res) {
 router.post("/sendMassiveSMS", function (req, res) {
   var phoneNumber = req.body.number;
   if (req.body.message != "") {
+    if (!req.body.countryCode) {
+      req.body.countryCode = "AT";
+    }
     request(
       link + "/getTranslationByCountryCode/" + req.body.countryCode,
       function (error, language, body) {
@@ -5853,9 +5857,7 @@ router.post("/sendMassiveSMS", function (req, res) {
                       ? to.telephone
                       : null;
                     var unsubscribeLink =
-                      process.env.unsubscribeSMS +
-                      "/" +
-                      global.btoa(to.customerId);
+                      process.env.unsubscribeSMS + "/" + btoa(to.customerId);
                     if (
                       checkAvailableCode(phoneNumber, JSON.parse(codes)) &&
                       req.body.message
@@ -5915,13 +5917,14 @@ router.post("/sendMassiveSMS", function (req, res) {
                         signature;
                       const fullMessage = message + "\n\n" + signature;
                       var fileName = "server/sms/" + phoneNumber + ".txt";
+                      console.log(fullMessage);
                       sendSmsFromMail(phoneNumber, fullMessage);
                     } else {
                       logger.log(
                         "warn",
                         `Number ${phoneNumber} is not start with available area code! or message is empty`
                       );
-                      res.json(false);
+                      // res.json(false);
                     }
                   });
                   updateAvailableSMSCount(count, req.body.superadmin);
@@ -6527,7 +6530,7 @@ function getSqlQueryMultiSelect(body) {
 
   if (body.noEventSinceCheckbox) {
     if (!body.noEventSinceDate) {
-      body.noEventSinceDate =  new Date().toISOString();
+      body.noEventSinceDate = new Date().toISOString();
     }
     if (question) {
       question += ` and CAST(t.end AS DATETIME) < CAST('${body.noEventSinceDate}' AS DATETIME)`;
@@ -10653,7 +10656,7 @@ router.post("/updateLicence", function (req, res, next) {
         } else {
           date["price"] = req.body.price;
           date["date_paid"] = new Date();
-          date['numberOfMonth'] = req.body.expired;
+          date["numberOfMonth"] = req.body.expired;
           conn.query(
             "insert into licence_payment SET ?",
             [date],
@@ -10663,7 +10666,8 @@ router.post("/updateLicence", function (req, res, next) {
               } else {
                 conn.release();
                 res.json({
-                  payment_id: sha1(rowsLicence.insertId.toString()),
+                  // payment_id: sha1(rowsLicence.insertId.toString()),
+                  payment_id: rowsLicence.insertId.toString(),
                   status: true,
                 });
               }
@@ -10701,7 +10705,7 @@ router.get("/getInvoiceForLicence/:id", function (req, res, next) {
     }
     console.log(req.params.id);
     conn.query(
-      "select * from licence_payment lp join licence l on lp.licence_id = l.id join users_superadmin u on lp.superadmin_id = u.id where SHA1(lp.id) like ?",
+      "select *, lp.id as 'license_paid_id' from licence_payment lp join licence l on lp.licence_id = l.id join users_superadmin u on lp.superadmin_id = u.id where lp.id like ?",
       [req.params.id],
       function (err, rows) {
         conn.release();
@@ -10723,7 +10727,7 @@ router.get("/getAllPaidLicenseForUser/:id", function (req, res, next) {
       res.json(err);
     }
     conn.query(
-      "select * from licence_payment lp join licence l on lp.licence_id = l.id join users_superadmin u on lp.superadmin_id = u.id where lp.superadmin_id = ? order by lp.date_paid desc",
+      "select *, lp.id as 'license_paid_id' from licence_payment lp join licence l on lp.licence_id = l.id join users_superadmin u on lp.superadmin_id = u.id where lp.superadmin_id = ? order by lp.date_paid desc",
       [req.params.id],
       function (err, rows) {
         conn.release();
