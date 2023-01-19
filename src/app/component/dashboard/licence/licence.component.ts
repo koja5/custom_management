@@ -214,7 +214,9 @@ export class LicenceComponent implements OnInit {
                     //   email: this.data["email"],
                     //   expiration_date: this.data["expiration_date"],
                     // };
-                    const successPayment = this.packDateForSendLicenseMail();
+                    const successPayment = this.packDateForSendLicenseMail(
+                      res["payment_id"]
+                    );
                     this.callApi
                       .callApiPost(
                         "/api/sendInfoForLicencePaymentSuccess",
@@ -243,16 +245,19 @@ export class LicenceComponent implements OnInit {
       );
   }
 
-  packDateForSendLicenseMail() {
+  packDateForSendLicenseMail(paidId) {
     return {
+      licensePaidId: paidId,
       licenseInvoice: this.language.licenseInvoice,
       licenseCompany: this.language.licenseCompany,
       licenseCompanyName: this.language.licenseCompanyName,
       licenseCompanyAddress: this.language.licenseCompanyAddress,
       licenseZipCode: this.language.licenseZipCode,
       licenseCity: this.language.licenseCity,
+      licenseCompanyUID: this.language.licenseCompanyUID,
+      licenseCompanyFN: this.language.licenseCompanyFN,
       licenseInvoiceNumber: this.language.licenseInvoiceNumber,
-      number: 1,
+      licenseInvoicePrefix: this.language.licenseInvoicePrefix,
       invoiceDate: this.language.invoiceDate,
       date: new Date(),
       licensePayer: this.language.licensePayer,
@@ -275,7 +280,7 @@ export class LicenceComponent implements OnInit {
       expired: this.data["expired"],
       feeValue: this.language.feeValue,
       expirationDate: this.data["expiration_date"],
-      numberOfMonth: this.data['expired'],
+      numberOfMonth: this.data["expired"],
       paymentType: this.language.paymentType,
       licenseCompanyPhone: this.language.licenseCompanyPhone,
       licenseCompanyEmail: this.language.licenseCompanyEmail,

@@ -39,7 +39,7 @@ function sendHappyBirthdayViaEmail() {
     request(
       link + "/getTranslationByCountryCode/AT",
       function (error, res, body) {
-        if (!error && response.statusCode === 200) {
+        if (!error && res.statusCode === 200) {
           conn.query(
             /*"SELECT distinct c.*, mb.* from customers c join mail_birthday_congratulation mb on c.storeId = mb.superadmin where DAY(c.birthday + interval 1 DAY) = DAY(CURRENT_DATE()) and MONTH(c.birthday) = MONTH(CURRENT_DATE())",*/
             "SELECT distinct c.*, mb.* from customers c join mail_birthday_congratulation mb on c.storeId = mb.superadmin where DAY(c.birthday + interval 1 DAY) = DAY(CURRENT_DATE()) and MONTH(c.birthday) = MONTH(CURRENT_DATE()) and c.active = 1",

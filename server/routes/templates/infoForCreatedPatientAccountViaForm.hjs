@@ -65,7 +65,6 @@
           <p style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7; white-space: pre-line;">
             {{introductoryMessageForConfirmMail}}</p>
             <br>
-          <br>
           <p class="text-sm"
             style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;font-size: 12px; font-family: Arial, Helvetica, sans-serif;">
             {{finalGreeting}},<br
@@ -118,8 +117,7 @@
         <div class="meta__help" style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;">
           <p class="leading-loose"
             style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;line-height: 2;">
-            {{ifYouHaveQuestion}} <a href="#" class="text-grey-darkest"
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;background-color: transparent;color: #3d4852;">{{emailAddress}}</a>
+            {{ifYouHaveQuestion}}
           </p>
         </div>
         <div class="auto-generate"

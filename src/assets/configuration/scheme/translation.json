@@ -2578,6 +2578,9 @@
             "licenseInvoiceNumber": {
                 "type": "string"
             },
+            "licenseInvoicePrefix": {
+                "type": "string"
+            },
             "licenseDate": {
                 "type": "string"
             },
@@ -2618,6 +2621,12 @@
                 "type": "string"
             },
             "licenseCompanyEmail": {
+                "type": "string"
+            },
+            "licenseCompanyUID": {
+                "type": "string"
+            },
+            "licenseCompanyFN": {
                 "type": "string"
             },
             "paymentSuccessTitle": {
@@ -7879,6 +7888,9 @@
                             "key": "licenseInvoiceNumber"
                         },
                         {
+                            "key": "licenseInvoicePrefix"
+                        },
+                        {
                             "key": "licenseDate"
                         },
                         {
@@ -7934,6 +7946,22 @@
                         {
                             "key": "licenseCompanyEmail"
                         }
+                    ]
+                },
+                {
+                    "type": "div",
+                    "display": "flex",
+                    "flex-direction": "row",
+                    "items": [
+                        {
+                            "key": "licenseCompanyUID"
+                        },
+                        {
+                            "key": "licenseCompanyFN"
+                        },
+                        {},
+                        {},
+                        {}
                     ]
                 }
             ]

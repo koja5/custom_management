@@ -213,7 +213,7 @@ var j = schedule.scheduleJob("58 09 * * *", function () {
   eventConfirm();
 });
 
-var j = schedule.scheduleJob("10 15 * * *", function () {
+var j = schedule.scheduleJob("35 02 15 * * *", function () {
   reminderViaEmail();
 });
 
