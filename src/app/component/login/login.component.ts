@@ -363,9 +363,7 @@ export class LoginComponent implements OnInit {
           } else {
             this.data["language"] =
               this.packLanguage.getLanguageForConfirmMail();
-            this.mailService.sendMail(this.data, function () {
-              console.log("Mail uspesno poslat");
-            });
+            this.mailService.sendMail(this.data, function () {});
             this.signUpInfo = JSON.parse(localStorage.getItem("language"))[
               "checkMailForActive"
             ];
@@ -391,25 +389,30 @@ export class LoginComponent implements OnInit {
     const thisObject = this;
     thisObject.data["language"] = this.packLanguage.getLanguageForForgotMail();
     if (this.data.email !== "") {
-      this.service.forgotPassword(this.data, function (exist, notVerified) {
-        setTimeout(() => {
-          if (exist) {
-            thisObject.mailService
-              .sendForgetMail(thisObject.data)
-              .subscribe((data) => {
-                console.log("test");
-              });
+      delete this.data.password;
+      this.service.forgotPassword(
+        this.data,
+        function (exist, notVerified, superadmin) {
+          setTimeout(() => {
+            if (exist) {
+              thisObject.data["superadmin"] = superadmin;
+              thisObject.mailService
+                .sendForgetMail(thisObject.data)
+                .subscribe((data) => {
+                  console.log("test");
+                });
 
-            if (!exist) {
-              thisObject.emailValid = false;
-            } else {
-              document.getElementById("textClass").innerHTML = JSON.parse(
-                localStorage.getItem("language")
-              )["sendForgotMail"];
+              if (!exist) {
+                thisObject.emailValid = false;
+              } else {
+                document.getElementById("textClass").innerHTML = JSON.parse(
+                  localStorage.getItem("language")
+                )["sendForgotMail"];
+              }
             }
-          }
-        }, 100);
-      });
+          }, 100);
+        }
+      );
     } else {
       this.errorInfo = JSON.parse(localStorage.getItem("language"))[
         "fillFields"

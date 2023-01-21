@@ -13321,15 +13321,27 @@ tr.group:hover {
  	and set bellow variable color as per desire. Thats It !!!!!!
  */
 
+// :root {
+//   --sidebar-color: #ffffff;
+//   --sidebar-font-color: #e3e3e3;
+//   --sidebar-selected-color: #01a9e9;
+//   --sidebar-group-color: #8f96ad;
+//   --logo-color: #222c3c;
+//   --header-color: #091467;
+//   --theme-color: #091467;
+//   --navbar-background-color: #ffffff;
+//   --navbar-font-color: #333;
+// }
+
 :root {
   --sidebar-color: #ffffff;
-  --sidebar-font-color: #e3e3e3;
-  --sidebar-selected-color: #01a9e9;
-  --sidebar-group-color: #8f96ad;
+  --sidebar-font-color: #ffffff;
+  --sidebar-selected-color: #a1a9c5;
+  --sidebar-group-color: #d6d2d2;
   --logo-color: #222c3c;
-  --header-color: #091467;
-  --theme-color: #091467;
-  --navbar-background-color: #ffffff;
+  --header-color: #0f1d2b;
+  --theme-color: #0f1d2b;
+  --navbar-background-color: #fff;
   --navbar-font-color: #333;
 }
 

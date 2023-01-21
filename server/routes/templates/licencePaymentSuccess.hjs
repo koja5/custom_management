@@ -168,7 +168,9 @@
                             <br>
                             {{licenseZipCode}} {{licenseCity}}
                             <br>
-                            {{licenseCompanyUID}} {{licenseCompanyFN}}
+                            {{licenseCompanyUID}} 
+                            <br>
+                            {{licenseCompanyFN}}
                           </td>
                         </tr>
                       </tbody>

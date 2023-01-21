@@ -27,8 +27,7 @@
       table, th, td { border: 1px solid black; border-collapse: collapse; } th,
       td { padding: 5px; text-align: left; } @media (max-width: 768px) {
       .date-large { display: none; } } @media (min-width: 768px) { .date-small {
-      display: none; } } 
-      p, pre { font-size: 12px; font-family: Arial,
+      display: none; } } p, pre { font-size: 12px; font-family: Arial,
       Helvetica, sans-serif; }
 
     </style>
@@ -170,7 +169,9 @@
               />
               {{signature}}
               <br />
-              <span style="white-space: break-spaces;">{{signatureAddress}}</span>
+              <span
+                style="white-space: break-spaces;"
+              >{{signatureAddress}}</span>
               <br />
               {{signatureTelephone}}
               <br />
@@ -202,25 +203,6 @@
           class="mail__meta text-center text-sm text-grey-darker mt-8"
           style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin-top: 2rem;text-align: center;color: #606f7b;font-size: 12px; font-family: Arial, Helvetica, sans-serif;"
         >
-
-          {{! <div class="meta__social flex justify-center my-4"
-          style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;display: flex;justify-content: center;margin-top: 1rem;margin-bottom: 1rem;">
-          <a href="#"
-            class="flex items-center justify-center mr-4 bg-black text-white rounded-full w-8 h-8 no-underline"
-            style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;background-color: #22292f;border-radius: 9999px;display: flex;align-items: center;justify-content: center;height: 2rem;margin-right: 1rem;color: #fff;text-decoration: none;width: 2rem;"><i
-              class="fab fa-facebook-f"
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;-moz-osx-font-smoothing: grayscale;-webkit-font-smoothing: antialiased;display: inline-block;font-style: normal;font-variant: normal;text-rendering: auto;line-height: 1;font-family: Font Awesome\ 5 Brands;"></i></a>
-          <a href="#"
-            class="flex items-center justify-center mr-4 bg-black text-white rounded-full w-8 h-8 no-underline"
-            style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;background-color: #22292f;border-radius: 9999px;display: flex;align-items: center;justify-content: center;height: 2rem;margin-right: 1rem;color: #fff;text-decoration: none;width: 2rem;"><i
-              class="fab fa-instagram"
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;-moz-osx-font-smoothing: grayscale;-webkit-font-smoothing: antialiased;display: inline-block;font-style: normal;font-variant: normal;text-rendering: auto;line-height: 1;font-family: Font Awesome\ 5 Brands;"></i></a>
-          <a href="#" class="flex items-center justify-center bg-black text-white rounded-full w-8 h-8 no-underline"
-            style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;background-color: #22292f;border-radius: 9999px;display: flex;align-items: center;justify-content: center;height: 2rem;color: #fff;text-decoration: none;width: 2rem;"><i
-              class="fab fa-twitter"
-              style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;-moz-osx-font-smoothing: grayscale;-webkit-font-smoothing: antialiased;display: inline-block;font-style: normal;font-variant: normal;text-rendering: auto;line-height: 1;font-family: Font Awesome\ 5 Brands;"></i></a>
-        </div> }}
-
           <div
             class="meta__help"
             style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;"
@@ -230,11 +212,6 @@
               style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;line-height: 2;"
             >
               {{ifYouHaveQuestion}}
-              <a
-                href="#"
-                class="text-grey-darkest"
-                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;background-color: transparent;color: #3d4852;"
-              >{{emailAddress}}</a>
             </p>
           </div>
           <div

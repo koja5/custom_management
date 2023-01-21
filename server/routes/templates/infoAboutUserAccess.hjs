@@ -189,11 +189,6 @@
               style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;line-height: 2;"
             >
               {{ifYouHaveQuestion}}
-              <a
-                href="#"
-                class="text-grey-darkest"
-                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;background-color: transparent;color: #3d4852;"
-              >{{emailAddress}}</a>
             </p>
           </div>
           <div

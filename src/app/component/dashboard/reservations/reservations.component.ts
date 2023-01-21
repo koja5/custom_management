@@ -56,6 +56,7 @@ export class ReservationsComponent implements OnInit {
       id: value,
       superadmin: this.helpService.getSuperadmin(),
       email: this.data.data.email,
+      firstname: this.data.data.firstname ? this.data.data.firstname : "",
       language: this.packLanguage.getLanguageForInfoForApproveReservation(),
     };
     if (this.data.id === "approve") {
@@ -69,12 +70,14 @@ export class ReservationsComponent implements OnInit {
         id: value,
         superadmin: this.helpService.getSuperadmin(),
         email: this.data.data.email,
+        firstname: this.data.data.firstname ? this.data.data.firstname : "",
         language: this.packLanguage.getLanguageForInfoForDenyReservation(),
       };
-      this.deleteReservation(api, value);
+
       this.mailService.sendInfoForDenyReservation(mail).subscribe((data) => {
         console.log(data);
         if (data) {
+          this.deleteReservation(api, value);
         }
       });
     }

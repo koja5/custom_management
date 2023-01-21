@@ -27,9 +27,7 @@
       table, th, td { border: 1px solid black; border-collapse: collapse; } th,
       td { padding: 5px; text-align: left; } @media (max-width: 768px) {
       .date-large { display: none; } } @media (min-width: 768px) { .date-small {
-      display: none; } } 
-      
-      p, pre { font-size: 12px; font-family: Arial,
+      display: none; } } p, pre { font-size: 12px; font-family: Arial,
       Helvetica, sans-serif; }
 
     </style>
@@ -192,11 +190,6 @@
               style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;margin: 0;line-height: 2;"
             >
               {{ifYouHaveQuestion}}
-              <a
-                href="#"
-                class="text-grey-darkest"
-                style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7;background-color: transparent;color: #3d4852;"
-              >{{emailAddress}}</a>
             </p>
           </div>
           <div

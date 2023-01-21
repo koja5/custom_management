@@ -253,4 +253,16 @@ export class ParameterItemService extends BehaviorSubject<any[]> {
   updateMailBirthdayCongratulation(data) {
     return this.http.post("/api/updateMailBirthdayCongratulation", data);
   }
+
+  getMailResetPassword(id: number) {
+    return this.http.get("/api/getMailResetPassword/" + id);
+  }
+
+  createMailResetPassword(data) {
+    return this.http.post("/api/createMailResetPassword", data);
+  }
+
+  updateMailResetPassword(data) {
+    return this.http.post("/api/updateMailResetPassword", data);
+  }
 }

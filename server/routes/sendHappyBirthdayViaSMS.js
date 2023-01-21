@@ -122,6 +122,10 @@ function sendHappyBirthdayViaSMS() {
                                         }
                                       }
 
+                                      if (sms.smsSignatureWebsite) {
+                                        signature += " \n" + sms.smsSignatureWebsite + "\n";
+                                      }
+
                                       if (language?.smsSignaturePoweredBy) {
                                         signature +=
                                           language?.smsSignaturePoweredBy +
