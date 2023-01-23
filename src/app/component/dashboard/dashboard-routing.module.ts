@@ -58,6 +58,7 @@ import { RegisteredClinicDetailComponent } from "./administrator/registered-clin
 import { LastMinuteEventConfirmationComponent } from "./customers/last-minute-event-confirmation/last-minute-event-confirmation.component";
 import { LicenceComponent } from "./licence/licence.component";
 import { MailMultipleRecepientComponent } from "./parameters/mail-parameters/mail-multiple-recepient/mail-multiple-recepient.component";
+import { MailResetPasswordComponent } from "./parameters/mail-reset-password/mail-reset-password.component";
 
 const routes: Routes = [
   {
@@ -80,12 +81,15 @@ const routes: Routes = [
       },
       { path: "store", component: StoreComponent },
       { path: "profile", component: ProfileComponent },
-      { path: "customers",
+      {
+        path: "customers",
         children: [
-          { path:"", component:CustomersComponent },
-          { path: "last-minute-event", component: LastMinuteEventConfirmationComponent}          
-          
-        ], 
+          { path: "", component: CustomersComponent },
+          {
+            path: "last-minute-event",
+            component: LastMinuteEventConfirmationComponent,
+          },
+        ],
       },
       { path: "invoice", component: InvoiceComponent },
       {
@@ -110,7 +114,6 @@ const routes: Routes = [
         canDeactivate: [FormGuard],
         component: ParametersComponent,
       },
-
       {
         path: "treatment",
         canDeactivate: [FormGuard],
@@ -228,7 +231,10 @@ const routes: Routes = [
       { path: "add-holiday", component: AddHolidayComponent },
       { path: "define-holidays", component: ChooseHolidayComponent },
       { path: "registered-clinics", component: RegisteredClinicsComponent },
-      { path: "registered-clinic-detail/:id", component: RegisteredClinicDetailComponent },
+      {
+        path: "registered-clinic-detail/:id",
+        component: RegisteredClinicDetailComponent,
+      },
       {
         path: "mail-reminder",
         canDeactivate: [FormGuard],
@@ -273,6 +279,11 @@ const routes: Routes = [
         path: "mail-massive",
         canDeactivate: [FormGuard],
         component: MailMassiveEmailComponent,
+      },
+      {
+        path: "mail-reset-password",
+        canDeactivate: [FormGuard],
+        component: MailResetPasswordComponent,
       },
       {
         path: "sms-reminder",
@@ -330,9 +341,9 @@ const routes: Routes = [
         ],
       },
       {
-        path: 'licence',
-        component: LicenceComponent
-      }
+        path: "licence",
+        component: LicenceComponent,
+      },
     ],
   },
 ];
@@ -341,4 +352,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class DashboardRouting { }
+export class DashboardRouting {}

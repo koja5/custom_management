@@ -48,7 +48,7 @@ export class LoginService {
       .post("/api/postojikorisnik", data)
       .map((res) => res)
       .subscribe((val) => {
-        callback(val["exist"], val["notVerified"]);
+        callback(val["exist"], val["notVerified"], val['superadmin']);
       });
   }
 

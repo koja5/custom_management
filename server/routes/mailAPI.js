@@ -301,45 +301,100 @@ router.post("/forgotmail", function (req, res) {
   var compiledTemplate = hogan.compile(confirmTemplate);
   var verificationLinkButton =
     loginLink + "/changePassword/" + sha1(req.body.email);
+  connection.getConnection(function (err, conn) {
+    conn.query(
+      "select mr.*, u.* from mail_reset_password mr join users_superadmin u on mr.superadmin = u.id  where mr.superadmin = ?",
+      [req.body.superadmin],
+      function (err, mailMessage, fields) {
+        conn.release();
 
-  var mailOptions = {
-    from: '"ClinicNode" support@app-production.eu',
-    to: req.body.email,
-    subject: req.body.language?.subjectForgotMail,
-    html: compiledTemplate.render({
-      firstName: req.body.shortname,
-      verificationLink: verificationLinkButton,
-      initialGreeting: req.body.language?.initialGreeting,
-      finalGreeting: req.body.language?.finalGreeting,
-      initialGreeting: req.body.language?.initialGreeting,
-      finalGreeting: req.body.language?.finalGreeting,
-      signature: req.body.language?.signature,
-      thanksForUsing: req.body.language?.thanksForUsing,
-      websiteLink: req.body.language?.websiteLink,
-      ifYouHaveQuestion: req.body.language?.ifYouHaveQuestion,
-      emailAddress: req.body.language?.emailAddress,
-      notReply: req.body.language?.notReply,
-      copyRight: req.body.language?.copyRight,
-      introductoryMessageForForgotMail:
-        req.body.language?.introductoryMessageForForgotMail,
-      forgotMailButtonText: req.body.language?.forgotMailButtonText,
-    }),
-  };
+        var mail = {};
+        var signatureAvailable = false;
+        if (mailMessage.length > 0) {
+          mail = mailMessage[0];
+          if (mail.signatureAvailable) {
+            signatureAvailable = true;
+          }
+        }
 
-  smtpTransport.sendMail(mailOptions, function (error, response) {
-    if (error) {
-      logger.log(
-        "error",
-        `Error to sent mail for FORGOT PASSWORD on EMAIL: ${req.body.email}. Error: ${error}`
-      );
-      res.end(error);
-    } else {
-      logger.log(
-        "info",
-        `Sent mail for FORGOT PASSWORD for USER: ${req.body.shortname} on EMAIL: ${req.body.email}`
-      );
-      res.end("sent");
-    }
+        var mailOptions = {
+          from: '"ClinicNode" support@app-production.eu',
+          to: req.body.email,
+          subject: req.body.language?.subjectForgotMail,
+          html: compiledTemplate.render({
+            firstName: req.body.shortname,
+            verificationLink: verificationLinkButton,
+            initialGreeting: mail.mailInitialGreeting
+              ? mail.mailInitialGreeting
+              : req.body.language?.initialGreeting,
+            finalGreeting: mail.mailFinalGreeting
+              ? mail.mailFinalGreeting
+              : req.body.language?.finalGreeting,
+            signature: mail.mailSignature
+              ? mail.mailSignature
+              : req.body.language?.signature,
+            thanksForUsing: mail.mailThanksForUsing
+              ? mail.mailThanksForUsing
+              : req.body.language?.thanksForUsing,
+            websiteLink: req.body.language?.websiteLink,
+            ifYouHaveQuestion: mail.mailIfYouHaveQuestion
+              ? mail.mailIfYouHaveQuestion
+              : req.body.language?.ifYouHaveQuestion,
+            emailAddress: req.body.language?.emailAddress,
+            notReply: mail.mailNotReply
+              ? mail.mailNotReply
+              : req.body.language?.notReply,
+            copyRight: mail.mailCopyRight
+              ? mail.mailCopyRight
+              : req.body.language?.copyRight,
+            introductoryMessageForForgotMail: mail.initialGreeting
+              ? mail.initialGreeting
+              : req.body.language?.introductoryMessageForForgotMail,
+            forgotMailButtonText: mail.mailForgotButtonText
+              ? mail.mailForgotButtonText
+              : req.body.language?.forgotMailButtonText,
+            signatureAddress:
+              signatureAvailable &&
+              mail.signatureAddress &&
+              (mail.street || mail.zipcode)
+                ? mail.signatureAddress +
+                  "\n" +
+                  mail.street +
+                  "\n" +
+                  mail.zipcode
+                : "",
+            signatureTelephone:
+              signatureAvailable && mail.signatureTelephone && mail.telephone
+                ? mail.signatureTelephone + " " + mail.telephone
+                : "",
+            signatureMobile:
+              signatureAvailable && mail.signatureMobile && mail.mobile
+                ? mail.signatureMobile + " " + mail.mobile
+                : "",
+            signatureEmail:
+              signatureAvailable && mail.signatureEmail && mail.email
+                ? mail.signatureEmail + " " + mail.email
+                : "",
+          }),
+        };
+
+        smtpTransport.sendMail(mailOptions, function (error, response) {
+          if (error) {
+            logger.log(
+              "error",
+              `Error to sent mail for FORGOT PASSWORD on EMAIL: ${req.body.email}. Error: ${error}`
+            );
+            res.end(error);
+          } else {
+            logger.log(
+              "info",
+              `Sent mail for FORGOT PASSWORD for USER: ${req.body.shortname} on EMAIL: ${req.body.email}`
+            );
+            res.end("sent");
+          }
+        });
+      }
+    );
   });
 });
 
@@ -865,7 +920,7 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
   );
   connection.getConnection(function (err, conn) {
     conn.query(
-      "select mr.*, s.* from tasks t join mail_approve_reservation mr on t.superadmin = mr.superadmin join store s on t.storeId = s.id where t.id = ?",
+      "select mr.*, s.*, s.place as store_place, t.start, t.end from tasks t join mail_approve_reservation mr on t.superadmin = mr.superadmin join store s on t.storeId = s.id where t.id = ?",
       [req.body.id],
       function (err, mailMessage, fields) {
         conn.release();
@@ -881,6 +936,30 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
             signatureAvailable = true;
           }
         }
+
+        var convertToDateStart = new Date(mail.start);
+        var convertToDateEnd = new Date(mail.end);
+        var startHours = convertToDateStart.getHours();
+        var startMinutes = convertToDateStart.getMinutes();
+        var endHours = convertToDateEnd.getHours();
+        var endMinutes = convertToDateEnd.getMinutes();
+        var date =
+          convertToDateStart.getDate() +
+          "." +
+          (convertToDateStart.getMonth() + 1) +
+          "." +
+          convertToDateStart.getFullYear();
+        var day = convertToDateStart.getDate();
+        var month = monthNames[convertToDateStart.getMonth()];
+        var start =
+          (startHours < 10 ? "0" + startHours : startHours) +
+          ":" +
+          (startMinutes < 10 ? "0" + startMinutes : startMinutes);
+        var end =
+          (endHours < 10 ? "0" + endHours : endHours) +
+          ":" +
+          (endMinutes < 10 ? "0" + endMinutes : endMinutes);
+
         var mailOptions = {
           from: '"ClinicNode" support@app-production.eu',
           to: req.body.email,
@@ -895,14 +974,23 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
             initialGreeting: mail.mailInitialGreeting
               ? mail.mailInitialGreeting
               : req.body.language?.initialGreeting,
+            dateMessage: mail.mailDate
+              ? mail.mailDate
+              : req.body.language?.dateMessage,
+            timeMessage: mail.mailTime
+              ? mail.mailTime
+              : req.body.language?.timeMessage,
+            month: month,
+            day: day,
+            date: date,
+            start: start,
+            end: end,
             finalGreeting: mail.mailFinalGreeting
               ? mail.mailFinalGreeting
               : req.body.language?.finalGreeting,
-            signature: !signatureAvailable
+            signature: mail.mailSignature
               ? mail.mailSignature
-                ? mail.mailSignature
-                : req.body.language?.signature
-              : "",
+              : req.body.language?.signature,
             thanksForUsing: mail.mailThanksForUsing
               ? mail.mailThanksForUsing
               : req.body.language?.thanksForUsing,
@@ -974,14 +1062,14 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
   var infoForDenyReservation = hogan.compile(infoForDenyReservationTemplate);
   connection.getConnection(function (err, conn) {
     conn.query(
-      "select mr.*, s.* from tasks t join mail_deny_reservation mr on t.superadmin = mr.superadmin join store s on t.storeId = s.id where t.id = ?",
+      "select mr.*, s.*, t.start, t.end from tasks t join mail_deny_reservation mr on t.superadmin = mr.superadmin join store s on t.storeId = s.id where t.id = ?",
       [req.body.id],
       function (err, mailMessage, fields) {
         conn.release();
         if (err) {
           res.json(false);
         }
-        console.log(mailMessage);
+
         var mail = {};
         var signatureAvailable = false;
         if (mailMessage.length > 0) {
@@ -990,6 +1078,30 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
             signatureAvailable = true;
           }
         }
+
+        var convertToDateStart = new Date(mail.start);
+        var convertToDateEnd = new Date(mail.end);
+        var startHours = convertToDateStart.getHours();
+        var startMinutes = convertToDateStart.getMinutes();
+        var endHours = convertToDateEnd.getHours();
+        var endMinutes = convertToDateEnd.getMinutes();
+        var date =
+          convertToDateStart.getDate() +
+          "." +
+          (convertToDateStart.getMonth() + 1) +
+          "." +
+          convertToDateStart.getFullYear();
+        var day = convertToDateStart.getDate();
+        var month = monthNames[convertToDateStart.getMonth()];
+        var start =
+          (startHours < 10 ? "0" + startHours : startHours) +
+          ":" +
+          (startMinutes < 10 ? "0" + startMinutes : startMinutes);
+        var end =
+          (endHours < 10 ? "0" + endHours : endHours) +
+          ":" +
+          (endMinutes < 10 ? "0" + endMinutes : endMinutes);
+
         var mailOptions = {
           from: '"ClinicNode" support@app-production.eu',
           to: req.body.email,
@@ -1004,14 +1116,23 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
             initialGreeting: mail.mailInitialGreeting
               ? mail.mailInitialGreeting
               : req.body.language?.initialGreeting,
+            dateMessage: mail.mailDate
+              ? mail.mailDate
+              : req.body.language?.dateMessage,
+            timeMessage: mail.mailTime
+              ? mail.mailTime
+              : req.body.language?.timeMessage,
+            month: month,
+            day: day,
+            date: date,
+            start: start,
+            end: end,
             finalGreeting: mail.mailFinalGreeting
               ? mail.mailFinalGreeting
               : req.body.language?.finalGreeting,
-            signature: !signatureAvailable
+            signature: mail.mailSignature
               ? mail.mailSignature
-                ? mail.mailSignature
-                : req.body.language?.signature
-              : "",
+              : req.body.language?.signature,
             thanksForUsing: mail.mailThanksForUsing
               ? mail.mailThanksForUsing
               : req.body.language?.thanksForUsing,

@@ -30,6 +30,13 @@
     {
         "type": "textbox",
         "width": "col-md-12",
+        "name": "smsSignatureWebsite",
+        "label": "smsSignatureWebsite",
+        "field": "smsSignatureWebsite"
+    },
+    {
+        "type": "textbox",
+        "width": "col-md-12",
         "name": "smsSignatureCompanyName",
         "label": "signatureCompanyName",
         "field": "smsSignatureCompanyName"

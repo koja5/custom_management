@@ -282,7 +282,7 @@
                         </div>
                       </div>
                       <div class="row" *ngIf="baseDataOne !== undefined">
-                        <div class="col-md-4 col-xs-6 b-r" *ngIf="recommendationList !== undefined">
+                        <div class="col-md-4 col-xs-6 b-r display_contents" *ngIf="recommendationList !== undefined">
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.recommendation }}">
@@ -1585,7 +1585,7 @@
                     : updateBaseDataOne()
                 " (change)="isDirty()" #baseOne="ngForm">
                 <div class="form-group">
-                  <div class="col-md-4 col-xs-12 b-r" *ngIf="recommendationList !== undefined">
+                  <div class="col-md-4 col-xs-12 b-r display_contents" *ngIf="recommendationList !== undefined">
                     <kendo-textbox-container floatingLabel="{{ language.recommendation }}">
                       <kendo-multiselect [data]="recommendationList" [textField]="'title'" [valueField]="'id'"
                         [(ngModel)]="selectedRecommendation" [valuePrimitive]="true" name="recommendation">
@@ -1666,18 +1666,18 @@
                 " #baseTwo="ngForm" (change)="isDirty()">
                 <div class="form-group">
                   <div class="panel-body">
-                    <div class="col-md-3 col-xs-12 b-r">
+                    <div class="col-md-4 col-xs-12 b-r">
                       <kendo-textbox-container floatingLabel="{{ language.size }}">
                         <input kendoTextBox type="number" [(ngModel)]="baseDataTwo.size" name="size" #size="ngModel" />
                       </kendo-textbox-container>
                     </div>
-                    <div class="col-md-3 col-xs-12 b-r">
+                    <div class="col-md-4 col-xs-12 b-r">
                       <kendo-textbox-container floatingLabel="{{ language.weight }}">
                         <input kendoTextBox type="number" [(ngModel)]="baseDataTwo.weight" name="weight"
                           #weight="ngModel" />
                       </kendo-textbox-container>
                     </div>
-                    <div class="col-md-3 col-xs-12 b-r">
+                    <div class="col-md-4 col-xs-12 b-r">
                       <kendo-textbox-container floatingLabel="{{ language.childs }}">
                         <input kendoTextBox type="number" [(ngModel)]="baseDataTwo.childs" name="childs"
                           #childs="ngModel" />

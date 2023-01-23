@@ -59,5 +59,6 @@ import { SharedComponentsModule } from "src/app/shared/shared-components.module"
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
     },
   ],
+  declarations: [],
 })
 export class ParametersModule { }

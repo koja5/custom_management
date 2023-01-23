@@ -128,6 +128,10 @@ function reminderViaSMS() {
                             }
                           }
 
+                          if (sms.smsSignatureWebsite) {
+                            signature += " \n" + sms.smsSignatureWebsite;
+                          }
+
                           if (language?.smsSignaturePoweredBy) {
                             signature +=
                               language?.smsSignaturePoweredBy + " \n";

@@ -117,6 +117,7 @@ import { SharedComponentsModule } from 'src/app/shared/shared-components.module'
 import { LastMinuteEventConfirmationComponent } from './customers/last-minute-event-confirmation/last-minute-event-confirmation.component';
 import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
 import { LicenceComponent } from './licence/licence.component';
+import { MailResetPasswordComponent } from './parameters/mail-reset-password/mail-reset-password.component';
 
 @NgModule({
   declarations: [
@@ -158,6 +159,7 @@ import { LicenceComponent } from './licence/licence.component';
     MailPatientCreatedAccountViaFormComponent,
     MailApproveReservationComponent,
     MailDenyReservationComponent,
+    MailResetPasswordComponent,
     SmsReminderComponent,
     ChangeSuperadminProfileComponent,
     PermissionPatientMenuComponent,

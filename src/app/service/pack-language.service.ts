@@ -7,14 +7,13 @@ import { HelpService } from "./help.service";
 export class PackLanguageService {
   constructor(private helpService: HelpService) {}
 
-
   dynamicPackLanguage(fields: Array<string>) {
     const language = this.helpService.getLanguage();
     const returnVal = {};
 
     fields.forEach((el: string) => {
       returnVal[el] = language[el];
-    })
+    });
     return returnVal;
   }
 
@@ -136,6 +135,8 @@ export class PackLanguageService {
       copyRight: language.copyRight,
       introductoryMessageForApproveReservation:
         language.introductoryMessageForApproveReservation,
+      dateTime: language.dateMessage,
+      timeMessage: language.timeMessage,
     };
   }
 
@@ -154,6 +155,8 @@ export class PackLanguageService {
       copyRight: language.copyRight,
       introductoryMessageForDenyReservation:
         language.introductoryMessageForDenyReservation,
+        dateMessage: language.dateMessage,
+      timeMessage: language.timeMessage,
     };
   }
 
@@ -194,7 +197,8 @@ export class PackLanguageService {
       emailAddress: language.emailAddress,
       notReply: language.notReply,
       copyRight: language.copyRight,
-      introductoryMessageForCreatedVaucher: language.introductoryMessageForCreatedVaucher,
+      introductoryMessageForCreatedVaucher:
+        language.introductoryMessageForCreatedVaucher,
       openForm: language.openForm,
       linkForLogin: language.linkForLogin,
       emailForLogin: language.emailForLogin,
@@ -204,7 +208,7 @@ export class PackLanguageService {
       customerBuys: language.customerBuys,
       customerConsumer: language.customerConsumer,
       user: language.user,
-      comment: language.comment
+      comment: language.comment,
     };
   }
 }
