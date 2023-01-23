@@ -46,111 +46,70 @@ function sendHappyBirthdayViaSMS() {
               if (err) {
                 console.error("SQL error:", err);
               }
-              if (rows.length > 0 && rows[0].congratulationBirthday === 1) {
-                conn.query(
-                  "SELECT distinct congratulationBirthday from mail_birthday_congratulation where superadmin = ?",
-                  [rows[0].superadmin],
-                  function (err, mailRows, fields) {
-                    if (
-                      mailRows.length === 0 ||
-                      (mailRows.length > 0 &&
-                        mailRows[0].congratulationBirthday === 0)
-                    ) {
-                      request(
-                        link + "/getAvailableAreaCode",
-                        function (error, response, codes) {
-                          rows.forEach(function (to, i, array) {
-                            if (to.congratulationBirthday === 1) {
-                              conn.query(
-                                "SELECT distinct congratulationBirthday from mail_birthday_congratulation where superadmin = ?",
-                                [to.superadmin],
-                                function (err, mailRows, fields) {
-                                  conn.release();
-                                  if (
-                                    mailRows.length === 0 ||
-                                    (mailRows.length > 0 &&
-                                      mailRows[0].congratulationBirthday === 0)
-                                  ) {
-                                    var phoneNumber = null;
-                                    if (to.mobile) {
-                                      phoneNumber = to.mobile;
-                                    }
-                                    if (
-                                      checkAvailableCode(
-                                        phoneNumber,
-                                        JSON.parse(codes)
-                                      )
-                                    ) {
-                                      var language = JSON.parse(body)["config"];
-                                      var message =
-                                        (to.initialGreeting
-                                          ? to.initialGreeting
-                                          : language.initialGreetingSMSReminder) +
-                                        " " +
-                                        to.shortname +
-                                        ", \n \n" +
-                                        to.smsSubject;
-                                      var signature = "";
-                                      if (to.signatureAvailable) {
-                                        if (to.smsSignatureCompanyName) {
-                                          signature +=
-                                            to.smsSignatureCompanyName + "\n";
-                                        }
-                                        if (to.smsSignatureAddress1) {
-                                          signature +=
-                                            to.smsSignatureAddress1 + "\n";
-                                        }
-                                        if (to.smsSignatureAddress2) {
-                                          signature +=
-                                            to.smsSignatureAddress2 + "\n";
-                                        }
-                                        if (to.smsSignatureAddress3) {
-                                          signature +=
-                                            to.smsSignatureAddress3 + "\n";
-                                        }
-                                        if (to.smsSignatureTelephone) {
-                                          signature +=
-                                            to.smsSignatureTelephone + " \n";
-                                        }
-                                        if (to.smsSignatureMobile) {
-                                          signature +=
-                                            to.smsSignatureMobile + " \n";
-                                        }
-                                        if (to.smsSignatureEmail) {
-                                          signature +=
-                                            to.smsSignatureEmail + " \n";
-                                        }
-                                      }
 
-                                      if (sms.smsSignatureWebsite) {
-                                        signature += " \n" + sms.smsSignatureWebsite + "\n";
-                                      }
-
-                                      if (language?.smsSignaturePoweredBy) {
-                                        signature +=
-                                          language?.smsSignaturePoweredBy +
-                                          " \n";
-                                      }
-
-                                      const fullMessage =
-                                        message + "\n\n" + signature;
-                                      sendSmsFromMail(phoneNumber, fullMessage);
-                                    }
-                                  }
-                                }
-                              );
-                            } else {
-                              conn.release();
-                            }
-                          });
+              request(
+                link + "/getAvailableAreaCode",
+                function (error, response, codes) {
+                  rows.forEach(function (to, i, array) {
+                    if (to.congratulationBirthday === 1) {
+                      console.log(to);
+                      var phoneNumber = null;
+                      if (to.mobile) {
+                        phoneNumber = to.mobile;
+                      }
+                      if (checkAvailableCode(phoneNumber, JSON.parse(codes))) {
+                        var language = JSON.parse(body)["config"];
+                        var message =
+                          (to.smsSubject
+                            ? to.smsSubject
+                            : language.initialGreetingSMSReminder) +
+                          " " +
+                          to.shortname +
+                          ", \n \n" +
+                          to.smsMessage;
+                        var signature = "";
+                        if (to.signatureAvailable) {
+                          if (to.smsSignatureCompanyName) {
+                            signature += to.smsSignatureCompanyName + "\n";
+                          }
+                          if (to.smsSignatureAddress1) {
+                            signature += to.smsSignatureAddress1 + "\n";
+                          }
+                          if (to.smsSignatureAddress2) {
+                            signature += to.smsSignatureAddress2 + "\n";
+                          }
+                          if (to.smsSignatureAddress3) {
+                            signature += to.smsSignatureAddress3 + "\n";
+                          }
+                          if (to.smsSignatureTelephone) {
+                            signature += to.smsSignatureTelephone + " \n";
+                          }
+                          if (to.smsSignatureMobile) {
+                            signature += to.smsSignatureMobile + " \n";
+                          }
+                          if (to.smsSignatureEmail) {
+                            signature += to.smsSignatureEmail + " \n";
+                          }
                         }
-                      );
+
+                        if (to.smsSignatureWebsite) {
+                          signature += " \n" + to.smsSignatureWebsite + "\n";
+                        }
+
+                        if (to.smsSignaturePoweredBy) {
+                          signature += to.smsSignaturePoweredBy + " \n";
+                        }
+
+                        const fullMessage = message + "\n\n" + signature;
+                        console.log(fullMessage);
+                        sendSmsFromMail(phoneNumber, fullMessage);
+                      }
                     } else {
                       conn.release();
                     }
-                  }
-                );
-              }
+                  });
+                }
+              );
             }
           );
         }

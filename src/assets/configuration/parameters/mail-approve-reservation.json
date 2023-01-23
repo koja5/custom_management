@@ -37,27 +37,6 @@
     {
       "type": "textbox",
       "width": "col-md-4",
-      "name": "mailClinic",
-      "label": "mailClinic",
-      "field": "mailClinic"
-    },
-    {
-      "type": "textbox",
-      "width": "col-md-4",
-      "name": "mailTherapy",
-      "label": "mailTherapy",
-      "field": "mailTherapy"
-    },
-    {
-      "type": "textbox",
-      "width": "col-md-4",
-      "name": "mailDoctor",
-      "label": "mailDoctor",
-      "field": "mailDoctor"
-    },
-    {
-      "type": "textbox",
-      "width": "col-md-4",
       "name": "mailFinalGreeting",
       "label": "mailFinalGreeting",
       "field": "mailFinalGreeting"

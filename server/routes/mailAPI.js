@@ -920,7 +920,7 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
   );
   connection.getConnection(function (err, conn) {
     conn.query(
-      "select mr.*, s.*, s.place as store_place from tasks t join mail_approve_reservation mr on t.superadmin = mr.superadmin join store s on t.storeId = s.id where t.id = ?",
+      "select mr.*, s.*, s.place as store_place, t.start, t.end from tasks t join mail_approve_reservation mr on t.superadmin = mr.superadmin join store s on t.storeId = s.id where t.id = ?",
       [req.body.id],
       function (err, mailMessage, fields) {
         conn.release();
@@ -936,6 +936,30 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
             signatureAvailable = true;
           }
         }
+
+        var convertToDateStart = new Date(mail.start);
+        var convertToDateEnd = new Date(mail.end);
+        var startHours = convertToDateStart.getHours();
+        var startMinutes = convertToDateStart.getMinutes();
+        var endHours = convertToDateEnd.getHours();
+        var endMinutes = convertToDateEnd.getMinutes();
+        var date =
+          convertToDateStart.getDate() +
+          "." +
+          (convertToDateStart.getMonth() + 1) +
+          "." +
+          convertToDateStart.getFullYear();
+        var day = convertToDateStart.getDate();
+        var month = monthNames[convertToDateStart.getMonth()];
+        var start =
+          (startHours < 10 ? "0" + startHours : startHours) +
+          ":" +
+          (startMinutes < 10 ? "0" + startMinutes : startMinutes);
+        var end =
+          (endHours < 10 ? "0" + endHours : endHours) +
+          ":" +
+          (endMinutes < 10 ? "0" + endMinutes : endMinutes);
+
         var mailOptions = {
           from: '"ClinicNode" support@app-production.eu',
           to: req.body.email,
@@ -950,6 +974,17 @@ router.post("/sendInfoForApproveReservation", function (req, res) {
             initialGreeting: mail.mailInitialGreeting
               ? mail.mailInitialGreeting
               : req.body.language?.initialGreeting,
+            dateMessage: mail.mailDate
+              ? mail.mailDate
+              : req.body.language?.dateMessage,
+            timeMessage: mail.mailTime
+              ? mail.mailTime
+              : req.body.language?.timeMessage,
+            month: month,
+            day: day,
+            date: date,
+            start: start,
+            end: end,
             finalGreeting: mail.mailFinalGreeting
               ? mail.mailFinalGreeting
               : req.body.language?.finalGreeting,
@@ -1027,15 +1062,14 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
   var infoForDenyReservation = hogan.compile(infoForDenyReservationTemplate);
   connection.getConnection(function (err, conn) {
     conn.query(
-      "select mr.*, s.* from tasks t join mail_deny_reservation mr on t.superadmin = mr.superadmin join store s on t.storeId = s.id where t.id = ?",
+      "select mr.*, s.*, t.start, t.end from tasks t join mail_deny_reservation mr on t.superadmin = mr.superadmin join store s on t.storeId = s.id where t.id = ?",
       [req.body.id],
       function (err, mailMessage, fields) {
         conn.release();
         if (err) {
           res.json(false);
         }
-        console.log("MESSAGE DENY!");
-        console.log(mailMessage);
+
         var mail = {};
         var signatureAvailable = false;
         if (mailMessage.length > 0) {
@@ -1044,6 +1078,30 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
             signatureAvailable = true;
           }
         }
+
+        var convertToDateStart = new Date(mail.start);
+        var convertToDateEnd = new Date(mail.end);
+        var startHours = convertToDateStart.getHours();
+        var startMinutes = convertToDateStart.getMinutes();
+        var endHours = convertToDateEnd.getHours();
+        var endMinutes = convertToDateEnd.getMinutes();
+        var date =
+          convertToDateStart.getDate() +
+          "." +
+          (convertToDateStart.getMonth() + 1) +
+          "." +
+          convertToDateStart.getFullYear();
+        var day = convertToDateStart.getDate();
+        var month = monthNames[convertToDateStart.getMonth()];
+        var start =
+          (startHours < 10 ? "0" + startHours : startHours) +
+          ":" +
+          (startMinutes < 10 ? "0" + startMinutes : startMinutes);
+        var end =
+          (endHours < 10 ? "0" + endHours : endHours) +
+          ":" +
+          (endMinutes < 10 ? "0" + endMinutes : endMinutes);
+
         var mailOptions = {
           from: '"ClinicNode" support@app-production.eu',
           to: req.body.email,
@@ -1058,6 +1116,17 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
             initialGreeting: mail.mailInitialGreeting
               ? mail.mailInitialGreeting
               : req.body.language?.initialGreeting,
+            dateMessage: mail.mailDate
+              ? mail.mailDate
+              : req.body.language?.dateMessage,
+            timeMessage: mail.mailTime
+              ? mail.mailTime
+              : req.body.language?.timeMessage,
+            month: month,
+            day: day,
+            date: date,
+            start: start,
+            end: end,
             finalGreeting: mail.mailFinalGreeting
               ? mail.mailFinalGreeting
               : req.body.language?.finalGreeting,

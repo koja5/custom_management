@@ -545,7 +545,6 @@ router.post("/login", (req, res, next) => {
                 "SELECT * FROM users_superadmin WHERE email=? AND password=?",
                 [reqObj.email, sha1(reqObj.password)],
                 function (err, rows, fields) {
-                  
                   if (err) {
                     logger.log("error", err.sql + ". " + err.sqlMessage);
                     res.json(err);
@@ -555,7 +554,6 @@ router.post("/login", (req, res, next) => {
                       "SELECT * from licence_per_user l where l.superadmin_id = ? and l.expiration_date >= ?",
                       [rows[0].id, new Date()],
                       function (err, licence, fields) {
-                        
                         if (licence.length > 0) {
                           logger.log(
                             "info",
@@ -1293,7 +1291,6 @@ router.get("/getSuperadmin/:id", function (req, res, next) {
         if (!err) {
           res.json(rows);
         } else {
-          
           res.json(null);
         }
       }
@@ -2092,14 +2089,14 @@ router.post("/postojikorisnik", (req, res, next) => {
               res.send({
                 exist: true,
                 notVerified: false,
-                superadmin: rows[0].superadmin
+                superadmin: rows[0].superadmin,
               });
             } else if (rows.length >= 1) {
               conn.release();
               res.send({
                 exist: true,
                 notVerified: true,
-                superadmin: rows[0].superadmin
+                superadmin: rows[0].superadmin,
               });
             } else {
               conn.query(
@@ -2115,7 +2112,7 @@ router.post("/postojikorisnik", (req, res, next) => {
                     res.send({
                       exist: true,
                       notVerified: false,
-                      superadmin: rows[0].id
+                      superadmin: rows[0].id,
                     });
                   } else if (rows.length >= 1) {
                     conn.release();
@@ -2138,13 +2135,13 @@ router.post("/postojikorisnik", (req, res, next) => {
                           res.send({
                             exist: true,
                             notVerified: false,
-                            superadmin: rows[0].storeId
+                            superadmin: rows[0].storeId,
                           });
                         } else if (rows.length >= 1) {
                           res.send({
                             exist: true,
                             notVerified: true,
-                            superadmin: rows[0].storeId
+                            superadmin: rows[0].storeId,
                           });
                         } else {
                           res.send({
@@ -5478,7 +5475,6 @@ function updateAvailableSMSCount(usedSms, superadmin) {
             "update sms_count set count = ? where superadmin = ?",
             [newCount, superadmin],
             function (err, rows) {
-              
               if (!err) {
                 return true;
               } else {
@@ -5519,7 +5515,6 @@ function checkSMSCount(superadmin, needCount) {
               "update sms_count set count = ? where superadmin = ?",
               [updateCount, superadmin],
               function (err, rows) {
-                
                 if (!err) {
                   return true;
                 } else {
@@ -5649,7 +5644,7 @@ router.post("/sendCustomSMS", function (req, res) {
 //                         signature;
 //                       var fileName = "server/sms/" + phoneNumber + ".txt";
 //                       fs.writeFile(fileName, content, function (err) {
-//                         
+//
 //                         if (err) return logger.log("error", err);
 //                         logger.log(
 //                           "info",
@@ -5750,6 +5745,10 @@ router.post("/sendVaucherSms", function (req, res) {
                           if (to.smsSignatureEmail) {
                             signature += to.smsSignatureEmail + " \n";
                           }
+                        }
+
+                        if (language.smsSignatureWebsite) {
+                          signature += " \n" + language.smsSignatureWebsite;
                         }
 
                         if (language.smsSignaturePoweredBy) {
@@ -7206,7 +7205,6 @@ function insertFromTemplate(conn, category, account_id, id) {
             "insert into " + category + " SET ?",
             to,
             function (err, res) {
-              
               console.log(res);
             }
           );
@@ -7248,9 +7246,7 @@ function insertFromTemplateForUsers(conn, category, account_id, id) {
                     conn.query(
                       "insert into work SET ?",
                       touw,
-                      function (err, res) {
-                        
-                      }
+                      function (err, res) {}
                     );
                   });
                 }
@@ -7303,7 +7299,6 @@ function getCustomersDemoData(conn, category, account_id, id) {
             "insert into " + category + " SET ?",
             to,
             function (err, res) {
-              
               console.log(res);
             }
           );
@@ -7414,7 +7409,6 @@ router.post("/createMailReminderMessage", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -7446,7 +7440,6 @@ router.post("/updateMailReminderMessage", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -7504,7 +7497,6 @@ router.post("/createMailApproveReservation", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -7536,7 +7528,6 @@ router.post("/updateMailApproveReservation", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -7594,7 +7585,6 @@ router.post("/createMailConfirmArrival", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -7626,7 +7616,6 @@ router.post("/updateMailConfirmArrival", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -7684,7 +7673,6 @@ router.post("/createMailMultipleRecepient", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -7716,7 +7704,6 @@ router.post("/updateMailMultipleRecepient", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -7774,7 +7761,6 @@ router.post("/createMailDenyReservation", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -7806,7 +7792,6 @@ router.post("/updateMailDenyReservation", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -7867,7 +7852,6 @@ router.post("/createMailPatientCreatedAccount", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -7899,7 +7883,6 @@ router.post("/updateMailPatientCreatedAccount", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -7960,7 +7943,6 @@ router.post("/createMailPatientCreatedAccountViaForm", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -7992,7 +7974,6 @@ router.post("/updateMailPatientCreatedAccountViaForm", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -8053,7 +8034,6 @@ router.post("/createMailPatientFormRegistration", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -8085,7 +8065,6 @@ router.post("/updateMailPatientFormRegistration", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -8143,7 +8122,6 @@ router.post("/createSmsReminderMessage", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -8175,7 +8153,6 @@ router.post("/updateSmsReminderMessage", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -8233,7 +8210,6 @@ router.post("/createSmsMassiveMessage", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -8265,7 +8241,6 @@ router.post("/updateSmsMassiveMessage", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -8324,7 +8299,6 @@ router.post("/createEventCategoryStatistic", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -8357,7 +8331,6 @@ router.post("/updateEventCategoryStatistic", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -8450,7 +8423,6 @@ router.post("/createSmsBirthdayCongratulation", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -8482,7 +8454,6 @@ router.post("/updateSmsBirthdayCongratulation", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -8543,7 +8514,6 @@ router.post("/createMailBirthdayCongratulation", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -8575,7 +8545,6 @@ router.post("/updateMailBirthdayCongratulation", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -8638,7 +8607,6 @@ router.post("/updateUserAccess", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -8674,7 +8642,6 @@ router.post("/updateUserAccessDevice", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -8753,7 +8720,6 @@ router.post("/updateSmsCountForSuperadmin", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -8786,7 +8752,6 @@ router.post("/createSmsCount", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -8818,7 +8783,6 @@ router.post("/updateSmsCount", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -8906,7 +8870,6 @@ router.post("/createMailMassive", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -8938,7 +8901,6 @@ router.post("/updateMailMassive", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -9027,7 +8989,6 @@ router.post("/updateMailResetPassword", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -9063,7 +9024,6 @@ router.post("/createHoliday", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(results.insertId);
             }
@@ -9101,7 +9061,6 @@ router.post("/updateHoliday", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -9290,7 +9249,6 @@ router.post("/createSuperAdminTemplateConnection", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -9327,7 +9285,6 @@ router.post("/deleteStoreTemplateConnection", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(true);
             }
@@ -9359,7 +9316,6 @@ router.get("/getStoreTemplateConnection/:superAdminId", (req, res, next) => {
             if (err) {
               logger.log("error", err.sql + ". " + err.sqlMessage);
               res.json(false);
-              
             } else {
               res.json(results);
             }
@@ -9575,7 +9531,6 @@ router.post("/updateInvoiceID", function (req, res, next) {
         if (err) {
           logger.log("error", err.sql + ". " + err.sqlMessage);
           res.json(false);
-          
         } else {
           res.json(true);
         }
@@ -10396,7 +10351,6 @@ router.post("/createClinic", function (req, res, next) {
             "insert licence_per_user SET ?",
             licence,
             function (err, rows) {
-              
               conn.release();
             }
           );
@@ -10531,7 +10485,6 @@ router.get("/getClinicEmployees/:id", function (req, res) {
       id,
       function (err, result) {
         if (err) {
-          
           res.json(err);
         } else {
           res.json(result);

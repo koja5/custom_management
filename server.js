@@ -221,7 +221,7 @@ var j = schedule.scheduleJob("00 12 * * *", function () {
   reminderViaSMS();
 });
 
-var j = schedule.scheduleJob("30 13 * * *", function () {
+var j = schedule.scheduleJob("39 23 11 * * *", function () {
   sendHappyBirthdayViaSMS();
 });
 

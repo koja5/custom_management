@@ -26,6 +26,11 @@
 
     <style>
       p, pre { font-size: 12px; font-family: Arial, Helvetica, sans-serif; }
+      table, th, td { border: 1px solid black; border-collapse: collapse; } th,
+      td { padding: 5px; text-align: left; } @media (max-width: 767px) {
+      .date-large { display: none; } } @media (min-width: 768px) { .date-small {
+      display: none; } } p, pre { font-size: 12px; font-family: Arial,
+      Helvetica, sans-serif; }
     </style>
 
   </head>
@@ -77,6 +82,59 @@
               style="box-sizing: inherit;border-width: 0;border-style: solid;border-color: #dae1e7; white-space: pre-line;"
             >
               {{introductoryMessageForApproveReservation}}</p>
+
+            <div style="text-align: center; padding: 15px;">
+              <table style="width:80%; margin: auto;">
+                <tr class="date-large">
+                  <td
+                    style="width: 30%; background: #01A9E9; color: #fff; text-align: center; font-weight: bold; font-size: 18px;"
+                  >
+                    {{month}}
+                    {{day}}
+                  </td>
+                  <td>
+                    <p
+                      style="text-align: initial; font-size: 13px; margin: 0px"
+                    >{{dateMessage}}
+                      <span
+                        style="font-size: 15px; font-weight: bold;"
+                      >{{date}}</span>
+                    </p>
+                    <p
+                      style="text-align: initial; font-size: 13px; margin: 0px"
+                    >{{timeMessage}}
+                      <span
+                        style="font-size: 15px; font-weight: bold;"
+                      >{{start}} {{end}}</span></p>
+                  </td>
+                </tr>
+                <tr class="date-small">
+                  <td
+                    style="width: 30%; background: #01A9E9; color: #fff; text-align: center; font-weight: bold; font-size: 18px;"
+                  >
+                    {{month}}
+                    {{day}}
+                  </td>
+                </tr>
+                <tr class="date-small">
+                  <td>
+                    <p
+                      style="text-align: initial; font-size: 13px; margin: 0px"
+                    >{{dateMessage}}
+                      <span
+                        style="font-size: 15px; font-weight: bold;"
+                      >{{date}}</span>
+                    </p>
+                    <p
+                      style="text-align: initial; font-size: 13px; margin: 0px"
+                    >{{timeMessage}}
+                      <span
+                        style="font-size: 15px; font-weight: bold;"
+                      >{{start}} {{end}}</span></p>
+                  </td>
+                </tr>
+              </table>
+            </div>
 
             <p
               class="text-sm"
