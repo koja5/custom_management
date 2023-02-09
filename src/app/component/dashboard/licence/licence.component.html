@@ -152,21 +152,29 @@
   </modal-content>
 </modal>
 
-<modal #paidLicense modalClass="modal-md top-margin loggerModal adminModal">
+<modal #paidLicense modalClass="modal-lg top-margin loggerModal adminModal">
   <modal-content>
     <table>
       <tr>
+        <td>{{language.licencePaymentDate}}</td>
         <td>{{language.licenceName}}</td>
         <td>{{language.licencePrice}}</td>
-        <td>{{language.licencePaymentDate}}</td>
+        <td>{{language.licenseMonth}}</td>
+        <td>{{language.licenseNetoPrice}}</td>
+        <td>{{language.licenseFee}}</td>
+        <td>{{language.licenseBrutoPrice}}</td>
         <td>{{language.licenceExpiredDate}}</td>
         <td>{{language.licencePreview}}</td>
       </tr>
       <tr *ngFor="let item of licences" class="paid-licence">
+        <td>{{item.date_paid | date: 'dd.MM.yyyy'}}</td>
         <td>{{language[item.name] ? language[item.name] : item.name}}</td>
         <td>{{item.price}} €</td>
-        <td>{{convertToDate(item.date_paid) | date :'dd.MM.yyyy'}}</td>
-        <td>{{convertToDate(item.expiration_date) | date :'dd.MM.yyyy'}}</td>
+        <td>{{item.numberOfMonth}}</td>
+        <td>{{calculateNetoPrice(item.price, item.numberOfMonth)}}</td>
+        <td>{{language.feeValue}}</td>
+        <td>{{calculateBrutoPrice(item.price, item.numberOfMonth)}}</td>
+        <td>{{item.expiration_date | date :'dd.MM.yyyy'}}</td>
         <td><span class="fa fa-search" (click)="showItemLicence(item)"></span></td>
       </tr>
     </table>

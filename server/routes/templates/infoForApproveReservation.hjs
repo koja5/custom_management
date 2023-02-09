@@ -105,7 +105,7 @@
                     >{{timeMessage}}
                       <span
                         style="font-size: 15px; font-weight: bold;"
-                      >{{start}} {{end}}</span></p>
+                      >{{start}} - {{end}}</span></p>
                   </td>
                 </tr>
                 <tr class="date-small">
@@ -130,7 +130,7 @@
                     >{{timeMessage}}
                       <span
                         style="font-size: 15px; font-weight: bold;"
-                      >{{start}} {{end}}</span></p>
+                      >{{start}} - {{end}}</span></p>
                   </td>
                 </tr>
               </table>

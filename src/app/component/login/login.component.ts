@@ -392,10 +392,11 @@ export class LoginComponent implements OnInit {
       delete this.data.password;
       this.service.forgotPassword(
         this.data,
-        function (exist, notVerified, superadmin) {
+        function (exist, notVerified, superadmin, firstname) {
           setTimeout(() => {
             if (exist) {
               thisObject.data["superadmin"] = superadmin;
+              thisObject.data["firstname"] = firstname;
               thisObject.mailService
                 .sendForgetMail(thisObject.data)
                 .subscribe((data) => {

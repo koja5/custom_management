@@ -1181,6 +1181,12 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
 
   onPopupOpen(args): void {
     console.log(args);
+    if (
+      args.data.StartTime < new Date() &&
+      this.type === this.userType.patient
+    ) {
+      args.cancel = true;
+    }
     this.updateEventModalLanguage();
     if (
       (!this.checkConditionForEvent(args) &&
@@ -3152,6 +3158,10 @@ export class DynamicSchedulerComponent implements OnInit, OnDestroy {
       if (this.type === this.userType.readOnlyScheduler) {
         date.element.style.pointerEvents = "none";
       }
+    }
+
+    if (date.date < new Date() && this.type === this.userType.patient) {
+      date.element.classList.add("e-disable-dates");
     }
   }
 

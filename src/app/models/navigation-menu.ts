@@ -50,4 +50,5 @@ export class NavigationMenuModel {
   sms_massive_message?: string;
   sms_birthday_congratulation?: string;
   email_birthday_congratulation?: string;
+  mail_reset_password?: string;
 }

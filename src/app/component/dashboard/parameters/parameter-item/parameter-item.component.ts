@@ -1,4 +1,12 @@
-import { Component, OnInit, Input, Inject, HostListener, Output, EventEmitter } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Input,
+  Inject,
+  HostListener,
+  Output,
+  EventEmitter,
+} from "@angular/core";
 import { State, process } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
@@ -67,8 +75,32 @@ export class ParameterItemComponent implements OnInit {
 
   public showColumnPicker = false;
   public columnsComplaint: string[] = ["Title", "Order"];
-  public columnsDoctors: string[] = ["Title", "Firstname", "Lastname", "Gender", "Street", "Web address", "Zip code", "City", "Telephone", "Email address", "Doctor type"];
-  public columnsTherapy: string[] = ["Title", "Title on Invoice", "Order", "Print on Invoice", "Unit", "Description", "Art. nr.", "Net Price", "Vat", "Gross Price", "Category"];
+  public columnsDoctors: string[] = [
+    "Title",
+    "Firstname",
+    "Lastname",
+    "Gender",
+    "Street",
+    "Web address",
+    "Zip code",
+    "City",
+    "Telephone",
+    "Email address",
+    "Doctor type",
+  ];
+  public columnsTherapy: string[] = [
+    "Title",
+    "Title on Invoice",
+    "Order",
+    "Print on Invoice",
+    "Unit",
+    "Description",
+    "Art. nr.",
+    "Net Price",
+    "Vat",
+    "Gross Price",
+    "Category",
+  ];
   public hiddenColumns: string[] = [];
 
   private mySelectionKey(context: RowArgs): string {
@@ -84,7 +116,7 @@ export class ParameterItemComponent implements OnInit {
     private message: MessageService,
     private helpService: HelpService,
     private router: Router
-  ) { }
+  ) {}
 
   public ngOnInit(): void {
     this.language = this.helpService.getLanguage();
@@ -101,14 +133,11 @@ export class ParameterItemComponent implements OnInit {
     if (this.type === "Therapies") {
       this.service.getTherapy(superadmin).subscribe((data) => {
         this.therapyList = data;
-
-
       });
     }
 
     if (this.type === "Therapy") {
-
-      console.log('Therapy')
+      console.log("Therapy");
 
       this.service.getVATTex(superadmin).subscribe((data: []) => {
         this.vatTexList = data.sort(function (a, b) {
@@ -122,15 +151,13 @@ export class ParameterItemComponent implements OnInit {
       map((data) => {
         this.currentLoadData = data;
 
-        if(this.currentLoadData.length < this.gridState.skip) {
+        if (this.currentLoadData.length < this.gridState.skip) {
           this.gridState.skip = 0;
         }
         if (this.type === "Therapy") {
-
-          data.forEach(element => {
+          data.forEach((element) => {
             this.checkBoxDisabled.push(true);
           });
-
         }
 
         return process(data, this.gridState);
@@ -138,7 +165,7 @@ export class ParameterItemComponent implements OnInit {
     );
 
     this.service.getData(this.type, superadmin);
-    console.log('view', this.view);
+    console.log("view", this.view);
 
     if (localStorage.getItem("theme") !== null) {
       this.theme = localStorage.getItem("theme");
@@ -171,9 +198,9 @@ export class ParameterItemComponent implements OnInit {
   }
 
   checkIsDataSaved() {
-    if(this.editedRowIndex > -1) {
+    if (this.editedRowIndex > -1) {
       this.checkIsFormChanged.emit(true);
-    }else {
+    } else {
       this.checkIsFormChanged.emit(false);
     }
   }
@@ -202,26 +229,25 @@ export class ParameterItemComponent implements OnInit {
         email: new FormControl(),
       });
     } else if (this.type === "Therapy") {
-
       this.newRowCheckboxDisabled = false;
 
       this.formGroup = new FormGroup({
         id: new FormControl(),
-        title: new FormControl('', Validators.required),
+        title: new FormControl(this.language.required, Validators.required),
         titleOnInvoice: new FormControl(),
         printOnInvoice: new FormControl(false),
-        sequence: new FormControl('', Validators.required),
+        sequence: new FormControl(this.language.required, Validators.required),
         unit: new FormControl(),
         description: new FormControl(),
-        art_nr: new FormControl('', Validators.required),
+        art_nr: new FormControl(this.language.required, Validators.required),
         net_price: new FormControl(),
         gross_price: new FormControl(),
         category: new FormControl(),
       });
     } else {
       this.formGroup = new FormGroup({
-        title: new FormControl('', Validators.required),
-        sequence: new FormControl('', Validators.required),
+        title: new FormControl(this.language.required, Validators.required),
+        sequence: new FormControl(this.language.required, Validators.required),
         superadmin: new FormControl(),
       });
     }
@@ -233,7 +259,6 @@ export class ParameterItemComponent implements OnInit {
   public editHandler({ sender, rowIndex, dataItem }) {
     this.closeEditor(sender);
     console.log(dataItem);
-
 
     if (this.type === "Doctors") {
       this.formGroup = new FormGroup({
@@ -251,9 +276,7 @@ export class ParameterItemComponent implements OnInit {
       this.selectedDoctorType = dataItem.doctor_type;
       this.selectedGender = dataItem.gender;
     } else if (this.type === "Therapy") {
-
-
-      console.log('rowIndex', rowIndex);
+      console.log("rowIndex", rowIndex);
       this.checkBoxDisabled[rowIndex] = false;
 
       this.formGroup = new FormGroup({
@@ -293,7 +316,7 @@ export class ParameterItemComponent implements OnInit {
     this.closeEditor(sender, rowIndex);
     this.refreshData();
 
-    this.checkBoxDisabled = this.checkBoxDisabled.map(element => true);
+    this.checkBoxDisabled = this.checkBoxDisabled.map((element) => true);
 
     this.changeTheme(this.theme);
     this.checkIsFormChanged.emit(false);
@@ -306,16 +329,14 @@ export class ParameterItemComponent implements OnInit {
   }
 
   public saveHandler({ sender, rowIndex, formGroup, isNew }) {
-
     this.checkIsFormChanged.emit(false);
 
     this.editedRowIndex = -1;
     const product = formGroup.value;
     console.log(product);
 
-      if (this.type === "Therapy" && !this.selectedVATEvent) {
-
-      this.checkBoxDisabled = this.checkBoxDisabled.map(element => true);
+    if (this.type === "Therapy" && !this.selectedVATEvent) {
+      this.checkBoxDisabled = this.checkBoxDisabled.map((element) => true);
       console.log(this.checkBoxDisabled);
 
       const sortedData = {
@@ -334,7 +355,7 @@ export class ParameterItemComponent implements OnInit {
       } else if (
         rowIndex !== -1 &&
         sortedData.data[rowIndex]["gross_price"] !==
-        formGroup.value.gross_price &&
+          formGroup.value.gross_price &&
         sortedData.data[rowIndex]["vat"] !== formGroup.value.vat
       ) {
         formGroup.value.net_price = (
@@ -480,7 +501,7 @@ export class ParameterItemComponent implements OnInit {
     this.loadProducts();
 
     this.savePage[this.currentUrl] = event.skip;
-    this.savePage[this.currentUrl + 'Take'] = event.take;
+    this.savePage[this.currentUrl + "Take"] = event.take;
     this.helpService.setGridPageSize(this.savePage);
   }
 

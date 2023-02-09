@@ -749,6 +749,9 @@
             "emailBirthdayCongratulation": {
                 "type": "string"
             },
+            "mailResetPassword": {
+                "type": "string"
+            },
             "smsDrafts": {
                 "type": "string"
             },
@@ -1387,6 +1390,9 @@
                 "type": "string"
             },
             "copyRight": {
+                "type": "string"
+            },
+            "mailForgotButtonText": {
                 "type": "string"
             },
             "signatureStreet": {
@@ -3871,6 +3877,9 @@
                         },
                         {
                             "key": "emailBirthdayCongratulation"
+                        },
+                        {
+                            "key": "mailResetPassword"
                         }
                     ]
                 },
@@ -5470,6 +5479,9 @@
                         },
                         {
                             "key": "copyRight"
+                        },
+                        {
+                            "key": "mailForgotButtonText"
                         }
                     ]
                 },

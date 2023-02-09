@@ -316,13 +316,14 @@ router.post("/forgotmail", function (req, res) {
             signatureAvailable = true;
           }
         }
+        console.log(mailMessage);
 
         var mailOptions = {
           from: '"ClinicNode" support@app-production.eu',
           to: req.body.email,
-          subject: req.body.language?.subjectForgotMail,
+          subject: mail.mailSubject ? mail.mailSubject : req.body.language?.subjectForgotMail,
           html: compiledTemplate.render({
-            firstName: req.body.shortname,
+            firstName: req.body.firstname,
             verificationLink: verificationLinkButton,
             initialGreeting: mail.mailInitialGreeting
               ? mail.mailInitialGreeting
@@ -347,8 +348,8 @@ router.post("/forgotmail", function (req, res) {
             copyRight: mail.mailCopyRight
               ? mail.mailCopyRight
               : req.body.language?.copyRight,
-            introductoryMessageForForgotMail: mail.initialGreeting
-              ? mail.initialGreeting
+            introductoryMessageForForgotMail: mail.mailMessage
+              ? mail.mailMessage
               : req.body.language?.introductoryMessageForForgotMail,
             forgotMailButtonText: mail.mailForgotButtonText
               ? mail.mailForgotButtonText
@@ -1062,7 +1063,7 @@ router.post("/sendInfoForDenyReservation", function (req, res) {
   var infoForDenyReservation = hogan.compile(infoForDenyReservationTemplate);
   connection.getConnection(function (err, conn) {
     conn.query(
-      "select mr.*, s.*, t.start, t.end from tasks t join mail_deny_reservation mr on t.superadmin = mr.superadmin join store s on t.storeId = s.id where t.id = ?",
+      "select mr.*, s.*, s.place as store_place, t.start, t.end from tasks t join mail_deny_reservation mr on t.superadmin = mr.superadmin join store s on t.storeId = s.id where t.id = ?",
       [req.body.id],
       function (err, mailMessage, fields) {
         conn.release();

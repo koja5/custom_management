@@ -2090,6 +2090,7 @@ router.post("/postojikorisnik", (req, res, next) => {
                 exist: true,
                 notVerified: false,
                 superadmin: rows[0].superadmin,
+                firstname: rows[0].firstname
               });
             } else if (rows.length >= 1) {
               conn.release();
@@ -2113,6 +2114,7 @@ router.post("/postojikorisnik", (req, res, next) => {
                       exist: true,
                       notVerified: false,
                       superadmin: rows[0].id,
+                      firstname: rows[0].firstname
                     });
                   } else if (rows.length >= 1) {
                     conn.release();
@@ -2136,6 +2138,7 @@ router.post("/postojikorisnik", (req, res, next) => {
                             exist: true,
                             notVerified: false,
                             superadmin: rows[0].storeId,
+                            firstname: rows[0].firstname
                           });
                         } else if (rows.length >= 1) {
                           res.send({
@@ -5905,8 +5908,8 @@ router.post("/sendMassiveSMS", function (req, res) {
                         }
                       }
 
-                      if (sms.smsSignatureWebsite) {
-                        signature += " \n" + sms.smsSignatureWebsite + "\n";
+                      if (to.smsSignatureWebsite) {
+                        signature += " \n" + to.smsSignatureWebsite + "\n";
                       }
 
                       signature +=
@@ -8983,6 +8986,94 @@ router.post("/updateMailResetPassword", (req, res, next) => {
       } else {
         conn.query(
           "update mail_reset_password SET ? where superadmin = ?",
+          [req.body, req.body.superadmin],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+// END MAIL RESET PASSWORD
+
+/* MAIL RESET PASSWORD */
+
+router.get("/getMailForgotPassword/:superadmin", function (req, res, next) {
+  connection.getConnection(function (err, conn) {
+    if (err) {
+      logger.log("error", err.sql + ". " + err.sqlMessage);
+      res.json(err);
+    }
+    conn.query(
+      "SELECT * from mail_forgot_password where superadmin = ?",
+      [req.params.superadmin],
+      function (err, rows) {
+        conn.release();
+        if (!err) {
+          res.json(rows);
+        } else {
+          logger.log("error", err.sql + ". " + err.sqlMessage);
+          res.json(err);
+        }
+      }
+    );
+  });
+});
+
+router.post("/createMailForgotPassword", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "insert into mail_forgot_password SET ?",
+          [req.body],
+          function (err, rows, fields) {
+            conn.release();
+            if (err) {
+              logger.log("error", err.sql + ". " + err.sqlMessage);
+              res.json(false);
+            } else {
+              res.json(true);
+            }
+          }
+        );
+      }
+    });
+  } catch (ex) {
+    logger.log("error", err.sql + ". " + err.sqlMessage);
+    res.json(ex);
+  }
+});
+
+router.post("/updateMailForgotPassword", (req, res, next) => {
+  try {
+    connection.getConnection(function (err, conn) {
+      if (err) {
+        console.error("SQL Connection error: ", err);
+        res.json({
+          code: 100,
+          status: err,
+        });
+      } else {
+        conn.query(
+          "update mail_forgot_password SET ? where superadmin = ?",
           [req.body, req.body.superadmin],
           function (err, rows, fields) {
             conn.release();

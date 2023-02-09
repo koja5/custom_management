@@ -42,6 +42,7 @@ export class LicenceComponent implements OnInit {
   public agreeValue = false;
   public licences: any;
   public itemLicence: any;
+  public user: any;
 
   constructor(
     private helpService: HelpService,
@@ -135,6 +136,24 @@ export class LicenceComponent implements OnInit {
           }
         });
     }, 100);
+    this.callApi
+      .callApiGet("/api/getMe", this.helpService.getMe())
+      .subscribe((data: any) => {
+        if (data && data.length > 0) {
+          this.setUserData(data[0]);
+        }
+      });
+  }
+
+  setUserData(data: any) {
+    this.data.firstname = data.firstname ? data.firstname : "";
+    this.data.lastname = data.lastname ? data.lastname : "";
+    this.data.email = data.email ? data.email : "";
+    this.data.phone = data.mobile
+      ? data.mobile
+      : data.telephone
+      ? data.telephone
+      : "";
   }
 
   openPaymentSMSForm() {
@@ -413,5 +432,17 @@ export class LicenceComponent implements OnInit {
 
   convertToDate(date) {
     return new Date(date);
+  }
+
+  calculateNetoPrice(price, numberOfMonth) {
+    return (
+      (Number(this.calculateBrutoPrice(price, numberOfMonth)) /
+        (100 + Number(this.language.feeValue))) *
+      100
+    ).toFixed(2);
+  }
+
+  calculateBrutoPrice(price, numberOfMonth) {
+    return (Number(price) * numberOfMonth).toFixed(2);
   }
 }

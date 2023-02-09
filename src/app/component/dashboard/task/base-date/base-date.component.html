@@ -155,9 +155,7 @@
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.attention }}">
                               <textarea kendoTextArea *ngIf="
-                                  data.attention === '' ||
-                                  data.attention === null ||
-                                  data.attention === undefined
+                                  !data.attention
                                 " [autoSize]="true" [readonly]="true" [(ngModel)]="language.noInformation"
                                 name="attention"></textarea>
                               <textarea kendoTextArea *ngIf="
@@ -173,9 +171,7 @@
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.physicalComplaint }}">
                               <textarea kendoTextArea *ngIf="
-                                  data.physicalComplaint === '' ||
-                                  data.physicalComplaint === null ||
-                                  data.physicalComplaint === undefined
+                                  !data.physicalComplaint
                                 " [autoSize]="true" [readonly]="true" [(ngModel)]="language.noInformation"
                                 name="physicalComplaint"></textarea>
                               <textarea kendoTextArea *ngIf="
@@ -287,9 +283,7 @@
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.recommendation }}">
                               <input kendoTextBox *ngIf="
-                                  baseDataOne.recommendation === '' ||
-                                  baseDataOne.recommendation === null ||
-                                  baseDataOne.recommendation === undefined
+                                  !baseDataOne.recommendation
                                 " [(ngModel)]="language['noInformation']" name="recommendation" class="noPadding"
                                 readonly="true" />
                               <kendo-multiselect *ngIf="baseDataOne.recommendation" [data]="recommendationList"
@@ -304,9 +298,7 @@
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.relationship }}">
                               <input kendoTextBox *ngIf="
-                                  baseDataOne.relationship === '' ||
-                                  baseDataOne.relationship === null ||
-                                  baseDataOne.relationship === undefined
+                                  !baseDataOne.relationship
                                 " [(ngModel)]="language['noInformation']" name="relationship" class="noPadding"
                                 readonly="true" />
                               <kendo-combobox *ngIf="baseDataOne.relationship" class="col-md-12 col-xs-12 noPadding"
@@ -322,9 +314,7 @@
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.social }}">
                               <input kendoTextBox *ngIf="
-                                  baseDataOne.social === '' ||
-                                  baseDataOne.social === null ||
-                                  baseDataOne.social === undefined
+                                  !baseDataOne.social
                                 " [(ngModel)]="language['noInformation']" name="social" class="noPadding"
                                 readonly="true" />
                               <kendo-combobox *ngIf="baseDataOne.social" class="col-md-12 col-xs-12 noPadding"
@@ -339,9 +329,7 @@
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.doctor }}">
                               <input kendoTextBox *ngIf="
-                                  baseDataOne.doctor === '' ||
-                                  baseDataOne.doctor === null ||
-                                  baseDataOne.doctor === undefined
+                                  !baseDataOne.doctor
                                 " [(ngModel)]="language['noInformation']" name="doctor" class="noPadding"
                                 readonly="true" />
                               <kendo-combobox *ngIf="baseDataOne.doctor" class="col-md-12 col-xs-12 noPadding"
@@ -356,9 +344,7 @@
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.firstDate }}">
                               <input kendoTextBox *ngIf="
-                                  baseDataOne.first_date === '' ||
-                                  baseDataOne.first_date === null ||
-                                  baseDataOne.first_date === undefined
+                                  !baseDataOne.first_date
                                 " [(ngModel)]="language['noInformation']" name="first_date" class="noPadding"
                                 readonly="true" />
                               <kendo-datepicker [format]="'dd.MM.yyyy'" *ngIf="baseDataOne.first_date"
@@ -390,9 +376,7 @@
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.size }}">
                               <input kendoTextBox *ngIf="
-                                  baseDataTwo.size === '' ||
-                                  baseDataTwo.size === null ||
-                                  baseDataTwo.size === undefined
+                                  !baseDataTwo.size
                                 " [(ngModel)]="language['noInformation']" name="size" class="noPadding"
                                 readonly="true" />
                               <input kendoTextBox *ngIf="baseDataTwo.size" [(ngModel)]="baseDataTwo.size" name="size"
@@ -405,9 +389,7 @@
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.weight }}">
                               <input kendoTextBox *ngIf="
-                                  baseDataTwo.weight === '' ||
-                                  baseDataTwo.weight === null ||
-                                  baseDataTwo.weight === undefined
+                                  !baseDataTwo.weight
                                 " [(ngModel)]="language['noInformation']" name="weight" class="noPadding"
                                 readonly="true" />
                               <input kendoTextBox *ngIf="baseDataTwo.weight" [(ngModel)]="baseDataTwo.weight"
@@ -420,9 +402,7 @@
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.childs }}">
                               <input kendoTextBox *ngIf="
-                                  baseDataTwo.childs === '' ||
-                                  baseDataTwo.childs === null ||
-                                  baseDataTwo.childs === undefined
+                                  !baseDataTwo.childs
                                 " [(ngModel)]="language['noInformation']" name="childs" class="noPadding"
                                 readonly="true" />
 
@@ -435,9 +415,7 @@
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.notes }}">
                               <textarea kendoTextArea *ngIf="
-                                  baseDataTwo.notes === '' ||
-                                  baseDataTwo.notes === null ||
-                                  baseDataTwo.notes === undefined
+                                  !baseDataTwo.notes
                                 " [(ngModel)]="language['noInformation']" name="skin_sensitivity" style="width: 95%"
                                 readonly="true" [autoSize]="true"></textarea>
                               <textarea *ngIf="baseDataTwo.notes" kendoTextArea type="text"
@@ -451,9 +429,7 @@
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.profession }}">
                               <textarea kendoTextArea *ngIf="
-                                  baseDataTwo.profession === '' ||
-                                  baseDataTwo.profession === null ||
-                                  baseDataTwo.profession === undefined
+                                  !baseDataTwo.profession
                                 " [(ngModel)]="language['noInformation']" name="skin_sensitivity" style="width: 95%"
                                 readonly="true" [autoSize]="true"></textarea>
                               <textarea *ngIf="baseDataTwo.profession" kendoTextArea type="text"
@@ -467,9 +443,7 @@
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.useful }}">
                               <textarea kendoTextArea *ngIf="
-                                  baseDataTwo.useful === '' ||
-                                  baseDataTwo.useful === null ||
-                                  baseDataTwo.useful === undefined
+                                  !baseDataTwo.useful
                                 " [(ngModel)]="language['noInformation']" name="skin_sensitivity" style="width: 95%"
                                 readonly="true" [autoSize]="true"></textarea>
                               <textarea *ngIf="baseDataTwo.useful" kendoTextArea type="text"
@@ -501,14 +475,12 @@
                           physicalIllness !== undefined &&
                           physicalIllness !== null
                         ">
-                        <div class="col-md-4 col-xs-6 b-r">
+                        <div class="col-md-12 col-xs-12 mb-1">
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.internalOrgans }}">
                               <textarea kendoTextArea *ngIf="
-                                  physicalIllness.internal_organs === '' ||
-                                  physicalIllness.internal_organs === null ||
-                                  physicalIllness.internal_organs === undefined
+                                  !physicalIllness.internal_organs
                                 " [(ngModel)]="language['noInformation']" name="skin_sensitivity" style="width: 95%"
                                 readonly="true" [autoSize]="true"></textarea>
                               <textarea kendoTextArea *ngIf="physicalIllness.internal_organs"
@@ -517,14 +489,12 @@
                             </kendo-textbox-container>
                           </p>
                         </div>
-                        <div class="col-md-4 col-xs-6 b-r">
+                        <div class="col-md-12 col-xs-12 mb-1">
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.operations }}">
                               <textarea kendoTextArea *ngIf="
-                                  physicalIllness.operations === '' ||
-                                  physicalIllness.operations === null ||
-                                  physicalIllness.operations === undefined
+                                  !physicalIllness.operations
                                 " [(ngModel)]="language['noInformation']" name="skin_sensitivity" style="width: 95%"
                                 readonly="true" [autoSize]="true"></textarea>
                               <textarea kendoTextArea *ngIf="physicalIllness.operations"
@@ -533,14 +503,12 @@
                             </kendo-textbox-container>
                           </p>
                         </div>
-                        <div class="col-md-4 col-xs-6 b-r">
+                        <div class="col-md-12 col-xs-12 mb-1">
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.previousFindidngs }}">
                               <textarea kendoTextArea *ngIf="
-                                  physicalIllness.previous_findings === '' ||
-                                  physicalIllness.previous_findings === null ||
-                                  physicalIllness.previous_findings ===
+                                  !physicalIllness.previous_findings
                                     undefined
                                 " [(ngModel)]="language['noInformation']" name="skin_sensitivity" style="width: 95%"
                                 readonly="true" [autoSize]="true"></textarea>
@@ -550,14 +518,12 @@
                             </kendo-textbox-container>
                           </p>
                         </div>
-                        <div class="col-md-4 col-xs-6 b-r">
+                        <div class="col-md-12 col-xs-12 mb-1">
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.medicament }}">
                               <textarea kendoTextArea *ngIf="
-                                  physicalIllness.medicament === '' ||
-                                  physicalIllness.medicament === null ||
-                                  physicalIllness.medicament === undefined
+                                  !physicalIllness.medicament
                                 " [(ngModel)]="language['noInformation']" name="skin_sensitivity" style="width: 95%"
                                 readonly="true" [autoSize]="true"></textarea>
                               <textarea kendoTextArea *ngIf="physicalIllness.medicament"
@@ -566,14 +532,12 @@
                             </kendo-textbox-container>
                           </p>
                         </div>
-                        <div class="col-md-4 col-xs-6 b-r">
+                        <div class="col-md-12 col-xs-12 mb-1">
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.allergies }}">
                               <textarea kendoTextArea *ngIf="
-                                  physicalIllness.allergies === '' ||
-                                  physicalIllness.allergies === null ||
-                                  physicalIllness.allergies === undefined
+                                  !physicalIllness.allergies
                                 " [(ngModel)]="language['noInformation']" name="skin_sensitivity" style="width: 95%"
                                 readonly="true" [autoSize]="true"></textarea>
                               <textarea kendoTextArea *ngIf="physicalIllness.allergies"
@@ -582,14 +546,12 @@
                             </kendo-textbox-container>
                           </p>
                         </div>
-                        <div class="col-md-4 col-xs-6 b-r">
+                        <div class="col-md-12 col-xs-12 mb-1">
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.skinSensitivity }}">
                               <textarea kendoTextArea *ngIf="
-                                  physicalIllness.skin_sensitivity === '' ||
-                                  physicalIllness.skin_sensitivity === null ||
-                                  physicalIllness.skin_sensitivity === undefined
+                                  !physicalIllness.skin_sensitivity
                                 " [(ngModel)]="language['noInformation']" name="skin_sensitivity" style="width: 95%"
                                 readonly="true" [autoSize]="true"></textarea>
                               <textarea kendoTextArea *ngIf="physicalIllness.skin_sensitivity"
@@ -598,14 +560,12 @@
                             </kendo-textbox-container>
                           </p>
                         </div>
-                        <div class="col-md-4 col-xs-6 b-r">
+                        <div class="col-md-12 col-xs-12 mb-1">
                           <br />
                           <p class="text-muted">
                             <kendo-textbox-container floatingLabel="{{ language.pregnancy }}">
                               <textarea kendoTextArea *ngIf="
-                                  physicalIllness.pregnancy === '' ||
-                                  physicalIllness.pregnancy === null ||
-                                  physicalIllness.pregnancy === undefined
+                                  !physicalIllness.pregnancy
                                 " [(ngModel)]="language['noInformation']" name="skin_sensitivity" style="width: 95%"
                                 readonly="true" [autoSize]="true"></textarea>
                               <textarea kendoTextArea *ngIf="physicalIllness.pregnancy"
@@ -1478,9 +1438,7 @@
                       <div class="col-sm-12">
                         <label class="label_name">{{ language.lastname }}</label>
                         <input kendoTextBox *ngIf="
-                              data.lastname === '' ||
-                              data.lastname === null ||
-                              data.lastname === undefined
+                              !data.lastname
                             " [(ngModel)]="language['noInformation']" name="lastname" class="noPadding full-width"
                           required />
                         <input kendoTextBox *ngIf="
@@ -1738,46 +1696,42 @@
                 " #physicalForm="ngForm" (change)="isDirty()">
                 <div class="form-group">
                   <div class="panel-body">
-                    <div class="col-md-4 col-xs-12 b-r">
+                    <div class="col-md-12 col-xs-12 mb-1">
                       <kendo-textbox-container floatingLabel="{{ language.internalOrgans }}">
-                        <textarea kendoTextArea [(ngModel)]="physicalIllness.internal_organs" name="internal_organs"
-                          style="width: 95%"></textarea>
+                        <textarea kendoTextArea [(ngModel)]="physicalIllness.internal_organs"
+                          name="internal_organs"></textarea>
                       </kendo-textbox-container>
                     </div>
-                    <div class="col-md-4 col-xs-12 b-r">
+                    <div class="col-md-12 col-xs-12 mb-1">
                       <kendo-textbox-container floatingLabel="{{ language.operations }}">
-                        <textarea kendoTextArea [(ngModel)]="physicalIllness.operations" name="operations"
-                          style="width: 95%"></textarea>
+                        <textarea kendoTextArea [(ngModel)]="physicalIllness.operations" name="operations"></textarea>
                       </kendo-textbox-container>
                     </div>
-                    <div class="col-md-4 col-xs-12 b-r">
+                    <div class="col-md-12 col-xs-12 mb-1">
                       <kendo-textbox-container floatingLabel="{{ language.previousFindidngs }}">
-                        <textarea kendoTextArea [(ngModel)]="physicalIllness.previous_findings" name="previous_findings"
-                          style="width: 95%"></textarea>
+                        <textarea kendoTextArea [(ngModel)]="physicalIllness.previous_findings"
+                          name="previous_findings"></textarea>
                       </kendo-textbox-container>
                     </div>
-                    <div class="col-md-4 col-xs-12 b-r">
+                    <div class="col-md-12 col-xs-12 mb-1">
                       <kendo-textbox-container floatingLabel="{{ language.medicament }}">
-                        <textarea kendoTextArea [(ngModel)]="physicalIllness.medicament" name="medicament"
-                          style="width: 95%"></textarea>
+                        <textarea kendoTextArea [(ngModel)]="physicalIllness.medicament" name="medicament"></textarea>
                       </kendo-textbox-container>
                     </div>
-                    <div class="col-md-4 col-xs-12 b-r">
+                    <div class="col-md-12 col-xs-12 mb-1">
                       <kendo-textbox-container floatingLabel="{{ language.allergies }}">
-                        <textarea kendoTextArea [(ngModel)]="physicalIllness.allergies" name="allergies"
-                          style="width: 95%"></textarea>
+                        <textarea kendoTextArea [(ngModel)]="physicalIllness.allergies" name="allergies"></textarea>
                       </kendo-textbox-container>
                     </div>
-                    <div class="col-md-4 col-xs-12 b-r">
+                    <div class="col-md-12 col-xs-12 mb-1">
                       <kendo-textbox-container floatingLabel="{{ language.skinSensitivity }}">
-                        <textarea kendoTextArea [(ngModel)]="physicalIllness.skin_sensitivity" name="skin_sensitivity"
-                          style="width: 95%"></textarea>
+                        <textarea kendoTextArea [(ngModel)]="physicalIllness.skin_sensitivity"
+                          name="skin_sensitivity"></textarea>
                       </kendo-textbox-container>
                     </div>
-                    <div class="col-md-4 col-xs-12 b-r">
+                    <div class="col-md-12 col-xs-12 mb-1">
                       <kendo-textbox-container floatingLabel="{{ language.pregnancy }}">
-                        <textarea kendoTextArea [(ngModel)]="physicalIllness.pregnancy" name="pregnancy"
-                          style="width: 95%"></textarea>
+                        <textarea kendoTextArea [(ngModel)]="physicalIllness.pregnancy" name="pregnancy"></textarea>
                       </kendo-textbox-container>
                     </div>
                   </div>
